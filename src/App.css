@@ -3,10 +3,7 @@
     border-radius: 5px;
     color: #171832;
 }
-/* button,[type="button"]{
-  background: #f8f8f8;
-    border-radius: 5px;
-} */
+
 main{
   padding: 41px;
 }
@@ -27,3 +24,53 @@ main{
   background: #fff;
     padding: 11px;
 }
+.ant-tag-green{
+  color: white;
+    background: #41BF36;
+    
+    border-radius: 5px;
+    font-family: 'Open Sans';
+  
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 22px;
+    width: 68px;
+    height: 25px;
+    text-align: center;
+}
+.ant-tag-volcano{
+  background: #FC6161;
+  border-radius: 5px;
+    font-family: 'Open Sans';
+  color: white;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 22px;
+    width: 68px;
+    height: 25px;
+    text-align: center;
+
+}
+a{
+  color: #171832;
+}
+.ant-table-cell{
+  text-align: center;
+}
+
+tr[data-row-key*="subTotal"] {
+  font-weight: bold;
+}
+.ant-table-column-has-sorters{
+  text-align: center;
+}
+.ant-table-thead th.ant-table-column-has-sorters {
+  text-align: center;}
+  .ant-btn-link{
+    color: #6e7475;
+  }
+  .deLete{
+    color: #f04747;
+  }

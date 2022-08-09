@@ -1,123 +1,184 @@
 import { Space, Table, Tag, DatePicker, Dropdown, Menu, message } from "antd";
-import { Button, Tooltip, Select } from "antd";
+import { Button, Tooltip, Select, Popover } from "antd";
 import { Typography, Layout } from "antd";
-import { AudioOutlined } from "@ant-design/icons";
+import {
+  AudioOutlined,
+  EditOutlined,
+  DeleteFilled,
+  DeleteOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+} from "@ant-design/icons";
 import { Input } from "antd";
 import { Col, Divider, Row } from "antd";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { SearchOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;
 const { Content } = Layout;
+
 const columns = [
+  {
+    title: "SL No.",
+    dataIndex: "sn",
+    key: "sn",
+  },
   {
     title: "Category Name",
     dataIndex: "catname",
     key: "catname",
+    onFilter: (value, record) => record.name.indexOf(value) === 0,
+    sorter: (a, b) => a.catname.length - b.catname.length,
+    sortDirections: ["ascend", "descend"],
     render: (text) => <a>{text}</a>,
   },
   {
-    title: "Customer Name",
+    title: "Paid By",
     dataIndex: "name",
     key: "name",
+    sorter: (a, b) => a.name - b.name,
   },
   {
     title: "Date",
     dataIndex: "date",
     key: "date",
+    sorter: (a, b) => a.date - b.date,
   },
   {
     title: "Status",
     key: "status",
     dataIndex: "status",
-    render: (_, { status }) => (
-      <>
-        {status.map((tag) => {
-          let color = tag.length > 5 ? "geekblue" : "green";
-
-          if (tag === "unpaid") {
-            color = "volcano";
-          }
-
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
+    sorter: (a, b) => a.status - b.status,
+    render: (_, { status }) =>
+      status !== "" && (
+        <Tag
+          color={status.toLowerCase() === "paid" ? "green" : "volcano"}
+          key={status}
+        >
+          {status}
+        </Tag>
+      ),
+  },
+  {
+    title: "Quantity",
+    dataIndex: "quantity",
+    key: "quantity",
+    sorter: (a, b) => a.quantity - b.quantity,
   },
   {
     title: "Amount",
     dataIndex: "amount",
     key: "amount",
+    sorter: (a, b) => a.amount - b.amount,
   },
   {
     title: "Description",
     dataIndex: "description",
     key: "description",
+    sorter: (a, b) => a.description - b.description,
+    render: (_, view) =>
+      view.description !== "" && (
+        <Popover content={view.description} trigger="click">
+          <Button>view</Button>
+        </Popover>
+      ),
   },
   {
     title: "Action",
     key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <Button type="link">Edit</Button>
-        <Button type="link">Delete</Button>
-      </Space>
-    ),
+    sorter: (a, b) => a.action - b.action,
+    render: (_, record) =>
+      record.quantity !== "Sub Total" && (
+        <Space size="middle">
+          <Button type="link">
+            {
+              <Space>
+                <EditOutlined />
+              </Space>
+            }
+          </Button>
+          <Button type="link" className="deLete">
+            <Space>
+              <DeleteOutlined />
+            </Space>
+          </Button>
+        </Space>
+      ),
   },
 ];
 const data = [
   {
     key: "1",
+    sn: "1",
     catname: "Food",
     name: "Ekta",
     date: "2022-07-12",
-    status: ["paid"],
-    amount: "1000",
+    status: "Paid",
+    price: 200,
+    quantity: 5,
+    amount: 1000,
     description: "done",
   },
   {
     key: "2",
-    catname: "water",
+    sn: "2",
+    catname: "Water",
     name: "Pooja",
     date: "2022-07-20",
-    status: ["unpaid"],
+    status: "Unpaid",
+    price: 200,
+    quantity: 5,
     amount: "1000",
+    description: "pending",
+  },
+  {
+    key: "subTotal",
+    sn: "",
+    catname: "",
+    name: "",
+    date: "",
+    status: "",
+    price: "",
+    quantity: "Sub Total",
+    amount: "2000",
     description: "",
   },
 ];
 function ExpenseList() {
+  const [filterCriteria, setFilterCriteria] = useState({
+    search: "",
+    date: "",
+    category: "all",
+    status: "all",
+  });
   const [allExpenses, setAllExpenses] = useState(data || []);
   const [filterExpenses, setFilterExpense] = useState(data || []);
 
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
+  useEffect(
+    function () {
+      console.log("filterCriteria:: ", filterCriteria);
     },
-    onSelect: (record, selected, selectedRows) => {
-      console.log(record, selected, selectedRows);
-    },
-    onSelectAll: (selected, selectedRows, changeRows) => {
-      console.log(selected, selectedRows, changeRows);
-    },
-  };
+    [filterCriteria]
+  );
+
   const Value = () => (
     <Table
       columns={columns}
       dataSource={filterExpenses}
-      rowSelection={rowSelection}
+      //    rowSelection={rowSelection}
+      pagination={{
+        position: ["none", "none"],
+      }}
+      //   onChange={onSort}
     />
   );
+  //   const onSort = (pagination, sorter) => {
+  //     console.log("param", pagination, sorter);
+  //   };
   const onChange = (date, dateString) => {
+    setFilterCriteria({ ...filterCriteria, date: dateString });
     if (dateString) {
       let result = allExpenses.filter((ex) =>
         ex.date.toLowerCase().includes(dateString.toLowerCase())
@@ -128,14 +189,12 @@ function ExpenseList() {
     }
     console.log(date, dateString);
   };
-  const handleButtonClick = (e) => {
-    message.info("Click on left button.");
-    console.log("click left button", e);
-  };
 
   const searchChange = (e) => {
     console.log(e.target.value);
+
     let search = e.target.value;
+    setFilterCriteria({ ...filterCriteria, search: search });
     if (search) {
       let result = allExpenses.filter(
         (ex) =>
@@ -151,9 +210,10 @@ function ExpenseList() {
 
   const onSelect = (value) => {
     console.log(`selected ${value}`);
+    setFilterCriteria({ ...filterCriteria, category: value });
     if (value && value !== "all") {
       let result = allExpenses.filter((ex) =>
-        ex.catname.toLowerCase().includes(value.toLowerCase())
+        ex.catname.toLowerCase().split().includes(value.toLowerCase())
       );
       setFilterExpense(result);
     } else {
@@ -162,9 +222,10 @@ function ExpenseList() {
   };
   const onChoose = (value) => {
     console.log(`selected ${value}`);
-    if (value) {
+    setFilterCriteria({ ...filterCriteria, status: value });
+    if (value && value !== "all") {
       let result = allExpenses.filter((ex) =>
-        ex.status.toLowerCase().includes(value.toLowerCase())
+        ex.status.toLowerCase().split().includes(value.toLowerCase())
       );
       setFilterExpense(result);
     } else {
@@ -225,6 +286,7 @@ function ExpenseList() {
               >
                 <Option value="paid">Paid</Option>
                 <Option value="unpaid">Unpaid</Option>
+                <Option value="all">All Status</Option>
               </Select>
             }
           </Space>

@@ -14,6 +14,7 @@ import { Col, Divider, Row } from "antd";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { SearchOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import "../style/expenselist.css";
 
 const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;

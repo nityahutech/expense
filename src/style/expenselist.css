@@ -1,7 +1,7 @@
 main{
     padding: 41px;
   }
-  
+
   .ant-select-selector{
     background: #f8f8f8 !important;
       border-radius: 5px !important;
@@ -20,7 +20,7 @@ main{
     background: #fff;
       padding: 11px;
   }
-  .ant-tag-green{
+  .statusTag.ant-tag-green{
     color: white;
       background: #41BF36;
       
@@ -28,20 +28,20 @@ main{
       font-family: 'Open Sans';
     
       font-style: normal;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 14px;
       line-height: 22px;
       width: 68px;
       height: 25px;
       text-align: center;
   }
-  .ant-tag-volcano{
+  .statusTag.ant-tag-volcano{
     background: #FC6161;
     border-radius: 5px;
       font-family: 'Open Sans';
     color: white;
       font-style: normal;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 14px;
       line-height: 22px;
       width: 68px;
@@ -49,7 +49,7 @@ main{
       text-align: center;
   
   }
-  a{
+  a.catName{
     color: #171832;
   }
   .ant-table-cell{
@@ -62,17 +62,20 @@ main{
   .ant-table-column-has-sorters{
     text-align: center;
   }
-  .ant-table-thead th.ant-table-column-has-sorters {
+  .expenseTable .ant-table-thead th.ant-table-column-has-sorters {
     text-align: center;}
-    .ant-btn-link{
+    .edIt.ant-btn-link{
       color: #6e7475;
     }
-    .deLete{
+    .deleTe.ant-btn-link{
       color: #f04747;
     }
-  .ant-picker{
+  .daTe.ant-picker{
     background: #f8f8f8;
       border-radius: 5px;
       color: #171832;
+  }
+  .addExpense.ant-btn-primary {
+    background: #189AB4;
   }
   

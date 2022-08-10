@@ -1,30 +1,15 @@
 import React from 'react'
-import Home from "./pages/home/Home";
+import LoginPage from './components/LoginPage'
+import ExpenseList from "./Expenselist";
+import "./App.css";
 
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
-
-
-
-const App = () => {
+function App() {
   return (
     <div>
-      
-      <BrowserRouter>
-        <Routes>
-          <Route path="/">
-            <Route index element={<Home/>}/>
-           
-            
-          </Route>
-     
-        </Routes>
-      </BrowserRouter>
+      <LoginPage></LoginPage>
     </div>
   )
+  //return <ExpenseList />;
 }
 
 export default App

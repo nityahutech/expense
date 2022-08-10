@@ -19,23 +19,23 @@ function getItem(label, key, icon, children, type) {
 
 const items = [
   getItem('Dashboard', '1', <img
-    src="logo/Dashboard.png" alt="image"
+    src="logo/Dashboard.png" 
     className="Dash"
   />
   ),
   getItem('Expense', 'sub1', <img
-    src="logo/Expense.png" alt="image"
+    src="logo/Expense.png" 
     className="Dash"
   />
     , [
 
       getItem('Add Expense', '5', <img
-        src="logo/dot.png" alt="image"
+        src="logo/dot.png"
         className="dot"
       />
       ),
       getItem('Expense List', '6', <img
-        src="logo/dot.png" alt="image"
+        src="logo/dot.png" 
         className="dot"
       />),
 
@@ -64,14 +64,14 @@ const Sidebar = () => {
 
         <div className='tops'>
           <img
-            src="logo/logo_1.png" alt="image"
+            src="logo/logo_1.png" 
             className="logos"
           />
         </div>
 
         <div onClick={onClickMenuIcon} className="sidebar-toggle">
           <img
-            src="logo/collapse.png" alt="image"
+            src="logo/collapse.png" 
             className="collapse"
           />
         </div>

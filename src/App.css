@@ -1,0 +1,29 @@
+.ant-picker{
+  background: #f8f8f8;
+    border-radius: 5px;
+    color: #171832;
+}
+/* button,[type="button"]{
+  background: #f8f8f8;
+    border-radius: 5px;
+} */
+main{
+  padding: 41px;
+}
+.ant-select-selector{
+  background: #f8f8f8 !important;
+    border-radius: 5px !important;
+    color: #171832 !important;
+}
+#root{
+  background: #f8f8f8;
+}
+.row{
+  background: #fff;
+    padding: 14px;
+    border-radius: 5px
+}
+.ant-table-wrapper{
+  background: #fff;
+    padding: 11px;
+}

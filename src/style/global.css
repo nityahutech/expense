@@ -26,10 +26,10 @@ img{
   font-size: smaller;
   font-family: sans-serif;
 }
-.ant-form{
+.form-div .ant-form{
   margin-top: 4rem;
 }
-a, area, button, [role='button'], input:not([type='range']), label, select, summary, textarea {
+.emailInput-div a, area, button, [role='button'], input:not([type='range']), label, select, summary, textarea {
   touch-action: manipulation;
   width: 18rem;
 }
@@ -40,11 +40,8 @@ a, area, button, [role='button'], input:not([type='range']), label, select, summ
   margin-top: 2rem;
 
 }
-.ant-input{
-  top: 0px;
-}
 
-.ant-input-affix-wrapper {
+.pwdInput-div .ant-input-affix-wrapper {
   position: relative;
   display: inline-block;
   width: 18rem;
@@ -70,7 +67,7 @@ a, area, button, [role='button'], input:not([type='range']), label, select, summ
   cursor: pointer;
   /* margin-right: 4.5rem; */
 }
-.ant-btn, .ant-btn:active, .ant-btn:focus, .ant-btn:hover {
+.login-btn .ant-btn, .ant-btn:active, .ant-btn:focus, .ant-btn:hover {
   outline: 0;
   color: #fff;
   border-color: #189AB4;
@@ -79,7 +76,7 @@ a, area, button, [role='button'], input:not([type='range']), label, select, summ
   box-shadow: 0 2px 0 rgb(0 0 0 / 5%);
   width: 18rem;
 }
-.ant-checkbox-checked .ant-checkbox-inner {
+.chkbox-color .ant-checkbox-checked .ant-checkbox-inner {
   background-color: #189AB4;
   border-color: #189AB4;
 }

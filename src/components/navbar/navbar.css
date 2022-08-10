@@ -1,0 +1,64 @@
+.navbar {
+
+
+    display: flex;
+    font-size: 14px;
+    flex-direction: column;
+    justify-content: center;
+
+    
+}
+
+hr{
+    margin-left: 20px;
+    height:1px solid;
+
+}
+
+.wrapper {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    
+}
+
+.image {
+  
+   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.item{
+    margin-left: 20px;
+}
+
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.tittle {
+    height: auto;
+    padding: 20px;
+}
+
+
+.ant-space-item {
+    margin-top: 8px;
+    margin-left: 15px;
+    color: #171832;
+}
+
+
+.c {
+    color: #171832;
+
+}

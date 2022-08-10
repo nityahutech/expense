@@ -1,15 +1,13 @@
 .navbar {
 
-
     display: flex;
     font-size: 14px;
     flex-direction: column;
     justify-content: center;
 
-    
 }
 
-hr{
+.line{
     margin-left: 20px;
     height:1px solid;
 
@@ -58,7 +56,11 @@ hr{
 }
 
 
-.c {
-    color: #171832;
+.avatarimg{
+    color: black;
+    height: 10px;
+}
 
+.bell{
+    height: 20px;
 }

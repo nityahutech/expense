@@ -31,8 +31,6 @@ span {
 
 }
 
-
-
 .ant-menu{
     background-color: #05445E;
 }
@@ -58,5 +56,18 @@ svg {
     color: white;
 }
 
+.Dash{
+  width: 10%;
+    height: auto;
+}
 
+.dot{
 
+    transform: scale(0.5);
+  }
+
+  .collapse{
+    width: 50%;
+      height: auto;
+  }
+  

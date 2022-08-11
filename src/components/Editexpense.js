@@ -113,7 +113,7 @@ const Editexpense = (props) => {
               value: moment(date, dateFormat),
             },
             {
-              name: ["cascade"],
+              name: ["status"],
               value: status,
             },
             {

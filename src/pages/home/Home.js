@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from '../../components/navbar/Navbar';
 import Sidebar from "../../components/sidebar/Sidebar";
+import Expenselist from '../../Expenselist';
 import "./home.css";
 
 const home = () => {
@@ -11,7 +12,7 @@ const home = () => {
                 <Navbar />
                 <div className="table">
                     <div className="tables">
-
+                    <Expenselist />
                     </div>
                 </div>
 

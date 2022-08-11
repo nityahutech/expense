@@ -7,6 +7,8 @@ import { Col, Divider, Row } from "antd";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { SearchOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import React from 'react'
+import "./Expenselist.css";
 
 const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;
@@ -178,8 +180,8 @@ function ExpenseList() {
 
   return (
     <Content>
-      <Title>Expenses</Title>
-      <Title level={5}>Dashboard/Expenses</Title>
+      {/* <Title>Expenses</Title>
+      <Title level={5}>Dashboard/Expenses</Title> */}
       <Divider orientation="left"></Divider>
       <Row className="row" justify="start">
         <Col md={12} lg={6}>

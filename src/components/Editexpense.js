@@ -77,11 +77,11 @@ const Editexpense = (props) => {
   return (
     <>
       <div
-        style={{
-          border: "1px solid black",
-          margin: "10px",
-          borderRadius: "10px",
-        }}
+      // style={{
+      //   border: "1px solid black",
+      //   margin: "10px",
+      //   borderRadius: "10px",
+      // }}
       >
         <Divider orientation="center">Expense Register</Divider>
         <Form
@@ -123,27 +123,21 @@ const Editexpense = (props) => {
             },
           ]}
         >
-          <Row gutter={[24, 8]}>
-            {/* ------------column-spacer-------------------- */}
-            <Col span={6} style={{ background: "" }}></Col>
-            {/* ------------Left-column-------------------- */}
+          <Col
+            gutter={[24, 8]}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            {/* <Col span={6} style={{ background: "" }}></Col> */}
             <Col span={6} style={{ background: "" }}>
               <Divider orientation="left" orientationMargin={0}>
                 Category
               </Divider>
-              <Form.Item
-                name="category"
-                // rules={[
-                //   {
-                //     message: "Please enter the expence category",
-                //     required: true,
-                //   },
-                // ]}
-              >
+              <Form.Item name="category">
                 <Select
-                  style={{
-                    width: "100%",
-                  }}
                   onChange={(value) => {
                     setOptionValue(value);
                   }}
@@ -153,6 +147,7 @@ const Editexpense = (props) => {
                   <Option value="all">All Category</Option>
                 </Select>
               </Form.Item>
+
               {/* ------------------------------Paid By------- */}
               <Divider orientation="left" orientationMargin={0}>
                 Paid By
@@ -242,7 +237,11 @@ const Editexpense = (props) => {
               >
                 <Input
                   value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) => {
+                    const amt = e.target.value;
+                    setAmount(amt);
+                    setTotal(amt * quantity);
+                  }}
                   placeholder="Enter Amount Here"
                 />
               </Form.Item>
@@ -261,7 +260,11 @@ const Editexpense = (props) => {
               >
                 <Input
                   value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
+                  onChange={(e) => {
+                    const qnt = e.target.value;
+                    setQuantity(qnt);
+                    setTotal(amount * qnt);
+                  }}
                   placeholder="Quantity of the item"
                 />
               </Form.Item>
@@ -270,16 +273,12 @@ const Editexpense = (props) => {
                 Subtotal
               </Divider>
               <Form.Item>
-                <Input
-                  onClick={calculateTotal}
-                  value={total}
-                  placeholder="Total"
-                />
+                <Input readonly value={total} placeholder="Total" />
               </Form.Item>
             </Col>
             {/* ------------column-spacer-------------------- */}
             <Col span={6} style={{ background: "" }}></Col>
-          </Row>
+          </Col>
           {/* -----------------------Text-area--------------- */}
           <Row gutter={24}>
             <Col className="gutter-row" span={6}></Col>
@@ -304,10 +303,10 @@ const Editexpense = (props) => {
                 </Form.Item>
               </div>
             </Col>
-            <Col className="gutter-row" span={6}></Col>
+            {/* <Col className="gutter-row" span={6}></Col> */}
           </Row>
           {/* -----------------------Buttons--------------- */}
-          <Row gutter={24}>
+          {/* <Row gutter={24}>
             <Col className="gutter-row" span={14}></Col>
             <Col className="gutter-row" span={10}>
               <Form.Item key="2">
@@ -322,7 +321,7 @@ const Editexpense = (props) => {
                 <Button key="2">Cancel</Button>
               </Form.Item>
             </Col>
-          </Row>
+          </Row> */}
         </Form>
       </div>
     </>

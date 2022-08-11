@@ -54,9 +54,9 @@ const data = [
     name: "",
     date: "",
     status: "",
-    price: "",
-    quantity: "Total",
-    amount: 3500,
+    quantity: "",
+    amount: "Total",
+    subtotal: 3500,
     description: "",
   },
 ];
@@ -78,6 +78,10 @@ function ExpenseList() {
     },
     [filterCriteria]
   );
+
+  useEffect(() => {
+    console.log("filterExpenses:: ", filterExpenses);
+  }, [filterExpenses]);
   const [modaldata, setmodaldata] = useState([]);
 
   const columns = [
@@ -170,7 +174,7 @@ function ExpenseList() {
       render: (_, record) => {
         console.log("record:: ", record);
         return (
-          record.quantity !== "Total" && (
+          record.quantity !== "" && (
             <Space size="middle">
               <Button
                 type="link"
@@ -186,7 +190,13 @@ function ExpenseList() {
                   </Space>
                 }
               </Button>
-              <Button type="link" className="deleTe">
+              <Button
+                type="link"
+                className="deleTe"
+                onClick={(e) => {
+                  onDelete(record.key, e);
+                }}
+              >
                 <Space>
                   <DeleteOutlined />
                 </Space>
@@ -225,6 +235,7 @@ function ExpenseList() {
 
   const handleOk = () => {
     setIsModalVisible(false);
+    // submit form data
   };
 
   const handleCancel = () => {
@@ -311,6 +322,12 @@ function ExpenseList() {
   const onSearch = (value) => {
     console.log("search:", value);
   };
+  const onDelete = (key, e) => {
+    e.preventDefault();
+    console.log("data::: ", key);
+    const filteredData = data.filter((item) => item.key !== key);
+    setFilterExpense(filteredData);
+  };
 
   return (
     <Layout>
@@ -327,11 +344,7 @@ function ExpenseList() {
             />
           </Col>
           <Col md={12} lg={{ span: 4, offset: 2 }}>
-            <DatePicker
-              className="daTe"
-              placeholder="Date"
-              onChange={onChange}
-            />
+            <DatePicker placeholder="Date" onChange={onChange} />
           </Col>
           <Col md={12} lg={4}>
             {
@@ -344,6 +357,7 @@ function ExpenseList() {
                 filterOption={(input, option) =>
                   option.children.toLowerCase().includes(input.toLowerCase())
                 }
+                className="category"
               >
                 <Option value="food">Food</Option>
                 <Option value="water">Water</Option>
@@ -386,6 +400,8 @@ function ExpenseList() {
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
+        okText="Submit"
+        cancelText="Cancel"
       >
         <Editexpense record={editedRecord} />
       </Modal>

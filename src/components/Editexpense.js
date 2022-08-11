@@ -75,211 +75,200 @@ const Editexpense = (props) => {
   console.log("status:::", status);
   console.log("description:::", description);
   return (
-    <>
-      <div
-      // style={{
-      //   border: "1px solid black",
-      //   margin: "10px",
-      //   borderRadius: "10px",
-      // }}
+    <Form
+      labelCol={{
+        span: 6,
+      }}
+      wrapperCol={{
+        span: 16,
+      }}
+      fields={[
+        {
+          name: ["category"],
+          value: optionValue,
+        },
+        {
+          name: ["name"],
+          value: paidBy,
+        },
+        {
+          name: ["quantity"],
+          value: quantity,
+        },
+        {
+          name: ["amount"],
+          value: amount,
+        },
+        {
+          name: ["date"],
+          value: moment(date, dateFormat),
+        },
+        {
+          name: ["status"],
+          value: status,
+        },
+        {
+          name: ["Textarea"],
+          value: description,
+        },
+      ]}
+      layout="horizontal"
+    >
+      <Form.Item
+        name="category"
+        label="Category"
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: "Please choose a category",
+        //   },
+        // ]}
       >
-        <Form
-          labelcol={{
-            span: 8,
+        <Select
+          className="category"
+          onChange={(value) => {
+            setOptionValue(value);
           }}
-          wrappercol={{
-            span: 16,
-          }}
-          name="form_name"
-          fields={[
-            {
-              name: ["category"],
-              value: optionValue,
-            },
-            {
-              name: ["name"],
-              value: paidBy,
-            },
-            {
-              name: ["quantity"],
-              value: quantity,
-            },
-            {
-              name: ["amount"],
-              value: amount,
-            },
-            {
-              name: ["date"],
-              value: moment(date, dateFormat),
-            },
-            {
-              name: ["status"],
-              value: status,
-            },
-            {
-              name: ["Textarea"],
-              value: description,
-            },
-          ]}
         >
-          <Form.Item
-            name="category"
-            label="Category"
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: "Please choose a category",
-            //   },
-            // ]}
-          >
-            <Select
-              className="category"
-              onChange={(value) => {
-                setOptionValue(value);
-              }}
-            >
-              <Option value="food">Food</Option>
-              <Option value="water">Water</Option>
-              <Option value="all">All Category</Option>
-            </Select>
-          </Form.Item>
+          <Option value="food">Food</Option>
+          <Option value="water">Water</Option>
+          <Option value="all">All Category</Option>
+        </Select>
+      </Form.Item>
 
-          {/* ------------------------------Paid By------- */}
+      {/* ------------------------------Paid By------- */}
 
-          <Form.Item
-            label="Paid By"
-            name="name"
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: "Please enter your name",
-            //   },
-            // ]}
-          >
-            <Input
-              onChange={(e) => {
-                setPaidBy(e.target.value);
-              }}
-              placeholder="Enter Customer Name"
-            />
-          </Form.Item>
+      <Form.Item
+        label="Paid By"
+        name="name"
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: "Please enter your name",
+        //   },
+        // ]}
+      >
+        <Input
+          onChange={(e) => {
+            setPaidBy(e.target.value);
+          }}
+          placeholder="Enter Customer Name"
+        />
+      </Form.Item>
 
-          {/* ----------------------------------Status------- */}
+      {/* ----------------------------------Status------- */}
 
-          <Form.Item
-            label="Status"
-            name="status"
-            // rules={[
-            //   {
-            //     message: "Please enter the paymeny status",
-            //     required: true,
-            //   },
-            // ]}
-          >
-            <Select
-              defaultValue="Status of the payment"
-              style={{
-                width: "100%",
-              }}
-              onChange={(value) => {
-                setStatus(value);
-              }}
-            >
-              <Option value="paid">Paid</Option>
-              <Option value="unpaid">Unpaid</Option>
-            </Select>
-          </Form.Item>
-          {/* ----------------------------------Datepicker------- */}
-          <Form.Item
-            name="date"
-            label="Date"
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: "Please Choose a Date",
-            //   },
-            // ]}
-          >
-            <DatePicker
-              defaultValue={moment(date, dateFormat)}
-              format={dateFormat}
-              style={{ width: "100%" }}
-              placeholder="Choose Date"
-              onChange={(value) => {
-                setdate(value);
-              }}
-            />
-          </Form.Item>
-          {/* --------------------------------------Amount------- */}
+      <Form.Item
+        label="Status"
+        name="status"
+        // rules={[
+        //   {
+        //     message: "Please enter the paymeny status",
+        //     required: true,
+        //   },
+        // ]}
+      >
+        <Select
+          defaultValue="Status of the payment"
+          style={{
+            width: "100%",
+          }}
+          onChange={(value) => {
+            setStatus(value);
+          }}
+        >
+          <Option value="paid">Paid</Option>
+          <Option value="unpaid">Unpaid</Option>
+        </Select>
+      </Form.Item>
+      {/* ----------------------------------Datepicker------- */}
+      <Form.Item
+        name="date"
+        label="Date"
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: "Please Choose a Date",
+        //   },
+        // ]}
+      >
+        <DatePicker
+          defaultValue={moment(date, dateFormat)}
+          format={dateFormat}
+          style={{ width: "100%" }}
+          placeholder="Choose Date"
+          onChange={(value) => {
+            setdate(value);
+          }}
+        />
+      </Form.Item>
+      {/* --------------------------------------Amount------- */}
 
-          <Form.Item
-            label="Amount"
-            name="amount"
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: "Please enter the amount",
-            //   },
-            // ]}
-          >
-            <Input
-              value={amount}
-              onChange={(e) => {
-                const amt = e.target.value;
-                setAmount(amt);
-                setTotal(amt * quantity);
-              }}
-              placeholder="Enter Amount Here"
-            />
-          </Form.Item>
-          {/* --------------------------------------Quantity------- */}
+      <Form.Item
+        label="Amount"
+        name="amount"
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: "Please enter the amount",
+        //   },
+        // ]}
+      >
+        <Input
+          value={amount}
+          onChange={(e) => {
+            const amt = e.target.value;
+            setAmount(amt);
+            setTotal(amt * quantity);
+          }}
+          placeholder="Enter Amount Here"
+        />
+      </Form.Item>
+      {/* --------------------------------------Quantity------- */}
 
-          <Form.Item
-            name="quantity"
-            label="Quantity"
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: "Please enter the quantity of the items/services",
-            //   },
-            // ]}
-          >
-            <Input
-              value={quantity}
-              onChange={(e) => {
-                const qnt = e.target.value;
-                setQuantity(qnt);
-                setTotal(amount * qnt);
-              }}
-              placeholder="Quantity of the item"
-            />
-          </Form.Item>
-          {/* --------------------------------------Sub-total------- */}
+      <Form.Item
+        name="quantity"
+        label="Quantity"
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: "Please enter the quantity of the items/services",
+        //   },
+        // ]}
+      >
+        <Input
+          value={quantity}
+          onChange={(e) => {
+            const qnt = e.target.value;
+            setQuantity(qnt);
+            setTotal(amount * qnt);
+          }}
+          placeholder="Quantity of the item"
+        />
+      </Form.Item>
+      {/* --------------------------------------Sub-total------- */}
 
-          <Form.Item label="Subtotal">
-            <Input readonly value={total} placeholder="Total" />
-          </Form.Item>
+      <Form.Item label="Subtotal">
+        <Input readonly value={total} placeholder="Total" />
+      </Form.Item>
 
-          {/* -----------------------Text-area--------------- */}
+      {/* -----------------------Text-area--------------- */}
 
-          <Form.Item
-            label="Descriptions"
-            name="Textarea"
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: "Please enter the Description ",
-            //   },
-            // ]}
-          >
-            <TextArea
-              onChange={(e) => setDescription(e.target.value)}
-              rows={4}
-            />
-          </Form.Item>
+      <Form.Item
+        label="Descriptions"
+        name="Textarea"
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: "Please enter the Description ",
+        //   },
+        // ]}
+      >
+        <TextArea onChange={(e) => setDescription(e.target.value)} rows={4} />
+      </Form.Item>
 
-          {/* -----------------------Buttons--------------- */}
-          {/* <Row gutter={24}>
+      {/* -----------------------Buttons--------------- */}
+      {/* <Row gutter={24}>
             <Col className="gutter-row" span={14}></Col>
             <Col className="gutter-row" span={10}>
               <Form.Item key="2">
@@ -295,9 +284,7 @@ const Editexpense = (props) => {
               </Form.Item>
             </Col>
           </Row> */}
-        </Form>
-      </div>
-    </>
+    </Form>
   );
 };
 export default Editexpense;

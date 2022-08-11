@@ -6,8 +6,8 @@ import "./App.css";
 function App() {
   return (
     <div>
-      <LoginPage></LoginPage>
-      {/* <ExpenseList /> */}
+      {/* <LoginPage></LoginPage> */}
+      <ExpenseList />
     </div>
   );
 }

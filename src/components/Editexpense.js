@@ -83,13 +83,12 @@ const Editexpense = (props) => {
       //   borderRadius: "10px",
       // }}
       >
-        <Divider orientation="center">Expense Register</Divider>
         <Form
           labelcol={{
-            span: 4,
+            span: 8,
           }}
           wrappercol={{
-            span: 14,
+            span: 16,
           }}
           name="form_name"
           fields={[
@@ -123,188 +122,162 @@ const Editexpense = (props) => {
             },
           ]}
         >
-          <Col
-            gutter={[24, 8]}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
+          <Form.Item
+            name="category"
+            label="Category"
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: "Please choose a category",
+            //   },
+            // ]}
           >
-            {/* <Col span={6} style={{ background: "" }}></Col> */}
-            <Col span={6} style={{ background: "" }}>
-              <Divider orientation="left" orientationMargin={0}>
-                Category
-              </Divider>
-              <Form.Item name="category">
-                <Select
-                  onChange={(value) => {
-                    setOptionValue(value);
-                  }}
-                >
-                  <Option value="food">Food</Option>
-                  <Option value="water">Water</Option>
-                  <Option value="all">All Category</Option>
-                </Select>
-              </Form.Item>
+            <Select
+              className="category"
+              onChange={(value) => {
+                setOptionValue(value);
+              }}
+            >
+              <Option value="food">Food</Option>
+              <Option value="water">Water</Option>
+              <Option value="all">All Category</Option>
+            </Select>
+          </Form.Item>
 
-              {/* ------------------------------Paid By------- */}
-              <Divider orientation="left" orientationMargin={0}>
-                Paid By
-              </Divider>
-              <Form.Item
-                name="name"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter your name",
-                  },
-                ]}
-              >
-                <Input
-                  onChange={(e) => {
-                    setPaidBy(e.target.value);
-                  }}
-                  placeholder="Enter Customer Name"
-                />
-              </Form.Item>
+          {/* ------------------------------Paid By------- */}
 
-              {/* ----------------------------------Status------- */}
-              <Divider orientation="left" orientationMargin={0}>
-                Status
-              </Divider>
-              <Form.Item
-                name="cascade"
-                rules={[
-                  {
-                    message: "Please enter the paymeny status",
-                    required: true,
-                  },
-                ]}
-              >
-                <Select
-                  defaultValue="Status of the payment"
-                  style={{
-                    width: "100%",
-                  }}
-                  onChange={(value) => {
-                    setStatus(value);
-                  }}
-                >
-                  <Option value="paid">Paid</Option>
-                  <Option value="unpaid">Unpaid</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            {/* ------------Right-column-------------------- */}
-            <Col span={6} style={{ background: "" }}>
-              {/* ----------------------------------Datepicker------- */}
-              <Divider orientation="left" orientationMargin={0}>
-                Date
-              </Divider>
-              <Form.Item
-                name="date"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please Choose a Date",
-                //   },
-                // ]}
-              >
-                <DatePicker
-                  defaultValue={moment(date, dateFormat)}
-                  format={dateFormat}
-                  style={{ width: "100%" }}
-                  placeholder="Choose Date"
-                  onChange={(value) => {
-                    setdate(value);
-                  }}
-                />
-              </Form.Item>
-              {/* --------------------------------------Amount------- */}
-              <Divider orientation="left" orientationMargin={0}>
-                Amount
-              </Divider>
-              <Form.Item
-              // className="numder-inputs"
-              // name="amount"
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: "Please enter the amount",
-              //   },
-              // ]}
-              >
-                <Input
-                  value={amount}
-                  onChange={(e) => {
-                    const amt = e.target.value;
-                    setAmount(amt);
-                    setTotal(amt * quantity);
-                  }}
-                  placeholder="Enter Amount Here"
-                />
-              </Form.Item>
-              {/* --------------------------------------Quantity------- */}
-              <Divider orientation="left" orientationMargin={0}>
-                Quantity
-              </Divider>
-              <Form.Item
-              // name="quantity"
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: "Please enter the quantity of the items/services",
-              //   },
-              // ]}
-              >
-                <Input
-                  value={quantity}
-                  onChange={(e) => {
-                    const qnt = e.target.value;
-                    setQuantity(qnt);
-                    setTotal(amount * qnt);
-                  }}
-                  placeholder="Quantity of the item"
-                />
-              </Form.Item>
-              {/* --------------------------------------Sub-total------- */}
-              <Divider orientation="left" orientationMargin={0}>
-                Subtotal
-              </Divider>
-              <Form.Item>
-                <Input readonly value={total} placeholder="Total" />
-              </Form.Item>
-            </Col>
-            {/* ------------column-spacer-------------------- */}
-            <Col span={6} style={{ background: "" }}></Col>
-          </Col>
+          <Form.Item
+            label="Paid By"
+            name="name"
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: "Please enter your name",
+            //   },
+            // ]}
+          >
+            <Input
+              onChange={(e) => {
+                setPaidBy(e.target.value);
+              }}
+              placeholder="Enter Customer Name"
+            />
+          </Form.Item>
+
+          {/* ----------------------------------Status------- */}
+
+          <Form.Item
+            label="Status"
+            name="status"
+            // rules={[
+            //   {
+            //     message: "Please enter the paymeny status",
+            //     required: true,
+            //   },
+            // ]}
+          >
+            <Select
+              defaultValue="Status of the payment"
+              style={{
+                width: "100%",
+              }}
+              onChange={(value) => {
+                setStatus(value);
+              }}
+            >
+              <Option value="paid">Paid</Option>
+              <Option value="unpaid">Unpaid</Option>
+            </Select>
+          </Form.Item>
+          {/* ----------------------------------Datepicker------- */}
+          <Form.Item
+            name="date"
+            label="Date"
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: "Please Choose a Date",
+            //   },
+            // ]}
+          >
+            <DatePicker
+              defaultValue={moment(date, dateFormat)}
+              format={dateFormat}
+              style={{ width: "100%" }}
+              placeholder="Choose Date"
+              onChange={(value) => {
+                setdate(value);
+              }}
+            />
+          </Form.Item>
+          {/* --------------------------------------Amount------- */}
+
+          <Form.Item
+            label="Amount"
+            name="amount"
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: "Please enter the amount",
+            //   },
+            // ]}
+          >
+            <Input
+              value={amount}
+              onChange={(e) => {
+                const amt = e.target.value;
+                setAmount(amt);
+                setTotal(amt * quantity);
+              }}
+              placeholder="Enter Amount Here"
+            />
+          </Form.Item>
+          {/* --------------------------------------Quantity------- */}
+
+          <Form.Item
+            name="quantity"
+            label="Quantity"
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: "Please enter the quantity of the items/services",
+            //   },
+            // ]}
+          >
+            <Input
+              value={quantity}
+              onChange={(e) => {
+                const qnt = e.target.value;
+                setQuantity(qnt);
+                setTotal(amount * qnt);
+              }}
+              placeholder="Quantity of the item"
+            />
+          </Form.Item>
+          {/* --------------------------------------Sub-total------- */}
+
+          <Form.Item label="Subtotal">
+            <Input readonly value={total} placeholder="Total" />
+          </Form.Item>
+
           {/* -----------------------Text-area--------------- */}
-          <Row gutter={24}>
-            <Col className="gutter-row" span={6}></Col>
-            <Col className="gutter-row" span={12}>
-              <div style={{ padding: "8px 0" }}>
-                <Divider orientation="left" orientationMargin={0}>
-                  Descriptions
-                </Divider>
-                <Form.Item
-                  name="Textarea"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter the Description ",
-                    },
-                  ]}
-                >
-                  <TextArea
-                    onChange={(e) => setDescription(e.target.value)}
-                    rows={4}
-                  />
-                </Form.Item>
-              </div>
-            </Col>
-            {/* <Col className="gutter-row" span={6}></Col> */}
-          </Row>
+
+          <Form.Item
+            label="Descriptions"
+            name="Textarea"
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: "Please enter the Description ",
+            //   },
+            // ]}
+          >
+            <TextArea
+              onChange={(e) => setDescription(e.target.value)}
+              rows={4}
+            />
+          </Form.Item>
+
           {/* -----------------------Buttons--------------- */}
           {/* <Row gutter={24}>
             <Col className="gutter-row" span={14}></Col>

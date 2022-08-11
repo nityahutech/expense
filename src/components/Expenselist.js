@@ -382,7 +382,7 @@ function ExpenseList() {
         {/* <Editexpense record={editedRecord} /> */}
       </Content>
       <Modal
-        title="Basic Modal"
+        title="Expense Register"
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}

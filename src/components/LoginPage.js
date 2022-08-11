@@ -70,82 +70,93 @@ function LoginPage() {
               <path d="M31 8.1626V15.6626" stroke="#189AB4" stroke-width="2" />
             </svg>
           </div>
-          <Form
-            name="basic"
-            labelCol={{
-              span: 8,
-            }}
-            wrapperCol={{
-              span: 16,
-            }}
-            initialValues={{
-              remember: true,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
-            <div className="wlc-div ">Welcome back!</div>
-            <div className="msg">Let's Access to our dashboard</div>
-            <div className="email-div">
-              Email address<label style={{ color: "red" }}>*</label>
-            </div>
-            <Form.Item
-              // label="Email ID"
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  message: "Enter your Email!",
-                },
-              ]}
+          <div className="form-div">
+            <Form
+              name="basic"
+              labelCol={{
+                span: 8,
+              }}
+              wrapperCol={{
+                span: 16,
+              }}
+              initialValues={{
+                remember: true,
+              }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
             >
-              <Input onChange={(e) => setEmail(e.target.value)} />
-            </Form.Item>
-            <div className="email-div">
-              Password<label style={{ color: "red" }}>*</label>
-            </div>
-            <Form.Item
-              // label="Password"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Enter your password!",
-                },
-              ]}
-            >
-              <Input.Password onChange={(e) => setPassword(e.target.value)} />
-            </Form.Item>
-            <div className="forgotpwd">Forgot Password?</div>
+              <div className="wlc-div ">Welcome back!</div>
+              <div className="msg">Let's Access to our dashboard</div>
+              <div className="email-div">
+                Email address<label style={{ color: "red" }}>*</label>
+              </div>
+              <div className="emailInput-div">
+                <Form.Item
+                  // label="Email ID"
+                  name="email"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Enter your Email!",
+                    },
+                  ]}
+                >
+                  <Input onChange={(e) => setEmail(e.target.value)} />
+                </Form.Item>
+              </div>
+              <div className="email-div">
+                Password<label style={{ color: "red" }}>*</label>
+              </div>
+              <div className="pwdInput-div">
+                <Form.Item
+                  // label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Enter your password!",
+                    },
+                  ]}
+                >
+                  <Input.Password
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Form.Item>
+              </div>
+              <div className="forgotpwd">Forgot Password?</div>
 
-            <Form.Item
-              name="remember"
-              valuePropName="checked"
-              wrapperCol={
-                {
-                  // offset: 8,
-                  // span: 16,
+              <Form.Item
+                name="remember"
+                valuePropName="checked"
+                wrapperCol={
+                  {
+                    // offset: 8,
+                    // span: 16,
+                  }
                 }
-              }
-            >
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item>
+              >
+                <Checkbox className="chkbox-color">Remember me</Checkbox>
+              </Form.Item>
 
-            <Form.Item
-              wrapperCol={
-                {
-                  // offset: 8,
-                  // span: 16,
+              <Form.Item
+                wrapperCol={
+                  {
+                    // offset: 8,
+                    // span: 16,
+                  }
                 }
-              }
-            >
-              <Button type="" htmlType="submit" onSubmit={handleSubmit}>
-                Login
-              </Button>
-            </Form.Item>
-            {/* <div className="signup-msg">Don't Have an account? </div> */}
-          </Form>
+              >
+                <div className="login-btn">
+                  {" "}
+                  <Button type="" htmlType="submit" onSubmit={handleSubmit}>
+                    Login
+                  </Button>
+                </div>
+              </Form.Item>
+              {/* <div className="signup-msg">Don't Have an account? </div> */}
+            </Form>
+          </div>
           <div className="signup-msg">
             Don't Have an account?{" "}
             <span style={{ color: "#0FAEAA", cursor: "pointer" }}>SignUp</span>

@@ -29,8 +29,12 @@ img{
 .form-div .ant-form{
   margin-top: 4rem;
 }
-.emailInput-div a, area, button, [role='button'], input:not([type='range']), label, select, summary, textarea {
+/* .emailInput-div a, area, button, [role='button'], input:not([type='range']), label, select, summary, textarea {
   touch-action: manipulation;
+  width: 18rem;
+} */
+.emailInput-div input[type='text'], input[type='password'], input[type='number'], textarea {
+  -webkit-appearance: none;
   width: 18rem;
 }
 .email-div{
@@ -67,7 +71,7 @@ img{
   cursor: pointer;
   /* margin-right: 4.5rem; */
 }
-.login-btn .ant-btn, .ant-btn:active, .ant-btn:focus, .ant-btn:hover {
+/* .login-btn .ant-btn, .ant-btn:active, .ant-btn:focus, .ant-btn:hover {
   outline: 0;
   color: #fff;
   border-color: #189AB4;
@@ -75,6 +79,18 @@ img{
   text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
   box-shadow: 0 2px 0 rgb(0 0 0 / 5%);
   width: 18rem;
+} */
+.login-btn {
+  outline: 0;
+  color: #fff;
+  border-color: #189AB4;
+  background: #189AB4;
+  width: 18rem;
+}
+.login-btn:hover{
+  background: #189AB4;
+  color: #fff;
+  border-color: #189AB4;
 }
 .chkbox-color .ant-checkbox-checked .ant-checkbox-inner {
   background-color: #189AB4;

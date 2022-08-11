@@ -7,7 +7,7 @@ function App() {
   return (
     <div>
       <LoginPage></LoginPage>
-      {/* <ExpenseList /> */}
+      <ExpenseList />
     </div>
   )
   //return <ExpenseList />;

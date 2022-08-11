@@ -143,7 +143,7 @@ function LoginPage() {
                     // span: 16,
                   }}
                 >
-                 <div className="login-btn"> <Button type="" htmlType="submit" onSubmit={handleSubmit}>
+                 <div className=""> <Button type="" htmlType="submit" className="login-btn" onSubmit={handleSubmit}>
                     Login
                   </Button></div>
                 </Form.Item>

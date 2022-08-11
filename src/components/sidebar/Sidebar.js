@@ -18,23 +18,28 @@ function getItem(label, key, icon, children, type) {
 
 
 const items = [
-  getItem('Dashboard', '1', <img
+  getItem('Dashboard', '1', 
+  <img
     src="logo/Dashboard.png" 
     className="Dash"
+   
   />
   ),
-  getItem('Expense', 'sub1', <img
+  getItem('Expense', 'sub1', 
+  <img
     src="logo/Expense.png" 
     className="Dash"
   />
     , [
 
-      getItem('Add Expense', '5', <img
+      getItem('Add Expense', '5', 
+      <img
         src="logo/dot.png"
         className="dot"
       />
       ),
-      getItem('Expense List', '6', <img
+      getItem('Expense List', '6', 
+      <img
         src="logo/dot.png" 
         className="dot"
       />),
@@ -46,16 +51,26 @@ const items = [
 
 
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
+
 
   const onClick = (e) => {
-    console.log('click ', e);
+    let pathkey=e.key
+    switch(pathkey){
+      case "5":
+        window.location.href="/ExpenseFrm"
+        break;
+        case "6":
+          window.location.href="/Home"
+          break;  case "1":
+          window.location.href="/DashBoard"
+          break;
+
+
+    }
+    console.log('click ', e.key);
   };
 
-  const onClickMenuIcon = () => {
-    setCollapsed(!collapsed);
-    console.log('hi')
-  };
+
 
   return (
     <div className='sidebar' >
@@ -69,7 +84,7 @@ const Sidebar = () => {
           />
         </div>
 
-        <div onClick={onClickMenuIcon} className="sidebar-toggle">
+        <div >
           <img
             src="logo/collapse.png" 
             className="collapse"

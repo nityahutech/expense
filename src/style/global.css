@@ -29,10 +29,10 @@ img{
 .ant-form{
   margin-top: 4rem;
 }
-a, area, button, [role='button'], input:not([type='range']), label, select, summary, textarea {
+/* a, area, button, [role='button'], input:not([type='range']), label, select, summary, textarea {
   touch-action: manipulation;
   width: 18rem;
-}
+} */
 .email-div{
   /* font-family: sans-serif; */
   font-weight: 600;

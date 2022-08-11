@@ -8,6 +8,7 @@ import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { SearchOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import React from 'react'
+import "./Expenselist.css";
 
 const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;

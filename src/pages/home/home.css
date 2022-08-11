@@ -9,18 +9,11 @@
     height: 22vh;
     display: flex;
     flex-direction: column;
-  
- 
    
 }
 .table{
   background-color: #f8f8f8;
   }
 
-.tables{
-  display: flex;
- 
-  height: 74vh;
 
-}
 

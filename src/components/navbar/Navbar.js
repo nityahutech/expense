@@ -1,13 +1,13 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import 'antd/dist/antd.css';
 import { Dropdown, Menu, Space,  } from 'antd';
 // import dropDownimg from "../../../public/logo/dropdown.svg"
 import dropDownimg from "../../assets/dropdown.svg"
 import logoutsvgrepocom from "../../assets/logoutsvgrepocom.svg"
 import abstractuserflat4 from "../../assets/abstractuserflat4.svg"
-
-
 import './navbar.css';
+import { useLocation } from 'react-router-dom';
+
 
 const menu = (
     <Menu
@@ -36,6 +36,14 @@ const menu = (
 );
 
 const Navbar = () => {
+    const [activePage, setActivePage] = useState("/DashBoard")
+    let loc=useLocation()
+
+    useEffect(() => {
+    setActivePage(loc.pathname);
+    }, [loc])
+    
+
     return (
         <div className='navbar'>
             <div className='wrapper' >
@@ -55,21 +63,30 @@ const Navbar = () => {
                 </div>
 
                 <Dropdown overlay={menu} >
-                    <a onClick={(e) => e.preventDefault()}>
+                   
                         <Space>
                             Hutech
-                            {/* <DownOutlined suffixIcon={<img src={dropDownimg} alt="downArrow" />} /> */}
+                  
                             <img src={dropDownimg} alt="downArrow" />
-
                         </Space>
-                    </a>
+                
                 </Dropdown>
+                
             </div>
 
             <hr className='line' width="95%" color="#F4F4F4" height="1" padding-left='20' />
 
             <div className='tittle'>
-                <p> <b>Dashboard / Expense /</b> Add Expense </p>
+                {
+                    activePage=='/DashBoard'
+                    ?<h4> <b>Dashboard </b> </h4>
+                    :<h4> <b>Expense </b>/Add Expense </h4>
+                    
+                }
+                   
+
+                
+                
             </div>
         </div>
 

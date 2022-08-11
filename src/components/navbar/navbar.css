@@ -4,6 +4,7 @@
     font-size: 14px;
     flex-direction: column;
     justify-content: center;
+    
 
 }
 
@@ -15,10 +16,11 @@
 
 .wrapper {
     width: 100%;
-    padding: 20px;
+    padding: 10px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    left:10;
 
     
 }

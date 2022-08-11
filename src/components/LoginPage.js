@@ -143,7 +143,7 @@ function LoginPage() {
                     // span: 16,
                   }}
                 >
-                 <div className=""> <Button type="" htmlType="submit" className="login-btn" onSubmit={handleSubmit}>
+                 <div className="login-btn"> <Button type="" htmlType="submit" style={{backgroundColor: '#189AB4', color:'white'}} onSubmit={handleSubmit}>
                     Login
                   </Button></div>
                 </Form.Item>

@@ -1,6 +1,6 @@
 import React from 'react'
 // import LoginPage from './components/LoginPage'
-// import ExpenseList from "./Expenselist";
+import ExpenseList from "./Expenselist";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from './components/LoginPage';
@@ -24,6 +24,7 @@ function App() {
         <Route path="/Home" element={<Home />} />
         <Route path="/DashBoard" element={<DashBoard />} />
         <Route path="/ExpenseFrm" element={<ExpenseFrm />} />
+        <Route path="/ExpenseList" element={<ExpenseList />} />
 
 
       </Routes>

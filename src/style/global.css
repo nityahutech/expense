@@ -67,7 +67,7 @@ img{
   text-align: right;
   position: absolute;
   top: 360px;
-  right: 13.5rem;
+  margin-left: 11rem;
   cursor: pointer;
   /* margin-right: 4.5rem; */
 }
@@ -80,14 +80,14 @@ img{
   box-shadow: 0 2px 0 rgb(0 0 0 / 5%);
   width: 18rem;
 } */
-.login-btn {
+.login-btn .ant-btn {
   outline: 0;
   color: #fff;
   border-color: #189AB4;
   background: #189AB4;
   width: 18rem;
 }
-.login-btn:hover{
+.login-btn .ant-btn:hover {
   background: #189AB4;
   color: #fff;
   border-color: #189AB4;

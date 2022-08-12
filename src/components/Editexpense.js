@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Col, Divider, Row } from "antd";
 import moment from "moment";
+import { UploadOutlined } from "@ant-design/icons";
 import {
   Cascader,
   Input,
@@ -12,6 +13,7 @@ import {
   Button,
   DatePicker,
   Form,
+  Upload,
 } from "antd";
 const { Option } = Select;
 
@@ -267,23 +269,22 @@ const Editexpense = (props) => {
         <TextArea onChange={(e) => setDescription(e.target.value)} rows={4} />
       </Form.Item>
 
-      {/* -----------------------Buttons--------------- */}
-      {/* <Row gutter={24}>
-            <Col className="gutter-row" span={14}></Col>
-            <Col className="gutter-row" span={10}>
-              <Form.Item key="2">
-                <Button
-                  key="1"
-                  onClick={submitteD}
-                  style={{ marginRight: "10px" }}
-                >
-                  Submit
-                </Button>
-
-                <Button key="2">Cancel</Button>
-              </Form.Item>
-            </Col>
-          </Row> */}
+      <Form.Item>
+        <Upload
+          multiple
+          listType="text"
+          action={"http://localhost:3001/"}
+          showUploadList={{ showRemoveIcon: true }}
+          beforeUpload={(file) => {
+            console.log({ file });
+            return false;
+          }}
+        >
+          <Button className="uploadout" icon={<UploadOutlined />}>
+            Upload
+          </Button>
+        </Upload>
+      </Form.Item>
     </Form>
   );
 };

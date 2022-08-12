@@ -1,6 +1,6 @@
 import { Space, Table, Tag, DatePicker, Dropdown, Menu, message } from "antd";
 import { Button, Tooltip, Select, Popover, Modal } from "antd";
-import { Typography, Layout } from "antd";
+import { Typography, Layout, Upload } from "antd";
 // import axios from "axios";
 import {
   AudioOutlined,
@@ -13,10 +13,11 @@ import {
 import { Input } from "antd";
 import { Col, Divider, Row } from "antd";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import "../style/expenselist.css";
 import Editexpense from "./Editexpense";
+import { upload } from "@testing-library/user-event/dist/upload";
 
 const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;
@@ -202,6 +203,31 @@ function ExpenseList() {
                 </Space>
               </Button>
             </Space>
+          )
+        );
+      },
+    },
+    {
+      title: "Upload",
+      key: "upload",
+      responsive: ["md"],
+      sorter: (a, b) => a.action - b.action,
+      render: (_, record) => {
+        console.log("record:: ", record);
+        return (
+          record.quantity !== "" && (
+            <Upload
+              multiple
+              listType="text"
+              action={"http://localhost:3001/"}
+              showUploadList={{ showRemoveIcon: true }}
+              beforeUpload={(file) => {
+                console.log({ file });
+                return false;
+              }}
+            >
+              <Button className="upload">Upload</Button>
+            </Upload>
           )
         );
       },
@@ -393,6 +419,7 @@ function ExpenseList() {
         </Row>
         <div style={{ padding: "10px 0px" }}></div>
         {Value()}
+
         {/* <Editexpense record={editedRecord} /> */}
       </Content>
       <Modal

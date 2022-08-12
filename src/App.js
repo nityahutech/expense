@@ -1,9 +1,9 @@
-import React from 'react'
-// import LoginPage from './components/LoginPage'
-import ExpenseList from "./Expenselist";
+
+import React from "react";
+import LoginPage from "./components/LoginPage";
+import ExpenseList from "./components/Expenselist";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginPage from './components/LoginPage';
 import Home from './pages/home/Home';
 import DashBoard from './pages/dashBoard/DashBoard';
 import ExpenseFrm from './pages/expenseFrm/ExpenseFrm';
@@ -33,6 +33,7 @@ function App() {
     </BrowserRouter>
   )
   //return <ExpenseList />;
+
 }
 
-export default App
+export default App;

@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: row;
   gap: 120px;
+  background-color: white;
+
   /* justify-content: center; */
 }
 img{

@@ -149,39 +149,6 @@ function LoginPage() {
                 </Form.Item>
                 {/* <div className="signup-msg">Don't Have an account? </div> */}
               </Form>
-              </div>
-              <div className="forgotpwd">Forgot Password?</div>
-
-              <Form.Item
-                name="remember"
-                valuePropName="checked"
-                wrapperCol={
-                  {
-                    // offset: 8,
-                    // span: 16,
-                  }
-                }
-              >
-                <Checkbox className="chkbox-color">Remember me</Checkbox>
-              </Form.Item>
-
-              <Form.Item
-                wrapperCol={
-                  {
-                    // offset: 8,
-                    // span: 16,
-                  }
-                }
-              >
-                <div className="login-btn">
-                  {" "}
-                  <Button type="" htmlType="submit" onSubmit={handleSubmit}>
-                    Login
-                  </Button>
-                </div>
-              </Form.Item>
-              {/* <div className="signup-msg">Don't Have an account? </div> */}
-            </Form>
           </div>
           <div className="signup-msg">
             Don't Have an account?{" "}

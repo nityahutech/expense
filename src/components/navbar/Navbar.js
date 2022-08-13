@@ -47,6 +47,7 @@ const Navbar = () => {
     return (
         <div className='navbar'>
             <div className='wrapper' >
+                
                 <div className='image' >
 
                     <img
@@ -83,9 +84,7 @@ const Navbar = () => {
                     :<h4> <b>Expense </b>/Add Expense </h4>
                     
                 }
-                   
-
-                
+                               
                 
             </div>
         </div>

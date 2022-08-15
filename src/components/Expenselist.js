@@ -15,6 +15,7 @@ import { Col, Divider, Row } from "antd";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { SearchOutlined, UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../style/expenselist.css";
 import Editexpense from "./Editexpense";
 import { upload } from "@testing-library/user-event/dist/upload";
@@ -63,6 +64,7 @@ const data = [
 ];
 
 function ExpenseList() {
+  const navigate = useNavigate();
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
     date: "",
@@ -91,12 +93,14 @@ function ExpenseList() {
       dataIndex: "sn",
       key: "sn",
       responsive: ["md"],
+      fixed: "left",
     },
     {
       title: "Category Name",
       dataIndex: "catname",
       key: "catname",
       responsive: ["md"],
+      fixed: "left",
       onFilter: (value, record) => record.name.indexOf(value) === 0,
       sorter: (a, b) => a.catname.length - b.catname.length,
       sortDirections: ["ascend", "descend"],
@@ -176,8 +180,9 @@ function ExpenseList() {
         console.log("record:: ", record);
         return (
           record.quantity !== "" && (
-            <Space size="middle">
+            <Space size="small">
               <Button
+                style={{ padding: 0 }}
                 type="link"
                 className="edIt"
                 onClick={() => {
@@ -185,11 +190,7 @@ function ExpenseList() {
                   showModal(record);
                 }}
               >
-                {
-                  <Space>
-                    <EditOutlined />
-                  </Space>
-                }
+                {<EditOutlined />}
               </Button>
               <Button
                 type="link"
@@ -198,9 +199,7 @@ function ExpenseList() {
                   onDelete(record.key, e);
                 }}
               >
-                <Space>
-                  <DeleteOutlined />
-                </Space>
+                <DeleteOutlined />
               </Button>
             </Space>
           )
@@ -243,7 +242,7 @@ function ExpenseList() {
   //     res.data.map((row) => ({
   //       category: row.catname,
   //       paidby: row.name,
-  //       statuspayment: row.status,
+  //       statuspayment: row.status,g
   //       address: row.quantity,
   //       amount: row.amount,
   //       newdate: row.date,
@@ -282,6 +281,7 @@ function ExpenseList() {
         position: ["none", "none"],
       }}
       className="expenseTable"
+      scroll={{ x: 1300 }}
       //   onChange={onSort}
     />
   );
@@ -355,30 +355,40 @@ function ExpenseList() {
     setFilterExpense(filteredData);
   };
 
+  const handleAddNewExpense = () => {
+    navigate("/ExpenseFrm");
+  };
+
   return (
     <Layout>
       <Content>
-        <Title>Expenses</Title>
-        <Title level={5}>Dashboard/Expenses</Title>
-        <Divider orientation="left"></Divider>
-        <Row className="row" justify="start">
-          <Col md={12} lg={6}>
+        <Row
+          className="row"
+          style={{ marginBottom: "0rem", marginTop: "1.5rem" }}
+        >
+          <Col flex={"2"}>
             <Input
               placeholder="Search"
               prefix={<SearchOutlined />}
               onChange={searchChange}
+              style={{ width: "19rem" }}
             />
           </Col>
-          <Col md={12} lg={{ span: 4, offset: 2 }}>
-            <DatePicker placeholder="Date" onChange={onChange} />
+          <Col flex={"1"}>
+            <DatePicker
+              placeholder="Date"
+              onChange={onChange}
+              style={{ cursor: "pointer" }}
+            />
           </Col>
-          <Col md={12} lg={4}>
+          <Col flex={"1"}>
             {
               <Select
                 showSearch
                 defaultValue="Choose Category"
                 optionFilterProp="children"
                 onChange={onSelect}
+                style={{ cursor: "pointer" }}
                 // onSearch={onSearch}
                 filterOption={(input, option) =>
                   option.children.toLowerCase().includes(input.toLowerCase())
@@ -391,7 +401,7 @@ function ExpenseList() {
               </Select>
             }
           </Col>
-          <Col md={12} lg={4}>
+          <Col flex={"1"}>
             <Space wrap>
               {
                 <Select
@@ -399,6 +409,7 @@ function ExpenseList() {
                   defaultValue="Choose Status"
                   optionFilterProp="children"
                   onChange={onChoose}
+                  style={{ cursor: "pointer" }}
                   // onSearch={onSearch}
                   filterOption={(input, option) =>
                     option.children.toLowerCase().includes(input.toLowerCase())
@@ -411,17 +422,20 @@ function ExpenseList() {
               }
             </Space>
           </Col>
-          <Col md={12} lg={4}>
-            <Button className="addExpense" type="primary">
+          <Col flex={"1"}>
+            <Button
+              className="addExpense"
+              type="primary"
+              onClick={handleAddNewExpense}
+            >
               + Add New Expenses
             </Button>
           </Col>
         </Row>
         <div style={{ padding: "10px 0px" }}></div>
         {Value()}
-
-        {/* <Editexpense record={editedRecord} /> */}
       </Content>
+      {/* <Editexpense record={editedRecord} /> */}
       <Modal
         title="Expense Register"
         visible={isModalVisible}
@@ -429,6 +443,7 @@ function ExpenseList() {
         onCancel={handleCancel}
         okText="Submit"
         cancelText="Cancel"
+        centered
       >
         <Editexpense record={editedRecord} />
       </Modal>

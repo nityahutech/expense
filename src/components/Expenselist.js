@@ -94,7 +94,7 @@ function ExpenseList() {
       title: "SL No.",
       dataIndex: "sn",
       key: "sn",
-      responsive: ["sm"],
+      // responsive: ["sm"],
       fixed: "left",
       className: "row1",
       width: 74,
@@ -104,7 +104,7 @@ function ExpenseList() {
       className: "row2",
       dataIndex: "catname",
       key: "catname",
-      responsive: ["md"],
+      // responsive: ["sm"],
       fixed: "left",
       onFilter: (value, record) => record.name.indexOf(value) === 0,
       sorter: (a, b) => a.catname.length - b.catname.length,
@@ -116,7 +116,7 @@ function ExpenseList() {
       className: "row3",
       dataIndex: "name",
       key: "name",
-      responsive: ["md"],
+      // responsive: ["sm"],
       sorter: (a, b) => a.name - b.name,
     },
     {
@@ -124,7 +124,7 @@ function ExpenseList() {
       className: "row3",
       dataIndex: "paidname",
       key: "paidto",
-      responsive: ["md"],
+      // responsive: ["sm"],
       sorter: (a, b) => a.name - b.name,
     },
     {
@@ -132,7 +132,7 @@ function ExpenseList() {
       className: "row4",
       dataIndex: "date",
       key: "date",
-      responsive: ["md"],
+      // responsive: ["sm"],
       sorter: (a, b) => a.date - b.date,
     },
     // {
@@ -158,7 +158,7 @@ function ExpenseList() {
       className: "row6",
       dataIndex: "quantity",
       key: "quantity",
-      responsive: ["md"],
+      // responsive: ["sm"],
       sorter: (a, b) => a.quantity - b.quantity,
     },
     {
@@ -166,7 +166,7 @@ function ExpenseList() {
       className: "row7",
       dataIndex: "amount",
       key: "amount",
-      responsive: ["md"],
+      // responsive: ["md"],
       sorter: (a, b) => a.amount - b.amount,
     },
     {
@@ -174,7 +174,7 @@ function ExpenseList() {
       className: "row8",
       dataIndex: "subtotal",
       key: "subtotal",
-      responsive: ["md"],
+      // responsive: ["sm"],
       sorter: (a, b) => a.subtotal - b.subtotal,
     },
     {
@@ -182,7 +182,7 @@ function ExpenseList() {
       className: "row9",
       dataIndex: "description",
       key: "description",
-      responsive: ["md"],
+      // responsive: ["sm"],
       ellipsis: true,
       sorter: (a, b) => a.description - b.description,
       // render: (_, view) =>
@@ -196,7 +196,7 @@ function ExpenseList() {
       title: "Action",
       className: "row10",
       key: "action",
-      responsive: ["md"],
+      // responsive: ["sm"],
       sorter: (a, b) => a.action - b.action,
       render: (_, record) => {
         console.log("record:: ", record);
@@ -357,28 +357,28 @@ function ExpenseList() {
       setFilterExpense(allExpenses);
     }
   };
-  const onChoose = (value) => {
-    console.log(`selected ${value}`);
-    setFilterCriteria({ ...filterCriteria, status: value });
-    if (value && value !== "all") {
-      let result = allExpenses.filter((ex) =>
-        ex.status.toLowerCase().split().includes(value.toLowerCase())
-      );
-      setFilterExpense(result);
-    } else {
-      setFilterExpense(allExpenses);
-    }
-  };
+  // const onChoose = (value) => {
+  //   console.log(`selected ${value}`);
+  //   setFilterCriteria({ ...filterCriteria, status: value });
+  //   if (value && value !== "all") {
+  //     let result = allExpenses.filter((ex) =>
+  //       ex.status.toLowerCase().split().includes(value.toLowerCase())
+  //     );
+  //     setFilterExpense(result);
+  //   } else {
+  //     setFilterExpense(allExpenses);
+  //   }
+  // };
 
   const onSearch = (value) => {
     console.log("search:", value);
   };
-  const onDelete = (sn, e) => {
-    e.preventDefault();
-    console.log("data::: ", sn);
-    const filteredData = data.filter((item) => item.sn !== sn);
-    setFilterExpense(filteredData);
-  };
+  // const onDelete = (sn, e) => {
+  //   e.preventDefault();
+  //   console.log("data::: ", sn);
+  //   const filteredData = data.filter((item) => item.sn !== sn);
+  //   setFilterExpense(filteredData);
+  // };
 
   const handleAddNewExpense = () => {
     navigate("/ExpenseFrm");
@@ -389,44 +389,44 @@ function ExpenseList() {
       <Content>
         <Row
           className="row"
+          gutter={[0, 8]}
           style={{ marginBottom: "0rem", marginTop: "1.5rem" }}
         >
-          <Col flex={"2"}>
+          <Col xs={22} sm={10} md={8}>
             <Input
               placeholder="Search"
               prefix={<SearchOutlined />}
               onChange={searchChange}
-              style={{ width: "19rem" }}
+              style={{ width: "95%" }}
             />
           </Col>
-          <Col flex={"1"}>
+          <Col xs={22} sm={10} md={4}>
             <DatePicker
               placeholder="Date"
               onChange={onChange}
-              style={{ cursor: "pointer" }}
+              // style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", width: "95%" }}
             />
           </Col>
-          <Col flex={"1"}>
-            {
-              <Select
-                showSearch
-                defaultValue="Choose Category"
-                optionFilterProp="children"
-                onChange={onSelect}
-                style={{ cursor: "pointer" }}
-                // onSearch={onSearch}
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().includes(input.toLowerCase())
-                }
-                className="category"
-              >
-                <Option value="food">Food</Option>
-                <Option value="water">Water</Option>
-                <Option value="all">All Category</Option>
-              </Select>
-            }
+          <Col xs={22} sm={10} md={6}>
+            <Select
+              showSearch
+              defaultValue="Choose Expense Name"
+              optionFilterProp="children"
+              onChange={onSelect}
+              style={{ cursor: "pointer", width: "95%" }}
+              // onSearch={onSearch}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().includes(input.toLowerCase())
+              }
+              className="category"
+            >
+              <Option value="food">Food</Option>
+              <Option value="water">Water</Option>
+              <Option value="all">All Category</Option>
+            </Select>
           </Col>
-          <Col flex={"1"}>
+          {/* <Col flex={"1"}>
             <Space wrap>
               {
                 <Select
@@ -446,12 +446,13 @@ function ExpenseList() {
                 </Select>
               }
             </Space>
-          </Col>
-          <Col flex={"1"}>
+          </Col> */}
+          <Col xs={22} sm={10} md={6}>
             <Button
               className="addExpense"
               type="primary"
               onClick={handleAddNewExpense}
+              style={{ width: "95%" }}
             >
               + Add New Expenses
             </Button>

@@ -21,26 +21,26 @@ const handleChange = (value) => {
   console.log(`selected ${value}`);
 };
 
-const paystatus = [
-  {
-    value: "Paid",
-    label: "Paid",
-  },
-  {
-    value: "Unpaid",
-    label: "Unpaid",
-  },
-];
+// const paystatus = [
+//   {
+//     value: "Paid",
+//     label: "Paid",
+//   },
+//   {
+//     value: "Unpaid",
+//     label: "Unpaid",
+//   },
+// ];
 const dateFormat = "yyyy-MM-DD";
 const { TextArea } = Input;
 const Editexpense = (props) => {
   const [amount, setAmount] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [total, setTotal] = useState(0);
-  const [optionValue, setOptionValue] = useState("Choose Category");
+  const [optionValue, setOptionValue] = useState("");
   const [paidBy, setPaidBy] = useState("");
   const [date, setdate] = useState(moment(new Date()).format(dateFormat));
-  const [status, setStatus] = useState("Status of the payment");
+  const [paidTo, setPaidTo] = useState("");
   const [description, setDescription] = useState("");
   function calculateTotal() {
     setTotal(amount * quantity);
@@ -53,14 +53,15 @@ const Editexpense = (props) => {
     console.log("props:::", props);
     const quantityVal = props.record ? props.record.quantity : 0;
     const amountVal = props.record ? props.record.amount : 0;
-    const category = props.record ? props.record.catname : "Choose Category";
+    const category = props.record ? props.record.catname : "";
     const paidByName = props.record ? props.record.name : "";
     const dateVal = props.record
       ? moment(new Date(props.record.date)).format(dateFormat)
       : moment(new Date()).format(dateFormat);
-    const statusTag = props.record
-      ? props.record.status
-      : "Status of the payment";
+    const paidToname = props.record ? props.record.paidname : "";
+    // const statusTag = props.record
+    //   ? props.record.status
+    //   : "Status of the payment";
     const description = props.record ? props.record.description : "";
     setAmount(amountVal);
     setQuantity(quantityVal);
@@ -68,13 +69,13 @@ const Editexpense = (props) => {
     setOptionValue(category);
     setPaidBy(paidByName);
     setdate(dateVal);
-    setStatus(statusTag);
+    setPaidTo(paidToname);
     setDescription(description);
   }, [props]);
   console.log("optionValue::: ", optionValue);
   console.log("paidBy::: ", paidBy);
   console.log("date:::", date);
-  console.log("status:::", status);
+  console.log("paidTo:::", paidTo);
   console.log("description:::", description);
   return (
     <Form
@@ -86,7 +87,7 @@ const Editexpense = (props) => {
       }}
       fields={[
         {
-          name: ["category"],
+          name: ["expensename"],
           value: optionValue,
         },
         {
@@ -106,8 +107,8 @@ const Editexpense = (props) => {
           value: moment(date, dateFormat),
         },
         {
-          name: ["status"],
-          value: status,
+          name: ["paidTo"],
+          value: paidTo,
         },
         {
           name: ["Textarea"],
@@ -118,8 +119,8 @@ const Editexpense = (props) => {
     >
       <Form.Item
         style={{ marginBottom: "10px" }}
-        name="category"
-        label="Category"
+        name="expensename"
+        label="Nature Expenses"
         // rules={[
         //   {
         //     required: true,
@@ -156,13 +157,29 @@ const Editexpense = (props) => {
           onChange={(e) => {
             setPaidBy(e.target.value);
           }}
-          placeholder="Enter Customer Name"
+        />
+      </Form.Item>
+      <Form.Item
+        style={{ marginBottom: "10px" }}
+        label="Paid To"
+        name="paidTo"
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: "Please enter your name",
+        //   },
+        // ]}
+      >
+        <Input
+          onChange={(e) => {
+            setPaidTo(e.target.value);
+          }}
         />
       </Form.Item>
 
       {/* ----------------------------------Status------- */}
 
-      <Form.Item
+      {/* <Form.Item
         style={{ marginBottom: "10px" }}
         label="Status"
         name="status"
@@ -185,7 +202,7 @@ const Editexpense = (props) => {
           <Option value="paid">Paid</Option>
           <Option value="unpaid">Unpaid</Option>
         </Select>
-      </Form.Item>
+      </Form.Item> */}
       {/* ----------------------------------Datepicker------- */}
       <Form.Item
         style={{ marginBottom: "10px" }}
@@ -276,7 +293,7 @@ const Editexpense = (props) => {
         <TextArea onChange={(e) => setDescription(e.target.value)} />
       </Form.Item>
 
-      <Form.Item style={{ marginBottom: "0" }}>
+      {/* <Form.Item style={{ marginBottom: "0" }}>
         <Upload
           multiple
           listType="text"
@@ -291,7 +308,7 @@ const Editexpense = (props) => {
             Upload
           </Button>
         </Upload>
-      </Form.Item>
+      </Form.Item> */}
     </Form>
   );
 };

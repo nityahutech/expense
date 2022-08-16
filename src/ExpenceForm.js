@@ -25,7 +25,8 @@ const ExpenceForm = () => {
   const { Option } = Select;
 
   const handleChange = event => {
-    const result = event.target.value.replace(/[^a-z]/gi, '');};
+    const result = event.target.value.replace(/[^a-z]/gi, '');
+  };
 
   // const handleChange = (value) => {
   //   console.log(`selected ${value}`);
@@ -43,13 +44,16 @@ const ExpenceForm = () => {
     console.log('hiiiiii');
   }
 
-  const [number1, setNumber1] = useState();
-  const [number2, setNumber2] = useState();
-  const [total, setTotal] = useState();
+  const [amount, setAmount] = useState(0);
+  const [quantity, setQuantity] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [description, setDescription] = useState("");
 
   function calculateTotal() {
-    setTotal(number1 * number2);
+    setTotal(amount * quantity);
   }
+
+
 
   return (
     <>
@@ -81,31 +85,9 @@ const ExpenceForm = () => {
             {/* ------------Left-column-------------------- */}
 
             <Col span={6} style={{ background: '' }}>
-              {/* <Divider orientation='left' orientationMargin={0}>Category</Divider> */}
-              {/* <Form.Item
-                name="cascades"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please enter the expence category',
 
-                  },
-                ]}
-              >
-                <Select
-                  required
-                  placeholder='Choose Category'
-                  style={{
-                    width: '100%',
-                  }}
-                // onChange={handleChange}
-                >
-                  <Option value="fruits" >Fruits</Option>
-                  <Option value="Water">Water</Option>
-                  <Option value="Others">Others</Option>
-                </Select>
 
-              </Form.Item> */}
+
 
               {/* ------------------------------Paid By------- */}
 
@@ -116,10 +98,11 @@ const ExpenceForm = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter your name"
-                  },
-                  { whitespace: true },
-                  { min: 3 }
+                    message: 'Channel ID is required',
+                  }, {
+                    pattern: /^[a-zA-Z]+$/g,
+                    message: 'Please enter Customer Name',
+                  }
                 ]}
                 hasFeedback
               >
@@ -139,11 +122,11 @@ const ExpenceForm = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter the expence type"
-                  },
-
-                  { whitespace: true },
-                  { min: 3 }
+                    message: 'Channel ID is required',
+                  }, {
+                    pattern: /^[a-zA-Z]+$/g,
+                    message: 'Please enter Customer Name',
+                  }
                 ]}
                 hasFeedback
               >
@@ -160,16 +143,16 @@ const ExpenceForm = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter the expence type"
-                  },
-
-                  { whitespace: true },
-                  { min: 3 }
+                    message: 'Channel ID is required',
+                  }, {
+                    pattern: /^[a-zA-Z]+$/g,
+                    message: 'Please enter Customer Name',
+                  }
                 ]}
                 hasFeedback
               >
                 <Input
-                  type="number"
+
                   required
                   placeholder='Enter Vendor Name' />
               </Form.Item>
@@ -233,11 +216,12 @@ const ExpenceForm = () => {
                 <Input
                   required
                   type="number"
-                  value={number1}
+
                   onChange={(e) => {
-                    setNumber1(+e.target.value)
-                    //set subtotal(state of amt * state of qty)
-                    //assign state of subtotal
+                    const amt = e.target.value;
+                    setAmount(amt);
+                    setTotal(amt * quantity);
+
                   }}
 
                   placeholder='Enter Amount Here'
@@ -263,8 +247,12 @@ const ExpenceForm = () => {
                   required
                   min={0}
                   type="number"
-                  value={number2}
-                  onChange={(e) => setNumber2(+e.target.value)}
+
+                  onChange={(e) => {
+                    const qnt = e.target.value;
+                    setQuantity(qnt);
+                    setTotal(amount * qnt);
+                  }}
                   placeholder='Quantity of the item' />
 
               </Form.Item>
@@ -275,33 +263,15 @@ const ExpenceForm = () => {
               <Form.Item >
                 <Input
                   required
-                  onClick={calculateTotal}
+                  onChange={(e) => setDescription(e.target.value)}
                   value={total || 0}
                   placeholder='Total' />
               </Form.Item>
 
               {/* --------------------------------------Upload------- */}
 
-              {/* <Divider orientation='left' orientationMargin={0}>Upload</Divider>
-              <Form.Item
-                // label="Upload" 
-                valuePropName="fileList"
-                name="upload"
 
-                rules={[
-                  {
-                    required: false,
-                    message: "Please enter the quantity ",
-                  },
-                ]}
-              >
-                <Upload action="/upload.do" listType="picture-card">
-                  <div style={{ margin: 2 }}>
-                    <PlusOutlined />
-                    <div style={{ marginTop: 2 }}>Upload</div>
-                  </div>
-                </Upload>
-              </Form.Item> */}
+
 
             </Col>
 

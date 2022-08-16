@@ -4,7 +4,7 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import ExpenceForm from '../../ExpenceForm';
 
 
-const DashBoard = () => {
+const ExpenseFrm = () => {
     return (
         <div className='home'>
         <Sidebar />
@@ -22,4 +22,4 @@ const DashBoard = () => {
     )
 }
 
-export default DashBoard
+export default ExpenseFrm

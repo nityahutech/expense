@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import { Dropdown, Menu, Space } from "antd";
 // import dropDownimg from "../../../public/logo/dropdown.svg"
+
 import dropDownimg from "../../assets/dropdown.svg";
 import logoutsvgrepocom from "../../assets/logoutsvgrepocom.svg";
 import abstractuserflat4 from "../../assets/abstractuserflat4.svg";
@@ -43,6 +44,7 @@ const menu = (
       },
     ]}
   />
+
 );
 
 const Navbar = () => {
@@ -53,16 +55,50 @@ const Navbar = () => {
     setActivePage(loc.pathname);
   }, [loc]);
 
-  return (
-    <div className="navbar">
-      <div className="wrapper">
-        <div className="image">
-          <img src="logo/bell.png" className="bell" />
 
-          <div className="item">
-            <img src="logo/logo.png" className="avatar" />
-          </div>
-        </div>
+    return (
+        <div className='navbar'>
+            <div className='wrapper' >
+                
+                <div className='image' >
+
+                    <img
+                        src="logo/bell.png" alt='imh'
+                        className="bell"
+                    />
+
+                    <div className="item">
+                        <img
+                            src="logo/logo.png" alt='imagh'
+                            className="avatar"
+                        />
+                    </div>
+                </div>
+
+                <Dropdown overlay={menu} >
+                   
+                        <Space>
+                            Hutech
+                  
+                            <img src={dropDownimg} alt="downArrow" />
+                        </Space>
+                
+                </Dropdown>
+                
+            </div>
+
+            <hr className='line' width="95%" color="#F4F4F4" height="1" padding-left='20' />
+
+            <div className='tittle'>
+                {
+                    activePage==='/DashBoard'
+                    ?<h4> <b>Dashboard </b> </h4>
+                    :<h4> <b>Expense </b>/Add Expense </h4>
+                    
+                }
+                               
+                
+           
 
         <Dropdown overlay={menu}>
           <Space>

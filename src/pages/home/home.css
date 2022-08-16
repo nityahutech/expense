@@ -1,11 +1,14 @@
 .home {
     display: flex;
     flex-direction: row;
+    height: 1000px;
 
 }
 
 .homeContainer {
-    width: 80%;
+
+    width: 85%;
+
     /* height: 22vh; */
     display: flex;
     flex-direction: column;

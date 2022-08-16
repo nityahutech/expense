@@ -31,16 +31,18 @@ const data = [
     catname: "food",
     name: "Ekta",
     date: "2022-07-12",
+    paidname: "kl",
     status: "Paid",
     quantity: 5,
     amount: 200,
     subtotal: 1000,
-    description: "done",
+    description: "doneasjdksndsvndjfdkjfdvkb",
   },
   {
     key: "2",
     sn: "2",
     catname: "water",
+    paidname: "k2",
     name: "Pooja",
     date: "2022-07-20",
     status: "Unpaid",
@@ -92,11 +94,14 @@ function ExpenseList() {
       title: "SL No.",
       dataIndex: "sn",
       key: "sn",
-      responsive: ["md"],
+      responsive: ["sm"],
       fixed: "left",
+      className: "row1",
+      width: 74,
     },
     {
-      title: "Category Name",
+      title: "Nature of Expenses",
+      className: "row2",
       dataIndex: "catname",
       key: "catname",
       responsive: ["md"],
@@ -108,37 +113,49 @@ function ExpenseList() {
     },
     {
       title: "Paid By",
+      className: "row3",
       dataIndex: "name",
       key: "name",
       responsive: ["md"],
       sorter: (a, b) => a.name - b.name,
     },
     {
+      title: "Paid To",
+      className: "row3",
+      dataIndex: "paidname",
+      key: "paidto",
+      responsive: ["md"],
+      sorter: (a, b) => a.name - b.name,
+    },
+    {
       title: "Date",
+      className: "row4",
       dataIndex: "date",
       key: "date",
       responsive: ["md"],
       sorter: (a, b) => a.date - b.date,
     },
-    {
-      title: "Status",
-      key: "status",
-      dataIndex: "status",
-      responsive: ["md"],
-      sorter: (a, b) => a.status - b.status,
-      render: (_, { status }) =>
-        status !== "" && (
-          <Tag
-            className="statusTag"
-            color={status.toLowerCase() === "paid" ? "green" : "volcano"}
-            key={status}
-          >
-            {status}
-          </Tag>
-        ),
-    },
+    // {
+    //   title: "Status",
+    //   className: "row5",
+    //   key: "status",
+    //   dataIndex: "status",
+    //   responsive: ["md"],
+    //   sorter: (a, b) => a.status - b.status,
+    //   render: (_, { status }) =>
+    //     status !== "" && (
+    //       <Tag
+    //         className="statusTag"
+    //         color={status.toLowerCase() === "paid" ? "green" : "volcano"}
+    //         key={status}
+    //       >
+    //         {status}
+    //       </Tag>
+    //     ),
+    // },
     {
       title: "Quantity",
+      className: "row6",
       dataIndex: "quantity",
       key: "quantity",
       responsive: ["md"],
@@ -146,6 +163,7 @@ function ExpenseList() {
     },
     {
       title: "Amount",
+      className: "row7",
       dataIndex: "amount",
       key: "amount",
       responsive: ["md"],
@@ -153,6 +171,7 @@ function ExpenseList() {
     },
     {
       title: "Sub Total",
+      className: "row8",
       dataIndex: "subtotal",
       key: "subtotal",
       responsive: ["md"],
@@ -160,27 +179,31 @@ function ExpenseList() {
     },
     {
       title: "Description",
+      className: "row9",
       dataIndex: "description",
       key: "description",
       responsive: ["md"],
+      ellipsis: true,
       sorter: (a, b) => a.description - b.description,
-      render: (_, view) =>
-        view.description !== "" && (
-          <Popover content={view.description} trigger="click">
-            <Button>view</Button>
-          </Popover>
-        ),
+      // render: (_, view) =>
+      //   view.description !== "" && (
+      //     <Popover content={view.description} trigger="click">
+      //       <Button>view</Button>
+      //     </Popover>
+      //   ),
     },
     {
       title: "Action",
+      className: "row10",
       key: "action",
       responsive: ["md"],
       sorter: (a, b) => a.action - b.action,
       render: (_, record) => {
         console.log("record:: ", record);
         return (
-          record.quantity !== "" && (
-            <Space size="small">
+          record.key !== "subTotal" && (
+            <>
+              {/* <Space size="small"> */}
               <Button
                 style={{ padding: 0 }}
                 type="link"
@@ -192,45 +215,47 @@ function ExpenseList() {
               >
                 {<EditOutlined />}
               </Button>
-              <Button
+              {/* <Button
                 type="link"
                 className="deleTe"
                 onClick={(e) => {
-                  onDelete(record.key, e);
+                  onDelete(record.sn, e);
                 }}
               >
                 <DeleteOutlined />
-              </Button>
-            </Space>
+              </Button> 
+            </Space>*/}
+            </>
           )
         );
       },
     },
-    {
-      title: "Upload",
-      key: "upload",
-      responsive: ["md"],
-      sorter: (a, b) => a.action - b.action,
-      render: (_, record) => {
-        console.log("record:: ", record);
-        return (
-          record.quantity !== "" && (
-            <Upload
-              multiple
-              listType="text"
-              action={"http://localhost:3001/"}
-              showUploadList={{ showRemoveIcon: true }}
-              beforeUpload={(file) => {
-                console.log({ file });
-                return false;
-              }}
-            >
-              <Button className="upload">Upload</Button>
-            </Upload>
-          )
-        );
-      },
-    },
+    // {
+    //   title: "Upload",
+    //   className: "row11",
+    //   key: "upload",
+    //   responsive: ["md"],
+    //   sorter: (a, b) => a.action - b.action,
+    //   render: (_, record) => {
+    //     console.log("record:: ", record);
+    //     return (
+    //       record.quantity !== "" && (
+    //         <Upload
+    //           multiple
+    //           listType="text"
+    //           action={"http://localhost:3001/"}
+    //           showUploadList={{ showRemoveIcon: true }}
+    //           beforeUpload={(file) => {
+    //             console.log({ file });
+    //             return false;
+    //           }}
+    //         >
+    //           <Button className="upload">Upload</Button>
+    //         </Upload>
+    //       )
+    //     );
+    //   },
+    // },
   ];
   // useEffect(() => {
   //   getData();
@@ -348,10 +373,10 @@ function ExpenseList() {
   const onSearch = (value) => {
     console.log("search:", value);
   };
-  const onDelete = (key, e) => {
+  const onDelete = (sn, e) => {
     e.preventDefault();
-    console.log("data::: ", key);
-    const filteredData = data.filter((item) => item.key !== key);
+    console.log("data::: ", sn);
+    const filteredData = data.filter((item) => item.sn !== sn);
     setFilterExpense(filteredData);
   };
 

@@ -1,7 +1,5 @@
 main{
-    width: 100%;
-    padding: 0px;
-    margin: 0px;
+    padding: 41px;
   }
 
   /* .category.ant-select-selector{
@@ -16,15 +14,11 @@ main{
   .row{
     background: #fff;
       padding: 14px;
-      border-radius: 5px;
-      margin: 4px 15px;
-
+      border-radius: 5px
   }
-  .expenseTable.ant-table-wrapper{
+  .ant-table-wrapper{
     background: #fff;
       padding: 11px;
-      margin: 0px 15px;
-      border-radius: 5px;
   }
   .statusTag.ant-tag-green{
     color: white;
@@ -85,7 +79,9 @@ main{
     color: #fff;
   }
   .uploadout.ant-btn{
+    position: absolute;
     left: 118px;
+    bottom: 10px;
     color: #fff;
     background:#189AB4;
   }

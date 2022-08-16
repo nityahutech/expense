@@ -50,12 +50,12 @@
     padding: 20px;
 }
 
-
-.ant-space-item {
+/* it will break expense list page "choose status filter" */
+/* .ant-space-item {
     margin-top: 8px;
     margin-left: 15px;
     color: #171832;
-}
+} */
 
 
 .avatarimg{

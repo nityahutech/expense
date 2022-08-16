@@ -5,8 +5,8 @@
 }
 
 .homeContainer {
-    width: 100%;
-    height: 22vh;
+    width: 80%;
+    /* height: 22vh; */
     display: flex;
     flex-direction: column;
    

@@ -117,6 +117,7 @@ const Editexpense = (props) => {
       layout="horizontal"
     >
       <Form.Item
+        style={{ marginBottom: "10px" }}
         name="category"
         label="Category"
         // rules={[
@@ -141,6 +142,7 @@ const Editexpense = (props) => {
       {/* ------------------------------Paid By------- */}
 
       <Form.Item
+        style={{ marginBottom: "10px" }}
         label="Paid By"
         name="name"
         // rules={[
@@ -161,6 +163,7 @@ const Editexpense = (props) => {
       {/* ----------------------------------Status------- */}
 
       <Form.Item
+        style={{ marginBottom: "10px" }}
         label="Status"
         name="status"
         // rules={[
@@ -185,6 +188,7 @@ const Editexpense = (props) => {
       </Form.Item>
       {/* ----------------------------------Datepicker------- */}
       <Form.Item
+        style={{ marginBottom: "10px" }}
         name="date"
         label="Date"
         // rules={[
@@ -207,6 +211,7 @@ const Editexpense = (props) => {
       {/* --------------------------------------Amount------- */}
 
       <Form.Item
+        style={{ marginBottom: "10px" }}
         label="Amount"
         name="amount"
         // rules={[
@@ -229,6 +234,7 @@ const Editexpense = (props) => {
       {/* --------------------------------------Quantity------- */}
 
       <Form.Item
+        style={{ marginBottom: "10px" }}
         name="quantity"
         label="Quantity"
         // rules={[
@@ -250,13 +256,14 @@ const Editexpense = (props) => {
       </Form.Item>
       {/* --------------------------------------Sub-total------- */}
 
-      <Form.Item label="Subtotal">
+      <Form.Item label="Subtotal" style={{ marginBottom: "10px" }}>
         <Input readonly value={total} placeholder="Total" />
       </Form.Item>
 
       {/* -----------------------Text-area--------------- */}
 
       <Form.Item
+        style={{ marginBottom: "10px" }}
         label="Descriptions"
         name="Textarea"
         // rules={[
@@ -266,10 +273,10 @@ const Editexpense = (props) => {
         //   },
         // ]}
       >
-        <TextArea onChange={(e) => setDescription(e.target.value)} rows={4} />
+        <TextArea onChange={(e) => setDescription(e.target.value)} />
       </Form.Item>
 
-      <Form.Item>
+      <Form.Item style={{ marginBottom: "0" }}>
         <Upload
           multiple
           listType="text"

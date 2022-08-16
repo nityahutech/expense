@@ -7,6 +7,7 @@ import logoutsvgrepocom from "../../assets/logoutsvgrepocom.svg"
 import abstractuserflat4 from "../../assets/abstractuserflat4.svg"
 import './navbar.css';
 import { useLocation } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 
 
 const menu = (
@@ -15,22 +16,22 @@ const menu = (
             {
                 key: '1',
                 label: (
-                    <link target="_blank" style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
+                    <Link to  target="_blank" style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
                         Admin
-                    </link>
+                    </Link>
                 ),
-                icon: <img src={abstractuserflat4} alt="downArrow" className="avatarimg" />,
+                icon: <img src={abstractuserflat4} alt="downArrow" className="avatarimg" />
 
             },
             {
                 key: '2',
                 label: (
-                    <link target="_blank" style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
+                    <Link to target="_blank" style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
                         Logout
-                    </link>
+                    </Link>
                 ),
-                icon: <img src={logoutsvgrepocom} alt="downArrow" className="avatarimg" />,
-            },
+                icon: <img src={logoutsvgrepocom} alt="downArrow" className="avatarimg" />
+            }
         ]}
     />
 );
@@ -51,13 +52,13 @@ const Navbar = () => {
                 <div className='image' >
 
                     <img
-                        src="logo/bell.png"
+                        src="logo/bell.png" alt='imh'
                         className="bell"
                     />
 
                     <div className="item">
                         <img
-                            src="logo/logo.png"
+                            src="logo/logo.png" alt='imagh'
                             className="avatar"
                         />
                     </div>
@@ -79,7 +80,7 @@ const Navbar = () => {
 
             <div className='tittle'>
                 {
-                    activePage=='/DashBoard'
+                    activePage==='/DashBoard'
                     ?<h4> <b>Dashboard </b> </h4>
                     :<h4> <b>Expense </b>/Add Expense </h4>
                     

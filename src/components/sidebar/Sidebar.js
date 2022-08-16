@@ -4,13 +4,10 @@ import { useNavigate } from "react-router-dom";
 import React from 'react'
 import { useState } from 'react'
 import {
-  AppstoreOutlined,
-  ContainerOutlined,
-  DesktopOutlined,
-  MailOutlined,
+
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  PieChartOutlined
+
 } from "@ant-design/icons";
 import { Button, Menu } from "antd";
 
@@ -87,11 +84,7 @@ const Sidebar = () => {
 
   return (
     <div className="sidebarTop"
-      // style={{
-      //   width: 256,
-      //   height: "1000px",
-      //   background: '#05445E'
-      // }}
+    
     >
       <div className="sidebarTittle">
         <img style={{
@@ -129,90 +122,7 @@ const Sidebar = () => {
       />
     </div>
   );
-  //   return (
 
-
-  //     // org
-  //     <div style={{ width: collapsed ? "200px" : "50px" }} className='sidebar' >
-  //       <div className='top_section'>
-  //         {/* <div className='tops'>
-  //           <img
-  //             src="logo/logo_1.png" alt='image'
-  //             className="logos"
-  //           />
-  //         </div> */}
-
-  //         {/* <div className="Tittle" >
-  //           <h2 style={{color: "#FFFFFF"}}>exepense</h2>
-  //         </div> */}
-
-  //         <div className="Tittle">
-  //           <img style={{
-  //             display: collapsed ? "block" : "none",
-  //             background:'#05445E'
-
-  //           }}src="logo/logo_1.png" alt='image' />
-  // {/* 
-  //           <h2 style={{
-  //             display: collapsed ? "block" : "none",
-  //             color: 'white',
-
-  //           }}
-  //             className="logo">exepense</h2> */}
-  //         </div>
-
-  //         <div style={{
-  //           marginLeft: collapsed ? "10px" : "0px",
-  //           marginTop: collapsed ? "10px" : "10px",
-  //           marginBottom: collapsed ? "10px" : "10px",
-  //         }}
-  //           className="bars">
-  //           <MenuUnfoldOutlined onClick={toggleCollapsed} />
-
-
-  //         </div>
-
-
-  //         {/*         
-  //         <icon
-  //           type="primary"
-  //           onClick={toggleCollapsed}
-  //           style={{
-  //             marginBottom: 16,
-  //             marginTop: 10,
-  //             marginLeft: 10,
-
-
-  //           }}
-  //         >
-  //           {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-  //         </icon> */}
-
-
-  //       </div>
-
-  //       <Menu
-  //         onClick={onClick}
-  //         style={{
-  //           width: 210,
-  //           height: "1000px"
-
-  //         }}
-
-  //         defaultSelectedKeys={['1']}
-  //         defaultOpenKeys={['sub1']}
-  //         mode="inline"
-  //         style={{
-  //           height: "1000px"
-  //         }}
-
-  //         // inlineCollapsed={collapsed}
-  //         items={items}
-  //       />
-
-  //     </div>
-
-  //   )
 }
 
 export default Sidebar

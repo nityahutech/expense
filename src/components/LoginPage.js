@@ -1,5 +1,5 @@
-// import React from 'react'
-import React, { useState, useEffect } from "react";
+import React from 'react'
+import  { useState, useEffect } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import "../App.css";
 
@@ -89,7 +89,7 @@ function LoginPage() {
               <div className="wlc-div ">Welcome back!</div>
               <div className="msg">Let's Access to our dashboard</div>
               <div className="email-div">
-                Email address<label style={{ color: "red" }}>*</label>
+                Email address<label style={{ color: "red" }}>   *</label>
               </div>
               <div className="emailInput-div">
                 <Form.Item
@@ -106,7 +106,7 @@ function LoginPage() {
                 </Form.Item>
               </div>
               <div className="email-div">
-                Password<label style={{ color: "red" }}>*</label>
+                Password<label style={{ color: "red" }}> *</label>
               </div>
               <div className="pwdInput-div">
                 <Form.Item

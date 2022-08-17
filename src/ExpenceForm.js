@@ -3,41 +3,26 @@ import { useState } from 'react';
 import 'antd/dist/antd.css';
 import './ExpenceForm';
 import { Col, Divider, Row } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import './ExpenseForm.css';
+
 import {
   // Cascader,
-  Upload,
+ 
   Input,
   Select,
-  handleChange,
-  Option,
+  
+
   Radio,
   Space,
   Button,
   DatePicker,
   Form,
-  InputNumber
+ 
 } from 'antd';
 
 const ExpenceForm = () => {
   const [category, setCategory] = useState("");
   const { TextArea } = Input;
-  const { Option } = Select;
-
-  const handleChange = event => {
-    const result = event.target.value.replace(/[^a-z]/gi, '');
-  };
-
-  // const handleChange = (value) => {
-  //   console.log(`selected ${value}`);
-  // };
-  // const onFinish = (values) => {
-  //   console.log('Success:', values);
-  // };
-
-  // const onFinishFailed = (errorInfo) => {
-  //   console.log('Failed:', errorInfo);
-  // };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -49,15 +34,11 @@ const ExpenceForm = () => {
   const [total, setTotal] = useState(0);
   const [description, setDescription] = useState("");
 
-  function calculateTotal() {
-    setTotal(amount * quantity);
-  }
-
 
 
   return (
     <>
-      <div >
+      <div className='expForm' style ={{ margin:"15px" , background:'white'}} >
 
         {/* <Divider orientation="center">Expence Rgister</Divider> */}
 
@@ -71,23 +52,14 @@ const ExpenceForm = () => {
           initialValues={{
             remember: true,
           }}
-          // onFinish={onFinish}
-          // onFinishFailed={onFinishFailed}
+       
           autoComplete="off"
         >
 
           <Row gutter={[14, 10]}>
 
-            {/* ------------column-spacer-------------------- */}
-
             <Col span={6} style={{ background: '' }}></Col>
-
-            {/* ------------Left-column-------------------- */}
-
             <Col span={6} style={{ background: '' }}>
-
-
-
 
               {/* ------------------------------Paid By------- */}
 
@@ -104,17 +76,36 @@ const ExpenceForm = () => {
                     message: 'Please enter Customer Name',
                   }
                 ]}
-                hasFeedback
+                
               >
                 <Input
                   type="text"
-                  onChange={handleChange}
-
                   required
                   placeholder='Enter  Name' />
               </Form.Item>
+              {/* --------------------Paid to------------ */}
 
-              {/* -------------------------Expense type------- */}
+              <Divider orientation='left' orientationMargin={0}>Paid to</Divider>
+              <Form.Item
+                name="paid to"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Channel ID is required',
+                  }, {
+                    pattern: /^[a-zA-Z]+$/g,
+                    message: 'Please enter  Name',
+                  }
+                ]}
+                
+              >
+                <Input
+
+                  required
+                  placeholder='Enter Vendor Name' />
+              </Form.Item>
+
+              {/* -------------------------Expense Name------- */}
 
               <Divider orientation='left' orientationMargin={0}>Expense Name</Divider>
               <Form.Item
@@ -128,44 +119,22 @@ const ExpenceForm = () => {
                     message: 'Please enter Customer Name',
                   }
                 ]}
-                hasFeedback
+                
               >
                 <Input required placeholder='Enter Expense For' />
               </Form.Item>
 
+              
 
 
-              {/* -------------------------------- */}
-
-              <Divider orientation='left' orientationMargin={0}>Paid to</Divider>
-              <Form.Item
-                name="paid to"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Channel ID is required',
-                  }, {
-                    pattern: /^[a-zA-Z]+$/g,
-                    message: 'Please enter Customer Name',
-                  }
-                ]}
-                hasFeedback
-              >
-                <Input
-
-                  required
-                  placeholder='Enter Vendor Name' />
-              </Form.Item>
-
-
-              {/* ----------------------------------------------------------Payment type------- */}
+              {/* ------------------------------Payment type------- */}
 
               <Divider orientation='left' orientationMargin={0}>Mode of Payment</Divider>
               <Form.Item
-                name="paytype"
+                name="radio"
                 rules={[
                   {
-                    required: false,
+                    required: true,
                     message: "Please enter the paymeny status"
                   },
                 ]}
@@ -174,15 +143,13 @@ const ExpenceForm = () => {
                   <Radio value="Bank"> Bank Transfer </Radio>
                   <Radio value="Cash"> Cash </Radio>
                   <Radio value="UPI"> UPI </Radio>
+                  <Radio value="COD"> COD</Radio>
                 </Radio.Group>
               </Form.Item>
             </Col>
-
-            {/* ------------Right-column-------------------- */}
-
             <Col span={6} style={{ background: '' }}>
 
-              {/* ----------------------------------Datepicker------- */}
+              {/* ----------------------Datepicker------- */}
 
               <Divider orientation='left' orientationMargin={0}>Date</Divider>
               <Form.Item
@@ -197,7 +164,7 @@ const ExpenceForm = () => {
                 <DatePicker style={{ width: '100%' }} placeholder='Choose Date' />
               </Form.Item>
 
-              {/* --------------------------------------Amount------- */}
+              {/* ---------------------------Amount------- */}
 
               <Divider orientation='left' orientationMargin={0}>Amount</Divider>
               <Form.Item
@@ -211,11 +178,11 @@ const ExpenceForm = () => {
                   { whitespace: true },
 
                 ]}
-                hasFeedback
+                
               >
                 <Input
                   required
-                  type="number"
+                  // type="number"
 
                   onChange={(e) => {
                     const amt = e.target.value;
@@ -228,7 +195,7 @@ const ExpenceForm = () => {
                 />
               </Form.Item>
 
-              {/* --------------------------------------Quantity------- */}
+              {/* --------------------------Quantity------- */}
 
               <Divider orientation='left' orientationMargin={0}>Quantity</Divider>
               <Form.Item
@@ -240,13 +207,13 @@ const ExpenceForm = () => {
                     message: "Please enter the quantity ",
                   },
                 ]}
-                hasFeedback
+                
               >
 
                 <Input
                   required
                   min={0}
-                  type="number"
+                  // type="number"
 
                   onChange={(e) => {
                     const qnt = e.target.value;
@@ -257,7 +224,7 @@ const ExpenceForm = () => {
 
               </Form.Item>
 
-              {/* --------------------------------------Sub-total------- */}
+              {/* -------------------------Sub-total------- */}
 
               <Divider orientation='left' orientationMargin={0}>Subtotal</Divider>
               <Form.Item >
@@ -268,22 +235,10 @@ const ExpenceForm = () => {
                   placeholder='Total' />
               </Form.Item>
 
-              {/* --------------------------------------Upload------- */}
-
-
-
-
             </Col>
-
-            {/* ------------column-spacer-------------------- */}
-
-
-
             <Col span={6} style={{ background: '' }}></Col>
           </Row>
-
-
-          {/* -----------------------Text-area--------------- */}
+          {/* -----------------Text-area--------------- */}
 
           <Row gutter={24}>
             <Col className='gutter-row' span={6}></Col>
@@ -311,7 +266,7 @@ const ExpenceForm = () => {
           <Row gutter={1}>
             <Col classsname='gutter-row' span={6}></Col>
             <Col classsname='gutter-row' span={12}>
-              <div style={{ alignItems: 'center' }}>
+              <div>
                 <Space>
                   <Form.Item >
                     <Button
@@ -319,7 +274,7 @@ const ExpenceForm = () => {
                         background: '#C1C1C1',
                         borderRadius: '5px',
                         width: '80px',
-                        height: '30px',
+                  
                         color: 'white',
                         cursor: 'pointer'
                       }}

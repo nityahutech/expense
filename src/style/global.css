@@ -102,3 +102,32 @@ img{
   text-align: center;
   font-family: sans-serif;
 }
+
+
+/* -----------mobile--------------- */
+
+@media (max-width: 768px){
+  .main-div{
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  img{
+    width: 50%;
+  }
+  .login-div{
+    padding: 20px;
+  }
+  .img-div img{
+    width: 100%;
+    height: auto;
+  }
+  .email-div{
+    margin-left: 20px;
+  }
+  .forgotpwd{
+    position: static;
+    margin-right: 2.5rem;
+  }
+  
+}

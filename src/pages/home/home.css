@@ -2,20 +2,23 @@
     display: flex;
     flex-direction: row;
     height: 1000px;
+ 
 
 }
 
 .homeContainer {
 
-    width: 85%;
+    width: 100%;
 
     /* height: 22vh; */
     display: flex;
     flex-direction: column;
    
+   
 }
 .table{
   background-color: #f8f8f8;
+ 
   }
 
 

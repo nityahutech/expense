@@ -1,5 +1,5 @@
 
-import './sidebar.css';
+// import './sidebar.css';
 import { useNavigate } from "react-router-dom";
 import React from 'react'
 import { useState } from 'react'
@@ -27,27 +27,27 @@ const items = [
 
   getItem('Dashboard', '1',
     <img
-      src="logo/Dashboard.png" alt='image'
+      src="logo/Dashboard.png" alt='hello'
       className="Dash"
 
     />
   ),
   getItem('Expense', 'sub1',
     <img
-      src="logo/Expense.png" alt='image'
+      src="logo/Expense.png" alt='hello'
       className="Dash"
     />
     , [
 
       getItem('Add Expense', '5',
         <img
-          src="logo/dot.png" alt='image'
+          src="logo/dot.png" alt='hello'
           className="dot"
         />
       ),
       getItem('Expense List', '6',
         <img
-          src="logo/dot.png" alt='image'
+          src="logo/dot.png" alt='hello'
           className="dot"
         />),
     ]),
@@ -61,7 +61,7 @@ const Sidebar = () => {
 
   const history = useNavigate()
   const onClick = (e) => {
-
+console.log(e);
     let pathkey = e.key
     switch (pathkey) {
       case "5":
@@ -91,7 +91,7 @@ const Sidebar = () => {
           display: collapsed ? "none" : "block",
           background: '#05445E'
 
-        }} src="logo/logo_1.png" alt='image' />
+        }} src="logo/logo_1.png" alt='hello' />
 
         <Button
           type="primary"
@@ -111,7 +111,7 @@ const Sidebar = () => {
       </div>
 
       <Menu
-        onClick={onClick}
+        onClick={()=>onClick()}
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
         mode="inline"

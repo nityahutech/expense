@@ -1,13 +1,13 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import 'antd/dist/antd.css';
-import { Dropdown, Menu, Space,  } from 'antd';
+import { Dropdown, Menu, Space, } from 'antd';
 // import dropDownimg from "../../../public/logo/dropdown.svg"
 import dropDownimg from "../../assets/dropdown.svg"
 import logoutsvgrepocom from "../../assets/logoutsvgrepocom.svg"
 import abstractuserflat4 from "../../assets/abstractuserflat4.svg"
 import './navbar.css';
 import { useLocation } from 'react-router-dom';
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 const menu = (
@@ -16,7 +16,7 @@ const menu = (
             {
                 key: '1',
                 label: (
-                    <Link to  target="_blank" style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
+                    <Link to target="_blank" style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
                         Admin
                     </Link>
                 ),
@@ -38,17 +38,17 @@ const menu = (
 
 const Navbar = () => {
     const [activePage, setActivePage] = useState("/DashBoard")
-    let loc=useLocation()
+    let loc = useLocation()
 
     useEffect(() => {
-    setActivePage(loc.pathname);
+        setActivePage(loc.pathname);
     }, [loc])
-    
+
 
     return (
-        <div className='navbar' style ={{background:'white'}} >
+        <div className='navbar' style={{ background: 'white' }} >
             <div className='wrapper' >
-                
+
                 <div className='image' >
 
                     <img
@@ -65,28 +65,28 @@ const Navbar = () => {
                 </div>
 
                 <Dropdown overlay={menu} >
-                   
-                        <Space>
-                            Hutech
-                  
-                            <img src={dropDownimg} alt="downArrow" />
-                        </Space>
-                
+
+                    <Space>
+                        Hutech
+
+                        <img src={dropDownimg} alt="downArrow" />
+                    </Space>
+
                 </Dropdown>
-                
+
             </div>
 
             <hr className='line' width="95%" color="#F4F4F4" height="1" padding-left='20' />
 
             <div className='tittle'>
                 {
-                    activePage==='/DashBoard'
-                    ?<h4> <b>Dashboard </b> </h4>
-                    :<h4> <b>Expense </b>/Add Expense </h4>
-                    
+                    activePage === '/DashBoard'
+                        ? <h4> <b>Dashboard </b> </h4>
+                        : <h4> <b>Expense </b>/Add Expense </h4>
+
                 }
-                               
-                
+
+
             </div>
         </div>
 

@@ -37,7 +37,9 @@ const ExpenceForm = () => {
 
 
   return (
+    
     <>
+    
       <div className='expForm' style ={{ margin:"15px" , background:'white'}} >
 
         {/* <Divider orientation="center">Expence Rgister</Divider> */}
@@ -299,7 +301,9 @@ const ExpenceForm = () => {
           </Row>
 
         </Form>
+        
       </div>
+      
     </>
   )
 }

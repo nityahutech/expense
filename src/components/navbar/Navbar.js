@@ -46,7 +46,7 @@ const Navbar = () => {
     
 
     return (
-        <div className='navbar'>
+        <div className='navbar' style ={{background:'white'}} >
             <div className='wrapper' >
                 
                 <div className='image' >

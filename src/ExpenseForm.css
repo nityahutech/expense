@@ -1,0 +1,37 @@
+@media only screen and (max-width: 800px) {
+    .ant-row {
+        
+      display: block;
+      margin-left: 20px;
+      margin-right: 20px;
+      
+    }
+
+    .ant-col-6 {
+        max-width : 100%
+    }
+
+    .ant-form-item{
+        margin-bottom: 0px;
+    }
+
+    .ant-col-12{
+        max-width:100%;
+    }
+    .gutter-row{
+        margin-bottom: 10px;
+    }
+    .ant-divider{
+      
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .ant-divider-horizontal.ant-divider-with-text{
+        margin: 10px 0;
+    }
+    .ant-row{
+        margin-bottom: 10px;
+    }
+  
+
+  }

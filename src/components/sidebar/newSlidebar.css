@@ -111,8 +111,6 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical{
 }
 
 
-
-
 .sidebarTittle{
    
     justify-content: center;
@@ -127,16 +125,6 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical{
     background-color: #05445E;
     height: auto;
  
-   
 }
-.ant-menu-vertical{
-    border-right: 1px solid #05445E;
-}
-.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left{
-
-    border-right: 1px solid #05445E;
-
-}
-
 
 

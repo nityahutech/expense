@@ -10,5 +10,6 @@ export function signup(email, password) {
   }
 
   export function logout() {
+    console.log("logged out successfully!")
     return signOut(auth)
   }

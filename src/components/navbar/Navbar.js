@@ -6,6 +6,7 @@ import dropDownimg from "../../assets/dropdown.svg"
 import logoutsvgrepocom from "../../assets/logoutsvgrepocom.svg"
 import abstractuserflat4 from "../../assets/abstractuserflat4.svg"
 import './navbar.css';
+import { logout } from "../../contexts/AuthContext"
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -26,7 +27,7 @@ const menu = (
             {
                 key: '2',
                 label: (
-                    <Link to target="_blank" style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
+                    <Link to="/" onClick={logout} " style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
                         Logout
                     </Link>
                 ),

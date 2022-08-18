@@ -7,21 +7,24 @@ import './ExpenseForm.css';
 
 import {
   // Cascader,
- 
+
   Input,
   Select,
-  
+
 
   Radio,
   Space,
   Button,
   DatePicker,
   Form,
- 
+
 } from 'antd';
+import { formatCountdown } from 'antd/lib/statistic/utils';
 
 const ExpenceForm = () => {
   const [category, setCategory] = useState("");
+  const [paidby, setPaidby] = useState("");
+
   const { TextArea } = Input;
 
   const handleSubmit = (event) => {
@@ -37,10 +40,10 @@ const ExpenceForm = () => {
 
 
   return (
-    
+
     <>
-    
-      <div className='expForm' style ={{ margin:"15px" , background:'white'}} >
+
+      <div className='expForm' style={{ margin: "15px", background: 'white' }} >
 
         {/* <Divider orientation="center">Expence Rgister</Divider> */}
 
@@ -54,21 +57,25 @@ const ExpenceForm = () => {
           initialValues={{
             remember: true,
           }}
-       
+
           autoComplete="off"
         >
 
-          <Row gutter={[14, 10]}>
-
-            <Col span={6} style={{ background: '' }}></Col>
-            <Col span={6} style={{ background: '' }}>
+          <Row gutter={[40,16]}>
+          
+       
+            {/* <Col span={2} style={{ background: 'black' }}></Col> */}
+            <Col span={12} style={{ background: '',padding:'10' }}>
+              
 
               {/* ------------------------------Paid By------- */}
 
               <Divider orientation='left' orientationMargin={0}>Paid By</Divider>
 
               <Form.Item
-                name="name"
+
+                initialValue={paidby}
+                name="paidby"s
                 rules={[
                   {
                     required: true,
@@ -76,19 +83,34 @@ const ExpenceForm = () => {
                   }, {
                     pattern: /^[a-zA-Z]+$/g,
                     message: 'Please enter Customer Name',
+
                   }
                 ]}
-                
+
               >
+
                 <Input
+                  onChange={(e) => {
+                    // console.log('hiiiiii');
+                    const inputValue = e.target.value;
+                    const firstChar = inputValue.substring(0, 1).toUpperCase();
+                    const remainValue = inputValue.substring(1);
+                    setPaidby(remainValue);
+                    console.log(firstChar + remainValue);
+                    console.log(paidby);
+                    
+
+                  }}
+                  value={paidby}
                   type="text"
                   required
                   placeholder='Enter  Name' />
               </Form.Item>
+              
               {/* --------------------Paid to------------ */}
 
               <Divider orientation='left' orientationMargin={0}>Paid to</Divider>
-              <Form.Item
+              <Form.Item 
                 name="paid to"
                 rules={[
                   {
@@ -99,7 +121,7 @@ const ExpenceForm = () => {
                     message: 'Please enter  Name',
                   }
                 ]}
-                
+
               >
                 <Input
 
@@ -121,12 +143,12 @@ const ExpenceForm = () => {
                     message: 'Please enter Customer Name',
                   }
                 ]}
-                
+
               >
                 <Input required placeholder='Enter Expense For' />
               </Form.Item>
 
-              
+
 
 
               {/* ------------------------------Payment type------- */}
@@ -149,7 +171,9 @@ const ExpenceForm = () => {
                 </Radio.Group>
               </Form.Item>
             </Col>
-            <Col span={6} style={{ background: '' }}>
+            {/* <Col span={4} style={{ background: 'black' }}></Col> */}
+            
+            <Col span={12} style={{ background: '' }}>
 
               {/* ----------------------Datepicker------- */}
 
@@ -180,7 +204,7 @@ const ExpenceForm = () => {
                   { whitespace: true },
 
                 ]}
-                
+
               >
                 <Input
                   required
@@ -209,7 +233,7 @@ const ExpenceForm = () => {
                     message: "Please enter the quantity ",
                   },
                 ]}
-                
+
               >
 
                 <Input
@@ -238,14 +262,14 @@ const ExpenceForm = () => {
               </Form.Item>
 
             </Col>
-            <Col span={6} style={{ background: '' }}></Col>
+            {/* <Col span={2} style={{ background: 'black' }}></Col> */}
           </Row>
           {/* -----------------Text-area--------------- */}
 
           <Row gutter={24}>
-            <Col className='gutter-row' span={6}></Col>
-            <Col className='gutter-row' span={12}>
-              <div style={{ padding: '0px 0' }}>
+            <Col className='gutter-row' span={4}></Col>
+            <Col className='gutter-row' span={16}>
+              <div className="te"style={{ padding: '0px 0' }}>
                 <Divider orientation='left' orientationMargin={0}>Descriptions</Divider>
                 <Form.Item
                   name="Textarea"
@@ -265,24 +289,24 @@ const ExpenceForm = () => {
 
           {/* -----------------------Buttons--------------- */}
 
-          <Row gutter={1}>
-            <Col classsname='gutter-row' span={6}></Col>
-            <Col classsname='gutter-row' span={12}>
-              <div>
+          <Row gutter={[16, 16]}>
+            <Col classsname='gutter-row' span={9}></Col>
+            <Col classsname='gutter-row' span={8}>
+              <div className='submitButton'>
                 <Space>
-                  <Form.Item >
+                  <Form.Item className='submit'>
                     <Button
                       style={{
                         background: '#C1C1C1',
                         borderRadius: '5px',
                         width: '80px',
-                  
+
                         color: 'white',
                         cursor: 'pointer'
                       }}
                     >Cancel</Button>
                   </Form.Item>
-                  <Form.Item>
+                  <Form.Item className='submit'>
                     <button style={{
                       background: '#189AB4',
                       borderRadius: '5px',
@@ -297,13 +321,13 @@ const ExpenceForm = () => {
                 </Space>
               </div>
             </Col>
-            <Col classsname='gutter-row' span={6}></Col>
+            <Col classsname='gutter-row' span={10}></Col>
           </Row>
 
         </Form>
-        
+
       </div>
-      
+
     </>
   )
 }

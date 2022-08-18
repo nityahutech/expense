@@ -1,37 +1,30 @@
-@media only screen and (max-width: 800px) {
-    .ant-row {
-        
-      display: block;
-      margin-left: 20px;
-      margin-right: 20px;
-      
+
+.expForm{
+    padding-left :100px;
+    padding-right: 100px;
+   
+
+}
+
+@media (max-width: 800px) {
+    .expForm{
+        padding-left :10px;
+        padding-right: 10px;
+       
     }
 
-    .ant-col-6 {
-        max-width : 100%
+    .submitButton{
+        display : flex;
+        align-items: center;
+        margin-left: -40px;
     }
 
-    .ant-form-item{
-        margin-bottom: 0px;
-    }
-
-    .ant-col-12{
-        max-width:100%;
-    }
-    .gutter-row{
-        margin-bottom: 10px;
-    }
-    .ant-divider{
-      
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-    .ant-divider-horizontal.ant-divider-with-text{
-        margin: 10px 0;
-    }
-    .ant-row{
-        margin-bottom: 10px;
+   .ant-layout-has-sider{
+        position: absolute;
+        z-index: 10;
+        height: 140vh;
     }
   
 
-  }
+}
+

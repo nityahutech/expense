@@ -112,22 +112,27 @@ img{
     width: 100%;
     height: auto;
   }
-  img{
-    width: 50%;
+  .img-div img{
+    display: none;
+  }
+  .exepnse-logo{
+    margin-left: 70px;
   }
   .login-div{
-    padding: 20px;
+    width: 90%;
+    margin: auto;
+    margin-top: 2rem;
   }
-  .img-div img{
-    width: 100%;
-    height: auto;
-  }
-  .email-div{
+  .email-div, .wlc-div, .msg{
     margin-left: 20px;
   }
   .forgotpwd{
     position: static;
-    margin-right: 2.5rem;
+    margin-right: 2rem; 
   }
+  .signup-msg{
+    text-align: center;
+  }
+
   
 }

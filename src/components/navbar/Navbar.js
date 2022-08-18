@@ -27,7 +27,7 @@ const menu = (
             {
                 key: '2',
                 label: (
-                    <Link to="/" onClick={logout} " style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
+                    <Link to="/" onClick={logout} style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
                         Logout
                     </Link>
                 ),

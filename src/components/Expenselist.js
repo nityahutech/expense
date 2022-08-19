@@ -306,7 +306,7 @@ function ExpenseList() {
         position: ["none", "none"],
       }}
       className="expenseTable"
-      scroll={{ x: 1000 }}
+      scroll={{ x: 1300 }}
       //   onChange={onSort}
     />
   );

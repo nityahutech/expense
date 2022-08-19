@@ -83,7 +83,7 @@ const Navbar = () => {
                 {
                     activePage === '/DashBoard'
                         ? <h4> <b>Dashboard </b> </h4>
-                        : <h4> <b>Expense </b>/Add Expense </h4>
+                        : <h4> <b>Expense </b> </h4>
 
                 }
 

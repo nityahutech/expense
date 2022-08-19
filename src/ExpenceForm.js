@@ -6,6 +6,7 @@ import { Col, Divider, Row } from 'antd';
 import './ExpenseForm.css';
 import ExpenseDataService from './services/ExpenseDataService.js'
 import { useNavigate } from 'react-router-dom';
+
 //import ExpenseDataService from './services/expense.services.js';
 
 
@@ -21,7 +22,8 @@ import {
 
 } from 'antd';
 import { formatCountdown } from 'antd/lib/statistic/utils';
-
+import moment from 'moment';
+const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
 const ExpenceForm = () => {
   // const [category, setCategory] = useState("");
   // const [paidBy, setPaidBy] = useState("");
@@ -43,7 +45,7 @@ const ExpenceForm = () => {
       
       amount: values['amount'],
       catname:  values['expence'],
-      date:  values['paymentDate'].format('YYYY-MM-DD'),
+      date:  values['paymentDate'].format('DD-MM-YYYY'),
       description:  values['description'],
   
       name:  values['paidByInput'],
@@ -93,9 +95,41 @@ const ExpenceForm = () => {
             {/* <Col span={2} style={{ background: 'black' }}></Col> */}
             <Col span={12} style={{ background: '', padding: '10' }}>
 
+
+              {/* -------------------------Expense Name------- */}
+
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Expense Name</Divider>
+              <Form.Item
+                name="expence"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Channel ID is required',
+                  }, {
+                    pattern: /^[a-zA-Z]+$/g,
+                    message: 'Please enter Customer Name',
+                  }
+                ]}
+
+              >
+                <Input
+                  onChange={(e) => {
+
+                    const inputval = e.target.value;
+                    const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                    // setPaidBy(newVal);
+                    form.setFieldsValue({ expence: newVal });
+
+                  }}
+
+
+                  required placeholder='Enter Expense For' />
+              </Form.Item>
+
+
               {/* ------------------------------Paid By------- */}
 
-              <Divider orientation='left' orientationMargin={0}>Paid By</Divider>
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Paid By</Divider>
 
               <Form.Item
 
@@ -131,7 +165,7 @@ const ExpenceForm = () => {
 
               {/* --------------------Paid to------------ */}
 
-              <Divider orientation='left' orientationMargin={0}>Paid to</Divider>
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Paid to</Divider>
               <Form.Item
                 name="paidto"
                 rules={[
@@ -158,42 +192,13 @@ const ExpenceForm = () => {
                   placeholder='Enter Vendor Name' />
               </Form.Item>
 
-              {/* -------------------------Expense Name------- */}
-
-              <Divider orientation='left' orientationMargin={0}>Expense Name</Divider>
-              <Form.Item
-                name="expence"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Channel ID is required',
-                  }, {
-                    pattern: /^[a-zA-Z]+$/g,
-                    message: 'Please enter Customer Name',
-                  }
-                ]}
-
-              >
-                <Input
-                  onChange={(e) => {
-
-                    const inputval = e.target.value;
-                    const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                    // setPaidBy(newVal);
-                    form.setFieldsValue({ expence: newVal });
-
-                  }}
-
-
-                  required placeholder='Enter Expense For' />
-              </Form.Item>
 
 
 
 
               {/* ------------------------------Payment type------- */}
 
-              <Divider orientation='left' orientationMargin={0}>Mode of Payment</Divider>
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Mode of Payment</Divider>
               <Form.Item
                 name="paymentMode"
                 rules={[
@@ -207,7 +212,7 @@ const ExpenceForm = () => {
                   <Radio value="Bank"> Bank Transfer </Radio>
                   <Radio value="Cash"> Cash </Radio>
                   <Radio value="UPI"> UPI </Radio>
-                  <Radio value="COD"> COD</Radio>
+                
                 </Radio.Group>
               </Form.Item>
             </Col>
@@ -217,7 +222,7 @@ const ExpenceForm = () => {
 
               {/* ----------------------Datepicker------- */}
 
-              <Divider orientation='left' orientationMargin={0}>Date</Divider>
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Date</Divider>
               <Form.Item
                 name="paymentDate"
                 rules={[
@@ -227,12 +232,13 @@ const ExpenceForm = () => {
                   },
                 ]}
               >
-                <DatePicker style={{ width: '100%' }} placeholder='Choose Date' />
+               
+                <DatePicker format={dateFormatList} style={{ width: '100%' }} placeholder='Choose Date'/>
               </Form.Item>
 
               {/* ---------------------------Amount------- */}
 
-              <Divider orientation='left' orientationMargin={0}>Amount</Divider>
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Amount</Divider>
               <Form.Item
                 className='numder-inputs'
                 name="amount"
@@ -265,7 +271,7 @@ const ExpenceForm = () => {
 
               {/* --------------------------Quantity------- */}
 
-              <Divider orientation='left' orientationMargin={0}>Quantity</Divider>
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Quantity</Divider>
               <Form.Item
 
                 name="Quantity"
@@ -298,11 +304,12 @@ const ExpenceForm = () => {
               <Divider orientation='left' orientationMargin={0}>Subtotal</Divider>
               <Form.Item
                 name="subTotal"
+                
               >
 
                 <Input
-
-                  required
+                  disabled={true}
+                  
 
                   value={total || 0}
                   placeholder='Total' />

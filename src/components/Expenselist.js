@@ -1,7 +1,7 @@
 import { Space, Table, Tag, DatePicker, Dropdown, Menu, message } from "antd";
 import { Button, Tooltip, Select, Popover, Modal } from "antd";
 import { Typography, Layout, Upload } from "antd";
-// import axios from "axios";
+import axios from "axios";
 import {
   AudioOutlined,
   EditOutlined,
@@ -55,7 +55,7 @@ const data = [
     key: "subTotal",
     sn: "",
     catname: "",
-    name: "",
+    paidname: "",
     date: "",
     status: "",
     quantity: "",
@@ -73,10 +73,34 @@ function ExpenseList() {
     category: "all",
     status: "all",
   });
-
-  const [allExpenses, setAllExpenses] = useState(data || []);
-  const [filterExpenses, setFilterExpense] = useState(data || []);
+  const [allExpenses, setAllExpenses] = useState([]);
+  const [filterExpenses, setFilterExpense] = useState([]);
   const [editedRecord, setEditedRecord] = useState(null);
+
+  useEffect(function () {
+    getExpense();
+  }, []);
+  function getExpense() {
+    axios.get(`http://localhost:3001/api/expense/get-expense`).then((res) => {
+      const persons = res.data.data;
+      console.log(persons);
+      let exp = persons.map((person, i) => ({
+        key: person.expenseId,
+        sn: i + 1,
+        catname: person.expenseName,
+        name: person.paid_by,
+        date: "2022-07-12",
+        paidname: person.paid_to,
+        status: "Paid",
+        quantity: 5,
+        amount: 200,
+        subtotal: 1000,
+        description: "doneasjdksndsvndjfdkjfdvkb",
+      }));
+      setAllExpenses(exp);
+      setFilterExpense(exp);
+    });
+  }
   useEffect(
     function () {
       console.log("filterCriteria:: ", filterCriteria);
@@ -84,9 +108,6 @@ function ExpenseList() {
     [filterCriteria]
   );
 
-  useEffect(() => {
-    console.log("filterExpenses:: ", filterExpenses);
-  }, [filterExpenses]);
   const [modaldata, setmodaldata] = useState([]);
 
   const columns = [

@@ -82,7 +82,7 @@ function LoginPage() {
             >
               <div className="wlc-div ">Welcome back!</div>
               <div className="msg">Let's Access to our dashboard</div>
-              {error && <Alert type="error" message={error}/>}
+              
               <div className="email-div">
                 Email address<label style={{ color: "red" }}>   *</label>
               </div>
@@ -140,6 +140,7 @@ function LoginPage() {
                 </Form.Item>
                 {/* <div className="signup-msg">Don't Have an account? </div> */}
               </Form>
+              {error && <Alert type="error" message={error}/>}
           </div>
           <div className="signup-msg">
             Don't Have an account?{" "}

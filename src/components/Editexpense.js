@@ -31,7 +31,7 @@ const handleChange = (value) => {
 //     label: "Unpaid",
 //   },
 // ];
-const dateFormat = "yyyy-MM-DD";
+const dateFormat = "DD-MM-YYYY";
 const { TextArea } = Input;
 const Editexpense = (props) => {
   const [amount, setAmount] = useState(0);
@@ -39,7 +39,7 @@ const Editexpense = (props) => {
   const [total, setTotal] = useState(0);
   const [optionValue, setOptionValue] = useState("");
   const [paidBy, setPaidBy] = useState("");
-  const [date, setdate] = useState(moment(new Date()).format(dateFormat));
+  const [date, setdate] = useState(moment().format(dateFormat));
   const [paidTo, setPaidTo] = useState("");
   const [description, setDescription] = useState("");
   function calculateTotal() {
@@ -56,8 +56,8 @@ const Editexpense = (props) => {
     const category = props.record ? props.record.catname : "";
     const paidByName = props.record ? props.record.name : "";
     const dateVal = props.record
-      ? moment(new Date(props.record.date)).format(dateFormat)
-      : moment(new Date()).format(dateFormat);
+      ? moment(props.record.date, dateFormat)
+      : moment().format(dateFormat);
     const paidToname = props.record ? props.record.paidname : "";
     // const statusTag = props.record
     //   ? props.record.status
@@ -222,7 +222,9 @@ const Editexpense = (props) => {
             style={{ width: "100%" }}
             placeholder="Choose Date"
             onChange={(value) => {
-              setdate(value);
+              if (value) {
+                setdate(value);
+              }
             }}
           />
         </Form.Item>

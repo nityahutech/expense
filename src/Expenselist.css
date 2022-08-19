@@ -1,8 +1,7 @@
-.tables{
+/* .tables{
    flex-direction: column;
    align-content: center;
-
-}
+} */
 
 /* .ant-form{
     margin: 0;
@@ -11,4 +10,9 @@
 /* .ant-form {
     margin: 10px;
     border: 1px solid black;
+} */
+
+/* .expenseTable table {
+    border-collapse: separate !important;
+    border-spacing: 0px 10px !important;
 } */

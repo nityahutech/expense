@@ -1,10 +1,10 @@
 import React from 'react'
 import Navbar from '../../components/navbar/Navbar';
-import Sidebar from "../../components/sidebar/Sidebar";
+import Sidebar from "../../components/sidebar/NewSidebar";
 import ExpenceForm from '../../ExpenceForm';
 
 
-const DashBoard = () => {
+const ExpenseFrm = () => {
     return (
         <div className='home'>
         <Sidebar />
@@ -22,4 +22,4 @@ const DashBoard = () => {
     )
 }
 
-export default DashBoard
+export default ExpenseFrm

@@ -1,39 +1,35 @@
-// import React from 'react'
-import React, { useState, useEffect } from "react";
-import { Button, Checkbox, Form, Input } from "antd";
+import React from 'react'
+import  { useState } from "react";
+import { Button, Checkbox, Form, Input, Alert } from "antd";
+import { signup, login } from "../contexts/AuthContext"
+import { useNavigate } from "react-router-dom"
 import "../App.css";
 
 function LoginPage() {
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginEmail, setLoginEmail] = useState("")
+  const [loginPassword, setLoginPassword] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const win = window.sessionStorage;
 
-  const handleSubmit = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
+    console.log(loginEmail, loginPassword);
     win.clear();
-    setEmail("");
-    setPassword("");
-  };
+    try {
+      setError("")
+      setLoading(true)
+      await login(loginEmail, loginPassword)
+      navigate( "Home" , { replace: true })
+    } catch {
+      setError("Failed to log in")
+    }
 
-  useEffect(() => {
-    if (win.getItem("email")) setEmail(win.getItem("email"));
-    if (win.getItem("password")) setEmail(win.getItem("password"));
-    console.log(email, password);
-  }, []);
-
-  useEffect(() => {
-    win.setItem("email", email);
-    win.setItem("password", password);
-  }, [email, password]);
+    setLoading(false)
+  }
 
   return (
     <>
@@ -82,18 +78,16 @@ function LoginPage() {
               initialValues={{
                 remember: true,
               }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
               autoComplete="off"
             >
               <div className="wlc-div ">Welcome back!</div>
               <div className="msg">Let's Access to our dashboard</div>
+              
               <div className="email-div">
-                Email address<label style={{ color: "red" }}>*</label>
+                Email address<label style={{ color: "red" }}>   *</label>
               </div>
               <div className="emailInput-div">
                 <Form.Item
-                  // label="Email ID"
                   name="email"
                   rules={[
                     {
@@ -102,15 +96,14 @@ function LoginPage() {
                     },
                   ]}
                 >
-                  <Input onChange={(e) => setEmail(e.target.value)} />
+                  <Input onChange={(e) => setLoginEmail(e.target.value)} />
                 </Form.Item>
               </div>
               <div className="email-div">
-                Password<label style={{ color: "red" }}>*</label>
+                Password<label style={{ color: "red" }}> *</label>
               </div>
               <div className="pwdInput-div">
                 <Form.Item
-                  // label="Password"
                   name="password"
                   rules={[
                     {
@@ -119,9 +112,7 @@ function LoginPage() {
                     },
                   ]}
                 >
-                  <Input.Password
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
+                  <Input.Password onChange={(e) => setLoginPassword(e.target.value)} />
                 </Form.Item>
                 </div>
                 <div className="forgotpwd">Forgot Password?</div>
@@ -143,12 +134,13 @@ function LoginPage() {
                     // span: 16,
                   }}
                 >
-                 <div className="login-btn"> <Button type="" htmlType="submit" style={{backgroundColor: '#189AB4', color:'white'}} onSubmit={handleSubmit}>
+                 <div className="login-btn"> <Button type="submit" htmlType="submit" style={{backgroundColor: '#189AB4', color:'white'}} onClick={handleSubmit} disabled={loading} >
                     Login
                   </Button></div>
                 </Form.Item>
                 {/* <div className="signup-msg">Don't Have an account? </div> */}
               </Form>
+              {error && <Alert type="error" message={error}/>}
           </div>
           <div className="signup-msg">
             Don't Have an account?{" "}

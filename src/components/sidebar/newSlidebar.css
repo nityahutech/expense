@@ -1,0 +1,130 @@
+.ant-layout-sider-zero-width-trigger
+{
+    top: 0;
+    right:10;
+    background-color: #05445E;
+}
+
+
+
+.top {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #05445E;
+    
+}
+
+ul.ant-menu-sub.ant-menu-inline{
+    background: #05445E;
+
+}
+
+
+ul.ant-menu 
+{
+    background: #05445E;
+}
+
+.ant-menu-title-content{
+    color: aliceblue;
+}
+
+.Logo {
+    width: 100%;
+    height: 50px;
+}
+
+.Dash {
+    width: 10%;
+    height: auto;
+    background-color: #05445E;
+}
+
+.dot {
+
+    transform: scale(0.5);
+    background-color: #05445E;
+}
+
+.logos {
+
+    background-color: #05445E;
+}
+
+.ant-menu-submenu-arrow {
+    color: white;
+    padding-left: 24px;
+}
+
+.collapse{
+
+    background-color: #05445E;
+    height: 20px;
+}
+
+ul.ant-menu .ant-menu-sub .ant-menu-vertical{
+    background-color: #05445E;
+}
+
+.ant-menu-submenu-popup > .ant-menu {
+    background-color: #05445E;
+}
+
+
+
+
+.ant-menu-title-content{
+    font-size: 13px;
+    font-weight: 600;
+    color:
+        #FFFFFF;
+    margin-left: 10px;
+}
+
+.ant-menu {
+    background-color: #05445E;
+}
+
+
+.ant-menu-sub.ant-menu-inline {
+    background-color: #05445E;
+}
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: #05445E;
+}
+
+ .collapse{
+
+    background-color: #05445E;
+    height: 20px;
+} 
+
+ .sideTop.ant-menu-item {
+    height: 20px;
+}
+
+.logo{
+    font-size: 30px;
+}
+
+
+.sidebarTittle{
+   
+    justify-content: center;
+    height: 30px;
+    margin-top: 10px;
+   margin-left: 15px;
+
+
+}
+
+.sidebarTop{
+    background-color: #05445E;
+    height: auto;
+ 
+}
+
+

@@ -1,0 +1,29 @@
+
+.expForm{
+    padding-left :100px;
+    padding-right: 100px;
+   
+
+}
+
+@media (max-width: 800px) {
+    .expForm{
+        padding-left :10px;
+        padding-right: 10px;
+       
+    }
+
+    .submitButton{
+        display : flex;
+        align-items: center;
+        margin-left: -40px;
+    }
+
+   .ant-layout-has-sider{
+        position: absolute;
+        z-index: 10;
+        height: 140vh;
+    }
+  
+
+}

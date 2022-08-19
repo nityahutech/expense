@@ -1,5 +1,7 @@
 main{
-    padding: 41px;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
   }
 
   /* .category.ant-select-selector{
@@ -14,11 +16,15 @@ main{
   .row{
     background: #fff;
       padding: 14px;
-      border-radius: 5px
+      border-radius: 5px;
+      margin: 4px 15px;
+
   }
-  .ant-table-wrapper{
+  .expenseTable.ant-table-wrapper{
     background: #fff;
       padding: 11px;
+      margin: 0px 15px;
+      border-radius: 5px;
   }
   .statusTag.ant-tag-green{
     color: white;
@@ -77,13 +83,79 @@ main{
   .upload.ant-btn {
     background:#189AB4;
     color: #fff;
-  }
-  .uploadout.ant-btn{
+    display: flex;
     position: absolute;
+    left: 18px;
+}
+  
+  .uploadout.ant-btn{
     left: 118px;
-    bottom: 10px;
     color: #fff;
     background:#189AB4;
   }
   
+  /* .expenseTable table {
+    border-collapse: separate !important;
+    border-spacing: 0px 10px !important;
+  }
+
+  .expenseTable table thead tr th, .expenseTable table tbody tr td {
+    border-bottom: thin #dadada solid;
+    border-top: thin #dadada solid;
+    padding: 10px 16px;
+  } 
+   .expenseTable table thead tr th {
+    background: #ECECEC !important;
+    padding: 10px 16px;
+  }  */
   
+
+  /* .expenseTable table thead tr th:nth-child(1), .expenseTable table tbody tr td:nth-child(1) {
+    border-left: thin #dadada solid;
+    border-bottom-left-radius: 5px !important;
+    border-top-left-radius: 5px !important;
+}
+
+  .expenseTable table thead tr th:nth-child(10), .expenseTable table tbody tr td:nth-child(10) {
+    border-right: thin #dadada solid;
+    border-bottom-right-radius: 5px !important;
+    border-top-right-radius: 5px !important;
+  } */
+
+  /* .expenseTable table {
+    border-collapse: separate !important;
+    border-spacing: 0px 10px !important;
+    
+} */
+/* .row1.ant-table-cell{
+    text-align: center;
+    width: 74px;
+  } */
+  .expenseTable table thead tr th, .expenseTable table tbody tr td {
+    padding: 10px 16px;
+  } 
+  .row2.ant-table-cell{
+    width: 172px;
+  }
+.row6.ant-table-cell{
+    width: 90px;
+} 
+.row7.ant-table-cell{
+    width: 90px;
+} 
+.row8.ant-table-cell{
+    width: 130px;
+} 
+.row10.ant-table-cell{
+    width: 80px;
+} 
+.row4.ant-table-cell{
+    width: 120px;
+}
+
+.expenseTable .edIt {
+    height: 22px;
+}
+/* @media screen and (max-width: 600px){
+   
+} */

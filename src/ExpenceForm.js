@@ -1,338 +1,389 @@
 import React from 'react';
 import { useState } from 'react';
-import 'antd/dist/antd.css'; 
+import 'antd/dist/antd.css';
 import './ExpenceForm';
 import { Col, Divider, Row } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import 
-  {
-    // Cascader,
-  Upload,  
+import './ExpenseForm.css';
+import ExpenseDataService from './services/ExpenseDataService.js'
+import { useNavigate } from 'react-router-dom';
+
+//import ExpenseDataService from './services/expense.services.js';
+
+
+import {
+  // Cascader,
   Input,
   Select,
-  handleChange,
-  Option,
   Radio,
   Space,
   Button,
   DatePicker,
   Form,
+
 } from 'antd';
-
-
-
-
-// const categories = [
-//   {
-//     value: 'Fruits',
-//     lable: 'Fruits',
-//   },
-//   {
-//     value: 'Waterbottle',
-//     lable: 'Waterbottle',
-//   },
-//   {
-//     value: 'Snacks',
-//     lable: 'Snacks',
-//   },
-//   {
-//     value: 'Other',
-//     lable: 'Other',
-//   },
-// ];
-
-// const paystatus =[
-//   {
-//     value: 'Paid',
-//     label: 'Paid',
-//   },
-//   {
-//     value: 'Unpaid',
-//     label: 'Unpaid',
-//   },
-// ];
-
-const { TextArea } = Input;
-
-
+import { formatCountdown } from 'antd/lib/statistic/utils';
+import moment from 'moment';
+const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
 const ExpenceForm = () => {
+  // const [category, setCategory] = useState("");
+  // const [paidBy, setPaidBy] = useState("");
+  const [form] = Form.useForm();
+  const [amount, setAmount] = useState(0);
+  const [quantity, setQuantity] = useState(0);
+  const [total, setTotal] = useState(0);
+  // const [description, setDescription] = useState("");
 
-  const { Option } = Select;
+  const { TextArea } = Input;
+  const navigate = useNavigate();
 
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
+  const onFinish = values => {
+    console.log('Received values of form: ', values);
 
+  
 
-
-    const[number1,setNumber1] = useState();
-    const[number2,setNumber2] = useState();
-    const [total,setTotal] = useState(); 
-
-     function calculateTotal(){
-      setTotal(number1*number2);
+    const valuesToservice = {
+      
+      amount: values['amount'],
+      catname:  values['expence'],
+      date:  values['paymentDate'].format('DD-MM-YYYY'),
+      description:  values['description'],
+  
+      name:  values['paidByInput'],
+      paidname:  values['paidto'],
+      quantity:  values['Quantity'],
+      paymenttype:  values['paymentMode'],
+     
+      // status:  values['paymentDate'],
+      subtotal:  values['subTotal'],
     }
 
-    return (
-  <>
-  <div >
-    {/* <Divider orientation="center">Expence Rgister</Divider> */}
-      <Form
-      labelcol={{
-        span:4,
-      }}
-      wrappercol={{
-        span:14,
-      }}
-      >
-          <Row gutter={[24,8]}>
-            {/* ------------column-spacer-------------------- */}
-            <Col span={6} style={{background:''}}></Col>
-             {/* ------------Left-column-------------------- */}
-            <Col span={6} style={{background:''}}>
-            <Divider orientation='left' orientationMargin={0}>Category</Divider>
+    console.log('valuesToservice: ', valuesToservice);
+
+    ExpenseDataService.addExpenses(valuesToservice)
+      .then(response => {
+        console.log(response);
+        navigate('/Home');
+      })
+      .catch(error => {
+        console.log(error.message);
+
+      })
+  };
+
+  return (
+
+    <>
+      <div className='expForm' style={{ margin: "15px", background: 'white' }} >
+
+        <Form
+          form={form}
+          labelcol={{
+            span: 4,
+          }}
+          wrappercol={{
+            span: 14,
+          }}
+          initialValues={{
+            remember: true,
+          }}
+
+          autoComplete="off"
+          onFinish={onFinish}
+        >
+          <Row gutter={[40, 16]}>
+
+            {/* <Col span={2} style={{ background: 'black' }}></Col> */}
+            <Col span={12} style={{ background: '', padding: '10' }}>
+
+
+              {/* -------------------------Expense Name------- */}
+
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Expense Name</Divider>
               <Form.Item
-              name="cascade"
-              rules={[
-                    {
-                      type: 'array',
-                      message: 'Please enter the expence category',
-                      required: true,
-                    },
-                  ]}
+                name="expence"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Channel ID is required',
+                  }, {
+                    pattern: /^[a-zA-Z]+$/g,
+                    message: 'Please enter Customer Name',
+                  }
+                ]}
+
               >
-                <Select
-                    placeholder='Choose Category'
-                    style={{
-                      width: '100%',
-                    }}
-                    onChange={handleChange}
-                  >
-                    <Option value="fruits" >Fruits</Option>
-                    <Option value="Water">Water</Option>
-                    <Option value="Others">Others</Option>
-                  </Select>
-              {/* <Cascader 
-              placeholder='Choose Category'
-              options={categories} /> */}
+                <Input
+                  onChange={(e) => {
+
+                    const inputval = e.target.value;
+                    const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                    // setPaidBy(newVal);
+                    form.setFieldsValue({ expence: newVal });
+
+                  }}
+
+
+                  required placeholder='Enter Expense For' />
               </Form.Item>
+
+
               {/* ------------------------------Paid By------- */}
-              <Divider orientation='left' orientationMargin={0}>Paid By</Divider>
+
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Paid By</Divider>
+
               <Form.Item
-                name="name"
+
+                name="paidByInput"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter your name"
-                  },
+                    message: 'Channel ID is required',
+                  }, {
+                    pattern: /^[a-zA-Z]+$/g,
+                    message: 'Please enter Customer Name',
+
+                  }
                 ]}
+
               >
-                <Input placeholder='Enter Customer Name'/>
+
+                <Input
+
+                  onChange={(e) => {
+
+                    const inputval = e.target.value;
+                    const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                    // setPaidBy(newVal);
+                    form.setFieldsValue({ paidByInput: newVal });
+
+                  }}
+
+                  type="text"
+                  required
+                  placeholder='Enter  Name' />
               </Form.Item>
-              {/* -------------------------Expense type------- */}
-              <Divider orientation='left' orientationMargin={0}>Nature of expense</Divider>
+
+              {/* --------------------Paid to------------ */}
+
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Paid to</Divider>
               <Form.Item
-                name="expencetype" 
+                name="paidto"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter the expence type"
+                    message: 'Channel ID is required',
+                  }, {
+                    pattern: /^[a-zA-Z]+$/g,
+                    message: 'Please enter  Name',
+                  }
+                ]}
+
+              >
+                <Input
+                  onChange={(e) => {
+
+                    const inputval = e.target.value;
+                    const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                    // setPaidBy(newVal);
+                    form.setFieldsValue({ paidto: newVal });
+
+                  }}
+                  required
+                  placeholder='Enter Vendor Name' />
+              </Form.Item>
+
+
+
+
+
+              {/* ------------------------------Payment type------- */}
+
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Mode of Payment</Divider>
+              <Form.Item
+                name="paymentMode"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter the paymeny status"
                   },
                 ]}
               >
-                <Input placeholder='Enter Expense For'/>
-              </Form.Item>
-              {/* ----------------------------------Status------- */}
-              <Divider orientation='left' orientationMargin={0}>Status</Divider>
-              <Form.Item 
-                name="cascade"
-                rules={[
-                      {
-                        type: 'array',
-                        message: "Please enter the paymeny status",
-                        required: true,
-                      },
-                    ]}>
-                  <Select
-                    placeholder='Choose Category'
-                    style={{
-                      width: '100%',
-                    }}
-                    onChange={handleChange}
-                  >
-                    <Option value="fruits" >Paid</Option>
-                    <Option value="Water">Unpaid</Option>
-                  </Select>
-                  {/* <Cascader
-                    
-                    placeholder='Status of the payment'
-                    options={paystatus} /> */}
-              </Form.Item>
-              {/* ----------------------------------------------------------Payment type------- */}
-                <Divider orientation='left' orientationMargin={0}>Mode of Payment</Divider>
-                <Form.Item
-                  name="paytype" 
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter the paymeny status"
-                    },
-                  ]}
-                >
                 <Radio.Group>
-                <Radio value="Bank"> Bank Transfer </Radio>
+                  <Radio value="Bank"> Bank Transfer </Radio>
                   <Radio value="Cash"> Cash </Radio>
                   <Radio value="UPI"> UPI </Radio>
+                
                 </Radio.Group>
               </Form.Item>
             </Col>
-            {/* ------------Right-column-------------------- */}
-            <Col span={6} style={{background:''}}>
-            
-                      {/* ----------------------------------Datepicker------- */}
-                    <Divider orientation='left' orientationMargin={0}>Date</Divider>
-                      <Form.Item 
-                        name="paytype" 
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please Choose a Date"
-                          },
-                        ]}
-                      >
-                        <DatePicker style={{ width: '100%' }} placeholder='Choose Date'/>
-                      </Form.Item>
-                      {/* --------------------------------------Amount------- */}
-                      <Divider orientation='left' orientationMargin={0}>Amount</Divider>
-                      <Form.Item 
-                        className='numder-inputs'
-                        name="amount" 
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter the amount"
-                          },
-                        ]}
-                      >
-                        <Input
-                        // type="number"
-                        value={number1}
-                        onChange={(e)=> {const ant=e.target.value;
-                          setNumber1(ant);
-                          setTotal(ant*number2);}}
-                        placeholder='Enter Amount Here' 
-                        />
-                      </Form.Item>
-                      {/* --------------------------------------Quantity------- */}
-                      <Divider orientation='left' orientationMargin={0}>Quantity</Divider>
-                      <Form.Item
-                        name="Quantity" 
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter the quantity of the items/services",
-                          },
-                        ]}
-                      >
-                        <Input
-                        //  type="number"
-                        value={number2}
-                        onChange={(e)=> {const qty=e.target.value;
-                          setNumber2(qty);
-                          setTotal(qty*number1);}}
-                         placeholder='Quantity of the item'/>
-                      </Form.Item>
-                      {/* --------------------------------------Sub-total------- */}
-                      <Divider orientation='left' orientationMargin={0}>Subtotal</Divider>
-                          <Form.Item >
-                            <Input
-                            readOnly
-                            // onChange={calculateTotal}
-                            value={total} 
-                            placeholder='Total'/>
-                          </Form.Item>
-                      {/* --------------------------------------Upload------- */}
-                      <Divider orientation='left' orientationMargin={0}>Upload</Divider>
-                      <Form.Item 
-                      // label="Upload" 
-                      valuePropName="fileList"
-                      name="Quantity" 
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter the quantity of the items/services",
-                          },
-                        ]}
-                      >
-                        <Upload action="/upload.do" listType="picture-card">
-                          <div>
-                            <PlusOutlined />
-                            <div style={{ marginTop: 8 }}>Upload</div>
-                          </div>
-                        </Upload>
-                      </Form.Item>
-        
+            {/* <Col span={4} style={{ background: 'black' }}></Col> */}
+
+            <Col span={12} style={{ background: '' }}>
+
+              {/* ----------------------Datepicker------- */}
+
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Date</Divider>
+              <Form.Item
+                name="paymentDate"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Choose a Date"
+                  },
+                ]}
+              >
+               
+                <DatePicker format={dateFormatList} style={{ width: '100%' }} placeholder='Choose Date'/>
+              </Form.Item>
+
+              {/* ---------------------------Amount------- */}
+
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Amount</Divider>
+              <Form.Item
+                className='numder-inputs'
+                name="amount"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter the amount",
+                    pattern: /^[0-9\b]+$/,
+                  },
+                  { whitespace: true },
+
+                ]}
+
+              >
+                <Input
+                  required
+
+
+                  onChange={(e) => {
+                    const amt = e.target.value;
+                    setAmount(amt);
+                    setTotal(amt * quantity);
+                    form.setFieldsValue({ subTotal: amt * quantity });
+
+                  }}
+
+                  placeholder='Enter Amount Here'
+                />
+              </Form.Item>
+
+              {/* --------------------------Quantity------- */}
+
+              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Quantity</Divider>
+              <Form.Item
+
+                name="Quantity"
+                rules={[
+                  {
+                    required: false,
+                    message: "Please enter the quantity ",
+                    pattern: /^[0-9\b]+$/,
+                  },
+                ]}
+
+              >
+
+                <Input
+                  required
+                  min={0}
+
+                  onChange={(e) => {
+                    const qnt = e.target.value;
+                    setQuantity(qnt);
+                    setTotal(amount * qnt);
+                    form.setFieldsValue({ subTotal: amount * qnt });
+                  }}
+                  placeholder='Quantity of the item' />
+
+              </Form.Item>
+
+              {/* -------------------------Sub-total------- */}
+
+              <Divider orientation='left' orientationMargin={0}>Subtotal</Divider>
+              <Form.Item
+                name="subTotal"
+                
+              >
+
+                <Input
+                  disabled={true}
+                  
+
+                  value={total || 0}
+                  placeholder='Total' />
+              </Form.Item>
+
             </Col>
-            {/* ------------column-spacer-------------------- */}
-            <Col span={6} style={{background:''}}></Col>
+            {/* <Col span={2} style={{ background: 'black' }}></Col> */}
           </Row>
-          {/* -----------------------Text-area--------------- */}
+          {/* -----------------Text-area--------------- */}
+
           <Row gutter={24}>
-              <Col className='gutter-row' span={6}></Col>
-              <Col className='gutter-row' span={12}>
-                <div style={{padding:'8px 0'}}>
-                  <Divider orientation='left' orientationMargin={0}>Descriptions</Divider>
-                    <Form.Item 
-                    name="Textarea" 
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter the Description ",
-                      },
-                    ]}
-                    >
-                      <TextArea rows={4} />
-                    </Form.Item>
-                  </div>
-              </Col>
-              <Col className='gutter-row' span={6}></Col>
+            <Col className='gutter-row' span={4}></Col>
+            <Col className='gutter-row' span={16}>
+              <div className="te" style={{ padding: '0px 0' }}>
+                <Divider orientation='left' orientationMargin={0}>Descriptions</Divider>
+                <Form.Item
+                  name="description"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter the Description ",
+                    },
+                  ]}
+                >
+                  <TextArea rows={3} />
+                </Form.Item>
+              </div>
+            </Col>
+            <Col className='gutter-row' span={6}></Col>
           </Row>
+
           {/* -----------------------Buttons--------------- */}
-          <Row gutter={24}>
-                   <Col classsname='gutter-row' span={6}></Col>
-                   <Col classsname='gutter-row' span={12}>
-                   <div style={{float:'right'}}>
-                   <Space>
-                        <Form.Item >
-                          <Button
-                          style={{background:'#C1C1C1',
-                          borderRadius:'5px',
-                          width:'134px',
-                          height:'44px',
-                          color:'white',
-                          cursor:'pointer'}}
-                          >Cancle</Button>
-                        </Form.Item>
-                        <Form.Item>
-                          <button style={{background:'#189AB4',
-                          borderRadius:'5px',
-                          borderWidth:'0px',
-                          width:'134px',
-                          height:'44px',
-                          color:'white',
-                          cursor:'pointer',}} 
-                          type="primary">Submit</button>
-                        </Form.Item>
-                  </Space>
-                  </div>
-                   </Col>
-                   <Col classsname='gutter-row' span={6}></Col>
+
+          <Row gutter={[16, 16]}>
+            <Col classsname='gutter-row' span={9}></Col>
+            <Col classsname='gutter-row' span={8}>
+              <div className='submitButton'>
+                <Space>
+                  <Form.Item className='submit'>
+                    <Button
+                      style={{
+                        background: '#C1C1C1',
+                        borderRadius: '5px',
+                        width: '80px',
+
+                        color: 'white',
+                        cursor: 'pointer'
+                      }}
+                    >Cancel</Button>
+                  </Form.Item>
+                  <Form.Item className='submit'>
+                    <button style={{
+                      background: '#189AB4',
+                      borderRadius: '5px',
+                      borderWidth: '0px',
+                      width: '80px',
+                      height: '30px',
+                      color: 'white',
+                      cursor: 'pointer',
+                    }}
+                      type="primary">Submit</button>
+                  </Form.Item>
+                </Space>
+              </div>
+            </Col>
+            <Col classsname='gutter-row' span={10}></Col>
           </Row>
-           
-      </Form>
-  </div>
-  </>
-)
+
+        </Form>
+
+      </div>
+
+    </>
+  )
 }
 
 export default ExpenceForm;

@@ -102,3 +102,37 @@ img{
   text-align: center;
   font-family: sans-serif;
 }
+
+
+/* -----------mobile--------------- */
+
+@media (max-width: 768px){
+  .main-div{
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .img-div img{
+    display: none;
+  }
+  .exepnse-logo{
+    margin-left: 70px;
+  }
+  .login-div{
+    width: 90%;
+    margin: auto;
+    margin-top: 2rem;
+  }
+  .email-div, .wlc-div, .msg{
+    margin-left: 20px;
+  }
+  .forgotpwd{
+    position: static;
+    margin-right: 2rem; 
+  }
+  .signup-msg{
+    text-align: center;
+  }
+
+  
+}

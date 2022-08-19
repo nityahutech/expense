@@ -94,7 +94,7 @@ main{
     background:#189AB4;
   }
   
-  .expenseTable table {
+  /* .expenseTable table {
     border-collapse: separate !important;
     border-spacing: 0px 10px !important;
   }
@@ -105,14 +105,12 @@ main{
     padding: 10px 16px;
   } 
    .expenseTable table thead tr th {
-    /* border-bottom: thin #dadada solid;
-    border-top: thin #dadada solid; */
     background: #ECECEC !important;
     padding: 10px 16px;
-  } 
+  }  */
   
 
-  .expenseTable table thead tr th:nth-child(1), .expenseTable table tbody tr td:nth-child(1) {
+  /* .expenseTable table thead tr th:nth-child(1), .expenseTable table tbody tr td:nth-child(1) {
     border-left: thin #dadada solid;
     border-bottom-left-radius: 5px !important;
     border-top-left-radius: 5px !important;
@@ -122,17 +120,20 @@ main{
     border-right: thin #dadada solid;
     border-bottom-right-radius: 5px !important;
     border-top-right-radius: 5px !important;
-  }
+  } */
 
-  .expenseTable table {
+  /* .expenseTable table {
     border-collapse: separate !important;
     border-spacing: 0px 10px !important;
     
-}
+} */
 /* .row1.ant-table-cell{
     text-align: center;
     width: 74px;
   } */
+  .expenseTable table thead tr th, .expenseTable table tbody tr td {
+    padding: 10px 16px;
+  } 
   .row2.ant-table-cell{
     width: 172px;
   }

@@ -1,7 +1,26 @@
-import { Space, Table, Tag, DatePicker, Dropdown, Menu, message } from "antd";
-import { Button, Tooltip, Select, Popover, Modal } from "antd";
-import { Typography, Layout, Upload } from "antd";
-import axios from "axios";
+import {
+  Col,
+  Divider,
+  Row,
+  Input,
+  Space,
+  Typography,
+  Layout,
+  Upload,
+  Table,
+  DatePicker,
+  Button,
+  Tooltip,
+  Select,
+  Popover,
+  Modal,
+  Tag,
+  Dropdown,
+  Menu,
+  message,
+} from "antd";
+import moment from "moment";
+// import axios from "axios";
 import {
   AudioOutlined,
   EditOutlined,
@@ -9,16 +28,18 @@ import {
   DeleteOutlined,
   ArrowUpOutlined,
   ArrowDownOutlined,
+  DownOutlined,
+  UserOutlined,
+  SearchOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
-import { Input } from "antd";
-import { Col, Divider, Row } from "antd";
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
-import { SearchOutlined, UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/expenselist.css";
 import Editexpense from "./Editexpense";
 import { upload } from "@testing-library/user-event/dist/upload";
+const { RangePicker } = DatePicker;
+const dateFormat = "DD-MM-YYYY";
 
 const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;
@@ -30,7 +51,7 @@ const data = [
     sn: "1",
     catname: "food",
     name: "Ekta",
-    date: "2022-07-12",
+    date: "12-07-2022",
     paidname: "kl",
     status: "Paid",
     quantity: 5,
@@ -44,24 +65,12 @@ const data = [
     catname: "water",
     paidname: "k2",
     name: "Pooja",
-    date: "2022-07-20",
+    date: "20-07-2022",
     status: "Unpaid",
     quantity: 5,
     amount: 500,
     subtotal: 2500,
     description: "pending",
-  },
-  {
-    key: "subTotal",
-    sn: "",
-    catname: "",
-    paidname: "",
-    date: "",
-    status: "",
-    quantity: "",
-    amount: "Total",
-    subtotal: 3500,
-    description: "",
   },
 ];
 
@@ -69,38 +78,68 @@ function ExpenseList() {
   const navigate = useNavigate();
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
-    date: "",
+    date: [],
     category: "all",
     status: "all",
   });
-  const [allExpenses, setAllExpenses] = useState([]);
-  const [filterExpenses, setFilterExpense] = useState([]);
+  const [allExpenses, setAllExpenses] = useState(data || []);
+  const [filterExpenses, setFilterExpense] = useState(data || []);
+  const [tableData, setTableData] = useState([]);
   const [editedRecord, setEditedRecord] = useState(null);
 
-  useEffect(function () {
-    getExpense();
-  }, []);
-  function getExpense() {
-    axios.get(`http://localhost:3001/api/expense/get-expense`).then((res) => {
-      const persons = res.data.data;
-      console.log(persons);
-      let exp = persons.map((person, i) => ({
-        key: person.expenseId,
-        sn: i + 1,
-        catname: person.expenseName,
-        name: person.paid_by,
-        date: "2022-07-12",
-        paidname: person.paid_to,
-        status: "Paid",
-        quantity: 5,
-        amount: 200,
-        subtotal: 1000,
-        description: "doneasjdksndsvndjfdkjfdvkb",
-      }));
-      setAllExpenses(exp);
-      setFilterExpense(exp);
-    });
-  }
+  useEffect(() => {
+    if (filterExpenses.length > 0) {
+      const totalAmount = filterExpenses.reduce((acc, expense) => {
+        acc += expense.amount * expense.quantity;
+        return acc;
+      }, 0);
+      const modifiedFilterExpense = [
+        ...filterExpenses,
+        {
+          key: "subTotal",
+          sn: "",
+          name: "",
+          catname: "",
+          paidname: "",
+          date: "",
+          status: "",
+          quantity: "",
+          amount: "Total",
+          subtotal: totalAmount,
+          description: "",
+        },
+      ];
+      setTableData(modifiedFilterExpense);
+    } else {
+      setTableData([]);
+    }
+  }, [filterExpenses]);
+
+  // useEffect(function () {
+  //   // getExpense();
+  // }, []);
+  // function getExpense() {
+  //   axios.get(`http://localhost:3001/api/expense/get-expense`).then((res) => {
+  //     const persons = res.data.data;
+  //     console.log(persons);
+  //     let exp = persons.map((person, i) => ({
+  //       key: person.expenseId,
+  //       sn: i + 1,
+  //       catname: person.expenseName,
+  //       name: person.paid_by,
+  //       date: "2022-07-12",
+  //       paidname: person.paid_to,
+  //       status: "Paid",
+  //       quantity: 5,
+  //       amount: 200,
+  //       subtotal: 1000,
+  //       description: "doneasjdksndsvndjfdkjfdvkb",
+  //     }));
+  //     setAllExpenses(exp);
+  //     setFilterExpense(exp);
+  //   });
+  // }
+
   useEffect(
     function () {
       console.log("filterCriteria:: ", filterCriteria);
@@ -318,34 +357,25 @@ function ExpenseList() {
     setEditedRecord(record);
   };
 
-  const Value = () => (
-    <Table
-      columns={columns}
-      dataSource={filterExpenses}
-      //    rowSelection={rowSelection}
-      pagination={{
-        position: ["none", "none"],
-      }}
-      className="expenseTable"
-      scroll={{ x: 1300 }}
-      //   onChange={onSort}
-    />
-  );
   //   const onSort = (pagination, sorter) => {
   //     console.log("param", pagination, sorter);
   //   };
 
   const onChange = (date, dateString) => {
-    setFilterCriteria({ ...filterCriteria, date: dateString });
-    if (dateString) {
-      let result = allExpenses.filter((ex) =>
-        ex.date.toLowerCase().includes(dateString.toLowerCase())
-      );
+    setFilterCriteria({ ...filterCriteria, date });
+    if (date) {
+      let result = allExpenses.filter((ex) => {
+        return (
+          moment(ex.date, dateFormat).isSame(date[0], "day") ||
+          moment(ex.date, dateFormat).isSame(date[1], "day") ||
+          (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
+            moment(ex.date, dateFormat).isSameOrBefore(date[1]))
+        );
+      });
       setFilterExpense(result);
     } else {
       setFilterExpense(allExpenses);
     }
-    console.log(date, dateString);
   };
 
   const searchChange = (e) => {
@@ -354,6 +384,7 @@ function ExpenseList() {
     let search = e.target.value;
     setFilterCriteria({ ...filterCriteria, search: search });
     if (search) {
+      console.log({ search });
       let result = allExpenses.filter(
         (ex) =>
           ex.catname.toLowerCase().includes(search.toLowerCase()) ||
@@ -413,7 +444,7 @@ function ExpenseList() {
           gutter={[0, 8]}
           style={{ marginBottom: "0rem", marginTop: "1.5rem" }}
         >
-          <Col xs={22} sm={10} md={8}>
+          <Col xs={22} sm={10} md={8} lg={6}>
             <Input
               placeholder="Search"
               prefix={<SearchOutlined />}
@@ -421,15 +452,15 @@ function ExpenseList() {
               style={{ width: "95%" }}
             />
           </Col>
-          <Col xs={22} sm={10} md={4}>
-            <DatePicker
-              placeholder="Date"
+          <Col xs={22} sm={10} md={8} lg={6}>
+            <RangePicker
+              defaultValue={[]}
+              format={dateFormat}
+              style={{ width: "95%" }}
               onChange={onChange}
-              // style={{ cursor: "pointer" }}
-              style={{ cursor: "pointer", width: "95%" }}
             />
           </Col>
-          <Col xs={22} sm={10} md={6}>
+          {/* <Col xs={22} sm={10} md={6}>
             <Select
               showSearch
               defaultValue="Choose Expense Name"
@@ -446,7 +477,7 @@ function ExpenseList() {
               <Option value="water">Water</Option>
               <Option value="all">All Category</Option>
             </Select>
-          </Col>
+          </Col> */}
           {/* <Col flex={"1"}>
             <Space wrap>
               {
@@ -468,7 +499,7 @@ function ExpenseList() {
               }
             </Space>
           </Col> */}
-          <Col xs={22} sm={10} md={6}>
+          <Col xs={22} sm={10} md={6} lg={4}>
             <Button
               className="addExpense"
               type="primary"
@@ -480,7 +511,17 @@ function ExpenseList() {
           </Col>
         </Row>
         <div style={{ padding: "10px 0px" }}></div>
-        {Value()}
+        <Table
+          columns={columns}
+          dataSource={tableData}
+          //    rowSelection={rowSelection}
+          pagination={{
+            position: ["none", "none"],
+          }}
+          className="expenseTable"
+          scroll={{ x: 1300 }}
+          //   onChange={onSort}
+        />
       </Content>
       {/* <Editexpense record={editedRecord} /> */}
       <Modal

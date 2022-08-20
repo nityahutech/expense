@@ -1,11 +1,8 @@
-.ant-layout-sider-zero-width-trigger
-{
+.ant-layout-sider-zero-width-trigger {
     top: 0;
-    right:10;
+    right: 10;
     background-color: #05445E;
 }
-
-
 
 .top {
     height: 50px;
@@ -13,21 +10,19 @@
     align-items: center;
     justify-content: space-evenly;
     background-color: #05445E;
-    
+
 }
 
-ul.ant-menu-sub.ant-menu-inline{
+ul.ant-menu-sub.ant-menu-inline {
     background: #05445E;
 
 }
 
-
-ul.ant-menu 
-{
+ul.ant-menu {
     background: #05445E;
 }
 
-.ant-menu-title-content{
+.ant-menu-title-content {
     color: aliceblue;
 }
 
@@ -58,24 +53,21 @@ ul.ant-menu
     padding-left: 24px;
 }
 
-.collapse{
+.collapse {
 
     background-color: #05445E;
     height: 20px;
 }
 
-ul.ant-menu .ant-menu-sub .ant-menu-vertical{
+ul.ant-menu .ant-menu-sub .ant-menu-vertical {
     background-color: #05445E;
 }
 
-.ant-menu-submenu-popup > .ant-menu {
+.ant-menu-submenu-popup>.ant-menu {
     background-color: #05445E;
 }
 
-
-
-
-.ant-menu-title-content{
+.ant-menu-title-content {
     font-size: 13px;
     font-weight: 600;
     color:
@@ -87,7 +79,6 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical{
     background-color: #05445E;
 }
 
-
 .ant-menu-sub.ant-menu-inline {
     background-color: #05445E;
 }
@@ -96,35 +87,32 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical{
     background-color: #05445E;
 }
 
- .collapse{
+.collapse {
 
     background-color: #05445E;
     height: 20px;
-} 
+}
 
- .sideTop.ant-menu-item {
+.sideTop.ant-menu-item {
     height: 20px;
 }
 
-.logo{
+.logo {
     font-size: 30px;
 }
 
+.sidebarTittle {
 
-.sidebarTittle{
-   
     justify-content: center;
     height: 30px;
     margin-top: 10px;
-   margin-left: 15px;
-
+    margin-left: 15px;
+    margin-bottom: 10px;
 
 }
 
-.sidebarTop{
+.sidebarTop {
     background-color: #05445E;
     height: auto;
- 
+
 }
-
-

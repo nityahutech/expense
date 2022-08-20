@@ -7,37 +7,60 @@
 
 .homeContainer {
 
-  width: 100%;
+  width: 84%;
   display: flex;
   flex-direction: column;
-   
-}
-.table{
-/* background-color: #d82323; */
-height: 120vh;
+  height: auto;
+
 
 }
+
+.sidecontainer {
+  background-color: #05445E;
+  height: 100vh;
+}
+
+.tables{
+  width: 100%;
+}
+
+
 
 @media (max-width: 800px) {
-  .homeContainer{
+  .homeContainer {
     position: absolute;
+    width: 100%;
+ 
   }
 
   .home {
- 
-      height: 100%;
-  }
-  
-.ant-layout-has-sider{
-  height: 80vh;
-}
-  .table{
 
     height: 100%;
-   
-    }
+  }
+
+  /* .ant-layout-has-sider {
+    height: 80vh;
+  } */
+
+  .table {
+
+    height: 100%;
+
+  }
+
+  .sidecontainer {
+    background-color: #05445E;
+    height: 00vh;
+  }
+  
 }
 
+@media (max-width: 1024px) {
+  .homeContainer {
+   
+    width: 100%;
+ 
+  }
 
-
-
+  
+}

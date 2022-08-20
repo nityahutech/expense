@@ -101,10 +101,11 @@ const ExpenceForm = () => {
               <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Expense Name</Divider>
               <Form.Item
                 name="expence"
+              
                 rules={[
                   {
                     required: true,
-                    message: 'Channel ID is required',
+                    message: 'Please enter Customer Name',
                   }, {
                     pattern: /^[a-zA-Z]+$/g,
                     message: 'Please enter Customer Name',
@@ -137,7 +138,7 @@ const ExpenceForm = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Channel ID is required',
+                    message: 'Please enter Customer Name',
                   }, {
                     pattern: /^[a-zA-Z]+$/g,
                     message: 'Please enter Customer Name',
@@ -171,7 +172,7 @@ const ExpenceForm = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Channel ID is required',
+                    message: 'Please enter  Name',
                   }, {
                     pattern: /^[a-zA-Z]+$/g,
                     message: 'Please enter  Name',

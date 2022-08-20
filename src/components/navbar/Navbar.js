@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import 'antd/dist/antd.css';
-import { Dropdown, Menu, Space, } from 'antd';
+import { Dropdown, Menu, Space } from 'antd';
 // import dropDownimg from "../../../public/logo/dropdown.svg"
 import dropDownimg from "../../assets/dropdown.svg"
 import logoutsvgrepocom from "../../assets/logoutsvgrepocom.svg"
@@ -9,6 +9,9 @@ import './navbar.css';
 import { logout } from "../../contexts/AuthContext"
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
+
+
 
 
 const menu = (
@@ -53,14 +56,16 @@ const Navbar = () => {
                 <div className='image' >
 
                     <img
-                        src="logo/bell.png" alt='imh'
+                        src="/logo/bell.png" alt='imh'
                         className="bell"
                     />
 
                     <div className="item">
                         <img
-                            src="logo/logo.png" alt='imagh'
+                            src="/logo/logo.png" alt='imagh'
                             className="avatar"
+                            style={{cursor:'pointer'}}
+                            
                         />
                     </div>
                 </div>
@@ -68,32 +73,30 @@ const Navbar = () => {
                 <Dropdown overlay={menu} >
 
                     <Space>
-                        Hutech
+                       <h1 style={{cursor:'pointer', fontSize: '16px',marginTop:'10px'}} >  Hutech </h1>
 
-                        <img src={dropDownimg} alt="downArrow" />
+                        <img src={dropDownimg} alt="downArrow"  style={{cursor:'pointer'}} />
+                       
                     </Space>
 
                 </Dropdown>
 
             </div>
 
-            <hr className='line' width="95%" color="#F4F4F4" height="1" padding-left='20' />
+            {/* <hr className='line' width="95%" color="#F4F4F4" height="1" padding-left='20' /> */}
 
             <div className='tittle'>
-                {
+
+                <ExpenseBreadCrumb/>
+                {/* {
                     activePage === '/DashBoard'
                         ? <h4> <b>Dashboard </b> </h4>
                         : <h4> <b>Expense </b> </h4>
 
-                }
-
+                } */}
 
             </div>
         </div>
-
-
-
-
 
     )
 }

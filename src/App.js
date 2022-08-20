@@ -17,9 +17,9 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/Home" element={<Home />} />
-        <Route path="/DashBoard" element={<DashBoard />} />
-        <Route path="/ExpenseFrm" element={<ExpenseFrm />} />
-        <Route path="/ExpenseList" element={<ExpenseList />} />
+        <Route path="/DashBoard" element={<DashBoard />}  />
+        <Route path="/Expense/ExpenseFrm" element={<ExpenseFrm />} />
+        <Route path="/Expense/ExpenseList" element={<ExpenseList />} />
         <Route path="/New" element={<NewSider />} />
 
       </Routes>

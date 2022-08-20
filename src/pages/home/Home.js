@@ -1,6 +1,5 @@
 import React from "react";
 import Navbar from "../../components/navbar/Navbar";
-
 import NewSider from '../../components/sidebar/NewSidebar'
 import Expenselist from "../../components/Expenselist";
 import "./home.css";
@@ -8,17 +7,23 @@ import "./home.css";
 const home = () => {
   return (
     <div className="home">
-      {/* <Sidebar /> */}
-      <NewSider/>
-      <div className="homeContainer">
-        <Navbar />
-        <div className="table" >
-          <div className="tables">
-            <Expenselist />
-          </div>
-        </div>
-      </div>
+
+    <div className="sidecontainer">
+
+      <NewSider />
     </div>
+
+    <div className="homeContainer">
+      <div className="table" >
+        <Navbar />
+      </div>
+
+      <div className="tables">
+        <Expenselist />
+      </div>
+
+    </div>
+  </div>
   );
 };
 

@@ -36,6 +36,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/expenselist.css";
+import ExpenseContext from '../contexts/ExpenseContext'
 import Editexpense from "./Editexpense";
 import { upload } from "@testing-library/user-event/dist/upload";
 const { RangePicker } = DatePicker;
@@ -45,36 +46,18 @@ const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;
 const { Content } = Layout;
 
-const data = [
-  {
-    key: "1",
-    sn: "1",
-    catname: "food",
-    name: "Ekta",
-    date: "12-07-2022",
-    paidname: "kl",
-    status: "Paid",
-    quantity: 5,
-    amount: 200,
-    subtotal: 1000,
-    description: "doneasjdksndsvndjfdkjfdvkb",
-  },
-  {
-    key: "2",
-    sn: "2",
-    catname: "water",
-    paidname: "k2",
-    name: "Pooja",
-    date: "20-07-2022",
-    status: "Unpaid",
-    quantity: 5,
-    amount: 500,
-    subtotal: 2500,
-    description: "pending",
-  },
-];
+
 
 function ExpenseList() {
+
+  const [data, setData] = useState([])
+ 
+  async function getData() {
+    const allData = await ExpenseContext.getAllExpenses();
+      // console.log(allData.docs);
+      setData(allData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  }
+
   const navigate = useNavigate();
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
@@ -84,10 +67,15 @@ function ExpenseList() {
   });
   const [allExpenses, setAllExpenses] = useState(data || []);
   const [filterExpenses, setFilterExpense] = useState(data || []);
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState(data || []);
   const [editedRecord, setEditedRecord] = useState(null);
 
   useEffect(() => {
+    getData();
+    console.log("hello1");
+    console.log(data);
+    setAllExpenses(data);
+    setTableData(data);
     if (filterExpenses.length > 0) {
       const totalAmount = filterExpenses.reduce((acc, expense) => {
         acc += expense.amount * expense.quantity;
@@ -113,11 +101,9 @@ function ExpenseList() {
     } else {
       setTableData([]);
     }
+    // setFilterExpense(data);
   }, [filterExpenses]);
 
-  // useEffect(function () {
-  //   // getExpense();
-  // }, []);
   // function getExpense() {
   //   axios.get(`http://localhost:3001/api/expense/get-expense`).then((res) => {
   //     const persons = res.data.data;
@@ -140,12 +126,12 @@ function ExpenseList() {
   //   });
   // }
 
-  useEffect(
-    function () {
-      console.log("filterCriteria:: ", filterCriteria);
-    },
-    [filterCriteria]
-  );
+  // useEffect(
+  //   function () {
+  //     console.log("filterCriteria:: ", filterCriteria);
+  //   },
+  //   [filterCriteria]
+  // );
 
   const [modaldata, setmodaldata] = useState([]);
 

@@ -49,15 +49,56 @@ const { Content } = Layout;
 
 
 function ExpenseList() {
-
   const [data, setData] = useState([])
+  const [allExpenses, setAllExpenses] = useState(data || []);
+  const [filterExpenses, setFilterExpense] = useState(data || []);
+  const [editedRecord, setEditedRecord] = useState(null);
+  
+  
+  useEffect(() => {
+    getData()
+  }, [])
+
+  // useEffect(() => {
+  //   getData();
+  //   console.log("hello1");
+  //   console.log(data);
+  //   console.log(allExpenses);
+  //   if (filterExpenses.length > 0) {
+  //     const totalAmount = filterExpenses.reduce((acc, expense) => {
+  //       acc += expense.amount * expense.quantity;
+  //       return acc;
+  //     }, 0);
+  //     const modifiedFilterExpense = [
+  //       ...filterExpenses,
+  //       {
+  //         key: "subTotal",
+  //         sn: "",
+  //         name: "",
+  //         catname: "",
+  //         paidname: "",
+  //         date: "",
+  //         quantity: "",
+  //         amount: "Total",
+  //         subtotal: totalAmount,
+  //         description: "",
+  //       },
+  //     ];
+  //     setTableData(modifiedFilterExpense);
+  //   } else {
+  //     setTableData([]);
+  //   }
+  //   // setFilterExpense(data);
+  // }, [filterExpenses]);
+
   async function getData() {
     const allData = await ExpenseContext.getAllExpenses();
-    console.log(allData.docs);
-    setData(allData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    let d=allData.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+    console.log({d});
+    setData(d);
     console.log(data);
-    let exp = data.map((person, i) => ({
-            key: person.id,
+    let exp = d.map((person, i) => ({
+      key: person.id,
             sn: i + 1,
             catname: person.catname,
             name: person.name,
@@ -69,81 +110,38 @@ function ExpenseList() {
             subtotal: person.subtotal,
             description: person.description,
           }));
-    setAllExpenses(exp);
-    setTableData(allExpenses);
+          const totalAmount = exp.reduce((acc, expense) => {
+            acc += expense.amount * expense.quantity;
+            return acc;
+          }, 0);
+          const modifiedFilterExpense = [
+            ...exp,
+            {
+              key: "subTotal",
+              sn: "",
+              name: "",
+              catname: "",
+              paidname: "",
+              date: "",
+              quantity: "",
+              amount: "Total",
+              subtotal: totalAmount,
+              description: "",
+            },
+          ];
+    console.log(modifiedFilterExpense);
+    setAllExpenses(modifiedFilterExpense);
+    setFilterExpense(modifiedFilterExpense)
     }
 
+    
   const navigate = useNavigate();
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
     date: [],
     category: "all"
   });
-  const [allExpenses, setAllExpenses] = useState(data || []);
-  const [filterExpenses, setFilterExpense] = useState(data || []);
-  const [tableData, setTableData] = useState(data || []);
-  const [editedRecord, setEditedRecord] = useState(null);
-
-  useEffect(() => {
-    getData();
-    console.log("hello1");
-    console.log(data);
-    console.log(allExpenses);
-    if (filterExpenses.length > 0) {
-      const totalAmount = filterExpenses.reduce((acc, expense) => {
-        acc += expense.amount * expense.quantity;
-        return acc;
-      }, 0);
-      const modifiedFilterExpense = [
-        ...filterExpenses,
-        {
-          key: "subTotal",
-          sn: "",
-          name: "",
-          catname: "",
-          paidname: "",
-          date: "",
-          quantity: "",
-          amount: "Total",
-          subtotal: totalAmount,
-          description: "",
-        },
-      ];
-      setTableData(modifiedFilterExpense);
-    } else {
-      setTableData([]);
-    }
-    // setFilterExpense(data);
-  }, [filterExpenses]);
-
-  // function getExpense() {
-  //   axios.get(`http://localhost:3001/api/expense/get-expense`).then((res) => {
-  //     const persons = res.data.data;
-  //     console.log(persons);
-  //     let exp = persons.map((person, i) => ({
-  //       key: person.expenseId,
-  //       sn: i + 1,
-  //       catname: person.expenseName,
-  //       name: person.paid_by,
-  //       date: "2022-07-12",
-  //       paidname: person.paid_to,
-  //       status: "Paid",
-  //       quantity: 5,
-  //       amount: 200,
-  //       subtotal: 1000,
-  //       description: "doneasjdksndsvndjfdkjfdvkb",
-  //     }));
-  //     setAllExpenses(exp);
-  //     setFilterExpense(exp);
-  //   });
-  // }
-
-  // useEffect(
-  //   function () {
-  //     console.log("filterCriteria:: ", filterCriteria);
-  //   },
-  //   [filterCriteria]
-  // );
+ 
 
   const [modaldata, setmodaldata] = useState([]);
 
@@ -257,7 +255,7 @@ function ExpenseList() {
       // responsive: ["sm"],
       sorter: (a, b) => a.action - b.action,
       render: (_, record) => {
-        console.log("record:: ", record);
+        // console.log("record:: ", record);
         return (
           record.key !== "subTotal" && (
             <>
@@ -384,7 +382,27 @@ function ExpenseList() {
           ex.catname.toLowerCase().includes(search.toLowerCase()) ||
           ex.name.toLowerCase().includes(search.toLowerCase())
       );
-      setFilterExpense(result);
+
+      const totalAmount = result.reduce((acc, expense) => {
+        acc += expense.amount * expense.quantity;
+        return acc;
+      }, 0);
+      const modifiedFilterExpense = [
+        ...result,
+        {
+          key: "subTotal",
+          sn: "",
+          name: "",
+          catname: "",
+          paidname: "",
+          date: "",
+          quantity: "",
+          amount: "Total",
+          subtotal: totalAmount,
+          description: "",
+        },
+      ];
+      setFilterExpense(modifiedFilterExpense);
     } else {
       setFilterExpense(allExpenses);
     }
@@ -507,7 +525,7 @@ function ExpenseList() {
         <div style={{ padding: "10px 0px" }}></div>
         <Table
           columns={columns}
-          dataSource={tableData}
+          dataSource={filterExpenses}
           //    rowSelection={rowSelection}
           pagination={{
             position: ["none", "none"],

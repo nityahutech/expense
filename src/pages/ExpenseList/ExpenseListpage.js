@@ -1,9 +1,11 @@
 import React from 'react'
 import Navbar from '../../components/navbar/Navbar';
 import Sidebar from "../../components/sidebar/NewSidebar";
+import Expenselist from "../../components/Expenselist";
+import "../home/home.css";
 
 
-const DashBoard = () => {
+const ExpenseListpage = () => {
     return (
         <div className="home">
 
@@ -18,7 +20,7 @@ const DashBoard = () => {
             </div>
 
             <div className="tables">
-              
+            <Expenselist />
             </div>
 
         </div>
@@ -26,4 +28,4 @@ const DashBoard = () => {
     )
 }
 
-export default DashBoard
+export default ExpenseListpage

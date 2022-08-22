@@ -427,7 +427,7 @@ function ExpenseList() {
   // };
 
   const handleAddNewExpense = () => {
-    navigate("/ExpenseFrm");
+    navigate("/Expense/ExpenseFrm");
   };
 
   return (

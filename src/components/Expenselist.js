@@ -53,7 +53,7 @@ function ExpenseList() {
   const [data, setData] = useState([])
   async function getData() {
     const allData = await ExpenseContext.getAllExpenses();
-    console.log(allData.docs);
+    console.log(allData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     setData(allData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     console.log(data);
     let exp = data.map((person, i) => ({
@@ -70,7 +70,8 @@ function ExpenseList() {
             description: person.description,
           }));
     setAllExpenses(exp);
-    setTableData(allExpenses);
+    // setTableData(allExpenses);
+    console.log(exp)
     }
 
   const navigate = useNavigate();
@@ -88,7 +89,7 @@ function ExpenseList() {
     getData();
     console.log("hello1");
     console.log(data);
-    console.log(allExpenses);
+    console.log(filterExpenses);
     if (filterExpenses.length > 0) {
       const totalAmount = filterExpenses.reduce((acc, expense) => {
         acc += expense.amount * expense.quantity;
@@ -113,6 +114,7 @@ function ExpenseList() {
     } else {
       setTableData([]);
     }
+    console.log(tableData)
     // setFilterExpense(data);
   }, [filterExpenses]);
 
@@ -523,9 +525,11 @@ function ExpenseList() {
         visible={isModalVisible}
         onOk={handleOk}
         okText="Done"
+        footer={null}
         centered
+        closable={false}
       >
-        <Editexpense record={editedRecord} />
+        <Editexpense record={editedRecord}  setIsModalVisible={setIsModalVisible}/>
       </Modal>
     </Layout>
   );

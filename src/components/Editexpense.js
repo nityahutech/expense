@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Col, Divider, Row, Alert } from "antd";
+import { Col, Divider, Row} from "antd";
 import moment from "moment";
 import { UploadOutlined } from "@ant-design/icons";
 import ExpenseContext from '../contexts/ExpenseContext'
@@ -35,7 +35,7 @@ const handleChange = (value) => {
 const dateFormat = "DD-MM-YYYY";
 const { TextArea } = Input;
 const Editexpense = (props) => {
-  const [showAlert, setShowAlert] = useState(false);
+  // const [showAlert, setShowAlert] = useState(false);
   const [amount, setAmount] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [subtotal, setsubtotal] = useState(0);
@@ -61,7 +61,10 @@ const Editexpense = (props) => {
     }
     console.log(editedRecord)
     ExpenseContext.updateExpense(props.record.key, editedRecord);
-    setShowAlert(true)
+    props.setIsModalVisible(false)
+    alert("Updated Successfully!!")
+    // setShowAlert(true)
+    return;
   };
 
   useEffect(() => {
@@ -87,6 +90,20 @@ const Editexpense = (props) => {
     console.log(dateVal)
     console.log(date)
 }, [props]);
+  function cancel(){
+    props.setIsModalVisible(false)
+  }
+
+  const cancelStyle ={
+    float: "right"
+  };  
+  const buttonStyle ={
+    marginRight: "5px",
+    color: "white",
+    backgroundColor: "#1890ff",
+    float: "right"
+  }; 
+
   return (
     <Col xs={22} sm={22} md={22}>
       <Form
@@ -127,7 +144,6 @@ const Editexpense = (props) => {
           },
         ]}
         layout="horizontal"
-        // onFinish={submitEdit}
       >
         <Form.Item
           style={{ marginBottom: "10px" }}
@@ -300,13 +316,9 @@ const Editexpense = (props) => {
           <TextArea onChange={(e) => setDescription(e.target.value)} />
         </Form.Item>
         <br />
-        {showAlert&& 
-        <Alert
-          message="Successfully Updated!"
-          type="success"
-        />}
+        <Button style={cancelStyle} onClick={cancel}>Cancel</Button>
+        <Button style={buttonStyle} onClick={submitEdit}>Submit</Button>
         <br />
-        <Button onClick={submitEdit}>Submit</Button>
         {/* <Form.Item style={{ marginBottom: "0" }}>
         <Upload
           multiple

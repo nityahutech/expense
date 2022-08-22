@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Col, Divider, Row } from "antd";
+import { Col, Divider, Row, Alert } from "antd";
 import moment from "moment";
 import { UploadOutlined } from "@ant-design/icons";
 import ExpenseContext from '../contexts/ExpenseContext'
@@ -35,6 +35,7 @@ const handleChange = (value) => {
 const dateFormat = "DD-MM-YYYY";
 const { TextArea } = Input;
 const Editexpense = (props) => {
+  const [showAlert, setShowAlert] = useState(false);
   const [amount, setAmount] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [subtotal, setsubtotal] = useState(0);
@@ -46,6 +47,7 @@ const Editexpense = (props) => {
   function calculatesubtotal() {
     setsubtotal(amount * quantity);
   }
+
   async function submitEdit() {
     const editedRecord ={
       catname,
@@ -57,29 +59,33 @@ const Editexpense = (props) => {
       subtotal,
       description
     }
-    ExpenseContext.updateExpense(props.record.id, editedRecord);
-  }
+    console.log(editedRecord)
+    ExpenseContext.updateExpense(props.record.key, editedRecord);
+    setShowAlert(true)
+  };
 
   useEffect(() => {
     const quantityVal = props.record ? props.record.quantity : 0;
     const amountVal = props.record ? props.record.amount : 0;
     const category = props.record ? props.record.catname : "";
-    const nameName = props.record ? props.record.name : "";
+    const nameby = props.record ? props.record.name : "";
     const dateVal = props.record ? props.record.date : "";
-    const paidnamename = props.record ? props.record.paidname : "";
+    const paidname = props.record ? props.record.paidname : "";
     // const statusTag = props.record
     //   ? props.record.status
     //   : "Status of the payment";
     const description = props.record ? props.record.description : "";
+    console.log(props.record.key)
     setAmount(amountVal);
-    console.log(dateVal)
     setQuantity(quantityVal);
     setsubtotal(amountVal * quantityVal);
     setcatname(category);
-    setname(nameName);
+    setname(nameby);
     setdate(dateVal);
-    setpaidname(paidnamename);
+    setpaidname(paidname);
     setDescription(description);
+    console.log(dateVal)
+    console.log(date)
 }, [props]);
   return (
     <Col xs={22} sm={22} md={22}>
@@ -109,7 +115,7 @@ const Editexpense = (props) => {
           },
           {
             name: ["date"],
-            value: date,
+            value: moment(date, dateFormat),
           },
           {
             name: ["paidname"],
@@ -121,6 +127,7 @@ const Editexpense = (props) => {
           },
         ]}
         layout="horizontal"
+        // onFinish={submitEdit}
       >
         <Form.Item
           style={{ marginBottom: "10px" }}
@@ -220,7 +227,9 @@ const Editexpense = (props) => {
           //   },
           // ]}
         >
-        <DatePicker defaultValue={props.record.date} format={dateFormat} style={{ width: '100%' }}/>
+        <DatePicker format={dateFormat} style={{ width: '100%' }}
+          onChange = {(e) => { setdate(e.format(dateFormat))}}
+        />
 
         </Form.Item>
         {/* --------------------------------------Amount------- */}
@@ -290,6 +299,13 @@ const Editexpense = (props) => {
         >
           <TextArea onChange={(e) => setDescription(e.target.value)} />
         </Form.Item>
+        <br />
+        {showAlert&& 
+        <Alert
+          message="Successfully Updated!"
+          type="success"
+        />}
+        <br />
         <Button onClick={submitEdit}>Submit</Button>
         {/* <Form.Item style={{ marginBottom: "0" }}>
         <Upload

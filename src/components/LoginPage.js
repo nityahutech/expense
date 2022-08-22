@@ -23,7 +23,7 @@ function LoginPage() {
       setError("")
       setLoading(true)
       await login(loginEmail, loginPassword)
-      navigate( "Home" , { replace: true })
+      navigate( "DashBoard" , { replace: true })
     } catch {
       setError("Failed to log in")
     }

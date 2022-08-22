@@ -11,7 +11,7 @@
 
 .wrapper {
     width: 100%;
-    padding: 10px;
+    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -58,3 +58,21 @@ img {
     margin-left: 0px;
 
 }
+
+.ant-breadcrumb ol{
+    flex-wrap: nowrap;
+    padding-top: 10px
+    
+}
+
+.ant-breadcrumb-link{
+   
+}
+
+@media (max-width: 500px) {
+   
+  .tittle{
+    display: none;
+  }
+    
+  }

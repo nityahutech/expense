@@ -62,7 +62,7 @@ const ExpenceForm = () => {
     ExpenseDataService.addExpenses(valuesToservice)
       .then(response => {
         console.log(response);
-        navigate('/Home');
+        navigate('/Expense/ExpenseList');
       })
       .catch(error => {
         console.log(error.message);

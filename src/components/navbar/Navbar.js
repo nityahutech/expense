@@ -88,12 +88,7 @@ const Navbar = () => {
             <div className='tittle'>
 
                 <ExpenseBreadCrumb/>
-                {/* {
-                    activePage === '/DashBoard'
-                        ? <h4> <b>Dashboard </b> </h4>
-                        : <h4> <b>Expense </b> </h4>
-
-                } */}
+             
 
             </div>
         </div>

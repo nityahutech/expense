@@ -539,11 +539,12 @@ function ExpenseList() {
       <Modal
         title="Expense Register"
         visible={isModalVisible}
-        onOk={handleOk}
-        okText="Done"
+        footer={null}
         centered
+        closable={false}
+        afterClose={getData}
       >
-        <Editexpense record={editedRecord} />
+        <Editexpense record={editedRecord}  setIsModalVisible={setIsModalVisible}/>
       </Modal>
     </Layout>
   );

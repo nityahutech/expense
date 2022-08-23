@@ -1,29 +1,23 @@
-import React from 'react'
-import Navbar from '../../components/navbar/Navbar';
+import React from "react";
+import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 
-
 const DashBoard = () => {
-    return (
-        <div className="home">
+  return (
+    <div className="home">
+      <div className="sidecontainer">
+        <Sidebar />
+      </div>
 
-        <div className="sidecontainer">
-
-            <Sidebar />
+      <div className="homeContainer">
+        <div className="table">
+          <Navbar />
         </div>
 
-        <div className="homeContainer">
-            <div className="table" >
-                <Navbar />
-            </div>
-
-            <div className="tables">
-              
-            </div>
-
-        </div>
+        <div className="tables"></div>
+      </div>
     </div>
-    )
-}
+  );
+};
 
-export default DashBoard
+export default DashBoard;

@@ -2,6 +2,12 @@
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
+    position:fixed;
+    z-index: 5;
+    width: 100%;
+    right: 0;
+    margin-left: 200px;
+    /* height: 15%; */
 }
 
 .line {
@@ -40,7 +46,7 @@
 .tittle {
     height: auto;
     padding: 20px;
-    padding-left: 40px;
+    padding-left: 250px;
 }
 
 .avatarimg {
@@ -65,9 +71,14 @@ img {
     
 }
 
-.ant-breadcrumb-link{
+@media (max-width: 1200px) {
    
-}
+    .tittle{
+        padding-left: 100px;
+      }
+        
+      
+    }
 
 @media (max-width: 500px) {
    

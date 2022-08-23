@@ -75,7 +75,7 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
     margin-left: 10px;
 }
 
-.ant-menu {
+/* .ant-menu {
     background-color: #05445E;
 }
 
@@ -85,7 +85,7 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
 
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
     background-color: #05445E;
-}
+} */
 
 .collapse {
 
@@ -93,9 +93,9 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
     height: 20px;
 }
 
-.sideTop.ant-menu-item {
+/* .sideTop.ant-menu-item {
     height: 20px;
-}
+} */
 
 .logo {
     font-size: 30px;
@@ -114,5 +114,14 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
 .sidebarTop {
     background-color: #05445E;
     height: auto;
+
+}
+
+.ant-layout 
+{
+    background-color: #f4f4f4;
+}
+.ant-layout.ant-layout-has-sider{
+    background-color: #05445E;
 
 }

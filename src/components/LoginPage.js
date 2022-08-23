@@ -104,6 +104,7 @@ function LoginPage() {
               </div>
               <div className="pwdInput-div">
                 <Form.Item
+           
                   name="password"
                   rules={[
                     {

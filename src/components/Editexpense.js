@@ -11,6 +11,7 @@ import {
   //   Option,
   Radio,
   Space,
+  notification,
   Button,
   DatePicker,
   Form,
@@ -21,7 +22,12 @@ const { Option } = Select;
 const handleChange = (value) => {
   console.log(`selected ${value}`);
 };
-
+const showNotification = (type,msg,desc) => {
+  notification[type]({
+    message: msg,
+    description:desc
+  });
+};
 // const paystatus = [
 //   {
 //     value: "Paid",
@@ -49,22 +55,29 @@ const Editexpense = (props) => {
   }
 
   async function submitEdit() {
-    const editedRecord ={
-      catname,
-      name,
-      paidname,
-      date,
-      amount,
-      quantity,
-      subtotal,
-      description
+    try {
+      const editedRecord ={
+        catname,
+        name,
+        paidname,
+        date,
+        amount,
+        quantity,
+        subtotal,
+        description
+      }
+      console.log(editedRecord)
+      ExpenseContext.updateExpense(props.record.key, editedRecord);
+      props.setIsModalVisible(false)
+      props.reloadData()
+      showNotification('success','Success','Record updated successfuly')
+
+      return;
+    } catch (error) {
+      console.log(error);
+      props.setIsModalVisible(false)
+      showNotification('error','Failed','Record update failed')
     }
-    console.log(editedRecord)
-    ExpenseContext.updateExpense(props.record.key, editedRecord);
-    props.setIsModalVisible(false)
-    alert("Updated Successfully!!")
-    // setShowAlert(true)
-    return;
   };
 
   useEffect(() => {

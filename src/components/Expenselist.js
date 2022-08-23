@@ -39,6 +39,7 @@ import "../style/expenselist.css";
 import ExpenseContext from '../contexts/ExpenseContext'
 import Editexpense from "./Editexpense";
 import { upload } from "@testing-library/user-event/dist/upload";
+import { async } from "@firebase/util";
 const { RangePicker } = DatePicker;
 const dateFormat = "DD-MM-YYYY";
 
@@ -53,10 +54,11 @@ function ExpenseList() {
   const [allExpenses, setAllExpenses] = useState(data || []);
   const [filterExpenses, setFilterExpense] = useState(data || []);
   const [editedRecord, setEditedRecord] = useState(null);
+  const [loading, setLoading] = useState(false)
   
   
   useEffect(() => {
-    getData()
+     getData()
   }, [])
 
   // useEffect(() => {
@@ -92,6 +94,7 @@ function ExpenseList() {
   // }, [filterExpenses]);
 
   async function getData() {
+    setLoading(true)
     const allData = await ExpenseContext.getAllExpenses();
     let d=allData.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
     console.log({d});
@@ -132,6 +135,7 @@ function ExpenseList() {
     console.log(modifiedFilterExpense);
     setAllExpenses(modifiedFilterExpense);
     setFilterExpense(modifiedFilterExpense)
+    setLoading(false)
     }
 
     
@@ -524,12 +528,13 @@ function ExpenseList() {
         </Row>
         <div style={{ padding: "10px 0px" }}></div>
         <Table
+        loading={loading}
           columns={columns}
           dataSource={filterExpenses}
           //    rowSelection={rowSelection}
           pagination={{
-            position: ["none", "none"],
-          }}
+          position: [ 'bottomCenter'],
+        }}
           className="expenseTable"
           scroll={{ x: 1300 }}
           //   onChange={onSort}
@@ -537,14 +542,14 @@ function ExpenseList() {
       </Content>
       {/* <Editexpense record={editedRecord} /> */}
       <Modal
+        centered
         title="Expense Register"
         visible={isModalVisible}
         footer={null}
-        centered
         closable={false}
-        afterClose={getData}
+
       >
-        <Editexpense record={editedRecord}  setIsModalVisible={setIsModalVisible}/>
+        <Editexpense record={editedRecord}  setIsModalVisible={setIsModalVisible}  reloadData={getData}/>
       </Modal>
     </Layout>
   );

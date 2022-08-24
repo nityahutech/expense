@@ -1,6 +1,8 @@
 import React from "react";
+import Charts from "../../components/Charts";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
+
 
 const DashBoard = () => {
   return (
@@ -18,7 +20,9 @@ const DashBoard = () => {
           <Navbar />
         </div>
 
-        <div className="tables"></div>
+        <div className="tables">
+        <Charts />
+        </div>  
       </div>
     </div>
   );

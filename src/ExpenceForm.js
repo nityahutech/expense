@@ -4,7 +4,7 @@ import 'antd/dist/antd.css';
 import './ExpenceForm';
 import { Col, Divider, Row } from 'antd';
 import './ExpenseForm.css';
-import ExpenseDataService from './services/ExpenseDataService.js'
+import ExpenseContext from './contexts/ExpenseContext'
 import { useNavigate } from 'react-router-dom';
 
 //import ExpenseDataService from './services/expense.services.js';
@@ -59,7 +59,7 @@ const ExpenceForm = () => {
 
     console.log('valuesToservice: ', valuesToservice);
 
-    ExpenseDataService.addExpenses(valuesToservice)
+    ExpenseContext.addExpenses(valuesToservice)
       .then(response => {
         console.log(response);
         navigate('/Expense/ExpenseList');
@@ -69,6 +69,10 @@ const ExpenceForm = () => {
 
       })
   };
+
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   return (
 
@@ -105,10 +109,10 @@ const ExpenceForm = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please enter Customer Name',
+                    message: 'Please enter Expense Name',
                   }, {
-                    pattern: /^[a-zA-Z]+$/g,
-                    message: 'Please enter Customer Name',
+                    pattern:/^[a-zA-Z\s]*$/,
+                    message: 'Please enter Valid Name',
                   }
                 ]}
 
@@ -117,9 +121,11 @@ const ExpenceForm = () => {
                   onChange={(e) => {
 
                     const inputval = e.target.value;
+                    const str = e.target.value;
                     const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                    // setPaidBy(newVal);
-                    form.setFieldsValue({ expence: newVal });
+                    const caps = str.split(' ').map(capitalize).join(' ');        
+                      // setPaidBy(newVal);
+                    form.setFieldsValue({ expence: newVal, expence: caps });
 
                   }}
 
@@ -140,8 +146,10 @@ const ExpenceForm = () => {
                     required: true,
                     message: 'Please enter Customer Name',
                   }, {
-                    pattern: /^[a-zA-Z]+$/g,
-                    message: 'Please enter Customer Name',
+                
+                    pattern:  /^[a-zA-Z\s]*$/,
+                    message: 'Please enter Valid Name',
+                    // /^[a-zA-Z]+$/g
 
                   }
                 ]}
@@ -172,10 +180,10 @@ const ExpenceForm = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please enter  Name',
+                    message: 'Please enter Vendor',
                   }, {
-                    pattern: /^[a-zA-Z]+$/g,
-                    message: 'Please enter  Name',
+                    pattern:  /^[a-zA-Z\s]*$/,
+                    message: 'Please enter Valid Name',
                   }
                 ]}
 
@@ -243,8 +251,10 @@ const ExpenceForm = () => {
               <Form.Item
                 className='numder-inputs'
                 name="amount"
+                
                 rules={[
                   {
+                   
                     required: true,
                     message: "Please enter the amount",
                     pattern: /^[0-9\b]+$/,

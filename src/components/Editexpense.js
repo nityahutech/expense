@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Col, Divider, Row, Alert } from "antd";
+import { Col, Divider, Row} from "antd";
 import moment from "moment";
 import { UploadOutlined } from "@ant-design/icons";
 import ExpenseContext from '../contexts/ExpenseContext'
@@ -11,6 +11,7 @@ import {
   //   Option,
   Radio,
   Space,
+  notification,
   Button,
   DatePicker,
   Form,
@@ -21,7 +22,12 @@ const { Option } = Select;
 const handleChange = (value) => {
   console.log(`selected ${value}`);
 };
-
+const showNotification = (type,msg,desc) => {
+  notification[type]({
+    message: msg,
+    description:desc
+  });
+};
 // const paystatus = [
 //   {
 //     value: "Paid",
@@ -35,7 +41,7 @@ const handleChange = (value) => {
 const dateFormat = "DD-MM-YYYY";
 const { TextArea } = Input;
 const Editexpense = (props) => {
-  const [showAlert, setShowAlert] = useState(false);
+  // const [showAlert, setShowAlert] = useState(false);
   const [amount, setAmount] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [subtotal, setsubtotal] = useState(0);
@@ -49,19 +55,29 @@ const Editexpense = (props) => {
   }
 
   async function submitEdit() {
-    const editedRecord ={
-      catname,
-      name,
-      paidname,
-      date,
-      amount,
-      quantity,
-      subtotal,
-      description
+    try {
+      const editedRecord ={
+        catname,
+        name,
+        paidname,
+        date,
+        amount,
+        quantity,
+        subtotal,
+        description
+      }
+      console.log(editedRecord)
+      ExpenseContext.updateExpense(props.record.key, editedRecord);
+      props.setIsModalVisible(false)
+      props.reloadData()
+      showNotification('success','Success','Record updated successfuly')
+
+      return;
+    } catch (error) {
+      console.log(error);
+      props.setIsModalVisible(false)
+      showNotification('error','Failed','Record update failed')
     }
-    console.log(editedRecord)
-    ExpenseContext.updateExpense(props.record.key, editedRecord);
-    setShowAlert(true)
   };
 
   useEffect(() => {
@@ -87,6 +103,20 @@ const Editexpense = (props) => {
     console.log(dateVal)
     console.log(date)
 }, [props]);
+  function cancel(){
+    props.setIsModalVisible(false)
+  }
+
+  const cancelStyle ={
+    float: "right"
+  };  
+  const buttonStyle ={
+    marginRight: "5px",
+    color: "white",
+    backgroundColor: "#1890ff",
+    float: "right"
+  }; 
+
   return (
     <Col xs={22} sm={22} md={22}>
       <Form
@@ -127,7 +157,6 @@ const Editexpense = (props) => {
           },
         ]}
         layout="horizontal"
-        // onFinish={submitEdit}
       >
         <Form.Item
           style={{ marginBottom: "10px" }}
@@ -300,13 +329,9 @@ const Editexpense = (props) => {
           <TextArea onChange={(e) => setDescription(e.target.value)} />
         </Form.Item>
         <br />
-        {showAlert&& 
-        <Alert
-          message="Successfully Updated!"
-          type="success"
-        />}
+        <Button style={cancelStyle} onClick={cancel}>Cancel</Button>
+        <Button style={buttonStyle} onClick={submitEdit}>Submit</Button>
         <br />
-        <Button onClick={submitEdit}>Submit</Button>
         {/* <Form.Item style={{ marginBottom: "0" }}>
         <Upload
           multiple

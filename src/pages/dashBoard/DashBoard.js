@@ -7,21 +7,21 @@ const DashBoard = () => {
     return (
         <div className="home">
 
-        <div className="sidecontainer">
+            <div className="sidecontainer">
 
-            <Sidebar />
-        </div>
-
-        <div className="homeContainer">
-            <div className="table" >
-                <Navbar />
+                <Sidebar />
             </div>
 
-            <div className="tables">
-              
-            </div>
+            <div className="homeContainer">
+                <div className="table" >
+                    <Navbar />
+                </div>
 
-        </div>
+                <div className="tables">
+                
+                </div>
+
+            </div>
     </div>
     )
 }

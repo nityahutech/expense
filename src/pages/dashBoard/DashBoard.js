@@ -2,15 +2,10 @@ import React from "react";
 import Charts from "../../components/Charts";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
-
-
+import Tabledash from "../../components/Tabledash";
 const DashBoard = () => {
   return (
     <div className="home">
-      <div className="sidecontainer">
-        <Sidebar />
-      </div>
-
       <div className="sidecontainer">
         <Sidebar />
       </div>
@@ -21,9 +16,9 @@ const DashBoard = () => {
         </div>
 
         <div className="tables">
-        <Charts />
-        
-        </div>  
+          <Charts />
+          <Tabledash />
+        </div>
       </div>
     </div>
   );

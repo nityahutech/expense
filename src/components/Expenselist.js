@@ -167,7 +167,13 @@ function ExpenseList() {
       // responsive: ["sm"],
       // fixed: "left",
       onFilter: (value, record) => record.name.indexOf(value) === 0,
-      sorter: (a, b) => a.catname.length - b.catname.length,
+      // sorter: (a, b) => a.catname - b.catname,
+      onFilter: (value, record) => record.name.indexOf(value) === 0,
+      sorter: (a, b) =>{if (a.catname < b.catname)
+        return -1;
+      if ( a.catname > b.catname)
+        return 1;
+      return 0;},
       sortDirections: ["ascend", "descend"],
       render: (text) => <a className="catName">{text}</a>,
     },
@@ -177,7 +183,11 @@ function ExpenseList() {
       dataIndex: "name",
       key: "name",
       // responsive: ["sm"],
-      sorter: (a, b) => a.name - b.name,
+     
+      sorter: (a, b ) =>{
+        return a.name !== b.name ? a.name < b.name ? -1 : 1 : 0;
+      },
+      sortDirections: ["ascend", "descend"]
     },
     {
       title: "Paid To",
@@ -185,7 +195,11 @@ function ExpenseList() {
       dataIndex: "paidname",
       key: "paidto",
       // responsive: ["sm"],
-      sorter: (a, b) => a.name - b.name,
+      // sorter: (a, b) => a.name - b.name,
+      sorter: (a, b ) =>{
+        return a.name !== b.name ? a.name < b.name ? -1 : 1 : 0;
+      },
+      sortDirections: ["ascend", "descend"]
     },
     {
       title: "Date",
@@ -527,6 +541,7 @@ function ExpenseList() {
           </Col>
         </Row>
         <div style={{ padding: "10px 0px" }}></div>
+        {/* --------------------Tablelist------------------ */}
         <Table
         loading={loading}
           columns={columns}

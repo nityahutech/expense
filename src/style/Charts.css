@@ -1,0 +1,32 @@
+.chartsbox{
+    padding: 50px;
+    margin:10px;
+    display:flex;
+    flex-direction: row;
+    width: 100%;
+}
+.Totalamount{
+    padding: 5px;
+    margin:10px;
+    background-color:grey;
+    display:flex;
+    width: 100%;
+}
+.AmountDue{
+    padding: 5px;
+    margin:10px;
+    background-color:grey;
+    display:flex;
+    width: 100%;
+}
+.AvgAmount{
+    padding: 5px;
+    margin:10px;
+    background-color:grey;
+    display:flex;
+    width: 100%;
+}
+.chartsdisp{
+    height:600px
+}
+

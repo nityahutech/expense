@@ -9,6 +9,10 @@ const DashBoard = () => {
         <Sidebar />
       </div>
 
+      <div className="sidecontainer">
+        <Sidebar />
+      </div>
+
       <div className="homeContainer">
         <div className="table">
           <Navbar />

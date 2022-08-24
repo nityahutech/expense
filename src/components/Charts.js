@@ -9,9 +9,9 @@ const Charts = () => {
       <div className='AvgAmount'>Avg.Amount</div>
     </div>
     <div className='chartsdisp'>
-
+        <div className='barGraph'>Bargraph</div>
+        <div className='pieChart'>Piechart</div>
     </div>
-    
     </>
   )
 }

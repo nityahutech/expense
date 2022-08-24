@@ -22,6 +22,7 @@ const DashBoard = () => {
 
         <div className="tables">
         <Charts />
+        
         </div>  
       </div>
     </div>

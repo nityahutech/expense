@@ -54,15 +54,15 @@ const NewSidebar = () => {
         let pathkey = e.key
         switch (pathkey) {
             case "5":
-                // window.location.href="/ExpenseFrm"
+                window.location.href="/ExpenseFrm"
                 history("/Expense/AddExpense")
                 break;
             case "6":
-                // window.location.href = "/Home"
+                window.location.href = "/Home"
                 history("/Expense/ExpenseList")
                 break;
             case "1":
-                // window.location.href = "/DashBoard"
+                window.location.href = "/DashBoard"
                 history("/DashBoard")
                 break;
         }

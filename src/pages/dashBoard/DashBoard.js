@@ -1,4 +1,5 @@
 import React from "react";
+import Charts from "../../components/Charts";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 import Tabledash from "../../components/Tabledash";
@@ -14,8 +15,10 @@ const DashBoard = () => {
           <Navbar />
         </div>
 
-        <div className="tables"></div>
-        <Tabledash />
+        <div className="tables">
+          <Charts />
+          <Tabledash />
+        </div>
       </div>
     </div>
   );

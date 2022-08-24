@@ -1,4 +1,26 @@
-.row{
-    display: flex;
-    justify-content: space-evenly;
+.Maintable{
+    margin-left:0px;
+    display:flex;
+    flex-direction: row;
+    width: 100%;
+    background: #f8f8f8;
 }
+
+ .Table1{
+    margin:25px 10px;
+    background-color:white;
+    display:flex;
+    width: 100%;
+    border-radius: 10px;
+    height: 400px;
+    justify-content: center;
+ } 
+ .Table2{
+    margin:25px 10px;
+    background-color:white;
+    display:flex;
+    width: 100%;
+    border-radius: 10px;
+    height: 400px;
+    justify-content: center;
+ }  

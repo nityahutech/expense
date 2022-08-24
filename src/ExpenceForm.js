@@ -4,10 +4,10 @@ import 'antd/dist/antd.css';
 import './ExpenceForm';
 import { Col, Divider, Row } from 'antd';
 import './ExpenseForm.css';
-import ExpenseDataService from './services/ExpenseDataService.js'
+import ExpenseContext from './contexts/ExpenseContext.js'
 import { useNavigate } from 'react-router-dom';
 
-//import ExpenseDataService from './services/expense.services.js';
+//import ExpenseContext from './services/expense.services.js';
 
 
 import {
@@ -59,7 +59,7 @@ const ExpenceForm = () => {
 
     console.log('valuesToservice: ', valuesToservice);
 
-    ExpenseDataService.addExpenses(valuesToservice)
+    ExpenseContext.addExpenses(valuesToservice)
       .then(response => {
         console.log(response);
         navigate('/Expense/ExpenseList');

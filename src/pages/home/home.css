@@ -6,7 +6,7 @@
   /* flex-direction: row-reverse; */
   /* justify-content: space-between; */
   display: flex;
-  min-height: 100vh;
+  min-height: auto;
   flex-direction: row;
   margin: 0;
 
@@ -35,7 +35,7 @@
   display: flex;
   width: 84%;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
   margin-left: 200px;
  right: 0;
  justify-content: space-between;

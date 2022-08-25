@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Col, Divider, Row } from "antd";
+import { Col, Divider, Row} from "antd";
 import moment from "moment";
 import { UploadOutlined } from "@ant-design/icons";
+import ExpenseContext from '../contexts/ExpenseContext'
 import {
   Cascader,
   Input,
@@ -10,6 +11,7 @@ import {
   //   Option,
   Radio,
   Space,
+  notification,
   Button,
   DatePicker,
   Form,
@@ -20,7 +22,12 @@ const { Option } = Select;
 const handleChange = (value) => {
   console.log(`selected ${value}`);
 };
-
+const showNotification = (type,msg,desc) => {
+  notification[type]({
+    message: msg,
+    description:desc
+  });
+};
 // const paystatus = [
 //   {
 //     value: "Paid",
@@ -34,49 +41,82 @@ const handleChange = (value) => {
 const dateFormat = "DD-MM-YYYY";
 const { TextArea } = Input;
 const Editexpense = (props) => {
+  // const [showAlert, setShowAlert] = useState(false);
   const [amount, setAmount] = useState(0);
   const [quantity, setQuantity] = useState(0);
-  const [total, setTotal] = useState(0);
-  const [optionValue, setOptionValue] = useState("");
-  const [paidBy, setPaidBy] = useState("");
-  const [date, setdate] = useState(moment().format(dateFormat));
-  const [paidTo, setPaidTo] = useState("");
+  const [subtotal, setsubtotal] = useState(0);
+  const [catname, setcatname] = useState("");
+  const [name, setname] = useState("");
+  const [date, setdate] = useState("");
+  const [paidname, setpaidname] = useState("");
   const [description, setDescription] = useState("");
-  function calculateTotal() {
-    setTotal(amount * quantity);
-  }
-  function submitteD() {
-    alert("update successfully");
+  function calculatesubtotal() {
+    setsubtotal(amount * quantity);
   }
 
+  async function submitEdit() {
+    try {
+      const editedRecord ={
+        catname,
+        name,
+        paidname,
+        date,
+        amount,
+        quantity,
+        subtotal,
+        description
+      }
+      console.log(editedRecord)
+      ExpenseContext.updateExpense(props.record.key, editedRecord);
+      props.setIsModalVisible(false)
+      props.reloadData()
+      showNotification('success','Success','Record updated successfuly')
+
+      return;
+    } catch (error) {
+      console.log(error);
+      props.setIsModalVisible(false)
+      showNotification('error','Failed','Record update failed')
+    }
+  };
+
   useEffect(() => {
-    console.log("props:::", props);
     const quantityVal = props.record ? props.record.quantity : 0;
     const amountVal = props.record ? props.record.amount : 0;
     const category = props.record ? props.record.catname : "";
-    const paidByName = props.record ? props.record.name : "";
-    const dateVal = props.record
-      ? moment(props.record.date, dateFormat)
-      : moment().format(dateFormat);
-    const paidToname = props.record ? props.record.paidname : "";
+    const nameby = props.record ? props.record.name : "";
+    const dateVal = props.record ? props.record.date : "";
+    const paidname = props.record ? props.record.paidname : "";
     // const statusTag = props.record
     //   ? props.record.status
     //   : "Status of the payment";
     const description = props.record ? props.record.description : "";
+    console.log(props.record.key)
     setAmount(amountVal);
     setQuantity(quantityVal);
-    setTotal(amountVal * quantityVal);
-    setOptionValue(category);
-    setPaidBy(paidByName);
+    setsubtotal(amountVal * quantityVal);
+    setcatname(category);
+    setname(nameby);
     setdate(dateVal);
-    setPaidTo(paidToname);
+    setpaidname(paidname);
     setDescription(description);
-  }, [props]);
-  console.log("optionValue::: ", optionValue);
-  console.log("paidBy::: ", paidBy);
-  console.log("date:::", date);
-  console.log("paidTo:::", paidTo);
-  console.log("description:::", description);
+    console.log(dateVal)
+    console.log(date)
+}, [props]);
+  function cancel(){
+    props.setIsModalVisible(false)
+  }
+
+  const cancelStyle ={
+    float: "right"
+  };  
+  const buttonStyle ={
+    marginRight: "5px",
+    color: "white",
+    backgroundColor: "#1890ff",
+    float: "right"
+  }; 
+
   return (
     <Col xs={22} sm={22} md={22}>
       <Form
@@ -89,11 +129,11 @@ const Editexpense = (props) => {
         fields={[
           {
             name: ["expensename"],
-            value: optionValue,
+            value: catname,
           },
           {
             name: ["name"],
-            value: paidBy,
+            value: name,
           },
           {
             name: ["quantity"],
@@ -108,8 +148,8 @@ const Editexpense = (props) => {
             value: moment(date, dateFormat),
           },
           {
-            name: ["paidTo"],
-            value: paidTo,
+            name: ["paidname"],
+            value: paidname,
           },
           {
             name: ["Textarea"],
@@ -122,23 +162,19 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           name="expensename"
           label="Expense Name"
-          // rules={[
-          //   {
+          // rules={[{
           //     required: true,
           //     message: "Please choose a category",
           //   },
           // ]}
         >
-          <Select
-            className="category"
-            onChange={(value) => {
-              setOptionValue(value);
+          <Input
+            onChange={(e) => {
+              const inputval = e.target.value;
+              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+              setcatname(newVal);
             }}
-          >
-            <Option value="food">Food</Option>
-            <Option value="water">Water</Option>
-            <Option value="all">All Category</Option>
-          </Select>
+          />
         </Form.Item>
 
         {/* ------------------------------Paid By------- */}
@@ -156,14 +192,16 @@ const Editexpense = (props) => {
         >
           <Input
             onChange={(e) => {
-              setPaidBy(e.target.value);
+              const inputval = e.target.value;
+              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+              setname(newVal);
             }}
           />
         </Form.Item>
         <Form.Item
           style={{ marginBottom: "10px" }}
           label="Paid To"
-          name="paidTo"
+          name="paidname"
           // rules={[
           //   {
           //     required: true,
@@ -173,7 +211,9 @@ const Editexpense = (props) => {
         >
           <Input
             onChange={(e) => {
-              setPaidTo(e.target.value);
+              const inputval = e.target.value;
+              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+              setpaidname(newVal);
             }}
           />
         </Form.Item>
@@ -216,17 +256,10 @@ const Editexpense = (props) => {
           //   },
           // ]}
         >
-          <DatePicker
-            defaultValue={moment(date, dateFormat)}
-            format={dateFormat}
-            style={{ width: "100%" }}
-            placeholder="Choose Date"
-            onChange={(value) => {
-              if (value) {
-                setdate(value);
-              }
-            }}
-          />
+        <DatePicker format={dateFormat} style={{ width: '100%' }}
+          onChange = {(e) => { setdate(e.format(dateFormat))}}
+        />
+
         </Form.Item>
         {/* --------------------------------------Amount------- */}
 
@@ -246,7 +279,7 @@ const Editexpense = (props) => {
             onChange={(e) => {
               const amt = e.target.value;
               setAmount(amt);
-              setTotal(amt * quantity);
+              setsubtotal(amt * quantity);
             }}
             placeholder="Enter Amount Here"
           />
@@ -269,15 +302,15 @@ const Editexpense = (props) => {
             onChange={(e) => {
               const qnt = e.target.value;
               setQuantity(qnt);
-              setTotal(amount * qnt);
+              setsubtotal(amount * qnt);
             }}
             placeholder="Quantity of the item"
           />
         </Form.Item>
-        {/* --------------------------------------Sub-total------- */}
+        {/* --------------------------------------Sub-subtotal------- */}
 
-        <Form.Item label="Subtotal" style={{ marginBottom: "10px" }}>
-          <Input readonly value={total} placeholder="Total" />
+        <Form.Item label="Subsubtotal" style={{ marginBottom: "10px" }}>
+          <Input readonly value={subtotal} placeholder="subtotal" />
         </Form.Item>
 
         {/* -----------------------Text-area--------------- */}
@@ -295,7 +328,10 @@ const Editexpense = (props) => {
         >
           <TextArea onChange={(e) => setDescription(e.target.value)} />
         </Form.Item>
-
+        <br />
+        <Button style={cancelStyle} onClick={cancel}>Cancel</Button>
+        <Button style={buttonStyle} onClick={submitEdit}>Submit</Button>
+        <br />
         {/* <Form.Item style={{ marginBottom: "0" }}>
         <Upload
           multiple
@@ -316,4 +352,5 @@ const Editexpense = (props) => {
     </Col>
   );
 };
+
 export default Editexpense;

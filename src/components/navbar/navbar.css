@@ -1,74 +1,89 @@
 .navbar {
-
     display: flex;
-    font-size: 14px;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    position:fixed;
+    z-index: 5;
+    width: 100%;
+    right: 0;
+    margin-left: 200px;
+    /* height: 15%; */
+}
 
-    
-
-} 
-
-.line{
+.line {
     margin-left: 20px;
-    height:1px solid;
-
+    height: 1px solid;
 }
 
 .wrapper {
     width: 100%;
-    padding: 10px;
+    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    left:10;
-
-    
+    left: 10;
 }
 
 .image {
-  
-   
+
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
 }
 
-.item{
+.item {
     margin-left: 20px;
 }
 
 
 .avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
 }
 
 .tittle {
     height: auto;
     padding: 20px;
+    padding-left: 250px;
 }
 
-/* it will break expense list page "choose status filter" */
-/* .ant-space-item {
-    margin-top: 8px;
-    margin-left: 15px;
-    color: #171832;
-} */
-
-
-.avatarimg{
+.avatarimg {
     color: black;
     height: 10px;
+    cursor: 'pointer'
 }
 
-.bell{
+.bell {
     height: 20px;
     margin-left: 0px;
 }
-img{
+
+img {
     margin-left: 0px;
 
 }
+
+.ant-breadcrumb ol{
+    flex-wrap: nowrap;
+    padding-top: 10px
+    
+}
+
+@media (max-width: 1200px) {
+   
+    .tittle{
+        padding-left: 100px;
+      }
+        
+      
+    }
+
+@media (max-width: 500px) {
+   
+  .tittle{
+    display: none;
+  }
+    
+  }

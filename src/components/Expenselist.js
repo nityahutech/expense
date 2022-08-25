@@ -382,7 +382,28 @@ function ExpenseList() {
             moment(ex.date, dateFormat).isSameOrBefore(date[1]))
         );
       });
-      setFilterExpense(result);
+      //find sub
+      const totalAmount = result.reduce((acc, expense) => {
+        acc += expense.amount * expense.quantity;
+        return acc;
+      }, 0);
+      //new row with subtotal
+      const modifiedFilterExpense = [
+        ...result,
+        {
+          key: "subTotal",
+          sn: "",
+          name: "",
+          catname: "",
+          paidname: "",
+          date: "",
+          quantity: "",
+          amount: "Total",
+          subtotal: totalAmount,
+          description: "",
+        },
+      ];
+      setFilterExpense( modifiedFilterExpense);
     } else {
       setFilterExpense(allExpenses);
     }

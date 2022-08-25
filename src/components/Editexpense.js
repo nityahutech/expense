@@ -164,11 +164,16 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           name="expensename"
           label="Expense Name"
-          // rules={[{
-          //     required: true,
-          //     message: "Please choose a category",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please enter Expense Name",
+            },
+            {
+              pattern: /^[a-zA-Z\s]*$/,
+              message: "Please enter Valid Name",
+            },
+          ]}
         >
           <Input
             onChange={(e) => {
@@ -186,12 +191,17 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           label="Paid By"
           name="name"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please enter your name",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please enter Customer Name",
+            },
+            {
+              pattern: /^[a-zA-Z\s]*$/,
+              message: "Please enter Valid Name",
+              // /^[a-zA-Z]+$/g
+            },
+          ]}
         >
           <Input
             onChange={(e) => {
@@ -206,12 +216,16 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           label="Paid To"
           name="paidname"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please enter your name",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please enter Vendor",
+            },
+            {
+              pattern: /^[a-zA-Z\s]*$/,
+              message: "Please enter Valid Name",
+            },
+          ]}
         >
           <Input
             onChange={(e) => {
@@ -254,12 +268,12 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           name="date"
           label="Date"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please Choose a Date",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please Choose a Date",
+            },
+          ]}
         >
           <DatePicker
             format={dateFormat}
@@ -275,21 +289,23 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           label="Amount"
           name="amount"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please enter the amount",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please enter the amount",
+              pattern: /^[0-9\b]+$/,
+            },
+            { whitespace: true },
+          ]}
         >
           <Input
+            maxLength={8}
             value={amount}
             onChange={(e) => {
               const amt = e.target.value;
               setAmount(amt);
               setsubtotal(amt * quantity);
             }}
-            placeholder="Enter Amount Here"
           />
         </Form.Item>
         {/* --------------------------------------Quantity------- */}
@@ -298,14 +314,16 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           name="quantity"
           label="Quantity"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please enter the quantity of the items/services",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please enter the quantity ",
+              pattern: /^[0-9\b]+$/,
+            },
+          ]}
         >
           <Input
+            maxLength={4}
             value={quantity}
             onChange={(e) => {
               const qnt = e.target.value;
@@ -317,8 +335,11 @@ const Editexpense = (props) => {
         </Form.Item>
         {/* --------------------------------------Sub-subtotal------- */}
 
-        <Form.Item label="Subsubtotal" style={{ marginBottom: "10px" }}>
-          <Input readonly value={subtotal} placeholder="subtotal" />
+        <Form.Item
+          label="Subsubtotal"
+          style={{ marginBottom: "10px", Color: "black" }}
+        >
+          <Input readonly value={subtotal} disabled={true} />
         </Form.Item>
 
         {/* -----------------------Text-area--------------- */}

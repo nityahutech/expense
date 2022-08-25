@@ -30,30 +30,29 @@ main{
     color: white;
       background: #41BF36;
       
-      border-radius: 5px;
+      border-radius: 3px;
       font-family: 'Open Sans';
     
       font-style: normal;
-      font-weight: 500;
-      font-size: 14px;
+      font-weight: 200;
+      font-size: 13px;
       line-height: 22px;
-      width: 68px;
+      width: 62px;
       height: 25px;
       text-align: center;
   }
   .statusTag.ant-tag-volcano{
-    background: #FC6161;
-    border-radius: 5px;
-      font-family: 'Open Sans';
+    background: #f13729;
+    border-radius: 3px;
+    font-family: 'Open Sans';
     color: white;
-      font-style: normal;
-      font-weight: 500;
-      font-size: 14px;
-      line-height: 22px;
-      width: 68px;
-      height: 25px;
-      text-align: center;
-  
+    font-style: normal;
+    font-weight: 200;
+    font-size: 13px;
+    line-height: 22px;
+    width: 62px;
+    height: 25px;
+    text-align: center;
   }
   a.catName{
     color: #171832;
@@ -152,6 +151,9 @@ main{
 .row4.ant-table-cell{
     width: 120px;
 }
+/* .row5.ant-table-cell{
+  width: 90px;
+} */
 
 .expenseTable .edIt {
     height: 22px;

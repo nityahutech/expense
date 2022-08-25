@@ -102,7 +102,7 @@ function Tabledash() {
   return (
     <div className="Maintable">
       <div className="Table1">
-        <div className="row">
+        <div className="Row">
           <div>
             <span className="Dot" style={{ backgroundColor: "#0ff40f" }}></span>
             Paid

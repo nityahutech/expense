@@ -36,7 +36,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/expenselist.css";
-import ExpenseContext from '../contexts/ExpenseContext'
+import ExpenseContext from "../contexts/ExpenseContext";
 import Editexpense from "./Editexpense";
 import { upload } from "@testing-library/user-event/dist/upload";
 import { async } from "@firebase/util";
@@ -47,19 +47,16 @@ const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;
 const { Content } = Layout;
 
-
-
 function ExpenseList() {
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
   const [allExpenses, setAllExpenses] = useState(data || []);
   const [filterExpenses, setFilterExpense] = useState(data || []);
   const [editedRecord, setEditedRecord] = useState(null);
-  const [loading, setLoading] = useState(false)
-  
-  
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-     getData()
-  }, [])
+    getData();
+  }, []);
 
   // useEffect(() => {
   //   getData();
@@ -94,58 +91,62 @@ function ExpenseList() {
   // }, [filterExpenses]);
 
   async function getData() {
-    setLoading(true)
+    setLoading(true);
     const allData = await ExpenseContext.getAllExpenses();
-    let d=allData.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-    console.log({d});
+    let d = allData.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+      status: doc?.status || "Unpaid",
+    }));
+    console.log({ d });
     setData(d);
     console.log(data);
     let exp = d.map((person, i) => ({
       key: person.id,
-            sn: i + 1,
-            catname: person.catname,
-            name: person.name,
-            date: person.date,
-            paidname: person.paidname,
-            quantity: person.quantity,
-            amount: person.amount,
-            payment: person.paymenttype,
-            subtotal: person.subtotal,
-            description: person.description,
-          }));
-          const totalAmount = exp.reduce((acc, expense) => {
-            acc += expense.amount * expense.quantity;
-            return acc;
-          }, 0);
-          const modifiedFilterExpense = [
-            ...exp,
-            {
-              key: "subTotal",
-              sn: "",
-              name: "",
-              catname: "",
-              paidname: "",
-              date: "",
-              quantity: "",
-              amount: "Total",
-              subtotal: totalAmount,
-              description: "",
-            },
-          ];
+      sn: i + 1,
+      catname: person.catname,
+      name: person.name,
+      date: person.date,
+      paidname: person.paidname,
+      quantity: person.quantity,
+      amount: person.amount,
+      payment: person.paymenttype,
+      subtotal: person.subtotal,
+      status: person.status,
+      description: person.description,
+    }));
+    const totalAmount = exp.reduce((acc, expense) => {
+      acc += expense.amount * expense.quantity;
+      return acc;
+    }, 0);
+    const modifiedFilterExpense = [
+      ...exp,
+      {
+        key: "subTotal",
+        sn: "",
+        name: "",
+        catname: "",
+        paidname: "",
+        date: "",
+        quantity: "",
+        amount: "Total",
+        subtotal: totalAmount,
+        status: "",
+        description: "",
+      },
+    ];
     console.log(modifiedFilterExpense);
     setAllExpenses(modifiedFilterExpense);
-    setFilterExpense(modifiedFilterExpense)
-    setLoading(false)
-    }
+    setFilterExpense(modifiedFilterExpense);
+    setLoading(false);
+  }
 
-    
   const navigate = useNavigate();
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
     date: [],
-    category: "all"
+    category: "all",
   });
- 
 
   const [modaldata, setmodaldata] = useState([]);
 
@@ -169,11 +170,11 @@ function ExpenseList() {
       onFilter: (value, record) => record.name.indexOf(value) === 0,
       // sorter: (a, b) => a.catname - b.catname,
       onFilter: (value, record) => record.name.indexOf(value) === 0,
-      sorter: (a, b) =>{if (a.catname < b.catname)
-        return -1;
-      if ( a.catname > b.catname)
-        return 1;
-      return 0;},
+      sorter: (a, b) => {
+        if (a.catname < b.catname) return -1;
+        if (a.catname > b.catname) return 1;
+        return 0;
+      },
       sortDirections: ["ascend", "descend"],
       render: (text) => <a className="catName">{text}</a>,
     },
@@ -183,11 +184,11 @@ function ExpenseList() {
       dataIndex: "name",
       key: "name",
       // responsive: ["sm"],
-     
-      sorter: (a, b ) =>{
-        return a.name !== b.name ? a.name < b.name ? -1 : 1 : 0;
+
+      sorter: (a, b) => {
+        return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
       },
-      sortDirections: ["ascend", "descend"]
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Paid To",
@@ -196,10 +197,10 @@ function ExpenseList() {
       key: "paidto",
       // responsive: ["sm"],
       // sorter: (a, b) => a.name - b.name,
-      sorter: (a, b ) =>{
-        return a.name !== b.name ? a.name < b.name ? -1 : 1 : 0;
+      sorter: (a, b) => {
+        return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
       },
-      sortDirections: ["ascend", "descend"]
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Date",
@@ -209,24 +210,24 @@ function ExpenseList() {
       // responsive: ["sm"],
       sorter: (a, b) => a.date - b.date,
     },
-    // {
-    //   title: "Status",
-    //   className: "row5",
-    //   key: "status",
-    //   dataIndex: "status",
-    //   responsive: ["md"],
-    //   sorter: (a, b) => a.status - b.status,
-    //   render: (_, { status }) =>
-    //     status !== "" && (
-    //       <Tag
-    //         className="statusTag"
-    //         color={status.toLowerCase() === "paid" ? "green" : "volcano"}
-    //         key={status}
-    //       >
-    //         {status}
-    //       </Tag>
-    //     ),
-    // },
+    {
+      title: "Status",
+      className: "row5",
+      key: "status",
+      dataIndex: "status",
+      // responsive: ["md"],
+      sorter: (a, b) => a.status - b.status,
+      render: (_, { status }) =>
+        status !== "" && (
+          <Tag
+            className="statusTag"
+            color={status.toLowerCase() === "paid" ? "green" : "volcano"}
+            key={status}
+          >
+            {status}
+          </Tag>
+        ),
+    },
     {
       title: "Quantity",
       className: "row6",
@@ -400,10 +401,11 @@ function ExpenseList() {
           quantity: "",
           amount: "Total",
           subtotal: totalAmount,
+          status: "",
           description: "",
         },
       ];
-      setFilterExpense( modifiedFilterExpense);
+      setFilterExpense(modifiedFilterExpense);
     } else {
       setFilterExpense(allExpenses);
     }
@@ -438,6 +440,7 @@ function ExpenseList() {
           quantity: "",
           amount: "Total",
           subtotal: totalAmount,
+          status: "",
           description: "",
         },
       ];
@@ -564,16 +567,16 @@ function ExpenseList() {
         <div style={{ padding: "10px 0px" }}></div>
         {/* --------------------Tablelist------------------ */}
         <Table
-        loading={loading}
+          loading={loading}
           columns={columns}
           dataSource={filterExpenses}
           //    rowSelection={rowSelection}
           pagination={{
-          position: [ 'bottomCenter'],
-        }}
+            position: ["bottomCenter"],
+          }}
           className="expenseTable"
-          scroll={{ x: 1300}}
-          
+          scroll={{ x: 1300 }}
+
           //   onChange={onSort}
         />
       </Content>
@@ -584,9 +587,12 @@ function ExpenseList() {
         visible={isModalVisible}
         footer={null}
         closable={false}
-
       >
-        <Editexpense record={editedRecord}  setIsModalVisible={setIsModalVisible}  reloadData={getData}/>
+        <Editexpense
+          record={editedRecord}
+          setIsModalVisible={setIsModalVisible}
+          reloadData={getData}
+        />
       </Modal>
     </Layout>
   );

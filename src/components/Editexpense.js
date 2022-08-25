@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Col, Divider, Row} from "antd";
+import { Col, Divider, Row } from "antd";
 import moment from "moment";
 import { UploadOutlined } from "@ant-design/icons";
-import ExpenseContext from '../contexts/ExpenseContext'
+import ExpenseContext from "../contexts/ExpenseContext";
 import {
   Cascader,
   Input,
@@ -22,10 +22,10 @@ const { Option } = Select;
 const handleChange = (value) => {
   console.log(`selected ${value}`);
 };
-const showNotification = (type,msg,desc) => {
+const showNotification = (type, msg, desc) => {
   notification[type]({
     message: msg,
-    description:desc
+    description: desc,
   });
 };
 // const paystatus = [
@@ -50,13 +50,14 @@ const Editexpense = (props) => {
   const [date, setdate] = useState("");
   const [paidname, setpaidname] = useState("");
   const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("unpaid");
   function calculatesubtotal() {
     setsubtotal(amount * quantity);
   }
 
   async function submitEdit() {
     try {
-      const editedRecord ={
+      const editedRecord = {
         catname,
         name,
         paidname,
@@ -64,21 +65,22 @@ const Editexpense = (props) => {
         amount,
         quantity,
         subtotal,
-        description
-      }
-      console.log(editedRecord)
+        status,
+        description,
+      };
+      console.log(editedRecord);
       ExpenseContext.updateExpense(props.record.key, editedRecord);
-      props.setIsModalVisible(false)
-      props.reloadData()
-      showNotification('success','Success','Record updated successfuly')
+      props.setIsModalVisible(false);
+      props.reloadData();
+      showNotification("success", "Success", "Record updated successfuly");
 
       return;
     } catch (error) {
       console.log(error);
-      props.setIsModalVisible(false)
-      showNotification('error','Failed','Record update failed')
+      props.setIsModalVisible(false);
+      showNotification("error", "Failed", "Record update failed");
     }
-  };
+  }
 
   useEffect(() => {
     const quantityVal = props.record ? props.record.quantity : 0;
@@ -91,7 +93,7 @@ const Editexpense = (props) => {
     //   ? props.record.status
     //   : "Status of the payment";
     const description = props.record ? props.record.description : "";
-    console.log(props.record.key)
+    console.log(props.record.key);
     setAmount(amountVal);
     setQuantity(quantityVal);
     setsubtotal(amountVal * quantityVal);
@@ -100,22 +102,22 @@ const Editexpense = (props) => {
     setdate(dateVal);
     setpaidname(paidname);
     setDescription(description);
-    console.log(dateVal)
-    console.log(date)
-}, [props]);
-  function cancel(){
-    props.setIsModalVisible(false)
+    console.log(dateVal);
+    console.log(date);
+  }, [props]);
+  function cancel() {
+    props.setIsModalVisible(false);
   }
 
-  const cancelStyle ={
-    float: "right"
-  };  
-  const buttonStyle ={
+  const cancelStyle = {
+    float: "right",
+  };
+  const buttonStyle = {
     marginRight: "5px",
     color: "white",
     backgroundColor: "#1890ff",
-    float: "right"
-  }; 
+    float: "right",
+  };
 
   return (
     <Col xs={22} sm={22} md={22}>
@@ -171,7 +173,8 @@ const Editexpense = (props) => {
           <Input
             onChange={(e) => {
               const inputval = e.target.value;
-              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+              const newVal =
+                inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
               setcatname(newVal);
             }}
           />
@@ -193,7 +196,8 @@ const Editexpense = (props) => {
           <Input
             onChange={(e) => {
               const inputval = e.target.value;
-              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+              const newVal =
+                inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
               setname(newVal);
             }}
           />
@@ -212,7 +216,8 @@ const Editexpense = (props) => {
           <Input
             onChange={(e) => {
               const inputval = e.target.value;
-              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+              const newVal =
+                inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
               setpaidname(newVal);
             }}
           />
@@ -220,30 +225,30 @@ const Editexpense = (props) => {
 
         {/* ----------------------------------Status------- */}
 
-        {/* <Form.Item
-        style={{ marginBottom: "10px" }}
-        label="Status"
-        name="status"
-        // rules={[
-        //   {
-        //     message: "Please enter the paymeny status",
-        //     required: true,
-        //   },
-        // ]}
-      >
-        <Select
-          defaultValue="Status of the payment"
-          style={{
-            width: "100%",
-          }}
-          onChange={(value) => {
-            setStatus(value);
-          }}
+        <Form.Item
+          style={{ marginBottom: "10px" }}
+          label="Status"
+          name="status"
+          // rules={[
+          //   {
+          //     message: "Please enter the paymeny status",
+          //     required: true,
+          //   },
+          // ]}
         >
-          <Option value="paid">Paid</Option>
-          <Option value="unpaid">Unpaid</Option>
-        </Select>
-      </Form.Item> */}
+          <Select
+            defaultValue={status}
+            style={{
+              width: "100%",
+            }}
+            onChange={(value) => {
+              setStatus(value);
+            }}
+          >
+            <Option value="paid">Paid</Option>
+            <Option value="unpaid">Unpaid</Option>
+          </Select>
+        </Form.Item>
         {/* ----------------------------------Datepicker------- */}
         <Form.Item
           style={{ marginBottom: "10px" }}
@@ -256,10 +261,13 @@ const Editexpense = (props) => {
           //   },
           // ]}
         >
-        <DatePicker format={dateFormat} style={{ width: '100%' }}
-          onChange = {(e) => { setdate(e.format(dateFormat))}}
-        />
-
+          <DatePicker
+            format={dateFormat}
+            style={{ width: "100%" }}
+            onChange={(e) => {
+              setdate(e.format(dateFormat));
+            }}
+          />
         </Form.Item>
         {/* --------------------------------------Amount------- */}
 
@@ -329,8 +337,12 @@ const Editexpense = (props) => {
           <TextArea onChange={(e) => setDescription(e.target.value)} />
         </Form.Item>
         <br />
-        <Button style={cancelStyle} onClick={cancel}>Cancel</Button>
-        <Button style={buttonStyle} onClick={submitEdit}>Submit</Button>
+        <Button style={cancelStyle} onClick={cancel}>
+          Cancel
+        </Button>
+        <Button style={buttonStyle} onClick={submitEdit}>
+          Submit
+        </Button>
         <br />
         {/* <Form.Item style={{ marginBottom: "0" }}>
         <Upload

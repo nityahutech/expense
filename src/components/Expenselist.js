@@ -36,8 +36,10 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/expenselist.css";
+import ExpenseContext from '../contexts/ExpenseContext'
 import Editexpense from "./Editexpense";
 import { upload } from "@testing-library/user-event/dist/upload";
+import { async } from "@firebase/util";
 const { RangePicker } = DatePicker;
 const dateFormat = "DD-MM-YYYY";
 
@@ -45,107 +47,105 @@ const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;
 const { Content } = Layout;
 
-const data = [
-  {
-    key: "1",
-    sn: "1",
-    catname: "food",
-    name: "Ekta",
-    date: "12-07-2022",
-    paidname: "kl",
-    status: "Paid",
-    quantity: 5,
-    amount: 200,
-    subtotal: 1000,
-    description: "doneasjdksndsvndjfdkjfdvkb",
-  },
-  {
-    key: "2",
-    sn: "2",
-    catname: "water",
-    paidname: "k2",
-    name: "Pooja",
-    date: "20-07-2022",
-    status: "Unpaid",
-    quantity: 5,
-    amount: 500,
-    subtotal: 2500,
-    description: "pending",
-  },
-];
+
 
 function ExpenseList() {
+  const [data, setData] = useState([])
+  const [allExpenses, setAllExpenses] = useState(data || []);
+  const [filterExpenses, setFilterExpense] = useState(data || []);
+  const [editedRecord, setEditedRecord] = useState(null);
+  const [loading, setLoading] = useState(false)
+  
+  
+  useEffect(() => {
+     getData()
+  }, [])
+
+  // useEffect(() => {
+  //   getData();
+  //   console.log("hello1");
+  //   console.log(data);
+  //   console.log(allExpenses);
+  //   if (filterExpenses.length > 0) {
+  //     const totalAmount = filterExpenses.reduce((acc, expense) => {
+  //       acc += expense.amount * expense.quantity;
+  //       return acc;
+  //     }, 0);
+  //     const modifiedFilterExpense = [
+  //       ...filterExpenses,
+  //       {
+  //         key: "subTotal",
+  //         sn: "",
+  //         name: "",
+  //         catname: "",
+  //         paidname: "",
+  //         date: "",
+  //         quantity: "",
+  //         amount: "Total",
+  //         subtotal: totalAmount,
+  //         description: "",
+  //       },
+  //     ];
+  //     setTableData(modifiedFilterExpense);
+  //   } else {
+  //     setTableData([]);
+  //   }
+  //   // setFilterExpense(data);
+  // }, [filterExpenses]);
+
+  async function getData() {
+    setLoading(true)
+    const allData = await ExpenseContext.getAllExpenses();
+    let d=allData.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+    console.log({d});
+    setData(d);
+    console.log(data);
+    let exp = d.map((person, i) => ({
+      key: person.id,
+            sn: i + 1,
+            catname: person.catname,
+            name: person.name,
+            date: person.date,
+            paidname: person.paidname,
+            quantity: person.quantity,
+            amount: person.amount,
+            payment: person.paymenttype,
+            subtotal: person.subtotal,
+            description: person.description,
+          }));
+          const totalAmount = exp.reduce((acc, expense) => {
+            acc += expense.amount * expense.quantity;
+            return acc;
+          }, 0);
+          const modifiedFilterExpense = [
+            ...exp,
+            {
+              key: "subTotal",
+              sn: "",
+              name: "",
+              catname: "",
+              paidname: "",
+              date: "",
+              quantity: "",
+              amount: "Total",
+              subtotal: totalAmount,
+              description: "",
+            },
+          ];
+    console.log(modifiedFilterExpense);
+    setAllExpenses(modifiedFilterExpense);
+    setFilterExpense(modifiedFilterExpense)
+    setLoading(false)
+    }
+
+    
   const navigate = useNavigate();
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
     date: [],
-    category: "all",
-    status: "all",
+    category: "all"
   });
-  const [allExpenses, setAllExpenses] = useState(data || []);
-  const [filterExpenses, setFilterExpense] = useState(data || []);
-  const [tableData, setTableData] = useState([]);
-  const [editedRecord, setEditedRecord] = useState(null);
-
-  useEffect(() => {
-    if (filterExpenses.length > 0) {
-      const totalAmount = filterExpenses.reduce((acc, expense) => {
-        acc += expense.amount * expense.quantity;
-        return acc;
-      }, 0);
-      const modifiedFilterExpense = [
-        ...filterExpenses,
-        {
-          key: "subTotal",
-          sn: "",
-          name: "",
-          catname: "",
-          paidname: "",
-          date: "",
-          status: "",
-          quantity: "",
-          amount: "Total",
-          subtotal: totalAmount,
-          description: "",
-        },
-      ];
-      setTableData(modifiedFilterExpense);
-    } else {
-      setTableData([]);
-    }
-  }, [filterExpenses]);
-
-  // useEffect(function () {
-  //   // getExpense();
-  // }, []);
-  // function getExpense() {
-  //   axios.get(`http://localhost:3001/api/expense/get-expense`).then((res) => {
-  //     const persons = res.data.data;
-  //     console.log(persons);
-  //     let exp = persons.map((person, i) => ({
-  //       key: person.expenseId,
-  //       sn: i + 1,
-  //       catname: person.expenseName,
-  //       name: person.paid_by,
-  //       date: "2022-07-12",
-  //       paidname: person.paid_to,
-  //       status: "Paid",
-  //       quantity: 5,
-  //       amount: 200,
-  //       subtotal: 1000,
-  //       description: "doneasjdksndsvndjfdkjfdvkb",
-  //     }));
-  //     setAllExpenses(exp);
-  //     setFilterExpense(exp);
-  //   });
-  // }
-
-  useEffect(
-    function () {
-      console.log("filterCriteria:: ", filterCriteria);
-    },
-    [filterCriteria]
-  );
+ 
 
   const [modaldata, setmodaldata] = useState([]);
 
@@ -167,7 +167,13 @@ function ExpenseList() {
       // responsive: ["sm"],
       // fixed: "left",
       onFilter: (value, record) => record.name.indexOf(value) === 0,
-      sorter: (a, b) => a.catname.length - b.catname.length,
+      // sorter: (a, b) => a.catname - b.catname,
+      onFilter: (value, record) => record.name.indexOf(value) === 0,
+      sorter: (a, b) =>{if (a.catname < b.catname)
+        return -1;
+      if ( a.catname > b.catname)
+        return 1;
+      return 0;},
       sortDirections: ["ascend", "descend"],
       render: (text) => <a className="catName">{text}</a>,
     },
@@ -177,7 +183,11 @@ function ExpenseList() {
       dataIndex: "name",
       key: "name",
       // responsive: ["sm"],
-      sorter: (a, b) => a.name - b.name,
+     
+      sorter: (a, b ) =>{
+        return a.name !== b.name ? a.name < b.name ? -1 : 1 : 0;
+      },
+      sortDirections: ["ascend", "descend"]
     },
     {
       title: "Paid To",
@@ -185,7 +195,11 @@ function ExpenseList() {
       dataIndex: "paidname",
       key: "paidto",
       // responsive: ["sm"],
-      sorter: (a, b) => a.name - b.name,
+      // sorter: (a, b) => a.name - b.name,
+      sorter: (a, b ) =>{
+        return a.name !== b.name ? a.name < b.name ? -1 : 1 : 0;
+      },
+      sortDirections: ["ascend", "descend"]
     },
     {
       title: "Date",
@@ -259,7 +273,7 @@ function ExpenseList() {
       // responsive: ["sm"],
       sorter: (a, b) => a.action - b.action,
       render: (_, record) => {
-        console.log("record:: ", record);
+        // console.log("record:: ", record);
         return (
           record.key !== "subTotal" && (
             <>
@@ -348,10 +362,6 @@ function ExpenseList() {
     // submit form data
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
   const handleEditExpense = (record) => {
     console.log("record: ", record);
     setEditedRecord(record);
@@ -372,7 +382,28 @@ function ExpenseList() {
             moment(ex.date, dateFormat).isSameOrBefore(date[1]))
         );
       });
-      setFilterExpense(result);
+      //find sub
+      const totalAmount = result.reduce((acc, expense) => {
+        acc += expense.amount * expense.quantity;
+        return acc;
+      }, 0);
+      //new row with subtotal
+      const modifiedFilterExpense = [
+        ...result,
+        {
+          key: "subTotal",
+          sn: "",
+          name: "",
+          catname: "",
+          paidname: "",
+          date: "",
+          quantity: "",
+          amount: "Total",
+          subtotal: totalAmount,
+          description: "",
+        },
+      ];
+      setFilterExpense( modifiedFilterExpense);
     } else {
       setFilterExpense(allExpenses);
     }
@@ -390,7 +421,27 @@ function ExpenseList() {
           ex.catname.toLowerCase().includes(search.toLowerCase()) ||
           ex.name.toLowerCase().includes(search.toLowerCase())
       );
-      setFilterExpense(result);
+
+      const totalAmount = result.reduce((acc, expense) => {
+        acc += expense.amount * expense.quantity;
+        return acc;
+      }, 0);
+      const modifiedFilterExpense = [
+        ...result,
+        {
+          key: "subTotal",
+          sn: "",
+          name: "",
+          catname: "",
+          paidname: "",
+          date: "",
+          quantity: "",
+          amount: "Total",
+          subtotal: totalAmount,
+          description: "",
+        },
+      ];
+      setFilterExpense(modifiedFilterExpense);
     } else {
       setFilterExpense(allExpenses);
     }
@@ -433,7 +484,7 @@ function ExpenseList() {
   // };
 
   const handleAddNewExpense = () => {
-    navigate("/ExpenseFrm");
+    navigate("/Expense/AddExpense");
   };
 
   return (
@@ -511,29 +562,31 @@ function ExpenseList() {
           </Col>
         </Row>
         <div style={{ padding: "10px 0px" }}></div>
+        {/* --------------------Tablelist------------------ */}
         <Table
+        loading={loading}
           columns={columns}
-          dataSource={tableData}
+          dataSource={filterExpenses}
           //    rowSelection={rowSelection}
           pagination={{
-            position: ["none", "none"],
-          }}
+          position: [ 'bottomCenter'],
+        }}
           className="expenseTable"
-          scroll={{ x: 1300 }}
+          scroll={{ x: 1300}}
+          
           //   onChange={onSort}
         />
       </Content>
       {/* <Editexpense record={editedRecord} /> */}
       <Modal
+        centered
         title="Expense Register"
         visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        okText="Submit"
-        cancelText="Cancel"
-        centered
+        footer={null}
+        closable={false}
+
       >
-        <Editexpense record={editedRecord} />
+        <Editexpense record={editedRecord}  setIsModalVisible={setIsModalVisible}  reloadData={getData}/>
       </Modal>
     </Layout>
   );

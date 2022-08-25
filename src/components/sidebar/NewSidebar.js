@@ -2,6 +2,12 @@ import { Layout, Menu } from 'antd';
 import React from 'react';
 import './newSlidebar.css';
 import { useNavigate, NavLink } from "react-router-dom";
+import {
+    
+    SettingOutlined,
+    ProfileOutlined 
+ 
+  } from "@ant-design/icons";
 
 
 const { Sider } = Layout;
@@ -133,6 +139,18 @@ const NewSidebar = () => {
                         </Menu.Item>
 
                     </Menu.SubMenu>
+
+                    <Menu.Item icon={<ProfileOutlined style={{color: "#FFFFFF"}}/>} key="4">
+                        Profile
+                        <NavLink to="/Profile" />
+                    </Menu.Item>
+                    <Menu.Item icon={<SettingOutlined  style={{color: "#FFFFFF"}} />} key="5">
+                       Setting
+                        <NavLink to="/Setting" />
+                    </Menu.Item>
+
+
+
                 </Menu>
 
             {/* </div> */}

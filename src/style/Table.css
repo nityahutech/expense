@@ -24,3 +24,21 @@
     height: 400px;
     justify-content: center;
  }  
+ .Dot{
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 24px 7px -2px 11px;
+ }
+ .Row{
+    font-family: 'CircularStd', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    display: contents;
+ }
+ .Newtable{
+    width: 47%;
+    margin-top: 47px;
+    position: absolute;
+ }

@@ -25,7 +25,6 @@ const menu = (
                     </Link>
                 ),
                 icon: <img src={abstractuserflat4} alt="downArrow" className="avatarimg" />
-
             },
             {
                 key: '2',
@@ -52,44 +51,30 @@ const Navbar = () => {
     return (
         <div className='navbar' style={{ background: 'white' }} >
             <div className='wrapper' >
-
                 <div className='image' >
-
                     <img
                         src="/logo/bell.png" alt='imh'
                         className="bell"
                     />
-
                     <div className="item">
                         <img
                             src="/logo/logo.png" alt='imagh'
                             className="avatar"
-                            style={{cursor:'pointer'}}
-                            
+                            style={{cursor:'pointer'}}                          
                         />
                     </div>
                 </div>
 
                 <Dropdown overlay={menu} >
-
                     <Space>
                        <h1 style={{cursor:'pointer', fontSize: '16px',marginTop:'10px'}} >  Hutech </h1>
-
-                        <img src={dropDownimg} alt="downArrow"  style={{cursor:'pointer'}} />
-                       
+                        <img src={dropDownimg} alt="downArrow"  style={{cursor:'pointer'}} />                       
                     </Space>
-
                 </Dropdown>
-
             </div>
-
-            {/* <hr className='line' width="95%" color="#F4F4F4" height="1" padding-left='20' /> */}
-
+         
             <div className='tittle'>
-
                 <ExpenseBreadCrumb/>
-             
-
             </div>
         </div>
 

@@ -7,9 +7,6 @@ import './ExpenseForm.css';
 import ExpenseContext from './contexts/ExpenseContext'
 import { useNavigate } from 'react-router-dom';
 
-//import ExpenseDataService from './services/expense.services.js';
-
-
 import {
   // Cascader,
   Input,
@@ -36,25 +33,34 @@ const ExpenceForm = () => {
   const { TextArea } = Input;
   const navigate = useNavigate();
 
+  const checkNumbervalue = (event) => {
+    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+  const checkAlphabets = (event) => {
+    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
   const onFinish = values => {
     console.log('Received values of form: ', values);
 
-  
-
     const valuesToservice = {
-      
+
       amount: values['amount'],
-      catname:  values['expence'],
-      date:  values['paymentDate'].format('DD-MM-YYYY'),
-      description:  values['description'],
-  
-      name:  values['paidByInput'],
-      paidname:  values['paidto'],
-      quantity:  values['Quantity'],
-      paymenttype:  values['paymentMode'],
-     
+      catname: values['expence'],
+      date: values['paymentDate'].format('DD-MM-YYYY'),
+      description: values['description'],
+      name: values['paidByInput'],
+      paidname: values['paidto'],
+      quantity: values['Quantity'],
+      paymenttype: values['paymentMode'],
+      status: 'unpaid',
+
       // status:  values['paymentDate'],
-      subtotal:  values['subTotal'],
+      subtotal: values['subTotal'],
     }
 
     console.log('valuesToservice: ', valuesToservice);
@@ -94,57 +100,86 @@ const ExpenceForm = () => {
           autoComplete="off"
           onFinish={onFinish}
         >
-          <Row gutter={[40, 16]}>
-            <col span={12} style={{ background: 'yellow', padding: '10' }}></col>
-            <col span={12} style={{ background: 'grey', padding: '10' }}></col>
-          </Row>
-          <Row gutter={[40, 16]}>
+        
+          <Row gutter={[24, 8]} >
 
-            {/* <Col span={2} style={{ background: 'black' }}></Col> */}
-            <Col span={12} style={{ background: '', padding: '10' }}>
+            {/* -----------------Expense Name-------------- */}
 
-
-              {/* -------------------------Expense Name------- */}
+            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
 
               <Divider orientation='left' orientationMargin={0}>Expense Name<span style={{color:'red'}}>*</span></Divider>
               <Form.Item
                 name="expence"
-              
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
+
                 rules={[
                   {
                     required: true,
+                    minLength: 3, maxLength: 20,
                     message: 'Please enter Expense Name',
+
                   }, {
-                    pattern:/^[a-zA-Z\s]*$/,
+                    pattern: /^[a-zA-Z\s]*$/,
                     message: 'Please enter Valid Name',
+
                   }
                 ]}
 
               >
-                <Input
+                <Input maxLength={20}
                   onChange={(e) => {
 
                     const inputval = e.target.value;
                     const str = e.target.value;
                     const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                    const caps = str.split(' ').map(capitalize).join(' ');        
-                      // setPaidBy(newVal);
+                    const caps = str.split(' ').map(capitalize).join(' ');
+                    // setPaidBy(newVal);
                     form.setFieldsValue({ expence: newVal, expence: caps });
 
                   }}
 
-
                   required placeholder='Enter Expense For' />
               </Form.Item>
+            </Col>
+            {/* -----------------Date-------------- */}
+            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
+              <Divider orientation='left' orientationMargin={0}>Date<span style={{ color: 'red' }}>*</span></Divider>
+              <Form.Item
+                name="paymentDate"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Choose a Date"
+                  },
+                ]}
+              >
 
+                <DatePicker format={dateFormatList} style={{ width: '100%' }} placeholder='Choose Date' />
+              </Form.Item>
+            </Col>
 
-              {/* ------------------------------Paid By------- */}
+          </Row>
 
-              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Paid By</Divider>
+          <Row gutter={[28, 8]}>
+
+            {/* -----------------paid by-------------- */}
+            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
+            <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Paid By</Divider>
 
               <Form.Item
 
                 name="paidByInput"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
+
+            
                 rules={[
                   {
                     required: true,
@@ -153,8 +188,7 @@ const ExpenceForm = () => {
                 
                     pattern:  /^[a-zA-Z\s]*$/,
                     message: 'Please enter Valid Name',
-                    // /^[a-zA-Z]+$/g
-
+                  
                   }
                 ]}
 
@@ -175,24 +209,33 @@ const ExpenceForm = () => {
                   required
                   placeholder='Enter  Name' />
               </Form.Item>
+            </Col>
 
-              {/* --------------------Paid to------------ */}
+            {/* -----------------paid to-------------- */}
 
-              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Paid to</Divider>
+
+            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
+
+              <Divider orientation='left' orientationMargin={0}>Paid to<span style={{ color: 'red' }}>*</span></Divider>
               <Form.Item
                 name="paidto"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
                 rules={[
                   {
                     required: true,
-                    message: 'Please enter Vendor',
+                    message: 'Please enter Vendor Name',
                   }, {
-                    pattern:  /^[a-zA-Z\s]*$/,
+                    pattern: /^[a-zA-Z\s]*$/,
                     message: 'Please enter Valid Name',
                   }
                 ]}
 
               >
-                <Input
+                <Input maxLength={20}
                   onChange={(e) => {
 
                     const inputval = e.target.value;
@@ -204,14 +247,98 @@ const ExpenceForm = () => {
                   required
                   placeholder='Enter Vendor Name' />
               </Form.Item>
+            </Col>
+
+          </Row>
+
+          <Row gutter={[28, 8]}>
+
+            {/* -----------------amount-------------- */}
+
+            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
 
 
+              <Divider orientation='left' orientationMargin={0}>Amount<span style={{ color: 'red' }}>*</span></Divider>
+              <Form.Item
+                className='numder-inputs'
+                name="amount"
+                onKeyPress={(event) => {
+                  if (checkNumbervalue(event)) {
+                    event.preventDefault();
+                  }
+                }}
+                rules={[
+                  {
+
+                    required: true,
+                    message: "Please enter the amount",
+                    pattern: /^[0-9\b]+$/,
+
+                  },
+                  { whitespace: true },
+
+                ]}
+
+              >
+                <Input maxLength={8}
+                  required
+                  onChange={(e) => {
+                    const amt = e.target.value;
+                    setAmount(amt);
+                    setTotal(amt * quantity);
+                    form.setFieldsValue({ subTotal: amt * quantity });
+
+                  }}
+
+                  placeholder='Enter Amount Here'
+
+                />
+              </Form.Item>
+            </Col>
 
 
+            {/* -----------------Quanitity--------------- */}
+            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
 
-              {/* ------------------------------Payment type------- */}
+              <Divider orientation='left' orientationMargin={0}>Quantity<span style={{ color: 'red' }}>*</span></Divider>
+              <Form.Item
 
-              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Mode of Payment</Divider>
+                name="Quantity"
+                onKeyPress={(event) => {
+                  if (checkNumbervalue(event)) {
+                    event.preventDefault();
+                  }
+                }}
+                rules={[
+                  {
+                    required: false,
+                    message: "Please enter the quantity ",
+                    pattern: /^[0-9\b]+$/,
+                  },
+                ]}
+
+              >
+
+                <Input maxLength={4}
+                  required
+                  min={0}
+
+                  onChange={(e) => {
+                    const qnt = e.target.value;
+                    setQuantity(qnt);
+                    setTotal(amount * qnt);
+                    form.setFieldsValue({ subTotal: amount * qnt });
+                  }}
+                  placeholder='Quantity of the item' />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          {/* -----------------Mode of Payment--------------- */}
+          <Row gutter={[28, 8]}>
+            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
+
+              <Divider orientation='left' orientationMargin={0}>Mode of Payment<span style={{ color: 'red' }}>*</span></Divider>
               <Form.Item
                 name="paymentMode"
                 rules={[
@@ -225,114 +352,24 @@ const ExpenceForm = () => {
                   <Radio value="Bank"> Bank Transfer </Radio>
                   <Radio value="Cash"> Cash </Radio>
                   <Radio value="UPI"> UPI </Radio>
-                
+
+
                 </Radio.Group>
               </Form.Item>
             </Col>
-            {/* <Col span={4} style={{ background: 'black' }}></Col> */}
-
-            <Col span={12} style={{ background: '' }}>
-
-              {/* ----------------------Datepicker------- */}
-
-              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Date</Divider>
-              <Form.Item
-                name="paymentDate"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Choose a Date"
-                  },
-                ]}
-              >
-               
-                <DatePicker format={dateFormatList} style={{ width: '100%' }} placeholder='Choose Date'/>
-              </Form.Item>
-
-              {/* ---------------------------Amount------- */}
-
-              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Amount</Divider>
-              <Form.Item
-                className='numder-inputs'
-                name="amount"
-                
-                rules={[
-                  {
-                   
-                    required: true,
-                    message: "Please enter the amount",
-                    pattern: /^[0-9\b]+$/,
-                  },
-                  { whitespace: true },
-
-                ]}
-
-              >
-                <Input
-                  required
-
-
-                  onChange={(e) => {
-                    const amt = e.target.value;
-                    setAmount(amt);
-                    setTotal(amt * quantity);
-                    form.setFieldsValue({ subTotal: amt * quantity });
-
-                  }}
-
-                  placeholder='Enter Amount Here'
-                />
-              </Form.Item>
-
-              {/* --------------------------Quantity------- */}
-
-              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Quantity</Divider>
-              <Form.Item
-
-                name="Quantity"
-                rules={[
-                  {
-                    required: false,
-                    message: "Please enter the quantity ",
-                    pattern: /^[0-9\b]+$/,
-                  },
-                ]}
-
-              >
-
-                <Input
-                  required
-                  min={0}
-
-                  onChange={(e) => {
-                    const qnt = e.target.value;
-                    setQuantity(qnt);
-                    setTotal(amount * qnt);
-                    form.setFieldsValue({ subTotal: amount * qnt });
-                  }}
-                  placeholder='Quantity of the item' />
-
-              </Form.Item>
-
-              {/* -------------------------Sub-total------- */}
-
+            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
               <Divider orientation='left' orientationMargin={0}>Subtotal</Divider>
               <Form.Item
                 name="subTotal"
-                
               >
-
                 <Input
                   disabled={true}
-                  
-
                   value={total || 0}
                   placeholder='Total' />
               </Form.Item>
-
             </Col>
-            {/* <Col span={2} style={{ background: 'black' }}></Col> */}
           </Row>
+
           {/* -----------------Text-area--------------- */}
 
           <Row gutter={24}>
@@ -344,7 +381,7 @@ const ExpenceForm = () => {
                   name="description"
                   rules={[
                     {
-                      required: true,
+                      required: '',
                       message: "Please enter the Description ",
                     },
                   ]}
@@ -402,3 +439,4 @@ const ExpenceForm = () => {
 }
 
 export default ExpenceForm;
+

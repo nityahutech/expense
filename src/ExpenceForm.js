@@ -100,14 +100,14 @@ const ExpenceForm = () => {
           autoComplete="off"
           onFinish={onFinish}
         >
-
+        
           <Row gutter={[24, 8]} >
 
             {/* -----------------Expense Name-------------- */}
 
             <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
 
-              <Divider orientation='left' orientationMargin={0}>Expense Name<span style={{ color: 'red' }}>*</span></Divider>
+              <Divider orientation='left' orientationMargin={0}>Expense Name<span style={{color:'red'}}>*</span></Divider>
               <Form.Item
                 name="expence"
                 onKeyPress={(event) => {

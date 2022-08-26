@@ -53,6 +53,7 @@ function ExpenseList() {
   const [filterExpenses, setFilterExpense] = useState(data || []);
   const [editedRecord, setEditedRecord] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState("");
 
   useEffect(() => {
     getData();
@@ -93,10 +94,10 @@ function ExpenseList() {
   async function getData() {
     setLoading(true);
     const allData = await ExpenseContext.getAllExpenses();
+    console.log(allData.docs);
     let d = allData.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
-      status: doc?.status || "Unpaid",
     }));
     console.log({ d });
     setData(d);
@@ -119,22 +120,23 @@ function ExpenseList() {
       acc += expense.amount * expense.quantity;
       return acc;
     }, 0);
-    const modifiedFilterExpense = [
-      ...exp,
-      {
-        key: "subTotal",
-        sn: "",
-        name: "",
-        catname: "",
-        paidname: "",
-        date: "",
-        quantity: "",
-        amount: "Total",
-        subtotal: totalAmount,
-        status: "",
-        description: "",
-      },
-    ];
+    setTotal(totalAmount);
+    const modifiedFilterExpense = [...exp];
+    //   ...exp,
+    //   {
+    //     key: "subTotal",
+    //     sn: "",
+    //     name: "",
+    //     catname: "",
+    //     paidname: "",
+    //     date: "",
+    //     quantity: "",
+    //     amount: "Total",
+    //     subtotal: totalAmount,
+    //     // status: "",
+    //     description: "",
+    //   },
+    // ];
     console.log(modifiedFilterExpense);
     setAllExpenses(modifiedFilterExpense);
     setFilterExpense(modifiedFilterExpense);
@@ -221,7 +223,7 @@ function ExpenseList() {
         status !== "" && (
           <Tag
             className="statusTag"
-            color={status.toLowerCase() === "paid" ? "green" : "volcano"}
+            color={status === "Paid" ? "green" : "volcano"}
             key={status}
           >
             {status}
@@ -388,23 +390,24 @@ function ExpenseList() {
         acc += expense.amount * expense.quantity;
         return acc;
       }, 0);
+      setTotal(totalAmount);
       //new row with subtotal
-      const modifiedFilterExpense = [
-        ...result,
-        {
-          key: "subTotal",
-          sn: "",
-          name: "",
-          catname: "",
-          paidname: "",
-          date: "",
-          quantity: "",
-          amount: "Total",
-          subtotal: totalAmount,
-          status: "",
-          description: "",
-        },
-      ];
+      const modifiedFilterExpense = [...result];
+      // ...result,
+      //   {
+      //     key: "subTotal",
+      //     sn: "",
+      //     name: "",
+      //     catname: "",
+      //     paidname: "",
+      //     date: "",
+      //     quantity: "",
+      //     amount: "Total",
+      //     subtotal: totalAmount,
+      //     // status: "",
+      //     description: "",
+      //   },
+      // ];
       setFilterExpense(modifiedFilterExpense);
     } else {
       setFilterExpense(allExpenses);
@@ -428,22 +431,23 @@ function ExpenseList() {
         acc += expense.amount * expense.quantity;
         return acc;
       }, 0);
-      const modifiedFilterExpense = [
-        ...result,
-        {
-          key: "subTotal",
-          sn: "",
-          name: "",
-          catname: "",
-          paidname: "",
-          date: "",
-          quantity: "",
-          amount: "Total",
-          subtotal: totalAmount,
-          status: "",
-          description: "",
-        },
-      ];
+      setTotal(totalAmount);
+      const modifiedFilterExpense = [...result];
+      //   ...result,
+      //   {
+      //     key: "subTotal",
+      //     sn: "",
+      //     name: "",
+      //     catname: "",
+      //     paidname: "",
+      //     date: "",
+      //     quantity: "",
+      //     amount: "Total",
+      //     subtotal: totalAmount,
+      //     // status: "",
+      //     description: "",
+      //   },
+      // ];
       setFilterExpense(modifiedFilterExpense);
     } else {
       setFilterExpense(allExpenses);
@@ -513,6 +517,19 @@ function ExpenseList() {
               style={{ width: "95%" }}
               onChange={onChange}
             />
+          </Col>
+          <Col
+            xs={22}
+            sm={10}
+            md={8}
+            lg={6}
+            style={{
+              fontWeight: "bold",
+              textAlign: "center",
+              fontSize: "1.1rem",
+            }}
+          >
+            Total: {total}
           </Col>
           {/* <Col xs={22} sm={10} md={6}>
             <Select

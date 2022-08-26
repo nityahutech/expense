@@ -50,7 +50,7 @@ const Editexpense = (props) => {
   const [date, setdate] = useState("");
   const [paidname, setpaidname] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("unpaid");
+  const [status, setStatus] = useState("");
   function calculatesubtotal() {
     setsubtotal(amount * quantity);
   }
@@ -89,6 +89,7 @@ const Editexpense = (props) => {
     const nameby = props.record ? props.record.name : "";
     const dateVal = props.record ? props.record.date : "";
     const paidname = props.record ? props.record.paidname : "";
+    const statusTag = props.record ? props.record.status : "";
     // const statusTag = props.record
     //   ? props.record.status
     //   : "Status of the payment";
@@ -102,8 +103,9 @@ const Editexpense = (props) => {
     setdate(dateVal);
     setpaidname(paidname);
     setDescription(description);
-    console.log(dateVal);
-    console.log(date);
+    setStatus(statusTag);
+    console.log(statusTag);
+    console.log(status);
   }, [props]);
   function cancel() {
     props.setIsModalVisible(false);
@@ -117,6 +119,17 @@ const Editexpense = (props) => {
     color: "white",
     backgroundColor: "#1890ff",
     float: "right",
+  };
+  const checkNumbervalue = (event) => {
+    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
+  const checkAlphabets = (event) => {
+    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
   };
 
   return (
@@ -157,6 +170,10 @@ const Editexpense = (props) => {
             name: ["Textarea"],
             value: description,
           },
+          {
+            name: ["status"],
+            value: status,
+          },
         ]}
         layout="horizontal"
       >
@@ -164,6 +181,11 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           name="expensename"
           label="Expense Name"
+          onKeyPress={(event) => {
+            if (checkAlphabets(event)) {
+              event.preventDefault();
+            }
+          }}
           rules={[
             {
               required: true,
@@ -176,6 +198,7 @@ const Editexpense = (props) => {
           ]}
         >
           <Input
+            maxLength={20}
             onChange={(e) => {
               const inputval = e.target.value;
               const newVal =
@@ -191,6 +214,11 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           label="Paid By"
           name="name"
+          onKeyPress={(event) => {
+            if (checkAlphabets(event)) {
+              event.preventDefault();
+            }
+          }}
           rules={[
             {
               required: true,
@@ -204,6 +232,7 @@ const Editexpense = (props) => {
           ]}
         >
           <Input
+            maxLength={20}
             onChange={(e) => {
               const inputval = e.target.value;
               const newVal =
@@ -216,6 +245,11 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           label="Paid To"
           name="paidname"
+          onKeyPress={(event) => {
+            if (checkAlphabets(event)) {
+              event.preventDefault();
+            }
+          }}
           rules={[
             {
               required: true,
@@ -228,6 +262,7 @@ const Editexpense = (props) => {
           ]}
         >
           <Input
+            maxLength={20}
             onChange={(e) => {
               const inputval = e.target.value;
               const newVal =
@@ -259,8 +294,8 @@ const Editexpense = (props) => {
               setStatus(value);
             }}
           >
-            <Option value="paid">Paid</Option>
-            <Option value="unpaid">Unpaid</Option>
+            <Option value="Paid">Paid</Option>
+            <Option value="Unpaid">Unpaid</Option>
           </Select>
         </Form.Item>
         {/* ----------------------------------Datepicker------- */}
@@ -289,6 +324,11 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           label="Amount"
           name="amount"
+          onKeyPress={(event) => {
+            if (checkNumbervalue(event)) {
+              event.preventDefault();
+            }
+          }}
           rules={[
             {
               required: true,
@@ -314,6 +354,11 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           name="quantity"
           label="Quantity"
+          onKeyPress={(event) => {
+            if (checkNumbervalue(event)) {
+              event.preventDefault();
+            }
+          }}
           rules={[
             {
               required: true,
@@ -355,7 +400,10 @@ const Editexpense = (props) => {
           //   },
           // ]}
         >
-          <TextArea onChange={(e) => setDescription(e.target.value)} />
+          <TextArea
+            maxLength={50}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </Form.Item>
         <br />
         <Button style={cancelStyle} onClick={cancel}>

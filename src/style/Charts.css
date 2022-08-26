@@ -13,21 +13,23 @@
     background-color:white;
     display:flex;
     width: 100%;
-    justify-content: center;
-    align-items: center;
+    /* justify-content: center;
+    align-items: center; */
     border-radius: 10px;
     height: 150px;
+    position: relative;
 }
-.AmountDue{
-    padding: 5px;
-    margin:10px;
-    background-color:white;
-    display:flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    height: 150px;
+.Totalamount h1{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.heading{
+    display: flex;
+    justify-content: flex-start;
+    font-size: 200%;
+
 }
 .AvgAmount{
     padding: 5px;
@@ -35,10 +37,17 @@
     background-color:white;
     display:flex;
     width: 100%;
-    justify-content: center;
-    align-items: center;
+    /* justify-content: center;
+    align-items: center; */
     border-radius: 10px;
     height: 150px;
+    position: relative;
+}
+.AvgAmount h1{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }
 .chartsdisp{
     margin-left:0px;
@@ -55,6 +64,7 @@
     border-radius: 10px;
     height: 400px;
     justify-content: center;
+    
    
 }
 .pieChart{
@@ -67,3 +77,4 @@
     justify-content: center;
     
 }
+

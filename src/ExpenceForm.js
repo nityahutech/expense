@@ -95,6 +95,10 @@ const ExpenceForm = () => {
           onFinish={onFinish}
         >
           <Row gutter={[40, 16]}>
+            <col span={12} style={{ background: 'yellow', padding: '10' }}></col>
+            <col span={12} style={{ background: 'grey', padding: '10' }}></col>
+          </Row>
+          <Row gutter={[40, 16]}>
 
             {/* <Col span={2} style={{ background: 'black' }}></Col> */}
             <Col span={12} style={{ background: '', padding: '10' }}>
@@ -102,7 +106,7 @@ const ExpenceForm = () => {
 
               {/* -------------------------Expense Name------- */}
 
-              <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Expense Name</Divider>
+              <Divider orientation='left' orientationMargin={0}>Expense Name<span style={{color:'red'}}>*</span></Divider>
               <Form.Item
                 name="expence"
               

@@ -2,7 +2,7 @@ import React from "react";
 import Charts from "../../components/Charts";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
-import Tabledash from "../../components/Tabledash";
+// import Tabledash from "../../components/Tabledash";
 const DashBoard = () => {
   return (
     <div className="home">
@@ -17,7 +17,7 @@ const DashBoard = () => {
 
         <div className="tables">
           <Charts />
-          <Tabledash />
+          {/* <Tabledash /> */}
         </div>
       </div>
     </div>

@@ -79,7 +79,7 @@ const NewSidebar = () => {
     
     <Layout className='sidelayout'>
         <Sider
-            breakpoint="xl"
+            breakpoint="lg"
             style={{ backgroundColor: '#05445E'  }}
             collapsedWidth="0"
             onBreakpoint={(broken) => {
@@ -145,7 +145,7 @@ const NewSidebar = () => {
                         <NavLink to="/Profile" />
                     </Menu.Item>
                     <Menu.Item icon={<SettingOutlined  style={{color: "#FFFFFF"}} />} key="5">
-                       Setting
+                       Settings
                         <NavLink to="/Setting" />
                     </Menu.Item>
 

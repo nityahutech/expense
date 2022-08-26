@@ -9,6 +9,7 @@
   min-height: 100vh;
   flex-direction: row;
   margin: 0;
+  overflow-x: hidden
 
 }
 
@@ -33,18 +34,16 @@
 
  position: relative;
   display: flex;
-  width: 84%;
+  width: 82%;
   flex-direction: column;
   height: auto;
   margin-left: 200px;
  right: 0;
- justify-content: space-between;
+ justify-content: flex-end;
  flex:1 1 auto;
  flex-grow:1;
 
 }
-
-
 
 .tables{
   width: 100%;
@@ -66,7 +65,7 @@
 
 
 
-@media (max-width: 1200px) {
+@media (max-width: 1000px) {
   .homeContainer {
    
     width: 100%;

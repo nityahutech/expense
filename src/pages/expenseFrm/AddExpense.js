@@ -1,16 +1,30 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import Navbar from '../../components/navbar/Navbar';
 import Sidebar from "../../components/sidebar/NewSidebar";
 import ExpenceForm from '../../ExpenceForm';
 
 
 const ExpenseFrm = () => {
-    return (
+    const [accessToken, setAccessToken] = useState(null)
+
+    useEffect(() => {
+        let token = sessionStorage.getItem ("accessToken")
+        console.log(typeof token);
+        if(token === 'null'){
+          window.location.href="/"
+        }
+        else{
+          setAccessToken(token)
+        }
+      }, [])
+    return accessToken 
+    ?
+    (
         <div className="home">
 
         <div className="sidecontainer">
 
-            <Sidebar />
+            <Sidebar accessToken={accessToken}/>
         </div>
 
         <div className="homeContainer">
@@ -24,7 +38,7 @@ const ExpenseFrm = () => {
 
         </div>
     </div>
-    )
+    ) : null;
 }
 
 export default ExpenseFrm

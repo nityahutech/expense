@@ -7,7 +7,7 @@
     align-items: center;
     
 }
-.Totalamount{
+.Card1{
     padding: 5px;
     margin:10px;
     background-color:white;
@@ -19,19 +19,22 @@
     height: 150px;
     position: relative;
 }
-.Totalamount h1{
+.Card1 h1{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
 }
+/* .Card1 h2{
+    margin: 20px;
+} */
 .heading{
     display: flex;
     justify-content: flex-start;
     font-size: 200%;
 
 }
-.AvgAmount{
+.Card2{
     padding: 5px;
     margin:10px;
     background-color:white;
@@ -43,7 +46,7 @@
     height: 150px;
     position: relative;
 }
-.AvgAmount h1{
+.Card2 h1{
     position: absolute;
     top: 50%;
     left: 50%;
@@ -64,8 +67,14 @@
     border-radius: 10px;
     height: 400px;
     justify-content: center;
+    position: relative;
     
    
+}
+.barGraph button{
+    position: absolute;
+    right: 10px;
+    top: 10px;
 }
 .pieChart{
     margin:10px;
@@ -78,3 +87,23 @@
     
 }
 
+@media only screen and (min-width:700px) and (max-width:1000px){
+    .barGraph{
+        width:90%
+    }
+}
+@media only screen and (min-width:700px) and (max-width:1000px){
+    .barGraph{
+        width:90%
+    }
+}
+@media only screen and (min-width:700px) and (max-width:1000px){
+    .barGraph{
+        width:90%
+    }
+}
+@media only screen and (min-width:700px) and (max-width:1000px){
+    .barGraph{
+        width:90%
+    }
+}

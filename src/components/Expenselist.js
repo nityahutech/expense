@@ -168,7 +168,7 @@ function ExpenseList() {
       dataIndex: "catname",
       key: "catname",
       // responsive: ["sm"],
-      // fixed: "left",
+      fixed: "left",
       onFilter: (value, record) => record.name.indexOf(value) === 0,
       // sorter: (a, b) => a.catname - b.catname,
       onFilter: (value, record) => record.name.indexOf(value) === 0,
@@ -360,7 +360,7 @@ function ExpenseList() {
     setIsModalVisible(true);
   };
 
-  const handleOk = () => {
+  const handleCancel = () => {
     setIsModalVisible(false);
     // submit form data
   };
@@ -603,7 +603,7 @@ function ExpenseList() {
         title="Expense Register"
         visible={isModalVisible}
         footer={null}
-        closable={false}
+        onCancel={handleCancel}
       >
         <Editexpense
           record={editedRecord}

@@ -22,7 +22,10 @@ function LoginPage() {
     try {
       setError("")
       setLoading(true)
-      await login(loginEmail, loginPassword)
+
+      let res = await login(loginEmail, loginPassword)
+      // console.log(res.user.accessToken);
+      sessionStorage.setItem("accessToken", res.user.accessToken)
       navigate( "DashBoard" , { replace: true })
     } catch {
       setError("Failed to log in")

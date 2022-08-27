@@ -17,6 +17,8 @@ import {
   Form,
   Upload,
 } from "antd";
+import "../style/Editexpense.css";
+import { Content } from "antd/lib/layout/layout";
 const { Option } = Select;
 
 const handleChange = (value) => {
@@ -278,6 +280,7 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           label="Status"
           name="status"
+          className="Required"
           // rules={[
           //   {
           //     message: "Please enter the paymeny status",
@@ -382,6 +385,7 @@ const Editexpense = (props) => {
 
         <Form.Item
           label="Subsubtotal"
+          className="Subtotal"
           style={{ marginBottom: "10px", Color: "black" }}
         >
           <Input readonly value={subtotal} disabled={true} />
@@ -393,6 +397,7 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           label="Descriptions"
           name="Textarea"
+          className="Description"
           // rules={[
           //   {
           //     required: true,

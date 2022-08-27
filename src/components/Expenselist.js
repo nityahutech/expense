@@ -360,7 +360,7 @@ function ExpenseList() {
     setIsModalVisible(true);
   };
 
-  const handleOk = () => {
+  const handleCancel = () => {
     setIsModalVisible(false);
     // submit form data
   };
@@ -603,7 +603,7 @@ function ExpenseList() {
         title="Expense Register"
         visible={isModalVisible}
         footer={null}
-        closable={false}
+        onCancel={handleCancel}
       >
         <Editexpense
           record={editedRecord}

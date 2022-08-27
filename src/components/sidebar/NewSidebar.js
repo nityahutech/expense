@@ -117,7 +117,8 @@ const NewSidebar = () => {
 
                         <img style={{
 
-                            background: '#05445E'
+                            background: '#05445E',
+                            height: '30px', 
 
                         }} src="/logo/logo_1.png" alt='hello' />
 

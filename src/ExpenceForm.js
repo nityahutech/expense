@@ -57,7 +57,7 @@ const ExpenceForm = () => {
       paidname: values['paidto'],
       quantity: values['Quantity'],
       paymenttype: values['paymentMode'],
-      status: 'unpaid',
+      status: 'UnPaid',
 
       // status:  values['paymentDate'],
       subtotal: values['subTotal'],
@@ -105,7 +105,7 @@ const ExpenceForm = () => {
 
             {/* -----------------Expense Name-------------- */}
 
-            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
               <Divider orientation='left' orientationMargin={0}>Expense Name<span style={{color:'red'}}>*</span></Divider>
               <Form.Item
@@ -146,7 +146,7 @@ const ExpenceForm = () => {
               </Form.Item>
             </Col>
             {/* -----------------Date-------------- */}
-            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }}  className='Col-1-left' style={{ background: '', height: '80px' }}>
               <Divider orientation='left' orientationMargin={0}>Date<span style={{ color: 'red' }}>*</span></Divider>
               <Form.Item
                 name="paymentDate"
@@ -164,10 +164,10 @@ const ExpenceForm = () => {
 
           </Row>
 
-          <Row gutter={[28, 8]}>
+          <Row gutter={[24, 8]}>
 
             {/* -----------------paid by-------------- */}
-            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
             <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Paid By</Divider>
 
               <Form.Item
@@ -214,7 +214,7 @@ const ExpenceForm = () => {
             {/* -----------------paid to-------------- */}
 
 
-            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
               <Divider orientation='left' orientationMargin={0}>Paid to<span style={{ color: 'red' }}>*</span></Divider>
               <Form.Item
@@ -251,11 +251,11 @@ const ExpenceForm = () => {
 
           </Row>
 
-          <Row gutter={[28, 8]}>
+          <Row gutter={[24, 8]}>
 
             {/* -----------------amount-------------- */}
 
-            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
 
               <Divider orientation='left' orientationMargin={0}>Amount<span style={{ color: 'red' }}>*</span></Divider>
@@ -298,7 +298,7 @@ const ExpenceForm = () => {
 
 
             {/* -----------------Quanitity--------------- */}
-            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
               <Divider orientation='left' orientationMargin={0}>Quantity<span style={{ color: 'red' }}>*</span></Divider>
               <Form.Item
@@ -335,8 +335,8 @@ const ExpenceForm = () => {
           </Row>
 
           {/* -----------------Mode of Payment--------------- */}
-          <Row gutter={[28, 8]}>
-            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
+          <Row gutter={[24, 8]}>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
               <Divider orientation='left' orientationMargin={0}>Mode of Payment<span style={{ color: 'red' }}>*</span></Divider>
               <Form.Item
@@ -357,7 +357,7 @@ const ExpenceForm = () => {
                 </Radio.Group>
               </Form.Item>
             </Col>
-            <Col span={12} className='Col-1-left' style={{ background: '', height: '90px' }}>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
               <Divider orientation='left' orientationMargin={0}>Subtotal</Divider>
               <Form.Item
                 name="subTotal"
@@ -421,6 +421,7 @@ const ExpenceForm = () => {
                       height: '30px',
                       color: 'white',
                       cursor: 'pointer',
+                     
                     }}
                       type="primary">Submit</button>
                   </Form.Item>

@@ -11,5 +11,6 @@ export function signup(email, password) {
 
   export function logout() {
     console.log("logged out successfully!")
+    sessionStorage.setItem("accessToken", null)
     return signOut(auth)
   }

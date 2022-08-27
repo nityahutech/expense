@@ -1,8 +1,8 @@
 import React from "react";
-import Charts from "../../components/Charts";
 import Navbar from "../../components/navbar/Navbar";
+import Profile from "../../components/Profilepage";
 import Sidebar from "../../components/sidebar/NewSidebar";
-// import Tabledash from "../../components/Tabledash";
+
 const DashBoard = () => {
   return (
     <div className="home">
@@ -16,8 +16,7 @@ const DashBoard = () => {
         </div>
 
         <div className="tables">
-          <Charts />
-          {/* <Tabledash /> */}
+        <Profile />
         </div>
       </div>
     </div>

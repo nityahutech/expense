@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Col, Divider, Row} from "antd";
+import { Col, Divider, Row } from "antd";
 import moment from "moment";
 import { UploadOutlined } from "@ant-design/icons";
-import ExpenseContext from '../contexts/ExpenseContext'
+import ExpenseContext from "../contexts/ExpenseContext";
 import {
   Cascader,
   Input,
@@ -22,10 +22,10 @@ const { Option } = Select;
 const handleChange = (value) => {
   console.log(`selected ${value}`);
 };
-const showNotification = (type,msg,desc) => {
+const showNotification = (type, msg, desc) => {
   notification[type]({
     message: msg,
-    description:desc
+    description: desc,
   });
 };
 // const paystatus = [
@@ -50,13 +50,14 @@ const Editexpense = (props) => {
   const [date, setdate] = useState("");
   const [paidname, setpaidname] = useState("");
   const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("");
   function calculatesubtotal() {
     setsubtotal(amount * quantity);
   }
 
   async function submitEdit() {
     try {
-      const editedRecord ={
+      const editedRecord = {
         catname,
         name,
         paidname,
@@ -64,21 +65,22 @@ const Editexpense = (props) => {
         amount,
         quantity,
         subtotal,
-        description
-      }
-      console.log(editedRecord)
+        status,
+        description,
+      };
+      console.log(editedRecord);
       ExpenseContext.updateExpense(props.record.key, editedRecord);
-      props.setIsModalVisible(false)
-      props.reloadData()
-      showNotification('success','Success','Record updated successfuly')
+      props.setIsModalVisible(false);
+      props.reloadData();
+      showNotification("success", "Success", "Record updated successfuly");
 
       return;
     } catch (error) {
       console.log(error);
-      props.setIsModalVisible(false)
-      showNotification('error','Failed','Record update failed')
+      props.setIsModalVisible(false);
+      showNotification("error", "Failed", "Record update failed");
     }
-  };
+  }
 
   useEffect(() => {
     const quantityVal = props.record ? props.record.quantity : 0;
@@ -87,11 +89,12 @@ const Editexpense = (props) => {
     const nameby = props.record ? props.record.name : "";
     const dateVal = props.record ? props.record.date : "";
     const paidname = props.record ? props.record.paidname : "";
+    const statusTag = props.record ? props.record.status : "";
     // const statusTag = props.record
     //   ? props.record.status
     //   : "Status of the payment";
     const description = props.record ? props.record.description : "";
-    console.log(props.record.key)
+    console.log(props.record.key);
     setAmount(amountVal);
     setQuantity(quantityVal);
     setsubtotal(amountVal * quantityVal);
@@ -100,22 +103,34 @@ const Editexpense = (props) => {
     setdate(dateVal);
     setpaidname(paidname);
     setDescription(description);
-    console.log(dateVal)
-    console.log(date)
-}, [props]);
-  function cancel(){
-    props.setIsModalVisible(false)
+    setStatus(statusTag);
+    console.log(statusTag);
+    console.log(status);
+  }, [props]);
+  function cancel() {
+    props.setIsModalVisible(false);
   }
 
-  const cancelStyle ={
-    float: "right"
-  };  
-  const buttonStyle ={
+  const cancelStyle = {
+    float: "right",
+  };
+  const buttonStyle = {
     marginRight: "5px",
     color: "white",
     backgroundColor: "#1890ff",
-    float: "right"
-  }; 
+    float: "right",
+  };
+  const checkNumbervalue = (event) => {
+    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
+  const checkAlphabets = (event) => {
+    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
 
   return (
     <Col xs={22} sm={22} md={22}>
@@ -155,6 +170,10 @@ const Editexpense = (props) => {
             name: ["Textarea"],
             value: description,
           },
+          {
+            name: ["status"],
+            value: status,
+          },
         ]}
         layout="horizontal"
       >
@@ -162,16 +181,28 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           name="expensename"
           label="Expense Name"
-          // rules={[{
-          //     required: true,
-          //     message: "Please choose a category",
-          //   },
-          // ]}
+          onKeyPress={(event) => {
+            if (checkAlphabets(event)) {
+              event.preventDefault();
+            }
+          }}
+          rules={[
+            {
+              required: true,
+              message: "Please enter Expense Name",
+            },
+            {
+              pattern: /^[a-zA-Z\s]*$/,
+              message: "Please enter Valid Name",
+            },
+          ]}
         >
           <Input
+            maxLength={20}
             onChange={(e) => {
               const inputval = e.target.value;
-              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+              const newVal =
+                inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
               setcatname(newVal);
             }}
           />
@@ -183,17 +214,29 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           label="Paid By"
           name="name"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please enter your name",
-          //   },
-          // ]}
+          onKeyPress={(event) => {
+            if (checkAlphabets(event)) {
+              event.preventDefault();
+            }
+          }}
+          rules={[
+            {
+              required: true,
+              message: "Please enter Customer Name",
+            },
+            {
+              pattern: /^[a-zA-Z\s]*$/,
+              message: "Please enter Valid Name",
+              // /^[a-zA-Z]+$/g
+            },
+          ]}
         >
           <Input
+            maxLength={20}
             onChange={(e) => {
               const inputval = e.target.value;
-              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+              const newVal =
+                inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
               setname(newVal);
             }}
           />
@@ -202,17 +245,28 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           label="Paid To"
           name="paidname"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please enter your name",
-          //   },
-          // ]}
+          onKeyPress={(event) => {
+            if (checkAlphabets(event)) {
+              event.preventDefault();
+            }
+          }}
+          rules={[
+            {
+              required: true,
+              message: "Please enter Vendor",
+            },
+            {
+              pattern: /^[a-zA-Z\s]*$/,
+              message: "Please enter Valid Name",
+            },
+          ]}
         >
           <Input
+            maxLength={20}
             onChange={(e) => {
               const inputval = e.target.value;
-              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+              const newVal =
+                inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
               setpaidname(newVal);
             }}
           />
@@ -220,46 +274,49 @@ const Editexpense = (props) => {
 
         {/* ----------------------------------Status------- */}
 
-        {/* <Form.Item
-        style={{ marginBottom: "10px" }}
-        label="Status"
-        name="status"
-        // rules={[
-        //   {
-        //     message: "Please enter the paymeny status",
-        //     required: true,
-        //   },
-        // ]}
-      >
-        <Select
-          defaultValue="Status of the payment"
-          style={{
-            width: "100%",
-          }}
-          onChange={(value) => {
-            setStatus(value);
-          }}
+        <Form.Item
+          style={{ marginBottom: "10px" }}
+          label="Status"
+          name="status"
+          // rules={[
+          //   {
+          //     message: "Please enter the paymeny status",
+          //     required: true,
+          //   },
+          // ]}
         >
-          <Option value="paid">Paid</Option>
-          <Option value="unpaid">Unpaid</Option>
-        </Select>
-      </Form.Item> */}
+          <Select
+            defaultValue={status}
+            style={{
+              width: "100%",
+            }}
+            onChange={(value) => {
+              setStatus(value);
+            }}
+          >
+            <Option value="Paid">Paid</Option>
+            <Option value="Unpaid">Unpaid</Option>
+          </Select>
+        </Form.Item>
         {/* ----------------------------------Datepicker------- */}
         <Form.Item
           style={{ marginBottom: "10px" }}
           name="date"
           label="Date"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please Choose a Date",
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: "Please Choose a Date",
+            },
+          ]}
         >
-        <DatePicker format={dateFormat} style={{ width: '100%' }}
-          onChange = {(e) => { setdate(e.format(dateFormat))}}
-        />
-
+          <DatePicker
+            format={dateFormat}
+            style={{ width: "100%" }}
+            onChange={(e) => {
+              setdate(e.format(dateFormat));
+            }}
+          />
         </Form.Item>
         {/* --------------------------------------Amount------- */}
 
@@ -267,21 +324,28 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           label="Amount"
           name="amount"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please enter the amount",
-          //   },
-          // ]}
+          onKeyPress={(event) => {
+            if (checkNumbervalue(event)) {
+              event.preventDefault();
+            }
+          }}
+          rules={[
+            {
+              required: true,
+              message: "Please enter the amount",
+              pattern: /^[0-9\b]+$/,
+            },
+            { whitespace: true },
+          ]}
         >
           <Input
+            maxLength={8}
             value={amount}
             onChange={(e) => {
               const amt = e.target.value;
               setAmount(amt);
               setsubtotal(amt * quantity);
             }}
-            placeholder="Enter Amount Here"
           />
         </Form.Item>
         {/* --------------------------------------Quantity------- */}
@@ -290,14 +354,21 @@ const Editexpense = (props) => {
           style={{ marginBottom: "10px" }}
           name="quantity"
           label="Quantity"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please enter the quantity of the items/services",
-          //   },
-          // ]}
+          onKeyPress={(event) => {
+            if (checkNumbervalue(event)) {
+              event.preventDefault();
+            }
+          }}
+          rules={[
+            {
+              required: true,
+              message: "Please enter the quantity ",
+              pattern: /^[0-9\b]+$/,
+            },
+          ]}
         >
           <Input
+            maxLength={4}
             value={quantity}
             onChange={(e) => {
               const qnt = e.target.value;
@@ -309,8 +380,11 @@ const Editexpense = (props) => {
         </Form.Item>
         {/* --------------------------------------Sub-subtotal------- */}
 
-        <Form.Item label="Subsubtotal" style={{ marginBottom: "10px" }}>
-          <Input readonly value={subtotal} placeholder="subtotal" />
+        <Form.Item
+          label="Subsubtotal"
+          style={{ marginBottom: "10px", Color: "black" }}
+        >
+          <Input readonly value={subtotal} disabled={true} />
         </Form.Item>
 
         {/* -----------------------Text-area--------------- */}
@@ -326,11 +400,18 @@ const Editexpense = (props) => {
           //   },
           // ]}
         >
-          <TextArea onChange={(e) => setDescription(e.target.value)} />
+          <TextArea
+            maxLength={50}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </Form.Item>
         <br />
-        <Button style={cancelStyle} onClick={cancel}>Cancel</Button>
-        <Button style={buttonStyle} onClick={submitEdit}>Submit</Button>
+        <Button style={cancelStyle} onClick={cancel}>
+          Cancel
+        </Button>
+        <Button style={buttonStyle} onClick={submitEdit}>
+          Submit
+        </Button>
         <br />
         {/* <Form.Item style={{ marginBottom: "0" }}>
         <Upload

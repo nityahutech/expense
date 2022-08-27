@@ -30,46 +30,45 @@ main{
     color: white;
       background: #41BF36;
       
-      border-radius: 5px;
+      border-radius: 3px;
       font-family: 'Open Sans';
-    
+      
       font-style: normal;
-      font-weight: 500;
-      font-size: 14px;
+      font-weight: 200;
+      font-size: 13px;
       line-height: 22px;
-      width: 68px;
+      width: 62px;
       height: 25px;
       text-align: center;
   }
   .statusTag.ant-tag-volcano{
-    background: #FC6161;
-    border-radius: 5px;
-      font-family: 'Open Sans';
+    background: #f13729;
+    border-radius: 3px;
+    font-family: 'Open Sans';
     color: white;
-      font-style: normal;
-      font-weight: 500;
-      font-size: 14px;
-      line-height: 22px;
-      width: 68px;
-      height: 25px;
-      text-align: center;
-  
+    font-style: normal;
+    font-weight: 200;
+    font-size: 13px;
+    line-height: 22px;
+    width: 62px;
+    height: 25px;
+    text-align: left;
   }
   a.catName{
     color: #171832;
   }
   .ant-table-cell{
-    text-align: center;
+    text-align: left;
   }
   
   tr[data-row-key*="subTotal"] {
     font-weight: bold;
   }
   .ant-table-column-has-sorters{
-    text-align: center;
+    text-align: left;
   }
   .expenseTable .ant-table-thead th.ant-table-column-has-sorters {
-    text-align: center;}
+    text-align: left;}
     .edIt.ant-btn-link{
       color: #6e7475;
     }
@@ -138,20 +137,23 @@ main{
     width: 172px;
   }
 .row6.ant-table-cell{
-    width: 90px;
+    width: 100px;
 } 
 .row7.ant-table-cell{
-    width: 90px;
+    width: 100px;
 } 
 .row8.ant-table-cell{
-    width: 130px;
+    width: 120px;
 } 
 .row10.ant-table-cell{
-    width: 80px;
+    width: 100px;
 } 
 .row4.ant-table-cell{
     width: 120px;
 }
+/* .row5.ant-table-cell{
+  width: 90px;
+} */
 
 .expenseTable .edIt {
     height: 22px;

@@ -5,26 +5,20 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
  
 
-class DashboardContext{
+// function DashboardContext() {
 
-//     // getData = async () => {
-//         allData = await ExpenseContext.getAllExpenses();
-//         data=allData.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-//         exp = data.map((person) => ({
-//             subtotal: person.subtotal
-//         }));
-//     //     return exp;
-//     // };
-
-    totalAmount = async () => {
-        // let exp = getData();
+    async function getData() {
         const allData = await ExpenseContext.getAllExpenses();
-        let data = allData.docs.map((doc) => ({...doc.data(), id: doc.id }))
-        console.log(data);
+        let data = allData.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         let exp = data.map((person) => ({
+            catname: person.catname,
             subtotal: person.subtotal
         }));
-        console.log(exp);
+        return exp;
+    };
+
+    export async function totalAmount() {
+        let exp = await getData();
         const total = exp.reduce((acc, expense) => {
             acc += expense.subtotal;
             return acc;
@@ -32,14 +26,17 @@ class DashboardContext{
         return total; 
     };
     
-//     avgAmountPerMonth = () => {
+    export async function avgAmountPerMonth() {
+        let total = await totalAmount();
+        return Math.round(total / 12);
+    };
     
-//     };
-    
-//     topFiveExpenses = () => {
-    
-//     };
+    // export async function topFiveExpenses() {
+    //     let exp = await getData();
+    //     console.log(exp)
+        
+    // };
 
-}
+// }
 
-export default new DashboardContext();
+// export default new DashboardContext();

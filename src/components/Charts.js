@@ -14,7 +14,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import DashboardContext from "../contexts/DashboardContext"
+import { totalAmount, avgAmountPerMonth } from "../contexts/DashboardContext"
 // import faker from 'faker';
 ChartJS.register(
   CategoryScale,
@@ -37,20 +37,15 @@ const Charts = () => {
   const [avg, setAvg] = useState(0);
 
   const values = async () => {
-    await DashboardContext.totalAmount().then((a) => {
+    await totalAmount().then((a) => {
       setTotal(a);
     });
-    // await DashboardContext.avgAmountPerMonth().then((a) => {
-    //   setAvg(a);
-    // });
+    await avgAmountPerMonth().then((a) => {
+      console.log(a);
+      setAvg(a);
+    });
 
   };
-
-  // const totalAmt = () => {
-  //   total.then((a) => {
-  //     console.log(a);
-  //   });
-  // }
 
   useEffect(() => {
     values();
@@ -79,7 +74,7 @@ const Charts = () => {
               }}
             >
               Average Amount/Month</h2></div>
-          <h1>0</h1>
+          <h1>{avg}</h1>
         </div>
       </div>
       <div className="chartsdisp">
@@ -112,13 +107,13 @@ const Charts = () => {
                       100,
                     ],
                     backgroundColor: [
-                      "red",
-                      "Green",
-                      "Yellow",
-                      "Orange",
-                      "blue",
-                      "lightgreen",
-                      "darkgreen",
+                      "red"
+                      // "Green",
+                      // "Yellow",
+                      // "Orange",
+                      // "blue",
+                      // "lightgreen",
+                      // "darkgreen",
                     ],
                   },
                   {
@@ -128,13 +123,13 @@ const Charts = () => {
                       100,
                     ],
                     backgroundColor: [
-                      "blue",
-                      "orange",
-                      "Yellow",
-                      "Orange",
-                      "blue",
-                      "lightgreen",
-                      "darkgreen",
+                      "blue"
+                      // "orange",
+                      // "Yellow",
+                      // "Orange",
+                      // "blue",
+                      // "lightgreen",
+                      // "darkgreen",
                     ],
                   },
                   {
@@ -144,13 +139,13 @@ const Charts = () => {
                       100,
                     ],
                     backgroundColor: [
-                      "aqua",
-                      "orange",
-                      "Yellow",
-                      "Orange",
-                      "blue",
-                      "lightgreen",
-                      "darkgreen",
+                      "aqua"
+                      // "orange",
+                      // "Yellow",
+                      // "Orange",
+                      // "blue",
+                      // "lightgreen",
+                      // "darkgreen",
                     ],
                   },
                   {
@@ -160,13 +155,13 @@ const Charts = () => {
                       100,
                     ],
                     backgroundColor: [
-                      "magenta",
-                      "orange",
-                      "Yellow",
-                      "Orange",
-                      "blue",
-                      "lightgreen",
-                      "darkgreen",
+                      // "magenta",
+                      // "orange",
+                      // "Yellow",
+                      // "Orange",
+                      // "blue",
+                      "lightgreen"
+                      // "darkgreen",
                     ],
                   },
                   {
@@ -176,13 +171,13 @@ const Charts = () => {
                       100,
                     ],
                     backgroundColor: [
-                      "pink",
-                      "orange",
-                      "Yellow",
-                      "Orange",
-                      "blue",
-                      "lightgreen",
-                      "darkgreen",
+                      // "pink",
+                      "orange"
+                      // "Yellow",
+                      // "Orange",
+                      // "blue",
+                      // "lightgreen",
+                      // "darkgreen",
                     ],
                   },
                 ],

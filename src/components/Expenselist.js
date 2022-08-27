@@ -168,7 +168,7 @@ function ExpenseList() {
       dataIndex: "catname",
       key: "catname",
       // responsive: ["sm"],
-      // fixed: "left",
+      fixed: "left",
       onFilter: (value, record) => record.name.indexOf(value) === 0,
       // sorter: (a, b) => a.catname - b.catname,
       onFilter: (value, record) => record.name.indexOf(value) === 0,

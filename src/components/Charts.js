@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../style/Charts.css";
 
 
@@ -14,6 +14,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import DashboardContext from "../contexts/DashboardContext"
 // import faker from 'faker';
 ChartJS.register(
   CategoryScale,
@@ -32,6 +33,29 @@ const Charts = () => {
   };
   const navigate = useNavigate();
 
+  const [total, setTotal] = useState(0);
+  const [avg, setAvg] = useState(0);
+
+  const values = async () => {
+    await DashboardContext.totalAmount().then((a) => {
+      setTotal(a);
+    });
+    // await DashboardContext.avgAmountPerMonth().then((a) => {
+    //   setAvg(a);
+    // });
+
+  };
+
+  // const totalAmt = () => {
+  //   total.then((a) => {
+  //     console.log(a);
+  //   });
+  // }
+
+  useEffect(() => {
+    values();
+  }, []);
+
   return (
     <>
       <div className="chartsbox">
@@ -43,7 +67,7 @@ const Charts = () => {
               fontSize:'30px',
               fontWeight:'normal',
               }}>Total Amount</h2></div>
-          <h1>6903</h1>
+          <h1>{total}</h1>
         </div>
         <div className="Card2">
           <div className="heading">
@@ -55,7 +79,7 @@ const Charts = () => {
               }}
             >
               Average Amount/Month</h2></div>
-          <h1>750</h1>
+          <h1>0</h1>
         </div>
       </div>
       <div className="chartsdisp">

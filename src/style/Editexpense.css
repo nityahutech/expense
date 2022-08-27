@@ -1,0 +1,27 @@
+.Required::before{
+    content: "*";
+    color: #ee5050;
+    position: absolute;
+    left: 46px;
+    top: 129px;
+    font-size: 20px;
+}
+.Subtotal::before{
+    content: "*";
+    color: #ee5050;
+    position: absolute;
+    left: 9px;
+    bottom: 115px;
+    font-size: 20px;
+}
+.Description::before{
+    content: "*";
+    color: #ee5050;
+    position: absolute;
+    left: 7px;
+    bottom: 73px;
+    font-size: 20px;
+}
+.Close{
+    outline: none;
+}

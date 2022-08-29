@@ -9,10 +9,6 @@ main{
       border-radius: 5px !important;
       color: #171832 !important;
   } */
-
-  #root{
-    /* background: #f8f8f8; */
-  }
   .row{
     background: #fff;
       padding: 14px;
@@ -78,6 +74,7 @@ main{
   
   .addExpense.ant-btn-primary {
     background: #189AB4;
+    left: 93px;
   }
   .upload.ant-btn {
     background:#189AB4;

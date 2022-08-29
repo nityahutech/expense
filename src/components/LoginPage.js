@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Button, Checkbox, Form, Input, Alert } from "antd";
+import { Button, Checkbox, Form, Input, Alert, Row, Col } from "antd";
 import { signup, login } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
@@ -94,6 +94,8 @@ function LoginPage() {
                   Email address<label style={{ color: "red" }}> *</label>
                 </div>
                 <div className="emailInput-div">
+                {/* <Row>
+                <Col xl={24} lg={24} sm={24} md={24} xs={24}> */}
                   <Form.Item
                     name="email"
                     rules={[
@@ -105,6 +107,8 @@ function LoginPage() {
                   >
                     <Input onChange={(e) => setLoginEmail(e.target.value)} />
                   </Form.Item>
+                  {/* </Col>
+                  </Row> */}
                 </div>
                 <div className="email-div">
                   Password<label style={{ color: "red" }}> *</label>

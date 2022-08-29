@@ -1,23 +1,36 @@
 /* @import '~antd/dist/antd.css'; */
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 .main-div{
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
   display: flex;
   flex-direction: row;
   gap: 120px;
   background-color: white;
-
-  /* justify-content: center; */
-}
-img{
-  background-color: #fbfafa;
-  margin-left: 50px;
-  
 }
 .img-div{
-  background: #fbfafa;
+  /* height: 100vh; */
+  background-color: #fbfafa;
+}
+.img-div img{
+  width: 100%;
+  height: 100vh;
+  background-color: #fbfafa;
+  margin-left: 50px;
 }
 .login-div{
-  margin-top: 2rem;
+  /* margin-top: 5%; */
+  /* top: 2rem; */
+  width: 50%;
+  overflow: auto;
+  min-height: 100%;
+  /* height: 100%; */
+  height: auto;
+}
+.xyz{
+  margin-top: 30px;    
 }
 .wlc-div{
   font-family: sans-serif;
@@ -66,22 +79,14 @@ img{
 
 .forgotpwd{
   color: #0FAEAA;
-  text-align: right;
-  position: absolute;
+  /* text-align: right; */
+
+  /* position: absolute;
   top: 360px;
   margin-left: 11rem;
   cursor: pointer;
-  /* margin-right: 4.5rem; */
+  margin-right: 4.5rem; */
 }
-/* .login-btn .ant-btn, .ant-btn:active, .ant-btn:focus, .ant-btn:hover {
-  outline: 0;
-  color: #fff;
-  border-color: #189AB4;
-  background: #189AB4;
-  text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
-  box-shadow: 0 2px 0 rgb(0 0 0 / 5%);
-  width: 18rem;
-} */
 .login-btn .ant-btn {
   outline: 0;
   color: #fff;
@@ -99,7 +104,7 @@ img{
   border-color: #189AB4;
 }
 .signup-msg{
-  text-align: center;
+  margin-left: 3rem;
   font-family: sans-serif;
 }
 
@@ -107,32 +112,40 @@ img{
 /* -----------mobile--------------- */
 
 @media (max-width: 768px){
+  
+
   .main-div{
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
   }
   .img-div img{
     display: none;
   }
-  .exepnse-logo{
-    margin-left: 70px;
-  }
-  .login-div{
-    width: 90%;
-    margin: auto;
-    margin-top: 2rem;
-  }
-  .email-div, .wlc-div, .msg{
-    margin-left: 20px;
-  }
-  .forgotpwd{
-    position: static;
-    margin-right: 2rem; 
-  }
-  .signup-msg{
-    text-align: center;
+  .xyz{
+    margin-top: 50px;
   }
 
-  
+  .login-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    /* margin-top: 2rem; */
+    width: auto;
+    background-color: white;
+  }
+
+  .forgotpwd{
+    position: static;
+  }
+
 }
+/* @media (max-width: 1000px) {
+  .xyz{
+    margin-top: 40px;    
+  }
+  .form-div .ant-form{
+    margin-top: 20px;
+  }
+} */

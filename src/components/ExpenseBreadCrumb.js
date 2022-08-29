@@ -1,23 +1,54 @@
 import { Breadcrumb } from "antd";
 import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
-import useBreadcrumbs from 'use-react-router-breadcrumbs';
+// import useBreadcrumbs from 'use-react-router-breadcrumbs';
 
 const ExpenseBreadCrumb = () => {
-const breadcrumbs = useBreadcrumbs();
-breadcrumbs.splice(0,1)
+  // const breadcrumbs = useBreadcrumbs();
+  // breadcrumbs.splice(0, 1)
 
   return (
-    <Breadcrumb separator="/">
-     {breadcrumbs.map(({ breadcrumb, match }) => {
-      return  <Breadcrumb.Item key={match.url}>
-          <Link to={match.url || ""}><span className="crumb" >{breadcrumb}</span></Link>
+    <Breadcrumb
+    style={{
+      margin: "1px 10px -10px",
+      textAlign: "left",
+      FontStyle: " Bold",
+      FontSize: " 14px",
+  
+    }}
+    >
+      <Breadcrumb.Item className="home-breadcrumb"> <Link to ='/Dashboard'><strong>Dashboard</strong></Link></Breadcrumb.Item>
+      {window.location.pathname === "/Dashboard" ? (
+        <Breadcrumb.Item>
+         {/* <strong>Dashboard</strong> */}
         </Breadcrumb.Item>
-})}
 
+      ) : window.location.pathname === "/Expense/AddExpense" ? (
+        <Breadcrumb.Item>
+         <strong> Expense / Add Expense</strong>
+        </Breadcrumb.Item>
+
+      ) : window.location.pathname === "/Expense/ExpenseList" ? (
+        <Breadcrumb.Item>
+          <strong> Expense / Expense List</strong>
+        </Breadcrumb.Item>
+
+      ) : window.location.pathname === "/Profile" ? (
+        <Breadcrumb.Item>
+          <strong>Profile</strong>
+        </Breadcrumb.Item>
+
+      ) : window.location.pathname === "/Setting" ? (
+        <Breadcrumb.Item>
+          <strong>Setting</strong>
+        </Breadcrumb.Item>
+
+
+      ) : (
+        ""
+      )}
     </Breadcrumb>
-
   );
 };
 
-  export default ExpenseBreadCrumb
+export default ExpenseBreadCrumb

@@ -56,24 +56,24 @@ function getItem(label, key, icon, children = null, type = null) {
 const NewSidebar = () => {
 
     const history = useNavigate()
-    const onClick = (e) => {
-        let pathkey = e.key
-        switch (pathkey) {
-            case "5":
-                window.location.href="/ExpenseFrm"
-                history("/Expense/AddExpense")
-                break;
-            case "6":
-                window.location.href = "/Home"
-                history("/Expense/ExpenseList")
-                break;
-            case "1":
-                window.location.href = "/DashBoard"
-                history("/DashBoard")
-                break;
-        }
-        console.log('click ', e.key);
-    };
+    // const onClick = (e) => {
+    //     let pathkey = e.key
+    //     switch (pathkey) {
+    //         case "5":
+    //             window.location.href="/ExpenseFrm"
+    //             history("/Expense/AddExpense")
+    //             break;
+    //         case "6":
+    //             window.location.href = "/Home"
+    //             history("/Expense/ExpenseList")
+    //             break;
+    //         case "1":
+    //             window.location.href = "/DashBoard"
+    //             history("/DashBoard")
+    //             break;
+    //     }
+    //     console.log('click ', e.key);
+    // };
 
     return (
     
@@ -107,7 +107,9 @@ const NewSidebar = () => {
                 /> */}
 
                 <Menu 
-                
+                 defaultOpenKeys={['sub1']}
+                onSelect={function({ item, key, keyPath, selectedKeys, domEvent }){console.log(item, key, keyPath, selectedKeys, domEvent);}}
+                // selectedKeys={['sub',"3"]}
                     mode='inline' style={{
 
                         padding: '5px', height: '100vh', 
@@ -123,12 +125,12 @@ const NewSidebar = () => {
                         }} src="/logo/logo_1.png" alt='hello' />
 
                     </div>
-                    <Menu.Item icon={<img src="/logo/Dashboard.png" alt="profile" className="Dash" />} key="1">
+                    <Menu.Item   icon={<img src="/logo/Dashboard.png" alt="profile" className="Dash" />} key="1">
                         Dashboard
                         <NavLink to="/DashBoard" />
                     </Menu.Item>
 
-                    <Menu.SubMenu icon={<img src="/logo/Expense.png" alt="profile" className="Dash" />} title="Expense" mode='inline'>
+                    <Menu.SubMenu icon={<img src="/logo/Expense.png" alt="profile" className="Dash" />} key="sub1"  title="Expense" mode='inline'>
 
                         <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="2">
                             Add Expense

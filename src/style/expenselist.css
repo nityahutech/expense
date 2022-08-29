@@ -74,6 +74,7 @@ main{
   
   .addExpense.ant-btn-primary {
     background: #189AB4;
+    left: 93px;
   }
   .upload.ant-btn {
     background:#189AB4;

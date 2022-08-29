@@ -6,6 +6,10 @@ import { Col, Divider, Row } from 'antd';
 import './ExpenseForm.css';
 import ExpenseContext from './contexts/ExpenseContext'
 import { useNavigate } from 'react-router-dom';
+import {
+    
+  ArrowLeftOutlined
+} from "@ant-design/icons";
 
 import {
   // Cascader,
@@ -32,6 +36,10 @@ const ExpenceForm = () => {
 
   const { TextArea } = Input;
   const navigate = useNavigate();
+
+  const handleListExpense = () => {
+    navigate("/Expense/ExpenseList");
+  };
 
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
@@ -100,14 +108,35 @@ const ExpenceForm = () => {
           autoComplete="off"
           onFinish={onFinish}
         >
-        
+
+          <Row
+            className="rowform"
+            gutter={[0, 8]}
+            style={{ marginBottom: "1.5rem", marginTop: "1.5rem", display: 'flex', flexDirection: 'column', alignitems: 'center',    justifyContent: 'space-around' }}
+
+          >
+            {/* -----------------Back button------------- */}
+
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-center' style={{ background: '', height: '50px', display: 'flex', justifyContent: 'flex-start' }}>
+              <Button
+                className="listExpense"
+                type="primary"
+                onClick={handleListExpense}
+                style={{ width: "35%" ,backgroundColor:'rgb(24, 154, 180)',borderRadius:'5px'}}
+              >
+                 <ArrowLeftOutlined /> Expense List
+              </Button>
+            </Col>
+          </Row>
+
           <Row gutter={[24, 8]} >
+
 
             {/* -----------------Expense Name-------------- */}
 
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
-              <Divider orientation='left' orientationMargin={0}>Expense Name<span style={{color:'red'}}>*</span></Divider>
+              <Divider orientation='left' orientationMargin={0}>Expense Name<span style={{ color: 'red' }}>*</span></Divider>
               <Form.Item
                 name="expence"
                 onKeyPress={(event) => {
@@ -145,8 +174,10 @@ const ExpenceForm = () => {
                   required placeholder='Enter Expense For' />
               </Form.Item>
             </Col>
+
             {/* -----------------Date-------------- */}
-            <Col xs={{ span: 24 }} sm={{ span: 12 }}  className='Col-1-left' style={{ background: '', height: '80px' }}>
+
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
               <Divider orientation='left' orientationMargin={0}>Date<span style={{ color: 'red' }}>*</span></Divider>
               <Form.Item
                 name="paymentDate"
@@ -168,7 +199,7 @@ const ExpenceForm = () => {
 
             {/* -----------------paid by-------------- */}
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
-            <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Paid By</Divider>
+              <Divider orientation='left' orientationMargin={0}><span style={{ color: 'red' }}>*</span>Paid By</Divider>
 
               <Form.Item
 
@@ -179,16 +210,16 @@ const ExpenceForm = () => {
                   }
                 }}
 
-            
+
                 rules={[
                   {
                     required: true,
                     message: 'Please enter Customer Name',
                   }, {
-                
-                    pattern:  /^[a-zA-Z\s]*$/,
+
+                    pattern: /^[a-zA-Z\s]*$/,
                     message: 'Please enter Valid Name',
-                  
+
                   }
                 ]}
 
@@ -421,7 +452,7 @@ const ExpenceForm = () => {
                       height: '30px',
                       color: 'white',
                       cursor: 'pointer',
-                     
+
                     }}
                       type="primary">Submit</button>
                   </Form.Item>

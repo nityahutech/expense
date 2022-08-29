@@ -4,6 +4,8 @@ import {
     collection,
     getDocs,
     getDoc,
+    query,
+    orderBy,
     addDoc,
     updateDoc,
     deleteDoc,
@@ -29,10 +31,12 @@ class ExpenseContext {
     };
 
     getAllExpenses = () => {
-        return getDocs(expenseCollectionRef);
+        const q = query(expenseCollectionRef, orderBy("date", "desc"));
+        // console.log(q);
+        return getDocs(q);
     };
 
-    getExpense = (id) => {
+    getExpense = (id) => { 
         const expenseDoc = doc(db, "expenses", id);
         return getDoc(expenseDoc);
     };

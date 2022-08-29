@@ -581,7 +581,7 @@ function ExpenseList() {
               className="addExpense"
               type="primary"
               onClick={handleAddNewExpense}
-              style={{ width: "95%" }}
+              style={{ width: "95%",borderRadius:'5px' }}
             >
               + Add New Expenses
             </Button>

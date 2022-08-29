@@ -11,7 +11,7 @@ main{
   } */
 
   #root{
-    background: #f8f8f8;
+    /* background: #f8f8f8; */
   }
   .row{
     background: #fff;
@@ -27,8 +27,8 @@ main{
       border-radius: 5px;
   }
   .statusTag.ant-tag-green{
-    color: white;
-      background: #41BF36;
+    color: #41BF36;
+      /* background: #41BF36; */
       
       border-radius: 3px;
       font-family: 'Open Sans';
@@ -42,10 +42,10 @@ main{
       text-align: center;
   }
   .statusTag.ant-tag-volcano{
-    background: #f13729;
+    /* background: #f13729; */
     border-radius: 3px;
     font-family: 'Open Sans';
-    color: white;
+    color: #f13729;
     font-style: normal;
     font-weight: 200;
     font-size: 13px;

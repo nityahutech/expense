@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../style/Charts.css";
 
 
@@ -14,6 +14,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { totalAmount, avgAmountPerMonth } from "../contexts/DashboardContext"
 // import faker from 'faker';
 ChartJS.register(
   CategoryScale,
@@ -32,6 +33,24 @@ const Charts = () => {
   };
   const navigate = useNavigate();
 
+  const [total, setTotal] = useState(0);
+  const [avg, setAvg] = useState(0);
+
+  const values = async () => {
+    await totalAmount().then((a) => {
+      setTotal(a);
+    });
+    await avgAmountPerMonth().then((a) => {
+      console.log(a);
+      setAvg(a);
+    });
+
+  };
+
+  useEffect(() => {
+    values();
+  }, []);
+
   return (
     <>
       <div className="chartsbox">
@@ -43,7 +62,7 @@ const Charts = () => {
               fontSize:'30px',
               fontWeight:'normal',
               }}>Total Amount</h2></div>
-          <h1>6903</h1>
+          <h1>{total}</h1>
         </div>
         <div className="Card2">
           <div className="heading">
@@ -55,7 +74,7 @@ const Charts = () => {
               }}
             >
               Average Amount/Month</h2></div>
-          <h1>750</h1>
+          <h1>{avg}</h1>
         </div>
       </div>
       <div className="chartsdisp">
@@ -88,13 +107,13 @@ const Charts = () => {
                       100,
                     ],
                     backgroundColor: [
-                      "red",
-                      "Green",
-                      "Yellow",
-                      "Orange",
-                      "blue",
-                      "lightgreen",
-                      "darkgreen",
+                      "red"
+                      // "Green",
+                      // "Yellow",
+                      // "Orange",
+                      // "blue",
+                      // "lightgreen",
+                      // "darkgreen",
                     ],
                   },
                   {
@@ -104,13 +123,13 @@ const Charts = () => {
                       100,
                     ],
                     backgroundColor: [
-                      "blue",
-                      "orange",
-                      "Yellow",
-                      "Orange",
-                      "blue",
-                      "lightgreen",
-                      "darkgreen",
+                      "blue"
+                      // "orange",
+                      // "Yellow",
+                      // "Orange",
+                      // "blue",
+                      // "lightgreen",
+                      // "darkgreen",
                     ],
                   },
                   {
@@ -120,13 +139,13 @@ const Charts = () => {
                       100,
                     ],
                     backgroundColor: [
-                      "aqua",
-                      "orange",
-                      "Yellow",
-                      "Orange",
-                      "blue",
-                      "lightgreen",
-                      "darkgreen",
+                      "aqua"
+                      // "orange",
+                      // "Yellow",
+                      // "Orange",
+                      // "blue",
+                      // "lightgreen",
+                      // "darkgreen",
                     ],
                   },
                   {
@@ -136,13 +155,13 @@ const Charts = () => {
                       100,
                     ],
                     backgroundColor: [
-                      "magenta",
-                      "orange",
-                      "Yellow",
-                      "Orange",
-                      "blue",
-                      "lightgreen",
-                      "darkgreen",
+                      // "magenta",
+                      // "orange",
+                      // "Yellow",
+                      // "Orange",
+                      // "blue",
+                      "lightgreen"
+                      // "darkgreen",
                     ],
                   },
                   {
@@ -152,13 +171,13 @@ const Charts = () => {
                       100,
                     ],
                     backgroundColor: [
-                      "pink",
-                      "orange",
-                      "Yellow",
-                      "Orange",
-                      "blue",
-                      "lightgreen",
-                      "darkgreen",
+                      // "pink",
+                      "orange"
+                      // "Yellow",
+                      // "Orange",
+                      // "blue",
+                      // "lightgreen",
+                      // "darkgreen",
                     ],
                   },
                 ],

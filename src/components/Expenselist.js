@@ -431,6 +431,7 @@ function ExpenseList() {
         acc += expense.amount * expense.quantity;
         return acc;
       }, 0);
+      console.log({totalAmount});
       setTotal(totalAmount);
       const modifiedFilterExpense = [...result];
       //   ...result,
@@ -450,6 +451,11 @@ function ExpenseList() {
       // ];
       setFilterExpense(modifiedFilterExpense);
     } else {
+      const totalAmount = allExpenses.reduce((acc, expense) => {
+        acc += expense.amount * expense.quantity;
+        return acc;
+      }, 0);
+      setTotal(totalAmount);
       setFilterExpense(allExpenses);
     }
   };

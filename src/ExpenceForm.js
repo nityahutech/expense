@@ -177,6 +177,7 @@ const ExpenceForm = () => {
                     const caps = str.split(' ').map(capitalize).join(' ');
                     // setPaidBy(newVal);
                     form.setFieldsValue({ expence: newVal, expence: caps });
+                    
 
                   }}
 

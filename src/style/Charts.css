@@ -1,5 +1,5 @@
 .chartsbox{
-    margin:10px 0px 10px 0px;
+    margin:15px 0px 15px 0px;
     display:flex;
     flex-direction: row;
     width: 100%;
@@ -18,6 +18,7 @@
     border-radius: 10px;
     height: 150px;
     position: relative;
+    /* border:2px solid red ; */
 }
 .Card1 h1{
     position: absolute;
@@ -25,14 +26,20 @@
     left: 50%;
     transform: translate(-50%,-50%);
 }
-/* .Card1 h2{
-    margin: 20px;
-} */
-.heading{
+.Card1 h2{
+    margin-left: 10px;
+     font-size: 20px;
+     font-Weight: normal;
+}
+.heading1{
     display: flex;
     justify-content: flex-start;
-    font-size: 200%;
-
+    font-size: 200px;
+}
+.heading2{
+    display: flex;
+    justify-content: flex-start;
+    font-size: 100px;
 }
 .Card2{
     padding: 5px;
@@ -45,6 +52,7 @@
     border-radius: 10px;
     height: 150px;
     position: relative;
+    /* border:2px solid red ; */
 }
 .Card2 h1{
     position: absolute;
@@ -52,58 +60,170 @@
     left: 50%;
     transform: translate(-50%,-50%);
 }
-.chartsdisp{
-    margin-left:0px;
+.Card2 h2{
+    margin-left: 10px;
+     font-size: 15px;
+     font-Weight: normal;
+}
+/* .chartsdisp{
+    margin:10px;
     display:flex;
     flex-direction: row;
     width: 100%;
-   
-}
+    height: auto;
+    border-radius: 10px;
+    background-color:white;
+    justify-content: center;
+    align-items: center;
+    border:2px solid red ;
+    padding: 5px;
+    margin: 5px;
+} */
 .barGraph{
     margin:10px;
-    background-color:white;
     display:flex;
+    flex-direction: row;
     width: 100%;
+    height: auto;
     border-radius: 10px;
-    height: 400px;
+    background-color:white;
     justify-content: center;
-    position: relative;
-    
-   
+    align-items: center;
+    /* border:2px solid red ; */
+    padding: 5px;
+    margin: 5px;
 }
-.barGraph button{
+.barGraph canvas{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    height: 400px;
+}
+.pichart{
+    margin:20px 0px 20px 30px;
+    display:flex;
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    background-color:white;
+    justify-content: center;
+    align-items: center;
+    /* border:2px solid red ; */
+    padding: 5px;
+    margin: 5px;
+}
+.casscader1{
+    margin-top: 10px;
+    border-radius: 2px;
+}
+/* .barGraph button{
     position: absolute;
     right: 10px;
     top: 10px;
-}
-.pieChart{
-    margin:10px;
-    background-color:white;
-    display:flex;
-    width: 100%;
-    border-radius: 10px;
+} */
+
+
+/* @media (max-width: 800px) {
+
+    .bg{
+        height: 500px;
+        width: 80%;
+    }
+    .bar{
+        width:50%
+    }
+    .Card1 h1{
+        font-size: small;
+    }
+    .Card2 h2{
+        font-size: small;
+    }
+
+} */
+/* .bg{
     height: 400px;
-    justify-content: center;
-    
+    width: 20%;
+} */
+
+
+
+
+
+/* @media only screen and (min-width:400px) and (max-width:1000px){
+    .barGraph{
+        width:50%
+    }
+    .chartsbox{
+        display: block;
+        flex-direction: column;
+        
+    }
+} */
+ /* @media only screen and (min-width:500px) and (max-width:950px){
+    .barGraph{
+        width:20%
+    }
+}  */
+/* @media only screen and (min-width:px) and (max-width:px){
+    .barGraph{
+        width:90%
+    }
+}
+@media only screen and (min-width:px) and (max-width:1000px){
+    .barGraph{
+        width:90%
+    }
+}  */
+.bar-style{
+    /* border: 2px solid pink; */
+    /* height: 500px !important; */
+    width: 800px !important;
 }
 
-@media only screen and (min-width:700px) and (max-width:1000px){
-    .barGraph{
-        width:90%
+@media only screen and (max-width: 600px) {
+    .bar-style{
+        /* border: 2px solid green; */
+        /* height: 500px !important; */
+        width: 400px !important;
+    }
+}   
+@media only screen and (max-width: 800px) {
+    .bar-style{
+        /* border: 2px solid green; */
+        /* height: 500px !important; */
+        width: 500px !important;
+    }
+}   
+
+@media only screen and (max-width: 400px) {
+    .bar-style{
+        /* border: 2px solid green; */
+        /* height: 500px !important; */
+        width: 400px !important;
+        height: 300px !important;
+    }
+}   
+
+@media only screen and (max-width: 400px) {   
+    .heading{
+        width: 100%;
+        /* align-items: center; */
+        justify-content: center;
+     /* border:1px solid green */
+
+    }
+@media only screen and (max-width: 500px) {
+
+    .chartdisp{
+        display: block;
     }
 }
-@media only screen and (min-width:700px) and (max-width:1000px){
-    .barGraph{
-        width:90%
-    }
-}
-@media only screen and (min-width:700px) and (max-width:1000px){
-    .barGraph{
-        width:90%
-    }
-}
-@media only screen and (min-width:700px) and (max-width:1000px){
-    .barGraph{
-        width:90%
+
+    .Card1 h2{
+        margin-top: 0;
+
     }
 }

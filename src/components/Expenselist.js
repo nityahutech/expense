@@ -273,6 +273,9 @@ function ExpenseList() {
       title: "Action",
       className: "row10",
       key: "action",
+      align:'center',
+     
+     
       // responsive: ["sm"],
       sorter: (a, b) => a.action - b.action,
       render: (_, record) => {
@@ -609,7 +612,10 @@ function ExpenseList() {
         title="Expense Register"
         visible={isModalVisible}
         footer={null}
-        onCancel={handleCancel}
+        closeIcon={<div onClick={()=>{setIsModalVisible(false)}}>X</div>}
+        
+        // onCancel={handleCancel}
+     
       >
         <Editexpense
           record={editedRecord}

@@ -274,6 +274,7 @@ function ExpenseList() {
       className: "row10",
       key: "action",
       align:'center',
+      fixed: 'right',
      
      
       // responsive: ["sm"],

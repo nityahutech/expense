@@ -65,7 +65,21 @@
      font-size: 15px;
      font-Weight: normal;
 }
-.chartsdisp{
+/* .chartsdisp{
+    margin:10px;
+    display:flex;
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    background-color:white;
+    justify-content: center;
+    align-items: center;
+    border:2px solid red ;
+    padding: 5px;
+    margin: 5px;
+} */
+.barGraph{
     margin:10px;
     display:flex;
     flex-direction: row;
@@ -86,6 +100,24 @@
     width: 100%;
     position: relative;
     height: 400px;
+}
+.pichart{
+    margin:20px 0px 20px 30px;
+    display:flex;
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    background-color:white;
+    justify-content: center;
+    align-items: center;
+    /* border:2px solid red ; */
+    padding: 5px;
+    margin: 5px;
+}
+.casscader1{
+    margin-top: 10px;
+    border-radius: 2px;
 }
 /* .barGraph button{
     position: absolute;
@@ -183,6 +215,12 @@
      /* border:1px solid green */
 
     }
+@media only screen and (max-width: 500px) {
+
+    .chartdisp{
+        display: block;
+    }
+}
 
     .Card1 h2{
         margin-top: 0;

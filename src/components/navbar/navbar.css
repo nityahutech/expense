@@ -16,7 +16,7 @@
 }
 
 .wrapper {
-    width: 100%;
+    /* width: 100%; */
     padding: 20px;
     display: flex;
     align-items: center;
@@ -46,12 +46,14 @@
 .tittle {
     height: auto;
     padding: 20px;
-    padding-left: 250px;
+    padding-left: 200px;
+    width:100%
 }
 
 .avatarimg {
     color: black;
-    height: 10px;
+    height: 20px;
+    width: 20px;
     cursor: 'pointer'
 }
 
@@ -85,7 +87,7 @@ img {
 
 
     .tittle {
-        padding-left: 100px;
+        display: none;
     }
 
 
@@ -94,7 +96,7 @@ img {
 @media (max-width: 500px) {
 
     .tittle {
-        display: none;
+        
     }
 
 }

@@ -6,6 +6,10 @@ import { Col, Divider, Row } from 'antd';
 import './ExpenseForm.css';
 import ExpenseContext from './contexts/ExpenseContext'
 import { useNavigate } from 'react-router-dom';
+import {
+
+  ArrowLeftOutlined
+} from "@ant-design/icons";
 
 import {
   // Cascader,
@@ -20,6 +24,9 @@ import {
 } from 'antd';
 import { formatCountdown } from 'antd/lib/statistic/utils';
 import moment from 'moment';
+
+
+
 const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
 const ExpenceForm = () => {
   // const [category, setCategory] = useState("");
@@ -32,6 +39,10 @@ const ExpenceForm = () => {
 
   const { TextArea } = Input;
   const navigate = useNavigate();
+
+  const handleListExpense = () => {
+    navigate("/Expense/ExpenseList");
+  };
 
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
@@ -57,7 +68,7 @@ const ExpenceForm = () => {
       paidname: values['paidto'],
       quantity: values['Quantity'],
       paymenttype: values['paymentMode'],
-      status: 'UnPaid',
+      status: 'Unpaid',
 
       // status:  values['paymentDate'],
       subtotal: values['subTotal'],
@@ -79,6 +90,10 @@ const ExpenceForm = () => {
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
+  const onReset = () => {
+    form.resetFields()
+  }
+
 
   return (
 
@@ -100,14 +115,37 @@ const ExpenceForm = () => {
           autoComplete="off"
           onFinish={onFinish}
         >
+
+          <Row
+            className="rowform"
+            gutter={[0, 8]}
+            style={{ marginBottom: "1.5rem", marginTop: "1.5rem", display: 'flex', flexDirection: 'column', alignitems: 'center', justifyContent: 'space-around' }}
+
+          >
+            {/* -----------------Back button------------- */}
+
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-center' style={{ background: '', height: '50px', display: 'flex', justifyContent: 'flex-start' }}>
+              <Button
+                className="listExpense"
+                type="primary"
+                onClick={handleListExpense}
+                style={{ width: '120px',cursor: 'pointer',
+                 backgroundColor: 'rgb(24, 154, 180)', borderRadius: '5px', }}
         
+              >
+                Expense List
+              </Button>
+            </Col>
+          </Row>
+
           <Row gutter={[24, 8]} >
+
 
             {/* -----------------Expense Name-------------- */}
 
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
-              <Divider orientation='left' orientationMargin={0}>Expense Name<span style={{color:'red'}}>*</span></Divider>
+              <Divider orientation='left' orientationMargin={0}>Expense Name<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
                 name="expence"
                 onKeyPress={(event) => {
@@ -139,15 +177,18 @@ const ExpenceForm = () => {
                     const caps = str.split(' ').map(capitalize).join(' ');
                     // setPaidBy(newVal);
                     form.setFieldsValue({ expence: newVal, expence: caps });
+                    
 
                   }}
 
                   required placeholder='Enter Expense For' />
               </Form.Item>
             </Col>
+
             {/* -----------------Date-------------- */}
-            <Col xs={{ span: 24 }} sm={{ span: 12 }}  className='Col-1-left' style={{ background: '', height: '80px' }}>
-              <Divider orientation='left' orientationMargin={0}>Date<span style={{ color: 'red' }}>*</span></Divider>
+
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
+              <Divider orientation='left' orientationMargin={0}>Date<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
                 name="paymentDate"
                 rules={[
@@ -168,7 +209,7 @@ const ExpenceForm = () => {
 
             {/* -----------------paid by-------------- */}
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
-            <Divider orientation='left' orientationMargin={0}><span style={{color:'red'}}>*</span>Paid By</Divider>
+              <Divider orientation='left' orientationMargin={0}>Paid By<span style={{ color: 'red' }}> *</span></Divider>
 
               <Form.Item
 
@@ -179,16 +220,16 @@ const ExpenceForm = () => {
                   }
                 }}
 
-            
+
                 rules={[
                   {
                     required: true,
                     message: 'Please enter Customer Name',
                   }, {
-                
-                    pattern:  /^[a-zA-Z\s]*$/,
+
+                    pattern: /^[a-zA-Z\s]*$/,
                     message: 'Please enter Valid Name',
-                  
+
                   }
                 ]}
 
@@ -216,7 +257,7 @@ const ExpenceForm = () => {
 
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
-              <Divider orientation='left' orientationMargin={0}>Paid to<span style={{ color: 'red' }}>*</span></Divider>
+              <Divider orientation='left' orientationMargin={0}>Paid to<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
                 name="paidto"
                 onKeyPress={(event) => {
@@ -258,7 +299,7 @@ const ExpenceForm = () => {
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
 
-              <Divider orientation='left' orientationMargin={0}>Amount<span style={{ color: 'red' }}>*</span></Divider>
+              <Divider orientation='left' orientationMargin={0}>Amount<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
                 className='numder-inputs'
                 name="amount"
@@ -300,7 +341,7 @@ const ExpenceForm = () => {
             {/* -----------------Quanitity--------------- */}
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
-              <Divider orientation='left' orientationMargin={0}>Quantity<span style={{ color: 'red' }}>*</span></Divider>
+              <Divider orientation='left' orientationMargin={0}>Quantity<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
 
                 name="Quantity"
@@ -338,7 +379,7 @@ const ExpenceForm = () => {
           <Row gutter={[24, 8]}>
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
-              <Divider orientation='left' orientationMargin={0}>Mode of Payment<span style={{ color: 'red' }}>*</span></Divider>
+              <Divider orientation='left' orientationMargin={0}>Mode of Payment<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
                 name="paymentMode"
                 rules={[
@@ -410,7 +451,8 @@ const ExpenceForm = () => {
                         color: 'white',
                         cursor: 'pointer'
                       }}
-                    >Cancel</Button>
+                      onClick={onReset}
+                    >Reset</Button>
                   </Form.Item>
                   <Form.Item className='submit'>
                     <button style={{
@@ -421,7 +463,7 @@ const ExpenceForm = () => {
                       height: '30px',
                       color: 'white',
                       cursor: 'pointer',
-                     
+
                     }}
                       type="primary">Submit</button>
                   </Form.Item>

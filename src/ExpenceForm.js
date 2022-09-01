@@ -7,7 +7,7 @@ import './ExpenseForm.css';
 import ExpenseContext from './contexts/ExpenseContext'
 import { useNavigate } from 'react-router-dom';
 import {
-    
+
   ArrowLeftOutlined
 } from "@ant-design/icons";
 
@@ -24,6 +24,9 @@ import {
 } from 'antd';
 import { formatCountdown } from 'antd/lib/statistic/utils';
 import moment from 'moment';
+
+
+
 const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
 const ExpenceForm = () => {
   // const [category, setCategory] = useState("");
@@ -65,7 +68,7 @@ const ExpenceForm = () => {
       paidname: values['paidto'],
       quantity: values['Quantity'],
       paymenttype: values['paymentMode'],
-      status: 'UnPaid',
+      status: 'Unpaid',
 
       // status:  values['paymentDate'],
       subtotal: values['subTotal'],
@@ -87,6 +90,10 @@ const ExpenceForm = () => {
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
+  const onReset = () => {
+    form.resetFields()
+  }
+
 
   return (
 
@@ -112,7 +119,7 @@ const ExpenceForm = () => {
           <Row
             className="rowform"
             gutter={[0, 8]}
-            style={{ marginBottom: "1.5rem", marginTop: "1.5rem", display: 'flex', flexDirection: 'column', alignitems: 'center',    justifyContent: 'space-around' }}
+            style={{ marginBottom: "1.5rem", marginTop: "1.5rem", display: 'flex', flexDirection: 'column', alignitems: 'center', justifyContent: 'space-around' }}
 
           >
             {/* -----------------Back button------------- */}
@@ -122,9 +129,11 @@ const ExpenceForm = () => {
                 className="listExpense"
                 type="primary"
                 onClick={handleListExpense}
-                style={{ width: "35%" ,backgroundColor:'rgb(24, 154, 180)',borderRadius:'5px'}}
+                style={{ width: '120px',cursor: 'pointer',
+                 backgroundColor: 'rgb(24, 154, 180)', borderRadius: '5px', }}
+        
               >
-                 <ArrowLeftOutlined /> Expense List
+                Expense List
               </Button>
             </Col>
           </Row>
@@ -136,7 +145,7 @@ const ExpenceForm = () => {
 
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
-              <Divider orientation='left' orientationMargin={0}>Expense Name<span style={{ color: 'red' }}>*</span></Divider>
+              <Divider orientation='left' orientationMargin={0}>Expense Name<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
                 name="expence"
                 onKeyPress={(event) => {
@@ -168,6 +177,7 @@ const ExpenceForm = () => {
                     const caps = str.split(' ').map(capitalize).join(' ');
                     // setPaidBy(newVal);
                     form.setFieldsValue({ expence: newVal, expence: caps });
+                    
 
                   }}
 
@@ -178,7 +188,7 @@ const ExpenceForm = () => {
             {/* -----------------Date-------------- */}
 
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
-              <Divider orientation='left' orientationMargin={0}>Date<span style={{ color: 'red' }}>*</span></Divider>
+              <Divider orientation='left' orientationMargin={0}>Date<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
                 name="paymentDate"
                 rules={[
@@ -199,7 +209,7 @@ const ExpenceForm = () => {
 
             {/* -----------------paid by-------------- */}
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
-              <Divider orientation='left' orientationMargin={0}><span style={{ color: 'red' }}>*</span>Paid By</Divider>
+              <Divider orientation='left' orientationMargin={0}>Paid By<span style={{ color: 'red' }}> *</span></Divider>
 
               <Form.Item
 
@@ -247,7 +257,7 @@ const ExpenceForm = () => {
 
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
-              <Divider orientation='left' orientationMargin={0}>Paid to<span style={{ color: 'red' }}>*</span></Divider>
+              <Divider orientation='left' orientationMargin={0}>Paid to<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
                 name="paidto"
                 onKeyPress={(event) => {
@@ -289,7 +299,7 @@ const ExpenceForm = () => {
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
 
-              <Divider orientation='left' orientationMargin={0}>Amount<span style={{ color: 'red' }}>*</span></Divider>
+              <Divider orientation='left' orientationMargin={0}>Amount<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
                 className='numder-inputs'
                 name="amount"
@@ -331,7 +341,7 @@ const ExpenceForm = () => {
             {/* -----------------Quanitity--------------- */}
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
-              <Divider orientation='left' orientationMargin={0}>Quantity<span style={{ color: 'red' }}>*</span></Divider>
+              <Divider orientation='left' orientationMargin={0}>Quantity<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
 
                 name="Quantity"
@@ -369,7 +379,7 @@ const ExpenceForm = () => {
           <Row gutter={[24, 8]}>
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' style={{ background: '', height: '80px' }}>
 
-              <Divider orientation='left' orientationMargin={0}>Mode of Payment<span style={{ color: 'red' }}>*</span></Divider>
+              <Divider orientation='left' orientationMargin={0}>Mode of Payment<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
                 name="paymentMode"
                 rules={[
@@ -441,7 +451,8 @@ const ExpenceForm = () => {
                         color: 'white',
                         cursor: 'pointer'
                       }}
-                    >Cancel</Button>
+                      onClick={onReset}
+                    >Reset</Button>
                   </Form.Item>
                   <Form.Item className='submit'>
                     <button style={{

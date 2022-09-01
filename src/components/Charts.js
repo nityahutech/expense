@@ -238,7 +238,7 @@ const Charts = () => {
                   color: "#fff",
                   borderRadius: "5px",
                   width: "50px",
-                  marginLeft: "40%",
+                  marginLeft: "30%",
                   cursor: "pointer",
                 }}
                 onClick={handleExpenselist}
@@ -246,10 +246,11 @@ const Charts = () => {
                 View
               </button>
               <Select
+                id="short"
                 defaultValue="Month"
                 style={{
-                  width: 120,
-                  margin: "10px",
+                  width: 90,
+                 margin: "10px",
                 }}
                 onChange={handleChange}
               >

@@ -183,3 +183,9 @@ main{
 ::-webkit-scrollbar-thumb:hover {
   background: #189AB4; 
 }
+@media (max-width: 990px){
+  .addExpense.ant-btn-primary {
+    background: #189AB4;
+    left: 0px;
+  }
+}

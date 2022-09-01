@@ -58,39 +58,21 @@ const Charts = () => {
 
   return (
     <>
-      {/* ------------------------------------------Cards Row------------------------------- */}
-      {/* <div className="chartsbox"
-              style={{margin:""}}> */}
-      <Row gutter={[8, 8]}>
-        <Col span={12} xs={24} sm={10} md={12} lg={12}>
-          <div className="Card1">
-            <div className="heading1">
-              <h2>Total Amount</h2>
-            </div>
+      <div className="content container-fluid">
+        <div className="rowcards">
+          <div className="col1">
+            <h2>Total Amount</h2>
             <h1>{total}</h1>
           </div>
-        </Col>
-        <Col span={12} xs={24} sm={10} md={12} lg={12}>
-          <div className="Card2">
-            <div className="heading2">
-              <h2>Average Amount/Month</h2>
-            </div>
+          <div className="col2">
+            <h2>Average Amount/Month</h2>
             <h1>{avg}</h1>
           </div>
-        </Col>
-      </Row>
-      {/* </div> */}
-      {/* ------------------------------------------Cards Row------------------------------- */}
-
-      {/* --------------------------------------------------------------Graph row----------- */}
-      <div className="chartsdisp">
-        {/* <Row gutter={[8, 8]}> */}
-        {/* -----------------------------------------------Bar graph starts----------------------- */}
-        {/* <Col span={22}> */}
-        <div className="barGraph">
-          <div>
+        </div>
+        <div className="rowcharts">
+          <div className="colbar">
             <Bar
-              className="bar-style"
+              // className="bar-style"
               data={{
                 labels: [
                   "January",
@@ -191,20 +173,39 @@ const Charts = () => {
               }}
               options={{}}
             />
-            
+            <div className="vbutton">
+              <button
+                style={{
+                  background: "#05445e",
+                  color: "#fff",
+                  borderRadius: "5px",
+                  width: "50px",
+                  marginLeft: "40%",
+                  cursor: "pointer",
+                }}
+                onClick={handleExpenselist}
+              >
+                View
+              </button>
+              <Select
+                defaultValue="Month"
+                style={{
+                  width: 120,
+                  margin: "10px",
+                }}
+                onChange={handleChange}
+              >
+                <Option value="year">Year</Option>
+                <Option value="Month">Month</Option>
+                <Option value="Week">Week</Option>
+                <Option value="day">Day</Option>
+              </Select>
+            </div>
           </div>
-          
-        </div>
-        
-        {/* ------------------------------------------------------Bar-graph end's----------------- */}
-        {/* ------------------------------------------------------Pie-Chaart starts----------------- */}
-        {/* </Col> */}
-        {/* <Col span={6}> */}
-        <div className="pichart">
-          <div>
+          <div className="colpie">
             <Pie
               data={{
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                labels: ["Water", "Electricity", "Newspaper", "Food", "Travel", "Others"],
                 datasets: [
                   {
                     label: "# of Votes",
@@ -230,33 +231,25 @@ const Charts = () => {
                 ],
               }}
             />
-          </div>
-        </div>
-        {/* </Col> */}
-        {/* </Row> */}
-      </div>
-
-      {/* ------------------------------------------------button-------------------------- */}
-      <div className="vbutton">
-        <button
-          style={{
-            background: "#05445e",
-            color: "#fff",
-            borderRadius: "5px",
-            width: "50px",
-            marginLeft: "40%",
-            cursor: "pointer",
-            
-          }}
-          onClick={handleExpenselist}
-        >
-          View
-        </button>
-          <Select
+            <div className="vbutton">
+              <button
+                style={{
+                  background: "#05445e",
+                  color: "#fff",
+                  borderRadius: "5px",
+                  width: "50px",
+                  marginLeft: "40%",
+                  cursor: "pointer",
+                }}
+                onClick={handleExpenselist}
+              >
+                View
+              </button>
+              <Select
                 defaultValue="Month"
                 style={{
                   width: 120,
-                  margin: '10px',
+                  margin: "10px",
                 }}
                 onChange={handleChange}
               >
@@ -265,9 +258,10 @@ const Charts = () => {
                 <Option value="Week">Week</Option>
                 <Option value="day">Day</Option>
               </Select>
-              
+            </div>
+          </div>
+        </div>
       </div>
-      {/* --------------------------------------------------------------Graph row----------- */}
     </>
   );
 };

@@ -1,231 +1,174 @@
-.chartsbox{
-    margin:15px 0px 15px 0px;
-    display:flex;
-    flex-direction: row;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    
+
+* {
+  box-sizing: border-box;
 }
 
+body {
+  /* overflow: hidden; */
+  margin: 0;
+}
 
-.Card1{
-    padding: 5px;
-    margin:10px;
-    background-color:white;
-    display:flex;
-    width: 100%;
-    /* justify-content: center;
-    align-items: center; */
-    border-radius: 10px;
-    height: 150px;
-    position: relative;
-    /* border:2px solid red ; */
+.content container-fluid {
+  border: 1px solid red;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-.Card1 h1{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+.rowcards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 10px;
+  border-radius: 5px;
+  /* border: 1px solid red; */
+  background-color: white;
+  justify-content: space-around;
+  align-items: center;
+  height: 19vh;
 }
-.Card1 h2{
-    margin-left: 10px;
-     font-size: 20px;
-     font-Weight: normal;
+.col1 {
+  border: 1px solid lightyellow;
+  background-color: white;
+  border-radius: 5px;
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  justify-content: center;
+  align-items: center;
+  background-color: antiquewhite;
 }
-.heading1{
-    display: flex;
-    justify-content: flex-start;
-    font-size: 200px;
+.col2 {
+  border: 1px solid lightyellow;
+  background-color: white;
+  background-color: antiquewhite;
+  border-radius: 5px;
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  justify-content: center;
+  align-items: center;
 }
-.heading2{
-    display: flex;
-    justify-content: flex-start;
-    font-size: 100px;
+.colbar {
+  /* border: 1px solid red; */
+  background-color: white;
+  border-radius: 5px;
+  margin: 5px;
+  width: 68%;
 }
-.Card2{
-    padding: 5px;
-    margin:10px;
-    background-color:white;
-    display:flex;
-    width: 100%;
-    /* justify-content: center;
-    align-items: center; */
-    border-radius: 10px;
-    height: 150px;
-    position: relative;
-    /* border:2px solid red ; */
+.colpie {
+  /* border: 1px solid red; */
+  background-color: white;
+  border-radius: 5px;
+  margin: 5px;
+  width: 30%;
+  height: 100%;
 }
-.Card2 h1{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+.rowcharts {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 10px;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  /* border: 1px solid red; */
 }
-.Card2 h2{
-    margin-left: 10px;
-     font-size: 15px;
-     font-Weight: normal;
-}
-/* .chartsdisp{
-    margin:10px;
-    display:flex;
-    flex-direction: row;
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    background-color:white;
-    justify-content: center;
-    align-items: center;
-    border:2px solid red ;
-    padding: 5px;
-    margin: 5px;
-} */
-.barGraph{
-    margin:10px;
-    display:flex;
-    flex-direction: row;
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    background-color:white;
-    justify-content: center;
-    align-items: center;
-    /* border:2px solid red ; */
-    padding: 5px;
-    margin: 5px;
-}
-.barGraph canvas{
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    position: relative;
-    height: 400px;
-}
-.pichart{
-    margin:20px 0px 20px 30px;
-    display:flex;
-    flex-direction: row;
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    background-color:white;
-    justify-content: center;
-    align-items: center;
-    /* border:2px solid red ; */
-    padding: 5px;
-    margin: 5px;
-}
-.casscader1{
-    margin-top: 10px;
-    border-radius: 2px;
-}
-/* .barGraph button{
-    position: absolute;
-    right: 10px;
-    top: 10px;
-} */
 
+@media (max-width: 500px) {
+    body {
+        overflow: auto;
+    }
+}
 
-/* @media (max-width: 800px) {
+@media (max-width: 300px) {
+    .colbar {
+        width: 97%;
+    }
+    .colpie {
+        width: 109%;
+    }
+}
 
-    .bg{
-        height: 500px;
+@media (max-width: 400px) {
+    .colbar {
+        width: 97%;
+    }
+    .colpie {
+        width: 109%;
+    }
+}
+@media (max-width: 500px) {
+    .colbar {
+        width: 97%;
+    }
+    .colpie {
+        width: 50%;
+    }
+    .rowcards {
+        display: block;
+        height: 24vh;
+    }
+    .col1 {
+        width: 100%;
+    }
+    .col2 {
+        width: 100%
+    }
+}
+@media (max-width: 600px) {
+    .colbar {
+        width: 97%;
+    }
+    .colpie {
+        width: 60%;
+    }
+}
+
+@media (max-width: 700px) {
+    .colbar {
+        width: 97%;
+    }
+    .colpie {
+        width: 70%;
+    }
+}
+
+@media (max-width: 800px) {
+    .colbar {
+        width: 97%;
+    }
+    .colpie {
         width: 80%;
     }
-    .bar{
-        width:50%
+}
+
+/* @media (max-width: 900px) {
+    .colbar {
+        width: 97%;
     }
-    .Card1 h1{
-        font-size: small;
+    .colpie {
+        width: 60%;
     }
-    .Card2 h2{
-        font-size: small;
+}
+
+@media (max-width: 1000px) {
+    .colbar {
+        width: 90%;
     }
-
-} */
-/* .bg{
-    height: 400px;
-    width: 20%;
-} */
-
-
-
-
-
-/* @media only screen and (min-width:400px) and (max-width:1000px){
-    .barGraph{
-        width:50%
-    }
-    .chartsbox{
-        display: block;
-        flex-direction: column;
-        
+    .colpie {
+        width: 40%;
     }
 } */
- /* @media only screen and (min-width:500px) and (max-width:950px){
-    .barGraph{
-        width:20%
-    }
-}  */
-/* @media only screen and (min-width:px) and (max-width:px){
-    .barGraph{
-        width:90%
-    }
-}
-@media only screen and (min-width:px) and (max-width:1000px){
-    .barGraph{
-        width:90%
-    }
-}  */
-.bar-style{
-    /* border: 2px solid pink; */
-    /* height: 500px !important; */
-    width: 800px !important;
-}
 
-@media only screen and (max-width: 600px) {
-    .bar-style{
-        /* border: 2px solid green; */
-        /* height: 500px !important; */
-        width: 400px !important;
+/* @media (max-width: 1200px) {
+    .colbar {
+        width: 50%;
     }
-}   
-@media only screen and (max-width: 800px) {
-    .bar-style{
-        /* border: 2px solid green; */
-        /* height: 500px !important; */
-        width: 500px !important;
+    .colpie {
+        width: 40%;
     }
-}   
-
-@media only screen and (max-width: 400px) {
-    .bar-style{
-        /* border: 2px solid green; */
-        /* height: 500px !important; */
-        width: 400px !important;
-        height: 300px !important;
-    }
-}   
-
-@media only screen and (max-width: 400px) {   
-    .heading{
-        width: 100%;
-        /* align-items: center; */
-        justify-content: center;
-     /* border:1px solid green */
-
-    }
-@media only screen and (max-width: 500px) {
-
-    .chartdisp{
-        display: block;
-    }
-}
-
-    .Card1 h2{
-        margin-top: 0;
-
-    }
-}
+} */

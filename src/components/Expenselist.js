@@ -1,39 +1,23 @@
 import {
   Col,
-  Divider,
   Row,
   Input,
-  Space,
   Typography,
   Layout,
-  Upload,
   Table,
   DatePicker,
   Button,
-  Tooltip,
   Select,
-  Popover,
   Modal,
   Tag,
-  Dropdown,
-  Menu,
-  message,
 } from "antd";
 import moment from "moment";
 // import axios from "axios";
 import {
-  AudioOutlined,
   EditOutlined,
-  DeleteFilled,
-  DeleteOutlined,
-  ArrowUpOutlined,
-  ArrowDownOutlined,
-  DownOutlined,
-  UserOutlined,
   SearchOutlined,
-  UploadOutlined,
 } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/expenselist.css";
 import ExpenseContext from "../contexts/ExpenseContext";
@@ -54,10 +38,13 @@ function ExpenseList() {
   const [editedRecord, setEditedRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState("");
+  const [size, setSize] = useState((window.innerWidth <= 760) ? "":"left");
+
 
   useEffect(() => {
     getData();
   }, []);
+
 
   // useEffect(() => {
   //   getData();
@@ -142,6 +129,17 @@ function ExpenseList() {
     setFilterExpense(modifiedFilterExpense);
     setLoading(false);
   }
+  // useEffect(() => {
+  //   const resize =() =>  {
+  //     // this.setState({hideNav: window.innerWidth <= 760});
+     
+  //     console.log({left: window.innerWidth <= 760});
+  // }
+  //   window.addEventListener("resize", resize());
+  // }, [window.innerWidth])
+
+  window.addEventListener("resize", ()=> setSize((window.innerWidth <= 760) ? "":"left"));
+
 
   const navigate = useNavigate();
   const [filterCriteria, setFilterCriteria] = useState({
@@ -168,7 +166,7 @@ function ExpenseList() {
       dataIndex: "catname",
       key: "catname",
       // responsive: ["sm"],
-      fixed: "left",
+      fixed: size ,
       onFilter: (value, record) => record.name.indexOf(value) === 0,
       // sorter: (a, b) => a.catname - b.catname,
       onFilter: (value, record) => record.name.indexOf(value) === 0,
@@ -505,7 +503,7 @@ function ExpenseList() {
   };
 
   return (
-    <Layout>
+    <Layout >
       <Content>
         <Row
           className="row"

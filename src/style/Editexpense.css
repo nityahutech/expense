@@ -1,4 +1,4 @@
-.Required::before{
+/* .Required::before{
     content: "*";
     color: #ee5050;
     position: absolute;
@@ -21,7 +21,27 @@
     left: 7px;
     bottom: 73px;
     font-size: 20px;
-}
+} */
 .Close{
     outline: none;
+}
+.ant-form-item-label
+    > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::after {
+    display: inline-block;
+    margin-right: 4px;
+    color: #ff4d4f;
+    font-size: 10px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+    content: ' * ';
+  }
+  .ant-form-item-label
+    > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+    content: '';
+  }
+  .ant-form-item-label > label::after {
+    content: '';
+    position: relative;
+    top: -0.5px;
+    margin: 0 8px 0 2px;
 }

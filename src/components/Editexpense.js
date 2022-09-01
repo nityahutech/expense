@@ -182,7 +182,7 @@ const Editexpense = (props) => {
         <Form.Item
           style={{ marginBottom: "10px" }}
           name="expensename"
-          label="Expense Name"
+          label="Expense Name&nbsp;"
           onKeyPress={(event) => {
             if (checkAlphabets(event)) {
               event.preventDefault();
@@ -214,7 +214,7 @@ const Editexpense = (props) => {
 
         <Form.Item
           style={{ marginBottom: "10px" }}
-          label="Paid By"
+          label="Paid By&nbsp;"
           name="name"
           onKeyPress={(event) => {
             if (checkAlphabets(event)) {
@@ -245,7 +245,7 @@ const Editexpense = (props) => {
         </Form.Item>
         <Form.Item
           style={{ marginBottom: "10px" }}
-          label="Paid To"
+          label="Paid To&nbsp;"
           name="paidname"
           onKeyPress={(event) => {
             if (checkAlphabets(event)) {
@@ -278,15 +278,15 @@ const Editexpense = (props) => {
 
         <Form.Item
           style={{ marginBottom: "10px" }}
-          label="Status"
+          label="Status&nbsp;"
           name="status"
           className="Required"
-          // rules={[
-          //   {
-          //     message: "Please enter the paymeny status",
-          //     required: true,
-          //   },
-          // ]}
+          rules={[
+            {
+              message: "Please enter the paymeny status",
+              required: true,
+            },
+          ]}
         >
           <Select
             defaultValue={status}
@@ -305,7 +305,7 @@ const Editexpense = (props) => {
         <Form.Item
           style={{ marginBottom: "10px" }}
           name="date"
-          label="Date"
+          label="Date&nbsp;"
           rules={[
             {
               required: true,
@@ -325,7 +325,7 @@ const Editexpense = (props) => {
 
         <Form.Item
           style={{ marginBottom: "10px" }}
-          label="Amount"
+          label="Amount&nbsp;"
           name="amount"
           onKeyPress={(event) => {
             if (checkNumbervalue(event)) {
@@ -356,7 +356,7 @@ const Editexpense = (props) => {
         <Form.Item
           style={{ marginBottom: "10px" }}
           name="quantity"
-          label="Quantity"
+          label="Quantity&nbsp;"
           onKeyPress={(event) => {
             if (checkNumbervalue(event)) {
               event.preventDefault();
@@ -384,7 +384,7 @@ const Editexpense = (props) => {
         {/* --------------------------------------Sub-subtotal------- */}
 
         <Form.Item
-          label="Subsubtotal"
+          label="Subtotal"
           className="Subtotal"
           style={{ marginBottom: "10px", Color: "black" }}
         >

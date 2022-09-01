@@ -83,3 +83,82 @@ body {
         overflow: auto;
     }
 }
+
+@media (max-width: 300px) {
+    .colbar {
+        width: 97%;
+    }
+    .colpie {
+        width: 109%;
+    }
+}
+
+@media (max-width: 400px) {
+    .colbar {
+        width: 97%;
+    }
+    .colpie {
+        width: 109%;
+    }
+}
+@media (max-width: 500px) {
+    .colbar {
+        width: 97%;
+    }
+    .colpie {
+        width: 50%;
+    }
+}
+@media (max-width: 600px) {
+    .colbar {
+        width: 97%;
+    }
+    .colpie {
+        width: 60%;
+    }
+}
+
+@media (max-width: 700px) {
+    .colbar {
+        width: 97%;
+    }
+    .colpie {
+        width: 70%;
+    }
+}
+
+@media (max-width: 800px) {
+    .colbar {
+        width: 97%;
+    }
+    .colpie {
+        width: 80%;
+    }
+}
+
+@media (max-width: 900px) {
+    .colbar {
+        width: 97%;
+    }
+    .colpie {
+        width: 60%;
+    }
+}
+
+@media (max-width: 1000px) {
+    .colbar {
+        width: 90%;
+    }
+    .colpie {
+        width: 40%;
+    }
+}
+
+/* @media (max-width: 1200px) {
+    .colbar {
+        width: 50%;
+    }
+    .colpie {
+        width: 40%;
+    }
+} */

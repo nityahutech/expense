@@ -108,6 +108,16 @@ body {
     .colpie {
         width: 50%;
     }
+    .rowcards {
+        display: block;
+        height: 24vh;
+    }
+    .col1 {
+        width: 100%;
+    }
+    .col2 {
+        width: 100%
+    }
 }
 @media (max-width: 600px) {
     .colbar {
@@ -136,7 +146,7 @@ body {
     }
 }
 
-@media (max-width: 900px) {
+/* @media (max-width: 900px) {
     .colbar {
         width: 97%;
     }
@@ -152,7 +162,7 @@ body {
     .colpie {
         width: 40%;
     }
-}
+} */
 
 /* @media (max-width: 1200px) {
     .colbar {

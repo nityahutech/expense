@@ -80,8 +80,7 @@ body {
   /* border: 1px solid red; */
 }
 #short {
-    width: 120;
-    margin: 10px;
+    
 }
 
 @media (max-width: 500px) {

@@ -94,6 +94,11 @@ const ExpenceForm = () => {
     form.resetFields()
   }
 
+  function disabledDate(current) {
+    // Can not select days before today and today
+    return current && current > moment().endOf('day');
+  }
+
 
   return (
 
@@ -199,7 +204,9 @@ const ExpenceForm = () => {
                 ]}
               >
 
-                <DatePicker format={dateFormatList} style={{ width: '100%' }} placeholder='Choose Date' />
+                <DatePicker format={dateFormatList} style={{ width: '100%' }}
+                 disabledDate={disabledDate}
+                 placeholder='Choose Date' />
               </Form.Item>
             </Col>
 

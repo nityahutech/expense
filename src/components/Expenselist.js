@@ -81,15 +81,20 @@ function ExpenseList() {
   async function getData() {
     setLoading(true);
     const allData = await ExpenseContext.getAllExpenses();
-    console.log(allData.docs);
-    let d = allData.docs.map((doc) => ({
-      ...doc.data(),
+    // console.log(allData.docs);
+    let d = allData.docs.map((doc) =>{      
+      //  console.log(JSON.stringify(new Date(doc.data()['date'])));
+       var longDateStr = moment(doc.data()['date'], 'D/M/Y').format('MM-DDY');
+    return ({
+      ...doc.data(),date:longDateStr,dt:new Date(longDateStr),
       id: doc.id,
-    }));
-    console.log({ d });
+    })});
+    // console.log({ d });
+    let filtered=d.sort(function(a,b){return b['dt'].getTime()-a['dt'].getTime() });
+    console.log(filtered)
     setData(d);
     console.log(data);
-    let exp = d.map((person, i) => ({
+    let exp = filtered.map((person, i) => ({
       key: person.id,
       sn: i + 1,
       catname: person.catname,
@@ -107,8 +112,8 @@ function ExpenseList() {
       acc += expense.amount * expense.quantity;
       return acc;
     }, 0);
-    setTotal(totalAmount);
-    const modifiedFilterExpense = [...exp];
+    console.log({exp});
+    // const modifiedFilterExpense = [...exp];
     //   ...exp,
     //   {
     //     key: "subTotal",
@@ -124,9 +129,10 @@ function ExpenseList() {
     //     description: "",
     //   },
     // ];
-    console.log(modifiedFilterExpense);
-    setAllExpenses(modifiedFilterExpense);
-    setFilterExpense(modifiedFilterExpense);
+    console.log(exp);
+    setTotal(totalAmount);
+    setAllExpenses(exp);
+    setFilterExpense(exp);
     setLoading(false);
   }
   // useEffect(() => {

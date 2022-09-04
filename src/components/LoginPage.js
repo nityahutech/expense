@@ -28,6 +28,9 @@ function LoginPage() {
       navigate("DashBoard", { replace: true });
     } catch {
       setError("Failed to log in");
+      setTimeout(() => {
+        setError("")
+      }, 3000);
     }
 
     setLoading(false);

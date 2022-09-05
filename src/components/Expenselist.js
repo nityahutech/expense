@@ -13,11 +13,8 @@ import {
 } from "antd";
 import moment from "moment";
 // import axios from "axios";
-import {
-  EditOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
-import { useEffect, useState,useRef } from "react";
+import { EditOutlined, SearchOutlined } from "@ant-design/icons";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/expenselist.css";
 import ExpenseContext from "../contexts/ExpenseContext";
@@ -38,13 +35,11 @@ function ExpenseList() {
   const [editedRecord, setEditedRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState("");
-  const [size, setSize] = useState((window.innerWidth <= 760) ? "":"left");
-
+  const [size, setSize] = useState(window.innerWidth <= 760 ? "" : "left");
 
   useEffect(() => {
     getData();
   }, []);
-
 
   // useEffect(() => {
   //   getData();
@@ -82,16 +77,21 @@ function ExpenseList() {
     setLoading(true);
     const allData = await ExpenseContext.getAllExpenses();
     // console.log(allData.docs);
-    let d = allData.docs.map((doc) =>{      
+    let d = allData.docs.map((doc) => {
       //  console.log(JSON.stringify(new Date(doc.data()['date'])));
-       var longDateStr = moment(doc.data()['date'], 'D/M/Y').format('MM-DDY');
-    return ({
-      ...doc.data(),date:longDateStr,dt:new Date(longDateStr),
-      id: doc.id,
-    })});
+      var longDateStr = moment(doc.data()["date"], "D/M/Y").format("MM-DDY");
+      return {
+        ...doc.data(),
+        date: longDateStr,
+        dt: new Date(longDateStr),
+        id: doc.id,
+      };
+    });
     // console.log({ d });
-    let filtered=d.sort(function(a,b){return b['dt'].getTime()-a['dt'].getTime() });
-    console.log(filtered)
+    let filtered = d.sort(function (a, b) {
+      return b["dt"].getTime() - a["dt"].getTime();
+    });
+    console.log(filtered);
     setData(d);
     console.log(data);
     let exp = filtered.map((person, i) => ({
@@ -112,7 +112,7 @@ function ExpenseList() {
       acc += expense.amount * expense.quantity;
       return acc;
     }, 0);
-    console.log({exp});
+    console.log({ exp });
     // const modifiedFilterExpense = [...exp];
     //   ...exp,
     //   {
@@ -138,14 +138,15 @@ function ExpenseList() {
   // useEffect(() => {
   //   const resize =() =>  {
   //     // this.setState({hideNav: window.innerWidth <= 760});
-     
+
   //     console.log({left: window.innerWidth <= 760});
   // }
   //   window.addEventListener("resize", resize());
   // }, [window.innerWidth])
 
-  window.addEventListener("resize", ()=> setSize((window.innerWidth <= 760) ? "":"left"));
-
+  window.addEventListener("resize", () =>
+    setSize(window.innerWidth <= 760 ? "" : "left")
+  );
 
   const navigate = useNavigate();
   const [filterCriteria, setFilterCriteria] = useState({
@@ -172,7 +173,7 @@ function ExpenseList() {
       dataIndex: "catname",
       key: "catname",
       // responsive: ["sm"],
-      fixed: size ,
+      fixed: size,
       onFilter: (value, record) => record.name.indexOf(value) === 0,
       // sorter: (a, b) => a.catname - b.catname,
       onFilter: (value, record) => record.name.indexOf(value) === 0,
@@ -216,24 +217,24 @@ function ExpenseList() {
       // responsive: ["sm"],
       sorter: (a, b) => a.date - b.date,
     },
-    {
-      title: "Status",
-      className: "row5",
-      key: "status",
-      dataIndex: "status",
-      // responsive: ["md"],
-      sorter: (a, b) => a.status - b.status,
-      render: (_, { status }) =>
-        status !== "" && (
-          <Tag
-            className="statusTag"
-            color={status === "Paid" ? "green" : "volcano"}
-            key={status}
-          >
-            {status}
-          </Tag>
-        ),
-    },
+    // {
+    //   title: "Status",
+    //   className: "row5",
+    //   key: "status",
+    //   dataIndex: "status",
+    //   // responsive: ["md"],
+    //   sorter: (a, b) => a.status - b.status,
+    //   render: (_, { status }) =>
+    //     status !== "" && (
+    //       <Tag
+    //         className="statusTag"
+    //         color={status === "Paid" ? "green" : "volcano"}
+    //         key={status}
+    //       >
+    //         {status}
+    //       </Tag>
+    //     ),
+    // },
     {
       title: "Quantity",
       className: "row6",
@@ -277,10 +278,9 @@ function ExpenseList() {
       title: "Action",
       className: "row10",
       key: "action",
-      align:'center',
-      fixed: 'right',
-     
-     
+      align: "center",
+      fixed: "right",
+
       // responsive: ["sm"],
       sorter: (a, b) => a.action - b.action,
       render: (_, record) => {
@@ -439,7 +439,7 @@ function ExpenseList() {
         acc += expense.amount * expense.quantity;
         return acc;
       }, 0);
-      console.log({totalAmount});
+      console.log({ totalAmount });
       setTotal(totalAmount);
       const modifiedFilterExpense = [...result];
       //   ...result,
@@ -509,7 +509,7 @@ function ExpenseList() {
   };
 
   return (
-    <Layout >
+    <Layout>
       <Content>
         <Row
           className="row"
@@ -589,7 +589,7 @@ function ExpenseList() {
               className="addExpense"
               type="primary"
               onClick={handleAddNewExpense}
-              style={{ width: "95%",borderRadius:'5px' }}
+              style={{ width: "95%", borderRadius: "5px" }}
             >
               + Add New Expenses
             </Button>
@@ -617,12 +617,20 @@ function ExpenseList() {
         title="Expense Register"
         visible={isModalVisible}
         footer={null}
-        closeIcon={<div onClick={()=>{setIsModalVisible(false)}}>X</div>}
-        
+        closeIcon={
+          <div
+            onClick={() => {
+              setIsModalVisible(false);
+            }}
+          >
+            X
+          </div>
+        }
+
         // onCancel={handleCancel}
-     
       >
         <Editexpense
+          className="Edit"
           record={editedRecord}
           setIsModalVisible={setIsModalVisible}
           reloadData={getData}

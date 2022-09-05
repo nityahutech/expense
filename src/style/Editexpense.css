@@ -49,10 +49,10 @@
     font-weight: 700;
     font-size: 13px;
 }
-.ant-modal-body.Edit{
+.ant-modal-body{
     margin-left: 38px;
 }
-.ant-modal-body.Subtotal{
+.ant-form-vertical .ant-form-item-row.Subtotal{
     position: relative;
     top: 3px;
 }

@@ -217,24 +217,24 @@ function ExpenseList() {
       // responsive: ["sm"],
       sorter: (a, b) => a.date - b.date,
     },
-    {
-      title: "Status",
-      className: "row5",
-      key: "status",
-      dataIndex: "status",
-      // responsive: ["md"],
-      sorter: (a, b) => a.status - b.status,
-      render: (_, { status }) =>
-        status !== "" && (
-          <Tag
-            className="statusTag"
-            color={status === "Paid" ? "green" : "volcano"}
-            key={status}
-          >
-            {status}
-          </Tag>
-        ),
-    },
+    // {
+    //   title: "Status",
+    //   className: "row5",
+    //   key: "status",
+    //   dataIndex: "status",
+    //   // responsive: ["md"],
+    //   sorter: (a, b) => a.status - b.status,
+    //   render: (_, { status }) =>
+    //     status !== "" && (
+    //       <Tag
+    //         className="statusTag"
+    //         color={status === "Paid" ? "green" : "volcano"}
+    //         key={status}
+    //       >
+    //         {status}
+    //       </Tag>
+    //     ),
+    // },
     {
       title: "Quantity",
       className: "row6",

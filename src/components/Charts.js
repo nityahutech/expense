@@ -16,7 +16,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { Pie } from "react-chartjs-2";
-import { totalAmount, avgAmountPerMonth } from "../contexts/DashboardContext";
+import { totalAmount, avgAmountPerMonth, topSixExpenses } from "../contexts/DashboardContext";
 // import faker from 'faker';
 ChartJS.register(
   CategoryScale,
@@ -29,9 +29,6 @@ ChartJS.register(
 );
 
 const { Option } = Select;
-const handleChange = (value) => {
-  console.log(`selected ${value}`);
-};
 
 const Charts = () => {
   const handleExpenselist = () => {
@@ -41,6 +38,36 @@ const Charts = () => {
 
   const [total, setTotal] = useState(0);
   const [avg, setAvg] = useState(0);
+  let col = 0;
+  const [pieData, setPieData] = useState([[],[]]);
+
+  function accumulateExpense(expense) {
+    let piedata= [...pieData];
+    if(pieData[0].includes(expense.catname)){
+      let index = pieData[0].indexOf(expense.catname);
+      piedata[1][index] += expense.subtotal;
+    }
+    else {
+      if (col == 6) return;
+      console.log(col);
+      piedata[0][col] = expense.catname;
+      console.log(piedata[0][col]);
+      piedata[1][col] = expense.subtotal;
+      console.log(piedata[1][col]);
+      setPieData(piedata);
+      col++;
+    }
+  }
+
+  const handleChange = async (value) => {
+      setPieData([[],[]]);
+      col = 0;
+      console.log(col,":",pieData);
+    await topSixExpenses(value, '2022').then((exp) => {
+      console.log(exp);
+      exp.forEach(accumulateExpense);
+    });
+  };
 
   const values = async () => {
     await totalAmount().then((a) => {
@@ -50,10 +77,23 @@ const Charts = () => {
       console.log(a);
       setAvg(a);
     });
+    await topSixExpenses('09', '2022').then((exp) => {
+      console.log(exp);
+      setPieData([[],[]]);
+      exp.forEach(accumulateExpense);
+      col = 0;
+    });
+    console.log(pieData);
   };
 
   useEffect(() => {
+    setPieData([[],[]]);
+    col = 0;
+    console.log(col,":",pieData);
     values();
+    setPieData([[],[]]);
+    col = 0;
+    console.log(col,":",pieData);
   }, []);
 
   return (
@@ -204,11 +244,11 @@ const Charts = () => {
           <div className="colpie">
             <Pie
               data={{
-                labels: ["Water", "Electricity", "Newspaper", "Food", "Travel", "Others"],
+                labels:  pieData[0],
                 datasets: [
                   {
                     label: "# of Votes",
-                    data: [12, 19, 3, 5, 2, 3],
+                    data:  pieData[1],
                     backgroundColor: [
                       "rgba(255, 99, 132, 0.2)",
                       "rgba(54, 162, 235, 0.2)",
@@ -252,25 +292,25 @@ const Charts = () => {
               </Select>
               <Select
                 id="short"
-                defaultValue="Month"
+                defaultValue="September"
                 style={{
                   width: 90,
                  marginLeft: "5px",
                 }}
                 onChange={handleChange}
               >
-                <Option value="2022">January</Option>
-                <Option value="2023">Faburary</Option>
-                <Option value="2022">March</Option>
-                <Option value="2023">April</Option>
-                <Option value="2022">May</Option>
-                <Option value="2023">June</Option>
-                <Option value="2022">July</Option>
-                <Option value="2023">August</Option>
-                <Option value="2022">September</Option>
-                <Option value="2023">October</Option>
-                <Option value="2022">Novemder</Option>
-                <Option value="2023">December</Option>
+                <Option value="01">January</Option>
+                <Option value="02">Faburary</Option>
+                <Option value="03">March</Option>
+                <Option value="04">April</Option>
+                <Option value="05">May</Option>
+                <Option value="06">June</Option>
+                <Option value="07">July</Option>
+                <Option value="08">August</Option>
+                <Option value="09">September</Option>
+                <Option value="10">October</Option>
+                <Option value="11">Novemder</Option>
+                <Option value="12">December</Option>
               </Select>
             </div>
           </div>

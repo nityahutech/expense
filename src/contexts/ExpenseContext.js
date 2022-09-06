@@ -36,6 +36,13 @@ class ExpenseContext {
         return getDocs(q);
     };
 
+
+    getAllByTotal = () => {
+        const q = query(expenseCollectionRef, orderBy("subtotal", "desc"));
+        // console.log(q);
+        return getDocs(q);
+    };
+
     getExpense = (id) => { 
         const expenseDoc = doc(db, "expenses", id);
         return getDoc(expenseDoc);

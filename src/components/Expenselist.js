@@ -82,7 +82,7 @@ function ExpenseList() {
       var longDateStr = moment(doc.data()["date"], "D/M/Y").format("MM-DDY");
       return {
         ...doc.data(),
-        date: longDateStr,
+        date: doc.data()["date"],
         dt: new Date(longDateStr),
         id: doc.id,
       };
@@ -190,6 +190,7 @@ function ExpenseList() {
       className: "row3",
       dataIndex: "name",
       key: "name",
+      width: 150,
       // responsive: ["sm"],
 
       sorter: (a, b) => {
@@ -202,6 +203,7 @@ function ExpenseList() {
       className: "row3",
       dataIndex: "paidname",
       key: "paidto",
+      width: 150,
       // responsive: ["sm"],
       // sorter: (a, b) => a.name - b.name,
       sorter: (a, b) => {

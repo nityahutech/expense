@@ -173,7 +173,7 @@ const Charts = () => {
               }}
               options={{}}
             />
-            <div className="vbutton">
+            <div className="vbutton1">
               <button
                 style={{
                   background: "#05445e",
@@ -188,17 +188,16 @@ const Charts = () => {
                 View
               </button>
               <Select
-                defaultValue="Month"
+                defaultValue="2022"
+                size="small"
                 style={{
                   width: 120,
-                  margin: "10px",
+                  marginLeft: 10,
                 }}
                 onChange={handleChange}
               >
-                <Option value="year">Year</Option>
-                <Option value="Month">Month</Option>
-                <Option value="Week">Week</Option>
-                <Option value="day">Day</Option>
+                <Option value="2022">2022</Option>
+                <Option value="2023">2023</Option>
               </Select>
             </div>
           </div>
@@ -231,33 +230,47 @@ const Charts = () => {
                 ],
               }}
             />
-            <div className="vbutton">
+            <div className="vbutton2">
               <button
-                style={{
-                  background: "#05445e",
-                  color: "#fff",
-                  borderRadius: "5px",
-                  width: "50px",
-                  marginLeft: "30%",
-                  cursor: "pointer",
-                }}
                 onClick={handleExpenselist}
               >
                 View
               </button>
               <Select
                 id="short"
-                defaultValue="Month"
+                defaultValue="2022"
                 style={{
                   width: 90,
-                 margin: "10px",
+                 marginLeft: "5px",
+                 marginTop: "10px",
+                 marginBottom: "10px",
                 }}
                 onChange={handleChange}
               >
-                <Option value="year">Year</Option>
-                <Option value="Month">Month</Option>
-                <Option value="Week">Week</Option>
-                <Option value="day">Day</Option>
+                <Option value="2022">2022</Option>
+                <Option value="2023">2023</Option>
+              </Select>
+              <Select
+                id="short"
+                defaultValue="Month"
+                style={{
+                  width: 90,
+                 marginLeft: "5px",
+                }}
+                onChange={handleChange}
+              >
+                <Option value="2022">January</Option>
+                <Option value="2023">Faburary</Option>
+                <Option value="2022">March</Option>
+                <Option value="2023">April</Option>
+                <Option value="2022">May</Option>
+                <Option value="2023">June</Option>
+                <Option value="2022">July</Option>
+                <Option value="2023">August</Option>
+                <Option value="2022">September</Option>
+                <Option value="2023">October</Option>
+                <Option value="2022">Novemder</Option>
+                <Option value="2023">December</Option>
               </Select>
             </div>
           </div>

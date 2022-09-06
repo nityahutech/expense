@@ -434,7 +434,10 @@ function ExpenseList() {
       let result = allExpenses.filter(
         (ex) =>
           ex.catname.toLowerCase().includes(search.toLowerCase()) ||
-          ex.name.toLowerCase().includes(search.toLowerCase())
+          ex.name.toLowerCase().includes(search.toLowerCase()) ||
+          ex.quantity == Number(search) ||
+          ex.amount == Number(search) ||
+          ex.sn == Number(search)
       );
 
       const totalAmount = result.reduce((acc, expense) => {

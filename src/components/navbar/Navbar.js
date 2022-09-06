@@ -52,10 +52,10 @@ const Navbar = () => {
         <div className='navbar' style={{ background: 'white' }} >
             <div className='wrapper' >
                 <div className='image' >
-                    <img
+                    {/* <img
                         src="/logo/bell.png" alt='imh'
                         className="bell"
-                    />
+                    /> */}
                     <div className="item">
                         <img
                             src="/logo/logo.png" alt='imagh'

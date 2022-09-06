@@ -19,9 +19,10 @@ const DashBoard = () => {
   return accessToken
   ?
    (
+    
     <div className="home">
       <div className="sidecontainer">
-        <Sidebar accessToken={accessToken} />
+        <Sidebar activeMenu={["1"]} selectedkey={['1']} accessToken={accessToken} />
       </div>
 
       <div className="homeContainer">

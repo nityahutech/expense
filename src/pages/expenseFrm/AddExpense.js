@@ -24,7 +24,8 @@ const ExpenseFrm = () => {
 
         <div className="sidecontainer">
 
-            <Sidebar accessToken={accessToken}/>
+            <Sidebar activeSubMenu={["sub1"]}
+          activeMenu={["2"]}  accessToken={accessToken}/>
         </div>
 
         <div className="homeContainer">

@@ -1,16 +1,18 @@
-import { Layout, Menu } from 'antd';
 import React from 'react';
+import { Layout, Menu } from 'antd';
+
 import './newSlidebar.css';
 import { useNavigate, NavLink } from "react-router-dom";
 import {
-    
+
     SettingOutlined,
-    ProfileOutlined 
- 
-  } from "@ant-design/icons";
+    ProfileOutlined
+
+} from "@ant-design/icons";
 
 
 const { Sider } = Layout;
+
 
 function getItem(label, key, icon, children = null, type = null) {
     return {
@@ -22,39 +24,10 @@ function getItem(label, key, icon, children = null, type = null) {
     };
 }
 
-// const items = [
-
-//     getItem('Dashboard', '1',
-//         <img
-//             src="/logo/Dashboard.png" alt='hello'
-//             className="Dash"
-
-//         />
-//     ),
-//     getItem('Expense', 'sub1',
-//         <img
-//             src="/logo/Expense.png" alt='hello'
-//             className="Dash"
-//         />
-//         , [
-
-//             getItem('Add Expense', '5',
-//                 <img
-//                     src="/logo/dot.png" alt='hello'
-//                     className="dot"
-//                 />
-//             ),
-//             getItem('Expense List', '6',
-//                 <img
-//                     src="/logo/dot.png" alt='hello'
-//                     className="dot"
-//                 />),
-//         ]),
-// ];
 
 
-const NewSidebar = () => {
-
+const NewSidebar = (props) => {
+console.log(props.openkey);
     const history = useNavigate()
     // const onClick = (e) => {
     //     let pathkey = e.key
@@ -76,61 +49,46 @@ const NewSidebar = () => {
     // };
 
     return (
-    
-    <Layout className='sidelayout'>
-        <Sider
-            breakpoint="lg"
-            style={{ backgroundColor: '#05445E'  }}
-            collapsedWidth="0"
-            onBreakpoint={(broken) => {
-                console.log(broken);
-            }}
-            onCollapse={(collapsed, type) => {
-                console.log(collapsed, type);
-            }}
 
-        >
-            {/* <div className='sidebar'> */}
-                
+        <Layout className='sidelayout'>
+            <Sider
+                breakpoint="lg"
+                style={{ backgroundColor: '#05445E' }}
+                collapsedWidth="0"
+                onBreakpoint={(broken) => {
+                    console.log(broken);
+                }}
+                onCollapse={(collapsed, type) => {
+                    console.log(collapsed, type);
+                }}
 
+            >
 
-                {/* <Menu
-                    onClick={onClick}
-                    style={{
-                        width: ' width: 10px',
-
-                    }}
-                    defaultSelectedKeys={['1']}
-                    defaultOpenKeys={['sub1']}
-                    mode="inline"
-                    items={items}
-                /> */}
-
-                <Menu 
-                 defaultOpenKeys={['sub1']}
-                onSelect={function({ item, key, keyPath, selectedKeys, domEvent }){console.log(item, key, keyPath, selectedKeys, domEvent);}}
-                // selectedKeys={['sub',"3"]}
+                <Menu
+                defaultOpenKeys={props.activeSubMenu || []}
+                selectedKeys={props.activeMenu}
+                    // openKeys={props.openkey}
+                    // selectedKeys={props.selectedkey}
+                    onSelect={function ({ item, key, keyPath, selectedKeys, domEvent })  { console.log(item, key, keyPath, selectedKeys, domEvent); }}
                     mode='inline' style={{
-
-                        padding: '5px', height: '100vh', 
-
+                        padding: '0px', height: '100vh',
                     }}>
                     <div className='sidebarTittle'>
 
                         <img style={{
 
                             background: '#05445E',
-                            height: '30px', 
+                            height: '30px',
 
                         }} src="/logo/logo_1.png" alt='hello' />
 
                     </div>
-                    <Menu.Item   icon={<img src="/logo/Dashboard.png" alt="profile" className="Dash" />} key="1">
+                    <Menu.Item icon={<img src="/logo/Dashboard.png" alt="profile" className="Dash" />} key="1">
                         Dashboard
                         <NavLink to="/DashBoard" />
                     </Menu.Item>
 
-                    <Menu.SubMenu icon={<img src="/logo/Expense.png" alt="profile" className="Dash" />} key="sub1"  title="Expense" mode='inline'>
+                    <Menu.SubMenu icon={<img src="/logo/Expense.png" alt="profile" className="Dash" />} key="sub1" title="Expense" mode='inline'>
 
                         <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="2">
                             Add Expense
@@ -143,12 +101,12 @@ const NewSidebar = () => {
 
                     </Menu.SubMenu>
 
-                    <Menu.Item icon={<ProfileOutlined style={{color: "#FFFFFF"}}/>} key="4">
+                    <Menu.Item icon={<ProfileOutlined style={{ color: "#FFFFFF" }} />} key="4">
                         Profile
                         <NavLink to="/Profile" />
                     </Menu.Item>
-                    <Menu.Item icon={<SettingOutlined  style={{color: "#FFFFFF"}} />} key="5">
-                       Settings
+                    <Menu.Item icon={<SettingOutlined style={{ color: "#FFFFFF" }} />} key="5">
+                        Settings
                         <NavLink to="/Setting" />
                     </Menu.Item>
 
@@ -156,9 +114,9 @@ const NewSidebar = () => {
 
                 </Menu>
 
-            {/* </div> */}
-        </Sider>
-    </Layout>)
+             
+            </Sider>
+        </Layout>)
 }
 
 export default NewSidebar;

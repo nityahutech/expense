@@ -75,17 +75,11 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
     margin-left: 10px;
 }
 
-/* .ant-menu {
-    background-color: #05445E;
-}
 
-.ant-menu-sub.ant-menu-inline {
-    background-color: #05445E;
-}
 
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-    background-color: #05445E;
-} */
+    background-color: #3f8bae;
+}
 
 .collapse {
 

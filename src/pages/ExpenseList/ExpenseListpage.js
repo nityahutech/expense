@@ -21,7 +21,8 @@ const ExpenseListpage = () => {
   (
     <div className="home">
       <div className="sidecontainer">
-        <Sidebar accessToken={accessToken}/>
+        <Sidebar activeSubMenu={["sub1"]}
+          activeMenu={["3"]} accessToken={accessToken}/>
       </div>
 
       <div className="homeContainer">

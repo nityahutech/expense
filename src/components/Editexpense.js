@@ -40,7 +40,7 @@ const showNotification = (type, msg, desc) => {
 //     label: "Unpaid",
 //   },
 // ];
-const dateFormat = "MM-DD-YYYY";
+const dateFormat = "DD-MM-YYYY";
 const { TextArea } = Input;
 const Editexpense = (props) => {
   // const [showAlert, setShowAlert] = useState(false);

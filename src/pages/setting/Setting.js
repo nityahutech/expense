@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
+import Settingpage from "../../components/Settingpage";
 
 const DashBoard = () => {
   return (
@@ -15,7 +16,7 @@ const DashBoard = () => {
         </div>
 
         <div className="tables">
-        
+          <Settingpage />
         </div>
       </div>
     </div>

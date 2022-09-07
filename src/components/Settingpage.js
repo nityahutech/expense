@@ -55,22 +55,22 @@ const Settingpage = () => {
               <div className="emaildiv">
                 Current Password<label style={{ color: "red" }}> </label>
               </div>
-              <div className="pwdInputdiv">
-                <Form.Item
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Enter your password!",
-                    },
-                  ]}
-                >
-                  <Input.Password
-                  // onChange={(e) => setLoginPassword(e.target.value)}
-                  />
-                </Form.Item>
-              </div>
+              {/* <div className="pwdInputdiv"> */}
+              <Form.Item
+                name="password"
+                rules={[
+                  {
+                    required: true,
+                    message: "Enter your password!",
+                  },
+                ]}
+              >
+                <Input.Password
+                // onChange={(e) => setLoginPassword(e.target.value)}
+                />
+              </Form.Item>
             </div>
+            {/* </div> */}
             <div
               className="foremail"
               style={{
@@ -125,7 +125,7 @@ const Settingpage = () => {
                 </Form.Item>
               </div>
             </div>
-            <div
+            {/* <div
               className="req-div"
               style={{
                 display: "flex",
@@ -146,7 +146,7 @@ const Settingpage = () => {
               <div>
                 <Button type="primary">Save Change</Button>
               </div>
-            </div>
+            </div> */}
           </Card>
         </Tabs.TabPane>
         <Tabs.TabPane tab="Update Email Address" key="4">

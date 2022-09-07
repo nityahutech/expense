@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Checkbox, Form, Input, Alert, Row, Col } from "antd";
-import { signup, login } from "../contexts/AuthContext";
+import { login, resetPassword } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
@@ -23,7 +23,7 @@ function LoginPage() {
       setLoading(true);
 
       let res = await login(loginEmail, loginPassword);
-      // console.log(res.user.accessToken);
+      console.log(res.user);
       sessionStorage.setItem("accessToken", res.user.accessToken);
       navigate("DashBoard", { replace: true });
     } catch {
@@ -36,6 +36,21 @@ function LoginPage() {
     setLoading(false);
   }
 
+  async function handleReset(e) {
+    e.preventDefault();
+    console.log(loginEmail, loginPassword);
+    win.clear();
+    try {
+      setError("Reset email sent");
+      setLoading(true);
+      await resetPassword(loginEmail);
+    } catch {
+      setError("Failed to send reset email");
+    }
+
+    setLoading(false);
+  }
+  
   return (
     <>
       <div className="main-div">
@@ -116,7 +131,7 @@ function LoginPage() {
                   >
                     <Checkbox className="chkbox-color">Remember me</Checkbox>
                   </Form.Item>
-                  <div className="forgotpwd" style={{marginLeft: '3.5rem', marginTop:'5px'}}>Forgot Password?</div>
+                  <div className="forgotpwd" onClick={handleReset} style={{marginLeft: '3.5rem', marginTop:'5px'}}>Forgot Password</div>
                 </div>
 
                 <Form.Item

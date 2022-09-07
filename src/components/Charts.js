@@ -59,25 +59,25 @@ const Charts = () => {
     }
   }
 
-  const handleChange = async (value) => {
+  const handleChange = (value) => {
       setPieData([[],[]]);
       col = 0;
       console.log(col,":",pieData);
-    await topSixExpenses(value, '2022').then((exp) => {
+    topSixExpenses(value, '2022').then((exp) => {
       console.log(exp);
       exp.forEach(accumulateExpense);
     });
   };
 
-  const values = async () => {
-    await totalAmount().then((a) => {
+  const values = () => {
+    totalAmount().then((a) => {
       setTotal(a);
     });
-    await avgAmountPerMonth().then((a) => {
+    avgAmountPerMonth().then((a) => {
       console.log(a);
       setAvg(a);
     });
-    await topSixExpenses('09', '2022').then((exp) => {
+    topSixExpenses('09', '2022').then((exp) => {
       console.log(exp);
       setPieData([[],[]]);
       exp.forEach(accumulateExpense);

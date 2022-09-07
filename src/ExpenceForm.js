@@ -443,9 +443,9 @@ const ExpenceForm = () => {
 
           {/* -----------------------Buttons--------------- */}
 
-          <Row gutter={[16, 16]}>
+          <Row gutter={[24, 16]}>
             <Col classsname='gutter-row' span={9}></Col>
-            <Col classsname='gutter-row' span={8}>
+            <Col classsname='gutter-row' >
               <div className='submitButton'>
                 <Space>
                   <Form.Item className='submit'>
@@ -470,6 +470,7 @@ const ExpenceForm = () => {
                       height: '30px',
                       color: 'white',
                       cursor: 'pointer',
+                      marginLeft: '17px'
 
                     }}
                       type="primary">Submit</button>
@@ -477,7 +478,7 @@ const ExpenceForm = () => {
                 </Space>
               </div>
             </Col>
-            <Col classsname='gutter-row' span={10}></Col>
+            {/* <Col classsname='gutter-row' span={3}></Col> */}
           </Row>
 
         </Form>

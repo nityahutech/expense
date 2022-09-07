@@ -286,6 +286,27 @@ const Editexpense = (props) => {
         <Col xs={22} sm={22} md={12}>
           <Form.Item
             style={{ marginBottom: "10px" }}
+            name="date"
+            label="Date&nbsp;"
+            rules={[
+              {
+                required: true,
+                message: "Please Choose a Date",
+              },
+            ]}
+          >
+            <DatePicker
+              format={dateFormat}
+              style={{ width: "100%" }}
+              onChange={(e) => {
+                setdate(e.format(dateFormat));
+              }}
+            />
+          </Form.Item>
+        </Col>
+        {/* <Col xs={22} sm={22} md={12}>
+          <Form.Item
+            style={{ marginBottom: "10px" }}
             label="Status&nbsp;"
             name="status"
             className="Required"
@@ -309,34 +330,13 @@ const Editexpense = (props) => {
               <Option value="Unpaid">Unpaid</Option>
             </Select>
           </Form.Item>
-        </Col>
+        </Col> */}
       </Row>
 
       {/* ----------------------------------Datepicker------- */}
 
       {/* --------------------------------------Amount------- */}
       <Row>
-        <Col xs={22} sm={22} md={12}>
-          <Form.Item
-            style={{ marginBottom: "10px" }}
-            name="date"
-            label="Date&nbsp;"
-            rules={[
-              {
-                required: true,
-                message: "Please Choose a Date",
-              },
-            ]}
-          >
-            <DatePicker
-              format={dateFormat}
-              style={{ width: "100%" }}
-              onChange={(e) => {
-                setdate(e.format(dateFormat));
-              }}
-            />
-          </Form.Item>
-        </Col>
         <Col xs={22} sm={22} md={12}>
           <Form.Item
             style={{ marginBottom: "10px" }}
@@ -367,12 +367,6 @@ const Editexpense = (props) => {
             />
           </Form.Item>
         </Col>
-      </Row>
-
-      {/* --------------------------------------Quantity------- */}
-
-      {/* --------------------------------------Sub-subtotal------- */}
-      <Row>
         <Col xs={22} sm={22} md={12}>
           <Form.Item
             style={{ marginBottom: "10px" }}
@@ -403,6 +397,12 @@ const Editexpense = (props) => {
             />
           </Form.Item>
         </Col>
+      </Row>
+
+      {/* --------------------------------------Quantity------- */}
+
+      {/* --------------------------------------Sub-subtotal------- */}
+      <Row>
         <Col xs={22} sm={22} md={12}>
           <Form.Item
             label="Subtotal"

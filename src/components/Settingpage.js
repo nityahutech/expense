@@ -7,29 +7,57 @@ import { Tabs } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 // import { useNavigate } from "react-router-dom";
 
-const onChange = (e) => {
-  console.log(`checked = ${e.target.checked}`);
-};
-const openNotificationWithIcon = (type) => {
+const showNotification = (type, msg, desc) => {
   notification[type]({
-    message: "Successfully",
-    description: "Password changed successfully",
-  });
-};
-const openUpdateEmail = (type) => {
-  notification[type]({
-    message: "Successfully",
-    description: "Email Address changed successfully",
+    message: msg,
+    description: desc,
   });
 };
 
 const Settingpage = () => {
   const [tabPosition, setTabPosition] = useState("left");
   const [email, setEmail] = useState("");
-  const [error, setError] = useState(null);
-  const [deleteCheck, setDelete] = useState(null);
-  const { updateMyPassword, deletePerson, updateMyEmail} = useAuth();
+  const [password, setPassword] = useState("");
+  const [newPassword, setNew] = useState("");
+  // const [deleteCheck, setDelete] = useState(null);
+  const { currentUser, updateMyPassword, deletePerson, updateMyEmail, login} = useAuth();
   // const navigate = useNavigate();
+
+  
+const handleEmailSubmit = async() => {
+  console.log(email);
+  try{
+    await updateMyEmail(email);
+    showNotification("success", "Success", "Record updated successfuly");
+  } catch {
+    showNotification("error", "Failed", "Record update failed");
+  }
+};
+
+const checkPassword = async () => {
+  try {
+    let check = await login(currentUser.email, password);
+    console.log(check);
+    console.log("Correct Password!");
+    return true;
+  } catch {
+    showNotification("error", "Failed", "Incorrect password");
+    return false;
+  }
+}
+
+const handlePasswordSubmit = async() => {
+  let check = await checkPassword();
+  if (check){
+    try{
+      await updateMyPassword(newPassword);
+      showNotification("success", "Success", "Record updated successfuly");
+    } catch {
+      showNotification("error", "Failed", "Record update failed");
+    }
+  }
+};
+
   const [form] = Form.useForm();
 
   //   function isValidEmail(email) {
@@ -74,7 +102,7 @@ const Settingpage = () => {
             <Form
               form={form}
               onFinish={() => {
-                openNotificationWithIcon("success");
+                // openNotificationWithIcon("success");
                 form.resetFields();
               }}
               name="basic"
@@ -110,6 +138,7 @@ const Settingpage = () => {
                       },
                     ]}
                     hasFeedback
+                    onChange={(e) => setPassword(e.target.value)}
                   >
                     <Input.Password className="new" />
                   </Form.Item>
@@ -137,6 +166,7 @@ const Settingpage = () => {
                       },
                     ]}
                     hasFeedback
+                    onChange={(e) => setNew(e.target.value)}
                   >
                     <Input.Password className="new" />
                   </Form.Item>
@@ -183,7 +213,7 @@ const Settingpage = () => {
                 className="save"
                 htmlType="submit"
                 type="primary"
-                // onClick={() => openNotificationWithIcon("success")}
+                onClick={handlePasswordSubmit}
               >
                 Save Change
               </Button>
@@ -220,7 +250,7 @@ const Settingpage = () => {
               </div>
               <div className="email">
                 <Form
-                  onFinish={() => openNotificationWithIcon("success")}
+                  // onFinish={() => openNotificationWithIcon("success")}
                   name="basic"
                   labelCol={{
                     span: 8,
@@ -250,7 +280,7 @@ const Settingpage = () => {
                       name="message"
                       //   value={message}
                       //   onChange={handleChange}
-                      // onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                     {/* {error && <h2 style={{ color: "red" }}>{error}</h2>} */}
                   </Form.Item>
@@ -259,7 +289,7 @@ const Settingpage = () => {
                     <Button
                       htmlType="submit"
                       type="primary"
-                      //   onClick={() => openUpdateEmail("success")}
+                      onClick={handleEmailSubmit}
                     >
                       Save Change
                     </Button>

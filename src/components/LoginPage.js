@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Checkbox, Form, Input, Alert, Row, Col } from "antd";
-import { login, resetPassword } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
@@ -11,6 +11,7 @@ function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login, resetPassword } = useAuth()
 
   const win = window.sessionStorage;
 

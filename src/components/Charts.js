@@ -39,33 +39,62 @@ const Charts = () => {
   const [total, setTotal] = useState(0);
   const [avg, setAvg] = useState(0);
   let col = 0;
+  let initalPieData = [[], []]
   const [pieData, setPieData] = useState([[],[]]);
 
-  function accumulateExpense(expense) {
-    let piedata= [...pieData];
-    if(pieData[0].includes(expense.catname)){
-      let index = pieData[0].indexOf(expense.catname);
-      piedata[1][index] += expense.subtotal;
-    }
-    else {
-      if (col == 6) return;
-      console.log(col);
-      piedata[0][col] = expense.catname;
-      console.log(piedata[0][col]);
-      piedata[1][col] = expense.subtotal;
-      console.log(piedata[1][col]);
-      setPieData(piedata);
+  // function accumulateExpense(expense) {
+  //   let piedata= [...pieData];
+  //   console.log(piedata[0])
+  //   console.log(expense.catname)
+  //   if(pieData[0].includes(expense.catname)){
+  //     let index = pieData[0].indexOf(expense.catname);
+  //     piedata[1][index] += expense.subtotal;
+  //   }
+  //   else {
+  //     if (col == 5) return;
+  //     console.log(col);
+  //     piedata[0][col] = expense.catname;
+  //     console.log(piedata[0][col]);
+  //     piedata[1][col] = expense.subtotal;
+  //     console.log(piedata[1][col]);
+  //     setPieData(piedata);
+  //     col++;
+  //   }
+  // }
+
+  function accumulateExpense(expense, i) {
+    if (i === 0) initalPieData = [[], []];
+    console.log("***************");
+    console.log(JSON.stringify(expense));
+    console.log(JSON.stringify(initalPieData));
+    if (initalPieData[0].includes(expense.catname)) {
+      let index = initalPieData[0].indexOf(expense.catname);
+      initalPieData[1][index] += expense.subtotal;
+    } else {
+      if (col === 6) return;
+      initalPieData[0][col] = expense.catname;
+      initalPieData[1][col] = expense.subtotal;
+      setPieData(initalPieData);
       col++;
     }
   }
 
+
+  // useEffect(() => {
+  //   console.log
+  //   topSixExpenses(value, '2022').then((exp) => {
+  //     console.log(exp);
+  //     exp.forEach(accumulateExpense);
+  //   });
+
+  // }, [pieData])
   const handleChange = (value) => {
       setPieData([[],[]]);
       col = 0;
       console.log(col,":",pieData);
     topSixExpenses(value, '2022').then((exp) => {
       console.log(exp);
-      exp.forEach(accumulateExpense);
+      exp.forEach(accumulateExpense, col);
     });
   };
 
@@ -73,27 +102,22 @@ const Charts = () => {
     totalAmount().then((a) => {
       setTotal(a);
     });
-    avgAmountPerMonth().then((a) => {
-      console.log(a);
-      setAvg(a);
+    avgAmountPerMonth().then((b) => {
+      console.log(b);
+      setAvg(b);
     });
     topSixExpenses('09', '2022').then((exp) => {
       console.log(exp);
       setPieData([[],[]]);
-      exp.forEach(accumulateExpense);
+      exp.forEach(accumulateExpense, col);
       col = 0;
     });
     console.log(pieData);
   };
 
   useEffect(() => {
-    setPieData([[],[]]);
-    col = 0;
     console.log(col,":",pieData);
     values();
-    setPieData([[],[]]);
-    col = 0;
-    console.log(col,":",pieData);
   }, []);
 
   return (

@@ -34,3 +34,23 @@ border-radius: 15px;
         font-size: 17px;
         font-weight: 500;
     }
+    .ant-input-affix-wrapper.current{
+        position: relative;
+    right: 114px;
+    width: 290px
+    }
+    .ant-input-affix-wrapper.new{
+        position: relative;
+    right: 0px;
+    width: 290px
+    }
+    .ant-input-affix-wrapper.confirm{
+        position: relative;
+    
+    width: 290px
+    }
+    .ant-btn-primary.save{
+        position: absolute;
+    left: 207px;
+    margin-top: 10px;
+    }

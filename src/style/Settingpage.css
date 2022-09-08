@@ -1,56 +1,27 @@
-.anticon svg.email{
-    display: none;
-}
-h1, h2, h3, h4, h5, h6.Label{
-    font-size: 14px;
-    font-family: sans-serif;
-    margin-left: 2px;
-    margin-top: 8px
-}
-.ant-card.Password {
-border-radius: 15px;
-    margin: 26px;}
 
-    .ant-card.Delete{
-        border-radius: 15px;
-    margin: 26px;
+    .settingsTab .ant-form-item-feedback-icon-error {
+        display: none;
     }
-    .ant-input#message{
-        width: 320px;
-    margin-right: 18px
-    }
-    .ant-card.Email{
-        border-radius: 15px;
-        margin: 26px;
-    }
-    /* .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    .settingsTab .ant-tabs-tab.ant-tabs-tab-active{
         font-weight: bold;
-    font-size: larger;
-    font-family: sans-serif;
-    color: black;
+    }
+    .settingsTab .ant-form-item-explain-error {
+        font-size: 10px !important;
+    }
+    .settingsTab .ant-tabs-nav-list {
+        padding: 24px 0px 24px 24px;
+    }
+    .tabPanel {
+        padding: 24px 24px 24px 0px;
+    }
+    .settingsCard {
+        
+    border-radius: 10px;
+    }
+    /* .cupsw{
+        width: 108px;
+    }
+    .copsw{
+        width: 120px;
     } */
-
-    .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
-        font-size: 17px;
-        font-weight: 500;
-    }
-    .ant-input-affix-wrapper.current{
-        position: relative;
-    right: 114px;
-    width: 290px
-    }
-    .ant-input-affix-wrapper.new{
-        position: relative;
-    right: 0px;
-    width: 290px
-    }
-    .ant-input-affix-wrapper.confirm{
-        position: relative;
     
-    width: 290px
-    }
-    .ant-btn-primary.save{
-        position: absolute;
-    left: 207px;
-    margin-top: 10px;
-    }

@@ -6,7 +6,7 @@ function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signup } = useAuth()
+  const { signup } = useAuth();
 
   const win = window.sessionStorage;
 
@@ -37,7 +37,9 @@ function SignupPage() {
     }
 
     setLoading(false);
+    form.resetFields();
   }
+  const [form] = Form.useForm();
   
   return (
     <>
@@ -52,6 +54,7 @@ function SignupPage() {
                 <img src={process.env.PUBLIC_URL + "ExepnseLogo.png"} alt="" />
               </div>
               <Form
+              form={form}
               onFinish={handleSubmit}
                 name="basic"
                 labelCol={{

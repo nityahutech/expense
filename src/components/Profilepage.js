@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import 'antd/dist/antd.css';
 import "../style/profile.css";
@@ -25,7 +24,7 @@ const Profile = () => {
     country: "India",
     phonenumber: "8447509792",
     state: "Haryana",
-    zipcode: "123401",
+    zipcode: "123401.",
   });
 
   const [fileList, setFileList] = useState([
@@ -160,7 +159,7 @@ const Profile = () => {
               </div>
 
               <div className="content-div">
-                <h2>Swayamprava Nanda</h2>
+              <h2 className="tropography" style={{ fontSize:'18px',fontWeight:'normal' }}>Swayamprava Nanda</h2>
                 <ul
                   style={{
                     listStyleType: "none",
@@ -193,20 +192,21 @@ const Profile = () => {
               style={{
                 width: '100%',
                 borderRadius: '10px'
+                
               }}
             >
               <div>
                 <div>
-                  <h3>About</h3>
+                <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900' }}>About</h2>
                   <p> {editname.employeename}</p>
                 </div>
                 <div>
-                  <h3>Contact</h3>
+                <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Contact</h2>
                   {/* {JSON.stringify(editname)} */}
                   <p>{editname.mailid},  <br /> {editname.phonenumber}</p>
                 </div>
                 <div>
-                  <h3>Address</h3>
+                <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Address</h2>
                   <p> {editname.address},<br />
                   {editname.city},
                   {editname.state},<br />

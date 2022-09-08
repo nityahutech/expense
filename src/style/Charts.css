@@ -173,4 +173,26 @@ body {
     }
 }
 
+@media only screen and (min-width: 100px) and (max-width: 300px) {
+    .colbar {
+        width: 100%;
+    }
+    .colpie {
+        width: 100%;
+    }
+    .rowcards {
+        display: block;
+        height: 36vh;
+    }
+    .col1 {
+        width: 100%;
+    }
+    .col2 {
+        width: 100%
+    }
+    .vbutton2{
+        display: flex;
+        justify-content: center;
+    }
+}
 

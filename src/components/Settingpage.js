@@ -1,158 +1,199 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../style/Settingpage.css";
 import "antd/dist/antd.css";
-import { Card, Col, Row, Form, Input, Checkbox } from "antd";
-import { EditOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Upload } from "antd";
+import { Card, Col, Row, Form, Input, notification } from "antd";
+import { Button } from "antd";
 import { Tabs } from "antd";
-import { Menu } from "antd";
-import Column from "antd/lib/table/Column";
-import { Avatar } from "antd";
-
-const { Meta } = Card;
+import { useAuth } from "../contexts/AuthContext";
+// import { useNavigate } from "react-router-dom";
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
 };
+const openNotificationWithIcon = (type) => {
+  notification[type]({
+    message: "Successfully",
+    description: "Password changed successfully",
+  });
+};
+const openUpdateEmail = (type) => {
+  notification[type]({
+    message: "Successfully",
+    description: "Email Address changed successfully",
+  });
+};
 
 const Settingpage = () => {
-  const [tabPosition] = useState("left");
-  const [message, setMessage] = useState("");
+  const [tabPosition, setTabPosition] = useState("left");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
-  function isValidEmail(email) {
-    return /\S+@\S+\.\S+/.test(email);
-  }
+  const [deleteCheck, setDelete] = useState(null);
+  const { updateMyPassword, deletePerson, updateMyEmail} = useAuth();
+  // const navigate = useNavigate();
+  const [form] = Form.useForm();
 
-  const handleChange = (event) => {
-    if (!isValidEmail(event.target.value)) {
-      setError("Email is invalid");
-    } else {
-      setError(null);
-    }
+  //   function isValidEmail(email) {
+  //     return /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9])+@[a-z]+\.[a-z]{2,3}/.test(email);
+  //   }
 
-    setMessage(event.target.value);
-  };
+  //   const handleChange = (event) => {
+  // if (!isValidEmail(event.target.value)) {
+  //   setError("Email is invalid");
+  // } else {
+  //   setError(null);
+  // }
+  // setMessage(event.target.value);
+  //   };
+
+  useEffect(() => {
+    setTabPosition(window.innerWidth <= 760 ? "top" : "left");
+  }, []);
+
+  window.addEventListener("resize", () => {
+    setTabPosition(window.innerWidth <= 760 ? "top" : "left");
+  });
+
   return (
     <>
       <Tabs tabPosition={tabPosition} defaultActiveKey="1">
-        <Tabs.TabPane className="Psw" tab="Update Password" key="3">
+        <Tabs.TabPane
+          className="Psw"
+          tab="Update Password"
+          key="3"
+          style={{ marinLeft: "2rem" }}
+        >
           <Card
             className="Password"
             title="Update Password"
             style={{
               width: 550,
               color: "black",
+              height: "310px",
             }}
           >
-            <div
-              className="foremail"
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
+            <Form
+              form={form}
+              onFinish={() => {
+                openNotificationWithIcon("success");
+                form.resetFields();
               }}
+              name="basic"
+              labelCol={{
+                span: 8,
+              }}
+              wrapperCol={{
+                span: 24,
+              }}
+              initialValues={{
+                remember: true,
+              }}
+              autoComplete="off"
             >
-              <div className="emaildiv">
-                Current Password<label style={{ color: "red" }}> </label>
-              </div>
-              {/* <div className="pwdInputdiv"> */}
-              <Form.Item
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Enter your password!",
-                  },
-                ]}
+              <Row gutter={[48, 4]}>
+                <Col xs={24} sm={12} md={8} lg={8}>
+                  <div>Current Password</div>
+                </Col>
+                <Col xs={24} sm={12} md={12} lg={12}>
+                  <Form.Item
+                    key="currentpassword"
+                    name="current password"
+                    className="currentpsw"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your current password!",
+                        // message: (
+                        //   <div style={{ margineLeft: "-1.5rem" }}>
+                        //     Please enter your current password!
+                        //   </div>
+                        // ),
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <Input.Password className="new" />
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <Row gutter={[48, 4]}>
+                <Col xs={24} sm={12} md={8} lg={8}>
+                  <div>New Password</div>
+                </Col>
+                <Col xs={24} sm={12} md={12} lg={12}>
+                  <Form.Item
+                    name="password1"
+                    key="password1"
+                    // style={{ position: "relative", left: "24px" }}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your password!",
+                        // message: (
+                        //   <div style={{ margineLeft: "-1.5rem" }}>
+                        //     Please enter your password!
+                        //   </div>
+                        // ),
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <Input.Password className="new" />
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <Row gutter={[48, 4]}>
+                <Col xs={24} sm={12} md={8} lg={8}>
+                  <div>Confirm Password</div>
+                </Col>
+                <Col xs={24} sm={12} md={12} lg={12}>
+                  <Form.Item
+                    name="password2"
+                    key="password2"
+                    dependencies={["password1"]}
+                    hasFeedback
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please confirm your password!",
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (!value || getFieldValue("password1") === value) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error(
+                              "The two passwords that you entered do not match!"
+                            )
+                          );
+                        },
+                      }),
+                    ]}
+                  >
+                    <Input.Password
+                      className="confirm"
+                      // onChange={(e) => setLoginPassword(e.target.value)}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Button
+                className="save"
+                htmlType="submit"
+                type="primary"
+                // onClick={() => openNotificationWithIcon("success")}
               >
-                <Input.Password
-                // onChange={(e) => setLoginPassword(e.target.value)}
-                />
-              </Form.Item>
-            </div>
-            {/* </div> */}
-            <div
-              className="foremail"
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <div className="emaildiv">
-                New Password<label style={{ color: "red" }}> </label>
-              </div>
-              <div className="pwdInputdiv">
-                <Form.Item
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Enter your password!",
-                    },
-                  ]}
-                >
-                  <Input.Password
-                  // onChange={(e) => setLoginPassword(e.target.value)}
-                  />
-                </Form.Item>
-              </div>
-            </div>
-            <div
-              className="foremail"
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <div className="emaildiv">
-                Confirm new password<label style={{ color: "red" }}> </label>
-              </div>
-              <div className="pwdInputdiv">
-                <Form.Item
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Enter your password!",
-                    },
-                  ]}
-                >
-                  <Input.Password
-                  // onChange={(e) => setLoginPassword(e.target.value)}
-                  />
-                </Form.Item>
-              </div>
-            </div>
-            {/* <div
-              className="req-div"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
-            >
-              <div class="rec-sm" style={{ float: "" }}>
-                <h2>Password requirements:</h2>
-                <p class="mb-2">Ensure that these requirements are met:</p>
-                <ul class="list-unstyled small">
-                  <li>Minimum 8 characters long - the more, the better</li>
-                  <li>At least one lowercase character</li>
-                  <li>At least one uppercase character</li>
-                  <li>At least one number, symbol</li>
-                </ul>
-              </div>
-              <div>
-                <Button type="primary">Save Change</Button>
-              </div>
-            </div> */}
+                Save Change
+              </Button>
+            </Form>
           </Card>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Update Email Address" key="4">
+        <Tabs.TabPane tab="Update Email" key="4">
           <Card
             className="Email"
-            title="Update Email Address"
+            title="Update Email"
             style={{
               width: 550,
               color: "black",
@@ -178,34 +219,57 @@ const Settingpage = () => {
                 </label>
               </div>
               <div className="email">
-                <Form.Item
-                  name="email"
-                  type="email"
-                  //   rules={[
-                  //     {
-                  //       required: true,
-                  //       message: "Enter your new email address!",
-                  //     },
-                  //   ]}
+                <Form
+                  onFinish={() => openNotificationWithIcon("success")}
+                  name="basic"
+                  labelCol={{
+                    span: 8,
+                  }}
+                  wrapperCol={{
+                    span: 24,
+                  }}
+                  initialValues={{
+                    remember: true,
+                  }}
+                  autoComplete="off"
                 >
-                  <Input
-                    placeholder="Enter New Email Address"
-                    id="message"
-                    name="message"
-                    value={message}
-                    onChange={handleChange}
-                    // onChange={(e) => setEmail(e.target.value)}
-                  />
-                  {error && <h2 style={{ color: "red" }}>{error}</h2>}
-                </Form.Item>
-                <div>
-                  <Button type="primary">Save Change</Button>
-                </div>
+                  <Form.Item
+                    name="email"
+                    type="email"
+                    rules={[
+                      {
+                        type: "email",
+                        required: true,
+                        message: "Enter your new email address!",
+                      },
+                    ]}
+                  >
+                    <Input
+                      placeholder="Enter New Email Address"
+                      id="message"
+                      name="message"
+                      //   value={message}
+                      //   onChange={handleChange}
+                      // onChange={(e) => setEmail(e.target.value)}
+                    />
+                    {/* {error && <h2 style={{ color: "red" }}>{error}</h2>} */}
+                  </Form.Item>
+
+                  <div>
+                    <Button
+                      htmlType="submit"
+                      type="primary"
+                      //   onClick={() => openUpdateEmail("success")}
+                    >
+                      Save Change
+                    </Button>
+                  </div>
+                </Form>
               </div>
             </div>
           </Card>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Delete Account" key="5">
+        {/* <Tabs.TabPane tab="Delete Account" key="5">
           <Card
             className="Delete"
             title="Delete your account"
@@ -226,7 +290,7 @@ const Settingpage = () => {
             </p>
             <Button type="primary">Save Change</Button>
           </Card>
-        </Tabs.TabPane>
+        </Tabs.TabPane> */}
       </Tabs>
     </>
   );

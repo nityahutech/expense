@@ -102,6 +102,46 @@
   color: #c2c0c0;
 }
 
+/* for signup page */
+
+.signupEmail-div{
+  font-weight: 600;
+  font-size: small;
+}
+.signupForm-div .ant-form{
+  margin-top: 2rem;
+}
+.signupFooter{
+  font-family: sans-serif;
+  font-size: 12px;
+  /* margin-top: 2rem; */
+  color: #c2c0c0;
+}
+.register-btn .ant-btn {
+  outline: 0;
+  color: #fff;
+  border-color: #189AB4;
+  background: #189AB4;
+  width: 18rem;
+}
+.register-btn .ant-btn:hover {
+  background: #189AB4;
+  color: #fff;
+  border-color: #189AB4;
+}
+.register-btn .ant-form-item{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+  font-feature-settings: 'tnum', "tnum";
+  /* margin-bottom: 10px; */
+  vertical-align: top;}
+
 
 /* -----------mobile--------------- */
 

@@ -1,6 +1,7 @@
 import React from "react";
 import LoginPage from "./components/LoginPage";
 import "./App.css";
+import SignupPage from "./components/SignupPage";
 import DashBoard from "./pages/dashBoard/DashBoard";
 import ExpenseFrm from "./pages/expenseFrm/AddExpense";
 import NewSider from "./components/sidebar/NewSidebar";

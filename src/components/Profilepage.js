@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import 'antd/dist/antd.css';
 import "../style/profile.css";
@@ -8,15 +7,15 @@ import { Upload } from 'antd';
 import "../style/profilepage.css";
 import { Button, Modal } from 'antd';
 import { Form, Input, Radio,notification } from 'antd';
-import { useAuth } from "../contexts/AuthContext";
+
+
 
 const { Meta } = Card;
 
 const Profile = () => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formLayout, setFormLayout] = useState('horizontal');  
-  const { currentUser, updateMyProfile, updateMyPhNo, updateMyEmail} = useAuth();
+  const [formLayout, setFormLayout] = useState('horizontal');
   const [editname, seteditname] = useState({
     address: "House No -2031, Sec- 4",
     city: "Rewari",
@@ -25,7 +24,7 @@ const Profile = () => {
     country: "India",
     phonenumber: "8447509792",
     state: "Haryana",
-    zipcode: "123401",
+    zipcode: "123401.",
   });
 
   const [fileList, setFileList] = useState([
@@ -160,7 +159,7 @@ const Profile = () => {
               </div>
 
               <div className="content-div">
-                <h2>{currentUser.displayName}</h2>
+              <h2 className="tropography" style={{ fontSize:'18px',fontWeight:'normal' }}>Swayamprava Nanda</h2>
                 <ul
                   style={{
                     listStyleType: "none",
@@ -176,10 +175,7 @@ const Profile = () => {
                     <div className="div-icon"><EnvironmentOutlined /></div>
                     <div className="div-name">HSR Layout, Bengaluru</div>
                   </li>
-                  <li className="div-title">
-                    <div className="div-icon"><CalendarOutlined /></div>
-                    <div className="div-name">Joined {currentUser.metadata.creationTime}</div>
-                  </li>
+                  {/* <li><CalendarOutlined />Joined July 2022</li> */}
 
                 </ul>
               </div>
@@ -196,20 +192,21 @@ const Profile = () => {
               style={{
                 width: '100%',
                 borderRadius: '10px'
+                
               }}
             >
               <div>
                 <div>
-                  <h3>About</h3>
-                  <p>{currentUser.displayName}</p>
+                <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900' }}>About</h2>
+                  <p> {editname.employeename}</p>
                 </div>
                 <div>
-                  <h3>Contact</h3>
+                <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Contact</h2>
                   {/* {JSON.stringify(editname)} */}
-                  <p>{currentUser.email},  <br /> {currentUser.phoneNumber}</p>
+                  <p>{editname.mailid},  <br /> {editname.phonenumber}</p>
                 </div>
                 <div>
-                  <h3>Address</h3>
+                <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Address</h2>
                   <p> {editname.address},<br />
                   {editname.city},
                   {editname.state},<br />
@@ -224,7 +221,7 @@ const Profile = () => {
 
       </div>
 
-      <Modal   maskClosable={false} centered title="Edit information" footer={null} visible={isModalOpen} open={isModalOpen}  onCancel={handleCancel}>
+      <Modal   maskClosable={false} centered title="Basic information" footer={null} visible={isModalOpen} open={isModalOpen}  onCancel={handleCancel}>
         <Row >
           <Col xl={24} lg={24} md={24} sm={24} xs={24}>
             <Form
@@ -237,10 +234,7 @@ const Profile = () => {
               }}
               initialValues={{
                 remember: true,
-                employeename: currentUser.displayName,
-                mailid: currentUser.email,
-                phonenumber: currentUser.phoneNumber
-
+                ...editname
               }}
               fields={[
                 {
@@ -379,4 +373,5 @@ const Profile = () => {
 };
 
 export default Profile
+
 

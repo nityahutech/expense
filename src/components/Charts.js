@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../style/Charts.css";
-import { Col, Row, Select } from "antd";
+import { Select } from "antd";
 
 import { useNavigate } from "react-router-dom";
 
@@ -92,18 +92,16 @@ const Charts = () => {
                   {
                     label: "Water",
                     data: [
-                      876, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
+                      1050, 150, 990, 900, 800, 700, 600, 500, 400, 300, 200,
                       100,
                     ],
                     backgroundColor: [
-                      "red",
-                      // "Green",
-                      // "Yellow",
-                      // "Orange",
-                      // "blue",
-                      // "lightgreen",
-                      // "darkgreen",
+                      "rgba(32, 126, 227, 0.5)",
                     ],
+                    borderColor: [
+                      "rgba(32, 126, 227, 1)",
+                    ],
+                    borderWidth: 1,
                   },
                   {
                     label: "Electricity",
@@ -112,66 +110,60 @@ const Charts = () => {
                       100,
                     ],
                     backgroundColor: [
-                      "blue",
-                      // "orange",
-                      // "Yellow",
-                      // "Orange",
-                      // "blue",
-                      // "lightgreen",
-                      // "darkgreen",
+                      "rgba(232, 65, 23, 0.5)",
                     ],
+                    borderColor: [
+                      "rgba(232, 65, 23, 1)",
+                    ],
+                    borderWidth: 1,
                   },
                   {
                     label: "Newspaper",
                     data: [
-                      750, 500, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
+                      750, 600, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
                       100,
                     ],
                     backgroundColor: [
-                      "aqua",
-                      // "orange",
-                      // "Yellow",
-                      // "Orange",
-                      // "blue",
-                      // "lightgreen",
-                      // "darkgreen",
+                      "rgba(231, 237, 47, 0.5)",
                     ],
+                    borderColor: [
+                      "rgba(231, 237, 47, 1)",
+                    ],
+                    borderWidth: 1,
                   },
                   {
                     label: "Food",
                     data: [
-                      650, 500, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
+                      650, 700, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
                       100,
                     ],
                     backgroundColor: [
-                      // "magenta",
-                      // "orange",
-                      // "Yellow",
-                      // "Orange",
-                      // "blue",
-                      "lightgreen",
-                      // "darkgreen",
+                      "rgba(21, 232, 60, 0.5)",
                     ],
+                    borderColor: [
+                      "rgba(21, 232, 60, 1)",
+                    ],
+                    borderWidth: 1,
                   },
                   {
                     label: "Travel",
                     data: [
-                      550, 500, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
+                      550, 800, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
                       100,
                     ],
                     backgroundColor: [
-                      // "pink",
-                      "orange",
-                      // "Yellow",
-                      // "Orange",
-                      // "blue",
-                      // "lightgreen",
-                      // "darkgreen",
+                      "rgba(232, 21, 158, 0.5)",
                     ],
+                    borderColor: [
+                      "rgba(232, 21, 158, 1)",
+                    ],
+                    borderWidth: 1,
                   },
                 ],
               }}
-              options={{}}
+              options={{
+                maintainAspectRatio: true,
+              }}
             />
             <div className="vbutton1">
               <button
@@ -204,26 +196,24 @@ const Charts = () => {
           <div className="colpie">
             <Pie
               data={{
-                labels: ["Water", "Electricity", "Newspaper", "Food", "Travel", "Others"],
+                labels: ["Water", "Electricity", "Newspaper", "Food", "Travel"],
                 datasets: [
                   {
                     label: "# of Votes",
-                    data: [12, 19, 3, 5, 2, 3],
+                    data: [12, 19, 3, 5, 2],
                     backgroundColor: [
-                      "rgba(255, 99, 132, 0.2)",
-                      "rgba(54, 162, 235, 0.2)",
-                      "rgba(255, 206, 86, 0.2)",
-                      "rgba(75, 192, 192, 0.2)",
-                      "rgba(153, 102, 255, 0.2)",
-                      "rgba(255, 159, 64, 0.2)",
+                      "rgba(32, 126, 227, 0.2)",
+                      "rgba(232, 65, 23, 0.2)",
+                      "rgba(231, 237, 47, 0.2)",
+                      "rgba(21, 232, 60, 0.2)",
+                      "rgba(232, 21, 158, 0.2)",
                     ],
                     borderColor: [
-                      "rgba(255, 99, 132, 1)",
-                      "rgba(54, 162, 235, 1)",
-                      "rgba(255, 206, 86, 1)",
-                      "rgba(75, 192, 192, 1)",
-                      "rgba(153, 102, 255, 1)",
-                      "rgba(255, 159, 64, 1)",
+                      "rgba(32, 126, 227, 1)",
+                      "rgba(232, 65, 23, 1)",
+                      "rgba(231, 237, 47, 1)",
+                      "rgba(21, 232, 60, 1)",
+                      "rgba(232, 21, 158, 1)",
                     ],
                     borderWidth: 1,
                   },
@@ -252,25 +242,25 @@ const Charts = () => {
               </Select>
               <Select
                 id="short"
-                defaultValue="Month"
+                defaultValue="January"
                 style={{
                   width: 90,
                  marginLeft: "5px",
                 }}
                 onChange={handleChange}
               >
-                <Option value="2022">January</Option>
-                <Option value="2023">Faburary</Option>
-                <Option value="2022">March</Option>
-                <Option value="2023">April</Option>
-                <Option value="2022">May</Option>
-                <Option value="2023">June</Option>
-                <Option value="2022">July</Option>
-                <Option value="2023">August</Option>
-                <Option value="2022">September</Option>
-                <Option value="2023">October</Option>
-                <Option value="2022">Novemder</Option>
-                <Option value="2023">December</Option>
+                <Option value="January">January</Option>
+                <Option value="Faburary">Faburary</Option>
+                <Option value="March">March</Option>
+                <Option value="April">April</Option>
+                <Option value="May">May</Option>
+                <Option value="June">June</Option>
+                <Option value="July">July</Option>
+                <Option value="August">August</Option>
+                <Option value="September">September</Option>
+                <Option value="October">October</Option>
+                <Option value="Novemder">Novemder</Option>
+                <Option value="December">December</Option>
               </Select>
             </div>
           </div>

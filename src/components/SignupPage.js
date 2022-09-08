@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { Form, Button, Checkbox, Input, Alert } from "antd";
-import { signup } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 function SignupPage() {
   const [signupEmail, setsignupEmail] = useState("");
@@ -8,6 +8,7 @@ function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const { signup } = useAuth()
 
   const win = window.sessionStorage;
 
@@ -19,7 +20,7 @@ function SignupPage() {
       setError("");
       setLoading(true);
 
-      let res = await signup(signupEmail, signupPassword);
+      let res = await signup("name0@gmail.com", "signupPassword");
       // console.log(res.user.accessToken);
       sessionStorage.setItem("accessToken", res.user.accessToken);
       setSuccess("Registration Successful. Please LogIn!")

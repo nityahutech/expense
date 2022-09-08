@@ -18,6 +18,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="/SignupPage" element={<SignupPage />}/>
           {/* <Route path="/Home" element={<DashBoard />} /> */}
           <Route path="/DashBoard" element={<DashBoard />} />
           <Route path="/Expense/AddExpense" element={<ExpenseFrm />} />

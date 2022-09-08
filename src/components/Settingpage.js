@@ -4,9 +4,18 @@ import "antd/dist/antd.css";
 import { Card, Col, Row, Form, Input, notification } from "antd";
 import { Button } from "antd";
 import { Tabs } from "antd";
+import { useAuth } from "../contexts/AuthContext";
+// import { useNavigate } from "react-router-dom";
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
+};
+
+const showNotification = (type, msg, desc) => {
+  notification[type]({
+    message: msg,
+    description: desc,
+  });
 };
 const openNotificationWithIcon = (type) => {
   notification[type]({
@@ -21,6 +30,12 @@ const Settingpage = () => {
   const [error, setError] = useState(null);
   const [form] = Form.useForm();
   const [emailForm] = Form.useForm();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [newPassword, setNew] = useState("");
+  // const [deleteCheck, setDelete] = useState(null);
+  const { currentUser, updateMyPassword, deletePerson, updateMyEmail, login } =
+    useAuth();
 
   const openUpdateEmail = (type) => {
     notification[type]({
@@ -36,6 +51,55 @@ const Settingpage = () => {
   window.addEventListener("resize", () => {
     setTabPosition(window.innerWidth <= 768 ? "top" : "left");
   });
+
+  // const navigate = useNavigate();
+
+  const handleEmailSubmit = async () => {
+    console.log(email);
+    try {
+      await updateMyEmail(email);
+      showNotification("success", "Success", "Record updated successfuly");
+    } catch {
+      showNotification("error", "Failed", "Record update failed");
+    }
+  };
+
+  const checkPassword = async () => {
+    try {
+      let check = await login(currentUser.email, password);
+      console.log(check);
+      console.log("Correct Password!");
+      return true;
+    } catch {
+      showNotification("error", "Failed", "Incorrect password");
+      return false;
+    }
+  };
+
+  const handlePasswordSubmit = async () => {
+    let check = await checkPassword();
+    if (check) {
+      try {
+        await updateMyPassword(newPassword);
+        showNotification("success", "Success", "Record updated successfuly");
+      } catch {
+        showNotification("error", "Failed", "Record update failed");
+      }
+    }
+  };
+
+  //   function isValidEmail(email) {
+  //     return /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9])+@[a-z]+\.[a-z]{2,3}/.test(email);
+  //   }
+
+  //   const handleChange = (event) => {
+  // if (!isValidEmail(event.target.value)) {
+  //   setError("Email is invalid");
+  // } else {
+  //   setError(null);
+  // }
+  // setMessage(event.target.value);
+  //   };
 
   return (
     <>
@@ -95,6 +159,7 @@ const Settingpage = () => {
                       },
                     ]}
                     hasFeedback
+                    onChange={(e) => setPassword(e.target.value)}
                   >
                     <Input.Password className="new" />
                   </Form.Item>
@@ -122,6 +187,7 @@ const Settingpage = () => {
                       },
                     ]}
                     hasFeedback
+                    onChange={(e) => setNew(e.target.value)}
                   >
                     <Input.Password className="new" />
                   </Form.Item>

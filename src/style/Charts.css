@@ -23,7 +23,7 @@ body {
   border-radius: 5px;
   /* border: 1px solid red; */
   background-color: white;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   height: 19vh;
 }
@@ -52,15 +52,15 @@ body {
   align-items: center;
 }
 .colbar {
-  /* border: 1px solid red; */
-  background-color: white;
+  border: 1px solid lightyellow;
+  background-color: antiquewhite;
   border-radius: 5px;
   margin: 5px;
   width: 68%;
 }
 .colpie {
-  /* border: 1px solid red; */
-  background-color: white;
+  border: 1px solid lightyellow;
+  background-color: antiquewhite;
   border-radius: 5px;
   margin: 5px;
   width: 30%;
@@ -74,48 +74,89 @@ body {
   flex-wrap: wrap;
   margin: 10px;
   border-radius: 5px;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   background-color: white;
   /* border: 1px solid red; */
 }
-#short {
-    
+
+.vbutton1{
+    position: absolute;
+    top: 2px;
+    right: 25px;
+    display:flex ;
+    height: 25px;
+}
+.col1 h2 {
+    margin-top: 20px;
 }
 
-@media (max-width: 500px) {
-    body {
-        overflow: auto;
-    }
+.col2 h2 {
+    margin-top: 15px;
+}
+.vbutton2 button {
+    background: #05445e;
+    color: #fff;
+    border-radius: 5px;
+    width: 50px;
+    margin-left: 20%;
+    cursor: pointer;
+}
+.colbar{
+    position: relative;
 }
 
-@media (max-width: 300px) {
+@media only screen and (min-width: 1200px) and (max-width: 2400px) {
     .colbar {
-        width: 97%;
+        width: 61%;
     }
     .colpie {
-        width: 109%;
+        width: 27%;
     }
+    .vbutton2 button {
+        margin-left: 5%;
+    }
+    .rowcards {
+        height: 21vh;
+    } 
 }
 
-@media (max-width: 400px) {
+@media only screen and (min-width: 800px) and (max-width: 1200px) {
     .colbar {
-        width: 97%;
+        width: 61%;
     }
     .colpie {
-        width: 109%;
+        width: 30%;
     }
+    .rowcards {
+        height: 24vh;
+    }
+    .vbutton2 button {
+        margin-left: 5%;
+    } 
 }
-@media (max-width: 500px) {
+@media only screen and (min-width: 600px) and (max-width: 800px) {
     .colbar {
-        width: 97%;
+        width: 100%;
     }
     .colpie {
-        width: 50%;
+        width: 100%;
+    }
+    .rowcards {
+        height: 18vh;
+    } 
+}
+
+@media only screen and (min-width: 300px) and (max-width: 600px) {
+    .colbar {
+        width: 100%;
+    }
+    .colpie {
+        width: 100%;
     }
     .rowcards {
         display: block;
-        height: 24vh;
+        height: 36vh;
     }
     .col1 {
         width: 100%;
@@ -124,57 +165,34 @@ body {
         width: 100%
     }
 }
-@media (max-width: 600px) {
-    .colbar {
-        width: 97%;
-    }
-    .colpie {
-        width: 60%;
+
+@media only screen and (min-width: 300px) and (max-width: 1360px) {
+    .vbutton1 {
+        position: relative;
+        margin: 10px;
     }
 }
 
-@media (max-width: 700px) {
+@media only screen and (min-width: 100px) and (max-width: 300px) {
     .colbar {
-        width: 97%;
+        width: 100%;
     }
     .colpie {
-        width: 70%;
+        width: 100%;
+    }
+    .rowcards {
+        display: block;
+        height: 36vh;
+    }
+    .col1 {
+        width: 100%;
+    }
+    .col2 {
+        width: 100%
+    }
+    .vbutton2{
+        display: flex;
+        justify-content: center;
     }
 }
 
-@media (max-width: 800px) {
-    .colbar {
-        width: 97%;
-    }
-    .colpie {
-        width: 80%;
-    }
-
-}
-
-/* @media (max-width: 900px) {
-    .colbar {
-        width: 97%;
-    }
-    .colpie {
-        width: 60%;
-    }
-}
-
-@media (max-width: 1000px) {
-    .colbar {
-        width: 90%;
-    }
-    .colpie {
-        width: 40%;
-    }
-} */
-
-/* @media (max-width: 1200px) {
-    .colbar {
-        width: 50%;
-    }
-    .colpie {
-        width: 40%;
-    }
-} */

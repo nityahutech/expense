@@ -1,56 +1,377 @@
-
-import React from "react";
+import React, { useState } from "react";
 import 'antd/dist/antd.css';
 import "../style/profile.css";
-import { Card, Row, Col } from 'antd';
+import { Card, Col, Row, } from 'antd';
+import { EnvironmentOutlined, CalendarOutlined, HomeOutlined } from '@ant-design/icons';
+import { Upload } from 'antd';
+import "../style/profilepage.css";
+import { Button, Modal } from 'antd';
+import { Form, Input, Radio,notification } from 'antd';
 
 
 
+const { Meta } = Card;
 
 const Profile = () => {
+  const [form] = Form.useForm();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formLayout, setFormLayout] = useState('horizontal');
+  const [editname, seteditname] = useState({
+    address: "House No -2031, Sec- 4",
+    city: "Rewari",
+    mailid: "swayamprava@hutechsolutions.com",
+    employeename: "Swayamprava Nanda",
+    country: "India",
+    phonenumber: "8447509792",
+    state: "Haryana",
+    zipcode: "123401.",
+  });
+
+  const [fileList, setFileList] = useState([
+    {
+
+      uid: "-1",
+      name: "image.png",
+      status: "done",
+      url:
+        "/logo/image.png"
+    }
+  ]);
+  const onPreview = async (file) => {
+    let src = file.url;
+
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
+
+
+
+  const onChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
+
+  const showModal = () => {
+    console.log('hi')
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    console.log('hiii')
+    setIsModalOpen(false);
+    showNotification("success", "Success", "Record updated successfuly");
+  };
+
+  const showNotification = (type, msg, desc) => {
+    notification[type]({
+      message: msg,
+      description: desc,
+    });
+  };
+
+  const handleCancel = () => {
+    console.log('hiii')
+    setIsModalOpen(!isModalOpen);
+  };
+
+
+  const formonFinishHandler = (values) => {
+    console.log(values, "vvvvvvvvvvvvvvvvvvvvvvvvvv");
+
+    seteditname(() => ({
+      ...values
+    }));
+    // seteditname(preState)
+
+    console.log(editname, "?d ")
+  }
+
+  const onFormLayoutChange = ({ layout }) => {
+    setFormLayout(layout);
+    console.log(layout);
+
+  };
+
+  const checkAlphabets = (event) => {
+    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+  const checkNumbervalue = (event) => {
+    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
+  const onReset = () => {
+    form.resetFields()
+  }
+
+  const onFieldsChangeHandler = (curr, allvalues) => {
+    console.log(allvalues)
+  }
+  const cancelStyle = {
+    float: "right",
+   
+  };
+  const buttonStyle = {
+    marginRight: "5px",
+    color: "white",
+    backgroundColor: "#1890ff",
+    float: "right",
+    backgroundColor: '#d9d9d9'
+  };
+
   return (
     <>
-{/* 
-      <div className='profile' style={{ margin: "20px", background: '' }} >
-        <Row gutter={24} style={{ background: 'red', margin: "40px", padding: '10', height: '100px' }}>
 
-          <div className="te" style={{ padding: '10px 0' }}>
-            hhhhh
-          </div>
+      <div className='profile'  >
+        <Row className="col-card" gutter={[48, 8]} style={{ background: '', display: "flex", flexDirection: 'row', justifyContent: 'space-between', alignItems: 'start' }}>
+          <Col xl={12} lg={12} md={12} sm={24} xs={24}>
+            <Card className="card-body"
+              style={{
+                width: '100%',
+                borderRadius: '10px',
+                display: "flex", flexDirection: 'column', justifyContent: 'center', padding: '10px'
 
-        </Row>
-     
+              }}
 
-        <Row gutter={[24, 24]} style={{ background: 'red', margin: "40px", height: '400px' }}>
+            >
+              <div className="editimg" style={{ paddingLeft: '' }}>
+                <Upload
+                  action="/logo/Expense.png"
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={onChange}
+                  onPreview={onPreview}
+                  style={{ background: 'black' }}
+                >
+                  {fileList.length < 1 && '+ Upload'}
+                </Upload>
+              </div>
 
-          <Col xs={{ span: 24 }} sm={{ span: 12 }} md={{ span: 12 }} style={{ padding: '20', height: '400px', }}>
-            <Col className='Col-1-left' style={{ background: 'green', height: '100px' }}>
+              <div className="content-div">
+              <h2 className="tropography" style={{ fontSize:'18px',fontWeight:'normal' }}>Swayamprava Nanda</h2>
+                <ul
+                  style={{
+                    listStyleType: "none",
+                    display: "inline",
+                    paddingLeft: '0'
 
-              <h1>ffffff</h1>
-            </Col>
+                  }}>
+                  <li className="div-title">
+                    <div className="div-icon"><HomeOutlined /></div>
+                    <div className="div-name">Hutech Solutions India Pvt. Ltd</div>
+                  </li>
+                  <li className="div-title">
+                    <div className="div-icon"><EnvironmentOutlined /></div>
+                    <div className="div-name">HSR Layout, Bengaluru</div>
+                  </li>
+                  {/* <li><CalendarOutlined />Joined July 2022</li> */}
 
+                </ul>
+              </div>
 
-            <Col className='Col-1-left' style={{ background: 'pink', height: '300px' }}>
-              <h1>ffffff</h1>
-            </Col>
+            </Card>
           </Col>
 
-          <Col xs={{ span: 24 }} sm={{ span: 12 }} md={{ span: 12 }}>
-            <Col  className='Col-1-right' style={{ background: 'blue', height: '400px',  }}>
-              <h1>ffffff</h1>
-            </Col>
+          <Col xl={12} lg={12} md={12} sm={24} xs={24}>
+            <Card
+              title="My Account"
+              extra={<Button type="primary" onClick={showModal}>
+                Edit
+              </Button>}
+              style={{
+                width: '100%',
+                borderRadius: '10px'
+                
+              }}
+            >
+              <div>
+                <div>
+                <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900' }}>About</h2>
+                  <p> {editname.employeename}</p>
+                </div>
+                <div>
+                <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Contact</h2>
+                  {/* {JSON.stringify(editname)} */}
+                  <p>{editname.mailid},  <br /> {editname.phonenumber}</p>
+                </div>
+                <div>
+                <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Address</h2>
+                  <p> {editname.address},<br />
+                  {editname.city},
+                  {editname.state},<br />
+                  {editname.country},<br />
+                  {editname.zipcode}</p>
+                 
+                </div>
+              </div>
+            </Card>
           </Col>
-
-
         </Row>
 
-      </div> */}
+      </div>
 
+      <Modal   maskClosable={false} centered title="Basic information" footer={null} visible={isModalOpen} open={isModalOpen}  onCancel={handleCancel}>
+        <Row >
+          <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+            <Form
+              labelCol={{
+                span: 6,
+
+              }}
+              wrapperCol={{
+                span: 16,
+              }}
+              initialValues={{
+                remember: true,
+                ...editname
+              }}
+              fields={[
+                {
+                  name: ["editname"],
+                  values: editname,
+                },
+
+              ]}
+
+              autoComplete="off"
+              form={form}
+              onFinish={formonFinishHandler}
+              onFieldsChange={(changedFields, allvalues) => onFieldsChangeHandler(changedFields, allvalues)}
+              onValuesChange={onFormLayoutChange}
+            >
+              <Form.Item labelAlign="left"
+                style={{ marginBottom: "10px", }}
+                label="Name"
+                name="employeename"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
+
+              >
+                <Input placeholder="Your Name" />
+              </Form.Item>
+
+              <Form.Item labelAlign="left"
+                style={{ marginBottom: "10px" }}
+                label="Email"
+                name="mailid"
+
+
+              >
+                <Input placeholder="Email" />
+              </Form.Item>
+
+              <Form.Item labelAlign="left"
+                name="phonenumber"
+                style={{ marginBottom: "10px" }}
+                label="Phone No."
+                onKeyPress={(event) => {
+                  if (checkNumbervalue(event)) {
+                    event.preventDefault();
+                  }
+                }}
+              >
+                <Input placeholder="Your Phone No." />
+              </Form.Item>
+
+              <Form.Item labelAlign="left"
+                name="country"
+                style={{ marginBottom: "10px" }}
+                label="country"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
+              >
+                <Input placeholder="Country" />
+              </Form.Item>
+
+              <Form.Item labelAlign="left"
+                name="state"
+                style={{ marginBottom: "10px" }}
+                label="State"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
+              >
+                <Input placeholder="State" />
+              </Form.Item>
+
+              <Form.Item labelAlign="left"
+                name="city"
+                style={{ marginBottom: "10px" }}
+                label="City"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
+              >
+                <Input placeholder="City" />
+              </Form.Item>
+
+              <Form.Item labelAlign="left"
+                name="address"
+                style={{ marginBottom: "10px" }}
+                label="Address line 1"
+
+              >
+                <Input placeholder="Your address" />
+              </Form.Item>
+
+              <Form.Item labelAlign="left"
+                name="zipcode"
+                style={{ marginBottom: "10px" }}
+                label="Zip Code"
+                onKeyPress={(event) => {
+                  if (checkNumbervalue(event)) {
+                    event.preventDefault();
+                  }
+                }}
+              >
+                <Input placeholder="Your zip code" />
+              </Form.Item>
+
+              <Form.Item >
+                <Button
+                  style={cancelStyle}
+                  onClick={handleOk}
+                 
+
+                  // onClick={submitEdit}
+                  htmlType="submit"
+
+                  type="primary">Save Change
+                </Button>
+                <Button
+                  style={buttonStyle}
+                  onClick={onReset}
+                >Reset</Button>
+              </Form.Item>
+            </Form>
+          </Col>
+        </Row>
+      </Modal>
     </>
-
-
-
   );
 };
 
 export default Profile
+
+

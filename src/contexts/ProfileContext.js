@@ -2,27 +2,25 @@ import { db } from "../firebase-config";
 
 import {
     collection,
+    setDoc,
     getDoc,
-    addDoc,
     updateDoc,
     doc,
 } from "firebase/firestore";
 
-const profileCollectionRef = collection(db, "users");
-
 class ProfileContext {
 
-    addProfile = (newProfile) => {
-        return addDoc(profileCollectionRef, newProfile);
+    addProfile = (id, newProfile) => {
+        return setDoc(doc(db, "users", id), newProfile);
     };
 
     updateProfile = (id, updatedProfile) => {
-        const profileDoc = doc(db, profileCollectionRef, id);
+        const profileDoc = doc(db, "users", id);
         return updateDoc(profileDoc, updatedProfile);
     };
 
     getProfile = (id) => { 
-        const profileDoc = doc(db, profileCollectionRef, id);
+        const profileDoc = doc(db, "users", id);
         return getDoc(profileDoc);
     };
 }

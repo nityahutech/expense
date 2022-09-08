@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import 'antd/dist/antd.css';
 import "../style/profile.css";
@@ -16,15 +15,15 @@ const { Meta } = Card;
 const Profile = () => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formLayout, setFormLayout] = useState('horizontal');  
+  const [formLayout, setFormLayout] = useState('horizontal');
   const { currentUser, updateMyProfile, updateMyPhNo, updateMyEmail} = useAuth();
   const [editname, seteditname] = useState({
     address: "House No -2031, Sec- 4",
     city: "Rewari",
     country: "India",
-    phonenumber: "8447509792",
+    phonenumber: "",
     state: "Haryana",
-    zipcode: "123401",
+    zipcode: "123401.",
   });
 
   const [fileList, setFileList] = useState([
@@ -61,7 +60,6 @@ const Profile = () => {
 
   const showModal = () => {
     console.log('hi')
-    updateMyPhNo(currentUser, "9900714682")
     setIsModalOpen(true);
   };
 
@@ -88,6 +86,16 @@ const Profile = () => {
     console.log(values.mailid);
     updateMyProfile({displayName: values.employeename})
     updateMyEmail(values.mailid)
+    if(!editname.phonenumber){
+      ProfileContext.addProfile(currentUser.uid, editname)
+    } else {
+      ProfileContext.updateProfile(currentUser.uid, editname)
+    }
+    if(!editname.address){
+      ProfileContext.addProfile(currentUser.uid, {address: values.address})
+    } else {
+      ProfileContext.updateProfile(currentUser.uid, {address: values.address})
+    }
 
     seteditname(() => ({
       ...values
@@ -162,7 +170,7 @@ const Profile = () => {
               </div>
 
               <div className="content-div">
-                <h2>{currentUser.displayName}</h2>
+              <h2 className="tropography" style={{ fontSize:'18px',fontWeight:'normal' }}>{currentUser.displayName}</h2>
                 <ul
                   style={{
                     listStyleType: "none",
@@ -182,7 +190,6 @@ const Profile = () => {
                     <div className="div-icon"><CalendarOutlined /></div>
                     <div className="div-name">Joined {currentUser.metadata.creationTime}</div>
                   </li>
-
                 </ul>
               </div>
 
@@ -198,20 +205,21 @@ const Profile = () => {
               style={{
                 width: '100%',
                 borderRadius: '10px'
+                
               }}
             >
               <div>
                 <div>
-                  <h3>About</h3>
+                <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900' }}>About</h2>
                   <p>{currentUser.displayName}</p>
                 </div>
                 <div>
-                  <h3>Contact</h3>
+                <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Contact</h2>
                   {/* {JSON.stringify(editname)} */}
                   <p>{currentUser.email},  <br /> {editname.phonenumber}</p>
                 </div>
                 <div>
-                  <h3>Address</h3>
+                <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Address</h2>
                   <p> {editname.address},<br />
                   {editname.city},
                   {editname.state},<br />
@@ -226,7 +234,7 @@ const Profile = () => {
 
       </div>
 
-      <Modal   maskClosable={false} centered title="Edit information" footer={null} visible={isModalOpen} open={isModalOpen}  onCancel={handleCancel}>
+      <Modal   maskClosable={false} centered title="Basic information" footer={null} visible={isModalOpen} open={isModalOpen}  onCancel={handleCancel}>
         <Row >
           <Col xl={24} lg={24} md={24} sm={24} xs={24}>
             <Form
@@ -380,4 +388,5 @@ const Profile = () => {
 };
 
 export default Profile
+
 

@@ -22,7 +22,10 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   function signup(email, password) {
-    return createUserWithEmailAndPassword(email, password)
+    console.log(email, password);
+    let res =  createUserWithEmailAndPassword(auth, email, password)
+    console.log(res);
+    return res;
   }
 
   function login(email, password) {

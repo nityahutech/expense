@@ -6,44 +6,44 @@ import dropDownimg from "../../assets/dropdown.svg"
 import logoutsvgrepocom from "../../assets/logoutsvgrepocom.svg"
 import abstractuserflat4 from "../../assets/abstractuserflat4.svg"
 import './navbar.css';
-import { logout } from "../../contexts/AuthContext"
+import { useAuth } from "../../contexts/AuthContext"
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 
 
-
-
-const menu = (
-    <Menu
-        items={[
-            {
-                key: '1',
-                label: (
-                    <Link to target="_blank" style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
-                        Admin
-                    </Link>
-                ),
-                icon: <img src={abstractuserflat4} alt="downArrow" className="avatarimg" />
-            },
-            {
-                key: '2',
-                label: (
-                    <Link to="/" onClick={logout} style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
-                        Logout
-                    </Link>
-                ),
-                icon: <img src={logoutsvgrepocom} alt="downArrow" className="avatarimg" />
-            }
-        ]}
-    />
-);
-
 const Navbar = () => {
     const [activePage, setActivePage] = useState("/DashBoard")
     let loc = useLocation()
+    const { currentUser, logout } = useAuth()
+
+    const menu = (
+        <Menu
+            items={[
+                {
+                    key: '1',
+                    label: (
+                        <Link to target="_blank" style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
+                            Admin
+                        </Link>
+                    ),
+                    icon: <img src={abstractuserflat4} alt="downArrow" className="avatarimg" />
+                },
+                {
+                    key: '2',
+                    label: (
+                        <Link to="/" onClick={logout} style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
+                            Logout
+                        </Link>
+                    ),
+                    icon: <img src={logoutsvgrepocom} alt="downArrow" className="avatarimg" />
+                }
+            ]}
+        />
+    );
 
     useEffect(() => {
+        console.log(currentUser);
         setActivePage(loc.pathname);
     }, [loc])
 

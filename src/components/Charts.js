@@ -16,7 +16,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { Pie } from "react-chartjs-2";
-import { totalAmount, avgAmountPerMonth } from "../contexts/DashboardContext";
+import { totalAmount, avgAmountPerMonth, topSixExpenses } from "../contexts/DashboardContext";
 // import faker from 'faker';
 ChartJS.register(
   CategoryScale,
@@ -29,9 +29,6 @@ ChartJS.register(
 );
 
 const { Option } = Select;
-const handleChange = (value) => {
-  console.log(`selected ${value}`);
-};
 
 const Charts = () => {
   const handleExpenselist = () => {
@@ -41,18 +38,85 @@ const Charts = () => {
 
   const [total, setTotal] = useState(0);
   const [avg, setAvg] = useState(0);
+  let col = 0;
+  let initalPieData = [[], []]
+  const [pieData, setPieData] = useState([[],[]]);
 
-  const values = async () => {
-    await totalAmount().then((a) => {
-      setTotal(a);
-    });
-    await avgAmountPerMonth().then((a) => {
-      console.log(a);
-      setAvg(a);
+  // function accumulateExpense(expense) {
+  //   let piedata= [...pieData];
+  //   console.log(piedata[0])
+  //   console.log(expense.catname)
+  //   if(pieData[0].includes(expense.catname)){
+  //     let index = pieData[0].indexOf(expense.catname);
+  //     piedata[1][index] += expense.subtotal;
+  //   }
+  //   else {
+  //     if (col == 5) return;
+  //     console.log(col);
+  //     piedata[0][col] = expense.catname;
+  //     console.log(piedata[0][col]);
+  //     piedata[1][col] = expense.subtotal;
+  //     console.log(piedata[1][col]);
+  //     setPieData(piedata);
+  //     col++;
+  //   }
+  // }
+
+  function accumulateExpense(expense, i) {
+    if (i === 0) initalPieData = [[], []];
+    console.log("***************");
+    console.log(JSON.stringify(expense));
+    console.log(JSON.stringify(initalPieData));
+    if (initalPieData[0].includes(expense.catname)) {
+      let index = initalPieData[0].indexOf(expense.catname);
+      initalPieData[1][index] += expense.subtotal;
+    } else {
+      if (col === 6) return;
+      initalPieData[0][col] = expense.catname;
+      initalPieData[1][col] = expense.subtotal;
+      setPieData(initalPieData);
+      col++;
+    }
+  }
+
+
+  // useEffect(() => {
+  //   console.log
+  //   topSixExpenses(value, '2022').then((exp) => {
+  //     console.log(exp);
+  //     exp.forEach(accumulateExpense);
+  //   });
+
+  // }, [pieData])
+  const handleChange = (value) => {
+      setPieData([[],[]]);
+      col = 0;
+      console.log(col,":",pieData);
+    topSixExpenses(value, '2022').then((exp) => {
+      console.log(exp);
+      exp.forEach(accumulateExpense, col);
     });
   };
 
+  const values = () => {
+    totalAmount().then((a) => {
+      setTotal(a);
+    });
+    avgAmountPerMonth().then((b) => {
+      console.log(b);
+      setAvg(b);
+    });
+    topSixExpenses('09', '2022').then((exp) => {
+      console.log(exp);
+      setPieData([[],[]]);
+      exp.forEach(accumulateExpense, col);
+      col = 0;
+    });
+    console.log(pieData);
+  };
+
   useEffect(() => {
+    console.log(col,":",pieData);
     values();
   }, []);
 
@@ -196,11 +260,11 @@ const Charts = () => {
           <div className="colpie">
             <Pie
               data={{
-                labels: ["Water", "Electricity", "Newspaper", "Food", "Travel"],
+                labels:  pieData[0],
                 datasets: [
                   {
                     label: "# of Votes",
-                    data: [12, 19, 3, 5, 2],
+                    data:  pieData[1],
                     backgroundColor: [
                       "rgba(32, 126, 227, 0.2)",
                       "rgba(232, 65, 23, 0.2)",
@@ -242,25 +306,25 @@ const Charts = () => {
               </Select>
               <Select
                 id="short"
-                defaultValue="January"
+                defaultValue="September"
                 style={{
                   width: 90,
                  marginLeft: "5px",
                 }}
                 onChange={handleChange}
               >
-                <Option value="January">January</Option>
-                <Option value="Faburary">Faburary</Option>
-                <Option value="March">March</Option>
-                <Option value="April">April</Option>
-                <Option value="May">May</Option>
-                <Option value="June">June</Option>
-                <Option value="July">July</Option>
-                <Option value="August">August</Option>
-                <Option value="September">September</Option>
-                <Option value="October">October</Option>
-                <Option value="Novemder">Novemder</Option>
-                <Option value="December">December</Option>
+                <Option value="01">January</Option>
+                <Option value="02">Faburary</Option>
+                <Option value="03">March</Option>
+                <Option value="04">April</Option>
+                <Option value="05">May</Option>
+                <Option value="06">June</Option>
+                <Option value="07">July</Option>
+                <Option value="08">August</Option>
+                <Option value="09">September</Option>
+                <Option value="10">October</Option>
+                <Option value="11">Novemder</Option>
+                <Option value="12">December</Option>
               </Select>
             </div>
           </div>

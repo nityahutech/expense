@@ -3,29 +3,28 @@ import { Form, Button, Checkbox, Input, Alert } from "antd";
 import { signup } from "../contexts/AuthContext";
 
 function SignupPage() {
-  const [signupEmail, setsignupEmail] = useState("");
-  const [signupPassword, setsignupPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   const win = window.sessionStorage;
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    console.log(signupEmail, signupPassword);
+  async function handleSubmit(formData) {
+    console.log(formData);
+    // e.preventDefault();
+    // console.log(signupEmail, signupPassword);
     win.clear();
     try {
       setError("");
       setLoading(true);
 
-      let res = await signup(signupEmail, signupPassword);
+      let res = await signup(formData.email, formData.password);
       // console.log(res.user.accessToken);
       sessionStorage.setItem("accessToken", res.user.accessToken);
       setSuccess("Registration Successful. Please LogIn!")
     } catch (err)  {
-      console.log(err);
-      setError("Failed to Register!");
+      console.log(err, err.message);
+      setError(err?.message=== 'Firebase: Error (auth/email-already-in-use).'?"Email id Already Registered!":"Failed to Register!"||"Failed to Register!");
       setTimeout(() => {
         setError("");
       }, 5000);
@@ -53,6 +52,7 @@ function SignupPage() {
                 <img src={process.env.PUBLIC_URL + "ExepnseLogo.png"} alt="" />
               </div>
               <Form
+              onFinish={handleSubmit}
                 name="basic"
                 labelCol={{
                   span: 8,
@@ -101,7 +101,7 @@ function SignupPage() {
                       },
                     ]}
                   >
-                    <Input onChange={(e) => setsignupEmail(e.target.value)} />
+                    <Input  />
                   </Form.Item>
                   {/* </Col>
                   </Row> */}
@@ -121,7 +121,7 @@ function SignupPage() {
                     ]}
                     hasFeedback
                   >
-                    <Input.Password onChange={(e) => setsignupPassword(e.target.value)}/>
+                    <Input.Password />
                   </Form.Item>
                 </div>
                 <div className="signupEmail-div">
@@ -191,7 +191,7 @@ function SignupPage() {
                       type="submit"
                       htmlType="submit"
                       style={{ backgroundColor: "#189AB4", color: "white" }}
-                        onClick={handleSubmit}
+                        // onClick={handleSubmit}
                         disabled={loading}
                     >
                       Register

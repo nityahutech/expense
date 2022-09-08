@@ -29,7 +29,7 @@ function LoginPage() {
     } catch {
       setError("Failed to log in");
       setTimeout(() => {
-        setError("")
+        setError("");
       }, 3000);
     }
 
@@ -46,7 +46,7 @@ function LoginPage() {
           <div className="xyz">
             <div className="form-div">
               <div className="exepnse-logo">
-              <img src={process.env.PUBLIC_URL + "ExepnseLogo.png"} alt="" />
+                <img src={process.env.PUBLIC_URL + "ExepnseLogo.png"} alt="" />
               </div>
               <Form
                 name="basic"
@@ -68,7 +68,7 @@ function LoginPage() {
                   Email address<label style={{ color: "red" }}> *</label>
                 </div>
                 <div className="emailInput-div">
-                {/* <Row>
+                  {/* <Row>
                 <Col xl={24} lg={24} sm={24} md={24} xs={24}> */}
                   <Form.Item
                     name="email"
@@ -103,7 +103,7 @@ function LoginPage() {
                   </Form.Item>
                 </div>
 
-                <div style={{display:'flex'}}>
+                <div style={{ display: "flex" }}>
                   <Form.Item
                     name="remember"
                     valuePropName="checked"
@@ -116,7 +116,12 @@ function LoginPage() {
                   >
                     <Checkbox className="chkbox-color">Remember me</Checkbox>
                   </Form.Item>
-                  <div className="forgotpwd" style={{marginLeft: '3.5rem', marginTop:'5px'}}>Forgot Password?</div>
+                  <div
+                    className="forgotpwd"
+                    style={{ marginLeft: "3.5rem", marginTop: "5px" }}
+                  >
+                    Forgot Password?
+                  </div>
                 </div>
 
                 <Form.Item
@@ -150,15 +155,15 @@ function LoginPage() {
 
                 <div className="signup-msg">
                   Don't Have an account?{" "}
-                  <span style={{ color: "#0FAEAA", cursor: "pointer" }}>
+                  <a href="/SignupPage" style={{ color: "#0FAEAA", cursor: "pointer" }}>
                     SignUp
-                  </span>
+                  </a>
                 </div>
                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-          <p className="loginFooter">
-            © 2022 Expense. All rights reserved. Terms of Service
-          </p>
-        </Col>
+                  <p className="loginFooter">
+                    © 2022 Expense. All rights reserved. Terms of Service
+                  </p>
+                </Col>
               </Form>
             </div>
           </div>

@@ -9,6 +9,7 @@ import "../style/profilepage.css";
 import { Button, Modal } from 'antd';
 import { Form, Input, Radio,notification } from 'antd';
 import { useAuth } from "../contexts/AuthContext";
+import ProfileContext from "../contexts/ProfileContext";
 
 const { Meta } = Card;
 
@@ -20,8 +21,6 @@ const Profile = () => {
   const [editname, seteditname] = useState({
     address: "House No -2031, Sec- 4",
     city: "Rewari",
-    mailid: "swayamprava@hutechsolutions.com",
-    employeename: "Swayamprava Nanda",
     country: "India",
     phonenumber: "8447509792",
     state: "Haryana",
@@ -62,6 +61,7 @@ const Profile = () => {
 
   const showModal = () => {
     console.log('hi')
+    updateMyPhNo(currentUser, "9900714682")
     setIsModalOpen(true);
   };
 
@@ -85,7 +85,9 @@ const Profile = () => {
 
 
   const formonFinishHandler = (values) => {
-    console.log(values, "vvvvvvvvvvvvvvvvvvvvvvvvvv");
+    console.log(values.mailid);
+    updateMyProfile({displayName: values.employeename})
+    updateMyEmail(values.mailid)
 
     seteditname(() => ({
       ...values
@@ -206,7 +208,7 @@ const Profile = () => {
                 <div>
                   <h3>Contact</h3>
                   {/* {JSON.stringify(editname)} */}
-                  <p>{currentUser.email},  <br /> {currentUser.phoneNumber}</p>
+                  <p>{currentUser.email},  <br /> {editname.phonenumber}</p>
                 </div>
                 <div>
                   <h3>Address</h3>
@@ -239,8 +241,7 @@ const Profile = () => {
                 remember: true,
                 employeename: currentUser.displayName,
                 mailid: currentUser.email,
-                phonenumber: currentUser.phoneNumber
-
+                ...editname 
               }}
               fields={[
                 {

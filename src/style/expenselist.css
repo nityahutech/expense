@@ -1,182 +1,182 @@
 main{
-    width: 100%;
-    padding: 0px;
-    margin: 0px;
-  }
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+}
 
-  /* .category.ant-select-selector{
-    background: #f8f8f8 ;
-      border-radius: 5px !important;
-      color: #171832 !important;
-  } */
-  .row{
-    background: #fff;
-      padding: 14px;
-      border-radius: 5px;
-      margin: 4px 15px;
+/* .category.ant-select-selector{
+  background: #f8f8f8 ;
+    border-radius: 5px !important;
+    color: #171832 !important;
+} */
+.row{
+  background: #fff;
+    padding: 14px;
+    border-radius: 5px;
+    margin: 4px 15px;
 
-  }
-  .expenseTable.ant-table-wrapper{
-    background: #fff;
-      padding: 11px;
-      margin: 0px 15px;
-      border-radius: 5px;
-  }
-  .statusTag.ant-tag-green{
-    color: #41BF36;
-      /* background: #41BF36; */
-      
-      border-radius: 3px;
-      font-family: 'Open Sans';
-      
-      font-style: normal;
-      font-weight: 200;
-      font-size: 13px;
-      line-height: 22px;
-      width: 62px;
-      height: 25px;
-      text-align: center;
-  }
-  .statusTag.ant-tag-volcano{
-    /* background: #f13729; */
+}
+.expenseTable.ant-table-wrapper{
+  background: #fff;
+    padding: 11px;
+    margin: 0px 15px;
+    border-radius: 5px;
+}
+.statusTag.ant-tag-green{
+  color: #41BF36;
+    /* background: #41BF36; */
+    
     border-radius: 3px;
     font-family: 'Open Sans';
-    color: #f13729;
+    
     font-style: normal;
     font-weight: 200;
     font-size: 13px;
     line-height: 22px;
     width: 62px;
     height: 25px;
-    text-align: left;
-  }
-  a.catName{
-    color: #171832;
-  }
-  .ant-table-cell{
-    text-align: left;
-  }
-  
-  tr[data-row-key*="subTotal"] {
-    font-weight: bold;
-  }
-  .ant-table-column-has-sorters{
-    text-align: left;
-  }
-  .expenseTable .ant-table-thead th.ant-table-column-has-sorters {
-    text-align: left;}
-    .edIt.ant-btn-link{
-      color: #6e7475;
-    }
-    .deleTe.ant-btn-link{
-      color: #f04747;
-    }
-  
-  .addExpense.ant-btn-primary {
-    background: #189AB4;
-    left: 93px;
-  }
-  .upload.ant-btn {
-    background:#189AB4;
-    color: #fff;
-    display: flex;
-    position: absolute;
-    left: 18px;
+    text-align: center;
 }
-  
-  .uploadout.ant-btn{
-    left: 118px;
-    color: #fff;
-    background:#189AB4;
-  }
-  
-  /* .expenseTable table {
-    border-collapse: separate !important;
-    border-spacing: 0px 10px !important;
-  }
-
-  .expenseTable table thead tr th, .expenseTable table tbody tr td {
-    border-bottom: thin #dadada solid;
-    border-top: thin #dadada solid;
-    padding: 10px 16px;
-  } 
-   .expenseTable table thead tr th {
-    background: #ECECEC !important;
-    padding: 10px 16px;
-  }  */
-  
-
-  /* .expenseTable table thead tr th:nth-child(1), .expenseTable table tbody tr td:nth-child(1) {
-    border-left: thin #dadada solid;
-    border-bottom-left-radius: 5px !important;
-    border-top-left-radius: 5px !important;
+.statusTag.ant-tag-volcano{
+  /* background: #f13729; */
+  border-radius: 3px;
+  font-family: 'Open Sans';
+  color: #f13729;
+  font-style: normal;
+  font-weight: 200;
+  font-size: 13px;
+  line-height: 22px;
+  width: 62px;
+  height: 25px;
+  text-align: left;
+}
+a.catName{
+  color: #171832;
+}
+.ant-table-cell{
+  text-align: left;
 }
 
-  .expenseTable table thead tr th:nth-child(10), .expenseTable table tbody tr td:nth-child(10) {
-    border-right: thin #dadada solid;
-    border-bottom-right-radius: 5px !important;
-    border-top-right-radius: 5px !important;
-  } */
+tr[data-row-key*="subTotal"] {
+  font-weight: bold;
+}
+.ant-table-column-has-sorters{
+  text-align: left;
+}
+.expenseTable .ant-table-thead th.ant-table-column-has-sorters {
+  text-align: left;}
+  .edIt.ant-btn-link{
+    color: #6e7475;
+  }
+  .deleTe.ant-btn-link{
+    color: #f04747;
+  }
 
-  /* .expenseTable table {
-    border-collapse: separate !important;
-    border-spacing: 0px 10px !important;
-    
+.addExpense.ant-btn-primary {
+  background: #189AB4;
+  left: 93px;
+}
+.upload.ant-btn {
+  background:#189AB4;
+  color: #fff;
+  display: flex;
+  position: absolute;
+  left: 18px;
+}
+
+.uploadout.ant-btn{
+  left: 118px;
+  color: #fff;
+  background:#189AB4;
+}
+
+/* .expenseTable table {
+  border-collapse: separate !important;
+  border-spacing: 0px 10px !important;
+}
+
+.expenseTable table thead tr th, .expenseTable table tbody tr td {
+  border-bottom: thin #dadada solid;
+  border-top: thin #dadada solid;
+  padding: 10px 16px;
+} 
+ .expenseTable table thead tr th {
+  background: #ECECEC !important;
+  padding: 10px 16px;
+}  */
+
+
+/* .expenseTable table thead tr th:nth-child(1), .expenseTable table tbody tr td:nth-child(1) {
+  border-left: thin #dadada solid;
+  border-bottom-left-radius: 5px !important;
+  border-top-left-radius: 5px !important;
+}
+
+.expenseTable table thead tr th:nth-child(10), .expenseTable table tbody tr td:nth-child(10) {
+  border-right: thin #dadada solid;
+  border-bottom-right-radius: 5px !important;
+  border-top-right-radius: 5px !important;
+} */
+
+/* .expenseTable table {
+  border-collapse: separate !important;
+  border-spacing: 0px 10px !important;
+  
 } */
 /* .row1.ant-table-cell{
-    text-align: center;
-    width: 74px;
-  } */
-  .expenseTable table thead tr th, .expenseTable table tbody tr td {
-    padding: 10px 16px;
-  } 
-  .row2.ant-table-cell{
-    width: 172px;
-  }
+  text-align: center;
+  width: 74px;
+} */
+.expenseTable table thead tr th, .expenseTable table tbody tr td {
+  padding: 10px 16px;
+} 
+.row2.ant-table-cell{
+  width: 172px;
+}
 .row6.ant-table-cell{
-    width: 100px;
+  width: 130px;
 } 
 .row7.ant-table-cell{
-    width: 100px;
+  width: 130px;
 } 
 .row8.ant-table-cell{
-    width: 120px;
+  width: 140px;
 } 
 .row10.ant-table-cell{
-    width: 100px;
+  width: 100px;
 } 
 .row4.ant-table-cell{
-    width: 120px;
+  width: 120px;
 }
 /* .row5.ant-table-cell{
-  width: 90px;
+width: 90px;
 } */
 
 .expenseTable .edIt {
-    height: 22px;
+  height: 22px;
 }
 /* @media screen and (max-width: 600px){
-   
+ 
 } */
 
 
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 12px;
+width: 10px;
+height: 12px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
-  border-radius: 10px;
+box-shadow: inset 0 0 5px grey; 
+border-radius: 10px;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #05445E; 
-  border-radius: 10px;
+background: #05445E; 
+border-radius: 10px;
 }
 
 /* Handle on hover */

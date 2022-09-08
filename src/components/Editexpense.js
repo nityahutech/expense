@@ -135,290 +135,317 @@ const Editexpense = (props) => {
   };
 
   return (
-    <Col xs={22} sm={22} md={22}>
-      <Form
-        labelCol={{
-          span: 6,
-        }}
-        wrapperCol={{
-          span: 16,
-        }}
-        fields={[
-          {
-            name: ["expensename"],
-            value: catname,
-          },
-          {
-            name: ["name"],
-            value: name,
-          },
-          {
-            name: ["quantity"],
-            value: quantity,
-          },
-          {
-            name: ["amount"],
-            value: amount,
-          },
-          {
-            name: ["date"],
-            value: moment(date, dateFormat),
-          },
-          {
-            name: ["paidname"],
-            value: paidname,
-          },
-          {
-            name: ["Textarea"],
-            value: description,
-          },
-          {
-            name: ["status"],
-            value: status,
-          },
-        ]}
-        layout="horizontal"
-      >
-        <Form.Item
-          style={{ marginBottom: "10px" }}
-          name="expensename"
-          label="Expense Name&nbsp;"
-          onKeyPress={(event) => {
-            if (checkAlphabets(event)) {
-              event.preventDefault();
-            }
-          }}
-          rules={[
-            {
-              required: true,
-              message: "Please enter Expense Name",
-            },
-            {
-              pattern: /^[a-zA-Z\s]*$/,
-              message: "Please enter Valid Name",
-            },
-          ]}
-        >
-          <Input
-            maxLength={20}
-            onChange={(e) => {
-              const inputval = e.target.value;
-              const newVal =
-                inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-              setcatname(newVal);
+    <Form
+      labelCol={{
+        span: 20,
+      }}
+      wrapperCol={{
+        span: 20,
+      }}
+      fields={[
+        {
+          name: ["expensename"],
+          value: catname,
+        },
+        {
+          name: ["name"],
+          value: name,
+        },
+        {
+          name: ["quantity"],
+          value: quantity,
+        },
+        {
+          name: ["amount"],
+          value: amount,
+        },
+        {
+          name: ["date"],
+          value: moment(date, dateFormat),
+        },
+        {
+          name: ["paidname"],
+          value: paidname,
+        },
+        {
+          name: ["Textarea"],
+          value: description,
+        },
+        {
+          name: ["status"],
+          value: status,
+        },
+      ]}
+      layout="vertical"
+    >
+      {/* ------------------------------Paid By------- */}
+      <Row>
+        <Col xs={22} sm={22} md={12}>
+          <Form.Item
+            style={{ marginBottom: "10px" }}
+            name="expensename"
+            label="Expense Name&nbsp;"
+            onKeyPress={(event) => {
+              if (checkAlphabets(event)) {
+                event.preventDefault();
+              }
             }}
-          />
-        </Form.Item>
-
-        {/* ------------------------------Paid By------- */}
-
-        <Form.Item
-          style={{ marginBottom: "10px" }}
-          label="Paid By&nbsp;"
-          name="name"
-          onKeyPress={(event) => {
-            if (checkAlphabets(event)) {
-              event.preventDefault();
-            }
-          }}
-          rules={[
-            {
-              required: true,
-              message: "Please enter Customer Name",
-            },
-            {
-              pattern: /^[a-zA-Z\s]*$/,
-              message: "Please enter Valid Name",
-              // /^[a-zA-Z]+$/g
-            },
-          ]}
-        >
-          <Input
-            maxLength={20}
-            onChange={(e) => {
-              const inputval = e.target.value;
-              const newVal =
-                inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-              setname(newVal);
-            }}
-          />
-        </Form.Item>
-        <Form.Item
-          style={{ marginBottom: "10px" }}
-          label="Paid To&nbsp;"
-          name="paidname"
-          onKeyPress={(event) => {
-            if (checkAlphabets(event)) {
-              event.preventDefault();
-            }
-          }}
-          rules={[
-            {
-              required: true,
-              message: "Please enter Vendor",
-            },
-            {
-              pattern: /^[a-zA-Z\s]*$/,
-              message: "Please enter Valid Name",
-            },
-          ]}
-        >
-          <Input
-            maxLength={20}
-            onChange={(e) => {
-              const inputval = e.target.value;
-              const newVal =
-                inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-              setpaidname(newVal);
-            }}
-          />
-        </Form.Item>
-
-        {/* ----------------------------------Status------- */}
-
-        <Form.Item
-          style={{ marginBottom: "10px" }}
-          label="Status&nbsp;"
-          name="status"
-          className="Required"
-          rules={[
-            {
-              message: "Please enter the paymeny status",
-              required: true,
-            },
-          ]}
-        >
-          <Select
-            defaultValue={status}
-            style={{
-              width: "100%",
-            }}
-            onChange={(value) => {
-              setStatus(value);
-            }}
+            rules={[
+              {
+                required: true,
+                message: "Please enter Expense Name",
+              },
+              {
+                pattern: /^[a-zA-Z\s]*$/,
+                message: "Please enter Valid Name",
+              },
+            ]}
           >
-            <Option value="Paid">Paid</Option>
-            <Option value="Unpaid">Unpaid</Option>
-          </Select>
-        </Form.Item>
-        {/* ----------------------------------Datepicker------- */}
-        <Form.Item
-          style={{ marginBottom: "10px" }}
-          name="date"
-          label="Date&nbsp;"
-          rules={[
-            {
-              required: true,
-              message: "Please Choose a Date",
-            },
-          ]}
-        >
-          <DatePicker
-            format={dateFormat}
-            style={{ width: "100%" }}
-            onChange={(e) => {
-              setdate(e.format(dateFormat));
+            <Input
+              maxLength={20}
+              onChange={(e) => {
+                const inputval = e.target.value;
+                const newVal =
+                  inputval.substring(0, 1).toUpperCase() +
+                  inputval.substring(1);
+                setcatname(newVal);
+              }}
+            />
+          </Form.Item>
+        </Col>
+        <Col xs={22} sm={22} md={12}>
+          <Form.Item
+            style={{ marginBottom: "10px" }}
+            label="Paid By&nbsp;"
+            name="name"
+            onKeyPress={(event) => {
+              if (checkAlphabets(event)) {
+                event.preventDefault();
+              }
             }}
-          />
-        </Form.Item>
-        {/* --------------------------------------Amount------- */}
+            rules={[
+              {
+                required: true,
+                message: "Please enter Customer Name",
+              },
+              {
+                pattern: /^[a-zA-Z\s]*$/,
+                message: "Please enter Valid Name",
+                // /^[a-zA-Z]+$/g
+              },
+            ]}
+          >
+            <Input
+              maxLength={20}
+              onChange={(e) => {
+                const inputval = e.target.value;
+                const newVal =
+                  inputval.substring(0, 1).toUpperCase() +
+                  inputval.substring(1);
+                setname(newVal);
+              }}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
 
-        <Form.Item
-          style={{ marginBottom: "10px" }}
-          label="Amount&nbsp;"
-          name="amount"
-          onKeyPress={(event) => {
-            if (checkNumbervalue(event)) {
-              event.preventDefault();
-            }
-          }}
-          rules={[
-            {
-              required: true,
-              message: "Please enter the amount",
-              pattern: /^[0-9\b]+$/,
-            },
-            { whitespace: true },
-          ]}
-        >
-          <Input
-            maxLength={8}
-            value={amount}
-            onChange={(e) => {
-              const amt = e.target.value;
-              setAmount(amt);
-              setsubtotal(amt * quantity);
+      <Row>
+        <Col xs={22} sm={22} md={12}>
+          <Form.Item
+            style={{ marginBottom: "10px" }}
+            label="Paid To&nbsp;"
+            name="paidname"
+            onKeyPress={(event) => {
+              if (checkAlphabets(event)) {
+                event.preventDefault();
+              }
             }}
-          />
-        </Form.Item>
-        {/* --------------------------------------Quantity------- */}
+            rules={[
+              {
+                required: true,
+                message: "Please enter Vendor",
+              },
+              {
+                pattern: /^[a-zA-Z\s]*$/,
+                message: "Please enter Valid Name",
+              },
+            ]}
+          >
+            <Input
+              maxLength={20}
+              onChange={(e) => {
+                const inputval = e.target.value;
+                const newVal =
+                  inputval.substring(0, 1).toUpperCase() +
+                  inputval.substring(1);
+                setpaidname(newVal);
+              }}
+            />
+          </Form.Item>
+        </Col>
+        <Col xs={22} sm={22} md={12}>
+          <Form.Item
+            style={{ marginBottom: "10px" }}
+            name="date"
+            label="Date&nbsp;"
+            rules={[
+              {
+                required: true,
+                message: "Please Choose a Date",
+              },
+            ]}
+          >
+            <DatePicker
+              format={dateFormat}
+              style={{ width: "100%" }}
+              onChange={(e) => {
+                setdate(e.format(dateFormat));
+              }}
+            />
+          </Form.Item>
+        </Col>
+        {/* <Col xs={22} sm={22} md={12}>
+          <Form.Item
+            style={{ marginBottom: "10px" }}
+            label="Status&nbsp;"
+            name="status"
+            className="Required"
+            rules={[
+              {
+                message: "Please enter the paymeny status",
+                required: true,
+              },
+            ]}
+          >
+            <Select
+              defaultValue={status}
+              style={{
+                width: "100%",
+              }}
+              onChange={(value) => {
+                setStatus(value);
+              }}
+            >
+              <Option value="Paid">Paid</Option>
+              <Option value="Unpaid">Unpaid</Option>
+            </Select>
+          </Form.Item>
+        </Col> */}
+      </Row>
 
-        <Form.Item
-          style={{ marginBottom: "10px" }}
-          name="quantity"
-          label="Quantity&nbsp;"
-          onKeyPress={(event) => {
-            if (checkNumbervalue(event)) {
-              event.preventDefault();
-            }
-          }}
-          rules={[
-            {
-              required: true,
-              message: "Please enter the quantity ",
-              pattern: /^[0-9\b]+$/,
-            },
-          ]}
-        >
-          <Input
-            maxLength={4}
-            value={quantity}
-            onChange={(e) => {
-              const qnt = e.target.value;
-              setQuantity(qnt);
-              setsubtotal(amount * qnt);
+      {/* ----------------------------------Datepicker------- */}
+
+      {/* --------------------------------------Amount------- */}
+      <Row>
+        <Col xs={22} sm={22} md={12}>
+          <Form.Item
+            style={{ marginBottom: "10px" }}
+            label="Amount&nbsp;"
+            name="amount"
+            onKeyPress={(event) => {
+              if (checkNumbervalue(event)) {
+                event.preventDefault();
+              }
             }}
-            placeholder="Quantity of the item"
-          />
-        </Form.Item>
-        {/* --------------------------------------Sub-subtotal------- */}
+            rules={[
+              {
+                required: true,
+                message: "Please enter the amount",
+                pattern: /^[0-9\b]+$/,
+              },
+              { whitespace: true },
+            ]}
+          >
+            <Input
+              maxLength={8}
+              value={amount}
+              onChange={(e) => {
+                const amt = e.target.value;
+                setAmount(amt);
+                setsubtotal(amt * quantity);
+              }}
+            />
+          </Form.Item>
+        </Col>
+        <Col xs={22} sm={22} md={12}>
+          <Form.Item
+            style={{ marginBottom: "10px" }}
+            name="quantity"
+            label="Quantity&nbsp;"
+            onKeyPress={(event) => {
+              if (checkNumbervalue(event)) {
+                event.preventDefault();
+              }
+            }}
+            rules={[
+              {
+                required: true,
+                message: "Please enter the quantity ",
+                pattern: /^[0-9\b]+$/,
+              },
+            ]}
+          >
+            <Input
+              maxLength={4}
+              value={quantity}
+              onChange={(e) => {
+                const qnt = e.target.value;
+                setQuantity(qnt);
+                setsubtotal(amount * qnt);
+              }}
+              placeholder="Quantity of the item"
+            />
+          </Form.Item>
+        </Col>
+      </Row>
 
-        <Form.Item
-          label="Subtotal"
-          className="Subtotal"
-          style={{ marginBottom: "10px", Color: "black" }}
-        >
-          <Input readonly value={subtotal} disabled={true} />
-        </Form.Item>
+      {/* --------------------------------------Quantity------- */}
 
-        {/* -----------------------Text-area--------------- */}
+      {/* --------------------------------------Sub-subtotal------- */}
+      <Row>
+        <Col xs={22} sm={22} md={12}>
+          <Form.Item
+            label="Subtotal"
+            className="Subtotal"
+            style={{ marginBottom: "10px", Color: "black" }}
+          >
+            <Input readonly value={subtotal} disabled={true} />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={24}>
+        <Col xs={22}>
+          <Form.Item
+            style={{ marginBottom: "10px" }}
+            label="Descriptions"
+            name="Textarea"
+            className="Description"
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: "Please enter the Description ",
+            //   },
+            // ]}
+          >
+            <TextArea
+              maxLength={50}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
 
-        <Form.Item
-          style={{ marginBottom: "10px" }}
-          label="Descriptions"
-          name="Textarea"
-          className="Description"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please enter the Description ",
-          //   },
-          // ]}
-        >
-          <TextArea
-            maxLength={50}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </Form.Item>
-        <br />
-        <Button style={cancelStyle} onClick={cancel}>
-          Cancel
-        </Button>
-        <Button style={buttonStyle} onClick={submitEdit}>
-          Submit
-        </Button>
-        <br />
-        {/* <Form.Item style={{ marginBottom: "0" }}>
+      {/* -----------------------Text-area--------------- */}
+
+      <br />
+      <Button style={cancelStyle} onClick={cancel}>
+        Cancel
+      </Button>
+      <Button style={buttonStyle} onClick={submitEdit}>
+        Submit
+      </Button>
+      <br />
+      {/* <Form.Item style={{ marginBottom: "0" }}>
         <Upload
           multiple
           listType="text"
@@ -434,8 +461,7 @@ const Editexpense = (props) => {
           </Button>
         </Upload>
       </Form.Item> */}
-      </Form>
-    </Col>
+    </Form>
   );
 };
 

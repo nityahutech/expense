@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../style/Charts.css";
-import { Col, Row, Select } from "antd";
+import { Select } from "antd";
 
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +16,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { Pie } from "react-chartjs-2";
-import { totalAmount, avgAmountPerMonth } from "../contexts/DashboardContext";
+import { totalAmount, avgAmountPerMonth, topSixExpenses } from "../contexts/DashboardContext";
 // import faker from 'faker';
 ChartJS.register(
   CategoryScale,
@@ -29,9 +29,6 @@ ChartJS.register(
 );
 
 const { Option } = Select;
-const handleChange = (value) => {
-  console.log(`selected ${value}`);
-};
 
 const Charts = () => {
   const handleExpenselist = () => {
@@ -41,18 +38,85 @@ const Charts = () => {
 
   const [total, setTotal] = useState(0);
   const [avg, setAvg] = useState(0);
+  let col = 0;
+  let initalPieData = [[], []]
+  const [pieData, setPieData] = useState([[],[]]);
 
-  const values = async () => {
-    await totalAmount().then((a) => {
-      setTotal(a);
-    });
-    await avgAmountPerMonth().then((a) => {
-      console.log(a);
-      setAvg(a);
+  // function accumulateExpense(expense) {
+  //   let piedata= [...pieData];
+  //   console.log(piedata[0])
+  //   console.log(expense.catname)
+  //   if(pieData[0].includes(expense.catname)){
+  //     let index = pieData[0].indexOf(expense.catname);
+  //     piedata[1][index] += expense.subtotal;
+  //   }
+  //   else {
+  //     if (col == 5) return;
+  //     console.log(col);
+  //     piedata[0][col] = expense.catname;
+  //     console.log(piedata[0][col]);
+  //     piedata[1][col] = expense.subtotal;
+  //     console.log(piedata[1][col]);
+  //     setPieData(piedata);
+  //     col++;
+  //   }
+  // }
+
+  function accumulateExpense(expense, i) {
+    if (i === 0) initalPieData = [[], []];
+    console.log("***************");
+    console.log(JSON.stringify(expense));
+    console.log(JSON.stringify(initalPieData));
+    if (initalPieData[0].includes(expense.catname)) {
+      let index = initalPieData[0].indexOf(expense.catname);
+      initalPieData[1][index] += expense.subtotal;
+    } else {
+      if (col === 6) return;
+      initalPieData[0][col] = expense.catname;
+      initalPieData[1][col] = expense.subtotal;
+      setPieData(initalPieData);
+      col++;
+    }
+  }
+
+
+  // useEffect(() => {
+  //   console.log
+  //   topSixExpenses(value, '2022').then((exp) => {
+  //     console.log(exp);
+  //     exp.forEach(accumulateExpense);
+  //   });
+
+  // }, [pieData])
+  const handleChange = (value) => {
+      setPieData([[],[]]);
+      col = 0;
+      console.log(col,":",pieData);
+    topSixExpenses(value, '2022').then((exp) => {
+      console.log(exp);
+      exp.forEach(accumulateExpense, col);
     });
   };
 
+  const values = () => {
+    totalAmount().then((a) => {
+      setTotal(a);
+    });
+    avgAmountPerMonth().then((b) => {
+      console.log(b);
+      setAvg(b);
+    });
+    topSixExpenses('09', '2022').then((exp) => {
+      console.log(exp);
+      setPieData([[],[]]);
+      exp.forEach(accumulateExpense, col);
+      col = 0;
+    });
+    console.log(pieData);
+  };
+
   useEffect(() => {
+    console.log(col,":",pieData);
     values();
   }, []);
 
@@ -92,18 +156,16 @@ const Charts = () => {
                   {
                     label: "Water",
                     data: [
-                      876, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
+                      1050, 150, 990, 900, 800, 700, 600, 500, 400, 300, 200,
                       100,
                     ],
                     backgroundColor: [
-                      "red",
-                      // "Green",
-                      // "Yellow",
-                      // "Orange",
-                      // "blue",
-                      // "lightgreen",
-                      // "darkgreen",
+                      "rgba(32, 126, 227, 0.5)",
                     ],
+                    borderColor: [
+                      "rgba(32, 126, 227, 1)",
+                    ],
+                    borderWidth: 1,
                   },
                   {
                     label: "Electricity",
@@ -112,68 +174,62 @@ const Charts = () => {
                       100,
                     ],
                     backgroundColor: [
-                      "blue",
-                      // "orange",
-                      // "Yellow",
-                      // "Orange",
-                      // "blue",
-                      // "lightgreen",
-                      // "darkgreen",
+                      "rgba(232, 65, 23, 0.5)",
                     ],
+                    borderColor: [
+                      "rgba(232, 65, 23, 1)",
+                    ],
+                    borderWidth: 1,
                   },
                   {
                     label: "Newspaper",
                     data: [
-                      750, 500, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
+                      750, 600, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
                       100,
                     ],
                     backgroundColor: [
-                      "aqua",
-                      // "orange",
-                      // "Yellow",
-                      // "Orange",
-                      // "blue",
-                      // "lightgreen",
-                      // "darkgreen",
+                      "rgba(231, 237, 47, 0.5)",
                     ],
+                    borderColor: [
+                      "rgba(231, 237, 47, 1)",
+                    ],
+                    borderWidth: 1,
                   },
                   {
                     label: "Food",
                     data: [
-                      650, 500, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
+                      650, 700, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
                       100,
                     ],
                     backgroundColor: [
-                      // "magenta",
-                      // "orange",
-                      // "Yellow",
-                      // "Orange",
-                      // "blue",
-                      "lightgreen",
-                      // "darkgreen",
+                      "rgba(21, 232, 60, 0.5)",
                     ],
+                    borderColor: [
+                      "rgba(21, 232, 60, 1)",
+                    ],
+                    borderWidth: 1,
                   },
                   {
                     label: "Travel",
                     data: [
-                      550, 500, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
+                      550, 800, 1000, 900, 800, 700, 600, 500, 400, 300, 200,
                       100,
                     ],
                     backgroundColor: [
-                      // "pink",
-                      "orange",
-                      // "Yellow",
-                      // "Orange",
-                      // "blue",
-                      // "lightgreen",
-                      // "darkgreen",
+                      "rgba(232, 21, 158, 0.5)",
                     ],
+                    borderColor: [
+                      "rgba(232, 21, 158, 1)",
+                    ],
+                    borderWidth: 1,
                   },
                 ],
               }}
-              options={{}}
+              options={{
+                maintainAspectRatio: true,
+              }}
             />
-            <div className="vbutton">
+            <div className="vbutton1">
               <button
                 style={{
                   background: "#05445e",
@@ -188,76 +244,87 @@ const Charts = () => {
                 View
               </button>
               <Select
-                defaultValue="Month"
+                defaultValue="2022"
+                size="small"
                 style={{
                   width: 120,
-                  margin: "10px",
+                  marginLeft: 10,
                 }}
                 onChange={handleChange}
               >
-                <Option value="year">Year</Option>
-                <Option value="Month">Month</Option>
-                <Option value="Week">Week</Option>
-                <Option value="day">Day</Option>
+                <Option value="2022">2022</Option>
+                <Option value="2023">2023</Option>
               </Select>
             </div>
           </div>
           <div className="colpie">
             <Pie
               data={{
-                labels: ["Water", "Electricity", "Newspaper", "Food", "Travel", "Others"],
+                labels:  pieData[0],
                 datasets: [
                   {
                     label: "# of Votes",
-                    data: [12, 19, 3, 5, 2, 3],
+                    data:  pieData[1],
                     backgroundColor: [
-                      "rgba(255, 99, 132, 0.2)",
-                      "rgba(54, 162, 235, 0.2)",
-                      "rgba(255, 206, 86, 0.2)",
-                      "rgba(75, 192, 192, 0.2)",
-                      "rgba(153, 102, 255, 0.2)",
-                      "rgba(255, 159, 64, 0.2)",
+                      "rgba(32, 126, 227, 0.2)",
+                      "rgba(232, 65, 23, 0.2)",
+                      "rgba(231, 237, 47, 0.2)",
+                      "rgba(21, 232, 60, 0.2)",
+                      "rgba(232, 21, 158, 0.2)",
                     ],
                     borderColor: [
-                      "rgba(255, 99, 132, 1)",
-                      "rgba(54, 162, 235, 1)",
-                      "rgba(255, 206, 86, 1)",
-                      "rgba(75, 192, 192, 1)",
-                      "rgba(153, 102, 255, 1)",
-                      "rgba(255, 159, 64, 1)",
+                      "rgba(32, 126, 227, 1)",
+                      "rgba(232, 65, 23, 1)",
+                      "rgba(231, 237, 47, 1)",
+                      "rgba(21, 232, 60, 1)",
+                      "rgba(232, 21, 158, 1)",
                     ],
                     borderWidth: 1,
                   },
                 ],
               }}
             />
-            <div className="vbutton">
+            <div className="vbutton2">
               <button
-                style={{
-                  background: "#05445e",
-                  color: "#fff",
-                  borderRadius: "5px",
-                  width: "50px",
-                  marginLeft: "30%",
-                  cursor: "pointer",
-                }}
                 onClick={handleExpenselist}
               >
                 View
               </button>
               <Select
                 id="short"
-                defaultValue="Month"
+                defaultValue="2022"
                 style={{
                   width: 90,
-                 margin: "10px",
+                 marginLeft: "5px",
+                 marginTop: "10px",
+                 marginBottom: "10px",
                 }}
                 onChange={handleChange}
               >
-                <Option value="year">Year</Option>
-                <Option value="Month">Month</Option>
-                <Option value="Week">Week</Option>
-                <Option value="day">Day</Option>
+                <Option value="2022">2022</Option>
+                <Option value="2023">2023</Option>
+              </Select>
+              <Select
+                id="short"
+                defaultValue="September"
+                style={{
+                  width: 90,
+                 marginLeft: "5px",
+                }}
+                onChange={handleChange}
+              >
+                <Option value="01">January</Option>
+                <Option value="02">Faburary</Option>
+                <Option value="03">March</Option>
+                <Option value="04">April</Option>
+                <Option value="05">May</Option>
+                <Option value="06">June</Option>
+                <Option value="07">July</Option>
+                <Option value="08">August</Option>
+                <Option value="09">September</Option>
+                <Option value="10">October</Option>
+                <Option value="11">Novemder</Option>
+                <Option value="12">December</Option>
               </Select>
             </div>
           </div>

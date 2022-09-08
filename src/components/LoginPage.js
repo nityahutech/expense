@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Checkbox, Form, Input, Alert, Row, Col } from "antd";
-import { signup, login } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
@@ -11,6 +11,7 @@ function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login, resetPassword } = useAuth()
 
   const win = window.sessionStorage;
 
@@ -23,19 +24,34 @@ function LoginPage() {
       setLoading(true);
 
       let res = await login(loginEmail, loginPassword);
-      // console.log(res.user.accessToken);
+      console.log(res.user);
       sessionStorage.setItem("accessToken", res.user.accessToken);
       navigate("DashBoard", { replace: true });
     } catch {
       setError("Failed to log in");
       setTimeout(() => {
-        setError("")
+        setError("");
       }, 3000);
     }
 
     setLoading(false);
   }
 
+  async function handleReset(e) {
+    e.preventDefault();
+    console.log(loginEmail, loginPassword);
+    win.clear();
+    try {
+      setError("Reset email sent");
+      setLoading(true);
+      await resetPassword(loginEmail);
+    } catch {
+      setError("Failed to send reset email");
+    }
+
+    setLoading(false);
+  }
+  
   return (
     <>
       <div className="main-div">
@@ -46,7 +62,7 @@ function LoginPage() {
           <div className="xyz">
             <div className="form-div">
               <div className="exepnse-logo">
-              <img src={process.env.PUBLIC_URL + "ExepnseLogo.png"} alt="" />
+                <img src={process.env.PUBLIC_URL + "ExepnseLogo.png"} alt="" />
               </div>
               <Form
                 name="basic"
@@ -68,7 +84,7 @@ function LoginPage() {
                   Email address<label style={{ color: "red" }}> *</label>
                 </div>
                 <div className="emailInput-div">
-                {/* <Row>
+                  {/* <Row>
                 <Col xl={24} lg={24} sm={24} md={24} xs={24}> */}
                   <Form.Item
                     name="email"
@@ -103,7 +119,7 @@ function LoginPage() {
                   </Form.Item>
                 </div>
 
-                <div style={{display:'flex'}}>
+                <div style={{ display: "flex" }}>
                   <Form.Item
                     name="remember"
                     valuePropName="checked"
@@ -116,7 +132,7 @@ function LoginPage() {
                   >
                     <Checkbox className="chkbox-color">Remember me</Checkbox>
                   </Form.Item>
-                  <div className="forgotpwd" style={{marginLeft: '3.5rem', marginTop:'5px'}}>Forgot Password?</div>
+                  <div className="forgotpwd" onClick={handleReset} style={{marginLeft: '3.5rem', marginTop:'5px'}}>Forgot Password</div>
                 </div>
 
                 <Form.Item
@@ -150,15 +166,15 @@ function LoginPage() {
 
                 <div className="signup-msg">
                   Don't Have an account?{" "}
-                  <span style={{ color: "#0FAEAA", cursor: "pointer" }}>
+                  <a href="/SignupPage" style={{ color: "#0FAEAA", cursor: "pointer" }}>
                     SignUp
-                  </span>
+                  </a>
                 </div>
                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-          <p className="loginFooter">
-            © 2022 Expense. All rights reserved. Terms of Service
-          </p>
-        </Col>
+                  <p className="loginFooter">
+                    © 2022 Expense. All rights reserved. Terms of Service
+                  </p>
+                </Col>
               </Form>
             </div>
           </div>

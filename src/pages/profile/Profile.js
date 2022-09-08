@@ -4,10 +4,12 @@ import Profile from "../../components/Profilepage";
 import Sidebar from "../../components/sidebar/NewSidebar";
 
 const DashBoard = () => {
+ 
   return (
     <div className="home">
       <div className="sidecontainer">
-        <Sidebar />
+        <Sidebar 
+          activeMenu={["4"]} selectedkey={['4']}  />
       </div>
 
       <div className="homeContainer">

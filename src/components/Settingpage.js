@@ -7,58 +7,86 @@ import { Tabs } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 // import { useNavigate } from "react-router-dom";
 
+const onChange = (e) => {
+  console.log(`checked = ${e.target.checked}`);
+};
+
 const showNotification = (type, msg, desc) => {
   notification[type]({
     message: msg,
     description: desc,
   });
 };
+const openNotificationWithIcon = (type) => {
+  notification[type]({
+    message: "Successfully",
+    description: "Password changed successfully",
+  });
+};
 
 const Settingpage = () => {
   const [tabPosition, setTabPosition] = useState("left");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(null);
+  const [form] = Form.useForm();
+  const [emailForm] = Form.useForm();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNew] = useState("");
   // const [deleteCheck, setDelete] = useState(null);
-  const { currentUser, updateMyPassword, deletePerson, updateMyEmail, login} = useAuth();
+  const { currentUser, updateMyPassword, deletePerson, updateMyEmail, login } =
+    useAuth();
+
+  const openUpdateEmail = (type) => {
+    notification[type]({
+      message: "Successfully",
+      description: "Email Address changed successfully",
+    });
+  };
+
+  useEffect(() => {
+    setTabPosition(window.innerWidth <= 768 ? "top" : "left");
+  }, []);
+
+  window.addEventListener("resize", () => {
+    setTabPosition(window.innerWidth <= 768 ? "top" : "left");
+  });
+
   // const navigate = useNavigate();
 
-  
-const handleEmailSubmit = async() => {
-  console.log(email);
-  try{
-    await updateMyEmail(email);
-    showNotification("success", "Success", "Record updated successfuly");
-  } catch {
-    showNotification("error", "Failed", "Record update failed");
-  }
-};
-
-const checkPassword = async () => {
-  try {
-    let check = await login(currentUser.email, password);
-    console.log(check);
-    console.log("Correct Password!");
-    return true;
-  } catch {
-    showNotification("error", "Failed", "Incorrect password");
-    return false;
-  }
-}
-
-const handlePasswordSubmit = async() => {
-  let check = await checkPassword();
-  if (check){
-    try{
-      await updateMyPassword(newPassword);
+  const handleEmailSubmit = async () => {
+    console.log(email);
+    try {
+      await updateMyEmail(email);
       showNotification("success", "Success", "Record updated successfuly");
     } catch {
       showNotification("error", "Failed", "Record update failed");
     }
-  }
-};
+  };
 
-  const [form] = Form.useForm();
+  const checkPassword = async () => {
+    try {
+      let check = await login(currentUser.email, password);
+      console.log(check);
+      console.log("Correct Password!");
+      return true;
+    } catch {
+      showNotification("error", "Failed", "Incorrect password");
+      return false;
+    }
+  };
+
+  const handlePasswordSubmit = async () => {
+    let check = await checkPassword();
+    if (check) {
+      try {
+        await updateMyPassword(newPassword);
+        showNotification("success", "Success", "Record updated successfuly");
+      } catch {
+        showNotification("error", "Failed", "Record update failed");
+      }
+    }
+  };
 
   //   function isValidEmail(email) {
   //     return /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9])+@[a-z]+\.[a-z]{2,3}/.test(email);
@@ -73,39 +101,32 @@ const handlePasswordSubmit = async() => {
   // setMessage(event.target.value);
   //   };
 
-  useEffect(() => {
-    setTabPosition(window.innerWidth <= 760 ? "top" : "left");
-  }, []);
-
-  window.addEventListener("resize", () => {
-    setTabPosition(window.innerWidth <= 760 ? "top" : "left");
-  });
-
   return (
     <>
-      <Tabs tabPosition={tabPosition} defaultActiveKey="1">
-        <Tabs.TabPane
-          className="Psw"
-          tab="Update Password"
-          key="3"
-          style={{ marinLeft: "2rem" }}
-        >
+      <Tabs
+        tabPosition={tabPosition}
+        defaultActiveKey="1"
+        className="settingsTab"
+      >
+        <Tabs.TabPane className="tabPanel" tab="Update Password" key="3">
           <Card
-            className="Password"
+            className="settingsCard"
             title="Update Password"
-            style={{
-              width: 550,
-              color: "black",
-              height: "310px",
-            }}
+            // style={{
+            //   width: 550,
+            //   color: "black",
+            //   height: "310px",
+            // }}
           >
             <Form
               form={form}
               onFinish={() => {
-                // openNotificationWithIcon("success");
+                openNotificationWithIcon("success");
                 form.resetFields();
               }}
               name="basic"
+              className="uppsw"
+              key={"psw"}
               labelCol={{
                 span: 8,
               }}
@@ -117,11 +138,11 @@ const handlePasswordSubmit = async() => {
               }}
               autoComplete="off"
             >
-              <Row gutter={[48, 4]}>
-                <Col xs={24} sm={12} md={8} lg={8}>
-                  <div>Current Password</div>
+              <Row gutter={[8, 4]}>
+                <Col xs={22} sm={10} md={8} lg={6}>
+                  <div className="cupsw">Current Password</div>
                 </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
+                <Col xs={22} sm={10} md={10} lg={10}>
                   <Form.Item
                     key="currentpassword"
                     name="current password"
@@ -145,11 +166,11 @@ const handlePasswordSubmit = async() => {
                 </Col>
               </Row>
 
-              <Row gutter={[48, 4]}>
-                <Col xs={24} sm={12} md={8} lg={8}>
-                  <div>New Password</div>
+              <Row gutter={[8, 4]}>
+                <Col xs={22} sm={10} md={8} lg={6}>
+                  <div className="npsw">New Password</div>
                 </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
+                <Col xs={22} sm={10} md={10} lg={10}>
                   <Form.Item
                     name="password1"
                     key="password1"
@@ -173,11 +194,11 @@ const handlePasswordSubmit = async() => {
                 </Col>
               </Row>
 
-              <Row gutter={[48, 4]}>
-                <Col xs={24} sm={12} md={8} lg={8}>
-                  <div>Confirm Password</div>
+              <Row gutter={[8, 4]}>
+                <Col xs={22} sm={10} md={8} lg={6}>
+                  <div className="copsw">Confirm Password</div>
                 </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
+                <Col xs={22} sm={10} md={10} lg={10}>
                   <Form.Item
                     name="password2"
                     key="password2"
@@ -209,27 +230,34 @@ const handlePasswordSubmit = async() => {
                   </Form.Item>
                 </Col>
               </Row>
-              <Button
-                className="save"
-                htmlType="submit"
-                type="primary"
-                onClick={handlePasswordSubmit}
-              >
-                Save Change
-              </Button>
+              <Row gutter={[8, 4]}>
+                <Col xs={22} sm={10} md={8} lg={6}>
+                  {" "}
+                </Col>
+                <Col xs={22} sm={10} md={10} lg={10}>
+                  <Button
+                    className="save"
+                    htmlType="submit"
+                    type="primary"
+                    // onClick={() => openNotificationWithIcon("success")}
+                  >
+                    Save Change
+                  </Button>
+                </Col>
+              </Row>
             </Form>
           </Card>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Update Email" key="4">
+        <Tabs.TabPane tab="Update Email" key="4" className="tabPanel">
           <Card
-            className="Email"
+            className="settingsCard"
             title="Update Email"
-            style={{
-              width: 550,
-              color: "black",
-            }}
+            // style={{
+            //   width: 550,
+            //   color: "black",
+            // }}
           >
-            <div
+            {/* <div
               className="address"
               style={{
                 display: "flex",
@@ -237,32 +265,31 @@ const handlePasswordSubmit = async() => {
                 justifyContent: "space-between",
               }}
             >
-              <div className="emailadd">
-                New Email Address{" "}
-                <label
-                  className="Label"
-                  style={{
-                    color: "red",
-                  }}
-                >
-                  {" "}
-                </label>
-              </div>
-              <div className="email">
-                <Form
-                  // onFinish={() => openNotificationWithIcon("success")}
-                  name="basic"
-                  labelCol={{
-                    span: 8,
-                  }}
-                  wrapperCol={{
-                    span: 24,
-                  }}
-                  initialValues={{
-                    remember: true,
-                  }}
-                  autoComplete="off"
-                >
+              <div className="email"> */}
+            <Form
+              form={emailForm}
+              onFinish={() => {
+                openUpdateEmail("success");
+                emailForm.resetFields();
+              }}
+              name="email"
+              key={"email"}
+              labelCol={{
+                span: 8,
+              }}
+              wrapperCol={{
+                span: 24,
+              }}
+              initialValues={{
+                remember: true,
+              }}
+              autoComplete="off"
+            >
+              <Row gutter={[8, 4]}>
+                <Col xs={22} sm={10} md={8} lg={6}>
+                  New Email Address
+                </Col>
+                <Col xs={22} sm={10} md={10} lg={10}>
                   <Form.Item
                     name="email"
                     type="email"
@@ -280,23 +307,30 @@ const handlePasswordSubmit = async() => {
                       name="message"
                       //   value={message}
                       //   onChange={handleChange}
-                      onChange={(e) => setEmail(e.target.value)}
+                      // onChange={(e) => setEmail(e.target.value)}
                     />
                     {/* {error && <h2 style={{ color: "red" }}>{error}</h2>} */}
                   </Form.Item>
-
-                  <div>
-                    <Button
-                      htmlType="submit"
-                      type="primary"
-                      onClick={handleEmailSubmit}
-                    >
-                      Save Change
-                    </Button>
-                  </div>
-                </Form>
-              </div>
-            </div>
+                </Col>
+              </Row>
+              <Row gutter={[8, 4]}>
+                <Col xs={22} sm={10} md={8} lg={6}>
+                  {" "}
+                </Col>
+                <Col xs={22} sm={10} md={10} lg={10}>
+                  <Button
+                    className="newemail"
+                    htmlType="submit"
+                    type="primary"
+                    //   onClick={() => openUpdateEmail("success")}
+                  >
+                    Save Change
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+            {/* </div>
+            </div> */}
           </Card>
         </Tabs.TabPane>
         {/* <Tabs.TabPane tab="Delete Account" key="5">

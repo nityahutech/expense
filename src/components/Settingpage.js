@@ -1,16 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../style/Settingpage.css";
 import "antd/dist/antd.css";
-import { Card, Col, Row, Form, Input, Checkbox, notification } from "antd";
-import { EditOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Upload } from "antd";
+import { Card, Col, Row, Form, Input, notification } from "antd";
+import { Button } from "antd";
 import { Tabs } from "antd";
-import { Menu } from "antd";
-import Column from "antd/lib/table/Column";
-import { Avatar } from "antd";
-import Password from "antd/lib/input/Password";
-
-const { Meta } = Card;
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
@@ -29,7 +22,7 @@ const openUpdateEmail = (type) => {
 };
 
 const Settingpage = () => {
-  const [tabPosition] = useState("left");
+  const [tabPosition, setTabPosition] = useState("left");
   const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
   const [form] = Form.useForm();
@@ -47,16 +40,30 @@ const Settingpage = () => {
   // setMessage(event.target.value);
   //   };
 
+  useEffect(() => {
+    setTabPosition(window.innerWidth <= 760 ? "top" : "left");
+  }, []);
+
+  window.addEventListener("resize", () => {
+    setTabPosition(window.innerWidth <= 760 ? "top" : "left");
+  });
+
   return (
     <>
       <Tabs tabPosition={tabPosition} defaultActiveKey="1">
-        <Tabs.TabPane className="Psw" tab="Update Password" key="3">
+        <Tabs.TabPane
+          className="Psw"
+          tab="Update Password"
+          key="3"
+          style={{ marinLeft: "2rem" }}
+        >
           <Card
             className="Password"
             title="Update Password"
             style={{
               width: 550,
               color: "black",
+              height: "310px",
             }}
           >
             <Form
@@ -77,8 +84,8 @@ const Settingpage = () => {
               }}
               autoComplete="off"
             >
-              <Row gutter={[0, 0]}>
-                <Col xs={24} sm={24} md={12} lg={12}>
+              <Row gutter={[48, 4]}>
+                <Col xs={24} sm={12} md={8} lg={8}>
                   <div>Current Password</div>
                 </Col>
                 <Col xs={24} sm={12} md={12} lg={12}>
@@ -89,36 +96,12 @@ const Settingpage = () => {
                     rules={[
                       {
                         required: true,
-                        message: (
-                          <div style={{ marginLeft: "-7rem" }}>
-                            Enter your password!
-                          </div>
-                        ),
-                      },
-                    ]}
-                  >
-                    <Input.Password className="current" />
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              <Row gutter={[48, 16]}>
-                <Col xs={24} sm={12} md={8} lg={6}>
-                  <div style={{ width: "114px" }}>New Password</div>
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={12}>
-                  <Form.Item
-                    name="password1"
-                    key="password1"
-                    // style={{ position: "relative", left: "24px" }}
-                    rules={[
-                      {
-                        required: true,
-                        message: (
-                          <div style={{ margineLeft: "-1.5rem" }}>
-                            Please enter your password!
-                          </div>
-                        ),
+                        message: "Please enter your current password!",
+                        // message: (
+                        //   <div style={{ margineLeft: "-1.5rem" }}>
+                        //     Please enter your current password!
+                        //   </div>
+                        // ),
                       },
                     ]}
                     hasFeedback
@@ -128,9 +111,36 @@ const Settingpage = () => {
                 </Col>
               </Row>
 
-              <Row gutter={[48, 16]}>
-                <Col xs={24} sm={12} md={8} lg={6}>
-                  <div style={{ width: "114px" }}>Confirm Password</div>
+              <Row gutter={[48, 4]}>
+                <Col xs={24} sm={12} md={8} lg={8}>
+                  <div>New Password</div>
+                </Col>
+                <Col xs={24} sm={12} md={12} lg={12}>
+                  <Form.Item
+                    name="password1"
+                    key="password1"
+                    // style={{ position: "relative", left: "24px" }}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your password!",
+                        // message: (
+                        //   <div style={{ margineLeft: "-1.5rem" }}>
+                        //     Please enter your password!
+                        //   </div>
+                        // ),
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <Input.Password className="new" />
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <Row gutter={[48, 4]}>
+                <Col xs={24} sm={12} md={8} lg={8}>
+                  <div>Confirm Password</div>
                 </Col>
                 <Col xs={24} sm={12} md={12} lg={12}>
                   <Form.Item
@@ -165,6 +175,7 @@ const Settingpage = () => {
                 </Col>
               </Row>
               <Button
+                className="save"
                 htmlType="submit"
                 type="primary"
                 // onClick={() => openNotificationWithIcon("success")}

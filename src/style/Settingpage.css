@@ -49,13 +49,8 @@ border-radius: 15px;
     
     width: 290px
     }
-    /* .ant-form-item-explain-error{
-        position: relative;
-    right: 117px;
-    margin: 7px;
-    } */
-    /* .ant-form-item.currentpsw{
-        position: relative;
-    right: 111px;
-    margin: 2px;
-    } */
+    .ant-btn-primary.save{
+        position: absolute;
+    left: 207px;
+    margin-top: 10px;
+    }

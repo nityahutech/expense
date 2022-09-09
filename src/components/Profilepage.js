@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import 'antd/dist/antd.css';
 import "../style/profile.css";
 import { Card, Col, Row, } from 'antd';
@@ -17,14 +17,34 @@ const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formLayout, setFormLayout] = useState('horizontal');
   const { currentUser, updateMyProfile, updateMyPhNo, updateMyEmail} = useAuth();
-  const [editname, seteditname] = useState({
-    address: "House No -2031, Sec- 4",
-    city: "Rewari",
-    country: "India",
+  const [userRecord, setUserRecord] = useState({
+    address: "",
+    city: "",
+    country: "",
     phonenumber: "",
-    state: "Haryana",
-    zipcode: "123401.",
+    state: "",
+    zipcode: "",
   });
+  let name = currentUser.displayName;
+  let email = currentUser.email;
+
+  async function getData(){
+    let rec = await ProfileContext.getProfile(currentUser.uid);
+    if (rec.data()){
+    setUserRecord(rec.data());
+    return;
+    }
+    ProfileContext.addProfile(currentUser.uid, userRecord)
+  }
+  
+
+  useEffect(() => {
+    getData();
+    name = currentUser.displayName;
+    email = currentUser.email;
+
+  }, [currentUser]);
+
 
   const [fileList, setFileList] = useState([
     {
@@ -83,26 +103,17 @@ const Profile = () => {
 
 
   const formonFinishHandler = (values) => {
-    console.log(values.mailid);
     updateMyProfile({displayName: values.employeename})
     updateMyEmail(values.mailid)
-    if(!editname.phonenumber){
-      ProfileContext.addProfile(currentUser.uid, editname)
-    } else {
-      ProfileContext.updateProfile(currentUser.uid, editname)
-    }
-    if(!editname.address){
-      ProfileContext.addProfile(currentUser.uid, {address: values.address})
-    } else {
-      ProfileContext.updateProfile(currentUser.uid, {address: values.address})
-    }
+    ProfileContext.updateProfile(currentUser.uid, values)
 
-    seteditname(() => ({
+    setUserRecord(() => ({
       ...values
     }));
-    // seteditname(preState)
-
-    console.log(editname, "?d ")
+    // setUserRecord(preState)
+    name = values.employeename;
+    email = values.mailid;
+    console.log(userRecord, "?d ")
   }
 
   const onFormLayoutChange = ({ layout }) => {
@@ -170,7 +181,7 @@ const Profile = () => {
               </div>
 
               <div className="content-div">
-              <h2 className="tropography" style={{ fontSize:'18px',fontWeight:'normal' }}>{currentUser.displayName}</h2>
+              <h2 className="tropography" style={{ fontSize:'18px',fontWeight:'normal' }}>{name}</h2>
                 <ul
                   style={{
                     listStyleType: "none",
@@ -211,20 +222,20 @@ const Profile = () => {
               <div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900' }}>About</h2>
-                  <p>{currentUser.displayName}</p>
+                  <p>{name}</p>
                 </div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Contact</h2>
-                  {/* {JSON.stringify(editname)} */}
-                  <p>{currentUser.email},  <br /> {editname.phonenumber}</p>
+                  {/* {JSON.stringify(userRecord)} */}
+                  <p>{email},  <br /> {userRecord.phonenumber}</p>
                 </div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Address</h2>
-                  <p> {editname.address},<br />
-                  {editname.city},
-                  {editname.state},<br />
-                  {editname.country},<br />
-                  {editname.zipcode}</p>
+                  <p> {userRecord.address},<br />
+                  {userRecord.city},
+                  {userRecord.state},<br />
+                  {userRecord.country},<br />
+                  {userRecord.zipcode}</p>
                  
                 </div>
               </div>
@@ -249,12 +260,12 @@ const Profile = () => {
                 remember: true,
                 employeename: currentUser.displayName,
                 mailid: currentUser.email,
-                ...editname 
+                ...userRecord 
               }}
               fields={[
                 {
-                  name: ["editname"],
-                  values: editname,
+                  name: ["userRecord"],
+                  values: userRecord,
                 },
 
               ]}

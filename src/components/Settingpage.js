@@ -121,7 +121,7 @@ const Settingpage = () => {
             <Form
               form={form}
               onFinish={() => {
-                openNotificationWithIcon("success");
+                // openNotificationWithIcon("success");
                 form.resetFields();
               }}
               name="basic"
@@ -269,7 +269,7 @@ const Settingpage = () => {
             <Form
               form={emailForm}
               onFinish={() => {
-                openUpdateEmail("success");
+                // openUpdateEmail("success");
                 emailForm.resetFields();
               }}
               name="email"
@@ -307,7 +307,7 @@ const Settingpage = () => {
                       name="message"
                       //   value={message}
                       //   onChange={handleChange}
-                      // onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                     {/* {error && <h2 style={{ color: "red" }}>{error}</h2>} */}
                   </Form.Item>
@@ -322,7 +322,7 @@ const Settingpage = () => {
                     className="newemail"
                     htmlType="submit"
                     type="primary"
-                    //   onClick={() => openUpdateEmail("success")}
+                    onClick={handleEmailSubmit}
                   >
                     Save Change
                   </Button>

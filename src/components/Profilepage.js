@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import 'antd/dist/antd.css';
 import "../style/profile.css";
 import { Card, Col, Row, } from 'antd';
@@ -7,8 +7,8 @@ import { Upload } from 'antd';
 import "../style/profilepage.css";
 import { Button, Modal } from 'antd';
 import { Form, Input, Radio,notification } from 'antd';
-
-
+import { useAuth } from "../contexts/AuthContext";
+import ProfileContext from "../contexts/ProfileContext";
 
 const { Meta } = Card;
 
@@ -16,16 +16,35 @@ const Profile = () => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formLayout, setFormLayout] = useState('horizontal');
-  const [editname, seteditname] = useState({
-    address: "House No -2031, Sec- 4",
-    city: "Rewari",
-    mailid: "swayamprava@hutechsolutions.com",
-    employeename: "Swayamprava Nanda",
-    country: "India",
-    phonenumber: "8447509792",
-    state: "Haryana",
-    zipcode: "123401.",
+  const { currentUser, updateMyProfile, updateMyPhNo, updateMyEmail} = useAuth();
+  const [userRecord, setUserRecord] = useState({
+    address: "",
+    city: "",
+    country: "",
+    phonenumber: "",
+    state: "",
+    zipcode: "",
   });
+  let name = currentUser.displayName;
+  let email = currentUser.email;
+
+  async function getData(){
+    let rec = await ProfileContext.getProfile(currentUser.uid);
+    if (rec.data()){
+    setUserRecord(rec.data());
+    return;
+    }
+    ProfileContext.addProfile(currentUser.uid, userRecord)
+  }
+  
+
+  useEffect(() => {
+    getData();
+    name = currentUser.displayName;
+    email = currentUser.email;
+
+  }, [currentUser]);
+
 
   const [fileList, setFileList] = useState([
     {
@@ -84,14 +103,17 @@ const Profile = () => {
 
 
   const formonFinishHandler = (values) => {
-    console.log(values, "vvvvvvvvvvvvvvvvvvvvvvvvvv");
+    updateMyProfile({displayName: values.employeename})
+    updateMyEmail(values.mailid)
+    ProfileContext.updateProfile(currentUser.uid, values)
 
-    seteditname(() => ({
+    setUserRecord(() => ({
       ...values
     }));
-    // seteditname(preState)
-
-    console.log(editname, "?d ")
+    // setUserRecord(preState)
+    name = values.employeename;
+    email = values.mailid;
+    console.log(userRecord, "?d ")
   }
 
   const onFormLayoutChange = ({ layout }) => {
@@ -159,7 +181,7 @@ const Profile = () => {
               </div>
 
               <div className="content-div">
-              <h2 className="tropography" style={{ fontSize:'18px',fontWeight:'normal' }}>Swayamprava Nanda</h2>
+              <h2 className="tropography" style={{ fontSize:'18px',fontWeight:'normal' }}>{name}</h2>
                 <ul
                   style={{
                     listStyleType: "none",
@@ -175,8 +197,10 @@ const Profile = () => {
                     <div className="div-icon"><EnvironmentOutlined /></div>
                     <div className="div-name">HSR Layout, Bengaluru</div>
                   </li>
-                  {/* <li><CalendarOutlined />Joined July 2022</li> */}
-
+                  <li className="div-title">
+                    <div className="div-icon"><CalendarOutlined /></div>
+                    <div className="div-name">Joined {currentUser.metadata.creationTime}</div>
+                  </li>
                 </ul>
               </div>
 
@@ -198,20 +222,20 @@ const Profile = () => {
               <div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900' }}>About</h2>
-                  <p> {editname.employeename}</p>
+                  <p>{name}</p>
                 </div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Contact</h2>
-                  {/* {JSON.stringify(editname)} */}
-                  <p>{editname.mailid},  <br /> {editname.phonenumber}</p>
+                  {/* {JSON.stringify(userRecord)} */}
+                  <p>{email},  <br /> {userRecord.phonenumber}</p>
                 </div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Address</h2>
-                  <p> {editname.address},<br />
-                  {editname.city},
-                  {editname.state},<br />
-                  {editname.country},<br />
-                  {editname.zipcode}</p>
+                  <p> {userRecord.address},<br />
+                  {userRecord.city},
+                  {userRecord.state},<br />
+                  {userRecord.country},<br />
+                  {userRecord.zipcode}</p>
                  
                 </div>
               </div>
@@ -234,12 +258,14 @@ const Profile = () => {
               }}
               initialValues={{
                 remember: true,
-                ...editname
+                employeename: currentUser.displayName,
+                mailid: currentUser.email,
+                ...userRecord 
               }}
               fields={[
                 {
-                  name: ["editname"],
-                  values: editname,
+                  name: ["userRecord"],
+                  values: userRecord,
                 },
 
               ]}

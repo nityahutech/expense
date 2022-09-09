@@ -42,12 +42,12 @@ export function AuthProvider({ children }) {
     return sendPasswordResetEmail(auth, email)
   }
 
-  function updateMyProfile(user, name, url) {
-    return updateProfile(user, name, url)
+  function updateMyProfile(name) {
+    return updateProfile(currentUser, name)
   }
 
-  function updateMyPhNo(user, phno) {
-    return updatePhoneNumber(user, phno)
+  function updateMyPhNo(phno) {
+    return updatePhoneNumber(currentUser, phno)
   }
 
   function updateMyEmail(email) {
@@ -66,8 +66,6 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
-      // user.displayName = "Maya Vijay"
-      // user.phoneNumber = "9900714682"
       setCurrentUser(user)
       setLoading(false)
     })

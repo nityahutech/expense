@@ -101,6 +101,19 @@ console.log(props.openkey);
 
                     </Menu.SubMenu>
 
+                    <Menu.SubMenu icon={<img src="/logo/Time-Attendance.png" alt="profile" className="Dash" />} key="sub2" title="Attendance" mode='inline'>
+
+                        <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="4">
+                            Attendance Log
+                            <NavLink to="/" />
+                        </Menu.Item>
+                        <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="5">
+                            Leave 
+                            <NavLink to="/" />
+                        </Menu.Item>
+
+                    </Menu.SubMenu>
+
                     <Menu.Item icon={<ProfileOutlined style={{ color: "#FFFFFF" }} />} key="4">
                         Profile
                         <NavLink to="/Profile" />

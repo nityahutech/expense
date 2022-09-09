@@ -12,10 +12,12 @@ import { Link } from 'react-router-dom';
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 
 
+
 const Navbar = () => {
     const [activePage, setActivePage] = useState("/DashBoard")
     let loc = useLocation()
     const { currentUser, logout } = useAuth()
+
 
     const menu = (
         <Menu
@@ -23,7 +25,7 @@ const Navbar = () => {
                 {
                     key: '1',
                     label: (
-                        <Link to target="_blank" style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
+                         <Link to="/Profile"     style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
                             Admin
                         </Link>
                     ),

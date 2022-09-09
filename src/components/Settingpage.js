@@ -239,7 +239,7 @@ const Settingpage = () => {
                     className="save"
                     htmlType="submit"
                     type="primary"
-                    // onClick={() => openNotificationWithIcon("success")}
+                    onClick={handlePasswordSubmit}
                   >
                     Save Change
                   </Button>

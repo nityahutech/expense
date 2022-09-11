@@ -21,6 +21,7 @@ import ExpenseContext from "../contexts/ExpenseContext";
 import Editexpense from "./Editexpense";
 import { upload } from "@testing-library/user-event/dist/upload";
 import { async } from "@firebase/util";
+import {ReactToPrint} from 'react-to-print';
 const { RangePicker } = DatePicker;
 const dateFormat = "DD-MM-YYYY";
 
@@ -512,6 +513,9 @@ function ExpenseList() {
   const handleAddNewExpense = () => {
     navigate("/Expense/AddExpense");
   };
+  function handlePrint(){
+    window.print();
+  }
 
   return (
     <Layout>
@@ -589,6 +593,20 @@ function ExpenseList() {
               }
             </Space>
           </Col> */}
+          
+          <Col >
+          
+            <Button
+              // className="addExpense"
+              type="primary"
+              // onClick={handleAddNewExpense}
+              onClick={handlePrint}
+              // style={{ width: "95%", borderRadius: "5px" }}
+            >
+              Print
+            </Button>
+          </Col>
+
           <Col xs={22} sm={10} md={6} lg={4}>
             <Button
               className="addExpense"

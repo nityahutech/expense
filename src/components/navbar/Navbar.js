@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import 'antd/dist/antd.css';
-import { Dropdown, Menu, Space } from 'antd';
+import { Dropdown, Menu, Space,Button } from 'antd';
 // import dropDownimg from "../../../public/logo/dropdown.svg"
 import dropDownimg from "../../assets/dropdown.svg"
 import logoutsvgrepocom from "../../assets/logoutsvgrepocom.svg"
@@ -14,6 +14,9 @@ import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 
 
 const Navbar = () => {
+
+    const [size, setSize] = useState('large');
+
     const [activePage, setActivePage] = useState("/DashBoard")
     let loc = useLocation()
     const { currentUser, logout } = useAuth()
@@ -49,11 +52,46 @@ const Navbar = () => {
         setActivePage(loc.pathname);
     }, [loc])
 
+    let time = new Date().toLocaleTimeString();
+
+    const [ctime, setCtime] = useState(time);
+
+    const UpdateTime = () => {
+        time = new Date().toLocaleTimeString();
+        setCtime(time);
+    }
+
 
     return (
         <div className='navbar' style={{ background: 'white' }} >
             <div className='wrapper' >
                 <div className='image' >
+                    <h1 style={{
+                        cursor:'pointer', 
+                        fontSize: '16px',
+                        marginTop:'9px',
+                        marginRight:'20px',
+                        padding:'5px',
+                        border:'1px solid black',
+                        backgroundColor:'#05445E',
+                        color:'white',
+                        fontWeight:'400',
+                        width:'auto',   
+                        }} 
+                    >
+                    {ctime}
+                    </h1>
+                    <Button 
+                        style={{
+                                backgroundColor:'#05445E', 
+                                color:'white'
+                               }} 
+                        size={size}
+                        onClick= {UpdateTime}    
+                    >
+                        
+                        Clock In
+                    </Button>
                     {/* <img
                         src="/logo/bell.png" alt='imh'
                         className="bell"

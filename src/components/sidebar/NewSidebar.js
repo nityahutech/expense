@@ -101,7 +101,7 @@ console.log(props.openkey);
 
                     </Menu.SubMenu>
 
-                    <Menu.SubMenu icon={<img src="/logo/Time-Attendance.png" alt="profile" className="Dash" />} key="sub2" title="Attendance" mode='inline'>
+                    <Menu.SubMenu icon={<img src="/logo/Time-Attendance.png" alt="profile" className="Dash" />} key="sub2" title="Employee" mode='inline'>
 
                         <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="4">
                             Attendance Log

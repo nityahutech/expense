@@ -77,7 +77,7 @@ const Navbar = () => {
                         color:'white',
                         fontWeight:'400',
                         width:'auto',   
-                        }} 
+                    }} 
                     >
                     {ctime}
                     </h1>

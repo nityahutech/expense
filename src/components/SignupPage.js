@@ -6,21 +6,20 @@ function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signup } = useAuth();
+  const { signup, login, updateMyProfile } = useAuth();
 
   const win = window.sessionStorage;
 
   async function handleSubmit(formData) {
-    console.log(formData);
+    console.log(formData.user.name);
     // e.preventDefault();
     // console.log(signupEmail, signupPassword);
     win.clear();
     try {
       setError("");
       setLoading(true);
-      let res = await signup(formData.email, formData.password);
-      // console.log(res.user.accessToken);
-      sessionStorage.setItem("accessToken", res.user.accessToken);
+      let res = await signup(formData.email, formData.password, formData.user.name);
+      // sessionStorage.setItem("accessToken", res.user.accessToken);
       setSuccess("Registration Successful. Please LogIn!")
     } catch (err)  {
       console.log(err, err.message);

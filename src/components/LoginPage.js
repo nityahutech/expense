@@ -42,11 +42,14 @@ function LoginPage() {
     console.log(loginEmail, loginPassword);
     win.clear();
     try {
-      setError("Reset email sent");
       setLoading(true);
       await resetPassword(loginEmail);
+      setError("Reset email sent");
     } catch {
       setError("Failed to send reset email");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
 
     setLoading(false);

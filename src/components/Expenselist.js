@@ -23,6 +23,10 @@ import { upload } from "@testing-library/user-event/dist/upload";
 import { async } from "@firebase/util";
 const { RangePicker } = DatePicker;
 const dateFormat = "DD-MM-YYYY";
+const PHE = require("print-html-element");
+
+
+
 
 const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;
@@ -242,6 +246,7 @@ function ExpenseList() {
       className: "row6",
       dataIndex: "quantity",
       key: "quantity",
+      align: "center",
       // responsive: ["sm"],
       sorter: (a, b) => a.quantity - b.quantity,
     },
@@ -250,6 +255,7 @@ function ExpenseList() {
       className: "row7",
       dataIndex: "amount",
       key: "amount",
+      align: "center",
       // responsive: ["md"],
       sorter: (a, b) => a.amount - b.amount,
     },
@@ -258,6 +264,7 @@ function ExpenseList() {
       className: "row8",
       dataIndex: "subtotal",
       key: "subtotal",
+      align: "center",
       // responsive: ["sm"],
       sorter: (a, b) => a.subtotal - b.subtotal,
     },
@@ -512,6 +519,53 @@ function ExpenseList() {
   const handleAddNewExpense = () => {
     navigate("/Expense/AddExpense");
   };
+  function handlePrint() {
+    let headerStyle = "textAlign: center";
+    let oddRowStyle = "";
+    let evenRowStyle = "";
+    let opts = {
+      printMode: "qqqqqq",
+      pageTitle: "",
+      templateString: "string",
+      popupProperties: "string",
+      stylesheets: "string" ,
+      styles:"background-color:red",
+  };
+    let dataIndexs = [];
+    let tableHeaderString = columns
+      .map((col) => {
+        if (col.title !== "Action") {
+          dataIndexs.push(col.dataIndex);
+          return `<th style="display: table-header-group color: grey; padding: 10px; textAlign: center" ${headerStyle}>${col.title}</th>`;
+        }
+      })
+      .toString()
+      .replaceAll(",", "");
+    let tableRowString = [];
+    let tableAllRow = [];
+    filterExpenses.forEach((exp, i) => {
+      tableRowString = [];
+      tableRowString.push(
+        `<tr style="${i % 2 === 1 ? oddRowStyle : evenRowStyle}">`
+      );
+      for (let i = 0; i < dataIndexs.length; i++) {
+        tableRowString.push(`<td style="color: grey; padding: 10px; textAlign: center; ">${exp[dataIndexs[i]]}</td>`);
+      }
+      tableRowString.push("</tr>");
+      tableAllRow.push(tableRowString);
+    });
+    let tableAllRowString = tableAllRow.toString().replaceAll(",", "");
+    // console.log(tableHeaderString);
+    // console.log(tableAllRowString);
+    PHE.printHtml(
+      `<div>
+        <h1 textAlign= center>Expense Report<h1/>
+        </br>
+        <table style="borderBottom: 5px solid black; " >${tableHeaderString}${tableAllRowString}</table>
+      </div>
+      `,opts
+    );
+  }
 
   return (
     <Layout>
@@ -589,6 +643,20 @@ function ExpenseList() {
               }
             </Space>
           </Col> */}
+          
+          <Col >
+          
+            <Button
+              // className="addExpense"
+              type="primary"
+              // onClick={handleAddNewExpense}
+              onClick={handlePrint}
+              style={{ width: "95%", borderRadius: "5px", background: '#189AB4' }}
+            >
+              Print
+            </Button>
+          </Col>
+
           <Col xs={22} sm={10} md={6} lg={4}>
             <Button
               className="addExpense"

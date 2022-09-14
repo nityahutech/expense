@@ -59,7 +59,7 @@ function AttendanceLog({ empDetails }) {
   //     }),
   //     type: "radio",
   //   };
-  const [selectionType, setSelectionType] = useState("");
+  //   const [selectionType, setSelectionType] = useState("");
   const data = [
     {
       key: "1",
@@ -80,13 +80,19 @@ function AttendanceLog({ empDetails }) {
     {
       key: "3",
       code: "HTS003",
-      date: "12-09-2022",
+      date: "13-09-2022",
       empname: "Saswat",
       project: "Expenses",
       description: "xfddsfdvbgfgfbvbvb",
     },
   ];
   const columns1 = [
+    {
+      title: "Employee Code",
+      dataIndex: "code",
+      key: "code",
+      render: (text) => <a>{text}</a>,
+    },
     {
       title: "Date",
       dataIndex: "date",
@@ -123,31 +129,31 @@ function AttendanceLog({ empDetails }) {
     //   key: "action",
     // },
   ];
-  const data1 = [
-    {
-      key: "1",
-      date: "12/09/2022",
-      status: "P",
-      time1: "",
-      time2: "",
-      work: "",
-      description: "dfdjdgjhgjhgjhfhfdj",
-    },
-    {
-      key: "2",
-      serial: 2,
-      empname: "Jatin",
-      project: "Expenses",
-      description: "xfddsfdvbgfgfbvbvb",
-    },
-    {
-      key: "3",
-      serial: 3,
-      empname: "Saswat",
-      project: "Expenses",
-      description: "xfddsfdvbgfgfbvbvb",
-    },
-  ];
+  //   const data1 = [
+  //     {
+  //       key: "1",
+  //       date: "12/09/2022",
+  //       status: "P",
+  //       time1: "",
+  //       time2: "",
+  //       work: "",
+  //       description: "dfdjdgjhgjhgjhfhfdj",
+  //     },
+  //     {
+  //       key: "2",
+  //       serial: 2,
+  //       empname: "Jatin",
+  //       project: "Expenses",
+  //       description: "xfddsfdvbgfgfbvbvb",
+  //     },
+  //     {
+  //       key: "3",
+  //       serial: 3,
+  //       empname: "Saswat",
+  //       project: "Expenses",
+  //       description: "xfddsfdvbgfgfbvbvb",
+  //     },
+  //   ];
 
   return (
     <Tabs
@@ -161,7 +167,7 @@ function AttendanceLog({ empDetails }) {
     >
       {role.userType === "emp" ? (
         <Tabs.TabPane tab="Monthly Log" key="1">
-          <Table columns={columns1} dataSource={data1} />
+          <Table columns={columns1} dataSource={[selectemp] || []} />
         </Tabs.TabPane>
       ) : (
         <>
@@ -175,7 +181,7 @@ function AttendanceLog({ empDetails }) {
                 return {
                   onClick: (event) => {
                     // console.log(record.code);
-                    setSelectemp(record.code);
+                    setSelectemp(record);
                     setActivetab("3");
                   }, // click row
                 };
@@ -185,7 +191,7 @@ function AttendanceLog({ empDetails }) {
             />
           </Tabs.TabPane>
           <Tabs.TabPane disabled={!selectemp} tab="Monthly Log" key="3">
-            <Table columns={columns1} dataSource={data1} />
+            <Table columns={columns1} dataSource={[selectemp] || []} />
           </Tabs.TabPane>
         </>
       )}

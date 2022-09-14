@@ -12,6 +12,7 @@
     "chart.js": "^3.9.1",
     "firebase": "^9.9.2",
     "moment": "^2.29.4",
+    "print-html-element": "^0.5.1",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",
     "react-dom": "^18.2.0",

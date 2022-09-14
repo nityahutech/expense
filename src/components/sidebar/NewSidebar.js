@@ -94,7 +94,7 @@ const NewSidebar = (props) => {
 
                         <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="4">
                             Attendance Log
-                            <NavLink to="/" />
+                            <NavLink to="/Attendance/AttendanceLog" />
                         </Menu.Item>
                         <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="7">
                             Leave 

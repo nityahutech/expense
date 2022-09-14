@@ -18,6 +18,8 @@ const Profile = () => {
   const [formLayout, setFormLayout] = useState('horizontal');
   const { currentUser, updateMyProfile, updateMyPhNo, updateMyEmail} = useAuth();
   const [userRecord, setUserRecord] = useState({
+    employeename:currentUser.displayName,
+    mailid:currentUser.email,
     address: "",
     city: "",
     country: "",
@@ -25,24 +27,19 @@ const Profile = () => {
     state: "",
     zipcode: "",
   });
-  let name = currentUser.displayName;
-  let email = currentUser.email;
 
   async function getData(){
     let rec = await ProfileContext.getProfile(currentUser.uid);
     if (rec.data()){
-    setUserRecord(rec.data());
-    return;
+      setUserRecord(rec.data());
+      return;
     }
-    ProfileContext.addProfile(currentUser.uid, userRecord)
+      ProfileContext.addProfile(currentUser.uid, userRecord)
   }
   
 
   useEffect(() => {
     getData();
-    name = currentUser.displayName;
-    email = currentUser.email;
-
   }, [currentUser]);
 
 
@@ -103,6 +100,7 @@ const Profile = () => {
 
 
   const formonFinishHandler = (values) => {
+    console.log(values);
     updateMyProfile({displayName: values.employeename})
     updateMyEmail(values.mailid)
     ProfileContext.updateProfile(currentUser.uid, values)
@@ -111,9 +109,10 @@ const Profile = () => {
       ...values
     }));
     // setUserRecord(preState)
-    name = values.employeename;
-    email = values.mailid;
+    // name = values.employeename;
+    // email = values.mailid;
     console.log(userRecord, "?d ")
+    // window.location.reload(false);
   }
 
   const onFormLayoutChange = ({ layout }) => {
@@ -182,7 +181,7 @@ const Profile = () => {
               </div>
 
               <div className="content-div">
-              <h2 className="tropography" style={{ fontSize:'18px',fontWeight:'normal' }}>{name}</h2>
+              <h2 className="tropography" style={{ fontSize:'18px',fontWeight:'normal' }}>{userRecord.employeename}</h2>
                 <ul
                   style={{
                     listStyleType: "none",
@@ -223,12 +222,12 @@ const Profile = () => {
               <div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900' }}>About</h2>
-                  <p>{name}</p>
+                  <p>{userRecord.employeename}</p>
                 </div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Contact</h2>
                   {/* {JSON.stringify(userRecord)} */}
-                  <p>{email},  <br /> {userRecord.phonenumber}</p>
+                  <p>{userRecord.mailid},  <br /> {userRecord.phonenumber}</p>
                 </div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Address</h2>
@@ -259,8 +258,8 @@ const Profile = () => {
               }}
               initialValues={{
                 remember: true,
-                employeename: currentUser.displayName,
-                mailid: currentUser.email,
+                // employeename: currentUser.displayName,
+                // mailid: currentUser.email,
                 ...userRecord 
               }}
               fields={[

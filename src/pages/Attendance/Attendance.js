@@ -30,7 +30,7 @@ function Attendance() {
         </div>
 
         <div className="tables">
-          <AttendanceLog empDetails={{ userType: "emp", empid: 12 }} />
+          <AttendanceLog empDetails={{ userType: "hr", empid: 12 }} />
         </div>
       </div>
     </div>

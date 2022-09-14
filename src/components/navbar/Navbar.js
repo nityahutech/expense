@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import { useStopwatch } from "react-timer-hook";
 
-
 const start = new Date().getTime();
 
 // ---------------------------------------------------------------------
@@ -74,8 +73,11 @@ const Navbar = () => {
 
   const setClockState = () => {
     setClocikIn(false);
-   let clickedDate =  new Date()
-    localStorage.setItem('clicked-tiime',clickedDate.toString().substring(16,25))
+    let clickedDate = new Date();
+    localStorage.setItem(
+      "clicked-tiime",
+      clickedDate.toString().substring(16, 25)
+    );
   };
   const setClockOutState = () => {
     setClocikIn(true);
@@ -103,7 +105,7 @@ const Navbar = () => {
         <button
           style={{
             padding: "1px",
-            background: "#f44336",
+            background: "aqua",
             color: "white",
             display: "inline-block",
             width: "200px",
@@ -123,10 +125,11 @@ const Navbar = () => {
           color: "white",
           display: "inline-block",
           width: "200px",
+          borderRadius: "2px",
         }}
         onClick={setClockState}
       >
-        WEB CLOCK IN
+        Web Clock In
       </button>
     );
   } else if (clockIn == false) {
@@ -137,9 +140,10 @@ const Navbar = () => {
           background: "#70BDF0",
           display: "inline-block",
           width: "200px",
-        //   height: "100px",
+          //   height: "100px",
           display: "flex",
           justifyContent: "center",
+          borderRadius: "2px",
         }}
         onMouseLeave={onMouseLeave}
         onMouseEnter={onMouseEnter}
@@ -166,14 +170,15 @@ const Navbar = () => {
           backgroundColor: "DodgerBlue",
           padding: "1px",
           fontFamily: "Arial",
+          borderRadius: "2px",
         }}
         onClick={setClockState}
       >
-        WEB CLOCK IN
+        Web Clock Out
       </button>
     );
   }
-  
+
   return (
     <div className="navbar" style={{ background: "white" }}>
       <div className="wrapper">
@@ -184,7 +189,8 @@ const Navbar = () => {
             fontSize: "16px",
             // marginTop:'9px',
             marginRight: "20px",
-            padding: "5px",
+            // padding: "5px",
+            borderRadius: "2px",
             border: "1px solid black",
             backgroundColor: "#05445E",
             color: "white",
@@ -196,9 +202,8 @@ const Navbar = () => {
           {/* {`${ctime.hrs}:${ctime.min}:${ctime.sec}`} */}
           {pushContent}
         </div>
-        {/* -----------------------------clockin  button */}
+
         <div className="image">
-          
           <div className="item">
             <img
               src="/logo/logo.png"
@@ -212,10 +217,13 @@ const Navbar = () => {
         <Dropdown overlay={menu}>
           <Space>
             <h1
-              style={{ cursor: "pointer", fontSize: "16px", marginTop: "10px" }}
+              style={{ 
+                cursor: "pointer", 
+                fontSize: "16px", 
+                marginTop: "10px" 
+              }}
             >
-              {" "}
-              Hutech{" "}
+              {" "}Hutech{" "}
             </h1>
             <img
               src={dropDownimg}

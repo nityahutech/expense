@@ -109,6 +109,10 @@ body {
     position: relative;
 }
 
+.ant-card-body {
+    padding: 0px;
+}
+
 @media only screen and (min-width: 1200px) and (max-width: 2400px) {
     .colbar {
         width: 61%;
@@ -146,11 +150,34 @@ body {
         width: 100%;
     }
     .rowcards {
-        height: 18vh;
-    } 
+        height: 27vh;
+    }
+    .rowcards .card1 {
+        width: 100%;
+    }
 }
 
-@media only screen and (min-width: 300px) and (max-width: 600px) {
+@media only screen and (min-width: 500px) and (max-width: 600px) {
+    .colbar {
+        width: 100%;
+    }
+    .colpie {
+        width: 100%;
+    }
+    .rowcards {
+        display: inline;
+        height: 36vh;
+    }
+    .col1 {
+        width: 100%;
+    }
+    .col2 {
+        width: 100%
+    }
+}
+
+
+@media only screen and (min-width: 300px) and (max-width: 500px) {
     .colbar {
         width: 100%;
     }

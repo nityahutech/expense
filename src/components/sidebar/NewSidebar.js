@@ -52,8 +52,7 @@ const NewSidebar = (props) => {
           console.log(collapsed, type);
         }}
       >
- 
-      
+
                 <Menu
                 defaultOpenKeys={props.activeSubMenu || []}
                 selectedKeys={props.activeMenu}

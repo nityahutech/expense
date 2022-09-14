@@ -1,4 +1,4 @@
-import React, { useState,} from 'react';
+import React, { useState, } from 'react';
 import {
     Col,
     Row,
@@ -14,6 +14,7 @@ import { Form, Input, } from 'antd';
 import { DatePicker, Space } from "antd";
 import moment from "moment";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import "../style/leave.css";
 
 const Leave = () => {
     const [form] = Form.useForm();
@@ -53,16 +54,16 @@ const Leave = () => {
 
     const onDeleteLeave = (record) => {
         Modal.confirm({
-          title: "Are you sure, you want to delete Leave record?",
-          okText: "Yes",
-          okType: "danger",
-          onOk: () => {
-            setLeaves((pre) => {
-              return pre.filter((leave) => leave.id !== record.id);
-            });
-          },
+            title: "Are you sure, you want to delete Leave record?",
+            okText: "Yes",
+            okType: "danger",
+            onOk: () => {
+                setLeaves((pre) => {
+                    return pre.filter((leave) => leave.id !== record.id);
+                });
+            },
         });
-      };
+    };
 
 
     const onReset = () => {
@@ -146,7 +147,7 @@ const Leave = () => {
                         <DeleteOutlined
                             onClick={() => {
                                 onDeleteLeave(record);
-                              }}
+                            }}
                             style={{ color: "red", marginLeft: 12 }}
                         />
                     </>
@@ -208,32 +209,34 @@ const Leave = () => {
                 gutter={[16, 16]}>
 
                 <Col id="responsive-input1" span={24} style={{
-                    display: 'flex', flexDirection: 'column', justifyContent: 'center', backgroundColor: '#05445E',
+                    display: 'flex', flexDirection: 'column', justifyContent: 'center', backgroundColor: 'white',
                     borderRadius: '10px', alignItems: 'center'
 
                 }} >
 
                     <div className='Col-1-center' style={{
-                        display: 'flex', flexDirection: 'row', color: 'white'
+                        display: 'flex', flexDirection: 'row', justifyContent: 'space-between', color: 'black', height: '200px', height: '40px', alignItems: 'center', backgroundColor: 'white',
 
-                    }}>Leave Request</div>
+                    }}><h3>Leave Request</h3></div>
 
                     <div style={{
-                        display: 'flex', flexDirection: 'row'
+                        display: 'flex', flexDirection: 'row', justifyContent: 'space-between'
 
                     }}>
                         {users.map((user) => {
                             return (
                                 <div className='Col-1-center' style={{
-                                    backgroundColor: '#e5e8ea', width: '150px',
-                                    margin: '10px', borderRadius: '5px', alignItems: 'center', display: 'flex', justifyContent: 'center',
+                                    backgroundColor: '#e9eaea', width: '150px',
+                                    margin: '10px', borderRadius: '5px', alignItems: 'center', display: 'flex', justifyContent: 'space-between',
                                     flexDirection: 'column', paddingTop: '10px'
 
                                 }}>
 
                                     <p className='heading' style={{
+                                        color: '#05445E', fontWeight: '500'
                                     }}>{user.leavetype}</p>
                                     <p className='leave' style={{
+                                        color: '#05445E', fontWeight: '500'
                                     }}>{user.leave}</p>
 
                                 </div>
@@ -244,22 +247,26 @@ const Leave = () => {
 
                 <Col span={12} >
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <div className='badge-div' style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#05445E', justifyContent: 'center' }}>
+                        <div className='badge-div' style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', justifyContent: 'center', paddingTop: '10px' }}>
                             {/* <Typography.Title level={4} >Calendar</Typography.Title> */}
-
-                            <Badge style={{ marginRight: '5px', color: 'white' }} color="red" text="Absent" />
-                            <Badge style={{ marginRight: '5px', color: 'white' }} color="orange" text="Half Day" />
-                            <Badge style={{ marginRight: '5px', color: 'white' }} color="blue" text="Leave" />
-                            <Badge style={{ marginRight: '5px', color: 'white' }} color="green" text="Present" />
-                            <Badge style={{ marginRight: '5px', color: 'white' }} color="yellow" text="Official Holiday" />
-                            <Badge style={{ marginRight: '5px', color: 'white' }} color="grey" text="Weekly Off" />
+                            <div className='rep-div'style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(204, 10, 10,0.2)" }} ><h5 style={{  color: "rgba(204, 10, 10, 1)" }}  className='rep-text'>Absent</h5></Button>
+                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(204, 94, 10,0.2)"  }}><h5 style={{  color: "rgba(204, 94, 10, 1)" }} className='rep-text'>Half Day</h5></Button>
+                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(10, 91, 204,0.2)"  }}><h5 style={{  color: "rgba(10, 91, 204,  1)" }} className='rep-text'>Leave</h5></Button>
+                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(252, 143, 10,0.2)"  }}><h5 style={{  color: "rgba(252, 143, 10, 1)" }} className='rep-text'>Late Arrival</h5></Button>
+                            </div>
+                            <div className='rep-div2'style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center',marginTop:'10px' }}>
+                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(10, 204, 107,0.2)"  }}><h5 style={{  color: "rgba(10, 204, 107, 1)" }} className='rep-text'>Present</h5></Button>
+                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(204, 204, 10,0.2)" }}><h5 style={{  color: "rgba(204, 204, 10, 1)" }} className='rep-text'>Official Holiday</h5></Button>
+                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(74, 67, 67,0.2)" }}><h5 style={{  color: "rgba(74, 67, 67, 1)" }} className='rep-text'>Weekly Off</h5></Button>
+                            </div>
 
                         </div>
                         <Calendar style={{ padding: '10px', }}
 
                             value={date}
                             onChange={setDate}
-                            // onPanelChange={handlePanelChange}
+                        // onPanelChange={handlePanelChange}
                         />
                     </div>
 
@@ -267,13 +274,13 @@ const Leave = () => {
 
 
                 <Row style={{
-                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: '#05445E',
+                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
                     borderRadius: '10px', padding: '10px'
                 }}
                 >
                     <Col span={24} style={{
-                        display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'white'
-                    }}>Apply Leave</Col>
+                        display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black'
+                    }}><h3>Apply Leave</h3></Col>
 
                     <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
                         background: 'flex', padding: '10px', width: '400px'
@@ -296,20 +303,20 @@ const Leave = () => {
                         >
                             <Form.Item labelAlign="left"
                                 style={{ marginBottom: "15px", }}
-                                label={<label style={{ color: "white", fontWeight: '400' }}>Employee Name</label>}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>Employee Name</label>}
                                 name="employeename"
 
                             >
 
                                 <Input
-                                
+
                                     required
                                     placeholder="Employee Name" />
                             </Form.Item>
 
                             <Form.Item labelAlign="left"
                                 style={{ marginBottom: "15px", color: 'white', }}
-                                label={<label style={{ color: "white", fontWeight: '400' }}>Duration</label>}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>Duration</label>}
                                 name="durationid"
 
 
@@ -336,14 +343,14 @@ const Leave = () => {
                                 name="leaveNature"
                                 style={{ marginBottom: "15px" }}
 
-                                label={<label style={{ color: "white", fontWeight: '400' }}>Nature of Leave</label>}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>Nature of Leave</label>}
 
 
                             >
                                 <Select required
                                     placeholder="Select a option "
                                     allowClear
-                                    // onSelect={handleSelect}
+                                // onSelect={handleSelect}
                                 >
 
                                     <Option value="Earn Leave">Earn Leave </Option>
@@ -359,13 +366,13 @@ const Leave = () => {
                                 name="slot"
                                 style={{ marginBottom: "15px" }}
 
-                                label={<label style={{ color: "white", fontWeight: '400' }}>Half Day Slot</label>}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>Half Day Slot</label>}
 
 
                             >
                                 <Radio.Group  >
-                                    <Radio style={{ color: "white", fontWeight: '400' }} value="Morning">Morning</Radio>
-                                    <Radio style={{ color: "white", fontWeight: '400' }} value="Evening" >Evening</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Evening" >Evening</Radio>
 
                                 </Radio.Group>
                             </Form.Item>
@@ -374,7 +381,7 @@ const Leave = () => {
                                 name="reason"
                                 style={{ marginBottom: "15px" }}
 
-                                label={<label style={{ color: "white", fontWeight: '400' }}>Reason</label>}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>Reason</label>}
 
 
                             >
@@ -385,7 +392,7 @@ const Leave = () => {
                                 name="approver"
                                 style={{ marginBottom: "15px" }}
 
-                                label={<label style={{ color: "white", fontWeight: '400' }}>Approver</label>}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>Approver</label>}
 
                             >
                                 <Input placeholder="Reporting Manager" required />
@@ -413,16 +420,16 @@ const Leave = () => {
                             </Form.Item>
                             <Col span={24} style={{
                                 display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white'
-                            }}>History</Col>
+                            }}><h3>History</h3></Col>
 
                             <div>
                                 {/* {JSON.stringify(leaves)} */}
                                 {/* {<p>{"ddd"} </p> }{JSON.stringify()} */}
-                                <Table columns={columns} 
-                                dataSource={ leaves} 
-                                size="small" scroll={{
-                                    x: 600,
-                                }} />
+                                <Table columns={columns}
+                                    dataSource={leaves}
+                                    size="small" scroll={{
+                                        x: 600,
+                                    }} />
                             </div>
 
                         </Form>

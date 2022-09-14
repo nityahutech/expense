@@ -18,6 +18,8 @@ const Profile = () => {
   const [formLayout, setFormLayout] = useState('horizontal');
   const { currentUser, updateMyProfile, updateMyPhNo, updateMyEmail} = useAuth();
   const [userRecord, setUserRecord] = useState({
+    employeename:"",
+    mailid:"",
     address: "",
     city: "",
     country: "",
@@ -25,8 +27,6 @@ const Profile = () => {
     state: "",
     zipcode: "",
   });
-  let name = currentUser.displayName;
-  let email = currentUser.email;
 
   async function getData(){
     let rec = await ProfileContext.getProfile(currentUser.uid);
@@ -40,9 +40,9 @@ const Profile = () => {
 
   useEffect(() => {
     getData();
-    name = currentUser.displayName;
-    email = currentUser.email;
-
+    userRecord.employeename = currentUser.displayName;
+    userRecord.mailid = currentUser.email;
+    console.log(userRecord);
   }, [currentUser]);
 
 
@@ -103,6 +103,7 @@ const Profile = () => {
 
 
   const formonFinishHandler = (values) => {
+    console.log(values);
     updateMyProfile({displayName: values.employeename})
     updateMyEmail(values.mailid)
     ProfileContext.updateProfile(currentUser.uid, values)
@@ -111,9 +112,10 @@ const Profile = () => {
       ...values
     }));
     // setUserRecord(preState)
-    name = values.employeename;
-    email = values.mailid;
+    // name = values.employeename;
+    // email = values.mailid;
     console.log(userRecord, "?d ")
+    // window.location.reload(false);
   }
 
   const onFormLayoutChange = ({ layout }) => {
@@ -181,7 +183,7 @@ const Profile = () => {
               </div>
 
               <div className="content-div">
-              <h2 className="tropography" style={{ fontSize:'18px',fontWeight:'normal' }}>{name}</h2>
+              <h2 className="tropography" style={{ fontSize:'18px',fontWeight:'normal' }}>{userRecord.employeename}</h2>
                 <ul
                   style={{
                     listStyleType: "none",
@@ -222,12 +224,12 @@ const Profile = () => {
               <div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900' }}>About</h2>
-                  <p>{name}</p>
+                  <p>{userRecord.employeename}</p>
                 </div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Contact</h2>
                   {/* {JSON.stringify(userRecord)} */}
-                  <p>{email},  <br /> {userRecord.phonenumber}</p>
+                  <p>{userRecord.mailid},  <br /> {userRecord.phonenumber}</p>
                 </div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Address</h2>

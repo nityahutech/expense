@@ -134,6 +134,7 @@ const Charts = () => {
             backgroundColor:"inherit",
             padding:'1px',
           }}
+          className="card1"
           >
             <div className="col1">
             <h2>Total Amount</h2>

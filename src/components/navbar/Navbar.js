@@ -1,124 +1,281 @@
-import React, { useState, useEffect } from 'react'
-import 'antd/dist/antd.css';
-import { Dropdown, Menu, Space,Button } from 'antd';
+import React, { useState, useEffect } from "react";
+import "antd/dist/antd.css";
+import { Dropdown, Menu, Space, Button } from "antd";
 // import dropDownimg from "../../../public/logo/dropdown.svg"
-import dropDownimg from "../../assets/dropdown.svg"
-import logoutsvgrepocom from "../../assets/logoutsvgrepocom.svg"
-import abstractuserflat4 from "../../assets/abstractuserflat4.svg"
-import './navbar.css';
-import { useAuth } from "../../contexts/AuthContext"
-import { useLocation } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import dropDownimg from "../../assets/dropdown.svg";
+import logoutsvgrepocom from "../../assets/logoutsvgrepocom.svg";
+import abstractuserflat4 from "../../assets/abstractuserflat4.svg";
+import "./navbar.css";
+import { useAuth } from "../../contexts/AuthContext";
+import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
+import { useStopwatch } from "react-timer-hook";
 
+const start = new Date().getTime();
 
+// ---------------------------------------------------------------------
 
 const Navbar = () => {
+  const [size, setSize] = useState("large");
 
-    const [size, setSize] = useState('large');
+  const [activePage, setActivePage] = useState("/DashBoard");
+  let loc = useLocation();
+  const { currentUser, logout } = useAuth();
 
-    const [activePage, setActivePage] = useState("/DashBoard")
-    let loc = useLocation()
-    const { currentUser, logout } = useAuth()
+  const menu = (
+    <Menu
+      items={[
+        {
+          key: "1",
+          label: (
+            <Link
+              to="/Profile"
+              style={{ color: "#171832", fontWeight: "normal" }}
+              rel="noopener noreferrer"
+            >
+              Admin
+            </Link>
+          ),
+          icon: (
+            <img
+              src={abstractuserflat4}
+              alt="downArrow"
+              className="avatarimg"
+            />
+          ),
+        },
+        {
+          key: "2",
+          label: (
+            <Link
+              to="/"
+              onClick={logout}
+              style={{ color: "#171832", fontWeight: "normal" }}
+              rel="noopener noreferrer"
+            >
+              Logout
+            </Link>
+          ),
+          icon: (
+            <img src={logoutsvgrepocom} alt="downArrow" className="avatarimg" />
+          ),
+        },
+      ]}
+    />
+  );
+  // ----------------------------------------full code for web-clock in
+  const { seconds, minutes, hours, days, start, pause, reset } = useStopwatch({
+    autoStart: false,
+  });
+  const [clockIn, setClocikIn] = useState(true);
+  const [mouseState, setMouseState] = useState(false);
 
-
-    const menu = (
-        <Menu
-            items={[
-                {
-                    key: '1',
-                    label: (
-                         <Link to="/Profile"     style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
-                            Admin
-                        </Link>
-                    ),
-                    icon: <img src={abstractuserflat4} alt="downArrow" className="avatarimg" />
-                },
-                {
-                    key: '2',
-                    label: (
-                        <Link to="/" onClick={logout} style={{ color: "#171832", fontWeight: 'normal' }} rel="noopener noreferrer" >
-                            Logout
-                        </Link>
-                    ),
-                    icon: <img src={logoutsvgrepocom} alt="downArrow" className="avatarimg" />
-                }
-            ]}
-        />
+  const setClockState = () => {
+    setClocikIn(false);
+   let clickedDate =  new Date()
+    localStorage.setItem('clicked-tiime',clickedDate.toString().substring(16,25))
+  };
+  const setClockOutState = () => {
+    setClocikIn(true);
+    setMouseState(false);
+  };
+  const onMouseEnter = (event) => {
+    //event.target.style.background = "red";
+    setMouseState(true);
+  };
+  const onMouseLeave = (event) => {
+    //event.target.style.background = "blue";
+    setMouseState(false);
+  };
+  console.log(mouseState);
+  const pushContent = [];
+  if (mouseState == true) {
+    pushContent.push(
+      <div
+        style={{ display: "inline-block" }}
+        onMouseLeave={onMouseLeave}
+        onMouseEnter={onMouseEnter}
+        onClick={start}
+        onClick={reset}
+      >
+        <button
+          style={{
+            padding: "1px",
+            background: "#f44336",
+            color: "white",
+            display: "inline-block",
+            width: "200px",
+          }}
+          onClick={setClockOutState}
+        >
+          WEB CLOCK OUT
+        </button>
+      </div>
     );
+  } else if (clockIn) {
+    pushContent.push(
+      <button
+        style={{
+          padding: "1px",
+          background: "#05445e",
+          color: "white",
+          display: "inline-block",
+          width: "200px",
+        }}
+        onClick={setClockState}
+      >
+        WEB CLOCK IN
+      </button>
+    );
+  } else if (clockIn == false) {
+    pushContent.push(
+      <div
+        style={{
+          padding: "1px",
+          background: "#70BDF0",
+          display: "inline-block",
+          width: "200px",
+        //   height: "100px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+        onMouseLeave={onMouseLeave}
+        onMouseEnter={onMouseEnter}
+        onClick={pause}
+      >
+        <div>
+          <div>
+            <span>Clocked In</span>
+            <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:
+            <span>{seconds}</span>
+            <span></span>
+          </div>
+          {/* <h4>Clocked in</h4>
+          <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>: */}
+          {/* <span>{seconds}</span>{" "} */}
+        </div>
+      </div>
+    );
+  } else {
+    pushContent.push(
+      <button
+        style={{
+          color: "white",
+          backgroundColor: "DodgerBlue",
+          padding: "1px",
+          fontFamily: "Arial",
+        }}
+        onClick={setClockState}
+      >
+        WEB CLOCK IN
+      </button>
+    );
+  }
+  // ----------------------------------code for current time registration
+  //   useEffect(() => {
+  //     console.log(currentUser);
+  //     setActivePage(loc.pathname);
+  //   }, [loc]);
 
-    useEffect(() => {
-        console.log(currentUser);
-        setActivePage(loc.pathname);
-    }, [loc])
+  //   let time = new Date().toLocaleTimeString();
 
-    let time = new Date().toLocaleTimeString();
+  //   const [ctime, setCtime] = useState({
+  //     hrs: "00",
+  //     min: "00",
+  //     sec: "00",
+  //     start: new Date().getTime,
+  //   });
 
-    const [ctime, setCtime] = useState(time);
+  //   const UpdateTime = () => {
+  //     time = new Date().toLocaleTimeString();
+  //     setCtime(time);
+  //   };
+  //--------------------------------------code for starting the stopwatch
 
-    const UpdateTime = () => {
-        time = new Date().toLocaleTimeString();
-        setCtime(time);
-    }
+  //   setInterval(() => {
+  //     var now = new Date().getTime();
+  //     var timeleft = now - start;
 
-
-    return (
-        <div className='navbar' style={{ background: 'white' }} >
-            <div className='wrapper' >
-                <div className='image' >
-                    <h1 style={{
-                        cursor:'pointer', 
-                        fontSize: '16px',
-                        marginTop:'9px',
-                        marginRight:'20px',
-                        padding:'5px',
-                        border:'1px solid black',
-                        backgroundColor:'#05445E',
-                        color:'white',
-                        fontWeight:'400',
-                        width:'auto',   
-                    }} 
-                    >
-                    {ctime}
-                    </h1>
-                    <Button 
-                        style={{
-                                backgroundColor:'#05445E', 
-                                color:'white'
-                               }} 
-                        size={size}
-                        onClick= {UpdateTime}    
-                    >
-                        
-                        Clock In
-                    </Button>
-                    {/* <img
-                        src="/logo/bell.png" alt='imh'
-                        className="bell"
-                    /> */}
-                    <div className="item">
-                        <img
-                            src="/logo/logo.png" alt='imagh'
-                            className="avatar"
-                            style={{cursor:'pointer'}}                          
-                        />
-                    </div>
-                </div>
-
-                <Dropdown overlay={menu} >
-                    <Space>
-                       <h1 style={{cursor:'pointer', fontSize: '16px',marginTop:'10px'}} >  Hutech </h1>
-                        <img src={dropDownimg} alt="downArrow"  style={{cursor:'pointer'}} />                       
-                    </Space>
-                </Dropdown>
-            </div>
-         
-            <div className='tittle'>
-                <ExpenseBreadCrumb/>
-            </div>
+  //     var hours = Math.floor(
+  //       (timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  //     );
+  //     var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+  //     var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+  //     seconds = seconds > 9 ? seconds : "0" + seconds;
+  //     minutes = minutes > 1 ? minutes : "0" + minutes;
+  //     hours = hours > 1 ? hours : "0" + hours;
+  //     setCtime({ ...ctime, hrs: hours, min: minutes, sec: seconds });
+  //   }, 1000);
+  // ---------------------------------------------------------------------
+  return (
+    <div className="navbar" style={{ background: "white" }}>
+      <div className="wrapper">
+        {/* --------------------------------stopwatch */}
+        <div
+          style={{
+            cursor: "pointer",
+            fontSize: "16px",
+            // marginTop:'9px',
+            marginRight: "20px",
+            padding: "5px",
+            border: "1px solid black",
+            backgroundColor: "#05445E",
+            color: "white",
+            fontWeight: "400",
+            width: "auto",
+          }}
+          className="stopwatch"
+        >
+          {/* {`${ctime.hrs}:${ctime.min}:${ctime.sec}`} */}
+          {pushContent}
+        </div>
+        {/* -----------------------------clockin  button */}
+        {/* <Button
+          style={{
+            backgroundColor: "#05445E",
+            color: "white",
+          }}
+          size={size}
+        //   onClick={UpdateTime}
+        >
+          Clock In
+        </Button> */}
+        <div className="image">
+          {/* <img src="/logo/bell.png" alt='imh'
+                 className="bell"/> */}
+          <div className="item">
+            <img
+              src="/logo/logo.png"
+              alt="imagh"
+              className="avatar"
+              style={{ cursor: "pointer" }}
+            />
+          </div>
         </div>
 
-    )
-}
+        <Dropdown overlay={menu}>
+          <Space>
+            <h1
+              style={{ cursor: "pointer", fontSize: "16px", marginTop: "10px" }}
+            >
+              {" "}
+              Hutech{" "}
+            </h1>
+            <img
+              src={dropDownimg}
+              alt="downArrow"
+              style={{ cursor: "pointer" }}
+            />
+          </Space>
+        </Dropdown>
+      </div>
 
-export default Navbar
+      <div className="tittle">
+        <ExpenseBreadCrumb />
+      </div>
+    </div>
+  );
+};
+
+export default Navbar;

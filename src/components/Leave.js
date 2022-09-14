@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
     Col,
     Row,
@@ -7,8 +7,7 @@ import {
     Badge,
     Table,
     Calendar,
-    Typography
-
+    Modal
 } from 'antd';
 import { Button } from 'antd';
 import { Form, Input, } from 'antd';
@@ -16,86 +15,65 @@ import { DatePicker, Space } from "antd";
 import moment from "moment";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
-const getFirstDateAndLastDateOnThePanel = (date: Moment) => {
-    const firstDate = moment(date).startOf("month");
-    const lastDate = moment(date).endOf("month");
-
-    const firstDateDay = firstDate.day();
-    firstDate.subtract(firstDateDay, "days");
-    lastDate.add(42 - Number(lastDate.format("DD")) - firstDateDay, "days");
-
-    return {
-        firstDate,
-        lastDate,
-    };
-};
-
-
-const columns = [
-    {
-        title: 'Date',
-        dataIndex: 'date',
-    },
-    {
-        title: 'Employee Name',
-        dataIndex: 'name',
-    },
-    {
-        title: 'Nature of Leave',
-        dataIndex: 'nature',
-    },
-    {
-        title: 'Slot',
-        dataIndex: 'slot',
-    },
-    {
-        title: 'Reason',
-        dataIndex: 'reason',
-    },
-
-
-    {
-        key: "5",
-        title: "Actions",
-        render: (record) => {
-            return (
-                <>
-                    {/* <EditOutlined
-                // onClick={() => {
-                //   onEditStudent(record);
-                // }}
-              /> */}
-                    <DeleteOutlined
-                        // onClick={() => {
-                        //   onDeleteStudent(record);
-                        // }}
-                        style={{ color: "red", marginLeft: 12 }}
-                    />
-                </>
-            );
-        },
-    }
-
-];
-const data = [
-    {
-        key: '1',
-        date: '12/09/22',
-        name: 'Jatin Yadav',
-        age: 32,
-        nature: 'Sick Leave',
-        slot: 'Morning',
-        reason: ''
-    },
-
-
-];
-
-
-
 const Leave = () => {
+    const [form] = Form.useForm();
+    const [leaves, setLeaves] = useState([]);
+    const [dataSource, setDataSource] = useState([]);
+    const getLocalData = localStorage.getItem("test");
+    const parseData = JSON.parse(getLocalData)
 
-    const [value, setValue] = useState(1);
+    // const [value, setValue] = useState({
+    //     approver: "",
+    //     approver: "",
+    //     employeename: "",
+    //     leaveNature: "",
+    //     reason: "",
+    //     slot: "",
+    // });
+
+
+    const onFinish = values => {
+        console.log("Success:", values);
+        let newLeave = {
+            approver: values.approver,
+            date: values.durationid,
+            name: values.employeename,
+            nature: values.leaveNature,
+            slot: values.slot,
+            reason: values.reason,
+        }
+
+        setLeaves([newLeave, ...leaves]);
+
+        localStorage.setItem("test" , JSON.stringify(newLeave));
+        form.resetFields()
+    };
+
+
+
+    const onDeleteLeave = (record) => {
+        Modal.confirm({
+          title: "Are you sure, you want to delete Leave record?",
+          okText: "Yes",
+          okType: "danger",
+          onOk: () => {
+            setLeaves((pre) => {
+              return pre.filter((leave) => leave.id !== record.id);
+            });
+          },
+        });
+      };
+
+
+    const onReset = () => {
+        form.resetFields()
+    }
+    const { Option } = Select;
+    // const handleSelect = (e) => {
+    //     console.log(e);
+    //     setValue(e)
+    // }
+
 
     const users = [
         {
@@ -131,6 +109,54 @@ const Leave = () => {
 
     ];
 
+    const columns = [
+        {
+            title: 'Duration',
+            dataIndex: 'date',
+        },
+        {
+            title: 'Employee Name',
+            dataIndex: 'name',
+        },
+        {
+            title: 'Nature of Leave',
+            dataIndex: 'nature',
+        },
+        {
+            title: 'Slot',
+            dataIndex: 'slot',
+        },
+        {
+            title: 'Reason',
+            dataIndex: 'reason',
+        },
+        {
+            title: 'Approver',
+            dataIndex: 'approver',
+        },
+
+
+
+        {
+            key: "5",
+            title: "Actions",
+            render: (record) => {
+                return (
+                    <>
+                        <DeleteOutlined
+                            onClick={() => {
+                                onDeleteLeave(record);
+                              }}
+                            style={{ color: "red", marginLeft: 12 }}
+                        />
+                    </>
+                );
+            },
+        }
+
+    ];
+
+
     const { RangePicker } = DatePicker;
 
     const onChange = (dates, dateStrings) => {
@@ -152,6 +178,19 @@ const Leave = () => {
         });
     };
 
+    const getFirstDateAndLastDateOnThePanel = (date: Moment) => {
+        const firstDate = moment(date).startOf("month");
+        const lastDate = moment(date).endOf("month");
+
+        const firstDateDay = firstDate.day();
+        firstDate.subtract(firstDateDay, "days");
+        lastDate.add(42 - Number(lastDate.format("DD")) - firstDateDay, "days");
+
+        return {
+            firstDate,
+            lastDate,
+        };
+    };
 
 
 
@@ -162,59 +201,61 @@ const Leave = () => {
                     padding: 24,
                     background: '#fff',
                     minHeight: 150,
-                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly',
+                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: '#e9eaea',
 
 
                 }}
                 gutter={[16, 16]}>
 
-                <Col span={24} style={{
-                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: '#6f6fee',
-                }}>Leave Request</Col>
-
                 <Col id="responsive-input1" span={24} style={{
-                    display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#6f6fee',
-                    borderRadius: '10px'
+                    display: 'flex', flexDirection: 'column', justifyContent: 'center', backgroundColor: '#05445E',
+                    borderRadius: '10px', alignItems: 'center'
 
                 }} >
 
-                    {/* <div className='Col-1-center' style={{  display:'flex',flexDirection:'row'
+                    <div className='Col-1-center' style={{
+                        display: 'flex', flexDirection: 'row', color: 'white'
 
-                    }}> */}
-                    {users.map((user) => {
-                        return (
-                            <div className='Col-1-center' style={{
-                                backgroundColor: '#e5e8ea', width: '200px',
-                                margin: '10px', borderRadius: '5px', alignItems: 'center', display: 'flex', justifyContent: 'center',
-                                flexDirection: 'column', paddingTop: '10px'
+                    }}>Leave Request</div>
 
-                            }}>
+                    <div style={{
+                        display: 'flex', flexDirection: 'row'
 
-                                <p className='heading' style={{
-                                }}>{user.leavetype}</p>
-                                <p className='leave' style={{
-                                }}>{user.leave}</p>
+                    }}>
+                        {users.map((user) => {
+                            return (
+                                <div className='Col-1-center' style={{
+                                    backgroundColor: '#e5e8ea', width: '150px',
+                                    margin: '10px', borderRadius: '5px', alignItems: 'center', display: 'flex', justifyContent: 'center',
+                                    flexDirection: 'column', paddingTop: '10px'
 
-                            </div>
-                        );
-                    })}
-                    {/* </div> */}
+                                }}>
+
+                                    <p className='heading' style={{
+                                    }}>{user.leavetype}</p>
+                                    <p className='leave' style={{
+                                    }}>{user.leave}</p>
+
+                                </div>
+                            );
+                        })}
+                    </div>
                 </Col>
 
-                <Col span={12} style={{ border: '2px solid #6f6fee', borderRadius: '10px' }}>
+                <Col span={12} >
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <div className='badge-div' style={{ display: 'flex', flexDirection: 'row',  }}>
+                        <div className='badge-div' style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#05445E', justifyContent: 'center' }}>
                             {/* <Typography.Title level={4} >Calendar</Typography.Title> */}
 
-                            <Badge style={{ marginRight: '5px', }} color="red" text="Absent" />
-                            <Badge style={{ marginRight: '5px', }} color="pink" text=" Half Day" />
-                            <Badge style={{ marginRight: '5px', }} color="blue" text="#Leave" />
-                            <Badge style={{ marginRight: '5px', }} color="green" text="Present" />
-                            <Badge style={{ marginRight: '5px', }} color="yellow" text=" Official Holiday" />
-                            <Badge style={{ marginRight: '5px', }} color="grey" text=" Weekly Off" />
+                            <Badge style={{ marginRight: '5px', color: 'white' }} color="red" text="Absent" />
+                            <Badge style={{ marginRight: '5px', color: 'white' }} color="orange" text="Half Day" />
+                            <Badge style={{ marginRight: '5px', color: 'white' }} color="blue" text="Leave" />
+                            <Badge style={{ marginRight: '5px', color: 'white' }} color="green" text="Present" />
+                            <Badge style={{ marginRight: '5px', color: 'white' }} color="yellow" text="Official Holiday" />
+                            <Badge style={{ marginRight: '5px', color: 'white' }} color="grey" text="Weekly Off" />
 
                         </div>
-                        <Calendar
+                        <Calendar style={{ padding: '10px', }}
 
                             value={date}
                             onChange={setDate}
@@ -226,18 +267,19 @@ const Leave = () => {
 
 
                 <Row style={{
-                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: '#6f6fee',
+                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: '#05445E',
                     borderRadius: '10px', padding: '10px'
                 }}
                 >
                     <Col span={24} style={{
-                        display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start',
+                        display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'white'
                     }}>Apply Leave</Col>
 
                     <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
-                        background: 'flex', padding: '10px',
+                        background: 'flex', padding: '10px', width: '400px'
                     }} >
                         <Form
+                            {...Leave}
                             labelCol={{
                                 span: 6,
 
@@ -245,28 +287,37 @@ const Leave = () => {
                             wrapperCol={{
                                 span: 16,
                             }}
+                            form={form}
+                            onFinish={onFinish}
 
 
+
+                        // onFieldsChange={(changedFields, allvalues) => onFieldsChangeHandler(changedFields, allvalues)}
                         >
                             <Form.Item labelAlign="left"
                                 style={{ marginBottom: "15px", }}
-                                label="Employee Name"
+                                label={<label style={{ color: "white", fontWeight: '400' }}>Employee Name</label>}
                                 name="employeename"
 
-
                             >
-                                <Input placeholder="Employee Name" />
+
+                                <Input
+                                
+                                    required
+                                    placeholder="Employee Name" />
                             </Form.Item>
 
                             <Form.Item labelAlign="left"
-                                style={{ marginBottom: "15px" }}
-                                label="Duration"
+                                style={{ marginBottom: "15px", color: 'white', }}
+                                label={<label style={{ color: "white", fontWeight: '400' }}>Duration</label>}
                                 name="durationid"
 
 
+
                             >
-                                <Space direction="vertical" size={12}>
-                                    <RangePicker
+                                <Space direction="vertical" size={12}
+                                    required>
+                                    <RangePicker required
                                         ranges={{
                                             Today: [moment(), moment()],
                                             "This Month": [moment().startOf("month"), moment().endOf("month")]
@@ -284,20 +335,21 @@ const Leave = () => {
 
                                 name="leaveNature"
                                 style={{ marginBottom: "15px" }}
-                                label="Nature of Leave"
+
+                                label={<label style={{ color: "white", fontWeight: '400' }}>Nature of Leave</label>}
 
 
                             >
-                                <Select
+                                <Select required
                                     placeholder="Select a option "
                                     allowClear
-
+                                    // onSelect={handleSelect}
                                 >
 
-                                    <Select.Option value="demo">Earn Leave </Select.Option>
-                                    <Select.Option value="demo">Sick Leave </Select.Option>
-                                    <Select.Option value="demo">Casual Leave </Select.Option>
-                                    <Select.Option value="demo">Floating Leave </Select.Option>
+                                    <Option value="Earn Leave">Earn Leave </Option>
+                                    <Option value="Sick Leave">Sick Leave </Option>
+                                    <Option value="Casual Leave">Casual Leave </Option>
+                                    <Option value="Floating Leave">Floating Leave </Option>
                                 </Select>
 
 
@@ -306,12 +358,14 @@ const Leave = () => {
                             <Form.Item labelAlign="left"
                                 name="slot"
                                 style={{ marginBottom: "15px" }}
-                                label="Half Day Slot"
+
+                                label={<label style={{ color: "white", fontWeight: '400' }}>Half Day Slot</label>}
+
 
                             >
-                                <Radio.Group onChange={onChange} value={value} >
-                                    <Radio value={1} >Morning</Radio>
-                                    <Radio value={2} >Evening</Radio>
+                                <Radio.Group  >
+                                    <Radio style={{ color: "white", fontWeight: '400' }} value="Morning">Morning</Radio>
+                                    <Radio style={{ color: "white", fontWeight: '400' }} value="Evening" >Evening</Radio>
 
                                 </Radio.Group>
                             </Form.Item>
@@ -319,21 +373,22 @@ const Leave = () => {
                             <Form.Item labelAlign="left"
                                 name="reason"
                                 style={{ marginBottom: "15px" }}
-                                label="Reason"
+
+                                label={<label style={{ color: "white", fontWeight: '400' }}>Reason</label>}
+
 
                             >
-                                <Input.TextArea />
+                                <Input.TextArea required />
                             </Form.Item>
 
                             <Form.Item labelAlign="left"
                                 name="approver"
                                 style={{ marginBottom: "15px" }}
-                                label="Approver"
 
-
+                                label={<label style={{ color: "white", fontWeight: '400' }}>Approver</label>}
 
                             >
-                                <Input placeholder="Reporting Manager" />
+                                <Input placeholder="Reporting Manager" required />
                             </Form.Item>
 
 
@@ -344,10 +399,13 @@ const Leave = () => {
                                     span: 16,
                                 }}
                             >
-                                <Button type="primary" htmlType="submit" >
+                                <Button type="primary" htmlType="submit"
+
+                                >
                                     Submit
                                 </Button>
-                                <Button htmlType="button" style={{ marginLeft: "10px", }} >
+                                <Button htmlType="button" style={{ marginLeft: "10px", }}
+                                    onClick={onReset}>
                                     Reset
                                 </Button>
 
@@ -358,8 +416,10 @@ const Leave = () => {
                             }}>History</Col>
 
                             <div>
-                                <Table columns={columns} dataSource={data} size="small" scroll={{
-                                    x: 400,
+                                {/* {JSON.stringify(leaves)} */}
+                                {/* {<p>{"ddd"} </p> }{JSON.stringify()} */}
+                                <Table columns={columns} dataSource={parseData.length >= 0 ? [...parseData] : leaves} size="small" scroll={{
+                                    x: 600,
                                 }} />
                             </div>
 

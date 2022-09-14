@@ -88,28 +88,28 @@ console.log(props.openkey);
                         <NavLink to="/DashBoard" />
                     </Menu.Item>
 
-                    <Menu.SubMenu icon={<img src="/logo/Expense.png" alt="profile" className="Dash" />} key="sub1" title="Expense" mode='inline'>
+                    <Menu.SubMenu icon={<img  src="/logo/Expense.png" alt="profile" className="Dash" />} key="sub1" title="Expense" mode='inline'>
 
                         <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="2">
                             Add Expense
                             <NavLink to="/Expense/AddExpense" />
                         </Menu.Item>
-                        <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="3">
+                        <Menu.Item icon={<img  src="/logo/dot.png" alt="profile" className="dot" />} key="3">
                             Expense List
                             <NavLink to="/Expense/ExpenseList" />
                         </Menu.Item>
 
                     </Menu.SubMenu>
 
-                    <Menu.SubMenu icon={<img src="/logo/Time-Attendance.png" alt="profile" className="Dash" />} key="sub2" title="Employee" mode='inline'>
+                    <Menu.SubMenu icon={<img style={{color:'white', backgroundColor:'white'}} src="/logo/Time-Attendance.png"alt="profile" className="Dash" />} key="sub2" title="Employee" mode='inline'>
 
                         <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="4">
                             Attendance Log
                             <NavLink to="/" />
                         </Menu.Item>
-                        <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="5">
+                        <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="7">
                             Leave 
-                            <NavLink to="/" />
+                            <NavLink to="/Employee/Leave" />
                         </Menu.Item>
 
                     </Menu.SubMenu>

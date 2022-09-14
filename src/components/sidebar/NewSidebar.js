@@ -52,53 +52,8 @@ const NewSidebar = (props) => {
           console.log(collapsed, type);
         }}
       >
-        <Menu
-          defaultOpenKeys={props.activeSubMenu || []}
-          selectedKeys={props.activeMenu}
-          // openKeys={props.openkey}
-          // selectedKeys={props.selectedkey}
-          onSelect={function ({ item, key, keyPath, selectedKeys, domEvent }) {
-            console.log(item, key, keyPath, selectedKeys, domEvent);
-          }}
-          mode="inline"
-          style={{
-            padding: "0px",
-            height: "100vh",
-          }}
-        >
-          <div className="sidebarTittle">
-            <img
-              style={{
-                background: "#05445E",
-                height: "30px",
-              }}
-              src="/logo/logo_1.png"
-              alt="hello"
-            />
-          </div>
-          <Menu.Item
-            icon={
-              <img src="/logo/Dashboard.png" alt="profile" className="Dash" />
-            }
-            key="1"
-          >
-            Dashboard
-            <NavLink to="/DashBoard" />
-          </Menu.Item>
-
-          <Menu.SubMenu
-            icon={
-              <img src="/logo/Expense.png" alt="profile" className="Dash" />
-            }
-            key="sub1"
-            title="Expense"
-            mode="inline"
-          >
-            <Menu.Item
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="2"
-            >
-
+ 
+      
                 <Menu
                 defaultOpenKeys={props.activeSubMenu || []}
                 selectedKeys={props.activeMenu}
@@ -164,7 +119,7 @@ const NewSidebar = (props) => {
 
              
             </Sider>
-        </Layout>)
-}
+        </Layout>
+)}
 
 export default NewSidebar;

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,} from 'react';
 import {
     Col,
     Row,
@@ -19,8 +19,8 @@ const Leave = () => {
     const [form] = Form.useForm();
     const [leaves, setLeaves] = useState([]);
     const [dataSource, setDataSource] = useState([]);
-    const getLocalData = localStorage.getItem("test");
-    const parseData = JSON.parse(getLocalData)
+    // const getLocalData = localStorage.getItem("test");
+    // const parseData = JSON.parse(getLocalData)
 
     // const [value, setValue] = useState({
     //     approver: "",
@@ -45,7 +45,7 @@ const Leave = () => {
 
         setLeaves([newLeave, ...leaves]);
 
-        localStorage.setItem("test" , JSON.stringify(newLeave));
+        // localStorage.setItem("test" , JSON.stringify(newLeave));
         form.resetFields()
     };
 
@@ -169,28 +169,28 @@ const Leave = () => {
     };
     const [date, setDate] = useState(moment());
 
-    const handlePanelChange = (date: Moment) => {
-        const { firstDate, lastDate } = getFirstDateAndLastDateOnThePanel(date);
+    // const handlePanelChange = (date: Moment) => {
+    //     const { firstDate, lastDate } = getFirstDateAndLastDateOnThePanel(date);
 
-        console.log({
-            firstDate: firstDate.format("YYYY-MM-DD"),
-            lastDate: lastDate.format("YYYY-MM-DD"),
-        });
-    };
+    //     console.log({
+    //         firstDate: firstDate.format("YYYY-MM-DD"),
+    //         lastDate: lastDate.format("YYYY-MM-DD"),
+    //     });
+    // };
 
-    const getFirstDateAndLastDateOnThePanel = (date: Moment) => {
-        const firstDate = moment(date).startOf("month");
-        const lastDate = moment(date).endOf("month");
+    // const getFirstDateAndLastDateOnThePanel = (date: Moment) => {
+    //     const firstDate = moment(date).startOf("month");
+    //     const lastDate = moment(date).endOf("month");
 
-        const firstDateDay = firstDate.day();
-        firstDate.subtract(firstDateDay, "days");
-        lastDate.add(42 - Number(lastDate.format("DD")) - firstDateDay, "days");
+    //     const firstDateDay = firstDate.day();
+    //     firstDate.subtract(firstDateDay, "days");
+    //     lastDate.add(42 - Number(lastDate.format("DD")) - firstDateDay, "days");
 
-        return {
-            firstDate,
-            lastDate,
-        };
-    };
+    //     return {
+    //         firstDate,
+    //         lastDate,
+    //     };
+    // };
 
 
 
@@ -259,7 +259,7 @@ const Leave = () => {
 
                             value={date}
                             onChange={setDate}
-                            onPanelChange={handlePanelChange}
+                            // onPanelChange={handlePanelChange}
                         />
                     </div>
 
@@ -418,7 +418,9 @@ const Leave = () => {
                             <div>
                                 {/* {JSON.stringify(leaves)} */}
                                 {/* {<p>{"ddd"} </p> }{JSON.stringify()} */}
-                                <Table columns={columns} dataSource={parseData.length >= 0 ? [...parseData] : leaves} size="small" scroll={{
+                                <Table columns={columns} 
+                                dataSource={ leaves} 
+                                size="small" scroll={{
                                     x: 600,
                                 }} />
                             </div>

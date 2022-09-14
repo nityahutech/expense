@@ -18,8 +18,8 @@ const Profile = () => {
   const [formLayout, setFormLayout] = useState('horizontal');
   const { currentUser, updateMyProfile, updateMyPhNo, updateMyEmail} = useAuth();
   const [userRecord, setUserRecord] = useState({
-    employeename:"",
-    mailid:"",
+    employeename:currentUser.displayName,
+    mailid:currentUser.email,
     address: "",
     city: "",
     country: "",
@@ -31,18 +31,15 @@ const Profile = () => {
   async function getData(){
     let rec = await ProfileContext.getProfile(currentUser.uid);
     if (rec.data()){
-    setUserRecord(rec.data());
-    return;
+      setUserRecord(rec.data());
+      return;
     }
-    ProfileContext.addProfile(currentUser.uid, userRecord)
+      ProfileContext.addProfile(currentUser.uid, userRecord)
   }
   
 
   useEffect(() => {
     getData();
-    userRecord.employeename = currentUser.displayName;
-    userRecord.mailid = currentUser.email;
-    console.log(userRecord);
   }, [currentUser]);
 
 
@@ -260,8 +257,8 @@ const Profile = () => {
               }}
               initialValues={{
                 remember: true,
-                employeename: currentUser.displayName,
-                mailid: currentUser.email,
+                // employeename: currentUser.displayName,
+                // mailid: currentUser.email,
                 ...userRecord 
               }}
               fields={[

@@ -1,68 +1,57 @@
-import React from 'react';
-import { Layout, Menu } from 'antd';
+import React from "react";
+import { Layout, Menu } from "antd";
 
-import './newSlidebar.css';
+import "./newSlidebar.css";
 import { useNavigate, NavLink } from "react-router-dom";
-import {
-
-    SettingOutlined,
-    ProfileOutlined
-
-} from "@ant-design/icons";
-
+import { SettingOutlined, ProfileOutlined } from "@ant-design/icons";
 
 const { Sider } = Layout;
 
-
 function getItem(label, key, icon, children = null, type = null) {
-    return {
-        key,
-        icon,
-        children,
-        label,
-        type,
-    };
+  return {
+    key,
+    icon,
+    children,
+    label,
+    type,
+  };
 }
 
-
-
 const NewSidebar = (props) => {
-console.log(props.openkey);
-    const history = useNavigate()
-    // const onClick = (e) => {
-    //     let pathkey = e.key
-    //     switch (pathkey) {
-    //         case "5":
-    //             window.location.href="/ExpenseFrm"
-    //             history("/Expense/AddExpense")
-    //             break;
-    //         case "6":
-    //             window.location.href = "/Home"
-    //             history("/Expense/ExpenseList")
-    //             break;
-    //         case "1":
-    //             window.location.href = "/DashBoard"
-    //             history("/DashBoard")
-    //             break;
-    //     }
-    //     console.log('click ', e.key);
-    // };
+  console.log(props.openkey);
+  const history = useNavigate();
+  // const onClick = (e) => {
+  //     let pathkey = e.key
+  //     switch (pathkey) {
+  //         case "5":
+  //             window.location.href="/ExpenseFrm"
+  //             history("/Expense/AddExpense")
+  //             break;
+  //         case "6":
+  //             window.location.href = "/Home"
+  //             history("/Expense/ExpenseList")
+  //             break;
+  //         case "1":
+  //             window.location.href = "/DashBoard"
+  //             history("/DashBoard")
+  //             break;
+  //     }
+  //     console.log('click ', e.key);
+  // };
 
-    return (
-
-        <Layout className='sidelayout'>
-            <Sider
-                breakpoint="lg"
-                style={{ backgroundColor: '#05445E' }}
-                collapsedWidth="0"
-                onBreakpoint={(broken) => {
-                    console.log(broken);
-                }}
-                onCollapse={(collapsed, type) => {
-                    console.log(collapsed, type);
-                }}
-
-            >
+  return (
+    <Layout className="sidelayout">
+      <Sider
+        breakpoint="lg"
+        style={{ backgroundColor: "#05445E" }}
+        collapsedWidth="0"
+        onBreakpoint={(broken) => {
+          console.log(broken);
+        }}
+        onCollapse={(collapsed, type) => {
+          console.log(collapsed, type);
+        }}
+      >
 
                 <Menu
                 defaultOpenKeys={props.activeSubMenu || []}
@@ -88,28 +77,28 @@ console.log(props.openkey);
                         <NavLink to="/DashBoard" />
                     </Menu.Item>
 
-                    <Menu.SubMenu icon={<img src="/logo/Expense.png" alt="profile" className="Dash" />} key="sub1" title="Expense" mode='inline'>
+                    <Menu.SubMenu icon={<img  src="/logo/Expense.png" alt="profile" className="Dash" />} key="sub1" title="Expense" mode='inline'>
 
                         <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="2">
                             Add Expense
                             <NavLink to="/Expense/AddExpense" />
                         </Menu.Item>
-                        <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="3">
+                        <Menu.Item icon={<img  src="/logo/dot.png" alt="profile" className="dot" />} key="3">
                             Expense List
                             <NavLink to="/Expense/ExpenseList" />
                         </Menu.Item>
 
                     </Menu.SubMenu>
 
-                    <Menu.SubMenu icon={<img src="/logo/Time-Attendance.png" alt="profile" className="Dash" />} key="sub2" title="Employee" mode='inline'>
+                    <Menu.SubMenu icon={<img style={{color:'white', backgroundColor:'white'}} src="/logo/Time-Attendance.png"alt="profile" className="Dash" />} key="sub2" title="Employee" mode='inline'>
 
                         <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="4">
                             Attendance Log
                             <NavLink to="/" />
                         </Menu.Item>
-                        <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="5">
+                        <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="7">
                             Leave 
-                            <NavLink to="/" />
+                            <NavLink to="/Employee/Leave" />
                         </Menu.Item>
 
                     </Menu.SubMenu>
@@ -129,7 +118,7 @@ console.log(props.openkey);
 
              
             </Sider>
-        </Layout>)
-}
+        </Layout>
+)}
 
 export default NewSidebar;

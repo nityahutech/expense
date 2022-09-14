@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import { useStopwatch } from "react-timer-hook";
 
+
 const start = new Date().getTime();
 
 // ---------------------------------------------------------------------
@@ -172,42 +173,7 @@ const Navbar = () => {
       </button>
     );
   }
-  // ----------------------------------code for current time registration
-  //   useEffect(() => {
-  //     console.log(currentUser);
-  //     setActivePage(loc.pathname);
-  //   }, [loc]);
-
-  //   let time = new Date().toLocaleTimeString();
-
-  //   const [ctime, setCtime] = useState({
-  //     hrs: "00",
-  //     min: "00",
-  //     sec: "00",
-  //     start: new Date().getTime,
-  //   });
-
-  //   const UpdateTime = () => {
-  //     time = new Date().toLocaleTimeString();
-  //     setCtime(time);
-  //   };
-  //--------------------------------------code for starting the stopwatch
-
-  //   setInterval(() => {
-  //     var now = new Date().getTime();
-  //     var timeleft = now - start;
-
-  //     var hours = Math.floor(
-  //       (timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-  //     );
-  //     var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
-  //     var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
-  //     seconds = seconds > 9 ? seconds : "0" + seconds;
-  //     minutes = minutes > 1 ? minutes : "0" + minutes;
-  //     hours = hours > 1 ? hours : "0" + hours;
-  //     setCtime({ ...ctime, hrs: hours, min: minutes, sec: seconds });
-  //   }, 1000);
-  // ---------------------------------------------------------------------
+  
   return (
     <div className="navbar" style={{ background: "white" }}>
       <div className="wrapper">
@@ -231,19 +197,8 @@ const Navbar = () => {
           {pushContent}
         </div>
         {/* -----------------------------clockin  button */}
-        {/* <Button
-          style={{
-            backgroundColor: "#05445E",
-            color: "white",
-          }}
-          size={size}
-        //   onClick={UpdateTime}
-        >
-          Clock In
-        </Button> */}
         <div className="image">
-          {/* <img src="/logo/bell.png" alt='imh'
-                 className="bell"/> */}
+          
           <div className="item">
             <img
               src="/logo/logo.png"

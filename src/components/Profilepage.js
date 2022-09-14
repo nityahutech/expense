@@ -140,6 +140,7 @@ const Profile = () => {
   const onFieldsChangeHandler = (curr, allvalues) => {
     console.log(allvalues)
   }
+  
   const cancelStyle = {
     float: "right",
    
@@ -310,7 +311,7 @@ const Profile = () => {
                   }
                 }}
               >
-                <Input placeholder="Your Phone No." />
+                <Input maxLength={10} placeholder="Your Phone No." />
               </Form.Item>
 
               <Form.Item labelAlign="left"
@@ -370,8 +371,9 @@ const Profile = () => {
                     event.preventDefault();
                   }
                 }}
+              
               >
-                <Input placeholder="Your zip code" />
+                <Input minLength={6} maxLength={6} placeholder="Your zip code" />
               </Form.Item>
 
               <Form.Item >

@@ -16,6 +16,11 @@ function AttendanceLog({ empDetails }) {
       render: (text) => <a>{text}</a>,
     },
     {
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+    },
+    {
       title: "Employee Name",
       dataIndex: "empname",
       key: "empname",
@@ -42,23 +47,24 @@ function AttendanceLog({ empDetails }) {
     setActivetab(empDetails.userType === "emp" ? "1" : "2");
   }, []);
 
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      setSelectemp(selectedRows[0].code);
-      setActivetab("3");
-    },
-    getCheckboxProps: (record) => ({
-      disabled: record.name === "Disabled User",
-      // Column configuration not to be checked
-      name: record.name,
-    }),
-    type: "radio",
-  };
-  const [selectionType, setSelectionType] = useState("checkbox");
+  //   const rowSelection = {
+  //     onChange: (selectedRowKeys, selectedRows) => {
+  //       setSelectemp(selectedRows[0].code);
+  //       setActivetab("3");
+  //     },
+  //     getCheckboxProps: (record) => ({
+  //       disabled: record.name === "Disabled User",
+  //       // Column configuration not to be checked
+  //       name: record.name,
+  //     }),
+  //     type: "radio",
+  //   };
+  const [selectionType, setSelectionType] = useState("");
   const data = [
     {
       key: "1",
       code: "HTS001",
+      date: "12-09-2022",
       empname: "Nitya",
       project: "Expenses",
       description: "xfddsfdvbgfgfbvbvbdffgfdgjfhjjkjfjfdgkj",
@@ -66,6 +72,7 @@ function AttendanceLog({ empDetails }) {
     {
       key: "2",
       code: "HTS002",
+      date: "12-09-2022",
       empname: "Jatin",
       project: "Expenses",
       description: "xfddsfdvbgfgfbvbvb",
@@ -73,6 +80,7 @@ function AttendanceLog({ empDetails }) {
     {
       key: "3",
       code: "HTS003",
+      date: "12-09-2022",
       empname: "Saswat",
       project: "Expenses",
       description: "xfddsfdvbgfgfbvbvb",
@@ -106,9 +114,9 @@ function AttendanceLog({ empDetails }) {
       dataIndex: "work",
     },
     {
-      title: "Action",
-      key: "action",
-      dataIndex: "action",
+      title: "Description",
+      key: "description",
+      dataIndex: "description",
     },
     // {
     //   title: "Action",
@@ -123,7 +131,7 @@ function AttendanceLog({ empDetails }) {
       time1: "",
       time2: "",
       work: "",
-      action: "",
+      description: "dfdjdgjhgjhgjhfhfdj",
     },
     {
       key: "2",
@@ -148,6 +156,7 @@ function AttendanceLog({ empDetails }) {
       className="Tabs"
       onChange={(tabKey) => {
         setActivetab(tabKey);
+        setSelectemp(null);
       }}
     >
       {role.userType === "emp" ? (
@@ -158,9 +167,18 @@ function AttendanceLog({ empDetails }) {
         <>
           <Tabs.TabPane tab="Daily Log" key="2">
             <Table
-              rowSelection={{
-                type: selectionType,
-                ...rowSelection,
+              //   rowSelection={{
+              //     type: selectionType,
+              //     ...rowSelection,
+              //   }}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    // console.log(record.code);
+                    setSelectemp(record.code);
+                    setActivetab("3");
+                  }, // click row
+                };
               }}
               columns={columns}
               dataSource={data}

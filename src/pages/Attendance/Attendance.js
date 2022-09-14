@@ -19,7 +19,7 @@ function Attendance() {
       <div className="sidecontainer">
         <Sidebar
           activeSubMenu={["sub2"]}
-          activeMenu={["4"]}
+          activeMenu={["6"]}
           accessToken={accessToken}
         />
       </div>
@@ -30,7 +30,7 @@ function Attendance() {
         </div>
 
         <div className="tables">
-          <AttendanceLog empDetails={{ userType: "emp", empid: 12 }} />
+          <AttendanceLog empDetails={{ userType: "hr", empid: 12 }} />
         </div>
       </div>
     </div>

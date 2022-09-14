@@ -90,7 +90,7 @@ const NewSidebar = (props) => {
 
                     </Menu.SubMenu>
 
-                    <Menu.SubMenu icon={<img style={{color:'white', backgroundColor:'white'}} src="/logo/Time-Attendance.png"alt="profile" className="Dash" />} key="sub2" title="Employee" mode='inline'>
+                    <Menu.SubMenu icon={<img style={{color:'white',}} src="/logo/employees.png"alt="profile" className="Dash" />} key="sub2" title="Employee" mode='inline'>
 
                         <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="4">
                             Attendance Log
@@ -100,14 +100,19 @@ const NewSidebar = (props) => {
                             Leave 
                             <NavLink to="/Employee/Leave" />
                         </Menu.Item>
+                        <Menu.Item icon={<img src="/logo/dot.png" alt="profile" className="dot" />} key="8">
+                            Add Employee
+                            <NavLink to="/SignupPage" />
+                        </Menu.Item>
 
                     </Menu.SubMenu>
 
-                    <Menu.Item icon={<ProfileOutlined style={{ color: "#FFFFFF" }} />} key="4">
+                    <Menu.Item icon={<img style={{color:'',}} src="/logo/user.png"alt="profile" className="Dash" />}key="4">
                         Profile
                         <NavLink to="/Profile" />
                     </Menu.Item>
-                    <Menu.Item icon={<SettingOutlined style={{ color: "#FFFFFF" }} />} key="5">
+                    <Menu.Item icon={<img style={{color:'',}} src="/logo/settings.png"alt="profile" className="Dash" />}key="5">
+                  
                         Settings
                         <NavLink to="/Setting" />
                     </Menu.Item>

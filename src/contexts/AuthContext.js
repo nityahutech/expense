@@ -21,10 +21,17 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState()
   const [loading, setLoading] = useState(true)
 
-  function signup(email, password) {
+  function signup(email, password, name) {
     console.log(email, password);
-    let res =  createUserWithEmailAndPassword(auth, email, password)
+    let res =  createUserWithEmailAndPassword(auth, email, password).then(() => {
+      login(email, password).then(() => {
+        auth.onAuthStateChanged((user) => {
+          updateProfile(user, {displayName: name});
+        })
+      })
+    })
     console.log(res);
+    console.log(currentUser);
     return res;
   }
 

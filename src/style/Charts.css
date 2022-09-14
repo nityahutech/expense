@@ -19,48 +19,53 @@ body {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin: 10px;
+  margin: 20px;
   border-radius: 5px;
-  /* border: 1px solid red; */
-  background-color: white;
   justify-content: space-evenly;
   align-items: center;
   height: 19vh;
+  position: relative;
 }
 .col1 {
-  border: 1px solid lightyellow;
-  background-color: white;
   border-radius: 5px;
-  margin: 5px;
+  /* margin: 5px; */
   display: flex;
   flex-direction: column;
-  width: 45%;
+  width: 100%;
   justify-content: center;
   align-items: center;
-  background-color: antiquewhite;
+  background-color: #05445e;
+}
+.col1 h2 {
+    color: #fff;
+}
+.col1 h1 {
+    color: #fff;
 }
 .col2 {
-  border: 1px solid lightyellow;
-  background-color: white;
-  background-color: antiquewhite;
   border-radius: 5px;
-  margin: 5px;
+  /* margin: 5px; */
   display: flex;
   flex-direction: column;
-  width: 45%;
+  width: 100%;
   justify-content: center;
   align-items: center;
+  background-color: #05445e;
+}
+.col2 h2 {
+    color: #fff;
+}
+.col2 h1 {
+    color: #fff;
 }
 .colbar {
-  border: 1px solid lightyellow;
-  background-color: antiquewhite;
+  /* border: 1px solid red; */
+  background-color: #fff;
   border-radius: 5px;
   margin: 5px;
-  width: 68%;
+  width: 61%;
 }
 .colpie {
-  border: 1px solid lightyellow;
-  background-color: antiquewhite;
   border-radius: 5px;
   margin: 5px;
   width: 30%;
@@ -76,13 +81,11 @@ body {
   border-radius: 5px;
   justify-content: space-evenly;
   align-items: center;
-  background-color: white;
-  /* border: 1px solid red; */
 }
 
 .vbutton1{
     position: absolute;
-    top: 2px;
+    top: 15px;
     right: 25px;
     display:flex ;
     height: 25px;
@@ -99,7 +102,7 @@ body {
     color: #fff;
     border-radius: 5px;
     width: 50px;
-    margin-left: 20%;
+    margin-left: 30%;
     cursor: pointer;
 }
 .colbar{
@@ -111,10 +114,10 @@ body {
         width: 61%;
     }
     .colpie {
-        width: 27%;
+        width: 29%;
     }
     .vbutton2 button {
-        margin-left: 5%;
+        margin-left: 12%;
     }
     .rowcards {
         height: 21vh;

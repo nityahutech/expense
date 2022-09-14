@@ -259,7 +259,7 @@ const Leave = () => {
 
                             value={date}
                             onChange={setDate}
-                            onPanelChange={handlePanelChange}
+                            // onPanelChange={handlePanelChange}
                         />
                     </div>
 

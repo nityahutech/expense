@@ -131,7 +131,8 @@ const Charts = () => {
           hoverable
           style={{
             width:'50%',
-            backgroundColor:"inherit"
+            backgroundColor:"inherit",
+            padding:'1px',
           }}
           >
             <div className="col1">
@@ -143,7 +144,8 @@ const Charts = () => {
           hoverable
           style={{
             width:'50%',
-            backgroundColor:"inherit"
+            backgroundColor:"inherit",
+            padding:'1px',
           }}
           >
           <div className="col2">

@@ -10,6 +10,12 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
+import { useStopwatch } from "react-timer-hook";
+
+
+const start = new Date().getTime();
+
+// ---------------------------------------------------------------------
 
 const Navbar = () => {
   const [size, setSize] = useState("large");
@@ -59,66 +65,140 @@ const Navbar = () => {
       ]}
     />
   );
+  // ----------------------------------------full code for web-clock in
+  const { seconds, minutes, hours, days, start, pause, reset } = useStopwatch({
+    autoStart: false,
+  });
+  const [clockIn, setClocikIn] = useState(true);
+  const [mouseState, setMouseState] = useState(false);
 
-  useEffect(() => {
-    console.log(currentUser);
-    setActivePage(loc.pathname);
-  }, [loc]);
-
+  const setClockState = () => {
+    setClocikIn(false);
+   let clickedDate =  new Date()
+    localStorage.setItem('clicked-tiime',clickedDate.toString().substring(16,25))
+  };
+  const setClockOutState = () => {
+    setClocikIn(true);
+    setMouseState(false);
+  };
+  const onMouseEnter = (event) => {
+    //event.target.style.background = "red";
+    setMouseState(true);
+  };
+  const onMouseLeave = (event) => {
+    //event.target.style.background = "blue";
+    setMouseState(false);
+  };
+  console.log(mouseState);
+  const pushContent = [];
+  if (mouseState == true) {
+    pushContent.push(
+      <div
+        style={{ display: "inline-block" }}
+        onMouseLeave={onMouseLeave}
+        onMouseEnter={onMouseEnter}
+        onClick={start}
+        onClick={reset}
+      >
+        <button
+          style={{
+            padding: "1px",
+            background: "#f44336",
+            color: "white",
+            display: "inline-block",
+            width: "200px",
+          }}
+          onClick={setClockOutState}
+        >
+          WEB CLOCK OUT
+        </button>
+      </div>
+    );
+  } else if (clockIn) {
+    pushContent.push(
+      <button
+        style={{
+          padding: "1px",
+          background: "#05445e",
+          color: "white",
+          display: "inline-block",
+          width: "200px",
+        }}
+        onClick={setClockState}
+      >
+        WEB CLOCK IN
+      </button>
+    );
+  } else if (clockIn == false) {
+    pushContent.push(
+      <div
+        style={{
+          padding: "1px",
+          background: "#70BDF0",
+          display: "inline-block",
+          width: "200px",
+        //   height: "100px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+        onMouseLeave={onMouseLeave}
+        onMouseEnter={onMouseEnter}
+        onClick={pause}
+      >
+        <div>
+          <div>
+            <span>Clocked In</span>
+            <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:
+            <span>{seconds}</span>
+            <span></span>
+          </div>
+          {/* <h4>Clocked in</h4>
+          <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>: */}
+          {/* <span>{seconds}</span>{" "} */}
+        </div>
+      </div>
+    );
+  } else {
+    pushContent.push(
+      <button
+        style={{
+          color: "white",
+          backgroundColor: "DodgerBlue",
+          padding: "1px",
+          fontFamily: "Arial",
+        }}
+        onClick={setClockState}
+      >
+        WEB CLOCK IN
+      </button>
+    );
+  }
+  
   return (
     <div className="navbar" style={{ background: "white" }}>
       <div className="wrapper">
+        {/* --------------------------------stopwatch */}
+        <div
+          style={{
+            cursor: "pointer",
+            fontSize: "16px",
+            // marginTop:'9px',
+            marginRight: "20px",
+            padding: "5px",
+            border: "1px solid black",
+            backgroundColor: "#05445E",
+            color: "white",
+            fontWeight: "400",
+            width: "auto",
+          }}
+          className="stopwatch"
+        >
+          {/* {`${ctime.hrs}:${ctime.min}:${ctime.sec}`} */}
+          {pushContent}
+        </div>
+        {/* -----------------------------clockin  button */}
         <div className="image">
-          {/* <img
-    useEffect(() => {
-        console.log(currentUser);
-        setActivePage(loc.pathname);
-    }, [loc])
-
-    let time = new Date().toLocaleTimeString();
-
-    const [ctime, setCtime] = useState(time);
-
-    const UpdateTime = () => {
-        time = new Date().toLocaleTimeString();
-        setCtime(time);
-    }
-
-
-    return (
-        <div className='navbar' style={{ background: 'white' }} >
-            <div className='wrapper' >
-                <div className='image' >
-                    <h1 style={{
-                        cursor:'pointer', 
-                        fontSize: '16px',
-                        marginTop:'9px',
-                        marginRight:'20px',
-                        padding:'5px',
-                        border:'1px solid black',
-                        backgroundColor:'#05445E',
-                        color:'white',
-                        fontWeight:'400',
-                        width:'auto',   
-                    }} 
-                    >
-                    {ctime}
-                    </h1>
-                    <Button 
-                        style={{
-                                backgroundColor:'#05445E', 
-                                color:'white'
-                               }} 
-                        size={size}
-                        onClick= {UpdateTime}    
-                    >
-                        
-                        Clock In
-                    </Button>
-                    {/* <img
-                        src="/logo/bell.png" alt='imh'
-                        className="bell"
-                    /> */}
+          
           <div className="item">
             <img
               src="/logo/logo.png"

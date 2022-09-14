@@ -520,7 +520,7 @@ function ExpenseList() {
     navigate("/Expense/AddExpense");
   };
   function handlePrint() {
-    let headerStyle = "textAlign: center";
+    let headerStyle = "";
     let oddRowStyle = "";
     let evenRowStyle = "";
     let opts = {
@@ -530,40 +530,57 @@ function ExpenseList() {
       popupProperties: "string",
       stylesheets: "string" ,
       styles:"background-color:red",
-  };
+    };
     let dataIndexs = [];
     let tableHeaderString = columns
       .map((col) => {
         if (col.title !== "Action") {
           dataIndexs.push(col.dataIndex);
-          return `<th style="display: table-header-group color: grey; padding: 10px; textAlign: center" ${headerStyle}>${col.title}</th>`;
+          return `<th ${headerStyle}>${col.title}&nbsp;&nbsp;</th>`;
         }
       })
       .toString()
       .replaceAll(",", "");
     let tableRowString = [];
     let tableAllRow = [];
-    filterExpenses.forEach((exp, i) => {
+    let allTableString = [];
+    let pageNum = 1;
+    [...filterExpenses, ...filterExpenses, ...filterExpenses].forEach((exp, i) => {
       tableRowString = [];
+      if(pageNum === 1 && (i+1) % 16 === 0){
+        allTableString.push(`<table>${tableHeaderString}${tableAllRow.toString().replaceAll(",", "")}</table>`);
+        tableAllRow = [];
+        ++pageNum;
+      }
+      else{
+        if(pageNum > 1 && (i-15) % 17 === 0){
+          allTableString.push(`<table>${tableHeaderString}${tableAllRow.toString().replaceAll(",", "")}</table>`);
+          tableAllRow = [];
+          ++pageNum;
+        }
+      }
       tableRowString.push(
         `<tr style="${i % 2 === 1 ? oddRowStyle : evenRowStyle}">`
       );
+
       for (let i = 0; i < dataIndexs.length; i++) {
-        tableRowString.push(`<td style="color: grey; padding: 10px; textAlign: center; ">${exp[dataIndexs[i]]}</td>`);
+        tableRowString.push(`<td style="color: grey; padding: 10px; textAlign: center; ">${exp[dataIndexs[i]]}&nbsp;&nbsp;</td>`);
       }
       tableRowString.push("</tr>");
       tableAllRow.push(tableRowString);
+      
     });
-    let tableAllRowString = tableAllRow.toString().replaceAll(",", "");
+    // let tableAllRowString = tableAllRow.toString().replaceAll(",", "");
     // console.log(tableHeaderString);
     // console.log(tableAllRowString);
+    
+    console.log(`<div>
+    <h1 textAlign= center>Expense Report<h1/>
+        </br>${allTableString.toString().replaceAll(",", "")}</div>`);
     PHE.printHtml(
       `<div>
-        <h1 textAlign= center>Expense Report<h1/>
-        </br>
-        <table style="borderBottom: 5px solid black; " >${tableHeaderString}${tableAllRowString}</table>
-      </div>
-      `,opts
+      <h1 textAlign= center>Expense Report<h1/>
+          </br>${allTableString.toString().replaceAll(",", "")}</div>`,opts
     );
   }
 

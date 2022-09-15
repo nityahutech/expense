@@ -4,12 +4,12 @@
 }
 
 body {
-  /* overflow: hidden; */
+  overflow: scroll;
   margin: 0;
 }
 
 .content container-fluid {
-  border: 1px solid red;
+  /* border: 1px solid red; */
   width: 100%;
   height: 100vh;
   display: flex;
@@ -116,16 +116,24 @@ body {
 @media only screen and (min-width: 1200px) and (max-width: 2400px) {
     .colbar {
         width: 61%;
+        margin-top: 130px
     }
     .colpie {
         width: 29%;
+        margin-top: 130px
     }
     .vbutton2 button {
         margin-left: 12%;
     }
     .rowcards {
-        height: 21vh;
-    } 
+        margin-bottom: -135px;
+    }
+    .col1{
+        height: 100px;
+    }
+    .col2{
+        height: 100px;
+    }
 }
 
 @media only screen and (min-width: 800px) and (max-width: 1200px) {

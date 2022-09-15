@@ -130,9 +130,10 @@ const Charts = () => {
           <Card
           hoverable
           style={{
-            width:'50%',
+            width:'46%',
             backgroundColor:"inherit",
             padding:'1px',
+            marginTop:'0px',
           }}
           className="card1"
           >
@@ -144,9 +145,10 @@ const Charts = () => {
           <Card
           hoverable
           style={{
-            width:'50%',
+            width:'46%',
             backgroundColor:"inherit",
             padding:'1px',
+            marginTop:'0px',
           }}
           >
           <div className="col2">
@@ -161,7 +163,7 @@ const Charts = () => {
           <Card
           hoverable
           style={{
-            width:'100%'
+            width:'100%',
           }}
           >
             <Bar

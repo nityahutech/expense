@@ -1,13 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { Tabs, Layout, Table } from "antd";
+import { Tabs, Layout, Table, Button, Modal, Form, Input } from "antd";
 import "../style/AttendanceLog.css";
 
 const { Content } = Layout;
+const layout = {
+  labelCol: {
+    span: 8,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+};
+const tailLayout = {
+  wrapperCol: {
+    offset: 8,
+    span: 16,
+  },
+};
 function AttendanceLog({ empDetails }) {
-  console.log(empDetails);
+  const [monthlydata, setMonthlydata] = useState([]);
+  const [allEmp, setallEmp] = useState([]);
   const [role, setRole] = useState(empDetails);
   const [selectemp, setSelectemp] = useState(null);
-  const [activetab, setActivetab] = useState(null);
+  const [activetab, setActivetab] = useState("1");
+  console.log(activetab);
+  const [key, setKey] = useState("1");
+  const [empMonthly, setEmpMonthly] = useState([]);
   const columns = [
     {
       title: "Employee Code",
@@ -15,11 +33,11 @@ function AttendanceLog({ empDetails }) {
       key: "code",
       render: (text) => <a>{text}</a>,
     },
-    {
-      title: "Date",
-      dataIndex: "date",
-      key: "date",
-    },
+    // {
+    //   title: "Date",
+    //   dataIndex: "date",
+    //   key: "date",
+    // },
     {
       title: "Employee Name",
       dataIndex: "empname",
@@ -31,9 +49,9 @@ function AttendanceLog({ empDetails }) {
       key: "project",
     },
     {
-      title: "Description",
-      key: "description",
-      dataIndex: "description",
+      title: "Report",
+      key: "report",
+      dataIndex: "report",
       ellipsis: true,
     },
     // {
@@ -42,9 +60,87 @@ function AttendanceLog({ empDetails }) {
     // },
   ];
 
+  const [form] = Form.useForm();
+
+  const onFinish = (values) => {
+    console.log(values);
+    const newData = {
+      code: "898",
+      date: new Date(),
+      status: "-",
+      time1: new Date().getTime(),
+      time2: "18:15:23",
+      work: "-",
+      report: values?.project_details || "-",
+    };
+    console.log({ monthlydata });
+    let newAlldata = [newData, ...empMonthly];
+    console.log(newAlldata);
+    localStorage.setItem("newReport", JSON.stringify(newAlldata));
+    setActivetab("1");
+    //create new report obj with required data + ""
+    //create newMonthlyAll=new+old monthly
+    //set local with newMonthlyAll
+    //set state for monthly with newMonthlyAll
+  };
   useEffect(() => {
-    console.log({ activetab });
-    setActivetab(empDetails.userType === "emp" ? "1" : "2");
+    getEmpMonthly();
+  }, [activetab]);
+
+  function getEmpMonthly() {
+    console.log(JSON.parse(localStorage.getItem("newReport")));
+    let userlocal = JSON.parse(localStorage.getItem("newReport")) || [];
+    let newEmp = [];
+    userlocal.map((emp, i) => {
+      newEmp.push({
+        key: i,
+        code: emp.code + i,
+        date: emp.date,
+        status: emp.status,
+        time1: emp.time1,
+        time2: emp.time2,
+        work: emp.work,
+        report: emp.report,
+      });
+    });
+    console.log({ newEmp });
+    setEmpMonthly(newEmp);
+  }
+
+  function allEmpDetails() {
+    console.log(JSON.parse(localStorage.getItem("newReport")));
+    let userlocal = JSON.parse(localStorage.getItem("newReport")) || [];
+    let newEmp = [];
+    userlocal.map((emp, i) => {
+      newEmp.push({
+        key: i,
+        code: emp.code + i,
+        date: emp.date,
+        status: emp.status,
+        time1: emp.time1,
+        time2: emp.time2,
+        empname: "Nitya-" + (i + 1),
+        project: "project-" + (i + 1),
+        report: emp.report,
+      });
+    });
+    console.log({ newEmp });
+    setallEmp(newEmp);
+    setEmpMonthly(newEmp);
+  }
+  const onReset = () => {
+    form.resetFields();
+  };
+  console.log(empDetails);
+
+  useEffect(() => {
+    if (empDetails.userType === "emp") {
+      setActivetab("1");
+      getEmpMonthly();
+    } else {
+      setActivetab("2");
+      allEmpDetails();
+    }
   }, []);
 
   //   const rowSelection = {
@@ -64,26 +160,26 @@ function AttendanceLog({ empDetails }) {
     {
       key: "1",
       code: "HTS001",
-      date: "12-09-2022",
+
       empname: "Nitya",
       project: "Expenses",
-      description: "xfddsfdvbgfgfbvbvbdffgfdgjfhjjkjfjfdgkj",
+      report: "xfddsfdvbgfgfbvbvbdffgfdgjfhjjkjfjfdgkj",
     },
     {
       key: "2",
       code: "HTS002",
-      date: "12-09-2022",
+
       empname: "Jatin",
       project: "Expenses",
-      description: "xfddsfdvbgfgfbvbvb",
+      report: "xfddsfdvbgfgfbvbvb",
     },
     {
       key: "3",
       code: "HTS003",
-      date: "13-09-2022",
+
       empname: "Saswat",
       project: "Expenses",
-      description: "xfddsfdvbgfgfbvbvb",
+      report: "xfddsfdvbgfgfbvbvb",
     },
   ];
   const columns1 = [
@@ -120,40 +216,47 @@ function AttendanceLog({ empDetails }) {
       dataIndex: "work",
     },
     {
-      title: "Description",
-      key: "description",
-      dataIndex: "description",
+      title: "Report",
+      key: "report",
+      dataIndex: "report",
     },
     // {
     //   title: "Action",
     //   key: "action",
     // },
   ];
-  //   const data1 = [
-  //     {
-  //       key: "1",
-  //       date: "12/09/2022",
-  //       status: "P",
-  //       time1: "",
-  //       time2: "",
-  //       work: "",
-  //       description: "dfdjdgjhgjhgjhfhfdj",
-  //     },
-  //     {
-  //       key: "2",
-  //       serial: 2,
-  //       empname: "Jatin",
-  //       project: "Expenses",
-  //       description: "xfddsfdvbgfgfbvbvb",
-  //     },
-  //     {
-  //       key: "3",
-  //       serial: 3,
-  //       empname: "Saswat",
-  //       project: "Expenses",
-  //       description: "xfddsfdvbgfgfbvbvb",
-  //     },
-  //   ];
+  const data1 = [
+    {
+      key: "1",
+      code: "8u",
+      date: "12/09/2022",
+      status: "P",
+      time1: "",
+      time2: "",
+      work: "",
+      report: "dfdjdgjhgjhgjhfhfdj",
+    },
+    {
+      key: "2",
+      code: "8u",
+      date: "12/09/2022",
+      status: "P",
+      time1: "",
+      time2: "",
+      work: "",
+      report: "dfdjdgjhgjhgjhfhfdj",
+    },
+    {
+      key: "3",
+      code: "8u",
+      date: "12/09/2022",
+      status: "P",
+      time1: "",
+      time2: "",
+      work: "",
+      report: "dfdjdgjhgjhgjhfhfdj",
+    },
+  ];
 
   return (
     <Tabs
@@ -166,9 +269,78 @@ function AttendanceLog({ empDetails }) {
       }}
     >
       {role.userType === "emp" ? (
-        <Tabs.TabPane tab="Monthly Log" key="1">
-          <Table columns={columns1} dataSource={[selectemp] || []} />
-        </Tabs.TabPane>
+        <>
+          <Tabs.TabPane tab="Monthly Log" key="1">
+            <Table columns={columns1} dataSource={empMonthly || []} />
+          </Tabs.TabPane>
+          <Tabs.TabPane
+            tab="Add Report"
+            key="2"
+            className="reportTabs"
+            // onClick={() => {
+            //   setIsModalOpen(true);
+            // }}
+          >
+            {/* <Button type="primary" onClick={showModal}>
+              Open Modal
+            </Button> */}
+            {/* <Modal
+              title="Basic Modal"
+              visible={isModalOpen}
+              footer={null}
+              closeIcon={
+                <div
+                  onClick={() => {
+                    setIsModalOpen(false);
+                  }}
+                >
+                  X
+                </div>
+              }
+            > */}
+            <Form
+              {...layout}
+              form={form}
+              name="control-hooks"
+              onFinish={onFinish}
+              className="formItem"
+            >
+              <Form.Item
+                name="project_name"
+                label="Project Name"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                className="pname"
+              >
+                <Input className="name" />
+              </Form.Item>
+              <Form.Item
+                name="project_details"
+                label="Project Details"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                className="pname"
+              >
+                <Input className="name" />
+              </Form.Item>
+              <Form.Item {...tailLayout}>
+                <Button type="primary" htmlType="submit" className="submit">
+                  Submit
+                </Button>
+                <Button htmlType="button" onClick={onReset} className="reset">
+                  Reset
+                </Button>
+              </Form.Item>
+            </Form>
+            {/* </Modal> */}
+          </Tabs.TabPane>
+        </>
       ) : (
         <>
           <Tabs.TabPane tab="Daily Log" key="2">
@@ -180,19 +352,60 @@ function AttendanceLog({ empDetails }) {
               onRow={(record, rowIndex) => {
                 return {
                   onClick: (event) => {
-                    // console.log(record.code);
-                    setSelectemp(record);
+                    console.log(record);
+                    setSelectemp({ ...record });
                     setActivetab("3");
                   }, // click row
                 };
               }}
               columns={columns}
-              dataSource={data}
+              dataSource={allEmp}
             />
           </Tabs.TabPane>
           <Tabs.TabPane disabled={!selectemp} tab="Monthly Log" key="3">
             <Table columns={columns1} dataSource={[selectemp] || []} />
           </Tabs.TabPane>
+          {/* <Tabs.TabPane tab="Add Report" key="4" className="reportTabs">
+            <Form
+              {...layout}
+              form={form}
+              name="control-hooks"
+              onFinish={onFinish}
+              className="formItem"
+            >
+              <Form.Item
+                name="project name"
+                label="Project Name"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input className="name" />
+              </Form.Item>
+              <Form.Item
+                name="project details"
+                label="Project Details"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input className="name" />
+              </Form.Item>
+              <Form.Item {...tailLayout}>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+                <Button htmlType="button" onClick={onReset}>
+                  Reset
+                </Button>
+              </Form.Item>
+            </Form>
+            
+          </Tabs.TabPane> */}
         </>
       )}
     </Tabs>

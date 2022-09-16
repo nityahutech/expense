@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React, { useEffect, useState, } from 'react';
 import {
     Col,
     Row,
@@ -15,12 +15,32 @@ import { Form, Input, } from 'antd';
 import { DatePicker, Space } from "antd";
 import moment from "moment";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import LeaveContext from '../contexts/LeaveContext'
+import { useAuth } from '../contexts/AuthContext'
 import "../style/leave.css";
 
+let leaveStyle = {
+    Present: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "green" },
+    Absent: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "red" },
+    Leave: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "blue" },
+    "Officialy Holiday": { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "yellow" },
+    "Week Off": { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "grey" },
+}
 
 const getListData = (value) => {
     let listData;
     switch (value.date()) {
+        case 8:
+            listData = [
+                {
+                    type: "Absent",
+                    intime: "In : ",
+                    outtime: "Out : "
+
+                },
+
+            ];
+            break
         case 9:
             listData = [
                 {
@@ -31,7 +51,44 @@ const getListData = (value) => {
                 },
 
             ];
+            break
+            case 10:
+            listData = [
+                {
+                    type: "Officialy Holiday",
+                    intime: "In : ",
+                    outtime: "Out : "
+
+                },
+
+            ];
+            break
+            case 11:
+            listData = [
+                {
+                    type: "Week Off",
+                    intime: "In : ",
+                    outtime: "Out : "
+
+                },
+
+            ];
+            break
+            case 12:
+                listData = [
+                    {
+                        type: "Leave",
+                        intime: "In : ",
+                        outtime: "Out : "
+    
+                    },
+    
+                ];
+                break
+
+
         default:
+
     }
 
     return listData || [];
@@ -44,18 +101,19 @@ const getMonthData = (value) => {
 };
 
 
-
-
-
 const Leave = () => {
     const [form] = Form.useForm();
     const [leaves, setLeaves] = useState([]);
+    const [history, setHistory] = useState([]);
     const [dataSource, setDataSource] = useState([]);
+    const [duration, setDuration] = useState([]);
+    const { currentUser } = useAuth();
     const [users, setUsers] = useState([
         {
             id: 1,
             leavetype: "Earn Leave",
             leave: 14,
+
 
         },
         {
@@ -87,18 +145,37 @@ const Leave = () => {
     ] || [])
 
 
-    // const getLocalData = localStorage.getItem("test");
-    // const parseData = JSON.parse(getLocalData)
-
     const onFinish = values => {
+        console.log("Success:", values);
+        console.log(duration)
         let newLeave = {
+            empId: currentUser.uid,
             approver: values.approver,
-            date: values.durationid,
+            date: duration,
             name: values.employeename,
             nature: values.leaveNature,
-            slot: values.slot,
+            slot: values.slot == null ? "Full Day" : values.slot,
             reason: values.reason,
         }
+
+
+        LeaveContext.createLeave(newLeave)
+            .then(response => {
+                // console.log(response.success);
+                // if(response.success){
+                //     getData();
+                // }else{
+                //     // err
+                // }
+                console.log(response);
+                getData();
+                // getDateFormatted([newLeave, ...leaves])
+
+            })
+            .catch(error => {
+                console.log(error.message);
+
+            })
 
         setLeaves([newLeave, ...leaves]);
         let tempUser = [...users]
@@ -108,13 +185,31 @@ const Leave = () => {
             }
             return leave
         })
-        setUsers(newLeaves)
 
-        // localStorage.setItem("test" , JSON.stringify(newLeave));
-        // form.resetFields()
+        setUsers(newLeaves)
+        form.resetFields()
     };
 
-   
+    // function disabledDate(current) {
+    //     // Can not select sundays and predfined days
+    //     return moment(current).day() === 0
+    // }
+
+    const getData = async () => {
+        let data = await LeaveContext.getAllById(currentUser.uid)
+        console.log(data)
+        let d = data.docs.map((doc) => {
+            return {
+                ...doc.data(),
+                id: doc.id
+            };
+        });
+        console.log(d);
+        setLeaves(d);
+        getDateFormatted(d)
+
+    }
+
 
 
     const onDeleteLeave = (record) => {
@@ -123,9 +218,15 @@ const Leave = () => {
             okText: "Yes",
             okType: "danger",
             onOk: () => {
-                setLeaves((pre) => {
-                    return pre.filter((leave) => leave.id !== record.id);
-                });
+                LeaveContext.deleteLeave(record.id)
+                    .then(response => {
+                        console.log(response);
+                        getData();
+                    })
+                    .catch(error => {
+                        console.log(error.message);
+
+                    })
             },
         });
     };
@@ -140,12 +241,13 @@ const Leave = () => {
         {
             title: 'Duration',
             dataIndex: 'date',
-           
+            width: 150,
+
         },
-        {
-            title: 'Employee Name',
-            dataIndex: 'name',
-        },
+        // {
+        //     title: 'Employee Name',
+        //     dataIndex: 'name',
+        // },
         {
             title: 'Nature of Leave',
             dataIndex: 'nature',
@@ -176,6 +278,7 @@ const Leave = () => {
         {
             key: "5",
             title: "Actions",
+            fixed: 'right',
             render: (record) => {
                 return (
                     <>
@@ -191,9 +294,19 @@ const Leave = () => {
         }
 
     ];
+    useEffect(() => {
+        getData();
+        console.log(currentUser);
+    }, []);
 
-    
-
+    const getDateFormatted = ((data) => {
+        let temp = []
+        data.forEach(dur => {
+            dur.date = dur.date[0] + " to " + dur.date[1]
+            temp.push(dur)
+        })
+        setHistory(temp)
+    })
 
     const { RangePicker } = DatePicker;
 
@@ -201,40 +314,12 @@ const Leave = () => {
         if (dates) {
             console.log("From: ", dates[0], ", to: ", dates[1]);
             console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
+            setDuration(dateStrings)
         } else {
             console.log("Clear");
         }
     };
     const [date, setDate] = useState(moment());
-
-    // const handlePanelChange = (date: Moment) => {
-    //     const { firstDate, lastDate } = getFirstDateAndLastDateOnThePanel(date);
-
-    //     console.log({
-    //         firstDate: firstDate.format("YYYY-MM-DD"),
-    //         lastDate: lastDate.format("YYYY-MM-DD"),
-    //     });
-    // };
-
-    // const getFirstDateAndLastDateOnThePanel = (date: Moment) => {
-    //     const firstDate = moment(date).startOf("month");
-    //     const lastDate = moment(date).endOf("month");
-
-    //     const firstDateDay = firstDate.day();
-    //     firstDate.subtract(firstDateDay, "days");
-    //     lastDate.add(42 - Number(lastDate.format("DD")) - firstDateDay, "days");
-
-    //     return {
-    //         firstDate,
-    //         lastDate,
-    //     };
-    // };
-
-    // const disabledDate = (current) => {
-    //     // Can not select sundays and predfined days
-    //     return moment(current).day() === 0
-    // }
-
     const monthCellRender = (value) => {
         const num = getMonthData(value);
         return num ? (
@@ -247,7 +332,9 @@ const Leave = () => {
 
     const dateCellRender = (value) => {
         const listData = getListData(value);
-        return (
+        let currentMonth=new Date().getMonth()
+let date=new Date(value['_d'])   
+        return currentMonth==date.getMonth()?(
             <ul className="events" >
                 {listData.map((item) => (
                     <li >
@@ -255,12 +342,13 @@ const Leave = () => {
                         <li className='present' > {item.type}</li>
                         <li className='intime' >{item.intime}</li>
                         <li className='outtime' >{item.outtime}</li>
+                        <div style={leaveStyle[item.type]}></div>
 
                     </li>
                 ))}
 
             </ul>
-        );
+        ):null;
     };
 
 
@@ -288,27 +376,13 @@ const Leave = () => {
                         display: 'flex', flexDirection: 'row', justifyContent: 'space-between', color: 'black', height: '40px', alignItems: 'center', backgroundColor: 'white',
 
                     }}><h3>Leave Available</h3></div>
-                       {/* {users?.map((item, inde4x) => {
-                            return (
-                                <Col xl={4} lg={4} md={11} sm={24} xs={24} className='card-box'>
-                                    <div style={{textAlign:'center'}}> {item?.leavetype}</div>
-                                    <div style={{textAlign:'center'}}>{item?.leave}</div>
-                                </Col>
-                            )
-                        })} */}
-
                     <div className='leavediv'
-                   
-                        >
+
+                    >
                         {users.map((user) => {
                             return (
-                                <div className='Col-2-center' 
-                                // style={{
-                                //     backgroundColor: '', width: '150px',
-                                //     margin: '10px', borderRadius: '5px', alignItems: 'center', display: 'flex', justifyContent: 'space-between',
-                                //     flexDirection: 'column', paddingTop: '10px'
+                                <div className='Col-2-center'
 
-                                // }}
                                 >
 
                                     <p className='heading' style={{
@@ -330,12 +404,12 @@ const Leave = () => {
                             {/* <Typography.Title level={4} >Calendar</Typography.Title> */}
                             <div className='rep-div' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                                 <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 10, 10,0.2)" }} ><h5 style={{ color: "rgba(204, 10, 10, 1)" }} className='rep-text'>Absent</h5></button>
-                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 94, 10,0.2)" }}><h5 style={{ color: "rgba(204, 94, 10, 1)" }} className='rep-text'>Half Day</h5></button>
+                                {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 94, 10,0.2)" }}><h5 style={{ color: "rgba(204, 94, 10, 1)" }} className='rep-text'>Half Day</h5></button> */}
                                 <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 91, 204,0.2)" }}><h5 style={{ color: "rgba(10, 91, 204,  1)" }} className='rep-text'>Leave</h5></button>
-                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(252, 143, 10,0.2)" }}><h5 style={{ color: "rgba(252, 143, 10, 1)" }} className='rep-text'>Late Arrival</h5></button>
+                                {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(252, 143, 10,0.2)" }}><h5 style={{ color: "rgba(252, 143, 10, 1)" }} className='rep-text'>Late Arrival</h5></button> */}
                             </div>
                             <div className='rep-div2' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px' }}>
-                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 204, 107,0.2)" }}><h5 style={{ color: "rgba(10, 204, 107, 1)" }} className='rep-text'>Present</h5></button>
+                                {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 204, 107,0.2)" }}><h5 style={{ color: "rgba(10, 204, 107, 1)" }} className='rep-text'>Present</h5></button> */}
                                 <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 204, 10,0.2)" }}><h5 style={{ color: "rgba(204, 204, 10, 1)", }} className='rep-text'>Official Holiday</h5></button>
                                 <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(74, 67, 67,0.2)" }}><h5 style={{ color: "rgba(74, 67, 67, 1)" }} className='rep-text'>Weekly Off</h5></button>
                             </div>
@@ -345,11 +419,12 @@ const Leave = () => {
 
                             value={date}
                             onChange={setDate}
-                            // onPanelChange={handlePanelChange}
                             dateCellRender={dateCellRender}
                             monthCellRender={monthCellRender}
+                            // disabledDate={disabledDate}
 
-                            
+
+
 
 
                         />
@@ -384,30 +459,23 @@ const Leave = () => {
                             }}
                             form={form}
                             onFinish={onFinish}
-
-
-
-
-                        // onFieldsChange={(changedFields, allvalues) => onFieldsChangeHandler(changedFields, allvalues)}
                         >
                             <Form.Item labelAlign="left"
                                 style={{ marginBottom: "20px", }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Employee Name<span style={{ color: 'red' }}> *</span></label>}
                                 name="employeename"
-                                // rules={[{message: "Please enter your name" }]}
 
                             >
 
                                 <Input maxLength={20}
-                                       onChange={(e) => {
+                                    onChange={(e) => {
                                         const inputval = e.target.value;
                                         const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                                        // setPaidBy(newVal);
                                         form.setFieldsValue({ employeename: newVal });
-                      
-                                      }}
-                               
-                                   
+
+                                    }}
+
+
                                     placeholder="Employee Name" />
                             </Form.Item>
 
@@ -415,21 +483,18 @@ const Leave = () => {
                                 style={{ marginBottom: "20px", color: 'white', }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Duration<span style={{ color: 'red' }}> *</span></label>}
                                 name="durationid"
-                                
+
                             >
                                 <Space direction="vertical" size={12}
-                                    >
-                                    <RangePicker 
+                                >
+                                    <RangePicker
                                         ranges={{
                                             Today: [moment(), moment()],
                                             "This Month": [moment().startOf("month"), moment().endOf("month")]
                                         }}
                                         showTime
-                                        format="DD/MM/YYYY HH:mm:ss"
+                                        format="Do MMM, YYYY"
                                         onChange={onChange}
-                                      
-
-
                                     />
                                 </Space>
                             </Form.Item>
@@ -439,15 +504,14 @@ const Leave = () => {
                                 name="leaveNature"
                                 style={{ marginBottom: "20px" }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Nature of Leave<span style={{ color: 'red' }}> *</span></label>}
-                                // rules={[{ required: true, message: "Please select an Leave Type!" }]}
-                                
+
 
                             >
                                 <Select required
                                     placeholder="Select a option "
                                     allowClear
-                                   
-                                    
+
+
                                 >
                                     {
                                         users.map(u => (
@@ -463,17 +527,17 @@ const Leave = () => {
                                 name="slot"
                                 style={{ marginBottom: "20px" }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}> Slot<span style={{ color: 'red' }}> *</span></label>}
-                                // rules={[{ required: true, message: "Please select an option!" }]}
+
 
                             >
-                                
+
                                 <Radio.Group  >
-                                    <Radio  style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Evening" >Evening</Radio>
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
-                                   
+
                                 </Radio.Group>
-                                
+
                             </Form.Item>
 
                             <Form.Item labelAlign="left"
@@ -482,35 +546,33 @@ const Leave = () => {
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Reason</label>}
                             >
                                 <Input.TextArea maxLength={20}
-                                   onChange={(e) => {
+                                    onChange={(e) => {
 
-                                    const inputval = e.target.value;
-                                    const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                                    // setPaidBy(newVal);
-                                    form.setFieldsValue({ reason: newVal });
-                  
-                                  }}                               
-                                required />
+                                        const inputval = e.target.value;
+                                        const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                                        form.setFieldsValue({ reason: newVal });
+
+                                    }}
+                                    required />
                             </Form.Item>
 
                             <Form.Item labelAlign="left"
                                 name="approver"
                                 style={{ marginBottom: "20px" }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Approver<span style={{ color: 'red' }}> *</span></label>}
-                              
+
 
                             >
                                 <Input maxLength={20}
-                                 onChange={(e) => {
+                                    onChange={(e) => {
 
-                                    const inputval = e.target.value;
-                                    const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                                    // setPaidBy(newVal);
-                                    form.setFieldsValue({ approver: newVal });
-                  
-                                  }}  
-                                    rules={[{ required: true }]}                             
-                                placeholder="Reporting Manager" required />
+                                        const inputval = e.target.value;
+                                        const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                                        form.setFieldsValue({ approver: newVal });
+
+                                    }}
+                                    rules={[{ required: true }]}
+                                    placeholder="Reporting Manager" required />
                             </Form.Item>
 
 
@@ -541,10 +603,8 @@ const Leave = () => {
 
 
                             <div>
-                                {/* {JSON.stringify(leaves)} */}
-                                {/* {<p>{"ddd"} </p> }{JSON.stringify()} */}
                                 <Table columns={columns}
-                                    dataSource={leaves}
+                                    dataSource={history}
                                     size="small" scroll={{
                                         x: 600,
                                     }} />

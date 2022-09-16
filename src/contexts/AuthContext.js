@@ -10,6 +10,7 @@ import { createUserWithEmailAndPassword,
          updatePhoneNumber,
          updateProfile
 } from "@firebase/auth"
+import ProfileContext from "./ProfileContext"
 
 const AuthContext = React.createContext()
 
@@ -71,12 +72,17 @@ export function AuthProvider({ children }) {
     return deleteUser(auth, currentUser)
   }
 
+  async function getRole(user) {
+    let rec = await ProfileContext.getProfile(user.uid);
+    console.log(rec.data().role);
+    setRole(rec.data().role);
+  }
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user)
-      setRole();
       setLoading(false)
+      getRole(user);
     })
 
     return unsubscribe

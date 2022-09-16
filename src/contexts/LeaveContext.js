@@ -2,7 +2,9 @@ import { db } from "../firebase-config";
 
 import {
     collection,
-    getDoc,
+    getDocs,
+    query,
+    where,
     addDoc,
     deleteDoc,
     doc,
@@ -21,9 +23,14 @@ class LeaveContext {
         return deleteDoc(leaveDoc);
     };
 
-    getLeave = (id) => { 
-        const leaveDoc = doc(db, "leave", id);
-        return getDoc(leaveDoc);
+    // getLeave = (id) => { 
+    //     const leaveDoc = doc(db, "leave", id);
+    //     return getDoc(leaveDoc);
+    // };
+    getAllById = (id) => {
+        const q = query(leaveCollectionRef,where("empId","==",id));
+        // console.log(q);
+        return getDocs(q);
     };
 }
 

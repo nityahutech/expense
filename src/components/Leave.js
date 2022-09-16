@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React, { useEffect, useState, } from 'react';
 import {
     Col,
     Row,
@@ -14,12 +14,19 @@ import { Form, Input, } from 'antd';
 import { DatePicker, Space } from "antd";
 import moment from "moment";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import LeaveContext from '../contexts/LeaveContext'
+import { useAuth } from '../contexts/AuthContext'
 import "../style/leave.css";
+import { get } from 'react-hook-form';
 
 const Leave = () => {
     const [form] = Form.useForm();
     const [leaves, setLeaves] = useState([]);
+    const [history, setHistory] = useState([]);
     const [dataSource, setDataSource] = useState([]);
+    const [duration,setDuration]=useState([]);
+    const {currentUser} = useAuth();
+    
     // const getLocalData = localStorage.getItem("test");
     // const parseData = JSON.parse(getLocalData)
 
@@ -35,20 +42,54 @@ const Leave = () => {
 
     const onFinish = values => {
         console.log("Success:", values);
+        console.log(duration)
         let newLeave = {
+            empId: currentUser.uid,
             approver: values.approver,
-            date: values.durationid,
+            date: duration,
             name: values.employeename,
             nature: values.leaveNature,
-            slot: values.slot,
+            slot: values.slot == null ?"Full Day" : values.slot,
             reason: values.reason,
         }
 
-        setLeaves([newLeave, ...leaves]);
+        // setLeaves([newLeave, ...leaves]);
+        LeaveContext.createLeave(newLeave)
+      .then(response => {
+        // console.log(response.success);
+        // if(response.success){
+        //     getData();
+        // }else{
+        //     // err
+        // }
+        console.log(response);
+        getData();
+        // getDateFormatted([newLeave, ...leaves])
+        
+      })
+      .catch(error => {
+        console.log(error.message);
+
+      })
 
         // localStorage.setItem("test" , JSON.stringify(newLeave));
         form.resetFields()
     };
+
+    const getData = async () => {
+         let data = await LeaveContext.getAllById(currentUser.uid)
+         console.log(data)
+        let d = data.docs.map((doc) => {
+        return {
+          ...doc.data(),
+          id: doc.id
+        };
+      });
+        console.log(d);
+        setLeaves(d);
+        getDateFormatted(d)
+        // setHistory(d)
+    }
 
 
 
@@ -58,9 +99,15 @@ const Leave = () => {
             okText: "Yes",
             okType: "danger",
             onOk: () => {
-                setLeaves((pre) => {
-                    return pre.filter((leave) => leave.id !== record.id);
-                });
+                LeaveContext.deleteLeave(record.id)
+                .then(response => {
+                  console.log(response);
+                  getData();
+                })
+                .catch(error => {
+                  console.log(error.message);
+          
+                })
             },
         });
     };
@@ -156,7 +203,19 @@ const Leave = () => {
         }
 
     ];
+    useEffect(() =>{
+        getData();
+        console.log(currentUser);
+    }, []);
 
+    const getDateFormatted = ((data) => {
+        let temp=[]
+        data.forEach(dur => {
+            dur.date = dur.date[0] + " to " + dur.date[1]
+            temp.push(dur)
+        })
+        setHistory(temp)
+    })
 
     const { RangePicker } = DatePicker;
 
@@ -164,6 +223,7 @@ const Leave = () => {
         if (dates) {
             console.log("From: ", dates[0], ", to: ", dates[1]);
             console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
+            setDuration(dateStrings)
         } else {
             console.log("Clear");
         }
@@ -330,9 +390,9 @@ const Leave = () => {
                                             "This Month": [moment().startOf("month"), moment().endOf("month")]
                                         }}
                                         showTime
-                                        format="YYYY/MM/DD HH:mm:ss"
-                                        onChange={onChange}
-                                    />
+                                        format="Do MMM, YYYY"
+                                        onChange={onChange}  
+                                        />
                                 </Space>
                             </Form.Item>
 
@@ -426,7 +486,7 @@ const Leave = () => {
                                 {/* {JSON.stringify(leaves)} */}
                                 {/* {<p>{"ddd"} </p> }{JSON.stringify()} */}
                                 <Table columns={columns}
-                                    dataSource={leaves}
+                                    dataSource={history}
                                     size="small" scroll={{
                                         x: 600,
                                     }} />

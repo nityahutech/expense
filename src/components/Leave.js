@@ -7,7 +7,8 @@ import {
     Badge,
     Table,
     Calendar,
-    Modal
+    Modal,
+    Divider
 } from 'antd';
 import { Button } from 'antd';
 import { Form, Input, } from 'antd';
@@ -17,27 +18,131 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import LeaveContext from '../contexts/LeaveContext'
 import { useAuth } from '../contexts/AuthContext'
 import "../style/leave.css";
-import { get } from 'react-hook-form';
+
+let leaveStyle = {
+    Present: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "green" },
+    Absent: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "red" },
+    Leave: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "blue" },
+    "Officialy Holiday": { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "yellow" },
+    "Week Off": { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "grey" },
+}
+
+const getListData = (value) => {
+    let listData;
+    switch (value.date()) {
+        case 8:
+            listData = [
+                {
+                    type: "Absent",
+                    intime: "In : ",
+                    outtime: "Out : "
+
+                },
+
+            ];
+            break
+        case 9:
+            listData = [
+                {
+                    type: "Present",
+                    intime: "In : 9:00Am",
+                    outtime: "Out : 9:00Pm"
+
+                },
+
+            ];
+            break
+            case 10:
+            listData = [
+                {
+                    type: "Officialy Holiday",
+                    intime: "In : ",
+                    outtime: "Out : "
+
+                },
+
+            ];
+            break
+            case 11:
+            listData = [
+                {
+                    type: "Week Off",
+                    intime: "In : ",
+                    outtime: "Out : "
+
+                },
+
+            ];
+            break
+            case 12:
+                listData = [
+                    {
+                        type: "Leave",
+                        intime: "In : ",
+                        outtime: "Out : "
+    
+                    },
+    
+                ];
+                break
+
+
+        default:
+
+    }
+
+    return listData || [];
+};
+
+const getMonthData = (value) => {
+    if (value.month() === 8) {
+        return 1394;
+    }
+};
+
 
 const Leave = () => {
     const [form] = Form.useForm();
     const [leaves, setLeaves] = useState([]);
     const [history, setHistory] = useState([]);
     const [dataSource, setDataSource] = useState([]);
-    const [duration,setDuration]=useState([]);
-    const {currentUser} = useAuth();
-    
-    // const getLocalData = localStorage.getItem("test");
-    // const parseData = JSON.parse(getLocalData)
+    const [duration, setDuration] = useState([]);
+    const { currentUser } = useAuth();
+    const [users, setUsers] = useState([
+        {
+            id: 1,
+            leavetype: "Earn Leave",
+            leave: 14,
 
-    // const [value, setValue] = useState({
-    //     approver: "",
-    //     approver: "",
-    //     employeename: "",
-    //     leaveNature: "",
-    //     reason: "",
-    //     slot: "",
-    // });
+
+        },
+        {
+            id: 2,
+            leavetype: "Sick Leave",
+            leave: 7,
+
+        },
+        {
+            id: 3,
+            leavetype: "Casual Leave",
+            leave: 7,
+
+        },
+        {
+            id: 4,
+            leavetype: "Floating Leave",
+            leave: 2,
+
+
+        },
+        {
+            id: 5,
+            leavetype: "Compensatory Off",
+            leave: 2,
+
+        },
+
+    ] || [])
 
 
     const onFinish = values => {
@@ -49,46 +154,60 @@ const Leave = () => {
             date: duration,
             name: values.employeename,
             nature: values.leaveNature,
-            slot: values.slot == null ?"Full Day" : values.slot,
+            slot: values.slot == null ? "Full Day" : values.slot,
             reason: values.reason,
         }
 
-        // setLeaves([newLeave, ...leaves]);
+
         LeaveContext.createLeave(newLeave)
-      .then(response => {
-        // console.log(response.success);
-        // if(response.success){
-        //     getData();
-        // }else{
-        //     // err
-        // }
-        console.log(response);
-        getData();
-        // getDateFormatted([newLeave, ...leaves])
-        
-      })
-      .catch(error => {
-        console.log(error.message);
+            .then(response => {
+                // console.log(response.success);
+                // if(response.success){
+                //     getData();
+                // }else{
+                //     // err
+                // }
+                console.log(response);
+                getData();
+                // getDateFormatted([newLeave, ...leaves])
 
-      })
+            })
+            .catch(error => {
+                console.log(error.message);
 
-        // localStorage.setItem("test" , JSON.stringify(newLeave));
+            })
+
+        setLeaves([newLeave, ...leaves]);
+        let tempUser = [...users]
+        let newLeaves = tempUser.map(leave => {
+            if (leave.leavetype?.toLowerCase() === values?.leaveNature.toLowerCase()) {
+                leave.leave -= 1;
+            }
+            return leave
+        })
+
+        setUsers(newLeaves)
         form.resetFields()
     };
 
+    // function disabledDate(current) {
+    //     // Can not select sundays and predfined days
+    //     return moment(current).day() === 0
+    // }
+
     const getData = async () => {
-         let data = await LeaveContext.getAllById(currentUser.uid)
-         console.log(data)
+        let data = await LeaveContext.getAllById(currentUser.uid)
+        console.log(data)
         let d = data.docs.map((doc) => {
-        return {
-          ...doc.data(),
-          id: doc.id
-        };
-      });
+            return {
+                ...doc.data(),
+                id: doc.id
+            };
+        });
         console.log(d);
         setLeaves(d);
         getDateFormatted(d)
-        // setHistory(d)
+
     }
 
 
@@ -100,14 +219,14 @@ const Leave = () => {
             okType: "danger",
             onOk: () => {
                 LeaveContext.deleteLeave(record.id)
-                .then(response => {
-                  console.log(response);
-                  getData();
-                })
-                .catch(error => {
-                  console.log(error.message);
-          
-                })
+                    .then(response => {
+                        console.log(response);
+                        getData();
+                    })
+                    .catch(error => {
+                        console.log(error.message);
+
+                    })
             },
         });
     };
@@ -117,58 +236,29 @@ const Leave = () => {
         form.resetFields()
     }
     const { Option } = Select;
-    // const handleSelect = (e) => {
-    //     console.log(e);
-    //     setValue(e)
-    // }
-
-
-    const users = [
-        {
-            id: 1,
-            leavetype: "EARN LEAVE",
-            leave: 14,
-
-        },
-        {
-            id: 2,
-            leavetype: "SICK LEAVE",
-            leave: 7,
-
-        },
-        {
-            id: 3,
-            leavetype: "CASUAL LEAVE",
-            leave: 7,
-
-        },
-        {
-            id: 4,
-            leavetype: "FLOATING LEAVE",
-            leave: 2,
-
-        },
-        {
-            id: 5,
-            leavetype: "COMPENSATORY OFF",
-            leave: 2,
-
-        },
-
-    ];
 
     const columns = [
         {
             title: 'Duration',
             dataIndex: 'date',
+            width: 150,
+
         },
-        {
-            title: 'Employee Name',
-            dataIndex: 'name',
-        },
+        // {
+        //     title: 'Employee Name',
+        //     dataIndex: 'name',
+        // },
         {
             title: 'Nature of Leave',
             dataIndex: 'nature',
+            // render(text, record) {
+            //     return {
+            //       props: {
+            //         style: { background: parseInt(text) > 50 ? "red" : "green" }
+            //       },
+            //       children: <div>{text}</div>
+            //     };
+            //   }
         },
         {
             title: 'Slot',
@@ -188,6 +278,7 @@ const Leave = () => {
         {
             key: "5",
             title: "Actions",
+            fixed: 'right',
             render: (record) => {
                 return (
                     <>
@@ -203,13 +294,13 @@ const Leave = () => {
         }
 
     ];
-    useEffect(() =>{
+    useEffect(() => {
         getData();
         console.log(currentUser);
     }, []);
 
     const getDateFormatted = ((data) => {
-        let temp=[]
+        let temp = []
         data.forEach(dur => {
             dur.date = dur.date[0] + " to " + dur.date[1]
             temp.push(dur)
@@ -229,29 +320,36 @@ const Leave = () => {
         }
     };
     const [date, setDate] = useState(moment());
+    const monthCellRender = (value) => {
+        const num = getMonthData(value);
+        return num ? (
+            <div className="notes-month">
+                <section>{num}</section>
+                <span>Backlog number</span>
+            </div>
+        ) : null;
+    };
 
-    // const handlePanelChange = (date: Moment) => {
-    //     const { firstDate, lastDate } = getFirstDateAndLastDateOnThePanel(date);
+    const dateCellRender = (value) => {
+        const listData = getListData(value);
+        let currentMonth=new Date().getMonth()
+let date=new Date(value['_d'])   
+        return currentMonth==date.getMonth()?(
+            <ul className="events" >
+                {listData.map((item) => (
+                    <li >
 
-    //     console.log({
-    //         firstDate: firstDate.format("YYYY-MM-DD"),
-    //         lastDate: lastDate.format("YYYY-MM-DD"),
-    //     });
-    // };
+                        <li className='present' > {item.type}</li>
+                        <li className='intime' >{item.intime}</li>
+                        <li className='outtime' >{item.outtime}</li>
+                        <div style={leaveStyle[item.type]}></div>
 
-    // const getFirstDateAndLastDateOnThePanel = (date: Moment) => {
-    //     const firstDate = moment(date).startOf("month");
-    //     const lastDate = moment(date).endOf("month");
+                    </li>
+                ))}
 
-    //     const firstDateDay = firstDate.day();
-    //     firstDate.subtract(firstDateDay, "days");
-    //     lastDate.add(42 - Number(lastDate.format("DD")) - firstDateDay, "days");
-
-    //     return {
-    //         firstDate,
-    //         lastDate,
-    //     };
-    // };
+            </ul>
+        ):null;
+    };
 
 
 
@@ -275,22 +373,17 @@ const Leave = () => {
                 }} >
 
                     <div className='Col-1-center' style={{
-                        display: 'flex', flexDirection: 'row', justifyContent: 'space-between', color: 'black', height: '200px', height: '40px', alignItems: 'center', backgroundColor: 'white',
+                        display: 'flex', flexDirection: 'row', justifyContent: 'space-between', color: 'black', height: '40px', alignItems: 'center', backgroundColor: 'white',
 
-                    }}><h3>Leave Request</h3></div>
+                    }}><h3>Leave Available</h3></div>
+                    <div className='leavediv'
 
-                    <div style={{
-                        display: 'flex', flexDirection: 'row', justifyContent: 'space-between'
-
-                    }}>
+                    >
                         {users.map((user) => {
                             return (
-                                <div className='Col-1-center' style={{
-                                    backgroundColor: '#e9eaea', width: '150px',
-                                    margin: '10px', borderRadius: '5px', alignItems: 'center', display: 'flex', justifyContent: 'space-between',
-                                    flexDirection: 'column', paddingTop: '10px'
+                                <div className='Col-2-center'
 
-                                }}>
+                                >
 
                                     <p className='heading' style={{
                                         color: '#05445E', fontWeight: '500'
@@ -305,20 +398,20 @@ const Leave = () => {
                     </div>
                 </Col>
 
-                <Col span={12} >
+                <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12} >
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <div className='badge-div' style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', justifyContent: 'center', paddingTop: '10px' }}>
                             {/* <Typography.Title level={4} >Calendar</Typography.Title> */}
-                            <div className='rep-div'style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(204, 10, 10,0.2)" }} ><h5 style={{  color: "rgba(204, 10, 10, 1)" }}  className='rep-text'>Absent</h5></Button>
-                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(204, 94, 10,0.2)"  }}><h5 style={{  color: "rgba(204, 94, 10, 1)" }} className='rep-text'>Half Day</h5></Button>
-                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(10, 91, 204,0.2)"  }}><h5 style={{  color: "rgba(10, 91, 204,  1)" }} className='rep-text'>Leave</h5></Button>
-                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(252, 143, 10,0.2)"  }}><h5 style={{  color: "rgba(252, 143, 10, 1)" }} className='rep-text'>Late Arrival</h5></Button>
+                            <div className='rep-div' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 10, 10,0.2)" }} ><h5 style={{ color: "rgba(204, 10, 10, 1)" }} className='rep-text'>Absent</h5></button>
+                                {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 94, 10,0.2)" }}><h5 style={{ color: "rgba(204, 94, 10, 1)" }} className='rep-text'>Half Day</h5></button> */}
+                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 91, 204,0.2)" }}><h5 style={{ color: "rgba(10, 91, 204,  1)" }} className='rep-text'>Leave</h5></button>
+                                {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(252, 143, 10,0.2)" }}><h5 style={{ color: "rgba(252, 143, 10, 1)" }} className='rep-text'>Late Arrival</h5></button> */}
                             </div>
-                            <div className='rep-div2'style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center',marginTop:'10px' }}>
-                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(10, 204, 107,0.2)"  }}><h5 style={{  color: "rgba(10, 204, 107, 1)" }} className='rep-text'>Present</h5></Button>
-                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(204, 204, 10,0.2)" }}><h5 style={{  color: "rgba(204, 204, 10, 1)" }} className='rep-text'>Official Holiday</h5></Button>
-                                <Button className='reprentation' style={{ marginRight: '15px', backgroundColor: "rgba(74, 67, 67,0.2)" }}><h5 style={{  color: "rgba(74, 67, 67, 1)" }} className='rep-text'>Weekly Off</h5></Button>
+                            <div className='rep-div2' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px' }}>
+                                {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 204, 107,0.2)" }}><h5 style={{ color: "rgba(10, 204, 107, 1)" }} className='rep-text'>Present</h5></button> */}
+                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 204, 10,0.2)" }}><h5 style={{ color: "rgba(204, 204, 10, 1)", }} className='rep-text'>Official Holiday</h5></button>
+                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(74, 67, 67,0.2)" }}><h5 style={{ color: "rgba(74, 67, 67, 1)" }} className='rep-text'>Weekly Off</h5></button>
                             </div>
 
                         </div>
@@ -326,8 +419,18 @@ const Leave = () => {
 
                             value={date}
                             onChange={setDate}
-                        // onPanelChange={handlePanelChange}
+                            dateCellRender={dateCellRender}
+                            monthCellRender={monthCellRender}
+                            // disabledDate={disabledDate}
+
+
+
+
+
                         />
+
+
+
                     </div>
 
                 </Col>
@@ -356,106 +459,120 @@ const Leave = () => {
                             }}
                             form={form}
                             onFinish={onFinish}
-
-
-
-                        // onFieldsChange={(changedFields, allvalues) => onFieldsChangeHandler(changedFields, allvalues)}
                         >
                             <Form.Item labelAlign="left"
-                                style={{ marginBottom: "15px", }}
-                                label={<label style={{ color: "black", fontWeight: '400' }}>Employee Name</label>}
+                                style={{ marginBottom: "20px", }}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>Employee Name<span style={{ color: 'red' }}> *</span></label>}
                                 name="employeename"
 
                             >
 
-                                <Input
+                                <Input maxLength={20}
+                                    onChange={(e) => {
+                                        const inputval = e.target.value;
+                                        const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                                        form.setFieldsValue({ employeename: newVal });
 
-                                    required
+                                    }}
+
+
                                     placeholder="Employee Name" />
                             </Form.Item>
 
                             <Form.Item labelAlign="left"
-                                style={{ marginBottom: "15px", color: 'white', }}
-                                label={<label style={{ color: "black", fontWeight: '400' }}>Duration</label>}
+                                style={{ marginBottom: "20px", color: 'white', }}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>Duration<span style={{ color: 'red' }}> *</span></label>}
                                 name="durationid"
-
-
 
                             >
                                 <Space direction="vertical" size={12}
-                                    required>
-                                    <RangePicker required
+                                >
+                                    <RangePicker
                                         ranges={{
                                             Today: [moment(), moment()],
                                             "This Month": [moment().startOf("month"), moment().endOf("month")]
                                         }}
                                         showTime
                                         format="Do MMM, YYYY"
-                                        onChange={onChange}  
-                                        />
+                                        onChange={onChange}
+                                    />
                                 </Space>
                             </Form.Item>
 
 
                             <Form.Item labelAlign="left"
-
-
                                 name="leaveNature"
-                                style={{ marginBottom: "15px" }}
-
-                                label={<label style={{ color: "black", fontWeight: '400' }}>Nature of Leave</label>}
+                                style={{ marginBottom: "20px" }}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>Nature of Leave<span style={{ color: 'red' }}> *</span></label>}
 
 
                             >
                                 <Select required
                                     placeholder="Select a option "
                                     allowClear
-                                // onSelect={handleSelect}
+
+
                                 >
+                                    {
+                                        users.map(u => (
+                                            <Option disabled={u.leave <= 0} value={u.leavetype}>{u.leavetype}
+                                            </Option>
+                                        ))
+                                    }
 
-                                    <Option value="Earn Leave">Earn Leave </Option>
-                                    <Option value="Sick Leave">Sick Leave </Option>
-                                    <Option value="Casual Leave">Casual Leave </Option>
-                                    <Option value="Floating Leave">Floating Leave </Option>
                                 </Select>
-
-
                             </Form.Item>
 
                             <Form.Item labelAlign="left"
                                 name="slot"
-                                style={{ marginBottom: "15px" }}
-
-                                label={<label style={{ color: "black", fontWeight: '400' }}>Half Day Slot</label>}
+                                style={{ marginBottom: "20px" }}
+                                label={<label style={{ color: "black", fontWeight: '400' }}> Slot<span style={{ color: 'red' }}> *</span></label>}
 
 
                             >
+
                                 <Radio.Group  >
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Evening" >Evening</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
 
                                 </Radio.Group>
+
                             </Form.Item>
 
                             <Form.Item labelAlign="left"
                                 name="reason"
-                                style={{ marginBottom: "15px" }}
-
+                                style={{ marginBottom: "20px" }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Reason</label>}
-
-
                             >
-                                <Input.TextArea required />
+                                <Input.TextArea maxLength={20}
+                                    onChange={(e) => {
+
+                                        const inputval = e.target.value;
+                                        const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                                        form.setFieldsValue({ reason: newVal });
+
+                                    }}
+                                    required />
                             </Form.Item>
 
                             <Form.Item labelAlign="left"
                                 name="approver"
-                                style={{ marginBottom: "15px" }}
+                                style={{ marginBottom: "20px" }}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>Approver<span style={{ color: 'red' }}> *</span></label>}
 
-                                label={<label style={{ color: "black", fontWeight: '400' }}>Approver</label>}
 
                             >
-                                <Input placeholder="Reporting Manager" required />
+                                <Input maxLength={20}
+                                    onChange={(e) => {
+
+                                        const inputval = e.target.value;
+                                        const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                                        form.setFieldsValue({ approver: newVal });
+
+                                    }}
+                                    rules={[{ required: true }]}
+                                    placeholder="Reporting Manager" required />
                             </Form.Item>
 
 
@@ -470,6 +587,7 @@ const Leave = () => {
 
                                 >
                                     Submit
+
                                 </Button>
                                 <Button htmlType="button" style={{ marginLeft: "10px", }}
                                     onClick={onReset}>
@@ -479,12 +597,12 @@ const Leave = () => {
 
                             </Form.Item>
                             <Col span={24} style={{
-                                display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white'
-                            }}><h3>History</h3></Col>
+
+                            }}><Divider><h3>History</h3></Divider></Col>
+
+
 
                             <div>
-                                {/* {JSON.stringify(leaves)} */}
-                                {/* {<p>{"ddd"} </p> }{JSON.stringify()} */}
                                 <Table columns={columns}
                                     dataSource={history}
                                     size="small" scroll={{

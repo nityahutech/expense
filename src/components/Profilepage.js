@@ -12,6 +12,13 @@ import ProfileContext from "../contexts/ProfileContext";
 
 const { Meta } = Card;
 
+// function removeCommas(str) {
+//   while (str.search(",") >= 0) {
+//       str = (str + "").replace(',', '');
+//   }
+//   return str;
+// };
+
 const Profile = () => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -231,11 +238,13 @@ const Profile = () => {
                 </div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Address</h2>
-                  <p> {userRecord.address},<br />
-                  {userRecord.city},
-                  {userRecord.state},<br />
-                  {userRecord.country},<br />
-                  {userRecord.zipcode}</p>
+                  <p> {`${userRecord?.address?userRecord.address+",":""}`}<br />
+                  {`${userRecord?.city?userRecord.city+",":""}`}
+                  {`${userRecord?.state?userRecord.state+",":""}`}<br />
+                  {`${userRecord?.country?userRecord.country+",":""}`}<br />
+                  {`${userRecord?.zipcode?userRecord.zipcode+".":""}`}
+                
+               </p>
                  
                 </div>
               </div>
@@ -287,6 +296,7 @@ const Profile = () => {
                 }}
 
               >
+                
                 <Input placeholder="Your Name" />
               </Form.Item>
 
@@ -297,7 +307,18 @@ const Profile = () => {
 
 
               >
-                <Input placeholder="Email" />
+                <Input
+                 onChange={(e) => {
+
+                  const inputval = e.target.value;
+                  const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                  // setPaidBy(newVal);
+                  form.setFieldsValue({ mailid: newVal });
+
+                }}
+                required
+                
+                placeholder="Email" />
               </Form.Item>
 
               <Form.Item labelAlign="left"
@@ -313,30 +334,14 @@ const Profile = () => {
                 <Input maxLength={10} placeholder="Your Phone No." />
               </Form.Item>
 
+              
               <Form.Item labelAlign="left"
-                name="country"
+                name="address"
                 style={{ marginBottom: "10px" }}
-                label="country"
-                onKeyPress={(event) => {
-                  if (checkAlphabets(event)) {
-                    event.preventDefault();
-                  }
-                }}
-              >
-                <Input placeholder="Country" />
-              </Form.Item>
+                label="Address line 1"
 
-              <Form.Item labelAlign="left"
-                name="state"
-                style={{ marginBottom: "10px" }}
-                label="State"
-                onKeyPress={(event) => {
-                  if (checkAlphabets(event)) {
-                    event.preventDefault();
-                  }
-                }}
               >
-                <Input placeholder="State" />
+                <Input placeholder="Your address" />
               </Form.Item>
 
               <Form.Item labelAlign="left"
@@ -353,13 +358,35 @@ const Profile = () => {
               </Form.Item>
 
               <Form.Item labelAlign="left"
-                name="address"
+                name="state"
                 style={{ marginBottom: "10px" }}
-                label="Address line 1"
-
+                label="State"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
               >
-                <Input placeholder="Your address" />
+                <Input placeholder="State" />
               </Form.Item>
+
+
+              <Form.Item labelAlign="left"
+                name="country"
+                style={{ marginBottom: "10px" }}
+                label="Country"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
+              >
+                <Input placeholder="Country" />
+              </Form.Item>
+
+              
+
+              
 
               <Form.Item labelAlign="left"
                 name="zipcode"

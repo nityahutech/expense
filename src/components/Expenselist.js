@@ -545,29 +545,34 @@ function ExpenseList() {
     let tableAllRow = [];
     let allTableString = [];
     let pageNum = 1;
-    [...filterExpenses, ...filterExpenses, ...filterExpenses].forEach((exp, i) => {
+    filterExpenses.forEach((exp, i) => {
       tableRowString = [];
-      if(pageNum === 1 && (i+1) % 16 === 0){
-        allTableString.push(`<table>${tableHeaderString}${tableAllRow.toString().replaceAll(",", "")}</table>`);
+      if(pageNum === 1 && (i+1) % 15 === 0){
+        allTableString.push(`<table style="margin-left: auto; margin-right: auto;  background-color: red">${tableHeaderString}${tableAllRow.toString().replaceAll(",", "")}</table>`);
         tableAllRow = [];
         ++pageNum;
       }
       else{
-        if(pageNum > 1 && (i-15) % 17 === 0){
-          allTableString.push(`<table>${tableHeaderString}${tableAllRow.toString().replaceAll(",", "")}</table>`);
+        if(pageNum > 1 && (i-14) % 17 === 0){
+          allTableString.push(`<table style="margin-left: auto; margin-right: auto;">${tableHeaderString}${tableAllRow.toString().replaceAll(",", "")}</table>`);
           tableAllRow = [];
           ++pageNum;
         }
       }
       tableRowString.push(
-        `<tr style="${i % 2 === 1 ? oddRowStyle : evenRowStyle}">`
+        `<tr style="border-bottom: 1px dotted red"${i % 2 === 1 ? oddRowStyle : evenRowStyle}">`
       );
 
       for (let i = 0; i < dataIndexs.length; i++) {
-        tableRowString.push(`<td style="color: grey; padding: 10px; textAlign: center; ">${exp[dataIndexs[i]]}&nbsp;&nbsp;</td>`);
+        tableRowString.push(`<td style="color: grey; padding: 10px; text-align: center; border-bottom: 1px dotted grey">${exp[dataIndexs[i]]}&nbsp;&nbsp;</td>`);
       }
       tableRowString.push("</tr>");
       tableAllRow.push(tableRowString);
+      if(i === filterExpenses.length - 1 ){
+        allTableString.push(`<table style="margin-left: auto; margin-right: auto; background-color: red">${tableHeaderString}${tableAllRow.toString().replaceAll(",", "")}</table>`);
+          tableAllRow = [];
+          ++pageNum;
+      }
       
     });
     // let tableAllRowString = tableAllRow.toString().replaceAll(",", "");
@@ -578,8 +583,8 @@ function ExpenseList() {
     <h1 textAlign= center>Expense Report<h1/>
         </br>${allTableString.toString().replaceAll(",", "")}</div>`);
     PHE.printHtml(
-      `<div>
-      <h1 textAlign= center>Expense Report<h1/>
+      `<div style="">
+      <h1 style = "text-align: center">Expense Report<h1/>
           </br>${allTableString.toString().replaceAll(",", "")}</div>`,opts
     );
   }

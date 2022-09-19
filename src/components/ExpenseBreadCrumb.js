@@ -9,23 +9,23 @@ const ExpenseBreadCrumb = () => {
 
   return (
     <Breadcrumb
-    style={{
-      margin: "1px 10px -10px",
-      textAlign: "left",
-      FontStyle: " Bold",
-      FontSize: " 14px",
-  
-    }}
+      style={{
+        margin: "1px 10px -10px",
+        textAlign: "left",
+        FontStyle: " Bold",
+        FontSize: " 14px",
+
+      }}
     >
-      <Breadcrumb.Item className="home-breadcrumb"> <Link to ='/Dashboard'><strong>Dashboard</strong></Link></Breadcrumb.Item>
+      <Breadcrumb.Item className="home-breadcrumb"> <Link to='/Dashboard'><strong>Dashboard</strong></Link></Breadcrumb.Item>
       {window.location.pathname === "/Dashboard" ? (
         <Breadcrumb.Item>
-         {/* <strong>Dashboard</strong> */}
+          {/* <strong>Dashboard</strong> */}
         </Breadcrumb.Item>
 
       ) : window.location.pathname === "/Expense/AddExpense" ? (
         <Breadcrumb.Item>
-         <strong> Expense / Add Expense</strong>
+          <strong> Expense / Add Expense</strong>
         </Breadcrumb.Item>
 
       ) : window.location.pathname === "/Expense/ExpenseList" ? (
@@ -37,6 +37,17 @@ const ExpenseBreadCrumb = () => {
         <Breadcrumb.Item>
           <strong>Profile</strong>
         </Breadcrumb.Item>
+
+      ) : window.location.pathname === "/Employee/Leave" ? (
+        <Breadcrumb.Item>
+          <strong>Employee / Leave</strong>
+        </Breadcrumb.Item>
+
+      ) : window.location.pathname === "/Attendance/AttendanceLog" ? (
+        <Breadcrumb.Item>
+          <strong>Employee / Attendance Log</strong>
+        </Breadcrumb.Item>
+
 
       ) : window.location.pathname === "/Setting" ? (
         <Breadcrumb.Item>

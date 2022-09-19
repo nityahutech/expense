@@ -130,10 +130,8 @@ const Charts = () => {
           <Card
           hoverable
           style={{
-            width:'46%',
             backgroundColor:"inherit",
             padding:'1px',
-            marginTop:'0px',
           }}
           className="card1"
           >
@@ -145,11 +143,10 @@ const Charts = () => {
           <Card
           hoverable
           style={{
-            width:'46%',
             backgroundColor:"inherit",
             padding:'1px',
-            marginTop:'0px',
           }}
+          className="card2"
           >
           <div className="col2">
             <h2>Average Amount/Month</h2>
@@ -158,7 +155,7 @@ const Charts = () => {
           </Card>
         </div>
         <div className="rowcharts">
-          {/* ---------------------box shadows must be added---------- */}
+          {/* --------------------------------------------------- */}
           <div className="colbar">
           <Card
           hoverable

@@ -17,6 +17,7 @@ import moment from "moment";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import LeaveContext from '../contexts/LeaveContext'
 import { useAuth } from '../contexts/AuthContext'
+import Notification from "./Notification";
 import "../style/leave.css";
 
 let leaveStyle = {
@@ -102,9 +103,19 @@ const getMonthData = (value) => {
 };
 
 
+let dummy=[{
+    date:"OKOKOqqqqqqqqqqq",
+    name:"OKOKO",
+    nature:"OKOKO",
+    slot:"OKOKO",
+    reason:"OKOKO",
+    approver:"jhbd"
+}]
 const Leave = () => {
     const [form] = Form.useForm();
     const [leaves, setLeaves] = useState([]);
+    const [data, setData] = useState(dummy)
+
     const [history, setHistory] = useState([]);
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
@@ -196,19 +207,22 @@ const Leave = () => {
 
     const getData = async () => {
         let data = await LeaveContext.getAllById(currentUser.uid)
-        console.log(data)
-       let d = data.docs.map((doc) => {
-       return {
-         ...doc.data(),
-         id: doc.id
-       };
-     });
-       console.log(d);
-       setLeaves(d);
-       getDateFormatted(d)
-       leaveDays = LeaveContext.getLeaveDays(d,currentUser.uid)
-       console.log(role)
-       // setHistory(d)
+        console.log("data",JSON.stringify(data.docs),currentUser.uid);
+
+        let d = data.docs.map((doc) => {
+            console.log("123",{...doc.data()})
+            return {
+                ...doc.data(),
+                id: doc.id
+            };
+        });
+        console.log("data",d);
+        setLeaves(d);
+        getDateFormatted(d)
+        leaveDays = LeaveContext.getLeaveDays(d, currentUser.uid)
+        console.log(leaveDays)
+        console.log(role)
+        setHistory(d)
 
     }
 
@@ -233,44 +247,6 @@ const Leave = () => {
         });
     };
 
-    const onApproveLeave = (record) => {
-        Modal.confirm({
-            title: "Are you sure, you want to approve Leave record?",
-            okText: "Yes",
-            okType: "primary",
-            onOk: () => {
-                LeaveContext.approveLeave(record.id)
-                    .then(response => {
-                        console.log(response);
-                        getData();
-                    })
-                    .catch(error => {
-                        console.log(error.message);
-
-                    })
-            },
-        });
-    };
-
-    const onRejectedLeave = (record) => {
-        Modal.confirm({
-            title: "Are you sure, you want to Reject Leave record?",
-            okText: "Yes",
-            okType: "danger",
-            onOk: () => {
-                LeaveContext.rejectLeave(record.id)
-                    .then(response => {
-                        console.log(response);
-                        getData();
-                    })
-                    .catch(error => {
-                        console.log(error.message);
-
-                    })
-            },
-        });
-    };
-
 
 
     const onReset = () => {
@@ -282,13 +258,15 @@ const Leave = () => {
         {
             title: 'Duration',
             dataIndex: 'date',
-            width: 150,
+            width: 200,
 
         },
-        {
-            title: 'Employee Name',
-            dataIndex: 'name',
-        },
+        // {
+        //     title: 'Employee Name',
+        //     dataIndex: 'name',
+        //     width: 150,
+
+        // },
         {
             title: 'Nature of Leave',
             dataIndex: 'nature',
@@ -298,6 +276,7 @@ const Leave = () => {
         {
             title: 'Slot',
             dataIndex: 'slot',
+            width: 150,
         },
         {
             title: 'Reason',
@@ -320,38 +299,40 @@ const Leave = () => {
             render: (record) => {
                 return (
                     <>
-                    {
-                        role == "hr"
-                        ?<>
-                         <img
-                            style={{ color: "white", width: '20px',marginRight: 10 }}
-                            src="../logo/checkmark.png"
-                            alt="profile"
-                            className="Dash"
-                            onClick={() => {
-                                onApproveLeave(record);
-                            }}
-                        />
-                                <img
-                            style={{ color: "white", width: '20px' }}
-                            src="../logo/rejected.png"
-                            alt="profile"
-                            className="Dash"
-                            onClick={() => {
-                                onRejectedLeave(record);
-                            }}
+                        {
+                            // role == "hr"
+                            <>
+                                {/* <img
+                                        style={{ color: "white", width: '20px', marginRight: 10 }}
+                                        src="../logo/checkmark.png"
+                                        alt="profile"
+                                        className="Dash"
+                                        onClick={() => {
+                                            onApproveLeave(record);
+                                        }}
+                                    />
+                                    <img
+                                        style={{ color: "white", width: '20px' }}
+                                        src="../logo/rejected.png"
+                                        alt="profile"
+                                        className="Dash"
+                                        onClick={() => {
+                                            onRejectedLeave(record);
+                                        }}
 
-                        />
-                        </>
-                        : <DeleteOutlined
-                        onClick={() => {
-                            onDeleteLeave(record);
-                        }}
-                        style={{ color: "red", marginLeft: 0 }}
-                    />
-                    }
-                       
-                       
+                                    /> */}
+
+                                <DeleteOutlined
+                                    onClick={() => {
+                                        onDeleteLeave(record);
+                                    }}
+                                    style={{ color: "red", marginLeft: 10 }}
+                                />
+                            </>
+
+                        }
+
+
                     </>
                 );
             },
@@ -439,7 +420,7 @@ const Leave = () => {
                         display: 'flex', flexDirection: 'row', justifyContent: 'space-between', color: 'black', height: '40px', alignItems: 'center', backgroundColor: 'white',
 
                     }}><h3>Leave Available</h3>
-                    {/* <Button>Add Leave</Button> */}
+                        {/* <Button>Add Leave</Button> */}
                     </div>
                     <div className='leavediv'
 
@@ -489,6 +470,7 @@ const Leave = () => {
                         // disabledDate={disabledDate}
 
                         />
+                        <Notification data={history}/>
 
 
 
@@ -667,7 +649,7 @@ const Leave = () => {
                                 <Table columns={columns}
                                     dataSource={history}
                                     size="small" scroll={{
-                                        x: 800,
+                                        x: 1000, 
                                     }} />
                             </div>
 

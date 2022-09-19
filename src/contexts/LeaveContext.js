@@ -51,9 +51,9 @@ class LeaveContext {
             let date1 = moment(rec.dateCalc[0], "Do MMM, YYYY");
             let date2 = moment(rec.dateCalc[1], "Do MMM, YYYY");
             let dur = date2.diff(date1,'days') + 1;
-            let nature = rec.nature;
-            // this.leaveDays.(rec.nature) -= dur;
-            console.log(this.leaveDays.nature)
+            // let nature = rec.nature;
+            this.leaveDays[rec.nature] -= dur;
+            console.log(rec.nature, this.leaveDays[rec.nature])
         })
         console.log(this.leaveDays)
         return this.leaveDays

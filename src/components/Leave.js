@@ -108,7 +108,9 @@ const Leave = () => {
     const [history, setHistory] = useState([]);
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
-    const { currentUser } = useAuth();
+    const { currentUser, role } = useAuth();
+    let leaveDays = "";
+    // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
     const [users, setUsers] = useState([
         {
             id: 1,
@@ -195,15 +197,17 @@ const Leave = () => {
     const getData = async () => {
         let data = await LeaveContext.getAllById(currentUser.uid)
         console.log(data)
-        let d = data.docs.map((doc) => {
-            return {
-                ...doc.data(),
-                id: doc.id
-            };
-        });
-        console.log(d);
-        setLeaves(d);
-        getDateFormatted(d)
+       let d = data.docs.map((doc) => {
+       return {
+         ...doc.data(),
+         id: doc.id
+       };
+     });
+       console.log(d);
+       setLeaves(d);
+       getDateFormatted(d)
+       leaveDays = LeaveContext.getLeaveDays(d)
+       // setHistory(d)
 
     }
 
@@ -249,7 +253,7 @@ const Leave = () => {
 
     const onRejectedLeave = (record) => {
         Modal.confirm({
-            title: "Are you sure, you want to approve Leave record?",
+            title: "Are you sure, you want to Reject Leave record?",
             okText: "Yes",
             okType: "danger",
             onOk: () => {
@@ -315,13 +319,10 @@ const Leave = () => {
             render: (record) => {
                 return (
                     <>
-                        <DeleteOutlined
-                            onClick={() => {
-                                onDeleteLeave(record);
-                            }}
-                            style={{ color: "red", marginLeft: 0 }}
-                        />
-                        <img
+                    {
+                        role == "hr"
+                        ?<>
+                         <img
                             style={{ color: "white", width: '20px',marginRight: 10 }}
                             src="../logo/checkmark.png"
                             alt="profile"
@@ -340,6 +341,16 @@ const Leave = () => {
                             }}
 
                         />
+                        </>
+                        : <DeleteOutlined
+                        onClick={() => {
+                            onDeleteLeave(record);
+                        }}
+                        style={{ color: "red", marginLeft: 0 }}
+                    />
+                    }
+                       
+                       
                     </>
                 );
             },
@@ -348,16 +359,14 @@ const Leave = () => {
     ];
     useEffect(() => {
         getData();
-        console.log(currentUser);
     }, []);
 
     const getDateFormatted = ((data) => {
-        let temp = []
         data.forEach(dur => {
+            dur.dateCalc = [dur.date[0], dur.date[1]]
             dur.date = dur.date[0] + " to " + dur.date[1]
-            temp.push(dur)
         })
-        setHistory(temp)
+        setHistory(data)
     })
 
     const { RangePicker } = DatePicker;
@@ -428,7 +437,7 @@ const Leave = () => {
                         display: 'flex', flexDirection: 'row', justifyContent: 'space-between', color: 'black', height: '40px', alignItems: 'center', backgroundColor: 'white',
 
                     }}><h3>Leave Available</h3>
-                  
+                    {/* <Button>Add Leave</Button> */}
                     </div>
                     <div className='leavediv'
 

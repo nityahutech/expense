@@ -155,7 +155,7 @@ const Leave = () => {
             empId: currentUser.uid,
             approver: values.approver,
             date: duration,
-            name: values.employeename,
+            name: currentUser.displayName,
             nature: values.leaveNature,
             slot: values.slot == null ? "Full Day" : values.slot,
             reason: values.reason,
@@ -207,6 +207,7 @@ const Leave = () => {
        setLeaves(d);
        getDateFormatted(d)
        leaveDays = LeaveContext.getLeaveDays(d)
+       console.log(role)
        // setHistory(d)
 
     }

@@ -14,6 +14,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Tabledash from "./components/Tabledash";
 import { AuthProvider } from "./contexts/AuthContext";
 import Attendance from "./pages/Attendance/Attendance";
+import Notification from "./components/Notification";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/Profile" element={<Profile />} />
           <Route path="/Setting" element={<Setting />} />
           <Route path="/Employee/Leave" element={<Leave />} />
+          <Route path="/Notification" element={<Notification />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

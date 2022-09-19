@@ -40,11 +40,10 @@ class LeaveContext {
     getLeaveDays = (records) => {
         console.log(records);
         this.leaveDays = {
-            "Earn Leave": "14",
-            "Sick Leave": "7",
-            "Casual Leave": "7",
-            "Floating Leave": "2",
-            "Compensatory Off": "2"
+            "Earn Leave": "12",
+            "Sick Leave": "12",
+            "Casual Leave": "12",
+            "official Leave": "2"
         }
         records.forEach((rec) => {
             console.log(rec)

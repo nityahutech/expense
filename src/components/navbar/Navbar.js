@@ -78,6 +78,7 @@ const Navbar = () => {
       "clicked-tiime",
       clickedDate.toString().substring(16, 25)
     );
+    console.log(localStorage.getItem);
   };
   const setClockOutState = () => {
     setClocikIn(true);

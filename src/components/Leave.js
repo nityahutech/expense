@@ -26,6 +26,7 @@ const Leave = () => {
     const [dataSource, setDataSource] = useState([]);
     const [duration,setDuration]=useState([]);
     const {currentUser} = useAuth();
+    let leaveDays = "";
     
     // const getLocalData = localStorage.getItem("test");
     // const parseData = JSON.parse(getLocalData)
@@ -88,6 +89,7 @@ const Leave = () => {
         console.log(d);
         setLeaves(d);
         getDateFormatted(d)
+        leaveDays = LeaveContext.getLeaveDays(d)
         // setHistory(d)
     }
 
@@ -209,12 +211,11 @@ const Leave = () => {
     }, []);
 
     const getDateFormatted = ((data) => {
-        let temp=[]
         data.forEach(dur => {
+            dur.dateCalc = [dur.date[0], dur.date[1]]
             dur.date = dur.date[0] + " to " + dur.date[1]
-            temp.push(dur)
         })
-        setHistory(temp)
+        setHistory(data)
     })
 
     const { RangePicker } = DatePicker;

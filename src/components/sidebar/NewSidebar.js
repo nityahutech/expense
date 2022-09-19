@@ -142,7 +142,7 @@ const NewSidebar = (props) => {
               key="8"
             >
               Add Employee
-              <NavLink to="/SignupPage" />
+              <NavLink to="/addemployee" />
             </Menu.Item>
           </Menu.SubMenu>
 

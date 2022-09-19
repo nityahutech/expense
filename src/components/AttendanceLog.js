@@ -62,16 +62,46 @@ function AttendanceLog({ empDetails }) {
 
   const [form] = Form.useForm();
 
+  function getFormateDateString() {
+    return (
+      (new Date().getDate() > 9
+        ? new Date().getDate()
+        : "0" + new Date().getDate()) +
+      "-" +
+      (new Date().getMonth() + 1 > 9
+        ? new Date().getMonth() + 1
+        : "0" + (new Date().getMonth() + 1)) +
+      "-" +
+      new Date().getFullYear()
+    );
+  }
+  function getFormatTimeString() {
+    return (
+      (new Date().getHours() > 9
+        ? new Date().getHours()
+        : "0" + new Date().getHours()) +
+      ":" +
+      (new Date().getMinutes() > 9
+        ? new Date().getMinutes()
+        : "0" + new Date().getMinutes()) +
+      ":" +
+      (new Date().getSeconds() > 9
+        ? new Date().getSeconds()
+        : "0" + new Date().getSeconds())
+    );
+  }
+
   const onFinish = (values) => {
     console.log(values);
     const newData = {
       code: "898",
-      date: new Date(),
-      status: "-",
-      time1: new Date().getTime(),
+      date: getFormateDateString(),
+      status: "-_",
+      time1: getFormatTimeString(),
       time2: "18:15:23",
       work: "-",
       report: values?.project_details || "-",
+      project: values?.project_name || "-",
     };
     console.log({ monthlydata });
     let newAlldata = [newData, ...empMonthly];
@@ -94,13 +124,14 @@ function AttendanceLog({ empDetails }) {
     userlocal.map((emp, i) => {
       newEmp.push({
         key: i,
-        code: emp.code + i,
+        code: emp.code,
         date: emp.date,
         status: emp.status,
         time1: emp.time1,
         time2: emp.time2,
         work: emp.work,
         report: emp.report,
+        project: emp.project,
       });
     });
     console.log({ newEmp });
@@ -120,7 +151,7 @@ function AttendanceLog({ empDetails }) {
         time1: emp.time1,
         time2: emp.time2,
         empname: "Nitya-" + (i + 1),
-        project: "project-" + (i + 1),
+        project: emp.project,
         report: emp.report,
       });
     });

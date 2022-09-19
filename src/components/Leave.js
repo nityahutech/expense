@@ -207,6 +207,7 @@ const Leave = () => {
        setLeaves(d);
        getDateFormatted(d)
        leaveDays = LeaveContext.getLeaveDays(d)
+       console.log(role)
        // setHistory(d)
 
     }

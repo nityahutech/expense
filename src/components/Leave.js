@@ -108,7 +108,8 @@ const Leave = () => {
     const [history, setHistory] = useState([]);
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
-    const { currentUser } = useAuth();
+    const { currentUser, role } = useAuth();
+    let leaveDays = "";
     // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
     const [users, setUsers] = useState([
         {
@@ -196,15 +197,17 @@ const Leave = () => {
     const getData = async () => {
         let data = await LeaveContext.getAllById(currentUser.uid)
         console.log(data)
-        let d = data.docs.map((doc) => {
-            return {
-                ...doc.data(),
-                id: doc.id
-            };
-        });
-        console.log(d);
-        setLeaves(d);
-        getDateFormatted(d)
+       let d = data.docs.map((doc) => {
+       return {
+         ...doc.data(),
+         id: doc.id
+       };
+     });
+       console.log(d);
+       setLeaves(d);
+       getDateFormatted(d)
+       leaveDays = LeaveContext.getLeaveDays(d)
+       // setHistory(d)
 
     }
 
@@ -317,7 +320,7 @@ const Leave = () => {
                 return (
                     <>
                     {
-                        {/* userDetails.isAdmin */}
+                        role == "hr"
                         ?<>
                          <img
                             style={{ color: "white", width: '20px',marginRight: 10 }}
@@ -356,16 +359,14 @@ const Leave = () => {
     ];
     useEffect(() => {
         getData();
-        console.log(currentUser);
     }, []);
 
     const getDateFormatted = ((data) => {
-        let temp = []
         data.forEach(dur => {
+            dur.dateCalc = [dur.date[0], dur.date[1]]
             dur.date = dur.date[0] + " to " + dur.date[1]
-            temp.push(dur)
         })
-        setHistory(temp)
+        setHistory(data)
     })
 
     const { RangePicker } = DatePicker;

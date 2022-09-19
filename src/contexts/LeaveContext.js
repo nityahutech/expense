@@ -55,7 +55,7 @@ class LeaveContext {
             // this.leaveDays.(rec.nature) -= dur;
             console.log(this.leaveDays.nature)
         })
-        console.log(typeof(this.leaveDays))
+        console.log(this.leaveDays)
         return this.leaveDays
     }
 }

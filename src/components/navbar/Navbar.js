@@ -86,7 +86,29 @@ const Navbar = () => {
           width: "200px",
         };
 
-  const buttonText = !isRunning ? "Web Clock In" : `${hours}:${minutes}:${seconds}`
+
+ const [buttonText, setButtonText] = useState(!isRunning ? "Web Clock In" : `${hours}:${minutes}:${seconds}`);
+
+  
+  const onMouseEnter = (event) => {
+    if(isRunning){
+      event.target.style.background = "orange";
+      setButtonText("Web Clock Out");
+    }
+    else {
+      event.target.style.background = "aqua";
+    }
+  };
+
+  const onMouseLeave = (event) => {
+    if(isRunning){
+      event.target.style.background = "#05445e";
+      setButtonText(`${hours}:${minutes}:${seconds}`);
+    }
+    else {
+      event.target.style.background = "red";
+    }
+  };
 
   const setClockState = () => {
       // setClockIn(true);
@@ -99,17 +121,20 @@ const Navbar = () => {
     // setClockIn(false);
     let clickedDate = new Date();
     pause();
+    console.log(isRunning);
     console.log(clickedDate.toString().substring(16, 25));
     console.log(`${hours}:${minutes}:${seconds}`);
-    reset();
+    reset("0:0:0:0", false);
   };
 
   const handleClock = () => {
     if (isRunning) {
       stopClockState();
+      console.log(isRunning);
     }
     else {
       setClockState();
+      console.log(isRunning);
     }
   }
   // ----------------------------------------full code for web-clock in
@@ -257,6 +282,8 @@ const Navbar = () => {
           <button
             style={buttonStyle}
           onClick={handleClock}
+        onMouseLeave={onMouseLeave}
+        onMouseEnter={onMouseEnter}
       >
         {buttonText}
       </button>

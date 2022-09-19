@@ -14,7 +14,16 @@ import {
 
 const attendCollectionRef = collection(db, "attendance");
 
-class ExpenseContext {
+class AttendanceContext {
+
+    addClockData = (record) => {
+        return addDoc(attendCollectionRef, record);
+    };
+
+    updateClockData = (id, record) => {
+        const attendDoc = doc(db, "attendance", id);
+        return updateDoc(attendDoc, record);
+    };
 
     addAttendance = (record) => {
         return addDoc(attendCollectionRef, record);
@@ -49,4 +58,4 @@ class ExpenseContext {
     };
 }
 
-export default new ExpenseContext();
+export default new AttendanceContext();

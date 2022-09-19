@@ -66,9 +66,19 @@ function AttendanceLog({ empDetails }) {
     console.log(values);
     const newData = {
       code: "898",
-      date: new Date(),
-      status: "-",
-      time1: new Date().getTime(),
+      date:
+        new Date().getDate() +
+        "-" +
+        (new Date().getMonth() + 1) +
+        "-" +
+        new Date().getFullYear(),
+      status: "-_",
+      time1:
+        new Date().getHours() +
+        ":" +
+        new Date().getMinutes() +
+        ":" +
+        new Date().getSeconds(),
       time2: "18:15:23",
       work: "-",
       report: values?.project_details || "-",

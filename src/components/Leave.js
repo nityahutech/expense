@@ -29,6 +29,7 @@ let leaveStyle = {
 
 const getListData = (value) => {
     let listData;
+    console.log(value.date());
     switch (value.date()) {
         case 8:
             listData = [
@@ -52,7 +53,7 @@ const getListData = (value) => {
 
             ];
             break
-            case 10:
+        case 10:
             listData = [
                 {
                     type: "Officialy Holiday",
@@ -63,7 +64,7 @@ const getListData = (value) => {
 
             ];
             break
-            case 11:
+        case 11:
             listData = [
                 {
                     type: "Week Off",
@@ -74,17 +75,17 @@ const getListData = (value) => {
 
             ];
             break
-            case 12:
-                listData = [
-                    {
-                        type: "Leave",
-                        intime: "In : ",
-                        outtime: "Out : "
-    
-                    },
-    
-                ];
-                break
+        case 12:
+            listData = [
+                {
+                    type: "Leave",
+                    intime: "In : ",
+                    outtime: "Out : "
+
+                },
+
+            ];
+            break
 
 
         default:
@@ -107,12 +108,14 @@ const Leave = () => {
     const [history, setHistory] = useState([]);
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
-    const { currentUser } = useAuth();
+    const { currentUser, role } = useAuth();
+    let leaveDays = "";
+    // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
     const [users, setUsers] = useState([
         {
             id: 1,
             leavetype: "Earn Leave",
-            leave: 14,
+            leave: 0,
 
 
         },
@@ -130,17 +133,17 @@ const Leave = () => {
         },
         {
             id: 4,
-            leavetype: "Floating Leave",
+            leavetype: "Optional Leave",
             leave: 2,
 
 
         },
-        {
-            id: 5,
-            leavetype: "Compensatory Off",
-            leave: 2,
+        // {
+        //     id: 5,
+        //     leavetype: "Compensatory Off",
+        //     leave: 2,
 
-        },
+        // },
 
     ] || [])
 
@@ -190,23 +193,21 @@ const Leave = () => {
         form.resetFields()
     };
 
-    // function disabledDate(current) {
-    //     // Can not select sundays and predfined days
-    //     return moment(current).day() === 0
-    // }
 
     const getData = async () => {
         let data = await LeaveContext.getAllById(currentUser.uid)
         console.log(data)
-        let d = data.docs.map((doc) => {
-            return {
-                ...doc.data(),
-                id: doc.id
-            };
-        });
-        console.log(d);
-        setLeaves(d);
-        getDateFormatted(d)
+       let d = data.docs.map((doc) => {
+       return {
+         ...doc.data(),
+         id: doc.id
+       };
+     });
+       console.log(d);
+       setLeaves(d);
+       getDateFormatted(d)
+       leaveDays = LeaveContext.getLeaveDays(d)
+       // setHistory(d)
 
     }
 
@@ -231,6 +232,45 @@ const Leave = () => {
         });
     };
 
+    const onApproveLeave = (record) => {
+        Modal.confirm({
+            title: "Are you sure, you want to approve Leave record?",
+            okText: "Yes",
+            okType: "primary",
+            onOk: () => {
+                LeaveContext.approveLeave(record.id)
+                    .then(response => {
+                        console.log(response);
+                        getData();
+                    })
+                    .catch(error => {
+                        console.log(error.message);
+
+                    })
+            },
+        });
+    };
+
+    const onRejectedLeave = (record) => {
+        Modal.confirm({
+            title: "Are you sure, you want to Reject Leave record?",
+            okText: "Yes",
+            okType: "danger",
+            onOk: () => {
+                LeaveContext.rejectLeave(record.id)
+                    .then(response => {
+                        console.log(response);
+                        getData();
+                    })
+                    .catch(error => {
+                        console.log(error.message);
+
+                    })
+            },
+        });
+    };
+
+
 
     const onReset = () => {
         form.resetFields()
@@ -251,14 +291,8 @@ const Leave = () => {
         {
             title: 'Nature of Leave',
             dataIndex: 'nature',
-            // render(text, record) {
-            //     return {
-            //       props: {
-            //         style: { background: parseInt(text) > 50 ? "red" : "green" }
-            //       },
-            //       children: <div>{text}</div>
-            //     };
-            //   }
+            width: 150,
+
         },
         {
             title: 'Slot',
@@ -267,10 +301,12 @@ const Leave = () => {
         {
             title: 'Reason',
             dataIndex: 'reason',
+            width: 150,
         },
         {
             title: 'Approver',
             dataIndex: 'approver',
+            width: 150,
         },
 
 
@@ -279,15 +315,42 @@ const Leave = () => {
             key: "5",
             title: "Actions",
             fixed: 'right',
+            width: 100,
             render: (record) => {
                 return (
                     <>
-                        <DeleteOutlined
+                    {
+                        role == "hr"
+                        ?<>
+                         <img
+                            style={{ color: "white", width: '20px',marginRight: 10 }}
+                            src="../logo/checkmark.png"
+                            alt="profile"
+                            className="Dash"
                             onClick={() => {
-                                onDeleteLeave(record);
+                                onApproveLeave(record);
                             }}
-                            style={{ color: "red", marginLeft: 12 }}
                         />
+                                <img
+                            style={{ color: "white", width: '20px' }}
+                            src="../logo/rejected.png"
+                            alt="profile"
+                            className="Dash"
+                            onClick={() => {
+                                onRejectedLeave(record);
+                            }}
+
+                        />
+                        </>
+                        : <DeleteOutlined
+                        onClick={() => {
+                            onDeleteLeave(record);
+                        }}
+                        style={{ color: "red", marginLeft: 0 }}
+                    />
+                    }
+                       
+                       
                     </>
                 );
             },
@@ -296,16 +359,14 @@ const Leave = () => {
     ];
     useEffect(() => {
         getData();
-        console.log(currentUser);
     }, []);
 
     const getDateFormatted = ((data) => {
-        let temp = []
         data.forEach(dur => {
+            dur.dateCalc = [dur.date[0], dur.date[1]]
             dur.date = dur.date[0] + " to " + dur.date[1]
-            temp.push(dur)
         })
-        setHistory(temp)
+        setHistory(data)
     })
 
     const { RangePicker } = DatePicker;
@@ -332,9 +393,9 @@ const Leave = () => {
 
     const dateCellRender = (value) => {
         const listData = getListData(value);
-        let currentMonth=new Date().getMonth()
-let date=new Date(value['_d'])   
-        return currentMonth==date.getMonth()?(
+        let currentMonth = new Date().getMonth()
+        let date = new Date(value['_d'])
+        return currentMonth == date.getMonth() ? (
             <ul className="events" >
                 {listData.map((item) => (
                     <li >
@@ -348,7 +409,7 @@ let date=new Date(value['_d'])
                 ))}
 
             </ul>
-        ):null;
+        ) : null;
     };
 
 
@@ -375,7 +436,9 @@ let date=new Date(value['_d'])
                     <div className='Col-1-center' style={{
                         display: 'flex', flexDirection: 'row', justifyContent: 'space-between', color: 'black', height: '40px', alignItems: 'center', backgroundColor: 'white',
 
-                    }}><h3>Leave Available</h3></div>
+                    }}><h3>Leave Available</h3>
+                    {/* <Button>Add Leave</Button> */}
+                    </div>
                     <div className='leavediv'
 
                     >
@@ -421,11 +484,7 @@ let date=new Date(value['_d'])
                             onChange={setDate}
                             dateCellRender={dateCellRender}
                             monthCellRender={monthCellRender}
-                            // disabledDate={disabledDate}
-
-
-
-
+                        // disabledDate={disabledDate}
 
                         />
 
@@ -606,7 +665,7 @@ let date=new Date(value['_d'])
                                 <Table columns={columns}
                                     dataSource={history}
                                     size="small" scroll={{
-                                        x: 600,
+                                        x: 800,
                                     }} />
                             </div>
 

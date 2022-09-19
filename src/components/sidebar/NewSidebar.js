@@ -137,12 +137,13 @@ const NewSidebar = (props) => {
               Leave
               <NavLink to="/Employee/Leave" />
             </Menu.Item>
+
             <Menu.Item
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="8"
             >
               Add Employee
-              <NavLink to="/addemployee" />
+              <NavLink to="/Addemployee/AddEmployee" />
             </Menu.Item>
             <Menu.Item
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}

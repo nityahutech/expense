@@ -206,7 +206,7 @@ const Leave = () => {
        console.log(d);
        setLeaves(d);
        getDateFormatted(d)
-       leaveDays = LeaveContext.getLeaveDays(d)
+       leaveDays = LeaveContext.getLeaveDays(d,currentUser.uid)
        console.log(role)
        // setHistory(d)
 
@@ -285,10 +285,10 @@ const Leave = () => {
             width: 150,
 
         },
-        // {
-        //     title: 'Employee Name',
-        //     dataIndex: 'name',
-        // },
+        {
+            title: 'Employee Name',
+            dataIndex: 'name',
+        },
         {
             title: 'Nature of Leave',
             dataIndex: 'nature',
@@ -360,6 +360,7 @@ const Leave = () => {
     ];
     useEffect(() => {
         getData();
+       // LeaveContext.getInitalLeaveById(currentUser.uid)
     }, []);
 
     const getDateFormatted = ((data) => {

@@ -1,4 +1,5 @@
 import { db } from "../firebase-config";
+import ProfileContext from "./ProfileContext";
 
 import {
     collection,
@@ -37,17 +38,16 @@ class LeaveContext {
         return getDocs(q);
     };
 
-    getLeaveDays = (records) => {
-        console.log(records);
+    getLeaveDays = async (records, id) => {
+        let rec = await ProfileContext.getProfile(id);
         this.leaveDays = {
-            "Earn Leave": "14",
-            "Sick Leave": "7",
-            "Casual Leave": "7",
-            "Floating Leave": "2",
-            "Compensatory Off": "2"
+            "Earn Leave": rec.data()["Earn Leave"],
+            "Sick Leave": rec.data()["Sick Leave"],
+            "Casual Leave": rec.data()["Casual Leave"],
+            "Optional Leave": rec.data()["Optional Leave"]
         }
+        console.log(this.leaveDays)
         records.forEach((rec) => {
-            console.log(rec)
             let date1 = moment(rec.dateCalc[0], "Do MMM, YYYY");
             let date2 = moment(rec.dateCalc[1], "Do MMM, YYYY");
             let dur = date2.diff(date1,'days') + 1;

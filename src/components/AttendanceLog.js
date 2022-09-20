@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Tabs, Layout, Table, Button, Modal, Form, Input } from "antd";
+import {
+  Tabs,
+  Layout,
+  Table,
+  Button,
+  Modal,
+  Form,
+  Input,
+  DatePicker,
+} from "antd";
 import "../style/AttendanceLog.css";
+import moment from "moment";
+
+const { RangePicker } = DatePicker;
 
 const { Content } = Layout;
 const layout = {
@@ -17,6 +29,8 @@ const tailLayout = {
     span: 16,
   },
 };
+const dateFormat = "DD-MM-YYYY";
+
 function AttendanceLog({ empDetails }) {
   const [monthlydata, setMonthlydata] = useState([]);
   const [allEmp, setallEmp] = useState([]);
@@ -124,8 +138,10 @@ function AttendanceLog({ empDetails }) {
     userlocal.map((emp, i) => {
       newEmp.push({
         key: i,
+
         code: emp.code,
         date: emp.date,
+        empname: "Nitya-" + (i + 1),
         status: emp.status,
         time1: emp.time1,
         time2: emp.time2,
@@ -136,6 +152,7 @@ function AttendanceLog({ empDetails }) {
     });
     console.log({ newEmp });
     setEmpMonthly(newEmp);
+    // setallEmp(newEmp);
   }
 
   function allEmpDetails() {
@@ -289,6 +306,28 @@ function AttendanceLog({ empDetails }) {
     },
   ];
 
+  function onDateFilter(date, dateString) {
+    console.log({ date, dateString });
+    if (date) {
+      console.log(empMonthly);
+      let result = empMonthly.filter((ex) => {
+        return (
+          moment(ex.date, dateFormat).isSame(date[0], "day") ||
+          moment(ex.date, dateFormat).isSame(date[1], "day") ||
+          (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
+            moment(ex.date, dateFormat).isSameOrBefore(date[1]))
+        );
+      });
+
+      const modifiedFilterExpense = [...result];
+
+      console.log({ modifiedFilterExpense });
+      setEmpMonthly(modifiedFilterExpense);
+    } else {
+      setEmpMonthly(empMonthly);
+    }
+  }
+
   return (
     <Tabs
       defaultActiveKey={activetab}
@@ -371,6 +410,25 @@ function AttendanceLog({ empDetails }) {
             </Form>
             {/* </Modal> */}
           </Tabs.TabPane>
+
+          <Tabs.TabPane
+            tab={
+              <RangePicker
+                defaultValue={[]}
+                dateFormat
+                style={{
+                  width: "95%",
+                  position: "relative",
+                  left: "40rem",
+                  marginTop: "4px",
+                }}
+                onChange={onDateFilter}
+              />
+            }
+            key="3"
+          >
+            <Table columns={columns1} dataSource={empMonthly || []} />
+          </Tabs.TabPane>
         </>
       ) : (
         <>
@@ -396,47 +454,25 @@ function AttendanceLog({ empDetails }) {
           <Tabs.TabPane disabled={!selectemp} tab="Monthly Log" key="3">
             <Table columns={columns1} dataSource={[selectemp] || []} />
           </Tabs.TabPane>
-          {/* <Tabs.TabPane tab="Add Report" key="4" className="reportTabs">
-            <Form
-              {...layout}
-              form={form}
-              name="control-hooks"
-              onFinish={onFinish}
-              className="formItem"
-            >
-              <Form.Item
-                name="project name"
-                label="Project Name"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input className="name" />
-              </Form.Item>
-              <Form.Item
-                name="project details"
-                label="Project Details"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input className="name" />
-              </Form.Item>
-              <Form.Item {...tailLayout}>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-                <Button htmlType="button" onClick={onReset}>
-                  Reset
-                </Button>
-              </Form.Item>
-            </Form>
-            
-          </Tabs.TabPane> */}
+          <Tabs.TabPane
+            tab={
+              <RangePicker
+                defaultValue={[]}
+                dateFormat
+                style={{
+                  width: "95%",
+                  position: "relative",
+                  left: "40rem",
+                  marginTop: "4px",
+                }}
+                onChange={onDateFilter}
+              />
+            }
+            key="3"
+            disabled={!empMonthly}
+          >
+            <Table columns={columns1} dataSource={empMonthly || []} />
+          </Tabs.TabPane>
         </>
       )}
     </Tabs>

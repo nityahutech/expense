@@ -3,7 +3,8 @@ import AttendanceLog from "../../components/AttendanceLog";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 import { useAuth } from "../../contexts/AuthContext";
-import AddEmployee from "../../components/addemployee";
+import Addemployee from "../../components/AddEmployee";
+
 
 function DashBoard() {
   const [accessToken, setAccessToken] = useState(null);

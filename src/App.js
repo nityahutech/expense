@@ -8,7 +8,8 @@ import NewSider from "./components/sidebar/NewSidebar";
 import Profile from "./pages/profile/Profile";
 import Setting from "./pages/setting/Setting";
 import Leave from "./pages/leave/Leave";
-import Addemployee from "./components/addemployee";
+import EmployeeList from "./components/EmployeeList";
+import Addemployee from "./pages/addemployee/Addemployee";
 import ExpenseListpage from "./pages/ExpenseList/ExpenseListpage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Tabledash from "./components/Tabledash";
@@ -28,7 +29,8 @@ function App() {
           <Route path="/Expense/AddExpense" element={<ExpenseFrm />} />
           <Route path="/Expense/ExpenseList" element={<ExpenseListpage />} />
           <Route path="/Attendance/AttendanceLog" element={<Attendance />} />
-          <Route path="/addemployee" element={<Addemployee />} />
+          <Route path="/EmployeeList" element={<EmployeeList />} />
+          <Route path="/Addemployee/AddEmployee" element={<Addemployee />} />
           <Route path="/New" element={<NewSider />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/Setting" element={<Setting />} />

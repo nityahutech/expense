@@ -48,6 +48,12 @@ const ExpenseBreadCrumb = () => {
           <strong>Employee / Attendance Log</strong>
         </Breadcrumb.Item>
 
+      ) : window.location.pathname === "/Addemployee/AddEmployee" ? (
+        <Breadcrumb.Item>
+          <strong>Employee / Add Employee</strong>
+        </Breadcrumb.Item>
+
+
 
       ) : window.location.pathname === "/Setting" ? (
         <Breadcrumb.Item>

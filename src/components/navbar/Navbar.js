@@ -66,7 +66,8 @@ const Navbar = () => {
   );
   // ----------------------------------------full code for web-clock in
   const { seconds, minutes, hours, days, start, pause, reset } = useStopwatch({
-    autoStart: false,
+    autoStart: true,
+    value:{minutes:4}
   });
   const [clockIn, setClocikIn] = useState(true);
   const [mouseState, setMouseState] = useState(false);
@@ -74,9 +75,13 @@ const Navbar = () => {
   const setClockState = () => {
     setClocikIn(false);
     let clickedDate = new Date();
+    // localStorage.setItem(
+    //   "clicked-tiime",
+    //   clickedDate.toString().substring(16, 25)
+    // );
     localStorage.setItem(
-      "clicked-tiime",
-      clickedDate.toString().substring(16, 25)
+      "clicked-time",
+      JSON.stringify({date:new Date().getTime(), login_time:clickedDate.toString().substring(16, 25), logout_time:null})
     );
     console.log(localStorage.getItem);
   };
@@ -106,10 +111,13 @@ const Navbar = () => {
         <button
           style={{
             padding: "1px",
-            background: "aqua",
+            background: "#cc3e25",
             color: "white",
             display: "inline-block",
             width: "200px",
+            cursor:"pionter",
+            border:"1px solid #cc3e25",
+            borderRadius:"5px"
           }}
           onClick={setClockOutState}
         >
@@ -122,11 +130,13 @@ const Navbar = () => {
       <button
         style={{
           padding: "1px",
-          background: "#05445e",
+          background: "#33f2a3",
           color: "white",
           display: "inline-block",
           width: "200px",
-          borderRadius: "2px",
+          borderRadius: "5px",
+          cursor:"pointer",
+          border:"1px solid #33f2a3"
         }}
         onClick={setClockState}
       >
@@ -144,7 +154,9 @@ const Navbar = () => {
           //   height: "100px",
           display: "flex",
           justifyContent: "center",
-          borderRadius: "2px",
+          borderRadius: "5px",
+          cursor:"pointer",
+          border:"1px solid #70BDF0",
         }}
         onMouseLeave={onMouseLeave}
         onMouseEnter={onMouseEnter}
@@ -152,7 +164,8 @@ const Navbar = () => {
       >
         <div>
           <div>
-            <span>Clocked In</span>
+            <span>Clocked In </span>
+            <span></span>
             <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:
             <span>{seconds}</span>
             <span></span>
@@ -171,7 +184,9 @@ const Navbar = () => {
           backgroundColor: "DodgerBlue",
           padding: "1px",
           fontFamily: "Arial",
-          borderRadius: "2px",
+          borderRadius: "5px",
+          cursor:"pointer",
+          border:"1px solid white"
         }}
         onClick={setClockState}
       >
@@ -191,9 +206,9 @@ const Navbar = () => {
             // marginTop:'9px',
             marginRight: "20px",
             // padding: "5px",
-            borderRadius: "2px",
-            border: "1px solid black",
-            backgroundColor: "#05445E",
+            borderRadius: "5px",
+            border: "1px solid white",
+            backgroundColor: "#33e9f2",
             color: "white",
             fontWeight: "400",
             width: "auto",

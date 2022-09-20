@@ -8,7 +8,7 @@ import NewSider from "./components/sidebar/NewSidebar";
 import Profile from "./pages/profile/Profile";
 import Setting from "./pages/setting/Setting";
 import Leave from "./pages/leave/Leave";
-import EmployeeList from "./components/EmployeeList";
+import EmployeeListPage from "./pages/Employeelist/EmployeeListPage";
 import Addemployee from "./pages/addemployee/Addemployee";
 import ExpenseListpage from "./pages/ExpenseList/ExpenseListpage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -29,7 +29,10 @@ function App() {
           <Route path="/Expense/AddExpense" element={<ExpenseFrm />} />
           <Route path="/Expense/ExpenseList" element={<ExpenseListpage />} />
           <Route path="/Attendance/AttendanceLog" element={<Attendance />} />
-          <Route path="/EmployeeList" element={<EmployeeList />} />
+          <Route
+            path="/EmployeeListPage/EmployeeList"
+            element={<EmployeeListPage />}
+          />
           <Route path="/Addemployee/AddEmployee" element={<Addemployee />} />
           <Route path="/New" element={<NewSider />} />
           <Route path="/Profile" element={<Profile />} />

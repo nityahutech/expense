@@ -9,6 +9,7 @@ import {
     addDoc,
     deleteDoc,
     doc,
+    updateDoc,
 } from "firebase/firestore";
 import moment from "moment";
 
@@ -37,6 +38,15 @@ class LeaveContext {
         // console.log(q);
         return getDocs(q);
     };
+    approveLeave=(id)=>{
+         const leaveDoc = doc(db, "leave", id);
+         return updateDoc(leaveDoc,{status:"Approved"})
+
+
+    }
+        
+
+    
 
     getLeaveDays = async (records, id) => {
         let rec = await ProfileContext.getProfile(id);

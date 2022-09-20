@@ -153,6 +153,7 @@ const Leave = () => {
         console.log(duration)
         let newLeave = {
             empId: currentUser.uid,
+            status:"Pending",
             approver: values.approver,
             date: duration,
             name: currentUser.displayName,

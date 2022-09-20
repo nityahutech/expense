@@ -3,7 +3,7 @@ import AttendanceLog from "../../components/AttendanceLog";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 import { useAuth } from "../../contexts/AuthContext";
-import Addemployee from "../../components/AddEmployee";
+import AddEmployee from "../../components/AddEmployee";
 
 
 function DashBoard() {
@@ -42,7 +42,7 @@ function DashBoard() {
         </div>
 
         <div className="tables">
-          <Addemployee />
+          <AddEmployee />
         </div>
       </div>
     </div>

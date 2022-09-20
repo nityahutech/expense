@@ -42,7 +42,7 @@ function DashBoard() {
         </div>
 
         <div className="tables">
-          <AddEmployee />
+          <Addemployee />
         </div>
       </div>
     </div>

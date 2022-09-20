@@ -150,11 +150,9 @@ const NewSidebar = (props) => {
               key="9"
             >
               Employee List
-              <NavLink to="/EmployeeList" />
+              <NavLink to="/EmployeeListPage/EmployeeList" />
             </Menu.Item>
           </Menu.SubMenu>
-
-          
 
           <Menu.Item
             icon={

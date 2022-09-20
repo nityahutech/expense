@@ -231,11 +231,12 @@ const Profile = () => {
                 </div>
                 <div>
                 <h2 className="tropography" style={{ fontSize:'18px',fontWeights :'900'  }}>Address</h2>
-                  <p> {userRecord.address},<br />
-                  {userRecord.city},
-                  {userRecord.state},<br />
-                  {userRecord.country},<br />
-                  {userRecord.zipcode}</p>
+                <p> {`${userRecord?.address?userRecord.address+",":""}`}<br />
+                  {`${userRecord?.city?userRecord.city+",":""}`}
+                  {`${userRecord?.state?userRecord.state+",":""}`}<br />
+                  {`${userRecord?.country?userRecord.country+",":""}`}<br />
+                  {`${userRecord?.zipcode?userRecord.zipcode+".":""}`}
+               </p>
                  
                 </div>
               </div>

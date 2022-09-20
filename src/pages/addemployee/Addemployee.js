@@ -3,9 +3,9 @@ import AttendanceLog from "../../components/AttendanceLog";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 import { useAuth } from "../../contexts/AuthContext";
-import ProfileContext from "../../contexts/ProfileContext";
+import AddEmployee from "../../components/addemployee";
 
-function Attendance() {
+function DashBoard() {
   const [accessToken, setAccessToken] = useState(null);
   const { currentUser, role } = useAuth();
   // const role = getRole();
@@ -30,7 +30,7 @@ function Attendance() {
       <div className="sidecontainer">
         <Sidebar
           activeSubMenu={["sub2"]}
-          activeMenu={["6"]}
+          activeMenu={["8"]}
           accessToken={accessToken}
         />
       </div>
@@ -41,11 +41,11 @@ function Attendance() {
         </div>
 
         <div className="tables">
-          <AttendanceLog empDetails={{ userType: role, empid: 12 }} />
+          <AddEmployee />
         </div>
       </div>
     </div>
   ) : null;
 }
 
-export default Attendance;
+export default DashBoard;

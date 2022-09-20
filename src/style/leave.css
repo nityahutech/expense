@@ -1,20 +1,107 @@
-.ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content{
+.ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content {
     height: 40px;
-}
-
-.reprentation{
-    width: 100px;
-    border-radius: 10px;
+    overflow: hidden;
+    font-size: 5px;
+  }
+  
+  .reprentation {
+    width: 105px;
+    border-radius: 15px;
     /* opacity: 0.5; */
     border: none;
- 
   
-}
-
-.rep-text{
+  }
+  
+  
+  
+  .rep-text {
     margin-bottom: 0;
-}
-
- .ant-picker-calendar-mode-switch{
+  }
+  
+  .ant-picker-calendar-mode-switch {
     display: none;
-}
+  }
+  
+  .events {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .events .ant-badge-status {
+    width: 100%;
+    overflow: hidden;
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
+  .notes-month {
+    font-size: 28px;
+    text-align: center;
+  }
+  
+  .notes-month section {
+    font-size: 28px;
+  }
+  
+  .ant-picker-cell-in-view:hover {
+    transform: scale(1.8);
+    z-index: 1000;
+  
+  }
+  
+  .Col-2-center {
+    box-shadow:
+      0px 5px 10px 0px rgba(0, 0, 0, 0.2);
+      width: 150px;
+      margin: 10px;
+      border-radius: 5px; 
+      align-items: center; 
+      display: flex; 
+      justify-content: space-between;
+      flex-direction: column; 
+      padding-top: 10px
+  }
+  
+  .leavediv {
+  
+    display: flex;
+    flex-Direction: row;
+    justify-content: space-between
+  }
+  
+  .card-container {
+  
+    display: flex;
+    width: 100%;
+  
+    row-gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .card-box {
+  
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 3% 3% 1% 3%;
+  }
+  
+  
+  @media only screen and (max-width: 800px) {
+    .leavediv {
+      flex-direction: column;
+  
+    }
+  
+    .Col-2-center {
+      flex-direction: row; 
+      padding-left: 10px;
+      padding-right: 10px;
+  
+    }
+  
+  
+  }
+  

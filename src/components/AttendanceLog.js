@@ -17,7 +17,7 @@ const tailLayout = {
     span: 16,
   },
 };
-function AttendanceLog({ empDetails }) {
+function AttendanceLog({  empDetails }) {
   const [monthlydata, setMonthlydata] = useState([]);
   const [allEmp, setallEmp] = useState([]);
   const [role, setRole] = useState(empDetails);

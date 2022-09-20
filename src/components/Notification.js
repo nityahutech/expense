@@ -20,24 +20,42 @@ let dummy=[{
 }]
 const Notification = ({data}) => {
 const { currentUser, role } = useAuth();
-const [dataSource, setDataSource] = useState(dummy)
+const [dataSource, setDataSource] = useState(data)
+useEffect(() => {
+ setDataSource(data)
+}, [data])
+
+
 console.log("data",data);
     const onApproveLeave = (record) => {
+       
+
         Modal.confirm({
             title: "Are you sure, you want to approve Leave record?",
             okText: "Yes",
             okType: "primary",
-            // onOk: () => {
-            //     LeaveContext.approveLeave(record.id)
-            //         .then(response => {
-            //             console.log(response);
-            //             getData();
-            //         })
-            //         .catch(error => {
-            //             console.log(error.message);
+         
 
-            //         })
-            // },
+
+            onOk: () => {
+                //log record
+                //set record: leaveStatus:"approve"
+                //record.leaveStatus="approved"
+                //get index of selected leave
+                //  dataSrc[0]=record
+                //hit firebase with status
+                //getDtata()
+
+                // LeaveContext.approveLeave(record.id)
+                //     .then(response => {
+                //         console.log(response);
+                //         getData();
+                //     })
+                //     .catch(error => {
+                //         console.log(error.message);
+
+                //     })
+            },
         });
     };
 
@@ -104,13 +122,15 @@ console.log("data",data);
             key: "5",
             title: "Actions",
             fixed: 'right',
-            width: 100,
+            width: 80,
             render: (record) => {
                 return (
                     <>
                         {
 
-                            <>
+                            <>{
+                                
+                            }
                                 <img
                                     style={{ color: "white", width: '20px', marginRight: 10 }}
                                     src="../logo/checkmark.png"
@@ -118,7 +138,10 @@ console.log("data",data);
                                     className="Dash"
                                     onClick={() => {
                                         onApproveLeave(record);
+
                                     }}
+                                    
+                                    
                                 />
                                 <img
                                     style={{ color: "white", width: '20px' }}
@@ -167,6 +190,7 @@ console.log("data",data);
                 <div>
                     <Table columns={columns}
                         dataSource={dataSource}
+                        // rowClassName={record => !record.enabled && "disabled-row"}
                         size="small" scroll={{
                             x: 1000,
                         }} />

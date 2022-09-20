@@ -20,6 +20,7 @@ import { useAuth } from '../contexts/AuthContext'
 import Notification from "./Notification";
 import "../style/leave.css";
 
+
 let leaveStyle = {
     Present: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "green" },
     Absent: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "red" },
@@ -102,23 +103,13 @@ const getMonthData = (value) => {
     }
 };
 
-
-let dummy=[{
-    date:"OKOKOqqqqqqqqqqq",
-    name:"OKOKO",
-    nature:"OKOKO",
-    slot:"OKOKO",
-    reason:"OKOKO",
-    approver:"jhbd"
-}]
 const Leave = () => {
     const [form] = Form.useForm();
     const [leaves, setLeaves] = useState([]);
-    const [data, setData] = useState(dummy)
-
     const [history, setHistory] = useState([]);
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
+    const [ishr, setIsHr] = useState(sessionStorage.getItem("ishr")||true )
     const { currentUser, role } = useAuth();
     let leaveDays = "";
     // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
@@ -157,6 +148,15 @@ const Leave = () => {
         // },
 
     ] || [])
+
+    // const [number1, setNumber1] = useState(0);
+    // const [number2, setNumber2] = useState(0);
+    // const [total, setTotal] = useState(number1 - number2);
+
+    // function calculateTotal() {
+    //     setTotal(number1 - number2);
+    // }
+
 
 
     const onFinish = values => {
@@ -207,16 +207,16 @@ const Leave = () => {
 
     const getData = async () => {
         let data = await LeaveContext.getAllById(currentUser.uid)
-        console.log("data",JSON.stringify(data.docs),currentUser.uid);
+        // console.log("data", JSON.stringify(data.docs), currentUser.uid);
 
         let d = data.docs.map((doc) => {
-            console.log("123",{...doc.data()})
+            console.log("123", { ...doc.data() })
             return {
                 ...doc.data(),
                 id: doc.id
             };
         });
-        console.log("data",d);
+        console.log("data", d);
         setLeaves(d);
         getDateFormatted(d)
         leaveDays = LeaveContext.getLeaveDays(d, currentUser.uid)
@@ -295,7 +295,7 @@ const Leave = () => {
             key: "5",
             title: "Actions",
             fixed: 'right',
-            width: 100,
+            width: 60,
             render: (record) => {
                 return (
                     <>
@@ -340,6 +340,7 @@ const Leave = () => {
 
     ];
     useEffect(() => {
+        console.log(role)
         getData();
     }, []);
 
@@ -466,10 +467,19 @@ const Leave = () => {
                             onChange={setDate}
                             dateCellRender={dateCellRender}
                             monthCellRender={monthCellRender}
-                        // disabledDate={disabledDate}
+                            // disabledDate={disabledDate}
+                            disabledDays={[{ daysOfWeek: [0, 6] }]}
+                            // disabledDates={disabledDates}
 
                         />
-                        <Notification data={history}/>
+                        {
+                            ishr
+                                ? <Notification data={history} />
+                                : null
+                        }
+
+
+
 
 
 
@@ -648,7 +658,7 @@ const Leave = () => {
                                 <Table columns={columns}
                                     dataSource={history}
                                     size="small" scroll={{
-                                        x: 1000, 
+                                        x: 1000,
                                     }} />
                             </div>
 

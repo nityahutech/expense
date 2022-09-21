@@ -26,6 +26,7 @@ function LoginPage() {
       let res = await login(loginEmail, loginPassword);
       console.log(res.user);
       sessionStorage.setItem("accessToken", res.user.accessToken);
+      sessionStorage.setItem("user", JSON.stringify(res.user));
       navigate("DashBoard", { replace: true });
     } catch {
       setError("Failed to log in");

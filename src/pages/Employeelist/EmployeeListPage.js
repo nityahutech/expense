@@ -3,11 +3,9 @@ import AttendanceLog from "../../components/AttendanceLog";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 import { useAuth } from "../../contexts/AuthContext";
-import addemployee from "../../components/addemployee";
+import EmployeeList from "../../components/EmployeeList";
 
-
-
-function DashBoard() {
+function EmployeeListPage() {
   const [accessToken, setAccessToken] = useState(null);
   const { currentUser, role } = useAuth();
   // const role = getRole();
@@ -32,7 +30,7 @@ function DashBoard() {
       <div className="sidecontainer">
         <Sidebar
           activeSubMenu={["sub2"]}
-          activeMenu={["8"]}
+          activeMenu={["9"]}
           accessToken={accessToken}
         />
       </div>
@@ -43,11 +41,11 @@ function DashBoard() {
         </div>
 
         <div className="tables">
-          <addemployee />
+          <EmployeeList />
         </div>
       </div>
     </div>
   ) : null;
 }
 
-export default DashBoard;
+export default EmployeeListPage;

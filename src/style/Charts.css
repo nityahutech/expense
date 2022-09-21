@@ -118,10 +118,10 @@ body {
     padding: 0px;
 }
 .ant-card.card1{
-    width: 46%;
+    width: 44%;
 }
 .ant-card.card2{
-    width: 46%;
+    width: 44%;
 }
 
 @media only screen and (min-width: 1200px) and (max-width: 2400px) {

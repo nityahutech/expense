@@ -69,7 +69,7 @@ const Navbar = () => {
     autoStart: true,
     value:{minutes:4}
   });
-  const [clockIn, setClocikIn] = useState(true);
+  // const [clockIn, setClockIn] = useState(false);
   const [mouseState, setMouseState] = useState(false);
 
   const setClockState = () => {
@@ -194,6 +194,126 @@ const Navbar = () => {
       </button>
     );
   }
+  // ----------------------------------------full code for web-clock in
+  // const { seconds, minutes, hours, days, start, pause, reset } = useStopwatch({
+  //   autoStart: false,
+  // });
+  // const [clockIn, setClocikIn] = useState(true);
+  // const [mouseState, setMouseState] = useState(false);
+
+  // const setClockState = () => {
+  //   setClocikIn(false);
+  //   let clickedDate = new Date();
+  //   localStorage.setItem(
+  //     "clicked-tiime",
+  //     clickedDate.toString().substring(16, 25)
+  //   );
+  //   console.log(localStorage.getItem);
+  // };
+  // const setClockOutState = () => {
+  //   setClocikIn(true);
+  //   setMouseState(false);
+  // };
+  // const onMouseEnter = (event) => {
+  //   //event.target.style.background = "red";
+  //   setMouseState(true);
+  // };
+  // const onMouseLeave = (event) => {
+  //   //event.target.style.background = "blue";
+  //   setMouseState(false);
+  // };
+  // console.log(mouseState);
+  // const pushContent = [];
+  // if (mouseState == true) {
+  //   pushContent.push(
+  //     <div
+  //       style={{ display: "inline-block" }}
+  //       onMouseLeave={onMouseLeave}
+  //       onMouseEnter={onMouseEnter}
+  //       onClick={start}
+  //       onClick={reset}
+  //     >
+  //       <button
+  //         style={{
+  //           padding: "1px",
+  //           background: "aqua",
+  //           color: "white",
+  //           display: "inline-block",
+  //           width: "200px",
+  //         }}
+  //         onClick={setClockOutState}
+  //       >
+  //         WEB CLOCK OUT
+  //       </button>
+  //     </div>
+  //   );
+  // } else if (clockIn) {
+    // pushContent.push(
+    //   <button
+    //     style={{
+    //       padding: "1px",
+    //       background: "#05445e",
+    //       color: "white",
+    //       display: "inline-block",
+    //       width: "200px",
+    //       borderRadius: "2px",
+    //     }}
+    //     onClick={setClockState}
+    //   >
+    //     Web Clock In
+    //   </button>
+    // );
+  // } else if (clockIn == false) {
+  //   pushContent.push(
+  //     <div
+  //       style={{
+  //         padding: "1px",
+  //         background: "#70BDF0",
+  //         display: "inline-block",
+  //         width: "200px",
+  //         //   height: "100px",
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         borderRadius: "2px",
+  //       }}
+  //       onMouseLeave={onMouseLeave}
+  //       onMouseEnter={onMouseEnter}
+  //       onClick={pause}
+  //     >
+  //       <div>
+  //         <div>
+  //           <span>Clocked In</span>
+  //           <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:
+  //           <span>{seconds}</span>
+  //           <span></span>
+  //         </div>
+  //         {/* <h4>Clocked in</h4>
+  //         <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>: */}
+  //         {/* <span>{seconds}</span>{" "} */}
+  //       </div>
+  //     </div>
+  //   );
+  // } else {
+  //   pushContent.push(
+  //     <button
+  //       style={{
+  //         color: "white",
+  //         backgroundColor: "DodgerBlue",
+  //         padding: "1px",
+  //         fontFamily: "Arial",
+  //         borderRadius: "2px",
+  //       }}
+  //       onClick={setClockState}
+  //     >
+  //       Web Clock Out
+  //     </button>
+  //   );
+  // }
+
+  
+  useEffect(() => {
+    console.log();
+  }, []);
 
   return (
     <div className="navbar" style={{ background: "white" }}>
@@ -216,7 +336,12 @@ const Navbar = () => {
           className="stopwatch"
         >
           {/* {`${ctime.hrs}:${ctime.min}:${ctime.sec}`} */}
-          {pushContent}
+          <button
+            style={buttonStyle}
+          onClick={handleClock}
+      >
+        {buttonText}
+      </button>
         </div>
 
         <div className="image">

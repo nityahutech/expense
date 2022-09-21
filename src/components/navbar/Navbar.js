@@ -11,6 +11,8 @@ import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import { useStopwatch } from "react-timer-hook";
+import AttendanceContext from "../../contexts/AttendanceContext";
+import moment from "moment";
 
 const start = new Date().getTime();
 
@@ -70,7 +72,7 @@ const Navbar = () => {
   });
   // const [clockIn, setClockIn] = useState(false);
   const [mouseState, setMouseState] = useState(false);
-
+  const clockTime =  isRunning ? `${hours}:${minutes}:${seconds}`: "";
   const buttonStyle = !isRunning ? {
           padding: "1px",
           background: "red",
@@ -86,14 +88,14 @@ const Navbar = () => {
           width: "200px",
         };
 
-
- const [buttonText, setButtonText] = useState(!isRunning ? "Web Clock In" : `${hours}:${minutes}:${seconds}`);
+ const [buttonText, setButtonText] = useState(!isRunning ? "Web Clock In" : "");
 
   
   const onMouseEnter = (event) => {
     if(isRunning){
       event.target.style.background = "orange";
       setButtonText("Web Clock Out");
+      clockTime = "";
     }
     else {
       event.target.style.background = "aqua";
@@ -103,38 +105,49 @@ const Navbar = () => {
   const onMouseLeave = (event) => {
     if(isRunning){
       event.target.style.background = "#05445e";
-      setButtonText(`${hours}:${minutes}:${seconds}`);
+      setButtonText("");
     }
     else {
+      setButtonText("Web Clock In");
       event.target.style.background = "red";
     }
   };
 
   const setClockState = () => {
       // setClockIn(true);
-      let clickedDate = new Date();
+      let clickedDate = {
+        empId: currentUser.uid,
+        date: moment().format("DD-MM-YYYY"),
+        clockIn: moment().format("hh:mm:ss"),
+        clockOut: null
+      } 
+      console.log(clickedDate)
       start();
-      console.log(clickedDate.toString().substring(16, 25));
+      AttendanceContext.addClockData(clickedDate)
   };
 
-  const stopClockState = () => {
+  const stopClockState = async () => {
     // setClockIn(false);
-    let clickedDate = new Date();
     pause();
+    let clickedDate = {
+      clockOut: moment().format("hh:mm:ss"),
+      duration: clockTime
+    }
+    // AttendanceContext.updateClockData(clickedDate, currentUser.uid)
+    let rec = await AttendanceContext.updateClockData(currentUser.uid, clickedDate);
+    // console.log(rec.data())
     console.log(isRunning);
     console.log(clickedDate.toString().substring(16, 25));
-    console.log(`${hours}:${minutes}:${seconds}`);
+    console.log("");
     reset("0:0:0:0", false);
   };
 
   const handleClock = () => {
     if (isRunning) {
       stopClockState();
-      console.log(isRunning);
     }
     else {
       setClockState();
-      console.log(isRunning);
     }
   }
   // ----------------------------------------full code for web-clock in
@@ -286,6 +299,7 @@ const Navbar = () => {
         onMouseEnter={onMouseEnter}
       >
         {buttonText}
+        <div>{clockTime}</div>
       </button>
         </div>
 

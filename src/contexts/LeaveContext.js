@@ -41,10 +41,10 @@ class LeaveContext {
     getLeaveDays = async (records, id) => {
         let rec = await ProfileContext.getProfile(id);
         this.leaveDays = {
-            "Earn Leave": rec.data()["Earn Leave"],
-            "Sick Leave": rec.data()["Sick Leave"],
-            "Casual Leave": rec.data()["Casual Leave"],
-            "Optional Leave": rec.data()["Optional Leave"]
+            "Earn Leave": "12",
+            "Sick Leave": "12",
+            "Casual Leave": "12",
+            "Optional Leave": "2"
         }
         console.log(this.leaveDays)
         records.forEach((rec) => {

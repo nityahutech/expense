@@ -20,6 +20,7 @@ import { useAuth } from '../contexts/AuthContext'
 import Notification from "./Notification";
 import "../style/leave.css";
 
+
 let leaveStyle = {
     Present: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "green" },
     Absent: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "red" },
@@ -102,23 +103,14 @@ const getMonthData = (value) => {
     }
 };
 
-
-let dummy=[{
-    date:"OKOKOqqqqqqqqqqq",
-    name:"OKOKO",
-    nature:"OKOKO",
-    slot:"OKOKO",
-    reason:"OKOKO",
-    approver:"jhbd"
-}]
+const userrole = ''
 const Leave = () => {
     const [form] = Form.useForm();
     const [leaves, setLeaves] = useState([]);
-    const [data, setData] = useState(dummy)
-
     const [history, setHistory] = useState([]);
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
+    const [ishr, setIsHr] = useState(sessionStorage.getItem("ishr") || true)
     const { currentUser, role } = useAuth();
     let leaveDays = "";
     // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
@@ -127,6 +119,7 @@ const Leave = () => {
             id: 1,
             leavetype: "Earn Leave",
             leave: 0,
+
 
 
         },
@@ -157,6 +150,17 @@ const Leave = () => {
         // },
 
     ] || [])
+
+    const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+    // const [number1, setNumber1] = useState(0);
+    // const [number2, setNumber2] = useState(0);
+    // const [total, setTotal] = useState(number1 - number2);
+
+    // function calculateTotal() {
+    //     setTotal(number1 - number2);
+    // }
+
 
 
     const onFinish = values => {
@@ -207,16 +211,16 @@ const Leave = () => {
 
     const getData = async () => {
         let data = await LeaveContext.getAllById(currentUser.uid)
-        console.log("data",JSON.stringify(data.docs),currentUser.uid);
+        // console.log("data", JSON.stringify(data.docs), currentUser.uid);
 
         let d = data.docs.map((doc) => {
-            console.log("123",{...doc.data()})
+            console.log("123", { ...doc.data() })
             return {
                 ...doc.data(),
                 id: doc.id
             };
         });
-        console.log("data",d);
+        console.log("data", d);
         setLeaves(d);
         getDateFormatted(d)
         leaveDays = LeaveContext.getLeaveDays(d, currentUser.uid)
@@ -288,6 +292,12 @@ const Leave = () => {
             dataIndex: 'approver',
             width: 150,
         },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            width: 100,
+        },
+
 
 
 
@@ -295,7 +305,7 @@ const Leave = () => {
             key: "5",
             title: "Actions",
             fixed: 'right',
-            width: 100,
+            width: 80,
             render: (record) => {
                 return (
                     <>
@@ -340,8 +350,8 @@ const Leave = () => {
 
     ];
     useEffect(() => {
+        console.log(currentUser,role)
         getData();
-       // LeaveContext.getInitalLeaveById(currentUser.uid)
     }, []);
 
     const getDateFormatted = ((data) => {
@@ -409,40 +419,30 @@ const Leave = () => {
 
                 }}
                 gutter={[16, 16]}>
-
-                <Col id="responsive-input1" span={24} style={{
-                    display: 'flex', flexDirection: 'column', justifyContent: 'center', backgroundColor: 'white',
-                    borderRadius: '10px', alignItems: 'center'
-
-                }} >
-
-                    <div className='Col-1-center' style={{
-                        display: 'flex', flexDirection: 'row', justifyContent: 'space-between', color: 'black', height: '40px', alignItems: 'center', backgroundColor: 'white',
-
-                    }}><h3>Leave Available</h3>
-                        {/* <Button>Add Leave</Button> */}
-                    </div>
+                <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className='leavediv'
 
                     >
-                        {users.map((user) => {
+                        {users.map((user, id) => {
                             return (
-                                <div className='Col-2-center'
+                                <div className='Col-2-center' style={{ background: colors[id], color: "#fff" }}
 
                                 >
-
                                     <p className='heading' style={{
-                                        color: '#05445E', fontWeight: '500'
+                                        fontWeight: '500',
                                     }}>{user.leavetype}</p>
+                                    {/* {JSON.stringify(colors[id])} */}
                                     <p className='leave' style={{
-                                        color: '#05445E', fontWeight: '500'
+                                        fontWeight: '500',
                                     }}>{user.leave}</p>
 
                                 </div>
                             );
                         })}
                     </div>
+
                 </Col>
+                {/* </Col> */}
 
                 <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12} >
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -467,10 +467,19 @@ const Leave = () => {
                             onChange={setDate}
                             dateCellRender={dateCellRender}
                             monthCellRender={monthCellRender}
-                        // disabledDate={disabledDate}
+                            // disabledDate={disabledDate}
+                            disabledDays={[{ daysOfWeek: [0, 6] }]}
+                        // disabledDates={disabledDates}
 
                         />
-                        <Notification data={history}/>
+                        {
+                            ishr
+                                ? <Notification data={history} />
+                                : null
+                        }
+
+
+
 
 
 
@@ -649,7 +658,7 @@ const Leave = () => {
                                 <Table columns={columns}
                                     dataSource={history}
                                     size="small" scroll={{
-                                        x: 1000, 
+                                        x: 1000,
                                     }} />
                             </div>
 

@@ -8,7 +8,8 @@ import {
     Table,
     Calendar,
     Modal,
-    Divider
+    Divider,
+    Tag
 } from 'antd';
 import { Button } from 'antd';
 import { Form, Input, } from 'antd';
@@ -103,61 +104,63 @@ const getMonthData = (value) => {
     }
 };
 
+const userrole = ''
 const Leave = () => {
     const [form] = Form.useForm();
     const [leaves, setLeaves] = useState([]);
     const [history, setHistory] = useState([]);
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
-    const [ishr, setIsHr] = useState(sessionStorage.getItem("ishr")||true )
+    const [noOfDays, setNoOfDays] = useState([]);
+    const [ishr, setIsHr] = useState(sessionStorage.getItem(null) || true)
     const { currentUser, role } = useAuth();
+    // const [userRecord, setUserRecord] = useState({
+    //     empId: currentUser.uid,
+    //     approver: currentUser.approver,
+    //     date: duration,
+    //     name: currentUser.displayName,
+    //     nature:currentUser.leaveNature,
+    //     slot: currentUser.slot ,
+    //     reason: currentUser.reason,
+    //   });
+    
     let leaveDays = "";
     // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
     const [users, setUsers] = useState([
         {
             id: 1,
-            leavetype: "Earn Leave",
+            leavetype: "Earn Leaves",
             leave: 0,
+
 
 
         },
         {
             id: 2,
-            leavetype: "Sick Leave",
+            leavetype: "Sick Leaves",
             leave: 7,
 
         },
         {
             id: 3,
-            leavetype: "Casual Leave",
+            leavetype: "Casual Leaves",
             leave: 7,
 
         },
         {
             id: 4,
-            leavetype: "Optional Leave",
+            leavetype: "Optional Leaves",
             leave: 2,
 
 
         },
-        // {
-        //     id: 5,
-        //     leavetype: "Compensatory Off",
-        //     leave: 2,
-
-        // },
+    
 
     ] || [])
 
-    // const [number1, setNumber1] = useState(0);
-    // const [number2, setNumber2] = useState(0);
-    // const [total, setTotal] = useState(number1 - number2);
+    const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
-    // function calculateTotal() {
-    //     setTotal(number1 - number2);
-    // }
-
-
+  
 
     const onFinish = values => {
         console.log("Success:", values);
@@ -175,15 +178,30 @@ const Leave = () => {
 
         LeaveContext.createLeave(newLeave)
             .then(response => {
-                // console.log(response.success);
-                // if(response.success){
-                //     getData();
-                // }else{
-                //     // err
-                // }
+
                 console.log(response);
                 getData();
-                // getDateFormatted([newLeave, ...leaves])
+
+                setLeaves([newLeave, ...leaves]);
+                let tempUser = [...users]
+                let newLeaves = tempUser.map(leave => {
+                    if (leave.leavetype?.toLowerCase() === values?.leaveNature.toLowerCase()) {
+
+                        if (noOfDays === 1 && values.slot != null) {
+                            leave.leave -= 0.5;
+                        }
+                        else {
+                            leave.leave -= noOfDays;
+                        }
+
+                        // console.log('noOfDays:',noOfDays);
+
+                    }
+                    return leave
+                })
+
+                setUsers(newLeaves)
+                form.resetFields()
 
             })
             .catch(error => {
@@ -191,17 +209,7 @@ const Leave = () => {
 
             })
 
-        setLeaves([newLeave, ...leaves]);
-        let tempUser = [...users]
-        let newLeaves = tempUser.map(leave => {
-            if (leave.leavetype?.toLowerCase() === values?.leaveNature.toLowerCase()) {
-                leave.leave -= 1;
-            }
-            return leave
-        })
 
-        setUsers(newLeaves)
-        form.resetFields()
     };
 
 
@@ -213,7 +221,8 @@ const Leave = () => {
             console.log("123", { ...doc.data() })
             return {
                 ...doc.data(),
-                id: doc.id
+                id: doc.id,
+                status: doc?.data()?.status || "Pending",
             };
         });
         console.log("data", d);
@@ -226,11 +235,9 @@ const Leave = () => {
 
     }
 
-
-
     const onDeleteLeave = (record) => {
         Modal.confirm({
-            title: "Are you sure, you want to delete Leave record?",
+            title: "Are you sure, you want to delete  Leave record?",
             okText: "Yes",
             okType: "danger",
             onOk: () => {
@@ -246,7 +253,6 @@ const Leave = () => {
             },
         });
     };
-
 
 
     const onReset = () => {
@@ -289,39 +295,35 @@ const Leave = () => {
             width: 150,
         },
 
-
-
+        {
+            title: "Status",
+            className: "row5",
+            key: "status",
+            dataIndex: "status",
+            // responsive: ["md"],
+            sorter: (a, b) => a.status - b.status,
+            render: (_, { status }) =>
+                status !== "" && (
+                    <Tag
+                        className="statusTag"
+                        color={status === "Approved" ? "green" : "volcano"}
+                        key={status}
+                    >
+                        {status}
+                    </Tag>
+                ),
+        },
+       
         {
             key: "5",
             title: "Actions",
             fixed: 'right',
-            width: 60,
+            width: 80,
             render: (record) => {
                 return (
                     <>
-                        {
-                            // role == "hr"
+                        {                        
                             <>
-                                {/* <img
-                                        style={{ color: "white", width: '20px', marginRight: 10 }}
-                                        src="../logo/checkmark.png"
-                                        alt="profile"
-                                        className="Dash"
-                                        onClick={() => {
-                                            onApproveLeave(record);
-                                        }}
-                                    />
-                                    <img
-                                        style={{ color: "white", width: '20px' }}
-                                        src="../logo/rejected.png"
-                                        alt="profile"
-                                        className="Dash"
-                                        onClick={() => {
-                                            onRejectedLeave(record);
-                                        }}
-
-                                    /> */}
-
                                 <DeleteOutlined
                                     onClick={() => {
                                         onDeleteLeave(record);
@@ -340,7 +342,8 @@ const Leave = () => {
 
     ];
     useEffect(() => {
-        console.log(role)
+        console.log(currentUser, role)
+        setIsHr(role === "hr")
         getData();
     }, []);
 
@@ -354,11 +357,19 @@ const Leave = () => {
 
     const { RangePicker } = DatePicker;
 
-    const onChange = (dates, dateStrings) => {
+    const onLeaveDateChange = (dates, dateStrings) => {
         if (dates) {
-            console.log("From: ", dates[0], ", to: ", dates[1]);
-            console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
-            setDuration(dateStrings)
+            let fromDate = dates[0];
+            let toDate = dates[1];
+            let noOfDays = toDate.diff(fromDate, 'days') + 1;
+
+
+            // console.log("From: ", dates[0], ", to: ", dates[1]);
+            console.log("dateStrings: ", dateStrings);
+            // console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
+            setDuration(dateStrings);
+            setNoOfDays(noOfDays)
+
         } else {
             console.log("Clear");
         }
@@ -409,40 +420,30 @@ const Leave = () => {
 
                 }}
                 gutter={[16, 16]}>
-
-                <Col id="responsive-input1" span={24} style={{
-                    display: 'flex', flexDirection: 'column', justifyContent: 'center', backgroundColor: 'white',
-                    borderRadius: '10px', alignItems: 'center'
-
-                }} >
-
-                    <div className='Col-1-center' style={{
-                        display: 'flex', flexDirection: 'row', justifyContent: 'space-between', color: 'black', height: '40px', alignItems: 'center', backgroundColor: 'white',
-
-                    }}><h3>Leave Available</h3>
-                        {/* <Button>Add Leave</Button> */}
-                    </div>
+                <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className='leavediv'
 
                     >
-                        {users.map((user) => {
+                        {users.map((user, id) => {
                             return (
-                                <div className='Col-2-center'
+                                <div className='Col-2-center' style={{ background: colors[id], color: "#fff" }}
 
                                 >
-
                                     <p className='heading' style={{
-                                        color: '#05445E', fontWeight: '500'
+                                        fontWeight: '500',
                                     }}>{user.leavetype}</p>
+                                    {/* {JSON.stringify(colors[id])} */}
                                     <p className='leave' style={{
-                                        color: '#05445E', fontWeight: '500'
+                                        fontWeight: '500',
                                     }}>{user.leave}</p>
 
                                 </div>
                             );
                         })}
                     </div>
+
                 </Col>
+                {/* </Col> */}
 
                 <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12} >
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -469,7 +470,7 @@ const Leave = () => {
                             monthCellRender={monthCellRender}
                             // disabledDate={disabledDate}
                             disabledDays={[{ daysOfWeek: [0, 6] }]}
-                            // disabledDates={disabledDates}
+                        // disabledDates={disabledDates}
 
                         />
                         {
@@ -546,7 +547,7 @@ const Leave = () => {
                                         }}
                                         showTime
                                         format="Do MMM, YYYY"
-                                        onChange={onChange}
+                                        onChange={onLeaveDateChange}
                                     />
                                 </Space>
                             </Form.Item>
@@ -586,7 +587,7 @@ const Leave = () => {
                                 <Radio.Group  >
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Evening" >Evening</Radio>
-                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
+                                    {/* <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio> */}
 
                                 </Radio.Group>
 

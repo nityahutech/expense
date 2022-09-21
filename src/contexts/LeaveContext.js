@@ -8,6 +8,7 @@ import {
     where,
     addDoc,
     deleteDoc,
+    updateDoc,
     doc,
 } from "firebase/firestore";
 import moment from "moment";
@@ -37,6 +38,24 @@ class LeaveContext {
         // console.log(q);
         return getDocs(q);
     };
+
+    getAllByApprover = (name) => {
+        const q = query(leaveCollectionRef,where("approver","==",name));
+        // console.log(q);
+        return getDocs(q);
+    };
+
+    
+    approveLeave=(id)=>{
+        const leaveDoc = doc(db, "leave", id);
+        return updateDoc(leaveDoc,{status:"Approved"})
+
+
+   }
+   rejectLeave=(id)=>{
+       const leaveDoc = doc(db, "leave", id);
+       return updateDoc(leaveDoc,{status:"Rejected"})
+  }
 
     getLeaveDays = async (records, id) => {
         let rec = await ProfileContext.getProfile(id);

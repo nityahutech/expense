@@ -7,7 +7,8 @@ import ProfileContext from "../../contexts/ProfileContext";
 
 function Attendance() {
   const [accessToken, setAccessToken] = useState(null);
-  const { currentUser, role } = useAuth();
+  const [role, setRole] = useState(null);
+  const { currentUser } = useAuth();
   // const role = getRole();
 
   // async function getRole() {
@@ -16,9 +17,10 @@ function Attendance() {
   // }
 
   useEffect(() => {
-    console.log(role);
+    let role = sessionStorage.getItem("role");
+    setRole(role)
     let token = sessionStorage.getItem("accessToken");
-    console.log({ token });
+    console.log({ token }, { role });
     if (token === "null") {
       window.location.href = "/";
     } else {

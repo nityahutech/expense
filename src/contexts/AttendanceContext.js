@@ -1,5 +1,5 @@
 import { db } from "../firebase-config";
-
+import moment from "moment";
 import {
     collection,
     getDocs,
@@ -10,11 +10,34 @@ import {
     updateDoc,
     deleteDoc,
     doc,
+    where,
+    limit, 
+    Timestamp
 } from "firebase/firestore";
 
 const attendCollectionRef = collection(db, "attendance");
 
-class ExpenseContext {
+class AttendanceContext {
+
+    addClockData = (record) => {
+        return addDoc(attendCollectionRef, record);
+    };
+
+    updateClockData = async (id, record) => {
+
+        const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("empId", "==", id), where("clockOut","==",null),limit(1))
+        let rec = await getDocs(q);
+        let d = rec.docs.map((doc) => {
+            return {
+                ...doc.data(),
+                id: doc.id
+            };
+        });
+        console.log(d[0])
+        const attendDoc = doc(db, "attendance", d[0].id);
+        updateDoc(attendDoc, record)
+        return 
+    };
 
     addAttendance = (record) => {
         return addDoc(attendCollectionRef, record);
@@ -44,9 +67,10 @@ class ExpenseContext {
     };
 
     getAttendance = (id) => { 
+        const q = query(attendCollectionRef, where("empId", "==", id),limit(1))
         const attendDoc = doc(db, "attendance", id);
-        return getDoc(attendDoc);
+        return getDoc(q);
     };
 }
 
-export default new ExpenseContext();
+export default new AttendanceContext();

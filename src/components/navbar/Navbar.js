@@ -11,6 +11,8 @@ import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import { useStopwatch } from "react-timer-hook";
+import AttendanceContext from "../../contexts/AttendanceContext";
+import moment from "moment";
 
 const start = new Date().getTime();
 
@@ -64,136 +66,96 @@ const Navbar = () => {
       ]}
     />
   );
-  // ----------------------------------------full code for web-clock in
-  const { seconds, minutes, hours, days, start, pause, reset } = useStopwatch({
-    autoStart: true,
-    value:{minutes:4}
+  
+  const { seconds, minutes, hours, isRunning, start, pause, reset } = useStopwatch({
+    autoStart: false,
   });
-  const [clockIn, setClocikIn] = useState(true);
+  // const [clockIn, setClockIn] = useState(false);
   const [mouseState, setMouseState] = useState(false);
+  const clockTime =  isRunning ? `${hours}:${minutes}:${seconds}`: "";
+  const buttonStyle = !isRunning ? {
+          padding: "1px",
+          background: "red",
+          color: "white",
+          display: "inline-block",
+          width: "200px",
+          borderRadius: "5px",
+          border:"1px solid white",
+        } : {
+          padding: "1px",
+          color: "white",
+          display: "inline-block",
+          width: "200px",
+          borderRadius: "5px",
+          border:"1px solid white",
+        };
+
+ const [buttonText, setButtonText] = useState(!isRunning ? "Web Clock In" : "");
+
+  
+  const onMouseEnter = (event) => {
+    if(isRunning){
+      event.target.style.background = "#CC3E25";
+      setButtonText("Web Clock Out");
+      clockTime = "";
+    }
+    else {
+      event.target.style.background = "#70BDF0";
+    }
+  };
+
+  const onMouseLeave = (event) => {
+    if(isRunning){
+      event.target.style.background = "#171832";
+      setButtonText("");
+    }
+    else {
+      setButtonText("Web Clock In");
+      event.target.style.background = "#33F2A3";
+    }
+  };
 
   const setClockState = () => {
-    setClocikIn(false);
-    let clickedDate = new Date();
-    // localStorage.setItem(
-    //   "clicked-tiime",
-    //   clickedDate.toString().substring(16, 25)
-    // );
-    localStorage.setItem(
-      "clicked-time",
-      JSON.stringify({date:new Date().getTime(), login_time:clickedDate.toString().substring(16, 25), logout_time:null})
-    );
-    console.log(localStorage.getItem);
+      // setClockIn(true);
+      let clickedDate = {
+        empId: currentUser.uid,
+        date: moment().format("DD-MM-YYYY"),
+        clockIn: moment().format("hh:mm:ss"),
+        clockOut: null
+      } 
+      console.log(clickedDate)
+      start();
+      AttendanceContext.addClockData(clickedDate)
   };
-  const setClockOutState = () => {
-    setClocikIn(true);
-    setMouseState(false);
+
+  const stopClockState = async () => {
+    // setClockIn(false);
+    pause();
+    let clickedDate = {
+      clockOut: moment().format("hh:mm:ss"),
+      duration: clockTime
+    }
+    // AttendanceContext.updateClockData(clickedDate, currentUser.uid)
+    let rec = await AttendanceContext.updateClockData(currentUser.uid, clickedDate);
+    // console.log(rec.data())
+    console.log(isRunning);
+    console.log(clickedDate.toString().substring(16, 25));
+    console.log("");
+    reset("0:0:0:0", false);
   };
-  const onMouseEnter = (event) => {
-    //event.target.style.background = "red";
-    setMouseState(true);
-  };
-  const onMouseLeave = (event) => {
-    //event.target.style.background = "blue";
-    setMouseState(false);
-  };
-  console.log(mouseState);
-  const pushContent = [];
-  if (mouseState == true) {
-    pushContent.push(
-      <div
-        style={{ display: "inline-block" }}
-        onMouseLeave={onMouseLeave}
-        onMouseEnter={onMouseEnter}
-        onClick={start}
-        onClick={reset}
-      >
-        <button
-          style={{
-            padding: "1px",
-            background: "#cc3e25",
-            color: "white",
-            display: "inline-block",
-            width: "200px",
-            cursor:"pionter",
-            border:"1px solid #cc3e25",
-            borderRadius:"5px"
-          }}
-          onClick={setClockOutState}
-        >
-          WEB CLOCK OUT
-        </button>
-      </div>
-    );
-  } else if (clockIn) {
-    pushContent.push(
-      <button
-        style={{
-          padding: "1px",
-          background: "#33f2a3",
-          color: "white",
-          display: "inline-block",
-          width: "200px",
-          borderRadius: "5px",
-          cursor:"pointer",
-          border:"1px solid #33f2a3"
-        }}
-        onClick={setClockState}
-      >
-        Web Clock In
-      </button>
-    );
-  } else if (clockIn == false) {
-    pushContent.push(
-      <div
-        style={{
-          padding: "1px",
-          background: "#70BDF0",
-          display: "inline-block",
-          width: "200px",
-          //   height: "100px",
-          display: "flex",
-          justifyContent: "center",
-          borderRadius: "5px",
-          cursor:"pointer",
-          border:"1px solid #70BDF0",
-        }}
-        onMouseLeave={onMouseLeave}
-        onMouseEnter={onMouseEnter}
-        onClick={pause}
-      >
-        <div>
-          <div>
-            <span>Clocked In </span>
-            <span></span>
-            <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:
-            <span>{seconds}</span>
-            <span></span>
-          </div>
-          {/* <h4>Clocked in</h4>
-          <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>: */}
-          {/* <span>{seconds}</span>{" "} */}
-        </div>
-      </div>
-    );
-  } else {
-    pushContent.push(
-      <button
-        style={{
-          color: "white",
-          backgroundColor: "DodgerBlue",
-          padding: "1px",
-          fontFamily: "Arial",
-          borderRadius: "5px",
-          cursor:"pointer",
-          border:"1px solid white"
-        }}
-        onClick={setClockState}
-      >
-        Web Clock Out
-      </button>
-    );
+
+  const handleClock = () => {
+    if (isRunning) {
+      stopClockState();
+    }
+    else {
+      setClockState();
+    }
   }
+  
+  useEffect(() => {
+    console.log();
+  }, []);
 
   return (
     <div className="navbar" style={{ background: "white" }}>
@@ -208,7 +170,7 @@ const Navbar = () => {
             // padding: "5px",
             borderRadius: "5px",
             border: "1px solid white",
-            backgroundColor: "#33e9f2",
+            // backgroundColor: "#33e9f2",
             color: "white",
             fontWeight: "400",
             width: "auto",
@@ -216,7 +178,15 @@ const Navbar = () => {
           className="stopwatch"
         >
           {/* {`${ctime.hrs}:${ctime.min}:${ctime.sec}`} */}
-          {pushContent}
+          <button
+            style={buttonStyle}
+          onClick={handleClock}
+        onMouseLeave={onMouseLeave}
+        onMouseEnter={onMouseEnter}
+      >
+        {buttonText}
+        <div>{clockTime}</div>
+      </button>
         </div>
 
         <div className="image">

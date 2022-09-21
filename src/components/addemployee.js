@@ -16,7 +16,7 @@ function addemployee() {
   
   return (
     <>
-      <div>
+      <div className='expForm' style={{ margin: "15px", background: 'white' }}>
         <Form
           //   form={form}
           labelcol={{
@@ -230,7 +230,7 @@ function addemployee() {
               style={{ background: "", height: "80px" }}
             >
               <Divider orientation="left" orientationMargin={0}>
-                DOB<span style={{ color: "red" }}> *</span>
+                Date Of Joining<span style={{ color: "red" }}> *</span>
               </Divider>
               <Form.Item
                 name="paymentDate"
@@ -313,22 +313,65 @@ function addemployee() {
                 ]}
               >
                 <Select
-                  showSearch
+                  // showSearch
                   placeholder="Select a Gender"
-                  optionFilterProp="children"
+                  // optionFilterProp="children"
                 //   onChange={onChange}
                 //   onSearch={onSearch}
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().includes(input.toLowerCase())
-                  }
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
                 >
                   <Option value="male">Male</Option>
                   <Option value="female">Female</Option>
-                  <Option value="pns">Prefer Not To Say</Option>
+                  {/* <Option value="pns">Prefer Not To Say</Option> */}
                 </Select>
               </Form.Item>
             </Col>
           </Row>
+
+          <Col
+              xs={{ span: 24 }}
+              sm={{ span: 12 }}
+              className="Col-1-left"
+              style={{ background: "", height: "80px" }}
+            >
+              <Divider orientation="left" orientationMargin={0}>
+                Designation<span style={{ color: "red" }}> *</span>
+              </Divider>
+              <Form.Item
+                name="paymentDate"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Choose Gender",
+                  },
+                ]}
+              >
+                <Select
+                  // showSearch
+                  placeholder="Select a Gender"
+                  // optionFilterProp="children"
+                //   onChange={onChange}
+                //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                  <Option value="intrn">Internship</Option>
+                  <Option value="st">Software Trainee</Option>
+                  <Option value="asd">Asst. Software Developer</Option>
+                  <Option value="ssd">Sr. Software Developer</Option>
+                  <Option value="jsd">Jr. Software Developer</Option>
+                  <Option value="ba">Business Analyst(BA)</Option>
+                  <Option value="qa">Quality Analyst(QA)</Option>
+                  <Option value="hr">Human Resource(HR)</Option>
+                  <Option value="mgr">Manager</Option>
+                  <Option value="dr">Director</Option>
+                  <Option value="ceo">Cheap Executive Officer(CEO)</Option>
+                </Select>
+              </Form.Item>
+            </Col>
 
           <Row gutter={[24, 16]}>
             <Col classsname='gutter-row' span={9}></Col>

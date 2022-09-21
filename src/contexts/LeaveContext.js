@@ -1,4 +1,5 @@
 import { db } from "../firebase-config";
+import ProfileContext from "./ProfileContext";
 
 import {
     collection,
@@ -7,6 +8,7 @@ import {
     where,
     addDoc,
     deleteDoc,
+    updateDoc,
     doc,
 } from "firebase/firestore";
 import moment from "moment";
@@ -37,16 +39,34 @@ class LeaveContext {
         return getDocs(q);
     };
 
-    getLeaveDays = (records) => {
-        console.log(records);
+    getAllByApprover = (name) => {
+        const q = query(leaveCollectionRef,where("approver","==",name));
+        // console.log(q);
+        return getDocs(q);
+    };
+
+    
+    approveLeave=(id)=>{
+        const leaveDoc = doc(db, "leave", id);
+        return updateDoc(leaveDoc,{status:"Approved"})
+
+
+   }
+   rejectLeave=(id)=>{
+       const leaveDoc = doc(db, "leave", id);
+       return updateDoc(leaveDoc,{status:"Rejected"})
+  }
+
+    getLeaveDays = async (records, id) => {
+        let rec = await ProfileContext.getProfile(id);
         this.leaveDays = {
             "Earn Leave": "12",
             "Sick Leave": "12",
             "Casual Leave": "12",
-            "official Leave": "2"
+            "Optional Leave": "2"
         }
+        console.log(this.leaveDays)
         records.forEach((rec) => {
-            console.log(rec)
             let date1 = moment(rec.dateCalc[0], "Do MMM, YYYY");
             let date2 = moment(rec.dateCalc[1], "Do MMM, YYYY");
             let dur = date2.diff(date1,'days') + 1;

@@ -79,13 +79,15 @@ const Navbar = () => {
           color: "white",
           display: "inline-block",
           width: "200px",
-          borderRadius: "2px",
+          borderRadius: "5px",
+          border:"1px solid white",
         } : {
           padding: "1px",
-          background: "#05445e",
           color: "white",
           display: "inline-block",
           width: "200px",
+          borderRadius: "5px",
+          border:"1px solid white",
         };
 
  const [buttonText, setButtonText] = useState(!isRunning ? "Web Clock In" : "");
@@ -93,23 +95,23 @@ const Navbar = () => {
   
   const onMouseEnter = (event) => {
     if(isRunning){
-      event.target.style.background = "orange";
+      event.target.style.background = "#CC3E25";
       setButtonText("Web Clock Out");
       clockTime = "";
     }
     else {
-      event.target.style.background = "aqua";
+      event.target.style.background = "#70BDF0";
     }
   };
 
   const onMouseLeave = (event) => {
     if(isRunning){
-      event.target.style.background = "#05445e";
+      event.target.style.background = "#171832";
       setButtonText("");
     }
     else {
       setButtonText("Web Clock In");
-      event.target.style.background = "red";
+      event.target.style.background = "#33F2A3";
     }
   };
 
@@ -150,122 +152,6 @@ const Navbar = () => {
       setClockState();
     }
   }
-  // ----------------------------------------full code for web-clock in
-  // const { seconds, minutes, hours, days, start, pause, reset } = useStopwatch({
-  //   autoStart: false,
-  // });
-  // const [clockIn, setClocikIn] = useState(true);
-  // const [mouseState, setMouseState] = useState(false);
-
-  // const setClockState = () => {
-  //   setClocikIn(false);
-  //   let clickedDate = new Date();
-  //   localStorage.setItem(
-  //     "clicked-tiime",
-  //     clickedDate.toString().substring(16, 25)
-  //   );
-  //   console.log(localStorage.getItem);
-  // };
-  // const setClockOutState = () => {
-  //   setClocikIn(true);
-  //   setMouseState(false);
-  // };
-  // const onMouseEnter = (event) => {
-  //   //event.target.style.background = "red";
-  //   setMouseState(true);
-  // };
-  // const onMouseLeave = (event) => {
-  //   //event.target.style.background = "blue";
-  //   setMouseState(false);
-  // };
-  // console.log(mouseState);
-  // const pushContent = [];
-  // if (mouseState == true) {
-  //   pushContent.push(
-  //     <div
-  //       style={{ display: "inline-block" }}
-  //       onMouseLeave={onMouseLeave}
-  //       onMouseEnter={onMouseEnter}
-  //       onClick={start}
-  //       onClick={reset}
-  //     >
-  //       <button
-  //         style={{
-  //           padding: "1px",
-  //           background: "aqua",
-  //           color: "white",
-  //           display: "inline-block",
-  //           width: "200px",
-  //         }}
-  //         onClick={setClockOutState}
-  //       >
-  //         WEB CLOCK OUT
-  //       </button>
-  //     </div>
-  //   );
-  // } else if (clockIn) {
-    // pushContent.push(
-    //   <button
-    //     style={{
-    //       padding: "1px",
-    //       background: "#05445e",
-    //       color: "white",
-    //       display: "inline-block",
-    //       width: "200px",
-    //       borderRadius: "2px",
-    //     }}
-    //     onClick={setClockState}
-    //   >
-    //     Web Clock In
-    //   </button>
-    // );
-  // } else if (clockIn == false) {
-  //   pushContent.push(
-  //     <div
-  //       style={{
-  //         padding: "1px",
-  //         background: "#70BDF0",
-  //         display: "inline-block",
-  //         width: "200px",
-  //         //   height: "100px",
-  //         display: "flex",
-  //         justifyContent: "center",
-  //         borderRadius: "2px",
-  //       }}
-  //       onMouseLeave={onMouseLeave}
-  //       onMouseEnter={onMouseEnter}
-  //       onClick={pause}
-  //     >
-  //       <div>
-  //         <div>
-  //           <span>Clocked In</span>
-  //           <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:
-  //           <span>{seconds}</span>
-  //           <span></span>
-  //         </div>
-  //         {/* <h4>Clocked in</h4>
-  //         <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>: */}
-  //         {/* <span>{seconds}</span>{" "} */}
-  //       </div>
-  //     </div>
-  //   );
-  // } else {
-  //   pushContent.push(
-  //     <button
-  //       style={{
-  //         color: "white",
-  //         backgroundColor: "DodgerBlue",
-  //         padding: "1px",
-  //         fontFamily: "Arial",
-  //         borderRadius: "2px",
-  //       }}
-  //       onClick={setClockState}
-  //     >
-  //       Web Clock Out
-  //     </button>
-  //   );
-  // }
-
   
   useEffect(() => {
     console.log();
@@ -284,7 +170,7 @@ const Navbar = () => {
             // padding: "5px",
             borderRadius: "5px",
             border: "1px solid white",
-            backgroundColor: "#33e9f2",
+            // backgroundColor: "#33e9f2",
             color: "white",
             fontWeight: "400",
             width: "auto",

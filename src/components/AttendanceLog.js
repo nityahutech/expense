@@ -84,6 +84,7 @@ function AttendanceLog({ empDetails }) {
       report: values?.project_details || "-",
     };
     console.log({ monthlydata });
+    
     let newAlldata = [newData, ...empMonthly];
     console.log(newAlldata);
     localStorage.setItem("newReport", JSON.stringify(newAlldata));

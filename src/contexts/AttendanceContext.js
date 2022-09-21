@@ -53,15 +53,15 @@ class AttendanceContext {
         return deleteDoc(attendDoc);
     };
 
-    getAllAttendance = () => {
-        const q = query(attendCollectionRef, orderBy("date", "desc"));
+    getAllAttendance = (id) => {
+        const q = query(attendCollectionRef, where("empId", "==", id));
         // console.log(q);
         return getDocs(q);
     };
 
 
-    getAllByTotal = () => {
-        const q = query(attendCollectionRef, orderBy("subtotal", "desc"));
+    getAllAttendanceById = () => {
+        const q = query(attendCollectionRef, orderBy("date", "desc"));
         // console.log(q);
         return getDocs(q);
     };

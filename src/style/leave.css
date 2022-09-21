@@ -54,14 +54,17 @@
   .Col-2-center {
     box-shadow:
       0px 5px 10px 0px rgba(0, 0, 0, 0.2);
-      width: 150px;
+      width: 200px;
+      height: 120px;
       margin: 10px;
       border-radius: 5px; 
       align-items: center; 
       display: flex; 
-      justify-content: space-between;
+      justify-content: center;
       flex-direction: column; 
-      padding-top: 10px
+      padding-top: 10px,
+     
+      
   }
   
   .leavediv {
@@ -89,9 +92,10 @@
   }
   
   
-  @media only screen and (max-width: 800px) {
+  @media only screen and (max-width: 600px) {
     .leavediv {
       flex-direction: column;
+      align-items: center
   
     }
   
@@ -99,6 +103,9 @@
       flex-direction: row; 
       padding-left: 10px;
       padding-right: 10px;
+      /* padding: 10px; */
+      height: 50px;
+
   
     }
   

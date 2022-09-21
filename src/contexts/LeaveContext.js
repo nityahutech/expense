@@ -44,6 +44,10 @@ class LeaveContext {
 
 
     }
+    rejectLeave=(id)=>{
+        const leaveDoc = doc(db, "leave", id);
+        return updateDoc(leaveDoc,{status:"Rejected"})
+   }
         
 
     

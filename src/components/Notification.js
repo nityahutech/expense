@@ -10,62 +10,76 @@ import {
 import { useAuth } from '../contexts/AuthContext'
 import "../style/leave.css";
 
-let dummy=[{
-    date:"OKOKO",
-    name:"OKOKO",
-    nature:"OKOKO",
-    slot:"OKOKO",
-    reason:"OKOKO",
-    approver:"jhbd"
+let dummy = [{
+    date: "OKOKO",
+    name: "OKOKO",
+    nature: "OKOKO",
+    slot: "OKOKO",
+    reason: "OKOKO",
+    approver: "jhbd"
 }]
-const Notification = ({data}) => {
-const { currentUser, role } = useAuth();
-const [dataSource, setDataSource] = useState(data)
-useEffect(() => {
- setDataSource(data)
-}, [data])
+const Notification = ({ data }) => {
+    const { currentUser, role } = useAuth();
+    const [dataSource, setDataSource] = useState(data)
+    const [approve, setApprove] = useState([]);
+
+    useEffect(() => {
+        setDataSource(data)
+    }, [data])
 
 
-console.log("data",data);
+    console.log("data", data);
+
+    // const getData = async () => {
+    //     let data = await LeaveContext.getAllById(currentUser.uid)
+    //     // console.log("data", JSON.stringify(data.docs), currentUser.uid);
+
+    //     let d = data.docs.map((doc) => {
+    //         console.log("123", { ...doc.data() })
+    //         return {
+    //             ...doc.data(),
+    //             id: doc.id,
+    //             status: doc?.data()?.status || "Pending",
+    //         };
+    //     });
+    //     console.log("data", d);
+    //     setLeaves(d);
+    //     getDateFormatted(d)
+    //     leaveDays = LeaveContext.getLeaveDays(d, currentUser.uid)
+    //     console.log(leaveDays)
+    //     console.log(role)
+    //     setHistory(d)
+
+    // }
+
+
+
     const onApproveLeave = (record) => {
-       
-
         Modal.confirm({
             title: "Are you sure, you want to approve Leave record?",
             okText: "Yes",
             okType: "primary",
-         
+            // onOk: () => {
+            //     LeaveContext.approveLeave(record.id)
+            //         .then(response => {
+            //             console.log(response);
+            //             getData();
+            //         })
+            //         .catch(error => {
+            //             console.log(error.message);
 
-
-            onOk: () => {
-                //log record
-                //set record: leaveStatus:"approve"
-                //record.leaveStatus="approved"
-                //get index of selected leave
-                //  dataSrc[0]=record
-                //hit firebase with status
-                //getDtata()
-
-                // LeaveContext.approveLeave(record.id)
-                //     .then(response => {
-                //         console.log(response);
-                //         getData();
-                //     })
-                //     .catch(error => {
-                //         console.log(error.message);
-
-                //     })
-            },
+            //         })
+            // },
         });
     };
 
     const onRejectedLeave = (record) => {
         Modal.confirm({
-            title: "Are you sure, you want to Reject Leave record?",
+            title: "Are you sure, you want to reject Leave record?",
             okText: "Yes",
             okType: "danger",
             // onOk: () => {
-            //     LeaveContext.rejectLeave(record.id)
+            //     LeaveContext.rejectedLeave(record.id)
             //         .then(response => {
             //             console.log(response);
             //             getData();
@@ -129,7 +143,7 @@ console.log("data",data);
                         {
 
                             <>{
-                                
+
                             }
                                 <img
                                     style={{ color: "white", width: '20px', marginRight: 10 }}
@@ -140,8 +154,8 @@ console.log("data",data);
                                         onApproveLeave(record);
 
                                     }}
-                                    
-                                    
+
+
                                 />
                                 <img
                                     style={{ color: "white", width: '20px' }}
@@ -171,6 +185,14 @@ console.log("data",data);
 
     ];
 
+    const rowClassNameFun = (e) => {
+        const { empId, name } = e
+
+        console.log(name, empId, "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG")
+    }
+
+
+
 
     return (
         <Row style={{
@@ -186,11 +208,13 @@ console.log("data",data);
                 background: 'flex', padding: '10px', width: '400px'
             }} >
 
-
+                {/* {JSON.stringify(dataSource[0])} */}
                 <div>
                     <Table columns={columns}
                         dataSource={dataSource}
-                        // rowClassName={record => !record.enabled && "disabled-row"}
+                        // rowClassName = {(e) => rowClassNameFun(e)}
+                        //  rowClassName={record => dataSource.filter((item) => item.nature === record.nature) ? "disabled-row" :"pankaj"}
+                        rowClassName={record => !record.enabled && "disabled-row"}
                         size="small" scroll={{
                             x: 1000,
                         }} />

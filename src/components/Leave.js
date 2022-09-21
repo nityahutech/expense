@@ -233,150 +233,6 @@ const Leave = () => {
         console.log(role)
         setHistory(d)
 
-<<<<<<< HEAD
-  const getData = async () => {
-    let data = await LeaveContext.getAllById(currentUser.uid);
-    // console.log("data", JSON.stringify(data.docs), currentUser.uid);
-
-    let d = data.docs.map((doc) => {
-      console.log("123", { ...doc.data() });
-      return {
-        ...doc.data(),
-        id: doc.id,
-      };
-    });
-    console.log("data", d);
-    setLeaves(d);
-    getDateFormatted(d);
-    leaveDays = LeaveContext.getLeaveDays(d, currentUser.uid);
-    console.log(leaveDays);
-    console.log(role);
-    setHistory(d);
-  };
-
-  const onDeleteLeave = (record) => {
-    Modal.confirm({
-      title: "Are you sure, you want to delete Leave record?",
-      okText: "Yes",
-      okType: "danger",
-      onOk: () => {
-        LeaveContext.deleteLeave(record.id)
-          .then((response) => {
-            console.log(response);
-            getData();
-          })
-          .catch((error) => {
-            console.log(error.message);
-          });
-      },
-    });
-  };
-
-  const onReset = () => {
-    form.resetFields();
-  };
-  const { Option } = Select;
-
-  const columns = [
-    {
-      title: "Duration",
-      dataIndex: "date",
-      width: 200,
-    },
-    // {
-    //     title: 'Employee Name',
-    //     dataIndex: 'name',
-    //     width: 150,
-
-    // },
-    {
-      title: "Nature of Leave",
-      dataIndex: "nature",
-      width: 150,
-    },
-    {
-      title: "Slot",
-      dataIndex: "slot",
-      width: 150,
-    },
-    {
-      title: "Reason",
-      dataIndex: "reason",
-      width: 150,
-    },
-    {
-      title: "Approver",
-      dataIndex: "approver",
-      width: 150,
-    },
-
-    {
-      key: "5",
-      title: "Actions",
-      fixed: "right",
-      width: 60,
-      render: (record) => {
-        return (
-          <>
-            {
-              // role == "hr"
-              <>
-                {/* <img
-                                        style={{ color: "white", width: '20px', marginRight: 10 }}
-                                        src="../logo/checkmark.png"
-                                        alt="profile"
-                                        className="Dash"
-                                        onClick={() => {
-                                            onApproveLeave(record);
-                                        }}
-                                    />
-                                    <img
-                                        style={{ color: "white", width: '20px' }}
-                                        src="../logo/rejected.png"
-                                        alt="profile"
-                                        className="Dash"
-                                        onClick={() => {
-                                            onRejectedLeave(record);
-                                        }}
-                                    /> */}
-
-                <DeleteOutlined
-                  onClick={() => {
-                    onDeleteLeave(record);
-                  }}
-                  style={{ color: "red", marginLeft: 10 }}
-                />
-              </>
-            }
-          </>
-        );
-      },
-    },
-  ];
-  useEffect(() => {
-    console.log(role);
-    getData();
-  }, []);
-
-  const getDateFormatted = (data) => {
-    data.forEach((dur) => {
-      dur.dateCalc = [dur.date[0], dur.date[1]];
-      dur.date = dur.date[0] + " to " + dur.date[1];
-    });
-    setHistory(data);
-  };
-
-  const { RangePicker } = DatePicker;
-
-  const onChange = (dates, dateStrings) => {
-    if (dates) {
-      console.log("From: ", dates[0], ", to: ", dates[1]);
-      console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
-      setDuration(dateStrings);
-    } else {
-      console.log("Clear");
-=======
->>>>>>> 7b0707efaceb5aa08992b12313f546844fb8d283
     }
 
     const onDeleteLeave = (record) => {
@@ -650,9 +506,6 @@ const Leave = () => {
                             labelCol={{
                                 span: 6,
 
-<<<<<<< HEAD
-export default Leave;
-=======
                             }}
                             wrapperCol={{
                                 span: 16,
@@ -823,4 +676,3 @@ export default Leave;
 }
 
 export default Leave
->>>>>>> 7b0707efaceb5aa08992b12313f546844fb8d283

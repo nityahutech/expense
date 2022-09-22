@@ -557,8 +557,14 @@ function ExpenseList() {
           allTableString.push(`<table>${tableHeaderString}${tableAllRow.toString().replaceAll(",", "")}</table>`);
           tableAllRow = [];
           ++pageNum;
+        }else
+        if(i=== filterExpenses.length - 1){
+          allTableString.push(`<table>${tableHeaderString}${tableAllRow.toString().replaceAll(",", "")}</table>`);
+          tableAllRow = [];
+          ++pageNum;
         }
       }
+     
       tableRowString.push(
         `<tr style="${i % 2 === 1 ? oddRowStyle : evenRowStyle}">`
       );

@@ -24,13 +24,7 @@ const DashBoard = () => {
       <div className="sidecontainer">
         <Sidebar activeMenu={["1"]} selectedkey={['1']} accessToken={accessToken} />
       </div>
-
-      <div className="homeContainer"
-        style={{
-          height:'100vh',
-        }}
-      
-      >
+      <div className="homeContainer">
         <div className="table">
           <Navbar />
         </div>

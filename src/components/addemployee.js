@@ -10,13 +10,55 @@ import {
   Select,
   Space
 } from "antd";
+// import { useNavigate } from 'react-router-dom';
+import { createUser } from "../contexts/CreateContext"
+
 const { Option } = Select;
 
-function addemployee() {
+function AddEmployee() {
+
+  // const navigate = useNavigate();
+  // const handleListEmployee = () => {
+  //   navigate("/Expense/ExpenseList");
+  // }
+// const {signup} = useAuth();
+   const onFinish = async (values) => {
+    console.log('Received values of form: ', values);
+    let res = await createUser(values);
+    console.log("DONE!!!!!!!!!");
+    // console.log(res);
+    // const valuesToservice = {
+
+    //   fname: values['fname'],
+    //   lname: values['lname'],
+    //   email: values['email'],
+    //   doj: values['doj'].format('DD-MM-YYYY'),
+    //   phone: values['phone'],
+    //   gender: values['gender'],
+    //   designation: values['designation'],
+    //   role: values['role'],
+    //   // status: 'Unpaid',
+
+    //   // status:  values['paymentDate'],
+    //   // subtotal: values['subTotal'],
+    // }
+
+    // console.log('valuesToservice: ', valuesToservice);
+
+    // ExpenseContext.addExpenses(valuesToservice)
+    //   .then(response => {
+    //     console.log(response);
+    //     navigate('/Expense/ExpenseList');
+    //   })
+    //   .catch(error => {
+    //     console.log(error.message);
+
+    //   })
+  };
   
   return (
     <>
-      <div>
+      <div className='expForm' style={{ margin: "15px", background: 'white' }}>
         <Form
           //   form={form}
           labelcol={{
@@ -29,7 +71,7 @@ function addemployee() {
             remember: true,
           }}
           autoComplete="off"
-          //   onFinish={onFinish}
+            onFinish={onFinish}
         >
           <Row
             className="rowform"
@@ -59,7 +101,7 @@ function addemployee() {
               <Button
                 className="listExpense"
                 type="primary"
-                // onClick={handleListExpense}
+                // onClick={handleListEmployee}
                 style={{
                   width: "120px",
                   cursor: "pointer",
@@ -83,7 +125,7 @@ function addemployee() {
                 First Name<span style={{ color: "red" }}> *</span>
               </Divider>
               <Form.Item
-                name="expence"
+                name="fname"
                 // onKeyPress={(event) => {
                 //   if (checkAlphabets(event)) {
                 //     event.preventDefault();
@@ -132,7 +174,7 @@ function addemployee() {
                 Last Name<span style={{ color: "red" }}> *</span>
               </Divider>
               <Form.Item
-                name="expence"
+                name="lname"
                 // onKeyPress={(event) => {
                 //   if (checkAlphabets(event)) {
                 //     event.preventDefault();
@@ -183,7 +225,7 @@ function addemployee() {
                 Email Id<span style={{ color: "red" }}> *</span>
               </Divider>
               <Form.Item
-                name="expence"
+                name="email"
                 // onKeyPress={(event) => {
                 //   if (checkAlphabets(event)) {
                 //     event.preventDefault();
@@ -193,13 +235,13 @@ function addemployee() {
                 rules={[
                   {
                     required: true,
-                    minLength: 3,
-                    maxLength: 20,
+                    // minLength: 3,
+                    // maxLength: 20,
                     message: "Please enter Email Id",
                     type: "email",
                   },
                   {
-                    pattern: /^[a-zA-Z\s]*$/,
+                    // pattern: /^[a-zA-Z\s]*$/,
                     message: "Please enter Valid Email",
                   },
                 ]}
@@ -230,10 +272,10 @@ function addemployee() {
               style={{ background: "", height: "80px" }}
             >
               <Divider orientation="left" orientationMargin={0}>
-                DOB<span style={{ color: "red" }}> *</span>
+                Date Of Joining<span style={{ color: "red" }}> *</span>
               </Divider>
               <Form.Item
-                name="paymentDate"
+                name="doj"
                 rules={[
                   {
                     required: true,
@@ -263,7 +305,7 @@ function addemployee() {
               </Divider>
               <Form.Item
                 className="numder-inputs"
-                name="amount"
+                name="phone"
                 // onKeyPress={(event) => {
                 //   if (checkNumbervalue(event)) {
                 //     event.preventDefault();
@@ -304,7 +346,7 @@ function addemployee() {
                 Gender<span style={{ color: "red" }}> *</span>
               </Divider>
               <Form.Item
-                name="paymentDate"
+                name="gender"
                 rules={[
                   {
                     required: true,
@@ -313,22 +355,101 @@ function addemployee() {
                 ]}
               >
                 <Select
-                  showSearch
+                  // showSearch
                   placeholder="Select a Gender"
-                  optionFilterProp="children"
+                  // optionFilterProp="children"
                 //   onChange={onChange}
                 //   onSearch={onSearch}
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().includes(input.toLowerCase())
-                  }
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
                 >
                   <Option value="male">Male</Option>
                   <Option value="female">Female</Option>
-                  <Option value="pns">Prefer Not To Say</Option>
+                  {/* <Option value="pns">Prefer Not To Say</Option> */}
                 </Select>
               </Form.Item>
             </Col>
           </Row>
+          <Row gutter={[24, 8]}>
+          <Col
+              xs={{ span: 24 }}
+              sm={{ span: 12 }}
+              className="Col-1-left"
+              style={{ background: "", height: "80px" }}
+            >
+              <Divider orientation="left" orientationMargin={0}>
+                Designation<span style={{ color: "red" }}> *</span>
+              </Divider>
+              <Form.Item
+                name="designation"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Choose Designation",
+                  },
+                ]}
+              >
+                <Select
+                  // showSearch
+                  placeholder="Select a Designation"
+                  // optionFilterProp="children"
+                //   onChange={onChange}
+                //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                  <Option value="intrn">Internship</Option>
+                  <Option value="st">Software Trainee</Option>
+                  <Option value="asd">Asst. Software Developer</Option>
+                  <Option value="ssd">Sr. Software Developer</Option>
+                  <Option value="jsd">Jr. Software Developer</Option>
+                  <Option value="ba">Business Analyst(BA)</Option>
+                  <Option value="qa">Quality Analyst(QA)</Option>
+                  <Option value="hr">Human Resource(HR)</Option>
+                  <Option value="mgr">Manager</Option>
+                  <Option value="dr">Director</Option>
+                  <Option value="ceo">Cheap Executive Officer(CEO)</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 12 }}
+              className="Col-1-left"
+              style={{ background: "", height: "80px" }}
+            >
+              <Divider orientation="left" orientationMargin={0}>
+                Role<span style={{ color: "red" }}> *</span>
+              </Divider>
+              <Form.Item
+                name="role"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Choose a Role",
+                  },
+                ]}
+              >
+                <Select
+                  // showSearch
+                  placeholder="Select a Role"
+                  // optionFilterProp="children"
+                //   onChange={onChange}
+                //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                  <Option value="admin">Admin</Option>
+                  <Option value="emp">Employee</Option>
+                  {/* <Option value="pns">Prefer Not To Say</Option> */}
+                </Select>
+              </Form.Item>
+            </Col>
+            </Row>
 
           <Row gutter={[24, 16]}>
             <Col classsname='gutter-row' span={9}></Col>
@@ -373,4 +494,4 @@ function addemployee() {
   );
 }
 
-export default addemployee;
+export default AddEmployee;

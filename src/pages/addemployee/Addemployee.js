@@ -5,6 +5,10 @@ import Sidebar from "../../components/sidebar/NewSidebar";
 import { useAuth } from "../../contexts/AuthContext";
 import AddEmployee from "../../components/addemployee";
 
+
+
+
+
 function DashBoard() {
   const [accessToken, setAccessToken] = useState(null);
   const { currentUser, role } = useAuth();

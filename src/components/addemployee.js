@@ -11,10 +11,11 @@ import {
   Space
 } from "antd";
 // import { useNavigate } from 'react-router-dom';
-import { useAuth } from "../contexts/AuthContext";
+import { createUser } from "../contexts/CreateContext"
+
 const { Option } = Select;
 
-function addemployee() {
+function AddEmployee() {
 
   // const navigate = useNavigate();
   // const handleListEmployee = () => {
@@ -23,7 +24,8 @@ function addemployee() {
 // const {signup} = useAuth();
    const onFinish = async (values) => {
     console.log('Received values of form: ', values);
-    // let res = await signup(values.email, values.fname);
+    let res = await createUser(values);
+    console.log("DONE!!!!!!!!!");
     // console.log(res);
     // const valuesToservice = {
 
@@ -492,4 +494,4 @@ function addemployee() {
   );
 }
 
-export default addemployee;
+export default AddEmployee;

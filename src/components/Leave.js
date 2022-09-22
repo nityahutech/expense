@@ -9,7 +9,9 @@ import {
     Calendar,
     Modal,
     Divider,
-    Tag
+    Tag,
+    notification
+
 } from 'antd';
 import { Button } from 'antd';
 import { Form, Input, } from 'antd';
@@ -109,11 +111,13 @@ const Leave = () => {
     const [form] = Form.useForm();
     const [leaves, setLeaves] = useState([]);
     const [history, setHistory] = useState([]);
+    const [requests, setRequests] = useState([]);
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
     const [noOfDays, setNoOfDays] = useState([]);
-    const [ishr, setIsHr] = useState(sessionStorage.getItem(null) || true)
-    const { currentUser, role } = useAuth();
+    const [ishr, setIsHr] = useState(sessionStorage.getItem(null) || true);
+    const [role, setRole] = useState(null);
+    const { currentUser } = useAuth();
     // const [userRecord, setUserRecord] = useState({
     //     empId: currentUser.uid,
     //     approver: currentUser.approver,
@@ -123,48 +127,26 @@ const Leave = () => {
     //     slot: currentUser.slot ,
     //     reason: currentUser.reason,
     //   });
-    
+
     let leaveDays = "";
     // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
-    const [users, setUsers] = useState([
-        {
-            id: 1,
-            leavetype: "Earn Leaves",
-            leave: 0,
-
-
-
-        },
-        {
-            id: 2,
-            leavetype: "Sick Leaves",
-            leave: 7,
-
-        },
-        {
-            id: 3,
-            leavetype: "Casual Leaves",
-            leave: 7,
-
-        },
-        {
-            id: 4,
-            leavetype: "Optional Leaves",
-            leave: 2,
-
-
-        },
-    
-
-    ] || [])
+    const [users, setUsers] = useState([])
+    const [leavetype, setLeavetype] = useState()
+    const [validleaverequest, setValidleaverequest] = useState('false')
+    const [leaveslot, setLeaveslot] = useState(null)
 
     const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
-  
+
 
     const onFinish = values => {
         console.log("Success:", values);
-        console.log(duration)
+     
+        if (validleaverequest == 'false') {
+            showNotification("error", "Error", "Leave requested is more than avilable Leave");
+            return;
+        }
+
         let newLeave = {
             empId: currentUser.uid,
             approver: values.approver,
@@ -175,41 +157,15 @@ const Leave = () => {
             reason: values.reason,
         }
 
-
         LeaveContext.createLeave(newLeave)
             .then(response => {
-
-                console.log(response);
                 getData();
-
-                setLeaves([newLeave, ...leaves]);
-                let tempUser = [...users]
-                let newLeaves = tempUser.map(leave => {
-                    if (leave.leavetype?.toLowerCase() === values?.leaveNature.toLowerCase()) {
-
-                        if (noOfDays === 1 && values.slot != null) {
-                            leave.leave -= 0.5;
-                        }
-                        else {
-                            leave.leave -= noOfDays;
-                        }
-
-                        // console.log('noOfDays:',noOfDays);
-
-                    }
-                    return leave
-                })
-
-                setUsers(newLeaves)
-                form.resetFields()
 
             })
             .catch(error => {
                 console.log(error.message);
 
             })
-
-
     };
 
 
@@ -229,10 +185,67 @@ const Leave = () => {
         setLeaves(d);
         getDateFormatted(d)
         leaveDays = LeaveContext.getLeaveDays(d, currentUser.uid)
-        console.log(leaveDays)
+            .then(response => {
+                console.log('leaveDays:', response)
+                let UsersLeaves = [
+                    {
+                        id: 1,
+                        leavetype: "Earn Leave",
+                        leave: response["Earn Leave"],
+
+
+
+                    },
+                    {
+                        id: 2,
+                        leavetype: "Sick Leave",
+                        leave: response["Sick Leave"],
+
+                    },
+                    {
+                        id: 3,
+                        leavetype: "Casual Leave",
+                        leave: response["Casual Leave"],
+
+                    },
+                    {
+                        id: 4,
+                        leavetype: "Optional Leave",
+                        leave: response["Optional Leave"],
+
+
+                    },
+
+
+                ];
+                setUsers(UsersLeaves)
+            })
+            .catch(error => {
+                console.log(error.message);
+
+            })
+
+
         console.log(role)
         setHistory(d)
 
+    }
+
+
+    const getRequestData = async () => {
+        let reqData = await LeaveContext.getAllByApprover(currentUser.displayName)
+        let req = reqData.docs.map((doc) => {
+            return {
+                ...doc.data(),
+                id: doc.id
+            };
+        });
+        req.forEach(dur => {
+            dur.dateCalc = [dur.date[0], dur.date[1]]
+            dur.date = dur.date[0] + " to " + dur.date[1]
+        });
+        setRequests(req);
+        console.log(req)
     }
 
     const onDeleteLeave = (record) => {
@@ -257,6 +270,11 @@ const Leave = () => {
 
     const onReset = () => {
         form.resetFields()
+        setLeavetype(null)
+        setValidleaverequest('false')
+        setLeaveslot(null)
+    
+       
     }
     const { Option } = Select;
 
@@ -313,7 +331,7 @@ const Leave = () => {
                     </Tag>
                 ),
         },
-       
+
         {
             key: "5",
             title: "Actions",
@@ -322,7 +340,7 @@ const Leave = () => {
             render: (record) => {
                 return (
                     <>
-                        {                        
+                        {
                             <>
                                 <DeleteOutlined
                                     onClick={() => {
@@ -342,9 +360,11 @@ const Leave = () => {
 
     ];
     useEffect(() => {
-        console.log(currentUser, role)
+        let role = sessionStorage.getItem("role");
+        setRole(role)
         setIsHr(role === "hr")
         getData();
+        if (role == "hr") getRequestData();
     }, []);
 
     const getDateFormatted = ((data) => {
@@ -357,18 +377,74 @@ const Leave = () => {
 
     const { RangePicker } = DatePicker;
 
+    const showNotification = (type, msg, desc) => {
+        notification[type]({
+            message: msg,
+            description: desc,
+        });
+    };
+
+    const validateLeaveRequest = (noOfDays, leavetype) => {
+        console.log('validate leave evoke', noOfDays);
+        console.log('validate leave evoke', leavetype);
+
+        if (leavetype != null && noOfDays > 0) {
+
+            let leaveRecord = users.filter(record => record.leavetype == leavetype);
+            console.log('validate leave evoke', leaveRecord[0].leave);
+            if (leaveRecord[0].leave < noOfDays) {
+                setValidleaverequest('false')
+                showNotification("error", "Error", "Leave requested is more than avilable Leave");
+
+            }
+            else {
+                console.log('validate setting leve to true', noOfDays);
+
+                setValidleaverequest('true')
+            }
+
+
+        }
+
+        console.log('validate ', validleaverequest);
+
+    }
+
+    const onLeaveNatureChange = (value) => {
+        console.log('fffff', value);
+        setLeavetype(value)
+        validateLeaveRequest(noOfDays, value)
+    };
+
+    const onLeaveSlotChange = (e) => {
+        console.log('fffff', e.target.value);
+        setLeaveslot(e.target.value);
+        let dur = noOfDays
+        if (dur === 1 &&  e.target.value != null) {
+            dur = 0.5;
+        }
+        validateLeaveRequest(dur, leavetype)
+    };
+
+
     const onLeaveDateChange = (dates, dateStrings) => {
+        console.log("dateStrings: ", leaveslot);
         if (dates) {
             let fromDate = dates[0];
             let toDate = dates[1];
             let noOfDays = toDate.diff(fromDate, 'days') + 1;
+            if (noOfDays === 1 && leaveslot != null) {
+                noOfDays = 0.5;
+            }
 
 
-            // console.log("From: ", dates[0], ", to: ", dates[1]);
             console.log("dateStrings: ", dateStrings);
-            // console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
+            console.log("dateStrings: ", noOfDays);
+
             setDuration(dateStrings);
             setNoOfDays(noOfDays)
+            validateLeaveRequest(noOfDays, leavetype)
+
 
         } else {
             console.log("Clear");
@@ -447,7 +523,7 @@ const Leave = () => {
 
                 <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12} >
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <div className='badge-div' style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', justifyContent: 'center', paddingTop: '10px' }}>
+                        <div className='badge-div' style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', justifyContent: 'center', paddingTop: '10px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', }}>
                             {/* <Typography.Title level={4} >Calendar</Typography.Title> */}
                             <div className='rep-div' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                                 <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 10, 10,0.2)" }} ><h5 style={{ color: "rgba(204, 10, 10, 1)" }} className='rep-text'>Absent</h5></button>
@@ -462,7 +538,7 @@ const Leave = () => {
                             </div>
 
                         </div>
-                        <Calendar style={{ padding: '10px', }}
+                        <Calendar style={{ padding: '10px', borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px' }}
 
                             value={date}
                             onChange={setDate}
@@ -475,7 +551,7 @@ const Leave = () => {
                         />
                         {
                             ishr
-                                ? <Notification data={history} />
+                                ? <Notification data={requests} />
                                 : null
                         }
 
@@ -548,6 +624,7 @@ const Leave = () => {
                                         showTime
                                         format="Do MMM, YYYY"
                                         onChange={onLeaveDateChange}
+
                                     />
                                 </Space>
                             </Form.Item>
@@ -563,6 +640,7 @@ const Leave = () => {
                                 <Select required
                                     placeholder="Select a option "
                                     allowClear
+                                    onChange={onLeaveNatureChange}
 
 
                                 >
@@ -572,6 +650,7 @@ const Leave = () => {
                                             </Option>
                                         ))
                                     }
+
 
                                 </Select>
                             </Form.Item>
@@ -584,7 +663,9 @@ const Leave = () => {
 
                             >
 
-                                <Radio.Group  >
+                                <Radio.Group 
+                                onChange={onLeaveSlotChange}
+                                 >
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Evening" >Evening</Radio>
                                     {/* <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio> */}
@@ -636,12 +717,13 @@ const Leave = () => {
                                     span: 16,
                                 }}
                             >
-                                <Button type="primary" htmlType="submit"
 
-                                >
-                                    Submit
 
-                                </Button>
+
+
+                                <Button type="primary" htmlType="submit" disabled={validleaverequest == 'false'}> Submit </Button>
+
+
                                 <Button htmlType="button" style={{ marginLeft: "10px", }}
                                     onClick={onReset}>
                                     Reset
@@ -659,7 +741,7 @@ const Leave = () => {
                                 <Table columns={columns}
                                     dataSource={history}
                                     size="small" scroll={{
-                                        x: 1000,
+                                        x: 1000, y: 150
                                     }} />
                             </div>
 

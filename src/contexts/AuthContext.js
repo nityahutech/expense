@@ -74,6 +74,7 @@ export function AuthProvider({ children }) {
 
   async function getRole(user) {
     let rec = await ProfileContext.getProfile(user.uid);
+    sessionStorage.setItem("role", rec.data().role)
     console.log(rec.data().role);
     setRole(rec.data().role);
   }

@@ -10,7 +10,7 @@ const data = [
     lname: "Patel",
     email: "saswat@gmail.com",
     dob: "23/07/1992",
-    gender: "mail",
+    gender: "male",
     cnumber: "234456677",
   },
   {
@@ -20,7 +20,7 @@ const data = [
     lname: "Yadav",
     email: "jatin@gmail.com",
     dob: "23/07/1993",
-    gender: "mail",
+    gender: "male",
     cnumber: "234456677",
   },
 ];

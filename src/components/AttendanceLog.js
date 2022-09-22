@@ -418,9 +418,9 @@ function AttendanceLog({ empDetails }) {
                 dateFormat
                 style={{
                   width: "95%",
-                  position: "relative",
-                  left: "40rem",
-                  marginTop: "4px",
+                  // position: "relative",
+                  // left: "40rem",
+                  // marginTop: "4px",
                 }}
                 onChange={onDateFilter}
               />
@@ -461,15 +461,15 @@ function AttendanceLog({ empDetails }) {
                 dateFormat
                 style={{
                   width: "95%",
-                  position: "relative",
-                  left: "40rem",
-                  marginTop: "4px",
+                  // position: "relative",
+                  // left: "40rem",
+                  // marginTop: "4px",
                 }}
                 onChange={onDateFilter}
               />
             }
             key="3"
-            disabled={!empMonthly}
+            // disabled={!empMonthly}
           >
             <Table columns={columns1} dataSource={empMonthly || []} />
           </Tabs.TabPane>

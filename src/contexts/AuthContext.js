@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react"
 import { auth } from "../firebase-config"
-import { createUserWithEmailAndPassword,
-         signInWithEmailAndPassword,
+import { signInWithEmailAndPassword,
          signOut,
          sendPasswordResetEmail,
          updateEmail,
@@ -22,20 +21,6 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState()
   const [loading, setLoading] = useState(true)
   const [role, setRole] = useState();
-
-  function signup(email, password, name) {
-    console.log(email, password);
-    let res =  createUserWithEmailAndPassword(auth, email, password).then(() => {
-      login(email, password).then(() => {
-        auth.onAuthStateChanged((user) => {
-          updateProfile(user, {displayName: name});
-        })
-      })
-    })
-    console.log(res);
-    console.log(currentUser);
-    return res;
-  }
 
   function login(email, password) {
     return signInWithEmailAndPassword(auth, email, password)
@@ -76,6 +61,7 @@ export function AuthProvider({ children }) {
     let rec = await ProfileContext.getProfile(user.uid);
     sessionStorage.setItem("role", rec.data().role)
     console.log(rec.data().role);
+    sessionStorage.setItem("role", rec.data().role)
     setRole(rec.data().role);
   }
 
@@ -93,7 +79,6 @@ export function AuthProvider({ children }) {
     currentUser,
     role,
     login,
-    signup,
     logout,
     resetPassword,
     updateMyEmail,

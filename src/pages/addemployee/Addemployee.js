@@ -3,7 +3,9 @@ import AttendanceLog from "../../components/AttendanceLog";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 import { useAuth } from "../../contexts/AuthContext";
-import AddEmployee from "../../components/addEmployee";
+import AddEmployee from "../../components/addemployee";
+
+
 
 
 

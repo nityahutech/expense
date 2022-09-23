@@ -40,7 +40,7 @@ class LeaveContext {
     };
 
     getAllByApprover = (name) => {
-        const q = query(leaveCollectionRef, where("approver", "==", name));
+        const q = query(leaveCollectionRef, where("approver", "==", name),where("status","==","Pending"));
         // console.log(q);
         return getDocs(q);
     };

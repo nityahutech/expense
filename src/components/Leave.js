@@ -153,12 +153,14 @@ const Leave = () => {
             date: duration,
             name: currentUser.displayName,
             nature: values.leaveNature,
+            status:"Pending",
             slot: values.slot == null ? "Full Day" : values.slot,
             reason: values.reason,
         }
 
         LeaveContext.createLeave(newLeave)
             .then(response => {
+                form.resetFields()
                 getData();
 
             })
@@ -178,7 +180,7 @@ const Leave = () => {
             return {
                 ...doc.data(),
                 id: doc.id,
-                status: doc?.data()?.status || "Pending",
+                status: doc?.data()?.status || "Pending"
             };
         });
         console.log("data", d);
@@ -343,10 +345,11 @@ const Leave = () => {
                         {
                             <>
                                 <DeleteOutlined
+                                disabled={record?.status==='Approved'}
                                     onClick={() => {
                                         onDeleteLeave(record);
                                     }}
-                                    style={{ color: "red", marginLeft: 10 }}
+                                    style={record?.status==='Approved'?{ color: "green",cursor:"not-allowed", marginLeft: 10 }:{ color: "red", marginLeft: 10 }}
                                 />
                             </>
 

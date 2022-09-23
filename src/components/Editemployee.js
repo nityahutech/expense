@@ -28,11 +28,11 @@ const dateFormat = "DD-MM-YYYY";
 function Editemployee(props) {
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
-  const [email, setEmail] = useState("");
-  const [date, setDate] = useState("");
+  const [mailid, setMailid] = useState("");
+  const [doj, setDoj] = useState("");
   const [designation, setDesignation] = useState("");
   const [gender, setGender] = useState("");
-  const [cnumber, setCnumber] = useState("");
+  const [phonenumber, setPhonenumber] = useState("");
   console.log(props);
 
   async function submitEdit() {
@@ -40,11 +40,11 @@ function Editemployee(props) {
       const editedRecord = {
         fname,
         lname,
-        email,
-        date,
+        mailid,
+        doj,
         designation,
         gender,
-        cnumber,
+        phonenumber,
       };
       props.setIsModalVisible(false);
       props.reloadData();
@@ -60,19 +60,19 @@ function Editemployee(props) {
   useEffect(() => {
     const fnameVal = props.record ? props.record.fname : "";
     const lnameVal = props.record ? props.record.lname : "";
-    const emailVal = props.record ? props.record.email : "";
-    const dateVal = props.record ? props.record.date : "";
+    const mailidVal = props.record ? props.record.mailid : "";
+    const dojVal = props.record ? props.record.doj : "";
     const designationVal = props.record ? props.record.designation : "";
     const genderVal = props.record ? props.record.gender : "";
-    const cnumberVal = props.record ? props.record.cnumber : "";
+    const phonenumberVal = props.record ? props.record.phonenumber : "";
 
     setFname(fnameVal);
     setLname(lnameVal);
-    setEmail(emailVal);
-    setDate(dateVal);
+    setMailid(mailidVal);
+    setDoj(dojVal);
     setDesignation(designationVal);
     setGender(genderVal);
-    setCnumber(cnumberVal);
+    setPhonenumber(phonenumberVal);
   }, [props]);
   function cancel() {
     props.setIsModalVisible(false);
@@ -164,11 +164,11 @@ function Editemployee(props) {
             },
             {
               name: ["email"],
-              value: email,
+              value: mailid,
             },
             {
-              name: ["date"],
-              value: moment(date, dateFormat),
+              name: ["doj"],
+              value: moment(doj, dateFormat),
             },
             {
               name: ["designation"],
@@ -179,8 +179,8 @@ function Editemployee(props) {
               value: gender,
             },
             {
-              name: ["cnumber"],
-              value: cnumber,
+              name: ["phonenumber"],
+              value: phonenumber,
             },
           ]}
         >
@@ -358,7 +358,7 @@ function Editemployee(props) {
                 Date Of Joining<span style={{ color: "red" }}> *</span>
               </Divider>
               <Form.Item
-                name="date"
+                name="doj"
                 rules={[
                   {
                     required: true,
@@ -389,7 +389,7 @@ function Editemployee(props) {
               </Divider>
               <Form.Item
                 className="numder-inputs"
-                name="cnumber"
+                name="phonenumber"
                 // onKeyPress={(event) => {
                 //   if (checkNumbervalue(event)) {
                 //     event.preventDefault();

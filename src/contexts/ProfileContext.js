@@ -9,7 +9,7 @@ import {
 
 class ProfileContext {
 
-    addProfile = (id, newProfile) => {
+    addProfile = async (id, newProfile) => {
         return setDoc(doc(db, "users", id), newProfile);
     };
 

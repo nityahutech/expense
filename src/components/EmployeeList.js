@@ -1,40 +1,16 @@
 import { Table, Button, Modal, Layout } from "antd";
 import { EditOutlined } from "@ant-design/icons";
-import React from "react";
-import { useState, useEffect } from "react";
 import Editemployee from "./Editemployee";
-
-const data = [
-  {
-    key: "1",
-    sn: "1",
-    fname: "Saswat",
-    lname: "Patel",
-    email: "saswat@gmail.com",
-    doj: "23/07/1992",
-    designation: "Software Developer",
-    gender: "male",
-    cnumber: "234456677",
-  },
-  {
-    key: "2",
-    sn: "2",
-    fname: "Jatin",
-    lname: "Yadav",
-    email: "jatin@gmail.com",
-    doj: "23/07/1993",
-    designation: "Software Developer",
-    gender: "male",
-    cnumber: "234456677",
-  },
-];
+import React, { useEffect, useState } from "react";
+import { createUser, getUsers } from "../contexts/CreateContext";
+import moment from "moment";
 
 function EmployeeList() {
   const [modaldata, setmodaldata] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editedRecord, setEditedRecord] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [allEmployee, setAllEmployee] = useState(data || []);
+  // const [allEmployee, setAllEmployee] = useState(data || []);
   // useEffect(() => {
   //   getData();
   // }, []);
@@ -63,14 +39,14 @@ function EmployeeList() {
     },
     {
       title: "Email",
-      dataIndex: "email",
+      dataIndex: "mailid",
       key: "email",
       width: 220,
     },
     {
       title: "D.O.J.",
-      dataIndex: "date",
-      key: "date",
+      dataIndex: "doj",
+      key: "dob",
       width: 150,
     },
     {
@@ -79,7 +55,6 @@ function EmployeeList() {
       key: "designation",
       width: 150,
     },
-
     {
       title: "Gender",
       dataIndex: "gender",
@@ -88,7 +63,7 @@ function EmployeeList() {
     },
     {
       title: "Contact No.",
-      dataIndex: "cnumber",
+      dataIndex: "phonenumber",
       key: "cnumber",
     },
     {
@@ -120,6 +95,11 @@ function EmployeeList() {
     },
   ];
 
+  const [data, setData] = React.useState([]);
+  useEffect(() => {
+    getData();
+  }, []);
+
   const showModal = (record) => {
     console.log(record);
     setmodaldata(record);
@@ -135,9 +115,30 @@ function EmployeeList() {
     console.log("record: ", record);
     setEditedRecord(record);
   };
+  async function getData() {
+    //hit api to get the employees
+    //set that employees to data state
+    setLoading(true);
+    const allData = await getUsers();
+    let d = allData.docs.map((doc, i) => {
+      //  console.log(JSON.stringify(new Date(doc.data()['date'])));
+      var longDateStr = moment(doc.data()["date"], "D/M/Y").format("MM-DDY");
+      return {
+        ...doc.data(),
+        date: doc.data()["date"],
+        dt: new Date(longDateStr),
+        id: doc.id,
+        sn: i + 1,
+      };
+    });
+    console.log({ d });
+    setData(d);
+    setLoading(false);
+  }
   return (
     <Layout>
       <Table
+        loading={loading}
         columns={columns}
         dataSource={data}
         pagination={{

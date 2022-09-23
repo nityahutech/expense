@@ -94,7 +94,7 @@ const Notification = ({ data }) => {
         {
             title: 'Duration',
             dataIndex: 'date',
-            width: 150,
+            width: 250,
 
         },
         {
@@ -147,18 +147,21 @@ const Notification = ({ data }) => {
                                         onApproveLeave(record);
 
                                     }}
+                                   
+                                  
 
 
                                 />
                                
                                 <img
-                                    style={{ color: "white", width: '20px' }}
+                                   
                                     src="../logo/rejected.png"
                                     alt="profile"
                                     className="Dash"
                                     onClick={() => {
                                         onRejectedLeave(record);
                                     }}
+                                   
 
                                 />
                             </>
@@ -200,8 +203,11 @@ const Notification = ({ data }) => {
                         // rowClassName = {(e) => rowClassNameFun(e)}
                         //  rowClassName={record => dataSource.filter((item) => item.nature === record.nature) ? "disabled-row" :"pankaj"}
                         rowClassName={record => !record.enabled && "disabled-row"}
+                        pagination={{
+                            position: ["bottomCenter"],
+                          }}
                         size="small" scroll={{
-                            x: 1000, y:100
+                            x: 1000, 
                         }} />
                 </div>
 

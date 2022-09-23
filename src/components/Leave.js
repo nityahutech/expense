@@ -18,7 +18,8 @@ import { Form, Input, } from 'antd';
 import { DatePicker, Space } from "antd";
 import moment from "moment";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import LeaveContext from '../contexts/LeaveContext'
+import LeaveContext from '../contexts/LeaveContext';
+import CompanyHolidayContext from '../contexts/CompanyHolidayContext';
 import { useAuth } from '../contexts/AuthContext'
 import Notification from "./Notification";
 import "../style/leave.css";
@@ -32,79 +33,6 @@ let leaveStyle = {
     "Week Off": { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "grey" },
 }
 
-const getListData = (value) => {
-    let listData;
-    console.log(value.date());
-    switch (value.date()) {
-        case 8:
-            listData = [
-                {
-                    type: "Absent",
-                    intime: "In : ",
-                    outtime: "Out : "
-
-                },
-
-            ];
-            break
-        case 9:
-            listData = [
-                {
-                    type: "Present",
-                    intime: "In : 9:00Am",
-                    outtime: "Out : 9:00Pm"
-
-                },
-
-            ];
-            break
-        case 10:
-            listData = [
-                {
-                    type: "Officialy Holiday",
-                    intime: "In : ",
-                    outtime: "Out : "
-
-                },
-
-            ];
-            break
-        case 11:
-            listData = [
-                {
-                    type: "Week Off",
-                    intime: "In : ",
-                    outtime: "Out : "
-
-                },
-
-            ];
-            break
-        case 12:
-            listData = [
-                {
-                    type: "Leave",
-                    intime: "In : ",
-                    outtime: "Out : "
-
-                },
-
-            ];
-            break
-
-
-        default:
-
-    }
-
-    return listData || [];
-};
-
-const getMonthData = (value) => {
-    if (value.month() === 8) {
-        return 1394;
-    }
-};
 
 const userrole = ''
 const Leave = () => {
@@ -118,15 +46,6 @@ const Leave = () => {
     const [ishr, setIsHr] = useState(sessionStorage.getItem(null) || true);
     const [role, setRole] = useState(null);
     const { currentUser } = useAuth();
-    // const [userRecord, setUserRecord] = useState({
-    //     empId: currentUser.uid,
-    //     approver: currentUser.approver,
-    //     date: duration,
-    //     name: currentUser.displayName,
-    //     nature:currentUser.leaveNature,
-    //     slot: currentUser.slot ,
-    //     reason: currentUser.reason,
-    //   });
 
     let leaveDays = "";
     // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
@@ -134,16 +53,67 @@ const Leave = () => {
     const [leavetype, setLeavetype] = useState()
     const [validleaverequest, setValidleaverequest] = useState('false')
     const [leaveslot, setLeaveslot] = useState(null)
+    const [companyholiday, setCompanyholiday] = useState([])
 
     const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
+    const getHoliday = async () => {
+
+        const allData = await CompanyHolidayContext.getAllCompanyHoliday();
+        console.log('allCompanyHoliday', allData)
+        // console.log(allData.docs);
+        allData.docs.map((doc) => {
+            console.log('allCompanyHoliday2', doc)
+            //   //  console.log(JSON.stringify(new Date(doc.data()['date'])));
+            //   var longDateStr = moment(doc.data()["date"], "D/M/Y").format("MM-DDY");
+            let d = allData.docs.map((doc) => {
+
+                return {
+                    ...doc.data(),
+                    id: doc.id,
+
+                };
+            });
+            setCompanyholiday(d)
+            console.log('allCompanyHoliday3', d)
+
+        });
+    }
+
+    const getListData = (value) => {
+        let listData;
+        let currdate = value.format('Do MMM, YYYY');
+        let leaveRecord = companyholiday.filter(record => record.Date == currdate);
+
+
+        console.log('calendervvvvv', currdate);
+        console.log('calendervvvvv2', leaveRecord.length);
+        if (leaveRecord.length > 0) {
+            listData = [
+                {
+                    type: leaveRecord[0].Name,
+                    intime: "In : ",
+                    outtime: "Out : "
+                }
+            ]
+
+        }
+
+        return listData || [];
+    };
+
+    const getMonthData = (value) => {
+        if (value.month() === 8) {
+            return 1394;
+        }
+    };
 
 
     const onFinish = values => {
         console.log("Success:", values);
-     
+
         if (validleaverequest == 'false') {
-            showNotification("error", "Error", "Leave requested is more than avilable Leave");
+            showNotification("error", "Error", "Leave requested is more than available Leave");
             return;
         }
 
@@ -153,9 +123,9 @@ const Leave = () => {
             date: duration,
             name: currentUser.displayName,
             nature: values.leaveNature,
-            status:"Pending",
-            slot: values.slot == null ? "Full Day" : values.slot,
+            slot: values.slot, 
             reason: values.reason,
+            status: 'Pending'
         }
 
         LeaveContext.createLeave(newLeave)
@@ -168,6 +138,7 @@ const Leave = () => {
                 console.log(error.message);
 
             })
+        form.resetFields();
     };
 
 
@@ -180,7 +151,7 @@ const Leave = () => {
             return {
                 ...doc.data(),
                 id: doc.id,
-                status: doc?.data()?.status || "Pending"
+                
             };
         });
         console.log("data", d);
@@ -226,8 +197,6 @@ const Leave = () => {
                 console.log(error.message);
 
             })
-
-
         console.log(role)
         setHistory(d)
 
@@ -275,8 +244,8 @@ const Leave = () => {
         setLeavetype(null)
         setValidleaverequest('false')
         setLeaveslot(null)
-    
-       
+
+
     }
     const { Option } = Select;
 
@@ -284,7 +253,7 @@ const Leave = () => {
         {
             title: 'Duration',
             dataIndex: 'date',
-            width: 200,
+            width: 240,
 
         },
         // {
@@ -324,9 +293,9 @@ const Leave = () => {
             sorter: (a, b) => a.status - b.status,
             render: (_, { status }) =>
                 status !== "" && (
-                    <Tag
+                    <Tag style={{width:'70px'}}
                         className="statusTag"
-                        color={status === "Approved" ? "green" : "volcano"}
+                        color={status === "Approved" ? "green":status === "Pending"?'blue' : "volcano"}
                         key={status}
                     >
                         {status}
@@ -343,15 +312,20 @@ const Leave = () => {
                 return (
                     <>
                         {
-                            <>
-                                <DeleteOutlined
-                                disabled={record?.status==='Approved'}
-                                    onClick={() => {
-                                        onDeleteLeave(record);
-                                    }}
-                                    style={record?.status==='Approved'?{ color: "green",cursor:"not-allowed", marginLeft: 10 }:{ color: "red", marginLeft: 10 }}
-                                />
-                            </>
+                             <>
+                             <DeleteOutlined
+                             disabled={record?.status==='Approved'}
+                                 onClick={() => {
+                                     onDeleteLeave(record);
+                                 }}
+                                 style={
+                                    record?.status==='Approved'
+                                    ?{color: "green",cursor:"not-allowed", marginLeft: 10 }
+                                    :record?.status==='Pending'
+                                        ?{ color: "blue", marginLeft: 10 }
+                                        :{ color: "red", marginLeft: 10 }}
+                             />
+                         </>
 
                         }
 
@@ -367,6 +341,7 @@ const Leave = () => {
         setRole(role)
         setIsHr(role === "hr")
         getData();
+        getHoliday();
         if (role == "hr") getRequestData();
     }, []);
 
@@ -397,7 +372,7 @@ const Leave = () => {
             console.log('validate leave evoke', leaveRecord[0].leave);
             if (leaveRecord[0].leave < noOfDays) {
                 setValidleaverequest('false')
-                showNotification("error", "Error", "Leave requested is more than avilable Leave");
+                showNotification("error", "Error", "Leave requested is more than available Leave");
 
             }
             else {
@@ -405,8 +380,6 @@ const Leave = () => {
 
                 setValidleaverequest('true')
             }
-
-
         }
 
         console.log('validate ', validleaverequest);
@@ -423,7 +396,7 @@ const Leave = () => {
         console.log('fffff', e.target.value);
         setLeaveslot(e.target.value);
         let dur = noOfDays
-        if (dur === 1 &&  e.target.value != null) {
+        if (dur === 1 && e.target.value != null) {
             dur = 0.5;
         }
         validateLeaveRequest(dur, leavetype)
@@ -464,11 +437,17 @@ const Leave = () => {
         ) : null;
     };
 
+    const handleOk = () => {
+        console.log('hiii')
+      
+        showNotification("success", "Success", "Leave apply successfuly");
+      };
+
     const dateCellRender = (value) => {
         const listData = getListData(value);
-        let currentMonth = new Date().getMonth()
-        let date = new Date(value['_d'])
-        return currentMonth == date.getMonth() ? (
+        // let currentMonth = new Date().getMonth()
+        // let date = new Date(value['_d'])
+        return  (
             <ul className="events" >
                 {listData.map((item) => (
                     <li >
@@ -482,7 +461,8 @@ const Leave = () => {
                 ))}
 
             </ul>
-        ) : null;
+        ); 
+        
     };
 
 
@@ -547,9 +527,7 @@ const Leave = () => {
                             onChange={setDate}
                             dateCellRender={dateCellRender}
                             monthCellRender={monthCellRender}
-                            // disabledDate={disabledDate}
-                            disabledDays={[{ daysOfWeek: [0, 6] }]}
-                        // disabledDates={disabledDates}
+                      
 
                         />
                         {
@@ -557,12 +535,6 @@ const Leave = () => {
                                 ? <Notification data={requests} />
                                 : null
                         }
-
-
-
-
-
-
                     </div>
 
                 </Col>
@@ -620,6 +592,7 @@ const Leave = () => {
                                 <Space direction="vertical" size={12}
                                 >
                                     <RangePicker
+                                    
                                         ranges={{
                                             Today: [moment(), moment()],
                                             "This Month": [moment().startOf("month"), moment().endOf("month")]
@@ -666,12 +639,12 @@ const Leave = () => {
 
                             >
 
-                                <Radio.Group 
-                                onChange={onLeaveSlotChange}
-                                 >
+                                <Radio.Group
+                                    onChange={onLeaveSlotChange}
+                                >
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Evening" >Evening</Radio>
-                                    {/* <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio> */}
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
 
                                 </Radio.Group>
 
@@ -721,12 +694,7 @@ const Leave = () => {
                                 }}
                             >
 
-
-
-
-                                <Button type="primary" htmlType="submit" disabled={validleaverequest == 'false'}> Submit </Button>
-
-
+                                <Button type="primary" htmlType="submit"  onClick={handleOk} disabled={validleaverequest == 'false'}> Submit </Button>
                                 <Button htmlType="button" style={{ marginLeft: "10px", }}
                                     onClick={onReset}>
                                     Reset
@@ -743,8 +711,11 @@ const Leave = () => {
                             <div>
                                 <Table columns={columns}
                                     dataSource={history}
+                                    pagination={{
+                                        position: ["bottomCenter"],
+                                      }}
                                     size="small" scroll={{
-                                        x: 1000, y: 150
+                                        x: 1000,
                                     }} />
                             </div>
 

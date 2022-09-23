@@ -75,16 +75,16 @@ const Navbar = () => {
   const clockTime =  isRunning ? `${hours}:${minutes}:${seconds}`: "";
   const buttonStyle = !isRunning ? {
           padding: "1px",
-          background: "red",
+          background: "#ff3300",
           color: "white",
-          display: "inline-block",
+          // display: "inline-block",
           width: "200px",
           borderRadius: "5px",
           border:"1px solid white",
         } : {
           padding: "1px",
           color: "white",
-          display: "inline-block",
+          // display: "inline-block",
           width: "200px",
           borderRadius: "5px",
           border:"1px solid white",
@@ -95,8 +95,9 @@ const Navbar = () => {
   
   const onMouseEnter = (event) => {
     if(isRunning){
-      event.target.style.background = "#CC3E25";
-      setButtonText("Web Clock Out");
+      event.target.style.background = "#ff3300";
+      event.target.style.display = "inline-block";
+      setButtonText("Web Clock Out ");
       clockTime = "";
     }
     else {
@@ -106,7 +107,7 @@ const Navbar = () => {
 
   const onMouseLeave = (event) => {
     if(isRunning){
-      event.target.style.background = "#171832";
+      event.target.style.background = "#ff3300";
       setButtonText("");
     }
     else {
@@ -127,6 +128,11 @@ const Navbar = () => {
       start();
       AttendanceContext.addClockData(clickedDate)
   };
+
+  const webclock = async () => {
+    let rec = await AttendanceContext.getStartTime(currentUser.uid);
+    console.log(rec)
+  }
 
   const stopClockState = async () => {
     // setClockIn(false);
@@ -154,7 +160,7 @@ const Navbar = () => {
   }
   
   useEffect(() => {
-    console.log();
+    webclock();
   }, []);
 
   return (

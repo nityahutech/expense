@@ -1,3 +1,4 @@
+
 import { db } from "../firebase-config";
 import moment from "moment";
 import {
@@ -53,15 +54,15 @@ class AttendanceContext {
         return deleteDoc(attendDoc);
     };
 
-    getAllAttendance = (id) => {
-        const q = query(attendCollectionRef, where("empId", "==", id));
+    getAllAttendance = () => {
+        const q = query(attendCollectionRef, orderBy("date", "desc"));
         // console.log(q);
         return getDocs(q);
     };
 
 
-    getAllAttendanceById = () => {
-        const q = query(attendCollectionRef, orderBy("date", "desc"));
+    getAllByTotal = () => {
+        const q = query(attendCollectionRef, orderBy("subtotal", "desc"));
         // console.log(q);
         return getDocs(q);
     };
@@ -71,6 +72,17 @@ class AttendanceContext {
         const attendDoc = doc(db, "attendance", id);
         return getDoc(q);
     };
+    getStartTime = async (id) =>{
+        const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("empId", "==", id), where("clockOut","==",null), limit(1))
+        let rec = await getDocs(q);
+        let d = rec.docs.map((doc) => {
+            return {
+                ...doc.data(),
+                id: doc.id
+            };
+        });
+        return d[0].clockIn;
+    }
 }
 
 export default new AttendanceContext();

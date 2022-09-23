@@ -410,7 +410,7 @@ function AddEmployee() {
                   <Option value="hr">Human Resource(HR)</Option>
                   <Option value="mgr">Manager</Option>
                   <Option value="dr">Director</Option>
-                  <Option value="ceo">Cheap Executive Officer(CEO)</Option>
+                  <Option value="ceo">Chief Executive Officer(CEO)</Option>
                 </Select>
               </Form.Item>
             </Col>

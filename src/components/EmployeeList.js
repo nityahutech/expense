@@ -1,6 +1,8 @@
-import { Table, Button } from "antd";
+import { Table, Button, Modal, Layout } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import React from "react";
+import { useState, useEffect } from "react";
+import Editemployee from "./Editemployee";
 
 const data = [
   {
@@ -9,7 +11,8 @@ const data = [
     fname: "Saswat",
     lname: "Patel",
     email: "saswat@gmail.com",
-    dob: "23/07/1992",
+    doj: "23/07/1992",
+    designation: "Software Developer",
     gender: "male",
     cnumber: "234456677",
   },
@@ -19,13 +22,26 @@ const data = [
     fname: "Jatin",
     lname: "Yadav",
     email: "jatin@gmail.com",
-    dob: "23/07/1993",
+    doj: "23/07/1993",
+    designation: "Software Developer",
     gender: "male",
     cnumber: "234456677",
   },
 ];
 
 function EmployeeList() {
+  const [modaldata, setmodaldata] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editedRecord, setEditedRecord] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [allEmployee, setAllEmployee] = useState(data || []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
+  // async function getData() {
+  //   setLoading(true);
+  // }
   const columns = [
     {
       title: "Sl. No.",
@@ -52,9 +68,15 @@ function EmployeeList() {
       width: 220,
     },
     {
-      title: "D.O.B.",
-      dataIndex: "dob",
-      key: "dob",
+      title: "D.O.J.",
+      dataIndex: "date",
+      key: "date",
+      width: 150,
+    },
+    {
+      title: "Designation",
+      dataIndex: "designation",
+      key: "designation",
       width: 150,
     },
 
@@ -74,28 +96,81 @@ function EmployeeList() {
       dataIndex: "action",
       key: "action",
 
-      render: () => {
+      render: (_, record) => {
+        // console.log("record:: ", record);
         return (
+          // record.key !== "subTotal" && (
           <>
-            <Button style={{ padding: 0 }} type="link" className="edIt">
+            {/* <Space size="small"> */}
+            <Button
+              style={{ padding: 0 }}
+              type="link"
+              className="edIt"
+              onClick={() => {
+                handleEditEmployee(record);
+                showModal(record);
+              }}
+            >
               {<EditOutlined />}
             </Button>
           </>
         );
+        // );
       },
     },
   ];
+
+  const showModal = (record) => {
+    console.log(record);
+    setmodaldata(record);
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    // submit form data
+  };
+
+  const handleEditEmployee = (record) => {
+    console.log("record: ", record);
+    setEditedRecord(record);
+  };
   return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      pagination={{
-        pageSize: 50,
-      }}
-      // scroll={{
-      //   y: 240,
-      // }}
-    />
+    <Layout>
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={{
+          pageSize: 50,
+        }}
+        // scroll={{
+        //   y: 240,
+        // }}
+      />
+      <Modal
+        centered
+        title="Employee Details"
+        visible={isModalVisible}
+        footer={null}
+        closeIcon={
+          <div
+            onClick={() => {
+              setIsModalVisible(false);
+            }}
+          >
+            X
+          </div>
+        }
+
+        // onCancel={handleCancel}
+      >
+        <Editemployee
+          className="Edit"
+          record={editedRecord}
+          setIsModalVisible={setIsModalVisible}
+        />
+      </Modal>
+    </Layout>
   );
 }
 

@@ -16,6 +16,15 @@ import Tabledash from "./components/Tabledash";
 import { AuthProvider } from "./contexts/AuthContext";
 import Attendance from "./pages/Attendance/Attendance";
 import Notification from "./components/Notification";
+import DocumentsPage from "./pages/DocumentsPage";
+import PersonalPage from "./pages/PersonalPage";
+import WorkPage from "./pages/WorkPage";
+import TeamPage from "./pages/TeamPage";
+import EducationPage from "./pages/EducationPage";
+import FamilyPage from "./pages/FamilyPage";
+import WorkWeekPage from "./pages/WorkWeekPage";
+import PaySlipPage from "./pages/PaySlipPage";
+import BankAccountpages from "./pages/BankAccountpages";
 
 function App() {
   return (
@@ -33,6 +42,15 @@ function App() {
             path="/EmployeeListPage/EmployeeList"
             element={<EmployeeListPage />}
           />
+          <Route path="/DocumentsPage/Document" element={<DocumentsPage />} />
+          <Route path="/PersonalPage/Personal" element={<PersonalPage />} />
+          <Route path="/WorkPage/Work" element={<WorkPage />} />
+          <Route path="/TeamPage/Team" element={<TeamPage />} />
+          <Route path="/EducationPage/Education" element={<EducationPage />} />
+          <Route path="/FamilyPage/Family" element={<FamilyPage />} />
+          <Route path="/WorkWeekPage/WorkWeek" element={<WorkWeekPage />} />
+          <Route path="/PaySlipPage/PaySlip" element={<PaySlipPage />} />
+          <Route path="/BankAccountpages/BankAccount" element={<BankAccountpages />} />
           <Route path="/Addemployee/AddEmployee" element={<Addemployee />} />
           <Route path="/New" element={<NewSider />} />
           <Route path="/Profile" element={<Profile />} />

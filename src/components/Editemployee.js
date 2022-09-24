@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import {
   Col,
   Divider,
@@ -8,39 +9,108 @@ import {
   Input,
   DatePicker,
   Select,
-  Space
+  Space,
+  notification,
 } from "antd";
-import { useNavigate } from 'react-router-dom';
-import { createUser } from "../contexts/CreateContext"
+// import { useNavigate } from 'react-router-dom';
+import { createUser } from "../contexts/CreateContext";
+import moment from "moment";
 
 const { Option } = Select;
+const showNotification = (type, msg, desc) => {
+  notification[type]({
+    message: msg,
+    description: desc,
+  });
+};
+const dateFormat = "DD-MM-YYYY";
 
-function AddEmployee() {
+function Editemployee(props) {
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
+  const [mailid, setMailid] = useState("");
+  const [doj, setDoj] = useState("");
+  const [designation, setDesignation] = useState("");
+  const [gender, setGender] = useState("");
+  const [phonenumber, setPhonenumber] = useState("");
+  console.log(props);
 
-  const [form] = Form.useForm();
-  const navigate = useNavigate();
-  const handleListEmployee = () => {
-    navigate("/EmployeeListPage/EmployeeList");
+  async function submitEdit() {
+    try {
+      const editedRecord = {
+        fname,
+        lname,
+        mailid,
+        doj,
+        designation,
+        gender,
+        phonenumber,
+      };
+      props.setIsModalVisible(false);
+      props.reloadData();
+      showNotification("success", "Success", "Record updated successfully");
+
+      return;
+    } catch (error) {
+      props.setIsModalVisible(false);
+      showNotification("error", "Failed", "Record update failed");
+    }
   }
+
+  useEffect(() => {
+    const fnameVal = props.record ? props.record.fname : "";
+    const lnameVal = props.record ? props.record.lname : "";
+    const mailidVal = props.record ? props.record.mailid : "";
+    const dojVal = props.record ? props.record.doj : "";
+    const designationVal = props.record ? props.record.designation : "";
+    const genderVal = props.record ? props.record.gender : "";
+    const phonenumberVal = props.record ? props.record.phonenumber : "";
+
+    setFname(fnameVal);
+    setLname(lnameVal);
+    setMailid(mailidVal);
+    setDoj(dojVal);
+    setDesignation(designationVal);
+    setGender(genderVal);
+    setPhonenumber(phonenumberVal);
+  }, [props]);
+  function cancel() {
+    props.setIsModalVisible(false);
+  }
+
+  const cancelStyle = {
+    float: "right",
+  };
+  const buttonStyle = {
+    marginRight: "5px",
+    color: "white",
+    backgroundColor: "#1890ff",
+    float: "right",
+  };
+  const checkNumbervalue = (event) => {
+    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
   const checkAlphabets = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-  function onReset(){
-    form.resetFields();
-  }
-   const onFinish = async (values) => {
-    console.log('Received values of form: ', values);
+  // const navigate = useNavigate();
+  // const handleListEmployee = () => {
+  //   navigate("/Expense/ExpenseList");
+  // }
+  // const {signup} = useAuth();
+  const onFinish = async (values) => {
+    console.log("Received values of form: ", values);
     let res = await createUser(values);
     console.log("DONE!!!!!!!!!");
-    console.log(res);
-    navigate("/EmployeeListPage/EmployeeList");
-        // const valuesToservice = {
-    //   fname: values.fname,
+    // console.log(res);
+    // const valuesToservice = {
+
+    //   fname: values['fname'],
     //   lname: values['lname'],
     //   email: values['email'],
     //   doj: values['doj'].format('DD-MM-YYYY'),
@@ -56,22 +126,22 @@ function AddEmployee() {
 
     // console.log('valuesToservice: ', valuesToservice);
 
-    // createUser.addExpenses(valuesToservice)
+    // ExpenseContext.addExpenses(valuesToservice)
     //   .then(response => {
     //     console.log(response);
-    //     navigate('/EmployeeListPage/EmployeeList');
+    //     navigate('/Expense/ExpenseList');
     //   })
     //   .catch(error => {
     //     console.log(error.message);
 
     //   })
   };
-  
+
   return (
     <>
-      <div className='expForm' style={{ margin: "15px", background: 'white' }}>
+      <div className="expForm" style={{ margin: "15px", background: "white" }}>
         <Form
-            form={form}
+          //   form={form}
           labelcol={{
             span: 4,
           }}
@@ -82,7 +152,37 @@ function AddEmployee() {
             remember: true,
           }}
           autoComplete="off"
-            onFinish={onFinish}
+          onFinish={onFinish}
+          fields={[
+            {
+              name: ["fname"],
+              value: fname,
+            },
+            {
+              name: ["lname"],
+              value: lname,
+            },
+            {
+              name: ["email"],
+              value: mailid,
+            },
+            {
+              name: ["doj"],
+              value: moment(doj, dateFormat),
+            },
+            {
+              name: ["designation"],
+              value: designation,
+            },
+            {
+              name: ["gender"],
+              value: gender,
+            },
+            {
+              name: ["phonenumber"],
+              value: phonenumber,
+            },
+          ]}
         >
           <Row
             className="rowform"
@@ -97,32 +197,6 @@ function AddEmployee() {
             }}
           >
             {/* -----------------Back button------------- */}
-
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-center"
-              style={{
-                background: "",
-                height: "50px",
-                display: "flex",
-                justifyContent: "flex-start",
-              }}
-            >
-              <Button
-                className="listExpense"
-                type="primary"
-                onClick={handleListEmployee}
-                style={{
-                  width: "120px",
-                  cursor: "pointer",
-                  backgroundColor: "rgb(24, 154, 180)",
-                  borderRadius: "5px",
-                }}
-              >
-                Employee List
-              </Button>
-            </Col>
           </Row>
 
           <Row gutter={[24, 8]}>
@@ -142,7 +216,6 @@ function AddEmployee() {
                     event.preventDefault();
                   }
                 }}
-
                 rules={[
                   {
                     required: true,
@@ -158,16 +231,16 @@ function AddEmployee() {
               >
                 <Input
                   maxLength={20}
-                    onChange={(e) => {
+                  //   onChange={(e) => {
 
-                      const inputval = e.target.value;
-                      const str = e.target.value;
-                      const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                      const caps = str.split(' ').map(capitalize).join(' ');
+                  //     const inputval = e.target.value;
+                  //     const str = e.target.value;
+                  //     const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                  //     const caps = str.split(' ').map(capitalize).join(' ');
                   // setPaidBy(newVal);
-                  form.setFieldsValue({ fname: newVal, fname: caps });
+                  // form.setFieldsValue({ expence: newVal, expence: caps });
 
-                    }}
+                  //   }}
 
                   required
                   placeholder="Enter Your First Name"
@@ -191,7 +264,6 @@ function AddEmployee() {
                     event.preventDefault();
                   }
                 }}
-
                 rules={[
                   {
                     required: true,
@@ -207,16 +279,16 @@ function AddEmployee() {
               >
                 <Input
                   maxLength={20}
-                    onChange={(e) => {
+                  //   onChange={(e) => {
 
-                      const inputval = e.target.value;
-                      const str = e.target.value;
-                      const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                      const caps = str.split(' ').map(capitalize).join(' ');
+                  //     const inputval = e.target.value;
+                  //     const str = e.target.value;
+                  //     const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                  //     const caps = str.split(' ').map(capitalize).join(' ');
                   // setPaidBy(newVal);
-                  form.setFieldsValue({ lname: newVal, lname: caps });
+                  // form.setFieldsValue({ expence: newVal, expence: caps });
 
-                    }}
+                  //   }}
 
                   required
                   placeholder="Enter Your Last Name"
@@ -258,6 +330,17 @@ function AddEmployee() {
                 ]}
               >
                 <Input
+                  maxLength={20}
+                  //   onChange={(e) => {
+
+                  //     const inputval = e.target.value;
+                  //     const str = e.target.value;
+                  //     const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                  //     const caps = str.split(' ').map(capitalize).join(' ');
+                  // setPaidBy(newVal);
+                  // form.setFieldsValue({ expence: newVal, expence: caps });
+
+                  //   }}
 
                   required
                   placeholder="Enter Email Address"
@@ -285,6 +368,7 @@ function AddEmployee() {
               >
                 {/* format={dateFormatList} */}
                 <DatePicker
+                  format={dateFormat}
                   style={{ width: "100%" }}
                   //  disabledDate={disabledDate}
                   placeholder="Choose Date"
@@ -305,12 +389,17 @@ function AddEmployee() {
               </Divider>
               <Form.Item
                 className="numder-inputs"
-                name="phone"
+                name="phonenumber"
                 // onKeyPress={(event) => {
                 //   if (checkNumbervalue(event)) {
                 //     event.preventDefault();
                 //   }
                 // }}
+                onKeyPress={(event) => {
+                  if (checkNumbervalue(event)) {
+                    event.preventDefault();
+                  }
+                }}
                 rules={[
                   {
                     required: true,
@@ -358,8 +447,8 @@ function AddEmployee() {
                   // showSearch
                   placeholder="Select a Gender"
                   // optionFilterProp="children"
-                //   onChange={onChange}
-                //   onSearch={onSearch}
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
                   // filterOption={(input, option) =>
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
@@ -372,7 +461,7 @@ function AddEmployee() {
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
-          <Col
+            <Col
               xs={{ span: 24 }}
               sm={{ span: 12 }}
               className="Col-1-left"
@@ -394,8 +483,8 @@ function AddEmployee() {
                   // showSearch
                   placeholder="Select a Designation"
                   // optionFilterProp="children"
-                //   onChange={onChange}
-                //   onSearch={onSearch}
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
                   // filterOption={(input, option) =>
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
@@ -410,35 +499,34 @@ function AddEmployee() {
                   <Option value="hr">Human Resource(HR)</Option>
                   <Option value="mgr">Manager</Option>
                   <Option value="dr">Director</Option>
-                  <Option value="ceo">Chief Executive Officer(CEO)</Option>
+                  <Option value="ceo">Cheap Executive Officer(CEO)</Option>
                 </Select>
               </Form.Item>
             </Col>
-
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "", height: "80px" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Role<span style={{ color: "red" }}> *</span>
-              </Divider>
-              <Form.Item
-                name="role"
-                rules={[
-                  {
+            {/* <Col */}
+            {/* xs={{ span: 24 }} */}
+            {/* sm={{ span: 12 }} */}
+            {/* className="Col-1-left" */}
+            {/* style={{ background: "", height: "80px" }} */}
+            {/* > */}
+            {/* <Divider orientation="left" orientationMargin={0}> */}
+            {/* Role<span style={{ color: "red" }}> *</span> */}
+            {/* </Divider> */}
+            {/* <Form.Item */}
+            {/* name="role" */}
+            {/* rules={[ */}
+            {/* {
                     required: true,
                     message: "Please Choose a Role",
                   },
                 ]}
-              >
-                <Select
+              > */}
+            {/* <Select
                   // showSearch
                   placeholder="Select a Role"
                   // optionFilterProp="children"
-                //   onChange={onChange}
-                //   onSearch={onSearch}
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
                   // filterOption={(input, option) =>
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
@@ -446,52 +534,23 @@ function AddEmployee() {
                   <Option value="admin">Admin</Option>
                   <Option value="emp">Employee</Option>
                   {/* <Option value="pns">Prefer Not To Say</Option> */}
-                </Select>
-              </Form.Item>
-            </Col>
-            </Row>
-
-          <Row gutter={[24, 16]}>
-            <Col classsname='gutter-row' span={9}></Col>
-            <Col classsname='gutter-row' >
-              <div className='submitButton'>
-                <Space>
-                  <Form.Item className='submit'>
-                    <Button
-                      style={{
-                        background: '#C1C1C1',
-                        borderRadius: '5px',
-                        width: '80px',
-
-                        color: 'white',
-                        cursor: 'pointer'
-                      }}
-                      onClick={onReset}
-                    >Reset</Button>
-                  </Form.Item>
-                  <Form.Item className='submit'>
-                    <button style={{
-                      background: '#189AB4',
-                      borderRadius: '5px',
-                      borderWidth: '0px',
-                      width: '80px',
-                      height: '30px',
-                      color: 'white',
-                      cursor: 'pointer',
-                      marginLeft: '17px'
-
-                    }}
-                      type="primary">Submit</button>
-                  </Form.Item>
-                </Space>
-              </div>
-            </Col>
-            {/* <Col classsname='gutter-row' span={3}></Col> */}
+            {/* </Select> */}
+            {/* </Form.Item>
+            </Col> */}
           </Row>
+
+          <br />
+          <Button style={cancelStyle} onClick={cancel}>
+            Cancel
+          </Button>
+          <Button style={buttonStyle} onClick={submitEdit}>
+            Submit
+          </Button>
+          <br />
         </Form>
       </div>
     </>
   );
 }
 
-export default AddEmployee;
+export default Editemployee;

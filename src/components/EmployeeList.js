@@ -1,7 +1,7 @@
 import { Table, Button } from "antd";
 import { EditOutlined } from "@ant-design/icons";
-import React,{useEffect,useState} from "react";
-import { createUser,getUsers } from "../contexts/CreateContext";
+import React, { useEffect, useState } from "react";
+import { createUser, getUsers } from "../contexts/CreateContext";
 import moment from "moment";
 
 const columns = [
@@ -64,20 +64,20 @@ const columns = [
   },
 ];
 
- function EmployeeList() {
+function EmployeeList() {
   const [loading, setLoading] = useState(false);
 
-  const [data, setData] = React.useState([])
-  useEffect(()=>{
-    getData()
-  },[])
+  const [data, setData] = React.useState([]);
+  useEffect(() => {
+    getData();
+  }, []);
 
   async function getData() {
     //hit api to get the employees
     //set that employees to data state
     setLoading(true);
-    const allData = await getUsers()
-    let d = allData.docs.map((doc,i) => {
+    const allData = await getUsers();
+    let d = allData.docs.map((doc, i) => {
       //  console.log(JSON.stringify(new Date(doc.data()['date'])));
       var longDateStr = moment(doc.data()["date"], "D/M/Y").format("MM-DDY");
       return {
@@ -85,11 +85,11 @@ const columns = [
         date: doc.data()["date"],
         dt: new Date(longDateStr),
         id: doc.id,
-        sn:i+1
+        sn: i + 1,
       };
     });
     console.log({ d });
-    setData(d)
+    setData(d);
     setLoading(false);
   }
   return (

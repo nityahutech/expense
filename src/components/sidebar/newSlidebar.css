@@ -3,7 +3,11 @@
     right: 10;
     background-color: #05445E;
 }
-
+element.style {
+    padding: 0px;
+    height: 100vh;
+    overflow-y: scroll;
+}
 .top {
     height: 50px;
     display: flex;

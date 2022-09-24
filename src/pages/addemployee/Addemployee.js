@@ -3,12 +3,15 @@ import AttendanceLog from "../../components/AttendanceLog";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 import { useAuth } from "../../contexts/AuthContext";
-import ProfileContext from "../../contexts/ProfileContext";
+import AddEmployee from "../../components/addemployee";
 
-function Attendance() {
+
+
+
+
+function DashBoard() {
   const [accessToken, setAccessToken] = useState(null);
-  const [role, setRole] = useState(null);
-  const { currentUser } = useAuth();
+  const { currentUser, role } = useAuth();
   // const role = getRole();
 
   // async function getRole() {
@@ -17,10 +20,9 @@ function Attendance() {
   // }
 
   useEffect(() => {
-    let role = sessionStorage.getItem("role");
-    setRole(role)
+    console.log(role);
     let token = sessionStorage.getItem("accessToken");
-    console.log({ token }, { role });
+    console.log({ token });
     if (token === "null") {
       window.location.href = "/";
     } else {
@@ -32,7 +34,7 @@ function Attendance() {
       <div className="sidecontainer">
         <Sidebar
           activeSubMenu={["sub2"]}
-          activeMenu={["6"]}
+          activeMenu={["8"]}
           accessToken={accessToken}
         />
       </div>
@@ -43,11 +45,11 @@ function Attendance() {
         </div>
 
         <div className="tables">
-          <AttendanceLog empDetails={{ userType: role, empid: 12 }} />
+          <AddEmployee />
         </div>
       </div>
     </div>
   ) : null;
 }
 
-export default Attendance;
+export default DashBoard;

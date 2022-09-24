@@ -3,7 +3,10 @@
     right: 10;
     background-color: #05445E;
 }
-
+.ant-menu-root.ant-menu-vertical, .ant-menu-root.ant-menu-vertical-left, .ant-menu-root.ant-menu-vertical-right, .ant-menu-root.ant-menu-inline {
+    box-shadow: none;
+    overflow-y: scroll;
+}
 .top {
     height: 50px;
     display: flex;
@@ -34,7 +37,8 @@ ul.ant-menu {
 .Dash {
     width: 10%;
     height: auto;
-    background-color: #05445E;
+    /* background-color: #05445E; */
+    color: white;
 }
 
 .dot {

@@ -113,41 +113,150 @@ const NewSidebar = (props) => {
           <Menu.SubMenu
             icon={
               <img
-                src="/logo/Time-Attendance.png"
+                style={{ color: "white" }}
+                src="/logo/employees.png"
                 alt="profile"
                 className="Dash"
               />
             }
             key="sub2"
-            title="Attendance"
+            title="Employee"
             mode="inline"
           >
             <Menu.Item
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="4"
+              key="6"
             >
               Attendance Log
               <NavLink to="/Attendance/AttendanceLog" />
             </Menu.Item>
             <Menu.Item
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="5"
+              key="7"
             >
               Leave
-              <NavLink to="/" />
+              <NavLink to="/Employee/Leave" />
+            </Menu.Item>
+
+            <Menu.Item
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="8"
+            >
+              Add Employee
+              <NavLink to="/Addemployee/AddEmployee" />
+            </Menu.Item>
+            <Menu.Item
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="9"
+            >
+              Employee List
+              <NavLink to="/EmployeeListPage/EmployeeList" />
+            </Menu.Item>
+          </Menu.SubMenu>
+           
+          <Menu.SubMenu
+            icon={
+              <img
+                style={{ color: "" }}
+                src="/logo/user.png"
+                alt="profile"
+                className="Dash"
+              />
+            }
+            key="sub3"
+            title="Profile"
+            mode="inline"
+          >
+            <Menu.Item
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="10"
+            >
+              Personal
+              <NavLink to="/PersonalPage/Personal"/>
+            </Menu.Item>
+            <Menu.Item
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="11"
+            >
+              Work
+              <NavLink to="/WorkPage/work" />
+            </Menu.Item>
+
+            <Menu.Item
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="12"
+            >
+              Team
+              <NavLink to="/TeamPage/Team" />
+            </Menu.Item>
+            <Menu.Item
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="13"
+            >
+              Education
+              <NavLink to="/EducationPage/Education" />
+            </Menu.Item>
+            <Menu.Item
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="14"
+            >
+              Family
+              <NavLink to="/FamilyPage/Family" />
+            </Menu.Item>
+            <Menu.Item
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="15"
+            >
+              Documents
+              <NavLink to="/DocumentsPage/Document" />
+            </Menu.Item>
+            <Menu.Item
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="16"
+            >
+              Work week
+              <NavLink to="/WorkWeekPage/WorkWeek" />
+            </Menu.Item>
+            <Menu.Item
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="17"
+            >
+              Pay Slip
+              <NavLink to="/PaySlipPage/PaySlip" />
+            </Menu.Item>
+            <Menu.Item
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="18"
+            >
+              Bank Account
+              <NavLink to="/BankAccountpages/BankAccount" />
             </Menu.Item>
           </Menu.SubMenu>
 
-          <Menu.Item
-            icon={<ProfileOutlined style={{ color: "#FFFFFF" }} />}
-            key="6"
+          {/* <Menu.Item
+            icon={
+              <img
+                style={{ color: "" }}
+                src="/logo/user.png"
+                alt="profile"
+                className="Dash"
+              />
+            }
+            key="4"
           >
             Profile
             <NavLink to="/Profile" />
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item
-            icon={<SettingOutlined style={{ color: "#FFFFFF" }} />}
-            key="7"
+            icon={
+              <img
+                style={{ color: "" }}
+                src="/logo/settings.png"
+                alt="profile"
+                className="Dash"
+              />
+            }
+            key="5"
           >
             Settings
             <NavLink to="/Setting" />

@@ -26,6 +26,7 @@ function LoginPage() {
       let res = await login(loginEmail, loginPassword);
       console.log(res.user);
       sessionStorage.setItem("accessToken", res.user.accessToken);
+      sessionStorage.setItem("user", JSON.stringify(res.user));
       navigate("DashBoard", { replace: true });
     } catch {
       setError("Failed to log in");
@@ -167,12 +168,12 @@ function LoginPage() {
                   />
                 )}
 
-                <div className="signup-msg">
+                {/* <div className="signup-msg">
                   Don't Have an account?{" "}
                   <a href="/SignupPage" style={{ color: "#0FAEAA", cursor: "pointer" }}>
                     SignUp
                   </a>
-                </div>
+                </div> */}
                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                   <p className="loginFooter">
                     © 2022 Expense. All rights reserved. Terms of Service

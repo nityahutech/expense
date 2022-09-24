@@ -1,3 +1,47 @@
 .ant-tabs-top.Tabs{
     margin-left: 13px;
 }
+.ant-input.name{
+    width: 50%;
+}
+.ant-form.formItem{
+    background: #fff;
+    padding: 3rem;
+    margin: 2rem 0rem 10rem 0rem;
+    width: 70%;
+    position: relative;
+    left: 7rem;
+    border-radius: 5px;
+}
+.ant-btn.reset{
+    position: absolute;
+    left: 96px;
+    width: 91px;
+}
+.ant-form-item-label{
+    font-size: 16px;
+}
+.Range{
+    position: relative;
+    bottom: 3.7rem;
+    left: 42rem;
+}
+.monthly{
+    position: relative;
+    bottom: 31px
+}
+.Daily{
+    width: 25%;
+    position: relative;
+    bottom: 3.7rem;
+    left: 15rem
+}
+.hrtab .ant-tabs-nav .ant-tabs-nav-wrap{
+    background: #FFF;
+    margin-top: 15px;
+    padding: 5px;
+}
+.DailyTable{
+    position: relative;
+    bottom: 30px;
+}

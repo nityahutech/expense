@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react"
 import { auth } from "../firebase-config"
-import { createUserWithEmailAndPassword,
-         signInWithEmailAndPassword,
+import { signInWithEmailAndPassword,
          signOut,
          sendPasswordResetEmail,
          updateEmail,
@@ -10,6 +9,7 @@ import { createUserWithEmailAndPassword,
          updatePhoneNumber,
          updateProfile
 } from "@firebase/auth"
+import ProfileContext from "./ProfileContext"
 
 const AuthContext = React.createContext()
 
@@ -20,20 +20,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState()
   const [loading, setLoading] = useState(true)
-
-  function signup(email, password, name) {
-    console.log(email, password);
-    let res =  createUserWithEmailAndPassword(auth, email, password).then(() => {
-      login(email, password).then(() => {
-        auth.onAuthStateChanged((user) => {
-          updateProfile(user, {displayName: name});
-        })
-      })
-    })
-    console.log(res);
-    console.log(currentUser);
-    return res;
-  }
+  const [role, setRole] = useState();
 
   function login(email, password) {
     return signInWithEmailAndPassword(auth, email, password)
@@ -70,11 +57,19 @@ export function AuthProvider({ children }) {
     return deleteUser(auth, currentUser)
   }
 
+  async function getRole(user) {
+    let rec = await ProfileContext.getProfile(user.uid);
+    sessionStorage.setItem("role", rec.data().role)
+    console.log(rec.data().role);
+    sessionStorage.setItem("role", rec.data().role)
+    setRole(rec.data().role);
+  }
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user)
       setLoading(false)
+      getRole(user);
     })
 
     return unsubscribe
@@ -82,8 +77,8 @@ export function AuthProvider({ children }) {
 
   const value = {
     currentUser,
+    role,
     login,
-    signup,
     logout,
     resetPassword,
     updateMyEmail,

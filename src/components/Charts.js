@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../style/Charts.css";
 import { Select } from "antd";
+import { Card } from 'antd';
+
 
 import { useNavigate } from "react-router-dom";
 
@@ -29,7 +31,7 @@ ChartJS.register(
 );
 
 const { Option } = Select;
-
+// ------------------------------------------------------
 const Charts = () => {
   const handleExpenselist = () => {
     navigate("/Expense/Expenselist");
@@ -119,22 +121,48 @@ const Charts = () => {
     console.log(col,":",pieData);
     values();
   }, []);
-
+// --------------------------------------------------------------------
   return (
     <>
       <div className="content container-fluid">
         <div className="rowcards">
-          <div className="col1">
+          
+          <Card
+          hoverable
+          style={{
+            backgroundColor:"inherit",
+            padding:'1px',
+          }}
+          className="card1"
+          >
+            <div className="col1">
             <h2>Total Amount</h2>
             <h1>{total}</h1>
-          </div>
+            </div>
+          </Card>
+          <Card
+          hoverable
+          style={{
+            backgroundColor:"inherit",
+            padding:'1px',
+          }}
+          className="card2"
+          >
           <div className="col2">
             <h2>Average Amount/Month</h2>
             <h1>{avg}</h1>
           </div>
+          </Card>
         </div>
         <div className="rowcharts">
+          {/* --------------------------------------------------- */}
           <div className="colbar">
+          <Card
+          hoverable
+          style={{
+            width:'100%',
+          }}
+          >
             <Bar
               // className="bar-style"
               data={{
@@ -256,8 +284,15 @@ const Charts = () => {
                 <Option value="2023">2023</Option>
               </Select>
             </div>
+          </Card>
           </div>
           <div className="colpie">
+          <Card
+          hoverable
+          style={{
+            width:'100%'
+          }}
+          >
             <Pie
               data={{
                 labels:  pieData[0],
@@ -327,6 +362,8 @@ const Charts = () => {
                 <Option value="12">December</Option>
               </Select>
             </div>
+          
+          </Card>
           </div>
         </div>
       </div>

@@ -3,9 +3,8 @@
     right: 10;
     background-color: #05445E;
 }
-element.style {
-    padding: 0px;
-    height: 100vh;
+.ant-menu-root.ant-menu-vertical, .ant-menu-root.ant-menu-vertical-left, .ant-menu-root.ant-menu-vertical-right, .ant-menu-root.ant-menu-inline {
+    box-shadow: none;
     overflow-y: scroll;
 }
 .top {

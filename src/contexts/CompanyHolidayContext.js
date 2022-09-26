@@ -7,9 +7,11 @@ import {
     doc,
     addDoc,
     query,
+    orderBy,
+    addDoc,
     deleteDoc,
-    updateDoc,
-    orderBy
+    doc
+
   
 } from "firebase/firestore";
 
@@ -22,18 +24,16 @@ class CompanyHolidayContext {
         // console.log(q);
         return getDocs(q);
     };
-    createHoliday = (newLeave) => {
-        return addDoc(companyholidayCollectionRef, newLeave);
-    };
-    deleteHoliday = (id) => {
-        const holidayDoc = doc(db, "companyholiday", id);
-        return deleteDoc(holidayDoc);
-    };
-    updateHoliday = (id, updateHoliday) => {
-        const holidayDoc = doc(db, "companyholiday", id);
-        return updateDoc(holidayDoc, updateHoliday);
+    
+    createHoliday = (newHoliday) => {
+        return addDoc(companyholidayCollectionRef, newHoliday);
     };
 
+    deleteHoliday = (id) => {
+        const newHoliday = doc(db, "companyholiday", id);
+        return deleteDoc(newHoliday);
+    };
 }
+
 
 export default new CompanyHolidayContext();

@@ -4,7 +4,6 @@ import {
     Row,
     Table,
     Modal,
-
 } from 'antd';
 
 import { useAuth } from '../contexts/AuthContext'
@@ -28,8 +27,6 @@ const Notification = ({ data }) => {
     useEffect(() => {
         setDataSource(data)
     }, [data])
-
-
     // console.log("data", data);
 
     const getData = async () => {
@@ -48,11 +45,12 @@ const Notification = ({ data }) => {
         setApprove(d);
 
     }
+    // ${JSON.stringify(record)}
 
     const onApproveLeave = (record) => {
         console.log(record)
         Modal.confirm({
-            title: "Are you sure, you want to approve Leave record?",
+            title: `Are you sure, you want to approve Leave of ${record?.name||''}!`,
             okText: "Yes",
             okType: "primary",
             onOk: () => {
@@ -72,7 +70,7 @@ const Notification = ({ data }) => {
     const onRejectedLeave = (record) => {
         console.log(record)
         Modal.confirm({
-            title: "Are you sure, you want to reject Leave record?",
+            title: `Are you sure, you want to reject Leave of ${record?.name||''}!`,
             okText: "Yes",
             okType: "danger",
             onOk: () => {
@@ -124,7 +122,6 @@ const Notification = ({ data }) => {
             width: 150,
         },
 
-
         {
             key: "5",
             title: "Actions",
@@ -147,10 +144,6 @@ const Notification = ({ data }) => {
                                         onApproveLeave(record);
 
                                     }}
-                                   
-                                  
-
-
                                 />
                                
                                 <img
@@ -162,7 +155,6 @@ const Notification = ({ data }) => {
                                         onRejectedLeave(record);
                                     }}
                                    
-
                                 />
                             </>
                         }
@@ -178,9 +170,6 @@ const Notification = ({ data }) => {
 
         console.log(name, empId, "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG")
     }
-
-
-
 
     return (
         <Row style={{
@@ -210,9 +199,6 @@ const Notification = ({ data }) => {
                             x: 1000, 
                         }} />
                 </div>
-
-
-
             </Col>
         </Row>
 

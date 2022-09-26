@@ -4,6 +4,7 @@ import Editemployee from "./Editemployee";
 import React, { useEffect, useState } from "react";
 import { createUser, getUsers } from "../contexts/CreateContext";
 import moment from "moment";
+import "../style/EmployeeList.css";
 
 function EmployeeList() {
   const [modaldata, setmodaldata] = useState([]);
@@ -23,12 +24,14 @@ function EmployeeList() {
       title: "Sl. No.",
       dataIndex: "sn",
       key: "sn",
+      fixed: "left",
       width: 80,
     },
     {
       title: "First Name",
       dataIndex: "fname",
       key: "fname",
+      fixed: "left",
       width: 180,
     },
     {
@@ -70,6 +73,7 @@ function EmployeeList() {
       title: "Action",
       dataIndex: "action",
       key: "action",
+      fixed: "right",
 
       render: (_, record) => {
         // console.log("record:: ", record);
@@ -142,11 +146,11 @@ function EmployeeList() {
         columns={columns}
         dataSource={data}
         pagination={{
-          pageSize: 50,
+          position: ["bottomCenter"],
         }}
-        // scroll={{
-        //   y: 240,
-        // }}
+        scroll={{ x: 1300 }}
+        className="employeeTable"
+        size="small"
       />
       <Modal
         centered

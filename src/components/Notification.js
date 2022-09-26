@@ -154,7 +154,7 @@ const Notification = ({ data }) => {
                                 />
                                
                                 <img
-                                   
+                                   style={{ color: "white", width: '20px', marginRight: 10 }}
                                     src="../logo/rejected.png"
                                     alt="profile"
                                     className="Dash"

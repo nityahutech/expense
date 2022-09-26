@@ -316,6 +316,7 @@ const Leave = () => {
                              <DeleteOutlined
                              disabled={record?.status==='Approved'}
                                  onClick={() => {
+                                    if (record?.status !== 'Approved')
                                      onDeleteLeave(record);
                                  }}
                                  style={

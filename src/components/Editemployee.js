@@ -13,8 +13,10 @@ import {
   notification,
 } from "antd";
 // import { useNavigate } from 'react-router-dom';
-import { createUser } from "../contexts/CreateContext";
+import { useAuth } from "../contexts/AuthContext";
 import moment from "moment";
+import ProfileContext from "../contexts/ProfileContext";
+import EmployeeContext from "../contexts/EmployeeContext";
 
 const { Option } = Select;
 const showNotification = (type, msg, desc) => {
@@ -34,24 +36,30 @@ function Editemployee(props) {
   const [gender, setGender] = useState("");
   const [phonenumber, setPhonenumber] = useState("");
   console.log(props);
+  const { currentUser } = useAuth();
 
   async function submitEdit() {
+    console.log("***************************");
     try {
       const editedRecord = {
         fname,
         lname,
-        mailid,
+        // mailid,
         doj,
         designation,
         gender,
         phonenumber,
       };
+      console.log("editedRecord");
+      console.log(props.record.id, editedRecord);
+      EmployeeContext.updateEmployee(props.record.id, editedRecord);
       props.setIsModalVisible(false);
-      props.reloadData();
+      // props.reloadData();
       showNotification("success", "Success", "Record updated successfully");
 
       return;
     } catch (error) {
+      console.log(error);
       props.setIsModalVisible(false);
       showNotification("error", "Failed", "Record update failed");
     }
@@ -111,7 +119,7 @@ function Editemployee(props) {
   // const {signup} = useAuth();
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
-    let res = await createUser(values);
+    let res = await ProfileContext.updateProfile(currentUser.uid, values);
     console.log("DONE!!!!!!!!!");
     // console.log(res);
     // const valuesToservice = {
@@ -299,15 +307,18 @@ function Editemployee(props) {
               <Input
                 style={{ width: "80%" }}
                 maxLength={20}
-                onChange={(e) => {
-                  const inputval = e.target.value;
+                // onChange={(e) => {
+                //   const inputval = e.target.value;
 
-                  const newVal =
-                    inputval.substring(0, 1).toUpperCase() +
-                    inputval.substring(1);
+                //   const newVal =
+                //     inputval.substring(0, 1).toUpperCase() +
+                //     inputval.substring(1);
 
-                  setMailid(newVal);
-                }}
+                //   setMailid(newVal);
+                // }}
+                readonly
+                value={mailid}
+                disabled={true}
               />
             </Form.Item>
           </Col>

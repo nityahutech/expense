@@ -6,6 +6,11 @@ import { createUserWithEmailAndPassword,
 } from "@firebase/auth"
 import ProfileContext from "./ProfileContext"
 
+function generateEmpId() {
+    const empId = "001";
+    return "HTS"+empId;
+}
+
 export async function createUser(values) {
     console.log(values.email, "password");
     let res =  await createUserWithEmailAndPassword(createAuth, values.email, "password")
@@ -15,6 +20,7 @@ export async function createUser(values) {
     console.log(res.user.uid);
     console.log(values.fname+" "+values.lname);
     const valuesToservice = {
+        empId: generateEmpId(),
         fname: values.fname,
         lname: values.lname,
         mailid: values.email,

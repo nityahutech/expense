@@ -11,6 +11,9 @@ import {
 } from "antd";
 import "../style/AttendanceLog.css";
 import moment from "moment";
+import { useAuth } from "../contexts/AuthContext"
+import AttendanceContext from "../contexts/AttendanceContext";
+import ProfileContext from "../contexts/ProfileContext";
 
 const { RangePicker } = DatePicker;
 
@@ -38,6 +41,7 @@ function AttendanceLog({ empDetails }) {
   const [selectemp, setSelectemp] = useState(null);
   const [activetab, setActivetab] = useState("1");
   console.log(activetab);
+  const { currentUser } = useAuth();
   const [key, setKey] = useState("1");
   const [empMonthly, setEmpMonthly] = useState([]);
   const columns = [
@@ -47,15 +51,15 @@ function AttendanceLog({ empDetails }) {
       key: "code",
       render: (text) => <a>{text}</a>,
     },
-    // {
-    //   title: "Date",
-    //   dataIndex: "date",
-    //   key: "date",
-    // },
     {
       title: "Employee Name",
-      dataIndex: "empname",
-      key: "empname",
+      dataIndex: "name",
+      key: "nFame",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
     },
     {
       title: "Project Name",
@@ -105,23 +109,18 @@ function AttendanceLog({ empDetails }) {
     );
   }
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log(values);
     const newData = {
-      code: "898",
-      date: getFormateDateString(),
-      status: "-_",
-      time1: getFormatTimeString(),
-      time2: "18:15:23",
-      work: "-",
       report: values?.project_details || "-",
-      project: values?.project_name || "-",
+      project: values?.project_name || "-"
     };
-    console.log({ monthlydata });
-    
-    let newAlldata = [newData, ...empMonthly];
-    console.log(newAlldata);
-    localStorage.setItem("newReport", JSON.stringify(newAlldata));
+    console.log(currentUser.uid, { monthlydata });
+    AttendanceContext.updateAttendance(currentUser.uid, newData)
+
+    // let newAlldata = [newData, ...empMonthly];
+    // console.log(newAlldata);
+    // localStorage.setItem("newReport", JSON.stringify(newAlldata));
     setActivetab("1");
     //create new report obj with required data + ""
     //create newMonthlyAll=new+old monthly
@@ -129,53 +128,78 @@ function AttendanceLog({ empDetails }) {
     //set state for monthly with newMonthlyAll
   };
   useEffect(() => {
-    getEmpMonthly();
+    getEmpDetails(currentUser.uid);
+    // getEmpMonthly();
   }, [activetab]);
 
-  function getEmpMonthly() {
-    console.log(JSON.parse(localStorage.getItem("newReport")));
-    let userlocal = JSON.parse(localStorage.getItem("newReport")) || [];
-    let newEmp = [];
-    userlocal.map((emp, i) => {
-      newEmp.push({
-        key: i,
-
-        code: emp.code,
-        date: emp.date,
-        empname: "Nitya-" + (i + 1),
-        status: emp.status,
-        time1: emp.time1,
-        time2: emp.time2,
-        work: emp.work,
-        report: emp.report,
-        project: emp.project,
-      });
+  async function getEmpDetails(id) {
+    let data = await AttendanceContext.getAllAttendance(id);
+    let d = data.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      };
     });
-    console.log({ newEmp });
-    setEmpMonthly(newEmp);
-    // setallEmp(newEmp);
+    console.log(d)
+    setEmpMonthly(d);
   }
 
-  function allEmpDetails() {
-    console.log(JSON.parse(localStorage.getItem("newReport")));
-    let userlocal = JSON.parse(localStorage.getItem("newReport")) || [];
-    let newEmp = [];
-    userlocal.map((emp, i) => {
-      newEmp.push({
-        key: i,
-        code: emp.code + i,
-        date: emp.date,
-        status: emp.status,
-        time1: emp.time1,
-        time2: emp.time2,
-        empname: "Nitya-" + (i + 1),
-        project: emp.project,
-        report: emp.report,
-      });
+  // function getEmpMonthly() {
+  //   console.log(JSON.parse(localStorage.getItem("newReport")));
+  //   let userlocal = JSON.parse(localStorage.getItem("newReport")) || [];
+  //   let newEmp = [];
+  //   userlocal.map((emp, i) => {
+  //     newEmp.push({
+  //       key: i,
+
+  //       code: emp.code,
+  //       date: emp.date,
+  //       name: "Nitya-" + (i + 1),
+  //       status: emp.status,
+  //       time1: emp.time1,
+  //       time2: emp.time2,
+  //       work: emp.work,
+  //       report: emp.report,
+  //       project: emp.project,
+  //     });
+  //   });
+  //   console.log({ newEmp });
+  //   setEmpMonthly(newEmp);
+  //   // setallEmp(newEmp);
+  // }
+
+  async function allEmpDetails() {
+    // console.log(JSON.parse(localStorage.getItem("newReport")));
+    let userdata = await AttendanceContext.getAllUsers();
+    let res = userdata.docs.map((doc) => {
+      return {
+        id: doc.id,
+        code: doc.data().empId,
+        name: doc.data().employeename,
+        status: "absent",
+      };
     });
-    console.log({ newEmp });
-    setallEmp(newEmp);
-    setEmpMonthly(newEmp);
+    console.log(res)
+    let stats = await AttendanceContext.getStatus();
+    console.log(stats)
+    // let userlocal = JSON.parse(localStorage.getItem("newReport")) || [];
+    // let newEmp = [];
+    // userlocal.map((emp, i) => {
+    //   newEmp.push({
+    //     key: i,
+    //     code: emp.code + i,
+    //     date: emp.date,
+    //     status: emp.status,
+    //     time1: emp.time1,
+    //     time2: emp.time2,
+    //     name: "Nitya-" + (i + 1),
+    //     project: emp.project,
+    //     report: emp.report,
+    //   });
+    // });
+    // console.log({ newEmp });
+    setallEmp(res);
+    setEmpMonthly(res);
   }
   const onReset = () => {
     form.resetFields();
@@ -185,7 +209,8 @@ function AttendanceLog({ empDetails }) {
   useEffect(() => {
     if (empDetails.userType === "emp") {
       setActivetab("1");
-      getEmpMonthly();
+      getEmpDetails(currentUser.uid);
+      // getEmpMonthly();
     } else {
       setActivetab("2");
       allEmpDetails();
@@ -210,7 +235,7 @@ function AttendanceLog({ empDetails }) {
       key: "1",
       code: "HTS001",
 
-      empname: "Nitya",
+      name: "Nitya",
       project: "Expenses",
       report: "xfddsfdvbgfgfbvbvbdffgfdgjfhjjkjfjfdgkj",
     },
@@ -218,7 +243,7 @@ function AttendanceLog({ empDetails }) {
       key: "2",
       code: "HTS002",
 
-      empname: "Jatin",
+      name: "Jatin",
       project: "Expenses",
       report: "xfddsfdvbgfgfbvbvb",
     },
@@ -226,18 +251,18 @@ function AttendanceLog({ empDetails }) {
       key: "3",
       code: "HTS003",
 
-      empname: "Saswat",
+      name: "Saswat",
       project: "Expenses",
       report: "xfddsfdvbgfgfbvbvb",
     },
   ];
   const columns1 = [
-    {
-      title: "Employee Code",
-      dataIndex: "code",
-      key: "code",
-      render: (text) => <a>{text}</a>,
-    },
+    // {
+    //   title: "Employee Code",
+    //   dataIndex: "code",
+    //   key: "code",
+    //   render: (text) => <a>{text}</a>,
+    // },
     {
       title: "Date",
       dataIndex: "date",
@@ -251,24 +276,29 @@ function AttendanceLog({ empDetails }) {
     },
     {
       title: "In Time",
-      dataIndex: "time1",
-      key: "time1",
+      dataIndex: "clockIn",
+      key: "clockIn",
     },
     {
       title: "Out Time",
-      key: "time2",
-      dataIndex: "time2",
+      key: "clockOut",
+      dataIndex: "clockOut",
     },
     {
       title: "Work Duration",
-      key: "work",
-      dataIndex: "work",
+      key: "duration",
+      dataIndex: "duration",
+    },
+    {
+      title: "Project Name",
+      dataIndex: "project",
+      key: "project",
     },
     {
       title: "Report",
       key: "report",
       dataIndex: "report",
-    },
+    }
     // {
     //   title: "Action",
     //   key: "action",

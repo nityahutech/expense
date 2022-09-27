@@ -32,19 +32,20 @@ function EmployeeList() {
       dataIndex: "fname",
       key: "fname",
       fixed: "left",
-      width: 180,
+      width: 160,
     },
     {
       title: "Last Name",
       dataIndex: "lname",
       key: "lname",
-      width: 180,
+      width: 160,
     },
     {
       title: "Email",
       dataIndex: "mailid",
       key: "email",
-      width: 220,
+      width: 200,
+      ellipsis: true,
     },
     {
       title: "D.O.J.",
@@ -62,12 +63,13 @@ function EmployeeList() {
       title: "Gender",
       dataIndex: "gender",
       key: "gender",
-      width: 150,
+      width: 120,
     },
     {
       title: "Contact No.",
       dataIndex: "phonenumber",
       key: "cnumber",
+      width: 150,
     },
     {
       title: "Action",

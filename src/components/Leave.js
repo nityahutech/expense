@@ -42,7 +42,7 @@ const Leave = () => {
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
     const [noOfDays, setNoOfDays] = useState([]);
-    const [ishr, setIsHr] = useState(sessionStorage.getItem(null) || true);
+    const [isHr, setIsHr] = useState(sessionStorage.getItem(null) || true);
     const [role, setRole] = useState(null);
     const { currentUser } = useAuth();
 
@@ -55,6 +55,9 @@ const Leave = () => {
     const [companyholiday, setCompanyholiday] = useState([])
     const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
+    function addNewHoliday(holiday) {
+        setCompanyholiday([...companyholiday,holiday])
+    }
     const getHoliday = async () => {
 
         const allData = await CompanyHolidayContext.getAllCompanyHoliday();
@@ -68,6 +71,7 @@ const Leave = () => {
                     id: doc.id,
                 };
             });
+            console.log("comp",d);
             setCompanyholiday(d)
             console.log('allCompanyHoliday3', d)
 
@@ -491,7 +495,7 @@ const Leave = () => {
                 {/* </Col> */}
 
                 <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12}  >
-                    <HolidayList />
+                    <HolidayList isHr={isHr}  addNewHoliday={getHoliday}/>
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <div className='badge-div' style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', justifyContent: 'center', paddingTop: '10px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', }}>
                             {/* <Typography.Title level={4} >Calendar</Typography.Title> */}
@@ -517,11 +521,11 @@ const Leave = () => {
                             disabledDate={disabledDate}
                         />
                         {
-                            ishr
-                                ? <Notification data={requests} />
+                            isHr
+                                ? <Notification data={requests}/>
                                 : null
                         }
-                    </div>
+                    </div>  
                 </Col>
 
                 <Row style={{

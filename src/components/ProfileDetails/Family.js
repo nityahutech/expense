@@ -31,7 +31,8 @@ const onChange = (date, dateString) => {
 function Education() {
 
   const [editContent, showEditContent] = useState(false);
-  const [saveContent, showSaveContent] = useState(false)
+  const [saveContent, showSaveContent] = useState(false);
+  const [saveEmergency, showSaveEmergency] = useState(false)
 
   return (
     <div className='education' style={{margin:'10px'}}>
@@ -39,17 +40,26 @@ function Education() {
 
         <Row>
         <Col span={24}>
-            <Button 
-              type="text"
-              onClick={() => showEditContent(!editContent)}
-            >
-                <PlusCircleOutlined />Add
-            </Button>
-          </Col>
+                    <Button 
+                      type="text"
+                      onClick={() => showEditContent(!editContent)}
+                    >
+                        <PlusCircleOutlined />Add
+                    </Button>
+              </Col>
         </Row>
 
         {editContent ===true ?
         <Row gutter={[16, 8]}>
+
+            <Col span={24}>
+                    <Button 
+                      type="text"
+                      onClick={() => showEditContent(!editContent)}
+                    >
+                        <PlusCircleOutlined />Add
+                    </Button>
+              </Col>
 
              <Col span={12}> <Input placeholder="Mother's Name" /> </Col>
 
@@ -79,43 +89,38 @@ function Education() {
 
         </Row>:null}
       </Card>
-      {saveContent ===true ?
-      <Card
-        title="Educatonal Info"
-        // extra={<EditTwoTone />}
-        extra={ 
-          <Button 
-            type="text"
-          >
-            <DeleteTwoTone twoToneColor="#eb2f96"/>
-          </Button>
-        } 
-        style={{marginTop:'10px'}}    
-      >
-        
-        <Row gutter={[16, 8]}>
-
-          <Col span={12}> <Input placeholder="Mother's Name" /> </Col>
-
-          <Col span={12}> <Input placeholder="Contact No." /> </Col>
-
-          <Col span={12}> <Input placeholder="Father's Name" /> </Col>
-
-          <Col span={12}> <Input placeholder="Contact No." /> </Col>
-
-        </Row>
-      </Card>:null}
+    {/* --------------------------Emergency---------------------- */}
       <Card
         title='Emergency Contact'
         style={{marginTop:'10px'}}
       >
         <Row gutter={[16, 8]}>
+          <Col span={24}>
+            <Button 
+              type="text"
+              onClick={() => showSaveEmergency(!saveEmergency)}
+            >
+                <PlusCircleOutlined />Add
+            </Button>
+          </Col>
+        </Row>
+        {saveEmergency ===true ?
+        <Row gutter={[16, 8]}>
+          <Col span={24}>
+            <Button 
+              type="text"
+              onClick={() => showSaveContent(!saveEmergency)}
+            >
+                <PlusCircleOutlined />Add
+            </Button>
+          </Col>
+          
           <Col span={8}> <Input placeholder="Mother's Name" /> </Col>
 
           <Col span={8}> <Input placeholder="Contact No." /> </Col>
 
           <Col span={8}> <Input placeholder="Relation" /> </Col>
-        </Row>
+        </Row>:null}
       </Card>
     </div>
   )

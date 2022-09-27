@@ -18,11 +18,12 @@ import { Form, Input, } from 'antd';
 import { DatePicker, Space } from "antd";
 import moment from "moment";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import LeaveContext from '../contexts/LeaveContext'
+import LeaveContext from '../contexts/LeaveContext';
+import CompanyHolidayContext from '../contexts/CompanyHolidayContext';
 import { useAuth } from '../contexts/AuthContext'
 import Notification from "./Notification";
+import HolidayList from "./HolidayList";
 import "../style/leave.css";
-
 
 let leaveStyle = {
     Present: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "green" },
@@ -31,80 +32,6 @@ let leaveStyle = {
     "Officialy Holiday": { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "yellow" },
     "Week Off": { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "grey" },
 }
-
-const getListData = (value) => {
-    let listData;
-    console.log(value.date());
-    switch (value.date()) {
-        case 8:
-            listData = [
-                {
-                    type: "Absent",
-                    intime: "In : ",
-                    outtime: "Out : "
-
-                },
-
-            ];
-            break
-        case 9:
-            listData = [
-                {
-                    type: "Present",
-                    intime: "In : 9:00Am",
-                    outtime: "Out : 9:00Pm"
-
-                },
-
-            ];
-            break
-        case 10:
-            listData = [
-                {
-                    type: "Officialy Holiday",
-                    intime: "In : ",
-                    outtime: "Out : "
-
-                },
-
-            ];
-            break
-        case 11:
-            listData = [
-                {
-                    type: "Week Off",
-                    intime: "In : ",
-                    outtime: "Out : "
-
-                },
-
-            ];
-            break
-        case 12:
-            listData = [
-                {
-                    type: "Leave",
-                    intime: "In : ",
-                    outtime: "Out : "
-
-                },
-
-            ];
-            break
-
-
-        default:
-
-    }
-
-    return listData || [];
-};
-
-const getMonthData = (value) => {
-    if (value.month() === 8) {
-        return 1394;
-    }
-};
 
 const userrole = ''
 const Leave = () => {
@@ -115,18 +42,9 @@ const Leave = () => {
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
     const [noOfDays, setNoOfDays] = useState([]);
-    const [ishr, setIsHr] = useState(sessionStorage.getItem(null) || true);
+    const [isHr, setIsHr] = useState(sessionStorage.getItem(null) || true);
     const [role, setRole] = useState(null);
     const { currentUser } = useAuth();
-    // const [userRecord, setUserRecord] = useState({
-    //     empId: currentUser.uid,
-    //     approver: currentUser.approver,
-    //     date: duration,
-    //     name: currentUser.displayName,
-    //     nature:currentUser.leaveNature,
-    //     slot: currentUser.slot ,
-    //     reason: currentUser.reason,
-    //   });
 
     let leaveDays = "";
     // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
@@ -134,16 +52,56 @@ const Leave = () => {
     const [leavetype, setLeavetype] = useState()
     const [validleaverequest, setValidleaverequest] = useState('false')
     const [leaveslot, setLeaveslot] = useState(null)
-
+    const [companyholiday, setCompanyholiday] = useState([])
     const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
+    const getHoliday = async () => {
 
+        const allData = await CompanyHolidayContext.getAllCompanyHoliday();
+        console.log('allCompanyHoliday', allData)  
+        allData.docs.map((doc) => {
+            console.log('allCompanyHoliday2', doc)
+            let d = allData.docs.map((doc) => {
+
+                return {
+                    ...doc.data(),
+                    id: doc.id,
+                };
+            });
+            setCompanyholiday(d)
+            console.log('allCompanyHoliday3', d)
+
+        });
+    }
+
+    const getListData = (value) => {
+        let listData;
+        let currdate = value.format('Do MMM, YYYY');
+        let leaveRecord = companyholiday.filter(record => record.Date == currdate);
+        console.log('calendervvvvv', currdate);
+        console.log('calendervvvvv2', leaveRecord.length);
+        if (leaveRecord.length > 0) {
+            listData = [
+                {
+                    type: leaveRecord[0].Name,            
+                }
+            ]
+        }
+
+        return listData || [];
+    };
+
+    const getMonthData = (value) => {
+        if (value.month() === 8) {
+            return 1394;
+        }
+    };
 
     const onFinish = values => {
         console.log("Success:", values);
-     
+
         if (validleaverequest == 'false') {
-            showNotification("error", "Error", "Leave requested is more than avilable Leave");
+            showNotification("error", "Error", "Leave requested is more than available Leave");
             return;
         }
 
@@ -153,10 +111,15 @@ const Leave = () => {
             date: duration,
             name: currentUser.displayName,
             nature: values.leaveNature,
-            slot: values.slot == null ? "Full Day" : values.slot,
+            slot: values.slot,
             reason: values.reason,
+            status: 'Pending'
         }
-
+        // let matchingLeaveList = newLeave.filter(item => item.date == newLeave.date)
+        // if(matchingLeaveList.length > 0){
+        //     //errormodal
+        //     console.log('Leave allready Exist')
+        // }
         LeaveContext.createLeave(newLeave)
             .then(response => {
                 getData();
@@ -166,6 +129,7 @@ const Leave = () => {
                 console.log(error.message);
 
             })
+        form.resetFields();
     };
 
 
@@ -178,7 +142,7 @@ const Leave = () => {
             return {
                 ...doc.data(),
                 id: doc.id,
-                status: doc?.data()?.status || "Pending",
+
             };
         });
         console.log("data", d);
@@ -192,8 +156,6 @@ const Leave = () => {
                         id: 1,
                         leavetype: "Earn Leave",
                         leave: response["Earn Leave"],
-
-
 
                     },
                     {
@@ -213,24 +175,16 @@ const Leave = () => {
                         leavetype: "Optional Leave",
                         leave: response["Optional Leave"],
 
-
                     },
-
-
                 ];
                 setUsers(UsersLeaves)
             })
             .catch(error => {
                 console.log(error.message);
-
             })
-
-
         console.log(role)
         setHistory(d)
-
     }
-
 
     const getRequestData = async () => {
         let reqData = await LeaveContext.getAllByApprover(currentUser.displayName)
@@ -253,6 +207,7 @@ const Leave = () => {
             title: "Are you sure, you want to delete  Leave record?",
             okText: "Yes",
             okType: "danger",
+
             onOk: () => {
                 LeaveContext.deleteLeave(record.id)
                     .then(response => {
@@ -267,14 +222,17 @@ const Leave = () => {
         });
     };
 
+    // const matchDate = (current) => {
+    //     //cannot select existing leave
+    //     let matchingLeaveList = users.filter(item => item.Date == current.format('Do MMM, YYYY'))
+    //     return matchingLeaveList.length > 0;
+    // };
 
     const onReset = () => {
         form.resetFields()
         setLeavetype(null)
         setValidleaverequest('false')
         setLeaveslot(null)
-    
-       
     }
     const { Option } = Select;
 
@@ -282,7 +240,7 @@ const Leave = () => {
         {
             title: 'Duration',
             dataIndex: 'date',
-            width: 200,
+            width: 240,
 
         },
         // {
@@ -322,9 +280,9 @@ const Leave = () => {
             sorter: (a, b) => a.status - b.status,
             render: (_, { status }) =>
                 status !== "" && (
-                    <Tag
+                    <Tag style={{ width: '70px' }}
                         className="statusTag"
-                        color={status === "Approved" ? "green" : "volcano"}
+                        color={status === "Approved" ? "green" : status === "Pending" ? 'blue' : "volcano"}
                         key={status}
                     >
                         {status}
@@ -343,16 +301,22 @@ const Leave = () => {
                         {
                             <>
                                 <DeleteOutlined
+
+                                    disabled={record?.status === 'Approved'}
                                     onClick={() => {
-                                        onDeleteLeave(record);
+                                        if (record?.status !== 'Approved')
+                                            onDeleteLeave(record);
                                     }}
-                                    style={{ color: "red", marginLeft: 10 }}
+                                    style={
+                                        record?.status === 'Approved'
+                                            ? { color: "green", cursor: "not-allowed", marginLeft: 10 }
+                                            : record?.status === 'Pending'
+                                                ? { color: "blue", marginLeft: 10 }
+                                                : { color: "red", marginLeft: 10 }}
                                 />
                             </>
 
                         }
-
-
                     </>
                 );
             },
@@ -364,6 +328,7 @@ const Leave = () => {
         setRole(role)
         setIsHr(role === "hr")
         getData();
+        getHoliday();
         if (role == "hr") getRequestData();
     }, []);
 
@@ -392,22 +357,18 @@ const Leave = () => {
 
             let leaveRecord = users.filter(record => record.leavetype == leavetype);
             console.log('validate leave evoke', leaveRecord[0].leave);
-            if (leaveRecord[0].leave < noOfDays) {
+            if (leaveRecord[0].leave < noOfDays ) {
                 setValidleaverequest('false')
-                showNotification("error", "Error", "Leave requested is more than avilable Leave");
+                showNotification("error", "Error", "Leave requested is more than available Leave");
 
             }
             else {
-                console.log('validate setting leve to true', noOfDays);
+                console.log('validate setting leave to true', noOfDays);
 
                 setValidleaverequest('true')
             }
-
-
         }
-
         console.log('validate ', validleaverequest);
-
     }
 
     const onLeaveNatureChange = (value) => {
@@ -420,12 +381,11 @@ const Leave = () => {
         console.log('fffff', e.target.value);
         setLeaveslot(e.target.value);
         let dur = noOfDays
-        if (dur === 1 &&  e.target.value != null) {
+        if (dur === 1 && e.target.value != null) {
             dur = 0.5;
         }
         validateLeaveRequest(dur, leavetype)
     };
-
 
     const onLeaveDateChange = (dates, dateStrings) => {
         console.log("dateStrings: ", leaveslot);
@@ -436,16 +396,12 @@ const Leave = () => {
             if (noOfDays === 1 && leaveslot != null) {
                 noOfDays = 0.5;
             }
-
-
             console.log("dateStrings: ", dateStrings);
             console.log("dateStrings: ", noOfDays);
 
             setDuration(dateStrings);
             setNoOfDays(noOfDays)
             validateLeaveRequest(noOfDays, leavetype)
-
-
         } else {
             console.log("Clear");
         }
@@ -461,28 +417,55 @@ const Leave = () => {
         ) : null;
     };
 
-    const dateCellRender = (value) => {
-        const listData = getListData(value);
-        let currentMonth = new Date().getMonth()
-        let date = new Date(value['_d'])
-        return currentMonth == date.getMonth() ? (
-            <ul className="events" >
-                {listData.map((item) => (
-                    <li >
+    const handleOk = () => {
+        console.log('hiii')
 
+        showNotification("success", "Success", "Leave apply successfuly");
+    };
+
+    const dateCellRender = (value) => {
+        const listData = getListData(value);     
+        return (
+            <ul className="events"  >
+                {listData.map((item) => (
+                    <li  style = {
+                        item.type === "Official"
+                        ?{ color: "rgba(204, 204, 10, 1)", }
+                        : {color: "rgba(252, 143, 10, 1)" }}
+
+                    >
+                        {/* style={{ color: "rgba(204, 204, 10, 1)",fontSize:'8px'}} */}
+                      
                         <li className='present' > {item.type}</li>
-                        <li className='intime' >{item.intime}</li>
-                        <li className='outtime' >{item.outtime}</li>
-                        <div style={leaveStyle[item.type]}></div>
+               
 
                     </li>
                 ))}
 
             </ul>
-        ) : null;
+        );
+
+    };
+  
+
+    function disabledDate(current) { 
+        //allL=['Mon Sep 26 2022','Mon Sep 26 2022']  get all leave date in formate of Mon Sep 26 2022
+        let aa=new Date(current).toDateString()
+        //get current date: calandar: aa
+        
+        console.log("********",aa,aa==='Mon Sep 26 2022');
+        let matchingHolidayList = companyholiday.filter(item => item.Date == current.format('Do MMM, YYYY'))
+        return moment(current).day() === 0 || (current).day() === 6 || matchingHolidayList.length > 0 || aa==='Mon Sep 26 2022'
+        //  allL.includes(aa)
     };
 
+   
+    // const selectDate = (current) => {
+    //     console.log('hiii')
+    //     if (moment(current).day() === 0 || (current).day() === 6) 
 
+    //     showNotification("success", "Success", "Leaves Cannot be Applied for Weekdays");
+    // };
 
     return (
         <>
@@ -492,8 +475,6 @@ const Leave = () => {
                     background: '#fff',
                     minHeight: 150,
                     display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: '#e9eaea',
-
-
                 }}
                 gutter={[16, 16]}>
                 <Col xl={24} lg={24} md={24} sm={24} xs={24}>
@@ -521,49 +502,47 @@ const Leave = () => {
                 </Col>
                 {/* </Col> */}
 
-                <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12} >
+                <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12}  >
+
+
+                    
+                    <HolidayList isHr={isHr} />
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <div className='badge-div' style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', justifyContent: 'center', paddingTop: '10px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', }}>
                             {/* <Typography.Title level={4} >Calendar</Typography.Title> */}
                             <div className='rep-div' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 10, 10,0.2)" }} ><h5 style={{ color: "rgba(204, 10, 10, 1)" }} className='rep-text'>Absent</h5></button>
+                                {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 10, 10,0.2)" }} ><h5 style={{ color: "rgba(204, 10, 10, 1)" }} className='rep-text'>Absent</h5></button> */}
                                 {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 94, 10,0.2)" }}><h5 style={{ color: "rgba(204, 94, 10, 1)" }} className='rep-text'>Half Day</h5></button> */}
                                 <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 91, 204,0.2)" }}><h5 style={{ color: "rgba(10, 91, 204,  1)" }} className='rep-text'>Leave</h5></button>
-                                {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(252, 143, 10,0.2)" }}><h5 style={{ color: "rgba(252, 143, 10, 1)" }} className='rep-text'>Late Arrival</h5></button> */}
+                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 204, 10,0.2)" }}><h5 style={{ color: "rgba(204, 204, 10, 1)", }} className='rep-text'>Optional Holiday</h5></button>
+                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(252, 143, 10,0.2)" }}><h5 style={{ color: "rgba(252, 143, 10, 1)" }} className='rep-text'>Official Holiday</h5></button>
+                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(74, 67, 67,0.2)" }}><h5 style={{ color: "rgba(74, 67, 67, 1)" }} className='rep-text'>Weekly Off</h5></button>
                             </div>
                             <div className='rep-div2' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px' }}>
                                 {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 204, 107,0.2)" }}><h5 style={{ color: "rgba(10, 204, 107, 1)" }} className='rep-text'>Present</h5></button> */}
-                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 204, 10,0.2)" }}><h5 style={{ color: "rgba(204, 204, 10, 1)", }} className='rep-text'>Official Holiday</h5></button>
-                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(74, 67, 67,0.2)" }}><h5 style={{ color: "rgba(74, 67, 67, 1)" }} className='rep-text'>Weekly Off</h5></button>
                             </div>
 
                         </div>
-                        <Calendar style={{ padding: '10px', borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px' }}
+                        {/* style={holiday.optionalHoliday === false ? {
+                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(204, 204, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                                } : {
+                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(252, 143, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                                }} */}
 
+                        <Calendar style={{ padding: '10px', borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px' }}
                             value={date}
                             onChange={setDate}
                             dateCellRender={dateCellRender}
                             monthCellRender={monthCellRender}
-                            // disabledDate={disabledDate}
-                            disabledDays={[{ daysOfWeek: [0, 6] }]}
-                        // disabledDates={disabledDates}
-
+                            disabledDate={disabledDate}
                         />
                         {
-                            ishr
+                            isHr
                                 ? <Notification data={requests} />
                                 : null
                         }
-
-
-
-
-
-
                     </div>
-
                 </Col>
-
 
                 <Row style={{
                     display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
@@ -595,7 +574,6 @@ const Leave = () => {
                                 name="employeename"
 
                             >
-
                                 <Input maxLength={20}
                                     onChange={(e) => {
                                         const inputval = e.target.value;
@@ -603,8 +581,6 @@ const Leave = () => {
                                         form.setFieldsValue({ employeename: newVal });
 
                                     }}
-
-
                                     placeholder="Employee Name" />
                             </Form.Item>
 
@@ -617,6 +593,7 @@ const Leave = () => {
                                 <Space direction="vertical" size={12}
                                 >
                                     <RangePicker
+                                    
                                         ranges={{
                                             Today: [moment(), moment()],
                                             "This Month": [moment().startOf("month"), moment().endOf("month")]
@@ -624,25 +601,38 @@ const Leave = () => {
                                         showTime
                                         format="Do MMM, YYYY"
                                         onChange={onLeaveDateChange}
+                                        disabledDate={disabledDate}
+                                        
+                                    // dateRender={(current) => {
+                                    //     const style = {};
 
+                                    //     if (moment(current).day() === 0) {
+                                    //       style.border = "1px solid #1890ff";
+                                    //       style.borderRadius = '50%';
+                                    //       style.color = "red";
+                                    //       style.backgroundColor = "grey";
+                                    //     }
+
+                                    //     return (
+                                    //       <div className="ant-picker-cell" style={style}>
+                                    //         {current.date()}
+                                    //       </div>
+                                    //     );
+                                    //   }}
                                     />
                                 </Space>
                             </Form.Item>
-
 
                             <Form.Item labelAlign="left"
                                 name="leaveNature"
                                 style={{ marginBottom: "20px" }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Nature of Leave<span style={{ color: 'red' }}> *</span></label>}
 
-
                             >
                                 <Select required
                                     placeholder="Select a option "
                                     allowClear
                                     onChange={onLeaveNatureChange}
-
-
                                 >
                                     {
                                         users.map(u => (
@@ -650,8 +640,6 @@ const Leave = () => {
                                             </Option>
                                         ))
                                     }
-
-
                                 </Select>
                             </Form.Item>
 
@@ -659,19 +647,16 @@ const Leave = () => {
                                 name="slot"
                                 style={{ marginBottom: "20px" }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}> Slot<span style={{ color: 'red' }}> *</span></label>}
-
-
                             >
 
-                                <Radio.Group 
-                                onChange={onLeaveSlotChange}
-                                 >
+                                <Radio.Group
+                                    onChange={onLeaveSlotChange}
+                                >
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Evening" >Evening</Radio>
-                                    {/* <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio> */}
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
 
                                 </Radio.Group>
-
                             </Form.Item>
 
                             <Form.Item labelAlign="left"
@@ -709,8 +694,6 @@ const Leave = () => {
                                     placeholder="Reporting Manager" required />
                             </Form.Item>
 
-
-
                             <Form.Item
                                 wrapperCol={{
                                     offset: 8,
@@ -718,30 +701,24 @@ const Leave = () => {
                                 }}
                             >
 
-
-
-
-                                <Button type="primary" htmlType="submit" disabled={validleaverequest == 'false'}> Submit </Button>
-
-
+                                <Button type="primary" htmlType="submit" onClick={handleOk} disabled={validleaverequest == 'false'}> Submit </Button>
                                 <Button htmlType="button" style={{ marginLeft: "10px", }}
                                     onClick={onReset}>
                                     Reset
                                 </Button>
-
-
                             </Form.Item>
                             <Col span={24} style={{
 
                             }}><Divider><h3>History</h3></Divider></Col>
 
-
-
                             <div>
                                 <Table columns={columns}
                                     dataSource={history}
+                                    pagination={{
+                                        position: ["bottomCenter"],
+                                    }}
                                     size="small" scroll={{
-                                        x: 1000, y: 150
+                                        x: 1000,
                                     }} />
                             </div>
 
@@ -749,8 +726,6 @@ const Leave = () => {
 
                     </Col>
                 </Row>
-
-
             </Row>
         </>
 

@@ -10,26 +10,37 @@ import {
   Select,
   Space
 } from "antd";
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { createUser } from "../contexts/CreateContext"
 
 const { Option } = Select;
 
 function AddEmployee() {
 
-  // const navigate = useNavigate();
-  // const handleListEmployee = () => {
-  //   navigate("/Expense/ExpenseList");
-  // }
-// const {signup} = useAuth();
+  const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const handleListEmployee = () => {
+    navigate("/EmployeeListPage/EmployeeList");
+  }
+  const checkAlphabets = (event) => {
+    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+  function onReset(){
+    form.resetFields();
+  }
    const onFinish = async (values) => {
     console.log('Received values of form: ', values);
     let res = await createUser(values);
     console.log("DONE!!!!!!!!!");
-    // console.log(res);
-    // const valuesToservice = {
-
-    //   fname: values['fname'],
+    console.log(res);
+    navigate("/EmployeeListPage/EmployeeList");
+        // const valuesToservice = {
+    //   fname: values.fname,
     //   lname: values['lname'],
     //   email: values['email'],
     //   doj: values['doj'].format('DD-MM-YYYY'),
@@ -45,10 +56,10 @@ function AddEmployee() {
 
     // console.log('valuesToservice: ', valuesToservice);
 
-    // ExpenseContext.addExpenses(valuesToservice)
+    // createUser.addExpenses(valuesToservice)
     //   .then(response => {
     //     console.log(response);
-    //     navigate('/Expense/ExpenseList');
+    //     navigate('/EmployeeListPage/EmployeeList');
     //   })
     //   .catch(error => {
     //     console.log(error.message);
@@ -60,7 +71,7 @@ function AddEmployee() {
     <>
       <div className='expForm' style={{ margin: "15px", background: 'white' }}>
         <Form
-          //   form={form}
+            form={form}
           labelcol={{
             span: 4,
           }}
@@ -101,7 +112,7 @@ function AddEmployee() {
               <Button
                 className="listExpense"
                 type="primary"
-                // onClick={handleListEmployee}
+                onClick={handleListEmployee}
                 style={{
                   width: "120px",
                   cursor: "pointer",
@@ -126,11 +137,11 @@ function AddEmployee() {
               </Divider>
               <Form.Item
                 name="fname"
-                // onKeyPress={(event) => {
-                //   if (checkAlphabets(event)) {
-                //     event.preventDefault();
-                //   }
-                // }}
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
 
                 rules={[
                   {
@@ -147,16 +158,16 @@ function AddEmployee() {
               >
                 <Input
                   maxLength={20}
-                  //   onChange={(e) => {
+                    onChange={(e) => {
 
-                  //     const inputval = e.target.value;
-                  //     const str = e.target.value;
-                  //     const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                  //     const caps = str.split(' ').map(capitalize).join(' ');
+                      const inputval = e.target.value;
+                      const str = e.target.value;
+                      const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                      const caps = str.split(' ').map(capitalize).join(' ');
                   // setPaidBy(newVal);
-                  // form.setFieldsValue({ expence: newVal, expence: caps });
+                  form.setFieldsValue({ fname: newVal, fname: caps });
 
-                  //   }}
+                    }}
 
                   required
                   placeholder="Enter Your First Name"
@@ -175,11 +186,11 @@ function AddEmployee() {
               </Divider>
               <Form.Item
                 name="lname"
-                // onKeyPress={(event) => {
-                //   if (checkAlphabets(event)) {
-                //     event.preventDefault();
-                //   }
-                // }}
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
 
                 rules={[
                   {
@@ -196,16 +207,16 @@ function AddEmployee() {
               >
                 <Input
                   maxLength={20}
-                  //   onChange={(e) => {
+                    onChange={(e) => {
 
-                  //     const inputval = e.target.value;
-                  //     const str = e.target.value;
-                  //     const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                  //     const caps = str.split(' ').map(capitalize).join(' ');
+                      const inputval = e.target.value;
+                      const str = e.target.value;
+                      const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                      const caps = str.split(' ').map(capitalize).join(' ');
                   // setPaidBy(newVal);
-                  // form.setFieldsValue({ expence: newVal, expence: caps });
+                  form.setFieldsValue({ lname: newVal, lname: caps });
 
-                  //   }}
+                    }}
 
                   required
                   placeholder="Enter Your Last Name"
@@ -247,17 +258,6 @@ function AddEmployee() {
                 ]}
               >
                 <Input
-                  maxLength={20}
-                  //   onChange={(e) => {
-
-                  //     const inputval = e.target.value;
-                  //     const str = e.target.value;
-                  //     const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                  //     const caps = str.split(' ').map(capitalize).join(' ');
-                  // setPaidBy(newVal);
-                  // form.setFieldsValue({ expence: newVal, expence: caps });
-
-                  //   }}
 
                   required
                   placeholder="Enter Email Address"
@@ -410,7 +410,7 @@ function AddEmployee() {
                   <Option value="hr">Human Resource(HR)</Option>
                   <Option value="mgr">Manager</Option>
                   <Option value="dr">Director</Option>
-                  <Option value="ceo">Cheap Executive Officer(CEO)</Option>
+                  <Option value="ceo">Chief Executive Officer(CEO)</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -466,7 +466,7 @@ function AddEmployee() {
                         color: 'white',
                         cursor: 'pointer'
                       }}
-                    //   onClick={onReset}
+                      onClick={onReset}
                     >Reset</Button>
                   </Form.Item>
                   <Form.Item className='submit'>

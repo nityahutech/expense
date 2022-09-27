@@ -4,7 +4,6 @@ import {
     Row,
     Table,
     Modal,
-
 } from 'antd';
 
 import { useAuth } from '../contexts/AuthContext'
@@ -28,8 +27,6 @@ const Notification = ({ data }) => {
     useEffect(() => {
         setDataSource(data)
     }, [data])
-
-
     // console.log("data", data);
 
     const getData = async () => {
@@ -48,11 +45,12 @@ const Notification = ({ data }) => {
         setApprove(d);
 
     }
+    // ${JSON.stringify(record)}
 
     const onApproveLeave = (record) => {
         console.log(record)
         Modal.confirm({
-            title: "Are you sure, you want to approve Leave record?",
+            title: `Are you sure, you want to approve Leave of ${record?.name||''}!`,
             okText: "Yes",
             okType: "primary",
             onOk: () => {
@@ -72,7 +70,7 @@ const Notification = ({ data }) => {
     const onRejectedLeave = (record) => {
         console.log(record)
         Modal.confirm({
-            title: "Are you sure, you want to reject Leave record?",
+            title: `Are you sure, you want to reject Leave of ${record?.name||''}!`,
             okText: "Yes",
             okType: "danger",
             onOk: () => {
@@ -94,7 +92,7 @@ const Notification = ({ data }) => {
         {
             title: 'Duration',
             dataIndex: 'date',
-            width: 150,
+            width: 250,
 
         },
         {
@@ -124,7 +122,6 @@ const Notification = ({ data }) => {
             width: 150,
         },
 
-
         {
             key: "5",
             title: "Actions",
@@ -147,19 +144,17 @@ const Notification = ({ data }) => {
                                         onApproveLeave(record);
 
                                     }}
-
-
                                 />
                                
                                 <img
-                                    style={{ color: "white", width: '20px' }}
+                                   style={{ color: "white", width: '20px', marginRight: 10 }}
                                     src="../logo/rejected.png"
                                     alt="profile"
                                     className="Dash"
                                     onClick={() => {
                                         onRejectedLeave(record);
                                     }}
-
+                                   
                                 />
                             </>
                         }
@@ -175,9 +170,6 @@ const Notification = ({ data }) => {
 
         console.log(name, empId, "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG")
     }
-
-
-
 
     return (
         <Row style={{
@@ -200,13 +192,13 @@ const Notification = ({ data }) => {
                         // rowClassName = {(e) => rowClassNameFun(e)}
                         //  rowClassName={record => dataSource.filter((item) => item.nature === record.nature) ? "disabled-row" :"pankaj"}
                         rowClassName={record => !record.enabled && "disabled-row"}
+                        pagination={{
+                            position: ["bottomCenter"],
+                          }}
                         size="small" scroll={{
-                            x: 1000, y:100
+                            x: 1000, 
                         }} />
                 </div>
-
-
-
             </Col>
         </Row>
 

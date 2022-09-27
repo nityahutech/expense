@@ -10,11 +10,11 @@ import {
   DatePicker,
 } from "antd";
 import "../style/AttendanceLog.css";
+import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { useAuth } from "../contexts/AuthContext"
+import { useAuth } from "../contexts/AuthContext";
 import AttendanceContext from "../contexts/AttendanceContext";
 import ProfileContext from "../contexts/ProfileContext";
-
 const { RangePicker } = DatePicker;
 
 const { Content } = Layout;
@@ -44,6 +44,12 @@ function AttendanceLog({ empDetails }) {
   const { currentUser } = useAuth();
   const [key, setKey] = useState("1");
   const [empMonthly, setEmpMonthly] = useState([]);
+  const [filterCriteria, setFilterCriteria] = useState({
+    search: "",
+    date: [],
+    category: "all",
+  });
+  const [filteredEmp, setFilteredEmp] = useState([]);
   const columns = [
     {
       title: "Employee Code",
@@ -54,13 +60,14 @@ function AttendanceLog({ empDetails }) {
     {
       title: "Employee Name",
       dataIndex: "name",
-      key: "nFame",
+      key: "nFname",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
     },
+
     {
       title: "Project Name",
       dataIndex: "project",
@@ -112,12 +119,17 @@ function AttendanceLog({ empDetails }) {
   const onFinish = async (values) => {
     console.log(values);
     const newData = {
+      // code: "898",
+      // date: getFormateDateString(),
+      // status: "-_",
+      // time1: getFormatTimeString(),
+      // time2: "18:15:23",
+      // work: "-",
       report: values?.project_details || "-",
       project: values?.project_name || "-"
     };
     console.log(currentUser.uid, { monthlydata });
-    AttendanceContext.updateAttendance(currentUser.uid, newData)
-
+    AttendanceContext.updateAttendance(currentUser.uid, newData);
     // let newAlldata = [newData, ...empMonthly];
     // console.log(newAlldata);
     // localStorage.setItem("newReport", JSON.stringify(newAlldata));
@@ -143,7 +155,6 @@ function AttendanceLog({ empDetails }) {
     console.log(d)
     setEmpMonthly(d);
   }
-
   // function getEmpMonthly() {
   //   console.log(JSON.parse(localStorage.getItem("newReport")));
   //   let userlocal = JSON.parse(localStorage.getItem("newReport")) || [];
@@ -154,7 +165,7 @@ function AttendanceLog({ empDetails }) {
 
   //       code: emp.code,
   //       date: emp.date,
-  //       name: "Nitya-" + (i + 1),
+  //       empname: "Nitya-" + (i + 1),
   //       status: emp.status,
   //       time1: emp.time1,
   //       time2: emp.time2,
@@ -174,15 +185,14 @@ function AttendanceLog({ empDetails }) {
     let res = userdata.docs.map((doc) => {
       return {
         id: doc.id,
-        code: doc.data().empId,
+        empId: doc.data().empId,
         name: doc.data().employeename,
         status: "absent",
       };
     });
-    console.log(res)
+    console.log(res);
     let stats = await AttendanceContext.getStatus();
     console.log(stats)
-    // let userlocal = JSON.parse(localStorage.getItem("newReport")) || [];
     // let newEmp = [];
     // userlocal.map((emp, i) => {
     //   newEmp.push({
@@ -192,13 +202,14 @@ function AttendanceLog({ empDetails }) {
     //     status: emp.status,
     //     time1: emp.time1,
     //     time2: emp.time2,
-    //     name: "Nitya-" + (i + 1),
+    //     empname: "Nitya-" + (i + 1),
     //     project: emp.project,
     //     report: emp.report,
     //   });
     // });
     // console.log({ newEmp });
     setallEmp(res);
+    setFilteredEmp(res);
     setEmpMonthly(res);
   }
   const onReset = () => {
@@ -358,34 +369,78 @@ function AttendanceLog({ empDetails }) {
       setEmpMonthly(empMonthly);
     }
   }
+  function onHrDateFilter(date, dateString) {
+    console.log({ date, dateString });
+    if (date) {
+      console.log(empMonthly);
+      let result = empMonthly.filter((ex) => {
+        return (
+          moment(ex.date, dateFormat).isSame(date[0], "day") ||
+          moment(ex.date, dateFormat).isSame(date[1], "day") ||
+          (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
+            moment(ex.date, dateFormat).isSameOrBefore(date[1]))
+        );
+      });
+
+      const modifiedFilterExpense = [...result];
+
+      console.log({ modifiedFilterExpense });
+      setEmpMonthly(modifiedFilterExpense);
+    } else {
+      setEmpMonthly(empMonthly);
+    }
+  }
+  const searchChange = (e) => {
+    let search = e.target.value;
+    setFilterCriteria({ ...filterCriteria, search: search });
+    if (search) {
+      let result = allEmp.filter((ex) =>
+        ex.empname.toLowerCase().includes(search.toLowerCase())
+      );
+      console.log({ result });
+      setFilteredEmp(result);
+    }
+  };
 
   return (
-    <Tabs
-      defaultActiveKey={activetab}
-      activeKey={activetab}
-      className="Tabs"
-      onChange={(tabKey) => {
-        setActivetab(tabKey);
-        setSelectemp(null);
-      }}
-    >
-      {role.userType === "emp" ? (
-        <>
-          <Tabs.TabPane tab="Monthly Log" key="1">
-            <Table columns={columns1} dataSource={empMonthly || []} />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            tab="Add Report"
-            key="2"
-            className="reportTabs"
-            // onClick={() => {
-            //   setIsModalOpen(true);
-            // }}
-          >
-            {/* <Button type="primary" onClick={showModal}>
+    <>
+      <div className="hrtab">
+        <Tabs
+          defaultActiveKey={activetab}
+          activeKey={activetab}
+          className="Tabs"
+          onChange={(tabKey) => {
+            setActivetab(tabKey);
+            setSelectemp(null);
+          }}
+        >
+          {role.userType === "emp" ? (
+            <>
+              <Tabs.TabPane tab="Monthly Log" key="1">
+                <RangePicker
+                  className="Range"
+                  defaultValue={[]}
+                  dateFormat
+                  onChange={onDateFilter}
+                />
+                <Table
+                  className="monthly"
+                  columns={columns1}
+                  dataSource={empMonthly || []}
+                />
+              </Tabs.TabPane>
+              <Tabs.TabPane
+                tab="Add Report"
+                key="2"
+                className="reportTabs"
+                // onClick={() => {
+                //   setIsModalOpen(true);
+                // }}
+              >
+                {/* <Button type="primary" onClick={showModal}>
               Open Modal
             </Button> */}
-            {/* <Modal
+                {/* <Modal
               title="Basic Modal"
               visible={isModalOpen}
               footer={null}
@@ -399,114 +454,100 @@ function AttendanceLog({ empDetails }) {
                 </div>
               }
             > */}
-            <Form
-              {...layout}
-              form={form}
-              name="control-hooks"
-              onFinish={onFinish}
-              className="formItem"
-            >
-              <Form.Item
-                name="project_name"
-                label="Project Name"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-                className="pname"
-              >
-                <Input className="name" />
-              </Form.Item>
-              <Form.Item
-                name="project_details"
-                label="Project Details"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-                className="pname"
-              >
-                <Input className="name" />
-              </Form.Item>
-              <Form.Item {...tailLayout}>
-                <Button type="primary" htmlType="submit" className="submit">
-                  Submit
-                </Button>
-                <Button htmlType="button" onClick={onReset} className="reset">
-                  Reset
-                </Button>
-              </Form.Item>
-            </Form>
-            {/* </Modal> */}
-          </Tabs.TabPane>
-
-          <Tabs.TabPane
-            tab={
-              <RangePicker
-                defaultValue={[]}
-                dateFormat
-                style={{
-                  width: "95%",
-                  position: "relative",
-                  left: "40rem",
-                  marginTop: "4px",
-                }}
-                onChange={onDateFilter}
-              />
-            }
-            key="3"
-          >
-            <Table columns={columns1} dataSource={empMonthly || []} />
-          </Tabs.TabPane>
-        </>
-      ) : (
-        <>
-          <Tabs.TabPane tab="Daily Log" key="2">
-            <Table
-              //   rowSelection={{
-              //     type: selectionType,
-              //     ...rowSelection,
-              //   }}
-              onRow={(record, rowIndex) => {
-                return {
-                  onClick: (event) => {
-                    console.log(record);
-                    setSelectemp({ ...record });
-                    setActivetab("3");
-                  }, // click row
-                };
-              }}
-              columns={columns}
-              dataSource={allEmp}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane disabled={!selectemp} tab="Monthly Log" key="3">
-            <Table columns={columns1} dataSource={[selectemp] || []} />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={
-              <RangePicker
-                defaultValue={[]}
-                dateFormat
-                style={{
-                  width: "95%",
-                  position: "relative",
-                  left: "40rem",
-                  marginTop: "4px",
-                }}
-                onChange={onDateFilter}
-              />
-            }
-            key="3"
-            disabled={!empMonthly}
-          >
-            <Table columns={columns1} dataSource={empMonthly || []} />
-          </Tabs.TabPane>
-        </>
-      )}
-    </Tabs>
+                <Form
+                  {...layout}
+                  form={form}
+                  name="control-hooks"
+                  onFinish={onFinish}
+                  className="formItem"
+                >
+                  <Form.Item
+                    name="project_name"
+                    label="Project Name"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                    className="pname"
+                  >
+                    <Input className="name" />
+                  </Form.Item>
+                  <Form.Item
+                    name="project_details"
+                    label="Project Details"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                    className="pname"
+                  >
+                    <Input className="name" />
+                  </Form.Item>
+                  <Form.Item {...tailLayout}>
+                    <Button type="primary" htmlType="submit" className="submit">
+                      Submit
+                    </Button>
+                    <Button
+                      htmlType="button"
+                      onClick={onReset}
+                      className="reset"
+                    >
+                      Reset
+                    </Button>
+                  </Form.Item>
+                </Form>
+                {/* </Modal> */}
+              </Tabs.TabPane>
+            </>
+          ) : (
+            <>
+              <Tabs.TabPane tab="Daily Log" key="2">
+                <Input
+                  className="Daily"
+                  placeholder="Search"
+                  prefix={<SearchOutlined />}
+                  onChange={searchChange}
+                  // style={{ width: "95%" }}
+                />
+                <Table
+                  //   rowSelection={{
+                  //     type: selectionType,
+                  //     ...rowSelection,
+                  //   }}
+                  className="DailyTable"
+                  onRow={(record, rowIndex) => {
+                    return {
+                      onClick: (event) => {
+                        console.log(record);
+                        setSelectemp({ ...record });
+                        setActivetab("3");
+                      }, // click row
+                    };
+                  }}
+                  columns={columns}
+                  dataSource={filteredEmp}
+                />
+              </Tabs.TabPane>
+              <Tabs.TabPane disabled={!selectemp} tab="Monthly Log" key="3">
+                <RangePicker
+                  className="Range"
+                  defaultValue={[]}
+                  dateFormat
+                  onChange={onHrDateFilter}
+                />
+                <Table
+                  className="monthly"
+                  columns={columns1}
+                  dataSource={empMonthly || []}
+                />
+              </Tabs.TabPane>
+            </>
+          )}
+        </Tabs>
+      </div>
+    </>
   );
 }
 

@@ -10,6 +10,7 @@ import {
   CloseOutlined,
   CheckOutlined,
   EditTwoTone,
+  DeleteTwoTone,
 } from "@ant-design/icons";
 
 // ----------------------------------------place for const declaration
@@ -22,6 +23,7 @@ const onChange = (date, dateString) => {
 
 function Education() {
   const [editContent, showEditContent] = useState(false);
+  const [saveContent, showSaveContent] = useState(false);
 
   return (
     <div className="education" style={{ margin: "10px" }}>
@@ -91,6 +93,7 @@ function Education() {
               <Button
                 type="primary"
                 style={{ width: "100px", marginLeft: "10px" }}
+                onClick={() => showSaveContent(!saveContent)}
               >
                 <CheckOutlined />
                 Save
@@ -99,24 +102,45 @@ function Education() {
           </Row>
         ) : null}
       </Card>
-      <Card title="Educatonal Info" extra={<EditTwoTone />}>
-        <Row>
-          <Col span={24}>
-            {" "}
-            <Input placeholder="Course Name" />{" "}
-          </Col>
+      {saveContent === true ? (
+        <Card
+          title="Educatonal Info"
+          // extra={<EditTwoTone />}
+          extra={
+            <Button type="text">
+              <DeleteTwoTone twoToneColor="#eb2f96" />
+            </Button>
+          }
+        >
+          <Row gutter={[36, 8]}>
+            <Col span={24}>
+              <h1>Qulification Type</h1>
+            </Col>
 
-          <Col span={3}>
-            {" "}
-            <Input placeholder="Course Name" />{" "}
-          </Col>
+            <Col span={5}>
+              <img
+                src="/logo/university medium.png"
+                alt="university"
+                style={{
+                  border: "1px solid #faf9be",
+                  borderRadius: "5px",
+                  backgroundColor: "#faf9be",
+                  height: "100%",
+                }}
+              />
+            </Col>
 
-          <Col span={21}>
-            {" "}
-            <Input placeholder="Course Name" />{" "}
-          </Col>
-        </Row>
-      </Card>
+            <Col span={19}>
+              <h3>College Name</h3>
+              <h3>University Name</h3>
+              <h3>COURSE Name</h3>
+              <h3>Course Type</h3>
+              <h3>Stream</h3>
+              <h3>Starting Date - Ending Date</h3>
+            </Col>
+          </Row>
+        </Card>
+      ) : null}
     </div>
   );
 }

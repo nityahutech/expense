@@ -462,7 +462,7 @@ function AddEmployee() {
                         background: '#C1C1C1',
                         borderRadius: '5px',
                         width: '80px',
-
+                        marginTop: '25px',
                         color: 'white',
                         cursor: 'pointer'
                       }}
@@ -475,6 +475,7 @@ function AddEmployee() {
                       borderRadius: '5px',
                       borderWidth: '0px',
                       width: '80px',
+                      marginTop: '25px',
                       height: '30px',
                       color: 'white',
                       cursor: 'pointer',

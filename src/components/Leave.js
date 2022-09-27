@@ -42,7 +42,8 @@ const Leave = () => {
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
     const [noOfDays, setNoOfDays] = useState([]);
-    const [isHr, setIsHr] = useState(sessionStorage.getItem(null) || true);
+    console.log(sessionStorage.getItem("role"));
+    const [isHr, setIsHr] = useState(sessionStorage.getItem("role")==="hr"?true:false);
     const [role, setRole] = useState(null);
     const { currentUser } = useAuth();
 

@@ -23,6 +23,7 @@ const { Text, } = Typography;
 
 
 const LeaveList = (props) => {
+    console.log(props);
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,7 +42,7 @@ const LeaveList = (props) => {
     ]
 
     const getData = async () => {
-        props.addNewHoliday()
+        // props.addNewHoliday()
 
         const allData = await CompanyHolidayContext.getAllCompanyHoliday();
         // 33-40 to be written in context
@@ -186,68 +187,70 @@ const LeaveList = (props) => {
                     borderRadius: '10px',
                 }}
             >
-                {
-                    props?.isHr
-                        ?
-                        <>
-                            <div>
-                                <Button className='button-div' style={{
-                                    marginLeft: '10px'
-                                }} onClick={showDrawer}>
-                                    Holiday List
-                                </Button>
-                                <Drawer title="List of Holiday" placement="right" onClose={onClose} visible={open} open={open}>
-                                    {/* <Table columns={columns} dataSource={holidaylist} > */}
 
-                                    {/* {JSON.stringify(colors[id])} */}
+                <div>
+                    <Button className='button-div' style={{
+                        marginLeft: '10px'
+                    }} onClick={showDrawer}>
+                        Holiday List
+                    </Button>
+                    <Drawer title="List of Holiday" placement="right" onClose={onClose} visible={open} open={open}>
+                        {/* <Table columns={columns} dataSource={holidaylist} > */}
 
-                                    {holidaylist.map((holiday, id,) => {
-                                        return (
-                                            // colors={}
+                        {/* {JSON.stringify(colors[id])} */}
 
-                                            <div className='holiday-div'
-                                                style={holiday.optionalHoliday === false ? {
-                                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(204, 204, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
-                                                } : {
-                                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(252, 143, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                        {holidaylist.map((holiday, id,) => {
+                            return (
+                                // colors={}
+
+                                <div className='holiday-div'
+                                    style={holiday.optionalHoliday === false ? {
+                                        borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(204, 204, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                                    } : {
+                                        borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(252, 143, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                                    }}
+                                >
+                                    <Space className='holiday-div-image' style={{
+                                        display: 'flex', flexDirection: 'column',
+                                        gap: '0px', justifyContent: 'space-evenly'
+                                    }} direction="vertical">
+
+                                        <div className='holiday-div-holiday' style={{
+                                            display: 'flex', flexDirection: 'row',
+                                            gap: '0px', justifyContent: 'space-between'
+                                        }}
+                                        >
+                                            <Text className='holiday-name' style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }}>{holiday.Name}</Text>
+                                            <DeleteOutlined
+                                                style={{
+                                                    display: 'flex', flexDirection: 'row', paddingTop: '5px', color: 'red'
+
                                                 }}
-                                            >
-                                                <Space className='holiday-div-image' style={{
-                                                    display: 'flex', flexDirection: 'column',
-                                                    gap: '0px', justifyContent: 'space-evenly'
-                                                }} direction="vertical">
+                                                onClick={() => {
+                                                    // if (record?.status !== 'Approved')
+                                                    onDeleteLeave(holiday);
+                                                }}
+                                            />
+                                        </div>
 
-                                                    <div className='holiday-div-holiday' style={{
-                                                        display: 'flex', flexDirection: 'row',
-                                                        gap: '0px', justifyContent: 'space-between'
-                                                    }}
-                                                    >
-                                                        <Text className='holiday-name' style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }}>{holiday.Name}</Text>
-                                                        <DeleteOutlined
-                                                            style={{
-                                                                display: 'flex', flexDirection: 'row', paddingTop: '5px', color: 'red'
+                                        <Text style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.Date} / {holiday.optionalHoliday === false ? <span  >'Optional'  </span> : <span>Official</span>}</Text>
 
-                                                            }}
-                                                            onClick={() => {
-                                                                // if (record?.status !== 'Approved')
-                                                                onDeleteLeave(holiday);
-                                                            }}
-                                                        />
-                                                    </div>
+                                    </Space>
+                                </div>
+                            );
 
-                                                    <Text style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.Date} / {holiday.optionalHoliday === false ? <span  >'Optional'  </span> : <span>Official</span>}</Text>
+                        })}
+                        {/* </Table> */}
+                    </Drawer>
+                </div>
 
-                                                </Space>
-                                            </div>
-                                        );
+                {
 
-                                    })}
-                                    {/* </Table> */}
-                                </Drawer>
-                            </div>
-                        </>
+                    props.isHr
+                        ?
 
-                        :
+
+
                         <div>
                             <Button className='button-div' style={{
                                 marginLeft: '10px'
@@ -337,6 +340,8 @@ const LeaveList = (props) => {
                             </Modal>
                         </div>
 
+                        :
+                        null
 
                 }
 
@@ -347,4 +352,3 @@ const LeaveList = (props) => {
 }
 
 export default LeaveList
-

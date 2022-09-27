@@ -34,28 +34,28 @@ class LeaveContext {
     //     return getDoc(leaveDoc);
     // };
     getAllById = (id) => {
-        const q = query(leaveCollectionRef,where("empId","==",id));
+        const q = query(leaveCollectionRef, where("empId", "==", id));
         // console.log(q);
         return getDocs(q);
     };
 
     getAllByApprover = (name) => {
-        const q = query(leaveCollectionRef,where("approver","==",name));
+        const q = query(leaveCollectionRef, where("approver", "==", name));
         // console.log(q);
         return getDocs(q);
     };
 
-    
-    approveLeave=(id)=>{
+
+    approveLeave = (id) => {
         const leaveDoc = doc(db, "leave", id);
-        return updateDoc(leaveDoc,{status:"Approved"})
+        return updateDoc(leaveDoc, { status: "Approved" })
 
 
-   }
-   rejectLeave=(id)=>{
-       const leaveDoc = doc(db, "leave", id);
-       return updateDoc(leaveDoc,{status:"Rejected"})
-  }
+    }
+    rejectLeave = (id) => {
+        const leaveDoc = doc(db, "leave", id);
+        return updateDoc(leaveDoc, { status: "Rejected" })
+    }
 
     getLeaveDays = async (records, id) => {
         let rec = await ProfileContext.getProfile(id);
@@ -69,12 +69,17 @@ class LeaveContext {
         records.forEach((rec) => {
             let date1 = moment(rec.dateCalc[0], "Do MMM, YYYY");
             let date2 = moment(rec.dateCalc[1], "Do MMM, YYYY");
-            let dur = date2.diff(date1,'days') + 1;
-            // let nature = rec.nature;
+            let dur = date2.diff(date1, 'days') + 1;
+            if (dur === 1 && rec.slot != 'Full Day') {
+                dur = 0.5;
+            }
+          
+
+
             this.leaveDays[rec.nature] -= dur;
             console.log(rec.nature, this.leaveDays[rec.nature])
         })
-        console.log(this.leaveDays)
+        console.log('dddddddddd', this.leaveDays)
         return this.leaveDays
     }
 }

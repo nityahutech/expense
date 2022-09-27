@@ -8,6 +8,7 @@ import {
 } from 'antd';
 
 import { useAuth } from '../contexts/AuthContext'
+import LeaveContext from '../contexts/LeaveContext'
 import "../style/leave.css";
 
 let dummy = [{
@@ -19,83 +20,75 @@ let dummy = [{
     approver: "jhbd"
 }]
 const Notification = ({ data }) => {
-    const { currentUser, role } = useAuth();
-    const [dataSource, setDataSource] = useState(data)
+    const { currentUser, role } = useAuth();  
+    const [dataSource, setDataSource] = useState(data);
     const [approve, setApprove] = useState([]);
+    const [reject, setReject] = useState([]);
 
     useEffect(() => {
         setDataSource(data)
     }, [data])
 
 
-    console.log("data", data);
+    // console.log("data", data);
 
-    // const getData = async () => {
-    //     let data = await LeaveContext.getAllById(currentUser.uid)
-    //     // console.log("data", JSON.stringify(data.docs), currentUser.uid);
+    const getData = async () => {
+        let data = await LeaveContext.getAllById(currentUser.uid)
+        // console.log("data", JSON.stringify(data.docs), currentUser.uid);
 
-    //     let d = data.docs.map((doc) => {
-    //         console.log("123", { ...doc.data() })
-    //         return {
-    //             ...doc.data(),
-    //             id: doc.id,
-    //             status: doc?.data()?.status || "Pending",
-    //         };
-    //     });
-    //     console.log("data", d);
-    //     setLeaves(d);
-    //     getDateFormatted(d)
-    //     leaveDays = LeaveContext.getLeaveDays(d, currentUser.uid)
-    //     console.log(leaveDays)
-    //     console.log(role)
-    //     setHistory(d)
+        let d = data.docs.map((doc) => {
+            console.log("123", { ...doc.data() })
+            return {
+                ...doc.data(),
+                id: doc.id,
+                status: doc?.data()?.status || "Pending",
+            };
+        });
+        console.log("data", d);
+        setApprove(d);
 
-    // }
-
-
+    }
 
     const onApproveLeave = (record) => {
+        console.log(record)
         Modal.confirm({
             title: "Are you sure, you want to approve Leave record?",
             okText: "Yes",
             okType: "primary",
-            // onOk: () => {
-            //     LeaveContext.approveLeave(record.id)
-            //         .then(response => {
-            //             console.log(response);
-            //             getData();
-            //         })
-            //         .catch(error => {
-            //             console.log(error.message);
+            onOk: () => {
+                LeaveContext.approveLeave(record.id)
+                    .then(response => {
+                        console.log(response);
+                        getData();
+                    })
+                    .catch(error => {
+                        console.log(error.message);
 
-            //         })
-            // },
+                    })
+            },
         });
     };
 
     const onRejectedLeave = (record) => {
+        console.log(record)
         Modal.confirm({
             title: "Are you sure, you want to reject Leave record?",
             okText: "Yes",
             okType: "danger",
-            // onOk: () => {
-            //     LeaveContext.rejectedLeave(record.id)
-            //         .then(response => {
-            //             console.log(response);
-            //             getData();
-            //         })
-            //         .catch(error => {
-            //             console.log(error.message);
+            onOk: () => {
+                LeaveContext.rejectLeave(record.id)
+                    .then(response => {
+                        console.log(response);
+                        getData();
+                    })
+                    .catch(error => {
+                        console.log(error.message);
 
-            //         })
-            // },
+                    })
+            },
         });
     };
-
-
-
-
-
+    
 
     const columns = [
         {
@@ -157,6 +150,7 @@ const Notification = ({ data }) => {
 
 
                                 />
+                               
                                 <img
                                     style={{ color: "white", width: '20px' }}
                                     src="../logo/rejected.png"
@@ -167,17 +161,8 @@ const Notification = ({ data }) => {
                                     }}
 
                                 />
-
-                                {/* <DeleteOutlined
-                                  
-                                    style={{ color: "red", marginLeft: 10 }}
-                                /> */}
-
                             </>
-
                         }
-
-
                     </>
                 );
             },
@@ -216,7 +201,7 @@ const Notification = ({ data }) => {
                         //  rowClassName={record => dataSource.filter((item) => item.nature === record.nature) ? "disabled-row" :"pankaj"}
                         rowClassName={record => !record.enabled && "disabled-row"}
                         size="small" scroll={{
-                            x: 1000,
+                            x: 1000, y:100
                         }} />
                 </div>
 

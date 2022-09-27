@@ -22,7 +22,7 @@ const { Text, } = Typography;
 
 
 
-const LeaveList = () => {
+const LeaveList = (props) => {
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,6 +41,7 @@ const LeaveList = () => {
     ]
 
     const getData = async () => {
+        props.addNewHoliday()
 
         const allData = await CompanyHolidayContext.getAllCompanyHoliday();
         // 33-40 to be written in context
@@ -95,7 +96,7 @@ const LeaveList = () => {
 
     const onReset = () => {
         form.resetFields()
-    
+
     }
 
     const onFinish = (values) => {
@@ -123,7 +124,7 @@ const LeaveList = () => {
                     console.log(error.message);
 
                 })
-                form.resetFields();
+            form.resetFields();
         }
     };
 
@@ -185,145 +186,162 @@ const LeaveList = () => {
                     borderRadius: '10px',
                 }}
             >
-                <div>
-                    <Button onClick={showDrawer}>
-                        Holiday List
-                    </Button>
-                    <Drawer title="Holiday List" placement="right" onClose={onClose} visible={open} open={open}>
-                        {/* <Table columns={columns} dataSource={holidaylist} > */}
-
-                        {/* {JSON.stringify(colors[id])} */}
-
-                        {holidaylist.map((holiday, id) => {
-                            return (
-                                // color={status === "Approved" ? "green" : status === "Pending" ? 'blue' : "volcano"}
-
-                                <div className='holiday-div' 
-                                style={{                                 
-                                    borderRadius: '5px', marginBottom: '10px', background: colors[id % 2], paddingLeft: '10px', justifyContent: 'space-evenly'
-                                }} 
-                                >
-                                    <Space className='holiday-div-image' style={{
-                                        display: 'flex', flexDirection: 'column',
-                                        gap: '0px', justifyContent: 'space-evenly'
-                                    }} direction="vertical">
-
-                                        <div className='holiday-div-holiday' style={{
-                                        display: 'flex', flexDirection: 'row',
-                                        gap: '0px', justifyContent: 'space-between'
-                                    }}
-                                        >
-                                            <Text>{holiday.Name}</Text>
-                                            <DeleteOutlined
-                                                style={{
-                                                    display: 'flex', flexDirection: 'row', paddingTop: '5px', color:'red'
-
-                                                }}
-                                                onClick={() => {
-                                                    // if (record?.status !== 'Approved')
-                                                    onDeleteLeave(holiday);
-                                                }}
-                                            />
-                                        </div>
-
-                                        <Text type="secondary">{holiday.Date} / {holiday.optionalHoliday === true ? <span>optional </span> : <span>official</span>}</Text>
-                                    </Space>
-                                </div>
-                            );
-
-                        })}
-                        {/* </Table> */}
-                    </Drawer>
-                </div>
-                <div>
-                    <Button onClick={showModal}>
-                        Create Holiday
-                    </Button>
-
-                    <Modal title=" Create Holiday" maskClosable={false} footer={null} open={isModalOpen} visible={isModalOpen} onCancel={handleCancel}>
-                        <Form
-
-                            labelCol={{
-                                span: 8,
-
-                            }}
-                            wrapperCol={{
-                                span: 16,
-                            }}
-                            initialValues={{
-                                remember: true,
-                            }}
-                            onFinish={onFinish}
-                            form={form}
-                            autoComplete="off"
-
-
-                        >
-                            <Form.Item labelAlign="left"
-                                style={{ marginBottom: "10px", }}
-
-                                label="Holiday Name"
-                                name='holidayname'
-                                rules={[
-                                    {
-                                        required: true,
-                                    },
-                                ]}
-
-
-
-                            >
-                                <Input placeholder="Please Type Holiday Name" />
-                            </Form.Item>
-
-                            <Form.Item
-
-                                label="Date"
-                                name='holidaydate'
-                                labelAlign="left"
-                                style={{ marginBottom: "10px", }}
-
-                            >
-
-                                <DatePicker
-                                    disabledDate={disabledDate}
-                                    format="MMM D, YYYY"
-                                />
-                            </Form.Item>
-
-                            <Form.Item
-                                label="Type Of Leave"
-                                name='holidaytype'
-                                labelAlign="left"
-                                style={{ marginBottom: "10px", }}
-
-                            >
-                                <Radio.Group
-                                >
-                                    <Radio value="Optional"> Optional </Radio>
-                                    <Radio value="Official"> Official </Radio>
-                                </Radio.Group>
-                            </Form.Item>
-
-                            <Form.Item >
-
-                                <Button
-                                    style={cancelStyle}                                  
-                                    onClick={handleOk}
-                                    htmlType="submit"
-                                    type="primary">Create New Holiday
+                {
+                    props?.isHr
+                        ?
+                        <>
+                            <div>
+                                <Button className='button-div' style={{
+                                    marginLeft: '10px'
+                                }} onClick={showDrawer}>
+                                    Holiday List
                                 </Button>
-                                <Button
-                                    style={buttonStyle}
-                                    onClick={onReset}>
-                                Reset</Button>
-                            </Form.Item>
+                                <Drawer title="List of Holiday" placement="right" onClose={onClose} visible={open} open={open}>
+                                    {/* <Table columns={columns} dataSource={holidaylist} > */}
 
-                        </Form>
+                                    {/* {JSON.stringify(colors[id])} */}
 
-                    </Modal>
-                </div>
+                                    {holidaylist.map((holiday, id,) => {
+                                        return (
+                                            // colors={}
+
+                                            <div className='holiday-div'
+                                                style={holiday.optionalHoliday === false ? {
+                                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(204, 204, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                                                } : {
+                                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(252, 143, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                                                }}
+                                            >
+                                                <Space className='holiday-div-image' style={{
+                                                    display: 'flex', flexDirection: 'column',
+                                                    gap: '0px', justifyContent: 'space-evenly'
+                                                }} direction="vertical">
+
+                                                    <div className='holiday-div-holiday' style={{
+                                                        display: 'flex', flexDirection: 'row',
+                                                        gap: '0px', justifyContent: 'space-between'
+                                                    }}
+                                                    >
+                                                        <Text className='holiday-name' style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }}>{holiday.Name}</Text>
+                                                        <DeleteOutlined
+                                                            style={{
+                                                                display: 'flex', flexDirection: 'row', paddingTop: '5px', color: 'red'
+
+                                                            }}
+                                                            onClick={() => {
+                                                                // if (record?.status !== 'Approved')
+                                                                onDeleteLeave(holiday);
+                                                            }}
+                                                        />
+                                                    </div>
+
+                                                    <Text style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.Date} / {holiday.optionalHoliday === false ? <span  >'Optional'  </span> : <span>Official</span>}</Text>
+
+                                                </Space>
+                                            </div>
+                                        );
+
+                                    })}
+                                    {/* </Table> */}
+                                </Drawer>
+                            </div>
+                        </>
+
+                        :
+                        <div>
+                            <Button className='button-div' style={{
+                                marginLeft: '10px'
+                            }} onClick={showModal}>
+                                Create Holiday
+                            </Button>
+
+
+                            <Modal title=" Create Holiday" maskClosable={false} footer={null} open={isModalOpen} visible={isModalOpen} onCancel={handleCancel}>
+                                <Form
+
+                                    labelCol={{
+                                        span: 8,
+
+                                    }}
+                                    wrapperCol={{
+                                        span: 16,
+                                    }}
+                                    initialValues={{
+                                        remember: true,
+                                    }}
+                                    onFinish={onFinish}
+                                    form={form}
+                                    autoComplete="off"
+
+
+                                >
+                                    <Form.Item labelAlign="left"
+                                        style={{ marginBottom: "10px", }}
+
+                                        label="Holiday Name"
+                                        name='holidayname'
+                                        rules={[
+                                            {
+                                                required: true,
+                                            },
+                                        ]}
+
+                                    >
+                                        <Input placeholder="Please Type Holiday Name" />
+                                    </Form.Item>
+
+                                    <Form.Item
+
+                                        label="Date"
+                                        name='holidaydate'
+                                        labelAlign="left"
+                                        style={{ marginBottom: "10px", width: '100% ' }}
+
+                                    >
+
+                                        <DatePicker
+                                            disabledDate={disabledDate}
+                                            format="MMM D, YYYY"
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label="Type Of Leave"
+                                        name='holidaytype'
+                                        labelAlign="left"
+                                        style={{ marginBottom: "10px", }}
+
+                                    >
+                                        <Radio.Group
+                                        >
+                                            <Radio value="Optional"> Optional </Radio>
+                                            <Radio value="Official"> Official </Radio>
+                                        </Radio.Group>
+                                    </Form.Item>
+
+                                    <Form.Item >
+
+                                        <Button
+                                            style={cancelStyle}
+                                            onClick={handleOk}
+                                            htmlType="submit"
+                                            type="primary">Create New Holiday
+                                        </Button>
+                                        <Button
+                                            style={buttonStyle}
+                                            onClick={onReset}>
+                                            Reset</Button>
+                                    </Form.Item>
+
+                                </Form>
+                            </Modal>
+                        </div>
+
+
+                }
+
             </Col>
+
         </Row>
     )
 }

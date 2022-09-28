@@ -116,13 +116,13 @@ const LeaveList = (props) => {
         
         else {
             CompanyHolidayContext.createHoliday(newHoliday)
-            .then(response => {
+                .then(response => {
                 console.log("***11111111111111111**");
                 props.refershCalendar(newHoliday);  
                 // getData()
 
-                
-            })
+
+                })
                 .catch(error => {
                     console.log(error.message);
 

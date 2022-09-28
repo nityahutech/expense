@@ -55,11 +55,11 @@ function Personal() {
           <Row gutter={[16, 16]}>
             <Col span={8}>
               <div>
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>Name</div>
+                <div style={{ fontWeight: "bold", fontSize: "15px" }} >Name</div>
                 {editContent === false ? (
                   <div>Nitya priya sahu</div>
                 ) : (
-                  <Input placeholder="Enter Your Name" />
+                  <Input placeholder="Enter Your Name" value="name" />
                 )}
               </div>
             </Col>
@@ -71,7 +71,7 @@ function Personal() {
                 {editContent === false ? (
                   <div>14/02/2014</div>
                 ) : (
-                  <DatePicker style={{ width: "100%" }} />
+                  <DatePicker style={{ width: "100%" }} value="dateOfBirth"/>
                 )}
               </div>
             </Col>
@@ -83,7 +83,7 @@ function Personal() {
                 {editContent === false ? (
                   <div>Male</div>
                 ) : (
-                  <Select style={{ width: "100%" }}>
+                  <Select style={{ width: "100%" }} value="gender">
                     <Option value="male">Male</Option>
                     <Option value="female">Female</Option>
                   </Select>
@@ -100,7 +100,7 @@ function Personal() {
                 {editContent === false ? (
                   <div>O+</div>
                 ) : (
-                  <Select style={{ width: "100%" }}>
+                  <Select style={{ width: "100%" }} value="bloodGroup">
                     <Option value="ap">A+</Option>
                     <Option value="an">A-</Option>
                     <Option value="op">O+</Option>
@@ -121,15 +121,9 @@ function Personal() {
                 {editContent === false ? (
                   <div>Single</div>
                 ) : (
-                  <Select style={{ width: "100%" }}>
-                    <Option>Single</Option>
-                    <Option>Married</Option>
-                    <Option>Engaged</Option>
-                    <Option>Divorced</Option>
-                    <Option>Unable to Find</Option>
-                    <Option>It's Complicated</Option>
-                    <Option>Depends on who's Asking</Option>
-                    <Option>In a Relationship</Option>
+                  <Select style={{ width: "100%" }} value="maritalStatus">
+                    <Option value="single">Single</Option>
+                    <Option value="married">Married</Option>
                   </Select>
                 )}
               </div>
@@ -152,7 +146,7 @@ function Personal() {
               </Button>
               <Col>
                 <Button type="primary" style={{ marginLeft: "10px" }}>
-                  SAVE
+                  SAVE 
                 </Button>
               </Col>
             </Row>
@@ -215,7 +209,7 @@ function Personal() {
                     <div>nityapriya.sahu@hutechsolutions.com</div>
                   ) : (
                     <Form.Item
-                      name="offEmail"
+                      name="officialEmailId"
                       rules={[
                         {
                           required: true,
@@ -242,7 +236,7 @@ function Personal() {
                     <div>nityapriya.sahu@gmail.com</div>
                   ) : (
                     <Form.Item
-                      name="perEmail"
+                      name="personalEmailId"
                       rules={[
                         {
                           required: true,
@@ -271,7 +265,7 @@ function Personal() {
                   ) : (
                     <Form.Item
                       className="numder-inputs"
-                      name="phone"
+                      name="phnNumber"
                       rules={[
                         {
                           required: true,
@@ -301,7 +295,7 @@ function Personal() {
                   ) : (
                     <Form.Item
                       className="numder-inputs"
-                      name="altPhone"
+                      name="alternatePhnNumber"
                       rules={[
                         {
                           required: true,
@@ -388,6 +382,7 @@ function Personal() {
                   <div>xxxxxxxxxxxxxxxxxxxxx</div>
                 ) : (
                   <TextArea
+                  value="currentAdd"
                     // value={value}
                     // onChange={e => setValue(e.target.value)}
                     placeholder="Enter Address in Details"
@@ -406,6 +401,7 @@ function Personal() {
                   <div>xxxxxxxxxxxxxxxxxxxxx</div>
                 ) : (
                   <TextArea
+                  value="permanentAdd"
                     // value={value}
                     // onChange={e => setValue(e.target.value)}
                     placeholder="Enter Address in Details"
@@ -424,7 +420,7 @@ function Personal() {
                 {editAddressInfo === false ? (
                   <div>Owned - with Family</div>
                 ) : (
-                  <Input />
+                  <Input value="houseType" />
                 )}
               </div>
             </Col>
@@ -440,7 +436,7 @@ function Personal() {
                 {editAddressInfo === false ? (
                   <div>12/02/2000</div>
                 ) : (
-                  <DatePicker style={{ width: "100%" }} />
+                  <DatePicker style={{ width: "100%" }} value="scrs"/>
                 )}
               </div>
             </Col>
@@ -456,7 +452,7 @@ function Personal() {
                 {editAddressInfo === false ? (
                   <div>12/02/2000</div>
                 ) : (
-                  <DatePicker style={{ width: "100%" }} />
+                  <DatePicker style={{ width: "100%" }} value="lcss" />
                 )}
               </div>
             </Col>

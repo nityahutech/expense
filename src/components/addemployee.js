@@ -130,7 +130,7 @@ function AddEmployee() {
               xs={{ span: 24 }}
               sm={{ span: 12 }}
               className="Col-1-left"
-              style={{ background: "", height: "80px" }}
+              style={{ background: "",  }}
             >
               <Divider orientation="left" orientationMargin={0}>
                 First Name<span style={{ color: "red" }}> *</span>
@@ -179,7 +179,7 @@ function AddEmployee() {
               xs={{ span: 24 }}
               sm={{ span: 12 }}
               className="Col-1-left"
-              style={{ background: "", height: "80px" }}
+              style={{ background: "",  }}
             >
               <Divider orientation="left" orientationMargin={0}>
                 Last Name<span style={{ color: "red" }}> *</span>
@@ -230,7 +230,7 @@ function AddEmployee() {
               xs={{ span: 24 }}
               sm={{ span: 12 }}
               className="Col-1-left"
-              style={{ background: "", height: "80px" }}
+              style={{ background: "",  }}
             >
               <Divider orientation="left" orientationMargin={0}>
                 Email Id<span style={{ color: "red" }}> *</span>
@@ -269,7 +269,7 @@ function AddEmployee() {
               xs={{ span: 24 }}
               sm={{ span: 12 }}
               className="Col-1-left"
-              style={{ background: "", height: "80px" }}
+              style={{ background: "",  }}
             >
               <Divider orientation="left" orientationMargin={0}>
                 Date Of Joining<span style={{ color: "red" }}> *</span>
@@ -298,7 +298,7 @@ function AddEmployee() {
               xs={{ span: 24 }}
               sm={{ span: 12 }}
               className="Col-1-left"
-              style={{ background: "", height: "80px" }}
+              style={{ background: "",  }}
             >
               <Divider orientation="left" orientationMargin={0}>
                 Phone No.<span style={{ color: "red" }}> *</span>
@@ -340,7 +340,7 @@ function AddEmployee() {
               xs={{ span: 24 }}
               sm={{ span: 12 }}
               className="Col-1-left"
-              style={{ background: "", height: "80px" }}
+              style={{ background: "",  }}
             >
               <Divider orientation="left" orientationMargin={0}>
                 Gender<span style={{ color: "red" }}> *</span>
@@ -376,7 +376,7 @@ function AddEmployee() {
               xs={{ span: 24 }}
               sm={{ span: 12 }}
               className="Col-1-left"
-              style={{ background: "", height: "80px" }}
+              style={{ background: "",  }}
             >
               <Divider orientation="left" orientationMargin={0}>
                 Designation<span style={{ color: "red" }}> *</span>
@@ -419,7 +419,7 @@ function AddEmployee() {
               xs={{ span: 24 }}
               sm={{ span: 12 }}
               className="Col-1-left"
-              style={{ background: "", height: "80px" }}
+              style={{ background: "",  }}
             >
               <Divider orientation="left" orientationMargin={0}>
                 Role<span style={{ color: "red" }}> *</span>

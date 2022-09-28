@@ -19,7 +19,7 @@ const companyholidayCollectionRef = collection(db, "companyholiday");
 
 class CompanyHolidayContext {
     getAllCompanyHoliday = () => {
-        const q = query(companyholidayCollectionRef, orderBy("Date", "desc"));
+        const q = query(companyholidayCollectionRef, orderBy("Date", "asc"));
         // console.log(q);
         return getDocs(q);
     };

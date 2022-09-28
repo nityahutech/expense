@@ -48,17 +48,16 @@ props.refershCalendar()
         // 33-40 to be written in context
         allData.docs.map((doc) => {
             let d = allData.docs.map((doc) => {
+        
                 return {
                     ...doc.data(),
+                    Date:  moment( doc.data()["Date"].seconds*1000).format('Do MMM, YYYY'),                 
                     id: doc.id,
                 };
-            });
-            d.sort((a, b) => {
-                return moment(a).diff(moment(b), 'days')
-
-            })
+            });   
             setHolidaylist(d)
-             //console.log('holidaylist',d )
+            console.log('holidaylist', d[1].Date);
+            console.log('holidaylist2',moment( d[1].Date.seconds*1000))
 
         });
     }
@@ -100,12 +99,12 @@ props.refershCalendar()
     }
 
     const onFinish = (values) => {
-        console.log('Success: holiday', values);
+        console.log('Success: holiday', values.holidaydate.toDate());
 
         let newHoliday = {
             Name: values.holidayname,
-            Date: values.holidaydate.format('Do MMM, YYYY'),
-            optionalHoliday: values.holidaytype === 'Optional' ? true : false,
+            Date: values.holidaydate.toDate(),
+            optionalHoliday: values.holidaytype === 'Official' ? true : false,
         }
         console.log('newHoliday', newHoliday)
         // let leaveRecord = companyholiday.filter(record => record.Date == currdate);
@@ -227,19 +226,16 @@ props.refershCalendar()
                                                 <DeleteOutlined
                                                 style={{
                                                     display: 'flex', flexDirection: 'row', paddingTop: '5px', color: 'red'
-
                                             }}
                                             onClick={() => {
                                                 // if (record?.status !== 'Approved')
                                                 onDeleteLeave(holiday);
                                             }}
-
                                          />
                                         :null}
-                                            
-                                    </div>
+                                        </div>
 
-                                        <Text style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.Date} / {holiday.optionalHoliday === false ? <span  >'Optional'  </span> : <span>Official</span>}</Text>
+                                        <Text style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.Date} / {holiday.optionalHoliday === false ? <span  >Optional </span> : <span>Official</span>}</Text>
 
                                     </Space>
                                 </div>
@@ -254,9 +250,6 @@ props.refershCalendar()
 
                     props.isHr
                         ?
-
-
-
                         <div>
                             <Button className='button-div' style={{
                                 marginLeft: '10px'

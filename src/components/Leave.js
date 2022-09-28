@@ -82,7 +82,7 @@ const Leave = () => {
     const getListData = (value) => {
         let listData;
         let currdate = value.format('Do MMM, YYYY');
-        let leaveRecord = companyholiday.filter(record => record.Date == currdate);
+        let leaveRecord = companyholiday.filter(record => record?.Date == currdate);
         console.log('calendervvvvv', currdate);
         console.log('calendervvvvv2', leaveRecord.length);
         if (leaveRecord.length > 0) {
@@ -140,10 +140,11 @@ const Leave = () => {
 
 
     const getData = async () => {
+        console.log("----");
         let data = await LeaveContext.getAllById(currentUser.uid)
         // console.log("data", JSON.stringify(data.docs), currentUser.uid);
 
-        let d = data.docs.map((doc) => {
+        let d = data.docs.map((doc) => {  
             console.log("123", { ...doc.data() })
             return {
                 ...doc.data(),
@@ -460,7 +461,7 @@ const Leave = () => {
         //get current date: calandar: aa
         
         console.log("********",aa,aa==='Mon Sep 26 2022');
-        let matchingHolidayList = companyholiday.filter(item => item.Date == current.format('Do MMM, YYYY'))
+        let matchingHolidayList = companyholiday.filter(item => item?.Date == current.format('Do MMM, YYYY'))
         return moment(current).day() === 0 || (current).day() === 6 || matchingHolidayList.length > 0 || aa==='Mon Sep 26 2022'
         //  allL.includes(aa)
     };
@@ -512,7 +513,7 @@ const Leave = () => {
 
 
                     
-                    <HolidayList isHr={isHr} />
+                    <HolidayList isHr={isHr} refershCalendar={addNewHoliday}/>
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <div className='badge-div' style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', justifyContent: 'center', paddingTop: '10px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', }}>
                             {/* <Typography.Title level={4} >Calendar</Typography.Title> */}
@@ -541,6 +542,7 @@ const Leave = () => {
                             dateCellRender={dateCellRender}
                             monthCellRender={monthCellRender}
                             disabledDate={disabledDate}
+                            
                         />
                         {
                             isHr

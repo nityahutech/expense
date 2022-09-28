@@ -43,7 +43,7 @@ const LeaveList = (props) => {
 
     const getData = async () => {
         // props.addNewHoliday()
-
+props.refershCalendar()
         const allData = await CompanyHolidayContext.getAllCompanyHoliday();
         // 33-40 to be written in context
         allData.docs.map((doc) => {
@@ -58,7 +58,7 @@ const LeaveList = (props) => {
 
             })
             setHolidaylist(d)
-            // console.log('holidaylist',d )
+             //console.log('holidaylist',d )
 
         });
     }
@@ -117,13 +117,14 @@ const LeaveList = (props) => {
         else {
             CompanyHolidayContext.createHoliday(newHoliday)
                 .then(response => {
-                    console.log("******************");
-                    getData();
+                    console.log("***11111111111111111**");
+                    props.refershCalendar(newHoliday);  
+                    // getData()
+
+                    
                 })
                 .catch(error => {
-                    console.log("***11111111111111111**");
-
-                    console.log(error.message);
+                    console.log(error);
 
                 })
             form.resetFields();
@@ -222,7 +223,8 @@ const LeaveList = (props) => {
                                         }}
                                         >
                                             <Text className='holiday-name' style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }}>{holiday.Name}</Text>
-                                            <DeleteOutlined
+                                            {props.isHr?
+                                                <DeleteOutlined
                                                 style={{
                                                     display: 'flex', flexDirection: 'row', paddingTop: '5px', color: 'red'
 
@@ -231,7 +233,10 @@ const LeaveList = (props) => {
                                                 // if (record?.status !== 'Approved')
                                                 onDeleteLeave(holiday);
                                             }}
-                                        />
+
+                                         />
+                                        :null}
+                                            
                                     </div>
 
                                         <Text style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.Date} / {holiday.optionalHoliday === false ? <span  >'Optional'  </span> : <span>Official</span>}</Text>

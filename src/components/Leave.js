@@ -55,12 +55,15 @@ const Leave = () => {
     const [leaveslot, setLeaveslot] = useState(null)
     const [companyholiday, setCompanyholiday] = useState([])
     const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  
 
     function addNewHoliday(holiday) {
-        setCompanyholiday([...companyholiday,holiday])
+        getHoliday()
     }
-    const getHoliday = async () => {
 
+
+
+    const getHoliday = async () => {
         const allData = await CompanyHolidayContext.getAllCompanyHoliday();
         console.log('allCompanyHoliday', allData)  
         allData.docs.map((doc) => {
@@ -73,7 +76,6 @@ const Leave = () => {
                     id: doc.id,
                 };
             });
-            console.log("comp",d);
             setCompanyholiday(d)
             console.log('allCompanyHoliday3', d)
 
@@ -83,7 +85,7 @@ const Leave = () => {
     const getListData = (value) => {
         let listData;
         let currdate = value.format('Do MMM, YYYY');
-        let leaveRecord = companyholiday.filter(record => record?.Date == currdate);
+        let leaveRecord = companyholiday.filter(record => record.Date == currdate);
         console.log('calendervvvvv', currdate);
         console.log('calendervvvvv2', leaveRecord.length);
         if (leaveRecord.length > 0) {
@@ -131,7 +133,6 @@ const Leave = () => {
         // }
         LeaveContext.createLeave(newLeave)
             .then(response => {
-                form.resetFields()
                 getData();
 
             })
@@ -144,11 +145,10 @@ const Leave = () => {
 
 
     const getData = async () => {
-        console.log("----");
         let data = await LeaveContext.getAllById(currentUser.uid)
         // console.log("data", JSON.stringify(data.docs), currentUser.uid);
 
-        let d = data.docs.map((doc) => {  
+        let d = data.docs.map((doc) => {
             console.log("123", { ...doc.data() })
             return {
                 ...doc.data(),
@@ -442,8 +442,8 @@ const Leave = () => {
                     <li 
                      style = {
                         item.isOptional?
-                        { color: "rgba(204, 204, 10, 1)", fontSize:'10px',  }
-                        : {color: "rgba(252, 143, 10, 1)", fontSize:'10px' }
+                        { color: "rgba(252, 143, 10, 1)", fontSize:'10px',  }
+                        : {color: "rgba(204, 204, 10, 1)", fontSize:'10px' }
                     }
 
                     >
@@ -520,6 +520,7 @@ const Leave = () => {
 
 
                     
+                    {/* <HolidayList isHr={isHr} /> */}
                     <HolidayList isHr={isHr} refershCalendar={addNewHoliday}/>
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <div className='badge-div' style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', justifyContent: 'center', paddingTop: '10px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', }}>
@@ -549,14 +550,13 @@ const Leave = () => {
                             dateCellRender={dateCellRender}
                             monthCellRender={monthCellRender}
                             disabledDate={disabledDate}
-                            
                         />
                         {
                             isHr
                                 ? <Notification data={requests} />
                                 : null
                         }
-                    </div>  
+                    </div>
                 </Col>
 
                 <Row style={{

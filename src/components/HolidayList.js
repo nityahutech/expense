@@ -43,7 +43,7 @@ const LeaveList = (props) => {
 
     const getData = async () => {
         // props.addNewHoliday()
-props.refershCalendar()
+
         const allData = await CompanyHolidayContext.getAllCompanyHoliday();
         // 33-40 to be written in context
         allData.docs.map((doc) => {
@@ -89,7 +89,7 @@ props.refershCalendar()
 
 
     const showDrawer = () => {
-        console.log('show')
+       getData()
         setOpen(true);
     };
 
@@ -113,17 +113,18 @@ props.refershCalendar()
             //errormodal
             console.log('holiday allready Exist')
         }
+        
         else {
             CompanyHolidayContext.createHoliday(newHoliday)
-                .then(response => {
-                    console.log("***11111111111111111**");
-                    props.refershCalendar(newHoliday);  
-                    // getData()
+            .then(response => {
+                console.log("***11111111111111111**");
+                props.refershCalendar(newHoliday);  
+                // getData()
 
-                    
-                })
+                
+            })
                 .catch(error => {
-                    console.log(error);
+                    console.log(error.message);
 
                 })
             form.resetFields();
@@ -198,7 +199,7 @@ props.refershCalendar()
                     <Drawer title="List of Holiday" placement="right" onClose={onClose} visible={open} open={open}>
                         {/* <Table columns={columns} dataSource={holidaylist} > */}
 
-                    {/* {JSON.stringify(colors[id])} */}
+                        {/* {JSON.stringify(colors[id])} */}
 
                         {holidaylist.map((holiday, id,) => {
                             return (
@@ -294,12 +295,12 @@ props.refershCalendar()
 
                                     <Form.Item
 
-                                    label="Date"
-                                    name='holidaydate'
-                                    labelAlign="left"
-                                    style={{ marginBottom: "10px", width: '100% ' }}
+                                        label="Date"
+                                        name='holidaydate'
+                                        labelAlign="left"
+                                        style={{ marginBottom: "10px", width: '100% ' }}
 
-                                >
+                                    >
 
                                         <DatePicker
                                             disabledDate={disabledDate}

@@ -89,7 +89,7 @@ const LeaveList = (props) => {
 
 
     const showDrawer = () => {
-        console.log('show')
+       getData()
         setOpen(true);
     };
 
@@ -113,12 +113,16 @@ const LeaveList = (props) => {
             //errormodal
             console.log('holiday allready Exist')
         }
+        
         else {
             CompanyHolidayContext.createHoliday(newHoliday)
-                .then(response => {
-                    getData();
+            .then(response => {
+                console.log("***11111111111111111**");
+                props.refershCalendar(newHoliday);  
+                // getData()
 
-                })
+                
+            })
                 .catch(error => {
                     console.log(error.message);
 

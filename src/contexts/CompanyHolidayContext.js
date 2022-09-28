@@ -4,11 +4,12 @@ import { db } from "../firebase-config";
 import {
     collection,
     getDocs,
+    doc,
+    addDoc,
     query,
     orderBy,
-    addDoc,
     deleteDoc,
-    doc
+
 
   
 } from "firebase/firestore";

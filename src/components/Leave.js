@@ -55,9 +55,15 @@ const Leave = () => {
     const [leaveslot, setLeaveslot] = useState(null)
     const [companyholiday, setCompanyholiday] = useState([])
     const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  
+
+    function addNewHoliday(holiday) {
+        getHoliday()
+    }
+
+
 
     const getHoliday = async () => {
-
         const allData = await CompanyHolidayContext.getAllCompanyHoliday();
         console.log('allCompanyHoliday', allData)  
         allData.docs.map((doc) => {
@@ -436,8 +442,8 @@ const Leave = () => {
                     <li 
                      style = {
                         item.isOptional?
-                        { color: "rgba(204, 204, 10, 1)", fontSize:'10px',  }
-                        : {color: "rgba(252, 143, 10, 1)", fontSize:'10px' }
+                        { color: "rgba(252, 143, 10, 1)", fontSize:'10px',  }
+                        : {color: "rgba(204, 204, 10, 1)", fontSize:'10px' }
                     }
 
                     >
@@ -514,7 +520,8 @@ const Leave = () => {
 
 
                     
-                    <HolidayList isHr={isHr} />
+                    {/* <HolidayList isHr={isHr} /> */}
+                    <HolidayList isHr={isHr} refershCalendar={addNewHoliday}/>
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <div className='badge-div' style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', justifyContent: 'center', paddingTop: '10px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', }}>
                             {/* <Typography.Title level={4} >Calendar</Typography.Title> */}

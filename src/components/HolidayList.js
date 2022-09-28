@@ -23,6 +23,7 @@ const { Text, } = Typography;
 
 
 const LeaveList = (props) => {
+    console.log(props);
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,24 +42,22 @@ const LeaveList = (props) => {
     ]
 
     const getData = async () => {
-        props.addNewHoliday()
+        // props.addNewHoliday()
 
         const allData = await CompanyHolidayContext.getAllCompanyHoliday();
         // 33-40 to be written in context
         allData.docs.map((doc) => {
             let d = allData.docs.map((doc) => {
-
+        
                 return {
                     ...doc.data(),
+                    Date:  moment( doc.data()["Date"].seconds*1000).format('Do MMM, YYYY'),                 
                     id: doc.id,
                 };
-            });
-            d.sort((a, b) => {
-                return moment(a).diff(moment(b), 'days')
-
-            })
+            });   
             setHolidaylist(d)
-            // console.log('holidaylist',d )
+            console.log('holidaylist', d[1].Date);
+            console.log('holidaylist2',moment( d[1].Date.seconds*1000))
 
         });
     }
@@ -90,7 +89,7 @@ const LeaveList = (props) => {
 
 
     const showDrawer = () => {
-        console.log('show')
+       getData()
         setOpen(true);
     };
 
@@ -100,11 +99,11 @@ const LeaveList = (props) => {
     }
 
     const onFinish = (values) => {
-        console.log('Success: holiday', values);
+        console.log('Success: holiday', values.holidaydate.toDate());
 
         let newHoliday = {
             Name: values.holidayname,
-            Date: values.holidaydate.format('Do MMM, YYYY'),
+            Date: values.holidaydate.toDate(),
             optionalHoliday: values.holidaytype === 'Official' ? true : false,
         }
         console.log('newHoliday', newHoliday)
@@ -114,12 +113,16 @@ const LeaveList = (props) => {
             //errormodal
             console.log('holiday allready Exist')
         }
+        
         else {
             CompanyHolidayContext.createHoliday(newHoliday)
-                .then(response => {
-                    getData();
+            .then(response => {
+                console.log("***11111111111111111**");
+                props.refershCalendar(newHoliday);  
+                // getData()
 
-                })
+                
+            })
                 .catch(error => {
                     console.log(error.message);
 
@@ -186,68 +189,68 @@ const LeaveList = (props) => {
                     borderRadius: '10px',
                 }}
             >
+
+                <div>
+                    <Button className='button-div' style={{
+                        marginLeft: '10px'
+                    }} onClick={showDrawer}>
+                        Holiday List
+                    </Button>
+                    <Drawer title="List of Holiday" placement="right" onClose={onClose} visible={open} open={open}>
+                        {/* <Table columns={columns} dataSource={holidaylist} > */}
+
+                        {/* {JSON.stringify(colors[id])} */}
+
+                        {holidaylist.map((holiday, id,) => {
+                            return (
+                                // colors={}
+
+                                <div className='holiday-div'
+                                    style={holiday.optionalHoliday === false ? {
+                                        borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(204, 204, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                                    } : {
+                                        borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(252, 143, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                                    }}
+                                >
+                                    <Space className='holiday-div-image' style={{
+                                        display: 'flex', flexDirection: 'column',
+                                        gap: '0px', justifyContent: 'space-evenly'
+                                    }} direction="vertical">
+
+                                        <div className='holiday-div-holiday' style={{
+                                            display: 'flex', flexDirection: 'row',
+                                            gap: '0px', justifyContent: 'space-between'
+                                        }}
+                                        >
+                                            <Text className='holiday-name' style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }}>{holiday.Name}</Text>
+                                            {props.isHr?
+                                                <DeleteOutlined
+                                                style={{
+                                                    display: 'flex', flexDirection: 'row', paddingTop: '5px', color: 'red'
+                                            }}
+                                            onClick={() => {
+                                                // if (record?.status !== 'Approved')
+                                                onDeleteLeave(holiday);
+                                            }}
+                                         />
+                                        :null}
+                                        </div>
+
+                                        <Text style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.Date} / {holiday.optionalHoliday === false ? <span  >Optional </span> : <span>Official</span>}</Text>
+
+                                    </Space>
+                                </div>
+                            );
+
+                        })}
+                        {/* </Table> */}
+                    </Drawer>
+                </div>
+
                 {
-                    props?.isHr
+
+                    props.isHr
                         ?
-                        <>
-                            <div>
-                                <Button className='button-div' style={{
-                                    marginLeft: '10px'
-                                }} onClick={showDrawer}>
-                                    Holiday List
-                                </Button>
-                                <Drawer title="List of Holiday" placement="right" onClose={onClose} visible={open} open={open}>
-                                    {/* <Table columns={columns} dataSource={holidaylist} > */}
-
-                                    {/* {JSON.stringify(colors[id])} */}
-
-                                    {holidaylist.map((holiday, id,) => {
-                                        return (
-                                            // colors={}
-
-                                            <div className='holiday-div'
-                                                style={holiday.optionalHoliday === false ? {
-                                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(204, 204, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
-                                                } : {
-                                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(252, 143, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
-                                                }}
-                                            >
-                                                <Space className='holiday-div-image' style={{
-                                                    display: 'flex', flexDirection: 'column',
-                                                    gap: '0px', justifyContent: 'space-evenly'
-                                                }} direction="vertical">
-
-                                                    <div className='holiday-div-holiday' style={{
-                                                        display: 'flex', flexDirection: 'row',
-                                                        gap: '0px', justifyContent: 'space-between'
-                                                    }}
-                                                    >
-                                                        <Text className='holiday-name' style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }}>{holiday.Name}</Text>
-                                                        <DeleteOutlined
-                                                            style={{
-                                                                display: 'flex', flexDirection: 'row', paddingTop: '5px', color: 'red'
-
-                                                            }}
-                                                            onClick={() => {
-                                                                // if (record?.status !== 'Approved')
-                                                                onDeleteLeave(holiday);
-                                                            }}
-                                                        />
-                                                    </div>
-
-                                                    <Text style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.Date} / {holiday.optionalHoliday === false ? <span  >'Optional'  </span> : <span>Official</span>}</Text>
-
-                                                </Space>
-                                            </div>
-                                        );
-
-                                    })}
-                                    {/* </Table> */}
-                                </Drawer>
-                            </div>
-                        </>
-
-                        :
                         <div>
                             <Button className='button-div' style={{
                                 marginLeft: '10px'
@@ -337,6 +340,8 @@ const LeaveList = (props) => {
                             </Modal>
                         </div>
 
+                        :
+                        null
 
                 }
 
@@ -347,4 +352,3 @@ const LeaveList = (props) => {
 }
 
 export default LeaveList
-

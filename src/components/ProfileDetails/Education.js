@@ -101,7 +101,7 @@ function Education() {
       </Card>
       {saveContent ===true ?
       <Card
-        title="Educatonal Info"
+        title="Qulification Type"
         // extra={<EditTwoTone />}
         extra={ 
           <Button 
@@ -115,10 +115,6 @@ function Education() {
       >
         
         <Row gutter={[36, 8]}>
-
-        <Col span={24}>
-           <h1>Qulification Type</h1> 
-        </Col>
 
         <Col span={5}> 
           <img 

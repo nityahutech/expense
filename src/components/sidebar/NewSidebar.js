@@ -86,7 +86,10 @@ const NewSidebar = (props) => {
             <NavLink to="/DashBoard" />
           </Menu.Item>
 
-          <Menu.SubMenu
+          <Menu.SubMenu className="arrow-div"  style={{
+            
+             width:'100%'
+              }}
             icon={
               <img src="/logo/Expense.png" alt="profile" className="Dash" />
             }
@@ -94,14 +97,18 @@ const NewSidebar = (props) => {
             title="Expense"
             mode="inline"
           >
-            <Menu.Item
+            <Menu.Item className ='arrow'
+            //  style={{
+            //     background: "#05445E",
+              
+            //   }}
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="2"
             >
               Add Expense
               <NavLink to="/Expense/AddExpense" />
             </Menu.Item>
-            <Menu.Item
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="3"
             >
@@ -110,7 +117,10 @@ const NewSidebar = (props) => {
             </Menu.Item>
           </Menu.SubMenu>
 
-          <Menu.SubMenu
+          <Menu.SubMenu  style={{
+            
+            width:'100%'
+             }}
             icon={
               <img
                 style={{ color: "white" }}
@@ -123,14 +133,14 @@ const NewSidebar = (props) => {
             title="Employee"
             mode="inline"
           >
-            <Menu.Item
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="6"
             >
               Attendance Log
               <NavLink to="/Attendance/AttendanceLog" />
             </Menu.Item>
-            <Menu.Item
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="7"
             >
@@ -138,14 +148,14 @@ const NewSidebar = (props) => {
               <NavLink to="/Employee/Leave" />
             </Menu.Item>
 
-            <Menu.Item
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="8"
             >
               Add Employee
               <NavLink to="/Addemployee/AddEmployee" />
             </Menu.Item>
-            <Menu.Item
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="9"
             >
@@ -154,7 +164,10 @@ const NewSidebar = (props) => {
             </Menu.Item>
           </Menu.SubMenu>
            
-          <Menu.SubMenu
+          <Menu.SubMenu  style={{
+            
+            width:'100%'
+             }}
             icon={
               <img
                 style={{ color: "" }}
@@ -167,14 +180,14 @@ const NewSidebar = (props) => {
             title="Profile"
             mode="inline"
           >
-            <Menu.Item
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="10"
             >
               Personal
               <NavLink to="/PersonalPage/Personal"/>
             </Menu.Item>
-            <Menu.Item
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="11"
             >
@@ -182,14 +195,14 @@ const NewSidebar = (props) => {
               <NavLink to="/WorkPage/work" />
             </Menu.Item>
 
-            <Menu.Item
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="12"
             >
               Team
               <NavLink to="/TeamPage/Team" />
             </Menu.Item>
-            <Menu.Item
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="13"
             >
@@ -203,28 +216,28 @@ const NewSidebar = (props) => {
               Family
               <NavLink to="/FamilyPage/Family" />
             </Menu.Item>
-            <Menu.Item
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="15"
             >
               Documents
               <NavLink to="/DocumentsPage/Document" />
             </Menu.Item>
-            <Menu.Item
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="16"
             >
               Work week
               <NavLink to="/WorkWeekPage/WorkWeek" />
             </Menu.Item>
-            <Menu.Item
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="17"
             >
               Pay Slip
               <NavLink to="/PaySlipPage/PaySlip" />
             </Menu.Item>
-            <Menu.Item
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="18"
             >
@@ -247,7 +260,7 @@ const NewSidebar = (props) => {
             Profile
             <NavLink to="/Profile" />
           </Menu.Item> */}
-          <Menu.Item
+          <Menu.Item className ='arrow'
             icon={
               <img
                 style={{ color: "" }}

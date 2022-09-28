@@ -42,7 +42,8 @@ const Leave = () => {
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
     const [noOfDays, setNoOfDays] = useState([]);
-    const [isHr, setIsHr] = useState(sessionStorage.getItem(null) || true);
+    console.log(sessionStorage.getItem("role"));
+    const [isHr, setIsHr] = useState(sessionStorage.getItem("role")==="hr"?true:false);
     const [role, setRole] = useState(null);
     const { currentUser } = useAuth();
 
@@ -54,9 +55,15 @@ const Leave = () => {
     const [leaveslot, setLeaveslot] = useState(null)
     const [companyholiday, setCompanyholiday] = useState([])
     const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  
+
+    function addNewHoliday(holiday) {
+        getHoliday()
+    }
+
+
 
     const getHoliday = async () => {
-
         const allData = await CompanyHolidayContext.getAllCompanyHoliday();
         console.log('allCompanyHoliday', allData)  
         allData.docs.map((doc) => {
@@ -65,6 +72,7 @@ const Leave = () => {
 
                 return {
                     ...doc.data(),
+                    Date:  moment( doc.data()["Date"].seconds*1000).format('Do MMM, YYYY'),   
                     id: doc.id,
                 };
             });
@@ -81,9 +89,12 @@ const Leave = () => {
         console.log('calendervvvvv', currdate);
         console.log('calendervvvvv2', leaveRecord.length);
         if (leaveRecord.length > 0) {
+            console.log(leaveRecord[0]);
             listData = [
                 {
-                    type: leaveRecord[0].Name,            
+                    type:leaveRecord[0].Name,  
+                    isOptional:leaveRecord[0]?.optionalHoliday
+                    //add type          
                 }
             ]
         }
@@ -428,10 +439,12 @@ const Leave = () => {
         return (
             <ul className="events"  >
                 {listData.map((item) => (
-                    <li  style = {
-                        item.type === "Official"
-                        ?{ color: "rgba(204, 204, 10, 1)", }
-                        : {color: "rgba(252, 143, 10, 1)" }}
+                    <li 
+                     style = {
+                        item.isOptional?
+                        { color: "rgba(252, 143, 10, 1)", fontSize:'10px',  }
+                        : {color: "rgba(204, 204, 10, 1)", fontSize:'10px' }
+                    }
 
                     >
                         {/* style={{ color: "rgba(204, 204, 10, 1)",fontSize:'8px'}} */}
@@ -450,12 +463,13 @@ const Leave = () => {
 
     function disabledDate(current) { 
         //allL=['Mon Sep 26 2022','Mon Sep 26 2022']  get all leave date in formate of Mon Sep 26 2022
-        let aa=new Date(current).toDateString()
+        // let aa=new Date(current).toDateString()
         //get current date: calandar: aa
         
-        console.log("********",aa,aa==='Mon Sep 26 2022');
+        // console.log("********",aa,aa==='Mon Sep 26 2022');
         let matchingHolidayList = companyholiday.filter(item => item.Date == current.format('Do MMM, YYYY'))
-        return moment(current).day() === 0 || (current).day() === 6 || matchingHolidayList.length > 0 || aa==='Mon Sep 26 2022'
+        return moment(current).day() === 0 || (current).day() === 6 || matchingHolidayList.length > 0 
+        // || aa==='Mon Sep 26 2022'
         //  allL.includes(aa)
     };
 
@@ -506,7 +520,8 @@ const Leave = () => {
 
 
                     
-                    <HolidayList isHr={isHr} />
+                    {/* <HolidayList isHr={isHr} /> */}
+                    <HolidayList isHr={isHr} refershCalendar={addNewHoliday}/>
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <div className='badge-div' style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', justifyContent: 'center', paddingTop: '10px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', }}>
                             {/* <Typography.Title level={4} >Calendar</Typography.Title> */}

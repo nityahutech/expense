@@ -1,0 +1,51 @@
+body{
+    overflow-x: hidden;
+}
+
+ 
+.form.ant-form{
+    margin-top: 46px;
+    position: relative;
+    right: 156px;
+}
+.inputNumber.ant-input{
+    margin-left: 26px;
+    width: 58%;
+}
+.inputName.ant-input{
+    margin-left: 60px;
+    width: 55%;
+}
+.inputCode.ant-input{
+    margin-left: 66px;
+    width: 56%;
+}
+.number.ant-form-item{
+margin-left: 53px;
+}
+.ifsc.ant-form-item{
+margin-right: 15px;
+}
+.cancel.ant-btn{
+    margin-left: 20px;
+}
+/* .ant-form-item-explain-error{
+    margin: 8px 0px 8px 61px !important;
+} */
+.save.ant-btn-primary{
+    width: 11%;
+}
+/* .name.ant-form-item-with-help {
+    margin: 4px 0px 14px 61px;
+}
+.number.ant-form-item-with-help {
+    margin: 4px 0px 14px 61px;
+} */
+/* .ant-form-item-with-help .ant-form-item-explain{
+    margin: 4px 0px 10px 60px;
+} */
+
+
+ 
+
+

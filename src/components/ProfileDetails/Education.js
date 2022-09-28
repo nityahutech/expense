@@ -47,11 +47,19 @@ function Education() {
             </Button>
           </Col>
         </Row>
-
         {editContent ===true ?
         <Row gutter={[16, 8]}>
 
-             <Col span={24}> <Input placeholder="Course Name" /> </Col>
+          <Col span={24}>
+            <Button 
+              type="text"
+              onClick={() => showEditContent(!editContent)}
+            >
+                <PlusCircleOutlined />Add
+            </Button>
+          </Col>
+
+             <Col span={8}> <Input placeholder="Qulificatoin Type" /> </Col>
 
              <Col span={8}> <Input placeholder="Course Name" /> </Col>
 

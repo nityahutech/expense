@@ -10,6 +10,8 @@ import {
   Input,
   DatePicker,
   Button,
+  Form,
+  Select,
 } from 'antd';
 
 import {
@@ -19,8 +21,11 @@ import {
   EditTwoTone,
   DeleteTwoTone, 
 } from '@ant-design/icons';
+import FormItem from 'antd/es/form/FormItem';
 
 // ----------------------------------------place for const declaration
+
+const { Option } = Select;
 
 const onChange = (date, dateString) => {
   console.log(date, dateString);
@@ -31,122 +36,190 @@ const onChange = (date, dateString) => {
 function Education() {
 
   const [editContent, showEditContent] = useState(false);
-  const [saveContent, showSaveContent] = useState(false)
+
+  const onFinish = (values) => {
+    console.log('Success:', values);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
 
   return (
-    <div className='education' style={{margin:'10px'}}>
-      <Card title="Educational Info">
+    <div 
+      className='education' 
+      style={{
+              margin:'10px',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+    >
+    
+    <Form
+      name="basic"
+      labelCol={{
+        span: 8,
+      }}
+      wrapperCol={{
+        span: 16,
+      }}
+      initialValues={{
+        remember: true,
+      }}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off"
+    >
 
-        <Row>
-        <Col span={24}>
-            <Button 
-              type="text"
-              onClick={() => showEditContent(!editContent)}
-            >
-                <PlusCircleOutlined />Add
-            </Button>
-          </Col>
-        </Row>
-        {editContent ===true ?
-        <Row gutter={[16, 8]}>
-
-          <Col span={24}>
-            <Button 
-              type="text"
-              onClick={() => showEditContent(!editContent)}
-            >
-                <PlusCircleOutlined />Add
-            </Button>
-          </Col>
-
-             <Col span={8}> <Input placeholder="Qulificatoin Type" /> </Col>
-
-             <Col span={8}> <Input placeholder="Course Name" /> </Col>
-
-             <Col span={8}> <Input placeholder="Course Type" /> </Col>
-
-             <Col span={8}> <Input placeholder="Stream" /> </Col>
-
-             <Col span={8}>
-                <DatePicker 
-                onChange={onChange} 
-                placeholder="Course Start Date"
-                style={{ width:'100%' }}
-                />
-              </Col>
-
-              <Col span={8}>
-                <DatePicker 
-                  onChange={onChange} 
-                  placeholder="Course End Date"
-                  style={{ width:'100%' }}
-                />
-              </Col>
-
-              <Col span={8}> <Input placeholder="College Name" /> </Col>
-
-              <Col span={8}> <Input placeholder="University Name" /> </Col>
-
-              <Col 
-                  span={24}
-                  style={{textAlign:'right'}}
+    <Card
+          title="EDUCATIONAL INFO"
+          //   actions={[
+          //   <EditOutlined key="edit" />,
+          // ]}
+          extra={
+            <>
+              {editContent === false ? (
+                <Button
+                  type="text"
+                  style={{ color: "#4ec0f1" }}
+                  onClick={() => showEditContent(!editContent)}
                 >
-                  <Button
-                  onClick={() => showEditContent(!editContent)}>
-                  <CloseOutlined /> 
-                  Cancel
-                  </Button>
-                  <Button
-                    type='primary'
-                    style={{width:'100px',marginLeft:'10px'}}
-                    onClick={() => showSaveContent(!saveContent)}
-                  >
-                    <CheckOutlined />Save
-                  </Button>
-                </Col>
+                  Edit
+                </Button>
+              ) : null}
+            </>
+          }
+          style={{
+            width: 800,
+            marginTop: 10,
+          }}
+        >
+          <Row gutter={[16, 16]}>
 
-        </Row>:null}
-      </Card>
-      {saveContent ===true ?
-      <Card
-        title="Qulification Type"
-        // extra={<EditTwoTone />}
-        extra={ 
-          <Button 
-            type="text"
-          >
-            <DeleteTwoTone twoToneColor="#eb2f96"/>
-          </Button>
-        
-        } 
-              
-      >
-        
-        <Row gutter={[36, 8]}>
+          <Col span={8}>
+            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+              labelCol={{span: 8,}}
+              wrapperCol={{span: 32,}}
+            >
+              <div>
+                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Qulification Type</h1>
+                {editContent === false ? (
+                  <h4>Graduation</h4>
+                ) : (
+                  <Input placeholder="" />
+                )}
+              </div>
+            </Form.Item>
+            </Col>
 
-        <Col span={5}> 
-          <img 
-            src="/logo/university medium.png" 
-            alt="university"
-            style={{
-              border:'1px solid #faf9be',
-              borderRadius:'5px',
-              backgroundColor:'#faf9be',
-              height:'100%'
-            }} 
-          /> 
-        </Col>
+            <Col span={8}>
+            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+              labelCol={{span: 8,}}
+              wrapperCol={{span: 32,}}
+            >
+              <div>
+                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Coure Name</h1>
+                {editContent === false ? (
+                  <h4>B.tech</h4>
+                ) : (
+                  <Input placeholder="" />
+                )}
+              </div>
+              </Form.Item>
+            </Col>
 
-        <Col span={19}>
-           <h3>College Name</h3>
-           <h3>University Name</h3>
-           <h3>COURSE Name</h3>
-           <h3>Course Type</h3>
-           <h3>Stream</h3>
-           <h3>Starting Date - Ending Date</h3>
-        </Col>
-        </Row>
-      </Card>:null}
+            <Col span={8}>
+            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+              labelCol={{span: 8,}}
+              wrapperCol={{span: 32,}}
+            >
+              <div>
+                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course Type</h1>
+                {editContent === false ? (<h4>Full Time</h4>) : (<Input placeholder="" />)}
+              </div>
+            </Form.Item>
+            </Col>
+
+            <Col span={8}>
+            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+              labelCol={{span: 8,}}
+              wrapperCol={{span: 32,}}
+            >
+              <div>
+                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Stream</h1>
+                {editContent === false ? (<h4>Mechanical</h4>) : (<Input placeholder="" />)}
+              </div>
+            </Form.Item>
+            </Col>
+
+            <Col span={8}>
+            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+              labelCol={{span: 8,}}
+              wrapperCol={{span: 32,}}
+            >
+              <div>
+                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course Start Date</h1>
+                {editContent === false ? (<h4>14/02/2014</h4>) : (<DatePicker style={{ width: "100%" }} />)}
+              </div>
+            </Form.Item>
+            </Col>
+
+            <Col span={8}>
+            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+              labelCol={{span: 8,}}
+              wrapperCol={{span: 32,}}
+            >
+              <div>
+                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course End Date</h1>
+                {editContent === false ? (<h4>14/02/2014</h4>) : (<DatePicker style={{ width: "100%" }} />)}
+              </div>
+            </Form.Item>
+            </Col>
+
+            <Col span={8}>
+            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+              labelCol={{span: 8,}}
+              wrapperCol={{span: 32,}}
+            >
+              <div>
+                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>University Name</h1>
+                {editContent === false ? (<h4>Mechanical</h4>) : (<Input placeholder="" />)}
+              </div>
+            </Form.Item>
+            </Col>
+
+          </Row>
+
+
+
+          {editContent === true ? (
+            <Row
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "3%",
+              }}
+            >
+              <Button
+                onClick={() => showEditContent(false)}
+                type="text"
+                style={{ fontSize: 15 }}
+              >
+                <CloseOutlined /> CANCEL
+              </Button>
+              <Col>
+                <Button type="primary" style={{ marginLeft: "10px" }}>
+                <CheckOutlined />
+                  SAVE
+                </Button>
+              </Col>
+            </Row>
+          ) : null}
+        </Card>
+      
+      </Form>
+
     </div>
   )
 }

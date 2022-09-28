@@ -115,9 +115,9 @@ function Education() {
             </Button>
           </Col>
           
-          <Col span={8}> <Input placeholder="Mother's Name" /> </Col>
+          <Col span={8}> <Input placeholder="Other Contact Name" /> </Col>
 
-          <Col span={8}> <Input placeholder="Contact No." /> </Col>
+          <Col span={8}> <Input placeholder="Other's Contact No." /> </Col>
 
           <Col span={8}> <Input placeholder="Relation" /> </Col>
         </Row>:null}

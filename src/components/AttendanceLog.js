@@ -53,8 +53,8 @@ function AttendanceLog({ empDetails }) {
   const columns = [
     {
       title: "Employee Code",
-      dataIndex: "code",
-      key: "code",
+      dataIndex: "id",
+      key: "id",
       render: (text) => <a>{text}</a>,
     },
     {
@@ -187,12 +187,27 @@ function AttendanceLog({ empDetails }) {
         id: doc.id,
         empId: doc.data().empId,
         name: doc.data().employeename,
-        status: "absent",
+        status: "Absent",
+        project: "",
+        report: ""
       };
     });
     console.log(res);
     let stats = await AttendanceContext.getStatus();
     console.log(stats)
+    stats.forEach((rec) => {
+      res.map((emp) => {
+        if (emp.id == rec.id) {
+          emp.status = "Present";
+          emp.project = rec.project;
+          emp.report = rec.report;
+          return;
+        }
+
+      })
+      
+    })
+    console.log(res)
     // let newEmp = [];
     // userlocal.map((emp, i) => {
     //   newEmp.push({
@@ -241,32 +256,32 @@ function AttendanceLog({ empDetails }) {
   //     type: "radio",
   //   };
   //   const [selectionType, setSelectionType] = useState("");
-  const data = [
-    {
-      key: "1",
-      code: "HTS001",
+  // const data = [
+  //   {
+  //     key: "1",
+  //     code: "HTS001",
 
-      name: "Nitya",
-      project: "Expenses",
-      report: "xfddsfdvbgfgfbvbvbdffgfdgjfhjjkjfjfdgkj",
-    },
-    {
-      key: "2",
-      code: "HTS002",
+  //     name: "Nitya",
+  //     project: "Expenses",
+  //     report: "xfddsfdvbgfgfbvbvbdffgfdgjfhjjkjfjfdgkj",
+  //   },
+  //   {
+  //     key: "2",
+  //     code: "HTS002",
 
-      name: "Jatin",
-      project: "Expenses",
-      report: "xfddsfdvbgfgfbvbvb",
-    },
-    {
-      key: "3",
-      code: "HTS003",
+  //     name: "Jatin",
+  //     project: "Expenses",
+  //     report: "xfddsfdvbgfgfbvbvb",
+  //   },
+  //   {
+  //     key: "3",
+  //     code: "HTS003",
 
-      name: "Saswat",
-      project: "Expenses",
-      report: "xfddsfdvbgfgfbvbvb",
-    },
-  ];
+  //     name: "Saswat",
+  //     project: "Expenses",
+  //     report: "xfddsfdvbgfgfbvbvb",
+  //   },
+  // ];
   const columns1 = [
     // {
     //   title: "Employee Code",

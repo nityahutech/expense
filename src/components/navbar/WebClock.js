@@ -9,16 +9,19 @@ import moment from "moment";
 
 
 const WebClock = (props) => {
+    const { currentUser } = useAuth();
 
-    useEffect(() => {
+    // useEffect(() => {
         console.log(props.record)
-      }, [props.record.secs])
+        // WebClock(props)
+    //   }, [props.record.autoStart])
     
-  const id = props.record.id;
+
+  const autoStart = props.record == 0 ? false : true;
   const stopwatchOffset = new Date
 
   const { seconds, minutes, hours, isRunning, start, pause, reset } = useStopwatch({
-    autoStart: props.record.autoStart, offsetTimestamp: stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + props.record.secs)
+    autoStart: autoStart, offsetTimestamp: stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + props.record)
   });
   
   console.log(`${hours}:${minutes}:${seconds}`)
@@ -70,8 +73,8 @@ const WebClock = (props) => {
   const setClockState = () => {
       // setClockIn(true);
       let clickedDate = {
-        empId: id,
-        name: props.record.name,
+        empId: currentUser.uid,
+        name: currentUser.displayName,
         date: moment().format("DD-MM-YYYY"),
         clockIn: moment().format("HH:mm:ss"),
         clockOut: null
@@ -89,7 +92,7 @@ const WebClock = (props) => {
       duration: clockTime
     }
     // AttendanceContext.updateClockData(clickedDate, currentUser.uid)
-    let rec = await AttendanceContext.updateClockData(id, clickedDate);
+    let rec = await AttendanceContext.updateClockData(currentUser.uid, clickedDate);
     // console.log(rec.data())
     console.log(isRunning);
     console.log(clickedDate.toString().substring(16, 25));

@@ -65,6 +65,10 @@ export function AuthProvider({ children }) {
     // console.log(rec.data().role);
     sessionStorage.setItem("role", rec.data().role)
     setRole(rec.data().role);
+    setCurrentUser({
+      ...currentUser,
+      role: rec.data().role
+    })
   }
 
   useEffect(() => {

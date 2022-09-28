@@ -25,14 +25,14 @@ const Navbar = () => {
   let loc = useLocation();
   const { logout, currentUser } = useAuth();
   
-  const [clockinfo, setClockInfo] = useState({
-    id: currentUser.uid,
-    name: currentUser.displayName,
-    autoStart: false,
-    secs: 0
-  });
+  // const [clockinfo, setClockInfo] = useState({
+  //   id: currentUser.uid,
+  //   name: currentUser.displayName,
+  //   autoStart: false,
+  //   secs: 0
+  // });
 
-
+  let secs = 0;
   const isClockRunning = async () => {
     let res = await AttendanceContext.getStartTime(currentUser.uid);
     console.log(res)
@@ -44,12 +44,13 @@ const Navbar = () => {
     console.log(offset.toDate());
     const offsetTime = moment(offset, "HH:mm:ss").diff(moment().startOf('day'), 'seconds')
     console.log(offsetTime)
-    setClockInfo({
-      id: currentUser.uid,
-      name: currentUser.displayName,
-      autoStart: true,
-      secs: offsetTime
-    })
+    // setClockInfo({
+    //   ...clockinfo,
+    //   autoStart: true,
+    //   secs: offsetTime
+    // })
+    secs = offsetTime
+    // console.log(clockinfo)
     return true;
   }  
   // const offset = isClockRunning().then((num) => {
@@ -61,7 +62,7 @@ const Navbar = () => {
 
   const runClock = () => {
     if(isClockRunning()) {
-      console.log(clockinfo)
+      console.log(secs, "clockinfo")
     }
     return;
   }
@@ -111,7 +112,7 @@ const Navbar = () => {
   
   useEffect(() => {
     runClock();
-  }, []);
+  }, [secs]);
 
   return (
     <div className="navbar" style={{ background: "white" }}>
@@ -137,7 +138,7 @@ const Navbar = () => {
           
         </div>
           <WebClock 
-            record = {clockinfo}
+            record = {secs}
           />
         <div className="image">
           <div className="item">

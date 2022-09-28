@@ -20,6 +20,7 @@ import {
 
 const attendCollectionRef = collection(db, "attendance");
 const usersCollectionRef = collection(db, "users");
+const leaveCollectionRef = collection(db, "leave");
 
 class AttendanceContext {
 
@@ -113,17 +114,31 @@ class AttendanceContext {
     };
 
     getStatus = async () => {
-        const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("status", "==", "present"));
+        const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")));
         let stats = await getDocs(q);
         let res = stats.docs.map((doc) => {
           return {
             id: doc.data().empId,
+            name: doc.data().name,
             project: doc.data().project,
             report: doc.data().report
           };
         });
-        console.log(res)
+        return res;
+    };
 
+    getLeaveStatus = async () => {
+        const q = query(leaveCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("status", "==", "Approved"));
+        let stats = await getDocs(q);
+        let res = stats.docs.map((doc) => {
+          return {
+            id: doc.data().empId,
+            name: doc.data().name,
+            project: doc.data().project,
+            report: doc.data().report
+          };
+        });
+        return res;
     }
 
     getAttendance = (id) => { 

@@ -42,7 +42,8 @@ const Leave = () => {
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
     const [noOfDays, setNoOfDays] = useState([]);
-    const [isHr, setIsHr] = useState(sessionStorage.getItem(null) || true);
+    console.log(sessionStorage.getItem("role"));
+    const [isHr, setIsHr] = useState(sessionStorage.getItem("role")==="hr"?true:false);
     const [role, setRole] = useState(null);
     const { currentUser } = useAuth();
 
@@ -433,11 +434,16 @@ const Leave = () => {
         return (
             <ul className="events"  >
                 {listData.map((item) => (
-                    <li >
+                    <li  style = {
+                        item.type === "Official"
+                        ?{ color: "rgba(204, 204, 10, 1)", }
+                        : {color: "rgba(252, 143, 10, 1)" }}
+
+                    >
+                        {/* style={{ color: "rgba(204, 204, 10, 1)",fontSize:'8px'}} */}
+                      
                         <li className='present' > {item.type}</li>
-                        <li className='intime' >{item.intime}</li>
-                        <li className='outtime' >{item.outtime}</li>
-                        <div style={leaveStyle[item.type]}></div>
+               
 
                     </li>
                 ))}
@@ -457,7 +463,15 @@ const Leave = () => {
         let matchingHolidayList = companyholiday.filter(item => item.Date == current.format('Do MMM, YYYY'))
         return moment(current).day() === 0 || (current).day() === 6 || matchingHolidayList.length > 0 || aa==='Mon Sep 26 2022'
         //  allL.includes(aa)
-    }
+    };
+
+   
+    // const selectDate = (current) => {
+    //     console.log('hiii')
+    //     if (moment(current).day() === 0 || (current).day() === 6) 
+
+    //     showNotification("success", "Success", "Leaves Cannot be Applied for Weekdays");
+    // };
 
     return (
         <>
@@ -495,7 +509,10 @@ const Leave = () => {
                 {/* </Col> */}
 
                 <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12}  >
-                    <HolidayList isHr={isHr}  addNewHoliday={getHoliday}/>
+
+
+                    
+                    <HolidayList isHr={isHr} />
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <div className='badge-div' style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', justifyContent: 'center', paddingTop: '10px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', }}>
                             {/* <Typography.Title level={4} >Calendar</Typography.Title> */}
@@ -512,6 +529,11 @@ const Leave = () => {
                             </div>
 
                         </div>
+                        {/* style={holiday.optionalHoliday === false ? {
+                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(204, 204, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                                } : {
+                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(252, 143, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                                }} */}
 
                         <Calendar style={{ padding: '10px', borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px' }}
                             value={date}
@@ -522,7 +544,7 @@ const Leave = () => {
                         />
                         {
                             isHr
-                                ? <Notification data={requests}/>
+                                ? <Notification data={requests} />
                                 : null
                         }
                     </div>  
@@ -586,6 +608,7 @@ const Leave = () => {
                                         format="Do MMM, YYYY"
                                         onChange={onLeaveDateChange}
                                         disabledDate={disabledDate}
+                                        
                                     // dateRender={(current) => {
                                     //     const style = {};
 

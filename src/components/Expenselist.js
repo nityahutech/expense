@@ -25,9 +25,6 @@ const { RangePicker } = DatePicker;
 const dateFormat = "DD-MM-YYYY";
 const PHE = require("print-html-element");
 
-
-
-
 const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;
 const { Content } = Layout;
@@ -528,8 +525,8 @@ function ExpenseList() {
       pageTitle: "",
       templateString: "string",
       popupProperties: "string",
-      stylesheets: "string" ,
-      styles:"background-color:red",
+      stylesheets: "string",
+      styles: "background-color:red",
     };
     let dataIndexs = [];
     let tableHeaderString = columns
@@ -547,46 +544,60 @@ function ExpenseList() {
     let pageNum = 1;
     filterExpenses.forEach((exp, i) => {
       tableRowString = [];
-      if(pageNum === 1 && (i+1) % 16 === 0){
-        allTableString.push(`<table>${tableHeaderString}${tableAllRow.toString().replaceAll(",", "")}</table>`);
+      if (pageNum === 1 && (i + 1) % 16 === 0) {
+        allTableString.push(
+          `<table>${tableHeaderString}${tableAllRow
+            .toString()
+            .replaceAll(",", "")}</table>`
+        );
         tableAllRow = [];
         ++pageNum;
-      }
-      else{
-        if(pageNum > 1 && (i-15) % 17 === 0){
-          allTableString.push(`<table>${tableHeaderString}${tableAllRow.toString().replaceAll(",", "")}</table>`);
+      } else {
+        if (pageNum > 1 && (i - 15) % 17 === 0) {
+          allTableString.push(
+            `<table>${tableHeaderString}${tableAllRow
+              .toString()
+              .replaceAll(",", "")}</table>`
+          );
           tableAllRow = [];
           ++pageNum;
-        }else
-        if(i=== filterExpenses.length - 1){
-          allTableString.push(`<table>${tableHeaderString}${tableAllRow.toString().replaceAll(",", "")}</table>`);
+        } else if (i === filterExpenses.length - 1) {
+          allTableString.push(
+            `<table>${tableHeaderString}${tableAllRow
+              .toString()
+              .replaceAll(",", "")}</table>`
+          );
           tableAllRow = [];
           ++pageNum;
         }
       }
-     
+
       tableRowString.push(
         `<tr style="${i % 2 === 1 ? oddRowStyle : evenRowStyle}">`
       );
 
       for (let i = 0; i < dataIndexs.length; i++) {
-        tableRowString.push(`<td style="color: grey; padding: 10px; textAlign: center; ">${exp[dataIndexs[i]]}&nbsp;&nbsp;</td>`);
+        tableRowString.push(
+          `<td style="color: grey; padding: 10px; textAlign: center; ">${
+            exp[dataIndexs[i]]
+          }&nbsp;&nbsp;</td>`
+        );
       }
       tableRowString.push("</tr>");
       tableAllRow.push(tableRowString);
-      
     });
     // let tableAllRowString = tableAllRow.toString().replaceAll(",", "");
     // console.log(tableHeaderString);
     // console.log(tableAllRowString);
-    
+
     console.log(`<div>
     <h1 textAlign= center>Expense Report<h1/>
         </br>${allTableString.toString().replaceAll(",", "")}</div>`);
     PHE.printHtml(
       `<div>
       <h1 textAlign= center>Expense Report<h1/>
-          </br>${allTableString.toString().replaceAll(",", "")}</div>`,opts
+          </br>${allTableString.toString().replaceAll(",", "")}</div>`,
+      opts
     );
   }
 
@@ -666,15 +677,18 @@ function ExpenseList() {
               }
             </Space>
           </Col> */}
-          
-          <Col >
-          
+
+          <Col>
             <Button
               // className="addExpense"
               type="primary"
               // onClick={handleAddNewExpense}
               onClick={handlePrint}
-              style={{ width: "95%", borderRadius: "5px", background: '#189AB4' }}
+              style={{
+                width: "95%",
+                borderRadius: "5px",
+                background: "#189AB4",
+              }}
             >
               Print
             </Button>

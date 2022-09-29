@@ -1,122 +1,401 @@
-// ------------------------------------Place for import 
-import React from 'react'
-
-import  { useState } from 'react';
-
-import { 
+import React, { useState } from "react";
+import {
   Card,
-  Col, 
   Row,
+  Col,
   Input,
-  DatePicker,
   Button,
-} from 'antd';
-
+  DatePicker,
+  Select,
+  Form,
+  Divider,
+} from "antd";
 import {
   PlusCircleOutlined,
-  CloseOutlined,
+  EditOutlined,
   CheckOutlined,
   EditTwoTone,
-  DeleteTwoTone, 
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-// ----------------------------------------place for const declaration
+const { TextArea } = Input;
+const { Option } = Select;
 
-const onChange = (date, dateString) => {
-  console.log(date, dateString);
-};
 
-// --------------------------------------place for functions
-
-function Education() {
+const Education = () => {
 
   const [editContent, showEditContent] = useState(false);
-  const [saveContent, showSaveContent] = useState(false)
+  const [form] = Form.useForm();
+  const [editContactInfo, showEditContactInfo] = useState(false);
+  const [newData, setnewData] = useState();
+
+
+  const onFinish = (values) => {
+
+
+    console.log('Success: holiday',);
+
+    let addProfile = {
+      name: values.familyname,
+      name: values.relationname,
+      name: values.dateofbirths,
+      name: values.dependent,
+    }
+    console.log('addProfile', addProfile)
+
+
+  }
+
+  const handleOk = () => {
+    console.log('hiii')
+
+  };
+
+  const handleAdd = () => {
+    console.log('yeeee')
+
+    const newData = {
+
+      familyname: '',
+      relationname: '',
+      dateofbirths: '',
+      dependent: '',
+    };
+  };
+
 
   return (
-    <div className='education' style={{margin:'10px'}}>
-      <Card title="Family Info">
+    <div
+      className="personalCardDiv"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        margin: '15px'
+      }}
+    >
+      <Form
+        form={form}
+        labelcol={{
+          span: 4,
+        }}
+        wrappercol={{
+          span: 14,
+        }}
+        initialValues={{
+          remember: true,
+        }}
+        autoComplete="off"
+        onFinish={onFinish}
 
-        <Row>
-        <Col span={24}>
-            <Button 
-              type="text"
-              onClick={() => showEditContent(!editContent)}
-            >
-                <PlusCircleOutlined />Add
-            </Button>
-          </Col>
-        </Row>
+      >
+        <Card
+          title="FAMILY MEMBERS"
 
-        {editContent ===true ?
-        <Row gutter={[16, 8]}>
-
-             <Col span={12}> <Input placeholder="Mother's Name" /> </Col>
-
-             <Col span={12}> <Input placeholder="Contact No." /> </Col>
-
-             <Col span={12}> <Input placeholder="Father's Name" /> </Col>
-
-             <Col span={12}> <Input placeholder="Contact No." /> </Col>
-
-             <Col 
-                  span={24}
-                  style={{textAlign:'right'}}
+          extra={
+            <>
+              {editContent === false ? (
+                <Button
+                  type="text"
+                  style={{ color: "#4ec0f1" }}
+                  onClick={() => showEditContent(!editContent)}
                 >
-                  <Button
-                  onClick={() => showEditContent(!editContent)}>
-                  <CloseOutlined /> 
-                  Cancel
-                  </Button>
-                  <Button
-                    type='primary'
-                    style={{width:'100px',marginLeft:'10px'}}
-                    onClick={() => showSaveContent(!saveContent)}
+                  Edit
+                </Button>
+              ) : null}
+            </>
+          }
+          style={{
+            width: 800,
+            marginTop: 10,
+          }}
+        >
+          <Row gutter={[16, 16]}>
+
+            <Col span={6}>
+              <div>
+                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                  Name
+                </div>
+                <Divider style={{width:'400px'}}/>
+
+                {editContent === false ? (
+                  <div>Mahesh</div>
+                ) : (
+                  <Form.Item
+                    name="familyname"
+
                   >
-                    <CheckOutlined />Save
-                  </Button>
-              </Col>
+                    <Input required placeholder="Enter Family Member Name" />
+                  </Form.Item>
+                )}
+              </div>
+            </Col>
+            
 
-        </Row>:null}
-      </Card>
-      {saveContent ===true ?
-      <Card
-        title="Educatonal Info"
-        // extra={<EditTwoTone />}
-        extra={ 
-          <Button 
-            type="text"
-          >
-            <DeleteTwoTone twoToneColor="#eb2f96"/>
-          </Button>
-        } 
-        style={{marginTop:'10px'}}    
-      >
+            <Col span={6}>
+              <div>
+                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                  RelationShip
+                </div>
+                {/* <Divider/> */}
+                {editContent === false ? (
+                  <div>Father</div>
+                ) : (
+                  <Form.Item
+                    name="relationname"
+
+                  >
+                    <Input required placeholder="Enter Family Member Relation" />
+                  </Form.Item>
+                )}
+              </div>
+            </Col>
+
+            <Col span={6}>
+              <div>
+                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                  Date of Birth
+                </div>
+                {/* <Divider/> */}
+                {editContent === false ? (
+                  <div>02/05/22</div>
+                ) : (
+                  <Form.Item
+                    className="numder-inputs"
+                    name="dateofbirths"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter D.O.B",
+                        // pattern: /^[0-9\b]+$/,
+                      },
+                      { whitespace: true },
+                    ]}
+                  >
+                    <Input
+                      maxLength={10}
+                      required
+                      placeholder="Enter Date of Birth"
+                    />
+                  </Form.Item>
+                )}
+              </div>
+            </Col>
+
+            <Col span={6}>
+              <div>
+                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                  Dependent
+                </div>
+                {/* <Divider /> */}
+                {editContent === false ? (
+                  <div>Yes</div>
+                ) : (
+                  <Form.Item
+                    name="dependent"
+
+                  >
+                    <Input required placeholder="Enter Family Member Relation" />
+                  </Form.Item>
+                )}
+              </div>
+            </Col >
+
+
+            {/* <Col span={4}>
+              <div>
+                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                  Action
+                </div>
+                {editContent === false ? (
+                  <div>Yes</div>
+                ) : (
+                  <Form.Item
+                    name="dependent"
+
+                  >
+
+                    <EditOutlined />
+
+
+                  </Form.Item>
+                )}
+              </div>
+            </Col >
+ */}
+
         
-        <Row gutter={[16, 8]}>
+            <div className="div-add-button" style={{ color: 'rgb(78, 192, 241)', }}>
+              <PlusCircleOutlined style={{ color: 'rgb(78, 192, 241)', marginRight: '5px' }}
+                onClick={handleAdd}
 
-          <Col span={12}> <Input placeholder="Mother's Name" /> </Col>
+              />Add
 
-          <Col span={12}> <Input placeholder="Contact No." /> </Col>
 
-          <Col span={12}> <Input placeholder="Father's Name" /> </Col>
+            </div>
 
-          <Col span={12}> <Input placeholder="Contact No." /> </Col>
+          </Row>
+          {editContent === true ? (
+            <Row
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "3%",
+              }}
+            >
 
-        </Row>
-      </Card>:null}
-      <Card
-        title='Emergency Contact'
-        style={{marginTop:'10px'}}
-      >
-        <Row gutter={[16, 8]}>
-          <Col span={8}> <Input placeholder="Mother's Name" /> </Col>
+              <Button
+                onClick={() => showEditContent(false)}
+                type="text"
+                style={{ fontSize: 15, backgroundColor: 'grey', color: 'white' }}
+              >
+                {/* <CloseOutlined />  */}
+                CANCEL
+              </Button>
+              <Col>
+                <Button type="primary" style={{ marginLeft: "10px" }}
+                  onClick={handleOk}
 
-          <Col span={8}> <Input placeholder="Contact No." /> </Col>
+                >
+                  SAVE
+                </Button>
+              </Col>
+            </Row>
+          ) : null}
+        </Card>
 
-          <Col span={8}> <Input placeholder="Relation" /> </Col>
-        </Row>
-      </Card>
+
+
+        <Card
+          title="EMERGENCY CONTACT"
+          //   actions={[
+          //   <EditOutlined key="edit" />,
+          // ]}
+          extra={
+            <>
+              {editContent === false ? (
+                <Button
+                  type="text"
+                  style={{ color: "#4ec0f1" }}
+                  onClick={() => showEditContactInfo(!editContactInfo)}
+                >
+                  Edit
+                </Button>
+              ) : null}
+            </>
+          }
+          style={{
+            width: 800,
+            marginTop: 10,
+          }}
+        >
+          <Row gutter={[16, 16]}>
+
+            <Col span={8}>
+              <div>
+                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                  Name
+                </div>
+
+                {editContactInfo === false ? (
+                  <div>Mahesh</div>
+                ) : (
+                  <Form.Item
+                    name="emergencycontact"
+
+                  >
+                    <Input required placeholder="Enter Family Emergency Contact" />
+                  </Form.Item>
+                )}
+              </div>
+            </Col>
+
+            <Col span={8}>
+              <div>
+                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                  RelationShip
+                </div>
+                {editContactInfo === false ? (
+                  <div>Father</div>
+                ) : (
+                  <Form.Item
+                    name="relation"
+
+                  >
+                    <Input required placeholder="Enter Family Member Relation" />
+                  </Form.Item>
+                )}
+              </div>
+            </Col>
+
+            <Col span={8}>
+              <div>
+                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                  Phone No.
+                </div>
+                {editContactInfo === false ? (
+                  <div>2221735</div>
+                ) : (
+                  <Form.Item
+                    className="numder-inputs"
+                    name="phonenumber"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter Phone Number",
+                        // pattern: /^[0-9\b]+$/,
+                      },
+                      { whitespace: true },
+                    ]}
+                  >
+                    <Input
+                      maxLength={10}
+                      required
+                      placeholder="Enter Date of Phone Number"
+                    />
+                  </Form.Item>
+                )}
+              </div>
+            </Col>
+
+
+            <div className="div-add-button" style={{ color: 'rgb(78, 192, 241)', }}>
+              <PlusCircleOutlined style={{ color: 'rgb(78, 192, 241)', marginRight: '5px' }} />Add
+
+            </div>
+
+
+
+          </Row>
+
+
+
+
+          {editContactInfo === true ? (
+            <Row
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "3%",
+              }}
+            >
+              <Button
+                type="text"
+                style={{ fontSize: 15, backgroundColor: 'grey', color: 'white' }}
+                onClick={() => showEditContactInfo(false)}
+              >
+                {/* <CloseOutlined /> */}
+                CANCEL
+              </Button>
+              <Col>
+                <Button type="primary" style={{ marginLeft: "10px" }}>
+                  SAVE
+                </Button>
+              </Col>
+            </Row>
+          ) : null}
+        </Card>
+      </Form>
     </div>
   )
 }

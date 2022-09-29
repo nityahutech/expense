@@ -24,6 +24,7 @@ import { useAuth } from '../contexts/AuthContext'
 import Notification from "./Notification";
 import HolidayList from "./HolidayList";
 import "../style/leave.css";
+import useItems from 'antd/lib/menu/hooks/useItems';
 
 let leaveStyle = {
     Present: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "green" },
@@ -43,7 +44,7 @@ const Leave = () => {
     const [duration, setDuration] = useState([]);
     const [noOfDays, setNoOfDays] = useState([]);
     console.log(sessionStorage.getItem("role"));
-    const [isHr, setIsHr] = useState(sessionStorage.getItem("role")==="hr"?true:false);
+    const [isHr, setIsHr] = useState(sessionStorage.getItem("role") === "hr" ? true : false);
     const [role, setRole] = useState(null);
     const { currentUser } = useAuth();
 
@@ -56,17 +57,23 @@ const Leave = () => {
     const [companyholiday, setCompanyholiday] = useState([])
     const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
-    const getHoliday = async () => {
 
+    function addNewHoliday(holiday) {
+        getHoliday()
+    }
+
+
+
+    const getHoliday = async () => {
         const allData = await CompanyHolidayContext.getAllCompanyHoliday();
-        console.log('allCompanyHoliday', allData)  
+        console.log('allCompanyHoliday', allData)
         allData.docs.map((doc) => {
             console.log('allCompanyHoliday2', doc)
             let d = allData.docs.map((doc) => {
 
                 return {
                     ...doc.data(),
-                    Date:  moment( doc.data()["Date"].seconds*1000).format('Do MMM, YYYY'),   
+                    Date: moment(doc.data()["Date"].seconds * 1000).format('Do MMM, YYYY'),
                     id: doc.id,
                 };
             });
@@ -79,18 +86,29 @@ const Leave = () => {
     const getListData = (value) => {
         let listData;
         let currdate = value.format('Do MMM, YYYY');
-        let leaveRecord = companyholiday.filter(record => record.Date == currdate);
+        let companyHolidayRecord = companyholiday.filter(record => record.Date == currdate);
         console.log('calendervvvvv', currdate);
-        console.log('calendervvvvv2', leaveRecord.length);
-        if (leaveRecord.length > 0) {
-            console.log(leaveRecord[0]);
+        console.log('calendervvvvv2', companyHolidayRecord.length);
+      
+        if (companyHolidayRecord.length > 0) {
+            console.log(companyHolidayRecord[0]);
             listData = [
                 {
-                    type:leaveRecord[0].Name,  
-                    isOptional:leaveRecord[0]?.optionalHoliday
+                    type: companyHolidayRecord[0].Name,
+                    isOptional: companyHolidayRecord[0]?.optionalHoliday
                     //add type          
                 }
             ]
+        }
+        if (currentDateInAppliedLeave(value)){
+            console.log('getListData',value);
+            listData = [
+                {
+                    type: 'leave',
+                    isOptional: false
+                    //add type          
+                }
+            ]              
         }
 
         return listData || [];
@@ -110,6 +128,66 @@ const Leave = () => {
             return;
         }
 
+        console.log("Success3:", values.leaveNature);
+        if (values.leaveNature === "Optional Leave") {
+
+            let optionalHolidays = companyholiday.filter((item) => {
+                if (item.optionalHoliday == true) {
+                    return true
+                }
+                else {
+                    return false
+                }
+            })
+            console.log("Success2:", optionalHolidays);
+            console.log("Success4:", duration[0]);
+            let matchOptionalHoliday = optionalHolidays.filter((item) => {
+                if (item.Date == duration[0]) {
+                    return true
+                }
+                else {
+                    return false
+                }
+            })
+            if (matchOptionalHoliday.length == 0) {
+
+                showNotification("error", "Error", "Optional Leave Can only be apply on Optional Holiday");
+                return
+            }
+
+        }
+
+        console.log("Success5:", history);
+
+        let currentLeaveStartDate = moment(duration[0], 'Do MMM, YYYY')
+        let currentLeaveEndDate = moment(duration[1], 'Do MMM, YYYY')
+        let matchingdates = history.filter((item) => {
+
+            let startDate = moment(item.dateCalc[0], 'Do MMM, YYYY')
+            let endDate = moment(item.dateCalc[1], 'Do MMM, YYYY')
+
+            if ((moment(currentLeaveStartDate).isSameOrAfter(startDate)
+                && moment(currentLeaveStartDate).isSameOrBefore(endDate))
+                || (moment(currentLeaveEndDate).isSameOrAfter(startDate)
+                    && moment(currentLeaveEndDate).isSameOrBefore(endDate))
+                || (moment(startDate).isSameOrAfter(currentLeaveStartDate)
+                    && moment(endDate).isSameOrBefore(currentLeaveEndDate))
+            ) {
+
+                return true
+            }
+            else {
+                return false
+            }
+        })
+
+        console.log("Success7:", currentLeaveStartDate);
+        console.log("Success8:", matchingdates);
+        if (matchingdates.length > 0) {
+            showNotification("error", "Error", "Allready apply Leave on one of the day");
+            return
+        }
+
         let newLeave = {
             empId: currentUser.uid,
             approver: values.approver,
@@ -120,6 +198,7 @@ const Leave = () => {
             reason: values.reason,
             status: 'Pending'
         }
+
         // let matchingLeaveList = newLeave.filter(item => item.date == newLeave.date)
         // if(matchingLeaveList.length > 0){
         //     //errormodal
@@ -128,6 +207,7 @@ const Leave = () => {
         LeaveContext.createLeave(newLeave)
             .then(response => {
                 getData();
+                showNotification("success", "Success", "Leave apply successfuly");
 
             })
             .catch(error => {
@@ -189,6 +269,8 @@ const Leave = () => {
             })
         console.log(role)
         setHistory(d)
+
+
     }
 
     const getRequestData = async () => {
@@ -362,7 +444,7 @@ const Leave = () => {
 
             let leaveRecord = users.filter(record => record.leavetype == leavetype);
             console.log('validate leave evoke', leaveRecord[0].leave);
-            if (leaveRecord[0].leave < noOfDays ) {
+            if (leaveRecord[0].leave < noOfDays) {
                 setValidleaverequest('false')
                 showNotification("error", "Error", "Leave requested is more than available Leave");
 
@@ -425,55 +507,71 @@ const Leave = () => {
     const handleOk = () => {
         console.log('hiii')
 
-        showNotification("success", "Success", "Leave apply successfuly");
+
     };
 
     const dateCellRender = (value) => {
-        const listData = getListData(value);     
+        console.log('renseValue', value)
+        const listData = getListData(value);
         return (
-            <ul className="events"  >
+            <div className="events"  >
                 {listData.map((item) => (
-                    <li 
-                     style = {
-                        item.isOptional?
-                        { color: "rgba(204, 204, 10, 1)", fontSize:'10px',  }
-                        : {color: "rgba(252, 143, 10, 1)", fontSize:'10px' }
-                    }
+                    <div
+                        style={
+                            item.type === 'leave'? { color: "green", fontSize: '10px', }
+                           : item.isOptional ?
+                                { color: "rgba(204, 204, 10, 1)", fontSize: '10px', }
+                                : { color: "rgba(252, 143, 10, 1)", fontSize: '10px' }
+                                
+                        }
 
                     >
                         {/* style={{ color: "rgba(204, 204, 10, 1)",fontSize:'8px'}} */}
-                      
-                        <li className='present' > {item.type}</li>
-               
 
-                    </li>
-                ))}
-
-            </ul>
+                        <div className='present' > {item.type}</div>
+                    </div>
+                ))}              
+            </div>
         );
 
     };
-  
 
-    function disabledDate(current) { 
-        //allL=['Mon Sep 26 2022','Mon Sep 26 2022']  get all leave date in formate of Mon Sep 26 2022
-        // let aa=new Date(current).toDateString()
-        //get current date: calandar: aa
-        
-        // console.log("********",aa,aa==='Mon Sep 26 2022');
-        let matchingHolidayList = companyholiday.filter(item => item.Date == current.format('Do MMM, YYYY'))
-        return moment(current).day() === 0 || (current).day() === 6 || matchingHolidayList.length > 0 
-        // || aa==='Mon Sep 26 2022'
-        //  allL.includes(aa)
+
+    function disabledDate(current) {
+
+        // let matchingHolidayList = companyholiday.filter(item => {
+        //     return item.Date == current.format('Do MMM, YYYY') && item.optionalHoliday == false
+
+        // })
+
+        return moment(current).day() === 0 || (current).day() === 6 
+
     };
 
-   
-    // const selectDate = (current) => {
-    //     console.log('hiii')
-    //     if (moment(current).day() === 0 || (current).day() === 6) 
+    function currentDateInAppliedLeave(current) {
+        let currentDate = moment(current.format('Do MMM, YYYY'), 'Do MMM, YYYY')
+        let matchingdates = history.filter((item) => {
 
-    //     showNotification("success", "Success", "Leaves Cannot be Applied for Weekdays");
-    // };
+            let startDate = moment(item.dateCalc[0], 'Do MMM, YYYY')
+            let endDate = moment(item.dateCalc[1], 'Do MMM, YYYY')
+            console.log('filter', currentDate, startDate, endDate)
+
+            if (moment(currentDate).isSameOrAfter(startDate)
+                && moment(currentDate).isSameOrBefore(endDate)) {
+
+                return true
+            }
+            else {
+                return false
+            }
+        })
+
+        return matchingdates.length > 0
+
+
+    }
+
+
 
     return (
         <>
@@ -513,8 +611,9 @@ const Leave = () => {
                 <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12}  >
 
 
-                    
-                    <HolidayList isHr={isHr} />
+
+                    {/* <HolidayList isHr={isHr} /> */}
+                    <HolidayList isHr={isHr} refershCalendar={addNewHoliday} />
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <div className='badge-div' style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', justifyContent: 'center', paddingTop: '10px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', }}>
                             {/* <Typography.Title level={4} >Calendar</Typography.Title> */}
@@ -601,7 +700,7 @@ const Leave = () => {
                                 <Space direction="vertical" size={12}
                                 >
                                     <RangePicker
-                                    
+
                                         ranges={{
                                             Today: [moment(), moment()],
                                             "This Month": [moment().startOf("month"), moment().endOf("month")]
@@ -610,7 +709,7 @@ const Leave = () => {
                                         format="Do MMM, YYYY"
                                         onChange={onLeaveDateChange}
                                         disabledDate={disabledDate}
-                                        
+
                                     // dateRender={(current) => {
                                     //     const style = {};
 

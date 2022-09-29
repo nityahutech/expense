@@ -89,7 +89,7 @@ const LeaveList = (props) => {
 
 
     const showDrawer = () => {
-        console.log('show')
+       getData()
         setOpen(true);
     };
 
@@ -104,7 +104,7 @@ const LeaveList = (props) => {
         let newHoliday = {
             Name: values.holidayname,
             Date: values.holidaydate.toDate(),
-            optionalHoliday: values.holidaytype === 'Official' ? true : false,
+            optionalHoliday: values.holidaytype === 'Official' ? false : true,
         }
         console.log('newHoliday', newHoliday)
         // let leaveRecord = companyholiday.filter(record => record.Date == currdate);
@@ -113,10 +113,14 @@ const LeaveList = (props) => {
             //errormodal
             console.log('holiday allready Exist')
         }
+        
         else {
             CompanyHolidayContext.createHoliday(newHoliday)
                 .then(response => {
-                    getData();
+                console.log("***11111111111111111**");
+                props.refershCalendar(newHoliday);  
+                // getData()
+
 
                 })
                 .catch(error => {
@@ -202,7 +206,7 @@ const LeaveList = (props) => {
                                 // colors={}
 
                                 <div className='holiday-div'
-                                    style={holiday.optionalHoliday === false ? {
+                                    style={holiday.optionalHoliday === true ? {
                                         borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(204, 204, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
                                     } : {
                                         borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(252, 143, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
@@ -218,7 +222,7 @@ const LeaveList = (props) => {
                                             gap: '0px', justifyContent: 'space-between'
                                         }}
                                         >
-                                            <Text className='holiday-name' style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }}>{holiday.Name}</Text>
+                                            <Text className='holiday-name' style={holiday.optionalHoliday === true ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }}>{holiday.Name}</Text>
                                             {props.isHr?
                                                 <DeleteOutlined
                                                 style={{
@@ -232,7 +236,7 @@ const LeaveList = (props) => {
                                         :null}
                                         </div>
 
-                                        <Text style={holiday.optionalHoliday === false ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.Date} / {holiday.optionalHoliday === false ? <span  >Optional </span> : <span>Official</span>}</Text>
+                                        <Text style={holiday.optionalHoliday === true ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.Date} / {holiday.optionalHoliday === true ? <span  >Optional </span> : <span>Official</span>}</Text>
 
                                     </Space>
                                 </div>

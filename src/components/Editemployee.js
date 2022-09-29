@@ -119,7 +119,7 @@ function Editemployee(props) {
   // const {signup} = useAuth();
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
-    let res = await ProfileContext.updateProfile(currentUser.uid, values);
+    let res = await ProfileContext.updateProfile(values.id, values);
     console.log("DONE!!!!!!!!!");
     // console.log(res);
     // const valuesToservice = {

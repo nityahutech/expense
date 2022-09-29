@@ -9,18 +9,18 @@ import {
 
 class EmpInfoContext {
 
-    addProfile = async (id, newProfile) => {
-        return setDoc(doc(db, "empDetails", id), newProfile);
+    addEduDetails = async (id, newEdu) => {
+        return setDoc(doc(db, "empDetails", id), newEdu);
     };
 
-    updateProfile = (id, updatedProfile) => {
-        const profileDoc = doc(db, "empDetails", id);
-        return updateDoc(profileDoc, updatedProfile);
+    updateEduDetails = (id, updateEdu) => {
+        const eduDoc = doc(db, "empDetails", id);
+        return updateDoc(eduDoc, updateEdu);
     };
 
-    getProfile = async (id) => { 
-        const profileDoc = doc(db, "empDetails", id);
-        let rec = await getDoc(profileDoc);
+    getEduDetails = async (id) => { 
+        const eduDoc = doc(db, "empDetails", id);
+        let rec = await getDoc(eduDoc);
         return rec.data();
     };
 }

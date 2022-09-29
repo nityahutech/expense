@@ -41,22 +41,24 @@ function EmployeeList() {
       width: 160,
     },
     {
-      title: "Email",
+      title: "Personal Email",
       dataIndex: "mailid",
       key: "email",
       width: 200,
       ellipsis: true,
     },
     {
-      title: "D.O.J.",
+      title: "Date of Join",
       dataIndex: "doj",
       key: "dob",
+      align: "center",
       width: 150,
     },
     {
       title: "Designation",
       dataIndex: "designation",
       key: "designation",
+      align: "center",
       width: 150,
     },
     {
@@ -69,13 +71,28 @@ function EmployeeList() {
       title: "Contact No.",
       dataIndex: "phonenumber",
       key: "cnumber",
+      align: "center",
       width: 150,
+    },
+    {
+      title: "Reporting Manager",
+      dataIndex: "repManager",
+      key: "repManager",
+      width: 200,
+    },
+    {
+      title: "Secondary Manager",
+      dataIndex: "secManager",
+      key: "secManager",
+      width: 200,
     },
     {
       title: "Action",
       dataIndex: "action",
       key: "action",
       fixed: "right",
+      align: "center",
+      width: 120,
 
       render: (_, record) => {
         // console.log("record:: ", record);

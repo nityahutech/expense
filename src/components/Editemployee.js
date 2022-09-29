@@ -17,6 +17,7 @@ import { useAuth } from "../contexts/AuthContext";
 import moment from "moment";
 import ProfileContext from "../contexts/ProfileContext";
 import EmployeeContext from "../contexts/EmployeeContext";
+import { SplitCellsOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 const showNotification = (type, msg, desc) => {
@@ -44,7 +45,7 @@ function Editemployee(props) {
       const editedRecord = {
         fname,
         lname,
-        // mailid,
+        mailid,
         doj,
         designation,
         gender,
@@ -119,7 +120,7 @@ function Editemployee(props) {
   // const {signup} = useAuth();
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
-    let res = await ProfileContext.updateProfile(currentUser.uid, values);
+    let res = await ProfileContext.updateProfile(values.id, values);
     console.log("DONE!!!!!!!!!");
     // console.log(res);
     // const valuesToservice = {
@@ -285,6 +286,7 @@ function Editemployee(props) {
               style={{ marginBottom: "17px" }}
               name="email"
               label="Email Id&nbsp;"
+              // disabled={{mailid.split('@')[1]==="hutechsolutions"}}
               // onKeyPress={(event) => {
               //   if (checkAlphabets(event)) {
               //     event.preventDefault();
@@ -318,7 +320,7 @@ function Editemployee(props) {
                 // }}
                 readonly
                 value={mailid}
-                disabled={true}
+                disabled={mailid.split("@")[1] === "hutechsolutions.com"}
               />
             </Form.Item>
           </Col>

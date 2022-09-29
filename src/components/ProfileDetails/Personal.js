@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Card,
   Row,
@@ -10,6 +10,8 @@ import {
   Form,
 } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
+import EmpInfoContext from "../../contexts/EmpInfoContext";
+import { useAuth } from "../../contexts/AuthContext";
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -18,6 +20,35 @@ function Personal() {
   const [editContactInfo, showEditContactInfo] = useState(false);
   const [editAddressInfo, showEditAddressInfo] = useState(false);
   // const [cancelEditContent, setcancelEditContent] = useState(false);
+  const [data, setData] = useState([]);
+  const{currentUser}=useAuth()
+  const onFinish =(value)=>{
+    console.log('success',value)
+    let record={...value,
+      houseType: value.houseType,
+      dateOfBirth: value.dateOfBirth,
+    }
+    if (data){
+      EmpInfoContext.updateEduDetails(currentUser.uid,record)
+}
+    else{
+      EmpInfoContext.addEduDetails(currentUser.uid,record)
+    }
+     
+     setData(record)
+     showEditContent(false)
+  };
+
+  useEffect(()=>{
+    getData();
+    
+  },[]);
+  const getData=async()=>{
+    let data=await EmpInfoContext.getEduDetails(currentUser.uid)
+    console.log(data)
+    setData(data)
+  }
+  console.log(data)
 
   return (
     <>
@@ -206,7 +237,7 @@ function Personal() {
                     Official Email ID
                   </div>
                   {editContactInfo === false ? (
-                    <div>nityapriya.sahu@hutechsolutions.com</div>
+                    <div>{data?data.officialEmailId:null}</div>
                   ) : (
                     <Form.Item
                       name="officialEmailId"

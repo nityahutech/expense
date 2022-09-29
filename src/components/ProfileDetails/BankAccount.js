@@ -1,143 +1,120 @@
-import React from "react";
-
-import { useState } from "react";
-
-import { Card, Col, Row, Input, DatePicker, Button, Form } from "antd";
-
+import React, { useState } from "react";
 import {
-  PlusCircleOutlined,
-  CloseOutlined,
-  CheckOutlined,
-  EditTwoTone,
-} from "@ant-design/icons";
-import "../../style/BankAccount.css";
+  Card,
+  Row,
+  Col,
+  Divider,
+  Input,
+  Button,
+  Space,
+  DatePicker,
+  Select,
+  Form,
+} from "antd";
+import { EditOutlined, CloseOutlined } from "@ant-design/icons";
+const { TextArea } = Input;
+const { Option } = Select;
 
 function BankAccount() {
   const [editContent, showEditContent] = useState(false);
-  const checkNumbervalue = (event) => {
-    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-  const checkAlphabets = (event) => {
-    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
-
+  const [bankName, setBankName] = useState("HDFC Bangluru");
+  const [accountNumber, setAccountNumber] = useState("12345678987");
+  const [ifscCode, setIfscCode] = useState("HDFC00000076");
   return (
-    <Card title="Bank Account" className="card">
-      <Row>
-        <Col xs={22} sm={22} md={12}>
-          <Button
-            type="text"
-            style={{ background: "#40a9ff", color: "white" }}
-            onClick={() => showEditContent(!editContent)}
-          >
-            <PlusCircleOutlined />
-            Add Bank Account
-          </Button>
-        </Col>
-      </Row>
-      {editContent === true ? (
-        <Form
-          className="form"
-          name="basic"
-          labelCol={{
-            span: 8,
-          }}
-          wrapperCol={{
-            span: 16,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item
-            className="name"
-            label="Bank Name"
-            name="bankname"
-            onKeyPress={(event) => {
-              if (checkAlphabets(event)) {
-                event.preventDefault();
-              }
-            }}
-            rules={[
-              {
-                required: true,
-                message: "Please enter bank name!",
-              },
-              {
-                pattern: /^[a-zA-Z\s]*$/,
-                message: "Please enter Valid Name",
-              },
-            ]}
-          >
-            <Input className="inputName" />
-          </Form.Item>
-          <Form.Item
-            className="number"
-            label="Account Number"
-            name="accountnumber"
-            onKeyPress={(event) => {
-              if (checkNumbervalue(event)) {
-                event.preventDefault();
-              }
-            }}
-            rules={[
-              {
-                required: true,
-                message: "Please enter account number!",
-              },
-            ]}
-          >
-            <Input maxLength={17} className="inputNumber" />
-          </Form.Item>
-          <Form.Item
-            className="ifsc"
-            label="IFSC Code"
-            name="ifsccode"
-            rules={[
-              {
-                required: true,
-                message: "Please enter valid code!",
-              },
-            ]}
-          >
-            <Input className="inputCode" />
-          </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              offset: 8,
-              span: 16,
-            }}
-          >
-            <div style={{ position: "relative", left: "4rem" }}>
-              {" "}
-              <Button type="primary" className="save" htmlType="submit">
-                Save
-              </Button>
+    <div
+      className="personalCardDiv"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Card
+        title="Bank Account Details"
+        //   actions={[
+        //   <EditOutlined key="edit" />,
+        // ]}
+        extra={
+          <>
+            {editContent === false ? (
               <Button
+                type="text"
+                style={{ color: "#4ec0f1" }}
                 onClick={() => showEditContent(!editContent)}
-                className="cancel"
               >
-                {/* <CloseOutlined /> */}
-                Cancel
+                Edit
               </Button>
+            ) : null}
+          </>
+        }
+        style={{
+          width: 800,
+          marginTop: 10,
+        }}
+      >
+        <Row gutter={[16, 16]}>
+          <Col span={10}>
+            <div>
+              <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                Bank Name
+              </div>
+              {editContent === false ? (
+                <div>{bankName}</div>
+              ) : (
+                <Input placeholder="Enter Bank Name" />
+              )}
             </div>
-          </Form.Item>
-        </Form>
-      ) : null}
-    </Card>
+          </Col>
+          <Col span={10}>
+            <div>
+              <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                Account Number
+              </div>
+              {editContent === false ? (
+                <div>{accountNumber}</div>
+              ) : (
+                <Input placeholder="Enter Account Number" />
+              )}
+            </div>
+          </Col>
+          <Col span={10}>
+            <div>
+              <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                IFSC Code
+              </div>
+              {editContent === false ? (
+                <div>{ifscCode}</div>
+              ) : (
+                <Input placeholder="Enter IFSC Code" />
+              )}
+            </div>
+          </Col>
+        </Row>
+
+        {editContent === true ? (
+          <Row
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "3%",
+            }}
+          >
+            <Button
+              onClick={() => showEditContent(false)}
+              type="text"
+              style={{ fontSize: 15 }}
+            >
+              <CloseOutlined /> CANCEL
+            </Button>
+            <Col>
+              <Button type="primary" style={{ marginLeft: "10px" }}>
+                SAVE
+              </Button>
+            </Col>
+          </Row>
+        ) : null}
+      </Card>
+    </div>
   );
 }
 

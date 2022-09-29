@@ -1,0 +1,42 @@
+.ant-picker-input>input::placeholder {
+    color:white;
+}
+.ant-picker .ant-picker-input span.ant-picker-suffix,
+.ant-picker.ant-picker-range span.ant-picker-suffix{
+    color: white;
+}
+.mainBorder{
+    box-sizing: border-box;
+    border: 1px solid black;
+    height: 100vh;
+}
+.splitLeft{
+    box-sizing: border-box;
+    height: 25%;
+    border: 1px solid black;
+  width: 46%;
+  position: relative;
+  left: 3%;
+  z-index: 1;
+  
+  overflow-x: hidden;
+  
+
+}
+.splitRight{
+    height: 25%;
+    box-sizing: border-box;
+    border: 1px solid black;
+  width: 48%;
+  position: relative;
+  left: 49%;
+  z-index: 1;
+  bottom: 25%;
+  
+  overflow-x: hidden;
+  
+
+}
+.card{
+    overflow-y: hidden;
+}

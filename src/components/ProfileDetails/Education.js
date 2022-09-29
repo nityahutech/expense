@@ -1,5 +1,5 @@
 // ------------------------------------Place for import 
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import  { useState } from 'react';
 
@@ -22,7 +22,10 @@ import {
   DeleteTwoTone, 
 } from '@ant-design/icons';
 import FormItem from 'antd/es/form/FormItem';
-
+import {  useAuth } from "../../contexts/AuthContext"
+import EmpInfoContext from '../../contexts/EmpInfoContext';
+import { async } from '@firebase/util';
+ 
 // ----------------------------------------place for const declaration
 
 const { Option } = Select;
@@ -36,15 +39,44 @@ const onChange = (date, dateString) => {
 function Education() {
 
   const [editContent, showEditContent] = useState(false);
-
+  const [dateStart, setDateStart] = useState();
+  const [dateEnd, setDateEnd] = useState();
+  const { currentUser } = useAuth()
   const onFinish = (values) => {
     console.log('Success:', values);
+    let record = {...values,
+                  courseStartDate: dateStart,
+                  courseEndDate: dateEnd,
+                }
+    if (data){
+      EmpInfoContext.updateEduDetails(currentUser.uid,record)
+}
+    else{
+      EmpInfoContext.addEduDetails(currentUser.uid,record)
+    }
+     
+     setData(record)
+     showEditContent(false)
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
+    
   };
+  const [data, setData] = useState([]);
 
+ // console.log(data?data.stream:null);
+
+  useEffect(()=>{
+    getData();
+    
+  },[]);
+  const getData=async()=>{
+    let data=await EmpInfoContext.getEduDetails(currentUser.uid)
+console.log(data)
+setData(data)
+  }
+console.log(data)
   return (
     <div 
       className='education' 
@@ -68,7 +100,7 @@ function Education() {
         remember: true,
       }}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
+       onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
 
@@ -98,14 +130,14 @@ function Education() {
           <Row gutter={[16, 16]}>
 
           <Col span={8}>
-            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+            <Form.Item name="qualificationType" rules={[{required: true,message: 'Please input your qalification Type!',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
             >
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Qulification Type</h1>
                 {editContent === false ? (
-                  <h4>Graduation</h4>
+                  <h4>{data?data.qualificationType:null}</h4>
                 ) : (
                   <Input placeholder="" />
                 )}
@@ -114,14 +146,14 @@ function Education() {
             </Col>
 
             <Col span={8}>
-            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+            <Form.Item name="courseName" rules={[{required: false,message: 'Please input course Name!',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
             >
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Coure Name</h1>
                 {editContent === false ? (
-                  <h4>B.tech</h4>
+                  <h4>{data?data.courseName:null}</h4>
                 ) : (
                   <Input placeholder="" />
                 )}
@@ -130,61 +162,63 @@ function Education() {
             </Col>
 
             <Col span={8}>
-            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+            <Form.Item name="courseType" rules={[{required: false,message: 'Please input your course Type!',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
             >
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course Type</h1>
-                {editContent === false ? (<h4>Full Time</h4>) : (<Input placeholder="" />)}
+                {editContent === false ? (<h4>{data?data.courseType:null}</h4>) : (<Input placeholder="" />)}
               </div>
             </Form.Item>
             </Col>
 
             <Col span={8}>
-            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+            <Form.Item name="stream" rules={[{required: true,message: 'Please input your Stream Type!',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
             >
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Stream</h1>
-                {editContent === false ? (<h4>Mechanical</h4>) : (<Input placeholder="" />)}
+                {editContent === false ? (<h4>{data?data.stream:null}</h4>) : (<Input placeholder="" />)}
               </div>
             </Form.Item>
             </Col>
 
             <Col span={8}>
-            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+            <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course Start Date</h1>
+
+            <Form.Item name="courseStartDate" rules={[{required: true,message: 'Please input your Course Start Date ',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
             >
-              <div>
-                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course Start Date</h1>
-                {editContent === false ? (<h4>14/02/2014</h4>) : (<DatePicker style={{ width: "100%" }} />)}
-              </div>
+              {/* <div> */}
+                {editContent === false ? (<h4>{data?data.courseStartDate:null}</h4>) : (<DatePicker style={{ width: "100%" }}  format={"DD-MM-YYYY"} onChange= {(e) => {setDateStart(e.format("DD-MM-YYYY"))}} />)}
+              {/* </div> */}
             </Form.Item>
             </Col>
 
             <Col span={8}>
-            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+            <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course End Date</h1>
+
+            <Form.Item name="courseEndDate" rules={[{required: true,message: 'Please input your Course End Date',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
             >
-              <div>
-                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course End Date</h1>
-                {editContent === false ? (<h4>14/02/2014</h4>) : (<DatePicker style={{ width: "100%" }} />)}
-              </div>
+              {/* <div> */}
+                {editContent === false ? (<h4>{data?data.courseEndDate:null}</h4>) : (<DatePicker style={{ width: "100%" }} format={"DD-MM-YYYY"} onChange= {(e) => {setDateEnd(e.format("DD-MM-YYYY"))}} />)}
+              {/* </div> */}
             </Form.Item>
             </Col>
 
             <Col span={8}>
-            <Form.Item name="graduation" rules={[{required: true,message: 'Please input your Graduction Type!',},]}
+            <Form.Item name="universityName" rules={[{required: true,message: 'Please input your University Name !',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
             >
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>University Name</h1>
-                {editContent === false ? (<h4>Mechanical</h4>) : (<Input placeholder="" />)}
+                {editContent === false ? (<h4>{data?data.universityName:null}</h4>) : (<Input placeholder="" />)}
               </div>
             </Form.Item>
             </Col>
@@ -209,7 +243,7 @@ function Education() {
                 <CloseOutlined /> CANCEL
               </Button>
               <Col>
-                <Button type="primary" style={{ marginLeft: "10px" }}>
+                <Button type="primary" htmlType="submit" style={{ marginLeft: "10px" }}>
                 <CheckOutlined />
                   SAVE
                 </Button>

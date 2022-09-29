@@ -8,35 +8,182 @@
 .mainBorder{
     box-sizing: border-box;
     border: 1px solid black;
-    height: 100vh;
+    margin-top: 18px;
+    
 }
 .splitLeft{
     box-sizing: border-box;
-    height: 25%;
+    /* height: 20%; */
     border: 1px solid black;
   width: 46%;
   position: relative;
   left: 3%;
   z-index: 1;
-  
+  border-right: none;
   overflow-x: hidden;
   
 
 }
 .splitRight{
-    height: 25%;
+    /* height: 20%; */
     box-sizing: border-box;
     border: 1px solid black;
   width: 48%;
   position: relative;
   left: 49%;
   z-index: 1;
-  bottom: 25%;
+  bottom: 122px;
   
   overflow-x: hidden;
   
 
 }
+.splitLeft,.splitRight{
+    height: 20vh;
+}
 .card{
     overflow-y: hidden;
+}
+.splitSecond{
+    box-sizing: border-box;
+    /* height: 46%; */
+    border: 1px solid black;
+  width: 46%;
+  position: relative;
+  left: 3%;
+  z-index: 1;
+  border-right: none;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  bottom: 100px;
+}
+.splitThird{
+
+    /* height: 46%; */
+    box-sizing: border-box;
+    border: 1px solid black;
+  width: 48%;
+  position: relative;
+  left: 49%;
+  z-index: 1;
+  bottom: 362px;
+  
+  
+  overflow-x: hidden;
+}
+.head1{
+    border-bottom: 1px solid black;
+    /* width: 2rem; */
+    /* border: 1px solid black; */
+}
+.head2{
+    border-bottom: 1px solid black;
+    /* border: 1px solid black; */
+}
+.splitSecond,.splitThird{
+    height: 43vh;
+}
+tfoot{
+    border: 1px solid black;
+    border-bottom: none;
+}
+.splitFourth{
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-top: none;
+    width: 46%;
+    position: relative;
+    bottom: 23rem;
+    left: 3%;
+    height: 3%;
+}
+.splitFifth{
+    box-sizing: border-box;
+    border: 1px solid black;
+    width: 48%;
+    position: relative;
+    bottom: 25rem;
+    height: 3%;
+    left: 49%;
+    border-top: none;
+    border-left: none;
+}
+.netPay{
+    position: relative;
+    bottom: 24rem;
+    left: 2rem;
+    font-weight: 500;
+}
+@media only screen and (max-width: 600px) {
+    .mainBorder{
+        overflow-x: hidden;
+    }
+    .splitRight{
+        position: relative;
+        bottom: 139px;
+    }
+    .splitThird{
+        position: relative;
+        bottom: 400px;
+    }
+    .splitFourth{
+        position: relative;
+        bottom: 25rem;
+    }
+    .splitFifth{
+        position: relative;
+        bottom: 27rem;
+    }
+    
+
+}
+@media only screen and (max-width: 900px){
+    .mainBorder{
+        overflow-x: hidden;
+    }
+    .splitRight{
+        position: relative;
+        bottom: 139px;
+    }
+    .splitThird{
+        position: relative;
+        bottom: 400px;
+    }
+    .splitFourth{
+        position: relative;
+        bottom: 25rem;
+    }
+    .splitFifth{
+        position: relative;
+        bottom: 27rem;
+    }
+    
+
+
+}
+@media only screen and (max-width: 1100px){
+    
+    .splitFifth{
+        position: relative;
+        bottom: 27rem;
+    }
+}
+@media only screen and (max-width: 1200px){
+    
+    .splitRight{
+        position: relative;
+        bottom: 139px;
+    }
+    .splitThird{
+        position: relative;
+        bottom: 400px;
+    }
+    .splitFourth{
+        position: relative;
+        bottom: 25rem;
+    }
+    .splitFifth{
+        position: relative;
+        bottom: 27rem;
+    }
 }

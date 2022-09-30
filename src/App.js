@@ -25,6 +25,8 @@ import FamilyPage from "./pages/FamilyPage";
 import WorkWeekPage from "./pages/WorkWeekPage";
 import PaySlipPage from "./pages/PaySlipPage";
 import BankAccountpages from "./pages/BankAccountpages";
+import Appraisal from "./pages/AppraisalPage";
+import AppraisalHr from "./pages/AppraisalPageHr";
 
 function App() {
   return (
@@ -57,6 +59,8 @@ function App() {
           <Route path="/Setting" element={<Setting />} />
           <Route path="/Employee/Leave" element={<Leave />} />
           <Route path="/Notification" element={<Notification />} />
+          <Route path="/Appraisal/AppraisalPage" element={<Appraisal />} />
+          <Route path="/Appraisal/AppraisalPageHr" element={<AppraisalHr />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

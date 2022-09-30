@@ -422,6 +422,7 @@ function AttendanceLog({ empDetails }) {
   
   console.log("test",(filteredEmp[1]));
   console.log("test",filteredEmp[1]?JSON.parse(JSON.stringify(filteredEmp[1])):"empty");
+  console.log(filteredEmp);
 
   // console.log("test",filteredEmp);
   // console.log("test",filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):"empty");

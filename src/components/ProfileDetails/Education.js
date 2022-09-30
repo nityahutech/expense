@@ -44,19 +44,14 @@ function Education() {
   const { currentUser } = useAuth()
   const onFinish = (values) => {
     console.log('Success:', values);
-    let record = {...values,
-                  courseStartDate: dateStart,
-                  courseEndDate: dateEnd,
-                }
-    if (data){
-      EmpInfoContext.updateEduDetails(currentUser.uid,record)
-}
-    else{
-      EmpInfoContext.addEduDetails(currentUser.uid,record)
+    let record = {
+      ...values,
+      courseStartDate: dateStart,
+      courseEndDate: dateEnd,
     }
-     
-     setData(record)
-     showEditContent(false)
+    EmpInfoContext.updateEduDetails(currentUser.uid,record)
+    setData(record)
+    showEditContent(false)
   };
 
   const onFinishFailed = (errorInfo) => {

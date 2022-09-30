@@ -9,28 +9,28 @@ import moment from "moment";
 
 
 const WebClock = (props) => {
-    const { currentUser } = useAuth();
+
+  // const [autoStart, setAutoStart] = useState("");
 
     // useEffect(() => {
-        console.log(props.record)
-        // WebClock(props)
-    //   }, [props.record.autoStart])
+    //     console.log(props)
+    //   }, [])
     
-
-  const autoStart = props.record == 0 ? false : true;
-  const stopwatchOffset = new Date
+      // setAutoStart(props.record.autoStart);
+  const id = props.record.id;
+  const stopwatchOffset = new Date()
 
   const { seconds, minutes, hours, isRunning, start, pause, reset } = useStopwatch({
-    autoStart: autoStart, offsetTimestamp: stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + props.record)
+    autoStart: props.record.autoStart, offsetTimestamp: stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + props.record.secs)
+    // autoStart: true, offsetTimestamp: stopwatchOffset.setSeconds(props.record.secs)
   });
   
   console.log(`${hours}:${minutes}:${seconds}`)
   // const [clockIn, setClockIn] = useState(false);
-  const [mouseState, setMouseState] = useState(false);
   const clockTime =  isRunning ? `${hours}:${minutes}:${seconds}`: "";
   const buttonStyle = !isRunning ? {
           padding: "1px",
-          background: "#70BDF0",
+          background: "#FF002A",
           color: "white",
           display: "inline-block",
           width: "200px",
@@ -38,7 +38,7 @@ const WebClock = (props) => {
           border:"1px solid white",
         } : {
           padding: "1px",
-          background: "#171832",
+          background: "skyblue",
           color: "white",
           display: "inline-block",
           width: "200px",
@@ -49,32 +49,29 @@ const WebClock = (props) => {
         const [buttonText, setButtonText] = useState(!isRunning ? "Web Clock In" : "");
 
   const onMouseEnter = (event) => {
+    event.target.style.background = "#DB0000";
     if(isRunning){
-      event.target.style.background = "orange";
       setButtonText("Web Clock Out ");
       clockTime = "";
-    }
-    else {
-      event.target.style.background = "red";
     }
   };
 
   const onMouseLeave = (event) => {
     if(isRunning){
-      event.target.style.background = "#171832";
+      event.target.style.background = "skyblue";
       setButtonText("");
     }
     else {
       setButtonText("Web Clock In ");
-      event.target.style.background = "#70BDF0";
+      event.target.style.background = "#FF002A";
     }
   };
 
   const setClockState = () => {
       // setClockIn(true);
       let clickedDate = {
-        empId: currentUser.uid,
-        name: currentUser.displayName,
+        empId: id,
+        name: props.record.name,
         date: moment().format("DD-MM-YYYY"),
         clockIn: moment().format("HH:mm:ss"),
         clockOut: null
@@ -92,7 +89,7 @@ const WebClock = (props) => {
       duration: clockTime
     }
     // AttendanceContext.updateClockData(clickedDate, currentUser.uid)
-    let rec = await AttendanceContext.updateClockData(currentUser.uid, clickedDate);
+    let rec = await AttendanceContext.updateClockData(id, clickedDate);
     // console.log(rec.data())
     console.log(isRunning);
     console.log(clickedDate.toString().substring(16, 25));

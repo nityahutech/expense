@@ -1,6 +1,8 @@
 
 import { db } from "../firebase-config";
-import moment from "moment";
+import moment from 'moment';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
 import {
     collection,
     getDocs,
@@ -17,6 +19,7 @@ import {
     runTransaction,
     get
 } from "firebase/firestore";
+import { async } from "@firebase/util";
 
 const attendCollectionRef = collection(db, "attendance");
 const usersCollectionRef = collection(db, "users");
@@ -45,7 +48,7 @@ class AttendanceContext {
 
     // fixNullClock = async () => {
     //     const q = query(attendCollectionRef, where("date","!=",moment().format("DD-MM-YYYY")), where("clockOut","==",null))
-    //     let rec = await transaction.get(q);
+    //     let rec = await getDocs(q);
     //     let d = rec.docs.map((doc) => {
     //         return {
     //             id: doc.id,
@@ -94,18 +97,74 @@ class AttendanceContext {
         return deleteDoc(attendDoc);
     };
 
-    getAllAttendance = () => {
-        const q = query(attendCollectionRef, orderBy("date", "desc"));
+    getAllAttendance =  async (id) => {
+        const q = query(attendCollectionRef, where("empId", "==", id));
         // console.log(q);
-        return getDocs(q);
+        let data = await getDocs(q);
+        let d = data.docs.map((doc) => {
+            return {
+              ...doc.data(),
+              id: doc.id,
+            };
+          });
+        return d;
     };
 
-    getAllUsers = () => {
+    getAllUsers = async() => {
         const q = query(usersCollectionRef, orderBy("empId", "asc"));
-        // console.log(q);
-        return getDocs(q);
+        let userdata = await getDocs(q);
+        let res = userdata.docs.map((doc) => {
+          console.log(doc.status);
+          return {
+            id: doc.id,
+            empId: doc.data().empId,
+            name: doc.data().fname+" "+doc.data().lname,
+            status: "Absent",
+            project: "",
+            report: ""
+          };
+        });
+        let stats = await this.getStatus();
+        console.log(stats)
+
+
+        res.forEach((emp,i) => {
+          for (let i = 0; i < stats.length; i++) {
+            if (emp.id == stats[i].id) {
+              console.log("Present")
+              emp.status = "Present";
+              emp.project = stats[i].project;
+              emp.report = stats[i].report;
+              return;
+            }
+          }
+
+          // let response=Promise.all()
+           
+        })
+        console.log(res);
+        console.log("test1",JSON.stringify(res));
+        console.log("7777");
+        return res;
+        // return getDocs(q)
     };
 
+    updateWithLeave = async (data) => {
+      console.log(data)
+      data.forEach((emp) => {
+        if(emp.status == "Absent") {
+          this.getLeaveStatus(emp.id).then((leave) => {
+            if (leave) {
+              console.log("8888");
+              emp.status = "On Leave";
+
+            }
+          })
+        }
+      })
+      console.log(data);
+      return data;
+    }
 
     getAllByTotal = () => {
         const q = query(attendCollectionRef, orderBy("subtotal", "desc"));
@@ -127,18 +186,28 @@ class AttendanceContext {
         return res;
     };
 
-    getLeaveStatus = async () => {
-        const q = query(leaveCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("status", "==", "Approved"));
+    getLeaveStatus = async (id) => {
+        console.log(id);
+        const q = query(leaveCollectionRef, where("empId", "==", id), where("status", "==", "Approved"));
         let stats = await getDocs(q);
         let res = stats.docs.map((doc) => {
           return {
-            id: doc.data().empId,
             name: doc.data().name,
-            project: doc.data().project,
-            report: doc.data().report
+            date: doc.data().date,
           };
         });
-        return res;
+        let status = false;
+        console.log(res);
+        const momentRange = extendMoment(Moment);
+        res.forEach((leave) => {
+            let start = moment(leave.date[0], "Do MMM, YYYY");
+            let end = moment(leave.date[1], "Do MMM, YYYY").add(1, "days");
+            let range = momentRange.range(start, end);
+            console.log(range)
+            status = range.contains(moment()) ? true : status;
+            console.log(status)
+        })
+        return status;
     }
 
     getAttendance = (id) => { 

@@ -25,14 +25,14 @@ const Navbar = () => {
   let loc = useLocation();
   const { logout, currentUser } = useAuth();
   
-  // const [clockinfo, setClockInfo] = useState({
-  //   id: currentUser.uid,
-  //   name: currentUser.displayName,
-  //   autoStart: false,
-  //   secs: 0
-  // });
+  const [clockinfo, setClockInfo] = useState({
+    id: currentUser.uid,
+    name: currentUser.displayName,
+    autoStart: false,
+    secs: 0
+  });
 
-  let secs = 0;
+
   const isClockRunning = async () => {
     let res = await AttendanceContext.getStartTime(currentUser.uid);
     console.log(res)
@@ -40,18 +40,19 @@ const Navbar = () => {
       console.log("heyyyyyyyy")
       return false;
     }
-    let offset = moment().subtract(res)
-    console.log(offset.toDate());
-    const offsetTime = moment(offset, "HH:mm:ss").diff(moment().startOf('day'), 'seconds')
-    console.log(offsetTime)
-    // setClockInfo({
-    //   ...clockinfo,
-    //   autoStart: true,
-    //   secs: offsetTime
-    // })
-    secs = offsetTime
-    // console.log(clockinfo)
-    return true;
+    else {
+      let offset = moment().subtract(res)
+      console.log(offset.toDate());
+      const offsetTime = moment(offset, "HH:mm:ss").diff(moment().startOf('day'), 'seconds')
+      console.log(offsetTime)
+      setClockInfo({
+        ...clockinfo,
+        autoStart: true,
+        secs: offsetTime
+      })
+      console.log(clockinfo)
+      return true;
+    }
   }  
   // const offset = isClockRunning().then((num) => {
   //   console.log(stopwatchOffset)
@@ -62,7 +63,7 @@ const Navbar = () => {
 
   const runClock = () => {
     if(isClockRunning()) {
-      console.log(secs, "clockinfo")
+      console.log(clockinfo)
     }
     return;
   }
@@ -112,8 +113,8 @@ const Navbar = () => {
   
   useEffect(() => {
     runClock();
-  }, [secs]);
-
+  }, []);
+  console.log(clockinfo)
   return (
     <div className="navbar" style={{ background: "white" }}>
       <div className="wrapper">
@@ -138,7 +139,7 @@ const Navbar = () => {
           
         </div>
           <WebClock 
-            record = {secs}
+            record = {{...clockinfo}}
           />
         <div className="image">
           <div className="item">

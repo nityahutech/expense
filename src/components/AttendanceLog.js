@@ -38,7 +38,7 @@ function AttendanceLog({ empDetails }) {
   const [monthlydata, setMonthlydata] = useState([]);
   const [allEmp, setallEmp] = useState([]);
   const [role, setRole] = useState(empDetails);
-  const [selectemp, setSelectemp] = useState(null);
+  const [selectemp, setSelectemp] = useState({id : ""});
   const [activetab, setActivetab] = useState("1");
   console.log(activetab);
   const { currentUser } = useAuth();
@@ -53,8 +53,8 @@ function AttendanceLog({ empDetails }) {
   const columns = [
     {
       title: "Employee Code",
-      dataIndex: "id",
-      key: "id",
+      dataIndex: "empId",
+      key: "empId",
       render: (text) => <a>{text}</a>,
     },
     {
@@ -139,21 +139,17 @@ function AttendanceLog({ empDetails }) {
     //set local with newMonthlyAll
     //set state for monthly with newMonthlyAll
   };
-  useEffect(() => {
-    getEmpDetails(currentUser.uid);
-    // getEmpMonthly();
-  }, [activetab]);
+  // useEffect(() => {
+  //   getEmpDetails(selectemp.id);
+  //   // getEmpMonthly();
+  // }, [activetab]);
 
   async function getEmpDetails(id) {
+    console.log(id)
     let data = await AttendanceContext.getAllAttendance(id);
-    let d = data.docs.map((doc) => {
-      return {
-        ...doc.data(),
-        id: doc.id,
-      };
-    });
-    console.log(d)
-    setEmpMonthly(d);
+    
+    console.log(data)
+    setEmpMonthly(data);
   }
   // function getEmpMonthly() {
   //   console.log(JSON.parse(localStorage.getItem("newReport")));
@@ -179,35 +175,41 @@ function AttendanceLog({ empDetails }) {
   //   // setallEmp(newEmp);
   // }
 
-  async function allEmpDetails() {
+  function allEmpDetails() {
     // console.log(JSON.parse(localStorage.getItem("newReport")));
-    let userdata = await AttendanceContext.getAllUsers();
-    let res = userdata.docs.map((doc) => {
-      return {
-        id: doc.id,
-        empId: doc.data().empId,
-        name: doc.data().employeename,
-        status: "Absent",
-        project: "",
-        report: ""
-      };
-    });
-    console.log(res);
-    let stats = await AttendanceContext.getStatus();
-    console.log(stats)
-    stats.forEach((rec) => {
-      res.map((emp) => {
-        if (emp.id == rec.id) {
-          emp.status = "Present";
-          emp.project = rec.project;
-          emp.report = rec.report;
-          return;
-        }
-
-      })
-      
+    AttendanceContext.getAllUsers().then((userdata) => {
+      setallEmp(userdata);
+      getWithLeave(userdata)
     })
-    console.log(res)
+  }
+
+  function getWithLeave(userdata) {
+    AttendanceContext.updateWithLeave(userdata).then((final) => {
+      console.log("test1",final?JSON.parse(JSON.stringify(final)):undefined)
+      setallEmp(final);
+      setFilteredEmp(final);
+      setEmpMonthly(final);
+    })
+  }
+    // stats.map((rec) => {
+    //   console.log("mooooooooooooooooooooooooooooo");
+    // if (emp.id == rec.id) {
+    //   emp.status = "Present";
+    //   emp.project = rec.project;
+    //   emp.report = rec.report;
+    //   return;
+    // }
+  // })
+  //   else {
+  //     console.log("AAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHH");
+  //     AttendanceContext.getLeaveStatus(emp.id).then((leave) => {
+  //     if (leave) {
+  //       emp.status = "On Leave";
+  //     }
+  //   })
+  // }
+
+    
     // let newEmp = [];
     // userlocal.map((emp, i) => {
     //   newEmp.push({
@@ -223,10 +225,7 @@ function AttendanceLog({ empDetails }) {
     //   });
     // });
     // console.log({ newEmp });
-    setallEmp(res);
-    setFilteredEmp(res);
-    setEmpMonthly(res);
-  }
+  
   const onReset = () => {
     form.resetFields();
   };
@@ -238,10 +237,14 @@ function AttendanceLog({ empDetails }) {
       getEmpDetails(currentUser.uid);
       // getEmpMonthly();
     } else {
-      setActivetab("2");
+      setActivetab("1");
       allEmpDetails();
     }
   }, []);
+
+  // useEffect(() => {
+  //   getWithLeave(allEmp);
+  // }, [allEmp, filteredEmp])
 
   //   const rowSelection = {
   //     onChange: (selectedRowKeys, selectedRows) => {
@@ -416,7 +419,13 @@ function AttendanceLog({ empDetails }) {
       setFilteredEmp(result);
     }
   };
+  
+  console.log("test",(filteredEmp[1]));
+  console.log("test",filteredEmp[1]?JSON.parse(JSON.stringify(filteredEmp[1])):"empty");
 
+  // console.log("test",filteredEmp);
+  // console.log("test",filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):"empty");
+  // setFilteredEmp(filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):undefined)
   return (
     <>
       <div className="hrtab">
@@ -518,7 +527,7 @@ function AttendanceLog({ empDetails }) {
             </>
           ) : (
             <>
-              <Tabs.TabPane tab="Daily Log" key="2">
+              <Tabs.TabPane tab="Daily Log" key="1">
                 <Input
                   className="Daily"
                   placeholder="Search"
@@ -537,7 +546,8 @@ function AttendanceLog({ empDetails }) {
                       onClick: (event) => {
                         console.log(record);
                         setSelectemp({ ...record });
-                        setActivetab("3");
+                        getEmpDetails(record.id);
+                        setActivetab("2");
                       }, // click row
                     };
                   }}
@@ -545,7 +555,7 @@ function AttendanceLog({ empDetails }) {
                   dataSource={filteredEmp}
                 />
               </Tabs.TabPane>
-              <Tabs.TabPane disabled={!selectemp} tab="Monthly Log" key="3">
+              <Tabs.TabPane disabled={!selectemp} tab="Monthly Log" key="2">
                 <RangePicker
                   className="Range"
                   defaultValue={[]}

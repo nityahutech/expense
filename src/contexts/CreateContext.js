@@ -8,7 +8,7 @@ import ProfileContext from "./ProfileContext"
 import {
     collection,
     getDocs,
-    getDoc,
+    get,
     query,
     orderBy,
     addDoc,
@@ -21,33 +21,36 @@ const users = collection(db, "users");
 
 
 function generateEmpId() {
-    const empId = "001";
-    return "HTS"+empId;
+    let len = getDocs(users).then((snapshot) => {
+        let res = snapshot.docs.length + 1;
+        return "HTS"+("00" + res.toString()).slice(-3);
+    });
+    console.log(len);
+    return len;
 }
 
 export async function createUser(values) {
     console.log(values.email, "password");
-    let res =  await createUserWithEmailAndPassword(createAuth, values.email, "password")
+    let res =  await createUserWithEmailAndPassword(createAuth, (values.fname+"."+values.lname+"@hutechsolutions.com").toLowerCase(), "password")
     updateProfile(res.user, {displayName: values.fname+" "+values.lname})
     // updatePhoneNumber(res.user, values.phone)
     console.log(res);
     console.log(res.user.uid);
     console.log(values.fname+" "+values.lname);
     const valuesToservice = {
-        empId: generateEmpId(),
+        empId: await generateEmpId(),
         fname: values.fname,
         lname: values.lname,
-        mailid: values.email,
+        mailid: (values.fname+"."+values.lname+"@hutechsolutions.com").toLowerCase(),
+        contactEmail: values.email,
         doj: values.doj.format('DD-MM-YYYY'),
         phonenumber: values.phone,
         gender: values.gender,
         designation: values.designation,
-        role: values.role,
-        address: "",
-        city: "",
-        country: "",
-        state: "",
-        zipcode: "",
+        role: (values.designation == "Chief Executive Officer(CEO)" || values.designation == "Human Resource(HR)") ? "hr" : "emp",
+        empType: values.empType,
+        repManager: values.repManager,
+        secManager: values.secManager
     }
     console.log(valuesToservice);
     ProfileContext.addProfile(res.user.uid, valuesToservice)

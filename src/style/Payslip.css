@@ -5,38 +5,60 @@
 .ant-picker.ant-picker-range span.ant-picker-suffix{
     color: white;
 }
+
 .mainBorder{
     box-sizing: border-box;
     border: 1px solid black;
-    height: 100vh;
+    margin-top: 18px;
+    padding-left: 30px;
+    
+    
 }
-.splitLeft{
-    box-sizing: border-box;
-    height: 25%;
+.splitLeft,.splitRight,.splitThird,.splitSecond,.splitFourth,.splitFifth{
     border: 1px solid black;
-  width: 46%;
-  position: relative;
-  left: 3%;
-  z-index: 1;
-  
-  overflow-x: hidden;
-  
+    width: 48%;
+}
+.firstSplit,.secondSplit,.thirdSplit{
+    display: flex;
+}
 
-}
-.splitRight{
-    height: 25%;
-    box-sizing: border-box;
-    border: 1px solid black;
-  width: 48%;
-  position: relative;
-  left: 49%;
-  z-index: 1;
-  bottom: 25%;
-  
-  overflow-x: hidden;
-  
 
-}
-.card{
-    overflow-y: hidden;
-}
+
+
+.head1{
+   
+    
+    border-bottom: 1px solid black;
+ } 
+.head2{
+    border-bottom: 1px solid black;
+ }  
+ td,th{
+    padding-left: 10px;
+ }
+ .netPay{
+    font-weight: 500;
+    padding: 15px 0px 15px 0px;
+ 
+ }
+ .card{
+    overflow-x: scroll;
+ }
+
+
+
+    
+
+
+@media only screen and (max-width: 920px){
+    .card{
+        overflow-x: scroll;
+    }
+    }
+
+
+
+ 
+
+    
+    

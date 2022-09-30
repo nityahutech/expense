@@ -37,6 +37,7 @@ let leaveStyle = {
 const userrole = ''
 const Leave = () => {
     const [form] = Form.useForm();
+    const [loading, setLoading] = useState(false);
     const [leaves, setLeaves] = useState([]);
     const [history, setHistory] = useState([]);
     const [requests, setRequests] = useState([]);
@@ -47,6 +48,7 @@ const Leave = () => {
     const [isHr, setIsHr] = useState(sessionStorage.getItem("role") === "hr" ? true : false);
     const [role, setRole] = useState(null);
     const { currentUser } = useAuth();
+   
 
     let leaveDays = "";
     // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
@@ -65,6 +67,7 @@ const Leave = () => {
 
 
     const getHoliday = async () => {
+        setLoading(true);
         const allData = await CompanyHolidayContext.getAllCompanyHoliday();
         console.log('allCompanyHoliday', allData)
         allData.docs.map((doc) => {
@@ -79,6 +82,7 @@ const Leave = () => {
             });
             setCompanyholiday(d)
             console.log('allCompanyHoliday3', d)
+            setLoading(false);
 
         });
     }
@@ -219,6 +223,7 @@ const Leave = () => {
 
 
     const getData = async () => {
+        setLoading(true);
         let data = await LeaveContext.getAllById(currentUser.uid)
         // console.log("data", JSON.stringify(data.docs), currentUser.uid);
 
@@ -269,11 +274,13 @@ const Leave = () => {
             })
         console.log(role)
         setHistory(d)
+        setLoading(false);
 
 
     }
 
     const getRequestData = async () => {
+        setLoading(true);
         let reqData = await LeaveContext.getAllByApprover(currentUser.displayName)
         let req = reqData.docs.map((doc) => {
             return {
@@ -287,6 +294,7 @@ const Leave = () => {
         });
         setRequests(req);
         console.log(req)
+        setLoading(false);
     }
 
     const onDeleteLeave = (record) => {
@@ -576,6 +584,7 @@ const Leave = () => {
     return (
         <>
             <Row
+             loading={loading}
                 style={{
                     padding: 24,
                     background: '#fff',
@@ -584,6 +593,7 @@ const Leave = () => {
                 }}
                 gutter={[16, 16]}>
                 <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                    
                     <div className='leavediv'
 
                     >

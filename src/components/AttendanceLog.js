@@ -225,7 +225,7 @@ function AttendanceLog({ empDetails }) {
       setActivetab("1");
       getEmpDetails(currentUser.uid);
     } else {
-      setActivetab("2");
+      setActivetab("1");
       allEmpDetails();
     }
   }, []);
@@ -505,7 +505,7 @@ function AttendanceLog({ empDetails }) {
             </>
           ) : (
             <>
-              <Tabs.TabPane tab="Daily Log" key="2">
+              <Tabs.TabPane tab="Daily Log" key="1">
                 <Input
                   className="Daily"
                   placeholder="Search"
@@ -523,8 +523,9 @@ function AttendanceLog({ empDetails }) {
                     return {
                       onClick: (event) => {
                         console.log(record);
+                        getEmpDetails(record.id);
                         setSelectemp({ ...record });
-                        setActivetab("3");
+                        setActivetab("2");
                       }, // click row
                     };
                   }}
@@ -532,7 +533,7 @@ function AttendanceLog({ empDetails }) {
                   dataSource={filteredEmp}
                 />
               </Tabs.TabPane>
-              <Tabs.TabPane disabled={!selectemp} tab="Monthly Log" key="3">
+              <Tabs.TabPane disabled={!selectemp} tab="Monthly Log" key="2">
                 <RangePicker
                   className="Range"
                   defaultValue={[]}

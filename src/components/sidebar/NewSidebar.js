@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Menu } from "antd";
 
 import "./newSlidebar.css";
@@ -18,8 +18,16 @@ function getItem(label, key, icon, children = null, type = null) {
 }
 
 const NewSidebar = (props) => {
+  const [isHr, setIsHr] = useState(sessionStorage.getItem("role")==="hr"?true:false);
+
   console.log(props.openkey);
   const history = useNavigate();
+
+  // useEffect(() => {
+  //   let role = sessionStorage.getItem("role");
+  //   setRole(role)
+  //   setIsHr(role === "hr")
+  // })
   // const onClick = (e) => {
   //     let pathkey = e.key
   //     switch (pathkey) {
@@ -85,42 +93,46 @@ const NewSidebar = (props) => {
             Dashboard
             <NavLink to="/DashBoard" />
           </Menu.Item>
+            { isHr ? 
+            <><Menu.SubMenu className="arrow-div"  style={{
+            
+            width:'100%'
+             }}
+           icon={
+             <img src="/logo/Expense.png" alt="profile" className="Dash" />
+           }
+           key="sub1"
+           title="Expense"
+           mode="inline"
+         >
+           <Menu.Item className ='arrow'
+           //  style={{
+           //     background: "#05445E",
+             
+           //   }}
+             icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+             key="2"
+           >
+             Add Expense
+             <NavLink to="/Expense/AddExpense" />
+           </Menu.Item>
+           <Menu.Item className ='arrow'
+             icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+             key="3"
+           >
+             Expense List
+             <NavLink to="/Expense/ExpenseList" />
+           </Menu.Item>
+         </Menu.SubMenu>
+          </>
+         : null
+         }
+          
 
-          <Menu.SubMenu className="arrow-div" style={{
-
-            width: '100%'
-          }}
-            icon={
-              <img src="/logo/Expense.png" alt="profile" className="Dash" />
-            }
-            key="sub1"
-            title="Expense"
-            mode="inline"
-          >
-            <Menu.Item className='arrow'
-              //  style={{
-              //     background: "#05445E",
-
-              //   }}
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="2"
-            >
-              Add Expense
-              <NavLink to="/Expense/AddExpense" />
-            </Menu.Item>
-            <Menu.Item className='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="3"
-            >
-              Expense List
-              <NavLink to="/Expense/ExpenseList" />
-            </Menu.Item>
-          </Menu.SubMenu>
-
-          <Menu.SubMenu style={{
-
-            width: '100%'
-          }}
+          <Menu.SubMenu  style={{
+            
+            width:'100%'
+             }}
             icon={
               <img
                 style={{ color: "white" }}
@@ -133,41 +145,45 @@ const NewSidebar = (props) => {
             title="Employee"
             mode="inline"
           >
-            <Menu.Item className='arrow'
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="6"
             >
               Attendance Log
               <NavLink to="/Attendance/AttendanceLog" />
             </Menu.Item>
-            <Menu.Item className='arrow'
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="7"
             >
               Leave
               <NavLink to="/Employee/Leave" />
             </Menu.Item>
-
-            <Menu.Item className='arrow'
+            { isHr ? <>
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="8"
             >
               Add Employee
               <NavLink to="/Addemployee/AddEmployee" />
             </Menu.Item>
-            <Menu.Item className='arrow'
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="9"
             >
               Employee List
               <NavLink to="/EmployeeListPage/EmployeeList" />
             </Menu.Item>
+            </>
+            :
+            null
+            }
           </Menu.SubMenu>
-
-          <Menu.SubMenu style={{
-
-            width: '100%'
-          }}
+           
+          <Menu.SubMenu  style={{
+            
+            width:'100%'
+             }}
             icon={
               <img
                 style={{ color: "" }}
@@ -180,14 +196,14 @@ const NewSidebar = (props) => {
             title="Profile"
             mode="inline"
           >
-            <Menu.Item className='arrow'
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="10"
             >
               Personal
-              <NavLink to="/PersonalPage/Personal" />
+              <NavLink to="/PersonalPage/Personal"/>
             </Menu.Item>
-            <Menu.Item className='arrow'
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="11"
             >
@@ -195,14 +211,14 @@ const NewSidebar = (props) => {
               <NavLink to="/WorkPage/work" />
             </Menu.Item>
 
-            <Menu.Item className='arrow'
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="12"
             >
               Team
               <NavLink to="/TeamPage/Team" />
             </Menu.Item>
-            <Menu.Item className='arrow'
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="13"
             >
@@ -216,28 +232,28 @@ const NewSidebar = (props) => {
               Family
               <NavLink to="/FamilyPage/Family" />
             </Menu.Item>
-            <Menu.Item className='arrow'
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="15"
             >
               Documents
               <NavLink to="/DocumentsPage/Document" />
             </Menu.Item>
-            <Menu.Item className='arrow'
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="16"
             >
               Work week
               <NavLink to="/WorkWeekPage/WorkWeek" />
             </Menu.Item>
-            <Menu.Item className='arrow'
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="17"
             >
               Pay Slip
               <NavLink to="/PaySlipPage/PaySlip" />
             </Menu.Item>
-            <Menu.Item className='arrow'
+            <Menu.Item className ='arrow'
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="18"
             >
@@ -257,42 +273,10 @@ const NewSidebar = (props) => {
             }
             key="4"
           >
-            Appraisal
+            Profile
             <NavLink to="/Profile" />
           </Menu.Item> */}
-
-          <Menu.SubMenu className="arrow-div" style={{
-
-            width: '100%'
-          }}
-            icon={
-              <img src="/logo/appraisal.png" alt="appraisal" className="Dash" />
-            }
-            key="sub4"
-            title="Appraisal"
-            mode="inline"
-          >
-            <Menu.Item className='arrow'
-
-              icon={<img src="/logo/dot.png" alt="appraisal" className="dot" />}
-              key="19"
-            >
-              Employees
-              <NavLink to="/Appraisal/AppraisalPage" />
-            </Menu.Item>
-
-            <Menu.Item className='arrow'
-
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="20"
-            >
-              Hr Corner
-              <NavLink to="/Appraisal/AppraisalPageHr" />
-            </Menu.Item>
-
-          </Menu.SubMenu>
-
-          <Menu.Item className='arrow'
+          <Menu.Item className ='arrow'
             icon={
               <img
                 style={{ color: "" }}

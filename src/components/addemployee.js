@@ -396,12 +396,12 @@ function AddEmployee() {
                   <Option value="Asst. Software Developer">Asst. Software Developer</Option>
                   <Option value="Sr. Software Developer">Sr. Software Developer</Option>
                   <Option value="Jr. Software Developer">Jr. Software Developer</Option>
-                  <Option value="Business Analyst">Business Analyst(BA)</Option>
-                  <Option value="Quality Analyst">Quality Analyst(QA)</Option>
-                  <Option value="Human Resource">Human Resource(HR)</Option>
+                  <Option value="Business Analyst(BA)">Business Analyst(BA)</Option>
+                  <Option value="Quality Analyst(QA)">Quality Analyst(QA)</Option>
+                  <Option value="Human Resource(HR)">Human Resource(HR)</Option>
                   <Option value="Manager">Manager</Option>
                   <Option value="Director">Director</Option>
-                  <Option value="Chief Executive Officer">Chief Executive Officer(CEO)</Option>
+                  <Option value="Chief Executive Officer(CEO)">Chief Executive Officer(CEO)</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -471,10 +471,10 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                  <Option value="pr">PRAVAT RANJAN</Option>
-                  <Option value="aa">AMLANA APARAJITA</Option>
-                  <Option value="amt">ANISHA MARIAM THOMAS</Option>
-                  <Option value="rjn">RAJEEV N. IYER</Option>
+                  <Option value="Pravat Ranjan">PRAVAT RANJAN</Option>
+                  <Option value="Amlana Aparajita">AMLANA APARAJITA</Option>
+                  <Option value="Anisha Mariam Thomas">ANISHA MARIAM THOMAS</Option>
+                  <Option value="Rajeev N. Iyer">RAJEEV N. IYER</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -507,7 +507,7 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                  <Option value="sn">SWAYAMPRAVA NANDA</Option>
+                  <Option value="Swayamprava Nanda">SWAYAMPRAVA NANDA</Option>
                   {/* <Option value="emp"></Option> */}
                   {/* <Option value="pns">Prefer Not To Say</Option> */}
                 </Select>

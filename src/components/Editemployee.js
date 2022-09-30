@@ -407,7 +407,7 @@ function Editemployee(props) {
             >
               <Select
                 style={{ width: "80%" }}
-                onChange={(e) => setGender(e.target.value)}
+                onChange={(e) => setGender(e)}
                 // showSearch
 
                 // optionFilterProp="children"
@@ -439,7 +439,7 @@ function Editemployee(props) {
             >
               <Select
                 style={{ width: "80%" }}
-                onChange={(e) => setDesignation(e.target.value)}
+                onChange={(e) => setDesignation(e)}
                 // showSearch
 
                 // optionFilterProp="children"
@@ -449,17 +449,17 @@ function Editemployee(props) {
                 //   option.children.toLowerCase().includes(input.toLowerCase())
                 // }
               >
-                <Option value="intrn">Internship</Option>
-                <Option value="st">Software Trainee</Option>
-                <Option value="asd">Asst. Software Developer</Option>
-                <Option value="ssd">Sr. Software Developer</Option>
-                <Option value="jsd">Jr. Software Developer</Option>
-                <Option value="ba">Business Analyst(BA)</Option>
-                <Option value="qa">Quality Analyst(QA)</Option>
-                <Option value="hr">Human Resource(HR)</Option>
-                <Option value="mgr">Manager</Option>
-                <Option value="dr">Director</Option>
-                <Option value="ceo">Cheap Executive Officer(CEO)</Option>
+                <Option value="Internship">Internship</Option>
+                  <Option value="Software Trainee">Software Trainee</Option>
+                  <Option value="Asst. Software Developer">Asst. Software Developer</Option>
+                  <Option value="Sr. Software Developer">Sr. Software Developer</Option>
+                  <Option value="Jr. Software Developer">Jr. Software Developer</Option>
+                  <Option value="Business Analyst">Business Analyst(BA)</Option>
+                  <Option value="Quality Analyst">Quality Analyst(QA)</Option>
+                  <Option value="Human Resource">Human Resource(HR)</Option>
+                  <Option value="Manager">Manager</Option>
+                  <Option value="Director">Director</Option>
+                  <Option value="Chief Executive Officer">Chief Executive Officer(CEO)</Option>
               </Select>
             </Form.Item>
           </Col>

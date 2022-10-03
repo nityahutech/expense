@@ -52,7 +52,7 @@
   .Col-2-center {
     box-shadow:
       0px 5px 10px 0px rgba(0, 0, 0, 0.2);
-      width: 200px;
+      width: 250px;
       height: 120px;
       margin: 10px;
       border-radius: 5px; 
@@ -98,9 +98,9 @@
     height: 24px;
  
   }
-  
+
   .ant-picker-cell-disabled{
-    background-color:  rgba(75, 41, 41, 0.2);
+    background-color:  rgba(74, 67, 67,0.2);
     color: rgb(2, 0, 0)
   }
 

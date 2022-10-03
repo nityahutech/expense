@@ -24,7 +24,6 @@ const Navbar = () => {
   const [activePage, setActivePage] = useState("/DashBoard");
   let loc = useLocation();
   const { logout, currentUser } = useAuth();
-  
   const [clockinfo, setClockInfo] = useState({
     id: currentUser.uid,
     name: currentUser.displayName,
@@ -34,6 +33,7 @@ const Navbar = () => {
 
 
   const isClockRunning = async () => {
+    console.log("isClockRunning")
     let res = await AttendanceContext.getStartTime(currentUser.uid);
     console.log(res)
     if (res == undefined) {
@@ -61,12 +61,15 @@ const Navbar = () => {
     
     
 
-  const runClock = () => {
-    if(isClockRunning()) {
-      console.log(clockinfo)
-    }
-    return;
-  }
+  // const runClock = async () => {
+  //   let cond = await isClockRunning();
+  //   if(cond) {
+  //     console.log(true, clockinfo)
+  //     return;
+  //   }
+  //     console.log(false, clockinfo)
+  //     return;
+  // }
 
   const menu = (
     <Menu
@@ -109,11 +112,13 @@ const Navbar = () => {
       ]}
     />
   );
-  
-  
   useEffect(() => {
-    runClock();
-  }, []);
+    console.log("BREHHHHHHHHHHHHS")
+    isClockRunning();
+  }, [clockinfo]);
+  
+  // useEffect(() => {
+  // }, []);
   console.log(clockinfo)
   return (
     <div className="navbar" style={{ background: "white" }}>
@@ -137,8 +142,7 @@ const Navbar = () => {
         >
           {/* {`${ctime.hrs}:${ctime.min}:${ctime.sec}`} */}
           
-        </div>
-          <WebClock 
+        </div><WebClock 
             record = {{...clockinfo}}
           />
         <div className="image">

@@ -69,7 +69,7 @@ class AttendanceContext {
                 id: doc.id
             };
         });
-        console.log("clock", d[0] ? "true" : "false")
+        console.log("clock", d)
         return d[0] ? d[0].clockIn : undefined;
     }
 
@@ -114,7 +114,6 @@ class AttendanceContext {
         const q = query(usersCollectionRef, orderBy("empId", "asc"));
         let userdata = await getDocs(q);
         let res = userdata.docs.map((doc) => {
-          console.log(doc.status);
           return {
             id: doc.id,
             empId: doc.data().empId,
@@ -151,10 +150,11 @@ class AttendanceContext {
 
     updateWithLeave = async (data) => {
       console.log(data)
-      data.forEach((emp) => {
+      await data.forEach((emp) => {
         if(emp.status == "Absent") {
           this.getLeaveStatus(emp.id).then((leave) => {
-            if (leave) {
+            console.log("7777");
+              if (leave) {
               console.log("8888");
               emp.status = "On Leave";
 
@@ -162,7 +162,7 @@ class AttendanceContext {
           })
         }
       })
-      console.log(data);
+      console.log(JSON.stringify(data));
       return data;
     }
 
@@ -215,17 +215,7 @@ class AttendanceContext {
         const attendDoc = doc(db, "attendance", id);
         return getDoc(q);
     };
-    getStartTime = async (id) =>{
-        const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("empId", "==", id), where("clockOut","==",null), limit(1))
-        let rec = await getDocs(q);
-        let d = rec.docs.map((doc) => {
-            return {
-                ...doc.data(),
-                id: doc.id
-            };
-        });
-        return d[0].clockIn;
-    }
-}
+
+  }
 
 export default new AttendanceContext();

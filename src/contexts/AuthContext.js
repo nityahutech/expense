@@ -29,6 +29,8 @@ export function AuthProvider({ children }) {
   function logout() {
     console.log("logged out successfully!")
     sessionStorage.setItem("accessToken", null)
+    sessionStorage.setItem("user", null)
+    sessionStorage.setItem("role", null)
     return signOut(auth)
   }
 
@@ -58,11 +60,11 @@ export function AuthProvider({ children }) {
   }
 
   async function getRole(user) {
-    let rec = await ProfileContext.getProfile(user.uid);
-    console.log(rec.data());
-    console.log(rec.data().role);
     console.log(user);
-    // console.log(rec.data().role);
+    if (!user) { 
+      return; 
+    }
+    let rec = await ProfileContext.getProfile(user.uid);
     sessionStorage.setItem("role", rec.data().role)
     setRole(rec.data().role);
   }

@@ -10,11 +10,15 @@ import moment from "moment";
 
 const WebClock = (props) => {
 
-  // const [autoStart, setAutoStart] = useState("");
+  const [secs, setSecs] = useState("");
 
-    // useEffect(() => {
-    //     console.log(props)
-    //   }, [])
+    useEffect(() => {
+        console.log(props)
+        let aa = new Date(props.record.secs * 1000)?.toISOString()?.substring(11, 19)
+
+        console.log(aa)
+        setSecs(aa)
+      }, [props])
     
       // setAutoStart(props.record.autoStart);
   const id = props.record.id;
@@ -115,7 +119,7 @@ const WebClock = (props) => {
         onMouseEnter={onMouseEnter}
       >
         {buttonText}
-        <div>{clockTime}</div>
+        <div>{secs}</div>
       </button>
   );
 };

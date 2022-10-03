@@ -178,7 +178,7 @@ function AttendanceLog({ empDetails }) {
   function allEmpDetails() {
     // console.log(JSON.parse(localStorage.getItem("newReport")));
     AttendanceContext.getAllUsers().then((userdata) => {
-      setallEmp(userdata);
+      console.log(JSON.stringify(userdata))
       getWithLeave(userdata)
     })
   }
@@ -239,12 +239,13 @@ function AttendanceLog({ empDetails }) {
     } else {
       setActivetab("1");
       allEmpDetails();
+
     }
   }, []);
 
-  // useEffect(() => {
-  //   getWithLeave(allEmp);
-  // }, [allEmp, filteredEmp])
+  useEffect(() => {
+    setFilteredEmp(filteredEmp)
+  }, [filteredEmp])
 
   //   const rowSelection = {
   //     onChange: (selectedRowKeys, selectedRows) => {
@@ -413,17 +414,19 @@ function AttendanceLog({ empDetails }) {
     setFilterCriteria({ ...filterCriteria, search: search });
     if (search) {
       let result = allEmp.filter((ex) =>
-        ex.empname.toLowerCase().includes(search.toLowerCase())
+        ex.name.toLowerCase().includes(search.toLowerCase())
       );
       console.log({ result });
       setFilteredEmp(result);
+    } else {
+      setFilteredEmp(allEmp);
     }
   };
   
-  console.log("test",(filteredEmp[1]));
-  console.log("test",filteredEmp[1]?JSON.parse(JSON.stringify(filteredEmp[1])):"empty");
+  console.log("test",(filteredEmp[3]));
+  console.log("test",JSON.stringify(filteredEmp[3]));
+  console.log("test",filteredEmp[3]?JSON.parse(JSON.stringify(filteredEmp[3])):"empty");
   console.log(filteredEmp);
-
   // console.log("test",filteredEmp);
   // console.log("test",filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):"empty");
   // setFilteredEmp(filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):undefined)
@@ -528,7 +531,7 @@ function AttendanceLog({ empDetails }) {
             </>
           ) : (
             <>
-              <Tabs.TabPane tab="Daily Log" key="1">
+              <Tabs.TabPane tab="Daily Log" key="1" forceRender="true">
                 <Input
                   className="Daily"
                   placeholder="Search"
@@ -568,6 +571,7 @@ function AttendanceLog({ empDetails }) {
                   columns={columns1}
                   dataSource={empMonthly || []}
                 />
+                {console.log(empMonthly || [])}
               </Tabs.TabPane>
             </>
           )}

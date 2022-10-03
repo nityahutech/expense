@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+//import React, { useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import EmpInfoContext from "../../contexts/EmpInfoContext";
 import {
   Card,
   Row,
@@ -17,9 +20,43 @@ const { Option } = Select;
 
 function BankAccount() {
   const [editContent, showEditContent] = useState(false);
-  const [bankName, setBankName] = useState("HDFC Bangluru");
-  const [accountNumber, setAccountNumber] = useState("12345678987");
-  const [ifscCode, setIfscCode] = useState("HDFC00000076");
+  const [bankName, setBankName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [ifscCode, setIfscCode] = useState("");
+  const [data, setData] = useState([]);
+  //const [bankName, setBankName] = useState(""); 
+  //const [accountNumber, setAccountNumber] = useState("");
+  const { currentUser } = useAuth()
+  const onFinish = () => {
+    console.log(data)
+    console.log(bankName, accountNumber, ifscCode)
+    //console.log('Success:', values);
+    let record = {
+      ...data,
+        bankName: bankName,
+      accountNumber: accountNumber,
+      ifscCode:ifscCode,
+      //bankName:bankName?bankName:null
+    }
+    console.log('Success:', record);
+    EmpInfoContext.updateEduDetails(currentUser.uid,record)
+    setData(record)
+    showEditContent(false)
+    getData();
+  };
+  useEffect(()=>{
+    getData();
+    
+  },[]);
+  const getData=async()=>{
+    let data=await EmpInfoContext.getEduDetails(currentUser.uid)
+    console.log(data)
+    setData(data)
+    setBankName(data.bankName?data.bankName:null)
+    setAccountNumber(data.accountNumber?data.accountNumber:null)
+    setIfscCode(data.ifscCode?data.ifscCode:null)
+  }
+  console.log(data)
   return (
     <div
       className="personalCardDiv"
@@ -59,10 +96,11 @@ function BankAccount() {
                 Bank Name
               </div>
               {editContent === false ? (
-                <div>{bankName}</div>
+                <div>{data?data.bankName:null}</div>
               ) : (
-                <Input placeholder="Enter Bank Name" />
-              )}
+               <Input  placeholder="Enter Bank Name" onChange={(e)=>{setBankName(e.target.value)}
+              } />
+             )}
             </div>
           </Col>
           <Col span={10}>
@@ -71,9 +109,9 @@ function BankAccount() {
                 Account Number
               </div>
               {editContent === false ? (
-                <div>{accountNumber}</div>
+                <div>{data?data.accountNumber:null}</div>
               ) : (
-                <Input placeholder="Enter Account Number" />
+                <Input placeholder="Enter Account Number" onChange={(e)=>{setAccountNumber(e.target.value)}} />
               )}
             </div>
           </Col>
@@ -83,9 +121,9 @@ function BankAccount() {
                 IFSC Code
               </div>
               {editContent === false ? (
-                <div>{ifscCode}</div>
+                <div>{data?data.ifscCode:null}</div>
               ) : (
-                <Input placeholder="Enter IFSC Code" />
+                <Input placeholder="Enter IFSC Code" onChange={(e)=>{setIfscCode(e.target.value)}} />
               )}
             </div>
           </Col>
@@ -107,7 +145,7 @@ function BankAccount() {
               <CloseOutlined /> CANCEL
             </Button>
             <Col>
-              <Button type="primary" style={{ marginLeft: "10px" }}>
+              <Button type="primary" htmlType="submit" style={{ marginLeft: "10px" }}  onClick={() => onFinish()}>
                 SAVE
               </Button>
             </Col>

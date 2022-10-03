@@ -1,0 +1,7 @@
+.tabs.ant-tabs{
+    width: 100% ;
+}
+.certficationtable table, th, td{
+    border: 1px solid #DDD;
+    border-collapse: collapse;
+}

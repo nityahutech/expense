@@ -93,12 +93,22 @@ const Notification = ({ data }) => {
             title: 'Duration',
             dataIndex: 'date',
             width: 250,
+            sorter: (a, b) => {
+                return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
+              },
+              sortDirections: ["ascend", "descend"],
+            
 
         },
         {
             title: 'Employee Name',
             dataIndex: 'name',
             width: 150,
+            sorter: (a, b) => {
+                return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
+              },
+              sortDirections: ["ascend", "descend"],
+            
 
         },
         {
@@ -110,6 +120,10 @@ const Notification = ({ data }) => {
         {
             title: 'Slot',
             dataIndex: 'slot',
+            sorter: (a, b) => {
+                return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+              },
+              sortDirections: ["ascend", "descend"],
         },
         {
             title: 'Reason',
@@ -174,7 +188,7 @@ const Notification = ({ data }) => {
     return (
         <Row style={{
             display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
-            borderRadius: '10px', padding: '10px', margin: '10px'
+            borderRadius: '10px', padding: '10px', marginTop: '10px'
         }}
         >
             <Col span={24} style={{

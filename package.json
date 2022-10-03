@@ -54,5 +54,8 @@
     "@types/faker": "^6.6.9",
     "faker": "^5.5.3"
   },
-  "browser": { "fs": true, "child_process": true }
+  "browser": {
+    "fs": true,
+    "child_process": true
+  }
 }

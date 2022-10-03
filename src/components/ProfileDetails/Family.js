@@ -15,53 +15,48 @@ import {
   EditOutlined,
   CheckOutlined,
   EditTwoTone,
+  CloseOutlined,
 } from "@ant-design/icons";
+
+// ----------------------------------------------------------------------------
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-
 const Education = () => {
-
   const [editContent, showEditContent] = useState(false);
   const [form] = Form.useForm();
   const [editContactInfo, showEditContactInfo] = useState(false);
   const [newData, setnewData] = useState();
 
-
   const onFinish = (values) => {
-
-
-    console.log('Success: holiday',);
+    console.log("Success: holiday");
 
     let addProfile = {
       name: values.familyname,
       name: values.relationname,
       name: values.dateofbirths,
       name: values.dependent,
-    }
-    console.log('addProfile', addProfile)
-
-
-  }
+    };
+    console.log("addProfile", addProfile);
+  };
 
   const handleOk = () => {
-    console.log('hiii')
-
+    console.log("hiii");
   };
 
   const handleAdd = () => {
-    console.log('yeeee')
-
-    const newData = {
-
-      familyname: '',
-      relationname: '',
-      dateofbirths: '',
-      dependent: '',
-    };
+    console.log("yeeee");
   };
 
+  //   const getData=async()=>{
+  //     let data=await EmpInfoContext.getEduDetails(currentUser.uid)
+  // console.log(data)
+  // setData(data)
+  //   }
+  // console.log(data)
+
+  // --------------------------------------------------------------------------
 
   return (
     <div
@@ -70,7 +65,7 @@ const Education = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        margin: '15px'
+        margin: "15px",
       }}
     >
       <Form
@@ -86,11 +81,10 @@ const Education = () => {
         }}
         autoComplete="off"
         onFinish={onFinish}
-
       >
+        {/* ----------------------------------------------------------------------------------------------- */}
         <Card
           title="FAMILY MEMBERS"
-
           extra={
             <>
               {editContent === false ? (
@@ -110,130 +104,113 @@ const Education = () => {
           }}
         >
           <Row gutter={[16, 16]}>
-
-            <Col span={6}>
-              <div>
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                  Name
+            {/* ------------------------------------father */}
+            <Col span={12}>
+              <Form.Item
+                name="father"
+                rules={[
+                  { required: true, message: "Please enter the Contact no." },
+                ]}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 32 }}
+              >
+                <div>
+                  <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    Father
+                  </h1>
+                  {editContent === false ? (
+                    <h4>Ram</h4>
+                  ) : (
+                    <Input placeholder="Enter Father's Name" />
+                  )}
                 </div>
-                <Divider style={{width:'400px'}}/>
-
-                {editContent === false ? (
-                  <div>Mahesh</div>
-                ) : (
-                  <Form.Item
-                    name="familyname"
-
-                  >
-                    <Input required placeholder="Enter Family Member Name" />
-                  </Form.Item>
-                )}
-              </div>
+              </Form.Item>
             </Col>
-            
-
-            <Col span={6}>
-              <div>
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                  RelationShip
+            {/* ---------------------------------------father contact */}
+            <Col span={12}>
+              <Form.Item
+                name="fatherContact"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter the Contact no.",
+                  },
+                ]}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 32 }}
+              >
+                <div>
+                  <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    Contact no.
+                  </h1>
+                  {editContent === false ? (
+                    <h4>123456789</h4>
+                  ) : (
+                    <Input placeholder="Enter Contact no." />
+                  )}
                 </div>
-                {/* <Divider/> */}
-                {editContent === false ? (
-                  <div>Father</div>
-                ) : (
-                  <Form.Item
-                    name="relationname"
+              </Form.Item>
 
-                  >
-                    <Input required placeholder="Enter Family Member Relation" />
-                  </Form.Item>
-                )}
-              </div>
-            </Col>
-
-            <Col span={6}>
-              <div>
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                  Date of Birth
-                </div>
-                {/* <Divider/> */}
-                {editContent === false ? (
-                  <div>02/05/22</div>
-                ) : (
-                  <Form.Item
-                    className="numder-inputs"
-                    name="dateofbirths"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter D.O.B",
-                        // pattern: /^[0-9\b]+$/,
-                      },
-                      { whitespace: true },
-                    ]}
-                  >
-                    <Input
-                      maxLength={10}
-                      required
-                      placeholder="Enter Date of Birth"
-                    />
-                  </Form.Item>
-                )}
-              </div>
+              {/* ---------------------------------------------------------------Mother */}
             </Col>
 
-            <Col span={6}>
-              <div>
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                  Dependent
+            <Col span={12}>
+              <Form.Item
+                name="father"
+                rules={[
+                  { required: true, message: "Please enter Mother's Name" },
+                ]}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 32 }}
+              >
+                <div>
+                  <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    Mother
+                  </h1>
+                  {editContent === false ? (
+                    <h4>Sita</h4>
+                  ) : (
+                    <Input placeholder="Enter Mother's Name" />
+                  )}
                 </div>
-                {/* <Divider /> */}
-                {editContent === false ? (
-                  <div>Yes</div>
-                ) : (
-                  <Form.Item
-                    name="dependent"
-
-                  >
-                    <Input required placeholder="Enter Family Member Relation" />
-                  </Form.Item>
-                )}
-              </div>
-            </Col >
-
-
-            {/* <Col span={4}>
-              <div>
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                  Action
+              </Form.Item>
+            </Col>
+            {/* ---------------------------------------------mother Contact */}
+            <Col span={12}>
+            <Form.Item
+                name="motherContact"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter the Contact no.",
+                  },
+                ]}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 32 }}
+              >
+                <div>
+                  <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    Contact no.
+                  </h1>
+                  {editContent === false ? (
+                    <h4>123456789</h4>
+                  ) : (
+                    <Input placeholder="Enter Contact no." />
+                  )}
                 </div>
-                {editContent === false ? (
-                  <div>Yes</div>
-                ) : (
-                  <Form.Item
-                    name="dependent"
+              </Form.Item>
+            </Col>
 
-                  >
-
-                    <EditOutlined />
-
-
-                  </Form.Item>
-                )}
-              </div>
-            </Col >
- */}
-
-        
-            <div className="div-add-button" style={{ color: 'rgb(78, 192, 241)', }}>
-              <PlusCircleOutlined style={{ color: 'rgb(78, 192, 241)', marginRight: '5px' }}
+            {/* <div
+              className="div-add-button"
+              style={{ color: "rgb(78, 192, 241)" }}
+            >
+              <PlusCircleOutlined
+                style={{ color: "rgb(78, 192, 241)", marginRight: "5px" }}
                 onClick={handleAdd}
-
-              />Add
-
-
-            </div>
-
+              />
+              Add
+            </div> */}
           </Row>
           {editContent === true ? (
             <Row
@@ -243,20 +220,23 @@ const Education = () => {
                 marginTop: "3%",
               }}
             >
-
               <Button
                 onClick={() => showEditContent(false)}
                 type="text"
-                style={{ fontSize: 15, backgroundColor: 'grey', color: 'white' }}
+                style={{
+                  fontSize: 15,
+                }}
               >
-                {/* <CloseOutlined />  */}
+                <CloseOutlined />
                 CANCEL
               </Button>
               <Col>
-                <Button type="primary" style={{ marginLeft: "10px" }}
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
                   onClick={handleOk}
-
                 >
+                  <CheckOutlined />
                   SAVE
                 </Button>
               </Col>
@@ -264,10 +244,10 @@ const Education = () => {
           ) : null}
         </Card>
 
-
+        {/* -------------------------------------------------------------------------- CARD-2 -------------------------------- */}
 
         <Card
-          title="EMERGENCY CONTACT"
+          title="EMERGENCY CONTACTS"
           //   actions={[
           //   <EditOutlined key="edit" />,
           // ]}
@@ -290,86 +270,94 @@ const Education = () => {
           }}
         >
           <Row gutter={[16, 16]}>
-
+            {/* -----------------------------------------------Other */}
             <Col span={8}>
-              <div>
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                  Name
+            <Form.Item
+                name="other"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter the Name",
+                  },
+                ]}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 32 }}
+              >
+                <div>
+                  <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    Other
+                  </h1>
+                  {editContactInfo === false ? (
+                    <h4>Bharat</h4>
+                  ) : (
+                    <Input placeholder="Enter Contact no." />
+                  )}
                 </div>
-
-                {editContactInfo === false ? (
-                  <div>Mahesh</div>
-                ) : (
-                  <Form.Item
-                    name="emergencycontact"
-
-                  >
-                    <Input required placeholder="Enter Family Emergency Contact" />
-                  </Form.Item>
-                )}
-              </div>
+              </Form.Item>
             </Col>
 
+            {/* --------------------------------------------------------------Relation */}
             <Col span={8}>
-              <div>
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                  RelationShip
+            <Form.Item
+                name="relation"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter the Relation",
+                  },
+                ]}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 32 }}
+              >
+                <div>
+                  <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    Relation
+                  </h1>
+                  {editContactInfo === false ? (
+                    <h4>brother</h4>
+                  ) : (
+                    <Input placeholder="Enter the Relation" />
+                  )}
                 </div>
-                {editContactInfo === false ? (
-                  <div>Father</div>
-                ) : (
-                  <Form.Item
-                    name="relation"
-
-                  >
-                    <Input required placeholder="Enter Family Member Relation" />
-                  </Form.Item>
-                )}
-              </div>
+              </Form.Item>
             </Col>
 
+          {/* -------------------------------------------------Other contact */}
             <Col span={8}>
-              <div>
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                  Phone No.
+            <Form.Item
+                name="otherContact"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter the Contact no.",
+                  },
+                ]}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 32 }}
+              >
+                <div>
+                  <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    Contact no.
+                  </h1>
+                  {editContactInfo === false ? (
+                    <h4>123456789</h4>
+                  ) : (
+                    <Input placeholder="Enter Contact no." />
+                  )}
                 </div>
-                {editContactInfo === false ? (
-                  <div>2221735</div>
-                ) : (
-                  <Form.Item
-                    className="numder-inputs"
-                    name="phonenumber"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter Phone Number",
-                        // pattern: /^[0-9\b]+$/,
-                      },
-                      { whitespace: true },
-                    ]}
-                  >
-                    <Input
-                      maxLength={10}
-                      required
-                      placeholder="Enter Date of Phone Number"
-                    />
-                  </Form.Item>
-                )}
-              </div>
+              </Form.Item>
             </Col>
 
-
-            <div className="div-add-button" style={{ color: 'rgb(78, 192, 241)', }}>
-              <PlusCircleOutlined style={{ color: 'rgb(78, 192, 241)', marginRight: '5px' }} />Add
-
-            </div>
-
-
-
+            {/* <div
+              className="div-add-button"
+              style={{ color: "rgb(78, 192, 241)" }}
+            >
+              <PlusCircleOutlined
+                style={{ color: "rgb(78, 192, 241)", marginRight: "5px" }}
+              />
+              Add
+            </div> */}
           </Row>
-
-
-
 
           {editContactInfo === true ? (
             <Row
@@ -381,23 +369,29 @@ const Education = () => {
             >
               <Button
                 type="text"
-                style={{ fontSize: 15, backgroundColor: 'grey', color: 'white' }}
+                style={{ fontSize: 15 }}
                 onClick={() => showEditContactInfo(false)}
               >
-                {/* <CloseOutlined /> */}
+                <CloseOutlined />
                 CANCEL
               </Button>
               <Col>
-                <Button type="primary" style={{ marginLeft: "10px" }}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{ marginLeft: "10px" }}
+                >
+                  <CheckOutlined />
                   SAVE
                 </Button>
               </Col>
             </Row>
           ) : null}
         </Card>
+        {/* ------------------------------------------------------------------------------------------------------ */}
       </Form>
     </div>
-  )
-}
+  );
+};
 
-export default Education 
+export default Education;

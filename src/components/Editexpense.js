@@ -326,7 +326,7 @@ const Editexpense = (props) => {
                 setStatus(value);
               }}
             >
-              <Option value="Paid">Paid</Option>
+              <  value="Paid">Paid</>
               <Option value="Unpaid">Unpaid</Option>
             </Select>
           </Form.Item>

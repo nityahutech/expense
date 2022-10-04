@@ -124,25 +124,13 @@ function AttendanceLog({ empDetails }) {
   const onFinish = async (values) => {
     console.log(values);
     const newData = {
-      // code: "898",
-      // date: getFormateDateString(),
-      // status: "-_",
-      // time1: getFormatTimeString(),
-      // time2: "18:15:23",
-      // work: "-",
       report: values?.project_details || "-",
       project: values?.project_name || "-",
     };
     console.log(currentUser.uid, { monthlydata });
     AttendanceContext.updateAttendance(currentUser.uid, newData);
-    // let newAlldata = [newData, ...empMonthly];
-    // console.log(newAlldata);
-    // localStorage.setItem("newReport", JSON.stringify(newAlldata));
+
     setActivetab("1");
-    //create new report obj with required data + ""
-    //create newMonthlyAll=new+old monthly
-    //set local with newMonthlyAll
-    //set state for monthly with newMonthlyAll
   };
   useEffect(() => {
     getEmpDetails(currentUser.uid);
@@ -159,29 +147,6 @@ function AttendanceLog({ empDetails }) {
     console.log(d);
     setEmpMonthly(d);
   }
-  // function getEmpMonthly() {
-  //   console.log(JSON.parse(localStorage.getItem("newReport")));
-  //   let userlocal = JSON.parse(localStorage.getItem("newReport")) || [];
-  //   let newEmp = [];
-  //   userlocal.map((emp, i) => {
-  //     newEmp.push({
-  //       key: i,
-
-  //       code: emp.code,
-  //       date: emp.date,
-  //       empname: "Nitya-" + (i + 1),
-  //       status: emp.status,
-  //       time1: emp.time1,
-  //       time2: emp.time2,
-  //       work: emp.work,
-  //       report: emp.report,
-  //       project: emp.project,
-  //     });
-  //   });
-  //   console.log({ newEmp });
-  //   setEmpMonthly(newEmp);
-  //   // setallEmp(newEmp);
-  // }
 
   async function allEmpDetails() {
     // console.log(JSON.parse(localStorage.getItem("newReport")));
@@ -196,21 +161,6 @@ function AttendanceLog({ empDetails }) {
     });
     console.log(res);
 
-    // let newEmp = [];
-    // userlocal.map((emp, i) => {
-    //   newEmp.push({
-    //     key: i,
-    //     code: emp.code + i,
-    //     date: emp.date,
-    //     status: emp.status,
-    //     time1: emp.time1,
-    //     time2: emp.time2,
-    //     empname: "Nitya-" + (i + 1),
-    //     project: emp.project,
-    //     report: emp.report,
-    //   });
-    // });
-    // console.log({ newEmp });
     setallEmp(res);
     setFilteredEmp(res);
     setEmpMonthly(res);
@@ -230,19 +180,6 @@ function AttendanceLog({ empDetails }) {
     }
   }, []);
 
-  //   const rowSelection = {
-  //     onChange: (selectedRowKeys, selectedRows) => {
-  //       setSelectemp(selectedRows[0].code);
-  //       setActivetab("3");
-  //     },
-  //     getCheckboxProps: (record) => ({
-  //       disabled: record.name === "Disabled User",
-  //       // Column configuration not to be checked
-  //       name: record.name,
-  //     }),
-  //     type: "radio",
-  //   };
-  //   const [selectionType, setSelectionType] = useState("");
   const data = [
     {
       key: "1",
@@ -431,31 +368,7 @@ function AttendanceLog({ empDetails }) {
                   dataSource={empMonthly || []}
                 />
               </Tabs.TabPane>
-              <Tabs.TabPane
-                tab="Add Report"
-                key="2"
-                className="reportTabs"
-                // onClick={() => {
-                //   setIsModalOpen(true);
-                // }}
-              >
-                {/* <Button type="primary" onClick={showModal}>
-              Open Modal
-            </Button> */}
-                {/* <Modal
-              title="Basic Modal"
-              visible={isModalOpen}
-              footer={null}
-              closeIcon={
-                <div
-                  onClick={() => {
-                    setIsModalOpen(false);
-                  }}
-                >
-                  X
-                </div>
-              }
-            > */}
+              <Tabs.TabPane tab="Add Report" key="2" className="reportTabs">
                 <Form
                   {...layout}
                   form={form}

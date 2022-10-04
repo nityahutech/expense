@@ -11,6 +11,7 @@ function EmployeeList() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editedRecord, setEditedRecord] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [size, setSize] = useState(window.innerWidth <= 768 ? "" : "left");
   // const [allEmployee, setAllEmployee] = useState(data || []);
   // useEffect(() => {
   //   getData();
@@ -19,6 +20,10 @@ function EmployeeList() {
   // async function getData() {
   //   setLoading(true);
   // }
+
+  window.addEventListener("resize", () =>
+    setSize(window.innerWidth <= 768 ? "" : "left")
+  );
   const columns = [
     {
       title: "Sl. No.",
@@ -33,6 +38,7 @@ function EmployeeList() {
       key: "fname",
       fixed: "left",
       width: 160,
+      fixed: size,
     },
     {
       title: "Last Name",
@@ -58,8 +64,8 @@ function EmployeeList() {
       title: "Designation",
       dataIndex: "designation",
       key: "designation",
-      align: "center",
-      width: 150,
+      // align: "center",
+      width: 190,
     },
     {
       title: "Gender",

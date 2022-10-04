@@ -16,7 +16,6 @@ import { useAuth } from "../contexts/AuthContext";
 import AttendanceContext from "../contexts/AttendanceContext";
 import ProfileContext from "../contexts/ProfileContext";
 const { RangePicker } = DatePicker;
-
 const { Content } = Layout;
 const layout = {
   labelCol: {
@@ -33,7 +32,6 @@ const tailLayout = {
   },
 };
 const dateFormat = "DD-MM-YYYY";
-
 function AttendanceLog({ empDetails }) {
   const [monthlydata, setMonthlydata] = useState([]);
   const [allEmp, setallEmp] = useState([]);
@@ -67,7 +65,6 @@ function AttendanceLog({ empDetails }) {
       dataIndex: "status",
       key: "status",
     },
-
     {
       title: "Project Name",
       dataIndex: "project",
@@ -84,9 +81,7 @@ function AttendanceLog({ empDetails }) {
     //   key: "action",
     // },
   ];
-
   const [form] = Form.useForm();
-
   function getFormateDateString() {
     return (
       (new Date().getDate() > 9
@@ -115,7 +110,6 @@ function AttendanceLog({ empDetails }) {
         : "0" + new Date().getSeconds())
     );
   }
-
   const onFinish = async (values) => {
     console.log(values);
     const newData = {
@@ -158,7 +152,6 @@ function AttendanceLog({ empDetails }) {
   //   userlocal.map((emp, i) => {
   //     newEmp.push({
   //       key: i,
-
   //       code: emp.code,
   //       date: emp.date,
   //       empname: "Nitya-" + (i + 1),
@@ -230,7 +223,6 @@ function AttendanceLog({ empDetails }) {
     form.resetFields();
   };
   console.log(empDetails);
-
   useEffect(() => {
     if (empDetails.userType === "emp") {
       setActivetab("1");
@@ -241,6 +233,9 @@ function AttendanceLog({ empDetails }) {
       allEmpDetails();
     }
   }, []);
+  useEffect(() => {
+    setFilteredEmp(filteredEmp);
+  }, [filteredEmp]);
 
   // useEffect(() => {
   //   getWithLeave(allEmp);
@@ -365,7 +360,6 @@ function AttendanceLog({ empDetails }) {
       report: "dfdjdgjhgjhgjhfhfdj",
     },
   ];
-
   function onDateFilter(date, dateString) {
     console.log({ date, dateString });
     if (date) {
@@ -378,9 +372,7 @@ function AttendanceLog({ empDetails }) {
             moment(ex.date, dateFormat).isSameOrBefore(date[1]))
         );
       });
-
       const modifiedFilterExpense = [...result];
-
       console.log({ modifiedFilterExpense });
       setEmpMonthly(modifiedFilterExpense);
     } else {
@@ -399,9 +391,7 @@ function AttendanceLog({ empDetails }) {
             moment(ex.date, dateFormat).isSameOrBefore(date[1]))
         );
       });
-
       const modifiedFilterExpense = [...result];
-
       console.log({ modifiedFilterExpense });
       setEmpMonthly(modifiedFilterExpense);
     } else {
@@ -413,10 +403,12 @@ function AttendanceLog({ empDetails }) {
     setFilterCriteria({ ...filterCriteria, search: search });
     if (search) {
       let result = allEmp.filter((ex) =>
-        ex.empname.toLowerCase().includes(search.toLowerCase())
+        ex.name.toLowerCase().includes(search.toLowerCase())
       );
       console.log({ result });
       setFilteredEmp(result);
+    } else {
+      setFilteredEmp(allEmp);
     }
   };
   
@@ -424,6 +416,13 @@ function AttendanceLog({ empDetails }) {
   console.log("test",filteredEmp[1]?JSON.parse(JSON.stringify(filteredEmp[1])):"empty");
   console.log(filteredEmp);
 
+  console.log("test", filteredEmp[3]);
+  console.log("test", JSON.stringify(filteredEmp[3]));
+  console.log(
+    "test",
+    filteredEmp[3] ? JSON.parse(JSON.stringify(filteredEmp[3])) : "empty"
+  );
+  console.log(filteredEmp);
   // console.log("test",filteredEmp);
   // console.log("test",filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):"empty");
   // setFilteredEmp(filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):undefined)
@@ -528,7 +527,7 @@ function AttendanceLog({ empDetails }) {
             </>
           ) : (
             <>
-              <Tabs.TabPane tab="Daily Log" key="1">
+              <Tabs.TabPane tab="Daily Log" key="1" forceRender="true">
                 <Input
                   className="Daily"
                   placeholder="Search"
@@ -568,6 +567,7 @@ function AttendanceLog({ empDetails }) {
                   columns={columns1}
                   dataSource={empMonthly || []}
                 />
+                {console.log(empMonthly || [])}
               </Tabs.TabPane>
             </>
           )}
@@ -576,5 +576,4 @@ function AttendanceLog({ empDetails }) {
     </>
   );
 }
-
 export default AttendanceLog;

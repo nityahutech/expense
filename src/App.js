@@ -27,6 +27,7 @@ import PaySlipPage from "./pages/PaySlipPage";
 import BankAccountpages from "./pages/BankAccountpages";
 import Appraisal from "./pages/AppraisalPage";
 import AppraisalHr from "./pages/AppraisalPageHr";
+import Payslip2 from "./pages/Payslip2";
 
 function App() {
   return (
@@ -52,7 +53,11 @@ function App() {
           <Route path="/FamilyPage/Family" element={<FamilyPage />} />
           <Route path="/WorkWeekPage/WorkWeek" element={<WorkWeekPage />} />
           <Route path="/PaySlipPage/PaySlip" element={<PaySlipPage />} />
-          <Route path="/BankAccountpages/BankAccount" element={<BankAccountpages />} />
+          <Route path="/Payslip2/HrPaySlip" element={<Payslip2 />} />
+          <Route
+            path="/BankAccountpages/BankAccount"
+            element={<BankAccountpages />}
+          />
           <Route path="/Addemployee/AddEmployee" element={<Addemployee />} />
           <Route path="/New" element={<NewSider />} />
           <Route path="/Profile" element={<Profile />} />

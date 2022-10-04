@@ -16,7 +16,6 @@ import { useAuth } from "../contexts/AuthContext";
 import AttendanceContext from "../contexts/AttendanceContext";
 import ProfileContext from "../contexts/ProfileContext";
 const { RangePicker } = DatePicker;
-
 const { Content } = Layout;
 const layout = {
   labelCol: {
@@ -33,12 +32,11 @@ const tailLayout = {
   },
 };
 const dateFormat = "DD-MM-YYYY";
-
 function AttendanceLog({ empDetails }) {
   const [monthlydata, setMonthlydata] = useState([]);
   const [allEmp, setallEmp] = useState([]);
   const [role, setRole] = useState(empDetails);
-  const [selectemp, setSelectemp] = useState(null);
+  const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
   console.log(activetab);
   const { currentUser } = useAuth();
@@ -53,15 +51,10 @@ function AttendanceLog({ empDetails }) {
   const columns = [
     {
       title: "Employee Code",
-      dataIndex: "code",
-      key: "code",
+      dataIndex: "empId",
+      key: "empId",
       render: (text) => <a>{text}</a>,
     },
-    // {
-    //   title: "Date",
-    //   dataIndex: "date",
-    //   key: "date",
-    // },
     {
       title: "Employee Name",
       dataIndex: "name",
@@ -72,7 +65,6 @@ function AttendanceLog({ empDetails }) {
       dataIndex: "status",
       key: "status",
     },
-
     {
       title: "Project Name",
       dataIndex: "project",
@@ -89,9 +81,7 @@ function AttendanceLog({ empDetails }) {
     //   key: "action",
     // },
   ];
-
   const [form] = Form.useForm();
-
   function getFormateDateString() {
     return (
       (new Date().getDate() > 9
@@ -120,92 +110,167 @@ function AttendanceLog({ empDetails }) {
         : "0" + new Date().getSeconds())
     );
   }
-
   const onFinish = async (values) => {
     console.log(values);
     const newData = {
+      // code: "898",
+      // date: getFormateDateString(),
+      // status: "-_",
+      // time1: getFormatTimeString(),
+      // time2: "18:15:23",
+      // work: "-",
       report: values?.project_details || "-",
       project: values?.project_name || "-",
     };
     console.log(currentUser.uid, { monthlydata });
     AttendanceContext.updateAttendance(currentUser.uid, newData);
-
+    // let newAlldata = [newData, ...empMonthly];
+    // console.log(newAlldata);
+    // localStorage.setItem("newReport", JSON.stringify(newAlldata));
     setActivetab("1");
+    //create new report obj with required data + ""
+    //create newMonthlyAll=new+old monthly
+    //set local with newMonthlyAll
+    //set state for monthly with newMonthlyAll
   };
-  useEffect(() => {
-    getEmpDetails(currentUser.uid);
-    // getEmpMonthly();
-  }, [activetab]);
+  // useEffect(() => {
+  //   getEmpDetails(selectemp.id);
+  //   // getEmpMonthly();
+  // }, [activetab]);
   async function getEmpDetails(id) {
+    console.log(id);
     let data = await AttendanceContext.getAllAttendance(id);
-    let d = data.docs.map((doc) => {
-      return {
-        ...doc.data(),
-        id: doc.id,
-      };
-    });
-    console.log(d);
-    setEmpMonthly(d);
-  }
 
-  async function allEmpDetails() {
+    console.log(data);
+    setEmpMonthly(data);
+  }
+  // function getEmpMonthly() {
+  //   console.log(JSON.parse(localStorage.getItem("newReport")));
+  //   let userlocal = JSON.parse(localStorage.getItem("newReport")) || [];
+  //   let newEmp = [];
+  //   userlocal.map((emp, i) => {
+  //     newEmp.push({
+  //       key: i,
+  //       code: emp.code,
+  //       date: emp.date,
+  //       empname: "Nitya-" + (i + 1),
+  //       status: emp.status,
+  //       time1: emp.time1,
+  //       time2: emp.time2,
+  //       work: emp.work,
+  //       report: emp.report,
+  //       project: emp.project,
+  //     });
+  //   });
+  //   console.log({ newEmp });
+  //   setEmpMonthly(newEmp);
+  //   // setallEmp(newEmp);
+  // }
+  function allEmpDetails() {
     // console.log(JSON.parse(localStorage.getItem("newReport")));
-    let userdata = await AttendanceContext.getAllUsers();
-    let res = userdata.docs.map((doc) => {
-      return {
-        id: doc.id,
-        empId: doc.data().empId,
-        name: doc.data().employeename,
-        status: "absent",
-      };
+    AttendanceContext.getAllUsers().then((userdata) => {
+      console.log(JSON.stringify(userdata));
+      getWithLeave(userdata);
     });
-    console.log(res);
-
-    setallEmp(res);
-    setFilteredEmp(res);
-    setEmpMonthly(res);
   }
+  function getWithLeave(userdata) {
+    AttendanceContext.updateWithLeave(userdata).then((final) => {
+      console.log(
+        "test1",
+        final ? JSON.parse(JSON.stringify(final)) : undefined
+      );
+      setallEmp(final);
+      setFilteredEmp(final);
+      setEmpMonthly(final);
+    });
+  }
+  // stats.map((rec) => {
+  //   console.log("mooooooooooooooooooooooooooooo");
+  // if (emp.id == rec.id) {
+  //   emp.status = "Present";
+  //   emp.project = rec.project;
+  //   emp.report = rec.report;
+  //   return;
+  // }
+  // })
+  //   else {
+  //     console.log("AAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHH");
+  //     AttendanceContext.getLeaveStatus(emp.id).then((leave) => {
+  //     if (leave) {
+  //       emp.status = "On Leave";
+  //     }
+  //   })
+  // }
+
+  // let newEmp = [];
+  // userlocal.map((emp, i) => {
+  //   newEmp.push({
+  //     key: i,
+  //     code: emp.code + i,
+  //     date: emp.date,
+  //     status: emp.status,
+  //     time1: emp.time1,
+  //     time2: emp.time2,
+  //     empname: "Nitya-" + (i + 1),
+  //     project: emp.project,
+  //     report: emp.report,
+  //   });
+  // });
+  // console.log({ newEmp });
+
   const onReset = () => {
     form.resetFields();
   };
   console.log(empDetails);
-
   useEffect(() => {
     if (empDetails.userType === "emp") {
       setActivetab("1");
       getEmpDetails(currentUser.uid);
+      // getEmpMonthly();
     } else {
       setActivetab("1");
       allEmpDetails();
     }
   }, []);
-
-  const data = [
-    {
-      key: "1",
-      code: "HTS001",
-
-      name: "Nitya",
-      project: "Expenses",
-      report: "xfddsfdvbgfgfbvbvbdffgfdgjfhjjkjfjfdgkj",
-    },
-    {
-      key: "2",
-      code: "HTS002",
-
-      name: "Jatin",
-      project: "Expenses",
-      report: "xfddsfdvbgfgfbvbvb",
-    },
-    {
-      key: "3",
-      code: "HTS003",
-
-      name: "Saswat",
-      project: "Expenses",
-      report: "xfddsfdvbgfgfbvbvb",
-    },
-  ];
+  useEffect(() => {
+    setFilteredEmp(filteredEmp);
+  }, [filteredEmp]);
+  //   const rowSelection = {
+  //     onChange: (selectedRowKeys, selectedRows) => {
+  //       setSelectemp(selectedRows[0].code);
+  //       setActivetab("3");
+  //     },
+  //     getCheckboxProps: (record) => ({
+  //       disabled: record.name === "Disabled User",
+  //       // Column configuration not to be checked
+  //       name: record.name,
+  //     }),
+  //     type: "radio",
+  //   };
+  //   const [selectionType, setSelectionType] = useState("");
+  // const data = [
+  //   {
+  //     key: "1",
+  //     code: "HTS001",
+  //     name: "Nitya",
+  //     project: "Expenses",
+  //     report: "xfddsfdvbgfgfbvbvbdffgfdgjfhjjkjfjfdgkj",
+  //   },
+  //   {
+  //     key: "2",
+  //     code: "HTS002",
+  //     name: "Jatin",
+  //     project: "Expenses",
+  //     report: "xfddsfdvbgfgfbvbvb",
+  //   },
+  //   {
+  //     key: "3",
+  //     code: "HTS003",
+  //     name: "Saswat",
+  //     project: "Expenses",
+  //     report: "xfddsfdvbgfgfbvbvb",
+  //   },
+  // ];
   const columns1 = [
     // {
     //   title: "Employee Code",
@@ -286,7 +351,6 @@ function AttendanceLog({ empDetails }) {
       report: "dfdjdgjhgjhgjhfhfdj",
     },
   ];
-
   function onDateFilter(date, dateString) {
     console.log({ date, dateString });
     if (date) {
@@ -299,9 +363,7 @@ function AttendanceLog({ empDetails }) {
             moment(ex.date, dateFormat).isSameOrBefore(date[1]))
         );
       });
-
       const modifiedFilterExpense = [...result];
-
       console.log({ modifiedFilterExpense });
       setEmpMonthly(modifiedFilterExpense);
     } else {
@@ -320,9 +382,7 @@ function AttendanceLog({ empDetails }) {
             moment(ex.date, dateFormat).isSameOrBefore(date[1]))
         );
       });
-
       const modifiedFilterExpense = [...result];
-
       console.log({ modifiedFilterExpense });
       setEmpMonthly(modifiedFilterExpense);
     } else {
@@ -334,13 +394,25 @@ function AttendanceLog({ empDetails }) {
     setFilterCriteria({ ...filterCriteria, search: search });
     if (search) {
       let result = allEmp.filter((ex) =>
-        ex.empname.toLowerCase().includes(search.toLowerCase())
+        ex.name.toLowerCase().includes(search.toLowerCase())
       );
       console.log({ result });
       setFilteredEmp(result);
+    } else {
+      setFilteredEmp(allEmp);
     }
   };
 
+  console.log("test", filteredEmp[3]);
+  console.log("test", JSON.stringify(filteredEmp[3]));
+  console.log(
+    "test",
+    filteredEmp[3] ? JSON.parse(JSON.stringify(filteredEmp[3])) : "empty"
+  );
+  console.log(filteredEmp);
+  // console.log("test",filteredEmp);
+  // console.log("test",filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):"empty");
+  // setFilteredEmp(filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):undefined)
   return (
     <>
       <div className="hrtab">
@@ -368,7 +440,31 @@ function AttendanceLog({ empDetails }) {
                   dataSource={empMonthly || []}
                 />
               </Tabs.TabPane>
-              <Tabs.TabPane tab="Add Report" key="2" className="reportTabs">
+              <Tabs.TabPane
+                tab="Add Report"
+                key="2"
+                className="reportTabs"
+                // onClick={() => {
+                //   setIsModalOpen(true);
+                // }}
+              >
+                {/* <Button type="primary" onClick={showModal}>
+              Open Modal
+            </Button> */}
+                {/* <Modal
+              title="Basic Modal"
+              visible={isModalOpen}
+              footer={null}
+              closeIcon={
+                <div
+                  onClick={() => {
+                    setIsModalOpen(false);
+                  }}
+                >
+                  X
+                </div>
+              }
+            > */}
                 <Form
                   {...layout}
                   form={form}
@@ -418,7 +514,7 @@ function AttendanceLog({ empDetails }) {
             </>
           ) : (
             <>
-              <Tabs.TabPane tab="Daily Log" key="1">
+              <Tabs.TabPane tab="Daily Log" key="1" forceRender="true">
                 <Input
                   className="Daily"
                   placeholder="Search"
@@ -436,8 +532,8 @@ function AttendanceLog({ empDetails }) {
                     return {
                       onClick: (event) => {
                         console.log(record);
-                        getEmpDetails(record.id);
                         setSelectemp({ ...record });
+                        getEmpDetails(record.id);
                         setActivetab("2");
                       }, // click row
                     };
@@ -458,6 +554,7 @@ function AttendanceLog({ empDetails }) {
                   columns={columns1}
                   dataSource={empMonthly || []}
                 />
+                {console.log(empMonthly || [])}
               </Tabs.TabPane>
             </>
           )}
@@ -466,5 +563,4 @@ function AttendanceLog({ empDetails }) {
     </>
   );
 }
-
 export default AttendanceLog;

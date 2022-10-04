@@ -16,7 +16,6 @@ import { useAuth } from "../contexts/AuthContext";
 import AttendanceContext from "../contexts/AttendanceContext";
 import ProfileContext from "../contexts/ProfileContext";
 const { RangePicker } = DatePicker;
-
 const { Content } = Layout;
 const layout = {
   labelCol: {
@@ -33,7 +32,6 @@ const tailLayout = {
   },
 };
 const dateFormat = "DD-MM-YYYY";
-
 function AttendanceLog({ empDetails }) {
   const [monthlydata, setMonthlydata] = useState([]);
   const [allEmp, setallEmp] = useState([]);
@@ -580,5 +578,4 @@ function AttendanceLog({ empDetails }) {
     </>
   );
 }
-
 export default AttendanceLog;

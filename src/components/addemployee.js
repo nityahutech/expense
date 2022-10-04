@@ -515,6 +515,46 @@ function AddEmployee() {
             </Col>
           </Row>
 
+          <Row gutter={[24, 8]}>
+          <Col span={6}></Col>
+          <Col
+              xs={{ span: 24 }}
+              sm={{ span: 12 }}
+              span={18}
+              className="Col-1-left"
+              style={{ background: "" }}
+            >
+              <Divider orientation="left" orientationMargin={0}>
+                Department<span style={{ color: "red" }}> *</span>
+              </Divider>
+              <Form.Item
+                name="department"
+                rules={[
+                  {
+                    required: true,
+                    message: "Choose Your Department",
+                  },
+                ]}
+              >
+                <Select
+                  // showSearch
+                  placeholder="Select a Field"
+                  // optionFilterProp="children"
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                  <Option value="consultingServicee">Consulting Service</Option>
+                  <Option value="humanResource">Human Resource</Option>
+                  <Option value="finance">Finance</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={3}></Col>
+          </Row>
+
           <Row gutter={[24, 16]}>
             <Col classsname="gutter-row" span={9}></Col>
             <Col classsname="gutter-row">

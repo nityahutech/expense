@@ -179,7 +179,7 @@ function EmployeeList() {
         closeIcon={
           <div
             onClick={() => {
-              setIsModalVisible(false);
+            setIsModalVisible(false);
             }}
           >
             X
@@ -192,6 +192,7 @@ function EmployeeList() {
           className="Edit"
           record={editedRecord}
           setIsModalVisible={setIsModalVisible}
+          reloadData={getData}
         />
       </Modal>
     </Layout>

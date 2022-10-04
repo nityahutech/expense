@@ -29,6 +29,8 @@ export function AuthProvider({ children }) {
   function logout() {
     console.log("logged out successfully!")
     sessionStorage.setItem("accessToken", null)
+    sessionStorage.setItem("user", null)
+    sessionStorage.setItem("role", null)
     return signOut(auth)
   }
 
@@ -58,11 +60,14 @@ export function AuthProvider({ children }) {
   }
 
   async function getRole(user) {
+    console.log(user);
+    if (!user) { 
+      return; 
+    }
     let rec = await ProfileContext.getProfile(user.uid);
-    sessionStorage.setItem("role", rec.data().role)
-    console.log(rec.data().role);
-    sessionStorage.setItem("role", rec.data().role)
-    setRole(rec.data().role);
+    sessionStorage.setItem("role", rec.role)
+    console.log("role", rec.role)
+    setRole(rec.role);
   }
 
   useEffect(() => {

@@ -6,6 +6,8 @@
 .ant-menu-root.ant-menu-vertical, .ant-menu-root.ant-menu-vertical-left, .ant-menu-root.ant-menu-vertical-right, .ant-menu-root.ant-menu-inline {
     box-shadow: none;
     overflow-y: scroll;
+    overflow-x: hidden;
+    
 }
 .top {
     height: 50px;

@@ -4,12 +4,14 @@ import Editemployee from "./Editemployee";
 import React, { useEffect, useState } from "react";
 import { createUser, getUsers } from "../contexts/CreateContext";
 import moment from "moment";
+import "../style/EmployeeList.css";
 
 function EmployeeList() {
   const [modaldata, setmodaldata] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editedRecord, setEditedRecord] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [size, setSize] = useState(window.innerWidth <= 768 ? "" : "left");
   // const [allEmployee, setAllEmployee] = useState(data || []);
   // useEffect(() => {
   //   getData();
@@ -18,58 +20,91 @@ function EmployeeList() {
   // async function getData() {
   //   setLoading(true);
   // }
+
+  window.addEventListener("resize", () =>
+    setSize(window.innerWidth <= 768 ? "" : "left")
+  );
   const columns = [
     {
       title: "Sl. No.",
       dataIndex: "sn",
       key: "sn",
+      fixed: "left",
       width: 80,
     },
     {
       title: "First Name",
       dataIndex: "fname",
       key: "fname",
-      width: 180,
+      fixed: "left",
+      width: 160,
+      fixed: size,
     },
     {
       title: "Last Name",
       dataIndex: "lname",
       key: "lname",
-      width: 180,
+      width: 160,
     },
     {
-      title: "Email",
+      title: "Personal Email",
       dataIndex: "mailid",
       key: "email",
-      width: 220,
+      width: 200,
+      ellipsis: true,
     },
     {
-      title: "D.O.J.",
+      title: "Date of Join",
       dataIndex: "doj",
       key: "dob",
+      align: "center",
       width: 150,
     },
     {
       title: "Designation",
       dataIndex: "designation",
       key: "designation",
-      width: 150,
+      // align: "center",
+      width: 190,
     },
     {
       title: "Gender",
       dataIndex: "gender",
       key: "gender",
-      width: 150,
+      width: 120,
     },
     {
       title: "Contact No.",
       dataIndex: "phonenumber",
       key: "cnumber",
+      align: "center",
+      width: 150,
+    },
+    {
+      title: "Reporting Manager",
+      dataIndex: "repManager",
+      key: "repManager",
+      width: 200,
+    },
+    {
+      title: "Secondary Manager",
+      dataIndex: "secManager",
+      key: "secManager",
+      width: 200,
+    },
+    {
+      title: "Department",
+      dataIndex: "department",
+      key: "department",
+      width: 200,
     },
     {
       title: "Action",
       dataIndex: "action",
       key: "action",
+      fixed: "right",
+      align: "center",
+      width: 120,
 
       render: (_, record) => {
         // console.log("record:: ", record);
@@ -142,11 +177,12 @@ function EmployeeList() {
         columns={columns}
         dataSource={data}
         pagination={{
-          pageSize: 50,
+          position: ["bottomCenter"],
         }}
-        // scroll={{
-        //   y: 240,
-        // }}
+        scroll={{ x: 1300 }}
+        className="employeeTable"
+        size="small"
+        reloadData={getData}
       />
       <Modal
         centered
@@ -169,6 +205,7 @@ function EmployeeList() {
           className="Edit"
           record={editedRecord}
           setIsModalVisible={setIsModalVisible}
+          reloadData={getData}
         />
       </Modal>
     </Layout>

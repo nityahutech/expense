@@ -1,0 +1,36 @@
+.Table table {
+    border-collapse: separate !important;
+    /* border-spacing: 0px 10px !important; */
+  }
+   
+  .Table table thead tr th, .Table table tbody tr td { 
+    border-bottom: 1px #c5c3c3 solid;
+    border-top: 1px #c5c3c3 solid;
+    border-left: 1px #c5c3c3 solid;
+    border-right: 1px #c5c3c3 solid;
+    padding: 10px 16px;
+    text-align: center;
+    
+  }  
+   .Table table thead tr th {
+    background: #ECECEC !important;
+    padding: 10px 16px;}
+
+    .Table.ant-table.ant-table-bordered{
+        border-right: 1px solid #a9a9a9;
+    }
+    .Table table{
+        border-right: 1px #c5c3c3 solid;
+    }
+    a.text{
+        color: #171832;
+      }
+      ul li{
+        list-style-type: none;
+        display: inline-block;
+        margin-right: 32px;
+      }
+      .box li{
+        display: inline-block;
+      }
+   

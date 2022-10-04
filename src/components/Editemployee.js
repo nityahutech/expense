@@ -13,8 +13,11 @@ import {
   notification,
 } from "antd";
 // import { useNavigate } from 'react-router-dom';
-import { createUser } from "../contexts/CreateContext";
+import { useAuth } from "../contexts/AuthContext";
 import moment from "moment";
+import ProfileContext from "../contexts/ProfileContext";
+import EmployeeContext from "../contexts/EmployeeContext";
+import { SplitCellsOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 const showNotification = (type, msg, desc) => {
@@ -33,9 +36,15 @@ function Editemployee(props) {
   const [designation, setDesignation] = useState("");
   const [gender, setGender] = useState("");
   const [phonenumber, setPhonenumber] = useState("");
+  const [repManager, setRepManager] = useState("");
+  const [secManager, setSecManager] = useState("");
+  const [department, setDepartment] = useState("");
+
   console.log(props);
+  const { currentUser } = useAuth();
 
   async function submitEdit() {
+    // console.log("***************************");
     try {
       const editedRecord = {
         fname,
@@ -45,13 +54,20 @@ function Editemployee(props) {
         designation,
         gender,
         phonenumber,
+        repManager,
+        secManager,
+        department,
       };
+      console.log("editedRecord");
+      console.log(props.record.id, editedRecord);
+      EmployeeContext.updateEmployee(props.record.id, editedRecord);
       props.setIsModalVisible(false);
-      props.reloadData();
+      // props.reloadData();
       showNotification("success", "Success", "Record updated successfully");
 
       return;
     } catch (error) {
+      console.log(error);
       props.setIsModalVisible(false);
       showNotification("error", "Failed", "Record update failed");
     }
@@ -65,6 +81,9 @@ function Editemployee(props) {
     const designationVal = props.record ? props.record.designation : "";
     const genderVal = props.record ? props.record.gender : "";
     const phonenumberVal = props.record ? props.record.phonenumber : "";
+    const repManagerVal = props.record ? props.record.repManager : "";
+    const secManagerVal = props.record ? props.record.secManager : "";
+    const setDepartmentVal = props.record ? props.record.setDepartment : "";
 
     setFname(fnameVal);
     setLname(lnameVal);
@@ -73,19 +92,28 @@ function Editemployee(props) {
     setDesignation(designationVal);
     setGender(genderVal);
     setPhonenumber(phonenumberVal);
+    setRepManager(repManagerVal);
+    setSecManager(secManagerVal);
+    setDepartment(setDepartmentVal);
   }, [props]);
   function cancel() {
     props.setIsModalVisible(false);
   }
 
   const cancelStyle = {
-    float: "right",
+    position: "relative",
+    bottom: "4px",
+    left: "20rem",
+    width: "25%",
   };
   const buttonStyle = {
     marginRight: "5px",
     color: "white",
     backgroundColor: "#1890ff",
-    float: "right",
+    position: "relative",
+    bottom: "4px",
+    left: "6rem",
+    width: "25%",
   };
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
@@ -105,7 +133,7 @@ function Editemployee(props) {
   // const {signup} = useAuth();
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
-    let res = await createUser(values);
+    let res = await ProfileContext.updateProfile(values.id, values);
     console.log("DONE!!!!!!!!!");
     // console.log(res);
     // const valuesToservice = {
@@ -139,416 +167,439 @@ function Editemployee(props) {
 
   return (
     <>
-      <div className="expForm" style={{ margin: "15px", background: "white" }}>
-        <Form
-          //   form={form}
-          labelcol={{
-            span: 4,
-          }}
-          wrappercol={{
-            span: 14,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          autoComplete="off"
-          onFinish={onFinish}
-          fields={[
-            {
-              name: ["fname"],
-              value: fname,
-            },
-            {
-              name: ["lname"],
-              value: lname,
-            },
-            {
-              name: ["email"],
-              value: mailid,
-            },
-            {
-              name: ["doj"],
-              value: moment(doj, dateFormat),
-            },
-            {
-              name: ["designation"],
-              value: designation,
-            },
-            {
-              name: ["gender"],
-              value: gender,
-            },
-            {
-              name: ["phonenumber"],
-              value: phonenumber,
-            },
-          ]}
-        >
-          <Row
-            className="rowform"
-            gutter={[0, 8]}
-            style={{
-              marginBottom: "1.5rem",
-              marginTop: "1.5rem",
-              display: "flex",
-              flexDirection: "column",
-              alignitems: "center",
-              justifyContent: "space-around",
-            }}
-          >
-            {/* -----------------Back button------------- */}
-          </Row>
+      <Form
+        //   form={form}
+        labelcol={{
+          span: 20,
+        }}
+        wrappercol={{
+          span: 20,
+        }}
+        initialValues={{
+          remember: true,
+        }}
+        autoComplete="off"
+        onFinish={onFinish}
+        fields={[
+          {
+            name: ["fname"],
+            value: fname,
+          },
+          {
+            name: ["lname"],
+            value: lname,
+          },
+          {
+            name: ["email"],
+            value: mailid,
+          },
+          {
+            name: ["doj"],
+            value: moment(doj, dateFormat),
+          },
+          {
+            name: ["designation"],
+            value: designation,
+          },
+          {
+            name: ["gender"],
+            value: gender,
+          },
+          {
+            name: ["phonenumber"],
+            value: phonenumber,
+          },
+          {
+            name: ["repManager"],
+            value: repManager,
+          },
+          {
+            name: ["secManager"],
+            value: secManager,
+          },
+          {
+            name: ["department"],
+            value: department,
+          },
+        ]}
+        layout="vertical"
+      >
+        <Row>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="fname"
+              label="First Name&nbsp;"
+              onKeyPress={(event) => {
+                if (checkAlphabets(event)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[
+                {
+                  required: true,
 
-          <Row gutter={[24, 8]}>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "", height: "80px" }}
+                  message: "Please enter First Name",
+                },
+                {
+                  pattern: /^[a-zA-Z\s]*$/,
+                  message: "Please enter Valid Name",
+                },
+              ]}
             >
-              <Divider orientation="left" orientationMargin={0}>
-                First Name<span style={{ color: "red" }}> *</span>
-              </Divider>
-              <Form.Item
-                name="fname"
-                onKeyPress={(event) => {
-                  if (checkAlphabets(event)) {
-                    event.preventDefault();
-                  }
+              <Input
+                style={{ width: "80%" }}
+                maxLength={20}
+                onChange={(e) => {
+                  const inputval = e.target.value;
+
+                  const newVal =
+                    inputval.substring(0, 1).toUpperCase() +
+                    inputval.substring(1);
+
+                  setFname(newVal);
                 }}
-                rules={[
-                  {
-                    required: true,
-                    minLength: 3,
-                    maxLength: 20,
-                    message: "Please enter First Name",
-                  },
-                  {
-                    pattern: /^[a-zA-Z\s]*$/,
-                    message: "Please enter Valid Name",
-                  },
-                ]}
-              >
-                <Input
-                  maxLength={20}
-                  //   onChange={(e) => {
 
-                  //     const inputval = e.target.value;
-                  //     const str = e.target.value;
-                  //     const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                  //     const caps = str.split(' ').map(capitalize).join(' ');
-                  // setPaidBy(newVal);
-                  // form.setFieldsValue({ expence: newVal, expence: caps });
+                // required
+                // placeholder="Enter Your First Name"
+              />
+            </Form.Item>
+          </Col>
 
-                  //   }}
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="lname"
+              label="Last Name&nbsp;"
+              onKeyPress={(event) => {
+                if (checkAlphabets(event)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[
+                {
+                  required: true,
 
-                  required
-                  placeholder="Enter Your First Name"
-                />
-              </Form.Item>
-            </Col>
-
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "", height: "80px" }}
+                  message: "Please enter Last Name",
+                },
+                {
+                  pattern: /^[a-zA-Z\s]*$/,
+                  message: "Please enter Valid Name",
+                },
+              ]}
             >
-              <Divider orientation="left" orientationMargin={0}>
-                Last Name<span style={{ color: "red" }}> *</span>
-              </Divider>
-              <Form.Item
-                name="lname"
-                onKeyPress={(event) => {
-                  if (checkAlphabets(event)) {
-                    event.preventDefault();
-                  }
+              <Input
+                style={{ width: "80%" }}
+                maxLength={20}
+                onChange={(e) => {
+                  const inputval = e.target.value;
+
+                  const newVal =
+                    inputval.substring(0, 1).toUpperCase() +
+                    inputval.substring(1);
+
+                  setLname(newVal);
                 }}
-                rules={[
-                  {
-                    required: true,
-                    minLength: 3,
-                    maxLength: 20,
-                    message: "Please enter Last Name",
-                  },
-                  {
-                    pattern: /^[a-zA-Z\s]*$/,
-                    message: "Please enter Valid Name",
-                  },
-                ]}
-              >
-                <Input
-                  maxLength={20}
-                  //   onChange={(e) => {
+              />
+            </Form.Item>
+          </Col>
+        </Row>
 
-                  //     const inputval = e.target.value;
-                  //     const str = e.target.value;
-                  //     const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                  //     const caps = str.split(' ').map(capitalize).join(' ');
-                  // setPaidBy(newVal);
-                  // form.setFieldsValue({ expence: newVal, expence: caps });
+        <Row>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="email"
+              label="Email Id&nbsp;"
+              // disabled={{mailid.split('@')[1]==="hutechsolutions"}}
+              // onKeyPress={(event) => {
+              //   if (checkAlphabets(event)) {
+              //     event.preventDefault();
+              //   }
+              // }}
 
-                  //   }}
+              rules={[
+                {
+                  required: true,
 
-                  required
-                  placeholder="Enter Your Last Name"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={[24, 8]}>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "", height: "80px" }}
+                  message: "Please enter Email Id",
+                  type: "email",
+                },
+                {
+                  // pattern: /^[a-zA-Z\s]*$/,
+                  message: "Please enter Valid Email",
+                },
+              ]}
             >
-              <Divider orientation="left" orientationMargin={0}>
-                Email Id<span style={{ color: "red" }}> *</span>
-              </Divider>
-              <Form.Item
-                name="email"
-                // onKeyPress={(event) => {
-                //   if (checkAlphabets(event)) {
-                //     event.preventDefault();
-                //   }
+              <Input
+                style={{ width: "80%" }}
+                maxLength={20}
+                // onChange={(e) => {
+                //   const inputval = e.target.value;
+
+                //   const newVal =
+                //     inputval.substring(0, 1).toUpperCase() +
+                //     inputval.substring(1);
+
+                //   setMailid(newVal);
                 // }}
+                readonly
+                value={mailid}
+                disabled={mailid.split("@")[1] === "hutechsolutions.com"}
+              />
+            </Form.Item>
+          </Col>
 
-                rules={[
-                  {
-                    required: true,
-                    // minLength: 3,
-                    // maxLength: 20,
-                    message: "Please enter Email Id",
-                    type: "email",
-                  },
-                  {
-                    // pattern: /^[a-zA-Z\s]*$/,
-                    message: "Please enter Valid Email",
-                  },
-                ]}
-              >
-                <Input
-                  maxLength={20}
-                  //   onChange={(e) => {
-
-                  //     const inputval = e.target.value;
-                  //     const str = e.target.value;
-                  //     const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                  //     const caps = str.split(' ').map(capitalize).join(' ');
-                  // setPaidBy(newVal);
-                  // form.setFieldsValue({ expence: newVal, expence: caps });
-
-                  //   }}
-
-                  required
-                  placeholder="Enter Email Address"
-                />
-              </Form.Item>
-            </Col>
-
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "", height: "80px" }}
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="doj"
+              label="Date of Joining&nbsp;"
+              rules={[
+                {
+                  required: true,
+                  message: "Please Choose a Date",
+                },
+              ]}
             >
-              <Divider orientation="left" orientationMargin={0}>
-                Date Of Joining<span style={{ color: "red" }}> *</span>
-              </Divider>
-              <Form.Item
-                name="doj"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Choose a Date",
-                  },
-                ]}
-              >
-                {/* format={dateFormatList} */}
-                <DatePicker
-                  format={dateFormat}
-                  style={{ width: "100%" }}
-                  //  disabledDate={disabledDate}
-                  placeholder="Choose Date"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={[24, 8]}>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "", height: "80px" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Phone No.<span style={{ color: "red" }}> *</span>
-              </Divider>
-              <Form.Item
-                className="numder-inputs"
-                name="phonenumber"
-                // onKeyPress={(event) => {
-                //   if (checkNumbervalue(event)) {
-                //     event.preventDefault();
-                //   }
-                // }}
-                onKeyPress={(event) => {
-                  if (checkNumbervalue(event)) {
-                    event.preventDefault();
-                  }
+              {/* format={dateFormatList} */}
+              <DatePicker
+                format={dateFormat}
+                style={{ width: "80%" }}
+                onChange={(e) => {
+                  setDoj(e.format(dateFormat));
                 }}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter Phone Number",
-                    pattern: /^[0-9\b]+$/,
-                  },
-                  { whitespace: true },
-                ]}
-              >
-                <Input
-                  maxLength={10}
-                  required
-                  //   onChange={(e) => {
-                  //     const amt = e.target.value;
-                  //     setAmount(amt);
-                  //     setTotal(amt * quantity);
-                  //     form.setFieldsValue({ subTotal: amt * quantity });
+              />
+            </Form.Item>
+          </Col>
+        </Row>
 
-                  //   }}
-
-                  placeholder="Enter Phone Number"
-                />
-              </Form.Item>
-            </Col>
-
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "", height: "80px" }}
+        <Row>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="phonenumber"
+              label="Phone No.&nbsp;"
+              // onKeyPress={(event) => {
+              //   if (checkNumbervalue(event)) {
+              //     event.preventDefault();
+              //   }
+              // }}
+              onKeyPress={(event) => {
+                if (checkNumbervalue(event)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter Phone Number",
+                  pattern: /^[0-9\b]+$/,
+                },
+                { whitespace: true },
+              ]}
             >
-              <Divider orientation="left" orientationMargin={0}>
-                Gender<span style={{ color: "red" }}> *</span>
-              </Divider>
-              <Form.Item
-                name="gender"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Choose Gender",
-                  },
-                ]}
-              >
-                <Select
-                  // showSearch
-                  placeholder="Select a Gender"
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
-                >
-                  <Option value="male">Male</Option>
-                  <Option value="female">Female</Option>
-                  {/* <Option value="pns">Prefer Not To Say</Option> */}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 8]}>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "", height: "80px" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Designation<span style={{ color: "red" }}> *</span>
-              </Divider>
-              <Form.Item
-                name="designation"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Choose Designation",
-                  },
-                ]}
-              >
-                <Select
-                  // showSearch
-                  placeholder="Select a Designation"
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
-                >
-                  <Option value="intrn">Internship</Option>
-                  <Option value="st">Software Trainee</Option>
-                  <Option value="asd">Asst. Software Developer</Option>
-                  <Option value="ssd">Sr. Software Developer</Option>
-                  <Option value="jsd">Jr. Software Developer</Option>
-                  <Option value="ba">Business Analyst(BA)</Option>
-                  <Option value="qa">Quality Analyst(QA)</Option>
-                  <Option value="hr">Human Resource(HR)</Option>
-                  <Option value="mgr">Manager</Option>
-                  <Option value="dr">Director</Option>
-                  <Option value="ceo">Cheap Executive Officer(CEO)</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            {/* <Col */}
-            {/* xs={{ span: 24 }} */}
-            {/* sm={{ span: 12 }} */}
-            {/* className="Col-1-left" */}
-            {/* style={{ background: "", height: "80px" }} */}
-            {/* > */}
-            {/* <Divider orientation="left" orientationMargin={0}> */}
-            {/* Role<span style={{ color: "red" }}> *</span> */}
-            {/* </Divider> */}
-            {/* <Form.Item */}
-            {/* name="role" */}
-            {/* rules={[ */}
-            {/* {
-                    required: true,
-                    message: "Please Choose a Role",
-                  },
-                ]}
-              > */}
-            {/* <Select
-                  // showSearch
-                  placeholder="Select a Role"
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
-                >
-                  <Option value="admin">Admin</Option>
-                  <Option value="emp">Employee</Option>
-                  {/* <Option value="pns">Prefer Not To Say</Option> */}
-            {/* </Select> */}
-            {/* </Form.Item>
-            </Col> */}
-          </Row>
+              <Input
+                style={{ width: "80%" }}
+                maxLength={10}
+                onChange={(e) => {
+                  const number = e.target.value;
+                  setPhonenumber(number);
+                }}
 
-          <br />
-          <Button style={cancelStyle} onClick={cancel}>
-            Cancel
-          </Button>
-          <Button style={buttonStyle} onClick={submitEdit}>
-            Submit
-          </Button>
-          <br />
-        </Form>
-      </div>
+                //   onChange={(e) => {
+                //     const amt = e.target.value;
+                //     setAmount(amt);
+                //     setTotal(amt * quantity);
+                //     form.setFieldsValue({ subTotal: amt * quantity });
+
+                //   }}
+              />
+            </Form.Item>
+          </Col>
+
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="gender"
+              label="Gender&nbsp;"
+              rules={[
+                {
+                  required: true,
+                  message: "Please Choose Gender",
+                },
+              ]}
+            >
+              <Select
+                style={{ width: "80%" }}
+                onChange={(e) => setGender(e)}
+                // showSearch
+
+                // optionFilterProp="children"
+                //   onChange={onChange}
+                //   onSearch={onSearch}
+                // filterOption={(input, option) =>
+                //   option.children.toLowerCase().includes(input.toLowerCase())
+                // }
+              >
+                <Option value="male">Male</Option>
+                <Option value="female">Female</Option>
+                {/* <Option value="pns">Prefer Not To Say</Option> */}
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="designation"
+              label="Designation&nbsp;"
+              rules={[
+                {
+                  required: true,
+                  message: "Please Choose Designation",
+                },
+              ]}
+            >
+              <Select
+                style={{ width: "80%" }}
+                onChange={(e) => setDesignation(e)}
+                // showSearch
+
+                // optionFilterProp="children"
+                //   onChange={onChange}
+                //   onSearch={onSearch}
+                // filterOption={(input, option) =>
+                //   option.children.toLowerCase().includes(input.toLowerCase())
+                // }
+              >
+                <Option value="Internship">Internship</Option>
+                <Option value="Software Trainee">Software Trainee</Option>
+                <Option value="Asst. Software Developer">
+                  Asst. Software Developer
+                </Option>
+                <Option value="Sr. Software Developer">
+                  Sr. Software Developer
+                </Option>
+                <Option value="Jr. Software Developer">
+                  Jr. Software Developer
+                </Option>
+                <Option value="Business Analyst">Business Analyst(BA)</Option>
+                <Option value="Quality Analyst">Quality Analyst(QA)</Option>
+                <Option value="Human Resource">Human Resource(HR)</Option>
+                <Option value="Manager">Manager</Option>
+                <Option value="Director">Director</Option>
+                <Option value="Chief Executive Officer">
+                  Chief Executive Officer(CEO)
+                </Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="repManager"
+              label="Reporting Manager&nbsp;"
+              rules={[
+                {
+                  required: true,
+                  message: "Choose Reporting Manager",
+                },
+              ]}
+            >
+              <Select
+                style={{ width: "80%" }}
+                onChange={(e) => setRepManager(e)}
+                // showSearch
+
+                // optionFilterProp="children"
+                //   onChange={onChange}
+                //   onSearch={onSearch}
+                // filterOption={(input, option) =>
+                //   option.children.toLowerCase().includes(input.toLowerCase())
+                // }
+              >
+                <Option value="Pravat Ranjan">PRAVAT RANJAN</Option>
+                <Option value="Amlana Aparajita">AMLANA APARAJITA</Option>
+                <Option value="Anisha Mariam Thomas">
+                  ANISHA MARIAM THOMAS
+                </Option>
+                <Option value="Rajeev N. Iyer">RAJEEV N. IYER</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="secManager"
+              label="Secondary Manager&nbsp;"
+              rules={[
+                {
+                  required: true,
+                  message: "Choose Secondary Manager",
+                },
+              ]}
+            >
+              <Select
+                style={{ width: "80%" }}
+                onChange={(e) => setSecManager(e)}
+                // showSearch
+
+                // optionFilterProp="children"
+                //   onChange={onChange}
+                //   onSearch={onSearch}
+                // filterOption={(input, option) =>
+                //   option.children.toLowerCase().includes(input.toLowerCase())
+                // }
+              >
+                <Option value="Swayamprava Nanda">SWAYAMPRAVA NANDA</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="department"
+              label="Department&nbsp;"
+              rules={[
+                {
+                  required: true,
+                  message: "Choose Your Department",
+                },
+              ]}
+            >
+              <Select
+                style={{ width: "80%" }}
+                onChange={(e) => setDepartment(e)}
+                // showSearch
+
+                // optionFilterProp="children"
+                //   onChange={onChange}
+                //   onSearch={onSearch}
+                // filterOption={(input, option) =>
+                //   option.children.toLowerCase().includes(input.toLowerCase())
+                // }
+              >
+                <Option value="Consulting Service">Consulting Service</Option>
+                <Option value="Human Resource">Human Resource</Option>
+                <Option value="Finance">Finance</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <br />
+        <Button style={cancelStyle} onClick={cancel}>
+          Cancel
+        </Button>
+        <Button style={buttonStyle} onClick={submitEdit}>
+          Submit
+        </Button>
+        <br />
+      </Form>
     </>
   );
 }

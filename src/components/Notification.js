@@ -4,7 +4,6 @@ import {
     Row,
     Table,
     Modal,
-
 } from 'antd';
 
 import { useAuth } from '../contexts/AuthContext'
@@ -28,8 +27,6 @@ const Notification = ({ data }) => {
     useEffect(() => {
         setDataSource(data)
     }, [data])
-
-
     // console.log("data", data);
 
     const getData = async () => {
@@ -48,11 +45,12 @@ const Notification = ({ data }) => {
         setApprove(d);
 
     }
+    // ${JSON.stringify(record)}
 
     const onApproveLeave = (record) => {
         console.log(record)
         Modal.confirm({
-            title: "Are you sure, you want to approve Leave record?",
+            title: `Are you sure, you want to approve Leave of ${record?.name||''}!`,
             okText: "Yes",
             okType: "primary",
             onOk: () => {
@@ -72,7 +70,7 @@ const Notification = ({ data }) => {
     const onRejectedLeave = (record) => {
         console.log(record)
         Modal.confirm({
-            title: "Are you sure, you want to reject Leave record?",
+            title: `Are you sure, you want to reject Leave of ${record?.name||''}!`,
             okText: "Yes",
             okType: "danger",
             onOk: () => {
@@ -95,12 +93,22 @@ const Notification = ({ data }) => {
             title: 'Duration',
             dataIndex: 'date',
             width: 250,
+            sorter: (a, b) => {
+                return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
+              },
+              sortDirections: ["ascend", "descend"],
+            
 
         },
         {
             title: 'Employee Name',
             dataIndex: 'name',
             width: 150,
+            sorter: (a, b) => {
+                return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
+              },
+              sortDirections: ["ascend", "descend"],
+            
 
         },
         {
@@ -112,6 +120,10 @@ const Notification = ({ data }) => {
         {
             title: 'Slot',
             dataIndex: 'slot',
+            sorter: (a, b) => {
+                return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+              },
+              sortDirections: ["ascend", "descend"],
         },
         {
             title: 'Reason',
@@ -123,7 +135,6 @@ const Notification = ({ data }) => {
             dataIndex: 'approver',
             width: 150,
         },
-
 
         {
             key: "5",
@@ -147,14 +158,10 @@ const Notification = ({ data }) => {
                                         onApproveLeave(record);
 
                                     }}
-                                   
-                                  
-
-
                                 />
                                
                                 <img
-                                   
+                                   style={{ color: "white", width: '20px', marginRight: 10 }}
                                     src="../logo/rejected.png"
                                     alt="profile"
                                     className="Dash"
@@ -162,7 +169,6 @@ const Notification = ({ data }) => {
                                         onRejectedLeave(record);
                                     }}
                                    
-
                                 />
                             </>
                         }
@@ -179,13 +185,10 @@ const Notification = ({ data }) => {
         console.log(name, empId, "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG")
     }
 
-
-
-
     return (
         <Row style={{
             display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
-            borderRadius: '10px', padding: '10px', margin: '10px'
+            borderRadius: '10px', padding: '10px', marginTop: '10px'
         }}
         >
             <Col span={24} style={{
@@ -210,9 +213,6 @@ const Notification = ({ data }) => {
                             x: 1000, 
                         }} />
                 </div>
-
-
-
             </Col>
         </Row>
 

@@ -65,8 +65,9 @@ export function AuthProvider({ children }) {
       return; 
     }
     let rec = await ProfileContext.getProfile(user.uid);
-    sessionStorage.setItem("role", rec.data().role)
-    setRole(rec.data().role);
+    sessionStorage.setItem("role", rec.role)
+    console.log("role", rec.role)
+    setRole(rec.role);
   }
 
   useEffect(() => {

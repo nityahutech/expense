@@ -12,47 +12,38 @@ import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
-import WebClock from "./WebClock";
-
-const start = new Date().getTime();
+import { set } from "react-hook-form";
 
 // ---------------------------------------------------------------------
 
 const Navbar = () => {
   const [size, setSize] = useState("large");
-
+  const [startTime, setStartTime] = useState();
+  const [isRunning, setIsRunning] = useState(false);
   const [activePage, setActivePage] = useState("/DashBoard");
   let loc = useLocation();
   const { logout, currentUser } = useAuth();
-  const [clockinfo, setClockInfo] = useState({
-    id: currentUser.uid,
-    name: currentUser.displayName,
-    autoStart: false,
-    secs: 0
-  });
-
+  const [clockinfo, setClockInfo] = useState()
 
   const isClockRunning = async () => {
-    console.log("isClockRunning")
-    let res = await AttendanceContext.getStartTime(currentUser.uid);
-    console.log(res)
-    if (res == undefined) {
-      console.log("heyyyyyyyy")
-      return false;
-    }
-    else {
-      let offset = moment().subtract(res)
-      console.log(offset.toDate());
-      const offsetTime = moment(offset, "HH:mm:ss").diff(moment().startOf('day'), 'seconds')
-      console.log(offsetTime)
-      setClockInfo({
-        ...clockinfo,
-        autoStart: true,
-        secs: offsetTime
-      })
-      console.log(clockinfo)
-      return true;
-    }
+      let res = await AttendanceContext.getStartTime(currentUser.uid);
+      console.log(res)
+      if (res == undefined) {
+        console.log("heyyyyyyyy")
+        setIsRunning(false)
+        return false;
+      }
+      else {
+        setIsRunning(true)
+        let offset = moment().subtract(res)
+        console.log(offset.toDate());
+        const offsetTime = moment(offset, "HH:mm:ss").diff(moment().startOf('day'), 'seconds')
+        console.log(offsetTime)
+        setStartTime(res)
+        setClockInfo(offsetTime)
+        console.log(clockinfo)
+        return true;
+      }
   }  
   // const offset = isClockRunning().then((num) => {
   //   console.log(stopwatchOffset)
@@ -113,13 +104,103 @@ const Navbar = () => {
     />
   );
   useEffect(() => {
-    console.log("BREHHHHHHHHHHHHS")
-    isClockRunning();
-  }, [clockinfo]);
+    console.log("BREHHHHHHHHHHHHS");
+    isClockRunning()
+    const timer = setInterval(() => {
+    console.log(isRunning);
+      if (isRunning){
+        setClockInfo(clockinfo => clockinfo + 1)
+      }
+    }, 1000)
+    return () => {
+      clearInterval(timer);
+    };
+  }, [isRunning]);
+
+  
+  const buttonStyle = !isRunning ? {
+          padding: "1px",
+          background: "#FF002A",
+          color: "white",
+          display: "inline-block",
+          width: "200px",
+          borderRadius: "5px",
+          border:"1px solid white",
+        } : {
+          padding: "1px",
+          background: "skyblue",
+          color: "white",
+          display: "inline-block",
+          width: "200px",
+          borderRadius: "5px",
+          border:"1px solid white",
+        };
+
+  const [buttonText, setButtonText] = useState(!isRunning ? "Web Clock In" : "");
+  let clockTime = isRunning? clockinfo: "" ;
+
+  const onMouseEnter = (event) => {
+    event.target.style.background = "#DB0000";
+    if(isRunning){
+      setButtonText("Web Clock Out ");
+    }
+  };
+
+  const onMouseLeave = (event) => {
+    if(isRunning){
+      event.target.style.background = "skyblue";
+      setButtonText("");
+    }
+    else {
+      setButtonText("Web Clock In ");
+      event.target.style.background = "#FF002A";
+    }
+  };
+
+  const setClockState = () => {
+      // setClockIn(true);
+      let clickedDate = {
+        empId: currentUser.uid,
+        name: currentUser.displayName,
+        date: moment().format("DD-MM-YYYY"),
+        clockIn: moment().format("HH:mm:ss"),
+        clockOut: null
+      } 
+      console.log(clickedDate)
+      setIsRunning(true)
+      AttendanceContext.addClockData(clickedDate)
+  };
+
+  const stopClockState = () => {
+    // setClockIn(false);
+    let clickedDate = {
+      clockOut: moment().format("HH:mm:ss"),
+      duration: moment.utc(clockTime * 1000).format('HH:mm:ss')
+    }
+    setIsRunning(false)
+    setStartTime("");
+    setClockInfo(0)
+    // AttendanceContext.updateClockData(clickedDate, currentUser.uid)
+    // console.log(rec.data())
+    console.log(isRunning);
+    AttendanceContext.updateClockData(currentUser.uid, clickedDate);
+  };
+
+  const handleClock = () => {
+    console.log(isRunning)
+    if (isRunning) {
+      stopClockState();
+      console.log(isRunning);
+      console.log(startTime);
+    }
+    else {
+      setClockState();
+    }
+  }
   
   // useEffect(() => {
   // }, []);
-  console.log(clockinfo)
+  console.log(startTime, clockinfo)
   return (
     <div className="navbar" style={{ background: "white" }}>
       <div className="wrapper">
@@ -142,9 +223,16 @@ const Navbar = () => {
         >
           {/* {`${ctime.hrs}:${ctime.min}:${ctime.sec}`} */}
           
-        </div><WebClock 
-            record = {{...clockinfo}}
-          />
+        </div>
+        <button
+          style={buttonStyle}
+          onClick={handleClock}
+          onMouseLeave={onMouseLeave}
+          onMouseEnter={onMouseEnter}
+      >
+        {buttonText} <br />
+        {moment.utc(clockTime * 1000).format('HH:mm:ss')}
+      </button>
         <div className="image">
           <div className="item">
             <img

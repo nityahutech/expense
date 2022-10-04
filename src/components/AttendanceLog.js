@@ -144,9 +144,9 @@ function AttendanceLog({ empDetails }) {
   //   // getEmpMonthly();
   // }, [activetab]);
 
-  async function getEmpDetails(id) {
+  async function getEmpDetails(id, date) {
     console.log(id)
-    let data = await AttendanceContext.getAllAttendance(id);
+    let data = await AttendanceContext.getAllAttendance(id, date);
     
     console.log(data)
     setEmpMonthly(data);
@@ -234,7 +234,7 @@ function AttendanceLog({ empDetails }) {
   useEffect(() => {
     if (empDetails.userType === "emp") {
       setActivetab("1");
-      getEmpDetails(currentUser.uid);
+      getEmpDetails(currentUser.uid, [moment().subtract(30, 'days'), moment()]);
       // getEmpMonthly();
     } else {
       setActivetab("1");
@@ -388,20 +388,20 @@ function AttendanceLog({ empDetails }) {
       setEmpMonthly(empMonthly);
     }
   }
-  function onHrDateFilter(date, dateString) {
+  async function onHrDateFilter(date, dateString) {
     console.log({ date, dateString });
     if (date) {
       console.log(empMonthly);
-      let result = empMonthly.filter((ex) => {
-        return (
-          moment(ex.date, dateFormat).isSame(date[0], "day") ||
-          moment(ex.date, dateFormat).isSame(date[1], "day") ||
-          (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
-            moment(ex.date, dateFormat).isSameOrBefore(date[1]))
-        );
-      });
+      // let result = empMonthly.filter((ex) => {
+      //   return (
+      //     moment(ex.date, dateFormat).isSame(date[0], "day") ||
+      //     moment(ex.date, dateFormat).isSame(date[1], "day") ||
+      //     (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
+      //       moment(ex.date, dateFormat).isSameOrBefore(date[1]))
+      //   );
+      // });
 
-      const modifiedFilterExpense = [...result];
+      const modifiedFilterExpense = await getEmpDetails(selectemp.id, date);
 
       console.log({ modifiedFilterExpense });
       setEmpMonthly(modifiedFilterExpense);
@@ -448,7 +448,7 @@ function AttendanceLog({ empDetails }) {
                 <RangePicker
                   className="Range"
                   defaultValue={[]}
-                  dateFormat
+                  format={dateFormat}
                   onChange={onDateFilter}
                 />
                 <Table
@@ -550,7 +550,7 @@ function AttendanceLog({ empDetails }) {
                       onClick: (event) => {
                         console.log(record);
                         setSelectemp({ ...record });
-                        getEmpDetails(record.id);
+                        getEmpDetails(record.id, [moment().subtract(30, 'days'), moment()]);
                         setActivetab("2");
                       }, // click row
                     };
@@ -563,7 +563,7 @@ function AttendanceLog({ empDetails }) {
                 <RangePicker
                   className="Range"
                   defaultValue={[]}
-                  dateFormat
+                  format={dateFormat}
                   onChange={onHrDateFilter}
                 />
                 <Table

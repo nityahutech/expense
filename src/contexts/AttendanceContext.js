@@ -97,7 +97,7 @@ class AttendanceContext {
         return deleteDoc(attendDoc);
     };
 
-    getAllAttendance =  async (id) => {
+    getAllAttendance =  async (id, date) => {
         const q = query(attendCollectionRef, where("empId", "==", id));
         // console.log(q);
         let data = await getDocs(q);
@@ -105,9 +105,38 @@ class AttendanceContext {
             return {
               ...doc.data(),
               id: doc.id,
+              status: "Present"
             };
           });
-        return d;
+          // let stats = await this.getMonthlyStatus();
+          // console.log(stats);
+          const momentRange = extendMoment(Moment);
+          console.log(date)
+          console.log(id)
+          const range = momentRange.range(date[0], date[1])
+          const res = Array.from(range.by('day'))
+          let x = 0;
+          let temp = []
+          res.map((day) => {
+            for (let i = 0; i < d.length; i++) {
+              console.log(moment(d[i].date, "DD-MM-YYYY"))
+              console.log(day, moment(d[i].date, "DD-MM-YYYY"), day.isSame(d[i], 'day'))
+
+              if (day.isSame(moment(d[i].date, "DD-MM-YYYY"), 'day')) {
+                temp[x++] = {
+                  ...d[i],
+                  date: day.format("DD-MM-YYYY"),
+                }
+                return;
+              }
+            }
+            console.log(day)
+            temp[x++] = {
+              date: day.format("DD-MM-YYYY"),
+              status: "Absent"
+            }
+          })
+        return temp.reverse();
     };
 
     getAllUsers = async() => {
@@ -127,7 +156,7 @@ class AttendanceContext {
         console.log(stats)
 
 
-        res.forEach((emp,i) => {
+        res.forEach((emp) => {
           for (let i = 0; i < stats.length; i++) {
             if (emp.id == stats[i].id) {
               console.log("Present")

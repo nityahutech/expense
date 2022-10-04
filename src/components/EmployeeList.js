@@ -93,6 +93,12 @@ function EmployeeList() {
       width: 200,
     },
     {
+      title: "Department",
+      dataIndex: "department",
+      key: "department",
+      width: 200,
+    },
+    {
       title: "Action",
       dataIndex: "action",
       key: "action",

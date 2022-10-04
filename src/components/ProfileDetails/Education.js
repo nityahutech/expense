@@ -1,6 +1,6 @@
 // ------------------------------------Place for import 
 import React, { useEffect } from 'react'
-
+import moment from 'moment';
 import  { useState } from 'react';
 
 import { 
@@ -128,13 +128,14 @@ console.log(data)
             <Form.Item name="qualificationType" rules={[{required: true,message: 'Please input your qalification Type!',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
+              initialValue={data.qualificationType}
             >
               <div>
-                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Qulification Type</h1>
+                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Qualification Type</h1>
                 {editContent === false ? (
                   <h4>{data?data.qualificationType:null}</h4>
                 ) : (
-                  <Input placeholder="" />
+                  <Input placeholder="Enter Qualification Type" />
                 )}
               </div>
             </Form.Item>
@@ -144,9 +145,10 @@ console.log(data)
             <Form.Item name="courseName" rules={[{required: false,message: 'Please input course Name!',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
+              initialValue={data ? data.courseName : null}
             >
               <div>
-                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Coure Name</h1>
+                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course Name</h1>
                 {editContent === false ? (
                   <h4>{data?data.courseName:null}</h4>
                 ) : (
@@ -160,6 +162,7 @@ console.log(data)
             <Form.Item name="courseType" rules={[{required: false,message: 'Please input your course Type!',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
+              initialValue={data.courseType}
             >
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course Type</h1>
@@ -172,6 +175,7 @@ console.log(data)
             <Form.Item name="stream" rules={[{required: true,message: 'Please input your Stream Type!',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
+              initialValue={data.stream}
             >
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Stream</h1>
@@ -186,6 +190,7 @@ console.log(data)
             <Form.Item name="courseStartDate" rules={[{required: true,message: 'Please input your Course Start Date ',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
+              initialValue={moment(dateStart, "DD-MM-YYYY")}
             >
               {/* <div> */}
                 {editContent === false ? (<h4>{data?data.courseStartDate:null}</h4>) : (<DatePicker style={{ width: "100%" }}  format={"DD-MM-YYYY"} onChange= {(e) => {setDateStart(e.format("DD-MM-YYYY"))}} />)}
@@ -199,6 +204,7 @@ console.log(data)
             <Form.Item name="courseEndDate" rules={[{required: true,message: 'Please input your Course End Date',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
+              initialValue={moment(dateEnd, "DD-MM-YYYY")}
             >
               {/* <div> */}
                 {editContent === false ? (<h4>{data?data.courseEndDate:null}</h4>) : (<DatePicker style={{ width: "100%" }} format={"DD-MM-YYYY"} onChange= {(e) => {setDateEnd(e.format("DD-MM-YYYY"))}} />)}
@@ -210,6 +216,7 @@ console.log(data)
             <Form.Item name="universityName" rules={[{required: true,message: 'Please input your University Name !',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
+              initialValue={data.universityName}
             >
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>University Name</h1>

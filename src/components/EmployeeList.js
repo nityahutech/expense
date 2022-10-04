@@ -182,6 +182,7 @@ function EmployeeList() {
         scroll={{ x: 1300 }}
         className="employeeTable"
         size="small"
+        reloadData={getData}
       />
       <Modal
         centered
@@ -204,6 +205,7 @@ function EmployeeList() {
           className="Edit"
           record={editedRecord}
           setIsModalVisible={setIsModalVisible}
+          reloadData={getData}
         />
       </Modal>
     </Layout>

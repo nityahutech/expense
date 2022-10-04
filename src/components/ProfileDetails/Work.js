@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Row, Col, Button, Select, DatePicker } from "antd";
+import { Card, Row, Col, Button, Select, DatePicker, Form } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
@@ -15,6 +15,20 @@ function Work() {
           justifyContent: "center",
         }}
       >
+      <Form
+          // form={form}
+          labelcol={{
+            span: 4,
+          }}
+          wrappercol={{
+            span: 14,
+          }}
+          initialValues={{
+            remember: true,
+          }}
+          autoComplete="off"
+          // onFinish={onFinish}
+        >
         <Card
           title="WORK DETAILS"
           extra={
@@ -43,7 +57,18 @@ function Work() {
               {editWork === false ? (
                 <div>Jr. Software Developer</div>
               ) : (
+                <Form.Item
+                      // initialValue={data ? data.bloodGroup : null}
+                      name="designation"
+                      rules={[
+                        {
+                          required: true,
+                          // message: "Please Choose Blood Groop",
+                        },
+                      ]}
+                    >
                 <Select
+                // disabled={true}
                   placeholder="Select a Designation"
                   style={{ width: "100%" }}
                 >
@@ -58,7 +83,7 @@ function Work() {
                   <Option value="mgr">Manager</Option>
                   <Option value="dr">Director</Option>
                   <Option value="ceo">Chief Executive Officer(CEO)</Option>
-                </Select>
+                </Select></Form.Item>
               )}
             </Col>
             <Col span={12}>
@@ -68,7 +93,25 @@ function Work() {
               {editWork === false ? (
                 <div>01-06-2022</div>
               ) : (
-                <DatePicker style={{ width: "100%" }} />
+                <Form.Item
+                      // initialValue={dob}
+                      name="doj"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Choose a Date",
+                        },
+                      ]}
+                    >
+                <DatePicker style={{ width: "100%" }}
+                // format={dateFormatList}
+                //         onChange={(e) => {
+                //           setDob(e.format("DD-MM-YYYY"));
+                //           console.log(e.format("DD-MM-YYYY"));
+                //         }}
+                        //  disabledDate={disabledDate}
+                        // value={dob}
+                        placeholder="Choose Date" /></Form.Item>
               )}
             </Col>
           </Row>
@@ -144,6 +187,7 @@ function Work() {
             </Row>
           ) : null}
         </Card>
+        </Form>
       </div>
     </>
   );

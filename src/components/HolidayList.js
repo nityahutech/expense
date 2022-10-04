@@ -180,17 +180,19 @@ const LeaveList = (props) => {
     return (
         <Row style={{
             display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start',
-            borderRadius: '10px', padding: '10px', marginBottom: '10px'
+            borderTopLeftRadius: '10px',borderTopRightRadius:'10px', padding: '10px', marginBottom: '0px', backgroundColor:'white'
         }}
         >
             <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12}
                 style={{
                     display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start',
                     borderRadius: '10px',
+                       
+                    
                 }}
             >
 
-                <div>
+                <div >
                     <Button className='button-div' style={{
                         marginLeft: '10px'
                     }} onClick={showDrawer}>
@@ -253,7 +255,7 @@ const LeaveList = (props) => {
                         ?
                         <div>
                             <Button className='button-div' style={{
-                                marginLeft: '10px'
+                                marginLeft: '10px',backgroundColor:''
                             }} onClick={showModal}>
                                 Create Holiday
                             </Button>

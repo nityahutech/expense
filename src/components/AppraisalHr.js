@@ -1,28 +1,31 @@
 import React, { useState, useEffect } from 'react'
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, PrinterFilled, DeleteOutlined } from "@ant-design/icons";
 import { Button, Col } from 'antd';
-import { Card, Input, Modal, Form, Row, notification, Typography, Select, DatePicker, Table } from 'antd';
+import { Card, Input, Modal, Form, Row, notification, Typography, Select, DatePicker, Table, } from 'antd';
+import Appraisal from "./Appraisal";
+import { NavLink } from "react-router-dom";
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Text, Link } = Typography;
+const { Meta } = Card;
 
 
 const AppraisalHr = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [openm, setOpen] = useState(false);
+    const [secondModal, setSecondModal] = useState(false)
     const [form] = Form.useForm();
     const [editedRecord, setEditedRecord] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [formLayout, setFormLayout] = useState('horizontal');
     const [loading, setLoading] = useState(false);
     const [userRecord, setUserRecord] = useState({
-        employeename: '',
-        mailid: '',
-        address: "",
-        city: "",
-        country: "",
-        phonenumber: "",
-        state: "",
-        zipcode: "",
+        associateId: '',
+        associatename: '',
+        joiningdate: "",
+        currentposition: "",
+        evaluationperiod: "",
+
     });
 
     const columns = [
@@ -34,9 +37,16 @@ const AppraisalHr = () => {
             width: 80,
         },
         {
-            title: "Associate Name",
-            dataIndex: "associatename",
-            key: "associatename",
+            title: "Employee Id",
+            dataIndex: "associateid",
+            key: "associateid",
+            // fixed: "left",
+            width: 160,
+        },
+        {
+            title: "Reporting Manager",
+            dataIndex: "manager",
+            key: "managers",
             // fixed: "left",
             width: 160,
         },
@@ -56,40 +66,58 @@ const AppraisalHr = () => {
         {
             title: 'Evaluation Quarter',
             children: [
-              {
-                title: 'Q1',
-                dataIndex: 'quarterone',
-                key: 'quarterone',
-                width: 50,
-              },
-              {
-                title: 'Q2',
-                dataIndex: 'quartertwo',
-                key: 'quartertwo',
-                width: 50,
-              },
-              {
-                title: 'Q3',
-                dataIndex: 'quarterthree',
-                key: 'quarterthree',
-                width: 50,
-              },
-              {
-                title: 'Q4',
-                dataIndex: 'quarterfour',
-                key: 'quarterfour',
-                width: 50,
-              },
+                {
+                    title: 'Q1',
+                    dataIndex: 'quarterone',
+                    key: 'quarterone',
+                    width: 50,
+                },
+                {
+                    title: 'Q2',
+                    dataIndex: 'quartertwo',
+                    key: 'quartertwo',
+                    width: 50,
+                },
+                {
+                    title: 'Q3',
+                    dataIndex: 'quarterthree',
+                    key: 'quarterthree',
+                    width: 50,
+                },
+                {
+                    title: 'Q4',
+                    dataIndex: 'quarterfour',
+                    key: 'quarterfour',
+                    width: 50,
+                },
             ],
-          },
-        {
-            title: "Status",
-            dataIndex: "status",
-            key: "status",
-            width: 150,
         },
-        
-        
+        // {
+        //     title: "Status",
+        //     children: [
+        //         {
+        //             title: 'Employee',
+        //             dataIndex: 'emp',
+        //             key: 'emp',
+        //             width: 80,
+        //         },
+        //         {
+        //             title: 'Lead',
+        //             dataIndex: 'lead',
+        //             key: 'lead',
+        //             width: 80,
+        //         },
+        //         {
+        //             title: 'Manager',
+        //             dataIndex: 'manager',
+        //             key: 'manager',
+        //             width: 80,
+        //         },
+
+        //     ],
+        // },
+
+
         {
             title: "Action",
             dataIndex: "action",
@@ -98,11 +126,9 @@ const AppraisalHr = () => {
             width: 150,
 
             render: (_, record) => {
-                // console.log("record:: ", record);
+
                 return (
-                    // record.key !== "subTotal" && (
                     <>
-                        {/* <Space size="small"> */}
                         <Button
                             style={{ padding: 0 }}
                             type="link"
@@ -114,9 +140,35 @@ const AppraisalHr = () => {
                         >
                             {<EditOutlined />}
                         </Button>
+
+                        <Button
+                            style={{ padding: 0 }}
+                            type="link"
+                            className="edIt"
+                            onClick={() => {
+                                handleEditEmployee(record);
+                                showModal(record);
+                            }}
+                        >
+                            {<PrinterFilled />}
+                        </Button>
+
+                        <Button
+                            style={{ padding: 0 }}
+                            type="link"
+                            className="edIt"
+                            onClick={() => {
+                                handleEditEmployee(record);
+                                showModal(record);
+                            }}
+                        >
+                            {<DeleteOutlined />}
+                        </Button>
+
+
                     </>
                 );
-                // );
+
             },
         },
     ];
@@ -126,6 +178,11 @@ const AppraisalHr = () => {
     const showModal = () => {
         console.log('hi')
         setIsModalOpen(true);
+    };
+
+    const shownModal = () => {
+        console.log('hi')
+        setOpen(true);
     };
 
     const handleCancel = () => {
@@ -185,12 +242,12 @@ const AppraisalHr = () => {
 
     const onChange = (date, dateString) => {
         console.log(date, dateString);
-      };
-//model------2
+    };
+
     const handleEditEmployee = (record) => {
         console.log("record: ", record);
         setEditedRecord(record);
-      };
+    };
 
     return (
         <div style={{
@@ -200,29 +257,110 @@ const AppraisalHr = () => {
             width: '100%',
             borderRadius: '10px'
 
+
         }}>
-            <Col xl={12} lg={12} md={12} sm={24} xs={24}>
-                <Card
-                    title=""
-                    extra={<Button type="primary" onClick={showModal}>
-                        Create Appraisal Form
-                    </Button>}
-                    style={{
+            <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                <div className='leavediv' style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    margin: '10px'
 
-                        width: '100%',
-                        borderRadius: '10px',
-                        margin: '10px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-
-                    }}
+                }}
                 >
+                    <Row gutter={[48, 16]}>
+                        <div className='card-div' style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between'
+                        }}>
+                            <Col span={6}>
 
-                    <Text type="secondary">Create Appraisal Form Here! </Text>
+                                <Card onClick={showModal}
+                                    style={{ width: 200, height: 200, borderRadius: '10px' }}
+                                    hoverable
+                                    cover={
+                                        <img
+                                            style={{ padding: '50px' }}
 
-                </Card>
+                                            alt="example"
+                                            src="/logo/resources.png"
+                                        />
+                                    }
+
+                                >
+                                    <Meta style={{ marginBottom: '10px', justifyContent: 'center' }}
+                                        title="HR"
+                                    />
+                                </Card>
+                            </Col>
+
+                            <Col span={6}>
+
+                                <Card onClick={()=>setSecondModal(true)}
+                                    style={{ width: 200, height: 200, borderRadius: '10px', }}
+                                    hoverable
+                                    cover={
+                                        <img
+                                            style={{ padding: '50px' }}
+                                            alt="example"
+                                            src="/logo/division.png"
+
+                                        />
+                                    }
+
+                                >
+
+                                    <Meta style={{ marginBottom: '10px', justifyContent: 'center' }}
+                                        title="Employee"
+                                    />
+                                </Card>
+                            </Col>
+
+                            <Col span={6}>
+                                <Card onClick={() => setOpen(true)}
+                                    style={{ width: 200, height: 200, borderRadius: '10px' }}
+                                    hoverable
+                                    cover={
+                                        <img
+                                            style={{ padding: '50px' }}
+                                            alt="example"
+                                            src="/logo/leader.png"
+                                        />
+                                    }
+
+                                >
+                                    <Meta style={{ marginBottom: '10px', justifyContent: 'center' }}
+                                        title="Lead"
+                                    />
+                                </Card>
+                            </Col>
+                            <Col span={6}>
+                                <Card
+                                    style={{ width: 200, height: 200, borderRadius: '10px' }}
+                                    hoverable
+                                    cover={
+                                        <img
+                                            style={{ padding: '50px' }}
+                                            alt="example"
+                                            src="/logo/manager.png"
+                                        />
+                                    }
+
+                                >
+                                    <Meta style={{ marginBottom: '10px', justifyContent: 'center' }}
+                                        title="Manager"
+                                    />
+                                </Card>
+                            </Col>
+                        </div>
+                    </Row>
+
+                </div>
             </Col>
+
+
+
 
             <Modal maskClosable={false} centered title="Basic information" footer={null} visible={isModalOpen} open={isModalOpen} onCancel={handleCancel}>
                 <Row >
@@ -256,9 +394,9 @@ const AppraisalHr = () => {
                             onValuesChange={onFormLayoutChange}
                         >
                             <Form.Item labelAlign="left"
-                                style={{ marginBottom: "10px", }}
-                                label="Associate Name"
-                                name="associatename"
+                                style={{ marginBottom: "10px" }}
+                                label="Employee Id"
+                                name="associateId"
                                 onKeyPress={(event) => {
                                     if (checkAlphabets(event)) {
                                         event.preventDefault();
@@ -267,6 +405,21 @@ const AppraisalHr = () => {
 
                             >
                                 <Input placeholder="Associate Name" />
+                            </Form.Item>
+
+
+                            <Form.Item labelAlign="left"
+                                style={{ marginBottom: "10px" }}
+                                label="Reporting Manager"
+                                name="manager"
+                                onKeyPress={(event) => {
+                                    if (checkAlphabets(event)) {
+                                        event.preventDefault();
+                                    }
+                                }}
+
+                            >
+                                <Input placeholder="Reporting Manager" />
                             </Form.Item>
 
 
@@ -280,7 +433,8 @@ const AppraisalHr = () => {
                                     }
                                 }}
                             >
-                                <DatePicker style={{ width: "100%" }} />
+                                <DatePicker style={{ width: "100%" }}
+                                    format="DD-MM-YYYY " />
                             </Form.Item>
 
                             <Form.Item labelAlign="left"
@@ -313,7 +467,7 @@ const AppraisalHr = () => {
 
                             <Form.Item labelAlign="left"
                                 name="evaluationperiod"
-                                style={{ marginBottom: "10px" }}
+                                style={{ marginBottom: "10px", width: '100%' }}
                                 label="Evaluation Period"
                                 onKeyPress={(event) => {
                                     if (checkAlphabets(event)) {
@@ -321,7 +475,7 @@ const AppraisalHr = () => {
                                     }
                                 }}
                             >
-                                 <DatePicker onChange={onChange} picker="quarter" />
+                                <DatePicker style={{ width: '100%' }} onChange={onChange} picker="quarter" />
                             </Form.Item>
 
                             <Form.Item >
@@ -346,16 +500,19 @@ const AppraisalHr = () => {
             </Modal>
 
 
-            <Table
+            <Table 
                 loading={loading}
                 columns={columns}
                 dataSource={data}
+                bordered
+
                 pagination={{
                     position: ["bottomCenter"],
                 }}
                 scroll={{ x: 1300 }}
                 className="employeeTable"
                 size="small"
+                style={{margin:'50px'}}
             />
             <Modal
                 centered
@@ -379,6 +536,18 @@ const AppraisalHr = () => {
                     record={editedRecord}
                     setIsModalVisible={setIsModalVisible}
                 /> */}
+            </Modal>
+
+            <Modal 
+                title="Appraisal Form"
+                centered
+                open={secondModal}
+                visible={secondModal}
+                onOk={() => setSecondModal(false)}
+                onCancel={() => setSecondModal(false)}
+                width={1000}
+            >
+              <Appraisal/>
             </Modal>
 
 

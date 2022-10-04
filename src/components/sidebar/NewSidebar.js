@@ -296,21 +296,21 @@ const NewSidebar = (props) => {
             title="Appraisal"
             mode="inline"
           >
-            <Menu.Item
-              className="arrow"
+            {/* <Menu.Item className='arrow'
+
               icon={<img src="/logo/dot.png" alt="appraisal" className="dot" />}
               key="19"
             >
               Employees
               <NavLink to="/Appraisal/AppraisalPage" />
-            </Menu.Item>
+            </Menu.Item> */}
 
             <Menu.Item
               className="arrow"
               icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
               key="20"
             >
-              Hr Corner
+              Appraisal Form
               <NavLink to="/Appraisal/AppraisalPageHr" />
             </Menu.Item>
           </Menu.SubMenu>

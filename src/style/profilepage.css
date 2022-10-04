@@ -6,28 +6,28 @@
 
 }
 
- .anticon {
+ /* .anticon {
     margin-right: 10px;
-    /* font-family: 'CircularStd', sans-serif */
- }
-
+   
+ } */
+/* 
  .ant-upload-list-item  {
     border:none;
     padding:0px
-    /* background-color: black */
-}
+  
+} */
 
-.ant-upload-list-item-info{
+/* .ant-upload-list-item-info{
     border-radius: 100%
-}
+} */
 
-.ant-upload-list-picture-card .ant-upload-list-item {
+/* .ant-upload-list-picture-card .ant-upload-list-item {
     border: none
-}
+} */
 
-.div-title{
+/* .div-title{
     display: flex;
-}
+} */
 
 @media only screen and (max-width: 800px)  and (min-width: 660px ) {
     .col-card{

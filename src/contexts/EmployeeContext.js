@@ -12,7 +12,7 @@ import {
   doc,
 } from "firebase/firestore";
 
-const employeeCollectionRef = collection(db, "employees");
+const employeeCollectionRef = collection(db, "users");
 
 class EmployeeContext {
   addEmployees = (newEmployee) => {
@@ -20,12 +20,12 @@ class EmployeeContext {
   };
 
   updateEmployee = (id, updateEmployee) => {
-    const employeeDoc = doc(db, "employees", id);
+    const employeeDoc = doc(db, "users", id);
     return updateDoc(employeeDoc, updateEmployee);
   };
 
   deleteEmployee = (id) => {
-    const employeeDoc = doc(db, "employees", id);
+    const employeeDoc = doc(db, "users", id);
     return deleteDoc(employeeDoc);
   };
 
@@ -42,7 +42,7 @@ class EmployeeContext {
   };
 
   getEmployee = (id) => {
-    const employeeDoc = doc(db, "employees", id);
+    const employeeDoc = doc(db, "users", id);
     return getDoc(employeeDoc);
   };
 }

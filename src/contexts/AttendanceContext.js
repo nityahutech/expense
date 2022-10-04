@@ -1,22 +1,22 @@
 import { db } from "../firebase-config";
-import moment from "moment";
-import Moment from "moment";
-import { extendMoment } from "moment-range";
+import moment from 'moment';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
 import {
-  collection,
-  getDocs,
-  getDoc,
-  query,
-  orderBy,
-  addDoc,
-  updateDoc,
-  // update,
-  deleteDoc,
-  doc,
-  where,
-  limit,
-  runTransaction,
-  get,
+    collection,
+    getDocs,
+    getDoc,
+    query,
+    orderBy,
+    addDoc,
+    updateDoc,
+    // update,
+    deleteDoc,
+    doc,
+    where,
+    limit, 
+    runTransaction,
+    get
 } from "firebase/firestore";
 import { async } from "@firebase/util";
 
@@ -229,11 +229,24 @@ class AttendanceContext {
     return status;
   };
 
-  getAttendance = (id) => {
-    const q = query(attendCollectionRef, where("empId", "==", id), limit(1));
-    const attendDoc = doc(db, "attendance", id);
-    return getDoc(q);
-  };
+    
+
+    getAttendance = (id) => { 
+        const q = query(attendCollectionRef, where("empId", "==", id),limit(1))
+        const attendDoc = doc(db, "attendance", id);
+        return getDoc(q);
+    };
+    getStartTime = async (id) =>{
+        const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("empId", "==", id), where("clockOut","==",null), limit(1))
+        let rec = await getDocs(q);
+        let d = rec.docs.map((doc) => {
+            return {
+                ...doc.data(),
+                id: doc.id
+            };
+        });
+        return d[0].clockIn;
+    }
 }
 
 export default new AttendanceContext();

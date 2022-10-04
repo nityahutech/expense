@@ -36,7 +36,7 @@ function AttendanceLog({ empDetails }) {
   const [monthlydata, setMonthlydata] = useState([]);
   const [allEmp, setallEmp] = useState([]);
   const [role, setRole] = useState(empDetails);
-  const [selectemp, setSelectemp] = useState({ id: "" });
+  const [selectemp, setSelectemp] = useState({id : ""});
   const [activetab, setActivetab] = useState("1");
   console.log(activetab);
   const { currentUser } = useAuth();
@@ -120,7 +120,7 @@ function AttendanceLog({ empDetails }) {
       // time2: "18:15:23",
       // work: "-",
       report: values?.project_details || "-",
-      project: values?.project_name || "-",
+      project: values?.project_name || "-"
     };
     console.log(currentUser.uid, { monthlydata });
     AttendanceContext.updateAttendance(currentUser.uid, newData);
@@ -137,11 +137,12 @@ function AttendanceLog({ empDetails }) {
   //   getEmpDetails(selectemp.id);
   //   // getEmpMonthly();
   // }, [activetab]);
-  async function getEmpDetails(id) {
-    console.log(id);
-    let data = await AttendanceContext.getAllAttendance(id);
 
-    console.log(data);
+  async function getEmpDetails(id) {
+    console.log(id)
+    let data = await AttendanceContext.getAllAttendance(id);
+    
+    console.log(data)
     setEmpMonthly(data);
   }
   // function getEmpMonthly() {
@@ -166,32 +167,31 @@ function AttendanceLog({ empDetails }) {
   //   setEmpMonthly(newEmp);
   //   // setallEmp(newEmp);
   // }
+
   function allEmpDetails() {
     // console.log(JSON.parse(localStorage.getItem("newReport")));
     AttendanceContext.getAllUsers().then((userdata) => {
-      console.log(JSON.stringify(userdata));
-      getWithLeave(userdata);
-    });
+      setallEmp(userdata);
+      getWithLeave(userdata)
+    })
   }
+
   function getWithLeave(userdata) {
     AttendanceContext.updateWithLeave(userdata).then((final) => {
-      console.log(
-        "test1",
-        final ? JSON.parse(JSON.stringify(final)) : undefined
-      );
+      console.log("test1",final?JSON.parse(JSON.stringify(final)):undefined)
       setallEmp(final);
       setFilteredEmp(final);
       setEmpMonthly(final);
-    });
+    })
   }
-  // stats.map((rec) => {
-  //   console.log("mooooooooooooooooooooooooooooo");
-  // if (emp.id == rec.id) {
-  //   emp.status = "Present";
-  //   emp.project = rec.project;
-  //   emp.report = rec.report;
-  //   return;
-  // }
+    // stats.map((rec) => {
+    //   console.log("mooooooooooooooooooooooooooooo");
+    // if (emp.id == rec.id) {
+    //   emp.status = "Present";
+    //   emp.project = rec.project;
+    //   emp.report = rec.report;
+    //   return;
+    // }
   // })
   //   else {
   //     console.log("AAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHH");
@@ -202,22 +202,23 @@ function AttendanceLog({ empDetails }) {
   //   })
   // }
 
-  // let newEmp = [];
-  // userlocal.map((emp, i) => {
-  //   newEmp.push({
-  //     key: i,
-  //     code: emp.code + i,
-  //     date: emp.date,
-  //     status: emp.status,
-  //     time1: emp.time1,
-  //     time2: emp.time2,
-  //     empname: "Nitya-" + (i + 1),
-  //     project: emp.project,
-  //     report: emp.report,
-  //   });
-  // });
-  // console.log({ newEmp });
-
+    
+    // let newEmp = [];
+    // userlocal.map((emp, i) => {
+    //   newEmp.push({
+    //     key: i,
+    //     code: emp.code + i,
+    //     date: emp.date,
+    //     status: emp.status,
+    //     time1: emp.time1,
+    //     time2: emp.time2,
+    //     empname: "Nitya-" + (i + 1),
+    //     project: emp.project,
+    //     report: emp.report,
+    //   });
+    // });
+    // console.log({ newEmp });
+  
   const onReset = () => {
     form.resetFields();
   };
@@ -235,6 +236,11 @@ function AttendanceLog({ empDetails }) {
   useEffect(() => {
     setFilteredEmp(filteredEmp);
   }, [filteredEmp]);
+
+  // useEffect(() => {
+  //   getWithLeave(allEmp);
+  // }, [allEmp, filteredEmp])
+
   //   const rowSelection = {
   //     onChange: (selectedRowKeys, selectedRows) => {
   //       setSelectemp(selectedRows[0].code);
@@ -252,6 +258,7 @@ function AttendanceLog({ empDetails }) {
   //   {
   //     key: "1",
   //     code: "HTS001",
+
   //     name: "Nitya",
   //     project: "Expenses",
   //     report: "xfddsfdvbgfgfbvbvbdffgfdgjfhjjkjfjfdgkj",
@@ -259,6 +266,7 @@ function AttendanceLog({ empDetails }) {
   //   {
   //     key: "2",
   //     code: "HTS002",
+
   //     name: "Jatin",
   //     project: "Expenses",
   //     report: "xfddsfdvbgfgfbvbvb",
@@ -266,6 +274,7 @@ function AttendanceLog({ empDetails }) {
   //   {
   //     key: "3",
   //     code: "HTS003",
+
   //     name: "Saswat",
   //     project: "Expenses",
   //     report: "xfddsfdvbgfgfbvbvb",
@@ -313,7 +322,7 @@ function AttendanceLog({ empDetails }) {
       title: "Report",
       key: "report",
       dataIndex: "report",
-    },
+    }
     // {
     //   title: "Action",
     //   key: "action",
@@ -402,6 +411,10 @@ function AttendanceLog({ empDetails }) {
       setFilteredEmp(allEmp);
     }
   };
+  
+  console.log("test",(filteredEmp[1]));
+  console.log("test",filteredEmp[1]?JSON.parse(JSON.stringify(filteredEmp[1])):"empty");
+  console.log(filteredEmp);
 
   console.log("test", filteredEmp[3]);
   console.log("test", JSON.stringify(filteredEmp[3]));

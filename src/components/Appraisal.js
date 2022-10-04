@@ -10,21 +10,23 @@ import {
     Form,
     Divider,
     Table,
-    Space
+    Space,
+    notification
+ 
 
 } from "antd";
 import { Progress } from 'antd';
 const { TextArea } = Input;
 const { Text, Link } = Typography;
+const { Title } = Typography;
 
 const fixedColumns = [
     {
         title: "Assessment Area",
         dataIndex: "name",
-        fixed: true,
-        width: 300,
-
-
+       
+        width: 160,
+        fixed: "left",
     },
     {
         title: "Rating Guidance",
@@ -35,7 +37,7 @@ const fixedData = [
     {
         key: '1',
         name: 'Far Exceeds (Role Model)',
-        description: 'Performance far exceeds job requirements (i.e., consistently far exceeds performance objectives)'
+        description: 'Performance far exceeds job requirements (i.e., consistently far exceeds performance objectives)',
 
     },
     {
@@ -64,26 +66,56 @@ const fixedData = [
     },
 ];
 
+
 const Appraisal = () => {
+
 
     const [editContent, showEditContent] = useState(false);
     const [editContactInfo, showEditContactInfo] = useState(false);
+    // const [secondModal, setSecondModal] = useState(false)
+
+    // const handleOk = () => {
+    //     console.log('hiii')
+    //     setSecondModal(false);
+    //     showNotification("success", "Success", "Record updated successfuly");
+    // };
+    
+    // const showNotification = (type, msg, desc) => {
+    //     notification[type]({
+    //         message: msg,
+    //         description: desc,
+    //     });
+    // };
+    
     return (
         <div style={{ display: "flex", flexDirection: "column", alignItems: 'center' }}>
 
             <Card
+            
                 title="Staff Performance Appraisal Form"
+                // extra={<Button  type="primary">Print</Button>}
+              
 
                 style={{
                     width: 800,
                     marginTop: 10,
+                    
                 }}
             >
                 <Row gutter={[16, 16]}>
 
-                    <Col span={6}>
+                
+                    <Col span={8}>
                         <div>
-                            <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                            <div style={{ fontWeight: "600", fontSize: "15px" }}>
+                                Employee Id
+                            </div>
+                        </div>
+                    </Col>
+
+                    <Col span={8}>
+                        <div>
+                            <div style={{ fontWeight: "600", fontSize: "15px" }}>
                                 Associate Name
                             </div>
 
@@ -91,20 +123,10 @@ const Appraisal = () => {
                         </div>
                     </Col>
 
-                    <Col span={6}>
+
+                    <Col span={8}>
                         <div>
-                            <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                                Employee Id
-                            </div>
-
-
-
-                        </div>
-                    </Col>
-
-                    <Col span={6}>
-                        <div>
-                            <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                            <div style={{ fontWeight: "600", fontSize: "15px" }}>
                                 Current Position
                             </div>
 
@@ -113,9 +135,9 @@ const Appraisal = () => {
                         </div>
                     </Col>
 
-                    <Col span={6}>
+                    <Col span={8}>
                         <div>
-                            <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                            <div style={{ fontWeight: "600", fontSize: "15px" }}>
                                 Date Of Joining
                             </div>
 
@@ -123,9 +145,9 @@ const Appraisal = () => {
                         </div>
                     </Col>
 
-                    <Col span={6}>
+                    <Col span={8}>
                         <div>
-                            <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                            <div style={{ fontWeight: "600", fontSize: "15px" }}>
                                 Quarter
                             </div>
 
@@ -133,28 +155,19 @@ const Appraisal = () => {
                         </div>
                     </Col>
 
-                    <Col span={18}>
+                    <Col span={8}>
                         <div>
-                            <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                                Status
+                            <div style={{ fontWeight: "600", fontSize: "15px" }}>
+                                Reporting Manager
                             </div>
 
-                            <div
-                                style={{
-                                    width: 250,
-                                }}
-                            >
-                                {/* <Progress percent={100} size="small" /> */}
-                            </div>
+                           
                         </div>
                     </Col>
                 </Row>
             </Card>
 
-
-
             <Card title="Refrence Guide"
-
                 style={{
                     width: 800,
                     marginTop: 10,
@@ -165,9 +178,10 @@ const Appraisal = () => {
             >
                 <Table
                     style={{
-                        padding: '5px',
+                        padding: '0px',
 
                     }}
+                    size="small"
                     columns={fixedColumns}
                     dataSource={fixedData}
                     bordered
@@ -177,10 +191,8 @@ const Appraisal = () => {
                 />
             </Card>
 
-
-
+            
             <Card
-
                 style={{
                     width: 800,
                     marginTop: 10,
@@ -191,7 +203,44 @@ const Appraisal = () => {
             >
                 <Col span={24}>
                     <div>
-                        <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
+                            Project Name and Description
+                        </div>
+                        <Form.Item
+                            className="numder-inputs"
+                            name="phonenumber"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "",
+                                    // pattern: /^[0-9\b]+$/,
+                                },
+                                { whitespace: true },
+                            ]}
+                        >
+                            <TextArea rows={2}
+                                maxLength={10}
+                                required
+                                placeholder=""
+                            />
+                        </Form.Item>
+
+                    </div>
+                </Col>
+            </Card>
+
+            <Card
+                style={{
+                    width: 800,
+                    marginTop: 10,
+                    padding: '5px',
+
+                }}
+
+            >
+                <Col span={24}>
+                    <div>
+                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
                             What were your best traits or contribution to the company this quarter?
                         </div>
                         <Form.Item
@@ -218,7 +267,6 @@ const Appraisal = () => {
             </Card>
 
             <Card
-
                 style={{
                     width: 800,
                     marginTop: 10,
@@ -229,7 +277,7 @@ const Appraisal = () => {
             >
                 <Col span={24}>
                     <div>
-                        <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
                             What are your goal for next quarter?
                         </div>
                         <Form.Item
@@ -256,7 +304,6 @@ const Appraisal = () => {
             </Card>
 
             <Card
-
                 style={{
                     width: 800,
                     marginTop: 10,
@@ -267,7 +314,7 @@ const Appraisal = () => {
             >
                 <Col span={24}>
                     <div>
-                        <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
                             What help do you need from the management?
                         </div>
                         <Form.Item
@@ -294,7 +341,6 @@ const Appraisal = () => {
             </Card>
 
             <Card
-
                 style={{
                     width: 800,
                     marginTop: 10,
@@ -305,8 +351,247 @@ const Appraisal = () => {
             >
                 <Col span={24}>
                     <div>
-                        <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
                             What are your Strength and Development Area?
+                        </div>
+                        <Form.Item
+                            className="numder-inputs"
+                            name="phonenumber"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "",
+                                    // pattern: /^[0-9\b]+$/,
+                                },
+                                { whitespace: true },
+                            ]}
+                        >
+                            <TextArea rows={4}
+                                maxLength={10}
+                                required
+                                placeholder=""
+                            />
+                        </Form.Item>
+
+                    </div>
+                </Col>
+            </Card>
+
+            <Card
+                style={{
+                    width: 800,
+                    marginTop: 10,
+                    padding: '5px',
+
+                }}
+
+            >
+                <Col span={24}>
+                    <div>
+                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
+                            What are your Strength and Development Area?
+                        </div>
+                        <Form.Item
+                            className="numder-inputs"
+                            name="phonenumber"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "",
+                                    // pattern: /^[0-9\b]+$/,
+                                },
+                                { whitespace: true },
+                            ]}
+                        >
+                            <TextArea rows={4}
+                                maxLength={10}
+                                required
+                                placeholder=""
+                            />
+                        </Form.Item>
+
+                    </div>
+                </Col>
+            </Card>
+
+            <div style = {{backgroundColor:'white',marginTop:'10px',width:'',padding:'10px'}}>
+              
+               <Title  level={5}>To Be Fill By Team Lead</Title>
+            </div>
+
+            <Card
+                style={{
+                    width: 800,
+                    marginTop: 10,
+                    padding: '5px',
+
+                }}
+
+            >
+
+                <Col span={24}>
+                    <div>
+                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
+                            Set goals and objective for upcoming assement year
+                        </div>
+                        <Form.Item
+                            className="numder-inputs"
+                            name="phonenumber"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "",
+                                    // pattern: /^[0-9\b]+$/,
+                                },
+                                { whitespace: true },
+                            ]}
+                        >
+                            <TextArea rows={4}
+                                maxLength={10}
+                                required
+                                placeholder=""
+                            />
+                        </Form.Item>
+
+                    </div>
+                </Col>
+            </Card>
+
+            <Card
+                style={{
+                    width: 800,
+                    marginTop: 10,
+                    padding: '5px',
+
+                }}
+
+            >
+
+                <Col span={24}>
+                    <div>
+                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
+                            Overall Rating
+                        </div>
+                        <Form.Item
+                            className="numder-inputs"
+                            name="phonenumber"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "",
+                                    // pattern: /^[0-9\b]+$/,
+                                },
+                                { whitespace: true },
+                            ]}
+                        >
+                            <TextArea rows={4}
+                                maxLength={10}
+                                required
+                                placeholder=""
+                            />
+                        </Form.Item>
+
+                    </div>
+                </Col>
+            </Card>
+
+            <div style = {{backgroundColor:'white',marginTop:'10px',width:'',padding:'10px'}}>
+           
+               <Title  level={5}>To Be Fill By Manager</Title>
+            </div>
+
+
+            <Card
+
+                style={{
+                    width: 800,
+                    marginTop: 10,
+                    padding: '5px',
+
+                }}
+
+            >
+               
+                <Col span={24}>
+                    <div>
+                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
+                            Associate Engagement Comments:
+                        </div>
+                        <Form.Item
+                            className="numder-inputs"
+                            name="phonenumber"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "",
+                                    // pattern: /^[0-9\b]+$/,
+                                },
+                                { whitespace: true },
+                            ]}
+                        >
+                            <TextArea rows={4}
+                                maxLength={10}
+                                required
+                                placeholder=""
+                            />
+                        </Form.Item>
+
+                    </div>
+                </Col>
+            </Card>
+
+            <Card
+                style={{
+                    width: 800,
+                    marginTop: 10,
+                    padding: '5px',
+
+                }}
+
+            >
+
+                <Col span={24}>
+                    <div>
+                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
+                            People Management/Leadership Objectives:
+                        </div>
+                        <Form.Item
+                            className="numder-inputs"
+                            name="phonenumber"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "",
+                                    // pattern: /^[0-9\b]+$/,
+                                },
+                                { whitespace: true },
+                            ]}
+                        >
+                            <TextArea rows={4}
+                                maxLength={10}
+                                required
+                                placeholder=""
+                            />
+                        </Form.Item>
+
+                    </div>
+                </Col>
+            </Card>
+
+            <Card
+                style={{
+                    width: 800,
+                    marginTop: 10,
+                    padding: '5px',
+
+                }}
+
+            >
+
+                <Col span={24}>
+                    <div>
+                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
+                            Diversity Goals Comments (if applicable):
                         </div>
                         <Form.Item
                             className="numder-inputs"
@@ -333,20 +618,15 @@ const Appraisal = () => {
 
             <Space>
                 <Form.Item className='submit'>
-                   
-                      
-                        <Button   style={{
-                           
-                            marginTop: '10px',
-                          
-                        }} type="primary">Submit Form</Button>
-                   
+                    <Button   
+                    // onClick={handleOk}
+                     style={{
+                        marginTop: '10px',
+                    }} type="primary">Submit Form</Button>
+
                 </Form.Item>
-                
+
             </Space>
-
-
-
 
         </div>
     )

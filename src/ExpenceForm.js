@@ -20,6 +20,8 @@ import {
   Button,
   DatePicker,
   Form,
+  notification
+
 
 } from 'antd';
 import { formatCountdown } from 'antd/lib/statistic/utils';
@@ -36,6 +38,7 @@ const ExpenceForm = () => {
   const [amount, setAmount] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [total, setTotal] = useState(0);
+  
   // const [description, setDescription] = useState("");
 
   const { TextArea } = Input;
@@ -81,12 +84,20 @@ const ExpenceForm = () => {
       .then(response => {
         console.log(response);
         navigate('/Expense/ExpenseList');
+        showNotification("success", "Success", "Expense Added");
       })
       .catch(error => {
         console.log(error.message);
 
       })
   };
+
+  const showNotification = (type, msg, desc) => {
+    notification[type]({
+        message: msg,
+        description: desc,
+    });
+};
 
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);

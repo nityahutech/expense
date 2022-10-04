@@ -1,16 +1,16 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Input, Button, DatePicker, Select, Form } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { useAuth } from "../../contexts/AuthContext";
-// import moment from 'moment';
+import moment from "moment";
 const { TextArea } = Input;
 const { Option } = Select;
-const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
+const dateFormatList = ["DD/MM/YYYY"];
 function Personal() {
   const [editContent, showEditContent] = useState(false);
   const [editContactInfo, showEditContactInfo] = useState(false);
-  const [dob, setDob] = useState("");  
+  const [dob, setDob] = useState("");
   const [scrs, setScrs] = useState("");
   const [lccs, setLccs] = useState("");
   // const [houseType, setHouseType] = useState("");
@@ -20,33 +20,34 @@ function Personal() {
   // const [phonenumber, setPhoneNumber] = useState("");
   // const [mailid, setMailId] = useState("");
   const [editAddressInfo, showEditAddressInfo] = useState(false);
-
   // const [cancelEditContent, setcancelEditContent] = useState(false);
   const [data, setData] = useState([]);
-  const{currentUser}=useAuth()
-  const onFinish = (value)=>{
-    console.log(data)
+  const { currentUser } = useAuth();
+  const onFinish = (value) => {
+    console.log(data);
     console.log(value);
-    let nameArray = value.name.split(" ")
-    
-    let fname= "";
-    for(let i = 0; i < (nameArray.length - 1); i++){
+    let nameArray = value.name.split(" ");
+
+    let fname = "";
+    for (let i = 0; i < nameArray.length - 1; i++) {
       fname = fname + nameArray[i] + " ";
     }
-    console.log(fname, nameArray[nameArray.length - 1])
-    let record={...value,
+    console.log(fname, nameArray[nameArray.length - 1]);
+    let record = {
+      ...value,
       lname: nameArray[nameArray.length - 1],
       fname: fname,
-      dob:dob?dob:null,
-    }
-    delete record['name']
-    console.log('success',record)
-    console.log(dob)
-    console.log(scrs)
-    console.log(lccs)
-    EmpInfoContext.updateEduDetails(currentUser.uid,record)     
-    setData(record)
-    showEditContent(false)
+      dob: dob ? dob : null,
+    };
+    delete record["name"];
+    console.log("success", record);
+    console.log(dob);
+    console.log(scrs);
+    console.log(lccs);
+    EmpInfoContext.updateEduDetails(currentUser.uid, record);
+    // setData(record)
+    getData();
+    showEditContent(false);
   };
   // function disabledDate(current) {
   //   // Can not select days before today and today
@@ -57,63 +58,63 @@ function Personal() {
   const onContactFinish = (values) => {
     // console.log(contactdata)
     console.log(values);
-    console.log('success',values)
+    console.log("success", values);
 
+    EmpInfoContext.updateEduDetails(currentUser.uid, values);
+    //  setData(values)
 
-    EmpInfoContext.updateEduDetails(currentUser.uid,values)     
-     setData(values)
-     showEditContactInfo(false)
-  }
+    getData();
+    showEditContactInfo(false);
+  };
   // const [addressdata, setAddressData] = useState([]);
 
   const onEditAddressFinish = (newvalue) => {
-    console.log(lccs, scrs)
+    console.log(lccs, scrs);
     console.log(newvalue);
-    let record={...newvalue,
-      scrs:scrs?scrs:null,
-      lccs:lccs?lccs:null,
-    }
-    console.log('success',record)
+    let record = {
+      ...newvalue,
+      scrs: scrs ? scrs : null,
+      lccs: lccs ? lccs : null,
+    };
+    console.log("success", record);
 
-    EmpInfoContext.updateEduDetails(currentUser.uid,record)     
-     showEditAddressInfo(false)
-     getData();
-  }
+    EmpInfoContext.updateEduDetails(currentUser.uid, record);
+    showEditAddressInfo(false);
+    getData();
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     getData();
     // getContactData();
     // getAddressData();
-    
-  },[]);
+  }, []);
 
-  const getData=async()=>{
-    let data=await EmpInfoContext.getEduDetails(currentUser.uid)
-    console.log(data)
-    setData(data)
-    setDob(data.dob?data.dob:null)
-    setLccs(data.lccs?data.lccs:null)
-    setScrs(data.scrs?data.scrs:null)
-  }
-  console.log(data)
-  const getContactData = async ()=>{
-    let alldata=await EmpInfoContext.getEduDetails(currentUser.uid)
-    console.log(alldata)
-     getData();
-     // setMailId(data.mailid?data.mailid:null)
+  const getData = async () => {
+    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+    console.log(data);
+    setData(data);
+    setDob(data.dob ? data.dob : null);
+    setLccs(data.lccs ? data.lccs : null);
+    setScrs(data.scrs ? data.scrs : null);
+  };
+  console.log(data);
+  const getContactData = async () => {
+    let alldata = await EmpInfoContext.getEduDetails(currentUser.uid);
+    console.log(alldata);
+    getData();
+    // setMailId(data.mailid?data.mailid:null)
     // setContactEmail(data.contactEmail?data.contactEmail:null)
     // setPhoneNumber(data.phonenumber?data.phonenumber:null)
-  }
-  console.log(data)
-  const getAddressData=async()=>{
-    let data=await EmpInfoContext.getEduDetails(currentUser.uid)
-    console.log(data)
-     getData();
-     // setCurrentAdd(data.currentAdd?data.currentAdd:null)
+  };
+  console.log(data);
+  const getAddressData = async () => {
+    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+    console.log(data);
+    getData();
+    // setCurrentAdd(data.currentAdd?data.currentAdd:null)
     // setPermanentAdd(data.permanentAdd?data.permanentAdd:null)
     // setHouseType(data.houseType?data.houseType:null)
-    
-  }
+  };
 
   return (
     <>
@@ -169,9 +170,10 @@ function Personal() {
                     Name
                   </div>
                   {editContent === false ? (
-                    <div>{data?data.fname+" "+data.lname:null}</div>
+                    <div>{data ? data.fname + " " + data.lname : null}</div>
                   ) : (
                     <Form.Item
+                      initialValue={data.fname + " " + data.lname}
                       name="name"
                       rules={[
                         {
@@ -187,10 +189,12 @@ function Personal() {
                       ]}
                     >
                       <Input
+                      disabled={true}
+                        value={data.fname + " " + data.lname}
                         maxLength={50}
                         required
                         placeholder="Enter Your Name"
-                          //defaultValue = {data?data.fname+" "+data.lname:null}
+                        //defaultValue = {data?data.fname+" "+data.lname:null}
                       />
                     </Form.Item>
                   )}
@@ -202,9 +206,10 @@ function Personal() {
                     Date of Birth
                   </div>
                   {editContent === false ? (
-                    <div>{data?data.dob:null}</div>
+                    <div>{data ? data.dob : null}</div>
                   ) : (
                     <Form.Item
+                      // initialValue={dob}
                       name="dob"
                       rules={[
                         {
@@ -217,9 +222,12 @@ function Personal() {
                       <DatePicker
                         style={{ width: "100%" }}
                         format={dateFormatList}
-                        onChange= {(e) => {setDob(e.format("DD-MM-YYYY"));
-                                            console.log(e.format("DD-MM-YYYY"))}}
+                        onChange={(e) => {
+                          setDob(e.format("DD-MM-YYYY"));
+                          console.log(e.format("DD-MM-YYYY"));
+                        }}
                         //  disabledDate={disabledDate}
+                        value={dob}
                         placeholder="Choose Date"
                       />
                     </Form.Item>
@@ -232,10 +240,11 @@ function Personal() {
                     Gender
                   </div>
                   {editContent === false ? (
-                    <div>{data?data.gender:null}</div>
+                    <div>{data ? data.gender : null}</div>
                   ) : (
                     <Form.Item
                       name="gender"
+                      initialValue={data ? data.gender : null}
                       rules={[
                         {
                           required: true,
@@ -262,9 +271,10 @@ function Personal() {
                     Blood Group
                   </div>
                   {editContent === false ? (
-                    <div>{data?data.bloodGroup:null}</div>
+                    <div>{data ? data.bloodGroup : null}</div>
                   ) : (
                     <Form.Item
+                      initialValue={data ? data.bloodGroup : null}
                       name="bloodGroup"
                       rules={[
                         {
@@ -296,9 +306,10 @@ function Personal() {
                     Marital Status
                   </div>
                   {editContent === false ? (
-                    <div>{data?data.maritalStatus:null}</div>
+                    <div>{data ? data.maritalStatus : null}</div>
                   ) : (
                     <Form.Item
+                      initialValue={data ? data.maritalStatus : null}
                       name="maritalStatus"
                       rules={[
                         {
@@ -332,7 +343,11 @@ function Personal() {
                   <CloseOutlined /> CANCEL
                 </Button>
                 <Col>
-                  <Button type="primary" htmlType="submit" style={{ marginLeft: "10px" }}>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{ marginLeft: "10px" }}
+                  >
                     SAVE
                   </Button>
                 </Col>
@@ -394,9 +409,11 @@ function Personal() {
                     Official Email ID
                   </div>
                   {editContactInfo === false ? (
-                    <div>{data?data.mailid:null}</div>
+                    <div>{data ? data.mailid : null}</div>
                   ) : (
                     <Form.Item
+                    
+                      initialValue={data ? data.mailid : null}
                       name="mailid"
                       rules={[
                         {
@@ -409,9 +426,8 @@ function Personal() {
                         },
                       ]}
                     >
-                      <Input required placeholder="Enter Email Address" />
+                      <Input disabled={true} required placeholder="Enter Email Address" />
                       {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
-
                     </Form.Item>
                   )}
                 </div>
@@ -423,9 +439,10 @@ function Personal() {
                     Personal Email ID
                   </div>
                   {editContactInfo === false ? (
-                    <div>{data?data.contactEmail:null}</div>
+                    <div>{data ? data.contactEmail : null}</div>
                   ) : (
                     <Form.Item
+                      initialValue={data ? data.contactEmail : null}
                       name="contactEmail"
                       rules={[
                         {
@@ -451,9 +468,10 @@ function Personal() {
                     Phone Number
                   </div>
                   {editContactInfo === false ? (
-                    <div>{data?data.phonenumber:null}</div>
+                    <div>{data ? data.phonenumber : null}</div>
                   ) : (
                     <Form.Item
+                      initialValue={data ? data.phonenumber : null}
                       className="numder-inputs"
                       name="phonenumber"
                       rules={[
@@ -481,9 +499,10 @@ function Personal() {
                     Alternate Phone Number
                   </div>
                   {editContactInfo === false ? (
-                    <div>{data?data.altPhnNo:null}</div>
+                    <div>{data ? data.altPhnNo : null}</div>
                   ) : (
                     <Form.Item
+                      initialValue={data ? data.altPhnNo : null}
                       className="numder-inputs"
                       name="altPhnNo"
                       rules={[
@@ -521,7 +540,11 @@ function Personal() {
                   <CloseOutlined /> CANCEL
                 </Button>
                 <Col>
-                  <Button type="primary" htmlType="submit" style={{ marginLeft: "10px" }}>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{ marginLeft: "10px" }}
+                  >
                     SAVE
                   </Button>
                 </Col>
@@ -583,10 +606,11 @@ function Personal() {
                     Current Address
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data?data.currentAdd:null}</div>
+                    <div>{data ? data.currentAdd : null}</div>
                   ) : (
                     <Form.Item
-                    name="currentAdd"
+                      initialValue={data ? data.currentAdd : null}
+                      name="currentAdd"
                       rules={[
                         {
                           // required: true,
@@ -595,17 +619,18 @@ function Personal() {
                           // message: "Please enter First Name",
                         },
                         {
-                          pattern: /^[a-zA-Z\s]*$/,
+                          // pattern: /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[a-zA-Z!#$%&? "])[a-zA-Z0-9!#$%&?]{5,100}$/,
                           // message: "Please enter Valid Name",
                         },
                       ]}
                     >
-                    <TextArea
-                      // value={value}
-                      // onChange={e => setValue(e.target.value)}
-                      placeholder="Enter Address in Details"
-                      autoSize={{ minRows: 3, maxRows: 5 }}
-                    /></Form.Item>
+                      <TextArea
+                        // value={value}
+                        // onChange={e => setValue(e.target.value)}
+                        placeholder="Enter Address in Details"
+                        autoSize={{ minRows: 3, maxRows: 5 }}
+                      />
+                    </Form.Item>
                   )}
                 </div>
               </Col>
@@ -616,10 +641,11 @@ function Personal() {
                     Permanent Address
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data?data.permanentAdd:null}</div>
+                    <div>{data ? data.permanentAdd : null}</div>
                   ) : (
                     <Form.Item
-                    name="permanentAdd"
+                      initialValue={data ? data.permanentAdd : null}
+                      name="permanentAdd"
                       rules={[
                         {
                           // required: true,
@@ -633,12 +659,13 @@ function Personal() {
                         },
                       ]}
                     >
-                    <TextArea
-                      // value={value}
-                      // onChange={e => setValue(e.target.value)}
-                      placeholder="Enter Address in Details"
-                      autoSize={{ minRows: 3, maxRows: 5 }}
-                    /></Form.Item>
+                      <TextArea
+                        // value={value}
+                        // onChange={e => setValue(e.target.value)}
+                        placeholder="Enter Address in Details"
+                        autoSize={{ minRows: 3, maxRows: 5 }}
+                      />
+                    </Form.Item>
                   )}
                 </div>
               </Col>
@@ -650,10 +677,11 @@ function Personal() {
                     House Type
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data?data.houseType:null}</div>
+                    <div>{data ? data.houseType : null}</div>
                   ) : (
                     <Form.Item
-                    name="houseType"
+                      initialValue={data ? data.houseType : null}
+                      name="houseType"
                       rules={[
                         {
                           // required: true,
@@ -662,18 +690,46 @@ function Personal() {
                           // message: "Please enter First Name",
                         },
                         {
-                          pattern: /^[a-zA-Z\s]*$/,
+                          // pattern: /^[a-zA-Z\s]*$/,
                           // message: "Please enter Valid Name",
                         },
                       ]}
                     >
-                    <Input
+                      {/* <Input
                     
                         maxLength={50}
                         // required
                         placeholder="Enter Your HouseType"
                           //defaultValue = {data?data.fname+" "+data.lname:null}
-                      /></Form.Item>
+                      /> */}
+                      <Select
+                        placeholder="Select Your HouseType"
+                        style={{ width: "100%" }}
+                      >
+                        <Option value="House Type">House Type</Option>
+                        <Option value="Owned by Self/Spouse">
+                          Owned by Self/Spouse
+                        </Option>
+                        <Option value="Owned by Parent/Sibling">
+                          Owned by Parent/Sibling
+                        </Option>
+                        <Option value="Rented - with Family">
+                          Rented - with Family
+                        </Option>
+                        <Option value="Rented - with Friends">
+                          Rented - with Friends
+                        </Option>
+                        <Option value="Rented - Staying Alone">
+                          Rented - Staying Alone
+                        </Option>
+                        <Option value="Paying Guest">Paying Guest</Option>
+                        <Option value="Hostel">Hostel</Option>
+                        <Option value="Company Provided">
+                          Company Provided
+                        </Option>
+                        <Option value="Other">Other</Option>
+                      </Select>
+                    </Form.Item>
                   )}
                 </div>
               </Col>
@@ -687,20 +743,28 @@ function Personal() {
                     Staying at Current Residence Since
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data?data.scrs:null}</div>
-                  ) : (<Form.Item
-                    // name="dob" 
-                    name="scrs"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please Choose a Date",
-                      },
-                    ]}
-                  >
-                    <DatePicker 
-                        format={dateFormatList} onChange= {(e) => {setScrs(e.format("DD-MM-YYYY"))
-                      console.log(e.format("DD-MM-YYYY"))}} style={{ width: "100%" }} /></Form.Item>
+                    <div>{data ? data.scrs : null}</div>
+                  ) : (
+                    <Form.Item
+                      // name="dob"
+                      // initialValue={data?data.scrs:null}
+                      name="scrs"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Choose a Date",
+                        },
+                      ]}
+                    >
+                      <DatePicker
+                        format={dateFormatList}
+                        onChange={(e) => {
+                          setScrs(e.format("DD-MM-YYYY"));
+                          console.log(e.format("DD-MM-YYYY"));
+                        }}
+                        style={{ width: "100%" }}
+                      />
+                    </Form.Item>
                   )}
                 </div>
               </Col>
@@ -714,10 +778,11 @@ function Personal() {
                     Living in Current City Since
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data?data.lccs:null}</div>
+                    <div>{data ? data.lccs : null}</div>
                   ) : (
                     <Form.Item
-                    name="lccs"
+                      // initialValue={data?data.lccs:null}
+                      name="lccs"
                       rules={[
                         {
                           required: true,
@@ -725,8 +790,14 @@ function Personal() {
                         },
                       ]}
                     >
-                    <DatePicker 
-                        format={dateFormatList} onChange= {(e) => {setLccs(e.format("DD-MM-YYYY"))}} style={{ width: "100%" }} /></Form.Item>
+                      <DatePicker
+                        format={dateFormatList}
+                        onChange={(e) => {
+                          setLccs(e.format("DD-MM-YYYY"));
+                        }}
+                        style={{ width: "100%" }}
+                      />
+                    </Form.Item>
                   )}
                 </div>
               </Col>
@@ -750,7 +821,11 @@ function Personal() {
                   CANCEL
                 </Button>
                 <Col>
-                  <Button type="primary" htmlType="submit" style={{ marginLeft: "10px" }}>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{ marginLeft: "10px" }}
+                  >
                     SAVE
                   </Button>
                 </Col>

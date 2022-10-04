@@ -393,15 +393,27 @@ function AddEmployee() {
                 >
                   <Option value="Internship">Internship</Option>
                   <Option value="Software Trainee">Software Trainee</Option>
-                  <Option value="Asst. Software Developer">Asst. Software Developer</Option>
-                  <Option value="Sr. Software Developer">Sr. Software Developer</Option>
-                  <Option value="Jr. Software Developer">Jr. Software Developer</Option>
-                  <Option value="Business Analyst(BA)">Business Analyst(BA)</Option>
-                  <Option value="Quality Analyst(QA)">Quality Analyst(QA)</Option>
+                  <Option value="Asst. Software Developer">
+                    Asst. Software Developer
+                  </Option>
+                  <Option value="Sr. Software Developer">
+                    Sr. Software Developer
+                  </Option>
+                  <Option value="Jr. Software Developer">
+                    Jr. Software Developer
+                  </Option>
+                  <Option value="Business Analyst(BA)">
+                    Business Analyst(BA)
+                  </Option>
+                  <Option value="Quality Analyst(QA)">
+                    Quality Analyst(QA)
+                  </Option>
                   <Option value="Human Resource(HR)">Human Resource(HR)</Option>
                   <Option value="Manager">Manager</Option>
                   <Option value="Director">Director</Option>
-                  <Option value="Chief Executive Officer(CEO)">Chief Executive Officer(CEO)</Option>
+                  <Option value="Chief Executive Officer(CEO)">
+                    Chief Executive Officer(CEO)
+                  </Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -473,7 +485,9 @@ function AddEmployee() {
                 >
                   <Option value="Pravat Ranjan">PRAVAT RANJAN</Option>
                   <Option value="Amlana Aparajita">AMLANA APARAJITA</Option>
-                  <Option value="Anisha Mariam Thomas">ANISHA MARIAM THOMAS</Option>
+                  <Option value="Anisha Mariam Thomas">
+                    ANISHA MARIAM THOMAS
+                  </Option>
                   <Option value="Rajeev N. Iyer">RAJEEV N. IYER</Option>
                 </Select>
               </Form.Item>
@@ -516,8 +530,8 @@ function AddEmployee() {
           </Row>
 
           <Row gutter={[24, 8]}>
-          <Col span={6}></Col>
-          <Col
+            <Col span={6}></Col>
+            <Col
               xs={{ span: 24 }}
               sm={{ span: 12 }}
               span={18}
@@ -546,9 +560,9 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                  <Option value="consultingServicee">Consulting Service</Option>
-                  <Option value="humanResource">Human Resource</Option>
-                  <Option value="finance">Finance</Option>
+                  <Option value="Consulting Service">Consulting Service</Option>
+                  <Option value="Human Resource">Human Resource</Option>
+                  <Option value="Finance">Finance</Option>
                 </Select>
               </Form.Item>
             </Col>

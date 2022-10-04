@@ -69,7 +69,7 @@ class AttendanceContext {
                 id: doc.id
             };
         });
-        console.log("clock", d[0] ? "true" : "false")
+        console.log("clock", d)
         return d[0] ? d[0].clockIn : undefined;
     }
 
@@ -97,7 +97,7 @@ class AttendanceContext {
         return deleteDoc(attendDoc);
     };
 
-    getAllAttendance =  async (id) => {
+    getAllAttendance =  async (id, date) => {
         const q = query(attendCollectionRef, where("empId", "==", id));
         // console.log(q);
         let data = await getDocs(q);
@@ -105,16 +105,44 @@ class AttendanceContext {
             return {
               ...doc.data(),
               id: doc.id,
+              status: "Present"
             };
           });
-        return d;
+          // let stats = await this.getMonthlyStatus();
+          // console.log(stats);
+          const momentRange = extendMoment(Moment);
+          console.log(date)
+          console.log(id)
+          const range = momentRange.range(date[0], date[1])
+          const res = Array.from(range.by('day'))
+          let x = 0;
+          let temp = []
+          res.map((day) => {
+            for (let i = 0; i < d.length; i++) {
+              console.log(moment(d[i].date, "DD-MM-YYYY"))
+              console.log(day, moment(d[i].date, "DD-MM-YYYY"), day.isSame(d[i], 'day'))
+
+              if (day.isSame(moment(d[i].date, "DD-MM-YYYY"), 'day')) {
+                temp[x++] = {
+                  ...d[i],
+                  date: day.format("DD-MM-YYYY"),
+                }
+                return;
+              }
+            }
+            console.log(day)
+            temp[x++] = {
+              date: day.format("DD-MM-YYYY"),
+              status: "Absent"
+            }
+          })
+        return temp.reverse();
     };
 
     getAllUsers = async() => {
         const q = query(usersCollectionRef, orderBy("empId", "asc"));
         let userdata = await getDocs(q);
         let res = userdata.docs.map((doc) => {
-          console.log(doc.status);
           return {
             id: doc.id,
             empId: doc.data().empId,
@@ -128,7 +156,7 @@ class AttendanceContext {
         console.log(stats)
 
 
-        res.forEach((emp,i) => {
+        res.forEach((emp) => {
           for (let i = 0; i < stats.length; i++) {
             if (emp.id == stats[i].id) {
               console.log("Present")
@@ -151,10 +179,11 @@ class AttendanceContext {
 
     updateWithLeave = async (data) => {
       console.log(data)
-      data.forEach((emp) => {
+      await data.forEach((emp) => {
         if(emp.status == "Absent") {
           this.getLeaveStatus(emp.id).then((leave) => {
-            if (leave) {
+            console.log("7777");
+              if (leave) {
               console.log("8888");
               emp.status = "On Leave";
 
@@ -162,7 +191,7 @@ class AttendanceContext {
           })
         }
       })
-      console.log(data);
+      console.log(JSON.stringify(data));
       return data;
     }
 
@@ -215,17 +244,7 @@ class AttendanceContext {
         const attendDoc = doc(db, "attendance", id);
         return getDoc(q);
     };
-    getStartTime = async (id) =>{
-        const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("empId", "==", id), where("clockOut","==",null), limit(1))
-        let rec = await getDocs(q);
-        let d = rec.docs.map((doc) => {
-            return {
-                ...doc.data(),
-                id: doc.id
-            };
-        });
-        return d[0].clockIn;
-    }
-}
+
+  }
 
 export default new AttendanceContext();

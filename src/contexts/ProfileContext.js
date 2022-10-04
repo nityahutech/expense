@@ -18,9 +18,10 @@ class ProfileContext {
         return updateDoc(profileDoc, updatedProfile);
     };
 
-    getProfile = (id) => { 
+    getProfile = async (id) => { 
         const profileDoc = doc(db, "users", id);
-        return getDoc(profileDoc);
+        let rec = await getDoc(profileDoc);
+        return rec.data();
     };
 }
 

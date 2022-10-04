@@ -393,15 +393,27 @@ function AddEmployee() {
                 >
                   <Option value="Internship">Internship</Option>
                   <Option value="Software Trainee">Software Trainee</Option>
-                  <Option value="Asst. Software Developer">Asst. Software Developer</Option>
-                  <Option value="Sr. Software Developer">Sr. Software Developer</Option>
-                  <Option value="Jr. Software Developer">Jr. Software Developer</Option>
-                  <Option value="Business Analyst(BA)">Business Analyst(BA)</Option>
-                  <Option value="Quality Analyst(QA)">Quality Analyst(QA)</Option>
+                  <Option value="Asst. Software Developer">
+                    Asst. Software Developer
+                  </Option>
+                  <Option value="Sr. Software Developer">
+                    Sr. Software Developer
+                  </Option>
+                  <Option value="Jr. Software Developer">
+                    Jr. Software Developer
+                  </Option>
+                  <Option value="Business Analyst(BA)">
+                    Business Analyst(BA)
+                  </Option>
+                  <Option value="Quality Analyst(QA)">
+                    Quality Analyst(QA)
+                  </Option>
                   <Option value="Human Resource(HR)">Human Resource(HR)</Option>
                   <Option value="Manager">Manager</Option>
                   <Option value="Director">Director</Option>
-                  <Option value="Chief Executive Officer(CEO)">Chief Executive Officer(CEO)</Option>
+                  <Option value="Chief Executive Officer(CEO)">
+                    Chief Executive Officer(CEO)
+                  </Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -473,7 +485,9 @@ function AddEmployee() {
                 >
                   <Option value="Pravat Ranjan">PRAVAT RANJAN</Option>
                   <Option value="Amlana Aparajita">AMLANA APARAJITA</Option>
-                  <Option value="Anisha Mariam Thomas">ANISHA MARIAM THOMAS</Option>
+                  <Option value="Anisha Mariam Thomas">
+                    ANISHA MARIAM THOMAS
+                  </Option>
                   <Option value="Rajeev N. Iyer">RAJEEV N. IYER</Option>
                 </Select>
               </Form.Item>
@@ -513,6 +527,46 @@ function AddEmployee() {
                 </Select>
               </Form.Item>
             </Col>
+          </Row>
+
+          <Row gutter={[24, 8]}>
+            <Col span={6}></Col>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 12 }}
+              span={18}
+              className="Col-1-left"
+              style={{ background: "" }}
+            >
+              <Divider orientation="left" orientationMargin={0}>
+                Department<span style={{ color: "red" }}> *</span>
+              </Divider>
+              <Form.Item
+                name="department"
+                rules={[
+                  {
+                    required: true,
+                    message: "Choose Your Department",
+                  },
+                ]}
+              >
+                <Select
+                  // showSearch
+                  placeholder="Select a Field"
+                  // optionFilterProp="children"
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                  <Option value="Consulting Service">Consulting Service</Option>
+                  <Option value="Human Resource">Human Resource</Option>
+                  <Option value="Finance">Finance</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={3}></Col>
           </Row>
 
           <Row gutter={[24, 16]}>

@@ -65,6 +65,7 @@ function AttendanceLog({ empDetails }) {
       dataIndex: "status",
       key: "status",
     },
+
     {
       title: "Project Name",
       dataIndex: "project",
@@ -81,7 +82,9 @@ function AttendanceLog({ empDetails }) {
     //   key: "action",
     // },
   ];
+
   const [form] = Form.useForm();
+
   function getFormateDateString() {
     return (
       (new Date().getDate() > 9
@@ -110,6 +113,7 @@ function AttendanceLog({ empDetails }) {
         : "0" + new Date().getSeconds())
     );
   }
+
   const onFinish = async (values) => {
     console.log(values);
     const newData = {
@@ -138,9 +142,9 @@ function AttendanceLog({ empDetails }) {
   //   // getEmpMonthly();
   // }, [activetab]);
 
-  async function getEmpDetails(id) {
+  async function getEmpDetails(id, date) {
     console.log(id)
-    let data = await AttendanceContext.getAllAttendance(id);
+    let data = await AttendanceContext.getAllAttendance(id, date);
     
     console.log(data)
     setEmpMonthly(data);
@@ -152,6 +156,7 @@ function AttendanceLog({ empDetails }) {
   //   userlocal.map((emp, i) => {
   //     newEmp.push({
   //       key: i,
+
   //       code: emp.code,
   //       date: emp.date,
   //       empname: "Nitya-" + (i + 1),
@@ -171,7 +176,7 @@ function AttendanceLog({ empDetails }) {
   function allEmpDetails() {
     // console.log(JSON.parse(localStorage.getItem("newReport")));
     AttendanceContext.getAllUsers().then((userdata) => {
-      setallEmp(userdata);
+      console.log(JSON.stringify(userdata))
       getWithLeave(userdata)
     })
   }
@@ -223,23 +228,22 @@ function AttendanceLog({ empDetails }) {
     form.resetFields();
   };
   console.log(empDetails);
+
   useEffect(() => {
     if (empDetails.userType === "emp") {
       setActivetab("1");
-      getEmpDetails(currentUser.uid);
+      getEmpDetails(currentUser.uid, [moment().subtract(30, 'days'), moment()]);
       // getEmpMonthly();
     } else {
       setActivetab("1");
       allEmpDetails();
+
     }
   }, []);
-  useEffect(() => {
-    setFilteredEmp(filteredEmp);
-  }, [filteredEmp]);
 
-  // useEffect(() => {
-  //   getWithLeave(allEmp);
-  // }, [allEmp, filteredEmp])
+  useEffect(() => {
+    setFilteredEmp(filteredEmp)
+  }, [filteredEmp])
 
   //   const rowSelection = {
   //     onChange: (selectedRowKeys, selectedRows) => {
@@ -360,6 +364,7 @@ function AttendanceLog({ empDetails }) {
       report: "dfdjdgjhgjhgjhfhfdj",
     },
   ];
+
   function onDateFilter(date, dateString) {
     console.log({ date, dateString });
     if (date) {
@@ -372,26 +377,30 @@ function AttendanceLog({ empDetails }) {
             moment(ex.date, dateFormat).isSameOrBefore(date[1]))
         );
       });
+
       const modifiedFilterExpense = [...result];
+
       console.log({ modifiedFilterExpense });
       setEmpMonthly(modifiedFilterExpense);
     } else {
       setEmpMonthly(empMonthly);
     }
   }
-  function onHrDateFilter(date, dateString) {
+  async function onHrDateFilter(date, dateString) {
     console.log({ date, dateString });
     if (date) {
       console.log(empMonthly);
-      let result = empMonthly.filter((ex) => {
-        return (
-          moment(ex.date, dateFormat).isSame(date[0], "day") ||
-          moment(ex.date, dateFormat).isSame(date[1], "day") ||
-          (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
-            moment(ex.date, dateFormat).isSameOrBefore(date[1]))
-        );
-      });
-      const modifiedFilterExpense = [...result];
+      // let result = empMonthly.filter((ex) => {
+      //   return (
+      //     moment(ex.date, dateFormat).isSame(date[0], "day") ||
+      //     moment(ex.date, dateFormat).isSame(date[1], "day") ||
+      //     (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
+      //       moment(ex.date, dateFormat).isSameOrBefore(date[1]))
+      //   );
+      // });
+
+      const modifiedFilterExpense = await getEmpDetails(selectemp.id, date);
+
       console.log({ modifiedFilterExpense });
       setEmpMonthly(modifiedFilterExpense);
     } else {
@@ -412,16 +421,9 @@ function AttendanceLog({ empDetails }) {
     }
   };
   
-  console.log("test",(filteredEmp[1]));
-  console.log("test",filteredEmp[1]?JSON.parse(JSON.stringify(filteredEmp[1])):"empty");
-  console.log(filteredEmp);
-
-  console.log("test", filteredEmp[3]);
-  console.log("test", JSON.stringify(filteredEmp[3]));
-  console.log(
-    "test",
-    filteredEmp[3] ? JSON.parse(JSON.stringify(filteredEmp[3])) : "empty"
-  );
+  console.log("test",(filteredEmp[3]));
+  console.log("test",JSON.stringify(filteredEmp[3]));
+  console.log("test",filteredEmp[3]?JSON.parse(JSON.stringify(filteredEmp[3])):"empty");
   console.log(filteredEmp);
   // console.log("test",filteredEmp);
   // console.log("test",filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):"empty");
@@ -444,7 +446,7 @@ function AttendanceLog({ empDetails }) {
                 <RangePicker
                   className="Range"
                   defaultValue={[]}
-                  dateFormat
+                  format={dateFormat}
                   onChange={onDateFilter}
                 />
                 <Table
@@ -546,7 +548,7 @@ function AttendanceLog({ empDetails }) {
                       onClick: (event) => {
                         console.log(record);
                         setSelectemp({ ...record });
-                        getEmpDetails(record.id);
+                        getEmpDetails(record.id, [moment().subtract(30, 'days'), moment()]);
                         setActivetab("2");
                       }, // click row
                     };
@@ -559,7 +561,7 @@ function AttendanceLog({ empDetails }) {
                 <RangePicker
                   className="Range"
                   defaultValue={[]}
-                  dateFormat
+                  format={dateFormat}
                   onChange={onHrDateFilter}
                 />
                 <Table

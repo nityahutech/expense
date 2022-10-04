@@ -14,7 +14,8 @@ function Work() {
   const [designation, setDesignation] = useState("");
   const [doj, setDoj] = useState("");
   const [department, setDepartment] = useState("");
-
+  const [workLocation, setWorkLocation] = useState("");
+  const [empType, setEmpType] = useState("");
 
 
   useEffect(() => {
@@ -24,9 +25,13 @@ function Work() {
   const getData=async()=>{
     let data=await EmpInfoContext.getEduDetails(currentUser.uid)
     console.log(data)
-    setData(data)
+    //setData(data)
     setDesignation(data.designation?data.designation:null)
+    setDoj(data.doj?data.doj:null)
+    setWorkLocation(data.workLocation?data.workLocation:null)
     setDepartment(data.department?data.department:null)
+    setEmpType(data.empType?data.empType:null)
+
     // setScrs(data.scrs?data.scrs:null)
   }
   console.log(data)
@@ -80,7 +85,7 @@ function Work() {
                   Designation
                 </div>
                 {editWork === false ? (
-                  <div>Jr. Software Developer</div>
+                  <div>{designation}</div>
                 ) : (
                   <Form.Item
                     // initialValue={data ? data.bloodGroup : null}
@@ -117,7 +122,7 @@ function Work() {
                   Date of Joining
                 </div>
                 {editWork === false ? (
-                  <div>01-06-2022</div>
+                  <div>{doj}</div>
                 ) : (
                   <Form.Item
                     // initialValue={dob}
@@ -155,7 +160,25 @@ function Work() {
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   Employee Type
                 </div>
-                <div>Full-Time</div>
+                {editWork === false ? (<div>{empType}</div>)
+                : (<Form.Item
+                // initialValue={data ? data.bloodGroup : null}
+                name="empType"
+                rules={[
+                  {
+                    required: true,
+                    // message: "Please Choose Blood Groop",
+                  },
+                ]}
+              >
+              <Select
+                style={{ width: "100%" }}
+                placeholder="Your Work Location"
+              >
+                <Option value="ptime">Part-Time</Option>
+                <Option value="ftime">Full-Time</Option>
+              </Select></Form.Item>)}
+                
               </Col>
             </Row>
             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
@@ -164,7 +187,7 @@ function Work() {
                   Work Location
                 </div>
                 {editWork === false ? (
-                  <div>Registered Office</div>
+                  <div>{workLocation}</div>
                 ) : (
                   <Form.Item
                     // initialValue={data ? data.bloodGroup : null}
@@ -190,7 +213,7 @@ function Work() {
                   Department
                 </div>
                 {editWork === false ? (
-                  <div>Consulting Service</div>
+                  <div>{department}</div>
                 ) : (
                   <Form.Item
                     // initialValue={data ? data.bloodGroup : null}

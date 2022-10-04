@@ -192,7 +192,7 @@ function EmployeeList() {
         closeIcon={
           <div
             onClick={() => {
-              setIsModalVisible(false);
+            setIsModalVisible(false);
             }}
           >
             X

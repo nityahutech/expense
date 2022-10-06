@@ -1,7 +1,18 @@
 .tabs.ant-tabs{
     width: 100% ;
 }
-.certficationtable table, th, td{
-    border: 1px solid #DDD;
-    border-collapse: collapse;
+.idbutton {
+    margin-top: 10px;
+}
+
+.idselect .ant-modal-body {
+    margin: 0;
+}
+
+.certficationtable .ant-modal-body {
+    margin: 0;
+}
+
+.worktab .ant-modal-body {
+    margin: 0;
 }

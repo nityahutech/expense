@@ -36,11 +36,15 @@ function Editemployee(props) {
   const [designation, setDesignation] = useState("");
   const [gender, setGender] = useState("");
   const [phonenumber, setPhonenumber] = useState("");
+  const [repManager, setRepManager] = useState("");
+  const [secManager, setSecManager] = useState("");
+  const [department, setDepartment] = useState("");
+
   console.log(props);
   const { currentUser } = useAuth();
 
   async function submitEdit() {
-    console.log("***************************");
+    // console.log("***************************");
     try {
       const editedRecord = {
         fname,
@@ -50,6 +54,9 @@ function Editemployee(props) {
         designation,
         gender,
         phonenumber,
+        repManager,
+        secManager,
+        department,
       };
       console.log("editedRecord");
       console.log(props.record.id, editedRecord);
@@ -74,6 +81,9 @@ function Editemployee(props) {
     const designationVal = props.record ? props.record.designation : "";
     const genderVal = props.record ? props.record.gender : "";
     const phonenumberVal = props.record ? props.record.phonenumber : "";
+    const repManagerVal = props.record ? props.record.repManager : "";
+    const secManagerVal = props.record ? props.record.secManager : "";
+    const setDepartmentVal = props.record ? props.record.setDepartment : "";
 
     setFname(fnameVal);
     setLname(lnameVal);
@@ -82,6 +92,9 @@ function Editemployee(props) {
     setDesignation(designationVal);
     setGender(genderVal);
     setPhonenumber(phonenumberVal);
+    setRepManager(repManagerVal);
+    setSecManager(secManagerVal);
+    setDepartment(setDepartmentVal);
   }, [props]);
   function cancel() {
     props.setIsModalVisible(false);
@@ -195,6 +208,18 @@ function Editemployee(props) {
           {
             name: ["phonenumber"],
             value: phonenumber,
+          },
+          {
+            name: ["repManager"],
+            value: repManager,
+          },
+          {
+            name: ["secManager"],
+            value: secManager,
+          },
+          {
+            name: ["department"],
+            value: department,
           },
         ]}
         layout="vertical"
@@ -450,53 +475,120 @@ function Editemployee(props) {
                 // }
               >
                 <Option value="Internship">Internship</Option>
-                  <Option value="Software Trainee">Software Trainee</Option>
-                  <Option value="Asst. Software Developer">Asst. Software Developer</Option>
-                  <Option value="Sr. Software Developer">Sr. Software Developer</Option>
-                  <Option value="Jr. Software Developer">Jr. Software Developer</Option>
-                  <Option value="Business Analyst">Business Analyst(BA)</Option>
-                  <Option value="Quality Analyst">Quality Analyst(QA)</Option>
-                  <Option value="Human Resource">Human Resource(HR)</Option>
-                  <Option value="Manager">Manager</Option>
-                  <Option value="Director">Director</Option>
-                  <Option value="Chief Executive Officer">Chief Executive Officer(CEO)</Option>
+                <Option value="Software Trainee">Software Trainee</Option>
+                <Option value="Asst. Software Developer">
+                  Asst. Software Developer
+                </Option>
+                <Option value="Sr. Software Developer">
+                  Sr. Software Developer
+                </Option>
+                <Option value="Jr. Software Developer">
+                  Jr. Software Developer
+                </Option>
+                <Option value="Business Analyst">Business Analyst(BA)</Option>
+                <Option value="Quality Analyst">Quality Analyst(QA)</Option>
+                <Option value="Human Resource">Human Resource(HR)</Option>
+                <Option value="Manager">Manager</Option>
+                <Option value="Director">Director</Option>
+                <Option value="Chief Executive Officer">
+                  Chief Executive Officer(CEO)
+                </Option>
               </Select>
             </Form.Item>
           </Col>
-          {/* <Col */}
-          {/* xs={{ span: 24 }} */}
-          {/* sm={{ span: 12 }} */}
-          {/* className="Col-1-left" */}
-          {/* style={{ background: "", height: "80px" }} */}
-          {/* > */}
-          {/* <Divider orientation="left" orientationMargin={0}> */}
-          {/* Role<span style={{ color: "red" }}> *</span> */}
-          {/* </Divider> */}
-          {/* <Form.Item */}
-          {/* name="role" */}
-          {/* rules={[ */}
-          {/* {
-                    required: true,
-                    message: "Please Choose a Role",
-                  },
-                ]}
-              > */}
-          {/* <Select
-                  // showSearch
-                  placeholder="Select a Role"
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
-                >
-                  <Option value="admin">Admin</Option>
-                  <Option value="emp">Employee</Option>
-                  {/* <Option value="pns">Prefer Not To Say</Option> */}
-          {/* </Select> */}
-          {/* </Form.Item>
-            </Col> */}
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="repManager"
+              label="Reporting Manager&nbsp;"
+              rules={[
+                {
+                  required: true,
+                  message: "Choose Reporting Manager",
+                },
+              ]}
+            >
+              <Select
+                style={{ width: "80%" }}
+                onChange={(e) => setRepManager(e)}
+                // showSearch
+
+                // optionFilterProp="children"
+                //   onChange={onChange}
+                //   onSearch={onSearch}
+                // filterOption={(input, option) =>
+                //   option.children.toLowerCase().includes(input.toLowerCase())
+                // }
+              >
+                <Option value="Pravat Ranjan">PRAVAT RANJAN</Option>
+                <Option value="Amlana Aparajita">AMLANA APARAJITA</Option>
+                <Option value="Anisha Mariam Thomas">
+                  ANISHA MARIAM THOMAS
+                </Option>
+                <Option value="Rajeev N. Iyer">RAJEEV N. IYER</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="secManager"
+              label="Secondary Manager&nbsp;"
+              rules={[
+                {
+                  required: true,
+                  message: "Choose Secondary Manager",
+                },
+              ]}
+            >
+              <Select
+                style={{ width: "80%" }}
+                onChange={(e) => setSecManager(e)}
+                // showSearch
+
+                // optionFilterProp="children"
+                //   onChange={onChange}
+                //   onSearch={onSearch}
+                // filterOption={(input, option) =>
+                //   option.children.toLowerCase().includes(input.toLowerCase())
+                // }
+              >
+                <Option value="Swayamprava Nanda">SWAYAMPRAVA NANDA</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="department"
+              label="Department&nbsp;"
+              rules={[
+                {
+                  required: true,
+                  message: "Choose Your Department",
+                },
+              ]}
+            >
+              <Select
+                style={{ width: "80%" }}
+                onChange={(e) => setDepartment(e)}
+                // showSearch
+
+                // optionFilterProp="children"
+                //   onChange={onChange}
+                //   onSearch={onSearch}
+                // filterOption={(input, option) =>
+                //   option.children.toLowerCase().includes(input.toLowerCase())
+                // }
+              >
+                <Option value="Consulting Service">Consulting Service</Option>
+                <Option value="Human Resource">Human Resource</Option>
+                <Option value="Finance">Finance</Option>
+              </Select>
+            </Form.Item>
+          </Col>
         </Row>
 
         <br />

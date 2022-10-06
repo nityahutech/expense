@@ -209,7 +209,7 @@ function Personal() {
                     <div>{data ? data.dob : null}</div>
                   ) : (
                     <Form.Item
-                      // initialValue={dob}
+                      initialValue={moment(dob, "DD-MM-YYYY")}
                       name="dob"
                       rules={[
                         {
@@ -747,7 +747,7 @@ function Personal() {
                   ) : (
                     <Form.Item
                       // name="dob"
-                      // initialValue={data?data.scrs:null}
+                      initialValue={moment(scrs, "DD-MM-YYYY")}
                       name="scrs"
                       rules={[
                         {
@@ -781,7 +781,7 @@ function Personal() {
                     <div>{data ? data.lccs : null}</div>
                   ) : (
                     <Form.Item
-                      // initialValue={data?data.lccs:null}
+                      initialValue={moment(lccs, "DD-MM-YYYY")}
                       name="lccs"
                       rules={[
                         {

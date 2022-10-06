@@ -21,9 +21,10 @@ import { PlusCircleOutlined } from '@ant-design/icons';
 import "../../style/Documents.css" 
 
 
-// import Columns from 'antd/lib/table/Column';
 
-// -------------------------------------------------------------------
+// // import Columns from 'antd/lib/table/Column';
+
+// // -------------------------------------------------------------------
 
 const idcolumns = [
   {
@@ -32,8 +33,6 @@ const idcolumns = [
     key: 'name',
   },
 ]
-
-
 const iddata = [
   {
     key: '1',
@@ -42,8 +41,8 @@ const iddata = [
   ]
 
 // ------------------------------------------------------------------
+ function Document() {
 
-function Document() {
 
 // -------------------------------------------------------------------space for const decleration
 
@@ -131,27 +130,28 @@ const { Title } = Typography;
   };
 // ---------------------------------------------------------space for the return
 
+
   return (
-    <div
-    className='education' 
-    style={{
-            margin:'10px',
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width:'100%'
-          }}
-    >
-        <div  
-          style={{
-              width:'800px',
-              marginTop:'10px',
-              backgroundColor:'white', 
-              padding:'10px',
-              display:'flex',
-              justifyContent:'center',
-               
-            }}>
+ <div
+     className='education'
+     style={{
+             margin:'10px',
+             display: "flex",
+             alignItems: "center",
+             justifyContent: "center",
+             width:'100%'
+           }}
+     >
+         <div 
+           style={{
+               width:'800px',
+               marginTop:'10px',
+               backgroundColor:'white',
+               padding:'10px',
+               display:'flex',
+            justifyContent:'center',
+            }}> 
+
 
           <Tabs defaultActiveKey="1" className='tabs'>
               {/* ------------------------------------IDs tabs------------------------------------- */}

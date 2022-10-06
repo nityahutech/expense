@@ -12,7 +12,7 @@ import {
     Table,
     Space,
     notification
- 
+
 
 } from "antd";
 import { Progress } from 'antd';
@@ -20,12 +20,13 @@ const { TextArea } = Input;
 const { Text, Link } = Typography;
 const { Title } = Typography;
 
+
 const fixedColumns = [
     {
         title: "Assessment Area",
         dataIndex: "name",
-       
-        width: 160,
+
+        width: 140,
         fixed: "left",
     },
     {
@@ -72,40 +73,82 @@ const Appraisal = () => {
 
     const [editContent, showEditContent] = useState(false);
     const [editContactInfo, showEditContactInfo] = useState(false);
-    // const [secondModal, setSecondModal] = useState(false)
+    const [form] = Form.useForm();
+    const [formLayout, setFormLayout] = useState('horizontal');
+    const [userRecord, setUserRecord] = useState({
+        associateId: '',
+        associatename: '',
+        joiningdate: "",
+        currentposition: "",
+        evaluationperiod: "",
 
-    // const handleOk = () => {
-    //     console.log('hiii')
-    //     setSecondModal(false);
-    //     showNotification("success", "Success", "Record updated successfuly");
-    // };
-    
-    // const showNotification = (type, msg, desc) => {
-    //     notification[type]({
-    //         message: msg,
-    //         description: desc,
-    //     });
-    // };
-    
+    });
+
+    const onReset = () => {
+        form.resetFields()
+    };
+
+    const buttonStyle = {
+        marginRight: "5px",
+        color: "white",
+        backgroundColor: "#1890ff",
+        float: "right",
+        backgroundColor: '#d9d9d9'
+    };
+
+    const handleOk = () => {
+        console.log('hiii')
+        // setIsModalOpen(false);
+        showNotification("success", "Success", "Record updated successfuly");
+    };
+
+    const cancelStyle = {
+        float: "right",
+
+    };
+
+    const checkAlphabets = (event) => {
+        if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+            return true;
+        }
+    };
+
+    const showNotification = (type, msg, desc) => {
+        notification[type]({
+            message: msg,
+            description: desc,
+        });
+    };
+
+
+    const onFormLayoutChange = ({ layout }) => {
+        setFormLayout(layout);
+        console.log(layout);
+
+    };
+
+    const onFieldsChangeHandler = (curr, allvalues) => {
+        console.log(allvalues)
+    };
+
+
     return (
         <div style={{ display: "flex", flexDirection: "column", alignItems: 'center' }}>
 
-            <Card
-            
-                title="Staff Performance Appraisal Form"
-                // extra={<Button  type="primary">Print</Button>}
-              
+
+
+            <Col xl={24} lg={24} md={24} sm={24} xs={24}
 
                 style={{
-                    width: 800,
+                    width: 600,
                     marginTop: 10,
-                    
                 }}
             >
                 <Row gutter={[16, 16]}>
 
-                
-                    <Col span={8}>
+
+                    <Col xs={{ span: 12 }}
+                        lg={{ span: 8 }}>
                         <div>
                             <div style={{ fontWeight: "600", fontSize: "15px" }}>
                                 Employee Id
@@ -113,7 +156,8 @@ const Appraisal = () => {
                         </div>
                     </Col>
 
-                    <Col span={8}>
+                    <Col xs={{ span: 12 }}
+                        lg={{ span: 8 }}>
                         <div>
                             <div style={{ fontWeight: "600", fontSize: "15px" }}>
                                 Associate Name
@@ -123,8 +167,8 @@ const Appraisal = () => {
                         </div>
                     </Col>
 
-
-                    <Col span={8}>
+                    <Col xs={{ span: 12 }}
+                        lg={{ span: 8 }}>
                         <div>
                             <div style={{ fontWeight: "600", fontSize: "15px" }}>
                                 Current Position
@@ -135,7 +179,8 @@ const Appraisal = () => {
                         </div>
                     </Col>
 
-                    <Col span={8}>
+                    <Col xs={{ span: 12 }}
+                        lg={{ span: 8 }}>
                         <div>
                             <div style={{ fontWeight: "600", fontSize: "15px" }}>
                                 Date Of Joining
@@ -145,79 +190,129 @@ const Appraisal = () => {
                         </div>
                     </Col>
 
-                    <Col span={8}>
+                    <Col xs={{ span: 12 }}
+                        lg={{ span: 8 }}>
                         <div>
                             <div style={{ fontWeight: "600", fontSize: "15px" }}>
                                 Quarter
                             </div>
 
-                            <Text type="secondary">Q1-Q2 </Text>
+                            <Text type="secondary">Q1 </Text>
                         </div>
                     </Col>
 
-                    <Col span={8}>
+                    <Col xs={{ span: 12 }}
+                        lg={{ span: 8 }}>
                         <div>
                             <div style={{ fontWeight: "600", fontSize: "15px" }}>
                                 Reporting Manager
                             </div>
 
-                           
+
                         </div>
                     </Col>
                 </Row>
-            </Card>
+            </Col>
 
-            <Card title="Refrence Guide"
+
+            <Col title="Refrence Guide"
                 style={{
-                    width: 800,
+                    width: 700,
                     marginTop: 10,
-                    padding: '5px',
+                    padding: 'px',
 
                 }}
 
             >
                 <Table
                     style={{
-                        padding: '0px',
+                        padding: '10px',
 
                     }}
                     size="small"
                     columns={fixedColumns}
                     dataSource={fixedData}
-                    bordered
+                    // bordered
                     pagination={false
                     }
                     summary={() => <Table.Summary fixed></Table.Summary>}
                 />
-            </Card>
+            </Col>
 
-            
-            <Card
-                style={{
-                    width: 800,
-                    marginTop: 10,
-                    padding: '5px',
+            <Row gutter={[8, 32]}>
+                <Col xl={24} lg={24} md={24} sm={24} xs={24} >
 
-                }}
+                    <Form className='appraisall-div'
+                        layout="vertical"
+                        labelCol={{
+                            span: 24,
 
-            >
-                <Col span={24}>
-                    <div>
-                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
-                            Project Name and Description
-                        </div>
-                        <Form.Item
-                            className="numder-inputs"
-                            name="phonenumber"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "",
-                                    // pattern: /^[0-9\b]+$/,
-                                },
-                                { whitespace: true },
-                            ]}
+                        }}
+                        wrapperCol={{
+                            span: 24,
+                        }}
+                        initialValues={{
+                            remember: true,
+                            // employeename: currentUser.displayName,
+                            // mailid: currentUser.email,
+                            ...userRecord
+                        }}
+                        fields={[
+                            {
+                                name: ["userRecord"],
+                                values: userRecord,
+                            },
+
+                        ]}
+
+                        autoComplete="off"
+                        form={form}
+                        // onFinish={formonFinishHandler}
+                        onFieldsChange={(changedFields, allvalues) => onFieldsChangeHandler(changedFields, allvalues)}
+                        onValuesChange={onFormLayoutChange}
+
+
+
+
+                    >
+
+
+                        <Divider orientation='left' orientationMargin={0}>To Be Fill By Employee<span style={{ color: 'red' }}> *</span></Divider>
+                        <Form.Item labelAlign="left"
+                            style={{ marginBottom: "10px" }}
+                       
+                            name="projname"
+                     
+
+                            onKeyPress={(event) => {
+                                if (checkAlphabets(event)) {
+                                    event.preventDefault();
+                                }
+                            }}
+
                         >
+                            <Typography.Text style={{ fontWeight: 400 }}>Project Name and Description : </Typography.Text>
+                            <TextArea rows={2}
+                                maxLength={10}
+                                required
+                                placeholder=""
+                            />
+
+                        </Form.Item>
+
+                        <Form.Item labelAlign="left"
+                            style={{ marginBottom: "10px" }}
+                        
+                            name="traits"
+                          
+                            onKeyPress={(event) => {
+                                if (checkAlphabets(event)) {
+                                    event.preventDefault();
+                                }
+                            }}
+
+                        >
+                            <Typography.Text style={{ fontWeight: 400 }}>What were your best traits or contribution to the company this quarter? </Typography.Text>
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
@@ -225,408 +320,182 @@ const Appraisal = () => {
                             />
                         </Form.Item>
 
-                    </div>
-                </Col>
-            </Card>
 
-            <Card
-                style={{
-                    width: 800,
-                    marginTop: 10,
-                    padding: '5px',
+                        <Form.Item labelAlign="left"
+                            style={{ marginBottom: "10px" }}
+                       
+                            name="goal"
+                        
+                            onKeyPress={(event) => {
+                                if (checkAlphabets(event)) {
+                                    event.preventDefault();
+                                }
+                            }}
 
-                }}
-
-            >
-                <Col span={24}>
-                    <div>
-                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
-                            What were your best traits or contribution to the company this quarter?
-                        </div>
-                        <Form.Item
-                            className="numder-inputs"
-                            name="phonenumber"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "",
-                                    // pattern: /^[0-9\b]+$/,
-                                },
-                                { whitespace: true },
-                            ]}
                         >
-                            <TextArea rows={4}
+                            <Typography.Text style={{ fontWeight: 400 }}>What are your goal for next quarter? </Typography.Text>
+                            <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
                             />
                         </Form.Item>
 
-                    </div>
-                </Col>
-            </Card>
+                        <Form.Item labelAlign="left"
+                            style={{ marginBottom: "10px" }}
+                           
+                            name="strength"
+                          
+                            onKeyPress={(event) => {
+                                if (checkAlphabets(event)) {
+                                    event.preventDefault();
+                                }
+                            }}
 
-            <Card
-                style={{
-                    width: 800,
-                    marginTop: 10,
-                    padding: '5px',
-
-                }}
-
-            >
-                <Col span={24}>
-                    <div>
-                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
-                            What are your goal for next quarter?
-                        </div>
-                        <Form.Item
-                            className="numder-inputs"
-                            name="phonenumber"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "",
-                                    // pattern: /^[0-9\b]+$/,
-                                },
-                                { whitespace: true },
-                            ]}
                         >
-                            <TextArea rows={4}
+                            <Typography.Text style={{ fontWeight: 400 }}> What are your Strength and Development Area? </Typography.Text>
+                            <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
                             />
                         </Form.Item>
 
-                    </div>
-                </Col>
-            </Card>
+                        <Divider orientation='left' orientationMargin={0}>To Be Fill By Team Lead<span style={{ color: 'red' }}> *</span></Divider>
 
-            <Card
-                style={{
-                    width: 800,
-                    marginTop: 10,
-                    padding: '5px',
 
-                }}
+                        <Form.Item labelAlign="left"
+                            style={{ marginBottom: "10px" }}
+                        
+                            name="goalnext"
+                      
+                            onKeyPress={(event) => {
+                                if (checkAlphabets(event)) {
+                                    event.preventDefault();
+                                }
+                            }}
 
-            >
-                <Col span={24}>
-                    <div>
-                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
-                            What help do you need from the management?
-                        </div>
-                        <Form.Item
-                            className="numder-inputs"
-                            name="phonenumber"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "",
-                                    // pattern: /^[0-9\b]+$/,
-                                },
-                                { whitespace: true },
-                            ]}
                         >
-                            <TextArea rows={4}
+                            <Typography.Text style={{ fontWeight: 400 }}>Set goals and objective for upcoming assement year</Typography.Text>
+                            <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
                             />
                         </Form.Item>
 
-                    </div>
-                </Col>
-            </Card>
+                        <Form.Item labelAlign="left"
+                            style={{ marginBottom: "10px" }}
+                        
+                            name="rating"
+                        
+                            onKeyPress={(event) => {
+                                if (checkAlphabets(event)) {
+                                    event.preventDefault();
+                                }
+                            }}
 
-            <Card
-                style={{
-                    width: 800,
-                    marginTop: 10,
-                    padding: '5px',
-
-                }}
-
-            >
-                <Col span={24}>
-                    <div>
-                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
-                            What are your Strength and Development Area?
-                        </div>
-                        <Form.Item
-                            className="numder-inputs"
-                            name="phonenumber"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "",
-                                    // pattern: /^[0-9\b]+$/,
-                                },
-                                { whitespace: true },
-                            ]}
                         >
-                            <TextArea rows={4}
+                            <Typography.Text style={{ fontWeight: 400 }}>Overall Rating</Typography.Text>
+                            <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
                             />
                         </Form.Item>
 
-                    </div>
-                </Col>
-            </Card>
+                        <Divider orientation='left' orientationMargin={0}>To Be Fill By Manager<span style={{ color: 'red' }}> *</span></Divider>
 
-            <Card
-                style={{
-                    width: 800,
-                    marginTop: 10,
-                    padding: '5px',
 
-                }}
+                        <Form.Item labelAlign="left"
+                            style={{ marginBottom: "10px" }}
+                          
+                            name="engagment"
+                           
+                            onKeyPress={(event) => {
+                                if (checkAlphabets(event)) {
+                                    event.preventDefault();
+                                }
+                            }}
 
-            >
-                <Col span={24}>
-                    <div>
-                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
-                            What are your Strength and Development Area?
-                        </div>
-                        <Form.Item
-                            className="numder-inputs"
-                            name="phonenumber"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "",
-                                    // pattern: /^[0-9\b]+$/,
-                                },
-                                { whitespace: true },
-                            ]}
                         >
-                            <TextArea rows={4}
+                            <Typography.Text style={{ fontWeight: 400 }}> Associate Engagement Comments: </Typography.Text>
+                            <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
                             />
                         </Form.Item>
 
-                    </div>
-                </Col>
-            </Card>
 
-            <div style = {{backgroundColor:'white',marginTop:'10px',width:'',padding:'10px'}}>
-              
-               <Title  level={5}>To Be Fill By Team Lead</Title>
-            </div>
+                        <Form.Item labelAlign="left"
+                            style={{ marginBottom: "10px" }}
+                         
+                            name="leaderojective"
+                          
+                            onKeyPress={(event) => {
+                                if (checkAlphabets(event)) {
+                                    event.preventDefault();
+                                }
+                            }}
 
-            <Card
-                style={{
-                    width: 800,
-                    marginTop: 10,
-                    padding: '5px',
-
-                }}
-
-            >
-
-                <Col span={24}>
-                    <div>
-                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
-                            Set goals and objective for upcoming assement year
-                        </div>
-                        <Form.Item
-                            className="numder-inputs"
-                            name="phonenumber"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "",
-                                    // pattern: /^[0-9\b]+$/,
-                                },
-                                { whitespace: true },
-                            ]}
                         >
-                            <TextArea rows={4}
+                            <Typography.Text style={{ fontWeight: 400 }}>People Management/Leadership Objectives: </Typography.Text>
+                            <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
                             />
                         </Form.Item>
 
-                    </div>
-                </Col>
-            </Card>
 
-            <Card
-                style={{
-                    width: 800,
-                    marginTop: 10,
-                    padding: '5px',
+                        <Form.Item labelAlign="left"
+                            style={{ marginBottom: "10px" }}
+                          
+                            name="goalcomment"
+                         
+                            onKeyPress={(event) => {
+                                if (checkAlphabets(event)) {
+                                    event.preventDefault();
+                                }
+                            }}
 
-                }}
-
-            >
-
-                <Col span={24}>
-                    <div>
-                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
-                            Overall Rating
-                        </div>
-                        <Form.Item
-                            className="numder-inputs"
-                            name="phonenumber"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "",
-                                    // pattern: /^[0-9\b]+$/,
-                                },
-                                { whitespace: true },
-                            ]}
                         >
-                            <TextArea rows={4}
+                            <Typography.Text style={{ fontWeight: 400 }}>Diversity Goals Comments (if applicable):</Typography.Text>
+                            <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
                             />
                         </Form.Item>
 
-                    </div>
+                        <Col span={30}>
+
+                            <Form.Item >
+                                <Button
+                                    style={cancelStyle}
+                                    onClick={handleOk}
+
+
+                                    // onClick={submitEdit}
+                                    htmlType="submit"
+
+                                    type="primary">Submit
+                                </Button>
+                                <Button
+                                    style={buttonStyle}
+                                    onClick={onReset}
+                                >Reset</Button>
+                            </Form.Item>
+                        </Col>
+
+
+
+
+                    </Form>
                 </Col>
-            </Card>
+            </Row>
 
-            <div style = {{backgroundColor:'white',marginTop:'10px',width:'',padding:'10px'}}>
-           
-               <Title  level={5}>To Be Fill By Manager</Title>
-            </div>
-
-
-            <Card
-
-                style={{
-                    width: 800,
-                    marginTop: 10,
-                    padding: '5px',
-
-                }}
-
-            >
-               
-                <Col span={24}>
-                    <div>
-                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
-                            Associate Engagement Comments:
-                        </div>
-                        <Form.Item
-                            className="numder-inputs"
-                            name="phonenumber"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "",
-                                    // pattern: /^[0-9\b]+$/,
-                                },
-                                { whitespace: true },
-                            ]}
-                        >
-                            <TextArea rows={4}
-                                maxLength={10}
-                                required
-                                placeholder=""
-                            />
-                        </Form.Item>
-
-                    </div>
-                </Col>
-            </Card>
-
-            <Card
-                style={{
-                    width: 800,
-                    marginTop: 10,
-                    padding: '5px',
-
-                }}
-
-            >
-
-                <Col span={24}>
-                    <div>
-                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
-                            People Management/Leadership Objectives:
-                        </div>
-                        <Form.Item
-                            className="numder-inputs"
-                            name="phonenumber"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "",
-                                    // pattern: /^[0-9\b]+$/,
-                                },
-                                { whitespace: true },
-                            ]}
-                        >
-                            <TextArea rows={4}
-                                maxLength={10}
-                                required
-                                placeholder=""
-                            />
-                        </Form.Item>
-
-                    </div>
-                </Col>
-            </Card>
-
-            <Card
-                style={{
-                    width: 800,
-                    marginTop: 10,
-                    padding: '5px',
-
-                }}
-
-            >
-
-                <Col span={24}>
-                    <div>
-                        <div style={{ fontWeight: "600", fontSize: "15px",marginBottom:'10px' }}>
-                            Diversity Goals Comments (if applicable):
-                        </div>
-                        <Form.Item
-                            className="numder-inputs"
-                            name="phonenumber"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "",
-                                    // pattern: /^[0-9\b]+$/,
-                                },
-                                { whitespace: true },
-                            ]}
-                        >
-                            <TextArea rows={4}
-                                maxLength={10}
-                                required
-                                placeholder=""
-                            />
-                        </Form.Item>
-
-                    </div>
-                </Col>
-            </Card>
-
-            <Space>
-                <Form.Item className='submit'>
-                    <Button   
-                    // onClick={handleOk}
-                     style={{
-                        marginTop: '10px',
-                    }} type="primary">Submit Form</Button>
-
-                </Form.Item>
-
-            </Space>
 
         </div>
     )

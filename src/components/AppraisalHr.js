@@ -3,11 +3,14 @@ import { EditOutlined, PrinterFilled, DeleteOutlined } from "@ant-design/icons";
 import { Button, Col } from 'antd';
 import { Card, Input, Modal, Form, Row, notification, Typography, Select, DatePicker, Table, } from 'antd';
 import Appraisal from "./Appraisal";
+import "../style/appraisal.css";
+import CompanyHolidayContext from '../contexts/CompanyHolidayContext';
 import { NavLink } from "react-router-dom";
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Text, Link } = Typography;
 const { Meta } = Card;
+
 
 
 const AppraisalHr = () => {
@@ -40,6 +43,13 @@ const AppraisalHr = () => {
             title: "Employee Id",
             dataIndex: "associateid",
             key: "associateid",
+            // fixed: "left",
+            width: 160,
+        },
+        {
+            title: "Employee Name",
+            dataIndex: "associatename",
+            key: "associatename",
             // fixed: "left",
             width: 160,
         },
@@ -249,6 +259,32 @@ const AppraisalHr = () => {
         setEditedRecord(record);
     };
 
+    const onFinish = (values) => {
+        console.log('Success: appraisal', values);
+
+        let newAppraisal = {
+            Id: values.associateId,
+            Name: values.associateName,
+            Position: values.currentposition,
+            Period: values.evaluationperiod,
+            JoiningDate: values.joiningdate,
+            Manager: values.manager,
+           
+        }
+        console.log('newAppraisal', newAppraisal)
+        
+            CompanyHolidayContext.createHoliday(newAppraisal)
+                .then(response => {
+                console.log("***11111111111111111**");   
+                })
+                .catch(error => {
+                    console.log(error.message);
+
+                })
+            form.resetFields();
+       
+    };
+
     return (
         <div style={{
             display: 'flex',
@@ -260,100 +296,92 @@ const AppraisalHr = () => {
 
         }}>
             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                <div className='leavediv' style={{
+                <div className='app-div' style={{
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'center',
-                    margin: '10px'
+                    margin: '10px',
+                   
 
                 }}
                 >
                     <Row gutter={[48, 16]}>
-                        <div className='card-div' style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-between'
-                        }}>
-                            <Col span={6}>
+                        <Col className='appraisal-div' xl={24} lg={24} md={24} sm={24} xs={24}  >
+                            <Card onClick={showModal} className='card-app'
+                                // style={{ width: 200, height: 250, borderRadius: '10px',padding:'0px' }}
+                                hoverable
+                                cover={
+                                    <img
+                                        style={{ padding: '40px' }}
 
-                                <Card onClick={showModal}
-                                    style={{ width: 200, height: 200, borderRadius: '10px' }}
-                                    hoverable
-                                    cover={
-                                        <img
-                                            style={{ padding: '50px' }}
-
-                                            alt="example"
-                                            src="/logo/resources.png"
-                                        />
-                                    }
-
-                                >
-                                    <Meta style={{ marginBottom: '10px', justifyContent: 'center' }}
-                                        title="HR"
+                                        alt="example"
+                                        src="/logo/resources.png"
                                     />
-                                </Card>
-                            </Col>
+                                }
 
-                            <Col span={6}>
+                            >
+                                <Meta style={{ marrginBottom: '30px', justifyContent: 'center'}}
+                                    title="HR"
+                                />
+                            </Card>
 
-                                <Card onClick={()=>setSecondModal(true)}
-                                    style={{ width: 200, height: 200, borderRadius: '10px', }}
-                                    hoverable
-                                    cover={
-                                        <img
-                                            style={{ padding: '50px' }}
-                                            alt="example"
-                                            src="/logo/division.png"
+                            <Card onClick={() => setSecondModal(true)} className='card-app'
+                                // style={{ width: 200, height: 250, borderRadius: '10px', margin:'10px'}}
+                                hoverable
+                                cover={
+                                    <img
+                                        style={{ padding: '50px' }}
+                                        alt="example"
+                                        src="/logo/division.png"
 
-                                        />
-                                    }
-
-                                >
-
-                                    <Meta style={{ marginBottom: '10px', justifyContent: 'center' }}
-                                        title="Employee"
                                     />
-                                </Card>
-                            </Col>
+                                }
 
-                            <Col span={6}>
-                                <Card onClick={() => setOpen(true)}
-                                    style={{ width: 200, height: 200, borderRadius: '10px' }}
-                                    hoverable
-                                    cover={
-                                        <img
-                                            style={{ padding: '50px' }}
-                                            alt="example"
-                                            src="/logo/leader.png"
-                                        />
-                                    }
+                            >
 
-                                >
-                                    <Meta style={{ marginBottom: '10px', justifyContent: 'center' }}
-                                        title="Lead"
+                                <Meta style={{ marginBottom: '10px', justifyContent: 'center' }}
+                                    title="Employee"
+                                />
+                            </Card>
+
+                            <Card className='card-app'
+                                // style={{ width: 200, height: 250, borderRadius: '10px',margin:'10px' }}
+                                hoverable
+                                cover={
+                                    <img
+                                        style={{ padding: '50px' }}
+                                        alt="example"
+                                        src="/logo/leader.png"
                                     />
-                                </Card>
-                            </Col>
-                            <Col span={6}>
-                                <Card
-                                    style={{ width: 200, height: 200, borderRadius: '10px' }}
-                                    hoverable
-                                    cover={
-                                        <img
-                                            style={{ padding: '50px' }}
-                                            alt="example"
-                                            src="/logo/manager.png"
-                                        />
-                                    }
+                                }
 
-                                >
-                                    <Meta style={{ marginBottom: '10px', justifyContent: 'center' }}
-                                        title="Manager"
+                            >
+                                <Meta style={{ marginBottom: '10px', justifyContent: 'center' }}
+                                    title="Lead"
+                                />
+                            </Card>
+
+
+                            <Card className='card-app'
+                                // style={{ width: 200, height: 250, borderRadius: '10px',margin:'10px' }}
+                                hoverable
+                                cover={
+                                    <img
+                                        style={{ padding: '50px' }}
+                                        alt="example"
+                                        src="/logo/manager.png"
                                     />
-                                </Card>
-                            </Col>
-                        </div>
+                                }
+
+                            >
+                                <Meta style={{ marginBottom: '10px', justifyContent: 'center' }}
+                                    title="Manager"
+                                />
+                            </Card>
+
+
+
+                        </Col>
                     </Row>
 
                 </div>
@@ -388,6 +416,7 @@ const AppraisalHr = () => {
                             ]}
 
                             autoComplete="off"
+                            onFinish={onFinish}
                             form={form}
                             // onFinish={formonFinishHandler}
                             onFieldsChange={(changedFields, allvalues) => onFieldsChangeHandler(changedFields, allvalues)}
@@ -404,8 +433,23 @@ const AppraisalHr = () => {
                                 }}
 
                             >
+                                <Input placeholder="Associate Id" />
+                            </Form.Item>
+
+                            <Form.Item labelAlign="left"
+                                style={{ marginBottom: "10px" }}
+                                label="Employee Name"
+                                name="associateName"
+                                onKeyPress={(event) => {
+                                    if (checkAlphabets(event)) {
+                                        event.preventDefault();
+                                    }
+                                }}
+
+                            >
                                 <Input placeholder="Associate Name" />
                             </Form.Item>
+
 
 
                             <Form.Item labelAlign="left"
@@ -500,7 +544,7 @@ const AppraisalHr = () => {
             </Modal>
 
 
-            <Table 
+            <Table
                 loading={loading}
                 columns={columns}
                 dataSource={data}
@@ -512,7 +556,7 @@ const AppraisalHr = () => {
                 scroll={{ x: 1300 }}
                 className="employeeTable"
                 size="small"
-                style={{margin:'50px'}}
+                style={{ margin: '50px' }}
             />
             <Modal
                 centered
@@ -538,16 +582,18 @@ const AppraisalHr = () => {
                 /> */}
             </Modal>
 
-            <Modal 
+            <Modal footer={null}   
                 title="Appraisal Form"
                 centered
                 open={secondModal}
                 visible={secondModal}
                 onOk={() => setSecondModal(false)}
                 onCancel={() => setSecondModal(false)}
-                width={1000}
+                width={700}
+                
             >
-              <Appraisal/>
+                
+                <Appraisal />
             </Modal>
 
 

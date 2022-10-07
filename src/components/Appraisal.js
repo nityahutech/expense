@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+// import AppraisalFormContext from '../contexts/AppraisalFormContext';
 import {
     Card,
     Row,
@@ -15,10 +16,10 @@ import {
 
 
 } from "antd";
-import { Progress } from 'antd';
+
 const { TextArea } = Input;
 const { Text, Link } = Typography;
-const { Title } = Typography;
+
 
 
 const fixedColumns = [
@@ -68,6 +69,7 @@ const fixedData = [
 ];
 
 
+
 const Appraisal = () => {
 
 
@@ -99,7 +101,7 @@ const Appraisal = () => {
     const handleOk = () => {
         console.log('hiii')
         // setIsModalOpen(false);
-        showNotification("success", "Success", "Record updated successfuly");
+       
     };
 
     const cancelStyle = {
@@ -121,6 +123,7 @@ const Appraisal = () => {
     };
 
 
+
     const onFormLayoutChange = ({ layout }) => {
         setFormLayout(layout);
         console.log(layout);
@@ -130,6 +133,40 @@ const Appraisal = () => {
     const onFieldsChangeHandler = (curr, allvalues) => {
         console.log(allvalues)
     };
+
+    const onFinish = (values) => {
+        console.log('appraisal', values);
+    
+        let newAppraisalForm = {
+            projname: values.projname,
+            traits: values.traits,
+            goal: values.goal,
+            strength: values.strength,
+            goalnext: values.goalnext,
+            rating: values.rating,
+            engagment: values.engagment,           
+            leaderojective: values.leaderojective,
+            goalcomment: values.goalcomment,
+         
+    
+        }
+        console.log('appraisal', newAppraisalForm)
+    
+        // AppraisalFormContext.createAppraisal(newAppraisalForm)
+            .then(response => {
+                console.log("appraisal Form Created", response);
+            })
+            .catch(error => {
+                console.log('appraisalForm', error.message);
+    
+            })
+        console.log('appraisalForm', 'appraisal created');
+        // showNotification("success", "Success", "Appraisal Form Created");
+        // setQuarter('')
+        // form.resetFields();
+    
+    };
+    
 
 
     return (
@@ -267,7 +304,7 @@ const Appraisal = () => {
 
                         autoComplete="off"
                         form={form}
-                        // onFinish={formonFinishHandler}
+                        onFinish={onFinish}
                         onFieldsChange={(changedFields, allvalues) => onFieldsChangeHandler(changedFields, allvalues)}
                         onValuesChange={onFormLayoutChange}
 

@@ -37,7 +37,7 @@ const NewSidebar = (props) => {
   //             break;
   //         case "6":
   //             window.location.href = "/Home"
-  //             history("/Expense/ExpenseList")
+  //             history("/Expenfse/ExpenseList")
   //             break;
   //         case "1":
   //             window.location.href = "/DashBoard"

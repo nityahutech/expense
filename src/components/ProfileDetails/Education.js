@@ -49,7 +49,7 @@ function Education() {
       courseStartDate: dateStart,
       courseEndDate: dateEnd,
     }
-    EmpInfoContext.updateEduDetails(currentUser.uid,record)
+    // EmpInfoContext.updateEduDetails(currentUser.uid,record)
     setData(record)
     showEditContent(false)
   };
@@ -135,7 +135,7 @@ console.log(data)
                 {editContent === false ? (
                   <h4>{data?data.qualificationType:null}</h4>
                 ) : (
-                  <Input placeholder="Enter Qualification Type" />
+                  <Input defaultValue={data?data.qualificationType:null} placeholder="Enter Qualification Type" />
                 )}
               </div>
             </Form.Item>
@@ -152,7 +152,7 @@ console.log(data)
                 {editContent === false ? (
                   <h4>{data?data.courseName:null}</h4>
                 ) : (
-                  <Input placeholder="" />
+                  <Input defaultValue={data?data.courseName:null} placeholder="Enter Course Name" />
                 )}
               </div>
               </Form.Item>
@@ -166,7 +166,8 @@ console.log(data)
             >
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course Type</h1>
-                {editContent === false ? (<h4>{data?data.courseType:null}</h4>) : (<Input placeholder="" />)}
+                {editContent === false ? (<h4>{data?data.courseType:null}</h4>) :(
+                <Input defaultValue={data?data.courseType:null} placeholder="Enter Course Type" />)}
               </div>
             </Form.Item>
             </Col>
@@ -179,7 +180,8 @@ console.log(data)
             >
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Stream</h1>
-                {editContent === false ? (<h4>{data?data.stream:null}</h4>) : (<Input placeholder="" />)}
+                {editContent === false ? (<h4>{data?data.stream:null}</h4>) :( 
+                <Input defaultValue={data?data.stream:null} placeholder="" />)}
               </div>
             </Form.Item>
             </Col>
@@ -190,10 +192,12 @@ console.log(data)
             <Form.Item name="courseStartDate" rules={[{required: true,message: 'Please input your Course Start Date ',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
-              initialValue={moment(dateStart, "DD-MM-YYYY")}
+              initialValue={moment((data?.courseStartDate?data.courseStartDate.replaceAll("-","/"):"01/01/1990"), "DD-MM-YYYY")}
             >
               {/* <div> */}
-                {editContent === false ? (<h4>{data?data.courseStartDate:null}</h4>) : (<DatePicker style={{ width: "100%" }}  format={"DD-MM-YYYY"} onChange= {(e) => {setDateStart(e.format("DD-MM-YYYY"))}} />)}
+                {editContent === false ? (<h4>{data?data?.courseStartDate:null}</h4>) : (
+                <DatePicker defaultValue={moment((data?.courseStartDate?data.courseStartDate.replaceAll("-","/"):"02/01/1990"), "DD-MM-YYYY")}  style={{ width: "100%" }}  format={"DD-MM-YYYY"} onChange= {(e) => {setDateStart(e.format("DD-MM-YYYY"))}}
+                 />)}
               {/* </div> */}
             </Form.Item>
             </Col>
@@ -220,7 +224,8 @@ console.log(data)
             >
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>University Name</h1>
-                {editContent === false ? (<h4>{data?data.universityName:null}</h4>) : (<Input placeholder="" />)}
+                {editContent === false ? (<h4>{data?data.universityName:null}</h4>) : (
+                <Input defaultValue={data?data.universityName:null} placeholder="" />)}
               </div>
             </Form.Item>
             </Col>

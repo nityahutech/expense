@@ -239,7 +239,7 @@ const Family = () => {
                           {editfamilymember === false ? (
                             <h4>{data?data.father:null}</h4>
                           ) : (
-                            <Input placeholder="Enter Father's Name"/>)}
+                            <Input defaultValue={data?data.father:null} placeholder="Enter Father's Name"/>)}
                             </div>
                       </Form.Item>
                       {/* --------------------------------------father-contact------------------------------------ */}
@@ -263,7 +263,7 @@ const Family = () => {
                           {editfamilymember === false ? (
                             <h4>{data?data.fatherContact:null}</h4>
                           ) : (
-                            <Input placeholder="Enter Contact no." />) }
+                            <Input defaultValue={data?data.fatherContact:null} placeholder="Enter Contact no." />) }
                         </div>
                       </Form.Item>
                       </Col>
@@ -284,7 +284,7 @@ const Family = () => {
                           {editfamilymember === false ? (
                             <h4>{data?data.mother:null}</h4>
                           ) : (
-                            <Input placeholder="Enter Mother's Name" />) }
+                            <Input defaultValue={data?data.mother:null} placeholder="Enter Mother's Name" />) }
                         </div>
                       </Form.Item>
                     </Col>
@@ -308,7 +308,7 @@ const Family = () => {
                           {editfamilymember === false ? (
                             <h4>{data?data.motherContact:null}</h4>
                           ) : (
-                            <Input placeholder="Enter Contact no."  /> ) }
+                            <Input defaultValue={data?data.motherContact:null} placeholder="Enter Contact no."  /> ) }
                         </div>
                       </Form.Item>
                     </Col>
@@ -485,7 +485,7 @@ const Family = () => {
                           Other
                         </h1>
                         
-                          <Input placeholder="Enter Other Name" /> 
+                          <Input defaultValue={data?data.other:null} placeholder="Enter Other Name" /> 
                       </div>
                     </Form.Item>
                   </Col><Col span={8}>
@@ -505,7 +505,7 @@ const Family = () => {
                           Relation
                         </h1>
                        
-                          <Input placeholder="Enter the Relation" />  
+                          <Input defaultValue={data?data.relation:null} placeholder="Enter the Relation" />  
                       </div>
                     </Form.Item>
                   </Col><Col span={8}>
@@ -525,7 +525,7 @@ const Family = () => {
                           Contact no.
                         </h1>
                         
-                          <Input placeholder="Enter Contact no." /> 
+                          <Input defaultValue={data?data.otherContact:null} placeholder="Enter Contact no." /> 
                       </div>
                     </Form.Item>
                   </Col></Row>

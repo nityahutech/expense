@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-// import AppraisalFormContext from '../contexts/AppraisalFormContext';
+import AppraisalContext from '../contexts/AppraisalContext';
 import {
     Card,
     Row,
@@ -19,9 +19,6 @@ import {
 
 const { TextArea } = Input;
 const { Text, Link } = Typography;
-
-
-
 const fixedColumns = [
     {
         title: "Assessment Area",
@@ -70,21 +67,14 @@ const fixedData = [
 
 
 
-const Appraisal = () => {
-
-
-    const [editContent, showEditContent] = useState(false);
-    const [editContactInfo, showEditContactInfo] = useState(false);
+const Appraisal = (props) => {
+    console.log('employeeRecord', props.currentEmployee)
+    console.log('employeeRecord', props.appraisal)
     const [form] = Form.useForm();
     const [formLayout, setFormLayout] = useState('horizontal');
-    const [userRecord, setUserRecord] = useState({
-        associateId: '',
-        associatename: '',
-        joiningdate: "",
-        currentposition: "",
-        evaluationperiod: "",
+    const [currentAppraisal, setCurrentAppraisal] = useState(props.appraisal);
+    const [empEditable, setEmpEditable] = useState(!(currentAppraisal.status === 'empPending'));
 
-    });
 
     const onReset = () => {
         form.resetFields()
@@ -100,8 +90,9 @@ const Appraisal = () => {
 
     const handleOk = () => {
         console.log('hiii')
-        // setIsModalOpen(false);
-       
+        props.setSecondModal(false)
+
+
     };
 
     const cancelStyle = {
@@ -122,8 +113,6 @@ const Appraisal = () => {
         });
     };
 
-
-
     const onFormLayoutChange = ({ layout }) => {
         setFormLayout(layout);
         console.log(layout);
@@ -135,38 +124,42 @@ const Appraisal = () => {
     };
 
     const onFinish = (values) => {
-        console.log('appraisal', values);
-    
+        console.log('appraisal1', values);
+
         let newAppraisalForm = {
-            projname: values.projname,
-            traits: values.traits,
-            goal: values.goal,
-            strength: values.strength,
-            goalnext: values.goalnext,
-            rating: values.rating,
-            engagment: values.engagment,           
-            leaderojective: values.leaderojective,
-            goalcomment: values.goalcomment,
-         
-    
+            projectName: values.projectName,
+            employeeContribution: values.contribution,
+            employeeGoal: values.employeeGoal,
+            employeeStrength: values.employeeStrength,
+            status: 'leadPending'
+            // leadGoal: values.leadGoal,
+            // leadRating: values.leadRating,
+            // managerComments: values.managerComments,
+            // managerObjective: values.managerObjective,
+            // diversityGoal: values.diversityGoal,
+
+
         }
-        console.log('appraisal', newAppraisalForm)
-    
-        // AppraisalFormContext.createAppraisal(newAppraisalForm)
+        console.log('appraisal2', newAppraisalForm)
+
+        AppraisalContext.updateAppraisal(currentAppraisal.id, newAppraisalForm)
             .then(response => {
                 console.log("appraisal Form Created", response);
+                showNotification("success", "Success", "Appraisal successfully submited");
+                setEmpEditable(false)
             })
             .catch(error => {
                 console.log('appraisalForm', error.message);
-    
+                showNotification("error", "Error", "Error Submiting Appraisal");
+
             })
         console.log('appraisalForm', 'appraisal created');
-        // showNotification("success", "Success", "Appraisal Form Created");
+
         // setQuarter('')
         // form.resetFields();
-    
+
     };
-    
+
 
 
     return (
@@ -190,6 +183,9 @@ const Appraisal = () => {
                             <div style={{ fontWeight: "600", fontSize: "15px" }}>
                                 Employee Id
                             </div>
+                            <Text type="secondary">{props.currentEmployee.empId
+                            }
+                            </Text>
                         </div>
                     </Col>
 
@@ -200,7 +196,8 @@ const Appraisal = () => {
                                 Associate Name
                             </div>
 
-                            <Text type="secondary">Jatin </Text>
+                            <Text type="secondary">{props.currentEmployee.fname}
+                            </Text>
                         </div>
                     </Col>
 
@@ -211,7 +208,8 @@ const Appraisal = () => {
                                 Current Position
                             </div>
 
-                            <Text type="secondary">Associate </Text>
+                            <Text type="secondary">{props.currentEmployee.designation
+                            } </Text>
 
                         </div>
                     </Col>
@@ -223,7 +221,8 @@ const Appraisal = () => {
                                 Date Of Joining
                             </div>
 
-                            <Text type="secondary">30/09/2022 </Text>
+                            <Text type="secondary">{props.currentEmployee.doj
+                            } </Text>
                         </div>
                     </Col>
 
@@ -234,7 +233,8 @@ const Appraisal = () => {
                                 Quarter
                             </div>
 
-                            <Text type="secondary">Q1 </Text>
+                            <Text type="secondary">{currentAppraisal.Period}
+                            </Text>
                         </div>
                     </Col>
 
@@ -244,6 +244,8 @@ const Appraisal = () => {
                             <div style={{ fontWeight: "600", fontSize: "15px" }}>
                                 Reporting Manager
                             </div>
+                            <Text type="secondary">{props.currentEmployee.repManager
+                            } </Text>
 
 
                         </div>
@@ -290,14 +292,21 @@ const Appraisal = () => {
                         }}
                         initialValues={{
                             remember: true,
-                            // employeename: currentUser.displayName,
-                            // mailid: currentUser.email,
-                            ...userRecord
+                            projectName: currentAppraisal.projectName,
+                            contribution: currentAppraisal.employeeContribution,
+                            employeeGoal: currentAppraisal.employeeGoal,
+                            employeeStrength: currentAppraisal.employeeStrength,
+                            leadGoal: currentAppraisal.leadGoal,
+                            leadRating: currentAppraisal.leadRating,
+                            managerComments: currentAppraisal.managerComments,
+                            managerObjective: currentAppraisal.managerObjective,
+                            diversityGoal: currentAppraisal.diversityGoal,
+
                         }}
                         fields={[
                             {
-                                name: ["userRecord"],
-                                values: userRecord,
+                                // name: ["userRecord"],
+                                // values: userRecord,
                             },
 
                         ]}
@@ -305,8 +314,8 @@ const Appraisal = () => {
                         autoComplete="off"
                         form={form}
                         onFinish={onFinish}
-                        onFieldsChange={(changedFields, allvalues) => onFieldsChangeHandler(changedFields, allvalues)}
-                        onValuesChange={onFormLayoutChange}
+                    // onFieldsChange={(changedFields, allvalues) => onFieldsChangeHandler(changedFields, allvalues)}
+                    // onValuesChange={onFormLayoutChange}
 
 
 
@@ -317,9 +326,11 @@ const Appraisal = () => {
                         <Divider orientation='left' orientationMargin={0}>To Be Fill By Employee<span style={{ color: 'red' }}> *</span></Divider>
                         <Form.Item labelAlign="left"
                             style={{ marginBottom: "10px" }}
-                       
-                            name="projname"
-                     
+                            // title='Project Name and Description '
+                            label='Project Name and Description '
+
+                            name="projectName"
+
 
                             onKeyPress={(event) => {
                                 if (checkAlphabets(event)) {
@@ -327,62 +338,68 @@ const Appraisal = () => {
                                 }
                             }}
 
-                        >
-                            <Typography.Text style={{ fontWeight: 400 }}>Project Name and Description : </Typography.Text>
+                        >             
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
+                                disabled={empEditable}
                             />
+                            {/* <Input placeholder="Associate Id" /> */}
 
                         </Form.Item>
 
-                        <Form.Item labelAlign="left"
-                            style={{ marginBottom: "10px" }}
                         
-                            name="traits"
-                          
+
+                        <Form.Item labelAlign="left"
+                            style={{ marginBottom: "10px" }}
+                            label='What were your best traits or contribution to the company this quarter?'
+
+                            name="contribution"
+
                             onKeyPress={(event) => {
                                 if (checkAlphabets(event)) {
                                     event.preventDefault();
                                 }
                             }}
 
-                        >
-                            <Typography.Text style={{ fontWeight: 400 }}>What were your best traits or contribution to the company this quarter? </Typography.Text>
+                        >                          
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
+                                disabled={empEditable}
                             />
                         </Form.Item>
 
 
                         <Form.Item labelAlign="left"
                             style={{ marginBottom: "10px" }}
-                       
-                            name="goal"
-                        
+                            label='What are your goal for next quarter?'
+
+                            name="employeeGoal"
+
                             onKeyPress={(event) => {
                                 if (checkAlphabets(event)) {
                                     event.preventDefault();
                                 }
                             }}
 
-                        >
-                            <Typography.Text style={{ fontWeight: 400 }}>What are your goal for next quarter? </Typography.Text>
+                        >                          
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
+                                disabled={empEditable}
                             />
                         </Form.Item>
 
                         <Form.Item labelAlign="left"
                             style={{ marginBottom: "10px" }}
-                           
-                            name="strength"
-                          
+                            label='What are your Strength and Development Area?'
+
+                            name="employeeStrength"
+
                             onKeyPress={(event) => {
                                 if (checkAlphabets(event)) {
                                     event.preventDefault();
@@ -390,11 +407,11 @@ const Appraisal = () => {
                             }}
 
                         >
-                            <Typography.Text style={{ fontWeight: 400 }}> What are your Strength and Development Area? </Typography.Text>
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
+                                disabled={empEditable}
                             />
                         </Form.Item>
 
@@ -403,9 +420,10 @@ const Appraisal = () => {
 
                         <Form.Item labelAlign="left"
                             style={{ marginBottom: "10px" }}
-                        
-                            name="goalnext"
-                      
+                            label='Set goals and objective for upcoming assement year'
+
+                            name="leadGoal"
+
                             onKeyPress={(event) => {
                                 if (checkAlphabets(event)) {
                                     event.preventDefault();
@@ -413,19 +431,21 @@ const Appraisal = () => {
                             }}
 
                         >
-                            <Typography.Text style={{ fontWeight: 400 }}>Set goals and objective for upcoming assement year</Typography.Text>
+                            
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
+                                disabled
                             />
                         </Form.Item>
 
                         <Form.Item labelAlign="left"
                             style={{ marginBottom: "10px" }}
-                        
-                            name="rating"
-                        
+                            label='Overall Rating'
+
+                            name="leadRating"
+
                             onKeyPress={(event) => {
                                 if (checkAlphabets(event)) {
                                     event.preventDefault();
@@ -433,11 +453,12 @@ const Appraisal = () => {
                             }}
 
                         >
-                            <Typography.Text style={{ fontWeight: 400 }}>Overall Rating</Typography.Text>
+                           
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
+                                disabled
                             />
                         </Form.Item>
 
@@ -446,9 +467,10 @@ const Appraisal = () => {
 
                         <Form.Item labelAlign="left"
                             style={{ marginBottom: "10px" }}
-                          
-                            name="engagment"
-                           
+                            label='Associate Engagement Comments:'
+
+                            name="managerComments"
+
                             onKeyPress={(event) => {
                                 if (checkAlphabets(event)) {
                                     event.preventDefault();
@@ -456,20 +478,21 @@ const Appraisal = () => {
                             }}
 
                         >
-                            <Typography.Text style={{ fontWeight: 400 }}> Associate Engagement Comments: </Typography.Text>
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
+                                disabled
                             />
                         </Form.Item>
 
 
                         <Form.Item labelAlign="left"
                             style={{ marginBottom: "10px" }}
-                         
-                            name="leaderojective"
-                          
+                            label='People Management/Leadership Objectives:'
+
+                            name="managerObjective"
+
                             onKeyPress={(event) => {
                                 if (checkAlphabets(event)) {
                                     event.preventDefault();
@@ -477,20 +500,21 @@ const Appraisal = () => {
                             }}
 
                         >
-                            <Typography.Text style={{ fontWeight: 400 }}>People Management/Leadership Objectives: </Typography.Text>
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
+                                disabled
                             />
                         </Form.Item>
 
 
                         <Form.Item labelAlign="left"
                             style={{ marginBottom: "10px" }}
-                          
-                            name="goalcomment"
-                         
+                            label='Diversity Goals Comments (if applicable):'
+
+                            name="diversityGoal"
+
                             onKeyPress={(event) => {
                                 if (checkAlphabets(event)) {
                                     event.preventDefault();
@@ -498,11 +522,11 @@ const Appraisal = () => {
                             }}
 
                         >
-                            <Typography.Text style={{ fontWeight: 400 }}>Diversity Goals Comments (if applicable):</Typography.Text>
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
                                 placeholder=""
+                                disabled
                             />
                         </Form.Item>
 
@@ -525,13 +549,11 @@ const Appraisal = () => {
                                 >Reset</Button>
                             </Form.Item>
                         </Col>
-
-
-
-
                     </Form>
                 </Col>
             </Row>
+
+
 
 
         </div>

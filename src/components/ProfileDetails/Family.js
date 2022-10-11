@@ -238,6 +238,7 @@ const Family = () => {
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
+                        initialValue = {data?data.father:null}
                       >
                             <Input defaultValue={data?data.father:null} placeholder="Enter Father's Name"/>
                       </Form.Item>)}
@@ -263,6 +264,7 @@ const Family = () => {
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
+                        initialValue = {data?data.fatherContact:null}
                       >
                             <Input defaultValue={data?data.fatherContact:null} placeholder="Enter Contact no." />
                       </Form.Item>) }
@@ -284,6 +286,7 @@ const Family = () => {
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
+                        initialValue = {data?data.mother:null}
                       >
                             <Input defaultValue={data?data.mother:null} placeholder="Enter Mother's Name" />
                       </Form.Item>) }
@@ -309,6 +312,7 @@ const Family = () => {
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
+                        initialValue = {data?data.motherContact:null}
                       >
                             <Input defaultValue={data?data.motherContact:null} placeholder="Enter Contact no."  />
                       </Form.Item> ) }
@@ -481,6 +485,7 @@ const Family = () => {
                       ]}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
+                      initialValue = {data?data.other:null}
                     >
                       <div>
                         <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
@@ -501,6 +506,7 @@ const Family = () => {
                       ]}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
+                      initialValue = {data?data.relation:null}
                     >
                       <div>
                         <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
@@ -516,11 +522,13 @@ const Family = () => {
                       rules={[
                         {
                           required: false,
-                          message: "Please enter the Contact no.",
+                          message: "Please enter Phone Number",
+                          pattern: /^[0-9\b]+$/,
                         },
                       ]}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
+                      initialValue = {data?data.otherContact:null}
                     >
                       <div>
                         <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>

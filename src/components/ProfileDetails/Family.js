@@ -45,23 +45,23 @@ const Family = () => {
     getData();
   };
 
-  const onContactsFinish = (newvalue) => {
-    // console.log(contactdata)
-    console.log(newvalue);
-    console.log('success',newvalue)
-    EmpInfoContext.updateEduDetails(currentUser.uid,newvalue)     
-     setData(newvalue)
-     showeditEmergency(false)
-  }
+  // const onContactsFinish = (newvalue) => {
+  //   // console.log(contactdata)
+  //   console.log(newvalue);
+  //   console.log('success',newvalue)
+  //   EmpInfoContext.updateEduDetails(currentUser.uid,newvalue)     
+  //    setData(newvalue)
+  //    showeditEmergency(false)
+  // }
 
-  const onEmergencyFinish = (newvalue) => {
-      // console.log(contactdata)
-      console.log(newvalue);
-      console.log('success',newvalue)
-      EmpInfoContext.updateEduDetails(currentUser.uid,newvalue)     
-      setData(newvalue)
-      showeditEmergency(false)
-    }
+  // const onEmergencyFinish = (newvalue) => {
+  //     // console.log(contactdata)
+  //     console.log(newvalue);
+  //     console.log('success',newvalue)
+  //     EmpInfoContext.updateEduDetails(currentUser.uid,newvalue)     
+  //     setData(newvalue)
+  //     showeditEmergency(false)
+  //   }
  
   const getData=async()=>{
     let data = await EmpInfoContext.getEduDetails(currentUser.uid)
@@ -111,7 +111,7 @@ const Family = () => {
                       <Form.Item
                 x                name="father"
                         rules={[
-                          { required: true, message: "Please enter Father's name" },
+                          { required: false, message: "Please enter Father's name" },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
@@ -130,7 +130,7 @@ const Family = () => {
                         name="fatherContact"
                         rules={[
                           {
-                            required: true,
+                            required: false,
                             message: "Please enter the Contact no.",
                           },
                         ]}
@@ -150,7 +150,7 @@ const Family = () => {
                       <Form.Item
                         name="mother"
                         rules={[
-                          { required: true, message: "Please enter Mother's Name" },
+                          { required: false, message: "Please enter Mother's Name" },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
@@ -169,7 +169,7 @@ const Family = () => {
                         name="motherContact"
                         rules={[
                           {
-                            required: true,
+                            required: false,
                             message: "Please enter the Contact no.",
                           },
                         ]}
@@ -224,14 +224,6 @@ const Family = () => {
                   <Row gutter={[16, 16]}>
                     {/* ------------------------------------father */}
                     <Col span={12}>
-                      <Form.Item
-                x                name="father"
-                        rules={[
-                          { required: true, message: "Please enter Father's name" },
-                        ]}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                      >
                         <div>
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Father
@@ -239,23 +231,21 @@ const Family = () => {
                           {editfamilymember === false ? (
                             <h4>{data?data.father:null}</h4>
                           ) : (
-                            <Input placeholder="Enter Father's Name"/>)}
-                            </div>
-                      </Form.Item>
-                      {/* --------------------------------------father-contact------------------------------------ */}
-                    </Col>
-                    <Col span={12}>
                       <Form.Item
-                        name="fatherContact"
+                        name="father"
                         rules={[
-                          {
-                            required: true,
-                            message: "Please enter the Contact no.",
-                          },
+                          { required: false, message: "Please enter Father's name" },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
+                        initialValue = {data?data.father:null}
                       >
+                            <Input defaultValue={data?data.father:null} placeholder="Enter Father's Name"/>
+                      </Form.Item>)}
+                            </div>
+                      {/* --------------------------------------father-contact------------------------------------ */}
+                    </Col>
+                    <Col span={12}>
                         <div>
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Contact no.
@@ -263,20 +253,25 @@ const Family = () => {
                           {editfamilymember === false ? (
                             <h4>{data?data.fatherContact:null}</h4>
                           ) : (
-                            <Input placeholder="Enter Contact no." />) }
-                        </div>
-                      </Form.Item>
-                      </Col>
-                      {/* -------------------------------------mother------------------------------------------ */}
-                    <Col span={12}>
                       <Form.Item
-                        name="mother"
+                        name="fatherContact"
                         rules={[
-                          { required: true, message: "Please enter Mother's Name" },
+                          {
+                            required: false,
+                            message: "Please enter Phone Number",
+                            pattern: /^[0-9\b]+$/,
+                          },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
+                        initialValue = {data?data.fatherContact:null}
                       >
+                            <Input defaultValue={data?data.fatherContact:null} placeholder="Enter Contact no." />
+                      </Form.Item>) }
+                        </div>
+                      </Col>
+                      {/* -------------------------------------mother------------------------------------------ */}
+                    <Col span={12}>
                         <div>
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Mother
@@ -284,23 +279,21 @@ const Family = () => {
                           {editfamilymember === false ? (
                             <h4>{data?data.mother:null}</h4>
                           ) : (
-                            <Input placeholder="Enter Mother's Name" />) }
-                        </div>
-                      </Form.Item>
-                    </Col>
-                    {/* ---------------------------------------------mother Contact------------------------------ */}
-                    <Col span={12}>
-                    <Form.Item
-                        name="motherContact"
+                      <Form.Item
+                        name="mother"
                         rules={[
-                          {
-                            required: true,
-                            message: "Please enter the Contact no.",
-                          },
+                          { required: false, message: "Please enter Mother's Name" },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
+                        initialValue = {data?data.mother:null}
                       >
+                            <Input defaultValue={data?data.mother:null} placeholder="Enter Mother's Name" />
+                      </Form.Item>) }
+                        </div>
+                    </Col>
+                    {/* ---------------------------------------------mother Contact------------------------------ */}
+                    <Col span={12}>
                         <div>
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Contact no.
@@ -308,9 +301,22 @@ const Family = () => {
                           {editfamilymember === false ? (
                             <h4>{data?data.motherContact:null}</h4>
                           ) : (
-                            <Input placeholder="Enter Contact no."  /> ) }
+                    <Form.Item
+                        name="motherContact"
+                        rules={[
+                          {
+                            required: false,
+                            message: "Please enter Phone Number",
+                            pattern: /^[0-9\b]+$/,
+                          },
+                        ]}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 32 }}
+                        initialValue = {data?data.motherContact:null}
+                      >
+                            <Input defaultValue={data?data.motherContact:null} placeholder="Enter Contact no."  />
+                      </Form.Item> ) }
                         </div>
-                      </Form.Item>
                     </Col>
                     </Row>
                   {editfamilymember === true ? (
@@ -336,7 +342,7 @@ const Family = () => {
                           type="primary"
                           htmlType="submit"
                           style={{ marginLeft: "10px" }}
-                          onClick={() => onContactsFinish()}
+                          // onClick={() => onContactsFinish()}
                         ><CheckOutlined />
                           SAVE
                         </Button>
@@ -377,7 +383,7 @@ const Family = () => {
                             name="other"
                             rules={[
                               {
-                                required: true,
+                                required: false,
                                 message: "Please enter the Name",
                               },
                             ]}
@@ -413,7 +419,7 @@ const Family = () => {
                             name="otherContact"
                             rules={[
                               {
-                                required: true,
+                                required: false,
                                 message: "Please enter the Contact no.",
                               },
                             ]}
@@ -473,19 +479,20 @@ const Family = () => {
                       name="other"
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Please enter the Name",
                         },
                       ]}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
+                      initialValue = {data?data.other:null}
                     >
                       <div>
                         <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                           Other
                         </h1>
                         
-                          <Input placeholder="Enter Other Name" /> 
+                          <Input defaultValue={data?data.other:null} placeholder="Enter Other Name" /> 
                       </div>
                     </Form.Item>
                   </Col><Col span={8}>
@@ -493,19 +500,20 @@ const Family = () => {
                       name="relation"
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Please enter the Relation",
                         },
                       ]}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
+                      initialValue = {data?data.relation:null}
                     >
                       <div>
                         <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                           Relation
                         </h1>
                        
-                          <Input placeholder="Enter the Relation" />  
+                          <Input defaultValue={data?data.relation:null} placeholder="Enter the Relation" />  
                       </div>
                     </Form.Item>
                   </Col><Col span={8}>
@@ -513,19 +521,21 @@ const Family = () => {
                       name="otherContact"
                       rules={[
                         {
-                          required: true,
-                          message: "Please enter the Contact no.",
+                          required: false,
+                          message: "Please enter Phone Number",
+                          pattern: /^[0-9\b]+$/,
                         },
                       ]}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
+                      initialValue = {data?data.otherContact:null}
                     >
                       <div>
                         <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                           Contact no.
                         </h1>
                         
-                          <Input placeholder="Enter Contact no." /> 
+                          <Input defaultValue={data?data.otherContact:null} placeholder="Enter Contact no." /> 
                       </div>
                     </Form.Item>
                   </Col></Row>
@@ -550,7 +560,7 @@ const Family = () => {
                         type="primary"
                         htmlType="submit"
                         style={{ marginLeft: "10px" }}
-                        onClick={() => onEmergencyFinish()}
+                        // onClick={() => onEmergencyFinish()}
                       >
                         <CheckOutlined />
                         SAVE

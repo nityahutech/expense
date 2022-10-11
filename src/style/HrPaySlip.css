@@ -1,5 +1,5 @@
 
-   h3{ 
+   h3.Background{ 
     background-image: url(https://d2t3zflm3wbahw.cloudfront.net/static/images/psw.svg);
     background-color: #edfdf6; 
 }
@@ -68,14 +68,10 @@
         padding: 30px 30px; 
         height: auto;
      }  
-
-
-     /* input[type="text"].search{
-        border: 1px solid lightgray;
-        width: 25%;
-        height: 28px;
-        border-radius: 3px;
+     .ant-select.ant-select-in-form-item.dropDown{
+        width: 30%;
+    margin-left: 11px;
+    margin-top: 16px
      }
-     rc-input-affix-wrapper-focused.search{
-        border: none;
-     } */
+
+     

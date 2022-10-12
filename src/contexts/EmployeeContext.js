@@ -41,9 +41,13 @@ class EmployeeContext {
     return getDocs(q);
   };
 
-  getEmployee = (id) => {
+  getEmployee = async (id) => {
     const employeeDoc = doc(db, "users", id);
-    return getDoc(employeeDoc);
+    let rec = await getDoc(employeeDoc);
+    let recordData = await rec.data();
+    console.log('recordData', recordData)
+    return recordData
+    // return getDoc(employeeDoc);
   };
 }
 

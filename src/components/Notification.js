@@ -19,7 +19,7 @@ let dummy = [{
     approver: "jhbd"
 }]
 const Notification = ({ data }) => {
-    const { currentUser, role } = useAuth();  
+    const { currentUser, role } = useAuth();
     const [dataSource, setDataSource] = useState(data);
     const [approve, setApprove] = useState([]);
     const [reject, setReject] = useState([]);
@@ -50,7 +50,7 @@ const Notification = ({ data }) => {
     const onApproveLeave = (record) => {
         console.log(record)
         Modal.confirm({
-            title: `Are you sure, you want to approve Leave of ${record?.name||''}!`,
+            title: `Are you sure, you want to approve Leave of ${record?.name || ''}!`,
             okText: "Yes",
             okType: "primary",
             onOk: () => {
@@ -70,7 +70,7 @@ const Notification = ({ data }) => {
     const onRejectedLeave = (record) => {
         console.log(record)
         Modal.confirm({
-            title: `Are you sure, you want to reject Leave of ${record?.name||''}!`,
+            title: `Are you sure, you want to reject Leave of ${record?.name || ''}!`,
             okText: "Yes",
             okType: "danger",
             onOk: () => {
@@ -86,7 +86,7 @@ const Notification = ({ data }) => {
             },
         });
     };
-    
+
 
     const columns = [
         {
@@ -95,9 +95,9 @@ const Notification = ({ data }) => {
             width: 250,
             sorter: (a, b) => {
                 return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
-            
+            },
+            sortDirections: ["ascend", "descend"],
+
 
         },
         {
@@ -106,9 +106,9 @@ const Notification = ({ data }) => {
             width: 150,
             sorter: (a, b) => {
                 return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
-            
+            },
+            sortDirections: ["ascend", "descend"],
+
 
         },
         {
@@ -122,8 +122,8 @@ const Notification = ({ data }) => {
             dataIndex: 'slot',
             sorter: (a, b) => {
                 return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
+            },
+            sortDirections: ["ascend", "descend"],
         },
         {
             title: 'Reason',
@@ -159,16 +159,16 @@ const Notification = ({ data }) => {
 
                                     }}
                                 />
-                               
+
                                 <img
-                                   style={{ color: "white", width: '20px', marginRight: 10 }}
+                                    style={{ color: "white", width: '20px', marginRight: 10 }}
                                     src="../logo/rejected.png"
                                     alt="profile"
                                     className="Dash"
                                     onClick={() => {
                                         onRejectedLeave(record);
                                     }}
-                                   
+
                                 />
                             </>
                         }
@@ -192,11 +192,11 @@ const Notification = ({ data }) => {
         }}
         >
             <Col span={24} style={{
-                display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black'
+                display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black', width: '100rem'
             }}><h3>Leave Requested</h3></Col>
 
             <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
-                background: 'flex', padding: '10px', width: '400px'
+                background: 'flex', padding: '10px',
             }} >
 
                 {/* {JSON.stringify(dataSource[0])} */}
@@ -208,10 +208,10 @@ const Notification = ({ data }) => {
                         rowClassName={record => !record.enabled && "disabled-row"}
                         pagination={{
                             position: ["bottomCenter"],
-                          }}
-                        size="small" scroll={{
-                            x: 1000, 
-                        }} />
+                        }}
+                        scroll={{ x: true }}
+
+                        size="small" />
                 </div>
             </Col>
         </Row>

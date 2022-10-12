@@ -69,11 +69,11 @@ const Navbar = () => {
           key: "1",
           label: (
             <Link
-              to="/Profile"
+              to="/Setting"
               style={{ color: "#171832", fontWeight: "normal" }}
               rel="noopener noreferrer"
             >
-              Admin
+              Setting
             </Link>
           ),
           icon: (

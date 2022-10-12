@@ -338,10 +338,10 @@ const Leave = () => {
             width: 240,
             sorter: (a, b) => {
                 return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
+            },
+            sortDirections: ["ascend", "descend"],
 
-            
+
 
         },
         // {
@@ -354,11 +354,11 @@ const Leave = () => {
             title: 'Nature of Leave',
             dataIndex: 'nature',
             width: 150,
-          
+
             sorter: (a, b) => {
                 return a.nature !== b.nature ? (a.nature < b.nature ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
+            },
+            sortDirections: ["ascend", "descend"],
 
         },
         {
@@ -367,10 +367,10 @@ const Leave = () => {
             width: 150,
             sorter: (a, b) => {
                 return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
-            
-            
+            },
+            sortDirections: ["ascend", "descend"],
+
+
         },
         {
             title: 'Reason',
@@ -388,11 +388,12 @@ const Leave = () => {
             className: "row5",
             key: "status",
             dataIndex: "status",
+            width: 100,
             // responsive: ["md"],
             sorter: (a, b) => {
                 return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
+            },
+            sortDirections: ["ascend", "descend"],
             render: (_, { status }) =>
                 status !== "" && (
                     <Tag style={{ width: '70px' }}
@@ -546,17 +547,19 @@ const Leave = () => {
                 {listData.map((item) => (
                     <div
                         style={
-                            item.type === 'leave' ? { color: 'rgba(10, 91, 204,  1)', fontSize: '10px', backgroundColor: "rgba(10, 91, 204,0.2)", paddingLeft: '10px', margin: '0px', borderRadius: '10px' }
+                            item.type === 'leave' ? { color: 'rgba(10, 91, 204,  1)', fontSize: '6px', backgroundColor: "rgba(10, 91, 204,0.2)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
                                 : item.isOptional ?
-                                    { color: "rgba(204, 204, 10, 1)", fontSize: '10px', backgroundColor: "rgba(204, 204, 10,0.2)", paddingLeft: '10px', margin: '0px', borderRadius: '10px' }
-                                    : { color: "rgba(252, 143, 10, 1)", fontSize: '10px', backgroundColor: "rgba(252, 143, 10,0.2)", paddingLeft: '10px', margin: '0px', borderRadius: '10px' }
+                                    { color: "rgba(0, 119, 137, 0.96)", fontSize: '6px', backgroundColor: "rgba(154, 214, 224, 0.96)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
+                                    : { color: "rgba(252, 143, 10, 1)", fontSize: '6px', backgroundColor: "rgba(252, 143, 10,0.2)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
 
                         }
+
+
 
                     >
                         {/* style={{ color: "rgba(204, 204, 10, 1)",fontSize:'8px'}} */}
 
-                        <div className='present' > {item.type}</div>
+                        <div className='present' > {item.type}  </div>
                     </div>
                 ))}
             </div>
@@ -600,21 +603,21 @@ const Leave = () => {
     }
 
     if (loading) {
-        return(
-        <div style={{height:'70vh', width:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
-            < Spin size="large" style={{
-                position: 'absolute',
-                top: '20%',
-                left: '50%',
-                margin: '-10px',
-                zIndex: '100',
-                opacity: '0.7',
-                backgroundColor: 'transparent'
-            }} />
-        </div>)
+        return (
+            <div style={{ height: '70vh', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                < Spin size="large" style={{
+                    position: 'absolute',
+                    top: '20%',
+                    left: '50%',
+                    margin: '-10px',
+                    zIndex: '100',
+                    opacity: '0.7',
+                    backgroundColor: 'transparent'
+                }} />
+            </div>)
     }
 
- 
+
 
     return (
         <>
@@ -626,7 +629,7 @@ const Leave = () => {
                     minHeight: 150,
                     display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: '#e9eaea',
                 }}
-                gutter={[16, 16]}>
+                gutter={[16, 0]}>
                 <Col xl={24} lg={24} md={24} sm={24} xs={24}>
 
 
@@ -640,11 +643,11 @@ const Leave = () => {
 
                                 >
                                     <p className='heading' style={{
-                                        fontWeight: '500',
+                                        fontWeight: '500', fontSize: '18px'
                                     }}>{user.leavetype}</p>
                                     {/* {JSON.stringify(colors[id])} */}
                                     <p className='leave' style={{
-                                        fontWeight: '500',
+                                        fontWeight: '500', fontSize: '16px'
                                     }}>{user.leave}</p>
 
                                 </div>
@@ -665,7 +668,7 @@ const Leave = () => {
                                 {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 10, 10,0.2)" }} ><h5 style={{ color: "rgba(204, 10, 10, 1)" }} className='rep-text'>Absent</h5></button> */}
                                 {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 94, 10,0.2)" }}><h5 style={{ color: "rgba(204, 94, 10, 1)" }} className='rep-text'>Half Day</h5></button> */}
                                 <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 91, 204,0.2)" }}><h5 style={{ color: "rgba(10, 91, 204,  1)" }} className='rep-text'>Leave</h5></button>
-                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 204, 10,0.2)" }}><h5 style={{ color: "rgba(204, 204, 10, 1)", }} className='rep-text'>Optional Holiday</h5></button>
+                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(154, 214, 224, 0.96)" }}><h5 style={{ color: "rgba(0, 119, 137, 0.96)", }} className='rep-text'>Optional Holiday</h5></button>
                                 <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(252, 143, 10,0.2)" }}><h5 style={{ color: "rgba(252, 143, 10, 1)" }} className='rep-text'>Official Holiday</h5></button>
                                 <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(74, 67, 67,0.2)" }}><h5 style={{ color: "rgba(74, 67, 67, 1)" }} className='rep-text'>Weekly Off</h5></button>
                             </div>
@@ -682,8 +685,8 @@ const Leave = () => {
 
 
                         <Calendar
-                     
-                  
+
+
                             style={{ paddingLeft: '10px', paddingRight: '10px', borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px' }}
                             value={date}
                             onChange={setDate}
@@ -691,22 +694,23 @@ const Leave = () => {
                             monthCellRender={monthCellRender}
                             disabledDate={disabledDate}
                         />
-                        {
-                            isHr
-                                ? <Notification data={requests} />
-                                : null
-                        }
                     </div>
                 </Col>
 
-                <Row style={{
-                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
-                    borderRadius: '10px', padding: '10px'
-                }}
+
+
+
+                <Row className='apply-leave'
+                // style={{
+                //     display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
+                //     borderRadius: '10px', padding: '10px', width: '50%'
+
+                // }}
+
                 >
                     <Col span={12} style={{
                         display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black'
-                    }}><h3>Apply Leave</h3></Col>
+                    }}><h3 className='apply-leave'>Apply Leave</h3></Col>
 
                     <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
                         background: 'flex', padding: '10px', width: '400px'
@@ -749,11 +753,11 @@ const Leave = () => {
                                 >
                                     <RangePicker
 
-                                        ranges={{
-                                            Today: [moment(), moment()],
-                                            "This Month": [moment().startOf("month"), moment().endOf("month")]
-                                        }}
-                                        showTime
+                                        // ranges={{
+                                        //     Today: [moment(), moment()],
+                                        //     "This Month": [moment().startOf("month"), moment().endOf("month")]
+                                        // }}
+                                        // showTime
                                         format="Do MMM, YYYY"
                                         onChange={onLeaveDateChange}
                                         disabledDate={disabledDate}
@@ -804,17 +808,17 @@ const Leave = () => {
                                 // label="Slot&nbsp;"
                                 className='div-slot'
                                 label={<label style={{ color: "black", fontWeight: '400' }}> Slot<span style={{ color: 'red' }}> *</span></label>}
-                                rules={[{  message: "Please select an option!" }]}
+                                rules={[{ message: "Please select an option!" }]}
                             >
 
                                 <Radio.Group defaultValue="Full Day"
                                     onChange={onLeaveSlotChange}
-                                   
-                                    
+
+
                                 >
-                                    <Radio  style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Evening" >Evening</Radio>
-                                    <Radio  style={{ color: "black", fontWeight: '400' }}  value="Full Day" >Full Day</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
 
                                 </Radio.Group>
                             </Form.Item>
@@ -867,24 +871,45 @@ const Leave = () => {
                                     Reset
                                 </Button>
                             </Form.Item>
-                            <Col span={24} style={{
-
-                            }}><Divider><h3>History</h3></Divider></Col>
-
-                            <div>
-                                <Table columns={columns}
-                                    dataSource={history}
-                                    pagination={{
-                                        position: ["bottomCenter"],
-                                    }}
-                                    size="small" scroll={{
-                                        x: 1000,
-                                    }} />
-                            </div>
 
                         </Form>
 
                     </Col>
+                </Row>
+
+                {
+                    isHr
+                        ? <Notification data={requests} />
+                        : null
+                }
+
+
+                <Row style={{
+                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
+                    borderRadius: '10px', padding: '10px', marginTop: '10px'
+                }}
+                >
+                    <Col span={24} style={{
+                        display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black', width: '100rem'
+                    }}><h3>History</h3></Col>
+
+                    <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
+                        background: 'flex', padding: '10px',
+                    }} >
+
+                        <div className='history-table' style={{}}>
+                            <Table columns={columns}
+                                dataSource={history}
+                                pagination={{
+                                    position: ["bottomCenter"],
+                                }}
+                                scroll={{ x: true }}
+
+                                size="small" />
+                        </div>
+
+                    </Col>
+
                 </Row>
             </Row>
         </>

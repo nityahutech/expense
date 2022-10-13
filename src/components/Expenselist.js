@@ -451,21 +451,7 @@ function ExpenseList() {
       console.log({ totalAmount });
       setTotal(totalAmount);
       const modifiedFilterExpense = [...result];
-      //   ...result,
-      //   {
-      //     key: "subTotal",
-      //     sn: "",
-      //     name: "",
-      //     catname: "",
-      //     paidname: "",
-      //     date: "",
-      //     quantity: "",
-      //     amount: "Total",
-      //     subtotal: totalAmount,
-      //     // status: "",
-      //     description: "",
-      //   },
-      // ];
+
       setFilterExpense(modifiedFilterExpense);
     } else {
       const totalAmount = allExpenses.reduce((acc, expense) => {

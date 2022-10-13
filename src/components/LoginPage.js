@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Button, Checkbox, Form, Input, Alert, Row, Col } from "antd";
+import { Button, Checkbox, Form, Input, Alert, Row, Col, Divider } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
@@ -85,7 +85,9 @@ function LoginPage() {
                 <div className="msg">Let's Access to our dashboard</div>
 
                 <div className="email-div">
-                  Email address<label style={{ color: "red" }}> *</label>
+                <Divider orientation="left" orientationMargin={0}>
+                Email address<span style={{ color: "red" }}> *</span>
+              </Divider>
                 </div>
                 <div className="emailInput-div">
                   {/* <Row>
@@ -105,7 +107,9 @@ function LoginPage() {
                   </Row> */}
                 </div>
                 <div className="email-div">
-                  Password<label style={{ color: "red" }}> *</label>
+                <Divider orientation="left" orientationMargin={0}>
+                Password<span style={{ color: "red" }}> *</span>
+              </Divider>
                 </div>
                 <div className="pwdInput-div">
                   <Form.Item

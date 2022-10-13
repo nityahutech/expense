@@ -145,7 +145,10 @@ const NewSidebar = (props) => {
             }
           </Menu.SubMenu>
            
-          <Menu.SubMenu  style={{
+            {/* PREVIOUS PROFILE TABS COMMENTED */}
+            {/* ---------------------------------------------------- */}
+
+          {/* <Menu.SubMenu  style={{
             
             width:'100%'
              }}
@@ -236,7 +239,16 @@ const NewSidebar = (props) => {
               Bank Account
               <NavLink to="/BankAccountpages/BankAccount" />
             </Menu.Item>
-          </Menu.SubMenu>
+          </Menu.SubMenu> */}
+          <Menu.Item
+            icon={
+              <img src="/logo/user.png" alt="profile" className="Dash" />
+            }
+            key="21"
+          >
+            My Profile
+            <NavLink to="/Profile" />
+          </Menu.Item>
 
           {/* <Menu.Item
             icon={

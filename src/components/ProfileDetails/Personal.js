@@ -6,7 +6,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import moment from "moment";
 const { TextArea } = Input;
 const { Option } = Select;
-const dateFormatList = ["DD/MM/YYYY"];
+// const dateFormatList = ["DD/MM/YYYY"];
 function Personal() {
   const [editContent, showEditContent] = useState(false);
   const [editContactInfo, showEditContactInfo] = useState(false);
@@ -221,7 +221,7 @@ function Personal() {
                       {/* format={dateFormatList} */}
                       <DatePicker
                         style={{ width: "100%" }}
-                        format={dateFormatList}
+                        // format={dateFormatList}
                         onChange={(e) => {
                           setDob(e.format("DD-MM-YYYY"));
                           console.log(e.format("DD-MM-YYYY"));
@@ -654,7 +654,7 @@ function Personal() {
                           // message: "Please enter First Name",
                         },
                         {
-                          pattern: /^[a-zA-Z\s]*$/,
+                          // pattern: /^[a-zA-Z\s]*$/,
                           // message: "Please enter Valid Name",
                         },
                       ]}
@@ -757,7 +757,7 @@ function Personal() {
                       ]}
                     >
                       <DatePicker
-                        format={dateFormatList}
+                        // format={dateFormatList}
                         onChange={(e) => {
                           setScrs(e.format("DD-MM-YYYY"));
                           console.log(e.format("DD-MM-YYYY"));
@@ -791,7 +791,7 @@ function Personal() {
                       ]}
                     >
                       <DatePicker
-                        format={dateFormatList}
+                        // format={dateFormatList}
                         onChange={(e) => {
                           setLccs(e.format("DD-MM-YYYY"));
                         }}

@@ -43,38 +43,6 @@ const data = [
     action: "",
   },
 ];
-const data1 = [
-  {
-    key: "1",
-    salary: "Basic ",
-    calc: "CTC * .4",
-  },
-  {
-    key: "2",
-    salary: "HRA ",
-    calc: "Basic * .4",
-  },
-  {
-    key: "3",
-    salary: "PF Employer ",
-    calc: "System Calculated",
-  },
-  {
-    key: "4",
-    salary: "ESI Employer ",
-    calc: "System Calculated",
-  },
-  {
-    key: "5",
-    salary: "Special Allowance ",
-    calc: "Balancing Amount of CTC",
-  },
-  //   {
-  //     key: "Gratuity",
-  //     salary: "Gratuity ",
-  //     calc: <Input />,
-  //   },
-];
 
 const months = [
   "January",
@@ -107,23 +75,49 @@ const Dropdown = [
 //   textAlign: "center",
 //   background: "gray",
 // };
-
+const data1 = [
+  {
+    key: "1",
+    salary: "Basic ",
+    calc: "CTC * .4",
+  },
+  {
+    key: "2",
+    salary: "HRA ",
+    calc: "Basic * .4",
+  },
+  {
+    key: "3",
+    salary: "PF Employer ",
+    calc: "System Calculated",
+  },
+  {
+    key: "4",
+    salary: "ESI Employer ",
+    calc: "System Calculated",
+  },
+  {
+    key: "5",
+    salary: "Special Allowance ",
+    calc: "Balancing Amount of CTC",
+  },
+];
 function HrPaySlip() {
   //   const [dotPosition, setDotPosition] = useState("top");
   const [componentSize, setComponentSize] = useState("default");
   const [selectionType, setSelectionType] = useState("checkbox");
   const [showComponent, setShowComponent] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState([]);
+  const [form] = Form.useForm();
 
   const [rows, setRows] = useState(data1);
   const [componentValues, setComponentValues] = useState({});
 
   const carouselRef = React.createRef();
 
-  const handleInputChange = (key, e, values) => {
-    console.log(values);
+  const handleInputChange = (key, e) => {
     const data = {
-      ...values,
+      ...componentValues,
       [key]: e.target.value,
     };
     console.log("data:: ", data);
@@ -139,22 +133,15 @@ function HrPaySlip() {
     setSelectedComponent(temp);
     temp = [];
     temp = [...rows];
-    console.log("componentValues inside handlechange:: ", componentValues);
     temp.push({
       key: value,
       salary: value,
-      calc: (
-        <Input
-          value={componentValues[value]}
-          onChange={(e) => handleInputChange(value, e, { [value]: "" })}
-        />
-      ),
     });
 
     setRows(temp);
     setShowComponent(false);
   };
-  function Component() {
+  function Component1() {
     return (
       <Form.Item>
         <Select
@@ -163,9 +150,11 @@ function HrPaySlip() {
           onSelect={handleChange}
         >
           {Dropdown.map(
-            (D) =>
+            (D, i) =>
               !selectedComponent.includes(D) && (
-                <Select.Option value={D}>{D}</Select.Option>
+                <Select.Option key={`component_${i}`} value={D}>
+                  {D}
+                </Select.Option>
               )
           )}
         </Select>
@@ -260,6 +249,14 @@ function HrPaySlip() {
       title: "Calculation (Annual)",
       dataIndex: "calc",
       key: "calc",
+      render: (d, record) => {
+        return Dropdown.includes(record.key) ? (
+          <Input onChange={(e) => handleInputChange(record.key, e)}></Input>
+        ) : (
+          d
+        );
+        // );
+      },
     },
   ];
 
@@ -278,6 +275,11 @@ function HrPaySlip() {
     }),
   };
   //   console.log(Carousel);
+
+  const onReset = () => {
+    form.resetFields();
+  };
+
   return (
     <div>
       <Carousel
@@ -311,7 +313,15 @@ function HrPaySlip() {
               onValuesChange={onFormLayoutChange}
               size={componentSize}
             >
-              <Form.Item label="When do you want to use Hutech’s Payroll from?">
+              <Form.Item
+                label="When do you want to use Hutech’s Payroll from?"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Select Month ",
+                  },
+                ]}
+              >
                 <Select className="SelectLabel">
                   <Select.Option value="Select Month">
                     Select Month
@@ -344,7 +354,15 @@ function HrPaySlip() {
                   defaultChecked
                 />
               </Form.Item>
-              <Form.Item label="Employee Contribution">
+              <Form.Item
+                label="Employee Contribution"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Select Required Field ",
+                  },
+                ]}
+              >
                 <Select className="SelectLabel">
                   <Select.Option value="Select Type">Select Type</Select.Option>
                   <Select.Option value="Basic*12%">Basic*12%</Select.Option>
@@ -478,7 +496,7 @@ function HrPaySlip() {
             </div>
             <div>
               {showComponent ? (
-                Component()
+                <Component1 />
               ) : (
                 <Button
                   style={{
@@ -504,8 +522,11 @@ function HrPaySlip() {
                   borderRadius: "5px",
                   bottom: "18px",
                 }}
+                form={form}
                 onClick={(e) => {
+                  onReset();
                   console.log(componentValues);
+                  carouselRef.current.next();
                 }}
               >
                 Finish

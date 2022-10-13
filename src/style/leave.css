@@ -61,14 +61,14 @@
 .Col-2-center {
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2);
   width: 250rem;
-  height: 120px;
+  height: 140px;
   margin: 10px;
   border-radius: 5px;
   align-items: center;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  padding-top: 10px;
+  /* padding-top: 10px; */
 }
 
 .leavediv {
@@ -106,6 +106,12 @@
   color: rgb(2, 0, 0);
 }
 
+.leave-status {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 @media only screen and (max-width: 600px) {
   .leavediv {
     flex-direction: column;
@@ -113,12 +119,12 @@
   }
 
   .Col-2-center {
-    flex-direction: row;
+    flex-direction: column;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 10px;
-    height: 50px;
-    width: 20rem;
+    height: 145px;
+    width: 16rem;
     justify-content: Space-around;
   }
 }

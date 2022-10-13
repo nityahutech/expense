@@ -73,7 +73,7 @@ const Navbar = () => {
               style={{ color: "#171832", fontWeight: "normal" }}
               rel="noopener noreferrer"
             >
-              Setting
+              Settings
             </Link>
           ),
           icon: (

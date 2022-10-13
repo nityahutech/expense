@@ -21,6 +21,7 @@ import moment from "moment";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import LeaveContext from '../contexts/LeaveContext';
 import CompanyHolidayContext from '../contexts/CompanyHolidayContext';
+import EmployeeContext from '../contexts/EmployeeContext';
 import { useAuth } from '../contexts/AuthContext'
 import Notification from "./Notification";
 import HolidayList from "./HolidayList";
@@ -59,6 +60,7 @@ const Leave = () => {
     const [leaveslot, setLeaveslot] = useState(null)
     const [companyholiday, setCompanyholiday] = useState([])
     const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+    const [employeeRecord, setEmployeeRecord] = useState();
 
 
     function addNewHoliday(holiday) {
@@ -193,13 +195,14 @@ const Leave = () => {
         }
 
         let newLeave = {
-            empId: currentUser.uid,
+            empId: employeeRecord.empId,
             approver: values.approver,
             date: duration,
-            name: currentUser.displayName,
+            name: employeeRecord.fname + ' ' + employeeRecord.lname,
             nature: values.leaveNature,
             slot: values.slot,
             reason: values.reason,
+            email: employeeRecord.mailid,
             status: 'Pending'
         }
 
@@ -224,7 +227,10 @@ const Leave = () => {
 
     const getData = async () => {
         setLoading(true);
-        let data = await LeaveContext.getAllById(currentUser.uid)
+        let empRecord = await EmployeeContext.getEmployee(currentUser.uid)
+        setEmployeeRecord(empRecord)
+        console.log('empRecord', empRecord)
+        let data = await LeaveContext.getAllById(empRecord.empId)
         // console.log("data", JSON.stringify(data.docs), currentUser.uid);
 
         let d = data.docs.map((doc) => {
@@ -246,24 +252,29 @@ const Leave = () => {
                         id: 1,
                         leavetype: "Earn Leave",
                         leave: response["Earn Leave"],
+                        totalLeave: response["Total Earn Leave"],
 
                     },
                     {
                         id: 2,
                         leavetype: "Sick Leave",
                         leave: response["Sick Leave"],
+                        totalLeave: response["Total Sick Leave"],
 
                     },
                     {
                         id: 3,
                         leavetype: "Casual Leave",
                         leave: response["Casual Leave"],
+                        totalLeave: response["Total Casual Leave"],
+
 
                     },
                     {
                         id: 4,
                         leavetype: "Optional Leave",
                         leave: response["Optional Leave"],
+                        totalLeave: response["Total Optional Leave"],
 
                     },
                 ];
@@ -336,6 +347,7 @@ const Leave = () => {
             title: 'Duration',
             dataIndex: 'date',
             width: 240,
+            align: "left",
             sorter: (a, b) => {
                 return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
             },
@@ -364,7 +376,7 @@ const Leave = () => {
         {
             title: 'Slot',
             dataIndex: 'slot',
-            width: 150,
+            width: 100,
             sorter: (a, b) => {
                 return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
             },
@@ -440,6 +452,7 @@ const Leave = () => {
 
     ];
     useEffect(() => {
+
         let role = sessionStorage.getItem("role");
         setRole(role)
         setIsHr(role === "hr")
@@ -643,12 +656,39 @@ const Leave = () => {
 
                                 >
                                     <p className='heading' style={{
-                                        fontWeight: '500', fontSize: '18px'
+                                        fontWeight: '500', fontSize: '20px'
                                     }}>{user.leavetype}</p>
-                                    {/* {JSON.stringify(colors[id])} */}
-                                    <p className='leave' style={{
-                                        fontWeight: '500', fontSize: '16px'
-                                    }}>{user.leave}</p>
+
+                                    <div className='total-leave' style={{
+                                        width: '90%'
+                                    }}>
+                                        <div className='leave-status'>
+                                            <p className='leave' Total style={{
+                                                fontWeight: '500', fontSize: '15px', margin: '0px',
+                                            }}>Total Leave  :- </p>
+                                            <p style={{
+                                                fontWeight: '500', fontSize: '15px', margin: '0px'
+                                            }}>{user.totalLeave}</p>
+                                        </div>
+
+                                        <div className='leave-status'>
+                                            <p className='leave' Total style={{
+                                                fontWeight: '500', fontSize: '15px', margin: '0px'
+                                            }}>Total Taken  :- </p>
+                                            <p style={{
+                                                fontWeight: '500', fontSize: '15px', margin: '0px'
+                                            }}>{user.totalLeave - user.leave}</p>
+                                        </div>
+
+                                        <div className='leave-status'>
+                                            <p className='leave' Total style={{
+                                                fontWeight: '500', fontSize: '15px', margin: '0px'
+                                            }}>Total Leave Remaining :- </p>
+                                            <p style={{
+                                                fontWeight: '500', fontSize: '15px', margin: '0px'
+                                            }}>{user.leave}</p>
+                                        </div>
+                                    </div>
 
                                 </div>
                             );
@@ -658,7 +698,11 @@ const Leave = () => {
                 </Col>
                 {/* </Col> */}
 
-                <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12}  >
+                <Col xl={12} lg={12} md={12} sm={24} xs={24} span={2} style={{
+                    marginTop: '10px'
+
+                }}
+                >
                     {/* <HolidayList isHr={isHr} /> */}
                     <HolidayList isHr={isHr} refershCalendar={addNewHoliday} />
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -701,11 +745,10 @@ const Leave = () => {
 
 
                 <Row className='apply-leave'
-                // style={{
-                //     display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
-                //     borderRadius: '10px', padding: '10px', width: '50%'
+                    style={{
+                        marginTop: '10px'
 
-                // }}
+                    }}
 
                 >
                     <Col span={12} style={{
@@ -726,6 +769,14 @@ const Leave = () => {
                             }}
                             form={form}
                             onFinish={onFinish}
+
+                            initialValues={{
+                                remember: true,
+                                // approver: employeeRecord.repManager
+
+
+
+                            }}
                         >
                             {/* <Form.Item labelAlign="left"
                                 style={{ marginBottom: "20px", }}
@@ -753,10 +804,10 @@ const Leave = () => {
                                 >
                                     <RangePicker
 
-                                        // ranges={{
-                                        //     Today: [moment(), moment()],
-                                        //     "This Month": [moment().startOf("month"), moment().endOf("month")]
-                                        // }}
+                                        ranges={{
+                                            Today: [moment(), moment()],
+                                            "This Month": [moment().startOf("month"), moment().endOf("month")]
+                                        }}
                                         // showTime
                                         format="Do MMM, YYYY"
                                         onChange={onLeaveDateChange}
@@ -809,6 +860,8 @@ const Leave = () => {
                                 className='div-slot'
                                 label={<label style={{ color: "black", fontWeight: '400' }}> Slot<span style={{ color: 'red' }}> *</span></label>}
                                 rules={[{ message: "Please select an option!" }]}
+                                initialValue={"Full Day"}
+
                             >
 
                                 <Radio.Group defaultValue="Full Day"
@@ -843,6 +896,7 @@ const Leave = () => {
                                 name="approver"
                                 style={{ marginBottom: "20px" }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Approver<span style={{ color: 'red' }}> *</span></label>}
+                            // initialValue={employeeRecord}
 
 
                             >
@@ -854,8 +908,9 @@ const Leave = () => {
                                         form.setFieldsValue({ approver: newVal });
 
                                     }}
-                                    rules={[{ required: true }]}
-                                    placeholder="Reporting Manager" required />
+                                // rules={[{ required: true }]}
+                                // placeholder="Reporting Manager" 
+                                />
                             </Form.Item>
 
                             <Form.Item
@@ -897,13 +952,14 @@ const Leave = () => {
                         background: 'flex', padding: '10px',
                     }} >
 
-                        <div className='history-table' style={{}}>
+                        <div className='history-table' >
                             <Table columns={columns}
                                 dataSource={history}
                                 pagination={{
                                     position: ["bottomCenter"],
                                 }}
-                                scroll={{ x: true }}
+                                scroll={{ x: 600 }}
+
 
                                 size="small" />
                         </div>

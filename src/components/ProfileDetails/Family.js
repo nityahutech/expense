@@ -70,6 +70,9 @@ const Family = () => {
   }
   console.log(data)
   
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 // ---------------------------------------------------------------------------------------------------------
 
   return (
@@ -240,7 +243,18 @@ const Family = () => {
                         wrapperCol={{ span: 32 }}
                         initialValue = {data?data.father:null}
                       >
-                            <Input defaultValue={data?data.father:null} placeholder="Enter Father's Name"/>
+                            <Input 
+                            onChange={(e) => {
+                              const inputval = e.target.value;
+                              const str = e.target.value;
+                              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                              const caps = str.split(' ').map(capitalize).join(' ');
+                              console.log('caps',caps)
+                              // setPaidBy(newVal);
+                              form.setFieldsValue({ father: newVal, father: caps });
+                              } } 
+                              defaultValue={data?data.father:null} 
+                              placeholder="Enter Father's Name"/>
                       </Form.Item>)}
                             </div>
                       {/* --------------------------------------father-contact------------------------------------ */}

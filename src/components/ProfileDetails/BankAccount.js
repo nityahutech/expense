@@ -52,6 +52,7 @@ function BankAccount() {
     let data=await EmpInfoContext.getEduDetails(currentUser.uid)
     console.log(data)
     setData(data)
+    //getData();
     setBankName(data.bankName?data.bankName:null)
     setAccountNumber(data.accountNumber?data.accountNumber:null)
     setIfscCode(data.ifscCode?data.ifscCode:null)
@@ -98,7 +99,7 @@ function BankAccount() {
               {editContent === false ? (
                 <div>{data?data.bankName:null}</div>
               ) : (
-               <Input  placeholder="Enter Bank Name" onChange={(e)=>{setBankName(e.target.value)}
+               <Input defaultValue={data?data.bankName:null}  placeholder="Enter Bank Name" onChange={(e)=>{setBankName(e.target.value)}
               } />
              )}
             </div>
@@ -111,7 +112,7 @@ function BankAccount() {
               {editContent === false ? (
                 <div>{data?data.accountNumber:null}</div>
               ) : (
-                <Input placeholder="Enter Account Number" onChange={(e)=>{setAccountNumber(e.target.value)}} />
+                <Input defaultValue={data?data.accountNumber:null} placeholder="Enter Account Number" onChange={(e)=>{setAccountNumber(e.target.value)}} />
               )}
             </div>
           </Col>
@@ -123,7 +124,7 @@ function BankAccount() {
               {editContent === false ? (
                 <div>{data?data.ifscCode:null}</div>
               ) : (
-                <Input placeholder="Enter IFSC Code" onChange={(e)=>{setIfscCode(e.target.value)}} />
+                <Input defaultValue={data?data.ifscCode:null} placeholder="Enter IFSC Code" onChange={(e)=>{setIfscCode(e.target.value)}} />
               )}
             </div>
           </Col>

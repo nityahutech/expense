@@ -1,127 +1,150 @@
 .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content {
-    height: 40px;
-    overflow: hidden;
-    font-size: 5px;
-  }
-  
-  .reprentation {
-    width: 105px;
-    border-radius: 15px;
-    /* opacity: 0.5; */
-    border: none;
-  
-  }
-  
-  .rep-text {
-    margin-bottom: 0;
-  }
-  
-  .ant-picker-calendar-mode-switch {
-    display: none;
-  }
-  
-  .events {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  
-  .events .ant-badge-status {
-    width: 100%;
-    overflow: hidden;
-    font-size: 12px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  
-  .notes-month {
-    font-size: 28px;
-    text-align: center;
-  }
-  
-  .notes-month section {
-    font-size: 28px;
-  }
-  
-  .ant-picker-cell-in-view:hover {
-    transform: scale(1.8);
-    z-index: 1000;
-  
-  }
-  
-  .Col-2-center {
-    box-shadow:
-      0px 5px 10px 0px rgba(0, 0, 0, 0.2);
-      width: 250px;
-      height: 120px;
-      margin: 10px;
-      border-radius: 5px; 
-      align-items: center; 
-      display: flex; 
-      justify-content: center;
-      flex-direction: column; 
-      padding-top: 10px,
-     
-      
-  }
-  
+  height: 30px;
+  overflow: hidden;
+  font-size: 5px;
+}
+
+.apply-leave {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-content: flex-start;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  width: 50%;
+}
+
+.reprentation {
+  width: 105px;
+  border-radius: 15px;
+  /* opacity: 0.5; */
+  border: none;
+}
+
+.rep-text {
+  margin-bottom: 0;
+}
+
+.ant-picker-calendar-mode-switch {
+  display: none;
+}
+
+.events {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.events .ant-badge-status {
+  width: 100%;
+  overflow: hidden;
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.notes-month {
+  font-size: 28px;
+  text-align: center;
+}
+
+.notes-month section {
+  font-size: 28px;
+}
+
+.ant-picker-cell-in-view:hover {
+  transform: scale(1.8);
+  z-index: 1000;
+}
+
+.Col-2-center {
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2);
+  width: 250rem;
+  height: 140px;
+  margin: 10px;
+  border-radius: 5px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  /* padding-top: 10px; */
+}
+
+.leavediv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.card-container {
+  display: flex;
+  width: 100%;
+
+  row-gap: 20px;
+  margin-bottom: 20px;
+}
+
+.card-box {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 3% 3% 1% 3%;
+}
+
+.ant-tag-green {
+  width: 70px;
+}
+
+.statusTag {
+  font-size: 14px;
+  height: 24px;
+}
+
+.ant-picker-cell-disabled {
+  background-color: rgba(74, 67, 67, 0.2);
+  color: rgb(2, 0, 0);
+}
+
+.leave-status {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+@media only screen and (max-width: 600px) {
   .leavediv {
-  
-    display: flex;
-    flex-Direction: row;
-    justify-content: space-between
-  }
-  
-  .card-container {
-  
-    display: flex;
-    width: 100%;
-  
-    row-gap: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .card-box {
-  
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    display: flex;
     flex-direction: column;
-    padding: 3% 3% 1% 3%;
+    align-items: center;
   }
 
- .ant-tag-green {
-    width: 70px;
+  .Col-2-center {
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    height: 145px;
+    width: 16rem;
+    justify-content: Space-around;
   }
+}
 
-  .statusTag{
-    font-size: 14px;
-    height: 24px;
- 
+@media only screen and (max-width: 750px) {
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 4px !important;
+    padding-right: 2px !important;
+    border: 0 !important;
+    border-top: 2px solid #f0f0f0 !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
   }
-
-  .ant-picker-cell-disabled{
-    background-color:  rgba(74, 67, 67,0.2);
-    color: rgb(2, 0, 0)
+  .apply-leave {
+    width: 100%;
   }
-
-  
-  @media only screen and (max-width: 600px) {
-    .leavediv {
-      flex-direction: column;
-      align-items: center
-  
-    }
-  
-    .Col-2-center {
-      flex-direction: row; 
-      padding-left: 10px;
-      padding-right: 10px;
-      /* padding: 10px; */
-      height: 50px;
-
-  
-    }
-  
-  
-  }
-  
+}

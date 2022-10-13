@@ -2,24 +2,24 @@
     overflow-y: hidden;
     overflow-x: hidden;
 } */
-.employeeTable.ant-table-wrapper{
-    background: #fff;
-      padding: 7px;
-      margin: 6px 6px;
-      border-radius: 5px;
+.employeeTable.ant-table-wrapper {
+  background: #fff;
+  padding: 7px;
+  margin: 6px 6px;
+  border-radius: 5px;
 }
-.employeeTable table thead tr th, .expenseTable table tbody tr td {
-    padding: 5px 10px;
-  } 
+.employeeTable table thead tr th,
+.expenseTable table tbody tr td {
+  padding: 5px 10px;
+}
 
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 12px;
-    }
-    
-    /* Track */
-    ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey; 
-    border-radius: 10px;
-    }
-      
+::-webkit-scrollbar {
+  width: 10px;
+  height: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}

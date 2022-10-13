@@ -189,6 +189,7 @@ function EmployeeList() {
         title="Employee Details"
         visible={isModalVisible}
         footer={null}
+        afterClose={getData}
         closeIcon={
           <div
             onClick={() => {
@@ -205,7 +206,6 @@ function EmployeeList() {
           className="Edit"
           record={editedRecord}
           setIsModalVisible={setIsModalVisible}
-          reloadData={getData}
         />
       </Modal>
     </Layout>

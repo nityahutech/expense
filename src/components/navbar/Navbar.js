@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import { Dropdown, Menu, Space, Button } from "antd";
 // import dropDownimg from "../../../public/logo/dropdown.svg"
-import dropDownimg from "../../assets/dropdown.svg";
-import logoutsvgrepocom from "../../assets/logoutsvgrepocom.svg";
-import abstractuserflat4 from "../../assets/abstractuserflat4.svg";
+import dropDownimg from "../../assets/dropdown.png";
+import logoutsvgrepocom from "../../assets/logoutsvgrepocom.png";
+import abstractuserflat4 from "../../assets/abstractuserflat4.png";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
 import { useLocation } from "react-router-dom";
@@ -26,31 +26,31 @@ const Navbar = () => {
   const [clockinfo, setClockInfo] = useState()
 
   const isClockRunning = async () => {
-      let res = await AttendanceContext.getStartTime(currentUser.uid);
-      console.log(res)
-      if (res == undefined) {
-        console.log("heyyyyyyyy")
-        setIsRunning(false)
-        return false;
-      }
-      else {
-        setIsRunning(true)
-        let offset = moment().subtract(res)
-        console.log(offset.toDate());
-        const offsetTime = moment(offset, "HH:mm:ss").diff(moment().startOf('day'), 'seconds')
-        console.log(offsetTime)
-        setStartTime(res)
-        setClockInfo(offsetTime)
-        console.log(clockinfo)
-        return true;
-      }
-  }  
+    let res = await AttendanceContext.getStartTime(currentUser.uid);
+    console.log(res)
+    if (res == undefined) {
+      console.log("heyyyyyyyy")
+      setIsRunning(false)
+      return false;
+    }
+    else {
+      setIsRunning(true)
+      let offset = moment().subtract(res)
+      console.log(offset.toDate());
+      const offsetTime = moment(offset, "HH:mm:ss").diff(moment().startOf('day'), 'seconds')
+      console.log(offsetTime)
+      setStartTime(res)
+      setClockInfo(offsetTime)
+      console.log(clockinfo)
+      return true;
+    }
+  }
   // const offset = isClockRunning().then((num) => {
   //   console.log(stopwatchOffset)
   // });
 
-    
-    
+
+
 
   // const runClock = async () => {
   //   let cond = await isClockRunning();
@@ -69,11 +69,11 @@ const Navbar = () => {
           key: "1",
           label: (
             <Link
-              to="/Profile"
+              to="/Setting"
               style={{ color: "#171832", fontWeight: "normal" }}
               rel="noopener noreferrer"
             >
-              Admin
+              Settings
             </Link>
           ),
           icon: (
@@ -107,8 +107,8 @@ const Navbar = () => {
     console.log("BREHHHHHHHHHHHHS");
     isClockRunning()
     const timer = setInterval(() => {
-    console.log(isRunning);
-      if (isRunning){
+      console.log(isRunning);
+      if (isRunning) {
         setClockInfo(clockinfo => clockinfo + 1)
       }
     }, 1000)
@@ -117,37 +117,37 @@ const Navbar = () => {
     };
   }, [isRunning]);
 
-  
+
   const buttonStyle = !isRunning ? {
-          padding: "1px",
-          background: "#FF002A",
-          color: "white",
-          display: "inline-block",
-          width: "200px",
-          borderRadius: "5px",
-          border:"1px solid white",
-        } : {
-          padding: "1px",
-          background: "skyblue",
-          color: "white",
-          display: "inline-block",
-          width: "200px",
-          borderRadius: "5px",
-          border:"1px solid white",
-        };
+    padding: "1px",
+    background: "#FF002A",
+    color: "white",
+    display: "inline-block",
+    width: "200px",
+    borderRadius: "5px",
+    border: "1px solid white",
+  } : {
+    padding: "1px",
+    background: "skyblue",
+    color: "white",
+    display: "inline-block",
+    width: "200px",
+    borderRadius: "5px",
+    border: "1px solid white",
+  };
 
   const [buttonText, setButtonText] = useState(!isRunning ? "Web Clock In" : "");
-  let clockTime = isRunning? clockinfo: "" ;
+  let clockTime = isRunning ? clockinfo : "";
 
   const onMouseEnter = (event) => {
     event.target.style.background = "#DB0000";
-    if(isRunning){
+    if (isRunning) {
       setButtonText("Web Clock Out ");
     }
   };
 
   const onMouseLeave = (event) => {
-    if(isRunning){
+    if (isRunning) {
       event.target.style.background = "skyblue";
       setButtonText("");
     }
@@ -158,17 +158,17 @@ const Navbar = () => {
   };
 
   const setClockState = () => {
-      // setClockIn(true);
-      let clickedDate = {
-        empId: currentUser.uid,
-        name: currentUser.displayName,
-        date: moment().format("DD-MM-YYYY"),
-        clockIn: moment().format("HH:mm:ss"),
-        clockOut: null
-      } 
-      console.log(clickedDate)
-      setIsRunning(true)
-      AttendanceContext.addClockData(clickedDate)
+    // setClockIn(true);
+    let clickedDate = {
+      empId: currentUser.uid,
+      name: currentUser.displayName,
+      date: moment().format("DD-MM-YYYY"),
+      clockIn: moment().format("HH:mm:ss"),
+      clockOut: null
+    }
+    console.log(clickedDate)
+    setIsRunning(true)
+    AttendanceContext.addClockData(clickedDate)
   };
 
   const stopClockState = () => {
@@ -197,7 +197,7 @@ const Navbar = () => {
       setClockState();
     }
   }
-  
+
   // useEffect(() => {
   // }, []);
   console.log(startTime, clockinfo)
@@ -222,17 +222,17 @@ const Navbar = () => {
           className="stopwatch"
         >
           {/* {`${ctime.hrs}:${ctime.min}:${ctime.sec}`} */}
-          
+
         </div>
         <button
           style={buttonStyle}
           onClick={handleClock}
           onMouseLeave={onMouseLeave}
           onMouseEnter={onMouseEnter}
-      >
-        {buttonText} <br />
-        {moment.utc(clockTime * 1000).format('HH:mm:ss')}
-      </button>
+        >
+          {buttonText} <br />
+          {moment.utc(clockTime * 1000).format('HH:mm:ss')}
+        </button>
         <div className="image">
           <div className="item">
             <img
@@ -247,18 +247,18 @@ const Navbar = () => {
         <Dropdown overlay={menu}>
           <Space>
             <h1
-              style={{ 
-                cursor: "pointer", 
-                fontSize: "16px", 
-                marginTop: "10px" 
+              style={{
+                cursor: "pointer",
+                fontSize: "16px",
+                marginTop: "10px"
               }}
             >
-              {" "}Hutech{" "}
+              {"  "}Hutech{""}
             </h1>
             <img
               src={dropDownimg}
               alt="downArrow"
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", width: '15px' }}
             />
           </Space>
         </Dropdown>

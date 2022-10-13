@@ -49,7 +49,7 @@ function Education() {
       courseStartDate: dateStart,
       courseEndDate: dateEnd,
     }
-    EmpInfoContext.updateEduDetails(currentUser.uid,record)
+    EmpInfoContext.updateEduDetails(currentUser.uid, record)
     setData(record)
     showEditContent(false)
   };
@@ -66,12 +66,17 @@ function Education() {
     getData();
     
   },[]);
+
   const getData=async()=>{
     let data=await EmpInfoContext.getEduDetails(currentUser.uid)
-console.log(data)
-setData(data)
+    console.log(data)
+    setData(data)
+    setDateEnd(data.courseEndDate)
+    setDateStart(data.courseStartDate)
   }
-console.log(data)
+
+  console.log(data, dateEnd, dateStart)
+  
   return (
     <div 
       className='education' 
@@ -125,104 +130,112 @@ console.log(data)
           <Row gutter={[16, 16]}>
 
           <Col span={8}>
-            <Form.Item name="qualificationType" rules={[{required: true,message: 'Please input your qalification Type!',},]}
-              labelCol={{span: 8,}}
-              wrapperCol={{span: 32,}}
-              initialValue={data.qualificationType}
-            >
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Qualification Type</h1>
                 {editContent === false ? (
                   <h4>{data?data.qualificationType:null}</h4>
                 ) : (
-                  <Input placeholder="Enter Qualification Type" />
+                  
+            <Form.Item name="qualificationType" rules={[{required: false,message: 'Please input your qalification Type!',},]}
+              labelCol={{span: 8,}}
+              wrapperCol={{span: 32,}}
+              initialValue={data.qualificationType}
+            >
+                  <Input value={data?data.qualificationType:null} placeholder="Enter Qualification Type" />
+                  </Form.Item>
                 )}
               </div>
-            </Form.Item>
             </Col>
 
             <Col span={8}>
-            <Form.Item name="courseName" rules={[{required: false,message: 'Please input course Name!',},]}
-              labelCol={{span: 8,}}
-              wrapperCol={{span: 32,}}
-              initialValue={data ? data.courseName : null}
-            >
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course Name</h1>
                 {editContent === false ? (
                   <h4>{data?data.courseName:null}</h4>
                 ) : (
-                  <Input placeholder="" />
+            <Form.Item name="courseName" rules={[{required: false,message: 'Please input course Name!',},]}
+              labelCol={{span: 8,}}
+              wrapperCol={{span: 32,}}
+              initialValue={data ? data.courseName : null}
+            >
+                  <Input initialValue={data?data.courseName:null} placeholder="Enter Course Name" />
+              </Form.Item>
                 )}
               </div>
-              </Form.Item>
             </Col>
 
             <Col span={8}>
-            <Form.Item name="courseType" rules={[{required: false,message: 'Please input your course Type!',},]}
+           
+              <div>
+                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course Type</h1>
+                {editContent === false ? (<h4>{data?data.courseType:null}</h4>) :( <Form.Item name="courseType" rules={[{required: false,message: 'Please input your course Type!',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
               initialValue={data.courseType}
             >
-              <div>
-                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course Type</h1>
-                {editContent === false ? (<h4>{data?data.courseType:null}</h4>) : (<Input placeholder="" />)}
-              </div>
+                <Input initialValue={data?data.courseType:null} placeholder="Enter Course Type" />
             </Form.Item>
+            )}
+              </div>
             </Col>
 
             <Col span={8}>
-            <Form.Item name="stream" rules={[{required: true,message: 'Please input your Stream Type!',},]}
+              <div>
+                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Stream</h1>
+                {editContent === false ? (<h4>{data?data.stream:null}</h4>) :( 
+            <Form.Item name="stream" rules={[{required: false,message: 'Please input your Stream Type!',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
               initialValue={data.stream}
             >
-              <div>
-                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Stream</h1>
-                {editContent === false ? (<h4>{data?data.stream:null}</h4>) : (<Input placeholder="" />)}
+                <Input defaultValue={data?data.stream:null} placeholder="" />
+                </Form.Item>
+                )}
               </div>
-            </Form.Item>
             </Col>
 
             <Col span={8}>
             <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course Start Date</h1>
 
-            <Form.Item name="courseStartDate" rules={[{required: true,message: 'Please input your Course Start Date ',},]}
+            
+              {/* <div> */}
+                {editContent === false ? (<h4>{data?data?.courseStartDate:null}</h4>) : (<Form.Item name="courseStartDate" rules={[{required: false,message: 'Please input your Course Start Date ',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
-              initialValue={moment(dateStart, "DD-MM-YYYY")}
+              initialValues={moment(dateStart, "DD-MM-YYYY")}
             >
-              {/* <div> */}
-                {editContent === false ? (<h4>{data?data.courseStartDate:null}</h4>) : (<DatePicker style={{ width: "100%" }}  format={"DD-MM-YYYY"} onChange= {(e) => {setDateStart(e.format("DD-MM-YYYY"))}} />)}
+                <DatePicker defaultValue={moment(dateStart, "DD-MM-YYYY")} style={{ width: "100%" }}  format={"DD-MM-YYYY"} onChange= {(e) => {setDateStart(e.format("DD-MM-YYYY"))}}
+                 />
+            </Form.Item>)}
               {/* </div> */}
-            </Form.Item>
             </Col>
 
             <Col span={8}>
             <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Course End Date</h1>
 
-            <Form.Item name="courseEndDate" rules={[{required: true,message: 'Please input your Course End Date',},]}
+              {/* <div> */}
+                {editContent === false ? (<h4>{data?data.courseEndDate:null}</h4>) : (
+            <Form.Item name="courseEndDate" rules={[{required: false,message: 'Please input your Course End Date',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
-              initialValue={moment(dateEnd, "DD-MM-YYYY")}
-            >
-              {/* <div> */}
-                {editContent === false ? (<h4>{data?data.courseEndDate:null}</h4>) : (<DatePicker style={{ width: "100%" }} format={"DD-MM-YYYY"} onChange= {(e) => {setDateEnd(e.format("DD-MM-YYYY"))}} />)}
+              initialValues={moment(dateEnd, "DD-MM-YYYY")}
+            ><DatePicker defaultValue={moment(dateEnd, "DD-MM-YYYY")} style={{ width: "100%" }} format={"DD-MM-YYYY"} onChange= {(e) => {setDateEnd(e.format("DD-MM-YYYY"))}} />
+            </Form.Item>)}
               {/* </div> */}
-            </Form.Item>
             </Col>
 
             <Col span={8}>
-            <Form.Item name="universityName" rules={[{required: true,message: 'Please input your University Name !',},]}
+              <div>
+                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>University Name</h1>
+                {editContent === false ? (<h4>{data?data.universityName:null}</h4>) : (
+            <Form.Item name="universityName" rules={[{required: false,message: 'Please input your University Name !',},]}
               labelCol={{span: 8,}}
               wrapperCol={{span: 32,}}
               initialValue={data.universityName}
             >
-              <div>
-                <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>University Name</h1>
-                {editContent === false ? (<h4>{data?data.universityName:null}</h4>) : (<Input placeholder="" />)}
+                <Input  defaultValue={data?data.universityName:null} placeholder="" />
+            </Form.Item>)}
               </div>
-            </Form.Item>
             </Col>
 
           </Row>

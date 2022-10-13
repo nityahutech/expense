@@ -21,6 +21,7 @@ import moment from "moment";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import LeaveContext from '../contexts/LeaveContext';
 import CompanyHolidayContext from '../contexts/CompanyHolidayContext';
+import EmployeeContext from '../contexts/EmployeeContext';
 import { useAuth } from '../contexts/AuthContext'
 import Notification from "./Notification";
 import HolidayList from "./HolidayList";
@@ -59,6 +60,7 @@ const Leave = () => {
     const [leaveslot, setLeaveslot] = useState(null)
     const [companyholiday, setCompanyholiday] = useState([])
     const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+    const [employeeRecord, setEmployeeRecord] = useState();
 
 
     function addNewHoliday(holiday) {
@@ -193,13 +195,14 @@ const Leave = () => {
         }
 
         let newLeave = {
-            empId: currentUser.uid,
+            empId: employeeRecord.empId,
             approver: values.approver,
             date: duration,
-            name: currentUser.displayName,
+            name: employeeRecord.fname + ' ' + employeeRecord.lname,
             nature: values.leaveNature,
             slot: values.slot,
             reason: values.reason,
+            email: employeeRecord.mailid,
             status: 'Pending'
         }
 
@@ -224,7 +227,10 @@ const Leave = () => {
 
     const getData = async () => {
         setLoading(true);
-        let data = await LeaveContext.getAllById(currentUser.uid)
+        let empRecord = await EmployeeContext.getEmployee(currentUser.uid)
+        setEmployeeRecord(empRecord)
+        console.log('empRecord', empRecord)
+        let data = await LeaveContext.getAllById(empRecord.empId)
         // console.log("data", JSON.stringify(data.docs), currentUser.uid);
 
         let d = data.docs.map((doc) => {
@@ -246,24 +252,29 @@ const Leave = () => {
                         id: 1,
                         leavetype: "Earn Leave",
                         leave: response["Earn Leave"],
+                        totalLeave: response["Total Earn Leave"],
 
                     },
                     {
                         id: 2,
                         leavetype: "Sick Leave",
                         leave: response["Sick Leave"],
+                        totalLeave: response["Total Sick Leave"],
 
                     },
                     {
                         id: 3,
                         leavetype: "Casual Leave",
                         leave: response["Casual Leave"],
+                        totalLeave: response["Total Casual Leave"],
+
 
                     },
                     {
                         id: 4,
                         leavetype: "Optional Leave",
                         leave: response["Optional Leave"],
+                        totalLeave: response["Total Optional Leave"],
 
                     },
                 ];
@@ -336,12 +347,13 @@ const Leave = () => {
             title: 'Duration',
             dataIndex: 'date',
             width: 240,
+            align: "left",
             sorter: (a, b) => {
                 return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
+            },
+            sortDirections: ["ascend", "descend"],
 
-            
+
 
         },
         // {
@@ -354,23 +366,23 @@ const Leave = () => {
             title: 'Nature of Leave',
             dataIndex: 'nature',
             width: 150,
-          
+
             sorter: (a, b) => {
                 return a.nature !== b.nature ? (a.nature < b.nature ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
+            },
+            sortDirections: ["ascend", "descend"],
 
         },
         {
             title: 'Slot',
             dataIndex: 'slot',
-            width: 150,
+            width: 100,
             sorter: (a, b) => {
                 return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
-            
-            
+            },
+            sortDirections: ["ascend", "descend"],
+
+
         },
         {
             title: 'Reason',
@@ -388,11 +400,12 @@ const Leave = () => {
             className: "row5",
             key: "status",
             dataIndex: "status",
+            width: 100,
             // responsive: ["md"],
             sorter: (a, b) => {
                 return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
+            },
+            sortDirections: ["ascend", "descend"],
             render: (_, { status }) =>
                 status !== "" && (
                     <Tag style={{ width: '70px' }}
@@ -439,6 +452,7 @@ const Leave = () => {
 
     ];
     useEffect(() => {
+
         let role = sessionStorage.getItem("role");
         setRole(role)
         setIsHr(role === "hr")
@@ -546,17 +560,19 @@ const Leave = () => {
                 {listData.map((item) => (
                     <div
                         style={
-                            item.type === 'leave' ? { color: 'rgba(10, 91, 204,  1)', fontSize: '10px', backgroundColor: "rgba(10, 91, 204,0.2)", paddingLeft: '10px', margin: '0px', borderRadius: '10px' }
+                            item.type === 'leave' ? { color: 'rgba(10, 91, 204,  1)', fontSize: '6px', backgroundColor: "rgba(10, 91, 204,0.2)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
                                 : item.isOptional ?
-                                    { color: "rgba(204, 204, 10, 1)", fontSize: '10px', backgroundColor: "rgba(204, 204, 10,0.2)", paddingLeft: '10px', margin: '0px', borderRadius: '10px' }
-                                    : { color: "rgba(252, 143, 10, 1)", fontSize: '10px', backgroundColor: "rgba(252, 143, 10,0.2)", paddingLeft: '10px', margin: '0px', borderRadius: '10px' }
+                                    { color: "rgba(0, 119, 137, 0.96)", fontSize: '6px', backgroundColor: "rgba(154, 214, 224, 0.96)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
+                                    : { color: "rgba(252, 143, 10, 1)", fontSize: '6px', backgroundColor: "rgba(252, 143, 10,0.2)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
 
                         }
+
+
 
                     >
                         {/* style={{ color: "rgba(204, 204, 10, 1)",fontSize:'8px'}} */}
 
-                        <div className='present' > {item.type}</div>
+                        <div className='present' > {item.type}  </div>
                     </div>
                 ))}
             </div>
@@ -600,21 +616,21 @@ const Leave = () => {
     }
 
     if (loading) {
-        return(
-        <div style={{height:'70vh', width:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
-            < Spin size="large" style={{
-                position: 'absolute',
-                top: '20%',
-                left: '50%',
-                margin: '-10px',
-                zIndex: '100',
-                opacity: '0.7',
-                backgroundColor: 'transparent'
-            }} />
-        </div>)
+        return (
+            <div style={{ height: '70vh', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                < Spin size="large" style={{
+                    position: 'absolute',
+                    top: '20%',
+                    left: '50%',
+                    margin: '-10px',
+                    zIndex: '100',
+                    opacity: '0.7',
+                    backgroundColor: 'transparent'
+                }} />
+            </div>)
     }
 
- 
+
 
     return (
         <>
@@ -626,7 +642,7 @@ const Leave = () => {
                     minHeight: 150,
                     display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: '#e9eaea',
                 }}
-                gutter={[16, 16]}>
+                gutter={[16, 0]}>
                 <Col xl={24} lg={24} md={24} sm={24} xs={24}>
 
 
@@ -640,12 +656,39 @@ const Leave = () => {
 
                                 >
                                     <p className='heading' style={{
-                                        fontWeight: '500',
+                                        fontWeight: '500', fontSize: '20px'
                                     }}>{user.leavetype}</p>
-                                    {/* {JSON.stringify(colors[id])} */}
-                                    <p className='leave' style={{
-                                        fontWeight: '500',
-                                    }}>{user.leave}</p>
+
+                                    <div className='total-leave' style={{
+                                        width: '90%'
+                                    }}>
+                                        <div className='leave-status'>
+                                            <p className='leave' Total style={{
+                                                fontWeight: '500', fontSize: '15px', margin: '0px',
+                                            }}>Total Leave  :- </p>
+                                            <p style={{
+                                                fontWeight: '500', fontSize: '15px', margin: '0px'
+                                            }}>{user.totalLeave}</p>
+                                        </div>
+
+                                        <div className='leave-status'>
+                                            <p className='leave' Total style={{
+                                                fontWeight: '500', fontSize: '15px', margin: '0px'
+                                            }}>Total Taken  :- </p>
+                                            <p style={{
+                                                fontWeight: '500', fontSize: '15px', margin: '0px'
+                                            }}>{user.totalLeave - user.leave}</p>
+                                        </div>
+
+                                        <div className='leave-status'>
+                                            <p className='leave' Total style={{
+                                                fontWeight: '500', fontSize: '15px', margin: '0px'
+                                            }}>Total Leave Remaining :- </p>
+                                            <p style={{
+                                                fontWeight: '500', fontSize: '15px', margin: '0px'
+                                            }}>{user.leave}</p>
+                                        </div>
+                                    </div>
 
                                 </div>
                             );
@@ -655,7 +698,11 @@ const Leave = () => {
                 </Col>
                 {/* </Col> */}
 
-                <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12}  >
+                <Col xl={12} lg={12} md={12} sm={24} xs={24} span={2} style={{
+                    marginTop: '10px'
+
+                }}
+                >
                     {/* <HolidayList isHr={isHr} /> */}
                     <HolidayList isHr={isHr} refershCalendar={addNewHoliday} />
                     <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -665,7 +712,7 @@ const Leave = () => {
                                 {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 10, 10,0.2)" }} ><h5 style={{ color: "rgba(204, 10, 10, 1)" }} className='rep-text'>Absent</h5></button> */}
                                 {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 94, 10,0.2)" }}><h5 style={{ color: "rgba(204, 94, 10, 1)" }} className='rep-text'>Half Day</h5></button> */}
                                 <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 91, 204,0.2)" }}><h5 style={{ color: "rgba(10, 91, 204,  1)" }} className='rep-text'>Leave</h5></button>
-                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 204, 10,0.2)" }}><h5 style={{ color: "rgba(204, 204, 10, 1)", }} className='rep-text'>Optional Holiday</h5></button>
+                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(154, 214, 224, 0.96)" }}><h5 style={{ color: "rgba(0, 119, 137, 0.96)", }} className='rep-text'>Optional Holiday</h5></button>
                                 <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(252, 143, 10,0.2)" }}><h5 style={{ color: "rgba(252, 143, 10, 1)" }} className='rep-text'>Official Holiday</h5></button>
                                 <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(74, 67, 67,0.2)" }}><h5 style={{ color: "rgba(74, 67, 67, 1)" }} className='rep-text'>Weekly Off</h5></button>
                             </div>
@@ -682,8 +729,8 @@ const Leave = () => {
 
 
                         <Calendar
-                     
-                  
+
+
                             style={{ paddingLeft: '10px', paddingRight: '10px', borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px' }}
                             value={date}
                             onChange={setDate}
@@ -691,22 +738,22 @@ const Leave = () => {
                             monthCellRender={monthCellRender}
                             disabledDate={disabledDate}
                         />
-                        {
-                            isHr
-                                ? <Notification data={requests} />
-                                : null
-                        }
                     </div>
                 </Col>
 
-                <Row style={{
-                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
-                    borderRadius: '10px', padding: '10px'
-                }}
+
+
+
+                <Row className='apply-leave'
+                    style={{
+                        marginTop: '10px'
+
+                    }}
+
                 >
                     <Col span={12} style={{
                         display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black'
-                    }}><h3>Apply Leave</h3></Col>
+                    }}><h3 className='apply-leave'>Apply Leave</h3></Col>
 
                     <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
                         background: 'flex', padding: '10px', width: '400px'
@@ -722,6 +769,14 @@ const Leave = () => {
                             }}
                             form={form}
                             onFinish={onFinish}
+
+                            initialValues={{
+                                remember: true,
+                                // approver: employeeRecord.repManager
+
+
+
+                            }}
                         >
                             {/* <Form.Item labelAlign="left"
                                 style={{ marginBottom: "20px", }}
@@ -753,7 +808,7 @@ const Leave = () => {
                                             Today: [moment(), moment()],
                                             "This Month": [moment().startOf("month"), moment().endOf("month")]
                                         }}
-                                        showTime
+                                        // showTime
                                         format="Do MMM, YYYY"
                                         onChange={onLeaveDateChange}
                                         disabledDate={disabledDate}
@@ -804,17 +859,19 @@ const Leave = () => {
                                 // label="Slot&nbsp;"
                                 className='div-slot'
                                 label={<label style={{ color: "black", fontWeight: '400' }}> Slot<span style={{ color: 'red' }}> *</span></label>}
-                                rules={[{  message: "Please select an option!" }]}
+                                rules={[{ message: "Please select an option!" }]}
+                                initialValue={"Full Day"}
+
                             >
 
                                 <Radio.Group defaultValue="Full Day"
                                     onChange={onLeaveSlotChange}
-                                   
-                                    
+
+
                                 >
-                                    <Radio  style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Evening" >Evening</Radio>
-                                    <Radio  style={{ color: "black", fontWeight: '400' }}  value="Full Day" >Full Day</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
 
                                 </Radio.Group>
                             </Form.Item>
@@ -839,6 +896,7 @@ const Leave = () => {
                                 name="approver"
                                 style={{ marginBottom: "20px" }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Approver<span style={{ color: 'red' }}> *</span></label>}
+                            // initialValue={employeeRecord}
 
 
                             >
@@ -850,8 +908,9 @@ const Leave = () => {
                                         form.setFieldsValue({ approver: newVal });
 
                                     }}
-                                    rules={[{ required: true }]}
-                                    placeholder="Reporting Manager" required />
+                                // rules={[{ required: true }]}
+                                // placeholder="Reporting Manager" 
+                                />
                             </Form.Item>
 
                             <Form.Item
@@ -867,24 +926,46 @@ const Leave = () => {
                                     Reset
                                 </Button>
                             </Form.Item>
-                            <Col span={24} style={{
-
-                            }}><Divider><h3>History</h3></Divider></Col>
-
-                            <div>
-                                <Table columns={columns}
-                                    dataSource={history}
-                                    pagination={{
-                                        position: ["bottomCenter"],
-                                    }}
-                                    size="small" scroll={{
-                                        x: 1000,
-                                    }} />
-                            </div>
 
                         </Form>
 
                     </Col>
+                </Row>
+
+                {
+                    isHr
+                        ? <Notification data={requests} />
+                        : null
+                }
+
+
+                <Row style={{
+                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
+                    borderRadius: '10px', padding: '10px', marginTop: '10px'
+                }}
+                >
+                    <Col span={24} style={{
+                        display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black', width: '100rem'
+                    }}><h3>History</h3></Col>
+
+                    <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
+                        background: 'flex', padding: '10px',
+                    }} >
+
+                        <div className='history-table' >
+                            <Table columns={columns}
+                                dataSource={history}
+                                pagination={{
+                                    position: ["bottomCenter"],
+                                }}
+                                scroll={{ x: 600 }}
+
+
+                                size="small" />
+                        </div>
+
+                    </Col>
+
                 </Row>
             </Row>
         </>

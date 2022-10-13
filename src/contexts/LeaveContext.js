@@ -32,7 +32,7 @@ class LeaveContext {
         return getDocs(q);
     };
     getAllByApprover = (name) => {
-        const q = query(leaveCollectionRef, where("approver", "==", name),where("status","==","Pending"));
+        const q = query(leaveCollectionRef, where("approver", "==", name), where("status", "==", "Pending"));
         // console.log(q);
         return getDocs(q);
     };
@@ -50,7 +50,11 @@ class LeaveContext {
             "Earn Leave": "12",
             "Sick Leave": "12",
             "Casual Leave": "12",
-            "Optional Leave": "2"
+            "Optional Leave": "2",
+            "Total Earn Leave": "12",
+            "Total Sick Leave": "12",
+            "Total Casual Leave": "12",
+            "Total Optional Leave": "2"
         }
         console.log(this.leaveDays)
         records.forEach((rec) => {

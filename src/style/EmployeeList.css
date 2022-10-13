@@ -12,14 +12,24 @@
 .expenseTable table tbody tr td {
   padding: 5px 10px;
 }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 12px;
+    }
+    
+    /* Track */
+    ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 10px;
+    }
+    .employeeRow{
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 17px 5px;}   
+    
+    .disabled-row{
+      color: #dadada;
+    
+    }
 
-::-webkit-scrollbar {
-  width: 10px;
-  height: 12px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey;
-  border-radius: 10px;
-}

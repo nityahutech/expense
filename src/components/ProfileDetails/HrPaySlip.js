@@ -43,6 +43,38 @@ const data = [
     action: "",
   },
 ];
+
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const Dropdown = [
+  "Gratuity",
+  "Phone Reimbursment",
+  "Vehicle Allowance",
+  "Medical Allowance",
+  "Leave Travel Allowance",
+  "Conveyance Allowance",
+];
+
+// const contentStyle = {
+//   height: "160px",
+//   color: "black",
+//   lineHeight: "160px",
+//   textAlign: "center",
+//   background: "gray",
+// };
 const data1 = [
   {
     key: "1",
@@ -70,22 +102,65 @@ const data1 = [
     calc: "Balancing Amount of CTC",
   },
 ];
-
-const months = ["January", "February", "March", "April", "May"];
-
-// const contentStyle = {
-//   height: "160px",
-//   color: "black",
-//   lineHeight: "160px",
-//   textAlign: "center",
-//   background: "gray",
-// };
-
 function HrPaySlip() {
   //   const [dotPosition, setDotPosition] = useState("top");
   const [componentSize, setComponentSize] = useState("default");
   const [selectionType, setSelectionType] = useState("checkbox");
+  const [showComponent, setShowComponent] = useState(false);
+  const [selectedComponent, setSelectedComponent] = useState([]);
+  const [form] = Form.useForm();
+
+  const [rows, setRows] = useState(data1);
+  const [componentValues, setComponentValues] = useState({});
+
   const carouselRef = React.createRef();
+
+  const handleInputChange = (key, e) => {
+    const data = {
+      ...componentValues,
+      [key]: e.target.value,
+    };
+    console.log("data:: ", data);
+    setComponentValues(data);
+  };
+
+  console.log("componentValues:: ", componentValues);
+
+  const handleChange = (value) => {
+    console.log(componentValues);
+    let temp = [...selectedComponent];
+    temp.push(value);
+    setSelectedComponent(temp);
+    temp = [];
+    temp = [...rows];
+    temp.push({
+      key: value,
+      salary: value,
+    });
+
+    setRows(temp);
+    setShowComponent(false);
+  };
+  function Component1() {
+    return (
+      <Form.Item>
+        <Select
+          className="dropDown"
+          placeholder="Select Component"
+          onSelect={handleChange}
+        >
+          {Dropdown.map(
+            (D, i) =>
+              !selectedComponent.includes(D) && (
+                <Select.Option key={`component_${i}`} value={D}>
+                  {D}
+                </Select.Option>
+              )
+          )}
+        </Select>
+      </Form.Item>
+    );
+  }
 
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
@@ -174,6 +249,14 @@ function HrPaySlip() {
       title: "Calculation (Annual)",
       dataIndex: "calc",
       key: "calc",
+      render: (d, record) => {
+        return Dropdown.includes(record.key) ? (
+          <Input onChange={(e) => handleInputChange(record.key, e)}></Input>
+        ) : (
+          d
+        );
+        // );
+      },
     },
   ];
 
@@ -191,7 +274,12 @@ function HrPaySlip() {
       name: record.name,
     }),
   };
-  console.log(Carousel);
+  //   console.log(Carousel);
+
+  const onReset = () => {
+    form.resetFields();
+  };
+
   return (
     <div>
       <Carousel
@@ -202,6 +290,7 @@ function HrPaySlip() {
       >
         <div>
           <h3
+            className="Background"
             style={{
               ...styleDefaults,
             }}
@@ -224,7 +313,15 @@ function HrPaySlip() {
               onValuesChange={onFormLayoutChange}
               size={componentSize}
             >
-              <Form.Item label="When do you want to use Hutech’s Payroll from?">
+              <Form.Item
+                label="When do you want to use Hutech’s Payroll from?"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Select Month ",
+                  },
+                ]}
+              >
                 <Select className="SelectLabel">
                   <Select.Option value="Select Month">
                     Select Month
@@ -257,7 +354,15 @@ function HrPaySlip() {
                   defaultChecked
                 />
               </Form.Item>
-              <Form.Item label="Employee Contribution">
+              <Form.Item
+                label="Employee Contribution"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Select Required Field ",
+                  },
+                ]}
+              >
                 <Select className="SelectLabel">
                   <Select.Option value="Select Type">Select Type</Select.Option>
                   <Select.Option value="Basic*12%">Basic*12%</Select.Option>
@@ -323,7 +428,9 @@ function HrPaySlip() {
           </div>
         </div>
         <div>
-          <h3 style={{ ...styleDefaults }}>Payroll Setup Wizard</h3>
+          <h3 className="Background" style={{ ...styleDefaults }}>
+            Payroll Setup Wizard
+          </h3>
           <div className="Second">
             <div className="innerTable">
               <Row>
@@ -372,7 +479,9 @@ function HrPaySlip() {
           </div>
         </div>
         <div>
-          <h3 style={{ ...styleDefaults }}>Payroll Setup Wizard</h3>
+          <h3 className="Background" style={{ ...styleDefaults }}>
+            Payroll Setup Wizard
+          </h3>
           <div className="Third">
             <div>
               <h1 style={{ marginLeft: "11px" }}>Salary Structure</h1>
@@ -381,16 +490,26 @@ function HrPaySlip() {
               <Table
                 className="Structure"
                 columns={columns1}
-                dataSource={data1}
+                dataSource={rows}
                 pagination={false}
               />
             </div>
             <div>
-              <Button
-                style={{ color: "#1890ff", fontWeight: "Bold", border: "none" }}
-              >
-                + Add Another Salary Component
-              </Button>
+              {showComponent ? (
+                <Component1 />
+              ) : (
+                <Button
+                  style={{
+                    color: "#1890ff",
+                    fontWeight: "Bold",
+                    border: "none",
+                    marginTop: "16px",
+                  }}
+                  onClick={(e) => setShowComponent(true)}
+                >
+                  + Add Another Salary Component
+                </Button>
+              )}
             </div>
             <div>
               <Button
@@ -402,6 +521,12 @@ function HrPaySlip() {
                   width: "100px",
                   borderRadius: "5px",
                   bottom: "18px",
+                }}
+                form={form}
+                onClick={(e) => {
+                  onReset();
+                  console.log(componentValues);
+                  carouselRef.current.next();
                 }}
               >
                 Finish

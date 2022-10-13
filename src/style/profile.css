@@ -1,4 +1,11 @@
-.chartsbox{
+.myProfile .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap, .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-weight: 500;
+}
+
+/* .chartsbox{
    margin:10px 0px 10px 0px;
    display:flex;
    flex-direction: row;
@@ -66,4 +73,4 @@
    height: 400px;
    justify-content: center;
    
-}
+} */

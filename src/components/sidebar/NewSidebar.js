@@ -124,21 +124,29 @@ const NewSidebar = (props) => {
               Leave
               <NavLink to="/Employee/Leave" />
             </Menu.Item>
-            {isHr ? <>
-              <Menu.Item className='arrow'
-                icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-                key="8"
-              >
-                Add Employee
-                <NavLink to="/Addemployee/AddEmployee" />
-              </Menu.Item>
-              <Menu.Item className='arrow'
-                icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-                key="9"
-              >
-                Employee List
-                <NavLink to="/EmployeeListPage/EmployeeList" />
-              </Menu.Item>
+            { isHr ? <>
+            <Menu.Item className ='arrow'
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="8"
+            >
+              Add Employee
+              <NavLink to="/Addemployee/AddEmployee" />
+            </Menu.Item>
+            <Menu.Item className ='arrow'
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="9"
+            >
+              Employee List
+              <NavLink to="/EmployeeListPage/EmployeeList" />
+            </Menu.Item>
+            <Menu.Item
+              className="arrow"
+              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              key="25"
+            >
+              Hr PaySlip
+              <NavLink to="/Payslip2/HrPaySlip" />
+            </Menu.Item>
             </>
               :
               null

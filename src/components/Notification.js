@@ -4,6 +4,7 @@ import {
     Row,
     Table,
     Modal,
+    Input
 } from 'antd';
 
 import { useAuth } from '../contexts/AuthContext'
@@ -23,11 +24,32 @@ const Notification = ({ data }) => {
     const [dataSource, setDataSource] = useState(data);
     const [approve, setApprove] = useState([]);
     const [reject, setReject] = useState([]);
+    const [text, setText] = useState("");
+
+    const Bbb = ({ onChange }) => {
+        const [value, setValue] = useState();
+        useEffect(() => {
+            if (onChange) {
+                onChange(value);
+            }
+        }, [value, onChange]);
+        return (
+            <Input
+                placeholder="Type something"
+                value={value}
+                onChange={(event) => setValue(event.target.value)}
+            />
+        );
+    };
 
     useEffect(() => {
         setDataSource(data)
     }, [data])
     // console.log("data", data);
+
+    const onChange = (val) => {
+        setText(val);
+    };
 
     const getData = async () => {
         let data = await LeaveContext.getAllById(currentUser.uid)
@@ -71,6 +93,7 @@ const Notification = ({ data }) => {
         console.log(record)
         Modal.confirm({
             title: `Are you sure, you want to reject Leave of ${record?.name || ''}!`,
+            content: <Bbb onChange={onChange} />,
             okText: "Yes",
             okType: "danger",
             onOk: () => {

@@ -279,13 +279,13 @@ function WorkWeek() {
                     style={{
                       position: "relative",
                       left: "38rem",
-                      top: "45px",
+                      top: "42px",
                       background: "blue",
                       cursor: "not-allowed",
                     }}
                   />
                   <p
-                    style={{ position: "relative", left: "39rem", top: "21px" }}
+                    style={{ position: "relative", left: "39rem", top: "18px" }}
                   >
                     Half Day
                   </p>

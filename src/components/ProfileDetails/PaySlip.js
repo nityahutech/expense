@@ -76,7 +76,7 @@ function PaySlip() {
                 style={{
                   background: "#1890ff",
                   color: "white",
-                  marginLeft: "37rem",
+                  marginLeft: "40rem",
                 }}
                 type="button"
                 onClick={() => {
@@ -590,7 +590,7 @@ function SlipHtml() {
                   </td>
                   <td
                     style={{
-                      width: "147px",
+                      width: "105px",
                       fontWeight: "500",
                       textAlign: "right",
                     }}
@@ -613,7 +613,7 @@ function SlipHtml() {
                   </td>
                   <td
                     style={{
-                      width: "147px",
+                      width: "105px",
                       fontWeight: "500",
                       textAlign: "right",
                     }}

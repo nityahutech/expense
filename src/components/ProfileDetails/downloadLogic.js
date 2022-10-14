@@ -6,9 +6,9 @@ const RATE = 2.83464566929;
 const PAGE_WIDTH = 297 * RATE;
 const PAGE_HEIGHT = 419 * RATE;
 
-const CONTENT_WIDTH = 297 * RATE;
+const CONTENT_WIDTH = 270 * RATE;
 const CONTENT_HEIGHT = 419 * RATE;
-const PAGE_MARGINS = [4 * RATE, 40 * RATE];
+const PAGE_MARGINS = [15 * RATE, 0 * RATE];
 const FONT_SIZE = 14 * RATE;
 
 export async function createPdfFromHtml(element) {

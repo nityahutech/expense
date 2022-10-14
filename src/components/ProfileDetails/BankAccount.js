@@ -69,6 +69,11 @@ function BankAccount() {
       return true;
     }
   };
+  const checkUpperCase = (event) => {
+    if (!/^[A-Z]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
 
   return (
     <>
@@ -211,7 +216,7 @@ function BankAccount() {
                         onKeyPress={(event) => {
                           if (
                             checkNumbervalue(event) &&
-                            checkAlphabets(event)
+                            checkUpperCase(event)
                           ) {
                             event.preventDefault();
                           }

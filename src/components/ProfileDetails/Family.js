@@ -252,7 +252,19 @@ const Family = () => {
                         wrapperCol={{ span: 32 }}
                         initialValue = {data?data.father:null}
                       >
-                            <Input defaultValue={data?data.father:null} placeholder="Enter Father's Name"/>
+                            <Input 
+                            onChange={(e) => {
+                              const inputval = e.target.value;
+                              const str = e.target.value;
+                              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                              const caps = str.split(' ').map(capitalize).join(' ');
+                              console.log('caps',caps)
+                              // setPaidBy(newVal);
+                              form.setFieldsValue({ father: newVal, father: caps });
+                              } } 
+                              defaultValue={data?data.father:null} 
+                              maxLength={40}
+                              placeholder="Enter Father's Name"/>
                       </Form.Item>)}
                             </div>
                       {/* --------------------------------------father-contact------------------------------------ */}
@@ -312,7 +324,19 @@ const Family = () => {
                         wrapperCol={{ span: 32 }}
                         initialValue = {data?data.mother:null}
                       >
-                            <Input defaultValue={data?data.mother:null} placeholder="Enter Mother's Name" />
+                            <Input
+                            onChange={(e) => {
+                              const inputval = e.target.value;
+                              const str = e.target.value;
+                              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                              const caps = str.split(' ').map(capitalize).join(' ');
+                              console.log('caps',caps)
+                              // setPaidBy(newVal);
+                              form.setFieldsValue({ mother: newVal, mother: caps });
+                              } } 
+                              defaultValue={data?data.mother:null} 
+                              maxLength={40}
+                              placeholder="Enter Mother's Name" />
                       </Form.Item>) }
                         </div>
                     </Col>

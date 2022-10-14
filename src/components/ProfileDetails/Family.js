@@ -21,7 +21,7 @@ import {
 } 
 from "@ant-design/icons";
 
-// ----------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -69,28 +69,13 @@ const Family = () => {
     setData(data)
   }
   console.log(data)
-
-  const checkNumbervalue = (event) => {
-    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
   
-  const checkAlphabets = (event) => {
-    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 // ---------------------------------------------------------------------------------------------------------
 
   return (
-
-// ---------------------------------------------------------------------------------------------------------
-
-
     <div
       className="personalCardDiv"
       style={{
@@ -127,6 +112,7 @@ const Family = () => {
                     {/* ------------------------------------father */}
                     <Col span={12}>
                       <Form.Item
+                x                name="father"
                         rules={[
                           { required: false, message: "Please enter Father's name" },
                         ]}
@@ -142,7 +128,6 @@ const Family = () => {
                       </Form.Item>
                       {/* --------------------------------------father-contact------------------------------------ */}
                     </Col>
-                    {/* ---------------------------------fatherContact */}
                     <Col span={12}>
                       <Form.Item
                         name="fatherContact"
@@ -162,17 +147,11 @@ const Family = () => {
                         <h4>{data?data.fatherContact:null}</h4>
                         </div>
                       </Form.Item>
-                    </Col>
-                    {/* -------------------------------------mother */}
+                      </Col>
+                      {/* -------------------------------------mother------------------------------------------ */}
                     <Col span={12}>
                       <Form.Item
                         name="mother"
-                        
-                        onKeyPress={(event) => {
-                          if (checkAlphabets(event)) {
-                            event.preventDefault();
-                          }
-                        }}
                         rules={[
                           { required: false, message: "Please enter Mother's Name" },
                         ]}
@@ -187,7 +166,7 @@ const Family = () => {
                             <h4>{data?data.mother:null}</h4></div>
                       </Form.Item>
                     </Col>
-                    {/* -----------------------------------mother Contact */}
+                    {/* ---------------------------------------------mother Contact------------------------------ */}
                     <Col span={12}>
                     <Form.Item
                         name="motherContact"
@@ -212,8 +191,17 @@ const Family = () => {
                 </Card>
 
                 : <Form
-                form={form} labelcol={{span: 4,}} wrappercol={{span: 14,}}
-                initialValues={{remember: true,}} autoComplete="off"
+                form={form}
+                labelcol={{
+                  span: 4,
+                }}
+                wrappercol={{
+                  span: 14,
+                }}
+                initialValues={{
+                  remember: true,
+                }}
+                autoComplete="off"
                 onFinish={onFinish}
                 >
                 <Card
@@ -231,14 +219,17 @@ const Family = () => {
                       ) : null}
                     </>
                   }
-                  style={{width: 800,marginTop: 10,}}
+                  style={{
+                    width: 800,
+                    marginTop: 10,
+                  }}
                 >
                   <Row gutter={[16, 16]}>
-                    {/* ---------------------------------------------father */}
+                    {/* ------------------------------------father */}
                     <Col span={12}>
                         <div>
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
-                            Father
+                            Father 
                           </h1>
                           {editfamilymember === false ? (
                             <h4>{data?data.father:null}</h4>
@@ -246,11 +237,14 @@ const Family = () => {
                       <Form.Item
                         name="father"
                         rules={[
-                          { required: false, message: "Please enter Father's name" },
+                          { 
+                          required: false, 
+                          maxLength: 40,
+                          message: "Please enter Father's name" },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
-                        initialValue = {data?data.father:null}
+                        initialValue = {data.father? data.father : ''}
                       >
                             <Input 
                             onChange={(e) => {
@@ -262,14 +256,13 @@ const Family = () => {
                               // setPaidBy(newVal);
                               form.setFieldsValue({ father: newVal, father: caps });
                               } } 
-                              defaultValue={data?data.father:null} 
+                              defaultValue={data?data.father:'breh'} 
                               maxLength={40}
                               placeholder="Enter Father's Name"/>
                       </Form.Item>)}
                             </div>
                       {/* --------------------------------------father-contact------------------------------------ */}
                     </Col>
-                    {/* --------------------------------------fatherContact */}
                     <Col span={12}>
                         <div>
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
@@ -280,11 +273,6 @@ const Family = () => {
                           ) : (
                       <Form.Item
                         name="fatherContact"
-                        onKeyPress={(event) => {
-                          if (checkNumbervalue(event)) {
-                            event.preventDefault();
-                          }
-                        }}
                         rules={[
                           {
                             required: false,
@@ -294,9 +282,9 @@ const Family = () => {
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
-                        initialValue = {data?data.fatherContact:null}
+                        initialValue = {data.fatherContact? data.fatherContact : ''}
                       >
-                            <Input defaultValue={data?data.fatherContact:null} placeholder="Enter Contact no." />
+                            <Input  maxLength={11} defaultValue={data?data.fatherContact:''} placeholder="Enter Contact no." />
                       </Form.Item>) }
                         </div>
                       </Col>
@@ -311,18 +299,14 @@ const Family = () => {
                           ) : (
                       <Form.Item
                         name="mother"
-                        onKeyPress={(event) => {
-                          if (checkAlphabets(event)) {
-                            event.preventDefault();
-                          }
-                        }}
-        
                         rules={[
-                          { required: false, message: "Please enter Mother's Name" },
+                          { required: false, 
+                          maxLength: 40,
+                          message: "Please enter Mother's Name" },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
-                        initialValue = {data?data.mother:null}
+                        initialValue = {data.mother?data.mother:''}
                       >
                             <Input
                             onChange={(e) => {
@@ -334,7 +318,7 @@ const Family = () => {
                               // setPaidBy(newVal);
                               form.setFieldsValue({ mother: newVal, mother: caps });
                               } } 
-                              defaultValue={data?data.mother:null} 
+                              defaultValue={data?data.mother:''} 
                               maxLength={40}
                               placeholder="Enter Mother's Name" />
                       </Form.Item>) }
@@ -351,11 +335,6 @@ const Family = () => {
                           ) : (
                     <Form.Item
                         name="motherContact"
-                        onKeyPress={(event) => {
-                          if (checkNumbervalue(event)) {
-                            event.preventDefault();
-                          }
-                        }}
                         rules={[
                           {
                             required: false,
@@ -365,13 +344,13 @@ const Family = () => {
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
-                        initialValue = {data?data.motherContact:null}
+                        initialValue = {data.motherContact?data.motherContact:''}
                       >
-                            <Input defaultValue={data?data.motherContact:null} placeholder="Enter Contact no."  />
+                            <Input  maxLength={11} defaultValue={data?data.motherContact:''} placeholder="Enter Contact no."  />
                       </Form.Item> ) }
                         </div>
                     </Col>
-                  </Row>
+                    </Row>
                   {editfamilymember === true ? (
                     <Row
                       style={{
@@ -528,47 +507,76 @@ const Family = () => {
               >
                 <Row gutter={[16, 16]}>
                   <Col span={8}>
+                  <div>
+                        <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                          Other
+                        </h1>
                   <Form.Item
                       name="other"
                       rules={[
                         {
                           required: false,
+                          maxLength: 40,
                           message: "Please enter the Name",
                         },
                       ]}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
-                      initialValue = {data?data.other:null}
+                      initialValue = {data.other?data.other:''}
                     >
+                      
+                        
+                          <Input
+                            onChange={(e) => {         
+                              const inputval = e.target.value;
+                              const str = e.target.value;
+                              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                              const caps = str.split(' ').map(capitalize).join(' ');
+                              console.log('caps',caps)
+                              // setPaidBy(newVal);
+                              form.setFieldsValue({ other: newVal, other: caps });
+                              } }      
+                              defaultValue={data?data.other:''}
+                              placeholder="Enter Other Name" 
+                              maxLength={40}
+                            /> 
+                    </Form.Item>
+                      </div>
+                  </Col><Col span={8}>
                       <div>
                         <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
-                          Other
+                          Relation
                         </h1>
-                        
-                          <Input defaultValue={data?data.other:null} placeholder="Enter Other Name" /> 
-                      </div>
-                    </Form.Item>
-                  </Col><Col span={8}>
                   <Form.Item
                       name="relation"
                       rules={[
                         {
                           required: false,
+                          maxLength: 20,
                           message: "Please enter the Relation",
                         },
                       ]}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
-                      initialValue = {data?data.relation:null}
+                      initialValue = {data.relation?data.relation:''}
                     >
-                      <div>
-                        <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
-                          Relation
-                        </h1>
                        
-                          <Input defaultValue={data?data.relation:null} placeholder="Enter the Relation" />  
-                      </div>
+                          <Input 
+                            onChange={(e) => {         
+                              const inputval = e.target.value;
+                              const str = e.target.value;
+                              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                              const caps = str.split(' ').map(capitalize).join(' ');
+                              console.log('caps',caps)
+                              // setPaidBy(newVal);
+                              form.setFieldsValue({ relation: newVal, relation: caps });
+                              } }      
+                              defaultValue={data?data.relation:''} 
+                              placeholder="Enter the Relation"
+                              maxLength={40}
+                            /> 
                     </Form.Item>
+                      </div>
                   </Col><Col span={8}>
                   <Form.Item
                       name="otherContact"
@@ -581,14 +589,14 @@ const Family = () => {
                       ]}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
-                      initialValue = {data?data.otherContact:null}
+                      initialValue = {data.otherContact?data.otherContact:''}
                     >
                       <div>
                         <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                           Contact no.
                         </h1>
                         
-                          <Input defaultValue={data?data.otherContact:null} placeholder="Enter Contact no." /> 
+                          <Input  maxLength={11} defaultValue={data?data.otherContact:''} placeholder="Enter Contact no." /> 
                       </div>
                     </Form.Item>
                   </Col></Row>

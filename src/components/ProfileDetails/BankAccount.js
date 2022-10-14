@@ -17,7 +17,6 @@ import {
 import { EditOutlined, CloseOutlined } from "@ant-design/icons";
 const { TextArea } = Input;
 const { Option } = Select;
-
 function BankAccount() {
   const [editContent, showEditContent] = useState(false);
   const [bankName, setBankName] = useState("");
@@ -28,9 +27,6 @@ function BankAccount() {
   //const [accountNumber, setAccountNumber] = useState("");
   const { currentUser } = useAuth();
   const onFinish = () => {
-    console.log(data);
-    console.log(bankName, accountNumber, ifscCode);
-    //console.log('Success:', values);
     let record = {
       ...data,
       bankName: bankName,
@@ -38,7 +34,6 @@ function BankAccount() {
       ifscCode: ifscCode,
       //bankName:bankName?bankName:null
     };
-    console.log("Success:", record);
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
     setData(record);
     showEditContent(false);
@@ -49,27 +44,22 @@ function BankAccount() {
   }, []);
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    console.log(data);
     setData(data);
     //getData();
     setBankName(data.bankName ? data.bankName : null);
     setAccountNumber(data.accountNumber ? data.accountNumber : null);
     setIfscCode(data.ifscCode ? data.ifscCode : null);
   };
-  console.log(data);
-
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   const checkAlphabets = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   return (
     <>
       <div
@@ -136,7 +126,6 @@ function BankAccount() {
                       rules={[
                         {
                           required: true,
-
                           pattern: /^[a-zA-Z\s]*$/,
                           message: "Please enter Bank Name",
                         },
@@ -234,7 +223,6 @@ function BankAccount() {
                 </div>
               </Col>
             </Row>
-
             {editContent === true ? (
               <Row
                 style={{
@@ -268,5 +256,4 @@ function BankAccount() {
     </>
   );
 }
-
 export default BankAccount;

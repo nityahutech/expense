@@ -15,12 +15,10 @@ function Attendance() {
   //   let res = await ProfileContext.getProfile(currentUser.uid);
   //   return res.data();
   // }
-
   useEffect(() => {
     let role = sessionStorage.getItem("role");
     setRole(role)
     let token = sessionStorage.getItem("accessToken");
-    console.log({ token }, { role });
     if (token === "null") {
       window.location.href = "/";
     } else {
@@ -36,12 +34,10 @@ function Attendance() {
           accessToken={accessToken}
         />
       </div>
-
       <div className="homeContainer">
         <div className="table">
           <Navbar />
         </div>
-
         <div className="tables">
           <AttendanceLog empDetails={{ userType: role, empid: 12 }} />
         </div>
@@ -49,5 +45,4 @@ function Attendance() {
     </div>
   ) : null;
 }
-
 export default Attendance;

@@ -1,7 +1,6 @@
 import React from "react";
 import { Table } from "antd";
 import "../../style/WorkWeek.css";
-
 const data = [
   {
     key: "1",
@@ -59,7 +58,6 @@ const data = [
     sun: "",
   },
 ];
-
 function WorkWeek() {
   const sharedOnCell = (_, index) => {
     if (index === 5) {
@@ -67,10 +65,8 @@ function WorkWeek() {
         colSpan: 0,
       };
     }
-
     return {};
   };
-
   const columns = [
     {
       title: "Week",
@@ -105,7 +101,6 @@ function WorkWeek() {
     },
     {
       title: "Tue",
-
       dataIndex: "tue",
       width: 80,
       onCell: sharedOnCell,
@@ -129,7 +124,6 @@ function WorkWeek() {
     },
     {
       title: "Wed",
-
       dataIndex: "wed",
       width: 80,
       onCell: sharedOnCell,
@@ -287,7 +281,6 @@ function WorkWeek() {
                   Half Day
                 </p>
               </div>
-
               <div style={{ position: "relative", bottom: "27px" }}>
                 <Table
                   className="Table"
@@ -347,5 +340,4 @@ function WorkWeek() {
     </>
   );
 }
-
 export default WorkWeek;

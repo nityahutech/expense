@@ -180,6 +180,7 @@ function EmployeeList() {
     console.log({ d });
     setData(d);
     setFilterEmployees(d);
+    setAllEmployees(d);
     setLoading(false);
   }
 

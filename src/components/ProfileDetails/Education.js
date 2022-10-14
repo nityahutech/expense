@@ -296,10 +296,10 @@ function Education() {
                   ]}
                   labelCol={{ span: 8 }}
                   wrapperCol={{ span: 32 }}
-                  initialValues={moment(dateStart, "DD-MM-YYYY")}
+                  initialValues={dateStart? moment(dateStart, "DD-MM-YYYY"):null}
                 >
                   <DatePicker
-                    defaultValue={moment(dateStart, "DD-MM-YYYY")}
+                    // defaultValue={moment(dateStart, "DD-MM-YYYY")}
                     style={{ width: "100%" }}
                     format={"DD-MM-YYYY"}
                     onChange={(e) => {
@@ -330,10 +330,10 @@ function Education() {
                   ]}
                   labelCol={{ span: 8 }}
                   wrapperCol={{ span: 32 }}
-                  initialValues={moment(dateEnd, "DD-MM-YYYY")}
+                  initialValues={dateEnd? moment(dateEnd, "DD-MM-YYYY"):null}
                 >
                   <DatePicker
-                    defaultValue={moment(dateEnd, "DD-MM-YYYY")}
+                    // defaultValue={moment(dateEnd, "DD-MM-YYYY")}
                     style={{ width: "100%" }}
                     format={"DD-MM-YYYY"}
                     onChange={(e) => {

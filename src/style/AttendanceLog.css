@@ -1,6 +1,9 @@
 .ant-tabs-top.Tabs{
     margin-left: 13px;
 }
+.ant-tabs-nav-wrap.Tabs{
+    margin-left: 13px;
+}
 .ant-input.name{
     width: 50%;
 }
@@ -28,13 +31,17 @@
 }
 .monthly{
     position: relative;
-    bottom: 31px
+    bottom: 31px;
+    pointer-events: none;
+    
+    
 }
 .Daily{
     width: 25%;
     position: relative;
     bottom: 3.7rem;
-    left: 15rem
+    float: right;
+    margin-right: 24px;
 }
 .hrtab .ant-tabs-nav .ant-tabs-nav-wrap{
     background: #FFF;
@@ -44,4 +51,11 @@
 .DailyTable{
     position: relative;
     bottom: 30px;
+}
+.Tabs{
+    margin-right: 13px;
+    border-radius: 5px;
+}
+.Tabs .ant-tabs-nav .ant-tabs-nav-list{
+    margin-left: 15px;
 }

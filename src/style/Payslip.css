@@ -44,6 +44,9 @@
  .card{
     overflow-x: scroll;
  }
+ .card.ant-card-bordered{
+    margin-bottom: 25px;
+ }
 
 
 

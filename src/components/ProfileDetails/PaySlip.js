@@ -37,9 +37,9 @@ function PaySlip() {
           className="card"
           title="Pay Slip"
           style={{
-            width: "900px",
+            width: "790px",
             marginTop: "3px",
-            marginLeft: "5rem",
+
             height: "auto",
           }}
         >

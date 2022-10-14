@@ -27,8 +27,29 @@ const leaveCollectionRef = collection(db, "leave");
 
 class AttendanceContext {
 
-    addClockData = (record) => {
+    addClockData = async (record) => {
+      const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("empId", "==", record.empId), where("clockOut","!=",null), limit(1))
+      let rec = await getDocs(q);
+      let d = rec.docs.map((doc) => {
+          return {
+              ...doc.data(),
+              id: doc.id
+          };
+      });
+      if (!d[0]) {
+        console.log("d")
         return addDoc(attendCollectionRef, record);
+      }
+      console.log(d)
+      let newrec = {
+        ...d[0],
+        break: moment().subtract(d[0].clockOut).format("HH:mm:ss"),
+        clockOut: null,
+      }
+      console.log(newrec)
+      const attendDoc = doc(db, "attendance", d[0].id);
+      updateDoc(attendDoc, newrec)
+      return d;
     };
 
     updateClockData = async (id, record) => {
@@ -61,7 +82,7 @@ class AttendanceContext {
     // }
 
     getStartTime = async (id) =>{
-        const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("empId", "==", id), where("clockOut","==",null), limit(1))
+        const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("empId", "==", id), limit(1))
         let rec = await getDocs(q);
         let d = rec.docs.map((doc) => {
             return {
@@ -70,15 +91,21 @@ class AttendanceContext {
             };
         });
         console.log("clock", d)
-        return d[0] ? d[0].clockIn : undefined;
+        let data = d[0] ? {
+          clockIn: d[0].clockIn,
+          break: d[0].break? d[0].break: undefined, 
+          clockOut: d[0].clockOut
+        } : null;
+        console.log(data)
+        return data
     }
 
     addAttendance = (record) => {
         return addDoc(attendCollectionRef, record);
     };
 
-    updateAttendance = async (id, record) => {
-        const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("empId", "==", id), limit(1))
+    updateAttendance = async (id, date, record) => {
+        const q = query(attendCollectionRef, where("date","==",date.format("DD-MM-YYYY")), where("empId", "==", id), limit(1))
         let rec = await getDocs(q);
         let d = rec.docs.map((doc) => {
             return {
@@ -119,9 +146,7 @@ class AttendanceContext {
           let temp = []
           res.map((day) => {
             for (let i = 0; i < d.length; i++) {
-              console.log(moment(d[i].date, "DD-MM-YYYY"))
-              console.log(day, moment(d[i].date, "DD-MM-YYYY"), day.isSame(d[i], 'day'))
-
+              console.log("breh")
               if (day.isSame(moment(d[i].date, "DD-MM-YYYY"), 'day')) {
                 temp[x++] = {
                   ...d[i],

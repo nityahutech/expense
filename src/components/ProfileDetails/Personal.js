@@ -209,7 +209,7 @@ function Personal() {
                     <div>{data ? data.dob : null}</div>
                   ) : (
                     <Form.Item
-                      initialValue={moment(dob, "DD-MM-YYYY")}
+                      initialValue={dob?moment(dob, "DD-MM-YYYY"):null}
                       name="dob"
                       rules={[
                         {
@@ -222,6 +222,7 @@ function Personal() {
                       <DatePicker
                         style={{ width: "100%" }}
                         // format={dateFormatList}
+                        // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
                         onChange={(e) => {
                           setDob(e.format("DD-MM-YYYY"));
                           console.log(e.format("DD-MM-YYYY"));
@@ -747,7 +748,7 @@ function Personal() {
                   ) : (
                     <Form.Item
                       // name="dob"
-                      initialValue={moment(scrs, "DD-MM-YYYY")}
+                      initialValue={scrs?moment(scrs, "DD-MM-YYYY"):null}
                       name="scrs"
                       rules={[
                         {
@@ -758,9 +759,10 @@ function Personal() {
                     >
                       <DatePicker
                         // format={dateFormatList}
+                        // defaultValue= {scrs?moment(scrs, "DD-MM-YYYY"):null}
                         onChange={(e) => {
-                          setScrs(e.format("DD-MM-YYYY"));
                           console.log(e.format("DD-MM-YYYY"));
+                          setScrs(e.format("DD-MM-YYYY"));
                         }}
                         style={{ width: "100%" }}
                       />
@@ -781,7 +783,7 @@ function Personal() {
                     <div>{data ? data.lccs : null}</div>
                   ) : (
                     <Form.Item
-                      initialValue={moment(lccs, "DD-MM-YYYY")}
+                      initialValue={lccs?moment(lccs, "DD-MM-YYYY"):null}
                       name="lccs"
                       rules={[
                         {
@@ -792,7 +794,9 @@ function Personal() {
                     >
                       <DatePicker
                         // format={dateFormatList}
+                        // defaultValue= {lccs?moment(lccs, "DD-MM-YYYY"):null}
                         onChange={(e) => {
+                          console.log(e.format("DD-MM-YYYY"));
                           setLccs(e.format("DD-MM-YYYY"));
                         }}
                         style={{ width: "100%" }}

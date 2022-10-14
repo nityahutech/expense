@@ -5,7 +5,6 @@ import { Card, Col, Row, Form, Input, notification } from "antd";
 import { Button } from "antd";
 import { Tabs } from "antd";
 import { useAuth } from "../contexts/AuthContext";
-// import { useNavigate } from "react-router-dom";
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
@@ -33,7 +32,7 @@ const Settingpage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNew] = useState("");
-  // const [deleteCheck, setDelete] = useState(null);
+
   const { currentUser, updateMyPassword, deletePerson, updateMyEmail, login } =
     useAuth();
 
@@ -51,8 +50,6 @@ const Settingpage = () => {
   window.addEventListener("resize", () => {
     setTabPosition(window.innerWidth <= 768 ? "top" : "left");
   });
-
-  // const navigate = useNavigate();
 
   const handleEmailSubmit = async () => {
     console.log(email);
@@ -88,19 +85,6 @@ const Settingpage = () => {
     }
   };
 
-  //   function isValidEmail(email) {
-  //     return /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9])+@[a-z]+\.[a-z]{2,3}/.test(email);
-  //   }
-
-  //   const handleChange = (event) => {
-  // if (!isValidEmail(event.target.value)) {
-  //   setError("Email is invalid");
-  // } else {
-  //   setError(null);
-  // }
-  // setMessage(event.target.value);
-  //   };
-
   return (
     <>
       <Tabs
@@ -109,19 +93,10 @@ const Settingpage = () => {
         className="settingsTab"
       >
         <Tabs.TabPane className="tabPanel" tab="Update Password" key="3">
-          <Card
-            className="settingsCard"
-            title="Update Password"
-            // style={{
-            //   width: 550,
-            //   color: "black",
-            //   height: "310px",
-            // }}
-          >
+          <Card className="settingsCard" title="Update Password">
             <Form
               form={form}
               onFinish={() => {
-                // openNotificationWithIcon("success");
                 form.resetFields();
               }}
               name="basic"
@@ -151,17 +126,16 @@ const Settingpage = () => {
                       {
                         required: true,
                         message: "Please enter your current password!",
-                        // message: (
-                        //   <div style={{ margineLeft: "-1.5rem" }}>
-                        //     Please enter your current password!
-                        //   </div>
-                        // ),
                       },
                     ]}
                     hasFeedback
                     onChange={(e) => setPassword(e.target.value)}
                   >
-                    <Input.Password className="new" />
+                    <Input.Password
+                      className="new"
+                      type="password"
+                      maxLength={40}
+                    />
                   </Form.Item>
                 </Col>
               </Row>
@@ -174,22 +148,20 @@ const Settingpage = () => {
                   <Form.Item
                     name="password1"
                     key="password1"
-                    // style={{ position: "relative", left: "24px" }}
                     rules={[
                       {
                         required: true,
                         message: "Please enter your password!",
-                        // message: (
-                        //   <div style={{ margineLeft: "-1.5rem" }}>
-                        //     Please enter your password!
-                        //   </div>
-                        // ),
                       },
                     ]}
                     hasFeedback
                     onChange={(e) => setNew(e.target.value)}
                   >
-                    <Input.Password className="new" />
+                    <Input.Password
+                      className="new"
+                      type="password"
+                      maxLength={40}
+                    />
                   </Form.Item>
                 </Col>
               </Row>
@@ -225,7 +197,8 @@ const Settingpage = () => {
                   >
                     <Input.Password
                       className="confirm"
-                      // onChange={(e) => setLoginPassword(e.target.value)}
+                      type="password"
+                      maxLength={40}
                     />
                   </Form.Item>
                 </Col>
@@ -292,12 +265,12 @@ const Settingpage = () => {
                 <Col xs={22} sm={10} md={10} lg={10}>
                   <Form.Item
                     name="email"
-                    type="email"
                     rules={[
                       {
                         type: "email",
                         required: true,
                         message: "Enter your new email address!",
+                        pattern: "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
                       },
                     ]}
                   >
@@ -308,6 +281,7 @@ const Settingpage = () => {
                       //   value={message}
                       //   onChange={handleChange}
                       onChange={(e) => setEmail(e.target.value)}
+                      maxLength={40}
                     />
                     {/* {error && <h2 style={{ color: "red" }}>{error}</h2>} */}
                   </Form.Item>

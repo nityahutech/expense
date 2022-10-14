@@ -92,7 +92,8 @@ const Notification = ({ data }) => {
         {
             title: 'Duration',
             dataIndex: 'date',
-            width: 250,
+            width: 240,
+            align: "left",
             sorter: (a, b) => {
                 return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
             },
@@ -120,6 +121,7 @@ const Notification = ({ data }) => {
         {
             title: 'Slot',
             dataIndex: 'slot',
+            width: 150,
             sorter: (a, b) => {
                 return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
             },
@@ -209,7 +211,8 @@ const Notification = ({ data }) => {
                         pagination={{
                             position: ["bottomCenter"],
                         }}
-                        scroll={{ x: true }}
+                        scroll={{ x: 600 }}
+                        // style={{ overflowX: 'auto' }}
 
                         size="small" />
                 </div>

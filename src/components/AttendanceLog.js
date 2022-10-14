@@ -244,21 +244,23 @@ function AttendanceLog({ empDetails }) {
     console.log(activetab)
     form.resetFields();
     if (empDetails.userType === "emp") {
-      console.log(currentUser.uid)
-      setSelectemp({id: currentUser.uid})
-      // setActivetab("1");
-      getEmpDetails(currentUser.uid, [moment().subtract(30, "days"), moment()]);
+      setTimeout(() => {
+        console.log(currentUser.uid)
+        setSelectemp({id: currentUser.uid})
+        // setActivetab("1");
+        getEmpDetails(currentUser.uid, [moment().subtract(30, "days"), moment()]);
+      }, 500)
       // getEmpMonthly();
     } else {
         if (activetab == "1"){
-          allEmpDetails();
+           allEmpDetails();
         }
     }
   }, [activetab]);
 
-  useEffect(() => {
-    setFilteredEmp(filteredEmp);
-  }, [filteredEmp]);
+  // useEffect(() => {
+  //   setFilteredEmp(filteredEmp);
+  // }, [activetab]);
 
   // useEffect(() => {
   //   setFilteredEmp(filteredEmp);

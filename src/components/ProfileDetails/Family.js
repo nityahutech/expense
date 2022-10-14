@@ -257,6 +257,7 @@ const Family = () => {
                               form.setFieldsValue({ father: newVal, father: caps });
                               } } 
                               defaultValue={data?data.father:null} 
+                              maxLength={40}
                               placeholder="Enter Father's Name"/>
                       </Form.Item>)}
                             </div>
@@ -317,7 +318,9 @@ const Family = () => {
                               // setPaidBy(newVal);
                               form.setFieldsValue({ mother: newVal, mother: caps });
                               } } 
-                               defaultValue={data?data.mother:null} placeholder="Enter Mother's Name" />
+                              defaultValue={data?data.mother:null} 
+                              maxLength={40}
+                              placeholder="Enter Mother's Name" />
                       </Form.Item>) }
                         </div>
                     </Col>

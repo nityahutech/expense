@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../style/Charts.css";
 import { Select } from "antd";
 import { Card } from 'antd';
-
-
 import { useNavigate } from "react-router-dom";
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,7 +16,6 @@ import {
 import { Bar } from "react-chartjs-2";
 import { Pie } from "react-chartjs-2";
 import { totalAmount, avgAmountPerMonth, topSixExpenses } from "../contexts/DashboardContext";
-// import faker from 'faker';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -29,7 +25,6 @@ ChartJS.register(
   Legend,
   ArcElement
 );
-
 const { Option } = Select;
 // ------------------------------------------------------
 const Charts = () => {
@@ -43,7 +38,6 @@ const Charts = () => {
   let col = 0;
   let initalPieData = [[], []]
   const [pieData, setPieData] = useState([[],[]]);
-
   // function accumulateExpense(expense) {
   //   let piedata= [...pieData];
   //   console.log(piedata[0])
@@ -63,12 +57,8 @@ const Charts = () => {
   //     col++;
   //   }
   // }
-
-  function accumulateExpense(expense, i) {
+function accumulateExpense(expense, i) {
     if (i === 0) initalPieData = [[], []];
-    console.log("***************");
-    console.log(JSON.stringify(expense));
-    console.log(JSON.stringify(initalPieData));
     if (initalPieData[0].includes(expense.catname)) {
       let index = initalPieData[0].indexOf(expense.catname);
       initalPieData[1][index] += expense.subtotal;
@@ -80,8 +70,6 @@ const Charts = () => {
       col++;
     }
   }
-
-
   // useEffect(() => {
   //   console.log
   //   topSixExpenses(value, '2022').then((exp) => {
@@ -93,32 +81,24 @@ const Charts = () => {
   const handleChange = (value) => {
       setPieData([[],[]]);
       col = 0;
-      console.log(col,":",pieData);
     topSixExpenses(value, '2022').then((exp) => {
-      console.log(exp);
       exp.forEach(accumulateExpense, col);
     });
   };
-
-  const values = () => {
+const values = () => {
     totalAmount().then((a) => {
       setTotal(a);
     });
     avgAmountPerMonth().then((b) => {
-      console.log(b);
       setAvg(b);
     });
     topSixExpenses('09', '2022').then((exp) => {
-      console.log(exp);
       setPieData([[],[]]);
       exp.forEach(accumulateExpense, col);
       col = 0;
     });
-    console.log(pieData);
   };
-
-  useEffect(() => {
-    console.log(col,":",pieData);
+useEffect(() => {
     values();
   }, []);
 // --------------------------------------------------------------------

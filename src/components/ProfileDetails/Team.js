@@ -2,27 +2,20 @@ import { Card, Row, Col, Form } from "antd";
 import React, { useState, useEffect } from "react";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { useAuth } from "../../contexts/AuthContext";
-
 function Team() {
   const { currentUser } = useAuth();
   const [data, setData] = useState([]);
   const [repManager, setRepManager] = useState("");
   const [secManager, setSecManager] = useState("");
-
-
   useEffect(() => {
     getData();
   }, []);
-
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    console.log(data);
     //setData(data);
     setRepManager(data.repManager ? data.repManager : null);
     setSecManager(data.secManager ? data.secManager : null);
   };
-  console.log(data);
-
   return (
     <>
       <div
@@ -108,5 +101,4 @@ function Team() {
     </>
   );
 }
-
 export default Team;

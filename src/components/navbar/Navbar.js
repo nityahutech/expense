@@ -28,18 +28,19 @@ const Navbar = () => {
   const isClockRunning = async () => {
     let res = await AttendanceContext.getStartTime(currentUser.uid);
     console.log(res)
-    if (res == undefined) {
+    if (res == null || res.clockOut != null) {
       console.log("heyyyyyyyy")
       setIsRunning(false)
       return false;
     }
     else {
       setIsRunning(true)
-      let offset = moment().subtract(res)
-      console.log(offset.toDate());
-      const offsetTime = moment(offset, "HH:mm:ss").diff(moment().startOf('day'), 'seconds')
+      let offset = moment().subtract(res.clockIn)
+      let offsettime = res.break?offset.subtract(res.break): offset;
+      console.log(offsettime.toDate());
+      const offsetTime = moment(offsettime, "HH:mm:ss").diff(moment().startOf('day'), 'seconds')
       console.log(offsetTime)
-      setStartTime(res)
+      setStartTime(res.clockIn)
       setClockInfo(offsetTime)
       console.log(clockinfo)
       return true;
@@ -103,11 +104,17 @@ const Navbar = () => {
       ]}
     />
   );
+
   useEffect(() => {
-    console.log("BREHHHHHHHHHHHHS");
+    console.log("First");
+    setIsRunning(isClockRunning());
+  }, [])
+
+  useEffect(() => {
+    console.log("BREHHHHHHHHHHHHS", isRunning);
     isClockRunning()
     const timer = setInterval(() => {
-      console.log(isRunning);
+      console.log(isRunning, clockinfo);
       if (isRunning) {
         setClockInfo(clockinfo => clockinfo + 1)
       }
@@ -115,7 +122,21 @@ const Navbar = () => {
     return () => {
       clearInterval(timer);
     };
-  }, [isRunning]);
+  }, [isRunning])
+
+  // useEffect(() => {
+  //   console.log("BREHHHHHHHHHHHHS");
+  //   isClockRunning()
+  //   const timer = setInterval(() => {
+  //     console.log(isRunning);
+  //     if (isRunning) {
+  //       setClockInfo(clockinfo => clockinfo + 1)
+  //     }
+  //   }, 1000)
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, [isRunning]);
 
 
   const buttonStyle = !isRunning ? {
@@ -157,7 +178,7 @@ const Navbar = () => {
     }
   };
 
-  const setClockState = () => {
+  const setClockState = async () => {
     // setClockIn(true);
     let clickedDate = {
       empId: currentUser.uid,
@@ -167,23 +188,24 @@ const Navbar = () => {
       clockOut: null
     }
     console.log(clickedDate)
+    await AttendanceContext.addClockData(clickedDate)
     setIsRunning(true)
-    AttendanceContext.addClockData(clickedDate)
   };
 
-  const stopClockState = () => {
+  const stopClockState = async () => {
     // setClockIn(false);
     let clickedDate = {
       clockOut: moment().format("HH:mm:ss"),
       duration: moment.utc(clockTime * 1000).format('HH:mm:ss')
     }
-    setIsRunning(false)
-    setStartTime("");
-    setClockInfo(0)
     // AttendanceContext.updateClockData(clickedDate, currentUser.uid)
     // console.log(rec.data())
     console.log(isRunning);
-    AttendanceContext.updateClockData(currentUser.uid, clickedDate);
+    await AttendanceContext.updateClockData(currentUser.uid, clickedDate);
+    setIsRunning(false)
+    setClockInfo(0)
+    setStartTime("");
+    setButtonText("Web Clock In ");
   };
 
   const handleClock = () => {
@@ -198,9 +220,7 @@ const Navbar = () => {
     }
   }
 
-  // useEffect(() => {
-  // }, []);
-  console.log(startTime, clockinfo)
+  // console.log(startTime, clockinfo)
   return (
     <div className="navbar" style={{ background: "white" }}>
       <div className="wrapper">
@@ -230,8 +250,8 @@ const Navbar = () => {
           onMouseLeave={onMouseLeave}
           onMouseEnter={onMouseEnter}
         >
-          {buttonText} <br />
-          {moment.utc(clockTime * 1000).format('HH:mm:ss')}
+          {buttonText? buttonText: ""} <br />
+          {clockinfo && isRunning ? moment.utc(clockTime * 1000).format('HH:mm:ss'): ""}
         </button>
         <div className="image">
           <div className="item">

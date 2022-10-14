@@ -15,6 +15,7 @@ import moment from "moment";
 import { useAuth } from "../contexts/AuthContext";
 import AttendanceContext from "../contexts/AttendanceContext";
 import ProfileContext from "../contexts/ProfileContext";
+import { scryRenderedComponentsWithType } from "react-dom/test-utils";
 const { RangePicker } = DatePicker;
 const { Content } = Layout;
 const layout = {
@@ -128,7 +129,7 @@ function AttendanceLog({ empDetails }) {
       project: values?.project_name || "-",
     };
     console.log(currentUser.uid, { monthlydata });
-    AttendanceContext.updateAttendance(currentUser.uid, newData);
+    await AttendanceContext.updateAttendance(currentUser.uid, values.date, newData);
     // let newAlldata = [newData, ...empMonthly];
     // console.log(newAlldata);
     // localStorage.setItem("newReport", JSON.stringify(newAlldata));
@@ -151,6 +152,7 @@ function AttendanceLog({ empDetails }) {
     console.log(data);
     setEmpMonthly(data);
     setLoading(false);
+    return data;
   }
   // function getEmpMonthly() {
   //   console.log(JSON.parse(localStorage.getItem("newReport")));
@@ -239,19 +241,30 @@ function AttendanceLog({ empDetails }) {
   console.log(empDetails);
 
   useEffect(() => {
+    console.log(activetab)
+    form.resetFields();
     if (empDetails.userType === "emp") {
-      setActivetab("1");
+      console.log(currentUser.uid)
+      setSelectemp({id: currentUser.uid})
+      // setActivetab("1");
       getEmpDetails(currentUser.uid, [moment().subtract(30, "days"), moment()]);
       // getEmpMonthly();
     } else {
-      setActivetab("1");
-      allEmpDetails();
+        if (activetab == "1"){
+          allEmpDetails();
+        }
     }
-  }, []);
+  }, [activetab]);
 
   useEffect(() => {
     setFilteredEmp(filteredEmp);
   }, [filteredEmp]);
+
+  // useEffect(() => {
+  //   setFilteredEmp(filteredEmp);
+  // }, [activetab]);
+
+
 
   //   const rowSelection = {
   //     onChange: (selectedRowKeys, selectedRows) => {
@@ -326,6 +339,11 @@ function AttendanceLog({ empDetails }) {
       dataIndex: "duration",
     },
     {
+      title: "Break Time",
+      key: "break",
+      dataIndex: "break",
+    },
+    {
       title: "Project Name",
       dataIndex: "project",
       key: "project",
@@ -373,31 +391,15 @@ function AttendanceLog({ empDetails }) {
     },
   ];
 
-  function onDateFilter(date, dateString) {
-    console.log({ date, dateString });
-    if (date) {
-      console.log(empMonthly);
-      let result = empMonthly.filter((ex) => {
-        return (
-          moment(ex.date, dateFormat).isSame(date[0], "day") ||
-          moment(ex.date, dateFormat).isSame(date[1], "day") ||
-          (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
-            moment(ex.date, dateFormat).isSameOrBefore(date[1]))
-        );
-      });
-
-      const modifiedFilterExpense = [...result];
-
-      console.log({ modifiedFilterExpense });
+  async function onHrDateFilter(value) {
+    if (value == null) {
+      console.log("empMonthly");
+      const modifiedFilterExpense = await getEmpDetails(selectemp.id, [moment().subtract(30, "days"), moment()]);
       setEmpMonthly(modifiedFilterExpense);
     } else {
-      setEmpMonthly(empMonthly);
-    }
-  }
-  async function onHrDateFilter(date, dateString) {
-    console.log({ date, dateString });
-    if (date) {
-      console.log(empMonthly);
+      const begin = value.clone().startOf('month');
+      const end = value.clone().endOf('month');
+      let date = [begin, end];
       // let result = empMonthly.filter((ex) => {
       //   return (
       //     moment(ex.date, dateFormat).isSame(date[0], "day") ||
@@ -409,10 +411,8 @@ function AttendanceLog({ empDetails }) {
 
       const modifiedFilterExpense = await getEmpDetails(selectemp.id, date);
 
-      console.log({ modifiedFilterExpense });
+      console.log(modifiedFilterExpense.reverse());
       setEmpMonthly(modifiedFilterExpense);
-    } else {
-      setEmpMonthly(empMonthly);
     }
   }
   const searchChange = (e) => {
@@ -429,11 +429,11 @@ function AttendanceLog({ empDetails }) {
     }
   };
 
-  console.log("test", filteredEmp[3]);
-  console.log("test", JSON.stringify(filteredEmp[3]));
+  console.log("test", filteredEmp[4]);
+  console.log("test", JSON.stringify(filteredEmp[4]));
   console.log(
     "test",
-    filteredEmp[3] ? JSON.parse(JSON.stringify(filteredEmp[3])) : "empty"
+    filteredEmp[4] ? JSON.parse(JSON.stringify(filteredEmp[3])) : "empty"
   );
   console.log(filteredEmp);
   // console.log("test",filteredEmp);
@@ -454,11 +454,10 @@ function AttendanceLog({ empDetails }) {
           {role.userType === "emp" ? (
             <>
               <Tabs.TabPane tab="Monthly Log" key="1">
-                <RangePicker
-                  className="Range"
-                  defaultValue={[]}
-                  format={dateFormat}
-                  onChange={onDateFilter}
+                <DatePicker picker="month" className="Range"
+                  // defaultValue={[]}
+                  format={"MM-YYYY"}
+                  onChange={onHrDateFilter}
                 />
                 <Table
                   loading={loading}
@@ -499,6 +498,18 @@ function AttendanceLog({ empDetails }) {
                   onFinish={onFinish}
                   className="formItem"
                 >
+                  <Form.Item
+                    name="date"
+                    label="Date"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                    className="pname"
+                  >
+                    <DatePicker format={"DD-MM-YYYY"} style={{width: "50%"}}/>
+                  </Form.Item>
                   <Form.Item
                     name="project_name"
                     label="Project Name"
@@ -574,10 +585,9 @@ function AttendanceLog({ empDetails }) {
                 />
               </Tabs.TabPane>
               <Tabs.TabPane disabled={!selectemp} tab="Monthly Log" key="2">
-                <RangePicker
-                  className="Range"
-                  defaultValue={[]}
-                  format={dateFormat}
+                <DatePicker picker="month" className="Range"
+                  // defaultValue={[]}
+                  format={"MM-YYYY"}
                   onChange={onHrDateFilter}
                 />
                 <Table

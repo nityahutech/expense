@@ -1,25 +1,27 @@
-import { Table, Button, Modal, Layout } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import { Table, Button, Modal, Layout, Row, Col, Input } from "antd";
+import {
+  EditOutlined,
+  SearchOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import Editemployee from "./Editemployee";
 import React, { useEffect, useState } from "react";
 import { createUser, getUsers } from "../contexts/CreateContext";
 import moment from "moment";
 import "../style/EmployeeList.css";
+import { doc } from "firebase/firestore";
 
 function EmployeeList() {
   const [modaldata, setmodaldata] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [filterExpenses, setFilterExpense] = useState([]);
   const [editedRecord, setEditedRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [size, setSize] = useState(window.innerWidth <= 768 ? "" : "left");
-  // const [allEmployee, setAllEmployee] = useState(data || []);
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
-  // async function getData() {
-  //   setLoading(true);
-  // }
+  const [filterEmployees, setFilterEmployees] = useState([]);
+  const [allEmployees, setAllEmployees] = useState([]);
+  const [data, setData] = React.useState([]);
+  const [disableItem, setDisableItem] = useState(false);
 
   window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 768 ? "" : "left")
@@ -107,30 +109,38 @@ function EmployeeList() {
       width: 120,
 
       render: (_, record) => {
-        // console.log("record:: ", record);
+        console.log("record:: ", record);
         return (
-          // record.key !== "subTotal" && (
-          <>
-            {/* <Space size="small"> */}
-            <Button
-              style={{ padding: 0 }}
-              type="link"
-              className="edIt"
-              onClick={() => {
-                handleEditEmployee(record);
-                showModal(record);
-              }}
-            >
-              {<EditOutlined />}
-            </Button>
-          </>
+          record.disabled === false && (
+            <>
+              {/* <Space size="small"> */}
+              <Button
+                style={{ padding: 0 }}
+                type="link"
+                className="edIt"
+                onClick={() => {
+                  handleEditEmployee(record);
+                  showModal(record);
+                }}
+              >
+                {<EditOutlined />}
+              </Button>
+              <Button
+                type="link"
+                className="deleTe"
+                onClick={(e) => {
+                  onDelete(record.sn - 1, e);
+                }}
+              >
+                <DeleteOutlined />
+              </Button>
+            </>
+          )
         );
-        // );
       },
     },
   ];
 
-  const [data, setData] = React.useState([]);
   useEffect(() => {
     getData();
   }, []);
@@ -164,18 +174,65 @@ function EmployeeList() {
         dt: new Date(longDateStr),
         id: doc.id,
         sn: i + 1,
+        disabled: false,
       };
     });
     console.log({ d });
     setData(d);
+    setFilterEmployees(d);
     setLoading(false);
   }
+
+  const searchChange = (e) => {
+    let search = e.target.value;
+    // setFilterCriteria({ ...filterCriteria, search: search });
+    if (search) {
+      let result = data.filter(
+        (ex) =>
+          ex.fname.toLowerCase().includes(search.toLowerCase()) ||
+          ex.lname.toLowerCase().includes(search.toLowerCase())
+      );
+      const modifiedFilterExpense = [...result];
+      setFilterEmployees(modifiedFilterExpense);
+    } else {
+      setFilterEmployees(allEmployees);
+    }
+  };
+
+  const onDelete = (idx, e) => {
+    e.preventDefault();
+    console.log("data::: ", idx);
+    const filteredData = data.map((doc, i) => {
+      let disabled = false;
+      if (idx == i) {
+        disabled = true;
+      }
+      return {
+        ...doc,
+
+        sn: i + 1,
+        disabled: disabled,
+      };
+    });
+    setData(filteredData);
+    setFilterEmployees(filteredData);
+  };
+
   return (
     <Layout>
+      <Row className="employeeRow">
+        <Col>
+          <Input
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            onChange={searchChange}
+          />
+        </Col>
+      </Row>
       <Table
         loading={loading}
         columns={columns}
-        dataSource={data}
+        dataSource={filterEmployees}
         pagination={{
           position: ["bottomCenter"],
         }}
@@ -183,6 +240,7 @@ function EmployeeList() {
         className="employeeTable"
         size="small"
         reloadData={getData}
+        rowClassName={(record) => record.disabled && "disabled-row"}
       />
       <Modal
         centered
@@ -193,7 +251,7 @@ function EmployeeList() {
         closeIcon={
           <div
             onClick={() => {
-            setIsModalVisible(false);
+              setIsModalVisible(false);
             }}
           >
             X

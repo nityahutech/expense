@@ -7,7 +7,7 @@ import ProfileContext from "../../contexts/ProfileContext";
 
 function Attendance() {
   const [accessToken, setAccessToken] = useState(null);
-  const [role, setRole] = useState(null);
+  const [role, setRole] = useState("emp");
   const { currentUser } = useAuth();
   // const role = getRole();
 

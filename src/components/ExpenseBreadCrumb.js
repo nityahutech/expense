@@ -57,6 +57,43 @@ const ExpenseBreadCrumb = () => {
         <Breadcrumb.Item>
           <strong>Employee / Employee List</strong>
         </Breadcrumb.Item>
+      ) : window.location.pathname === "/PersonalPage/Personal" ? (
+        <Breadcrumb.Item>
+          <strong>Profile / Personal</strong>
+        </Breadcrumb.Item>
+      ) : window.location.pathname === "/WorkPage/work" ? (
+        <Breadcrumb.Item>
+          <strong>Profile / Work</strong>
+        </Breadcrumb.Item>
+      ) : window.location.pathname === "/TeamPage/Team" ? (
+        <Breadcrumb.Item>
+          <strong>Profile / Team</strong>
+        </Breadcrumb.Item>
+      ) : window.location.pathname === "/EducationPage/Education" ? (
+        <Breadcrumb.Item>
+          <strong>Profile / Education</strong>
+        </Breadcrumb.Item>
+      ) : window.location.pathname === "/FamilyPage/Family" ? (
+        <Breadcrumb.Item>
+          <strong>Profile / Family</strong>
+        </Breadcrumb.Item>
+      ) : window.location.pathname === "/DocumentsPage/Document" ? (
+        <Breadcrumb.Item>
+          <strong>Profile / Document</strong>
+        </Breadcrumb.Item>
+      ) : window.location.pathname === "/WorkWeekPage/WorkWeek" ? (
+        <Breadcrumb.Item>
+          <strong>Profile / Work Week</strong>
+        </Breadcrumb.Item>
+      ) : window.location.pathname === "/PaySlipPage/PaySlip" ? (
+        <Breadcrumb.Item>
+          <strong>Profile / Pay Slip</strong>
+        </Breadcrumb.Item>
+      ) : window.location.pathname === "/BankAccountpages/BankAccount" ? (
+        <Breadcrumb.Item>
+          <strong>Profile / Bank Account</strong>
+        </Breadcrumb.Item>
+
 
       ) : window.location.pathname === "/Setting" ? (
         <Breadcrumb.Item>

@@ -10,7 +10,7 @@
     box-sizing: border-box;
     border: 1px solid black;
     margin-top: 18px;
-    padding-left: 23px;
+    padding-left: 19px;
     
     
 }
@@ -43,6 +43,9 @@
  }
  .card{
     overflow-x: scroll;
+ }
+ .card.ant-card-bordered{
+    margin-bottom: 25px;
  }
 
 

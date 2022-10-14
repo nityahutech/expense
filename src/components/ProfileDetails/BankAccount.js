@@ -69,6 +69,11 @@ function BankAccount() {
       return true;
     }
   };
+  const checkUpperCase = (event) => {
+    if (!/^[A-Z]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
 
   return (
     <>
@@ -80,190 +85,198 @@ function BankAccount() {
           justifyContent: "center",
         }}
       >
-        <Form
-          // form={form}
-          labelcol={{
-            span: 4,
-          }}
-          wrappercol={{
-            span: 14,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          autoComplete="off"
-          onFinish={onFinish}
+        <Card
+          className="bankAccount"
+          style={{ marginBottom: "25px", border: "none" }}
         >
-          <Card
-            title="Bank Account Details"
-            //   actions={[
-            //   <EditOutlined key="edit" />,
-            // ]}
-            extra={
-              <>
-                {editContent === false ? (
-                  <Button
-                    type="text"
-                    style={{ color: "#4ec0f1" }}
-                    onClick={() => showEditContent(!editContent)}
-                  >
-                    Edit
-                  </Button>
-                ) : null}
-              </>
-            }
-            style={{
-              width: 800,
-              marginTop: 10,
+          <Form
+            // form={form}
+            labelcol={{
+              span: 4,
             }}
+            wrappercol={{
+              span: 14,
+            }}
+            initialValues={{
+              remember: true,
+            }}
+            autoComplete="off"
+            onFinish={onFinish}
           >
-            <Row gutter={[16, 16]}>
-              <Col span={10}>
-                <div>
-                  <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                    Bank Name
-                  </div>
+            <Card
+              title="Bank Account Details"
+              //   actions={[
+              //   <EditOutlined key="edit" />,
+              // ]}
+              extra={
+                <>
                   {editContent === false ? (
-                    <div>{data ? data.bankName : null}</div>
-                  ) : (
-                    <Form.Item
-                      name="bankname"
-                      onKeyPress={(event) => {
-                        if (checkAlphabets(event)) {
-                          event.preventDefault();
-                        }
-                      }}
-                      rules={[
-                        {
-                          required: true,
-
-                          pattern: /^[a-zA-Z\s]*$/,
-                          message: "Please enter Bank Name",
-                        },
-                      ]}
+                    <Button
+                      type="text"
+                      style={{ color: "#4ec0f1" }}
+                      onClick={() => showEditContent(!editContent)}
                     >
-                      <Input
-                        defaultValue={data ? data.bankName : null}
-                        placeholder="Enter Bank Name"
-                        onChange={(e) => {
-                          setBankName(e.target.value);
+                      Edit
+                    </Button>
+                  ) : null}
+                </>
+              }
+              style={{
+                width: 800,
+                marginTop: 10,
+              }}
+            >
+              <Row gutter={[16, 16]}>
+                <Col span={10}>
+                  <div>
+                    <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                      Bank Name
+                    </div>
+                    {editContent === false ? (
+                      <div>{data ? data.bankName : null}</div>
+                    ) : (
+                      <Form.Item
+                        name="bankname"
+                        onKeyPress={(event) => {
+                          if (checkAlphabets(event)) {
+                            event.preventDefault();
+                          }
                         }}
-                        maxLength={20}
-                      />
-                    </Form.Item>
-                  )}
-                </div>
-              </Col>
-              <Col span={10}>
-                <div>
-                  <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                    Account Number
+                        rules={[
+                          {
+                            required: true,
+
+                            pattern: /^[a-zA-Z\s]*$/,
+                            message: "Please enter Bank Name",
+                          },
+                        ]}
+                      >
+                        <Input
+                          defaultValue={data ? data.bankName : null}
+                          placeholder="Enter Bank Name"
+                          onChange={(e) => {
+                            setBankName(e.target.value);
+                          }}
+                          maxLength={20}
+                        />
+                      </Form.Item>
+                    )}
                   </div>
-                  {editContent === false ? (
-                    <div>{data ? data.accountNumber : null}</div>
-                  ) : (
-                    <Form.Item
-                      name="accountnumber"
-                      onKeyPress={(event) => {
-                        if (checkNumbervalue(event)) {
-                          event.preventDefault();
-                        }
-                      }}
-                      rules={[
-                        {
-                          required: true,
-
-                          pattern: /^[0-9\b]+$/,
-                          message: "Please enter Account Number",
-                        },
-                        {
-                          whitespace: true,
-                        },
-                      ]}
-                    >
-                      <Input
-                        defaultValue={data ? data.accountNumber : null}
-                        placeholder="Enter Account Number"
-                        onChange={(e) => {
-                          setAccountNumber(e.target.value);
+                </Col>
+                <Col span={10}>
+                  <div>
+                    <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                      Account Number
+                    </div>
+                    {editContent === false ? (
+                      <div>{data ? data.accountNumber : null}</div>
+                    ) : (
+                      <Form.Item
+                        name="accountnumber"
+                        onKeyPress={(event) => {
+                          if (checkNumbervalue(event)) {
+                            event.preventDefault();
+                          }
                         }}
-                        maxLength={20}
-                        required
-                      />
-                    </Form.Item>
-                  )}
-                </div>
-              </Col>
-              <Col span={10}>
-                <div>
-                  <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                    IFSC Code
+                        rules={[
+                          {
+                            required: true,
+
+                            pattern: /^[0-9\b]+$/,
+                            message: "Please enter Account Number",
+                          },
+                          {
+                            whitespace: true,
+                          },
+                        ]}
+                      >
+                        <Input
+                          defaultValue={data ? data.accountNumber : null}
+                          placeholder="Enter Account Number"
+                          onChange={(e) => {
+                            setAccountNumber(e.target.value);
+                          }}
+                          maxLength={20}
+                          required
+                        />
+                      </Form.Item>
+                    )}
                   </div>
-                  {editContent === false ? (
-                    <div>{data ? data.ifscCode : null}</div>
-                  ) : (
-                    <Form.Item
-                      name="ifsccode"
-                      onKeyPress={(event) => {
-                        if (checkNumbervalue(event) && checkAlphabets(event)) {
-                          event.preventDefault();
-                        }
-                      }}
-                      rules={[
-                        {
-                          required: true,
-
-                          pattern: /^[0-9a-zA-Z]+$/,
-                          message: "Please enter IFSC Code",
-                        },
-                        {
-                          whitespace: true,
-                        },
-                      ]}
-                    >
-                      <Input
-                        defaultValue={data ? data.ifscCode : null}
-                        placeholder="Enter IFSC Code"
-                        maxLength={15}
-                        onChange={(e) => {
-                          setIfscCode(e.target.value);
+                </Col>
+                <Col span={10}>
+                  <div>
+                    <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                      IFSC Code
+                    </div>
+                    {editContent === false ? (
+                      <div>{data ? data.ifscCode : null}</div>
+                    ) : (
+                      <Form.Item
+                        name="ifsccode"
+                        onKeyPress={(event) => {
+                          if (
+                            checkNumbervalue(event) &&
+                            checkUpperCase(event)
+                          ) {
+                            event.preventDefault();
+                          }
                         }}
-                      />
-                    </Form.Item>
-                  )}
-                </div>
-              </Col>
-            </Row>
+                        rules={[
+                          {
+                            required: true,
 
-            {editContent === true ? (
-              <Row
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  marginTop: "3%",
-                }}
-              >
-                <Button
-                  onClick={() => showEditContent(false)}
-                  type="text"
-                  style={{ fontSize: 15 }}
-                >
-                  <CloseOutlined /> CANCEL
-                </Button>
-                <Col>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    style={{ marginLeft: "10px" }}
-                    onClick={() => onFinish()}
-                  >
-                    SAVE
-                  </Button>
+                            pattern: /^[0-9a-zA-Z]+$/,
+                            message: "Please enter IFSC Code",
+                          },
+                          {
+                            whitespace: true,
+                          },
+                        ]}
+                      >
+                        <Input
+                          defaultValue={data ? data.ifscCode : null}
+                          placeholder="Enter IFSC Code"
+                          maxLength={15}
+                          onChange={(e) => {
+                            setIfscCode(e.target.value);
+                          }}
+                        />
+                      </Form.Item>
+                    )}
+                  </div>
                 </Col>
               </Row>
-            ) : null}
-          </Card>
-        </Form>
+
+              {editContent === true ? (
+                <Row
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "3%",
+                  }}
+                >
+                  <Button
+                    onClick={() => showEditContent(false)}
+                    type="text"
+                    style={{ fontSize: 15 }}
+                  >
+                    <CloseOutlined /> CANCEL
+                  </Button>
+                  <Col>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      style={{ marginLeft: "10px" }}
+                      onClick={() => onFinish()}
+                    >
+                      SAVE
+                    </Button>
+                  </Col>
+                </Row>
+              ) : null}
+            </Card>
+          </Form>
+        </Card>
       </div>
     </>
   );

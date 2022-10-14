@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import { Button } from 'antd';
 import { Form, Input, } from 'antd';
-import { DatePicker, Space } from "antd";
+import { Space } from "antd";
 import moment from "moment";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import LeaveContext from '../contexts/LeaveContext';
@@ -26,6 +26,8 @@ import { useAuth } from '../contexts/AuthContext'
 import Notification from "./Notification";
 import HolidayList from "./HolidayList";
 import "../style/leave.css";
+import DatePicker, { DateObject } from "react-multi-date-picker";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import useItems from 'antd/lib/menu/hooks/useItems';
 
 let leaveStyle = {
@@ -38,6 +40,7 @@ let leaveStyle = {
 
 const userrole = ''
 const Leave = () => {
+    const [dateSelected, setDateSelected] = useState([]);
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const [leaves, setLeaves] = useState([]);
@@ -48,8 +51,10 @@ const Leave = () => {
     const [noOfDays, setNoOfDays] = useState([]);
     console.log(sessionStorage.getItem("role"));
     const [isHr, setIsHr] = useState(sessionStorage.getItem("role") === "hr" ? true : false);
+    const [isMgr, setIsMgr] = useState(sessionStorage.getItem("role") === "mgr" ? true : false);
     const [role, setRole] = useState(null);
     const { currentUser } = useAuth();
+    const format = "DD MMM, YYYY"
 
 
     let leaveDays = "";
@@ -61,6 +66,7 @@ const Leave = () => {
     const [companyholiday, setCompanyholiday] = useState([])
     const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
     const [employeeRecord, setEmployeeRecord] = useState();
+    const [repManager, setRepManager] = useState();
 
 
     function addNewHoliday(holiday) {
@@ -77,7 +83,7 @@ const Leave = () => {
 
                 return {
                     ...doc.data(),
-                    Date: moment(doc.data()["Date"].seconds * 1000).format('Do MMM, YYYY'),
+                    Date: moment(doc.data()["Date"].seconds * 1000).format(format),
                     id: doc.id,
                 };
             });
@@ -91,7 +97,7 @@ const Leave = () => {
 
     const getListData = (value) => {
         let listData;
-        let currdate = value.format('Do MMM, YYYY');
+        let currdate = value.format((format));
         let companyHolidayRecord = companyholiday.filter(record => record.Date == currdate);
         console.log('calendervvvvv', currdate);
         console.log('calendervvvvv2', companyHolidayRecord.length);
@@ -128,14 +134,16 @@ const Leave = () => {
 
     const onFinish = values => {
         console.log("Success:", values);
+        // console.log("Success1:", dateSelected[0].toString());
+        console.log("Success2:", dateSelected);
 
-        if (validleaverequest == 'false') {
-            showNotification("error", "Error", "Leave requested is more than available Leave");
-            return;
-        }
+        // if (validleaverequest == 'false') {
+        //     showNotification("error", "Error", "Leave requested is more than available Leave");
+        //     return;
+        // }
 
         console.log("Success3:", values.leaveNature);
-        if (values.leaveNature === "Optional Leave") {
+        if (values.leaveNature === "Optional Leave" || dateSelected.length == 1) {
 
             let optionalHolidays = companyholiday.filter((item) => {
                 if (item.optionalHoliday == true) {
@@ -145,17 +153,18 @@ const Leave = () => {
                     return false
                 }
             })
-            console.log("Success2:", optionalHolidays);
-            console.log("Success4:", duration[0]);
+            console.log("Success3:", optionalHolidays);
+            console.log("Success4:", dateSelected[0].format(format));
             let matchOptionalHoliday = optionalHolidays.filter((item) => {
-                if (item.Date == duration[0]) {
+                if (item.Date == dateSelected[0].format(format)) {
                     return true
                 }
                 else {
                     return false
                 }
             })
-            if (matchOptionalHoliday.length == 0) {
+            if (matchOptionalHoliday.length > 0 && values.leaveNature != "Optional Leave") {
+
 
                 showNotification("error", "Error", "Optional Leave Can only be apply on Optional Holiday");
                 return
@@ -163,41 +172,32 @@ const Leave = () => {
 
         }
 
-        console.log("Success5:", history);
+        console.log("Success5:", leaves);
 
-        let currentLeaveStartDate = moment(duration[0], 'Do MMM, YYYY')
-        let currentLeaveEndDate = moment(duration[1], 'Do MMM, YYYY')
-        let matchingdates = history.filter((item) => {
-
-            let startDate = moment(item.dateCalc[0], 'Do MMM, YYYY')
-            let endDate = moment(item.dateCalc[1], 'Do MMM, YYYY')
-
-            if ((moment(currentLeaveStartDate).isSameOrAfter(startDate)
-                && moment(currentLeaveStartDate).isSameOrBefore(endDate))
-                || (moment(currentLeaveEndDate).isSameOrAfter(startDate)
-                    && moment(currentLeaveEndDate).isSameOrBefore(endDate))
-                || (moment(startDate).isSameOrAfter(currentLeaveStartDate)
-                    && moment(endDate).isSameOrBefore(currentLeaveEndDate))
-            ) {
-
-                return true
+        let array = []
+        dateSelected.map((date, index) => (
+            array.push(date.format(format))
+        ))
+        console.log('Success6', array)
+        let matchingdates = leaves.filter((item) => {
+            for (let i = 0; i < array.length; i++) {
+                if (item.orgDate.includes(array[i])) {
+                    return true
+                }
             }
-            else {
-                return false
-            }
+            return false
+
+
         })
-
-        console.log("Success7:", currentLeaveStartDate);
-        console.log("Success8:", matchingdates);
+        console.log("Success7:", matchingdates);
         if (matchingdates.length > 0) {
             showNotification("error", "Error", "Allready apply Leave on one of the day");
             return
         }
-
         let newLeave = {
             empId: employeeRecord.empId,
             approver: values.approver,
-            date: duration,
+            date: array,
             name: employeeRecord.fname + ' ' + employeeRecord.lname,
             nature: values.leaveNature,
             slot: values.slot,
@@ -206,8 +206,10 @@ const Leave = () => {
             status: 'Pending'
         }
 
+        console.log("Success8:", newLeave);
+
         // let matchingLeaveList = newLeave.filter(item => item.date == newLeave.date)
-        // if(matchingLeaveList.length > 0){
+        // if (matchingLeaveList.length > 0) {
         //     //errormodal
         //     console.log('Leave allready Exist')
         // }
@@ -228,6 +230,7 @@ const Leave = () => {
     const getData = async () => {
         setLoading(true);
         let empRecord = await EmployeeContext.getEmployee(currentUser.uid)
+        setRepManager(empRecord.repManager)
         setEmployeeRecord(empRecord)
         console.log('empRecord', empRecord)
         let data = await LeaveContext.getAllById(empRecord.empId)
@@ -241,7 +244,7 @@ const Leave = () => {
 
             };
         });
-        console.log("data", d);
+        console.log("employeeleave", d);
         setLeaves(d);
         getDateFormatted(d)
         leaveDays = LeaveContext.getLeaveDays(d, currentUser.uid)
@@ -463,13 +466,15 @@ const Leave = () => {
 
     const getDateFormatted = ((data) => {
         data.forEach(dur => {
-            dur.dateCalc = [dur.date[0], dur.date[1]]
-            dur.date = dur.date[0] + " to " + dur.date[1]
+            let len = dur.date.length
+            dur.dateCalc = [dur.date[0], dur.date[len - 1]]
+            dur.date = dur.date[0] + " to " + dur.date[len - 1]
+            dur.orgDate = dur.date
         })
         setHistory(data)
     })
 
-    const { RangePicker } = DatePicker;
+    // const { RangePicker } = DatePicker;
 
     const showNotification = (type, msg, desc) => {
         notification[type]({
@@ -482,7 +487,7 @@ const Leave = () => {
         console.log('validate leave evoke', noOfDays);
         console.log('validate leave evoke', leavetype);
 
-        if (leavetype != null && noOfDays > 0) {
+        if (leavetype != null && dateSelected.length > 0) {
 
             let leaveRecord = users.filter(record => record.leavetype == leavetype);
             console.log('validate leave evoke', leaveRecord[0].leave);
@@ -503,20 +508,29 @@ const Leave = () => {
     const onLeaveNatureChange = (value) => {
         console.log('fffff', value);
         setLeavetype(value)
+        let noOfDays = dateSelected.length
+        if (dateSelected.length == 1 && leaveslot != 'Full Day') {
+            noOfDays = 0.5
+        }
         validateLeaveRequest(noOfDays, value)
     };
 
     const onLeaveSlotChange = (e) => {
         console.log('fffff', e.target.value);
         setLeaveslot(e.target.value);
-        let dur = noOfDays
-        if (dur === 1 && e.target.value != null) {
-            dur = 0.5;
+        let noOfDays = dateSelected.length
+        if (dateSelected.length == 1 && leaveslot != 'Full Day') {
+            noOfDays = 0.5
         }
-        validateLeaveRequest(dur, leavetype)
+        // let dur = noOfDays
+        // if (dur === 1 && e.target.value != null) {
+        //     dur = 0.5;
+        // }
+        validateLeaveRequest(noOfDays, leavetype)
     };
 
     const onLeaveDateChange = (dates, dateStrings) => {
+        console.log(dates, dateStrings);
         console.log("dateStrings: ", leaveslot);
         if (dates) {
             let fromDate = dates[0];
@@ -629,6 +643,7 @@ const Leave = () => {
                 }} />
             </div>)
     }
+
 
 
 
@@ -770,13 +785,13 @@ const Leave = () => {
                             form={form}
                             onFinish={onFinish}
 
-                            initialValues={{
-                                remember: true,
-                                // approver: employeeRecord.repManager
+                        // initialValues={{
+                        //     remember: true,
+                        //     // approver: employeeRecord.repManager
 
 
 
-                            }}
+                        // }}
                         >
                             {/* <Form.Item labelAlign="left"
                                 style={{ marginBottom: "20px", }}
@@ -798,11 +813,67 @@ const Leave = () => {
                                 style={{ marginBottom: "20px", color: 'white', }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Duration<span style={{ color: 'red' }}> *</span></label>}
                                 name="durationid"
+                            // initialValue ={ abc}
 
                             >
-                                <Space direction="vertical" size={12}
-                                >
-                                    <RangePicker
+                                <Space direction="vertical" size={12} >
+                                    <DatePicker
+                                        value={dateSelected}
+                                        onChange={setDateSelected}
+                                        // range
+                                        multiple
+                                        sort
+                                        minDate={new Date()}
+                                        format={format}
+                                        plugins={[<DatePanel />]}
+
+                                        mapDays={({ date }) => {
+                                            let props = {}
+                                            let isWeekend = [0, 6].includes(date.weekDay.index)
+                                            let matchingHolidayList = companyholiday.filter(item => {
+                                                return item.Date == date.toString()
+
+                                            })
+                                            let leavedates = leaves.filter((item) => {
+                                                if (item.orgDate.includes(date.toString())) {
+                                                    return true
+                                                }
+                                                else {
+                                                    return false
+                                                }
+
+                                            })
+                                            console.log('matchingHolidayList', matchingHolidayList)
+                                            if (isWeekend) return {
+                                                disabled: true,
+                                                style: { color: "#ccc" },
+
+                                            }
+                                            if (matchingHolidayList.length > 0 && matchingHolidayList[0].optionalHoliday == false) return {
+
+                                                disabled: true,
+                                                style: { color: "rgb(252, 143, 10)" },
+
+                                            }
+                                            if (matchingHolidayList.length > 0 && matchingHolidayList[0].optionalHoliday == true) return {
+
+                                                disabled: true,
+                                                style: { color: "rgba(0, 119, 137, 0.96)" },
+
+                                            }
+
+                                            if (leavedates.length > 0) return {
+
+                                                disabled: true,
+                                                style: { color: "rgb(10, 91, 204)" },
+
+                                            }
+
+
+                                            return props
+                                        }}
+                                    />
+                                    {/* <RangePicker
 
                                         ranges={{
                                             Today: [moment(), moment()],
@@ -829,7 +900,7 @@ const Leave = () => {
                                     //       </div>
                                     //     );
                                     //   }}
-                                    />
+                                    /> */}
                                 </Space>
                             </Form.Item>
 
@@ -896,7 +967,8 @@ const Leave = () => {
                                 name="approver"
                                 style={{ marginBottom: "20px" }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Approver<span style={{ color: 'red' }}> *</span></label>}
-                            // initialValue={employeeRecord}
+                                initialValue={repManager}
+
 
 
                             >
@@ -908,8 +980,9 @@ const Leave = () => {
                                         form.setFieldsValue({ approver: newVal });
 
                                     }}
-                                // rules={[{ required: true }]}
-                                // placeholder="Reporting Manager" 
+                                    // rules={[{ required: true }]}
+                                    // placeholder="Reporting Manager" 
+                                    disabled
                                 />
                             </Form.Item>
 
@@ -920,7 +993,7 @@ const Leave = () => {
                                 }}
                             >
 
-                                <Button type="primary" htmlType="submit" onClick={handleOk} disabled={validleaverequest == 'false'}> Submit </Button>
+                                <Button type="primary" htmlType="submit" onClick={handleOk} > Submit </Button>
                                 <Button htmlType="button" style={{ marginLeft: "10px", }}
                                     onClick={onReset}>
                                     Reset
@@ -933,7 +1006,7 @@ const Leave = () => {
                 </Row>
 
                 {
-                    isHr
+                    isHr || isMgr
                         ? <Notification data={requests} />
                         : null
                 }

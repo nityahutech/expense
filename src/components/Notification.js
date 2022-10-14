@@ -138,6 +138,8 @@ const Notification = ({ data }) => {
             width: 150,
         },
 
+
+
         {
             key: "5",
             title: "Actions",

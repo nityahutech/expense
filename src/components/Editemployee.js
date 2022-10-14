@@ -83,7 +83,7 @@ function Editemployee(props) {
     const phonenumberVal = props.record ? props.record.phonenumber : "";
     const repManagerVal = props.record ? props.record.repManager : "";
     const secManagerVal = props.record ? props.record.secManager : "";
-    const setDepartmentVal = props.record ? props.record.setDepartment : "";
+    const setDepartmentVal = props.record ? props.record.department : "";
 
     setFname(fnameVal);
     setLname(lnameVal);

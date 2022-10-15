@@ -70,7 +70,7 @@ const Leave = () => {
         'Optional Leave': 0
     })
     // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
-    const [users, setUsers] = useState([])
+    // const [users, setUsers] = useState([])
     const [leavetype, setLeavetype] = useState()
     const [validleaverequest, setValidleaverequest] = useState('false')
     const [leaveslot, setLeaveslot] = useState(null)
@@ -271,10 +271,10 @@ const Leave = () => {
             'Casual Leave': empRecord.casualLeave?empRecord.casualLeave:6,
             'Optional Leave': empRecord.optionalLeave?empRecord.optionalLeave:2
         })
-        await LeaveContext.getLeaveDays(d, temp)
-        setLeaveDays(temp)
+        let days = await LeaveContext.getLeaveDays(d, temp)
+        setLeaveDays(days)
             // .then(response => {
-            //     console.log('leaveDays:', response)
+                console.log(days)
             //     let UsersLeaves = [
             //         {
             //             id: 1,
@@ -550,9 +550,9 @@ const Leave = () => {
 
         if (leavetype != null && dateSelected.length > 0) {
 
-            let leaveRecord = users.filter(record => record.leavetype == leavetype);
-            console.log('validate leave evoke', leaveRecord[0].leave);
-            if (leaveRecord[0].leave < noOfDays) {
+            // let leaveRecord = Object.keys(leavedays).filter(record => record.leavetype == leavetype);
+            console.log('validate leave evoke', leavedays[leavetype]);
+            if (leavedays[leavetype] < noOfDays) {
                 setValidleaverequest('false')
                 showNotification("error", "Error", "Leave requested is more than available Leave");
 

@@ -48,7 +48,7 @@ class LeaveContext {
     getLeaveDays = (records, leavedays) => {
         console.log(leavedays)
         records.forEach((rec) => {
-            if(records.status == "Approved"){
+            if(rec.status == "Approved"){
                 let date1 = moment(rec.dateCalc[0], "Do MMM, YYYY");
                 let date2 = moment(rec.dateCalc[1], "Do MMM, YYYY");
                 let dur = date2.diff(date1, 'days') + 1;

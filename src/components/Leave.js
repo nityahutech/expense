@@ -46,6 +46,7 @@ const Leave = () => {
     const [leaves, setLeaves] = useState([]);
     const [history, setHistory] = useState([]);
     const [requests, setRequests] = useState([]);
+    const [pendingRequests, setPendingRequests] = useState([]);
     const [allRequests, setAllRequests] = useState([]);
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
@@ -327,11 +328,16 @@ const Leave = () => {
             };
         });
         // setIsMgr(req?true:false)
-        // req.forEach(dur => {
-        //     dur.dateCalc = [dur.date[0], dur.date[1]]
-        //     dur.date = dur.date[0] + " to " + dur.date[1]
-        // });
+        let temp = []
+        req.forEach(dur => {
+        console.log(dur)
+        if (dur.status == "Pending") {
+                temp.push(dur)
+            }
+        });
+        console.log(temp)
         setRequests(req);
+        setPendingRequests(temp)
         // console.log(isMgr, req)
     }
 
@@ -465,7 +471,11 @@ const Leave = () => {
                     </Tag>
                 ),
         },
-
+        {
+            title: 'Comment',
+            dataIndex: 'comment',
+            width: 150,
+        },
         {
             key: "5",
             title: "Actions",
@@ -507,7 +517,7 @@ const Leave = () => {
         // setIsHr(role === "hr")
         getData();
         getHoliday();
-        console.log(isMgr)
+        console.log(isMgr, allRequests, pendingRequests)
     }, []);
 
     useEffect(() => {
@@ -694,9 +704,34 @@ const Leave = () => {
             dataIndex: 'approver',
             width: 150,
         },
-
-
-
+        {
+            title: "Status",
+            className: "row5",
+            key: "status",
+            dataIndex: "status",
+            align: "left",
+            width: 100,
+            // responsive: ["md"],
+            sorter: (a, b) => {
+                return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
+            },
+            sortDirections: ["ascend", "descend"],
+            render: (_, { status }) =>
+                status !== "" && (
+                    <Tag style={{ width: '70px' }}
+                        className="statusTag"
+                        color={status === "Approved" ? "green" : status === "Pending" ? 'blue' : "volcano"}
+                        key={status}
+                    >
+                        {status}
+                    </Tag>
+                ),
+        },
+        {
+            title: 'Comment',
+            dataIndex: 'comment',
+            width: 150,
+        },
         {
             key: "5",
             title: "Actions",
@@ -709,14 +744,13 @@ const Leave = () => {
                             <>
                                 <DeleteOutlined
 
-                                    disabled={record?.status === 'Approved'}
+                                    // disabled={record?.status === 'Approved'}
                                     onClick={() => {
-                                        if (record?.status !== 'Approved')
-                                            onDeleteLeave(record);
+                                        onDeleteLeave(record);
                                     }}
                                     style={
                                         record?.status === 'Approved'
-                                            ? { color: "green", cursor: "not-allowed", marginLeft: 10 }
+                                            ? { color: "green", marginLeft: 10 }
                                             : record?.status === 'Pending'
                                                 ? { color: "blue", marginLeft: 10 }
                                                 : { color: "red", marginLeft: 10 }}
@@ -1156,7 +1190,7 @@ const Leave = () => {
 
                 {
                     isMgr
-                        ? <Notification data={requests} />
+                        ? <Notification data={pendingRequests} />
                         : null
                 }
 

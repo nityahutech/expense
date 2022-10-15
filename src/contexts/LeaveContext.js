@@ -37,13 +37,13 @@ class LeaveContext {
         const q = query(leaveCollectionRef, where("approver", "==", name));
         return getDocs(q);
     };
-    approveLeave = (id) => {
+    approveLeave = (id, comment) => {
         const leaveDoc = doc(db, "leave", id);
-        return updateDoc(leaveDoc, { status: "Approved" })
+        return updateDoc(leaveDoc, { status: "Approved", comment: comment })
     }
-    rejectLeave = (id) => {
+    rejectLeave = (id, comment) => {
         const leaveDoc = doc(db, "leave", id);
-        return updateDoc(leaveDoc, { status: "Rejected" })
+        return updateDoc(leaveDoc, { status: "Rejected", comment: comment })
     }
     getLeaveDays = (records, leavedays) => {
         console.log(leavedays)

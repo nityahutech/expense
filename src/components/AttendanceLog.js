@@ -54,6 +54,7 @@ function AttendanceLog({ empDetails }) {
     {
       title: "Employee Code",
       dataIndex: "empId",
+      className: "code",
       key: "empId",
       render: (text) => <a>{text}</a>,
     },
@@ -129,7 +130,11 @@ function AttendanceLog({ empDetails }) {
       project: values?.project_name || "-",
     };
     console.log(currentUser.uid, { monthlydata });
-    await AttendanceContext.updateAttendance(currentUser.uid, values.date, newData);
+    await AttendanceContext.updateAttendance(
+      currentUser.uid,
+      values.date,
+      newData
+    );
     // let newAlldata = [newData, ...empMonthly];
     // console.log(newAlldata);
     // localStorage.setItem("newReport", JSON.stringify(newAlldata));
@@ -241,20 +246,23 @@ function AttendanceLog({ empDetails }) {
   console.log(empDetails);
 
   useEffect(() => {
-    console.log(activetab)
+    console.log(activetab);
     form.resetFields();
     if (empDetails.userType === "emp") {
       setTimeout(() => {
-        console.log(currentUser.uid)
-        setSelectemp({id: currentUser.uid})
+        console.log(currentUser.uid);
+        setSelectemp({ id: currentUser.uid });
         // setActivetab("1");
-        getEmpDetails(currentUser.uid, [moment().subtract(30, "days"), moment()]);
-      }, 500)
+        getEmpDetails(currentUser.uid, [
+          moment().subtract(30, "days"),
+          moment(),
+        ]);
+      }, 500);
       // getEmpMonthly();
     } else {
-        if (activetab == "1"){
-           allEmpDetails();
-        }
+      if (activetab == "1") {
+        allEmpDetails();
+      }
     }
   }, [activetab]);
 
@@ -265,8 +273,6 @@ function AttendanceLog({ empDetails }) {
   // useEffect(() => {
   //   setFilteredEmp(filteredEmp);
   // }, [activetab]);
-
-
 
   //   const rowSelection = {
   //     onChange: (selectedRowKeys, selectedRows) => {
@@ -319,6 +325,7 @@ function AttendanceLog({ empDetails }) {
       dataIndex: "date",
       key: "date",
       render: (text) => <a>{text}</a>,
+      className: "date",
     },
     {
       title: "Status",
@@ -396,11 +403,14 @@ function AttendanceLog({ empDetails }) {
   async function onHrDateFilter(value) {
     if (value == null) {
       console.log("empMonthly");
-      const modifiedFilterExpense = await getEmpDetails(selectemp.id, [moment().subtract(30, "days"), moment()]);
+      const modifiedFilterExpense = await getEmpDetails(selectemp.id, [
+        moment().subtract(30, "days"),
+        moment(),
+      ]);
       setEmpMonthly(modifiedFilterExpense);
     } else {
-      const begin = value.clone().startOf('month');
-      const end = value.clone().endOf('month');
+      const begin = value.clone().startOf("month");
+      const end = value.clone().endOf("month");
       let date = [begin, end];
       // let result = empMonthly.filter((ex) => {
       //   return (
@@ -450,15 +460,26 @@ function AttendanceLog({ empDetails }) {
           className="Tabs"
           onChange={(tabKey) => {
             setActivetab(tabKey);
-            setSelectemp(null);
+            setSelectemp({ id: "" });
           }}
         >
           {role.userType === "emp" ? (
             <>
               <Tabs.TabPane tab="Monthly Log" key="1">
-                <DatePicker picker="month" className="Range"
+                <DatePicker
+                  picker="month"
+                  placeholder="Select Month"
+                  className="Range"
+                  bordered={true}
                   // defaultValue={[]}
-                  format={"MM-YYYY"}
+                  format="MM-YYYY"
+                  style={{
+                    font : "white",
+                    width: "100%",
+                    background: "#1890ff",
+                    cursor: "pointer",
+                  }}
+                  allowClear
                   onChange={onHrDateFilter}
                 />
                 <Table
@@ -510,7 +531,10 @@ function AttendanceLog({ empDetails }) {
                     ]}
                     className="pname"
                   >
-                    <DatePicker format={"DD-MM-YYYY"} style={{width: "50%"}}/>
+                    <DatePicker
+                      format={"DD-MM-YYYY"}
+                      style={{ width: "50%" }}
+                    />
                   </Form.Item>
                   <Form.Item
                     name="project_name"
@@ -586,10 +610,20 @@ function AttendanceLog({ empDetails }) {
                   dataSource={filteredEmp}
                 />
               </Tabs.TabPane>
-              <Tabs.TabPane disabled={!selectemp} tab="Monthly Log" key="2">
-                <DatePicker picker="month" className="Range"
+              <Tabs.TabPane disabled={!selectemp.id} tab="Monthly Log" key="2">
+                <DatePicker
+                  picker="month"
+                  placeholder="Select Month"
+                  className="Range"
                   // defaultValue={[]}
                   format={"MM-YYYY"}
+                  style={{
+                    font : "white",
+                    background: "#1890ff",
+                    cursor: "pointer",
+                    marginLeft: "12rem",
+                  }}
+                  allowClear
                   onChange={onHrDateFilter}
                 />
                 <Table

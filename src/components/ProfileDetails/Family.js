@@ -72,7 +72,19 @@ const Family = () => {
   
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+  };
+
+  const checkNumbervalue = (event) => {
+    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+  
+  const checkAlphabets = (event) => {
+    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
 // ---------------------------------------------------------------------------------------------------------
 
   return (
@@ -236,11 +248,23 @@ const Family = () => {
                           ) : (
                       <Form.Item
                         name="father"
+                        onKeyPress={(event) => {
+                          if (checkAlphabets(event)) {
+                            event.preventDefault();
+                          }
+                        }}
+        
                         rules={[
-                          { 
-                          required: false, 
-                          maxLength: 40,
-                          message: "Please enter Father's name" },
+                          {
+                            required: true,
+                            minLength: 3, maxLength: 25,
+                            message: 'Please enter Father Name',
+        
+                          }, {
+                            pattern: /^[a-zA-Z\s]*$/,
+                            message: 'Please enter Valid Name',
+        
+                          }
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
@@ -273,10 +297,15 @@ const Family = () => {
                           ) : (
                       <Form.Item
                         name="fatherContact"
+                        onKeyPress={(event) => {
+                          if (checkNumbervalue(event)) {
+                            event.preventDefault();
+                          }
+                        }}
                         rules={[
                           {
-                            required: false,
-                            message: "Please enter Phone Number",
+                            required: true,
+                            message: "Please enter the Contact no.",
                             pattern: /^[0-9\b]+$/,
                           },
                         ]}
@@ -299,10 +328,23 @@ const Family = () => {
                           ) : (
                       <Form.Item
                         name="mother"
+                       onKeyPress={(event) => {
+                          if (checkAlphabets(event)) {
+                            event.preventDefault();
+                          }
+                        }}
+        
                         rules={[
-                          { required: false, 
-                          maxLength: 40,
-                          message: "Please enter Mother's Name" },
+                          {
+                            required: true,
+                            minLength: 3, maxLength: 25,
+                            message: 'Please enter Mother Name',
+        
+                          }, {
+                            pattern: /^[a-zA-Z\s]*$/,
+                            message: 'Please enter Valid Name',
+        
+                          }
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
@@ -335,10 +377,15 @@ const Family = () => {
                           ) : (
                     <Form.Item
                         name="motherContact"
+                        onKeyPress={(event) => {
+                          if (checkNumbervalue(event)) {
+                            event.preventDefault();
+                          }
+                        }}
                         rules={[
                           {
-                            required: false,
-                            message: "Please enter Phone Number",
+                            required: true,
+                            message: "Please enter the Contact no.",
                             pattern: /^[0-9\b]+$/,
                           },
                         ]}
@@ -449,10 +496,16 @@ const Family = () => {
                         </Col><Col span={8}>
                         <Form.Item
                             name="otherContact"
+                            onKeyPress={(event) => {
+                              if (checkNumbervalue(event)) {
+                                event.preventDefault();
+                              }
+                            }}
                             rules={[
                               {
-                                required: false,
+                                required: true,
                                 message: "Please enter the Contact no.",
+                                pattern: /^[0-9\b]+$/,
                               },
                             ]}
                             labelCol={{ span: 8 }}
@@ -513,12 +566,23 @@ const Family = () => {
                         </h1>
                   <Form.Item
                       name="other"
+                      onKeyPress={(event) => {
+                        if (checkAlphabets(event)) {
+                          event.preventDefault();
+                        }
+                      }}
+      
                       rules={[
                         {
-                          required: false,
-                          maxLength: 40,
-                          message: "Please enter the Name",
-                        },
+                          required: true,
+                          minLength: 3, maxLength: 25,
+                          message: 'Please enter Other Name',
+      
+                        }, {
+                          pattern: /^[a-zA-Z\s]*$/,
+                          message: 'Please enter Name',
+      
+                        }
                       ]}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
@@ -549,12 +613,23 @@ const Family = () => {
                         </h1>
                   <Form.Item
                       name="relation"
+                      onKeyPress={(event) => {
+                        if (checkAlphabets(event)) {
+                          event.preventDefault();
+                        }
+                      }}
+      
                       rules={[
                         {
-                          required: false,
-                          maxLength: 20,
-                          message: "Please enter the Relation",
-                        },
+                          required: true,
+                          minLength: 3, maxLength: 25,
+                          message: 'Please enter Relation Name',
+      
+                        }, {
+                          pattern: /^[a-zA-Z\s]*$/,
+                          message: 'Please enter Relation Name',
+      
+                        }
                       ]}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}

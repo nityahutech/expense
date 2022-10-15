@@ -69,6 +69,18 @@ function Education() {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
+  const checkNumbervalue = (event) => {
+    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+  
+  const checkAlphabets = (event) => {
+    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
   const [form] = Form.useForm();
 
   return (
@@ -131,12 +143,23 @@ function Education() {
                 ) : (
                   <Form.Item
                     name="qualificationType"
+                    onKeyPress={(event) => {
+                      if (checkAlphabets(event)) {
+                        event.preventDefault();
+                      }
+                    }}
+    
                     rules={[
                       {
                         required: false,
-                        message: "Please input your qalification Type!",
-                        transform:(v)=>v.toUpperCase()
-                      },
+                        minLength: 3, maxLength: 25,
+                        message: 'Please enter Father Name',
+    
+                      }, {
+                        pattern: /^[a-zA-Z\s]*$/,
+                        message: 'Please enter Valid Name',
+    
+                      }
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
@@ -175,8 +198,24 @@ function Education() {
                 ) : (
                   <Form.Item
                     name="courseName"
+                    onKeyPress={(event) => {
+                      if (checkAlphabets(event)) {
+                        event.preventDefault();
+                      }
+                    }}
+    
                     rules={[
-                      { required: false, message: "Please input course Name!" },
+                      {
+                        required: false,
+                        minLength: 3, maxLength: 25,
+                        message: 'Please enter Father Name',
+    
+                      }, 
+                      {
+                        pattern: /^[a-zA-Z\s]*$/,
+                        message: 'Please enter Valid Name',
+    
+                      }
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
@@ -211,11 +250,23 @@ function Education() {
                 ) : (
                   <Form.Item
                     name="courseType"
+                    onKeyPress={(event) => {
+                      if (checkAlphabets(event)) {
+                        event.preventDefault();
+                      }
+                    }}
+    
                     rules={[
                       {
                         required: false,
-                        message: "Please input your course Type!",
-                      },
+                        minLength: 3, maxLength: 25,
+                        message: 'Please enter Father Name',
+    
+                      }, {
+                        pattern: /^[a-zA-Z\s]*$/,
+                        message: 'Please enter Valid Name',
+    
+                      }
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
@@ -248,11 +299,23 @@ function Education() {
                 ) : (
                   <Form.Item
                     name="stream"
+                    onKeyPress={(event) => {
+                      if (checkAlphabets(event)) {
+                        event.preventDefault();
+                      }
+                    }}
+    
                     rules={[
                       {
                         required: false,
-                        message: "Please input your Stream Type!",
-                      },
+                        minLength: 3, maxLength: 25,
+                        message: 'Please enter Father Name',
+    
+                      }, {
+                        pattern: /^[a-zA-Z\s]*$/,
+                        message: 'Please enter Valid Name',
+    
+                      }
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
@@ -355,11 +418,23 @@ function Education() {
                 ) : (
                   <Form.Item
                     name="universityName"
+                    onKeyPress={(event) => {
+                      if (checkAlphabets(event)) {
+                        event.preventDefault();
+                      }
+                    }}
+    
                     rules={[
                       {
                         required: false,
-                        message: "Please input your University Name !",
-                      },
+                        minLength: 3, maxLength: 25,
+                        message: 'Please enter Father Name',
+    
+                      }, {
+                        pattern: /^[a-zA-Z\s]*$/,
+                        message: 'Please enter Valid Name',
+    
+                      }
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}

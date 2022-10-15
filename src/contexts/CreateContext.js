@@ -65,6 +65,10 @@ export async function createUser(values) {
     repManager: values.repManager,
     secManager: values.secManager,
     department: values.department,
+    earnLeave: 12,
+    sickLeave: 6,
+    casualLeave: 6,
+    optionalLeave: 2
   };
   console.log(valuesToservice);
   ProfileContext.addProfile(res.user.uid, valuesToservice)
@@ -79,7 +83,7 @@ export async function createUser(values) {
 }
 
 export async function getUsers() {
-  const q = query(users);
+  const q = query(users, orderBy("empId", "asc"));
   // console.log(q);
   return getDocs(q);
   // return [

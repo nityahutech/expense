@@ -21,30 +21,31 @@ let dummy = [{
 const Notification = ({ data }) => {
     const { currentUser, role } = useAuth();
     const [dataSource, setDataSource] = useState(data);
-    const [approve, setApprove] = useState([]);
-    const [reject, setReject] = useState([]);
+    // const [approve, setApprove] = useState([]);
+    // const [reject, setReject] = useState([]);
 
     useEffect(() => {
         setDataSource(data)
+        console.log(data)
     }, [data])
     // console.log("data", data);
 
-    const getData = async () => {
-        let data = await LeaveContext.getAllById(currentUser.uid)
-        // console.log("data", JSON.stringify(data.docs), currentUser.uid);
+    // const getData = async () => {
+    //     let data = await LeaveContext.getAllById(currentUser.uid)
+    //     // console.log("data", JSON.stringify(data.docs), currentUser.uid);
 
-        let d = data.docs.map((doc) => {
-            console.log("123", { ...doc.data() })
-            return {
-                ...doc.data(),
-                id: doc.id,
-                status: doc?.data()?.status || "Pending",
-            };
-        });
-        console.log("data", d);
-        setApprove(d);
+    //     let d = data.docs.map((doc) => {
+    //         console.log("123", { ...doc.data() })
+    //         return {
+    //             ...doc.data(),
+    //             id: doc.id,
+    //             status: doc?.data()?.status || "Pending",
+    //         };
+    //     });
+    //     console.log("data", d);
+    //     setApprove(d);
 
-    }
+    // }
     // ${JSON.stringify(record)}
 
     const onApproveLeave = (record) => {
@@ -57,7 +58,7 @@ const Notification = ({ data }) => {
                 LeaveContext.approveLeave(record.id)
                     .then(response => {
                         console.log(response);
-                        getData();
+                        // getData();
                     })
                     .catch(error => {
                         console.log(error.message);
@@ -77,7 +78,7 @@ const Notification = ({ data }) => {
                 LeaveContext.rejectLeave(record.id)
                     .then(response => {
                         console.log(response);
-                        getData();
+                        // getData();
                     })
                     .catch(error => {
                         console.log(error.message);
@@ -209,7 +210,7 @@ const Notification = ({ data }) => {
                         dataSource={dataSource}
                         // rowClassName = {(e) => rowClassNameFun(e)}
                         //  rowClassName={record => dataSource.filter((item) => item.nature === record.nature) ? "disabled-row" :"pankaj"}
-                        rowClassName={record => !record.enabled && "disabled-row"}
+                        // rowClassName={record => !record.enabled && "disabled-row"}
                         pagination={{
                             position: ["bottomCenter"],
                         }}

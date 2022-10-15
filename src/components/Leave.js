@@ -46,18 +46,28 @@ const Leave = () => {
     const [leaves, setLeaves] = useState([]);
     const [history, setHistory] = useState([]);
     const [requests, setRequests] = useState([]);
+    const [allRequests, setAllRequests] = useState([]);
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
     const [noOfDays, setNoOfDays] = useState([]);
     console.log(sessionStorage.getItem("role"));
     const [isHr, setIsHr] = useState(sessionStorage.getItem("role") === "hr" ? true : false);
-    const [isMgr, setIsMgr] = useState(sessionStorage.getItem("role") === "mgr" ? true : false);
+    const [isMgr, setIsMgr] = useState(false);
     const [role, setRole] = useState(null);
     const { currentUser } = useAuth();
     const format = "DD MMM, YYYY"
-
-
-    let leaveDays = "";
+    const [leavedays, setLeaveDays] = useState({
+        'Earn Leave': 0,
+        'Sick Leave': 0,
+        'Casual Leave': 0,
+        'Optional Leave': 0
+    })
+    const [totaldays, setTotalDays] = useState({
+        'Earn Leave': 0,
+        'Sick Leave': 0,
+        'Casual Leave': 0,
+        'Optional Leave': 0
+    })
     // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
     const [users, setUsers] = useState([])
     const [leavetype, setLeavetype] = useState()
@@ -78,7 +88,7 @@ const Leave = () => {
         const allData = await CompanyHolidayContext.getAllCompanyHoliday();
         console.log('allCompanyHoliday', allData)
         allData.docs.map((doc) => {
-            console.log('allCompanyHoliday2', doc)
+            // console.log('allCompanyHoliday2', doc)
             let d = allData.docs.map((doc) => {
 
                 return {
@@ -88,7 +98,7 @@ const Leave = () => {
                 };
             });
             setCompanyholiday(d)
-            console.log('allCompanyHoliday3', d)
+            // console.log('allCompanyHoliday3', d)
 
 
         });
@@ -99,8 +109,8 @@ const Leave = () => {
         let listData;
         let currdate = value.format((format));
         let companyHolidayRecord = companyholiday.filter(record => record.Date == currdate);
-        console.log('calendervvvvv', currdate);
-        console.log('calendervvvvv2', companyHolidayRecord.length);
+        // console.log('calendervvvvv', currdate);
+        // console.log('calendervvvvv2', companyHolidayRecord.length);
 
         if (companyHolidayRecord.length > 0) {
             console.log(companyHolidayRecord[0]);
@@ -198,7 +208,7 @@ const Leave = () => {
             empId: employeeRecord.empId,
             approver: values.approver,
             date: array,
-            name: employeeRecord.fname + ' ' + employeeRecord.lname,
+            name: currentUser.displayName,
             nature: values.leaveNature,
             slot: values.slot,
             reason: values.reason,
@@ -233,6 +243,7 @@ const Leave = () => {
         setRepManager(empRecord.repManager)
         setEmployeeRecord(empRecord)
         console.log('empRecord', empRecord)
+        setIsMgr(empRecord.isManager)
         let data = await LeaveContext.getAllById(empRecord.empId)
         // console.log("data", JSON.stringify(data.docs), currentUser.uid);
 
@@ -247,45 +258,58 @@ const Leave = () => {
         console.log("employeeleave", d);
         setLeaves(d);
         getDateFormatted(d)
-        leaveDays = LeaveContext.getLeaveDays(d, currentUser.uid)
-            .then(response => {
-                console.log('leaveDays:', response)
-                let UsersLeaves = [
-                    {
-                        id: 1,
-                        leavetype: "Earn Leave",
-                        leave: response["Earn Leave"],
-                        totalLeave: response["Total Earn Leave"],
+        let temp = {
+            'Earn Leave': empRecord.earnLeave?empRecord.earnLeave:12,
+            'Sick Leave': empRecord.sickLeave?empRecord.sickLeave:6,
+            'Casual Leave': empRecord.casualLeave?empRecord.casualLeave:6,
+            'Optional Leave': empRecord.optionalLeave?empRecord.optionalLeave:2
+        }
+        setTotalDays({
+            'Earn Leave': empRecord.earnLeave?empRecord.earnLeave:12,
+            'Sick Leave': empRecord.sickLeave?empRecord.sickLeave:6,
+            'Casual Leave': empRecord.casualLeave?empRecord.casualLeave:6,
+            'Optional Leave': empRecord.optionalLeave?empRecord.optionalLeave:2
+        })
+        await LeaveContext.getLeaveDays(d, temp)
+        setLeaveDays(temp)
+            // .then(response => {
+            //     console.log('leaveDays:', response)
+            //     let UsersLeaves = [
+            //         {
+            //             id: 1,
+            //             leavetype: "Earn Leave",
+            //             leave: response["Earn Leave"],
+            //             totalLeave: response["Total Earn Leave"],
 
-                    },
-                    {
-                        id: 2,
-                        leavetype: "Sick Leave",
-                        leave: response["Sick Leave"],
-                        totalLeave: response["Total Sick Leave"],
+            //         },
+            //         {
+            //             id: 2,
+            //             leavetype: "Sick Leave",
+            //             leave: response["Sick Leave"],
+            //             totalLeave: response["Total Sick Leave"],
 
-                    },
-                    {
-                        id: 3,
-                        leavetype: "Casual Leave",
-                        leave: response["Casual Leave"],
-                        totalLeave: response["Total Casual Leave"],
+            //         },
+            //         {
+            //             id: 3,
+            //             leavetype: "Casual Leave",
+            //             leave: response["Casual Leave"],
+            //             totalLeave: response["Total Casual Leave"],
 
 
-                    },
-                    {
-                        id: 4,
-                        leavetype: "Optional Leave",
-                        leave: response["Optional Leave"],
-                        totalLeave: response["Total Optional Leave"],
+            //         },
+            //         {
+            //             id: 4,
+            //             leavetype: "Optional Leave",
+            //             leave: response["Optional Leave"],
+            //             totalLeave: response["Total Optional Leave"],
 
-                    },
-                ];
-                setUsers(UsersLeaves)
-            })
-            .catch(error => {
-                console.log(error.message);
-            })
+            //         },
+            //     ];
+            //     setUsers(UsersLeaves)
+            // })
+            // .catch(error => {
+            //     console.log(error.message);
+            // })
         console.log(role)
         setHistory(d)
         setLoading(false);
@@ -302,13 +326,31 @@ const Leave = () => {
                 id: doc.id
             };
         });
-        req.forEach(dur => {
-            dur.dateCalc = [dur.date[0], dur.date[1]]
-            dur.date = dur.date[0] + " to " + dur.date[1]
-        });
+        // setIsMgr(req?true:false)
+        // req.forEach(dur => {
+        //     dur.dateCalc = [dur.date[0], dur.date[1]]
+        //     dur.date = dur.date[0] + " to " + dur.date[1]
+        // });
         setRequests(req);
-        console.log(req)
+        // console.log(isMgr, req)
+    }
 
+    const getAllRequests = async () => {
+
+        let reqData = await LeaveContext.getLeaves()
+        let req = reqData.docs.map((doc) => {
+            return {
+                ...doc.data(),
+                id: doc.id
+            };
+        });
+        // setIsMgr(req?true:false)
+        // req.forEach(dur => {
+        //     dur.dateCalc = [dur.date[0], dur.date[1]]
+        //     dur.date = dur.date[0] + " to " + dur.date[1]
+        // });
+        setAllRequests(req);
+        // console.log(isMgr, req)
     }
 
     const onDeleteLeave = (record) => {
@@ -455,14 +497,20 @@ const Leave = () => {
 
     ];
     useEffect(() => {
-
-        let role = sessionStorage.getItem("role");
-        setRole(role)
-        setIsHr(role === "hr")
+        getRequestData();
+        if (isHr) getAllRequests();
+        // let role = sessionStorage.getItem("role");
+        // setRole(role)
+        // setIsHr(role === "hr")
         getData();
         getHoliday();
-        if (role == "hr") getRequestData();
+        console.log(isMgr)
     }, []);
+
+    useEffect(() => {
+        getRequestData();
+        if (isHr) getAllRequests();
+    }, [loading]);
 
     const getDateFormatted = ((data) => {
         data.forEach(dur => {
@@ -567,7 +615,7 @@ const Leave = () => {
     };
 
     const dateCellRender = (value) => {
-        console.log('renseValue', value)
+        // console.log('renseValue', value)
         const listData = getListData(value);
         return (
             <div className="events" style={{}} >
@@ -594,7 +642,91 @@ const Leave = () => {
 
     };
 
+    const reqColumns = [
+        {
+            title: 'Duration',
+            dataIndex: 'date',
+            width: 240,
+            align: "left",
+            sorter: (a, b) => {
+                return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
+            },
+            sortDirections: ["ascend", "descend"],
 
+
+        },
+        {
+            title: 'Employee Name',
+            dataIndex: 'name',
+            width: 150,
+            sorter: (a, b) => {
+                return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
+            },
+            sortDirections: ["ascend", "descend"],
+
+
+        },
+        {
+            title: 'Nature of Leave',
+            dataIndex: 'nature',
+            width: 150,
+
+        },
+        {
+            title: 'Slot',
+            dataIndex: 'slot',
+            width: 150,
+            sorter: (a, b) => {
+                return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+            },
+            sortDirections: ["ascend", "descend"],
+        },
+        {
+            title: 'Reason',
+            dataIndex: 'reason',
+            width: 150,
+        },
+        {
+            title: 'Approver',
+            dataIndex: 'approver',
+            width: 150,
+        },
+
+
+
+        {
+            key: "5",
+            title: "Actions",
+            fixed: 'right',
+            width: 80,
+            render: (record) => {
+                return (
+                    <>
+                        {
+                            <>
+                                <DeleteOutlined
+
+                                    disabled={record?.status === 'Approved'}
+                                    onClick={() => {
+                                        if (record?.status !== 'Approved')
+                                            onDeleteLeave(record);
+                                    }}
+                                    style={
+                                        record?.status === 'Approved'
+                                            ? { color: "green", cursor: "not-allowed", marginLeft: 10 }
+                                            : record?.status === 'Pending'
+                                                ? { color: "blue", marginLeft: 10 }
+                                                : { color: "red", marginLeft: 10 }}
+                                />
+                            </>
+
+                        }
+                    </>
+                );
+            },
+        }
+
+    ];
     function disabledDate(current) {
 
         // let matchingHolidayList = companyholiday.filter(item => {
@@ -612,7 +744,7 @@ const Leave = () => {
 
             let startDate = moment(item.dateCalc[0], 'Do MMM, YYYY')
             let endDate = moment(item.dateCalc[1], 'Do MMM, YYYY')
-            console.log('filter', currentDate, startDate, endDate)
+            // console.log('filter', currentDate, startDate, endDate)
 
             if (moment(currentDate).isSameOrAfter(startDate)
                 && moment(currentDate).isSameOrBefore(endDate)) {
@@ -664,7 +796,7 @@ const Leave = () => {
                     <div className='leavediv'
 
                     >
-                        {users.map((user, id) => {
+                        {Object.keys(leavedays).map((user, id) => {
                             return (
                                 <div
                                     className='Col-2-center' style={{ background: colors[id], color: "#fff" }}
@@ -672,7 +804,7 @@ const Leave = () => {
                                 >
                                     <p className='heading' style={{
                                         fontWeight: '500', fontSize: '20px'
-                                    }}>{user.leavetype}</p>
+                                    }}>{user}</p>
 
                                     <div className='total-leave' style={{
                                         width: '90%'
@@ -680,28 +812,28 @@ const Leave = () => {
                                         <div className='leave-status'>
                                             <p className='leave' Total style={{
                                                 fontWeight: '500', fontSize: '15px', margin: '0px',
-                                            }}>Total Leave  :- </p>
+                                            }}>Total :- </p>
                                             <p style={{
                                                 fontWeight: '500', fontSize: '15px', margin: '0px'
-                                            }}>{user.totalLeave}</p>
+                                            }}>{totaldays[user]}</p>
                                         </div>
 
                                         <div className='leave-status'>
                                             <p className='leave' Total style={{
                                                 fontWeight: '500', fontSize: '15px', margin: '0px'
-                                            }}>Total Taken  :- </p>
+                                            }}>Taken :- </p>
                                             <p style={{
                                                 fontWeight: '500', fontSize: '15px', margin: '0px'
-                                            }}>{user.totalLeave - user.leave}</p>
+                                            }}>{totaldays[user]-leavedays[user]}</p>
                                         </div>
 
                                         <div className='leave-status'>
                                             <p className='leave' Total style={{
                                                 fontWeight: '500', fontSize: '15px', margin: '0px'
-                                            }}>Total Leave Remaining :- </p>
+                                            }}>Remaining :- </p>
                                             <p style={{
                                                 fontWeight: '500', fontSize: '15px', margin: '0px'
-                                            }}>{user.leave}</p>
+                                            }}>{leavedays[user]}</p>
                                         </div>
                                     </div>
 
@@ -817,6 +949,7 @@ const Leave = () => {
 
                             >
                                 <Space direction="vertical" size={12} >
+                                <div style={{ textAlign: "center", color: "black"}}>
                                     <DatePicker
                                         value={dateSelected}
                                         onChange={setDateSelected}
@@ -901,6 +1034,7 @@ const Leave = () => {
                                     //     );
                                     //   }}
                                     /> */}
+                                    </div>
                                 </Space>
                             </Form.Item>
 
@@ -916,8 +1050,8 @@ const Leave = () => {
                                     onChange={onLeaveNatureChange}
                                 >
                                     {
-                                        users.map(u => (
-                                            <Option disabled={u.leave <= 0} value={u.leavetype}>{u.leavetype}
+                                        Object.keys(leavedays).map(u => (
+                                            <Option disabled={leavedays[u] <= 0} value={u}>{u}
                                             </Option>
                                         ))
                                     }
@@ -1006,9 +1140,75 @@ const Leave = () => {
                 </Row>
 
                 {
-                    isHr || isMgr
+                    isMgr
                         ? <Notification data={requests} />
                         : null
+                }
+
+                {
+                    isMgr && !isHr ?
+                    <Row style={{
+                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
+                    borderRadius: '10px', padding: '10px', marginTop: '10px'
+                }}
+                >
+                    <Col span={24} style={{
+                        display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black', width: '100rem'
+                    }}><h3>All Requests</h3></Col>
+
+                    <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
+                        background: 'flex', padding: '10px',
+                    }} >
+
+                        <div className='history-table' >
+                            <Table columns={reqColumns}
+                                dataSource={requests}
+                                pagination={{
+                                    position: ["bottomCenter"],
+                                }}
+                                scroll={{ x: 600 }}
+
+
+                                size="small" />
+                        </div>
+
+                    </Col>
+
+                </Row> :
+                null
+                }
+
+                {
+                    isHr ?
+                    <Row style={{
+                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
+                    borderRadius: '10px', padding: '10px', marginTop: '10px'
+                }}
+                >
+                    <Col span={24} style={{
+                        display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black', width: '100rem'
+                    }}><h3>All Requests</h3></Col>
+
+                    <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
+                        background: 'flex', padding: '10px',
+                    }} >
+
+                        <div className='history-table' >
+                            <Table columns={reqColumns}
+                                dataSource={allRequests}
+                                pagination={{
+                                    position: ["bottomCenter"],
+                                }}
+                                scroll={{ x: 600 }}
+
+
+                                size="small" />
+                        </div>
+
+                    </Col>
+
+                </Row> :
+                null
                 }
 
 

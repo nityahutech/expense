@@ -44,7 +44,7 @@ class EmployeeContext {
   getEmployee = async (id) => {
     const employeeDoc = doc(db, "users", id);
     let rec = await getDoc(employeeDoc);
-    let recordData = await rec.data();
+    let recordData = rec.data();
     console.log('recordData', recordData)
     return recordData
     // return getDoc(employeeDoc);

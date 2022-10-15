@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import {
+  Form,
   Tabs,
   Button,
   Modal,
@@ -11,13 +12,25 @@ import {
   Checkbox,
   message,
   Upload,
+  Popconfirm,InputNumber,
 } from "antd";
 import { 
   PlusCircleOutlined,
-  UploadOutlined, 
+  UploadOutlined,
+  EditOutlined, 
 } from "@ant-design/icons";
 
 import "../../style/Documents.css";
+
+
+
+
+
+// ----------------------------------------------------------------------------------------------------------------------------
+
+
+
+
 
 
 // // ----------------------------------code for table of id tab
@@ -70,35 +83,6 @@ const iddata = [
     doc: "Voter ID Card",
   },
 ];
-
-// ----------------------------------code for document list of the id tab
-
-  const doclist =[
-    {
-      title: 'Type',
-      dataIndex: 'type',
-      key: 'type',
-    },
-    {
-      title: 'Id',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: 'Id no.',
-      dataIndex: 'idno',
-      key: 'idno',
-    },
-  ]
-
-  const docdata = [
-    {
-      key:'1',
-      type:'Photo ID',
-      id:'PAN Card',
-      idno:'AB1234567',
-    }
-  ]
 
 // ---------------------------------code for table of certification
 
@@ -174,17 +158,103 @@ const iddata = [
       action:'verified',
     }
   ]
-// ----------------------------------------------------------------
+// ------------------------------------------------------------------------------
+
+
+
+
+
 
 
 function Document() {
+
+
+
+
 
 
   // -------------------------------------------------------------------space for const decleration
 
   const { Title } = Typography;
 
-  // --------------------------code for model in id tab
+  // --------------------------code for document list in id tab
+  const doclist =[
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
+    },
+    {
+      title: 'Id',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Id no.',
+      dataIndex: 'idno',
+      key: 'idno',
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+    }
+  ]
+
+  const [getiddata, setiddata] = useState([
+    {
+      key:'1',
+      type:'Photo ID',
+      id:'PAN Card',
+      idno:'AB1234567',
+      action:'Verified   Edit   Delete'
+    },
+  ])
+
+  // ---------------------------------code for table of certification
+
+  const certcolumn = [
+    {
+      title: "Course Title",
+      dataIndex:"name",
+    },
+    {
+      title: "Upload By",
+      dataIndex:"uploadedby",
+    },
+    {
+      title: "Type",
+      dataIndex:"type",
+    },
+    {
+      title: "Verified By",
+      dataIndex:"verification",
+    },
+    {
+      title: "Action",
+      dataIndex:"action",
+    },
+  ]
+
+  const [getCertData, setCertData] = [
+    {
+      key:'1',
+      name:'Diploma',
+      uploadedby:'Saswat',
+      type:'Skill Development',
+      verification:'STB',
+      action:'verified',
+    },
+    {
+      key:'2',
+      name:'Graduation',
+      uploadedby:'Saswat',
+      type:'Skill Development',
+      verification:'BPUT',
+      action:'Pending Edit Delete',
+    },
+  ]
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const[selectedIdType,setSelectedIdType]=useState(null)
 
@@ -274,6 +344,41 @@ function Document() {
   };
   // ---------------------------------------------------------space for the return
 
+  const EditableCell = ({
+    editing,
+    dataIndex,
+    title,
+    inputType,
+    record,
+    index,
+    children,
+    ...restProps
+  }) => {
+    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+    return (
+      <td {...restProps}>
+        {editing ? (
+          <Form.Item
+            name={dataIndex}
+            style={{
+              margin: 0,
+            }}
+            rules={[
+              {
+                required: true,
+                message: `Please Input ${title}!`,
+              },
+            ]}
+          >
+            {inputNode}
+          </Form.Item>
+        ) : (
+          children
+        )}
+      </td>
+    );
+  };
+
   return (
     <div
       className="education"
@@ -295,6 +400,11 @@ function Document() {
           {/* ------------------------------------IDs tabs------------------------------------- */}
           <Tabs.TabPane tab="IDs" key="1">
             <Table
+             components={{
+              body: {
+                cell: EditableCell,
+              },
+            }}
               columns={idcolumns}
               dataSource={iddata}
               pagination={false}
@@ -306,11 +416,12 @@ function Document() {
             />
             <Table
               columns={doclist}
-              dataSource={docdata}
+              dataSource={getiddata}
               pagination={false}
               style={{
                 margin: "0px",
                 padding: "0px",
+                // border:'3px solid red'
               }}
               bordered
             />
@@ -377,7 +488,7 @@ function Document() {
           <Tabs.TabPane tab="Certification" key="2">
             <Table
                 columns={certcolumn}
-                dataSource={certData}
+                dataSource={getCertData}
                 pagination={false}
                 style={{
                   margin: "0px",

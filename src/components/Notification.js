@@ -4,6 +4,7 @@ import {
     Row,
     Table,
     Modal,
+    Input
 } from 'antd';
 
 import { useAuth } from '../contexts/AuthContext'
@@ -21,8 +22,25 @@ let dummy = [{
 const Notification = ({ data }) => {
     const { currentUser, role } = useAuth();
     const [dataSource, setDataSource] = useState(data);
-    // const [approve, setApprove] = useState([]);
-    // const [reject, setReject] = useState([]);
+    const [approve, setApprove] = useState([]);
+    const [reject, setReject] = useState([]);
+    const [text, setText] = useState("");
+
+    const Bbb = ({ onChange }) => {
+        const [value, setValue] = useState();
+        useEffect(() => {
+            if (onChange) {
+                onChange(value);
+            }
+        }, [value, onChange]);
+        return (
+            <Input
+                placeholder="Type something"
+                value={value}
+                onChange={(event) => setValue(event.target.value)}
+            />
+        );
+    };
 
     useEffect(() => {
         setDataSource(data)
@@ -30,22 +48,26 @@ const Notification = ({ data }) => {
     }, [data])
     // console.log("data", data);
 
-    // const getData = async () => {
-    //     let data = await LeaveContext.getAllById(currentUser.uid)
-    //     // console.log("data", JSON.stringify(data.docs), currentUser.uid);
+    const onChange = (val) => {
+        setText(val);
+    };
 
-    //     let d = data.docs.map((doc) => {
-    //         console.log("123", { ...doc.data() })
-    //         return {
-    //             ...doc.data(),
-    //             id: doc.id,
-    //             status: doc?.data()?.status || "Pending",
-    //         };
-    //     });
-    //     console.log("data", d);
-    //     setApprove(d);
+    const getData = async () => {
+        let data = await LeaveContext.getAllById(currentUser.uid)
+        // console.log("data", JSON.stringify(data.docs), currentUser.uid);
 
-    // }
+        let d = data.docs.map((doc) => {
+            console.log("123", { ...doc.data() })
+            return {
+                ...doc.data(),
+                id: doc.id,
+                status: doc?.data()?.status || "Pending",
+            };
+        });
+        console.log("data", d);
+        setApprove(d);
+
+    }
     // ${JSON.stringify(record)}
 
     const onApproveLeave = (record) => {
@@ -58,7 +80,7 @@ const Notification = ({ data }) => {
                 LeaveContext.approveLeave(record.id)
                     .then(response => {
                         console.log(response);
-                        // getData();
+                        getData();
                     })
                     .catch(error => {
                         console.log(error.message);
@@ -72,13 +94,14 @@ const Notification = ({ data }) => {
         console.log(record)
         Modal.confirm({
             title: `Are you sure, you want to reject Leave of ${record?.name || ''}!`,
+            content: <Bbb onChange={onChange} />,
             okText: "Yes",
             okType: "danger",
             onOk: () => {
                 LeaveContext.rejectLeave(record.id)
                     .then(response => {
                         console.log(response);
-                        // getData();
+                        getData();
                     })
                     .catch(error => {
                         console.log(error.message);

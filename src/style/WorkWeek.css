@@ -33,4 +33,7 @@
       .box li{
         display: inline-block;
       }
+      .workWeek.ant-card-bordered{
+        margin-bottom: 25px;
+      }
    

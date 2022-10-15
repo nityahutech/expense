@@ -31,9 +31,9 @@ import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import useItems from 'antd/lib/menu/hooks/useItems';
 
 let leaveStyle = {
-    Present: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "green" },
-    Absent: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "red" },
-    Leave: { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "blue" },
+    Present: { height: "8px", width: "0.6rem", borderRadius: '6px', backgroundColor: "green" },
+    Absent: { height: "8px", width: "0.6rem", borderRadius: '6px', backgroundColor: "red" },
+    Leave: { height: "8px", width: "0.6rem", borderRadius: '6px', backgroundColor: "blue" },
     "Officialy Holiday": { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "yellow" },
     "Week Off": { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "grey" },
 }
@@ -411,7 +411,7 @@ const Leave = () => {
             title: 'Nature of Leave',
             dataIndex: 'nature',
             width: 150,
-
+            align: "left",
             sorter: (a, b) => {
                 return a.nature !== b.nature ? (a.nature < b.nature ? -1 : 1) : 0;
             },
@@ -422,6 +422,7 @@ const Leave = () => {
             title: 'Slot',
             dataIndex: 'slot',
             width: 100,
+            align: "left",
             sorter: (a, b) => {
                 return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
             },
@@ -437,6 +438,7 @@ const Leave = () => {
         {
             title: 'Approver',
             dataIndex: 'approver',
+            align: "left",
             width: 150,
         },
 
@@ -445,6 +447,7 @@ const Leave = () => {
             className: "row5",
             key: "status",
             dataIndex: "status",
+            align: "left",
             width: 100,
             // responsive: ["md"],
             sorter: (a, b) => {
@@ -622,10 +625,10 @@ const Leave = () => {
                 {listData.map((item) => (
                     <div
                         style={
-                            item.type === 'leave' ? { color: 'rgba(10, 91, 204,  1)', fontSize: '6px', backgroundColor: "rgba(10, 91, 204,0.2)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
+                            item.type === 'leave' ? { color: 'rgba(10, 91, 204,  1)', fontSize: '8px', backgroundColor: "rgba(10, 91, 204,0.2)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
                                 : item.isOptional ?
-                                    { color: "rgba(0, 119, 137, 0.96)", fontSize: '6px', backgroundColor: "rgba(154, 214, 224, 0.96)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
-                                    : { color: "rgba(252, 143, 10, 1)", fontSize: '6px', backgroundColor: "rgba(252, 143, 10,0.2)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
+                                    { color: "rgba(0, 119, 137, 0.96)", fontSize: '8px', backgroundColor: "rgba(154, 214, 224, 0.96)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
+                                    : { color: "rgba(252, 143, 10, 1)", fontSize: '8px', backgroundColor: "rgba(252, 143, 10,0.2)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
 
                         }
 
@@ -905,27 +908,7 @@ const Leave = () => {
                     <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
                         background: 'flex', padding: '10px', width: '400px'
                     }} >
-                        <Form
-                            {...Leave}
-                            labelCol={{
-                                span: 6,
-
-                            }}
-                            wrapperCol={{
-                                span: 16,
-                            }}
-                            form={form}
-                            onFinish={onFinish}
-
-                        // initialValues={{
-                        //     remember: true,
-                        //     // approver: employeeRecord.repManager
-
-
-
-                        // }}
-                        >
-                            {/* <Form.Item labelAlign="left"
+                        {/* <Form.Item labelAlign="left"
                                 style={{ marginBottom: "20px", }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Employee Name<span style={{ color: 'red' }}> *</span></label>}
                                 name="employeename"
@@ -941,72 +924,82 @@ const Leave = () => {
                                     placeholder="Employee Name" />
                             </Form.Item> */}
 
-                            <Form.Item labelAlign="left"
+                        {/* <Form.Item labelAlign="left"
                                 style={{ marginBottom: "20px", color: 'white', }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Duration<span style={{ color: 'red' }}> *</span></label>}
                                 name="durationid"
-                            // initialValue ={ abc}
+                                initialValue={'abc'}
 
-                            >
-                                <Space direction="vertical" size={12} >
-                                <div style={{ textAlign: "center", color: "black"}}>
-                                    <DatePicker
-                                        value={dateSelected}
-                                        onChange={setDateSelected}
-                                        // range
-                                        multiple
-                                        sort
-                                        minDate={new Date()}
-                                        format={format}
-                                        plugins={[<DatePanel />]}
+                            > */}
+                        {/* <Space direction="vertical" size={12} style={{ width: '100%' }}> */}
+                        <div class="field required" style={{ backgroundColor: '', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingBottom: '8px' }}>
+                            <div className='date-pick-label' style={{ backgroundColor: '', width: '27%', textAlign: 'left' }}>
+                                <label for="id_username" style={{ fontWeight: '400', width: '100%' }}>Duration<span style={{ color: 'red' }}> *</span></label>
+                            </div>
+                            <div className='date-picker' style={{ backgroundColor: '', width: '80%' }}>
+                                <DatePicker style={{ width: '92%', backgroundColor: '', marginBottom: '20px', marginLeft: '', height: '32px', borderRadius: '0px', border: '1px solid #d9d9d9', paddingLeft: '10px' }}
+                                    // label='Duration'
+                                    value={dateSelected}
+                                    onChange={setDateSelected}
+                                    type='input'
+                                    // range
+                                    multiple
+                                    sort
+                                    minDate={new Date()}
+                                    format={format}
+                                    plugins={[<DatePanel />]}
 
-                                        mapDays={({ date }) => {
-                                            let props = {}
-                                            let isWeekend = [0, 6].includes(date.weekDay.index)
-                                            let matchingHolidayList = companyholiday.filter(item => {
-                                                return item.Date == date.toString()
+                                    // placeholder='Pick select Leave Date'
 
-                                            })
-                                            let leavedates = leaves.filter((item) => {
-                                                if (item.orgDate.includes(date.toString())) {
-                                                    return true
-                                                }
-                                                else {
-                                                    return false
-                                                }
+                                    mapDays={({ date }) => {
+                                        let props = {}
+                                        let isWeekend = [0, 6].includes(date.weekDay.index)
+                                        let matchingHolidayList = companyholiday.filter(item => {
+                                            return item.Date == date.toString()
 
-                                            })
-                                            console.log('matchingHolidayList', matchingHolidayList)
-                                            if (isWeekend) return {
-                                                disabled: true,
-                                                style: { color: "#ccc" },
-
+                                        })
+                                        let leavedates = leaves.filter((item) => {
+                                            if (item.orgDate.includes(date.toString())) {
+                                                return true
                                             }
-                                            if (matchingHolidayList.length > 0 && matchingHolidayList[0].optionalHoliday == false) return {
-
-                                                disabled: true,
-                                                style: { color: "rgb(252, 143, 10)" },
-
-                                            }
-                                            if (matchingHolidayList.length > 0 && matchingHolidayList[0].optionalHoliday == true) return {
-
-                                                disabled: true,
-                                                style: { color: "rgba(0, 119, 137, 0.96)" },
-
+                                            else {
+                                                return false
                                             }
 
-                                            if (leavedates.length > 0) return {
+                                        })
+                                        console.log('matchingHolidayList', matchingHolidayList)
+                                        if (isWeekend) return {
+                                            disabled: true,
+                                            style: { color: "#ccc" },
 
-                                                disabled: true,
-                                                style: { color: "rgb(10, 91, 204)" },
+                                        }
+                                        if (matchingHolidayList.length > 0 && matchingHolidayList[0].optionalHoliday == false) return {
 
-                                            }
+                                            disabled: true,
+                                            style: { color: "rgb(252, 143, 1)", backgroundColor: 'rgba(252, 143, 10, 0.2)', },
+
+                                        }
+                                        if (matchingHolidayList.length > 0 && matchingHolidayList[0].optionalHoliday == true) return {
+
+                                            disabled: true,
+                                            style: { color: "rgba(0, 119, 137, 1)", backgroundColor: "rgba(0, 119, 137, 0.2)" },
+
+                                        }
+
+                                        if (leavedates.length > 0) return {
+
+                                            disabled: true,
+                                            style: { color: "rgba(10, 91, 204, 1)", backgroundColor: "rgb(10, 91, 204, 0.2)" },
+
+                                        }
 
 
-                                            return props
-                                        }}
-                                    />
-                                    {/* <RangePicker
+                                        return props
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        {/* <RangePicker
 
                                         ranges={{
                                             Today: [moment(), moment()],
@@ -1034,13 +1027,35 @@ const Leave = () => {
                                     //     );
                                     //   }}
                                     /> */}
-                                    </div>
-                                </Space>
-                            </Form.Item>
+
+                        {/* </Space> */}
+                        {/* </Form.Item> */}
+
+                        <Form
+                            {...Leave}
+                            labelCol={{
+                                span: 6,
+
+                            }}
+                            wrapperCol={{
+                                span: 16,
+                            }}
+                            form={form}
+                            onFinish={onFinish}
+
+                        // initialValues={{
+                        //     remember: true,
+                        //     // approver: employeeRecord.repManager
+
+
+
+                        // }}
+                        >
+
 
                             <Form.Item labelAlign="left"
                                 name="leaveNature"
-                                style={{ marginBottom: "20px" }}
+                                style={{ marginBottom: "25px", }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Nature of Leave<span style={{ color: 'red' }}> *</span></label>}
 
                             >
@@ -1060,7 +1075,7 @@ const Leave = () => {
 
                             <Form.Item labelAlign="left"
                                 name="slot"
-                                style={{ marginBottom: "20px" }}
+                                style={{ marginBottom: "25px", }}
                                 // label="Slot&nbsp;"
                                 className='div-slot'
                                 label={<label style={{ color: "black", fontWeight: '400' }}> Slot<span style={{ color: 'red' }}> *</span></label>}
@@ -1083,7 +1098,7 @@ const Leave = () => {
 
                             <Form.Item labelAlign="left"
                                 name="reason"
-                                style={{ marginBottom: "20px" }}
+                                style={{ marginBottom: "25px", }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Reason<span style={{ color: 'red' }}> *</span> </label>}
                             >
                                 <Input.TextArea maxLength={20}
@@ -1099,7 +1114,7 @@ const Leave = () => {
 
                             <Form.Item labelAlign="left"
                                 name="approver"
-                                style={{ marginBottom: "20px" }}
+                                style={{ marginBottom: "25px", }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Approver<span style={{ color: 'red' }}> *</span></label>}
                                 initialValue={repManager}
 
@@ -1120,10 +1135,10 @@ const Leave = () => {
                                 />
                             </Form.Item>
 
-                            <Form.Item
+                            <Form.Item style={{ paddingTop: "15px", }}
                                 wrapperCol={{
                                     offset: 8,
-                                    span: 16,
+                                    span: 24,
                                 }}
                             >
 
@@ -1219,7 +1234,7 @@ const Leave = () => {
                 >
                     <Col span={24} style={{
                         display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black', width: '100rem'
-                    }}><h3>History</h3></Col>
+                    }}><h3>Employee Leave History</h3></Col>
 
                     <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
                         background: 'flex', padding: '10px',

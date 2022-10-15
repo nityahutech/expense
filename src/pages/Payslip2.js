@@ -17,8 +17,8 @@ const Payslip2 = () => {
     <div className="home">
       <div className="sidecontainer">
         <Sidebar
-          activeSubMenu={["sub3"]}
-          activeMenu={["21"]}
+          activeSubMenu={["sub2"]}
+          activeMenu={["25"]}
           accessToken={accessToken}
         />
       </div>

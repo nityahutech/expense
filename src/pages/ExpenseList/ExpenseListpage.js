@@ -3,20 +3,16 @@ import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 import Expenselist from "../../components/Expenselist";
 import "../home/home.css";
-
 const ExpenseListpage = () => {
-    console.log("oota aitha");
   const [accessToken, setAccessToken] = useState(null);
   useEffect(() => {
     let token = sessionStorage.getItem("accessToken");
-    console.log({token});
     if (token === 'null') {
       window.location.href = "/";
     } else {
       setAccessToken(token);
     }
   }, []);
-
   return accessToken ?
   (
     <div className="home">
@@ -24,12 +20,10 @@ const ExpenseListpage = () => {
         <Sidebar activeSubMenu={["sub1"]}
           activeMenu={["3"]} accessToken={accessToken}/>
       </div>
-
       <div className="homeContainer">
         <div className="table">
           <Navbar />
         </div>
-
         <div className="tables">
           <Expenselist />
         </div>
@@ -37,5 +31,4 @@ const ExpenseListpage = () => {
     </div>
   ): null;
 };
-
 export default ExpenseListpage;

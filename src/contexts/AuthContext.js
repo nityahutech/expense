@@ -54,9 +54,10 @@ export function AuthProvider({ children }) {
     return updatePassword(currentUser, password)
   }
 
-  function deletePerson() {
-    sessionStorage.setItem("accessToken", null)
-    return deleteUser(auth, currentUser)
+  async function disablePerson(id) {
+    await updateProfile(id, {disabled: true})
+    console.log(currentUser)
+    return 
   }
 
   async function getRole(user) {
@@ -88,7 +89,7 @@ export function AuthProvider({ children }) {
     resetPassword,
     updateMyEmail,
     updateMyPassword,
-    deletePerson,
+    disablePerson,
     updateMyProfile,
     updateMyPhNo
   }

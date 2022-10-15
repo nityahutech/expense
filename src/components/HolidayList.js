@@ -56,8 +56,8 @@ const LeaveList = (props) => {
                 };
             });
             setHolidaylist(d)
-            console.log('holidaylist', d[1].Date);
-            console.log('holidaylist2', moment(d[1].Date.seconds * 1000))
+            // console.log('holidaylist', d[1].Date);
+            // console.log('holidaylist2', moment(d[1].Date.seconds * 1000))
 
         });
     }

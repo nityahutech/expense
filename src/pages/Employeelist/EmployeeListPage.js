@@ -4,21 +4,16 @@ import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 import { useAuth } from "../../contexts/AuthContext";
 import EmployeeList from "../../components/EmployeeList";
-
 function EmployeeListPage() {
   const [accessToken, setAccessToken] = useState(null);
   const { currentUser, role } = useAuth();
   // const role = getRole();
-
   // async function getRole() {
   //   let res = await ProfileContext.getProfile(currentUser.uid);
   //   return res.data();
   // }
-
   useEffect(() => {
-    console.log(role);
     let token = sessionStorage.getItem("accessToken");
-    console.log({ token });
     if (token === "null") {
       window.location.href = "/";
     } else {
@@ -34,12 +29,10 @@ function EmployeeListPage() {
           accessToken={accessToken}
         />
       </div>
-
       <div className="homeContainer">
         <div className="table">
           <Navbar />
         </div>
-
         <div className="tables">
           <EmployeeList />
         </div>
@@ -47,5 +40,4 @@ function EmployeeListPage() {
     </div>
   ) : null;
 }
-
 export default EmployeeListPage;

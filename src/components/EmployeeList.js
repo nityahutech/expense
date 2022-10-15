@@ -7,6 +7,7 @@ import {
 import Editemployee from "./Editemployee";
 import React, { useEffect, useState } from "react";
 import { createUser, getUsers } from "../contexts/CreateContext";
+import { useAuth } from "../contexts/AuthContext";
 import moment from "moment";
 import "../style/EmployeeList.css";
 import { doc } from "firebase/firestore";
@@ -22,15 +23,16 @@ function EmployeeList() {
   const [allEmployees, setAllEmployees] = useState([]);
   const [data, setData] = React.useState([]);
   const [disableItem, setDisableItem] = useState(false);
+  const { disablePerson } = useAuth();
 
   window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 768 ? "" : "left")
   );
   const columns = [
     {
-      title: "Sl. No.",
-      dataIndex: "sn",
-      key: "sn",
+      title: "Emp. Code",
+      dataIndex: "empId",
+      key: "empId",
       fixed: "left",
       width: 80,
     },
@@ -49,16 +51,16 @@ function EmployeeList() {
       width: 160,
     },
     {
-      title: "Personal Email",
+      title: "Email",
       dataIndex: "mailid",
-      key: "email",
+      key: "mailid",
       width: 200,
       ellipsis: true,
     },
     {
       title: "Date of Join",
       dataIndex: "doj",
-      key: "dob",
+      key: "doj",
       align: "center",
       width: 150,
     },
@@ -76,9 +78,16 @@ function EmployeeList() {
       width: 120,
     },
     {
+      title: "Personal Email",
+      dataIndex: "contactEmail",
+      key: "contactEmail",
+      width: 200,
+      ellipsis: true,
+    },
+    {
       title: "Contact No.",
       dataIndex: "phonenumber",
-      key: "cnumber",
+      key: "phonenumber",
       align: "center",
       width: 150,
     },
@@ -201,22 +210,23 @@ function EmployeeList() {
   };
 
   const onDelete = (idx, e) => {
-    e.preventDefault();
-    console.log("data::: ", idx);
-    const filteredData = data.map((doc, i) => {
-      let disabled = false;
-      if (idx == i) {
-        disabled = true;
-      }
-      return {
-        ...doc,
+    // e.preventDefault();
+    console.log("data::: ", data[idx].id);
+    disablePerson(data[idx].id)
+    // const filteredData = data.map((doc, i) => {
+    //   let disabled = false;
+    //   if (idx == i) {
+    //     disabled = true;
+    //   }
+    //   return {
+    //     ...doc,
 
-        sn: i + 1,
-        disabled: disabled,
-      };
-    });
-    setData(filteredData);
-    setFilterEmployees(filteredData);
+    //     sn: i + 1,
+    //     disabled: disabled,
+    //   };
+    // });
+    // setData(filteredData);
+    // setFilterEmployees(filteredData);
   };
 
   return (

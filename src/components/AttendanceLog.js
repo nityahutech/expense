@@ -474,9 +474,9 @@ function AttendanceLog({ empDetails }) {
                   // defaultValue={[]}
                   format="MM-YYYY"
                   style={{
-                    width: "100%",
                     background: "#1890ff",
                     cursor: "pointer",
+                    marginLeft: "12rem",
                   }}
                   allowClear
                   onChange={onHrDateFilter}

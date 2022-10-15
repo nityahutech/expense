@@ -3,9 +3,6 @@ import { Card, Row, Col, Button, Select, DatePicker, Form } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { useAuth } from "../../contexts/AuthContext";
-
-
-
 const { Option } = Select;
 function Work() {
   const [editWork, setEditWork] = useState(false);
@@ -16,25 +13,19 @@ function Work() {
   const [department, setDepartment] = useState("");
   const [workLocation, setWorkLocation] = useState("");
   const [empType, setEmpType] = useState("");
-
-
   useEffect(() => {
     getData();
   }, [])
-  
   const getData=async()=>{
     let data=await EmpInfoContext.getEduDetails(currentUser.uid)
-    console.log(data)
     //setData(data)
     setDesignation(data.designation?data.designation:null)
     setDoj(data.doj?data.doj:null)
     setWorkLocation(data.workLocation?data.workLocation:null)
     setDepartment(data.department?data.department:null)
     setEmpType(data.empType?data.empType:null)
-
     // setScrs(data.scrs?data.scrs:null)
   }
-  console.log(data)
   return (
     <>
       <div
@@ -139,7 +130,6 @@ function Work() {
                       // format={dateFormatList}
                       //         onChange={(e) => {
                       //           setDob(e.format("DD-MM-YYYY"));
-                      //           console.log(e.format("DD-MM-YYYY"));
                       //         }}
                       //  disabledDate={disabledDate}
                       // value={dob}
@@ -264,5 +254,4 @@ function Work() {
     </>
   );
 }
-
 export default Work;

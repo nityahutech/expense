@@ -6,9 +6,10 @@ const RATE = 2.83464566929;
 const PAGE_WIDTH = 297 * RATE;
 const PAGE_HEIGHT = 419 * RATE;
 
-const CONTENT_WIDTH = 297 * RATE;
+const CONTENT_WIDTH = 270 * RATE;
 const CONTENT_HEIGHT = 419 * RATE;
-const PAGE_MARGINS = [0 * RATE, 0 * RATE];
+const PAGE_MARGINS = [15 * RATE, 0 * RATE];
+const FONT_SIZE = 14 * RATE;
 
 export async function createPdfFromHtml(element) {
   console.log("element:: ", element.innerHTML);
@@ -35,13 +36,14 @@ async function createPdfProps(element) {
       height: CONTENT_HEIGHT,
     },
     pageMargins: PAGE_MARGINS,
+    fontSize: FONT_SIZE,
   };
 
   return pdfProps;
 }
 
 function createPdf(pdfProps) {
-  const { dataUrl, contentSize, pageMargins } = pdfProps;
+  const { dataUrl, contentSize, pageMargins, fontSize } = pdfProps;
   const pageSize = pdfProps.pageSize;
   const pageOrientation = pdfProps.pageOrientation;
 
@@ -53,6 +55,7 @@ function createPdf(pdfProps) {
       ...contentSize,
     },
     pageMargins,
+    fontSize,
   };
 
   pdfMake.createPdf(documentDefinitions).download();

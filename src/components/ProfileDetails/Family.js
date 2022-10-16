@@ -45,23 +45,23 @@ const Family = () => {
     getData();
   };
 
-  const onContactsFinish = (newvalue) => {
-    // console.log(contactdata)
-    console.log(newvalue);
-    console.log('success',newvalue)
-    EmpInfoContext.updateEduDetails(currentUser.uid,newvalue)     
-     setData(newvalue)
-     showeditEmergency(false)
-  }
+  // const onContactsFinish = (newvalue) => {
+  //   // console.log(contactdata)
+  //   console.log(newvalue);
+  //   console.log('success',newvalue)
+  //   EmpInfoContext.updateEduDetails(currentUser.uid,newvalue)     
+  //    setData(newvalue)
+  //    showeditEmergency(false)
+  // }
 
-  const onEmergencyFinish = (newvalue) => {
-      // console.log(contactdata)
-      console.log(newvalue);
-      console.log('success',newvalue)
-      EmpInfoContext.updateEduDetails(currentUser.uid,newvalue)     
-      setData(newvalue)
-      showeditEmergency(false)
-    }
+  // const onEmergencyFinish = (newvalue) => {
+  //     // console.log(contactdata)
+  //     console.log(newvalue);
+  //     console.log('success',newvalue)
+  //     EmpInfoContext.updateEduDetails(currentUser.uid,newvalue)     
+  //     setData(newvalue)
+  //     showeditEmergency(false)
+  //   }
  
   const getData=async()=>{
     let data = await EmpInfoContext.getEduDetails(currentUser.uid)
@@ -70,6 +70,21 @@ const Family = () => {
   }
   console.log(data)
   
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
+  const checkNumbervalue = (event) => {
+    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+  
+  const checkAlphabets = (event) => {
+    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
 // ---------------------------------------------------------------------------------------------------------
 
   return (
@@ -111,7 +126,7 @@ const Family = () => {
                       <Form.Item
                 x                name="father"
                         rules={[
-                          { required: true, message: "Please enter Father's name" },
+                          { required: false, message: "Please enter Father's name" },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
@@ -130,7 +145,7 @@ const Family = () => {
                         name="fatherContact"
                         rules={[
                           {
-                            required: true,
+                            required: false,
                             message: "Please enter the Contact no.",
                           },
                         ]}
@@ -150,7 +165,7 @@ const Family = () => {
                       <Form.Item
                         name="mother"
                         rules={[
-                          { required: true, message: "Please enter Mother's Name" },
+                          { required: false, message: "Please enter Mother's Name" },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
@@ -169,7 +184,7 @@ const Family = () => {
                         name="motherContact"
                         rules={[
                           {
-                            required: true,
+                            required: false,
                             message: "Please enter the Contact no.",
                           },
                         ]}
@@ -224,38 +239,55 @@ const Family = () => {
                   <Row gutter={[16, 16]}>
                     {/* ------------------------------------father */}
                     <Col span={12}>
-                      <Form.Item
-                x                name="father"
-                        rules={[
-                          { required: true, message: "Please enter Father's name" },
-                        ]}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                      >
                         <div>
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
-                            Father
+                            Father 
                           </h1>
                           {editfamilymember === false ? (
                             <h4>{data?data.father:null}</h4>
                           ) : (
-                            <Input placeholder="Enter Father's Name"/>)}
-                            </div>
-                      </Form.Item>
-                      {/* --------------------------------------father-contact------------------------------------ */}
-                    </Col>
-                    <Col span={12}>
                       <Form.Item
-                        name="fatherContact"
+                        name="father"
+                        onKeyPress={(event) => {
+                          if (checkAlphabets(event)) {
+                            event.preventDefault();
+                          }
+                        }}
+        
                         rules={[
                           {
                             required: true,
-                            message: "Please enter the Contact no.",
-                          },
+                            minLength: 3, maxLength: 25,
+                            message: 'Please enter Father Name',
+        
+                          }, {
+                            pattern: /^[a-zA-Z\s]*$/,
+                            message: 'Please enter Valid Name',
+        
+                          }
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
+                        initialValue = {data.father? data.father : ''}
                       >
+                            <Input 
+                            onChange={(e) => {
+                              const inputval = e.target.value;
+                              const str = e.target.value;
+                              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                              const caps = str.split(' ').map(capitalize).join(' ');
+                              console.log('caps',caps)
+                              // setPaidBy(newVal);
+                              form.setFieldsValue({ father: newVal, father: caps });
+                              } } 
+                              defaultValue={data?data.father:'breh'} 
+                              maxLength={40}
+                              placeholder="Enter Father's Name"/>
+                      </Form.Item>)}
+                            </div>
+                      {/* --------------------------------------father-contact------------------------------------ */}
+                    </Col>
+                    <Col span={12}>
                         <div>
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Contact no.
@@ -263,20 +295,30 @@ const Family = () => {
                           {editfamilymember === false ? (
                             <h4>{data?data.fatherContact:null}</h4>
                           ) : (
-                            <Input placeholder="Enter Contact no." />) }
-                        </div>
-                      </Form.Item>
-                      </Col>
-                      {/* -------------------------------------mother------------------------------------------ */}
-                    <Col span={12}>
                       <Form.Item
-                        name="mother"
+                        name="fatherContact"
+                        onKeyPress={(event) => {
+                          if (checkNumbervalue(event)) {
+                            event.preventDefault();
+                          }
+                        }}
                         rules={[
-                          { required: true, message: "Please enter Mother's Name" },
+                          {
+                            required: true,
+                            message: "Please enter the Contact no.",
+                            pattern: /^[0-9\b]+$/,
+                          },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
+                        initialValue = {data.fatherContact? data.fatherContact : ''}
                       >
+                            <Input  maxLength={11} defaultValue={data?data.fatherContact:''} placeholder="Enter Contact no." />
+                      </Form.Item>) }
+                        </div>
+                      </Col>
+                      {/* -------------------------------------mother------------------------------------------ */}
+                    <Col span={12}>
                         <div>
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Mother
@@ -284,23 +326,48 @@ const Family = () => {
                           {editfamilymember === false ? (
                             <h4>{data?data.mother:null}</h4>
                           ) : (
-                            <Input placeholder="Enter Mother's Name" />) }
-                        </div>
-                      </Form.Item>
-                    </Col>
-                    {/* ---------------------------------------------mother Contact------------------------------ */}
-                    <Col span={12}>
-                    <Form.Item
-                        name="motherContact"
+                      <Form.Item
+                        name="mother"
+                       onKeyPress={(event) => {
+                          if (checkAlphabets(event)) {
+                            event.preventDefault();
+                          }
+                        }}
+        
                         rules={[
                           {
                             required: true,
-                            message: "Please enter the Contact no.",
-                          },
+                            minLength: 3, maxLength: 25,
+                            message: 'Please enter Mother Name',
+        
+                          }, {
+                            pattern: /^[a-zA-Z\s]*$/,
+                            message: 'Please enter Valid Name',
+        
+                          }
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
+                        initialValue = {data.mother?data.mother:''}
                       >
+                            <Input
+                            onChange={(e) => {
+                              const inputval = e.target.value;
+                              const str = e.target.value;
+                              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                              const caps = str.split(' ').map(capitalize).join(' ');
+                              console.log('caps',caps)
+                              // setPaidBy(newVal);
+                              form.setFieldsValue({ mother: newVal, mother: caps });
+                              } } 
+                              defaultValue={data?data.mother:''} 
+                              maxLength={40}
+                              placeholder="Enter Mother's Name" />
+                      </Form.Item>) }
+                        </div>
+                    </Col>
+                    {/* ---------------------------------------------mother Contact------------------------------ */}
+                    <Col span={12}>
                         <div>
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Contact no.
@@ -308,9 +375,27 @@ const Family = () => {
                           {editfamilymember === false ? (
                             <h4>{data?data.motherContact:null}</h4>
                           ) : (
-                            <Input placeholder="Enter Contact no."  /> ) }
+                    <Form.Item
+                        name="motherContact"
+                        onKeyPress={(event) => {
+                          if (checkNumbervalue(event)) {
+                            event.preventDefault();
+                          }
+                        }}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter the Contact no.",
+                            pattern: /^[0-9\b]+$/,
+                          },
+                        ]}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 32 }}
+                        initialValue = {data.motherContact?data.motherContact:''}
+                      >
+                            <Input  maxLength={11} defaultValue={data?data.motherContact:''} placeholder="Enter Contact no."  />
+                      </Form.Item> ) }
                         </div>
-                      </Form.Item>
                     </Col>
                     </Row>
                   {editfamilymember === true ? (
@@ -336,7 +421,7 @@ const Family = () => {
                           type="primary"
                           htmlType="submit"
                           style={{ marginLeft: "10px" }}
-                          onClick={() => onContactsFinish()}
+                          // onClick={() => onContactsFinish()}
                         ><CheckOutlined />
                           SAVE
                         </Button>
@@ -377,7 +462,7 @@ const Family = () => {
                             name="other"
                             rules={[
                               {
-                                required: true,
+                                required: false,
                                 message: "Please enter the Name",
                               },
                             ]}
@@ -411,10 +496,16 @@ const Family = () => {
                         </Col><Col span={8}>
                         <Form.Item
                             name="otherContact"
+                            onKeyPress={(event) => {
+                              if (checkNumbervalue(event)) {
+                                event.preventDefault();
+                              }
+                            }}
                             rules={[
                               {
                                 required: true,
                                 message: "Please enter the Contact no.",
+                                pattern: /^[0-9\b]+$/,
                               },
                             ]}
                             labelCol={{ span: 8 }}
@@ -469,63 +560,118 @@ const Family = () => {
               >
                 <Row gutter={[16, 16]}>
                   <Col span={8}>
-                  <Form.Item
-                      name="other"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter the Name",
-                        },
-                      ]}
-                      labelCol={{ span: 8 }}
-                      wrapperCol={{ span: 32 }}
-                    >
-                      <div>
+                  <div>
                         <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                           Other
                         </h1>
-                        
-                          <Input placeholder="Enter Other Name" /> 
-                      </div>
-                    </Form.Item>
-                  </Col><Col span={8}>
                   <Form.Item
-                      name="relation"
+                      name="other"
+                      onKeyPress={(event) => {
+                        if (checkAlphabets(event)) {
+                          event.preventDefault();
+                        }
+                      }}
+      
                       rules={[
                         {
                           required: true,
-                          message: "Please enter the Relation",
-                        },
+                          minLength: 3, maxLength: 25,
+                          message: 'Please enter Other Name',
+      
+                        }, {
+                          pattern: /^[a-zA-Z\s]*$/,
+                          message: 'Please enter Name',
+      
+                        }
                       ]}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
+                      initialValue = {data.other?data.other:''}
                     >
+                      
+                        
+                          <Input
+                            onChange={(e) => {         
+                              const inputval = e.target.value;
+                              const str = e.target.value;
+                              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                              const caps = str.split(' ').map(capitalize).join(' ');
+                              console.log('caps',caps)
+                              // setPaidBy(newVal);
+                              form.setFieldsValue({ other: newVal, other: caps });
+                              } }      
+                              defaultValue={data?data.other:''}
+                              placeholder="Enter Other Name" 
+                              maxLength={40}
+                            /> 
+                    </Form.Item>
+                      </div>
+                  </Col><Col span={8}>
                       <div>
                         <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                           Relation
                         </h1>
+                  <Form.Item
+                      name="relation"
+                      onKeyPress={(event) => {
+                        if (checkAlphabets(event)) {
+                          event.preventDefault();
+                        }
+                      }}
+      
+                      rules={[
+                        {
+                          required: true,
+                          minLength: 3, maxLength: 25,
+                          message: 'Please enter Relation Name',
+      
+                        }, {
+                          pattern: /^[a-zA-Z\s]*$/,
+                          message: 'Please enter Relation Name',
+      
+                        }
+                      ]}
+                      labelCol={{ span: 8 }}
+                      wrapperCol={{ span: 32 }}
+                      initialValue = {data.relation?data.relation:''}
+                    >
                        
-                          <Input placeholder="Enter the Relation" />  
-                      </div>
+                          <Input 
+                            onChange={(e) => {         
+                              const inputval = e.target.value;
+                              const str = e.target.value;
+                              const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                              const caps = str.split(' ').map(capitalize).join(' ');
+                              console.log('caps',caps)
+                              // setPaidBy(newVal);
+                              form.setFieldsValue({ relation: newVal, relation: caps });
+                              } }      
+                              defaultValue={data?data.relation:''} 
+                              placeholder="Enter the Relation"
+                              maxLength={40}
+                            /> 
                     </Form.Item>
+                      </div>
                   </Col><Col span={8}>
                   <Form.Item
                       name="otherContact"
                       rules={[
                         {
-                          required: true,
-                          message: "Please enter the Contact no.",
+                          required: false,
+                          message: "Please enter Phone Number",
+                          pattern: /^[0-9\b]+$/,
                         },
                       ]}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
+                      initialValue = {data.otherContact?data.otherContact:''}
                     >
                       <div>
                         <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                           Contact no.
                         </h1>
                         
-                          <Input placeholder="Enter Contact no." /> 
+                          <Input  maxLength={11} defaultValue={data?data.otherContact:''} placeholder="Enter Contact no." /> 
                       </div>
                     </Form.Item>
                   </Col></Row>
@@ -550,7 +696,7 @@ const Family = () => {
                         type="primary"
                         htmlType="submit"
                         style={{ marginLeft: "10px" }}
-                        onClick={() => onEmergencyFinish()}
+                        // onClick={() => onEmergencyFinish()}
                       >
                         <CheckOutlined />
                         SAVE

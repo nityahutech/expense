@@ -15,6 +15,7 @@ import moment from "moment";
 import { useAuth } from "../contexts/AuthContext";
 import AttendanceContext from "../contexts/AttendanceContext";
 import ProfileContext from "../contexts/ProfileContext";
+import { scryRenderedComponentsWithType } from "react-dom/test-utils";
 const { RangePicker } = DatePicker;
 const { Content } = Layout;
 const layout = {
@@ -53,6 +54,7 @@ function AttendanceLog({ empDetails }) {
     {
       title: "Employee Code",
       dataIndex: "empId",
+      className: "code",
       key: "empId",
       render: (text) => <a>{text}</a>,
     },
@@ -128,7 +130,11 @@ function AttendanceLog({ empDetails }) {
       project: values?.project_name || "-",
     };
     console.log(currentUser.uid, { monthlydata });
-    AttendanceContext.updateAttendance(currentUser.uid, newData);
+    await AttendanceContext.updateAttendance(
+      currentUser.uid,
+      values.date,
+      newData
+    );
     // let newAlldata = [newData, ...empMonthly];
     // console.log(newAlldata);
     // localStorage.setItem("newReport", JSON.stringify(newAlldata));
@@ -151,6 +157,7 @@ function AttendanceLog({ empDetails }) {
     console.log(data);
     setEmpMonthly(data);
     setLoading(false);
+    return data;
   }
   // function getEmpMonthly() {
   //   console.log(JSON.parse(localStorage.getItem("newReport")));
@@ -239,19 +246,33 @@ function AttendanceLog({ empDetails }) {
   console.log(empDetails);
 
   useEffect(() => {
+    console.log(activetab);
+    form.resetFields();
     if (empDetails.userType === "emp") {
-      setActivetab("1");
-      getEmpDetails(currentUser.uid, [moment().subtract(30, "days"), moment()]);
+      setTimeout(() => {
+        console.log(currentUser.uid);
+        setSelectemp({ id: currentUser.uid });
+        // setActivetab("1");
+        getEmpDetails(currentUser.uid, [
+          moment().subtract(30, "days"),
+          moment(),
+        ]);
+      }, 500);
       // getEmpMonthly();
     } else {
-      setActivetab("1");
-      allEmpDetails();
+      if (activetab == "1") {
+        allEmpDetails();
+      }
     }
-  }, []);
+  }, [activetab]);
 
-  useEffect(() => {
-    setFilteredEmp(filteredEmp);
-  }, [filteredEmp]);
+  // useEffect(() => {
+  //   setFilteredEmp(filteredEmp);
+  // }, [activetab]);
+
+  // useEffect(() => {
+  //   setFilteredEmp(filteredEmp);
+  // }, [activetab]);
 
   //   const rowSelection = {
   //     onChange: (selectedRowKeys, selectedRows) => {
@@ -304,6 +325,7 @@ function AttendanceLog({ empDetails }) {
       dataIndex: "date",
       key: "date",
       render: (text) => <a>{text}</a>,
+      className: "date",
     },
     {
       title: "Status",
@@ -324,6 +346,11 @@ function AttendanceLog({ empDetails }) {
       title: "Work Duration",
       key: "duration",
       dataIndex: "duration",
+    },
+    {
+      title: "Break Time",
+      key: "break",
+      dataIndex: "break",
     },
     {
       title: "Project Name",
@@ -373,31 +400,18 @@ function AttendanceLog({ empDetails }) {
     },
   ];
 
-  function onDateFilter(date, dateString) {
-    console.log({ date, dateString });
-    if (date) {
-      console.log(empMonthly);
-      let result = empMonthly.filter((ex) => {
-        return (
-          moment(ex.date, dateFormat).isSame(date[0], "day") ||
-          moment(ex.date, dateFormat).isSame(date[1], "day") ||
-          (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
-            moment(ex.date, dateFormat).isSameOrBefore(date[1]))
-        );
-      });
-
-      const modifiedFilterExpense = [...result];
-
-      console.log({ modifiedFilterExpense });
+  async function onHrDateFilter(value) {
+    if (value == null) {
+      console.log("empMonthly");
+      const modifiedFilterExpense = await getEmpDetails(selectemp.id, [
+        moment().subtract(30, "days"),
+        moment(),
+      ]);
       setEmpMonthly(modifiedFilterExpense);
     } else {
-      setEmpMonthly(empMonthly);
-    }
-  }
-  async function onHrDateFilter(date, dateString) {
-    console.log({ date, dateString });
-    if (date) {
-      console.log(empMonthly);
+      const begin = value.clone().startOf("month");
+      const end = value.clone().endOf("month");
+      let date = [begin, end];
       // let result = empMonthly.filter((ex) => {
       //   return (
       //     moment(ex.date, dateFormat).isSame(date[0], "day") ||
@@ -409,10 +423,8 @@ function AttendanceLog({ empDetails }) {
 
       const modifiedFilterExpense = await getEmpDetails(selectemp.id, date);
 
-      console.log({ modifiedFilterExpense });
+      console.log(modifiedFilterExpense.reverse());
       setEmpMonthly(modifiedFilterExpense);
-    } else {
-      setEmpMonthly(empMonthly);
     }
   }
   const searchChange = (e) => {
@@ -429,11 +441,11 @@ function AttendanceLog({ empDetails }) {
     }
   };
 
-  console.log("test", filteredEmp[3]);
-  console.log("test", JSON.stringify(filteredEmp[3]));
+  console.log("test", filteredEmp[4]);
+  console.log("test", JSON.stringify(filteredEmp[4]));
   console.log(
     "test",
-    filteredEmp[3] ? JSON.parse(JSON.stringify(filteredEmp[3])) : "empty"
+    filteredEmp[4] ? JSON.parse(JSON.stringify(filteredEmp[3])) : "empty"
   );
   console.log(filteredEmp);
   // console.log("test",filteredEmp);
@@ -448,17 +460,26 @@ function AttendanceLog({ empDetails }) {
           className="Tabs"
           onChange={(tabKey) => {
             setActivetab(tabKey);
-            setSelectemp(null);
+            setSelectemp({ id: "" });
           }}
         >
           {role.userType === "emp" ? (
             <>
               <Tabs.TabPane tab="Monthly Log" key="1">
-                <RangePicker
+                <DatePicker
+                  picker="month"
+                  placeholder="Select Month"
                   className="Range"
-                  defaultValue={[]}
-                  format={dateFormat}
-                  onChange={onDateFilter}
+                  bordered={true}
+                  // defaultValue={[]}
+                  format="MM-YYYY"
+                  style={{
+                    background: "#1890ff",
+                    cursor: "pointer",
+                    marginLeft: "12rem",
+                  }}
+                  allowClear
+                  onChange={onHrDateFilter}
                 />
                 <Table
                   loading={loading}
@@ -499,6 +520,21 @@ function AttendanceLog({ empDetails }) {
                   onFinish={onFinish}
                   className="formItem"
                 >
+                  <Form.Item
+                    name="date"
+                    label="Date"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                    className="pname"
+                  >
+                    <DatePicker
+                      format={"DD-MM-YYYY"}
+                      style={{ width: "50%" }}
+                    />
+                  </Form.Item>
                   <Form.Item
                     name="project_name"
                     label="Project Name"
@@ -573,11 +609,19 @@ function AttendanceLog({ empDetails }) {
                   dataSource={filteredEmp}
                 />
               </Tabs.TabPane>
-              <Tabs.TabPane disabled={!selectemp} tab="Monthly Log" key="2">
-                <RangePicker
+              <Tabs.TabPane disabled={!selectemp.id} tab="Monthly Log" key="2">
+                <DatePicker
+                  picker="month"
+                  placeholder="Select Month"
                   className="Range"
-                  defaultValue={[]}
-                  format={dateFormat}
+                  // defaultValue={[]}
+                  format={"MM-YYYY"}
+                  style={{
+                    background: "#1890ff",
+                    cursor: "pointer",
+                    marginLeft: "12rem",
+                  }}
+                  allowClear
                   onChange={onHrDateFilter}
                 />
                 <Table

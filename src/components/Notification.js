@@ -4,6 +4,7 @@ import {
     Row,
     Table,
     Modal,
+    Input
 } from 'antd';
 
 import { useAuth } from '../contexts/AuthContext'
@@ -19,45 +20,69 @@ let dummy = [{
     approver: "jhbd"
 }]
 const Notification = ({ data }) => {
-    const { currentUser, role } = useAuth();  
+    const { currentUser, role } = useAuth();
     const [dataSource, setDataSource] = useState(data);
-    const [approve, setApprove] = useState([]);
-    const [reject, setReject] = useState([]);
+    // const [approve, setApprove] = useState([]);
+    // const [reject, setReject] = useState([]);
+    // const [text, setText] = useState("");
+    // const [value, setValue] = useState();
+    let value = '';
+
+    const Bbb = () => {
+        // useEffect(() => {
+        //     if (onChange) {
+        //         onChange(value);
+        //     }
+        // }, [value]);
+        return (
+            <Input
+                placeholder="Enter Comment"
+                onChange={(event) => {value=event.target.value}}
+            />
+        );
+    };
 
     useEffect(() => {
         setDataSource(data)
+        console.log(data)
     }, [data])
     // console.log("data", data);
 
-    const getData = async () => {
-        let data = await LeaveContext.getAllById(currentUser.uid)
-        // console.log("data", JSON.stringify(data.docs), currentUser.uid);
+    const onChange = (val) => {
+        // setText(val);
+    };
 
-        let d = data.docs.map((doc) => {
-            console.log("123", { ...doc.data() })
-            return {
-                ...doc.data(),
-                id: doc.id,
-                status: doc?.data()?.status || "Pending",
-            };
-        });
-        console.log("data", d);
-        setApprove(d);
+    // const getData = async () => {
+    //     let data = await LeaveContext.getAllById(currentUser.uid)
+    //     // console.log("data", JSON.stringify(data.docs), currentUser.uid);
 
-    }
+    //     let d = data.docs.map((doc) => {
+    //         console.log("123", { ...doc.data() })
+    //         return {
+    //             ...doc.data(),
+    //             id: doc.id,
+    //             status: doc?.data()?.status || "Pending",
+    //         };
+    //     });
+    //     console.log("data", d);
+    //     setApprove(d);
+
+    // }
     // ${JSON.stringify(record)}
 
     const onApproveLeave = (record) => {
         console.log(record)
         Modal.confirm({
-            title: `Are you sure, you want to approve Leave of ${record?.name||''}!`,
+            title: `Are you sure, you want to approve Leave of ${record?.name || ''}!`,
+            content: <Bbb />,
             okText: "Yes",
             okType: "primary",
             onOk: () => {
-                LeaveContext.approveLeave(record.id)
+                console.log(value);
+                LeaveContext.approveLeave(record.id, value)
                     .then(response => {
                         console.log(response);
-                        getData();
+                        // getData();
                     })
                     .catch(error => {
                         console.log(error.message);
@@ -70,14 +95,16 @@ const Notification = ({ data }) => {
     const onRejectedLeave = (record) => {
         console.log(record)
         Modal.confirm({
-            title: `Are you sure, you want to reject Leave of ${record?.name||''}!`,
+            title: `Are you sure, you want to reject Leave of ${record?.name || ''}!`,
+            content: <Bbb />,
             okText: "Yes",
             okType: "danger",
             onOk: () => {
-                LeaveContext.rejectLeave(record.id)
+                console.log(value);
+                LeaveContext.rejectLeave(record.id, value)
                     .then(response => {
                         console.log(response);
-                        getData();
+                        // getData();
                     })
                     .catch(error => {
                         console.log(error.message);
@@ -86,18 +113,19 @@ const Notification = ({ data }) => {
             },
         });
     };
-    
+
 
     const columns = [
         {
             title: 'Duration',
             dataIndex: 'date',
-            width: 250,
+            width: 240,
+            align: "left",
             sorter: (a, b) => {
                 return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
-            
+            },
+            sortDirections: ["ascend", "descend"],
+
 
         },
         {
@@ -106,9 +134,9 @@ const Notification = ({ data }) => {
             width: 150,
             sorter: (a, b) => {
                 return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
-            
+            },
+            sortDirections: ["ascend", "descend"],
+
 
         },
         {
@@ -120,21 +148,24 @@ const Notification = ({ data }) => {
         {
             title: 'Slot',
             dataIndex: 'slot',
+            width: 150,
             sorter: (a, b) => {
                 return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
-              },
-              sortDirections: ["ascend", "descend"],
+            },
+            sortDirections: ["ascend", "descend"],
         },
         {
             title: 'Reason',
             dataIndex: 'reason',
             width: 150,
         },
-        {
-            title: 'Approver',
-            dataIndex: 'approver',
-            width: 150,
-        },
+        // {
+        //     title: 'Approver',
+        //     dataIndex: 'approver',
+        //     width: 150,
+        // },
+
+
 
         {
             key: "5",
@@ -159,16 +190,16 @@ const Notification = ({ data }) => {
 
                                     }}
                                 />
-                               
+
                                 <img
-                                   style={{ color: "white", width: '20px', marginRight: 10 }}
+                                    style={{ color: "white", width: '20px', marginRight: 10 }}
                                     src="../logo/rejected.png"
                                     alt="profile"
                                     className="Dash"
                                     onClick={() => {
                                         onRejectedLeave(record);
                                     }}
-                                   
+
                                 />
                             </>
                         }
@@ -184,6 +215,7 @@ const Notification = ({ data }) => {
 
         console.log(name, empId, "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG")
     }
+    console.log(value)
 
     return (
         <Row style={{
@@ -192,11 +224,11 @@ const Notification = ({ data }) => {
         }}
         >
             <Col span={24} style={{
-                display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black'
+                display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black', width: '100rem'
             }}><h3>Leave Requested</h3></Col>
 
             <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
-                background: 'flex', padding: '10px', width: '400px'
+                background: 'flex', padding: '10px',
             }} >
 
                 {/* {JSON.stringify(dataSource[0])} */}
@@ -205,13 +237,14 @@ const Notification = ({ data }) => {
                         dataSource={dataSource}
                         // rowClassName = {(e) => rowClassNameFun(e)}
                         //  rowClassName={record => dataSource.filter((item) => item.nature === record.nature) ? "disabled-row" :"pankaj"}
-                        rowClassName={record => !record.enabled && "disabled-row"}
+                        // rowClassName={record => !record.enabled && "disabled-row"}
                         pagination={{
                             position: ["bottomCenter"],
-                          }}
-                        size="small" scroll={{
-                            x: 1000, 
-                        }} />
+                        }}
+                        scroll={{ x: 600 }}
+                        // style={{ overflowX: 'auto' }}
+
+                        size="small" />
                 </div>
             </Col>
         </Row>

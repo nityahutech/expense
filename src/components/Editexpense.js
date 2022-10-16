@@ -20,9 +20,7 @@ import {
 import "../style/Editexpense.css";
 import { Content } from "antd/lib/layout/layout";
 const { Option } = Select;
-
 const handleChange = (value) => {
-  console.log(`selected ${value}`);
 };
 const showNotification = (type, msg, desc) => {
   notification[type]({
@@ -56,7 +54,6 @@ const Editexpense = (props) => {
   function calculatesubtotal() {
     setsubtotal(amount * quantity);
   }
-
   async function submitEdit() {
     try {
       const editedRecord = {
@@ -70,20 +67,16 @@ const Editexpense = (props) => {
         status,
         description,
       };
-      console.log(editedRecord);
       ExpenseContext.updateExpense(props.record.key, editedRecord);
       props.setIsModalVisible(false);
       props.reloadData();
       showNotification("success", "Success", "Record updated successfuly");
-
       return;
     } catch (error) {
-      console.log(error);
       props.setIsModalVisible(false);
       showNotification("error", "Failed", "Record update failed");
     }
   }
-
   useEffect(() => {
     const quantityVal = props.record ? props.record.quantity : 0;
     const amountVal = props.record ? props.record.amount : 0;
@@ -96,7 +89,6 @@ const Editexpense = (props) => {
     //   ? props.record.status
     //   : "Status of the payment";
     const description = props.record ? props.record.description : "";
-    console.log(props.record.key);
     setAmount(amountVal);
     setQuantity(quantityVal);
     setsubtotal(amountVal * quantityVal);
@@ -106,13 +98,10 @@ const Editexpense = (props) => {
     setpaidname(paidname);
     setDescription(description);
     setStatus(statusTag);
-    console.log(statusTag);
-    console.log(status);
   }, [props]);
   function cancel() {
     props.setIsModalVisible(false);
   }
-
   const cancelStyle = {
     float: "right",
   };
@@ -127,13 +116,11 @@ const Editexpense = (props) => {
       return true;
     }
   };
-
   const checkAlphabets = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   return (
     <Form
       labelCol={{
@@ -248,7 +235,6 @@ const Editexpense = (props) => {
           </Form.Item>
         </Col>
       </Row>
-
       <Row>
         <Col xs={22} sm={22} md={12}>
           <Form.Item
@@ -398,9 +384,7 @@ const Editexpense = (props) => {
           </Form.Item>
         </Col>
       </Row>
-
       {/* --------------------------------------Quantity------- */}
-
       {/* --------------------------------------Sub-subtotal------- */}
       <Row>
         <Col xs={22} sm={22} md={12}>
@@ -434,9 +418,7 @@ const Editexpense = (props) => {
           </Form.Item>
         </Col>
       </Row>
-
       {/* -----------------------Text-area--------------- */}
-
       <br />
       <Button style={cancelStyle} onClick={cancel}>
         Cancel
@@ -452,7 +434,6 @@ const Editexpense = (props) => {
           action={"http://localhost:3001/"}
           showUploadList={{ showRemoveIcon: true }}
           beforeUpload={(file) => {
-            console.log({ file });
             return false;
           }}
         >
@@ -464,5 +445,4 @@ const Editexpense = (props) => {
     </Form>
   );
 };
-
 export default Editexpense;

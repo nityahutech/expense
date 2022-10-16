@@ -12,9 +12,7 @@ import {
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../contexts/CreateContext";
-
 const { Option } = Select;
-
 function AddEmployee() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -33,10 +31,7 @@ function AddEmployee() {
     form.resetFields();
   }
   const onFinish = async (values) => {
-    console.log("Received values of form: ", values);
     let res = await createUser(values);
-    console.log("DONE!!!!!!!!!");
-    console.log(res);
     navigate("/EmployeeListPage/EmployeeList");
     // const valuesToservice = {
     //   fname: values.fname,
@@ -48,24 +43,16 @@ function AddEmployee() {
     //   designation: values['designation'],
     //   role: values['role'],
     //   // status: 'Unpaid',
-
     //   // status:  values['paymentDate'],
     //   // subtotal: values['subTotal'],
     // }
-
-    // console.log('valuesToservice: ', valuesToservice);
-
     // createUser.addExpenses(valuesToservice)
     //   .then(response => {
-    //     console.log(response);
     //     navigate('/EmployeeListPage/EmployeeList');
     //   })
     //   .catch(error => {
-    //     console.log(error.message);
-
     //   })
   };
-
   return (
     <>
       <div className="expForm" style={{ margin: "15px", background: "white" }}>
@@ -96,7 +83,6 @@ function AddEmployee() {
             }}
           >
             {/* -----------------Back button------------- */}
-
             <Col
               xs={{ span: 24 }}
               sm={{ span: 12 }}
@@ -123,7 +109,6 @@ function AddEmployee() {
               </Button>
             </Col>
           </Row>
-
           <Row gutter={[24, 8]}>
             <Col
               xs={{ span: 24 }}
@@ -171,7 +156,6 @@ function AddEmployee() {
                 />
               </Form.Item>
             </Col>
-
             <Col
               xs={{ span: 24 }}
               sm={{ span: 12 }}
@@ -219,7 +203,6 @@ function AddEmployee() {
               </Form.Item>
             </Col>
           </Row>
-
           <Row gutter={[24, 8]}>
             <Col
               xs={{ span: 24 }}
@@ -237,7 +220,6 @@ function AddEmployee() {
                 //     event.preventDefault();
                 //   }
                 // }}
-
                 rules={[
                   {
                     required: true,
@@ -255,7 +237,6 @@ function AddEmployee() {
                 <Input required placeholder="Enter Email Address" />
               </Form.Item>
             </Col>
-
             <Col
               xs={{ span: 24 }}
               sm={{ span: 12 }}
@@ -283,7 +264,6 @@ function AddEmployee() {
               </Form.Item>
             </Col>
           </Row>
-
           <Row gutter={[24, 8]}>
             <Col
               xs={{ span: 24 }}
@@ -319,14 +299,11 @@ function AddEmployee() {
                   //     setAmount(amt);
                   //     setTotal(amt * quantity);
                   //     form.setFieldsValue({ subTotal: amt * quantity });
-
                   //   }}
-
                   placeholder="Enter Phone Number"
                 />
               </Form.Item>
             </Col>
-
             <Col
               xs={{ span: 24 }}
               sm={{ span: 12 }}
@@ -417,7 +394,6 @@ function AddEmployee() {
                 </Select>
               </Form.Item>
             </Col>
-
             <Col
               xs={{ span: 24 }}
               sm={{ span: 12 }}
@@ -453,7 +429,6 @@ function AddEmployee() {
               </Form.Item>
             </Col>
           </Row>
-
           <Row gutter={[24, 8]}>
             <Col
               xs={{ span: 24 }}
@@ -492,7 +467,6 @@ function AddEmployee() {
                 </Select>
               </Form.Item>
             </Col>
-
             <Col
               xs={{ span: 24 }}
               sm={{ span: 12 }}
@@ -528,7 +502,6 @@ function AddEmployee() {
               </Form.Item>
             </Col>
           </Row>
-
           <Row gutter={[24, 8]}>
             <Col span={6}></Col>
             <Col
@@ -568,7 +541,6 @@ function AddEmployee() {
             </Col>
             <Col span={3}></Col>
           </Row>
-
           <Row gutter={[24, 16]}>
             <Col classsname="gutter-row" span={9}></Col>
             <Col classsname="gutter-row">
@@ -617,5 +589,4 @@ function AddEmployee() {
     </>
   );
 }
-
 export default AddEmployee;

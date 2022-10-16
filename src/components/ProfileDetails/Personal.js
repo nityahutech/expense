@@ -6,7 +6,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import moment from "moment";
 const { TextArea } = Input;
 const { Option } = Select;
-const dateFormatList = ["DD/MM/YYYY"];
+// const dateFormatList = ["DD/MM/YYYY"];
 function Personal() {
   const [editContent, showEditContent] = useState(false);
   const [editContactInfo, showEditContactInfo] = useState(false);
@@ -24,15 +24,11 @@ function Personal() {
   const [data, setData] = useState([]);
   const { currentUser } = useAuth();
   const onFinish = (value) => {
-    console.log(data);
-    console.log(value);
     let nameArray = value.name.split(" ");
-
     let fname = "";
     for (let i = 0; i < nameArray.length - 1; i++) {
       fname = fname + nameArray[i] + " ";
     }
-    console.log(fname, nameArray[nameArray.length - 1]);
     let record = {
       ...value,
       lname: nameArray[nameArray.length - 1],
@@ -40,10 +36,6 @@ function Personal() {
       dob: dob ? dob : null,
     };
     delete record["name"];
-    console.log("success", record);
-    console.log(dob);
-    console.log(scrs);
-    console.log(lccs);
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
     // setData(record)
     getData();
@@ -54,68 +46,49 @@ function Personal() {
   //   return current && current > moment().endOf('day');
   // }
   // const [contactdata, setContactData] = useState([]);
-
   const onContactFinish = (values) => {
-    // console.log(contactdata)
-    console.log(values);
-    console.log("success", values);
-
     EmpInfoContext.updateEduDetails(currentUser.uid, values);
     //  setData(values)
-
     getData();
     showEditContactInfo(false);
   };
   // const [addressdata, setAddressData] = useState([]);
-
   const onEditAddressFinish = (newvalue) => {
-    console.log(lccs, scrs);
-    console.log(newvalue);
     let record = {
       ...newvalue,
       scrs: scrs ? scrs : null,
       lccs: lccs ? lccs : null,
     };
-    console.log("success", record);
-
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
     showEditAddressInfo(false);
     getData();
   };
-
   useEffect(() => {
     getData();
     // getContactData();
     // getAddressData();
   }, []);
-
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    console.log(data);
     setData(data);
     setDob(data.dob ? data.dob : null);
     setLccs(data.lccs ? data.lccs : null);
     setScrs(data.scrs ? data.scrs : null);
   };
-  console.log(data);
   const getContactData = async () => {
     let alldata = await EmpInfoContext.getEduDetails(currentUser.uid);
-    console.log(alldata);
     getData();
     // setMailId(data.mailid?data.mailid:null)
     // setContactEmail(data.contactEmail?data.contactEmail:null)
     // setPhoneNumber(data.phonenumber?data.phonenumber:null)
   };
-  console.log(data);
   const getAddressData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    console.log(data);
     getData();
     // setCurrentAdd(data.currentAdd?data.currentAdd:null)
     // setPermanentAdd(data.permanentAdd?data.permanentAdd:null)
     // setHouseType(data.houseType?data.houseType:null)
   };
-
   return (
     <>
       <div
@@ -209,7 +182,7 @@ function Personal() {
                     <div>{data ? data.dob : null}</div>
                   ) : (
                     <Form.Item
-                      initialValue={moment(dob, "DD-MM-YYYY")}
+                      initialValue={dob?moment(dob, "DD-MM-YYYY"):null}
                       name="dob"
                       rules={[
                         {
@@ -221,10 +194,10 @@ function Personal() {
                       {/* format={dateFormatList} */}
                       <DatePicker
                         style={{ width: "100%" }}
-                        format={dateFormatList}
+                        // format={dateFormatList}
+                        // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
                         onChange={(e) => {
                           setDob(e.format("DD-MM-YYYY"));
-                          console.log(e.format("DD-MM-YYYY"));
                         }}
                         //  disabledDate={disabledDate}
                         value={dob}
@@ -412,7 +385,6 @@ function Personal() {
                     <div>{data ? data.mailid : null}</div>
                   ) : (
                     <Form.Item
-                    
                       initialValue={data ? data.mailid : null}
                       name="mailid"
                       rules={[
@@ -654,7 +626,7 @@ function Personal() {
                           // message: "Please enter First Name",
                         },
                         {
-                          pattern: /^[a-zA-Z\s]*$/,
+                          // pattern: /^[a-zA-Z\s]*$/,
                           // message: "Please enter Valid Name",
                         },
                       ]}
@@ -747,7 +719,7 @@ function Personal() {
                   ) : (
                     <Form.Item
                       // name="dob"
-                      initialValue={moment(scrs, "DD-MM-YYYY")}
+                      initialValue={scrs?moment(scrs, "DD-MM-YYYY"):null}
                       name="scrs"
                       rules={[
                         {
@@ -757,10 +729,10 @@ function Personal() {
                       ]}
                     >
                       <DatePicker
-                        format={dateFormatList}
+                        // format={dateFormatList}
+                        // defaultValue= {scrs?moment(scrs, "DD-MM-YYYY"):null}
                         onChange={(e) => {
                           setScrs(e.format("DD-MM-YYYY"));
-                          console.log(e.format("DD-MM-YYYY"));
                         }}
                         style={{ width: "100%" }}
                       />
@@ -781,7 +753,7 @@ function Personal() {
                     <div>{data ? data.lccs : null}</div>
                   ) : (
                     <Form.Item
-                      initialValue={moment(lccs, "DD-MM-YYYY")}
+                      initialValue={lccs?moment(lccs, "DD-MM-YYYY"):null}
                       name="lccs"
                       rules={[
                         {
@@ -791,7 +763,8 @@ function Personal() {
                       ]}
                     >
                       <DatePicker
-                        format={dateFormatList}
+                        // format={dateFormatList}
+                        // defaultValue= {lccs?moment(lccs, "DD-MM-YYYY"):null}
                         onChange={(e) => {
                           setLccs(e.format("DD-MM-YYYY"));
                         }}
@@ -837,5 +810,4 @@ function Personal() {
     </>
   );
 }
-
 export default Personal;

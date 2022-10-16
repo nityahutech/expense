@@ -3,13 +3,10 @@ import { useState, useEffect } from "react";
 import Navbar from '../components/navbar/Navbar';
 import Sidebar from "../components/sidebar/NewSidebar";
 import Document from '../components/ProfileDetails/Document';
-
 function DocumentsPage() {
     const [accessToken, setAccessToken] = useState(null);
- 
-    useEffect(() => {
+     useEffect(() => {
         let token = sessionStorage.getItem("accessToken");
-        console.log({ token });
         if (token === 'null') {
             window.location.href = "/";
         } else {
@@ -22,12 +19,10 @@ function DocumentsPage() {
     <Sidebar activeSubMenu={["sub3"]}
   activeMenu={["15"]} accessToken={accessToken}/>
     </div>
-
     <div className="homeContainer">
         <div className="table">
             <Navbar />
         </div>
-
         <div className="tables">
         <Document />
         </div>
@@ -35,5 +30,4 @@ function DocumentsPage() {
 </div>
   ) : null;
 }
-
 export default DocumentsPage

@@ -12,6 +12,8 @@ import {
 } from "firebase/firestore";
 import moment from "moment";
 const leaveCollectionRef = collection(db, "leave");
+const usersCollectionRef = collection(db, "users");
+const daysCollectionRef = collection(db, "leavedays");
 class LeaveContext {
     leaves = [];
     leaveDays = {};
@@ -22,49 +24,56 @@ class LeaveContext {
         const leaveDoc = doc(db, "leave", id);
         return deleteDoc(leaveDoc);
     };
-    // getLeave = (id) => {
-    //     const leaveDoc = doc(db, "leave", id);
-    //     return getDoc(leaveDoc);
-    // };
+    getLeaves = () => {
+        // const q = query(leaveCollectionRef, where("empId", "==", id));
+        return getDocs(leaveCollectionRef);
+    };
     getAllById = (id) => {
         const q = query(leaveCollectionRef, where("empId", "==", id));
         // console.log(q);
         return getDocs(q);
     };
     getAllByApprover = (name) => {
-        const q = query(leaveCollectionRef, where("approver", "==", name),where("status","==","Pending"));
-        // console.log(q);
+        const q = query(leaveCollectionRef, where("approver", "==", name));
         return getDocs(q);
     };
-    approveLeave = (id) => {
+    approveLeave = (id, comment) => {
         const leaveDoc = doc(db, "leave", id);
-        return updateDoc(leaveDoc, { status: "Approved" })
+        return updateDoc(leaveDoc, { status: "Approved", comment: comment })
     }
-    rejectLeave = (id) => {
+    rejectLeave = (id, comment) => {
         const leaveDoc = doc(db, "leave", id);
-        return updateDoc(leaveDoc, { status: "Rejected" })
+        return updateDoc(leaveDoc, { status: "Rejected", comment: comment })
     }
-    getLeaveDays = async (records, id) => {
-        let rec = await ProfileContext.getProfile(id);
-        this.leaveDays = {
-            "Earn Leave": "12",
-            "Sick Leave": "12",
-            "Casual Leave": "12",
-            "Optional Leave": "2"
-        }
-        console.log(this.leaveDays)
+    getLeaveDays = (records, leavedays) => {
+        console.log(leavedays)
         records.forEach((rec) => {
-            let date1 = moment(rec.dateCalc[0], "Do MMM, YYYY");
-            let date2 = moment(rec.dateCalc[1], "Do MMM, YYYY");
-            let dur = date2.diff(date1, 'days') + 1;
-            if (dur === 1 && rec.slot != 'Full Day') {
-                dur = 0.5;
+            if(rec.status == "Approved"){
+                let date1 = moment(rec.dateCalc[0], "Do MMM, YYYY");
+                let date2 = moment(rec.dateCalc[1], "Do MMM, YYYY");
+                let dur = date2.diff(date1, 'days') + 1;
+                if (dur === 1 && rec.slot != 'Full Day') {
+                    dur = 0.5;
+                }
+                leavedays[rec.nature] -= dur;
+                console.log(rec.nature, leavedays[rec.nature])
             }
-            this.leaveDays[rec.nature] -= dur;
-            console.log(rec.nature, this.leaveDays[rec.nature])
         })
-        console.log('dddddddddd', this.leaveDays)
-        return this.leaveDays
+        console.log('dddddddddd', leavedays)
+        return leavedays
+    }
+
+    getEmailApproverList = async (manager) => {
+        const q = query(usersCollectionRef, where("role", "==", "hr"));
+        let reqData = await getDocs(q);
+        let req = reqData.docs.map((doc) => {
+            return {
+                ...doc.data(),
+                id: doc.id
+            };
+        });
+        console.log(req);
+        return req;
     }
 }
 export default new LeaveContext();

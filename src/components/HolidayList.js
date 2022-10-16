@@ -29,7 +29,7 @@ const LeaveList = (props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [holidaylist, setHolidaylist] = useState([])
 
-    const colors = ['rgba(204, 204, 10,0.2)', 'rgba(252, 143, 10,0.2)',];
+    const colors = ['rgba(154, 214, 224, 0.96)', 'rgba(252, 143, 10,0.2)',];
     // const fontColors = ['rgba(204, 204, 10, 1)', 'color: "rgba(252, 143, 10, 1)', ];
 
     const columns = [
@@ -48,16 +48,16 @@ const LeaveList = (props) => {
         // 33-40 to be written in context
         allData.docs.map((doc) => {
             let d = allData.docs.map((doc) => {
-        
+
                 return {
                     ...doc.data(),
-                    Date:  moment( doc.data()["Date"].seconds*1000).format('Do MMM, YYYY'),                 
+                    Date: moment(doc.data()["Date"].seconds * 1000).format('Do MMM, YYYY'),
                     id: doc.id,
                 };
-            });   
+            });
             setHolidaylist(d)
-            console.log('holidaylist', d[1].Date);
-            console.log('holidaylist2',moment( d[1].Date.seconds*1000))
+            // console.log('holidaylist', d[1].Date);
+            // console.log('holidaylist2', moment(d[1].Date.seconds * 1000))
 
         });
     }
@@ -89,7 +89,7 @@ const LeaveList = (props) => {
 
 
     const showDrawer = () => {
-       getData()
+        getData()
         setOpen(true);
     };
 
@@ -113,13 +113,13 @@ const LeaveList = (props) => {
             //errormodal
             console.log('holiday allready Exist')
         }
-        
+
         else {
             CompanyHolidayContext.createHoliday(newHoliday)
                 .then(response => {
-                console.log("***11111111111111111**");
-                props.refershCalendar(newHoliday);  
-                // getData()
+                    console.log("***11111111111111111**");
+                    props.refershCalendar(newHoliday);
+                    // getData()
 
 
                 })
@@ -180,15 +180,15 @@ const LeaveList = (props) => {
     return (
         <Row style={{
             display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start',
-            borderTopLeftRadius: '10px',borderTopRightRadius:'10px', padding: '10px', marginBottom: '0px', backgroundColor:'white'
+            borderTopLeftRadius: '10px', borderTopRightRadius: '10px', padding: '10px', marginBottom: '0px', backgroundColor: 'white'
         }}
         >
             <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12}
                 style={{
                     display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start',
                     borderRadius: '10px',
-                       
-                    
+
+
                 }}
             >
 
@@ -198,7 +198,9 @@ const LeaveList = (props) => {
                     }} onClick={showDrawer}>
                         Holiday List
                     </Button>
-                    <Drawer title="List of Holiday" placement="right" onClose={onClose} visible={open} open={open}>
+                    <Drawer
+                        width={300}
+                        title="List of Holiday" placement="right" onClose={onClose} visible={open} open={open}>
                         {/* <Table columns={columns} dataSource={holidaylist} > */}
 
                         {/* {JSON.stringify(colors[id])} */}
@@ -209,9 +211,9 @@ const LeaveList = (props) => {
 
                                 <div className='holiday-div'
                                     style={holiday.optionalHoliday === true ? {
-                                        borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(204, 204, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                                        borderRadius: '5px', marginBottom: '10px', paddingRight: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(154, 214, 224, 0.96)', boxShadow: ' rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset'
                                     } : {
-                                        borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(252, 143, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                                        borderRadius: '5px', marginBottom: '10px', paddingRight: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(252, 143, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset'
                                     }}
                                 >
                                     <Space className='holiday-div-image' style={{
@@ -224,21 +226,21 @@ const LeaveList = (props) => {
                                             gap: '0px', justifyContent: 'space-between'
                                         }}
                                         >
-                                            <Text className='holiday-name' style={holiday.optionalHoliday === true ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }}>{holiday.Name}</Text>
-                                            {props.isHr?
+                                            <Text className='holiday-name' style={holiday.optionalHoliday === true ? { color: "rgba(0, 119, 137, 0.96)", } : { color: "rgba(252, 143, 10, 1)" }}>{holiday.Name}</Text>
+                                            {props.isHr ?
                                                 <DeleteOutlined
-                                                style={{
-                                                    display: 'flex', flexDirection: 'row', paddingTop: '5px', color: 'red'
-                                            }}
-                                            onClick={() => {
-                                                // if (record?.status !== 'Approved')
-                                                onDeleteLeave(holiday);
-                                            }}
-                                         />
-                                        :null}
+                                                    style={{
+                                                        display: 'flex', flexDirection: 'row', marginLeft: '5px', paddingTop: '5px', color: 'red'
+                                                    }}
+                                                    onClick={() => {
+                                                        // if (record?.status !== 'Approved')
+                                                        onDeleteLeave(holiday);
+                                                    }}
+                                                />
+                                                : null}
                                         </div>
 
-                                        <Text style={holiday.optionalHoliday === true ? { color: "rgba(204, 204, 10, 1)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.Date} / {holiday.optionalHoliday === true ? <span  >Optional </span> : <span>Official</span>}</Text>
+                                        <Text style={holiday.optionalHoliday === true ? { color: "rgba(0, 119, 137, 0.96)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.Date} / {holiday.optionalHoliday === true ? <span  >Optional </span> : <span>Official</span>}</Text>
 
                                     </Space>
                                 </div>
@@ -255,7 +257,7 @@ const LeaveList = (props) => {
                         ?
                         <div>
                             <Button className='button-div' style={{
-                                marginLeft: '10px',backgroundColor:''
+                                marginLeft: '10px', backgroundColor: ''
                             }} onClick={showModal}>
                                 Create Holiday
                             </Button>
@@ -304,7 +306,7 @@ const LeaveList = (props) => {
 
                                     >
 
-                                        <DatePicker
+                                        <DatePicker style={{ width: '100% ' }}
                                             disabledDate={disabledDate}
                                             format="MMM D, YYYY"
                                         />
@@ -317,7 +319,7 @@ const LeaveList = (props) => {
                                         style={{ marginBottom: "10px", }}
 
                                     >
-                                        <Radio.Group
+                                        <Radio.Group defaultValue="Official"
                                         >
                                             <Radio value="Optional"> Optional </Radio>
                                             <Radio value="Official"> Official </Radio>

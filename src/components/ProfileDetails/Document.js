@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import {
+  Form,
   Tabs,
   Button,
   Modal,
@@ -11,13 +12,25 @@ import {
   Checkbox,
   message,
   Upload,
+  Popconfirm,InputNumber,
 } from "antd";
 import { 
   PlusCircleOutlined,
-  UploadOutlined, 
+  UploadOutlined,
+  EditOutlined, 
 } from "@ant-design/icons";
 
 import "../../style/Documents.css";
+
+
+
+
+
+// ----------------------------------------------------------------------------------------------------------------------------
+
+
+
+
 
 
 // // ----------------------------------code for table of id tab
@@ -42,6 +55,9 @@ const idcolumns = [
     // colSpan: 1 ,
   },
   {
+    title:"Documents",
+    dataIndex:"doc",
+    key:"doc",
   }
 ];
 
@@ -49,130 +65,198 @@ const iddata = [
   {
     key: "1",
     name: "Photo ID",
+    doc: "Aaddhar Card",
   },
   {
     key: "2",
     name: "Date of Birth",
+    doc: "Driving Licence",
   },
   {
     key: "3",
     name: "Current Address",
+    doc: "Aaddhar Card",
   },
   {
     key: "4",
     name: "Permanent Address",
+    doc: "Voter ID Card",
   },
 ];
-
-// ----------------------------------code for document list of the id tab
-
-  const doclist =[
-    {
-      title: 'TYPE',
-      dataIndex: 'type',
-      key: 'type',
-    },
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-  ]
-
-  const docdata = [
-    {
-      key:'1',
-      type:'Photo ID',
-      id:'PAN Card',
-    }
-  ]
 
 // ---------------------------------code for table of certification
 
   const certcolumn = [
     {
-      title: "COURSE TITLE",
+      title: "Course Title",
       dataIndex:"name",
     },
     {
-      title: "UPLOADED BY",
-      dataIndex:"name",
+      title: "Upload By",
+      dataIndex:"uploadedby",
     },
     {
-      title: "TYPE",
-      dataIndex:"name",
+      title: "Type",
+      dataIndex:"type",
     },
     {
-      title: "VERIFICATION",
-      dataIndex:"name",
+      title: "Verified By",
+      dataIndex:"verification",
     },
     {
-      title: "ACTION",
-      dataIndex:"name",
+      title: "Action",
+      dataIndex:"action",
     },
   ]
 
   const certData = [
     {
       key:'1',
-      name:''
+      name:'Diploma',
+      uploadedby:'Saswat',
+      type:'Skill Development',
+      verification:'STB',
+      action:'verified',
     },
-    // {
-    //   key:'2',
-    //   name:''
-    // },
-    // {
-    //   key:'3',
-    //   name:''
-    // },
-    // {
-    //   key:'4',
-    //   name:''
-    // },
-    // {
-    //   key:'5',
-    //   name:''
-    // },
+    {
+      key:'2',
+      name:'Graduation',
+      uploadedby:'Saswat',
+      type:'Skill Development',
+      verification:'BPUT',
+      action:'Pending',
+    },
   ]
 
 // ------------------------------------code for table of Work tab
 
   const workcolumn = [
     {
-      title:'Name',
-      dataIndex: 'name',
+      title:'Company Name',
+      dataIndex: 'companyname',
     },
     {
-      title:'UPLOADED BY',
-      dataIndex: 'name',
+      title:'Work Experience ',
+      dataIndex: 'workexperience',
     },
     {
-      title:'UPLOADED ON',
-      dataIndex: 'name',
+      title:'Upload Document',
+      dataIndex: 'uploadedon',
     },
     {
-      title:'ACTION',
-      dataIndex: 'name',
+      title:'Action',
+      dataIndex: 'action',
     },
   ]
 
   const workData = [
     {
-      
+      key:'1',
+      companyname:'Delta',
+      workexperience:'2.5 years',
+      uploadedon:'pay slip image.png',
+      action:'verified',
     }
   ]
-// ----------------------------------------------------------------
+// ------------------------------------------------------------------------------
+
+
+
+
+
 
 
 function Document() {
+
+
+
+
 
 
   // -------------------------------------------------------------------space for const decleration
 
   const { Title } = Typography;
 
-  // --------------------------code for model in id tab
+  // --------------------------code for document list in id tab
+  const doclist =[
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
+    },
+    {
+      title: 'Id',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Id no.',
+      dataIndex: 'idno',
+      key: 'idno',
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+    }
+  ]
+
+  const [getiddata, setiddata] = useState([
+    {
+      key:'1',
+      type:'Photo ID',
+      id:'PAN Card',
+      idno:'AB1234567',
+      action:'Verified   Edit   Delete'
+    },
+  ])
+
+  // ---------------------------------code for table of certification
+
+  const certcolumn = [
+    {
+      title: "Course Title",
+      dataIndex:"name",
+    },
+    {
+      title: "Upload By",
+      dataIndex:"uploadedby",
+    },
+    {
+      title: "Type",
+      dataIndex:"type",
+    },
+    {
+      title: "Verified By",
+      dataIndex:"verification",
+    },
+    {
+      title: "Action",
+      dataIndex:"action",
+    },
+  ]
+
+  const [getCertData, setCertData] = [
+    {
+      key:'1',
+      name:'Diploma',
+      uploadedby:'Saswat',
+      type:'Skill Development',
+      verification:'STB',
+      action:'verified',
+    },
+    {
+      key:'2',
+      name:'Graduation',
+      uploadedby:'Saswat',
+      type:'Skill Development',
+      verification:'BPUT',
+      action:'Pending Edit Delete',
+    },
+  ]
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const[selectedIdType,setSelectedIdType]=useState(null)
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -187,7 +271,7 @@ function Document() {
   };
   // -------------------------code for model in certificatoin tab
   const [certMOdel, setCertModal] = useState(false);
-
+  const [selectedCourseType,setSelectedCourseType]=useState(null)
   const showCert = () => {
     setCertModal(true);
   };
@@ -216,8 +300,14 @@ function Document() {
   // -------------------------code for select on id
   const { Option } = Select;
 
-  const idoption = (value) => {
+  const idOption = (value) => {
     console.log(`selected ${value}`);
+    setSelectedIdType(value);
+  };
+// ---------------------------code for select on certification
+  const certOption = (value) => {
+    console.log(`selected ${value}`);
+    setSelectedCourseType(value);
   };
   // -------------------------code for checkbox
   const checkId = (e) => {
@@ -254,6 +344,41 @@ function Document() {
   };
   // ---------------------------------------------------------space for the return
 
+  const EditableCell = ({
+    editing,
+    dataIndex,
+    title,
+    inputType,
+    record,
+    index,
+    children,
+    ...restProps
+  }) => {
+    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+    return (
+      <td {...restProps}>
+        {editing ? (
+          <Form.Item
+            name={dataIndex}
+            style={{
+              margin: 0,
+            }}
+            rules={[
+              {
+                required: true,
+                message: `Please Input ${title}!`,
+              },
+            ]}
+          >
+            {inputNode}
+          </Form.Item>
+        ) : (
+          children
+        )}
+      </td>
+    );
+  };
+
   return (
     <div
       className="education"
@@ -267,11 +392,7 @@ function Document() {
     >
       <div
         style={{
-          width: "800px",
-          marginTop: "10px",
-          backgroundColor: "white",
-          padding: "10px",
-          display: "flex",
+          width: "800px",marginTop: "10px",backgroundColor: "white",padding: "10px",display: "flex",
           justifyContent: "center",
         }}
       >
@@ -279,6 +400,11 @@ function Document() {
           {/* ------------------------------------IDs tabs------------------------------------- */}
           <Tabs.TabPane tab="IDs" key="1">
             <Table
+             components={{
+              body: {
+                cell: EditableCell,
+              },
+            }}
               columns={idcolumns}
               dataSource={iddata}
               pagination={false}
@@ -290,11 +416,12 @@ function Document() {
             />
             <Table
               columns={doclist}
-              dataSource={docdata}
+              dataSource={getiddata}
               pagination={false}
               style={{
                 margin: "0px",
                 padding: "0px",
+                // border:'3px solid red'
               }}
               bordered
             />
@@ -308,21 +435,21 @@ function Document() {
             >
               <Title level={5}>Select ID Type</Title>
               <Select
-                onChange={idoption}
+              value={selectedIdType}
+                onChange={idOption}
                 style={{
-                  width: "100%",
+                  width: "100%"
                 }}
-                defaultValue="Id Type"
               >
-                <Option>PAN Card</Option>
-                <Option>Aadhar Card</Option>
-                <Option>Passport</Option>
-                <Option>Driving Licence</Option>
-                <option>Voter ID</option>
-                <Option>Electricity Bill</Option>
-                <Option>Phone Bill</Option>
-                <Option>Bank Passbook</Option>
-                <Option>Rental Agreement</Option>
+                <Option value="PAN Card">PAN Card</Option>
+                <Option value="Aadhar Card">Aadhar Card</Option>
+                <Option value="Passport">Passport</Option>
+                <Option value="Driving Licence">Driving Licence</Option>
+                <option value="Voter ID">Voter ID</option>
+                <Option value="Electricity Bill">Electricity Bill</Option>
+                <Option value="Phone Bill">Phone Bill</Option>
+                <Option value="Bank Passbook">Bank Passbook</Option>
+                <Option value="Rental Agreement">Rental Agreement</Option>
               </Select>
 
               <Input
@@ -356,12 +483,12 @@ function Document() {
             </Button>
           </Tabs.TabPane>
 
-          {/* ----------------------------------------------------------Certification tab---------------- */}
+          {/* ------------------------Certification tab---------------- */}
 
           <Tabs.TabPane tab="Certification" key="2">
             <Table
                 columns={certcolumn}
-                dataSource={certData}
+                dataSource={getCertData}
                 pagination={false}
                 style={{
                   margin: "0px",
@@ -379,24 +506,25 @@ function Document() {
             >
               <Title level={5}>Select Course Type</Title>
               <Select
-                onChange={idoption}
+                onChange={certOption}
                 style={{
                   width: "100%",
                 }}
                 defaultValue="Course Type"
+                value={selectedCourseType}
               >
-                <Option>Graduation</Option>
-                <Option>Post Graduation</Option>
-                <Option>Doctorate</Option>
-                <Option>Diploma</Option>
-                <Option>Pre University</Option>
-                <Option>Certification</Option>
-                <Option>Others</Option>
+                <Option value='Graduation'>Graduation</Option>
+                <Option value='Post Graduation'>Post Graduation</Option>
+                <Option vale='Doctorate'>Doctorate</Option>
+                <Option value='Diploma'>Diploma</Option>
+                <Option value='Pre University'>Pre University</Option>
+                <Option value='Certification'>Certification</Option>
+                <Option value='Others'>Others</Option>
               </Select>
 
               <Input
                 placeholder="Enter Certification title"
-                style={{ marginTop: "25px", marginBottom: "25px" }}
+                style={{ marginTop: "15px", marginBottom: "25px" }}
               />
 
               <Upload {...props}>
@@ -409,7 +537,7 @@ function Document() {
                 </Button>
               </Upload>
             </Modal>
-            <Button type="text" onClick={showCert}>
+            <Button type="text" style={{marginTop:'15px'}}onClick={showCert}>
               <PlusCircleOutlined /> Add
             </Button>
           </Tabs.TabPane>
@@ -437,7 +565,7 @@ function Document() {
             >
               <Input
                 placeholder="Enter Document Title"
-                style={{ marginTop: "25px", marginBottom: "25px" }}
+                style={{ marginTop: "25px"}}
               />
 
               <Input
@@ -455,7 +583,7 @@ function Document() {
                 </Button>
               </Upload>
             </Modal>
-            <Button type="text" onClick={showWork}>
+            <Button type="text" style={{marginTop:'15px'}} onClick={showWork}>
               <PlusCircleOutlined /> Add
             </Button>
           </Tabs.TabPane>

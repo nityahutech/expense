@@ -4,11 +4,6 @@ import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 import { useAuth } from "../../contexts/AuthContext";
 import AddEmployee from "../../components/addemployee";
-
-
-
-
-
 function DashBoard() {
   const [accessToken, setAccessToken] = useState(null);
   const { currentUser, role } = useAuth();
@@ -18,11 +13,8 @@ function DashBoard() {
   //   let res = await ProfileContext.getProfile(currentUser.uid);
   //   return res.data();
   // }
-
   useEffect(() => {
-    console.log(role);
     let token = sessionStorage.getItem("accessToken");
-    console.log({ token });
     if (token === "null") {
       window.location.href = "/";
     } else {
@@ -51,5 +43,4 @@ function DashBoard() {
     </div>
   ) : null;
 }
-
 export default DashBoard;

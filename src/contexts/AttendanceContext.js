@@ -20,6 +20,7 @@ import {
     get
 } from "firebase/firestore";
 import { async } from "@firebase/util";
+import { MacCommandFilled } from "@ant-design/icons";
 
 const attendCollectionRef = collection(db, "attendance");
 const usersCollectionRef = collection(db, "users");
@@ -204,10 +205,10 @@ class AttendanceContext {
 
     updateWithLeave = async (data) => {
       console.log(data)
-      await data.forEach((emp) => {
+      data.forEach((emp) => {
         if(emp.status == "Absent") {
-          this.getLeaveStatus(emp.id).then((leave) => {
-            console.log("7777");
+          this.getLeaveStatus(emp.empId).then((leave) => {
+            console.log("7777", leave);
               if (leave) {
               console.log("8888");
               emp.status = "On Leave";
@@ -241,28 +242,17 @@ class AttendanceContext {
     };
 
     getLeaveStatus = async (id) => {
-        console.log(id);
-        const q = query(leaveCollectionRef, where("empId", "==", id), where("status", "==", "Approved"));
-        let stats = await getDocs(q);
-        let res = stats.docs.map((doc) => {
-          return {
-            name: doc.data().name,
-            date: doc.data().date,
-          };
-        });
-        let status = false;
-        console.log(res);
-        const momentRange = extendMoment(Moment);
-        res.forEach((leave) => {
-            let start = moment(leave.date[0], "Do MMM, YYYY");
-            let end = moment(leave.date[1], "Do MMM, YYYY").add(1, "days");
-            let range = momentRange.range(start, end);
-            console.log(range)
-            status = range.contains(moment()) ? true : status;
-            console.log(status)
-        })
-        return status;
-    }
+      console.log(id);
+      const q = query(leaveCollectionRef, where("empId", "==", id), where("status", "==", "Approved"));
+      let stats = await getDocs(q);
+      let temp = []
+      stats.docs.map((doc) => {
+        temp.push(doc.data().date)
+      });
+      let leaves = [].concat.apply([], temp)
+      // console.log(leaves, (moment().format("Do MMM, YYYY")), leaves.includes(moment().format("Do MMM, YYYY")));
+      return leaves.includes(moment().format("Do MMM, YYYY"));
+  }
 
     getAttendance = (id) => { 
         const q = query(attendCollectionRef, where("empId", "==", id),limit(1))

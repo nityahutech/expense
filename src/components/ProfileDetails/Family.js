@@ -657,7 +657,7 @@ const Family = () => {
                       name="otherContact"
                       rules={[
                         {
-                          required: false,
+                          required: true,
                           message: "Please enter Phone Number",
                           pattern: /^[0-9\b]+$/,
                         },

@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import {
+  Tag,
   Form,
   Tabs,
   Button,
@@ -12,26 +13,19 @@ import {
   Checkbox,
   message,
   Upload,
-  Popconfirm,InputNumber,
+  Popconfirm,
+  InputNumber,
 } from "antd";
-import { 
+import {
   PlusCircleOutlined,
   UploadOutlined,
-  EditOutlined, 
+  EditOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 
 import "../../style/Documents.css";
 
-
-
-
-
 // ----------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
 
 // // ----------------------------------code for table of id tab
 
@@ -46,8 +40,8 @@ const sharedOnCell = (_, index) => {
 };
 
 const idcolumns = [
-  { 
-    title:"Proofs",   
+  {
+    title: "Proofs",
     dataIndex: "name",
     onCell: sharedOnCell,
     key: "name",
@@ -55,10 +49,10 @@ const idcolumns = [
     // colSpan: 1 ,
   },
   {
-    title:"Documents",
-    dataIndex:"doc",
-    key:"doc",
-  }
+    title: "Documents",
+    dataIndex: "doc",
+    key: "doc",
+  },
 ];
 
 const iddata = [
@@ -84,179 +78,222 @@ const iddata = [
   },
 ];
 
-// ---------------------------------code for table of certification
-
-  const certcolumn = [
-    {
-      title: "Course Title",
-      dataIndex:"name",
-    },
-    {
-      title: "Upload By",
-      dataIndex:"uploadedby",
-    },
-    {
-      title: "Type",
-      dataIndex:"type",
-    },
-    {
-      title: "Verified By",
-      dataIndex:"verification",
-    },
-    {
-      title: "Action",
-      dataIndex:"action",
-    },
-  ]
-
-  const certData = [
-    {
-      key:'1',
-      name:'Diploma',
-      uploadedby:'Saswat',
-      type:'Skill Development',
-      verification:'STB',
-      action:'verified',
-    },
-    {
-      key:'2',
-      name:'Graduation',
-      uploadedby:'Saswat',
-      type:'Skill Development',
-      verification:'BPUT',
-      action:'Pending',
-    },
-  ]
-
-// ------------------------------------code for table of Work tab
-
-  const workcolumn = [
-    {
-      title:'Company Name',
-      dataIndex: 'companyname',
-    },
-    {
-      title:'Work Experience ',
-      dataIndex: 'workexperience',
-    },
-    {
-      title:'Upload Document',
-      dataIndex: 'uploadedon',
-    },
-    {
-      title:'Action',
-      dataIndex: 'action',
-    },
-  ]
-
-  const workData = [
-    {
-      key:'1',
-      companyname:'Delta',
-      workexperience:'2.5 years',
-      uploadedon:'pay slip image.png',
-      action:'verified',
-    }
-  ]
-// ------------------------------------------------------------------------------
-
-
-
-
-
-
+const getiddata = [
+  {
+    key: "1",
+    type: "Photo ID",
+    id: "PAN Card",
+    idno: "AB1234567",
+    action: "Verified   Edit   Delete",
+  },
+];
 
 function Document() {
+  const [idData, setIdData] = useState(getiddata);
 
-
-
-
-
+  const handleDelete = (key) => {
+    const newData = idData.filter((item) => item.key !== key);
+    setIdData(newData);
+  };
 
   // -------------------------------------------------------------------space for const decleration
 
   const { Title } = Typography;
 
   // --------------------------code for document list in id tab
-  const doclist =[
+  const doclist = [
     {
-      title: 'Type',
-      dataIndex: 'type',
-      key: 'type',
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
     },
     {
-      title: 'Id',
-      dataIndex: 'id',
-      key: 'id',
+      title: "Id",
+      dataIndex: "id",
+      key: "id",
     },
     {
-      title: 'Id no.',
-      dataIndex: 'idno',
-      key: 'idno',
+      title: "Id no.",
+      dataIndex: "idno",
+      key: "idno",
     },
     {
-      title: 'Action',
-      dataIndex: 'action',
-      key: 'action',
-    }
-  ]
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
 
-  const [getiddata, setiddata] = useState([
-    {
-      key:'1',
-      type:'Photo ID',
-      id:'PAN Card',
-      idno:'AB1234567',
-      action:'Verified   Edit   Delete'
+      render: (_, record) => {
+        console.log("record:: ", record);
+        return (
+          <>
+            {/* <Space size="small"> */}
+            <Button
+              style={{ padding: 0 }}
+              type="link"
+              className="edIt"
+              // onClick={() => {
+              //   handleEditEmployee(record);
+              //   showModal(record);
+              // }}
+            >
+              {<EditOutlined />}
+            </Button>
+            
+            <Button
+              type='text'
+              style={{color:'#f04747'}}
+            >
+              <Popconfirm
+                title="Sure to delete?"
+                onConfirm={() => handleDelete(record.key)}
+              >
+                <DeleteOutlined />
+              </Popconfirm>
+            </Button>
+          </>
+        );
+      },
     },
-  ])
+  ];
 
   // ---------------------------------code for table of certification
 
   const certcolumn = [
     {
       title: "Course Title",
-      dataIndex:"name",
+      dataIndex: "name",
     },
     {
       title: "Upload By",
-      dataIndex:"uploadedby",
+      dataIndex: "uploadedby",
     },
     {
       title: "Type",
-      dataIndex:"type",
+      dataIndex: "type",
     },
     {
       title: "Verified By",
-      dataIndex:"verification",
+      dataIndex: "verification",
     },
     {
       title: "Action",
-      dataIndex:"action",
+      dataIndex: "action",
+      render: (_, record) => {
+        console.log("record:: ", record);
+        return (
+          <>
+            {/* <Space size="small"> */}
+            <Button
+              style={{ padding: 0 }}
+              type="link"
+              className="edIt"
+              // onClick={() => {
+              //   handleEditEmployee(record);
+              //   showModal(record);
+              // }}
+            >
+              {<EditOutlined />}
+            </Button>
+            <Button
+              type='text'
+              style={{color:'#f04747'}}
+            >
+              <Popconfirm
+                title="Sure to delete?"
+                onConfirm={() => handleDelete(record.key)}
+              >
+                <DeleteOutlined />
+              </Popconfirm>
+            </Button>
+          </>
+        );
+      },
     },
-  ]
+  ];
 
-  const [getCertData, setCertData] = [
+  const getCertData = [
     {
-      key:'1',
-      name:'Diploma',
-      uploadedby:'Saswat',
-      type:'Skill Development',
-      verification:'STB',
-      action:'verified',
+      key: "1",
+      name: "Diploma",
+      uploadedby: "Saswat",
+      type: "Skill Development",
+      verification: "STB",
+      action: "verified",
     },
     {
-      key:'2',
-      name:'Graduation',
-      uploadedby:'Saswat',
-      type:'Skill Development',
-      verification:'BPUT',
-      action:'Pending Edit Delete',
+      key: "2",
+      name: "Graduation",
+      uploadedby: "Saswat",
+      type: "Skill Development",
+      verification: "BPUT",
+      action: "Pending Edit Delete",
     },
-  ]
+  ];
+
+  // ---------------------------------code for table of work
+
+  const workcolumn = [
+    {
+      title: "Company Name",
+      dataIndex: "companyname",
+    },
+    {
+      title: "Work Experience ",
+      dataIndex: "workexperience",
+    },
+    {
+      title: "Upload Document",
+      dataIndex: "uploadedon",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (_, record) => {
+        console.log("record:: ", record);
+        return (
+          <>
+            {/* <Space size="small"> */}
+            <Button
+              style={{ padding: 0 }}
+              type="link"
+              className="edIt"
+              // onClick={() => {
+              //   handleEditEmployee(record);
+              //   showModal(record);
+              // }}
+            >
+              {<EditOutlined />}
+            </Button>
+            <Button
+              type='text'
+              style={{color:'#f04747'}}
+            >
+              <Popconfirm
+                title="Sure to delete?"
+                onConfirm={() => handleDelete(record.key)}
+              >
+                <DeleteOutlined />
+              </Popconfirm>
+            </Button>
+          </>
+        );
+      },
+    },
+  ];
+
+  const workData = [
+    {
+      key: "1",
+      companyname: "Delta",
+      workexperience: "2.5 years",
+      uploadedon: "pay slip image.png",
+      action: "verified",
+      
+    },
+  ];
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const[selectedIdType,setSelectedIdType]=useState(null)
+  const [selectedIdType, setSelectedIdType] = useState(null);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -271,7 +308,7 @@ function Document() {
   };
   // -------------------------code for model in certificatoin tab
   const [certMOdel, setCertModal] = useState(false);
-  const [selectedCourseType,setSelectedCourseType]=useState(null)
+  const [selectedCourseType, setSelectedCourseType] = useState(null);
   const showCert = () => {
     setCertModal(true);
   };
@@ -304,7 +341,7 @@ function Document() {
     console.log(`selected ${value}`);
     setSelectedIdType(value);
   };
-// ---------------------------code for select on certification
+  // ---------------------------code for select on certification
   const certOption = (value) => {
     console.log(`selected ${value}`);
     setSelectedCourseType(value);
@@ -354,7 +391,7 @@ function Document() {
     children,
     ...restProps
   }) => {
-    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+    const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
     return (
       <td {...restProps}>
         {editing ? (
@@ -392,7 +429,11 @@ function Document() {
     >
       <div
         style={{
-          width: "800px",marginTop: "10px",backgroundColor: "white",padding: "10px",display: "flex",
+          width: "800px",
+          marginTop: "10px",
+          backgroundColor: "white",
+          padding: "10px",
+          display: "flex",
           justifyContent: "center",
         }}
       >
@@ -400,11 +441,11 @@ function Document() {
           {/* ------------------------------------IDs tabs------------------------------------- */}
           <Tabs.TabPane tab="IDs" key="1">
             <Table
-             components={{
-              body: {
-                cell: EditableCell,
-              },
-            }}
+              components={{
+                body: {
+                  cell: EditableCell,
+                },
+              }}
               columns={idcolumns}
               dataSource={iddata}
               pagination={false}
@@ -435,10 +476,10 @@ function Document() {
             >
               <Title level={5}>Select ID Type</Title>
               <Select
-              value={selectedIdType}
+                value={selectedIdType}
                 onChange={idOption}
                 style={{
-                  width: "100%"
+                  width: "100%",
                 }}
               >
                 <Option value="PAN Card">PAN Card</Option>
@@ -487,15 +528,15 @@ function Document() {
 
           <Tabs.TabPane tab="Certification" key="2">
             <Table
-                columns={certcolumn}
-                dataSource={getCertData}
-                pagination={false}
-                style={{
-                  margin: "0px",
-                  padding: "0px",
-                }}
-                bordered
-              />
+              columns={certcolumn}
+              dataSource={getCertData}
+              pagination={false}
+              style={{
+                margin: "0px",
+                padding: "0px",
+              }}
+              bordered
+            />
             <Modal
               title="Add Documents"
               open={certMOdel}
@@ -513,13 +554,13 @@ function Document() {
                 defaultValue="Course Type"
                 value={selectedCourseType}
               >
-                <Option value='Graduation'>Graduation</Option>
-                <Option value='Post Graduation'>Post Graduation</Option>
-                <Option vale='Doctorate'>Doctorate</Option>
-                <Option value='Diploma'>Diploma</Option>
-                <Option value='Pre University'>Pre University</Option>
-                <Option value='Certification'>Certification</Option>
-                <Option value='Others'>Others</Option>
+                <Option value="Graduation">Graduation</Option>
+                <Option value="Post Graduation">Post Graduation</Option>
+                <Option vale="Doctorate">Doctorate</Option>
+                <Option value="Diploma">Diploma</Option>
+                <Option value="Pre University">Pre University</Option>
+                <Option value="Certification">Certification</Option>
+                <Option value="Others">Others</Option>
               </Select>
 
               <Input
@@ -537,7 +578,11 @@ function Document() {
                 </Button>
               </Upload>
             </Modal>
-            <Button type="text" style={{marginTop:'15px'}}onClick={showCert}>
+            <Button
+              type="text"
+              style={{ marginTop: "15px" }}
+              onClick={showCert}
+            >
               <PlusCircleOutlined /> Add
             </Button>
           </Tabs.TabPane>
@@ -545,7 +590,7 @@ function Document() {
           {/* -------------------------------------------------Work tabs-------------------------- */}
 
           <Tabs.TabPane tab="Work" key="3">
-          <Table
+            <Table
               columns={workcolumn}
               dataSource={workData}
               pagination={false}
@@ -565,7 +610,7 @@ function Document() {
             >
               <Input
                 placeholder="Enter Document Title"
-                style={{ marginTop: "25px"}}
+                style={{ marginTop: "25px" }}
               />
 
               <Input
@@ -583,7 +628,11 @@ function Document() {
                 </Button>
               </Upload>
             </Modal>
-            <Button type="text" style={{marginTop:'15px'}} onClick={showWork}>
+            <Button
+              type="text"
+              style={{ marginTop: "15px" }}
+              onClick={showWork}
+            >
               <PlusCircleOutlined /> Add
             </Button>
           </Tabs.TabPane>

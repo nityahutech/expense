@@ -11,6 +11,7 @@ import {
   CheckOutlined,
   EditTwoTone,
   DeleteTwoTone,
+  EditFilled
 } from "@ant-design/icons";
 import FormItem from "antd/es/form/FormItem";
 import { useAuth } from "../../contexts/AuthContext";
@@ -106,7 +107,7 @@ function Education() {
                 style={{ color: "#4ec0f1" }}
                 onClick={() => showEditContent(!editContent)}
               >
-                Edit
+                <EditFilled />
               </Button>
             ) : null}
           </>
@@ -414,7 +415,7 @@ function Education() {
                   University Name
                 </h1>
                 {editContent === false ? (
-                  <div>{data.university ? data.universityName : null}</div>
+                  <div>{data.university ? data.universityName : "-"}</div>
                 ) : (
                   <Form.Item
                     name="universityName"

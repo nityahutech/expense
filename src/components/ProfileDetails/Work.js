@@ -150,7 +150,7 @@ function Work() {
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   Employee Type
                 </div>
-                {editWork === false ? (<div>{empType}</div>)
+                {editWork === false ? (<div>{empType?{empType}:"-"}</div>)
                 : (<Form.Item
                 // initialValue={data ? data.bloodGroup : null}
                 name="empType"
@@ -177,7 +177,7 @@ function Work() {
                   Work Location
                 </div>
                 {editWork === false ? (
-                  <div>{workLocation}</div>
+                  <div>{workLocation? {workLocation}: "-"}</div>
                 ) : (
                   <Form.Item
                     // initialValue={data ? data.bloodGroup : null}

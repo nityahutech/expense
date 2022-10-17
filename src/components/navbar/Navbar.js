@@ -114,7 +114,7 @@ const Navbar = () => {
     console.log("BREHHHHHHHHHHHHS", isRunning);
     isClockRunning()
     const timer = setInterval(() => {
-      console.log(isRunning, clockinfo);
+      // console.log(isRunning, clockinfo);
       if (isRunning) {
         setClockInfo(clockinfo => clockinfo + 1)
       }

@@ -104,7 +104,7 @@ function BankAccount() {
                   {editContent === false ? (
                     <Button
                       type="text"
-                      style={{ color: "darkgray" }}
+                      style={{ color: "#4ec0f1" }}
                       onClick={() => showEditContent(!editContent)}
                     >
                       <EditFilled />

@@ -665,14 +665,7 @@ function AttendanceLog({ empDetails }) {
                   dataSource={empMonthly}
                   pagination={true}
                 />
-                {/* <Pagination
-                  onChange={(page) => {
-                    setCurrentPage(page);
-                  }}
-                  total={empMonthly?.length || 0}
-                  current={currentPage}
-                  pageSize={10}
-                /> */}
+
                 {console.log(empMonthly || [])}
               </Tabs.TabPane>
             </>

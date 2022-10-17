@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Input, Button, DatePicker, Select, Form } from "antd";
-import { CloseOutlined } from "@ant-design/icons";
+import { CloseOutlined, EditFilled } from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { useAuth } from "../../contexts/AuthContext";
 import moment from "moment";
@@ -126,7 +126,7 @@ function Personal() {
                     style={{ color: "#4ec0f1" }}
                     onClick={() => showEditContent(!editContent)}
                   >
-                    Edit
+                    <EditFilled />
                   </Button>
                 ) : null}
               </>
@@ -179,7 +179,7 @@ function Personal() {
                     Date of Birth
                   </div>
                   {editContent === false ? (
-                    <div>{data ? data.dob : null}</div>
+                    <div>{data.dob ? data.dob : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={dob?moment(dob, "DD-MM-YYYY"):null}
@@ -217,7 +217,7 @@ function Personal() {
                   ) : (
                     <Form.Item
                       name="gender"
-                      initialValue={data ? data.gender : null}
+                      initialValue={data.gender ? data.gender : "-"}
                       rules={[
                         {
                           required: true,
@@ -244,7 +244,7 @@ function Personal() {
                     Blood Group
                   </div>
                   {editContent === false ? (
-                    <div>{data ? data.bloodGroup : null}</div>
+                    <div>{data.bloodGroup ? data.bloodGroup : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.bloodGroup : null}
@@ -279,7 +279,7 @@ function Personal() {
                     Marital Status
                   </div>
                   {editContent === false ? (
-                    <div>{data ? data.maritalStatus : null}</div>
+                    <div>{data.maritalStatus ? data.maritalStatus : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.maritalStatus : null}
@@ -365,7 +365,7 @@ function Personal() {
                     style={{ color: "#4ec0f1" }}
                     onClick={() => showEditContactInfo(!editContactInfo)}
                   >
-                    Edit
+                    <EditFilled />
                   </Button>
                 ) : null}
               </>
@@ -382,7 +382,7 @@ function Personal() {
                     Official Email ID
                   </div>
                   {editContactInfo === false ? (
-                    <div>{data ? data.mailid : null}</div>
+                    <div>{data.mailid ? data.mailid : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.mailid : null}
@@ -411,7 +411,7 @@ function Personal() {
                     Personal Email ID
                   </div>
                   {editContactInfo === false ? (
-                    <div>{data ? data.contactEmail : null}</div>
+                    <div>{data.contactEmail ? data.contactEmail : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.contactEmail : null}
@@ -440,7 +440,7 @@ function Personal() {
                     Phone Number
                   </div>
                   {editContactInfo === false ? (
-                    <div>{data ? data.phonenumber : null}</div>
+                    <div>{data.phonenumber ? data.phonenumber : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.phonenumber : null}
@@ -471,7 +471,7 @@ function Personal() {
                     Alternate Phone Number
                   </div>
                   {editContactInfo === false ? (
-                    <div>{data ? data.altPhnNo : null}</div>
+                    <div>{data.altPhnNo ? data.altPhnNo : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.altPhnNo : null}
@@ -561,7 +561,7 @@ function Personal() {
                     style={{ color: "#4ec0f1" }}
                     onClick={() => showEditAddressInfo(!editAddressInfo)}
                   >
-                    Edit
+                    <EditFilled />
                   </Button>
                 ) : null}
               </>
@@ -578,7 +578,7 @@ function Personal() {
                     Current Address
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data ? data.currentAdd : null}</div>
+                    <div>{data.currentAdd ? data.currentAdd : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.currentAdd : null}
@@ -613,7 +613,7 @@ function Personal() {
                     Permanent Address
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data ? data.permanentAdd : null}</div>
+                    <div>{data.permanentAdd ? data.permanentAdd : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.permanentAdd : null}
@@ -649,7 +649,7 @@ function Personal() {
                     House Type
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data ? data.houseType : null}</div>
+                    <div>{data.houseType ? data.houseType : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.houseType : null}
@@ -715,7 +715,7 @@ function Personal() {
                     Staying at Current Residence Since
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data ? data.scrs : null}</div>
+                    <div>{data.scrs ? data.scrs : "-"}</div>
                   ) : (
                     <Form.Item
                       // name="dob"
@@ -750,7 +750,7 @@ function Personal() {
                     Living in Current City Since
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data ? data.lccs : null}</div>
+                    <div>{data.lccs ? data.lccs : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={lccs?moment(lccs, "DD-MM-YYYY"):null}

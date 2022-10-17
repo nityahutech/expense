@@ -68,7 +68,7 @@ function Team() {
                     },
                   ]}
                 >
-                  <div>{repManager}</div>
+                  <div>{repManager? {repManager}: "-"}</div>
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -91,7 +91,7 @@ function Team() {
                     },
                   ]}
                 >
-                  <div>{secManager}</div>
+                  <div>{secManager? {secManager}: "-"}</div>
                 </Form.Item>
               </Col>
             </Row>

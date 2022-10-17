@@ -14,7 +14,7 @@ import {
   Select,
   Form,
 } from "antd";
-import { EditOutlined, CloseOutlined } from "@ant-design/icons";
+import { EditFilled, CloseOutlined } from "@ant-design/icons";
 const { TextArea } = Input;
 const { Option } = Select;
 function BankAccount() {
@@ -104,10 +104,10 @@ function BankAccount() {
                   {editContent === false ? (
                     <Button
                       type="text"
-                      style={{ color: "#4ec0f1" }}
+                      style={{ color: "darkgray" }}
                       onClick={() => showEditContent(!editContent)}
                     >
-                      Edit
+                      <EditFilled />
                     </Button>
                   ) : null}
                 </>
@@ -124,7 +124,7 @@ function BankAccount() {
                       Bank Name
                     </div>
                     {editContent === false ? (
-                      <div>{data ? data.bankName : null}</div>
+                      <div>{data.bankName ? data.bankName : "-"}</div>
                     ) : (
                       <Form.Item
                         name="bankname"
@@ -160,7 +160,7 @@ function BankAccount() {
                       Account Number
                     </div>
                     {editContent === false ? (
-                      <div>{data ? data.accountNumber : null}</div>
+                      <div>{data.accountNumber ? data.accountNumber : "-"}</div>
                     ) : (
                       <Form.Item
                         name="accountnumber"
@@ -200,7 +200,7 @@ function BankAccount() {
                       IFSC Code
                     </div>
                     {editContent === false ? (
-                      <div>{data ? data.ifscCode : null}</div>
+                      <div>{data.ifscCode ? data.ifscCode : "-"}</div>
                     ) : (
                       <Form.Item
                         name="ifsccode"

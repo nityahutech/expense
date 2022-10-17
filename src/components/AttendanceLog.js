@@ -9,6 +9,7 @@ import {
   Input,
   DatePicker,
   Spin,
+  Pagination,
 } from "antd";
 import "../style/AttendanceLog.css";
 import { SearchOutlined } from "@ant-design/icons";
@@ -45,18 +46,21 @@ function AttendanceLog({ empDetails }) {
   const [key, setKey] = useState("1");
   const [loading, setLoading] = useState(false);
   const [empMonthly, setEmpMonthly] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
     date: [],
     category: "all",
   });
   const [filteredEmp, setFilteredEmp] = useState([]);
+
   const columns = [
     {
       title: "Employee Code",
       dataIndex: "empId",
       className: "code",
       key: "empId",
+
       render: (text) => <a>{text}</a>,
     },
     {
@@ -86,7 +90,6 @@ function AttendanceLog({ empDetails }) {
     //   key: "action",
     // },
   ];
-
 
   useEffect(() => {
     console.log(activetab);
@@ -172,25 +175,36 @@ function AttendanceLog({ empDetails }) {
   //   // getEmpMonthly();
   // }, [activetab]);
 
-  
   // useEffect(() => {
 
   // }, [loading])
 
   if (loading) {
     return (
-        <div style={{ height: '70vh', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            < Spin size="large" style={{
-                position: 'absolute',
-                top: '20%',
-                left: '50%',
-                margin: '-10px',
-                zIndex: '100',
-                opacity: '0.7',
-                backgroundColor: 'transparent'
-            }} />
-        </div>)
-}
+      <div
+        style={{
+          height: "70vh",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Spin
+          size="large"
+          style={{
+            position: "absolute",
+            top: "20%",
+            left: "50%",
+            margin: "-10px",
+            zIndex: "100",
+            opacity: "0.7",
+            backgroundColor: "transparent",
+          }}
+        />
+      </div>
+    );
+  }
 
   async function getEmpDetails(id, date) {
     // setLoading(true);
@@ -345,8 +359,6 @@ function AttendanceLog({ empDetails }) {
       title: "Date",
       dataIndex: "date",
       key: "date",
-      render: (text) => <a>{text}</a>,
-      className: "date",
     },
     {
       title: "Status",
@@ -645,12 +657,22 @@ function AttendanceLog({ empDetails }) {
                   allowClear
                   onChange={onHrDateFilter}
                 />
+
                 <Table
                   loading={loading}
                   className="monthly"
                   columns={columns1}
-                  dataSource={empMonthly || []}
+                  dataSource={empMonthly}
+                  pagination={true}
                 />
+                {/* <Pagination
+                  onChange={(page) => {
+                    setCurrentPage(page);
+                  }}
+                  total={empMonthly?.length || 0}
+                  current={currentPage}
+                  pageSize={10}
+                /> */}
                 {console.log(empMonthly || [])}
               </Tabs.TabPane>
             </>

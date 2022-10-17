@@ -32,7 +32,7 @@
 .monthly{
     position: relative;
     bottom: 31px;
-    pointer-events: none;
+    
     
     
 }
@@ -59,6 +59,6 @@
 .Tabs .ant-tabs-nav .ant-tabs-nav-list{
     margin-left: 15px;
 }
-.ant-picker-input > input {
+/* .ant-picker-input > input {
     color: white;
-}
+} */

@@ -11,6 +11,7 @@ import {
   CheckOutlined,
   EditTwoTone,
   DeleteTwoTone,
+  EditFilled
 } from "@ant-design/icons";
 import FormItem from "antd/es/form/FormItem";
 import { useAuth } from "../../contexts/AuthContext";
@@ -106,7 +107,7 @@ function Education() {
                 style={{ color: "#4ec0f1" }}
                 onClick={() => showEditContent(!editContent)}
               >
-                Edit
+                <EditFilled />
               </Button>
             ) : null}
           </>
@@ -139,7 +140,7 @@ function Education() {
                   Qualification Type
                 </h1>
                 {editContent === false ? (
-                  <h4>{data ? data.qualificationType : null}</h4>
+                  <div>{data.qualificationType ? data.qualificationType : "-"}</div>
                 ) : (
                   <Form.Item
                     name="qualificationType"
@@ -194,7 +195,7 @@ function Education() {
                   Course Name
                 </h1>
                 {editContent === false ? (
-                  <h4>{data ? data.courseName : null}</h4>
+                  <h4>{data.courseName ? data.courseName : "-"}</h4>
                 ) : (
                   <Form.Item
                     name="courseName"
@@ -246,7 +247,7 @@ function Education() {
                   Course Type
                 </h1>
                 {editContent === false ? (
-                  <h4>{data ? data.courseType : null}</h4>
+                  <h4>{data.courseType ? data.courseType : "-"}</h4>
                 ) : (
                   <Form.Item
                     name="courseType"
@@ -295,7 +296,7 @@ function Education() {
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Stream</h1>
                 {editContent === false ? (
-                  <h4>{data ? data.stream : null}</h4>
+                  <h4>{data.stream ? data.stream : "-"}</h4>
                 ) : (
                   <Form.Item
                     name="stream"
@@ -347,7 +348,7 @@ function Education() {
 
               {/* <div> */}
               {editContent === false ? (
-                <h4>{data ? data?.courseStartDate : null}</h4>
+                <div>{data.courseStartDate? data.courseStartDate : "-"}</div>
               ) : (
                 <Form.Item
                   name="courseStartDate"
@@ -381,7 +382,7 @@ function Education() {
 
               {/* <div> */}
               {editContent === false ? (
-                <h4>{data ? data.courseEndDate : null}</h4>
+                <div>{data.courseEndDate ? data.courseEndDate : "-"}</div>
               ) : (
                 <Form.Item
                   name="courseEndDate"
@@ -414,7 +415,7 @@ function Education() {
                   University Name
                 </h1>
                 {editContent === false ? (
-                  <h4>{data ? data.universityName : null}</h4>
+                  <div>{data.university ? data.universityName : "-"}</div>
                 ) : (
                   <Form.Item
                     name="universityName"

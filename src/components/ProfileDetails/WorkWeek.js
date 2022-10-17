@@ -242,6 +242,7 @@ function WorkWeek() {
   return (
     <>
       <div
+        className="week"
         style={{
           display: "flex",
           alignItems: "center",

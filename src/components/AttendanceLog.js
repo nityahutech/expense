@@ -8,6 +8,8 @@ import {
   Form,
   Input,
   DatePicker,
+  Spin,
+  Pagination,
 } from "antd";
 import "../style/AttendanceLog.css";
 import { SearchOutlined } from "@ant-design/icons";
@@ -44,18 +46,21 @@ function AttendanceLog({ empDetails }) {
   const [key, setKey] = useState("1");
   const [loading, setLoading] = useState(false);
   const [empMonthly, setEmpMonthly] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
     date: [],
     category: "all",
   });
   const [filteredEmp, setFilteredEmp] = useState([]);
+
   const columns = [
     {
       title: "Employee Code",
       dataIndex: "empId",
       className: "code",
       key: "empId",
+
       render: (text) => <a>{text}</a>,
     },
     {
@@ -85,6 +90,27 @@ function AttendanceLog({ empDetails }) {
     //   key: "action",
     // },
   ];
+
+  useEffect(() => {
+    console.log(activetab);
+    form.resetFields();
+    if (empDetails.userType === "emp") {
+      setTimeout(() => {
+        console.log(currentUser.uid);
+        setSelectemp({ id: currentUser.uid });
+        // setActivetab("1");
+        getEmpDetails(currentUser.uid, [
+          moment().subtract(30, "days"),
+          moment(),
+        ]);
+      }, 500);
+      // getEmpMonthly();
+    } else {
+      if (activetab == "1") {
+        allEmpDetails();
+      }
+    }
+  }, [activetab]);
 
   const [form] = Form.useForm();
 
@@ -149,6 +175,37 @@ function AttendanceLog({ empDetails }) {
   //   // getEmpMonthly();
   // }, [activetab]);
 
+  // useEffect(() => {
+
+  // }, [loading])
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          height: "70vh",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Spin
+          size="large"
+          style={{
+            position: "absolute",
+            top: "20%",
+            left: "50%",
+            margin: "-10px",
+            zIndex: "100",
+            opacity: "0.7",
+            backgroundColor: "transparent",
+          }}
+        />
+      </div>
+    );
+  }
+
   async function getEmpDetails(id, date) {
     // setLoading(true);
     console.log(id);
@@ -184,13 +241,13 @@ function AttendanceLog({ empDetails }) {
   // }
 
   function allEmpDetails() {
-    // setLoading(true);
+    setLoading(true);
     // console.log(JSON.parse(localStorage.getItem("newReport")));
     AttendanceContext.getAllUsers().then((userdata) => {
       console.log(JSON.stringify(userdata));
       getWithLeave(userdata);
     });
-    setLoading(false);
+    // setLoading(false);
   }
 
   function getWithLeave(userdata) {
@@ -203,7 +260,7 @@ function AttendanceLog({ empDetails }) {
       setallEmp(final);
       setFilteredEmp(final);
       setEmpMonthly(final);
-      // setLoading(false);
+      setLoading(false);
     });
   }
   // stats.map((rec) => {
@@ -244,28 +301,6 @@ function AttendanceLog({ empDetails }) {
     form.resetFields();
   };
   console.log(empDetails);
-
-  useEffect(() => {
-    console.log(activetab);
-    form.resetFields();
-    if (empDetails.userType === "emp") {
-      setTimeout(() => {
-        console.log(currentUser.uid);
-        setSelectemp({ id: currentUser.uid });
-        // setActivetab("1");
-        getEmpDetails(currentUser.uid, [
-          moment().subtract(30, "days"),
-          moment(),
-        ]);
-      }, 500);
-      // getEmpMonthly();
-    } else {
-      if (activetab == "1") {
-        allEmpDetails();
-      }
-    }
-  }, [activetab]);
-
   // useEffect(() => {
   //   setFilteredEmp(filteredEmp);
   // }, [activetab]);
@@ -324,8 +359,6 @@ function AttendanceLog({ empDetails }) {
       title: "Date",
       dataIndex: "date",
       key: "date",
-      render: (text) => <a>{text}</a>,
-      className: "date",
     },
     {
       title: "Status",
@@ -441,11 +474,11 @@ function AttendanceLog({ empDetails }) {
     }
   };
 
-  console.log("test", filteredEmp[4]);
-  console.log("test", JSON.stringify(filteredEmp[4]));
+  console.log("test", filteredEmp[1]);
+  console.log("test", JSON.stringify(filteredEmp[1]));
   console.log(
     "test",
-    filteredEmp[4] ? JSON.parse(JSON.stringify(filteredEmp[3])) : "empty"
+    filteredEmp[1] ? JSON.parse(JSON.stringify(filteredEmp[1])) : "empty"
   );
   console.log(filteredEmp);
   // console.log("test",filteredEmp);
@@ -624,12 +657,15 @@ function AttendanceLog({ empDetails }) {
                   allowClear
                   onChange={onHrDateFilter}
                 />
+
                 <Table
                   loading={loading}
                   className="monthly"
                   columns={columns1}
-                  dataSource={empMonthly || []}
+                  dataSource={empMonthly}
+                  pagination={true}
                 />
+
                 {console.log(empMonthly || [])}
               </Tabs.TabPane>
             </>

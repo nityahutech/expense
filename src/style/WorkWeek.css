@@ -36,4 +36,13 @@
       .workWeek.ant-card-bordered{
         margin-bottom: 25px;
       }
-   
+      /* @media only screen   and  (max-width: 800px) {
+    .week{
+      width: 100%;
+      
+      display: flex;
+      justify-content: center;
+
+      
+    }
+   } */

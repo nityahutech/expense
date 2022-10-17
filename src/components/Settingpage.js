@@ -117,7 +117,7 @@ const Settingpage = () => {
                 <Col xs={22} sm={10} md={8} lg={6}>
                   <div className="cupsw">Current Password</div>
                 </Col>
-                <Col xs={22} sm={10} md={10} lg={10}>
+                <Col>
                   <Form.Item
                     key="currentpassword"
                     name="current password"
@@ -144,7 +144,7 @@ const Settingpage = () => {
                 <Col xs={22} sm={10} md={8} lg={6}>
                   <div className="npsw">New Password</div>
                 </Col>
-                <Col xs={22} sm={10} md={10} lg={10}>
+                <Col>
                   <Form.Item
                     name="password1"
                     key="password1"
@@ -170,7 +170,7 @@ const Settingpage = () => {
                 <Col xs={22} sm={10} md={8} lg={6}>
                   <div className="copsw">Confirm Password</div>
                 </Col>
-                <Col xs={22} sm={10} md={10} lg={10}>
+                <Col>
                   <Form.Item
                     name="password2"
                     key="password2"

@@ -30,11 +30,11 @@ function EmployeeList() {
   );
   const columns = [
     {
-      title: "Emp. Code",
+      title: "Employee Code",
       dataIndex: "empId",
       key: "empId",
       fixed: "left",
-      width: 80,
+      width: 120,
     },
     {
       title: "First Name",
@@ -210,23 +210,23 @@ function EmployeeList() {
   };
 
   const onDelete = (idx, e) => {
-    // e.preventDefault();
+    e.preventDefault();
     console.log("data::: ", data[idx].id);
-    disablePerson(data[idx].id)
-    // const filteredData = data.map((doc, i) => {
-    //   let disabled = false;
-    //   if (idx == i) {
-    //     disabled = true;
-    //   }
-    //   return {
-    //     ...doc,
+    disablePerson(data[idx].id);
+    const filteredData = data.map((doc, i) => {
+      let disabled = false;
+      if (idx == i) {
+        disabled = true;
+      }
+      return {
+        ...doc,
 
-    //     sn: i + 1,
-    //     disabled: disabled,
-    //   };
-    // });
-    // setData(filteredData);
-    // setFilterEmployees(filteredData);
+        sn: i + 1,
+        disabled: disabled,
+      };
+    });
+    setData(filteredData);
+    setFilterEmployees(filteredData);
   };
 
   return (

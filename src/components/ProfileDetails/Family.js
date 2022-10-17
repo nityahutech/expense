@@ -18,6 +18,7 @@ import {
   CheckOutlined,
   EditTwoTone,
   CloseOutlined,
+  EditFilled
 } 
 from "@ant-design/icons";
 
@@ -110,7 +111,7 @@ const Family = () => {
                           style={{ color: "#4ec0f1" }}
                           onClick={() => showeditfamilymember(!editfamilymember)}
                         >
-                          Edit
+                          <EditFilled />
                         </Button>
                       ) : null}
                     </>
@@ -120,7 +121,7 @@ const Family = () => {
                     marginTop: 10,
                   }}
                 >
-                  <Row gutter={[16, 16]}>
+                  <Row >
                     {/* ------------------------------------father */}
                     <Col span={12}>
                       <Form.Item
@@ -135,7 +136,7 @@ const Family = () => {
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Father
                           </h1>
-                        <h4>{data?data.father:null}</h4>
+                        <div>{data.father?data.father:"-"}</div>
                           </div>
                       </Form.Item>
                       {/* --------------------------------------father-contact------------------------------------ */}
@@ -156,7 +157,7 @@ const Family = () => {
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Contact no.
                           </h1>
-                        <h4>{data?data.fatherContact:null}</h4>
+                        <div>{data.fatherContact?data.fatherContact:"-"}</div>
                         </div>
                       </Form.Item>
                       </Col>
@@ -175,7 +176,8 @@ const Family = () => {
                             Mother
                           </h1>
                           
-                            <h4>{data?data.mother:null}</h4></div>
+                            <div>{data.mother?data.mother:"-"}</div>
+                            </div>
                       </Form.Item>
                     </Col>
                     {/* ---------------------------------------------mother Contact------------------------------ */}
@@ -196,7 +198,7 @@ const Family = () => {
                             Contact no.
                           </h1>
                           
-                            <h4>{data?data.motherContact:null}</h4> </div>
+                            <div>{data.motherContact?data.motherContact:"-"}</div> </div>
                       </Form.Item>
                     </Col>
                     </Row>
@@ -205,10 +207,10 @@ const Family = () => {
                 : <Form
                 form={form}
                 labelcol={{
-                  span: 4,
+                  span: 8,
                 }}
                 wrappercol={{
-                  span: 14,
+                  span: 16,
                 }}
                 initialValues={{
                   remember: true,
@@ -226,7 +228,7 @@ const Family = () => {
                           style={{ color: "#4ec0f1" }}
                           onClick={() => showeditfamilymember(!editfamilymember)}
                         >
-                          Edit
+                          <EditFilled />
                         </Button>
                       ) : null}
                     </>
@@ -256,7 +258,7 @@ const Family = () => {
         
                         rules={[
                           {
-                            required: true,
+                            required: false,
                             minLength: 3, maxLength: 25,
                             message: 'Please enter Father Name',
         
@@ -304,7 +306,7 @@ const Family = () => {
                         }}
                         rules={[
                           {
-                            required: true,
+                            required: false,
                             message: "Please enter the Contact no.",
                             pattern: /^[0-9\b]+$/,
                           },
@@ -336,7 +338,7 @@ const Family = () => {
         
                         rules={[
                           {
-                            required: true,
+                            required: false,
                             minLength: 3, maxLength: 25,
                             message: 'Please enter Mother Name',
         
@@ -384,7 +386,7 @@ const Family = () => {
                         }}
                         rules={[
                           {
-                            required: true,
+                            required: false,
                             message: "Please enter the Contact no.",
                             pattern: /^[0-9\b]+$/,
                           },
@@ -447,7 +449,7 @@ const Family = () => {
                               style={{ color: "#4ec0f1" }}
                               onClick={() => showeditEmergency(!editEmergency)}
                             >
-                              Edit
+                              <EditFilled />
                             </Button>
                           ) : null}
                         </>
@@ -474,7 +476,7 @@ const Family = () => {
                                 Other
                               </h1>
                               
-                                <h4>{data?data.other:null}</h4>
+                                <div>{data.other?data.other:"-"}</div>
                               
                             </div>
                           </Form.Item>
@@ -489,7 +491,7 @@ const Family = () => {
                                 Relation
                               </h1>
                             
-                                <h4>{data?data.relation:null}</h4>
+                                <div>{data.relation?data.relation:"-"}</div>
                               
                             </div>
                           </Form.Item>
@@ -503,7 +505,7 @@ const Family = () => {
                             }}
                             rules={[
                               {
-                                required: true,
+                                required: false,
                                 message: "Please enter the Contact no.",
                                 pattern: /^[0-9\b]+$/,
                               },
@@ -516,7 +518,7 @@ const Family = () => {
                                 Contact no.
                               </h1>
                             
-                                <h4>{data?data.otherContact:null}</h4>
+                                <div>{data.otherContact?data.otherContact:"-"}</div>
                             
                             </div>
                           </Form.Item>
@@ -548,7 +550,7 @@ const Family = () => {
                         style={{ color: "#4ec0f1" }}
                         onClick={() => showeditEmergency(!editEmergency)}
                       >
-                        Edit
+                        <EditFilled />
                       </Button>
                     ) : null}
                   </>
@@ -574,7 +576,7 @@ const Family = () => {
       
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           minLength: 3, maxLength: 25,
                           message: 'Please enter Other Name',
       
@@ -600,7 +602,7 @@ const Family = () => {
                               // setPaidBy(newVal);
                               form.setFieldsValue({ other: newVal, other: caps });
                               } }      
-                              defaultValue={data?data.other:''}
+                              defaultValue={data?data.other:null}
                               placeholder="Enter Other Name" 
                               maxLength={40}
                             /> 
@@ -621,7 +623,7 @@ const Family = () => {
       
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           minLength: 3, maxLength: 25,
                           message: 'Please enter Relation Name',
       

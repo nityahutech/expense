@@ -89,8 +89,7 @@ function WorkWeek() {
                 background: "#1fcb1f",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -112,8 +111,7 @@ function WorkWeek() {
                 background: "#1fcb1f",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -135,8 +133,7 @@ function WorkWeek() {
                 background: "#1fcb1f",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -158,8 +155,7 @@ function WorkWeek() {
                 background: "#1fcb1f",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -181,8 +177,7 @@ function WorkWeek() {
                 background: "#1fcb1f",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -204,8 +199,7 @@ function WorkWeek() {
                 background: "#da2828",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -227,8 +221,7 @@ function WorkWeek() {
                 background: "#da2828",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -253,7 +246,7 @@ function WorkWeek() {
           <div style={{ background: "#fff" }}>
             {" "}
             <>
-              <div style={{ marginLeft: "22px", background: "#fff" }}>
+              <div style={{ marginLeft: "2px", background: "#fff" }}>
                 <div className="header" style={{ marginLeft: "10px" }}>
                   <h1>Saturday Sunday Off</h1>
                   <h4>Description</h4>
@@ -263,30 +256,29 @@ function WorkWeek() {
                   </p>
                   <h4>Effective Date</h4>
                   <p> 09 Sep,2022</p>
-                  <hr style={{ marginRight: "21.7rem" }} />
+                  {/* <hr style={{ marginRight: "21.7rem" }} /> */}
                 </div>
                 <h4 style={{ marginLeft: "10px" }}>Rule Settings1</h4>
-                <div style={{ position: "relative", bottom: "30px" }}>
-                  {" "}
+                <div
+                  style={{
+                    float: "right",
+                    display: "flex",
+                    alignItems: "baseline",
+                    marginRight: "17px",
+                  }}
+                >
                   <input
                     checked="true"
                     type="checkbox"
                     style={{
-                      position: "relative",
-                      left: "38rem",
-                      top: "42px",
                       background: "blue",
                       cursor: "not-allowed",
                     }}
                   />
-                  <p
-                    style={{ position: "relative", left: "39rem", top: "18px" }}
-                  >
-                    Half Day
-                  </p>
+                  <p>Half Day</p>
                 </div>
 
-                <div style={{ position: "relative", bottom: "27px" }}>
+                <div>
                   <Table
                     className="Table"
                     columns={columns}
@@ -294,49 +286,75 @@ function WorkWeek() {
                     pagination={false}
                     size="small"
                     bordered
-                    style={{ width: "700px" }}
                   />
                 </div>
-                <ul style={{ position: "relative", bottom: "30px" }}>
-                  <li className="box">
+                <ul>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-evenly",
+                      marginTop: "10px",
+                      marginRight: "6rem",
+                    }}
+                  >
                     <div
                       style={{
                         background: "#1fcb1f",
                         width: "15px",
                         height: "15px",
-                        position: "relative",
-                        right: "20px",
-                        top: "18px",
                       }}
-                    ></div>
-                    Working Day
-                  </li>
-                  <li className="box">
+                    >
+                      <li
+                        style={{
+                          paddingLeft: "15px",
+                          width: "100px",
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                          marginTop: "-3px ",
+                        }}
+                      >
+                        Working Day
+                      </li>
+                    </div>
                     <div
                       style={{
                         background: "#da2828",
                         width: "15px",
                         height: "15px",
-                        position: "relative",
-                        right: "20px",
-                        top: "18px",
                       }}
-                    ></div>
-                    Weekly Off
-                  </li>
-                  <li className="box">
+                    >
+                      <li
+                        style={{
+                          paddingLeft: "6px",
+                          width: "100px",
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                          marginTop: "-3px ",
+                        }}
+                      >
+                        Weekly Off
+                      </li>
+                    </div>
                     <div
                       style={{
                         background: "#ffc107",
                         width: "15px",
                         height: "15px",
-                        position: "relative",
-                        right: "20px",
-                        top: "18px",
                       }}
-                    ></div>
-                    Half Day
-                  </li>
+                    >
+                      <li
+                        style={{
+                          paddingRight: "8px",
+                          width: "100px",
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                          marginTop: "-3px ",
+                        }}
+                      >
+                        Half Day
+                      </li>
+                    </div>
+                  </div>
                 </ul>
               </div>
             </>

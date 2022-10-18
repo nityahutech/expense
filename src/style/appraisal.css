@@ -3,15 +3,13 @@
   flex-direction: row;
   align-items: center;
   align-content: space-between;
-
 }
 
 .card-app {
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 140px;
   border-radius: 10px;
-  margin: 10px
-
+  margin: 10px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -22,7 +20,5 @@
 
   .card-app {
     height: 250px;
-
   }
-
 }

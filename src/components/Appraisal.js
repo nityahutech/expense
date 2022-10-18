@@ -262,7 +262,7 @@ const Appraisal = (props) => {
 
                 }}
 
-            >
+            >  
                 <Table
                     style={{
                         padding: '10px',
@@ -338,7 +338,7 @@ const Appraisal = (props) => {
                                 }
                             }}
 
-                        >             
+                        >
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
@@ -349,7 +349,7 @@ const Appraisal = (props) => {
 
                         </Form.Item>
 
-                        
+
 
                         <Form.Item labelAlign="left"
                             style={{ marginBottom: "10px" }}
@@ -363,7 +363,7 @@ const Appraisal = (props) => {
                                 }
                             }}
 
-                        >                          
+                        >
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
@@ -385,7 +385,7 @@ const Appraisal = (props) => {
                                 }
                             }}
 
-                        >                          
+                        >
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
@@ -431,7 +431,7 @@ const Appraisal = (props) => {
                             }}
 
                         >
-                            
+
                             <TextArea rows={2}
                                 maxLength={10}
                                 required
@@ -453,7 +453,7 @@ const Appraisal = (props) => {
                             }}
 
                         >
-                           
+
                             <TextArea rows={2}
                                 maxLength={10}
                                 required

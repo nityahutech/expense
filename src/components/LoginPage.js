@@ -85,9 +85,7 @@ function LoginPage() {
                 <div className="msg">Let's Access to our dashboard</div>
 
                 <div className="email-div">
-                <Divider orientation="left" orientationMargin={0}>
                 Email address<span style={{ color: "red" }}> *</span>
-              </Divider>
                 </div>
                 <div className="emailInput-div">
                   {/* <Row>
@@ -107,9 +105,7 @@ function LoginPage() {
                   </Row> */}
                 </div>
                 <div className="email-div">
-                <Divider orientation="left" orientationMargin={0}>
                 Password<span style={{ color: "red" }}> *</span>
-              </Divider>
                 </div>
                 <div className="pwdInput-div">
                   <Form.Item

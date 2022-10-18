@@ -56,7 +56,7 @@ const Leave = () => {
     const [isMgr, setIsMgr] = useState(false);
     const [role, setRole] = useState(null);
     const { currentUser } = useAuth();
-    const format = "Do MMM, YYYY"
+    const format = "DD MMM, YYYY"
     const [leavedays, setLeaveDays] = useState({
         'Earn Leave': 0,
         'Sick Leave': 0,

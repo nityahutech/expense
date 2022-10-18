@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Col, Divider, Row } from "antd";
+import { Col, Row } from "antd";
 import moment from "moment";
 import { UploadOutlined } from "@ant-design/icons";
 import ExpenseContext from "../contexts/ExpenseContext";
@@ -20,8 +20,7 @@ import {
 import "../style/Editexpense.css";
 import { Content } from "antd/lib/layout/layout";
 const { Option } = Select;
-const handleChange = (value) => {
-};
+const handleChange = (value) => {};
 const showNotification = (type, msg, desc) => {
   notification[type]({
     message: msg,

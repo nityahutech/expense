@@ -27,12 +27,12 @@
       }
       ul li{
         list-style-type: none;
-        display: inline-block;
-        margin-right: 32px;
+        /* display: inline-block;
+        margin-right: 32px; */
       }
-      .box li{
+      /* .box li{
         display: inline-block;
-      }
+      } */
       .workWeek.ant-card-bordered{
         margin-bottom: 25px;
       }

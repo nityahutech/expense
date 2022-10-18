@@ -77,7 +77,12 @@ function Education() {
   };
   
   const checkAlphabets = (event) => {
-    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+    if (!/^[ A-Za-z.]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+  const checkSpecial = (event) => {
+    if (!/^[ A-Za-z]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
@@ -145,22 +150,19 @@ function Education() {
                   <Form.Item
                     name="qualificationType"
                     onKeyPress={(event) => {
-                      if (checkAlphabets(event)) {
+                      if (checkSpecial(event)) {
                         event.preventDefault();
                       }
                     }}
     
                     rules={[
                       {
-                        required: false,
+                        required: true,
                         minLength: 3, maxLength: 25,
-                        message: 'Please enter Father Name',
+                        message: 'Please Enter Qualification type',
+                        pattern: /^[a-zA-Z.\s]*$/,
     
-                      }, {
-                        pattern: /^[a-zA-Z\s]*$/,
-                        message: 'Please enter Valid Name',
-    
-                      }
+                      },
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
@@ -169,16 +171,16 @@ function Education() {
                     }
                   >
                     <Input
-                    onInput={(e)=>{
-                      const inputval = e.target.value;
-                      const str = e.target.value;
-                      const newVal =
-                        inputval.substring(0, 1).toUpperCase() +
-                        inputval.substring(1);
-                      const caps = str.split(" ").map(capitalize).join(" ");
-                      console.log("caps", caps);
-                      e.target.value= caps
-                    }}
+                    // onInput={(e)=>{
+                    //   const inputval = e.target.value;
+                    //   const str = e.target.value;
+                    //   const newVal =
+                    //     inputval.substring(0, 1).toUpperCase() +
+                    //     inputval.substring(1);
+                    //   const caps = str.split(" ").map(capitalize).join(" ");
+                    //   console.log("caps", caps);
+                    //   e.target.value= caps
+                    // }}
                 
                       defaultValue={data ? data.qualificationType : null}
                       maxLength={25}
@@ -207,32 +209,29 @@ function Education() {
     
                     rules={[
                       {
-                        required: false,
+                        required: true,
                         minLength: 3, maxLength: 25,
-                        message: 'Please enter Father Name',
+                        message: 'Please Enter Valid Course Name',
+                        pattern: /^[ A-Za-z.]*$/,
     
                       }, 
-                      {
-                        pattern: /^[a-zA-Z\s]*$/,
-                        message: 'Please enter Valid Name',
-    
-                      }
+                      
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
                     initialValue={data.courseName ? data.courseName : null}
                   >
                     <Input
-                       onInput={(e)=>{
-                        const inputval = e.target.value;
-                        const str = e.target.value;
-                        const newVal =
-                          inputval.substring(0, 1).toUpperCase() +
-                          inputval.substring(1);
-                        const caps = str.split(" ").map(capitalize).join(" ");
-                        console.log("caps", caps);
-                        e.target.value= caps
-                      }}
+                      //  onInput={(e)=>{
+                      //   // const inputval = e.target.value;
+                      //   // const str = e.target.value;
+                      //   // const newVal =
+                      //   //   inputval.substring(0, 1).toUpperCase() +
+                      //   //   inputval.substring(1);
+                      //   // const caps = str.split(" ").map(capitalize).join(" ");
+                      //   // console.log("caps", caps);
+                      //   // e.target.value= caps
+                      // }}
                       initialValue={data ? data.courseName : null}
                       placeholder="Enter Course Name"
                     />
@@ -252,22 +251,19 @@ function Education() {
                   <Form.Item
                     name="courseType"
                     onKeyPress={(event) => {
-                      if (checkAlphabets(event)) {
+                      if (checkSpecial(event)) {
                         event.preventDefault();
                       }
                     }}
     
                     rules={[
                       {
-                        required: false,
+                        required: true,
                         minLength: 3, maxLength: 25,
-                        message: 'Please enter Father Name',
-    
-                      }, {
+                        message: 'Please Enter Course Type',
                         pattern: /^[a-zA-Z\s]*$/,
-                        message: 'Please enter Valid Name',
     
-                      }
+                      }, 
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
@@ -301,22 +297,19 @@ function Education() {
                   <Form.Item
                     name="stream"
                     onKeyPress={(event) => {
-                      if (checkAlphabets(event)) {
+                      if (checkSpecial(event)) {
                         event.preventDefault();
                       }
                     }}
     
                     rules={[
                       {
-                        required: false,
+                        required: true,
                         minLength: 3, maxLength: 25,
-                        message: 'Please enter Father Name',
-    
-                      }, {
+                        message: 'Please Enter Stream',
                         pattern: /^[a-zA-Z\s]*$/,
-                        message: 'Please enter Valid Name',
     
-                      }
+                      }, 
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
@@ -354,8 +347,8 @@ function Education() {
                   name="courseStartDate"
                   rules={[
                     {
-                      required: false,
-                      message: "Please input your Course Start Date ",
+                      required: true,
+                      message: "Please select Start Date ",
                     },
                   ]}
                   labelCol={{ span: 8 }}
@@ -388,8 +381,8 @@ function Education() {
                   name="courseEndDate"
                   rules={[
                     {
-                      required: false,
-                      message: "Please input your Course End Date",
+                      required: true,
+                      message: "Please select End Date",
                     },
                   ]}
                   labelCol={{ span: 8 }}
@@ -415,7 +408,7 @@ function Education() {
                   University Name
                 </h1>
                 {editContent === false ? (
-                  <div>{data.university ? data.universityName : "-"}</div>
+                  <div>{data.universityName ? data.universityName : "-"}</div>
                 ) : (
                   <Form.Item
                     name="universityName"
@@ -427,32 +420,20 @@ function Education() {
     
                     rules={[
                       {
-                        required: false,
+                        required: true,
                         minLength: 3, maxLength: 25,
-                        message: 'Please enter Father Name',
+                        message: 'Please Enter University Name',
+                        pattern: /^[a-zA-Z.\s]*$/,
     
-                      }, {
-                        pattern: /^[a-zA-Z\s]*$/,
-                        message: 'Please enter Valid Name',
-    
-                      }
+                      }, 
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
-                    initialValue={data.universityName}
+                    initialValue={data.universityName ? data.universityName : null}
                   >
                     <Input
-                      onInput={(e)=>{
-                        const inputval = e.target.value;
-                        const str = e.target.value;
-                        const newVal =
-                          inputval.substring(0, 1).toUpperCase() +
-                          inputval.substring(1);
-                        const caps = str.split(" ").map(capitalize).join(" ");
-                        console.log("caps", caps);
-                        e.target.value= caps
-                      }}
-                      defaultValue={data ? data.universityName : null}
+                      
+                      defaultValue={data.universityName ? data.universityName : null}
                       placeholder=""
                     />
                   </Form.Item>

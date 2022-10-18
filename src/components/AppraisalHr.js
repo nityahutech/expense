@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { EditOutlined, PrinterFilled, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, PrinterFilled, DeleteOutlined, FileImageOutlined } from "@ant-design/icons";
 import { Button, Col } from 'antd';
-import { Card, Input, Modal, Form, Row, notification, Typography, Select, DatePicker, Table, } from 'antd';
+import { Card, Input, Modal, Form, Row, notification, Typography, Select, DatePicker, Table, Tag } from 'antd';
 import Appraisal from "./Appraisal";
 import "../style/appraisal.css";
 import AppraisalContext from '../contexts/AppraisalContext';
@@ -40,99 +40,98 @@ const AppraisalHr = () => {
             title: "Employee Id",
             dataIndex: "empId",
             fixed: "left",
-            width: 80,
+            width: 60,
         },
         {
             title: "Employee Name",
             dataIndex: "Name",
-            width: 120,
+            fixed: "left",
+            width: 80,
         },
-        // {
-        //     title: "Reporting Manager",
-        //     dataIndex: "Manager",    
-        //     width: 120,
-        // },
-        // {
-        //     title: "Date of Joining",
-        //     dataIndex: "JoiningDate",
-        //     width: 120,
-        // },
-        // {
-        //     title: "Current Position",
-        //     dataIndex: "Position",        
-        //     width: 120,
-        //     ellipsis: true,
-        // },
+        {
+            title: "Reporting Manager",
+            dataIndex: "Manager",
+            fixed: "left",
+            width: 80,
+        },
+        {
+            title: "Self Assessment",
+            dataIndex: "Selfassessment",
+            fixed: "left",
+            width: 100,
+            sorter: (a, b) => {
+                return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
+            },
+            sortDirections: ["ascend", "descend"],
+            render: (_, { status }) =>
+                status !== "" && (
+                    <Tag style={{ width: '100px' }}
+                        className="statusTag"
+                        color={status === "Approved" ? "green" : status === "Pending" ? 'blue' : "volcano"}
+                        key={status}
+                    >
+                        {status}
+                    </Tag>
+                ),
+        },
+        {
+            title: "Manager Assessment",
+            dataIndex: "Mangassessment",
+            fixed: "left",
+            width: 100,
+            ellipsis: true,
+            sorter: (a, b) => {
+                return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
+            },
+            sortDirections: ["ascend", "descend"],
+            render: (_, { status }) =>
+                status !== "" && (
+                    <Tag style={{ width: '100px' }}
+                        className="statusTag"
+                        color={status === "Approved" ? "green" : status === "Pending" ? 'blue' : "volcano"}
+                        key={status}
+                    >
+                        {status}
+                    </Tag>
+                ),
+
+        },
         {
             title: 'Evaluation Quarter',
             dataIndex: "Period",
-            width: 100,
+            fixed: "left",
+            width: 80,
             ellipsis: true,
-            // children: [
-            //     {
-            //         title: 'Q1',
-            //         dataIndex: 'quarterone',
-            //         // key: 'quarterone',
-            //         width: 50,
-            //     },
-            //     {
-            //         title: 'Q2',
-            //         dataIndex: 'quartertwo',
-            //         // key: 'quartertwo',
-            //         width: 50,
-            //     },
-            //     {
-            //         title: 'Q3',
-            //         dataIndex: 'quarterthree',
-            //         // key: 'quarterthree',
-            //         width: 50,
-            //     },
-            //     {
-            //         title: 'Q4',
-            //         dataIndex: 'quarterfour',
-            //         // key: 'quarterfour',
-            //         width: 50,
-            //     },
-            // ],
+
         },
-        // {
-        //     title: "Status",
-        //     children: [
-        //         {
-        //             title: 'Employee',
-        //             dataIndex: 'emp',
-        //             key: 'emp',
-        //             width: 80,
-        //         },
-        //         {
-        //             title: 'Lead',
-        //             dataIndex: 'lead',
-        //             key: 'lead',
-        //             width: 80,
-        //         },
-        //         {
-        //             title: 'Manager',
-        //             dataIndex: 'manager',
-        //             key: 'manager',
-        //             width: 80,
-        //         },
-
-        //     ],
-        // },
-
-
         {
             title: "Action",
             dataIndex: "action",
             key: "action",
+            fixed: "left",
             fixed: "right",
-            width: 100,
+            width: 80,
 
             render: (_, appraisal) => {
 
                 return (
                     <>
                         {console.log('render', appraisal)}
+
+                        <Button
+                            style={{ padding: 10, color: 'blue', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)' }}
+                            type="link"
+                            className="edIt"
+                            hoverable
+                            onClick={() => {
+
+                                setEditedAppraisal(appraisal);
+                                setSecondModal(true)
+
+                            }}
+                        >
+                            {<EditOutlined />}
+                        </Button>
 
                         <Button
                             style={{ padding: 10, color: 'blue' }}
@@ -145,8 +144,9 @@ const AppraisalHr = () => {
 
                             }}
                         >
-                            {<EditOutlined />}
+                            {<FileImageOutlined />}
                         </Button>
+
 
                         {(sessionStorage.getItem("role") === 'hr') &&
                             <Button
@@ -168,6 +168,7 @@ const AppraisalHr = () => {
                         >
                             {<PrinterFilled />}
                         </Button>
+
 
 
                     </>
@@ -322,7 +323,7 @@ const AppraisalHr = () => {
     const onDeleteAppraisal = (appraisal) => {
         console.log('deleteappraisal', appraisal)
         Modal.confirm({
-            title: "Are you sure, you want to delete Holiday record?",
+            title: "Are you sure, you want to delete  record?",
             okText: "Yes",
             okType: "danger",
 
@@ -346,7 +347,7 @@ const AppraisalHr = () => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            width: '100%',
+            // width: '100%',
             borderRadius: '10px'
 
 
@@ -363,93 +364,98 @@ const AppraisalHr = () => {
                 >
                     <Row gutter={[48, 16]}>
                         <Col className='appraisal-div' xl={24} lg={24} md={24} sm={24} xs={24}  >
-                            <Card onClick={showModal} className='card-app'
-                                style={{ position: 'relative' }}
+                            <Card
+                                // onClick={showModal} 
+                                className='card-app'
+                                style={{ position: 'relative', width: '25rem' }}
                                 hoverable
-                                cover={
-                                    <img
-                                        style={{ padding: '40px' }}
+                            // cover={
+                            //     <img
+                            //         style={{ padding: '40px' }}
 
-                                        alt="example"
-                                        src="/logo/resources.png"
-                                    />
-                                }
+                            //         alt="example"
+                            //     // src="/logo/resources.png"
+                            //     />
+                            // }
 
                             >
-                                <div style={{ position: 'absolute', top: '0', right: '0' }}> <img
-                                    src="../logo/checkmark.png"
-
-                                /></div>
-                                <div style={{ position: 'absolute', bottom: '0', left: '45%' }}>HR</div>
+                                <div style={{ fontSize: '30px' }}>50</div>
+                                <div style={{ color: 'rgb(37, 150, 190)' }}>Total Assessment</div>
                             </Card>
 
                             <Card
 
                                 className='card-app'
-                                style={{ position: 'relative' }}
+                                style={{ position: 'relative', width: '25rem' }}
                                 hoverable
-                                cover={
-                                    <img
-                                        style={{ padding: '50px', }}
-                                        alt="example"
-                                        src="/logo/division.png"
-
-                                    />
-                                }
 
                             >
-                                <div style={{ position: 'absolute', top: '0', right: '0' }}> <img
-                                    src="../logo/checkmark.png"
+                                <div style={{ fontSize: '30px' }}> 20</div>
+                                <div style={{ color: 'rgb(37, 150, 190)' }}>Self Assessment</div>
+                                <div style={{ color: 'grey' }}>Pending</div>
 
-                                /></div>
-
-                                <div style={{ position: 'absolute', bottom: '0', left: '40%' }}>Employee</div>
                             </Card>
 
                             <Card className='card-app'
-                                style={{ position: 'relative' }}
+                                style={{ position: 'relative', width: '25rem' }}
                                 hoverable
-                                cover={
-                                    <img
-                                        style={{ padding: '50px' }}
-                                        alt="example"
-                                        src="/logo/leader.png"
-                                    />
-                                }
+
 
                             >
-                                <div style={{ position: 'absolute', top: '0', right: '0' }}> <img
-                                    src="../logo/checkmark.png"
-
-                                /></div>
-                                <div style={{ position: 'absolute', bottom: '0', left: '40%' }}>Lead</div>
+                                <div style={{ fontSize: '30px' }}> 10</div>
+                                <div style={{ color: 'rgb(37, 150, 190)' }}>Manager Assessment</div>
+                                <div style={{ color: 'grey' }}>In Progress</div>
                             </Card>
 
 
                             <Card className='card-app'
-                                style={{ position: 'relative' }}
+                                style={{ position: 'relative', width: '25rem' }}
                                 hoverable
-                                cover={
-                                    <img
-                                        style={{ padding: '50px' }}
-                                        alt="example"
-                                        src="/logo/manager.png"
-
-                                    />
-                                } src="../logo/checkmark.png"
 
                             >
-                                <div style={{ position: 'absolute', top: '0', right: '0' }}> <img
-                                    src="../logo/checkmark.png"
-
-                                /></div>
-                                <div style={{ position: 'absolute', bottom: '0', left: '40%' }}>Manager</div>
+                                <div style={{ fontSize: '30px' }}>2</div>
+                                <div style={{ color: 'rgb(37, 150, 190)' }}>Completed</div>
+                                <div style={{ color: 'grey' }}>Submitted to Hr</div>
                             </Card>
                         </Col>
                     </Row>
 
                 </div>
             </Col>
+
+            <div className="app-tab" style={{ width: '100%', marginleft: '10px' }}>
+                <Row className="employeeRow" style={{ marginLeft: '10px', marginRight: '10px', flexDirection: 'row', display: 'flex', justifyContent: 'space-between', }}>
+                    <Col>
+                        <Input
+                            placeholder="Search"
+
+                        />
+
+                    </Col>
+                    <Button type="primary" onClick={showModal}>Create Appraisal</Button>
+
+                </Row>
+                <Table
+                    loading={loading}
+                    columns={columns}
+                    dataSource={appraisalList}
+                    bordered
+
+                    pagination={{
+                        position: ["bottomCenter"],
+                    }}
+                    scroll={{ x: 1000 }}
+                    className="employeeTable"
+                    style={{ marginLeft: '10px', marginRight: '10px' }}
+                    size="small"
+                    onClick={() => {
+                        // if (record?.status !== 'Approved')
+                        onDeleteAppraisal();
+                    }}
+
+                />
+
+            </div>
 
             <Modal maskClosable={false} centered title="Basic information" footer={null} visible={isModalOpen} open={isModalOpen} onCancel={handleCancel}>
                 <Row >
@@ -600,26 +606,6 @@ const AppraisalHr = () => {
                 </Row>
             </Modal>
 
-
-            <Table
-                loading={loading}
-                columns={columns}
-                dataSource={appraisalList}
-                bordered
-
-                pagination={{
-                    position: ["bottomCenter"],
-                }}
-                scroll={{ x: 1300 }}
-                className="employeeTable"
-                size="small"
-                // style={{ margin: '50px' }}
-                onClick={() => {
-                    // if (record?.status !== 'Approved')
-                    onDeleteAppraisal();
-                }}
-
-            />
             <Modal
                 centered
                 title="Employee Details"

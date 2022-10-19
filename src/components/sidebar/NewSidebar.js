@@ -80,13 +80,13 @@ const NewSidebar = (props) => {
                 background: "#05445E",
                 height: "30px",
               }}
-              src="/logo/logo_1.png"
+              src="/logo_1.png"
               alt="hello"
             />
           </div>
           <Menu.Item
             icon={
-              <img src="/logo/Dashboard.png" alt="profile" className="Dash" />
+              <img src="/Dashboard.png" alt="profile" className="Dash" />
             }
             key="1"
           >
@@ -101,7 +101,7 @@ const NewSidebar = (props) => {
             icon={
               <img
                 style={{ color: "white" }}
-                src="/logo/employees.png"
+                src="/employees.png"
                 alt="profile"
                 className="Dash"
               />
@@ -111,50 +111,50 @@ const NewSidebar = (props) => {
             mode="inline"
           >
             <Menu.Item className='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              icon={<img src="/dot.png" alt="profile" className="dot" />}
               key="6"
             >
               Attendance Log
               <NavLink to="/Attendance/AttendanceLog" />
             </Menu.Item>
             <Menu.Item className='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              icon={<img src="/dot.png" alt="profile" className="dot" />}
               key="7"
             >
               Leave
               <NavLink to="/Employee/Leave" />
             </Menu.Item>
-            { isHr ? <>
-            <Menu.Item className ='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="8"
-            >
-              Add Employee
-              <NavLink to="/Addemployee/AddEmployee" />
-            </Menu.Item>
-            <Menu.Item className ='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="9"
-            >
-              Employee List
-              <NavLink to="/EmployeeListPage/EmployeeList" />
-            </Menu.Item>
-            <Menu.Item
-              className="arrow"
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="25"
-            >
-              Hr PaySlip
-              <NavLink to="/Payslip2/HrPaySlip" />
-            </Menu.Item>
+            {isHr ? <>
+              <Menu.Item className='arrow'
+                icon={<img src="/dot.png" alt="profile" className="dot" />}
+                key="8"
+              >
+                Add Employee
+                <NavLink to="/Addemployee/AddEmployee" />
+              </Menu.Item>
+              <Menu.Item className='arrow'
+                icon={<img src="/dot.png" alt="profile" className="dot" />}
+                key="9"
+              >
+                Employee List
+                <NavLink to="/EmployeeListPage/EmployeeList" />
+              </Menu.Item>
+              <Menu.Item
+                className="arrow"
+                icon={<img src="/dot.png" alt="profile" className="dot" />}
+                key="25"
+              >
+                Hr PaySlip
+                <NavLink to="/Payslip2/HrPaySlip" />
+              </Menu.Item>
             </>
               :
               null
             }
           </Menu.SubMenu>
-           
-            {/* PREVIOUS PROFILE TABS COMMENTED */}
-            {/* ---------------------------------------------------- */}
+
+          {/* PREVIOUS PROFILE TABS COMMENTED */}
+          {/* ---------------------------------------------------- */}
 
           {/* <Menu.SubMenu  style={{
             
@@ -250,7 +250,7 @@ const NewSidebar = (props) => {
           </Menu.SubMenu> */}
           <Menu.Item
             icon={
-              <img src="/logo/user.png" alt="profile" className="Dash" />
+              <img src="/user.png" alt="profile" className="Dash" />
             }
             key="21"
           >
@@ -262,7 +262,7 @@ const NewSidebar = (props) => {
             icon={
               <img
                 style={{ color: "" }}
-                src="/logo/user.png"
+                src="/user.png"
                 alt="profile"
                 className="Dash"
               />
@@ -278,7 +278,7 @@ const NewSidebar = (props) => {
               width: "100%",
             }}
             icon={
-              <img src="/logo/appraisal.png" alt="appraisal" className="Dash" />
+              <img src="/appraisal.png" alt="appraisal" className="Dash" />
             }
             key="sub4"
             title="Appraisal"
@@ -286,7 +286,7 @@ const NewSidebar = (props) => {
           > */}
           {/* <Menu.Item className='arrow'
 
-              icon={<img src="/logo/dot.png" alt="appraisal" className="dot" />}
+              icon={<img src="/dot.png" alt="appraisal" className="dot" />}
               key="19"
             >
               Employees
@@ -295,7 +295,7 @@ const NewSidebar = (props) => {
 
           {/* <Menu.Item
               className="arrow"
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+              icon={<img src="/dot.png" alt="profile" className="dot" />}
               key="20"
             >
               Appraisal Form
@@ -306,7 +306,7 @@ const NewSidebar = (props) => {
             icon={
               <img
                 style={{ color: "" }}
-                src="/logo/settings.png"
+                src="/settings.png"
                 alt="profile"
                 className="Dash"
               />
@@ -322,7 +322,7 @@ const NewSidebar = (props) => {
               width: '100%'
             }}
               icon={
-                <img src="/logo/Expense.png" alt="profile" className="Dash" />
+                <img src="/Expense.png" alt="profile" className="Dash" />
               }
               key="sub1"
               title="Expense"
@@ -333,14 +333,14 @@ const NewSidebar = (props) => {
                 //     background: "#05445E",
 
                 //   }}
-                icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+                icon={<img src="/dot.png" alt="profile" className="dot" />}
                 key="2"
               >
                 Add Expense
                 <NavLink to="/Expense/AddExpense" />
               </Menu.Item>
               <Menu.Item className='arrow'
-                icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
+                icon={<img src="/dot.png" alt="profile" className="dot" />}
                 key="3"
               >
                 Expense List

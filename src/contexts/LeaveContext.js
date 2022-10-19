@@ -12,7 +12,6 @@ import {
 } from "firebase/firestore";
 import emailjs from 'emailjs-com'
 import moment from "moment";
-import { sendEmail } from "./EmailContext";
 const leaveCollectionRef = collection(db, "leave");
 const usersCollectionRef = collection(db, "users");
 const daysCollectionRef = collection(db, "leavedays");
@@ -26,14 +25,14 @@ class LeaveContext {
             to_name: newLeave.approver,
             to_email: email,
             name: newLeave.name,
-            dates: newLeave.date,
+            dates: newLeave.date.join(", "),
             type: newLeave.nature,
             slot: newLeave.slot,
             reason: newLeave.reason
         }
         console.log(data)
-        emailjs.send('service_9hz3rhk', 'template_qkiloai', data, '1CQEfgDcYGkNmButz')
-        return addDoc(leaveCollectionRef, newLeave);
+        // emailjs.send('service_9hz3rhk', 'template_qkiloai', data, '1CQEfgDcYGkNmButz')
+        // return addDoc(leaveCollectionRef, newLeave);
     };
     deleteLeave = (id) => {
         const leaveDoc = doc(db, "leave", id);
@@ -61,12 +60,13 @@ class LeaveContext {
         return updateDoc(leaveDoc, { status: "Rejected", comment: comment })
     }
     getLeaveDays = (records, leavedays) => {
-        console.log(leavedays)
+        console.log(records, leavedays)
         records.forEach((rec) => {
             if(rec.status == "Approved"){
-                let date1 = moment(rec.dateCalc[0], "Do MMM, YYYY");
-                let date2 = moment(rec.dateCalc[1], "Do MMM, YYYY");
-                let dur = date2.diff(date1, 'days') + 1;
+                let dur = rec.dateCalc.length
+                // let date1 = moment(rec.dateCalc[0], "Do MMM, YYYY");
+                // let date2 = moment(rec.dateCalc[1], "Do MMM, YYYY");
+                // let dur = date2.diff(date1, 'days') + 1;
                 if (dur === 1 && rec.slot != 'Full Day') {
                     dur = 0.5;
                 }
@@ -98,7 +98,14 @@ class LeaveContext {
                 id: doc.id
             };
         });
-        console.log(req[0].mailid);
+        const q1 = query(usersCollectionRef, where ("role", "==", "hr"));
+        let hrData = await getDocs(q1);
+        let hr = hrData.docs.map((doc) => {
+            return [
+                doc.data().mailid
+        ];
+        });
+        console.log(hr);
         return req[0].mailid;
     }
 }

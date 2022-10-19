@@ -4,11 +4,9 @@ import {
     Row,
     Select,
     Radio,
-    Badge,
     Table,
     Calendar,
     Modal,
-    Divider,
     Tag,
     notification,
     Spin,
@@ -16,9 +14,8 @@ import {
 } from 'antd';
 import { Button } from 'antd';
 import { Form, Input, } from 'antd';
-import { Space } from "antd";
 import moment from "moment";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import {  DeleteOutlined } from "@ant-design/icons";
 import LeaveContext from '../contexts/LeaveContext';
 import CompanyHolidayContext from '../contexts/CompanyHolidayContext';
 import EmployeeContext from '../contexts/EmployeeContext';
@@ -26,19 +23,9 @@ import { useAuth } from '../contexts/AuthContext'
 import Notification from "./Notification";
 import HolidayList from "./HolidayList";
 import "../style/leave.css";
-import DatePicker, { DateObject } from "react-multi-date-picker";
+import DatePicker from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import useItems from 'antd/lib/menu/hooks/useItems';
 
-let leaveStyle = {
-    Present: { height: "8px", width: "0.6rem", borderRadius: '6px', backgroundColor: "green" },
-    Absent: { height: "8px", width: "0.6rem", borderRadius: '6px', backgroundColor: "red" },
-    Leave: { height: "8px", width: "0.6rem", borderRadius: '6px', backgroundColor: "blue" },
-    "Officialy Holiday": { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "yellow" },
-    "Week Off": { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "grey" },
-}
-
-const userrole = ''
 const Leave = () => {
     const [dateSelected, setDateSelected] = useState([]);
     const [form] = Form.useForm();
@@ -51,7 +38,6 @@ const Leave = () => {
     const [dataSource, setDataSource] = useState([]);
     const [duration, setDuration] = useState([]);
     const [noOfDays, setNoOfDays] = useState([]);
-    console.log(sessionStorage.getItem("role"));
     const [isHr, setIsHr] = useState(sessionStorage.getItem("role") === "hr" ? true : false);
     const [isMgr, setIsMgr] = useState(false);
     const [role, setRole] = useState(null);
@@ -69,8 +55,6 @@ const Leave = () => {
         'Casual Leave': 0,
         'Optional Leave': 0
     })
-    // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
-    // const [users, setUsers] = useState([])
     const [leavetype, setLeavetype] = useState()
     const [validleaverequest, setValidleaverequest] = useState('false')
     const [leaveslot, setLeaveslot] = useState(null)
@@ -88,8 +72,6 @@ const Leave = () => {
 
         const allData = await CompanyHolidayContext.getAllCompanyHoliday();
         console.log('allCompanyHoliday', allData)
-        allData.docs.map((doc) => {
-            // console.log('allCompanyHoliday2', doc)
             let d = allData.docs.map((doc) => {
 
                 return {
@@ -102,7 +84,6 @@ const Leave = () => {
             // console.log('allCompanyHoliday3', d)
 
 
-        });
 
     }
 
@@ -114,7 +95,7 @@ const Leave = () => {
         // console.log('calendervvvvv2', companyHolidayRecord.length);
 
         if (companyHolidayRecord.length > 0) {
-            console.log(companyHolidayRecord[0]);
+            // console.log(companyHolidayRecord[0]);
             listData = [
                 {
                     type: companyHolidayRecord[0].Name,
@@ -124,7 +105,7 @@ const Leave = () => {
             ]
         }
         if (currentDateInAppliedLeave(value)) {
-            console.log('getListData', value);
+            // console.log('getListData', value);
             listData = [
                 {
                     type: 'leave',
@@ -337,6 +318,8 @@ const Leave = () => {
                 temp.push(dur)
             }
         });
+        getDateFormatted(req)
+        getDateFormatted(temp)
         console.log(temp)
         setRequests(req);
         setPendingRequests(temp)
@@ -357,6 +340,7 @@ const Leave = () => {
         //     dur.dateCalc = [dur.date[0], dur.date[1]]
         //     dur.date = dur.date[0] + " to " + dur.date[1]
         // });
+        getDateFormatted(req)
         setAllRequests(req);
         // console.log(isMgr, req)
     }
@@ -530,8 +514,8 @@ const Leave = () => {
     const getDateFormatted = ((data) => {
         data.forEach(dur => {
             let len = dur.date.length
-            dur.dateCalc = [dur.date[0], dur.date[len - 1]]
-            dur.date = dur.date[0] + " to " + dur.date[len - 1]
+            dur.dateCalc = dur.date
+            dur.date = len == 1 ?dur.date[0] : dur.date[0] + " to " + dur.date[len - 1]
             dur.orgDate = dur.date
         })
         setHistory(data)

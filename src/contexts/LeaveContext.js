@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import emailjs from 'emailjs-com'
 import moment from "moment";
+import { sendMail } from "./EmailContext"
 const leaveCollectionRef = collection(db, "leave");
 const usersCollectionRef = collection(db, "users");
 const daysCollectionRef = collection(db, "leavedays");
@@ -31,8 +32,14 @@ class LeaveContext {
             reason: newLeave.reason
         }
         console.log(data)
+        sendMail({
+            to: `${email}`,
+            from: "hutechhr@gmail.com",
+            subject: "Leave Request",
+            text: `${data}`
+        });
         // emailjs.send('service_9hz3rhk', 'template_qkiloai', data, '1CQEfgDcYGkNmButz')
-        // return addDoc(leaveCollectionRef, newLeave);
+        return addDoc(leaveCollectionRef, newLeave);
     };
     deleteLeave = (id) => {
         const leaveDoc = doc(db, "leave", id);

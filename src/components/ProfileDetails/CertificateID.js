@@ -36,6 +36,22 @@ const [data, setData] = useState(certData);
   
 const isEditing = (record) => record.key === editingKey;
 
+const mergedColumns = certcolumn.map((col) => {
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: (record) => ({
+        record,
+        inputType: col.dataIndex,
+        dataIndex: col.dataIndex,
+        title: col.title,
+        editing: isEditing(record),
+      }),
+    };
+  });
+
 // ------------------------------code for edit
 
 

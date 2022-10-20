@@ -441,30 +441,42 @@ function AddEmployee() {
               </Divider>
               <Form.Item
                 name="repManager"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
                 rules={[
                   {
                     required: true,
-                    message: "Choose Reporting Manager",
+                    minLength: 3,
+                    maxLength: 20,
+                    message: "Please enter Reporting Manager Name",
+                  },
+                  {
+                    pattern: /^[a-zA-Z\s]*$/,
+                    message: "Please enter Valid Name",
                   },
                 ]}
               >
-                <Select
-                  // showSearch
-                  placeholder="Select a Field"
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
-                >
-                  <Option value="Pravat Ranjan">PRAVAT RANJAN</Option>
-                  <Option value="Amlana Aparajita">AMLANA APARAJITA</Option>
-                  <Option value="Anisha Mariam Thomas">
-                    ANISHA MARIAM THOMAS
-                  </Option>
-                  <Option value="Rajeev N. Iyer">RAJEEV N. IYER</Option>
-                </Select>
+                <Input
+                  maxLength={20}
+                  onChange={(e) => {
+                    const inputval = e.target.value;
+                    const str = e.target.value;
+                    const newVal =
+                      inputval.substring(0, 1).toUpperCase() +
+                      inputval.substring(1);
+                    const caps = str.split(" ").map(capitalize).join(" ");
+                    // setPaidBy(newVal);
+                    form.setFieldsValue({
+                      repManager: newVal,
+                      repManager: caps,
+                    });
+                  }}
+                  required
+                  placeholder="Enter Reporting Manager Name"
+                />
               </Form.Item>
             </Col>
             <Col
@@ -478,27 +490,42 @@ function AddEmployee() {
               </Divider>
               <Form.Item
                 name="secManager"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
                 rules={[
                   {
                     required: true,
-                    message: "Choose Secondary Manager",
+                    minLength: 3,
+                    maxLength: 20,
+                    message: "Please enter Sec. Manager Name",
+                  },
+                  {
+                    pattern: /^[a-zA-Z\s]*$/,
+                    message: "Please enter Valid Name",
                   },
                 ]}
               >
-                <Select
-                  // showSearch
-                  placeholder=""
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
-                >
-                  <Option value="Swayamprava Nanda">SWAYAMPRAVA NANDA</Option>
-                  {/* <Option value="emp"></Option> */}
-                  {/* <Option value="pns">Prefer Not To Say</Option> */}
-                </Select>
+                <Input
+                  maxLength={20}
+                  onChange={(e) => {
+                    const inputval = e.target.value;
+                    const str = e.target.value;
+                    const newVal =
+                      inputval.substring(0, 1).toUpperCase() +
+                      inputval.substring(1);
+                    const caps = str.split(" ").map(capitalize).join(" ");
+                    // setPaidBy(newVal);
+                    form.setFieldsValue({
+                      secManager: newVal,
+                      secManager: caps,
+                    });
+                  }}
+                  required
+                  placeholder="Enter Secondary Manager Name"
+                />
               </Form.Item>
             </Col>
           </Row>

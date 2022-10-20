@@ -394,6 +394,8 @@ function AttendanceLog({ empDetails }) {
       title: "Report",
       key: "report",
       dataIndex: "report",
+      width: 180,
+      ellipsis: true,
     },
     // {
     //   title: "Action",

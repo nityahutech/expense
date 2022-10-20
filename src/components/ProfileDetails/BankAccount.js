@@ -6,6 +6,7 @@ import {
   Card,
   Row,
   Col,
+  Divider,
   Input,
   Button,
   Space,
@@ -187,7 +188,6 @@ function BankAccount() {
                             setAccountNumber(e.target.value);
                           }}
                           maxLength={20}
-                          required
                         />
                       </Form.Item>
                     )}
@@ -257,7 +257,7 @@ function BankAccount() {
                       type="primary"
                       htmlType="submit"
                       style={{ marginLeft: "10px" }}
-                      onClick={() => onFinish()}
+                      // onClick={() => onFinish()}
                     >
                       SAVE
                     </Button>

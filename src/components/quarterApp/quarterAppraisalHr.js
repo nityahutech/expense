@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { EditOutlined, PrinterFilled, DeleteOutlined, FileImageOutlined } from "@ant-design/icons";
 import { Button, Col } from 'antd';
 import { Card, Input, Modal, Form, Row, notification, Typography, Select, DatePicker, Table, Tag } from 'antd';
-import Appraisal from "./Appraisal";
-import "../style/appraisal.css";
-import AppraisalContext from '../contexts/AppraisalContext';
-import EmployeeContext from '../contexts/EmployeeContext';
+import Appraisal from "./quarterAppraisal";
+import AppraisalEmp from "./quarterAppraisalEmp";
+import AppraisalLead from "./quarterAppraisalLead";
+import AppraisalManager from "./quarterAppraisalManager";
+import "./appraisal.css";
+import AppraisalContext from '../../contexts/AppraisalContext';
+import EmployeeContext from '../../contexts/EmployeeContext';
 import moment from 'moment/moment';
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
+
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Text, Link } = Typography;
@@ -39,26 +43,46 @@ const AppraisalHr = () => {
         {
             title: "Employee Id",
             dataIndex: "empId",
-            fixed: "left",
-            width: 60,
+            // fixed: "left",
+            width: 90,
         },
         {
             title: "Employee Name",
             dataIndex: "Name",
-            fixed: "left",
-            width: 80,
+            // fixed: "left",
+            width: 120,
         },
         {
             title: "Reporting Manager",
             dataIndex: "Manager",
-            fixed: "left",
-            width: 80,
+            // fixed: "left",
+            width: 120,
         },
         {
             title: "Self Assessment",
             dataIndex: "Selfassessment",
-            fixed: "left",
-            width: 100,
+            // fixed: "left",
+            width: 120,
+            sorter: (a, b) => {
+                return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
+            },
+            sortDirections: ["ascend", "descend"],
+            render: (_, { status }) =>
+                status !== "" && (
+                    <Tag style={{ width: '100px' }}
+                        className="statusTag"
+                        color={status === "Approved" ? "green" : status === "Pending" ? 'blue' : "volcano"}
+                        key={status}
+                    >
+                        {status}
+                    </Tag>
+                ),
+        },
+        {
+            title: "Lead Assessment",
+            dataIndex: "Leadassessment",
+            // fixed: "left",
+            width: 150,
             sorter: (a, b) => {
                 return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
             },
@@ -77,8 +101,8 @@ const AppraisalHr = () => {
         {
             title: "Manager Assessment",
             dataIndex: "Mangassessment",
-            fixed: "left",
-            width: 100,
+            // fixed: "left",
+            width: 140,
             ellipsis: true,
             sorter: (a, b) => {
                 return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
@@ -99,8 +123,8 @@ const AppraisalHr = () => {
         {
             title: 'Evaluation Quarter',
             dataIndex: "Period",
-            fixed: "left",
-            width: 80,
+
+            width: 110,
             ellipsis: true,
 
         },
@@ -108,9 +132,9 @@ const AppraisalHr = () => {
             title: "Action",
             dataIndex: "action",
             key: "action",
-            fixed: "left",
+
             fixed: "right",
-            width: 80,
+            width: 130,
 
             render: (_, appraisal) => {
 
@@ -118,8 +142,8 @@ const AppraisalHr = () => {
                     <>
                         {console.log('render', appraisal)}
 
-                        <Button
-                            style={{ padding: 10, color: 'blue', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)' }}
+                        {/* <Button
+                            style={{ color: 'blue', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)' }}
                             type="link"
                             className="edIt"
                             hoverable
@@ -131,10 +155,10 @@ const AppraisalHr = () => {
                             }}
                         >
                             {<EditOutlined />}
-                        </Button>
+                        </Button> */}
 
                         <Button
-                            style={{ padding: 10, color: 'blue' }}
+                            style={{ color: 'blue', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', }}
                             type="link"
                             className="edIt"
                             onClick={() => {
@@ -145,12 +169,13 @@ const AppraisalHr = () => {
                             }}
                         >
                             {<FileImageOutlined />}
+
                         </Button>
 
 
                         {(sessionStorage.getItem("role") === 'hr') &&
                             <Button
-                                style={{ padding: 10, color: 'red' }}
+                                style={{ color: 'red', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)' }}
                                 type="link"
                                 className="edIt"
                                 onClick={() => {
@@ -161,7 +186,7 @@ const AppraisalHr = () => {
                             </Button>}
 
                         <Button
-                            style={{ padding: 10 }}
+                            style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)' }}
                             type="link"
                             className="edIt"
 
@@ -369,14 +394,6 @@ const AppraisalHr = () => {
                                 className='card-app'
                                 style={{ position: 'relative', width: '25rem' }}
                                 hoverable
-                            // cover={
-                            //     <img
-                            //         style={{ padding: '40px' }}
-
-                            //         alt="example"
-                            //     // src="/logo/resources.png"
-                            //     />
-                            // }
 
                             >
                                 <div style={{ fontSize: '30px' }}>50</div>
@@ -394,6 +411,18 @@ const AppraisalHr = () => {
                                 <div style={{ color: 'rgb(37, 150, 190)' }}>Self Assessment</div>
                                 <div style={{ color: 'grey' }}>Pending</div>
 
+                            </Card>
+
+
+                            <Card className='card-app'
+                                style={{ position: 'relative', width: '25rem' }}
+                                hoverable
+
+
+                            >
+                                <div style={{ fontSize: '30px' }}> 10</div>
+                                <div style={{ color: 'rgb(37, 150, 190)' }}>Lead Assessment</div>
+                                <div style={{ color: 'grey' }}>In Progress</div>
                             </Card>
 
                             <Card className='card-app'
@@ -435,30 +464,53 @@ const AppraisalHr = () => {
                     <Button type="primary" onClick={showModal}>Create Appraisal</Button>
 
                 </Row>
-                <Table
-                    loading={loading}
-                    columns={columns}
-                    dataSource={appraisalList}
-                    bordered
-
-                    pagination={{
-                        position: ["bottomCenter"],
-                    }}
-                    scroll={{ x: 1000 }}
-                    className="employeeTable"
-                    style={{ marginLeft: '10px', marginRight: '10px' }}
-                    size="small"
-                    onClick={() => {
-                        // if (record?.status !== 'Approved')
-                        onDeleteAppraisal();
-                    }}
-
-                />
-
             </div>
+
+            <div className="app-tab" style={{ width: '100%', paddingLeft: '10px', paddingRight: '10px', }}>
+                <Row style={{
+                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
+                    borderRadius: '10px', padding: '10px', marginTop: '10px'
+                }}
+                >
+                    <Col span={24} style={{
+                        display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black', width: '100rem'
+                    }}><h3>Appraisal Created by Hr</h3></Col>
+
+                    <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
+                        background: 'flex', padding: '10px',
+                    }} >
+
+                        <Table
+                            loading={loading}
+                            columns={columns}
+                            dataSource={appraisalList}
+                            bordered
+
+                            pagination={{
+                                position: ["bottomCenter"],
+                            }}
+                            scroll={{ x: 1200 }}
+                            className="employeeTable"
+                            style={{ marginLeft: '10px', marginRight: '10px' }}
+                            size="small"
+                            onClick={() => {
+                                // if (record?.status !== 'Approved')
+                                onDeleteAppraisal();
+                            }}
+
+                        />
+
+                    </Col>
+
+                </Row>
+            </div>
+
 
             <Modal maskClosable={false} centered title="Basic information" footer={null} visible={isModalOpen} open={isModalOpen} onCancel={handleCancel}>
                 <Row >
+
+
+
                     <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                         <Form
                             labelCol={{
@@ -517,63 +569,7 @@ const AppraisalHr = () => {
                             </Form.Item>
 
 
-                            {/* 
-                            <Form.Item labelAlign="left"
-                                style={{ marginBottom: "10px" }}
-                                label="Reporting Manager"
-                                name="manager"
-                                onKeyPress={(event) => {
-                                    if (checkAlphabets(event)) {
-                                        event.preventDefault();
-                                    }
-                                }}
 
-                            >
-                                <Input placeholder="Reporting Manager" />
-                            </Form.Item> */}
-
-                            {/* 
-                            <Form.Item labelAlign="left"
-                                name="joiningdate"
-                                style={{ marginBottom: "10px" }}
-                                label="Date Of Joining"
-                                onKeyPress={(event) => {
-                                    if (checkNumbervalue(event)) {
-                                        event.preventDefault();
-                                    }
-                                }}
-                            >
-                                <DatePicker style={{ width: "100%" }}
-                                    format="DD-MM-YYYY " />
-                            </Form.Item> */}
-
-                            {/* <Form.Item labelAlign="left"
-                                name="currentposition"
-                                style={{ marginBottom: "10px" }}
-                                label="Current Position"
-                                onKeyPress={(event) => {
-                                    if (checkAlphabets(event)) {
-                                        event.preventDefault();
-                                    }
-                                }}
-                            >
-                                <Select
-                                    placeholder="Select a Designation"
-                                    style={{ width: "100%" }}
-                                >
-                                    <Option value="Internship">Internship</Option>
-                                    <Option value="Software Trainee">Software Trainee</Option>
-                                    <Option value="Asst. Software Developer">Asst. Software Developer</Option>
-                                    <Option value="Sr. Software Developer">Sr. Software Developer</Option>
-                                    <Option value="Jr. Software Developer">Jr. Software Developer</Option>
-                                    <Option value="Business Analyst(BA)">Business Analyst(BA)</Option>
-                                    <Option value="Quality Analyst(QA)">Quality Analyst(QA)</Option>
-                                    <Option value="Human Resource(HR)">Human Resource(HR)</Option>
-                                    <Option value="Human Resource(HR)">Human Resource(HR)</Option>
-                                    <Option value="Director">Director</Option>
-                                    <Option value="Chief Executive Officer(CEO)">Chief Executive Officer(CEO)</Option>
-                                </Select>
-                            </Form.Item> */}
 
                             <Form.Item labelAlign="left"
                                 name="evaluationperiod"
@@ -638,6 +634,9 @@ const AppraisalHr = () => {
                 <Appraisal currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} />
 
             </Modal>
+            <AppraisalEmp />
+            <AppraisalLead />
+            <AppraisalManager />
 
 
         </div>

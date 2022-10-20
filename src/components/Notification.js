@@ -37,7 +37,7 @@ const Notification = ({ data }) => {
         return (
             <Input
                 placeholder="Enter Comment"
-                onChange={(event) => {value=event.target.value}}
+                onChange={(event) => { value = event.target.value }}
             />
         );
     };
@@ -182,7 +182,7 @@ const Notification = ({ data }) => {
                             }
                                 <img
                                     style={{ color: "white", width: '20px', marginRight: 10 }}
-                                    src="../logo/checkmark.png"
+                                    src="../checkmark.png"
                                     alt="profile"
                                     className="Dash"
                                     onClick={() => {
@@ -193,7 +193,7 @@ const Notification = ({ data }) => {
 
                                 <img
                                     style={{ color: "white", width: '20px', marginRight: 10 }}
-                                    src="../logo/rejected.png"
+                                    src="../rejected.png"
                                     alt="profile"
                                     className="Dash"
                                     onClick={() => {

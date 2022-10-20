@@ -10,7 +10,6 @@ import {
     updateDoc,
     doc,
 } from "firebase/firestore";
-import emailjs from 'emailjs-com'
 import moment from "moment";
 import { sendMail } from "./EmailContext"
 const leaveCollectionRef = collection(db, "leave");
@@ -38,7 +37,7 @@ class LeaveContext {
             subject: "Leave Request",
             text: `${data}`
         });
-        // emailjs.send('service_9hz3rhk', 'template_qkiloai', data, '1CQEfgDcYGkNmButz')
+
         return addDoc(leaveCollectionRef, newLeave);
     };
     deleteLeave = (id) => {

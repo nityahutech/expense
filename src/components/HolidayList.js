@@ -317,11 +317,11 @@ const LeaveList = (props) => {
                                         name='holidaytype'
                                         labelAlign="left"
                                         style={{ marginBottom: "10px", }}
-                                        defaultValue="Official"
+                                        initialValue="Official"
                                     >
                                         <Radio.Group defaultValue="Official"
                                         >
-                                            <Radio value="Optional"> Optional </Radio>
+                                            <Radio value="Optional"> Opotional </Radio>
                                             <Radio value="Official"> Official </Radio>
                                         </Radio.Group>
                                     </Form.Item>

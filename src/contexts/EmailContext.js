@@ -1,15 +1,26 @@
-require("dotenv").config();
-const sgMail = require("@sendgrid/mail");
-sgMail.setApiKey(process.env.API_KEY);
+// require("dotenv").config();
+const nodemailer = require('nodemailer');
 
-export const sendMail = async (msg) => {
-    try {
-        await sgMail.send(msg);
-        alert("Email Sent!!");
-    } catch (error) {
-        alert("Error Occured!!");
-        if (error.response) {
-            console.error(error.response.body);
+export const sendMail = (info) => {
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'hutechhr@gmail.com',
+            pass: process.env.PASSWORD
         }
+    });
+    let mailOptions = {
+        from: 'hutechhr@gmail.com',
+        to: 'swetha.vijay@hutechsolutions.com',
+        subject: 'Leave Request',
+        text: 'Test Mail',
     }
-};
+    
+    transporter.sendMail(mailOptions, function(err, data) {
+        if (err) {
+            console.log("Error", err);
+        } else {
+            console.log("Email Sent!!!");
+        }
+    });
+}

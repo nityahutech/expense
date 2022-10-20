@@ -1,5 +1,10 @@
-module.exports = {
-    resolve: {
-        fallback: { path: false},
-    },
-};
+module.exports = function (webpackEnv) {
+    return {
+        resolve: {
+            fallback: { "path": false,
+                        "crypto": false
+    
+            }
+        }
+    }
+}

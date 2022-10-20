@@ -43,6 +43,7 @@ const Leave = () => {
     const [role, setRole] = useState(null);
     const { currentUser } = useAuth();
     const format = "D MMM, YYYY"
+    const [leavedates, setLeaveDates] = useState()
     const [leavedays, setLeaveDays] = useState({
         'Earn Leave': 0,
         'Sick Leave': 0,
@@ -104,7 +105,7 @@ const Leave = () => {
                 }
             ]
         }
-        if (currentDateInAppliedLeave(value)) {
+        if (leavedates.includes(value.format("Do MMM, YYYY"))) {
             // console.log('getListData', value);
             listData = [
                 {
@@ -175,7 +176,7 @@ const Leave = () => {
         console.log('Success6', array)
         let matchingdates = leaves.filter((item) => {
             for (let i = 0; i < array.length; i++) {
-                if (item.orgDate.includes(array[i])) {
+                if (item.dateCalc.includes(array[i])) {
                     return true
                 }
             }
@@ -296,9 +297,12 @@ const Leave = () => {
             // })
         console.log(role)
         setHistory(d)
+        let dates = [];
+        d.forEach((rec) => {
+            dates.push(rec.dateCalc)
+        })
+        setLeaveDates([].concat.apply([], dates))
         setLoading(false);
-
-
     }
 
     const getRequestData = async () => {
@@ -516,7 +520,6 @@ const Leave = () => {
             let len = dur.date.length
             dur.dateCalc = dur.date
             dur.date = len == 1 ?dur.date[0] : dur.date[0] + " to " + dur.date[len - 1]
-            dur.orgDate = dur.date
         })
         setHistory(data)
     })
@@ -764,19 +767,7 @@ const Leave = () => {
     function currentDateInAppliedLeave(current) {
         let currentDate = moment(current.format('Do MMM, YYYY'), 'Do MMM, YYYY')
         let matchingdates = history.filter((item) => {
-
-            let startDate = moment(item.dateCalc[0], 'Do MMM, YYYY')
-            let endDate = moment(item.dateCalc[1], 'Do MMM, YYYY')
-            // console.log('filter', currentDate, startDate, endDate)
-
-            if (moment(currentDate).isSameOrAfter(startDate)
-                && moment(currentDate).isSameOrBefore(endDate)) {
-
-                return true
-            }
-            else {
-                return false
-            }
+            return item.dateCalc.includes(currentDate)
         })
 
         return matchingdates.length > 0
@@ -979,7 +970,7 @@ const Leave = () => {
 
                                         })
                                         let leavedates = leaves.filter((item) => {
-                                            if (item.orgDate.includes(date.toString())) {
+                                            if (item.dateCalc.includes(date.toString())) {
                                                 return true
                                             }
                                             else {

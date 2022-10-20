@@ -1,16 +1,16 @@
 import { db } from "../firebase-config";
 import ProfileContext from "./ProfileContext";
 import {
-    collection,
-    getDocs,
-    query,
-    where,
-    addDoc,
-    deleteDoc,
-    updateDoc,
-    doc,
+  collection,
+  getDocs,
+  query,
+  where,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+  doc,
 } from "firebase/firestore";
-import emailjs from 'emailjs-com'
+import emailjs from "emailjs-com";
 import moment from "moment";
 const leaveCollectionRef = collection(db, "leave");
 const usersCollectionRef = collection(db, "users");

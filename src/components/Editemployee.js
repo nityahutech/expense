@@ -500,32 +500,34 @@ function Editemployee(props) {
               style={{ marginBottom: "17px" }}
               name="repManager"
               label="Reporting Manager&nbsp;"
+              onKeyPress={(event) => {
+                if (checkAlphabets(event)) {
+                  event.preventDefault();
+                }
+              }}
               rules={[
                 {
                   required: true,
-                  message: "Choose Reporting Manager",
+                  minLength: 3,
+                  maxLength: 20,
+                  message: "Please enter Reporting Manager Name",
+                },
+                {
+                  pattern: /^[a-zA-Z\s]*$/,
+                  message: "Please enter Valid Name",
                 },
               ]}
             >
-              <Select
+              <Input
                 style={{ width: "80%" }}
-                onChange={(e) => setRepManager(e)}
-                // showSearch
-
-                // optionFilterProp="children"
-                //   onChange={onChange}
-                //   onSearch={onSearch}
-                // filterOption={(input, option) =>
-                //   option.children.toLowerCase().includes(input.toLowerCase())
-                // }
-              >
-                <Option value="Pravat Ranjan">PRAVAT RANJAN</Option>
-                <Option value="Amlana Aparajita">AMLANA APARAJITA</Option>
-                <Option value="Anisha Mariam Thomas">
-                  ANISHA MARIAM THOMAS
-                </Option>
-                <Option value="Rajeev N. Iyer">RAJEEV N. IYER</Option>
-              </Select>
+                onChange={(e) => {
+                  const inputval = e.target.value;
+                  const newVal =
+                    inputval.substring(0, 1).toUpperCase() +
+                    inputval.substring(1);
+                  setRepManager(newVal);
+                }}
+              ></Input>
             </Form.Item>
           </Col>
         </Row>
@@ -535,27 +537,34 @@ function Editemployee(props) {
               style={{ marginBottom: "17px" }}
               name="secManager"
               label="Secondary Manager&nbsp;"
+              onKeyPress={(event) => {
+                if (checkAlphabets(event)) {
+                  event.preventDefault();
+                }
+              }}
               rules={[
                 {
                   required: true,
-                  message: "Choose Secondary Manager",
+                  minLength: 3,
+                  maxLength: 20,
+                  message: "Please enter Sec. Manager Name",
+                },
+                {
+                  pattern: /^[a-zA-Z\s]*$/,
+                  message: "Please enter Valid Name",
                 },
               ]}
             >
-              <Select
+              <Input
                 style={{ width: "80%" }}
-                onChange={(e) => setSecManager(e)}
-                // showSearch
-
-                // optionFilterProp="children"
-                //   onChange={onChange}
-                //   onSearch={onSearch}
-                // filterOption={(input, option) =>
-                //   option.children.toLowerCase().includes(input.toLowerCase())
-                // }
-              >
-                <Option value="Swayamprava Nanda">SWAYAMPRAVA NANDA</Option>
-              </Select>
+                onChange={(e) => {
+                  const inputval = e.target.value;
+                  const newVal =
+                    inputval.substring(0, 1).toUpperCase() +
+                    inputval.substring(1);
+                  setSecManager(newVal);
+                }}
+              ></Input>
             </Form.Item>
           </Col>
           <Col xs={22} sm={22} md={12}>

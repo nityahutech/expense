@@ -56,7 +56,7 @@ const Leave = () => {
     const [isMgr, setIsMgr] = useState(false);
     const [role, setRole] = useState(null);
     const { currentUser } = useAuth();
-    const format = "Do MMM, YYYY"
+    const format = "D MMM, YYYY"
     const [leavedays, setLeaveDays] = useState({
         'Earn Leave': 0,
         'Sick Leave': 0,
@@ -186,9 +186,11 @@ const Leave = () => {
         console.log("Success5:", leaves);
 
         let array = []
-        dateSelected.map((date, index) => (
-            array.push(date.format(format))
-        ))
+        dateSelected.map((date, index) => {
+            let temp = date.format("DD-MM-YYYY")
+            array.push(moment(temp, "DD-MM-YYYY").format("Do MMM, YYYY"))
+        })
+        setDateSelected(array)
         console.log('Success6', array)
         let matchingdates = leaves.filter((item) => {
             for (let i = 0; i < array.length; i++) {

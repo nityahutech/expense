@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import AppraisalContext from '../contexts/AppraisalContext';
+import AppraisalContext from '../../contexts/AppraisalContext';
 import {
     Card,
     Row,
@@ -262,7 +262,7 @@ const Appraisal = (props) => {
 
                 }}
 
-            >  
+            >
                 <Table
                     style={{
                         padding: '10px',

@@ -10,14 +10,29 @@ import {
     updateDoc,
     doc,
 } from "firebase/firestore";
+import emailjs from 'emailjs-com'
 import moment from "moment";
+import { sendEmail } from "./EmailContext";
 const leaveCollectionRef = collection(db, "leave");
 const usersCollectionRef = collection(db, "users");
 const daysCollectionRef = collection(db, "leavedays");
 class LeaveContext {
     leaves = [];
     leaveDays = {};
-    createLeave = (newLeave) => {
+    createLeave = async (newLeave) => {
+        let email = await this.getEmailApproverList(newLeave.approver)
+        console.log(email)
+        let data = {
+            to_name: newLeave.approver,
+            to_email: email,
+            name: newLeave.name,
+            dates: newLeave.date,
+            type: newLeave.nature,
+            slot: newLeave.slot,
+            reason: newLeave.reason
+        }
+        console.log(data)
+        emailjs.send('service_9hz3rhk', 'template_qkiloai', data, '1CQEfgDcYGkNmButz')
         return addDoc(leaveCollectionRef, newLeave);
     };
     deleteLeave = (id) => {
@@ -64,16 +79,27 @@ class LeaveContext {
     }
 
     getEmailApproverList = async (manager) => {
-        const q = query(usersCollectionRef, where("role", "==", "hr"));
+        // const q = query(usersCollectionRef, where("role", "==", "hr"));
+        // let reqData = await getDocs(q);
+        // let req = reqData.docs.map((doc) => {
+        //     return {
+        //         ...doc.data(),
+        //         id: doc.id
+        //     };
+        // });
+        let name = manager.split(" ");
+        console.log(manager, name);
+        const q = query(usersCollectionRef, where("fname", "==", name[0] ));
         let reqData = await getDocs(q);
+        console.log(reqData);
         let req = reqData.docs.map((doc) => {
             return {
                 ...doc.data(),
                 id: doc.id
             };
         });
-        console.log(req);
-        return req;
+        console.log(req[0].mailid);
+        return req[0].mailid;
     }
 }
 export default new LeaveContext();

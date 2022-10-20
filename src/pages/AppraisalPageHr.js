@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AppraisalHr from "../components/AppraisalHr";
+import AppraisalHr from "../components/quarterApp/quarterAppraisalHr";
 import Navbar from "../components/navbar/Navbar";
 import Sidebar from "../components/sidebar/NewSidebar";
 import { useAuth } from "../contexts/AuthContext";
@@ -36,7 +36,7 @@ function AppraisalPage() {
           <Navbar />
         </div>
         <div className="tables">
-          <AppraisalHr  />
+          <AppraisalHr />
         </div>
       </div>
     </div>

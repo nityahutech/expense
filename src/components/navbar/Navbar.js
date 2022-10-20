@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import { Dropdown, Menu, Space, Button } from "antd";
 // import dropDownimg from "../../../public/logo/dropdown.svg"
-import dropDownimg from "../../assets/dropdown.png";
-import logoutsvgrepocom from "../../assets/logoutsvgrepocom.png";
-import abstractuserflat4 from "../../assets/abstractuserflat4.png";
+// import dropDownimg from "/dropdown.png";
+// import logoutsvgrepocom from "../../assets/logoutsvgrepocom.png";
+// import abstractuserflat4 from "../../assets/abstractuserflat4.png";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
 import { useLocation } from "react-router-dom";
@@ -36,7 +36,7 @@ const Navbar = () => {
     else {
       setIsRunning(true)
       let offset = moment().subtract(res.clockIn)
-      let offsettime = res.break?offset.subtract(res.break): offset;
+      let offsettime = res.break ? offset.subtract(res.break) : offset;
       console.log(offsettime.toDate());
       const offsetTime = moment(offsettime, "HH:mm:ss").diff(moment().startOf('day'), 'seconds')
       console.log(offsetTime)
@@ -79,7 +79,8 @@ const Navbar = () => {
           ),
           icon: (
             <img
-              src={abstractuserflat4}
+              // src={abstractuserflat4}
+              src="/abstractuserflat4.png"
               alt="downArrow"
               className="avatarimg"
             />
@@ -98,7 +99,9 @@ const Navbar = () => {
             </Link>
           ),
           icon: (
-            <img src={logoutsvgrepocom} alt="downArrow" className="avatarimg" />
+            <img src="/logoutsvgrepocom.png"
+              alt="downArrow"
+              className="avatarimg" />
           ),
         },
       ]}
@@ -250,13 +253,13 @@ const Navbar = () => {
           onMouseLeave={onMouseLeave}
           onMouseEnter={onMouseEnter}
         >
-          {buttonText? buttonText: ""} <br />
-          {clockinfo && isRunning ? moment.utc(clockTime * 1000).format('HH:mm:ss'): ""}
+          {buttonText ? buttonText : ""} <br />
+          {clockinfo && isRunning ? moment.utc(clockTime * 1000).format('HH:mm:ss') : ""}
         </button>
         <div className="image">
           <div className="item">
             <img
-              src="/logo/logo.png"
+              src="/logo.png"
               alt="imagh"
               className="avatar"
               style={{ cursor: "pointer" }}
@@ -276,7 +279,7 @@ const Navbar = () => {
               {"  "}Hutech{""}
             </h1>
             <img
-              src={dropDownimg}
+              src="/dropdown.png"
               alt="downArrow"
               style={{ cursor: "pointer", width: '15px' }}
             />

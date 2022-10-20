@@ -25,6 +25,8 @@ import {
 
 import "../../style/Documents.css";
 
+import WorkID from "../ProfileDetails/WorkID";
+
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // // ----------------------------------code for table of id tab
@@ -227,68 +229,6 @@ function Document() {
       type: "Skill Development",
       verification: "BPUT",
       action: "Pending Edit Delete",
-    },
-  ];
-
-  // ---------------------------------code for table of work
-
-  const workcolumn = [
-    {
-      title: "Company Name",
-      dataIndex: "companyname",
-    },
-    {
-      title: "Work Experience ",
-      dataIndex: "workexperience",
-    },
-    {
-      title: "Upload Document",
-      dataIndex: "uploadedon",
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-      render: (_, record) => {
-        console.log("record:: ", record);
-        return (
-          <>
-            {/* <Space size="small"> */}
-            <Button
-              style={{ padding: 0 }}
-              type="link"
-              className="edIt"
-              // onClick={() => {
-              //   handleEditEmployee(record);
-              //   showModal(record);
-              // }}
-            >
-              {<EditOutlined />}
-            </Button>
-            <Button
-              type='text'
-              style={{color:'#f04747'}}
-            >
-              <Popconfirm
-                title="Sure to delete?"
-                onConfirm={() => handleDelete(record.key)}
-              >
-                <DeleteOutlined />
-              </Popconfirm>
-            </Button>
-          </>
-        );
-      },
-    },
-  ];
-
-  const workData = [
-    {
-      key: "1",
-      companyname: "Delta",
-      workexperience: "2.5 years",
-      uploadedon: "pay slip image.png",
-      action: "verified",
-      
     },
   ];
 
@@ -590,51 +530,7 @@ function Document() {
           {/* -------------------------------------------------Work tabs-------------------------- */}
 
           <Tabs.TabPane tab="Work" key="3">
-            <Table
-              columns={workcolumn}
-              dataSource={workData}
-              pagination={false}
-              style={{
-                margin: "0px",
-                padding: "0px",
-              }}
-              bordered
-            />
-            <Modal
-              title="Add Documents"
-              open={workModel}
-              visible={workModel}
-              onOk={saveWork}
-              onCancel={cancelWork}
-              className="worktab"
-            >
-              <Input
-                placeholder="Enter Document Title"
-                style={{ marginTop: "25px" }}
-              />
-
-              <Input
-                placeholder="Enter Document Description"
-                style={{ marginTop: "25px", marginBottom: "25px" }}
-              />
-
-              <Upload {...props}>
-                <Button
-                  style={{ marginTop: "5px" }}
-                  icon={<UploadOutlined />}
-                  type="primary"
-                >
-                  Click to Upload
-                </Button>
-              </Upload>
-            </Modal>
-            <Button
-              type="text"
-              style={{ marginTop: "15px" }}
-              onClick={showWork}
-            >
-              <PlusCircleOutlined /> Add
-            </Button>
+            <WorkID />
           </Tabs.TabPane>
         </Tabs>
       </div>

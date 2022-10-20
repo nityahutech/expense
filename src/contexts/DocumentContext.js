@@ -3,7 +3,7 @@ import { db } from "../firebase-config";
 import {
     collection,
     getDoc,
-    addDoc,
+    setDoc,
     updateDoc,
     deleteDoc,
     doc,
@@ -13,8 +13,8 @@ const documentCollectionRef = collection(db, "document");
 
 class DocumentContext {
 
-    addDocument = (newDocument) => {
-        return addDoc(documentCollectionRef, newDocument);
+    addDocument = (id, newDocument) => {
+        return setDoc(doc(db, "document",id), newDocument);
     };
 
     updateDocument = (id, updateDocument) => {

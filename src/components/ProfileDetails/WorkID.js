@@ -22,6 +22,8 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
+import DocumentContext from '../../contexts/DocumentContext';
+import { useAuth } from '../../contexts/AuthContext'
 
 
 
@@ -88,6 +90,9 @@ const [workData, setWorkData] = useState([
 const [editingKey, setEditingKey] = useState('');
 const [form] = Form.useForm();
 const [data, setData] = useState(workData);
+const [name, setName] = useState(workData);
+const [exp, setExp] = useState(workData);
+const { currentUser } = useAuth();
   
 const isEditing = (record) => record.key === editingKey;
 
@@ -238,6 +243,8 @@ const showWork = () => {
 };
 
 const saveWork = () => {
+  console.log({companyName: name, experience: exp})
+  DocumentContext.addDocument(currentUser.uid, {companyName: name, experience: exp})
   setWorkModel(false);
 };
 
@@ -291,13 +298,15 @@ const mergedColumns = workcolumn.map((col) => {
               className="worktab"
             >
               <Input
-                placeholder="Enter Document Title"
+                placeholder="Enter Company Name"
                 style={{ marginTop: "25px" }}
+                onChange={(e) => setName(e.target.value)}
               />
 
               <Input
-                placeholder="Enter Document Description"
+                placeholder="Enter Experience"
                 style={{ marginTop: "25px", marginBottom: "25px" }}
+                onChange={(e) => setExp(e.target.value)}
               />
 
               <Upload {...props}>

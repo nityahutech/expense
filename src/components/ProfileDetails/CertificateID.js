@@ -1,7 +1,8 @@
-import React from 'react'
 
+import React from "react";
 function CertificateID() {
   return (
+
     <div>
       Certificate
     </div>
@@ -9,3 +10,4 @@ function CertificateID() {
 }
 
 export default CertificateID
+

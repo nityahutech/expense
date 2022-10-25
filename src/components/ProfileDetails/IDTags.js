@@ -1,11 +1,11 @@
 import React from 'react'
 
-function WorkID() {
+function IDTags() {
   return (
     <div>
-      Workid
+      IDTags
     </div>
   )
 }
 
-export default WorkID
+export default IDTags

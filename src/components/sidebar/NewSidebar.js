@@ -49,13 +49,17 @@ const NewSidebar = (props) => {
                 background: "#05445E",
                 height: "30px",
               }}
-              src="/logo_1.png"
+              // src="/logo_1.png"
+              src={process.env.PUBLIC_URL + "/logo_1.png"}
               alt="hello"
             />
           </div>
           <Menu.Item
             icon={
-              <img src="/Dashboard.png" alt="profile" className="Dash" />
+              <img
+                src={process.env.PUBLIC_URL + "/Dashboard.png"}
+                // src="/Dashboard.png" 
+                alt="profile" className="Dash" />
             }
             key="1"
           >
@@ -70,7 +74,8 @@ const NewSidebar = (props) => {
             icon={
               <img
                 style={{ color: "white" }}
-                src="/employees.png"
+                src={process.env.PUBLIC_URL + "/employees.png"}
+                // src="/employees.png"
                 alt="profile"
                 className="Dash"
               />
@@ -80,14 +85,20 @@ const NewSidebar = (props) => {
             mode="inline"
           >
             <Menu.Item className='arrow'
-              icon={<img src="/dot.png" alt="profile" className="dot" />}
+              icon={<img
+                // src="/dot.png"
+                src={process.env.PUBLIC_URL + "/dot.png"}
+                alt="profile" className="dot" />}
               key="6"
             >
               Attendance Log
               <NavLink to="/Attendance/AttendanceLog" />
             </Menu.Item>
             <Menu.Item className='arrow'
-              icon={<img src="/dot.png" alt="profile" className="dot" />}
+              icon={<img
+                // src="/dot.png"
+                src={process.env.PUBLIC_URL + "/dot.png"}
+                alt="profile" className="dot" />}
               key="7"
             >
               Leave
@@ -95,14 +106,18 @@ const NewSidebar = (props) => {
             </Menu.Item>
             {isHr ? <>
               <Menu.Item className='arrow'
-                icon={<img src="/dot.png" alt="profile" className="dot" />}
+                icon={<img
+                  src={process.env.PUBLIC_URL + "/dot.png"}
+                  alt="profile" className="dot" />}
                 key="8"
               >
                 Add Employee
                 <NavLink to="/Addemployee/AddEmployee" />
               </Menu.Item>
               <Menu.Item className='arrow'
-                icon={<img src="/dot.png" alt="profile" className="dot" />}
+                icon={<img
+                  src={process.env.PUBLIC_URL + "/dot.png"}
+                  alt="profile" className="dot" />}
                 key="9"
               >
                 Employee List
@@ -110,7 +125,9 @@ const NewSidebar = (props) => {
               </Menu.Item>
               <Menu.Item
                 className="arrow"
-                icon={<img src="/dot.png" alt="profile" className="dot" />}
+                icon={<img
+                  src={process.env.PUBLIC_URL + "/dot.png"}
+                  alt="profile" className="dot" />}
                 key="25"
               >
                 Hr PaySlip
@@ -219,7 +236,10 @@ const NewSidebar = (props) => {
           </Menu.SubMenu> */}
           <Menu.Item
             icon={
-              <img src="/user.png" alt="profile" className="Dash" />
+              <img
+                src={process.env.PUBLIC_URL + "/user.png"}
+                // src="/user.png"
+                alt="profile" className="Dash" />
             }
             key="21"
           >
@@ -285,7 +305,10 @@ const NewSidebar = (props) => {
               width: '100%'
             }}
               icon={
-                <img src="/Expense.png" alt="profile" className="Dash" />
+                <img
+                  src={process.env.PUBLIC_URL + "/Expense.png"}
+                  // src="/Expense.png"
+                  alt="profile" className="Dash" />
               }
               key="sub1"
               title="Expense"
@@ -296,14 +319,18 @@ const NewSidebar = (props) => {
                 //     background: "#05445E",
 
                 //   }}
-                icon={<img src="/dot.png" alt="profile" className="dot" />}
+                icon={<img
+                  src={process.env.PUBLIC_URL + "/dot.png"}
+                  alt="profile" className="dot" />}
                 key="2"
               >
                 Add Expense
                 <NavLink to="/Expense/AddExpense" />
               </Menu.Item>
               <Menu.Item className='arrow'
-                icon={<img src="/dot.png" alt="profile" className="dot" />}
+                icon={<img
+                  src={process.env.PUBLIC_URL + "/dot.png"}
+                  alt="profile" className="dot" />}
                 key="3"
               >
                 Expense List

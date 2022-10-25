@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import AppraisalContext from '../../contexts/AppraisalContext';
-import ReactToPrint from "react-to-print";
+import ReactToPrint, { useReactToPrint } from "react-to-print";
+
 import {
     Row,
     Col,
@@ -74,6 +75,15 @@ const Appraisal = (props) => {
     const [empEditable, setEmpEditable] = useState(!(currentAppraisal.status === 'empPending'));
     const [leadEditable, setLeadEditable] = useState((currentAppraisal.status === 'leadPending'));
     const [mgrEditable, setMgrEditable] = useState((currentAppraisal.status === 'mgrPending'));
+
+
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+        documentTitle: 'Quarter Appraisal Form',
+        onafterprint: () => alert('Print Succes')
+
+    });
 
 
     const onReset = () => {
@@ -163,16 +173,12 @@ const Appraisal = (props) => {
 
     return (
         <Layout>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: 'center' }}>
-                <ReactToPrint
-                    trigger={() => (
-                        <a className="ant-btn ant-btn-primary" href="#">
-                            Print
-                        </a>
-                    )}
-                    content={() => this.componentRef}
-                />
-
+            <button style={{ width: '50px', backgroundColor: 'white' }}
+                onClick={handlePrint}>Print
+            </button>
+            <div
+                ref={componentRef}
+                style={{ display: "flex", flexDirection: "column", alignItems: 'center' }}>
                 <Col xl={24} lg={24} md={24} sm={24} xs={24}
 
                     style={{
@@ -340,8 +346,8 @@ const Appraisal = (props) => {
                                 }}
 
                             >
-                                <TextArea rows={2}
-                                    maxLength={10}
+                                <TextArea rows={3}
+                                    maxLength={100}
                                     required
                                     placeholder=""
                                     disabled={empEditable}
@@ -365,8 +371,8 @@ const Appraisal = (props) => {
                                 }}
 
                             >
-                                <TextArea rows={2}
-                                    maxLength={10}
+                                <TextArea rows={3}
+                                    maxLength={100}
                                     required
                                     placeholder=""
                                     disabled={empEditable}
@@ -387,8 +393,8 @@ const Appraisal = (props) => {
                                 }}
 
                             >
-                                <TextArea rows={2}
-                                    maxLength={10}
+                                <TextArea rows={3}
+                                    maxLength={100}
                                     required
                                     placeholder=""
                                     disabled={empEditable}
@@ -408,8 +414,8 @@ const Appraisal = (props) => {
                                 }}
 
                             >
-                                <TextArea rows={2}
-                                    maxLength={10}
+                                <TextArea rows={3}
+                                    maxLength={100}
                                     required
                                     placeholder=""
                                     disabled={empEditable}
@@ -436,8 +442,8 @@ const Appraisal = (props) => {
 
                                 >
 
-                                    <TextArea rows={2}
-                                        maxLength={10}
+                                    <TextArea rows={3}
+                                        maxLength={100}
                                         required
                                         placeholder=""
                                         disabled={!leadEditable}
@@ -458,8 +464,8 @@ const Appraisal = (props) => {
 
                                 >
 
-                                    <TextArea rows={2}
-                                        maxLength={10}
+                                    <TextArea rows={3}
+                                        maxLength={100}
                                         required
                                         placeholder=""
                                         disabled={!leadEditable}
@@ -486,8 +492,8 @@ const Appraisal = (props) => {
                                     }}
 
                                 >
-                                    <TextArea rows={2}
-                                        maxLength={10}
+                                    <TextArea rows={3}
+                                        maxLength={100}
                                         required
                                         placeholder=""
                                         disabled={!mgrEditable}
@@ -508,8 +514,8 @@ const Appraisal = (props) => {
                                     }}
 
                                 >
-                                    <TextArea rows={2}
-                                        maxLength={10}
+                                    <TextArea rows={3}
+                                        maxLength={100}
                                         required
                                         placeholder=""
                                         disabled={!mgrEditable}
@@ -530,8 +536,8 @@ const Appraisal = (props) => {
                                     }}
 
                                 >
-                                    <TextArea rows={2}
-                                        maxLength={10}
+                                    <TextArea rows={3}
+                                        maxLength={100}
                                         required
                                         placeholder=""
                                         disabled={!mgrEditable}
@@ -540,14 +546,12 @@ const Appraisal = (props) => {
 
                             </div>
 
-                            <Col span={30}>
+                            <Col span={30} >
 
                                 <Form.Item >
                                     <Button
                                         style={cancelStyle}
                                         onClick={handleOk}
-
-
                                         // onClick={submitEdit}
                                         htmlType="submit"
 

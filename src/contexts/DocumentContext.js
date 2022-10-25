@@ -26,9 +26,10 @@ class DocumentContext {
         const documentDoc = doc(db, "document", id);
         return deleteDoc(documentDoc);
     };
-    getDocument = (id) => { 
-        const documentDoc = doc(db, "expenses", id);
-        return getDoc(documentDoc);
+    getDocument = async (id) => { 
+        const documentDoc = doc(db, "document", id);
+        let temp = await getDoc(documentDoc);
+        return temp.data();
     };
 
     // getAllDocument = () => {

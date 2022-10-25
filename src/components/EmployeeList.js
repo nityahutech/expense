@@ -110,6 +110,36 @@ function EmployeeList() {
       width: 200,
     },
     {
+      title: "Manager",
+      dataIndex: "isManager",
+      key: "isManager",
+      width: 100,
+    },
+    {
+      title: "Earn Leave",
+      dataIndex: "earnLeave",
+      key: "earnLeave",
+      width: 60,
+    },
+    {
+      title: "Sick Leave",
+      dataIndex: "sickLeave",
+      key: "sickLeave",
+      width: 60,
+    },
+    {
+      title: "Casual Leave",
+      dataIndex: "casualLeave",
+      key: "casualLeave",
+      width: 60,
+    },
+    {
+      title: "Optional Leave",
+      dataIndex: "optionalLeave",
+      key: "optionalLeave",
+      width: 75,
+    },
+    {
       title: "Action",
       dataIndex: "action",
       key: "action",
@@ -176,11 +206,9 @@ function EmployeeList() {
     const allData = await getUsers();
     let d = allData.docs.map((doc, i) => {
       //  console.log(JSON.stringify(new Date(doc.data()['date'])));
-      var longDateStr = moment(doc.data()["date"], "D/M/Y").format("MM-DDY");
       return {
         ...doc.data(),
-        date: doc.data()["date"],
-        dt: new Date(longDateStr),
+        isManager: doc.data().isManager? "true":"false",
         id: doc.id,
         sn: i + 1,
         disabled: false,

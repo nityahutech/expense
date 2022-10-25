@@ -30,10 +30,10 @@ function generateEmpId() {
 }
 
 export async function createUser(values) {
-  console.log(values.email, "password");
+  console.log(values.mailid, "password");
   let res = await createUserWithEmailAndPassword(
     createAuth,
-    (values.fname + "." + values.lname + "@hutechsolutions.com").toLowerCase(),
+    values.mailid,
     "password"
   );
   updateProfile(res.user, { displayName: values.fname + " " + values.lname });
@@ -45,12 +45,7 @@ export async function createUser(values) {
     empId: await generateEmpId(),
     fname: values.fname,
     lname: values.lname,
-    mailid: (
-      values.fname +
-      "." +
-      values.lname +
-      "@hutechsolutions.com"
-    ).toLowerCase(),
+    mailid: values.mailid,
     contactEmail: values.email,
     doj: values.doj.format("DD-MM-YYYY"),
     phonenumber: values.phone,
@@ -65,6 +60,7 @@ export async function createUser(values) {
     repManager: values.repManager,
     secManager: values.secManager,
     department: values.department,
+    isManager: false,
     earnLeave: 12,
     sickLeave: 6,
     casualLeave: 6,
@@ -84,28 +80,5 @@ export async function createUser(values) {
 
 export async function getUsers() {
   const q = query(users, orderBy("empId", "asc"));
-  // console.log(q);
   return getDocs(q);
-  // return [
-  //     {
-  //       key: "1",
-  //       sn: "1",
-  //       fname: "Saswat",
-  //       lname: "Patel",
-  //       email: "saswat@gmail.com",
-  //       dob: "23/07/1992",
-  //       gender: "mail",
-  //       cnumber: "234456677",
-  //     },
-  //     {
-  //       key: "2",
-  //       sn: "2",
-  //       fname: "Jatin",
-  //       lname: "Yadav",
-  //       email: "jatin@gmail.com",
-  //       dob: "23/07/1993",
-  //       gender: "mail",
-  //       cnumber: "234456677",
-  //     },
-  //   ]
 }

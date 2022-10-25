@@ -3,7 +3,7 @@ import { db } from "../firebase-config";
 import {
     collection,
     getDoc,
-    addDoc,
+    setDoc,
     updateDoc,
     deleteDoc,
     doc,
@@ -13,8 +13,8 @@ const documentCollectionRef = collection(db, "document");
 
 class DocumentContext {
 
-    addDocument = (newDocument) => {
-        return addDoc(documentCollectionRef, newDocument);
+    addDocument = (id, newDocument) => {
+        return setDoc(doc(db, "document",id), newDocument);
     };
 
     updateDocument = (id, updateDocument) => {
@@ -26,9 +26,10 @@ class DocumentContext {
         const documentDoc = doc(db, "document", id);
         return deleteDoc(documentDoc);
     };
-    getDocument = (id) => { 
-        const documentDoc = doc(db, "expenses", id);
-        return getDoc(documentDoc);
+    getDocument = async (id) => { 
+        const documentDoc = doc(db, "document", id);
+        let temp = await getDoc(documentDoc);
+        return temp.data();
     };
 
     // getAllDocument = () => {

@@ -42,10 +42,10 @@ const Notification = ({ data }) => {
         );
     };
 
-    useEffect(() => {
-        setDataSource(data)
-        console.log(data)
-    }, [data])
+    // useEffect(() => {
+    //     setDataSource(data)
+    //     console.log(data)
+    // }, [data])
     // console.log("data", data);
 
     const onChange = (val) => {
@@ -79,7 +79,7 @@ const Notification = ({ data }) => {
             okType: "primary",
             onOk: () => {
                 console.log(value);
-                LeaveContext.approveLeave(record.id, value)
+                LeaveContext.approveLeave(record.id, record.name, value)
                     .then(response => {
                         console.log(response);
                         // getData();
@@ -101,7 +101,7 @@ const Notification = ({ data }) => {
             okType: "danger",
             onOk: () => {
                 console.log(value);
-                LeaveContext.rejectLeave(record.id, value)
+                LeaveContext.rejectLeave(record.id, record.name, value)
                     .then(response => {
                         console.log(response);
                         // getData();
@@ -159,14 +159,6 @@ const Notification = ({ data }) => {
             dataIndex: 'reason',
             width: 150,
         },
-        // {
-        //     title: 'Approver',
-        //     dataIndex: 'approver',
-        //     width: 150,
-        // },
-
-
-
         {
             key: "5",
             title: "Actions",

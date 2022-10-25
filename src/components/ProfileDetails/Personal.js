@@ -27,7 +27,7 @@ function Personal() {
     let nameArray = value.name.split(" ");
     let fname = "";
     for (let i = 0; i < nameArray.length - 1; i++) {
-      fname = fname + nameArray[i] + " ";
+      fname = i != 0 ? " " + fname + nameArray[i] : fname + nameArray[i];
     }
     let record = {
       ...value,

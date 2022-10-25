@@ -152,7 +152,7 @@ function AddEmployee() {
                     form.setFieldsValue({ fname: newVal, fname: caps });
                   }}
                   required
-                  placeholder="Enter Your First Name"
+                  placeholder="Enter First Name"
                 />
               </Form.Item>
             </Col>
@@ -198,12 +198,45 @@ function AddEmployee() {
                     form.setFieldsValue({ lname: newVal, lname: caps });
                   }}
                   required
-                  placeholder="Enter Your Last Name"
+                  placeholder="Enter Last Name"
                 />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 12 }}
+              className="Col-1-left"
+              style={{ background: "" }}
+            >
+              <Divider orientation="left" orientationMargin={0}>
+                Official Email Id<span style={{ color: "red" }}> *</span>
+              </Divider>
+              <Form.Item
+                name="mailid"
+                // onKeyPress={(event) => {
+                //   if (checkAlphabets(event)) {
+                //     event.preventDefault();
+                //   }
+                // }}
+                rules={[
+                  {
+                    required: true,
+                    // minLength: 3,
+                    // maxLength: 20,
+                    message: "Please enter Email Id",
+                    type: "email",
+                  },
+                  {
+                    // pattern: /^[a-zA-Z\s]*$/,
+                    message: "Please enter Valid Email",
+                  },
+                ]}
+              >
+                <Input required placeholder="Enter Email Address" />
+              </Form.Item>
+            </Col>
             <Col
               xs={{ span: 24 }}
               sm={{ span: 12 }}
@@ -235,32 +268,6 @@ function AddEmployee() {
                 ]}
               >
                 <Input required placeholder="Enter Email Address" />
-              </Form.Item>
-            </Col>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Date Of Joining<span style={{ color: "red" }}> *</span>
-              </Divider>
-              <Form.Item
-                name="doj"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Choose a Date",
-                  },
-                ]}
-              >
-                {/* format={dateFormatList} */}
-                <DatePicker
-                  style={{ width: "100%" }}
-                  //  disabledDate={disabledDate}
-                  placeholder="Choose Date"
-                />
               </Form.Item>
             </Col>
           </Row>
@@ -332,8 +339,8 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                  <Option value="male">Male</Option>
-                  <Option value="female">Female</Option>
+                  <Option value="Male">Male</Option>
+                  <Option value="Female">Female</Option>
                   {/* <Option value="pns">Prefer Not To Say</Option> */}
                 </Select>
               </Form.Item>
@@ -530,7 +537,33 @@ function AddEmployee() {
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
-            <Col span={6}></Col>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 12 }}
+              className="Col-1-left"
+              style={{ background: "" }}
+            >
+              <Divider orientation="left" orientationMargin={0}>
+                Date Of Joining<span style={{ color: "red" }}> *</span>
+              </Divider>
+              <Form.Item
+                name="doj"
+                placeholder="Choose Date"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Choose a Date",
+                  },
+                ]}
+              >
+                {/* format={dateFormatList} */}
+                <DatePicker
+                  style={{ width: "100%" }}
+                  //  disabledDate={disabledDate}
+                  placeholder="Choose Date"
+                />
+              </Form.Item>
+            </Col>
             <Col
               xs={{ span: 24 }}
               sm={{ span: 12 }}
@@ -546,7 +579,7 @@ function AddEmployee() {
                 rules={[
                   {
                     required: true,
-                    message: "Choose Your Department",
+                    message: "Choose Department",
                   },
                 ]}
               >
@@ -566,7 +599,6 @@ function AddEmployee() {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={3}></Col>
           </Row>
           <Row gutter={[24, 16]}>
             <Col classsname="gutter-row" span={9}></Col>

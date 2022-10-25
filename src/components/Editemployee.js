@@ -10,6 +10,7 @@ import {
   Select,
   Space,
   notification,
+  Checkbox,
 } from "antd";
 // import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext";
@@ -38,6 +39,11 @@ function Editemployee(props) {
   const [repManager, setRepManager] = useState("");
   const [secManager, setSecManager] = useState("");
   const [department, setDepartment] = useState("");
+  const [isManager, setIsMgr] = useState("");
+  const [earnLeave, setEarnLeave] = useState("");
+  const [sickLeave, setSickLeave] = useState("");
+  const [optionalLeave, setOptionalLeave] = useState("");
+  const [casualLeave, setCasualLeave] = useState("");
 
   console.log(props);
   const { currentUser } = useAuth();
@@ -52,10 +58,15 @@ function Editemployee(props) {
         doj,
         designation,
         gender,
-        phonenumber,
+        // phonenumber,
         repManager,
         secManager,
         department,
+        isManager,
+        earnLeave,
+        sickLeave,
+        casualLeave,
+        optionalLeave
       };
       console.log("editedRecord");
       console.log(props.record.id, editedRecord);
@@ -83,6 +94,11 @@ function Editemployee(props) {
     const repManagerVal = props.record ? props.record.repManager : "";
     const secManagerVal = props.record ? props.record.secManager : "";
     const setDepartmentVal = props.record ? props.record.department : "";
+    const isMgrVal = props.record ? props.record.isManager : "";
+    const earnLeaveVal = props.record ? props.record.earnLeave : "";
+    const sickLeaveVal = props.record ? props.record.sickLeave : "";
+    const casualLeaveVal = props.record ? props.record.casualLeave : "";
+    const optionalLeaveVal = props.record ? props.record.optionalLeave : "";
 
     setFname(fnameVal);
     setLname(lnameVal);
@@ -94,6 +110,11 @@ function Editemployee(props) {
     setRepManager(repManagerVal);
     setSecManager(secManagerVal);
     setDepartment(setDepartmentVal);
+    setIsMgr(isMgrVal);
+    setEarnLeave(earnLeaveVal);
+    setSickLeave(sickLeaveVal);
+    setCasualLeave(casualLeaveVal);
+    setOptionalLeave(optionalLeaveVal);
   }, [props]);
   function cancel() {
     props.setIsModalVisible(false);
@@ -204,10 +225,10 @@ function Editemployee(props) {
             name: ["gender"],
             value: gender,
           },
-          {
-            name: ["phonenumber"],
-            value: phonenumber,
-          },
+          // {
+          //   name: ["phonenumber"],
+          //   value: phonenumber,
+          // },
           {
             name: ["repManager"],
             value: repManager,
@@ -219,6 +240,26 @@ function Editemployee(props) {
           {
             name: ["department"],
             value: department,
+          },
+          {
+            name: ["isManager"],
+            value: isManager,
+          },
+          {
+            name: ["earnLeave"],
+            value: earnLeave,
+          },
+          {
+            name: ["sickLeave"],
+            value: sickLeave,
+          },
+          {
+            name: ["casualLeave"],
+            value: casualLeave,
+          },
+          {
+            name: ["optionalLeave"],
+            value: optionalLeave,
           },
         ]}
         layout="vertical"
@@ -377,33 +418,34 @@ function Editemployee(props) {
           <Col xs={22} sm={22} md={12}>
             <Form.Item
               style={{ marginBottom: "17px" }}
-              name="phonenumber"
-              label="Phone No.&nbsp;"
+              name="isManager"
+              label="Is Manager&nbsp;"
               // onKeyPress={(event) => {
               //   if (checkNumbervalue(event)) {
               //     event.preventDefault();
               //   }
               // }}
-              onKeyPress={(event) => {
-                if (checkNumbervalue(event)) {
-                  event.preventDefault();
-                }
-              }}
+              // onKeyPress={(event) => {
+              //   if (checkNumbervalue(event)) {
+              //     event.preventDefault();
+              //   }
+              // }}
               rules={[
                 {
-                  required: true,
-                  message: "Please enter Phone Number",
-                  pattern: /^[0-9\b]+$/,
+                  // required: true,
+                  // message: "Please enter Phone Number",
+                  // pattern: /^[0-9\b]+$/,
                 },
                 { whitespace: true },
               ]}
             >
-              <Input
+              <Checkbox
+                defaultChecked={isManager == "true"? true : false}
                 style={{ width: "80%" }}
                 maxLength={10}
                 onChange={(e) => {
-                  const number = e.target.value;
-                  setPhonenumber(number);
+                  const number = e.target.checked;
+                  setIsMgr(number);
                 }}
 
                 //   onChange={(e) => {
@@ -413,7 +455,7 @@ function Editemployee(props) {
                 //     form.setFieldsValue({ subTotal: amt * quantity });
 
                 //   }}
-              />
+              >Manager</Checkbox>
             </Form.Item>
           </Col>
 
@@ -599,6 +641,123 @@ function Editemployee(props) {
           </Col>
         </Row>
 
+        <Row>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="earnLeave"
+              label="Earn Leave&nbsp;"
+              onKeyPress={(event) => {
+                if (checkNumbervalue(event)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[
+                {
+                  required: true,
+                  maxLength: 2,
+                  message: "Please enter Earn Leave",
+                },
+              ]}
+            >
+              <Input
+                maxLength={2}
+                style={{ width: "80%" }}
+                onChange={(e) => {
+                  const newVal = e.target.value;
+                  setEarnLeave(newVal);
+                }}
+              ></Input>
+            </Form.Item>
+          </Col>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="sickLeave"
+              label="Sick Leave&nbsp;"
+              onKeyPress={(event) => {
+                if (checkNumbervalue(event)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[
+                {
+                  required: true,
+                  maxLength: 2,
+                  message: "Please enter Sick Leave",
+                },
+              ]}
+            >
+              <Input
+                maxLength={2}
+                style={{ width: "80%" }}
+                onChange={(e) => {
+                  const newVal = e.target.value;
+                  setSickLeave(newVal);
+                }}
+              ></Input>
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="casualLeave"
+              label="Casual Leave&nbsp;"
+              onKeyPress={(event) => {
+                if (checkNumbervalue(event)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[
+                {
+                  required: true,
+                  maxLength: 2,
+                  message: "Please enter Casual Leave",
+                },
+              ]}
+            >
+              <Input
+                maxLength={2}
+                style={{ width: "80%" }}
+                onChange={(e) => {
+                  const newVal = e.target.value;
+                  setCasualLeave(newVal);
+                }}
+              ></Input>
+            </Form.Item>
+          </Col>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="optionalLeave"
+              label="Optional Leave&nbsp;"
+              onKeyPress={(event) => {
+                if (checkNumbervalue(event)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[
+                {
+                  required: true,
+                  maxLength: 2,
+                  message: "Please enter Optional Leave",
+                },
+              ]}
+            >
+              <Input
+                maxLength={2}
+                style={{ width: "80%" }}
+                onChange={(e) => {
+                  const newVal = e.target.value;
+                  setOptionalLeave(newVal);
+                }}
+              ></Input>
+            </Form.Item>
+          </Col>
+        </Row>
         <br />
         <Button style={cancelStyle} onClick={cancel}>
           Cancel

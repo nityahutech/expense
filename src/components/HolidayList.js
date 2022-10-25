@@ -99,7 +99,7 @@ const LeaveList = (props) => {
     }
 
     const onFinish = (values) => {
-        console.log('Success: holiday', values.holidaydate.toDate());
+        console.log('Success: holiday', values);
 
         let newHoliday = {
             Name: values.holidayname,
@@ -317,7 +317,7 @@ const LeaveList = (props) => {
                                         name='holidaytype'
                                         labelAlign="left"
                                         style={{ marginBottom: "10px", }}
-
+                                        defaultValue="Official"
                                     >
                                         <Radio.Group defaultValue="Official"
                                         >

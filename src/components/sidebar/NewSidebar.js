@@ -272,6 +272,7 @@ const NewSidebar = (props) => {
             Profile
             <NavLink to="/Profile" />
           </Menu.Item> */}
+
           {/* <Menu.SubMenu
             className="arrow-div"
             style={{
@@ -283,25 +284,18 @@ const NewSidebar = (props) => {
             key="sub4"
             title="Appraisal"
             mode="inline"
-          > */}
-          {/* <Menu.Item className='arrow'
+          >
 
-              icon={<img src="/dot.png" alt="appraisal" className="dot" />}
-              key="19"
-            >
-              Employees
-              <NavLink to="/Appraisal/AppraisalPage" />
-            </Menu.Item> */}
-
-          {/* <Menu.Item
+            <Menu.Item
               className="arrow"
               icon={<img src="/dot.png" alt="profile" className="dot" />}
               key="20"
             >
-              Appraisal Form
+              Quarter Appraisal
               <NavLink to="/Appraisal/AppraisalPageHr" />
             </Menu.Item>
           </Menu.SubMenu> */}
+
           {/* <Menu.Item className ='arrow'
             icon={
               <img

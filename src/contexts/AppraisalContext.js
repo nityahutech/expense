@@ -1,4 +1,5 @@
 import { db } from "../firebase-config";
+
 import {
     collection,
     getDocs,
@@ -8,7 +9,10 @@ import {
     orderBy,
     deleteDoc,
     updateDoc,
-    where
+    where,
+    getFirestore,
+    writeBatch
+
 } from "firebase/firestore";
 
 
@@ -16,7 +20,17 @@ const appraisalCollectionRef = collection(db, "appraisal");
 
 class AppraisalContext {
     getAllAppraisal = () => {
-        const q = query(appraisalCollectionRef, orderBy("Period", "desc"));
+        const q = query(appraisalCollectionRef, orderBy("quarter", "desc"));
+        return getDocs(q);
+    };
+
+    getLeadAppraisal = (leadName) => {
+        const q = query(appraisalCollectionRef, where("lead", "==", leadName));
+        return getDocs(q);
+    };
+
+    getManagerAppraisal = (mgrName) => {
+        const q = query(appraisalCollectionRef, where("repManager", "==", mgrName));
         return getDocs(q);
     };
 
@@ -29,6 +43,18 @@ class AppraisalContext {
     createAppraisal = (appraisal) => {
         console.log('appraisal', 'received in service')
         return addDoc(appraisalCollectionRef, appraisal);
+    };
+
+    createBatchAppraisal = (appraisalList) => {
+        console.log('appraisal received in service', appraisalList)
+        var db = getFirestore();
+        const batch = writeBatch(db);
+
+        appraisalList.forEach((appraisal) => {
+            addDoc(appraisalCollectionRef, appraisal);
+        });
+        return batch.commit()
+
     };
 
     deleteAppraisal = (id) => {

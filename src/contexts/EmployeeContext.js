@@ -31,13 +31,11 @@ class EmployeeContext {
 
   getAllEmployees = () => {
     const q = query(employeeCollectionRef, orderBy("date", "desc"));
-    // console.log(q);
     return getDocs(q);
   };
 
   getAllByTotal = () => {
     const q = query(employeeCollectionRef, orderBy("subtotal", "desc"));
-    // console.log(q);
     return getDocs(q);
   };
 
@@ -45,9 +43,7 @@ class EmployeeContext {
     const employeeDoc = doc(db, "users", id);
     let rec = await getDoc(employeeDoc);
     let recordData = rec.data();
-    console.log('recordData', recordData)
     return recordData
-    // return getDoc(employeeDoc);
   };
 }
 

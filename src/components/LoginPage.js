@@ -17,14 +17,12 @@ function LoginPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(loginEmail, loginPassword);
     win.clear();
     try {
       setError("");
       setLoading(true);
 
       let res = await login(loginEmail, loginPassword);
-      console.log(res.user);
       sessionStorage.setItem("accessToken", res.user.accessToken);
       sessionStorage.setItem("user", JSON.stringify(res.user));
       navigate("DashBoard", { replace: true });
@@ -40,7 +38,6 @@ function LoginPage() {
 
   async function handleReset(e) {
     e.preventDefault();
-    console.log(loginEmail, loginPassword);
     win.clear();
     try {
       setLoading(true);

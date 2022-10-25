@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from 'react';
+import React, { useState } from 'react';
 import {
     Col,
     Row,
@@ -6,34 +6,14 @@ import {
     Modal,
     Input
 } from 'antd';
-
-import { useAuth } from '../contexts/AuthContext'
 import LeaveContext from '../contexts/LeaveContext'
 import "../style/leave.css";
 
-let dummy = [{
-    date: "OKOKO",
-    name: "OKOKO",
-    nature: "OKOKO",
-    slot: "OKOKO",
-    reason: "OKOKO",
-    approver: "jhbd"
-}]
 const Notification = ({ data }) => {
-    const { currentUser, role } = useAuth();
     const [dataSource, setDataSource] = useState(data);
-    // const [approve, setApprove] = useState([]);
-    // const [reject, setReject] = useState([]);
-    // const [text, setText] = useState("");
-    // const [value, setValue] = useState();
     let value = '';
 
     const Bbb = () => {
-        // useEffect(() => {
-        //     if (onChange) {
-        //         onChange(value);
-        //     }
-        // }, [value]);
         return (
             <Input
                 placeholder="Enter Comment"
@@ -42,47 +22,16 @@ const Notification = ({ data }) => {
         );
     };
 
-    // useEffect(() => {
-    //     setDataSource(data)
-    //     console.log(data)
-    // }, [data])
-    // console.log("data", data);
-
-    const onChange = (val) => {
-        // setText(val);
-    };
-
-    // const getData = async () => {
-    //     let data = await LeaveContext.getAllById(currentUser.uid)
-    //     // console.log("data", JSON.stringify(data.docs), currentUser.uid);
-
-    //     let d = data.docs.map((doc) => {
-    //         console.log("123", { ...doc.data() })
-    //         return {
-    //             ...doc.data(),
-    //             id: doc.id,
-    //             status: doc?.data()?.status || "Pending",
-    //         };
-    //     });
-    //     console.log("data", d);
-    //     setApprove(d);
-
-    // }
-    // ${JSON.stringify(record)}
-
     const onApproveLeave = (record) => {
-        console.log(record)
         Modal.confirm({
             title: `Are you sure, you want to approve Leave of ${record?.name || ''}!`,
             content: <Bbb />,
             okText: "Yes",
             okType: "primary",
             onOk: () => {
-                console.log(value);
                 LeaveContext.approveLeave(record.id, record.name, value)
                     .then(response => {
                         console.log(response);
-                        // getData();
                     })
                     .catch(error => {
                         console.log(error.message);
@@ -93,14 +42,12 @@ const Notification = ({ data }) => {
     };
 
     const onRejectedLeave = (record) => {
-        console.log(record)
         Modal.confirm({
             title: `Are you sure, you want to reject Leave of ${record?.name || ''}!`,
             content: <Bbb />,
             okText: "Yes",
             okType: "danger",
             onOk: () => {
-                console.log(value);
                 LeaveContext.rejectLeave(record.id, record.name, value)
                     .then(response => {
                         console.log(response);
@@ -202,13 +149,6 @@ const Notification = ({ data }) => {
 
     ];
 
-    const rowClassNameFun = (e) => {
-        const { empId, name } = e
-
-        console.log(name, empId, "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG")
-    }
-    console.log(value)
-
     return (
         <Row style={{
             display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
@@ -223,19 +163,13 @@ const Notification = ({ data }) => {
                 background: 'flex', padding: '10px',
             }} >
 
-                {/* {JSON.stringify(dataSource[0])} */}
                 <div>
                     <Table columns={columns}
                         dataSource={dataSource}
-                        // rowClassName = {(e) => rowClassNameFun(e)}
-                        //  rowClassName={record => dataSource.filter((item) => item.nature === record.nature) ? "disabled-row" :"pankaj"}
-                        // rowClassName={record => !record.enabled && "disabled-row"}
                         pagination={{
                             position: ["bottomCenter"],
                         }}
                         scroll={{ x: 600 }}
-                        // style={{ overflowX: 'auto' }}
-
                         size="small" />
                 </div>
             </Col>

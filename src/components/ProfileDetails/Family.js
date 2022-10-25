@@ -37,39 +37,16 @@ const Family = () => {
     
   },[]);
   const onFinish = (values) => {
-    console.log(values)
-    // console.log('Success:',record);
     EmpInfoContext.updateEduDetails(currentUser.uid,values)
     setData(values)
     showeditfamilymember(false)
     showeditEmergency(false)
     getData();
   };
-
-  // const onContactsFinish = (newvalue) => {
-  //   // console.log(contactdata)
-  //   console.log(newvalue);
-  //   console.log('success',newvalue)
-  //   EmpInfoContext.updateEduDetails(currentUser.uid,newvalue)     
-  //    setData(newvalue)
-  //    showeditEmergency(false)
-  // }
-
-  // const onEmergencyFinish = (newvalue) => {
-  //     // console.log(contactdata)
-  //     console.log(newvalue);
-  //     console.log('success',newvalue)
-  //     EmpInfoContext.updateEduDetails(currentUser.uid,newvalue)     
-  //     setData(newvalue)
-  //     showeditEmergency(false)
-  //   }
- 
   const getData=async()=>{
     let data = await EmpInfoContext.getEduDetails(currentUser.uid)
-    console.log(data)
     setData(data)
   }
-  console.log(data)
   
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -278,7 +255,6 @@ const Family = () => {
                               const str = e.target.value;
                               const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
                               const caps = str.split(' ').map(capitalize).join(' ');
-                              console.log('caps',caps)
                               // setPaidBy(newVal);
                               form.setFieldsValue({ father: newVal, father: caps });
                               } } 
@@ -358,7 +334,6 @@ const Family = () => {
                               const str = e.target.value;
                               const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
                               const caps = str.split(' ').map(capitalize).join(' ');
-                              console.log('caps',caps)
                               // setPaidBy(newVal);
                               form.setFieldsValue({ mother: newVal, mother: caps });
                               } } 
@@ -598,8 +573,6 @@ const Family = () => {
                               const str = e.target.value;
                               const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
                               const caps = str.split(' ').map(capitalize).join(' ');
-                              console.log('caps',caps)
-                              // setPaidBy(newVal);
                               form.setFieldsValue({ other: newVal, other: caps });
                               } }      
                               defaultValue={data?data.other:null}
@@ -645,7 +618,6 @@ const Family = () => {
                               const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
                               const caps = str.split(' ').map(capitalize).join(' ');
                               console.log('caps',caps)
-                              // setPaidBy(newVal);
                               form.setFieldsValue({ relation: newVal, relation: caps });
                               } }      
                               defaultValue={data?data.relation:''} 

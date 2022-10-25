@@ -32,11 +32,6 @@ class DocumentContext {
         return temp.data();
     };
 
-    // getAllDocument = () => {
-    //     const q = query(documentCollectionRef, orderBy("date", "desc"));
-    //     // console.log(q);
-    //     return getDocs(q);
-    // };
 }
 
 export default new DocumentContext();

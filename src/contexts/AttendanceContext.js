@@ -38,16 +38,13 @@ class AttendanceContext {
           };
       });
       if (!d[0]) {
-        console.log("d")
         return addDoc(attendCollectionRef, record);
       }
-      console.log(d)
       let newrec = {
         ...d[0],
         break: moment().subtract(d[0].clockOut).format("HH:mm:ss"),
         clockOut: null,
       }
-      console.log(newrec)
       const attendDoc = doc(db, "attendance", d[0].id);
       updateDoc(attendDoc, newrec)
       return d;
@@ -62,7 +59,6 @@ class AttendanceContext {
                 id: doc.id
             };
         });
-        console.log(d)
         const attendDoc = doc(db, "attendance", d[0].id);
         updateDoc(attendDoc, record)
         return 
@@ -91,13 +87,11 @@ class AttendanceContext {
                 id: doc.id
             };
         });
-        console.log("clock", d)
         let data = d[0] ? {
           clockIn: d[0].clockIn,
           break: d[0].break? d[0].break: undefined, 
           clockOut: d[0].clockOut
         } : null;
-        console.log(data)
         return data
     }
 
@@ -114,7 +108,6 @@ class AttendanceContext {
                 id: doc.id
             };
         });
-        console.log(d)
         const attendDoc = doc(db, "attendance", d[0].id);
         updateDoc(attendDoc, record)
         return 
@@ -127,7 +120,6 @@ class AttendanceContext {
 
     getAllAttendance =  async (id, date) => {
         const q = query(attendCollectionRef, where("empId", "==", id));
-        // console.log(q);
         let data = await getDocs(q);
         let d = data.docs.map((doc) => {
             return {
@@ -136,18 +128,13 @@ class AttendanceContext {
               status: "Present"
             };
           });
-          // let stats = await this.getMonthlyStatus();
-          // console.log(stats);
           const momentRange = extendMoment(Moment);
-          console.log(date)
-          console.log(id)
           const range = momentRange.range(date[0], date[1])
           const res = Array.from(range.by('day'))
           let x = 0;
           let temp = []
           res.map((day) => {
             for (let i = 0; i < d.length; i++) {
-              console.log("breh")
               if (day.isSame(moment(d[i].date, "DD-MM-YYYY"), 'day')) {
                 temp[x++] = {
                   ...d[i],
@@ -156,7 +143,6 @@ class AttendanceContext {
                 return;
               }
             }
-            console.log(day)
             temp[x++] = {
               date: day.format("DD-MM-YYYY"),
               status: "Absent"
@@ -179,51 +165,35 @@ class AttendanceContext {
           };
         });
         let stats = await this.getStatus();
-        console.log(stats)
-
-
         res.forEach((emp) => {
           for (let i = 0; i < stats.length; i++) {
             if (emp.id == stats[i].id) {
-              console.log("Present")
               emp.status = "Present";
               emp.project = stats[i].project;
               emp.report = stats[i].report;
               return;
             }
           }
-
-          // let response=Promise.all()
-           
         })
-        console.log(res);
-        console.log("test1",JSON.stringify(res));
-        console.log("7777");
         return res;
-        // return getDocs(q)
     };
 
     updateWithLeave = async (data) => {
-      console.log(data)
       data.forEach((emp) => {
         if(emp.status == "Absent") {
           this.getLeaveStatus(emp.empId).then((leave) => {
-            console.log("7777", leave);
               if (leave) {
-              console.log("8888");
               emp.status = "On Leave";
 
             }
           })
         }
       })
-      console.log(JSON.stringify(data));
       return data;
     }
 
     getAllByTotal = () => {
         const q = query(attendCollectionRef, orderBy("subtotal", "desc"));
-        // console.log(q);
         return getDocs(q);
     };
 
@@ -242,7 +212,6 @@ class AttendanceContext {
     };
 
     getLeaveStatus = async (id) => {
-      console.log(id);
       const q = query(leaveCollectionRef, where("empId", "==", id), where("status", "==", "Approved"));
       let stats = await getDocs(q);
       let temp = []
@@ -250,7 +219,6 @@ class AttendanceContext {
         temp.push(doc.data().date)
       });
       let leaves = [].concat.apply([], temp)
-      // console.log(leaves, (moment().format("Do MMM, YYYY")), leaves.includes(moment().format("Do MMM, YYYY")));
       return leaves.includes(moment().format("Do MMM, YYYY"));
   }
 

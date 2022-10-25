@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Layout, Menu } from "antd";
 
 import "./newSlidebar.css";
-import { useNavigate, NavLink } from "react-router-dom";
-import { SettingOutlined, ProfileOutlined } from "@ant-design/icons";
+import { NavLink } from "react-router-dom";
 
 const { Sider } = Layout;
 
@@ -20,33 +19,6 @@ function getItem(label, key, icon, children = null, type = null) {
 const NewSidebar = (props) => {
   const [isHr, setIsHr] = useState(sessionStorage.getItem("role") === "hr" ? true : false);
 
-  console.log(props.openkey);
-  const history = useNavigate();
-
-  // useEffect(() => {
-  //   let role = sessionStorage.getItem("role");
-  //   setRole(role)
-  //   setIsHr(role === "hr")
-  // })
-  // const onClick = (e) => {
-  //     let pathkey = e.key
-  //     switch (pathkey) {
-  //         case "5":
-  //             window.location.href="/ExpenseFrm"
-  //             history("/Expense/AddExpense")
-  //             break;
-  //         case "6":
-  //             window.location.href = "/Home"
-  //             history("/Expenfse/ExpenseList")
-  //             break;
-  //         case "1":
-  //             window.location.href = "/DashBoard"
-  //             history("/DashBoard")
-  //             break;
-  //     }
-  //     console.log('click ', e.key);
-  // };
-
   return (
     <Layout className="sidelayout">
       <Sider
@@ -54,10 +26,8 @@ const NewSidebar = (props) => {
         style={{ backgroundColor: "#05445E" }}
         collapsedWidth="0"
         onBreakpoint={(broken) => {
-          console.log(broken);
         }}
         onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
         }}
       >
         <Menu
@@ -66,7 +36,6 @@ const NewSidebar = (props) => {
           // openKeys={props.openkey}
           // selectedKeys={props.selectedkey}
           onSelect={function ({ item, key, keyPath, selectedKeys, domEvent }) {
-            console.log(item, key, keyPath, selectedKeys, domEvent);
           }}
           mode="inline"
           style={{

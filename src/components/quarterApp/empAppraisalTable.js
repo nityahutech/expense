@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { PrinterFilled, FileImageOutlined } from "@ant-design/icons";
+import {
+    // PrinterFilled,
+    FileImageOutlined,
+    DeleteOutlined
+} from "@ant-design/icons";
 import { Button, Col } from 'antd';
 import { Card, Input, Modal, Row, Table, Tag } from 'antd';
 import Appraisal from "./appraisalForm";
@@ -117,16 +121,16 @@ const EmpAppraisalTable = (props) => {
             dataIndex: "action",
             key: "action",
             fixed: "right",
-            width: 130,
+            width: 120,
 
             render: (_, appraisal) => {
 
                 return (
                     <>
                         {console.log('render', appraisal)}
-                        <Button
-                            style={{ color: 'blue', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', }}
-                            type="link"
+                        <Button type="primary"
+                            style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', }}
+
                             className="edIt"
                             onClick={() => {
 
@@ -135,18 +139,24 @@ const EmpAppraisalTable = (props) => {
 
                             }}
                         >
-                            {<FileImageOutlined />}
+                            {<FileImageOutlined style={{ color: 'white', }} />}
 
                         </Button>
 
                         {(sessionStorage.getItem("role") === 'hr') &&
-                            <Button
-                                style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)' }}
-                                type="link"
+                            <Button type='danger'
+                                style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', marginLeft: '10px' }}
+                                // type="link"
                                 className="edIt"
+                                onClick={() => {
+                                    // if (record?.status !== 'Approved')
+                                    onDeleteAppraisal(appraisal);
+                                }}
 
                             >
-                                {<PrinterFilled />}
+                                {<DeleteOutlined style={{ color: 'white', }}
+
+                                />}
                             </Button>
 
                         }
@@ -176,7 +186,7 @@ const EmpAppraisalTable = (props) => {
         else if (props.listType === 'lead') {
             allData = await AppraisalContext.getLeadAppraisal(empRecord.fname + ' ' + empRecord.lname)
         }
-        else if (props.listType === 'mgr') {         
+        else if (props.listType === 'mgr') {
             allData = await AppraisalContext.getManagerAppraisal(empRecord.fname + ' ' + empRecord.lname)
 
         }
@@ -196,7 +206,7 @@ const EmpAppraisalTable = (props) => {
     const onDeleteAppraisal = (appraisal) => {
         console.log('deleteappraisal', appraisal)
         Modal.confirm({
-            title: "Are you sure, you want to delete  record?",
+            title: "Are you sure, you want to delete Appraisal?",
             okText: "Yes",
             okType: "danger",
 
@@ -259,7 +269,7 @@ const EmpAppraisalTable = (props) => {
                 onCancel={() => setSecondModal(false)}
                 width={800}
             >
-              <Appraisal currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} />
+                <Appraisal currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} />
 
             </Modal>
 

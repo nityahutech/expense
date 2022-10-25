@@ -80,7 +80,8 @@ const Navbar = () => {
           icon: (
             <img
               // src={abstractuserflat4}
-              src="/abstractuserflat4.png"
+              src={process.env.PUBLIC_URL + "/abstractuserflat4.png"}
+              // src="/abstractuserflat4.png"
               alt="downArrow"
               className="avatarimg"
             />
@@ -99,7 +100,9 @@ const Navbar = () => {
             </Link>
           ),
           icon: (
-            <img src="/logoutsvgrepocom.png"
+            <img
+              src={process.env.PUBLIC_URL + "/logoutsvgrepocom.png"}
+              // src="/logoutsvgrepocom.png"
               alt="downArrow"
               className="avatarimg" />
           ),
@@ -259,7 +262,8 @@ const Navbar = () => {
         <div className="image">
           <div className="item">
             <img
-              src="/logo.png"
+              src={process.env.PUBLIC_URL + "/logo.png"}
+              // src="/logo.png"
               alt="imagh"
               className="avatar"
               style={{ cursor: "pointer" }}
@@ -279,7 +283,8 @@ const Navbar = () => {
               {"  "}Hutech{""}
             </h1>
             <img
-              src="/dropdown.png"
+              src={process.env.PUBLIC_URL + "/dropdown.png"}
+              // src="/dropdown.png"
               alt="downArrow"
               style={{ cursor: "pointer", width: '15px' }}
             />

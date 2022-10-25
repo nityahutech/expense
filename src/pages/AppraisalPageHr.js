@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AppraisalHr from "../components/quarterApp/quarterAppraisalHr";
+import AppraisalHr from "../components/quarterApp/appraisalHomePage";
 import Navbar from "../components/navbar/Navbar";
 import Sidebar from "../components/sidebar/NewSidebar";
 import { useAuth } from "../contexts/AuthContext";

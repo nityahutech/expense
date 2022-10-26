@@ -23,36 +23,40 @@ import DocumentContext from "../../contexts/DocumentContext";
 import { async } from "@firebase/util";
 
 function WorkID() {
-  const [allWorkDetails, setAllWorkDetails] = useState([]);
+  const [allWorkDetails, setAllWorkDetails] = useState([
+  //   {
+  //   name: "",
+  //   description: "",
+  //   file: ""
+  // }
+]);
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [imgPreview, setImgPreview] = useState();
   const imgRef = useRef(null);
   const [deleteRow, setDeleteRow] = useState("");
-  const [data, setData] = useState([]);
   const { currentUser } = useAuth();
 
 
   function addNewWork(values) {
-    console.log({ values });
-    DocumentContext.addDocument(currentUser.uid,values);
+    console.log();
+    DocumentContext.addDocument({ ...values, empId: currentUser.uid, type: "work" });
     getData();
-    setAllWorkDetails([...allWorkDetails, values]);
   };
 
-  const deleteData = (name, e) => {
-    DocumentContext.deleteDocument(currentUser.uid,name,e)
-    const filteredData = allWorkDetails.filter((item) => item.name !== name);
+  const deleteData = (id) => {
+    DocumentContext.deleteDocument(id)
+    // const filteredData = allWorkDetails.filter((item) => item.name !== name);
     getData();
-    setAllWorkDetails(filteredData);
+    // setAllWorkDetails(filteredData);
   };
   useEffect(()=>{
     getData();
   },[]);
   const getData=async()=>{
-    let alldata=await DocumentContext.getDocument(currentUser.uid);
+    let alldata=await DocumentContext.getDocument(currentUser.uid, "work");
     console.log(alldata)
-    setData(alldata);
+    // setData(alldata);
     setAllWorkDetails(alldata);
   };
 
@@ -71,20 +75,20 @@ function WorkID() {
       title: "Uploaded File",
       dataIndex: "file",
       key: "file",
-      render: (data, record) => {
-        console.log("record: ", record);
-        console.log("data:: ", data);
-        // var fReader = new FileReader();
-        // fReader.readAsDataURL(imgRef.current.input.files[0]);
-        // fReader.onload = function (event) {
-        //   setImgPreview(event.target.result);
-        // };
-        return (
-          <a href={imgRef.current.input.files[0].name} target="_blank">
-            {imgRef.current.input.files[0].name}
-          </a>
-        );
-      },
+      // render: (data, record) => {
+      //   console.log("record: ", record);
+      //   console.log("data:: ", data);
+      //   var fReader = new FileReader();
+      //   fReader.readAsDataURL(imgRef.current.input.files[0]);
+      //   fReader.onload = function (event) {
+      //     setImgPreview(event.target.result);
+      //   };
+      //   return (
+      //     <a href={imgRef.current.input.files[0].name} target="_blank">
+      //       {imgRef.current.input.files[0].name}
+      //     </a>
+      //   );
+      // },
     },
 
     {
@@ -92,7 +96,7 @@ function WorkID() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <Button type="link" onClick={(e) => deleteData(record.name, e)}>
+          <Button type="link" onClick={(e) => deleteData(record.id)}>
             <DeleteOutlined />
           </Button>
         </Space>

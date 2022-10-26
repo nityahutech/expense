@@ -1,4 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+
 import {
   Button,
   Table,
@@ -17,6 +19,8 @@ import {
 } from "@ant-design/icons";
 import FormItem from "antd/es/form/FormItem";
 import Item from "antd/lib/list/Item";
+import DocumentContext from "../../contexts/DocumentContext";
+import { async } from "@firebase/util";
 
 function WorkID() {
   const [allWorkDetails, setAllWorkDetails] = useState([]);
@@ -25,15 +29,31 @@ function WorkID() {
   const [imgPreview, setImgPreview] = useState();
   const imgRef = useRef(null);
   const [deleteRow, setDeleteRow] = useState("");
+  const [data, setData] = useState([]);
+  const { currentUser } = useAuth();
+
 
   function addNewWork(values) {
     console.log({ values });
+    DocumentContext.addDocument(currentUser.uid,values);
+    getData();
     setAllWorkDetails([...allWorkDetails, values]);
-  }
+  };
 
   const deleteData = (name, e) => {
+    DocumentContext.deleteDocument(currentUser.uid,name,e)
     const filteredData = allWorkDetails.filter((item) => item.name !== name);
+    getData();
     setAllWorkDetails(filteredData);
+  };
+  useEffect(()=>{
+    getData();
+  },[]);
+  const getData=async()=>{
+    let alldata=await DocumentContext.getDocument(currentUser.uid);
+    console.log(alldata)
+    setData(alldata);
+    setAllWorkDetails(alldata);
   };
 
   const columns = [
@@ -156,10 +176,10 @@ function WorkID() {
           layout="vertical"
         >
           <FormItem name="name">
-            <Input placeholder="Enter Company Title" />
+            <Input placeholder="Enter Company Name" />
           </FormItem>
           <FormItem name="description">
-            <Input placeholder="Enter Experience Description" />
+            <Input placeholder="Enter year of Experience" />
           </FormItem>
           <FormItem name="file">
             <Input

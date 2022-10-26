@@ -29,6 +29,7 @@ class DocumentContext {
     getDocument = async (id) => { 
         const documentDoc = doc(db, "document", id);
         let temp = await getDoc(documentDoc);
+        console.log(temp,temp.data())
         return temp.data();
     };
 

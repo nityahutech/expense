@@ -26,3 +26,54 @@
     height: 250px;
   }
 }
+
+@media print {
+  .noprint {
+    visibility: hidden;
+  }
+}
+
+@media print {
+  .page-header {
+    display: flex !important;
+    page-break-before: auto !important;
+    margin-top: 30px !important;
+  }
+}
+
+@media print {
+  .page-break-lead {
+    display: block !important;
+    page-break-before: auto !important;
+    margin-top: 80px !important;
+  }
+}
+
+@media print {
+  .page-break-mgr {
+    display: block !important;
+    page-break-before: auto !important;
+    margin-top: 80px !important;
+  }
+}
+
+@media print {
+  .page-break4 {
+    display: block !important;
+    page-break-before: auto !important;
+    margin-top: 150px !important;
+  }
+}
+
+@media print {
+  .page-time {
+    display: block !important;
+  }
+}
+
+/* @media print {
+  .textArea-ant  {
+    border: none;
+
+  }
+} */

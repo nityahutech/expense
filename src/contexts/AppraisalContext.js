@@ -14,6 +14,8 @@ import {
     writeBatch
 
 } from "firebase/firestore";
+import { sendEmail } from "./EmailContext";
+const usersCollectionRef = collection(db, "users");
 
 
 const appraisalCollectionRef = collection(db, "appraisal");
@@ -45,6 +47,7 @@ class AppraisalContext {
         return addDoc(appraisalCollectionRef, appraisal);
     };
 
+
     createBatchAppraisal = (appraisalList) => {
         console.log('appraisal received in service', appraisalList)
         var db = getFirestore();
@@ -64,8 +67,59 @@ class AppraisalContext {
 
     updateAppraisal = (id, updateAppraisal) => {
         const apprasialDoc = doc(db, "appraisal", id);
+        console.log('apprasialDoc', apprasialDoc)
         return updateDoc(apprasialDoc, updateAppraisal);
     };
+
+    sendEmailToLead = async (appraisal) => {
+        let email = await this.getEmailList(appraisal.lead)
+        let mailOptions = {
+            from: 'hutechhr@gmail.com',
+            to: `${email}`,
+            cc: `${appraisal.mailid}`,
+            subject: `Appraisal self Assesment completed By ${appraisal.fname} ${appraisal.lname} `,
+            html: `<p>Hello ${appraisal.lead},</p><br />
+            <p> ${appraisal.fname} ${appraisal.lname} has completed their self Assessment=></p>
+        <br />
+        <p>Please fill lead Assessment through HR portal.</p>
+        <br />
+        <p>Hutech HR</p>`,
+        }
+        sendEmail(mailOptions)
+
+    };
+
+    sendEmailToManager = async (appraisal) => {
+        let email = await this.getEmailList(appraisal.repManager)
+        let mailOptions = {
+            from: 'hutechhr@gmail.com',
+            to: `${email}`,
+            cc: `${appraisal.mailid}`,
+            subject: `Appraisal lead assesment completed for ${appraisal.fname} ${appraisal.lname} `,
+            html: `<p>Hello ${appraisal.repManager},</p><br />
+            <p> lead assesment has completed for ${appraisal.fname} ${appraisal.lname} =></p>
+        <br />
+        <p>Please fill Manager Assessment through HR portal.</p>
+        <br />
+        <p>Hutech HR</p>`,
+        }
+        sendEmail(mailOptions)
+
+    };
+
+    getEmailList = async (manager) => {
+        let name = manager.split(" ");
+        const q = query(usersCollectionRef, where("lname", "==", name[name.length - 1]), where("fname", "==", name[0]));
+        let reqData = await getDocs(q);
+        let req = reqData.docs.map((doc) => {
+            return {
+                ...doc.data(),
+                id: doc.id
+            };
+        });
+
+        return req[0].mailid;
+    }
 }
 
 

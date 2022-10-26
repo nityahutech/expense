@@ -8,6 +8,8 @@ import {
 } from 'antd';
 import LeaveContext from '../contexts/LeaveContext'
 import "../style/leave.css";
+import checkedIcon from "../images/checkmark.png"
+import rejectIcon from "../images/rejected.png"
 
 const Notification = ({ data }) => {
     const [dataSource, setDataSource] = useState(data);
@@ -121,7 +123,7 @@ const Notification = ({ data }) => {
                             }
                                 <img
                                     style={{ color: "white", width: '20px', marginRight: 10 }}
-                                    src="../checkmark.png"
+                                    src={checkedIcon}
                                     alt="profile"
                                     className="Dash"
                                     onClick={() => {
@@ -132,7 +134,7 @@ const Notification = ({ data }) => {
 
                                 <img
                                     style={{ color: "white", width: '20px', marginRight: 10 }}
-                                    src="../rejected.png"
+                                    src={rejectIcon}
                                     alt="profile"
                                     className="Dash"
                                     onClick={() => {

@@ -8,7 +8,10 @@ import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
-
+import settingsIcon from "../../images/abstractuserflat4.png"
+import logoutIcon from "../../images/logoutsvgrepocom.png"
+import logo from "../../images/logo.png"
+import dropdown from "../../images/dropdown.png"
 // ---------------------------------------------------------------------
 
 const Navbar = () => {
@@ -53,7 +56,7 @@ const Navbar = () => {
           icon: (
             <img
               // src={abstractuserflat4}
-              src={process.env.PUBLIC_URL + "/abstractuserflat4.png"}
+              src={settingsIcon}
               // src="/abstractuserflat4.png"
               alt="downArrow"
               className="avatarimg"
@@ -74,7 +77,7 @@ const Navbar = () => {
           ),
           icon: (
             <img
-              src={process.env.PUBLIC_URL + "/logoutsvgrepocom.png"}
+              src={logoutIcon}
               // src="/logoutsvgrepocom.png"
               alt="downArrow"
               className="avatarimg" />
@@ -207,7 +210,7 @@ const Navbar = () => {
         <div className="image">
           <div className="item">
             <img
-              src={process.env.PUBLIC_URL + "/logo.png"}
+              src={logo}
               // src="/logo.png"
               alt="imagh"
               className="avatar"
@@ -228,7 +231,7 @@ const Navbar = () => {
               {"  "}Hutech{""}
             </h1>
             <img
-              src={process.env.PUBLIC_URL + "/dropdown.png"}
+              src={dropdown}
               // src="/dropdown.png"
               alt="downArrow"
               style={{ cursor: "pointer", width: '15px' }}

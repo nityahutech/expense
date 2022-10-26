@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { Layout, Menu } from "antd";
-
+import expenseIcon from "../../images/Expense.png"
+import dot from "../../images/dot.png"
+import dashIcon from "../../images/Dashboard.png"
+import empIcon from "../../images/employees.png"
+import userIcon from "../../images/user.png"
+import logo from "../../images/logo_1.png"
+import appraisalIcon from "../../images/appraisal.png"
 import "./newSlidebar.css";
 import { NavLink } from "react-router-dom";
 
@@ -50,14 +56,14 @@ const NewSidebar = (props) => {
                 height: "30px",
               }}
               // src="/logo_1.png"
-              src={process.env.PUBLIC_URL + "/logo_1.png"}
+              src={logo}
               alt="hello"
             />
           </div>
           <Menu.Item
             icon={
               <img
-                src={process.env.PUBLIC_URL + "/Dashboard.png"}
+                src={dashIcon}
                 // src="/Dashboard.png" 
                 alt="profile" className="Dash" />
             }
@@ -74,7 +80,7 @@ const NewSidebar = (props) => {
             icon={
               <img
                 style={{ color: "white" }}
-                src={process.env.PUBLIC_URL + "/employees.png"}
+                src={empIcon}
                 // src="/employees.png"
                 alt="profile"
                 className="Dash"
@@ -87,7 +93,7 @@ const NewSidebar = (props) => {
             <Menu.Item className='arrow'
               icon={<img
                 // src="/dot.png"
-                src={process.env.PUBLIC_URL + "/dot.png"}
+                src={dot}
                 alt="profile" className="dot" />}
               key="6"
             >
@@ -97,7 +103,7 @@ const NewSidebar = (props) => {
             <Menu.Item className='arrow'
               icon={<img
                 // src="/dot.png"
-                src={process.env.PUBLIC_URL + "/dot.png"}
+                src={dot}
                 alt="profile" className="dot" />}
               key="7"
             >
@@ -107,7 +113,7 @@ const NewSidebar = (props) => {
             {isHr ? <>
               <Menu.Item className='arrow'
                 icon={<img
-                  src={process.env.PUBLIC_URL + "/dot.png"}
+                  src={dot}
                   alt="profile" className="dot" />}
                 key="8"
               >
@@ -116,7 +122,7 @@ const NewSidebar = (props) => {
               </Menu.Item>
               <Menu.Item className='arrow'
                 icon={<img
-                  src={process.env.PUBLIC_URL + "/dot.png"}
+                  src={dot}
                   alt="profile" className="dot" />}
                 key="9"
               >
@@ -126,7 +132,7 @@ const NewSidebar = (props) => {
               <Menu.Item
                 className="arrow"
                 icon={<img
-                  src={process.env.PUBLIC_URL + "/dot.png"}
+                  src={dot}
                   alt="profile" className="dot" />}
                 key="25"
               >
@@ -237,7 +243,7 @@ const NewSidebar = (props) => {
           <Menu.Item
             icon={
               <img
-                src={process.env.PUBLIC_URL + "/user.png"}
+                src={userIcon}
                 // src="/user.png"
                 alt="profile" className="Dash" />
             }
@@ -268,7 +274,7 @@ const NewSidebar = (props) => {
               width: "100%",
             }}
             icon={
-              <img src="/appraisal.png" alt="appraisal" className="Dash" />
+              <img src={appraisalIcon} alt="appraisal" className="Dash" />
             }
             key="sub4"
             title="Appraisal"
@@ -277,7 +283,7 @@ const NewSidebar = (props) => {
 
             <Menu.Item
               className="arrow"
-              icon={<img src="/dot.png" alt="profile" className="dot" />}
+              icon={<img src={dot} alt="profile" className="dot" />}
               key="20"
             >
               Quarter Appraisal
@@ -306,7 +312,7 @@ const NewSidebar = (props) => {
             }}
               icon={
                 <img
-                  src={process.env.PUBLIC_URL + "/Expense.png"}
+                  src={expenseIcon}
                   // src="/Expense.png"
                   alt="profile" className="Dash" />
               }
@@ -320,7 +326,7 @@ const NewSidebar = (props) => {
 
                 //   }}
                 icon={<img
-                  src={process.env.PUBLIC_URL + "/dot.png"}
+                  src={dot}
                   alt="profile" className="dot" />}
                 key="2"
               >
@@ -329,7 +335,7 @@ const NewSidebar = (props) => {
               </Menu.Item>
               <Menu.Item className='arrow'
                 icon={<img
-                  src={process.env.PUBLIC_URL + "/dot.png"}
+                  src={dot}
                   alt="profile" className="dot" />}
                 key="3"
               >

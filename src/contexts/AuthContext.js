@@ -46,6 +46,7 @@ export function AuthProvider({ children }) {
   }
 
   function updateMyEmail(email) {
+    ProfileContext.updateProfile(currentUser.uid, {mailid: email})
     return updateEmail(currentUser, email)
   }
 

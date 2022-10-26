@@ -13,11 +13,9 @@ import {
   Checkbox,
 } from "antd";
 // import { useNavigate } from 'react-router-dom';
-import { useAuth } from "../contexts/AuthContext";
 import moment from "moment";
 import ProfileContext from "../contexts/ProfileContext";
 import EmployeeContext from "../contexts/EmployeeContext";
-import { SplitCellsOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 const showNotification = (type, msg, desc) => {
@@ -45,11 +43,7 @@ function Editemployee(props) {
   const [optionalLeave, setOptionalLeave] = useState("");
   const [casualLeave, setCasualLeave] = useState("");
 
-  console.log(props);
-  const { currentUser } = useAuth();
-
   async function submitEdit() {
-    // console.log("***************************");
     try {
       const editedRecord = {
         fname,
@@ -68,8 +62,6 @@ function Editemployee(props) {
         casualLeave,
         optionalLeave
       };
-      console.log("editedRecord");
-      console.log(props.record.id, editedRecord);
       EmployeeContext.updateEmployee(props.record.id, editedRecord);
       props.setIsModalVisible(false);
       // props.reloadData();
@@ -146,43 +138,8 @@ function Editemployee(props) {
       return true;
     }
   };
-  // const navigate = useNavigate();
-  // const handleListEmployee = () => {
-  //   navigate("/Expense/ExpenseList");
-  // }
-  // const {signup} = useAuth();
   const onFinish = async (values) => {
-    console.log("Received values of form: ", values);
     let res = await ProfileContext.updateProfile(values.id, values);
-    console.log("DONE!!!!!!!!!");
-    // console.log(res);
-    // const valuesToservice = {
-
-    //   fname: values['fname'],
-    //   lname: values['lname'],
-    //   email: values['email'],
-    //   doj: values['doj'].format('DD-MM-YYYY'),
-    //   phone: values['phone'],
-    //   gender: values['gender'],
-    //   designation: values['designation'],
-    //   role: values['role'],
-    //   // status: 'Unpaid',
-
-    //   // status:  values['paymentDate'],
-    //   // subtotal: values['subTotal'],
-    // }
-
-    // console.log('valuesToservice: ', valuesToservice);
-
-    // ExpenseContext.addExpenses(valuesToservice)
-    //   .then(response => {
-    //     console.log(response);
-    //     navigate('/Expense/ExpenseList');
-    //   })
-    //   .catch(error => {
-    //     console.log(error.message);
-
-    //   })
   };
 
   return (
@@ -440,7 +397,7 @@ function Editemployee(props) {
               ]}
             >
               <Checkbox
-                defaultChecked={isManager == "true"? true : false}
+                defaultChecked={isManager}
                 style={{ width: "80%" }}
                 maxLength={10}
                 onChange={(e) => {

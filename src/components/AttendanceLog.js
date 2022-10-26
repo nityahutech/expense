@@ -16,8 +16,6 @@ import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useAuth } from "../contexts/AuthContext";
 import AttendanceContext from "../contexts/AttendanceContext";
-import ProfileContext from "../contexts/ProfileContext";
-import { scryRenderedComponentsWithType } from "react-dom/test-utils";
 const { RangePicker } = DatePicker;
 const { Content } = Layout;
 const layout = {
@@ -41,7 +39,6 @@ function AttendanceLog({ empDetails }) {
   const [role, setRole] = useState(empDetails);
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
-  console.log(activetab);
   const { currentUser } = useAuth();
   const [key, setKey] = useState("1");
   const [loading, setLoading] = useState(false);
@@ -92,19 +89,15 @@ function AttendanceLog({ empDetails }) {
   ];
 
   useEffect(() => {
-    console.log(activetab);
     form.resetFields();
     if (empDetails.userType === "emp") {
       setTimeout(() => {
-        console.log(currentUser.uid);
         setSelectemp({ id: currentUser.uid });
-        // setActivetab("1");
         getEmpDetails(currentUser.uid, [
           moment().subtract(30, "days"),
           moment(),
         ]);
       }, 500);
-      // getEmpMonthly();
     } else {
       if (activetab == "1") {
         allEmpDetails();
@@ -144,40 +137,17 @@ function AttendanceLog({ empDetails }) {
   }
 
   const onFinish = async (values) => {
-    console.log(values);
     const newData = {
-      // code: "898",
-      // date: getFormateDateString(),
-      // status: "-_",
-      // time1: getFormatTimeString(),
-      // time2: "18:15:23",
-      // work: "-",
       report: values?.project_details || "-",
       project: values?.project_name || "-",
     };
-    console.log(currentUser.uid, { monthlydata });
     await AttendanceContext.updateAttendance(
       currentUser.uid,
       values.date,
       newData
     );
-    // let newAlldata = [newData, ...empMonthly];
-    // console.log(newAlldata);
-    // localStorage.setItem("newReport", JSON.stringify(newAlldata));
     setActivetab("1");
-    //create new report obj with required data + ""
-    //create newMonthlyAll=new+old monthly
-    //set local with newMonthlyAll
-    //set state for monthly with newMonthlyAll
   };
-  // useEffect(() => {
-  //   getEmpDetails(selectemp.id);
-  //   // getEmpMonthly();
-  // }, [activetab]);
-
-  // useEffect(() => {
-
-  // }, [loading])
 
   if (loading) {
     return (
@@ -207,147 +177,32 @@ function AttendanceLog({ empDetails }) {
   }
 
   async function getEmpDetails(id, date) {
-    // setLoading(true);
-    console.log(id);
     let data = await AttendanceContext.getAllAttendance(id, date);
-
-    console.log(data);
     setEmpMonthly(data);
     setLoading(false);
     return data;
   }
-  // function getEmpMonthly() {
-  //   console.log(JSON.parse(localStorage.getItem("newReport")));
-  //   let userlocal = JSON.parse(localStorage.getItem("newReport")) || [];
-  //   let newEmp = [];
-  //   userlocal.map((emp, i) => {
-  //     newEmp.push({
-  //       key: i,
-
-  //       code: emp.code,
-  //       date: emp.date,
-  //       empname: "Nitya-" + (i + 1),
-  //       status: emp.status,
-  //       time1: emp.time1,
-  //       time2: emp.time2,
-  //       work: emp.work,
-  //       report: emp.report,
-  //       project: emp.project,
-  //     });
-  //   });
-  //   console.log({ newEmp });
-  //   setEmpMonthly(newEmp);
-  //   // setallEmp(newEmp);
-  // }
 
   function allEmpDetails() {
     setLoading(true);
-    // console.log(JSON.parse(localStorage.getItem("newReport")));
     AttendanceContext.getAllUsers().then((userdata) => {
-      console.log(JSON.stringify(userdata));
       getWithLeave(userdata);
     });
-    // setLoading(false);
   }
 
   function getWithLeave(userdata) {
-    // setLoading(true);
     AttendanceContext.updateWithLeave(userdata).then((final) => {
-      console.log(
-        "test1",
-        final ? JSON.parse(JSON.stringify(final)) : undefined
-      );
       setallEmp(final);
       setFilteredEmp(final);
       setEmpMonthly(final);
       setLoading(false);
     });
   }
-  // stats.map((rec) => {
-  //   console.log("mooooooooooooooooooooooooooooo");
-  // if (emp.id == rec.id) {
-  //   emp.status = "Present";
-  //   emp.project = rec.project;
-  //   emp.report = rec.report;
-  //   return;
-  // }
-  // })
-  //   else {
-  //     console.log("AAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHH");
-  //     AttendanceContext.getLeaveStatus(emp.id).then((leave) => {
-  //     if (leave) {
-  //       emp.status = "On Leave";
-  //     }
-  //   })
-  // }
-
-  // let newEmp = [];
-  // userlocal.map((emp, i) => {
-  //   newEmp.push({
-  //     key: i,
-  //     code: emp.code + i,
-  //     date: emp.date,
-  //     status: emp.status,
-  //     time1: emp.time1,
-  //     time2: emp.time2,
-  //     empname: "Nitya-" + (i + 1),
-  //     project: emp.project,
-  //     report: emp.report,
-  //   });
-  // });
-  // console.log({ newEmp });
 
   const onReset = () => {
     form.resetFields();
   };
-  console.log(empDetails);
-  // useEffect(() => {
-  //   setFilteredEmp(filteredEmp);
-  // }, [activetab]);
 
-  // useEffect(() => {
-  //   setFilteredEmp(filteredEmp);
-  // }, [activetab]);
-
-  //   const rowSelection = {
-  //     onChange: (selectedRowKeys, selectedRows) => {
-  //       setSelectemp(selectedRows[0].code);
-  //       setActivetab("3");
-  //     },
-  //     getCheckboxProps: (record) => ({
-  //       disabled: record.name === "Disabled User",
-  //       // Column configuration not to be checked
-  //       name: record.name,
-  //     }),
-  //     type: "radio",
-  //   };
-  //   const [selectionType, setSelectionType] = useState("");
-  // const data = [
-  //   {
-  //     key: "1",
-  //     code: "HTS001",
-
-  //     name: "Nitya",
-  //     project: "Expenses",
-  //     report: "xfddsfdvbgfgfbvbvbdffgfdgjfhjjkjfjfdgkj",
-  //   },
-  //   {
-  //     key: "2",
-  //     code: "HTS002",
-
-  //     name: "Jatin",
-  //     project: "Expenses",
-  //     report: "xfddsfdvbgfgfbvbvb",
-  //   },
-  //   {
-  //     key: "3",
-  //     code: "HTS003",
-
-  //     name: "Saswat",
-  //     project: "Expenses",
-  //     report: "xfddsfdvbgfgfbvbvb",
-  //   },
-  // ];
   const columns1 = [
     // {
     //   title: "Employee Code",
@@ -402,42 +257,9 @@ function AttendanceLog({ empDetails }) {
     //   key: "action",
     // },
   ];
-  const data1 = [
-    {
-      key: "1",
-      code: "8u",
-      date: "12/09/2022",
-      status: "P",
-      time1: "",
-      time2: "",
-      work: "",
-      report: "dfdjdgjhgjhgjhfhfdj",
-    },
-    {
-      key: "2",
-      code: "8u",
-      date: "12/09/2022",
-      status: "P",
-      time1: "",
-      time2: "",
-      work: "",
-      report: "dfdjdgjhgjhgjhfhfdj",
-    },
-    {
-      key: "3",
-      code: "8u",
-      date: "12/09/2022",
-      status: "P",
-      time1: "",
-      time2: "",
-      work: "",
-      report: "dfdjdgjhgjhgjhfhfdj",
-    },
-  ];
 
   async function onHrDateFilter(value) {
     if (value == null) {
-      console.log("empMonthly");
       const modifiedFilterExpense = await getEmpDetails(selectemp.id, [
         moment().subtract(30, "days"),
         moment(),
@@ -447,18 +269,7 @@ function AttendanceLog({ empDetails }) {
       const begin = value.clone().startOf("month");
       const end = value.clone().endOf("month");
       let date = [begin, end];
-      // let result = empMonthly.filter((ex) => {
-      //   return (
-      //     moment(ex.date, dateFormat).isSame(date[0], "day") ||
-      //     moment(ex.date, dateFormat).isSame(date[1], "day") ||
-      //     (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
-      //       moment(ex.date, dateFormat).isSameOrBefore(date[1]))
-      //   );
-      // });
-
       const modifiedFilterExpense = await getEmpDetails(selectemp.id, date);
-
-      console.log(modifiedFilterExpense.reverse());
       setEmpMonthly(modifiedFilterExpense);
     }
   }
@@ -469,23 +280,12 @@ function AttendanceLog({ empDetails }) {
       let result = allEmp.filter((ex) =>
         ex.name.toLowerCase().includes(search.toLowerCase())
       );
-      console.log({ result });
       setFilteredEmp(result);
     } else {
       setFilteredEmp(allEmp);
     }
   };
 
-  console.log("test", filteredEmp[1]);
-  console.log("test", JSON.stringify(filteredEmp[1]));
-  console.log(
-    "test",
-    filteredEmp[1] ? JSON.parse(JSON.stringify(filteredEmp[1])) : "empty"
-  );
-  console.log(filteredEmp);
-  // console.log("test",filteredEmp);
-  // console.log("test",filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):"empty");
-  // setFilteredEmp(filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):undefined)
   return (
     <>
       <div className="hrtab">
@@ -629,7 +429,6 @@ function AttendanceLog({ empDetails }) {
                   onRow={(record, rowIndex) => {
                     return {
                       onClick: (event) => {
-                        console.log(record);
                         setSelectemp({ ...record });
                         getEmpDetails(record.id, [
                           moment().subtract(30, "days"),
@@ -667,8 +466,6 @@ function AttendanceLog({ empDetails }) {
                   dataSource={empMonthly}
                   pagination={true}
                 />
-
-                {console.log(empMonthly || [])}
               </Tabs.TabPane>
             </>
           )}

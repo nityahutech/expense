@@ -38,25 +38,6 @@ const Charts = () => {
   let col = 0;
   let initalPieData = [[], []]
   const [pieData, setPieData] = useState([[],[]]);
-  // function accumulateExpense(expense) {
-  //   let piedata= [...pieData];
-  //   console.log(piedata[0])
-  //   console.log(expense.catname)
-  //   if(pieData[0].includes(expense.catname)){
-  //     let index = pieData[0].indexOf(expense.catname);
-  //     piedata[1][index] += expense.subtotal;
-  //   }
-  //   else {
-  //     if (col == 5) return;
-  //     console.log(col);
-  //     piedata[0][col] = expense.catname;
-  //     console.log(piedata[0][col]);
-  //     piedata[1][col] = expense.subtotal;
-  //     console.log(piedata[1][col]);
-  //     setPieData(piedata);
-  //     col++;
-  //   }
-  // }
 function accumulateExpense(expense, i) {
     if (i === 0) initalPieData = [[], []];
     if (initalPieData[0].includes(expense.catname)) {
@@ -70,14 +51,6 @@ function accumulateExpense(expense, i) {
       col++;
     }
   }
-  // useEffect(() => {
-  //   console.log
-  //   topSixExpenses(value, '2022').then((exp) => {
-  //     console.log(exp);
-  //     exp.forEach(accumulateExpense);
-  //   });
-
-  // }, [pieData])
   const handleChange = (value) => {
       setPieData([[],[]]);
       col = 0;
@@ -135,7 +108,6 @@ useEffect(() => {
           </Card>
         </div>
         <div className="rowcharts">
-          {/* --------------------------------------------------- */}
           <div className="colbar">
           <Card
           hoverable

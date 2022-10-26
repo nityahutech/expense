@@ -5,6 +5,7 @@ import "../../style/Payslip.css";
 import { DeleteOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { createPdfFromHtml } from "./downloadLogic";
+import hutechLogo from "../../images/hutech-logo.png"
 
 function PaySlip() {
   const [month, setMonth] = useState(null);
@@ -129,7 +130,7 @@ function SlipHtml() {
             </div>
             <div>
               <img
-                src="/hutech-logo.png"
+                src={hutechLogo}
                 style={{
                   marginRight: "34px",
                   marginTop: "5px",

@@ -23,7 +23,6 @@ const { Text, } = Typography;
 
 
 const LeaveList = (props) => {
-    console.log(props);
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,14 +55,10 @@ const LeaveList = (props) => {
                 };
             });
             setHolidaylist(d)
-            // console.log('holidaylist', d[1].Date);
-            // console.log('holidaylist2', moment(d[1].Date.seconds * 1000))
-
         });
     }
 
     const onDeleteLeave = (newHoliday) => {
-        console.log('newHoliday', newHoliday)
         Modal.confirm({
             title: "Are you sure, you want to delete Holiday record?",
             okText: "Yes",
@@ -99,29 +94,17 @@ const LeaveList = (props) => {
     }
 
     const onFinish = (values) => {
-        console.log('Success: holiday', values);
-
         let newHoliday = {
             Name: values.holidayname,
             Date: values.holidaydate.toDate(),
             optionalHoliday: values.holidaytype === 'Official' ? false : true,
         }
-        console.log('newHoliday', newHoliday)
-        // let leaveRecord = companyholiday.filter(record => record.Date == currdate);
         let matchingHolidayList = holidaylist.filter(item => item.Date == newHoliday.Date)
-        if (matchingHolidayList.length > 0) {
-            //errormodal
-            console.log('holiday allready Exist')
-        }
-
-        else {
+        if (!(matchingHolidayList.length > 0)) {
             CompanyHolidayContext.createHoliday(newHoliday)
                 .then(response => {
-                    console.log("***11111111111111111**");
+                    console.log(response);
                     props.refershCalendar(newHoliday);
-                    // getData()
-
-
                 })
                 .catch(error => {
                     console.log(error.message);
@@ -132,7 +115,6 @@ const LeaveList = (props) => {
     };
 
     const disabledDate = (current) => {
-        //cannot select existing holiday
         let matchingHolidayList = holidaylist.filter(item => item.Date == current.format('Do MMM, YYYY'))
         return matchingHolidayList.length > 0;
     };
@@ -153,7 +135,6 @@ const LeaveList = (props) => {
     };
 
     const handleOk = () => {
-        console.log('hiii')
         setIsModalOpen(false);
         showNotification("success", "Success", "Holiday Created successfuly");
     };

@@ -12,7 +12,6 @@ function PaySlip() {
   const [paySlip, setPaySlip] = useState(false);
   const [printContent, setPrintContent] = useState(null);
   useEffect(() => {
-    console.log("inside useEffect: ", { month });
     if (month) {
       // alert("ok");
       setPaySlip(true);
@@ -22,7 +21,6 @@ function PaySlip() {
     }
   }, [month]);
 
-  console.log({ month });
 
   return (
     <>

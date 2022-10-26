@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import { Dropdown, Menu, Space, Button } from "antd";
-// import dropDownimg from "../../../public/logo/dropdown.svg"
-// import dropDownimg from "/dropdown.png";
-// import logoutsvgrepocom from "../../assets/logoutsvgrepocom.png";
-// import abstractuserflat4 from "../../assets/abstractuserflat4.png";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
 import { useLocation } from "react-router-dom";
@@ -12,12 +8,13 @@ import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
-import { set } from "react-hook-form";
-
+import settingsIcon from "../../images/abstractuserflat4.png"
+import logoutIcon from "../../images/logoutsvgrepocom.png"
+import logo from "../../images/logo.png"
+import dropdown from "../../images/dropdown.png"
 // ---------------------------------------------------------------------
 
 const Navbar = () => {
-  const [size, setSize] = useState("large");
   const [startTime, setStartTime] = useState();
   const [isRunning, setIsRunning] = useState(false);
   const [activePage, setActivePage] = useState("/DashBoard");
@@ -27,9 +24,7 @@ const Navbar = () => {
 
   const isClockRunning = async () => {
     let res = await AttendanceContext.getStartTime(currentUser.uid);
-    console.log(res)
     if (res == null || res.clockOut != null) {
-      console.log("heyyyyyyyy")
       setIsRunning(false)
       return false;
     }
@@ -37,31 +32,12 @@ const Navbar = () => {
       setIsRunning(true)
       let offset = moment().subtract(res.clockIn)
       let offsettime = res.break ? offset.subtract(res.break) : offset;
-      console.log(offsettime.toDate());
       const offsetTime = moment(offsettime, "HH:mm:ss").diff(moment().startOf('day'), 'seconds')
-      console.log(offsetTime)
       setStartTime(res.clockIn)
       setClockInfo(offsetTime)
-      console.log(clockinfo)
       return true;
     }
   }
-  // const offset = isClockRunning().then((num) => {
-  //   console.log(stopwatchOffset)
-  // });
-
-
-
-
-  // const runClock = async () => {
-  //   let cond = await isClockRunning();
-  //   if(cond) {
-  //     console.log(true, clockinfo)
-  //     return;
-  //   }
-  //     console.log(false, clockinfo)
-  //     return;
-  // }
 
   const menu = (
     <Menu
@@ -80,7 +56,8 @@ const Navbar = () => {
           icon: (
             <img
               // src={abstractuserflat4}
-              src="/abstractuserflat4.png"
+              src={settingsIcon}
+              // src="/abstractuserflat4.png"
               alt="downArrow"
               className="avatarimg"
             />
@@ -99,7 +76,9 @@ const Navbar = () => {
             </Link>
           ),
           icon: (
-            <img src="/logoutsvgrepocom.png"
+            <img
+              src={logoutIcon}
+              // src="/logoutsvgrepocom.png"
               alt="downArrow"
               className="avatarimg" />
           ),
@@ -109,15 +88,12 @@ const Navbar = () => {
   );
 
   useEffect(() => {
-    console.log("First");
     setIsRunning(isClockRunning());
   }, [])
 
   useEffect(() => {
-    console.log("BREHHHHHHHHHHHHS", isRunning);
     isClockRunning()
     const timer = setInterval(() => {
-      // console.log(isRunning, clockinfo);
       if (isRunning) {
         setClockInfo(clockinfo => clockinfo + 1)
       }
@@ -126,21 +102,6 @@ const Navbar = () => {
       clearInterval(timer);
     };
   }, [isRunning])
-
-  // useEffect(() => {
-  //   console.log("BREHHHHHHHHHHHHS");
-  //   isClockRunning()
-  //   const timer = setInterval(() => {
-  //     console.log(isRunning);
-  //     if (isRunning) {
-  //       setClockInfo(clockinfo => clockinfo + 1)
-  //     }
-  //   }, 1000)
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, [isRunning]);
-
 
   const buttonStyle = !isRunning ? {
     padding: "1px",
@@ -182,7 +143,6 @@ const Navbar = () => {
   };
 
   const setClockState = async () => {
-    // setClockIn(true);
     let clickedDate = {
       empId: currentUser.uid,
       name: currentUser.displayName,
@@ -190,20 +150,15 @@ const Navbar = () => {
       clockIn: moment().format("HH:mm:ss"),
       clockOut: null
     }
-    console.log(clickedDate)
     await AttendanceContext.addClockData(clickedDate)
     setIsRunning(true)
   };
 
   const stopClockState = async () => {
-    // setClockIn(false);
     let clickedDate = {
       clockOut: moment().format("HH:mm:ss"),
       duration: moment.utc(clockTime * 1000).format('HH:mm:ss')
     }
-    // AttendanceContext.updateClockData(clickedDate, currentUser.uid)
-    // console.log(rec.data())
-    console.log(isRunning);
     await AttendanceContext.updateClockData(currentUser.uid, clickedDate);
     setIsRunning(false)
     setClockInfo(0)
@@ -212,18 +167,14 @@ const Navbar = () => {
   };
 
   const handleClock = () => {
-    console.log(isRunning)
     if (isRunning) {
       stopClockState();
-      console.log(isRunning);
-      console.log(startTime);
     }
     else {
       setClockState();
     }
   }
-
-  // console.log(startTime, clockinfo)
+  
   return (
     <div className="navbar" style={{ background: "white" }}>
       <div className="wrapper">
@@ -259,7 +210,8 @@ const Navbar = () => {
         <div className="image">
           <div className="item">
             <img
-              src="/logo.png"
+              src={logo}
+              // src="/logo.png"
               alt="imagh"
               className="avatar"
               style={{ cursor: "pointer" }}
@@ -279,7 +231,8 @@ const Navbar = () => {
               {"  "}Hutech{""}
             </h1>
             <img
-              src="/dropdown.png"
+              src={dropdown}
+              // src="/dropdown.png"
               alt="downArrow"
               style={{ cursor: "pointer", width: '15px' }}
             />

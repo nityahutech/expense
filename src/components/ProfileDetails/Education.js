@@ -22,9 +22,6 @@ import { async } from "@firebase/util";
 
 const { Option } = Select;
 
-const onChange = (date, dateString) => {
-  console.log(date, dateString);
-};
 
 // --------------------------------------place for functions
 
@@ -34,7 +31,6 @@ function Education() {
   const [dateEnd, setDateEnd] = useState();
   const { currentUser } = useAuth();
   const onFinish = (values) => {
-    console.log("Success:", values);
     let record = {
       ...values,
       courseStartDate: dateStart,
@@ -46,11 +42,8 @@ function Education() {
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
   };
   const [data, setData] = useState([]);
-
-  // console.log(data?data.stream:null);
 
   useEffect(() => {
     getData();
@@ -58,13 +51,10 @@ function Education() {
 
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    console.log(data);
     setData(data);
     setDateEnd(data.courseEndDate);
     setDateStart(data.courseStartDate);
   };
-
-  console.log(data, dateEnd, dateStart);
 
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -171,16 +161,6 @@ function Education() {
                     }
                   >
                     <Input
-                    // onInput={(e)=>{
-                    //   const inputval = e.target.value;
-                    //   const str = e.target.value;
-                    //   const newVal =
-                    //     inputval.substring(0, 1).toUpperCase() +
-                    //     inputval.substring(1);
-                    //   const caps = str.split(" ").map(capitalize).join(" ");
-                    //   console.log("caps", caps);
-                    //   e.target.value= caps
-                    // }}
                 
                       defaultValue={data ? data.qualificationType : null}
                       maxLength={25}
@@ -222,16 +202,6 @@ function Education() {
                     initialValue={data.courseName ? data.courseName : null}
                   >
                     <Input
-                      //  onInput={(e)=>{
-                      //   // const inputval = e.target.value;
-                      //   // const str = e.target.value;
-                      //   // const newVal =
-                      //   //   inputval.substring(0, 1).toUpperCase() +
-                      //   //   inputval.substring(1);
-                      //   // const caps = str.split(" ").map(capitalize).join(" ");
-                      //   // console.log("caps", caps);
-                      //   // e.target.value= caps
-                      // }}
                       initialValue={data ? data.courseName : null}
                       placeholder="Enter Course Name"
                     />
@@ -277,7 +247,6 @@ function Education() {
                           inputval.substring(0, 1).toUpperCase() +
                           inputval.substring(1);
                         const caps = str.split(" ").map(capitalize).join(" ");
-                        console.log("caps", caps);
                         e.target.value= caps
                       }}
                       initialValue={data ? data.courseType : null}
@@ -323,7 +292,6 @@ function Education() {
                           inputval.substring(0, 1).toUpperCase() +
                           inputval.substring(1);
                         const caps = str.split(" ").map(capitalize).join(" ");
-                        console.log("caps", caps);
                         e.target.value= caps
                       }}
                       defaultValue={data ? data.stream : null}

@@ -25,12 +25,10 @@ function generateEmpId() {
     let res = snapshot.docs.length + 1;
     return "HTS" + ("00" + res.toString()).slice(-3);
   });
-  console.log(len);
   return len;
 }
 
 export async function createUser(values) {
-  console.log(values.mailid, "password");
   let res = await createUserWithEmailAndPassword(
     createAuth,
     values.mailid,
@@ -38,9 +36,6 @@ export async function createUser(values) {
   );
   updateProfile(res.user, { displayName: values.fname + " " + values.lname });
   // updatePhoneNumber(res.user, values.phone)
-  console.log(res);
-  console.log(res.user.uid);
-  console.log(values.fname + " " + values.lname);
   const valuesToservice = {
     empId: await generateEmpId(),
     fname: values.fname,
@@ -66,7 +61,6 @@ export async function createUser(values) {
     casualLeave: 6,
     optionalLeave: 2
   };
-  console.log(valuesToservice);
   ProfileContext.addProfile(res.user.uid, valuesToservice)
     .then((result) => {
       signOut(createAuth);

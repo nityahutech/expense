@@ -27,7 +27,6 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
-    console.log("logged out successfully!")
     sessionStorage.setItem("accessToken", null)
     sessionStorage.setItem("user", null)
     sessionStorage.setItem("role", null)
@@ -47,6 +46,7 @@ export function AuthProvider({ children }) {
   }
 
   function updateMyEmail(email) {
+    ProfileContext.updateProfile(currentUser.uid, {mailid: email})
     return updateEmail(currentUser, email)
   }
 
@@ -56,18 +56,15 @@ export function AuthProvider({ children }) {
 
   async function disablePerson(id) {
     await updateProfile(id, {disabled: true})
-    console.log(currentUser)
     return 
   }
 
   async function getRole(user) {
-    console.log(user);
     if (!user) { 
       return; 
     }
     let rec = await ProfileContext.getProfile(user.uid);
     sessionStorage.setItem("role", rec.role)
-    console.log("role", rec.role)
     setRole(rec.role);
   }
 

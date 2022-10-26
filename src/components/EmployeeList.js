@@ -148,7 +148,6 @@ function EmployeeList() {
       width: 120,
 
       render: (_, record) => {
-        console.log("record:: ", record);
         return (
           record.disabled === false && (
             <>
@@ -185,7 +184,6 @@ function EmployeeList() {
   }, []);
 
   const showModal = (record) => {
-    console.log(record);
     setmodaldata(record);
     setIsModalVisible(true);
   };
@@ -196,7 +194,6 @@ function EmployeeList() {
   };
 
   const handleEditEmployee = (record) => {
-    console.log("record: ", record);
     setEditedRecord(record);
   };
   async function getData() {
@@ -205,7 +202,6 @@ function EmployeeList() {
     setLoading(true);
     const allData = await getUsers();
     let d = allData.docs.map((doc, i) => {
-      //  console.log(JSON.stringify(new Date(doc.data()['date'])));
       return {
         ...doc.data(),
         isManager: doc.data().isManager? "true":"false",
@@ -214,7 +210,6 @@ function EmployeeList() {
         disabled: false,
       };
     });
-    console.log({ d });
     setData(d);
     setFilterEmployees(d);
     setAllEmployees(d);
@@ -239,7 +234,6 @@ function EmployeeList() {
 
   const onDelete = (idx, e) => {
     e.preventDefault();
-    console.log("data::: ", data[idx].id);
     disablePerson(data[idx].id);
     const filteredData = data.map((doc, i) => {
       let disabled = false;

@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Layout, Menu } from "antd";
-
+import expenseIcon from "../../images/Expense.png"
+import dot from "../../images/dot.png"
+import dashIcon from "../../images/Dashboard.png"
+import empIcon from "../../images/employees.png"
+import userIcon from "../../images/user.png"
+import logo from "../../images/logo_1.png"
+import appraisalIcon from "../../images/appraisal.png"
 import "./newSlidebar.css";
-import { useNavigate, NavLink } from "react-router-dom";
-import { SettingOutlined, ProfileOutlined } from "@ant-design/icons";
+import { NavLink } from "react-router-dom";
 
 const { Sider } = Layout;
 
@@ -20,33 +25,6 @@ function getItem(label, key, icon, children = null, type = null) {
 const NewSidebar = (props) => {
   const [isHr, setIsHr] = useState(sessionStorage.getItem("role") === "hr" ? true : false);
 
-  console.log(props.openkey);
-  const history = useNavigate();
-
-  // useEffect(() => {
-  //   let role = sessionStorage.getItem("role");
-  //   setRole(role)
-  //   setIsHr(role === "hr")
-  // })
-  // const onClick = (e) => {
-  //     let pathkey = e.key
-  //     switch (pathkey) {
-  //         case "5":
-  //             window.location.href="/ExpenseFrm"
-  //             history("/Expense/AddExpense")
-  //             break;
-  //         case "6":
-  //             window.location.href = "/Home"
-  //             history("/Expenfse/ExpenseList")
-  //             break;
-  //         case "1":
-  //             window.location.href = "/DashBoard"
-  //             history("/DashBoard")
-  //             break;
-  //     }
-  //     console.log('click ', e.key);
-  // };
-
   return (
     <Layout className="sidelayout">
       <Sider
@@ -54,10 +32,8 @@ const NewSidebar = (props) => {
         style={{ backgroundColor: "#05445E" }}
         collapsedWidth="0"
         onBreakpoint={(broken) => {
-          console.log(broken);
         }}
         onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
         }}
       >
         <Menu
@@ -66,7 +42,6 @@ const NewSidebar = (props) => {
           // openKeys={props.openkey}
           // selectedKeys={props.selectedkey}
           onSelect={function ({ item, key, keyPath, selectedKeys, domEvent }) {
-            console.log(item, key, keyPath, selectedKeys, domEvent);
           }}
           mode="inline"
           style={{
@@ -80,13 +55,17 @@ const NewSidebar = (props) => {
                 background: "#05445E",
                 height: "30px",
               }}
-              src="/logo_1.png"
+              // src="/logo_1.png"
+              src={logo}
               alt="hello"
             />
           </div>
           <Menu.Item
             icon={
-              <img src="/Dashboard.png" alt="profile" className="Dash" />
+              <img
+                src={dashIcon}
+                // src="/Dashboard.png" 
+                alt="profile" className="Dash" />
             }
             key="1"
           >
@@ -101,7 +80,8 @@ const NewSidebar = (props) => {
             icon={
               <img
                 style={{ color: "white" }}
-                src="/employees.png"
+                src={empIcon}
+                // src="/employees.png"
                 alt="profile"
                 className="Dash"
               />
@@ -111,14 +91,20 @@ const NewSidebar = (props) => {
             mode="inline"
           >
             <Menu.Item className='arrow'
-              icon={<img src="/dot.png" alt="profile" className="dot" />}
+              icon={<img
+                // src="/dot.png"
+                src={dot}
+                alt="profile" className="dot" />}
               key="6"
             >
               Attendance Log
               <NavLink to="/Attendance/AttendanceLog" />
             </Menu.Item>
             <Menu.Item className='arrow'
-              icon={<img src="/dot.png" alt="profile" className="dot" />}
+              icon={<img
+                // src="/dot.png"
+                src={dot}
+                alt="profile" className="dot" />}
               key="7"
             >
               Leave
@@ -126,14 +112,18 @@ const NewSidebar = (props) => {
             </Menu.Item>
             {isHr ? <>
               <Menu.Item className='arrow'
-                icon={<img src="/dot.png" alt="profile" className="dot" />}
+                icon={<img
+                  src={dot}
+                  alt="profile" className="dot" />}
                 key="8"
               >
                 Add Employee
                 <NavLink to="/Addemployee/AddEmployee" />
               </Menu.Item>
               <Menu.Item className='arrow'
-                icon={<img src="/dot.png" alt="profile" className="dot" />}
+                icon={<img
+                  src={dot}
+                  alt="profile" className="dot" />}
                 key="9"
               >
                 Employee List
@@ -141,7 +131,9 @@ const NewSidebar = (props) => {
               </Menu.Item>
               <Menu.Item
                 className="arrow"
-                icon={<img src="/dot.png" alt="profile" className="dot" />}
+                icon={<img
+                  src={dot}
+                  alt="profile" className="dot" />}
                 key="25"
               >
                 Hr PaySlip
@@ -250,7 +242,10 @@ const NewSidebar = (props) => {
           </Menu.SubMenu> */}
           <Menu.Item
             icon={
-              <img src="/user.png" alt="profile" className="Dash" />
+              <img
+                src={userIcon}
+                // src="/user.png"
+                alt="profile" className="Dash" />
             }
             key="21"
           >
@@ -279,7 +274,7 @@ const NewSidebar = (props) => {
               width: "100%",
             }}
             icon={
-              <img src="/appraisal.png" alt="appraisal" className="Dash" />
+              <img src={appraisalIcon} alt="appraisal" className="Dash" />
             }
             key="sub4"
             title="Appraisal"
@@ -288,7 +283,7 @@ const NewSidebar = (props) => {
 
             <Menu.Item
               className="arrow"
-              icon={<img src="/dot.png" alt="profile" className="dot" />}
+              icon={<img src={dot} alt="profile" className="dot" />}
               key="20"
             >
               Quarter Appraisal
@@ -316,7 +311,10 @@ const NewSidebar = (props) => {
               width: '100%'
             }}
               icon={
-                <img src="/Expense.png" alt="profile" className="Dash" />
+                <img
+                  src={expenseIcon}
+                  // src="/Expense.png"
+                  alt="profile" className="Dash" />
               }
               key="sub1"
               title="Expense"
@@ -327,14 +325,18 @@ const NewSidebar = (props) => {
                 //     background: "#05445E",
 
                 //   }}
-                icon={<img src="/dot.png" alt="profile" className="dot" />}
+                icon={<img
+                  src={dot}
+                  alt="profile" className="dot" />}
                 key="2"
               >
                 Add Expense
                 <NavLink to="/Expense/AddExpense" />
               </Menu.Item>
               <Menu.Item className='arrow'
-                icon={<img src="/dot.png" alt="profile" className="dot" />}
+                icon={<img
+                  src={dot}
+                  alt="profile" className="dot" />}
                 key="3"
               >
                 Expense List

@@ -4,6 +4,8 @@ import { Button, Checkbox, Form, Input, Alert, Row, Col, Divider } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+import loginBg from "../images/login-img.png"
+import loginLogo from "../images/ExepnseLogo.png"
 
 function LoginPage() {
   const [loginEmail, setLoginEmail] = useState("");
@@ -17,14 +19,12 @@ function LoginPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(loginEmail, loginPassword);
     win.clear();
     try {
       setError("");
       setLoading(true);
 
       let res = await login(loginEmail, loginPassword);
-      console.log(res.user);
       sessionStorage.setItem("accessToken", res.user.accessToken);
       sessionStorage.setItem("user", JSON.stringify(res.user));
       navigate("DashBoard", { replace: true });
@@ -40,7 +40,6 @@ function LoginPage() {
 
   async function handleReset(e) {
     e.preventDefault();
-    console.log(loginEmail, loginPassword);
     win.clear();
     try {
       setLoading(true);
@@ -60,13 +59,15 @@ function LoginPage() {
     <>
       <div className="main-div">
         <div className="img-div">
-          <img src={process.env.PUBLIC_URL + "login-img.png"} alt="" />
+          {/* <img src={process.env.PUBLIC_URL + "/hutechHr/images/login-img.png"} alt="" /> */}
+          <img src={loginBg} alt=""  />
         </div>
         <div className="login-div">
           <div className="xyz">
             <div className="form-div">
               <div className="exepnse-logo">
-                <img src={process.env.PUBLIC_URL + "ExepnseLogo.png"} alt="" />
+                {/* <img src={process.env.PUBLIC_URL + "ExepnseLogo.png"} alt="" /> */}
+                <img src={loginLogo} alt="" />
               </div>
               <Form
                 name="basic"

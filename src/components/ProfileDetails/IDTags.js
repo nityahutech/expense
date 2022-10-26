@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useRef} from 'react'
 
 import { 
   PlusCircleOutlined,
@@ -80,6 +80,7 @@ const [allIdDetails, setAllIdDetails] = useState([])
 const [visible,setVisible]= useState(false)
 const [uploadFile,setUploadFile]=useState([])
 const [form]=Form.useForm()
+const imgRef = useRef(null);
 // ----------------------------------------usestate for add buttob
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -96,6 +97,12 @@ const [form]=Form.useForm()
     setVisible(false)
     form.resetFields()
   };
+
+  const deleteData = (idtitle, e) => {
+    const filteredData = allIdDetails.filter((item) => item.idtitle !== idtitle);
+    setAllIdDetails(filteredData);
+  };
+
 
   function addNewDetail (values) {
     console.log({values})
@@ -114,45 +121,56 @@ const [form]=Form.useForm()
       key: 'iddescription ',
     },
     {
-      title: 'Uploadded file',
-      dataIndex: 'upload',
-      key: 'upload',
+      title: "Uploaded File",
+      dataIndex: "file",
+      key: "file",
+      render: (data, record) => {
+        console.log("record: ", record);
+        console.log("data:: ", data);
+        // var fReader = new FileReader();
+        // fReader.readAsDataURL(imgRef.current.input.files[0]);
+        // fReader.onload = function (event) {
+        //   setImgPreview(event.target.result);
+        // };
+        return (
+          <a href={imgRef.current.input.files[0].idtitle} target="_blank">
+            {imgRef.current.input.files[0].idtitle}
+          </a>
+        );
+      },
     },
     {
-      title: 'Action',
-      dataIndex: 'action',
-      key: 'action',
-      render: (_, record) => {
-        <>
-          <Space>
-            <Button>
-             <DeleteOutlined />
-            </Button>
-          </Space>
-        </>
-      }
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <Button type="link" onClick={(e) => deleteData(record.idtitle, e)}>
+            <DeleteOutlined />
+          </Button>
+        </Space>
+      ),
     },
   ];
 
   // ------------------------------------code for upload button 
 
-  const props = {
-    name: 'file',
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    headers: {
-      authorization: 'authorization-text',
-    },
-    onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
+  // const props = {
+  //   name: 'file',
+  //   action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+  //   headers: {
+  //     authorization: 'authorization-text',
+  //   },
+  //   onChange(info) {
+  //     if (info.file.status !== 'uploading') {
+  //       console.log(info.file, info.fileList);
+  //     }
+  //     if (info.file.status === 'done') {
+  //       message.success(`${info.file.name} file uploaded successfully`);
+  //     } else if (info.file.status === 'error') {
+  //       message.error(`${info.file.name} file upload failed.`);
+  //     }
+  //   },
+  // };
 
 
 // --------------------------------------------------------------------- 
@@ -204,9 +222,16 @@ const [form]=Form.useForm()
             <Input placeholder="Enter Experience Description" />
           </FormItem>
           <FormItem name="upload">
-          <Upload {...props}>
+          <Input
+              type="file"
+              // accept="image/gif, image/jpeg, image/png"
+              id="myfile"
+              name="file"
+              ref={imgRef}
+            />
+          {/* <Upload {...props}>
             <Button icon={<UploadOutlined />}>Click to Upload</Button>
-          </Upload>
+          </Upload> */}
           </FormItem>
         </Form>
       </Modal>

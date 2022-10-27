@@ -269,7 +269,7 @@ const EmpAppraisalTable = (props) => {
                 onCancel={() => setSecondModal(false)}
                 width={800}
             >
-                <Appraisal currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} />
+                <Appraisal currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} hrMode={props.listType === 'hr'}/>
 
             </Modal>
 

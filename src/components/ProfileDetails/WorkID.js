@@ -75,20 +75,21 @@ function WorkID() {
       title: "Uploaded File",
       dataIndex: "file",
       key: "file",
-      // render: (data, record) => {
-      //   console.log("record: ", record);
-      //   console.log("data:: ", data);
-      //   var fReader = new FileReader();
-      //   fReader.readAsDataURL(imgRef.current.input.files[0]);
-      //   fReader.onload = function (event) {
-      //     setImgPreview(event.target.result);
-      //   };
-      //   return (
-      //     <a href={imgRef.current.input.files[0].name} target="_blank">
-      //       {imgRef.current.input.files[0].name}
-      //     </a>
-      //   );
-      // },
+      render: (data, record) => {
+        console.log("record: ", record);
+        console.log("data:: ", data);
+        // var fReader = new FileReader();
+        // fReader.readAsDataURL(imgRef.current.input.files[0]);
+        // fReader.onload = function (event) {
+        //   setImgPreview(event.target.result);
+        // };
+        const hrefVal = imgRef?.current?.input?.files[0]?.name;
+        return (
+          <a href={hrefVal} target="_blank">
+            {hrefVal}
+          </a>
+        );
+      },
     },
 
     {

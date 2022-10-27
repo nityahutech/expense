@@ -444,7 +444,7 @@ function AddEmployee() {
               style={{ background: "" }}
             >
               <Divider orientation="left" orientationMargin={0}>
-                Reporting Manager<span style={{ color: "red" }}> *</span>
+                Reporting Manager
               </Divider>
               <Form.Item
                 name="repManager"
@@ -455,7 +455,7 @@ function AddEmployee() {
                 }}
                 rules={[
                   {
-                    required: true,
+                    // required: true,
                     minLength: 3,
                     maxLength: 20,
                     message: "Please enter Reporting Manager Name",
@@ -481,7 +481,6 @@ function AddEmployee() {
                       repManager: caps,
                     });
                   }}
-                  required
                   placeholder="Enter Reporting Manager Name"
                 />
               </Form.Item>
@@ -493,7 +492,7 @@ function AddEmployee() {
               style={{ background: "" }}
             >
               <Divider orientation="left" orientationMargin={0}>
-                Secondary Manager<span style={{ color: "red" }}> *</span>
+                Secondary Manager
               </Divider>
               <Form.Item
                 name="secManager"
@@ -504,7 +503,7 @@ function AddEmployee() {
                 }}
                 rules={[
                   {
-                    required: true,
+                    // required: true,
                     minLength: 3,
                     maxLength: 20,
                     message: "Please enter Sec. Manager Name",
@@ -530,7 +529,6 @@ function AddEmployee() {
                       secManager: caps,
                     });
                   }}
-                  required
                   placeholder="Enter Secondary Manager Name"
                 />
               </Form.Item>

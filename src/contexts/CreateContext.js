@@ -52,14 +52,14 @@ export async function createUser(values) {
         ? "hr"
         : "emp",
     empType: values.empType,
-    repManager: values.repManager,
-    secManager: values.secManager,
+    repManager: values.repManager ? values.repManager : "",
+    secManager: values.secManager ? values.secManager : "",
     department: values.department,
     isManager: false,
     earnLeave: 12,
     sickLeave: 6,
     casualLeave: 6,
-    optionalLeave: 2
+    optionalLeave: 2,
   };
   ProfileContext.addProfile(res.user.uid, valuesToservice)
     .then((result) => {

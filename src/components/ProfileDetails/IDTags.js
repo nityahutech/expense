@@ -1,4 +1,5 @@
 import React,{useState, useRef} from 'react'
+import "../../style/IDTags.css"
 
 import { 
   PlusCircleOutlined,
@@ -17,6 +18,7 @@ import {
   message, 
   Upload,
   Space,
+  Popconfirm,
 } from 'antd'
 import { upload } from '@testing-library/user-event/dist/upload';
 
@@ -103,6 +105,14 @@ const imgRef = useRef(null);
     setAllIdDetails(filteredData);
   };
 
+  const confirm = (e) => {
+    console.log(e);
+    message.success('Click on Yes');
+  };
+  const cancel = (e) => {
+    console.log(e);
+    message.error('Click on No');
+  };
 
   function addNewDetail (values) {
     console.log({values})
@@ -132,9 +142,10 @@ const imgRef = useRef(null);
         // fReader.onload = function (event) {
         //   setImgPreview(event.target.result);
         // };
+        const hrefVal = imgRef?.current?.input?.files[0]?.idtitle;
         return (
-          <a href={imgRef.current.input.files[0].idtitle} target="_blank">
-            {imgRef.current.input.files[0].idtitle}
+          <a href={hrefVal} target="_blank">
+            {hrefVal}
           </a>
         );
       },
@@ -144,9 +155,17 @@ const imgRef = useRef(null);
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <Button type="link" onClick={(e) => deleteData(record.idtitle, e)}>
+          <Popconfirm
+            title="Are you sure to delete this task?"
+            onConfirm={(e) => deleteData(record.idtitle, e)}
+            // onCancel={cancel}
+            // okText="Yes"
+            // cancelText="No"
+          >
+          <Button type="link" style={{color:"#E64949"}}>
             <DeleteOutlined />
           </Button>
+          </Popconfirm>
         </Space>
       ),
     },
@@ -182,15 +201,16 @@ const imgRef = useRef(null);
         pagination={false}
         dataSource={allIdDetails}
       />
-      <Button type="text" onClick={showModal}>
+      <Button type="primary" onClick={showModal} style={{marginLeft:"10px"}}>
         <PlusCircleOutlined />
         Add
       </Button>
       <Modal
-        title="Basic Modal"
+        title="Add IDs"
         open={isModalOpen}
         onOk={()=>{form.submit(); handleOk()}}
-        onCancel={handleCancel} 
+        onCancel={handleCancel}
+        okText="Save" 
       >
         <Form
         form={form}
@@ -215,20 +235,49 @@ const imgRef = useRef(null);
           // ]}
           layout="vertical"
         >
-          <FormItem name="idtitle">
-            <Input placeholder="Enter ID details" />
+          <FormItem 
+          name="idtitle"
+          rules={[
+            {
+              required: true,
+              message: 'Please enter the Id title',
+            },
+          ]}
+          >
+            <Input placeholder="Enter ID details" 
+            required/>
           </FormItem>
-          <FormItem name="iddescription">
-            <Input placeholder="Enter Experience Description" />
+          <FormItem 
+          name="iddescription"
+          rules={[
+            {
+              required: true,
+              message: 'Please enter the Id description',
+            },
+          ]}
+          >
+            <Input placeholder="Enter Experience Description"
+            required />
           </FormItem>
-          <FormItem name="upload">
+          <FormItem 
+          name="upload"
+          rules={[
+            {
+              required: true,
+              message: 'Please upload file',
+            },
+          ]}
+          >
+            <div className='idpage'>
           <Input
               type="file"
               // accept="image/gif, image/jpeg, image/png"
               id="myfile"
               name="file"
               ref={imgRef}
+              required
             />
+            </div>
           {/* <Upload {...props}>
             <Button icon={<UploadOutlined />}>Click to Upload</Button>
           </Upload> */}

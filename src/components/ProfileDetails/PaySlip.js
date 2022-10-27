@@ -5,7 +5,7 @@ import "../../style/Payslip.css";
 import { DeleteOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { createPdfFromHtml } from "./downloadLogic";
-import hutechLogo from "../../images/hutech-logo.png"
+import hutechLogo from "../../images/hutech-logo.png";
 
 function PaySlip() {
   const [month, setMonth] = useState(null);
@@ -21,7 +21,6 @@ function PaySlip() {
       setPaySlip(false);
     }
   }, [month]);
-
 
   return (
     <>
@@ -53,6 +52,7 @@ function PaySlip() {
             >
               <DatePicker
                 picker="month"
+                className="picker"
                 placeholder="Select MM & YY"
                 bordered={true}
                 format="MM-YYYY"

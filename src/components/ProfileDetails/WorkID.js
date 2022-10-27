@@ -59,9 +59,10 @@ function WorkID() {
         // fReader.onload = function (event) {
         //   setImgPreview(event.target.result);
         // };
+        const hrefVal = imgRef?.current?.input?.files[0]?.name;
         return (
-          <a href={imgRef.current.input.files[0].name} target="_blank">
-            {imgRef.current.input.files[0].name}
+          <a href={hrefVal} target="_blank">
+            {hrefVal}
           </a>
         );
       },

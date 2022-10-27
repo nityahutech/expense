@@ -1,5 +1,6 @@
 
 import React,{useState, useRef} from "react";
+import "../../style/CertificationID.css"
 
 import { 
   Table,
@@ -10,6 +11,7 @@ import {
   message, 
   Upload,
   Space,
+  Popconfirm,
 } from 'antd'
 
 import { 
@@ -29,7 +31,7 @@ function CertificateID() {
 // ------------------------------------------------------------
  
   // -----------------code for useState
-  const [certificatioDetails, setCertificationDetais] = useState([])
+  const [certificationDetails, setCertificationDetais] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visible,setVisible]= useState(false);
   const [uploadFile,setUploadFile]=useState([])
@@ -52,7 +54,7 @@ function CertificateID() {
   };
 
   const deleteData = (courseTitle, e) => {
-    const filteredData = certificatioDetails.filter((item) => item.courseTitle !== courseTitle);
+    const filteredData = certificationDetails.filter((item) => item.courseTitle !== courseTitle);
     setCertificationDetais(filteredData);
   };
 
@@ -80,9 +82,10 @@ function CertificateID() {
         // fReader.onload = function (event) {
         //   setImgPreview(event.target.result);
         // };
+        const hrefVal = imgRef?.current?.input?.files[0]?.courseTitle;
         return (
-          <a href={imgRef.current.input.files[0].name} target="_blank">
-            {imgRef.current.input.files[0].name}
+          <a href={hrefVal} target="_blank">
+            {hrefVal}
           </a>
         );
       },
@@ -93,9 +96,17 @@ function CertificateID() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <Button type="link" onClick={(e) => deleteData(record.courseTitle, e)}>
+          <Popconfirm
+            title="Are you sure to delete this task?"
+            onConfirm={(e) => deleteData(record.courseTitle, e)}
+            // onCancel={cancel}
+            // okText="Yes"
+            // cancelText="No"
+          >
+          <Button type="link" style={{color:"#E64949"}} >
             <DeleteOutlined />
           </Button>
+          </Popconfirm>
         </Space>
       ),
     },
@@ -132,7 +143,7 @@ function CertificateID() {
  // -----------------function for datasourse
  function addNewDetail (values) {
   console.log({values})
-  setCertificationDetais([...certificatioDetails,values])
+  setCertificationDetais([...certificationDetails,values])
   setUploadFile([...uploadFile,values])
 }
   return (
@@ -140,19 +151,20 @@ function CertificateID() {
     <>
       <Table
         columns={columns}
-        dataSource={certificatioDetails}
+        dataSource={certificationDetails}
         pagination={false}
       >
       </Table>
-        <Button type="text" onClick={showModal}>
+        <Button type="primary" onClick={showModal} style={{marginLeft:"10px"}}>
           <PlusCircleOutlined />
           Add
         </Button>
           <Modal
-          title="Basic Modal"
+          title="Add Certification"
           open={isModalOpen}
           onOk={()=>{form.submit(); handleOk()}}
-          onCancel={handleCancel} 
+          onCancel={handleCancel}
+          okText="Save" 
         >
           <Form
           form={form}
@@ -163,20 +175,49 @@ function CertificateID() {
             onFinish={addNewDetail}
             layout="vertical"
           >
-            <FormItem name="courseTitle">
-              <Input placeholder="please enter the course title" />
+            <FormItem 
+            name="courseTitle"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter the course title',
+              },
+            ]}
+            >
+              <Input placeholder="Please enter the course title"
+              required />
             </FormItem>
-            <FormItem name="type">
-              <Input placeholder="please enter the course type" />
+            <FormItem 
+              name="type"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter the course type',
+                },
+              ]}
+            >
+              <Input placeholder="Please enter the course type" 
+              required />
             </FormItem>
-            <FormItem name="upload">
+            <FormItem 
+              name="upload"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please upload the file',
+                },
+              ]}
+            >
+              <div className="certificationIP">
             <Input
               type="file"
               // accept="image/gif, image/jpeg, image/png"
               id="myfile"
               name="file"
               ref={imgRef}
+              required
             />
+            </div>
             {/* <Upload {...props}>
               <Button icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload> */}

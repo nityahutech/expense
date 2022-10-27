@@ -1,0 +1,7 @@
+.certificationIP input[type='file']::file-selector-button {
+    background-color: #1890FF;
+    border-color: #E1DFDF;
+    border-radius: 5px;
+    font-weight: 400;
+} 
+

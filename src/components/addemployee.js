@@ -8,6 +8,7 @@ import {
   Input,
   DatePicker,
   Select,
+  notification,
   Space,
 } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -30,8 +31,16 @@ function AddEmployee() {
   function onReset() {
     form.resetFields();
   }
-  const onFinish = async (values) => {
-    let res = await createUser(values);
+  
+  const showNotification = (type, msg, desc) => {
+    notification[type]({
+        message: msg,
+        description: desc,
+    });
+};
+  const onFinish = (values) => {
+    createUser(values).then((response) => showNotification("success", "Success", "Employee Created"))
+    .catch((error) => showNotification("error", "Error", "This user already exists!"))
     navigate("/EmployeeListPage/EmployeeList");
     // const valuesToservice = {
     //   fname: values.fname,

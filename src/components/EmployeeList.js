@@ -45,6 +45,13 @@ function EmployeeList() {
       fixed: size,
     },
     {
+      title: "Middle Name",
+      dataIndex: "mname",
+      key: "mname",
+
+      width: 160,
+    },
+    {
       title: "Last Name",
       dataIndex: "lname",
       key: "lname",
@@ -115,6 +122,13 @@ function EmployeeList() {
       key: "isManager",
       width: 100,
     },
+    {
+      title: "Work Location",
+      dataIndex: "location",
+      key: "location",
+      width: 150,
+    },
+
     {
       title: "Earn Leave",
       dataIndex: "earnLeave",
@@ -204,7 +218,7 @@ function EmployeeList() {
     let d = allData.docs.map((doc, i) => {
       return {
         ...doc.data(),
-        isManager: doc.data().isManager? "true":"false",
+        isManager: doc.data().isManager ? "true" : "false",
         id: doc.id,
         sn: i + 1,
         disabled: false,
@@ -223,8 +237,10 @@ function EmployeeList() {
       let result = data.filter(
         (ex) =>
           ex.fname.toLowerCase().includes(search.toLowerCase()) ||
-          ex.lname.toLowerCase().includes(search.toLowerCase())
+          ex.lname.toLowerCase().includes(search.toLowerCase()) ||
+          ex?.mname?.toLowerCase()?.includes(search?.toLowerCase())
       );
+      console.log({ result });
       const modifiedFilterExpense = [...result];
       setFilterEmployees(modifiedFilterExpense);
     } else {

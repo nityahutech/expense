@@ -16,6 +16,7 @@ import {
 import moment from "moment";
 import ProfileContext from "../contexts/ProfileContext";
 import EmployeeContext from "../contexts/EmployeeContext";
+import "../style/IDTags.css";
 
 const { Option } = Select;
 const showNotification = (type, msg, desc) => {
@@ -28,6 +29,7 @@ const dateFormat = "DD-MM-YYYY";
 
 function Editemployee(props) {
   const [fname, setFname] = useState("");
+  const [mname, setMname] = useState("");
   const [lname, setLname] = useState("");
   const [mailid, setMailid] = useState("");
   const [doj, setDoj] = useState("");
@@ -37,6 +39,7 @@ function Editemployee(props) {
   const [repManager, setRepManager] = useState("");
   const [secManager, setSecManager] = useState("");
   const [department, setDepartment] = useState("");
+  const [location, setLocation] = useState("");
   const [isManager, setIsMgr] = useState("");
   const [earnLeave, setEarnLeave] = useState("");
   const [sickLeave, setSickLeave] = useState("");
@@ -47,6 +50,7 @@ function Editemployee(props) {
     try {
       const editedRecord = {
         fname,
+        mname,
         lname,
         mailid,
         doj,
@@ -56,11 +60,12 @@ function Editemployee(props) {
         repManager,
         secManager,
         department,
+        location,
         isManager,
         earnLeave,
         sickLeave,
         casualLeave,
-        optionalLeave
+        optionalLeave,
       };
       EmployeeContext.updateEmployee(props.record.id, editedRecord);
       props.setIsModalVisible(false);
@@ -77,6 +82,7 @@ function Editemployee(props) {
 
   useEffect(() => {
     const fnameVal = props.record ? props.record.fname : "";
+    const mnameVal = props.record ? props.record.mname : "";
     const lnameVal = props.record ? props.record.lname : "";
     const mailidVal = props.record ? props.record.mailid : "";
     const dojVal = props.record ? props.record.doj : "";
@@ -86,6 +92,7 @@ function Editemployee(props) {
     const repManagerVal = props.record ? props.record.repManager : "";
     const secManagerVal = props.record ? props.record.secManager : "";
     const setDepartmentVal = props.record ? props.record.department : "";
+    const locationVal = props.record ? props.record.location : "";
     const isMgrVal = props.record ? props.record.isManager : "";
     const earnLeaveVal = props.record ? props.record.earnLeave : "";
     const sickLeaveVal = props.record ? props.record.sickLeave : "";
@@ -93,6 +100,7 @@ function Editemployee(props) {
     const optionalLeaveVal = props.record ? props.record.optionalLeave : "";
 
     setFname(fnameVal);
+    setMname(mnameVal);
     setLname(lnameVal);
     setMailid(mailidVal);
     setDoj(dojVal);
@@ -102,6 +110,7 @@ function Editemployee(props) {
     setRepManager(repManagerVal);
     setSecManager(secManagerVal);
     setDepartment(setDepartmentVal);
+    setLocation(locationVal);
     setIsMgr(isMgrVal);
     setEarnLeave(earnLeaveVal);
     setSickLeave(sickLeaveVal);
@@ -163,6 +172,10 @@ function Editemployee(props) {
             value: fname,
           },
           {
+            name: ["mname"],
+            value: mname,
+          },
+          {
             name: ["lname"],
             value: lname,
           },
@@ -197,6 +210,10 @@ function Editemployee(props) {
           {
             name: ["department"],
             value: department,
+          },
+          {
+            name: ["location"],
+            value: location,
           },
           {
             name: ["isManager"],
@@ -266,6 +283,46 @@ function Editemployee(props) {
           <Col xs={22} sm={22} md={12}>
             <Form.Item
               style={{ marginBottom: "17px" }}
+              name="mname"
+              label="Middle Name"
+              onKeyPress={(event) => {
+                if (checkAlphabets(event)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[
+                {
+                  required: false,
+
+                  message: "Please enter Middle Name",
+                },
+                {
+                  pattern: /^[a-zA-Z\s]*$/,
+                  message: "Please enter Valid Name",
+                },
+              ]}
+            >
+              <Input
+                style={{ width: "80%" }}
+                maxLength={20}
+                onChange={(e) => {
+                  const inputval = e.target.value;
+
+                  const newVal =
+                    inputval.substring(0, 1).toUpperCase() +
+                    inputval.substring(1);
+
+                  setMname(newVal);
+                }}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
               name="lname"
               label="Last Name&nbsp;"
               onKeyPress={(event) => {
@@ -296,6 +353,29 @@ function Editemployee(props) {
                     inputval.substring(1);
 
                   setLname(newVal);
+                }}
+              />
+            </Form.Item>
+          </Col>
+
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="doj"
+              label="Date of Joining&nbsp;"
+              rules={[
+                {
+                  required: true,
+                  message: "Please Choose a Date",
+                },
+              ]}
+            >
+              {/* format={dateFormatList} */}
+              <DatePicker
+                format={dateFormat}
+                style={{ width: "80%" }}
+                onChange={(e) => {
+                  setDoj(e.format(dateFormat));
                 }}
               />
             </Form.Item>
@@ -344,75 +424,6 @@ function Editemployee(props) {
                 value={mailid}
                 disabled={mailid.split("@")[1] === "hutechsolutions.com"}
               />
-            </Form.Item>
-          </Col>
-
-          <Col xs={22} sm={22} md={12}>
-            <Form.Item
-              style={{ marginBottom: "17px" }}
-              name="doj"
-              label="Date of Joining&nbsp;"
-              rules={[
-                {
-                  required: true,
-                  message: "Please Choose a Date",
-                },
-              ]}
-            >
-              {/* format={dateFormatList} */}
-              <DatePicker
-                format={dateFormat}
-                style={{ width: "80%" }}
-                onChange={(e) => {
-                  setDoj(e.format(dateFormat));
-                }}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col xs={22} sm={22} md={12}>
-            <Form.Item
-              style={{ marginBottom: "17px" }}
-              name="isManager"
-              label="Is Manager&nbsp;"
-              // onKeyPress={(event) => {
-              //   if (checkNumbervalue(event)) {
-              //     event.preventDefault();
-              //   }
-              // }}
-              // onKeyPress={(event) => {
-              //   if (checkNumbervalue(event)) {
-              //     event.preventDefault();
-              //   }
-              // }}
-              rules={[
-                {
-                  // required: true,
-                  // message: "Please enter Phone Number",
-                  // pattern: /^[0-9\b]+$/,
-                },
-                { whitespace: true },
-              ]}
-            >
-              <Checkbox
-                defaultChecked={isManager}
-                style={{ width: "80%" }}
-                maxLength={10}
-                onChange={(e) => {
-                  const number = e.target.checked;
-                  setIsMgr(number);
-                }}
-
-                //   onChange={(e) => {
-                //     const amt = e.target.value;
-                //     setAmount(amt);
-                //     setTotal(amt * quantity);
-                //     form.setFieldsValue({ subTotal: amt * quantity });
-
-                //   }}
-              >Manager</Checkbox>
             </Form.Item>
           </Col>
 
@@ -594,6 +605,91 @@ function Editemployee(props) {
                 <Option value="Human Resource">Human Resource</Option>
                 <Option value="Finance">Finance</Option>
               </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              className="managerError"
+              style={{ marginBottom: "17px" }}
+              name="isManager"
+              label="Is Manager&nbsp;"
+              // onKeyPress={(event) => {
+              //   if (checkNumbervalue(event)) {
+              //     event.preventDefault();
+              //   }
+              // }}
+              // onKeyPress={(event) => {
+              //   if (checkNumbervalue(event)) {
+              //     event.preventDefault();
+              //   }
+              // }}
+              rules={[
+                {
+                  required: false,
+                  message: "Please enter Phone Number",
+                  // pattern: /^[0-9\b]+$/,
+                },
+                { whitespace: true },
+              ]}
+            >
+              <Checkbox
+                // defaultChecked={isManager}
+                style={{ width: "80%" }}
+                maxLength={10}
+                onChange={(e) => {
+                  const number = e.target.checked;
+                  setIsMgr(number);
+                }}
+
+                //   onChange={(e) => {
+                //     const amt = e.target.value;
+                //     setAmount(amt);
+                //     setTotal(amt * quantity);
+                //     form.setFieldsValue({ subTotal: amt * quantity });
+
+                //   }}
+              >
+                Manager
+              </Checkbox>
+            </Form.Item>
+          </Col>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              style={{ marginBottom: "17px" }}
+              name="location"
+              label="Work Location&nbsp;"
+              onKeyPress={(event) => {
+                if (checkAlphabets(event)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[
+                {
+                  required: true,
+
+                  message: "Please enter Location",
+                },
+                {
+                  pattern: /^[a-zA-Z\s]*$/,
+                  message: "Please enter Valid Location",
+                },
+              ]}
+            >
+              <Input
+                style={{ width: "80%" }}
+                maxLength={20}
+                onChange={(e) => {
+                  const inputval = e.target.value;
+
+                  const newVal =
+                    inputval.substring(0, 1).toUpperCase() +
+                    inputval.substring(1);
+
+                  setLocation(newVal);
+                }}
+              />
             </Form.Item>
           </Col>
         </Row>

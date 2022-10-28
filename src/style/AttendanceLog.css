@@ -59,3 +59,12 @@
 .Tabs .ant-tabs-nav .ant-tabs-nav-list{
     margin-left: 15px;
 }
+.monthColor .ant-picker-input>input::placeholder {
+    color:white;
+    cursor: pointer;
+}
+.monthColor .ant-picker .ant-picker-input span.ant-picker-suffix,
+.monthColor .ant-picker.ant-picker-range span.ant-picker-suffix{
+    color: white;
+    cursor: pointer;
+}

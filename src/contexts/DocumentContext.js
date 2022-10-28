@@ -2,19 +2,21 @@ import { db } from "../firebase-config";
 
 import {
     collection,
-    getDoc,
-    setDoc,
+    getDocs,
+    addDoc,
     updateDoc,
     deleteDoc,
     doc,
+    query,
+    where
 } from "firebase/firestore";
 
 const documentCollectionRef = collection(db, "document");
 
 class DocumentContext {
 
-    addDocument = (id, newDocument) => {
-        return setDoc(doc(db, "document",id), newDocument);
+    addDocument = (newDocument) => {
+        return addDoc(documentCollectionRef, newDocument);
     };
 
     updateDocument = (id, updateDocument) => {
@@ -26,10 +28,17 @@ class DocumentContext {
         const documentDoc = doc(db, "document", id);
         return deleteDoc(documentDoc);
     };
-    getDocument = async (id) => { 
-        const documentDoc = doc(db, "document", id);
-        let temp = await getDoc(documentDoc);
-        return temp.data();
+    getDocument = async (empId, type) => { 
+        const q = query(documentCollectionRef, where("empId", "==", empId), where("type", "==", type));
+        let temp = await getDocs(q);
+        let req = temp.docs.map((doc) => {
+            return {
+                ...doc.data(),
+                id: doc.id
+            };
+        });
+        console.log(req)
+        return req;
     };
 
 }

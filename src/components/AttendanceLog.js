@@ -177,26 +177,49 @@ function AttendanceLog({ empDetails }) {
   }
 
   async function getEmpDetails(id, date) {
-    let data = await AttendanceContext.getAllAttendance(id, date);
-    setEmpMonthly(data);
-    setLoading(false);
+    setLoading(true);
+    let data;
+    AttendanceContext.getAllAttendance(id, date).then((userdata) => {
+      console.log("first")
+      AttendanceContext.updateLeaves(userdata).then((final) => {
+      console.log("second", final)
+      data = final
+      setEmpMonthly(final);
+      const timer = setTimeout(() => {
+        setLoading(false);
+        console.log('This will run after 0.75 seconds!')
+      }, 750);
+      return () => clearTimeout(timer);
+    });
+      // getWithLeave(userdata);
+      console.log("last")
+    });
     return data;
   }
 
   function allEmpDetails() {
     setLoading(true);
     AttendanceContext.getAllUsers().then((userdata) => {
-      getWithLeave(userdata);
+      console.log("first")
+      AttendanceContext.updateWithLeave(userdata).then((final) => {
+      console.log("second", final)
+      setallEmp(final);
+      setFilteredEmp(final);
+      setEmpMonthly(final);
+      const timer = setTimeout(() => {
+        setLoading(false);
+        console.log('This will run after 0.75 seconds!')
+      }, 750);
+      return () => clearTimeout(timer);
+      
+    });
+      // getWithLeave(userdata);
+      console.log("last")
     });
   }
 
   function getWithLeave(userdata) {
-    AttendanceContext.updateWithLeave(userdata).then((final) => {
-      setallEmp(final);
-      setFilteredEmp(final);
-      setEmpMonthly(final);
-      setLoading(false);
-    });
+    
   }
 
   const onReset = () => {
@@ -301,6 +324,7 @@ function AttendanceLog({ empDetails }) {
           {role.userType === "emp" ? (
             <>
               <Tabs.TabPane tab="Monthly Log" key="1">
+              <div className="monthColor">
                 <DatePicker
                   picker="month"
                   placeholder="Select Month"
@@ -316,6 +340,7 @@ function AttendanceLog({ empDetails }) {
                   allowClear
                   onChange={onHrDateFilter}
                 />
+                </div>
                 <Table
                   loading={loading}
                   className="monthly"
@@ -444,10 +469,11 @@ function AttendanceLog({ empDetails }) {
                 />
               </Tabs.TabPane>
               <Tabs.TabPane disabled={!selectemp.id} tab="Monthly Log" key="2">
+              <div className="monthColor">
                 <DatePicker
                   picker="month"
                   placeholder="Select Month"
-                  className="Range"
+                  className="Range "
                   // defaultValue={[]}
                   format={"MM-YYYY"}
                   style={{
@@ -458,7 +484,7 @@ function AttendanceLog({ empDetails }) {
                   allowClear
                   onChange={onHrDateFilter}
                 />
-
+              </div>
                 <Table
                   loading={loading}
                   className="monthly"

@@ -1,4 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+
 import {
   Button,
   Table,
@@ -18,23 +20,62 @@ import {
 import FormItem from "antd/es/form/FormItem";
 import "../../style/WorkId.css";
 import Item from "antd/lib/list/Item";
+import DocumentContext from "../../contexts/DocumentContext";
+import { async } from "@firebase/util";
 
 function WorkID() {
-  const [allWorkDetails, setAllWorkDetails] = useState([]);
+  const [allWorkDetails, setAllWorkDetails] = useState([
+  //   {
+  //   name: "",
+  //   description: "",
+  //   file: ""
+  // }
+]);
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [imgPreview, setImgPreview] = useState();
   const imgRef = useRef(null);
   const [deleteRow, setDeleteRow] = useState("");
+  const { currentUser } = useAuth();
+
 
   function addNewWork(values) {
-    console.log({ values });
-    setAllWorkDetails([...allWorkDetails, values]);
-  }
+    console.log();
+    DocumentContext.addDocument({ ...values, empId: currentUser.uid, type: "work" });
+    getData();
+  };
 
-  const deleteData = (name, e) => {
-    const filteredData = allWorkDetails.filter((item) => item.name !== name);
-    setAllWorkDetails(filteredData);
+  const deleteData = (id) => {
+    Modal.confirm({
+        title: "Are you sure, you want to delete this record?",
+        okText: "Yes",
+        okType: "danger",
+
+        onOk: () => {
+          DocumentContext.deleteDocument(id)
+                .then(response => {
+                    console.log(response);
+                    getData();
+                })
+                .catch(error => {
+                    console.log(error.message);
+
+                })
+        },
+    });
+    
+    // const filteredData = allWorkDetails.filter((item) => item.name !== name);
+    // getData();
+    // setAllWorkDetails(filteredData);
+  };
+  useEffect(()=>{
+    getData();
+  },[]);
+  const getData=async()=>{
+    let alldata=await DocumentContext.getDocument(currentUser.uid, "work");
+    console.log(alldata)
+    // setData(alldata);
+    setAllWorkDetails(alldata);
   };
 
   const columns = [
@@ -72,18 +113,13 @@ function WorkID() {
     {
       title: "Action",
       key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <Popconfirm
-            title="Sure to delete?"
-            onConfirm={(e) => deleteData(record.name, e)}
-          >
-            <Button type="link" style={{ color: "#e64949" }}>
-              <DeleteOutlined />
-            </Button>
-          </Popconfirm>
-        </Space>
-      ),
+      render: (_, record) => {
+        return (
+            <DeleteOutlined
+                            onClick={() => deleteData(record.id)}
+                        />
+        );
+    },
     },
   ];
 

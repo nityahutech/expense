@@ -288,8 +288,8 @@ const Charts = () => {
                   }}
                   onChange={handleChange}
                 >
+                  <Option value="2021">2021</Option>
                   <Option value="2022">2022</Option>
-                  <Option value="2023">2023</Option>
                 </Select>
                 <Select
                   id="short"

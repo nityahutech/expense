@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Table } from "antd";
 import "../../style/WorkWeek.css";
+import EmpInfoContext from "../../contexts/EmpInfoContext";
+import { useAuth } from "../../contexts/AuthContext";
 const data = [
   {
     key: "1",
@@ -59,6 +61,18 @@ const data = [
   },
 ];
 function WorkWeek() {
+  const [doj, setDoj] = useState();
+
+  useEffect(() => {
+    getData();
+  }, [])
+  const{currentUser}=useAuth()
+
+  const getData = async () => {
+    let data=await EmpInfoContext.getEduDetails(currentUser.uid)
+    setDoj(data.doj?data.doj:null)
+  }
+
   const sharedOnCell = (_, index) => {
     if (index === 5) {
       return {
@@ -255,7 +269,7 @@ function WorkWeek() {
                     Saturday and Sunday.
                   </p>
                   <h4>Effective Date</h4>
-                  <p> 09 Sep,2022</p>
+                  <p> {doj}</p>
                   {/* <hr style={{ marginRight: "21.7rem" }} /> */}
                 </div>
                 <h4 style={{ marginLeft: "10px" }}>Rule Settings1</h4>

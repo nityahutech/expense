@@ -119,13 +119,18 @@ class AttendanceContext {
     };
 
     getAllAttendance =  async (id, date) => {
+        const profileDoc = doc(db, "users", id);
+        let rec = await getDoc(profileDoc);
+        let empId = rec.data().empId
         const q = query(attendCollectionRef, where("empId", "==", id));
         let data = await getDocs(q);
         let d = data.docs.map((doc) => {
             return {
               ...doc.data(),
               id: doc.id,
-              status: "Present"
+              status: "Present",
+              empId: empId,
+              eId: id
             };
           });
           const momentRange = extendMoment(Moment);
@@ -145,7 +150,9 @@ class AttendanceContext {
             }
             temp[x++] = {
               date: day.format("DD-MM-YYYY"),
-              status: "Absent"
+              status: "Absent",
+              eId: id,
+              empId: empId
             }
           })
         return temp.reverse();
@@ -178,11 +185,29 @@ class AttendanceContext {
         return res;
     };
 
-    updateWithLeave = async (data) => {
+    updateLeaves = async (data) => {
+      console.log(data)
+      let list = await this.getLeaveList(data[0].empId);
+      console.log(list)
       data.forEach((emp) => {
         if(emp.status == "Absent") {
+          console.log(emp)
+          if (list.includes(moment(emp.date, "DD-MM-YYYY").format("Do MMM, YYYY"))) {
+            emp.status = "On Leave";
+          }
+        }
+      })
+      return data;
+    }
+
+    updateWithLeave = async (data) => {
+      console.log(data)
+      data.forEach((emp) => {
+        console.log(emp)
+        if(emp.status == "Absent") {
           this.getLeaveStatus(emp.empId).then((leave) => {
-              if (leave) {
+            console.log(leave)
+            if (leave) {
               emp.status = "On Leave";
 
             }
@@ -221,6 +246,19 @@ class AttendanceContext {
       let leaves = [].concat.apply([], temp)
       return leaves.includes(moment().format("Do MMM, YYYY"));
   }
+
+  getLeaveList = async (id) => {
+    console.log(id)
+    const q = query(leaveCollectionRef, where("empId", "==", id), where("status", "==", "Approved"));
+    let stats = await getDocs(q);
+    let temp = []
+    stats.docs.map((doc) => {
+      temp.push(doc.data().date)
+    });
+    let leaves = [].concat.apply([], temp)
+    console.log(leaves)
+    return leaves;
+}
 
     getAttendance = (id) => { 
         const q = query(attendCollectionRef, where("empId", "==", id),limit(1))

@@ -268,7 +268,7 @@ const NewSidebar = (props) => {
             <NavLink to="/Profile" />
           </Menu.Item> */}
 
-          {/* <Menu.SubMenu
+          <Menu.SubMenu
             className="arrow-div"
             style={{
               width: "100%",
@@ -289,7 +289,7 @@ const NewSidebar = (props) => {
               Quarter Appraisal
               <NavLink to="/Appraisal/AppraisalPageHr" />
             </Menu.Item>
-          </Menu.SubMenu> */}
+          </Menu.SubMenu>
 
           {/* <Menu.Item className ='arrow'
             icon={

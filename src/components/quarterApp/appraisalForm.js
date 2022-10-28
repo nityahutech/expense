@@ -73,8 +73,8 @@ const Appraisal = (props) => {
     const [formLayout, setFormLayout] = useState('horizontal');
     const [currentAppraisal, setCurrentAppraisal] = useState(props.appraisal);
     const [empEditable, setEmpEditable] = useState(!(currentAppraisal.status === 'empPending'));
-    const [leadEditable, setLeadEditable] = useState((currentAppraisal.status === 'leadPending'));
-    const [mgrEditable, setMgrEditable] = useState((currentAppraisal.status === 'mgrPending'));
+    const [leadEditable, setLeadEditable] = useState((currentAppraisal.status === 'leadPending' && props.hrMode == false));
+    const [mgrEditable, setMgrEditable] = useState((currentAppraisal.status === 'mgrPending' && props.hrMode == false));
 
 
     const componentRef = useRef();
@@ -132,6 +132,8 @@ const Appraisal = (props) => {
             lead: props.appraisal.lead,
             repManager: props.appraisal.repManager,
             mailid: props.appraisal.mailid,
+            fname: props.appraisal.fname,
+            lname: props.appraisal.lname,
             status: 'leadPending'
 
         }
@@ -144,6 +146,8 @@ const Appraisal = (props) => {
                 lead: props.appraisal.lead,
                 repManager: props.appraisal.repManager,
                 mailid: props.appraisal.mailid,
+                fname: props.appraisal.fname,
+                lname: props.appraisal.lname,
 
             }
         }
@@ -158,6 +162,8 @@ const Appraisal = (props) => {
                 lead: props.appraisal.lead,
                 repManager: props.appraisal.repManager,
                 mailid: props.appraisal.mailid,
+                fname: props.appraisal.fname,
+                lname: props.appraisal.lname,
             }
         }
         console.log('appraisal2', newAppraisalForm)
@@ -166,7 +172,9 @@ const Appraisal = (props) => {
             .then(response => {
                 console.log("appraisal Form Created", response);
                 if (newAppraisalForm.status === 'leadPending') {
+                    console.log('newAppraisalForm.status', newAppraisalForm.status)
                     AppraisalContext.sendEmailToLead(newAppraisalForm)
+
                 }
                 else if (newAppraisalForm.status === 'mgrPending') {
                     AppraisalContext.sendEmailToManager(newAppraisalForm)
@@ -372,6 +380,7 @@ const Appraisal = (props) => {
                                     autoSize={{
                                         minRows: 3,
 
+
                                     }}
                                     required
                                     placeholder=""
@@ -484,6 +493,7 @@ const Appraisal = (props) => {
                                         maxLength={100}
                                         autoSize={{
                                             minRows: 3,
+
 
                                         }}
                                         required

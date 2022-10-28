@@ -1,8 +1,8 @@
-.ant-picker-input>input::placeholder {
+.date .ant-picker-input>input::placeholder {
     color:white;
 }
-.ant-picker .ant-picker-input span.ant-picker-suffix,
-.ant-picker.ant-picker-range span.ant-picker-suffix{
+.date .ant-picker .ant-picker-input span.ant-picker-suffix,
+.date .ant-picker.ant-picker-range span.ant-picker-suffix{
     color: white;
 }
 

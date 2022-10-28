@@ -32,7 +32,9 @@ import Payslip2 from "./pages/Payslip2";
 function App() {
   return (
     <AuthProvider>
+     
       <BrowserRouter >
+
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/SignupPage" element={<SignupPage />} />

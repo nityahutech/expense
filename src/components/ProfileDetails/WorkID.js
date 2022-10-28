@@ -85,9 +85,9 @@ function WorkID() {
       key: "name",
     },
     {
-      title: "Experience Description",
-      dataIndex: "description",
-      key: "description",
+      title: "Duration",
+      dataIndex: "duration",
+      key: "duration",
     },
     {
       title: "Uploaded File",
@@ -192,58 +192,13 @@ function WorkID() {
           // ]}
           layout="vertical"
         >
-          <FormItem
-            name="name"
-            onKeyPress={(event) => {
-              if (checkAlphabets(event)) {
-                event.preventDefault();
-              }
-            }}
-            rules={[
-              {
-                required: true,
-
-                message: "Please Enter Company Name",
-              },
-              {
-                pattern: /^[a-zA-Z\s]*$/,
-                message: "Please Enter Company Name",
-              },
-            ]}
-          >
-            <Input placeholder="Enter Company Title" required />
+          <FormItem name="name">
+            <Input placeholder="Enter Company Name" required />
           </FormItem>
-          <FormItem
-            name="description"
-            onKeyPress={(event) => {
-              if (checkAlphabets(event) && checkNumbervalue(event)) {
-                event.preventDefault();
-              }
-            }}
-            rules={[
-              {
-                required: true,
-                message: "Please Enter Description",
-              },
-              {
-                pattern: /^[0-9a-zA-Z]+$/,
-                message: "Please Enter Description",
-              },
-            ]}
-          >
-            <Input placeholder="Enter Experience Description" required />
+          <FormItem name="duration">
+            <Input placeholder="Enter Duration" required />
           </FormItem>
-          <FormItem
-            name="file"
-            className="file"
-            rules={[
-              {
-                required: true,
-
-                message: "Please Choose Required File",
-              },
-            ]}
-          >
+          <FormItem name="file" className="file">
             <div className="choose">
               <Input
                 type="file"

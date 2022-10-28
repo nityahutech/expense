@@ -440,8 +440,8 @@ function Editemployee(props) {
                 //   option.children.toLowerCase().includes(input.toLowerCase())
                 // }
               >
-                <Option value="male">Male</Option>
-                <Option value="female">Female</Option>
+                <Option value="Male">Male</Option>
+                <Option value="Female">Female</Option>
                 {/* <Option value="pns">Prefer Not To Say</Option> */}
               </Select>
             </Form.Item>

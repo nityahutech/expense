@@ -16,7 +16,7 @@ import {
 import moment from "moment";
 import ProfileContext from "../contexts/ProfileContext";
 import EmployeeContext from "../contexts/EmployeeContext";
-import "../style/IDTags.css";
+import "../style/CertificationID.css";
 
 const { Option } = Select;
 const showNotification = (type, msg, desc) => {

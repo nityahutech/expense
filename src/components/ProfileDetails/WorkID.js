@@ -46,9 +46,26 @@ function WorkID() {
   };
 
   const deleteData = (id) => {
-    DocumentContext.deleteDocument(id)
+    Modal.confirm({
+        title: "Are you sure, you want to delete this record?",
+        okText: "Yes",
+        okType: "danger",
+
+        onOk: () => {
+          DocumentContext.deleteDocument(id)
+                .then(response => {
+                    console.log(response);
+                    getData();
+                })
+                .catch(error => {
+                    console.log(error.message);
+
+                })
+        },
+    });
+    
     // const filteredData = allWorkDetails.filter((item) => item.name !== name);
-    getData();
+    // getData();
     // setAllWorkDetails(filteredData);
   };
   useEffect(()=>{
@@ -96,18 +113,13 @@ function WorkID() {
     {
       title: "Action",
       key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <Popconfirm
-            title="Sure to delete?"
-            onConfirm={(e) => deleteData(record.name, e)}
-          >
-            <Button type="link" style={{ color: "#e64949" }}>
-              <DeleteOutlined />
-            </Button>
-          </Popconfirm>
-        </Space>
-      ),
+      render: (_, record) => {
+        return (
+            <DeleteOutlined
+                            onClick={() => deleteData(record.id)}
+                        />
+        );
+    },
     },
   ];
 

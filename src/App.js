@@ -28,16 +28,14 @@ import BankAccountpages from "./pages/BankAccountpages";
 import Appraisal from "./pages/AppraisalPage";
 import AppraisalHr from "./pages/AppraisalPageHr";
 import Payslip2 from "./pages/Payslip2";
-import MainDashboardPage from "./pages/MainDashboardPage"
-import OnboardingPage from "./pages/OnboardingPage"
-import CompanyProfilepage from"./pages/CompanyProfilepage"
+import MainDashboardPage from "./pages/MainDashboardPage";
+import OnboardingPage from "./pages/OnboardingPage";
+import CompanyProfilepage from "./pages/CompanyProfilepage";
 
 function App() {
   return (
     <AuthProvider>
-     
-      <BrowserRouter >
-
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/SignupPage" element={<SignupPage />} />
@@ -71,9 +69,15 @@ function App() {
           <Route path="/Notification" element={<Notification />} />
           <Route path="/Appraisal/AppraisalPage" element={<Appraisal />} />
           <Route path="/Appraisal/AppraisalPageHr" element={<AppraisalHr />} />
-          <Route path="/MainDashboardPage/MainDashBoard" element={<MainDashboardPage/>}/>
-          <Route path="/OnboardingPage/Onboarding" element={<OnboardingPage/>}/>
-          <Route path="/CompanyProfilepgae/CompanyProfile" element={<CompanyProfilepage/>}/>
+          <Route
+            path="/MainDashboardPage/MainDashBoard"
+            element={<MainDashboardPage />}
+          />
+          <Route
+            path="/OnboardingPage/Onboarding"
+            element={<OnboardingPage />}
+          />
+          <Route path="/CompanyProfilepage" element={<CompanyProfilepage />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

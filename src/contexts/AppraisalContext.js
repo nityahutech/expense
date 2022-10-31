@@ -73,6 +73,7 @@ class AppraisalContext {
 
     sendEmailToLead = async (appraisal) => {
         let email = await this.getEmailList(appraisal.lead)
+        console.log('email', email)
         let mailOptions = {
             from: 'hutechhr@gmail.com',
             to: `${email}`,
@@ -117,8 +118,9 @@ class AppraisalContext {
                 id: doc.id
             };
         });
-
+        console.log('emailid')
         return req[0].mailid;
+
     }
 }
 

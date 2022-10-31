@@ -1,6 +1,6 @@
-import React,{useState, useRef} from 'react'
+import React,{useState, useRef,useEffect} from 'react'
+import { useAuth } from "../../contexts/AuthContext";
 import "../../style/IDTags.css"
-
 import { 
   PlusCircleOutlined,
   UploadOutlined,
@@ -21,6 +21,9 @@ import {
   Popconfirm,
 } from 'antd'
 import { upload } from '@testing-library/user-event/dist/upload';
+import DocumentContext from '../../contexts/DocumentContext';
+import { updateCurrentUser } from 'firebase/auth';
+import { getDatasetAtEvent } from 'react-chartjs-2';
 
 // -----------------------code and data of table
 
@@ -70,18 +73,13 @@ const props = {
     format: (percent) => percent && `${parseFloat(percent.toFixed(2))}%`,
   },
 };
-
-// --------------------------------------------------------------------------------
-
 function IDTags() {
-
-// --------------------------------------------------------------------------------
-
-// ---------------------------------------usestate for adding data
 const [allIdDetails, setAllIdDetails] = useState([])
 const [visible,setVisible]= useState(false)
 const [uploadFile,setUploadFile]=useState([])
 const [form]=Form.useForm()
+const { currentUser } = useAuth();
+
 const imgRef = useRef(null);
 // ----------------------------------------usestate for add buttob
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -100,10 +98,10 @@ const imgRef = useRef(null);
     form.resetFields()
   };
 
-  const deleteData = (idtitle, e) => {
-    const filteredData = allIdDetails.filter((item) => item.idtitle !== idtitle);
-    setAllIdDetails(filteredData);
-  };
+  // const deleteData = (idtitle, e) => {
+  //   const filteredData = allIdDetails.filter((item) => item.idtitle !== idtitle);
+  //   setAllIdDetails(filteredData);
+  // };
 
   const confirm = (e) => {
     console.log(e);
@@ -116,9 +114,40 @@ const imgRef = useRef(null);
 
   function addNewDetail (values) {
     console.log({values})
+    DocumentContext.addDocument({...values,empId:currentUser.uid,type:"id"});
+    getData();
     setAllIdDetails([...allIdDetails,values])
     setUploadFile([...uploadFile,values])
-  }
+  };
+  const deleteData = (id) => {
+    Modal.confirm({
+        title: "Are you sure, you want to delete this record?",
+        okText: "Yes",
+        okType: "danger",
+
+        onOk: () => {
+          DocumentContext.deleteDocument(id)
+                .then(response => {
+                    console.log(response);
+                    getData();
+                })
+                .catch(error => {
+                    console.log(error.message);
+
+                })
+        },
+    });
+  };
+  useEffect(()=>{
+    getData();
+  },[]);
+  const getData=async()=>{
+    let alldata=await DocumentContext.getDocument(currentUser.uid, "id");
+    console.log(alldata)
+     //setData(alldata);
+     setAllIdDetails(alldata);
+  };
+  
   const columns = [
     {
       title: 'ID Title',
@@ -153,22 +182,14 @@ const imgRef = useRef(null);
     {
       title: "Action",
       key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <Popconfirm
-            title="Are you sure to delete this task?"
-            onConfirm={(e) => deleteData(record.idtitle, e)}
-            // onCancel={cancel}
-            // okText="Yes"
-            // cancelText="No"
-          >
-          <Button type="link" style={{color:"#E64949"}}>
-            <DeleteOutlined />
-          </Button>
-          </Popconfirm>
-        </Space>
-      ),
+      render: (_, record) => {
+        return (
+          <DeleteOutlined
+                          onClick={() => deleteData(record.id)}
+                      />
+      );
     },
+  },
   ];
 
   // ------------------------------------code for upload button 
@@ -192,11 +213,9 @@ const imgRef = useRef(null);
   // };
 
 
-// --------------------------------------------------------------------- 
   return (
     <>
       <Table 
-        // dataSource={dataSource}
         columns={columns}
         pagination={false}
         dataSource={allIdDetails}
@@ -219,20 +238,6 @@ const imgRef = useRef(null);
           initialValues={{ remember: true }}
           autoComplete="off"
           onFinish={addNewDetail}
-          // fields={[
-          //   {
-          //     name: ["title"],
-          //     value: title,
-          //   },
-          //   {
-          //     name: ["description"],
-          //     value: description,
-          //   },
-          //   {
-          //     name: ["file"],
-          //     value: file,
-          //   },
-          // ]}
           layout="vertical"
         >
           <FormItem 
@@ -240,7 +245,7 @@ const imgRef = useRef(null);
           rules={[
             {
               required: true,
-              message: 'Please enter the Id title',
+              message: 'Enter the Id title',
             },
           ]}
           >
@@ -252,11 +257,11 @@ const imgRef = useRef(null);
           rules={[
             {
               required: true,
-              message: 'Please enter the Id description',
+              message: 'Enter Id Number',
             },
           ]}
           >
-            <Input placeholder="Enter Experience Description"
+            <Input placeholder="Enter Id Number"
             required />
           </FormItem>
           <FormItem 

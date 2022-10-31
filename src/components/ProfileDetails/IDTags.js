@@ -1,6 +1,6 @@
 import React,{useState, useRef,useEffect} from 'react'
 import { useAuth } from "../../contexts/AuthContext";
-import "../../style/IDTags.css"
+import "../../style/CertificationID.css"
 import { 
   PlusCircleOutlined,
   UploadOutlined,

@@ -116,7 +116,7 @@ const NewSidebar = (props) => {
             key="32"
           >
             Company Profile
-            <NavLink to="CompantProfilepage/CompanyProfile" />
+            <NavLink to="/CompanyProfilepage" />
           </Menu.Item>
 
           <Menu.SubMenu

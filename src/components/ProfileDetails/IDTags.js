@@ -16,13 +16,13 @@ import {
   Input,
   Modal,
   message, 
+  notification,
   Upload,
   Space,
   Popconfirm,
 } from 'antd'
 import { upload } from '@testing-library/user-event/dist/upload';
 import DocumentContext from '../../contexts/DocumentContext';
-import { updateCurrentUser } from 'firebase/auth';
 import { getDatasetAtEvent } from 'react-chartjs-2';
 
 // -----------------------code and data of table
@@ -80,7 +80,13 @@ const [uploadFile,setUploadFile]=useState([])
 const [form]=Form.useForm()
 const { currentUser } = useAuth();
 
-const imgRef = useRef(null);
+const [file, setFile] = useState("");
+
+// Handle file upload event and update state
+function handleChange(event) {
+    setFile(event.target.files[0]);
+}
+
 // ----------------------------------------usestate for add buttob
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -103,37 +109,40 @@ const imgRef = useRef(null);
   //   setAllIdDetails(filteredData);
   // };
 
-  const confirm = (e) => {
-    console.log(e);
-    message.success('Click on Yes');
-  };
-  const cancel = (e) => {
-    console.log(e);
-    message.error('Click on No');
+  async function addNewDetail (values) {
+    try {
+      await DocumentContext.addDocument({...values,empId:currentUser.uid,type:"id"}, file)
+      showNotification("success", "Success", "Upload Complete");
+      const timer = setTimeout(() => {
+        getData();
+      }, 3500);
+      return () => clearTimeout(timer);
+    } catch {
+      showNotification("error", "Error", "Upload Failed");
+    }
   };
 
-  function addNewDetail (values) {
-    console.log({values})
-    DocumentContext.addDocument({...values,empId:currentUser.uid,type:"id"});
-    getData();
-    setAllIdDetails([...allIdDetails,values])
-    setUploadFile([...uploadFile,values])
-  };
-  const deleteData = (id) => {
+  const showNotification = (type, msg, desc) => {
+    notification[type]({
+        message: msg,
+        description: desc,
+    });
+};
+
+  const deleteData = (id, fileName) => {
     Modal.confirm({
         title: "Are you sure, you want to delete this record?",
         okText: "Yes",
         okType: "danger",
 
         onOk: () => {
-          DocumentContext.deleteDocument(id)
+          DocumentContext.deleteDocument(id, fileName)
                 .then(response => {
-                    console.log(response);
-                    getData();
+                  showNotification("success", "Success", "Succesfully deleted");
+                  getData();
                 })
                 .catch(error => {
-                    console.log(error.message);
-
+                  showNotification("error", "Error", "Record not deleted");
                 })
         },
     });
@@ -141,11 +150,11 @@ const imgRef = useRef(null);
   useEffect(()=>{
     getData();
   },[]);
-  const getData=async()=>{
-    let alldata=await DocumentContext.getDocument(currentUser.uid, "id");
+  const getData = async () => {
+    console.log("alldata")
+    let alldata = await DocumentContext.getDocument(currentUser.uid, "id");
     console.log(alldata)
-     //setData(alldata);
-     setAllIdDetails(alldata);
+    setAllIdDetails(alldata);
   };
   
   const columns = [
@@ -161,8 +170,8 @@ const imgRef = useRef(null);
     },
     {
       title: "Uploaded File",
-      dataIndex: "file",
-      key: "file",
+      dataIndex: "upload",
+      key: "upload",
       render: (data, record) => {
         console.log("record: ", record);
         console.log("data:: ", data);
@@ -171,10 +180,9 @@ const imgRef = useRef(null);
         // fReader.onload = function (event) {
         //   setImgPreview(event.target.result);
         // };
-        const hrefVal = imgRef?.current?.input?.files[0]?.idtitle;
         return (
-          <a href={hrefVal} target="_blank">
-            {hrefVal}
+          <a href={data} target="_blank">
+            {record.fileName}
           </a>
         );
       },
@@ -185,7 +193,7 @@ const imgRef = useRef(null);
       render: (_, record) => {
         return (
           <DeleteOutlined
-                          onClick={() => deleteData(record.id)}
+                          onClick={() => deleteData(record.id, record.fileName)}
                       />
       );
     },
@@ -277,10 +285,9 @@ const imgRef = useRef(null);
           <Input
               type="file"
               // accept="image/gif, image/jpeg, image/png"
-              id="myfile"
-              name="file"
-              ref={imgRef}
-              required
+              id="upload"
+              name="upload"
+              onChange={handleChange}
             />
             </div>
           {/* <Upload {...props}>

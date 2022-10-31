@@ -1,5 +1,5 @@
-import { db } from "../firebase-config";
-
+import { db, storage } from "../firebase-config";
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import {
     collection,
     getDocs,
@@ -15,8 +15,24 @@ const documentCollectionRef = collection(db, "document");
 
 class DocumentContext {
 
-    addDocument = (newDocument) => {
-        return addDoc(documentCollectionRef, newDocument);
+    addDocument = (newDocument, file) => {
+        if (file) {
+            const storageRef = ref(storage, `/files/${file.name}`);
+            uploadBytesResumable(storageRef, file).then((snapshot) => {
+                getDownloadURL(snapshot.ref).then((url) => {
+                    console.log(url);
+                    newDocument.upload = url;
+                    newDocument.fileName = file.name
+                    console.log("FINAL", newDocument)
+                    addDoc(documentCollectionRef, newDocument)
+                    return Promise.resolve();
+                })
+            });
+        } else {
+            console.log("FINAL", newDocument) 
+            addDoc(documentCollectionRef, newDocument)
+            return Promise.resolve();
+        }
     };
 
     updateDocument = (id, updateDocument) => {
@@ -24,7 +40,11 @@ class DocumentContext {
         return updateDoc(documentDoc, updateDocument);
     };
 
-    deleteDocument = (id) => {
+    deleteDocument = (id, file) => {
+        if(file) {
+            const storageRef = ref(storage, `/files/${file}`);
+            deleteObject(storageRef)
+        }
         const documentDoc = doc(db, "document", id);
         return deleteDoc(documentDoc);
     };

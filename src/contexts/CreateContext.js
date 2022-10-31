@@ -39,6 +39,7 @@ export async function createUser(values) {
   const valuesToservice = {
     empId: await generateEmpId(),
     fname: values.fname,
+    mname: values.mname,
     lname: values.lname,
     mailid: values.mailid,
     contactEmail: values.email,
@@ -55,6 +56,7 @@ export async function createUser(values) {
     repManager: values.repManager ? values.repManager : "",
     secManager: values.secManager ? values.secManager : "",
     department: values.department,
+    location: values.location,
     isManager: false,
     earnLeave: 12,
     sickLeave: 6,

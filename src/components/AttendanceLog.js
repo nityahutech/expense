@@ -78,6 +78,7 @@ function AttendanceLog({ empDetails }) {
       title: "Project Name",
       dataIndex: "project",
       key: "project",
+      ellipsis: true,
     },
     {
       title: "Report",
@@ -219,7 +220,7 @@ const setHolidayStatus = (data) => {
     setLoading(true);
     let data;
     AttendanceContext.getAllAttendance(id, date).then((userdata) => {
-      console.log("first")
+      console.log("first");
       AttendanceContext.updateLeaves(userdata).then((final) => {
       setHolidayStatus(final)
       console.log("second", final)
@@ -232,7 +233,7 @@ const setHolidayStatus = (data) => {
       return () => clearTimeout(timer);
     });
       // getWithLeave(userdata);
-      console.log("last")
+      console.log("last");
     });
     return data;
   }
@@ -240,28 +241,24 @@ const setHolidayStatus = (data) => {
   function allEmpDetails() {
     setLoading(true);
     AttendanceContext.getAllUsers().then((userdata) => {
-      console.log("first")
+      console.log("first");
       AttendanceContext.updateWithLeave(userdata).then((final) => {
       // setHolidayStatus(final)
-      console.log("second", final)
-      setallEmp(final);
-      setFilteredEmp(final);
-      setEmpMonthly(final);
-      const timer = setTimeout(() => {
-        setLoading(false);
-        console.log('This will run after 0.75 seconds!')
-      }, 750);
-      return () => clearTimeout(timer);
-      
-    });
+        console.log("second", final);
+        setallEmp(final);
+        setFilteredEmp(final);
+        setEmpMonthly(final);
+        const timer = setTimeout(() => {
+          setLoading(false);
+          console.log("This will run after 0.75 seconds!");
+        }, 750);
+        return () => clearTimeout(timer);
+      });
       // getWithLeave(userdata);
-      console.log("last")
+      console.log("last");
     });
   }
 
-  function getWithLeave(userdata) {
-    
-  }
 
   const onReset = () => {
     form.resetFields();
@@ -308,6 +305,7 @@ const setHolidayStatus = (data) => {
       title: "Project Name",
       dataIndex: "project",
       key: "project",
+      ellipsis: true,
     },
     {
       title: "Report",
@@ -365,22 +363,22 @@ const setHolidayStatus = (data) => {
           {role.userType === "emp" ? (
             <>
               <Tabs.TabPane tab="Monthly Log" key="1">
-              <div className="monthColor">
-                <DatePicker
-                  picker="month"
-                  placeholder="Select Month"
-                  className="Range"
-                  bordered={true}
-                  // defaultValue={[]}
-                  format="MM-YYYY"
-                  style={{
-                    background: "#1890ff",
-                    cursor: "pointer",
-                    marginLeft: "12rem",
-                  }}
-                  allowClear
-                  onChange={onHrDateFilter}
-                />
+                <div className="monthColor">
+                  <DatePicker
+                    picker="month"
+                    placeholder="Select Month"
+                    className="Range"
+                    bordered={true}
+                    // defaultValue={[]}
+                    format="MM-YYYY"
+                    style={{
+                      background: "#1890ff",
+                      cursor: "pointer",
+                      marginLeft: "12rem",
+                    }}
+                    allowClear
+                    onChange={onHrDateFilter}
+                  />
                 </div>
                 <Table
                   loading={loading}
@@ -510,22 +508,22 @@ const setHolidayStatus = (data) => {
                 />
               </Tabs.TabPane>
               <Tabs.TabPane disabled={!selectemp.id} tab="Monthly Log" key="2">
-              <div className="monthColor">
-                <DatePicker
-                  picker="month"
-                  placeholder="Select Month"
-                  className="Range "
-                  // defaultValue={[]}
-                  format={"MM-YYYY"}
-                  style={{
-                    background: "#1890ff",
-                    cursor: "pointer",
-                    marginLeft: "12rem",
-                  }}
-                  allowClear
-                  onChange={onHrDateFilter}
-                />
-              </div>
+                <div className="monthColor">
+                  <DatePicker
+                    picker="month"
+                    placeholder="Select Month"
+                    className="Range "
+                    // defaultValue={[]}
+                    format={"MM-YYYY"}
+                    style={{
+                      background: "#1890ff",
+                      cursor: "pointer",
+                      marginLeft: "12rem",
+                    }}
+                    allowClear
+                    onChange={onHrDateFilter}
+                  />
+                </div>
                 <Table
                   loading={loading}
                   className="monthly"

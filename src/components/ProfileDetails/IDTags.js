@@ -1,5 +1,5 @@
 import React,{useState, useRef} from 'react'
-import "../../style/IDTags.css"
+import "../../style/CertificationID.css"
 
 import { 
   PlusCircleOutlined,

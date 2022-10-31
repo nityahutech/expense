@@ -68,3 +68,15 @@
     color: white;
     cursor: pointer;
 }
+.Range .ant-picker-input-placeholder>input{
+    color: white;
+}
+.Range .ant-picker-input > input:placeholder-shown{
+    cursor: pointer;
+}
+.monthly .ant-table table{
+    cursor: default;
+}
+.DailyTable .ant-table table{
+    cursor: pointer;
+}

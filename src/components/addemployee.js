@@ -121,7 +121,7 @@ function AddEmployee() {
           <Row gutter={[24, 8]}>
             <Col
               xs={{ span: 24 }}
-              sm={{ span: 12 }}
+              sm={{ span: 8 }}
               className="Col-1-left"
               style={{ background: "" }}
             >
@@ -167,7 +167,53 @@ function AddEmployee() {
             </Col>
             <Col
               xs={{ span: 24 }}
-              sm={{ span: 12 }}
+              sm={{ span: 8 }}
+              className="Col-1-left"
+              style={{ background: "" }}
+            >
+              <Divider orientation="left" orientationMargin={0}>
+                Middle Name<span style={{ color: "red" }}> *</span>
+              </Divider>
+              <Form.Item
+                name="mname"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
+                rules={[
+                  {
+                    required: true,
+                    minLength: 3,
+                    maxLength: 20,
+                    message: "Please enter Middle Name",
+                  },
+                  {
+                    pattern: /^[a-zA-Z\s]*$/,
+                    message: "Please enter Valid Name",
+                  },
+                ]}
+              >
+                <Input
+                  maxLength={20}
+                  onChange={(e) => {
+                    const inputval = e.target.value;
+                    const str = e.target.value;
+                    const newVal =
+                      inputval.substring(0, 1).toUpperCase() +
+                      inputval.substring(1);
+                    const caps = str.split(" ").map(capitalize).join(" ");
+                    // setPaidBy(newVal);
+                    form.setFieldsValue({ mname: newVal, mname: caps });
+                  }}
+                  required
+                  placeholder="Enter Middle Name"
+                />
+              </Form.Item>
+            </Col>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 8 }}
               className="Col-1-left"
               style={{ background: "" }}
             >
@@ -604,6 +650,54 @@ function AddEmployee() {
                   <Option value="Human Resource">Human Resource</Option>
                   <Option value="Finance">Finance</Option>
                 </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={[24, 8]}>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 12 }}
+              className="Col-1-left"
+              style={{ background: "" }}
+            >
+              <Divider orientation="left" orientationMargin={0}>
+                Work Location<span style={{ color: "red" }}> *</span>
+              </Divider>
+              <Form.Item
+                name="location"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
+                rules={[
+                  {
+                    required: true,
+                    minLength: 3,
+                    maxLength: 20,
+                    message: "Please enter Location",
+                  },
+                  {
+                    pattern: /^[a-zA-Z\s]*$/,
+                    message: "Please enter Valid Location",
+                  },
+                ]}
+              >
+                <Input
+                  maxLength={20}
+                  onChange={(e) => {
+                    const inputval = e.target.value;
+                    const str = e.target.value;
+                    const newVal =
+                      inputval.substring(0, 1).toUpperCase() +
+                      inputval.substring(1);
+                    const caps = str.split(" ").map(capitalize).join(" ");
+                    // setPaidBy(newVal);
+                    form.setFieldsValue({ location: newVal, location: caps });
+                  }}
+                  required
+                  placeholder="Enter Location"
+                />
               </Form.Item>
             </Col>
           </Row>

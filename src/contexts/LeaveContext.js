@@ -8,6 +8,7 @@ import {
   deleteDoc,
   updateDoc,
   doc,
+  orderBy,
 } from "firebase/firestore";
 import { sendEmail } from "./EmailContext";
 
@@ -56,7 +57,7 @@ class LeaveContext {
         const q = query(leaveCollectionRef, where("approver", "==", name));
         return getDocs(q);
     };
-    approveLeave = async (id, name, comment) => {
+    approveLeave = async (id, name) => {
         const leaveDoc = doc(db, "leave", id);
         let email = await this.getEmailId(name)
         let mailOptions = {
@@ -65,12 +66,10 @@ class LeaveContext {
             subject: `Leave Request Status`,
             html: `<p>Hello,</p><br /><p> Your Leave Request is Approved</p>
             <br />
-            <p>Comment: ${comment}</p>
-            <br />
             <p>Hutech HR</p>`,
         }
         sendEmail(mailOptions)
-        return updateDoc(leaveDoc, { status: "Approved", comment: comment })
+        return updateDoc(leaveDoc, { status: "Approved"})
     }
     rejectLeave = async (id, name, comment) => {
         const leaveDoc = doc(db, "leave", id);

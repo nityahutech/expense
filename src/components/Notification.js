@@ -27,11 +27,10 @@ const Notification = ({ data }) => {
     const onApproveLeave = (record) => {
         Modal.confirm({
             title: `Are you sure, you want to approve Leave of ${record?.name || ''}!`,
-            content: <Bbb />,
             okText: "Yes",
             okType: "primary",
             onOk: () => {
-                LeaveContext.approveLeave(record.id, record.name, value)
+                LeaveContext.approveLeave(record.id, record.name)
                     .then(response => {
                         console.log(response);
                     })
@@ -80,6 +79,7 @@ const Notification = ({ data }) => {
         {
             title: 'Employee Name',
             dataIndex: 'name',
+            align: "left",
             width: 150,
             sorter: (a, b) => {
                 return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
@@ -91,21 +91,38 @@ const Notification = ({ data }) => {
         {
             title: 'Nature of Leave',
             dataIndex: 'nature',
+            align: "left",
             width: 150,
 
         },
+        // {
+        //     title: 'Slot',
+        //     dataIndex: 'slot',
+        //     width: 100,
+        //     align: "left",
+        //     sorter: (a, b) => {
+        //         return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+        //     },
+        //     sortDirections: ["ascend", "descend"],
+
+
+        // },
         {
-            title: 'Slot',
-            dataIndex: 'slot',
-            width: 150,
+            title: 'No. Of Days',
+            dataIndex: 'len',
+            width: 100,
+            align: "left",
             sorter: (a, b) => {
-                return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+                return a.len !== b.len ? (a.len < b.len ? -1 : 1) : 0;
             },
             sortDirections: ["ascend", "descend"],
+
+
         },
         {
             title: 'Reason',
             dataIndex: 'reason',
+            align: "left",
             width: 150,
         },
         {

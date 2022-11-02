@@ -172,6 +172,10 @@ const EmpAppraisalTable = (props) => {
         getAppraisalList()
     }, [])
 
+    useEffect(() => {
+        getAppraisalList()
+    }, [props])
+
     const getAppraisalList = async () => {
 
         let allData = []

@@ -7,6 +7,7 @@ import empIcon from "../../images/employees.png";
 import userIcon from "../../images/user.png";
 import logo from "../../images/logo_1.png";
 import appraisalIcon from "../../images/appraisal.png";
+import Organization from "../../images/Organization.png"
 import "./newSlidebar.css";
 import { NavLink } from "react-router-dom";
 
@@ -69,6 +70,14 @@ const NewSidebar = (props) => {
             style={{
               width: "100%",
             }}
+            icon={
+              <img
+                style={{ color: "white" }}
+                src={Organization}
+                alt="organization"
+                className="Dash"
+              />
+            }
             key="sub5"
             title="Organization"
             mode="inline"
@@ -228,6 +237,13 @@ const NewSidebar = (props) => {
             >
               Quarter Appraisal
               <NavLink to="/Appraisal/AppraisalPageHr" />
+            </Menu.Item>
+            <Menu.Item
+              className="arrow"
+              icon={<img src={dot} alt="profile" className="dot" />}
+              key="34"
+            >
+              Half Yearly Appraisal
             </Menu.Item>
           </Menu.SubMenu>
 

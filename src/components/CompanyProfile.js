@@ -38,9 +38,9 @@ function CompanyProfile() {
           <Tabs.TabPane tab="Designation" key="4">
             <Designation></Designation>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Announcement" key="5">
+          {/* <Tabs.TabPane tab="Announcement" key="5">
             <Announcement></Announcement>
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
           <Tabs.TabPane tab="Policies" key="6">
             <Policies></Policies>
           </Tabs.TabPane>
@@ -50,9 +50,9 @@ function CompanyProfile() {
           <Tabs.TabPane tab="Statutory" key="8">
             <Statutory></Statutory>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="My Plan" key="9">
+          {/* <Tabs.TabPane tab="My Plan" key="9">
             <MyPlan></MyPlan>
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
         </Tabs>
       </div>
     </>

@@ -15,3 +15,39 @@ Input[type="CompamyName"],
   border-bottom: 1px solid #ccc !important;
   outline: 0 !important;
 }
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* .personalCardDiv {
+  position: relative !important;
+  display: inline-block !important;
+} */
+
+.personalCardDiv:hover .edit {
+  display: block !important;
+}
+
+.div-discription {
+  font-weight: 600;
+  line-height: 18px;
+  color: #07182b;
+  font-size: 14px;
+  font-family: "Open Sans", sans-serif;
+}
+
+.modal-close-x:hover {
+  transform: rotate(180deg);
+  transform-origin: center;
+  transition: 0.7s;
+}
+
+.modal-close-x {
+  top: 10;
+  right: 10px;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}

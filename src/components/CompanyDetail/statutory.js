@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Input, Button, DatePicker, Select, Form } from "antd";
+import { Card, Row, Col, Input, Button, DatePicker, Select, Form, Tabs, Table } from "antd";
 import { CloseOutlined, EditFilled } from "@ant-design/icons";
 // import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { useAuth } from "../../contexts/AuthContext";
@@ -94,6 +94,99 @@ const Statutory = () => {
     // setHouseType(data.houseType?data.houseType:null)
   };
 
+  const columnone = [
+    {
+      title: 'Name',
+      dataIndex: 'Name',
+      key: 'Name',
+    },
+    {
+      title: 'EmailID',
+      dataIndex: 'EmailID',
+      key: 'EmailID',
+    },
+    {
+      title: 'DIN',
+      dataIndex: 'DIN',
+      key: 'DIN',
+    },
+    {
+      title: 'Phoneno',
+      dataIndex: 'Phoneno',
+      key: 'Phoneno',
+    },
+  ]
+  
+  const dataone = [
+    {
+      key:"1",
+      Name:"Ram",
+      EmailID:"ram@hutechsolutions.com",
+      DIN:"85462",
+      Phoneno:"654865875",
+    }
+  ]
+
+  const columntwo = [
+    {
+      title: 'Name',
+      dataIndex: 'Name',
+      key: 'Name',
+    },
+    {
+      title: 'EmailID',
+      dataIndex: 'EmailID',
+      key: 'EmailID',
+    },
+    {
+      title: 'Type',
+      dataIndex: 'Type',
+      key: 'Type',
+    },
+    {
+      title: 'Phoneno',
+      dataIndex: 'Phoneno',
+      key: 'Phoneno',
+    },
+  ]
+
+  const datatwo = [
+    {
+      key:"1",
+      Name:"Ram",
+      EmailID:"ram@hutechsolutions.com",
+      Type:"85462",
+      Phoneno:"654865875",
+    }
+  ]
+
+  const columnthree = [
+    {
+      title: 'Name',
+      dataIndex: 'Name',
+      key: 'Name',
+    },
+    {
+      title: 'EmailID',
+      dataIndex: 'EmailID',
+      key: 'EmailID',
+    },
+    {
+      title: 'Phoneno',
+      dataIndex: 'Phoneno',
+      key: 'Phoneno',
+    },
+  ]
+
+  const datathree = [
+    {
+      key:"1",
+      Name:"Ram",
+      EmailID:"ram@hutechsolutions.com",
+      Phoneno:"654865875",
+    }
+  ]
+
   return (
 
     <div
@@ -102,8 +195,6 @@ const Statutory = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-
-
       }}
     >
       <Form
@@ -351,6 +442,43 @@ const Statutory = () => {
               </Col>
             </Row>
           ) : null}
+        </Card>
+        <Card
+          style={{marginTop:'1rem'}}
+          // className='card2'
+        >
+          <Tabs defaultActiveKey="1">
+            <Tabs.TabPane tab="Directors" key="1">
+                <Card
+                className="tabcard1"
+                  title="Directors"
+                  bordered={false}
+                >
+                  <Table columns={columnone} dataSource={dataone} bordered={false} pagination={false} className='table1' />
+                </Card>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Auditors" key="2">
+                  <Card
+                        title="Auditors"
+                        bordered={false}
+                      >
+                         <Table columns={columntwo} dataSource={datatwo} bordered={false} pagination={false}/>
+                      </Card>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Company Secretary" key="3">
+                    <Card
+                        title="Company Secretary"
+                        bordered={false}
+                      >
+                         <Table columns={columnthree} dataSource={datathree} bordered={false} pagination={false}/>
+                      </Card>
+            </Tabs.TabPane>
+          </Tabs>
+        </Card>
+        <Card
+           style={{marginTop:'1rem'}}
+        >
+
         </Card>
       </Form>
     </div>

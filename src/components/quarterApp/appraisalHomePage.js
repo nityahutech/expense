@@ -62,7 +62,7 @@ const AppraisalHr = () => {
             }
 
             {
-                empRole === 'hr' && <EmpAppraisalTable listType='hr' title='Appraisal Created by Hr' />
+                empRole === 'hr' && <EmpAppraisalTable reload={!isModalOpen} listType='hr' title='Appraisal Created by Hr' />
 
             }
             <Modal

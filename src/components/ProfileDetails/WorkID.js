@@ -11,6 +11,7 @@ import {
   Popconfirm,
   Upload,
   message,
+  notification,
 } from "antd";
 import {
   DeleteOutlined,
@@ -21,53 +22,61 @@ import FormItem from "antd/es/form/FormItem";
 import "../../style/CertificationID.css"
 
 import Item from "antd/lib/list/Item";
+import { upload } from '@testing-library/user-event/dist/upload';
 import DocumentContext from "../../contexts/DocumentContext";
 import { async } from "@firebase/util";
 
 function WorkID() {
   const [allWorkDetails, setAllWorkDetails] = useState([
-  //   {
-  //   name: "",
-  //   description: "",
-  //   file: ""
-  // }
-]);
+  ]);
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [imgPreview, setImgPreview] = useState();
   const imgRef = useRef(null);
   const [deleteRow, setDeleteRow] = useState("");
   const { currentUser } = useAuth();
+  const [file, setFile] = useState("");
 
+  function handleChange(event) {
+    setFile(event.target.files[0]);
+  }
 
-  function addNewWork(values) {
-    console.log();
-    DocumentContext.addDocument({ ...values, empId: currentUser.uid, type: "work" });
+   async function addNewWork(values) {
+     try{
+    await DocumentContext.addDocument({ ...values, empId: currentUser.uid, type: "work" },file)
+    showNotification("success", "Success", "Upload Complete");
+    const timer = setTimeout(() => {
     getData();
-  };
+  }, 3500);
+  return()=>clearTimeout(timer);
+}catch{
+  showNotification("error", "Error", "Upload Failed");
+  }
+};
+const showNotification=(type,msg,desc)=>{
+  notification[type]({
+    message:msg,
+    description:desc,
+  });
+};
 
-  const deleteData = (id) => {
+  const deleteData = (id,fileName) => {
     Modal.confirm({
         title: "Are you sure, you want to delete this record?",
         okText: "Yes",
         okType: "danger",
 
         onOk: () => {
-          DocumentContext.deleteDocument(id)
+          DocumentContext.deleteDocument(id,fileName)
                 .then(response => {
-                    console.log(response);
-                    getData();
+                  showNotification("success","Success","Successfully deleted")
+                  getData();
                 })
-                .catch(error => {
-                    console.log(error.message);
-
+                .catch(error=>{
+                  showNotification("error","Error","Record not deleted "); 
                 })
         },
     });
-    
-    // const filteredData = allWorkDetails.filter((item) => item.name !== name);
-    // getData();
-    // setAllWorkDetails(filteredData);
   };
   useEffect(()=>{
     getData();
@@ -92,8 +101,8 @@ function WorkID() {
     },
     {
       title: "Uploaded File",
-      dataIndex: "file",
-      key: "file",
+      dataIndex: "upload",
+      key: "upload",
       render: (data, record) => {
         console.log("record: ", record);
         console.log("data:: ", data);
@@ -102,10 +111,10 @@ function WorkID() {
         // fReader.onload = function (event) {
         //   setImgPreview(event.target.result);
         // };
-        const hrefVal = imgRef?.current?.input?.files[0]?.name;
+        //const hrefVal = imgRef?.current?.input?.files[0]?.name;
         return (
-          <a href={hrefVal} target="_blank">
-            {hrefVal}
+          <a href={data} target="_blank">
+            {record.fileName}
           </a>
         );
       },
@@ -117,7 +126,7 @@ function WorkID() {
       render: (_, record) => {
         return (
             <DeleteOutlined
-                            onClick={() => deleteData(record.id)}
+                            onClick={() => deleteData(record.id,record.fileName)}
                         />
         );
     },
@@ -199,16 +208,22 @@ function WorkID() {
           <FormItem name="duration">
             <Input placeholder="Enter Duration" required />
           </FormItem>
-          <FormItem name="file" className="file">
-            <div className="choose">
+          <FormItem name="upload"
+          rules={[
+            {
+              required:true,
+              message:'upload file',
+            },
+          ]}
+          >
+           <div className="workId">
               <Input
                 type="file"
                 // accept="image/gif, image/jpeg, image/png"
-                id="myfile"
-                name="file"
-                ref={imgRef}
-                required
-              />
+                id="upload"
+                name="upload"
+                onChange={handleChange}
+                />
             </div>
           </FormItem>
         </Form>

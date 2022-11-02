@@ -1,6 +1,5 @@
 import React,{useState, useRef,useEffect} from 'react'
 import { useAuth } from "../../contexts/AuthContext";
-import "../../style/CertificationID.css"
 import { 
   PlusCircleOutlined,
   UploadOutlined,
@@ -138,7 +137,7 @@ function handleChange(event) {
         onOk: () => {
           DocumentContext.deleteDocument(id, fileName)
                 .then(response => {
-                  showNotification("success", "Success", "Succesfully deleted");
+                  showNotification("success", "Success", "Successfully deleted");
                   getData();
                 })
                 .catch(error => {

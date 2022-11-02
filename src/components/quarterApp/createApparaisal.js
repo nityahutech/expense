@@ -79,6 +79,7 @@ const CreateApparaisal = (props) => {
         AppraisalContext.createBatchAppraisal(appraisals)
             .then(response => {
                 console.log("appraisal Created", response);
+                
                 // getAppraisalList()
             })
             .catch(error => {

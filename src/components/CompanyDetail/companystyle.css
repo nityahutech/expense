@@ -1,0 +1,17 @@
+Input[type="CompamyName"],
+[type="brandName"],
+[type="WebsiteName"],
+[type="DomainName"],
+[type="twitter"],
+[type="linkedin"],
+[type="facebook"],
+[type="AddressName"],
+[type="AddressName2"],
+[type="City"],
+[type="State"],
+[type="Country"],
+[type="Pin"] {
+  border: 0 !important;
+  border-bottom: 1px solid #ccc !important;
+  outline: 0 !important;
+}

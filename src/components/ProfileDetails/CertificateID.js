@@ -1,7 +1,5 @@
-
-import React,{useState, useRef} from "react";
-import "../../style/CertificationID.css"
-
+import { useAuth } from "../../contexts/AuthContext";
+import React,{useState, useRef,useEffect} from "react";
 import { 
   Table,
   Form,
@@ -11,7 +9,6 @@ import {
   message, 
   Upload,
   Space,
-  Popconfirm,
 } from 'antd'
 
 import { 
@@ -21,22 +18,17 @@ import {
 } from "@ant-design/icons";
 
 import FormItem from "antd/es/form/FormItem";
+import DocumentContext from "../../contexts/DocumentContext";
 
-// ------------------------------------------------------------
-
-// ------------------------------------------------------------
-
-function CertificateID() {
-
-// ------------------------------------------------------------
- 
-  // -----------------code for useState
-  const [certificationDetails, setCertificationDetais] = useState([])
+function CertificateID() { 
+  const [certificatioDetails, setCertificationDetails] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visible,setVisible]= useState(false);
   const [uploadFile,setUploadFile]=useState([])
   const [form]=Form.useForm()
   const imgRef = useRef(null);
+  const { currentUser } = useAuth();
+
   // -----------------code for model
   const showModal = () => {
     setIsModalOpen(true);
@@ -52,13 +44,51 @@ function CertificateID() {
     setVisible(false)
     form.resetFields()
   };
+  function addNewDetail (values) {
+      console.log({values})
+       DocumentContext.addDocument({...values,empId:currentUser.uid,type:"certificate"});
+      getData();
+       setCertificationDetails([...certificatioDetails,values])
+       setUploadFile([...uploadFile,values])
+     };
+    //  const deleteData=(id)=>{
+    //  DocumentContext.deleteDocument(id)
+    //   getData();
+    //  };
+    const deleteData = (id) => {
+      Modal.confirm({
+          title: "Are you sure, you want to delete this record?",
+          okText: "Yes",
+          okType: "danger",
+  
+          onOk: () => {
+            DocumentContext.deleteDocument(id)
+                  .then(response => {
+                      console.log(response);
+                      getData();
+                  })
+                  .catch(error => {
+                      console.log(error.message);
+  
+                  })
+          },
+      });
+    };
 
-  const deleteData = (courseTitle, e) => {
-    const filteredData = certificationDetails.filter((item) => item.courseTitle !== courseTitle);
-    setCertificationDetais(filteredData);
-  };
+useEffect(()=>{
+  getData();
+},[]);
+const getData=async()=>{
+  let alldata=await DocumentContext.getDocument(currentUser.uid, "certificate");
+  console.log(alldata)
+   //setData(alldata);
+  setCertificationDetails(alldata);
+};
 
-  // -----------------code for table content
+  // const deleteData = (courseTitle, e) => {
+  //   const filteredData = certificatioDetails.filter((item) => item.courseTitle !== courseTitle);
+  //   setCertificationDetais(filteredData);
+  // };
   const columns = [
     {
       title: 'Course Title',
@@ -66,9 +96,9 @@ function CertificateID() {
       key: 'courseTitle',
     },
     {
-      title: 'Type',
-      dataIndex: 'type',
-      key: 'type',
+      title: 'Duration',
+      dataIndex: 'duration',
+      key: 'duration',
     },
     {
       title: "Uploaded File",
@@ -82,7 +112,12 @@ function CertificateID() {
         // fReader.onload = function (event) {
         //   setImgPreview(event.target.result);
         // };
-        const hrefVal = imgRef?.current?.input?.files[0]?.courseTitle;
+        // return (
+        //   <a href={imgRef.current.input.files[0].name} target="_blank">
+        //     {imgRef.current.input.files[0].name}
+        //   </a>
+        // );
+        const hrefVal = imgRef?.current?.input?.files[0]?.name;
         return (
           <a href={hrefVal} target="_blank">
             {hrefVal}
@@ -94,23 +129,15 @@ function CertificateID() {
     {
       title: "Action",
       key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <Popconfirm
-            title="Are you sure to delete this task?"
-            onConfirm={(e) => deleteData(record.courseTitle, e)}
-            // onCancel={cancel}
-            // okText="Yes"
-            // cancelText="No"
-          >
-          <Button type="link" style={{color:"#E64949"}} >
-            <DeleteOutlined />
-          </Button>
-          </Popconfirm>
-        </Space>
-      ),
+      render: (_, record) => {
+        return (
+          <DeleteOutlined
+                          onClick={() => deleteData(record.id)}
+                      />
+      );
     },
-  ]
+  },
+  ];
   // --------------------code for upload 
   // const props = {
   //   name: 'file',
@@ -139,32 +166,23 @@ function CertificateID() {
   //   },
   // };
 // ------------------------------------------------------------
-
- // -----------------function for datasourse
- function addNewDetail (values) {
-  console.log({values})
-  setCertificationDetais([...certificationDetails,values])
-  setUploadFile([...uploadFile,values])
-}
   return (
-
     <>
       <Table
         columns={columns}
-        dataSource={certificationDetails}
+        dataSource={certificatioDetails}
         pagination={false}
       >
       </Table>
-        <Button type="primary" onClick={showModal} style={{marginLeft:"10px"}}>
+        <Button type="primary" onClick={showModal}>
           <PlusCircleOutlined />
           Add
         </Button>
           <Modal
-          title="Add Certification"
+          title="Certification Details"
           open={isModalOpen}
           onOk={()=>{form.submit(); handleOk()}}
-          onCancel={handleCancel}
-          okText="Save" 
+          onCancel={handleCancel} 
         >
           <Form
           form={form}
@@ -175,49 +193,20 @@ function CertificateID() {
             onFinish={addNewDetail}
             layout="vertical"
           >
-            <FormItem 
-            name="courseTitle"
-            rules={[
-              {
-                required: true,
-                message: 'Please enter the course title',
-              },
-            ]}
-            >
-              <Input placeholder="Please enter the course title"
-              required />
+            <FormItem name="courseTitle">
+              <Input placeholder="Enter Course Name" />
             </FormItem>
-            <FormItem 
-              name="type"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please enter the course type',
-                },
-              ]}
-            >
-              <Input placeholder="Please enter the course type" 
-              required />
+            <FormItem name="duration">
+              <Input placeholder="Enter Duration" />
             </FormItem>
-            <FormItem 
-              name="upload"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please upload the file',
-                },
-              ]}
-            >
-              <div className="certificationIP">
+            <FormItem name="file">
             <Input
               type="file"
               // accept="image/gif, image/jpeg, image/png"
               id="myfile"
               name="file"
               ref={imgRef}
-              required
             />
-            </div>
             {/* <Upload {...props}>
               <Button icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload> */}

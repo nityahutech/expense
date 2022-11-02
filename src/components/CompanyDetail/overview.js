@@ -7,33 +7,47 @@ import "./companystyle.css";
 import linkedin from "../../images/linkedin.png";
 import facebook from "../../images/facebook.png";
 import twitter from "../../images/twitter.png";
-
-
+import CompanyProContext from "../../contexts/CompanyProContext";
 
 function Overview() {
-  const [editContactInfo, showEditContactInfo] = useState(false);
-  const [editContactIconInfo, showEditContactIconInfo] = useState(false);
+  const [editContactInfo, showEditCompanyInfo] = useState(false);
+  const [editContactIconInfo, showEditCompanyIconInfo] = useState(false);
   const [data, setData] = useState([]);
   const { currentUser } = useAuth();
   const [companyName, setCompanyName] = useState()
 
-
-
-  const onFinish = (value) => {
-
+  const onFinish = (values) => {
+    const valuesToservice = {
+      regCompName: values.regCompName,
+      brandName: values.brandName,
+      website: values.website,
+      domain: values.domain,
+      
+    }
+    CompanyProContext.updateCompInfo("compId001",valuesToservice);
+    getData();
+    showEditCompanyInfo(false);
   };
 
-  const onContactFinish = (values) => {
-    showEditContactInfo(false);
+  const onSocialFinish = (values) => {
+    const value={
+      linkedin: values.linkedin,
+    facebook: values.facebook,
+    twitter: values.twitter,
+    }
+    CompanyProContext.updateCompInfo("compId001",value);
+    getData();
+    showEditCompanyIconInfo(false);
   };
-
-
 
   useEffect(() => {
-
+  getData();
   }, []);
-
-
+  const getData = async () => {
+    let data = await CompanyProContext.getCompanyProfile("compId001");
+    setData(data);
+    
+  };
 
   return (
     <>
@@ -59,7 +73,7 @@ function Overview() {
             remember: true,
           }}
           autoComplete="off"
-          onFinish={onContactFinish}
+          onFinish={onFinish}
         >
           <Card
             title=" OVERVIEW"
@@ -76,7 +90,7 @@ function Overview() {
                       right: 10,
                       top: 10,
                     }}
-                    onClick={() => showEditContactInfo(!editContactInfo)}
+                    onClick={() => showEditCompanyInfo(!editContactInfo)}
                   >
                     <EditFilled />
                   </Button>
@@ -96,13 +110,12 @@ function Overview() {
                   </div>
                   {editContactInfo === false ? (
                     <div>
-                      Hutech
-                      {/* {data.mailid ? data.mailid : ""} */}
+                      {data.regCompName}
                     </div>
                   ) : (
                     <Form.Item
-                      initialValue={data ? data.mailid : null}
-                      name="companyName"
+                      initialValue={data ? data.regCompName : null}
+                      name="regCompName"
                       rules={[
                         {
                           required: true,
@@ -114,7 +127,7 @@ function Overview() {
                         },
                       ]}
                     >
-                      <Input style={{ paddingLeft: '0px' }} type='CompamyName' required placeholder="Enter Comapany Name" />
+                      <Input style={{ paddingLeft: '0px' }} required placeholder="Enter Comapany Name" />
 
                     </Form.Item>
                   )}
@@ -128,12 +141,11 @@ function Overview() {
                   </div>
                   {editContactInfo === false ? (
                     <div>
-                      Hutech
-                      {/* {data.contactEmail ? data.contactEmail : ""} */}
+                      {data.brandName}
                     </div>
                   ) : (
                     <Form.Item
-                      initialValue={data ? data.contactEmail : null}
+                      initialValue={data ? data.brandName : null}
                       name="brandName"
                       rules={[
                         {
@@ -146,7 +158,7 @@ function Overview() {
                         },
                       ]}
                     >
-                      <Input style={{ paddingLeft: '0px' }} type='brandName' required placeholder="Enter Brand Name" />
+                      <Input style={{ paddingLeft: '0px' }} required placeholder="Enter Brand Name" />
                     </Form.Item>
                   )}
                 </div>
@@ -161,12 +173,12 @@ function Overview() {
                   </div>
                   {editContactInfo === false ? (
                     <div>
-                      {/* {data.mailid ? data.mailid : ""} */}
+                      {data.website}
                     </div>
                   ) : (
                     <Form.Item
-                      initialValue={data ? data.mailid : null}
-                      name="websiteName"
+                      initialValue={data ? data.website : null}
+                      name="website"
                       rules={[
                         {
                           required: true,
@@ -178,7 +190,7 @@ function Overview() {
                         },
                       ]}
                     >
-                      <Input style={{ paddingLeft: '0px' }} type='WebsiteName' required placeholder="Enter Website Name" />
+                      <Input style={{ paddingLeft: '0px' }} required placeholder="Enter Website Name" />
 
                     </Form.Item>
                   )}
@@ -193,11 +205,11 @@ function Overview() {
                   </div>
                   {editContactInfo === false ? (
                     <div>
-                      {/* {data.mailid ? data.mailid : ""} */}
+                      {data.domain}
                     </div>
                   ) : (
                     <Form.Item
-                      initialValue={data ? data.mailid : null}
+                      initialValue={data ? data.domain : null}
                       name="domain"
                       rules={[
                         {
@@ -210,7 +222,7 @@ function Overview() {
                         },
                       ]}
                     >
-                      <Input style={{ paddingLeft: '0px' }} type='DomainName' required placeholder="Enter Domain Name" />
+                      <Input style={{ paddingLeft: '0px' }} required placeholder="Enter Domain Name" />
 
                     </Form.Item>
                   )}
@@ -229,7 +241,7 @@ function Overview() {
                 <Button
                   type="text"
                   style={{ fontSize: 15 }}
-                  onClick={() => showEditContactInfo(false)}
+                  onClick={() => showEditCompanyInfo(false)}
                 >
                   <CloseOutlined /> CANCEL
                 </Button>
@@ -271,7 +283,7 @@ function Overview() {
             remember: true,
           }}
           autoComplete="off"
-          onFinish={onContactFinish}
+          onFinish={onSocialFinish}
         >
           <Card
             title=" SOCIAL PROFILE"
@@ -289,7 +301,7 @@ function Overview() {
                       right: 10,
                       top: 10,
                     }}
-                    onClick={() => showEditContactIconInfo(!editContactIconInfo)}
+                    onClick={() => showEditCompanyIconInfo(!editContactIconInfo)}
                   >
                     <EditFilled />
                   </Button>
@@ -322,10 +334,10 @@ function Overview() {
 
                     </div>
                     {editContactIconInfo === false ? (
-                      <div>{data.mailid ? data.mailid : ""}</div>
+                      <div>{data.linkedin}</div>
                     ) : (
                       <Form.Item style={{ width: '50%' }}
-                        initialValue={data ? data.mailid : null}
+                        initialValue={data ? data.linkedin : null}
                         name="linkedin"
 
                       >
@@ -352,10 +364,10 @@ function Overview() {
 
                     </div>
                     {editContactIconInfo === false ? (
-                      <div>{data.mailid ? data.mailid : ""}</div>
+                      <div>{data.facebook}</div>
                     ) : (
                       <Form.Item style={{ width: '50%' }}
-                        initialValue={data ? data.mailid : null}
+                        initialValue={data ? data.facebook : null}
                         name="facebook"
 
                       >
@@ -382,10 +394,10 @@ function Overview() {
 
                     </div>
                     {editContactIconInfo === false ? (
-                      <div>{data.mailid ? data.mailid : ""}</div>
+                      <div>{data.twitter}</div>
                     ) : (
                       <Form.Item style={{ width: '50%' }}
-                        initialValue={data ? data.mailid : null}
+                        initialValue={data ? data.twitter : null}
                         name="twitter"
 
                       >
@@ -410,7 +422,7 @@ function Overview() {
                 <Button
                   type="text"
                   style={{ fontSize: 15 }}
-                  onClick={() => showEditContactIconInfo(false)}
+                  onClick={() => showEditCompanyIconInfo(false)}
                 >
                   <CloseOutlined /> CANCEL
                 </Button>

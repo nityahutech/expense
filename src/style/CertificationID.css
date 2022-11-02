@@ -6,3 +6,24 @@
     font-weight: 400;
 } 
 
+.choose input[type='file']::file-selector-button {
+    color:black;
+    background-color: #e1dfdf;
+    border-color:grey;
+    border-radius: 5px;
+    font-weight: 400;
+     
+}
+
+.idpage input[type='file']::file-selector-button {
+    color:black;
+    background-color: #e1dfdf;
+    border-color:grey;
+    border-radius: 5px;
+    font-weight: 400;
+} 
+
+.managerError .ant-form-item-explain-error{
+    display: none;
+}
+

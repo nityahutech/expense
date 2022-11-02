@@ -18,7 +18,8 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import FormItem from "antd/es/form/FormItem";
-import "../../style/WorkId.css";
+import "../../style/CertificationID.css"
+
 import Item from "antd/lib/list/Item";
 import DocumentContext from "../../contexts/DocumentContext";
 import { async } from "@firebase/util";

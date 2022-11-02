@@ -8,6 +8,7 @@ import {
   Form,
   Input,
   DatePicker,
+  notification,
   Spin,
   Pagination,
 } from "antd";
@@ -16,6 +17,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useAuth } from "../contexts/AuthContext";
 import AttendanceContext from "../contexts/AttendanceContext";
+import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
 const { RangePicker } = DatePicker;
 const { Content } = Layout;
 const layout = {
@@ -43,6 +45,7 @@ function AttendanceLog({ empDetails }) {
   const [key, setKey] = useState("1");
   const [loading, setLoading] = useState(false);
   const [empMonthly, setEmpMonthly] = useState([]);
+  const [holidays, setHolidays] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
@@ -89,16 +92,27 @@ function AttendanceLog({ empDetails }) {
     // },
   ];
 
+  const showNotification = (type, msg, desc) => {
+    notification[type]({
+        message: msg,
+        description: desc,
+    });
+};
+
+useEffect(() => {
+  getHolidayList()
+}, [])
+
   useEffect(() => {
     form.resetFields();
     if (empDetails.userType === "emp") {
-      setTimeout(() => {
+      if (activetab == "1") {
         setSelectemp({ id: currentUser.uid });
         getEmpDetails(currentUser.uid, [
           moment().subtract(30, "days"),
           moment(),
         ]);
-      }, 500);
+      }
     } else {
       if (activetab == "1") {
         allEmpDetails();
@@ -137,16 +151,41 @@ function AttendanceLog({ empDetails }) {
     );
   }
 
-  const onFinish = async (values) => {
+const getHolidayList = async () => {
+  let data = await CompanyHolidayContext.getAllCompanyHoliday();
+  let req = data.docs.map((doc) => {
+    if (!(doc.data().optionalHoliday))
+      return moment(doc.data().Date.seconds*1000).format("DD-MM-YYYY");
+  });
+  console.log("holidya", req)
+  setHolidays(req)
+}
+
+const setHolidayStatus = (data) => {
+  data.forEach((rec) =>{
+    console.log(rec.data)
+    if(holidays.includes(rec.date) && rec.status!="Present"){
+      rec.status = "Holiday"
+    }
+  })
+  return data;
+}
+
+  const onFinish = (values) => {
     const newData = {
       report: values?.project_details || "-",
       project: values?.project_name || "-",
     };
-    await AttendanceContext.updateAttendance(
+    AttendanceContext.updateAttendance(
       currentUser.uid,
       values.date,
       newData
-    );
+    ).then((response) => {
+      showNotification("success", "Success", "Record updated successfuly");
+    }).catch((error) => {
+      console.log("error");
+      showNotification("error", "Error", "No records exist for this day");
+    })
     setActivetab("1");
   };
 
@@ -183,15 +222,16 @@ function AttendanceLog({ empDetails }) {
     AttendanceContext.getAllAttendance(id, date).then((userdata) => {
       console.log("first");
       AttendanceContext.updateLeaves(userdata).then((final) => {
-        console.log("second", final);
-        data = final;
-        setEmpMonthly(final);
-        const timer = setTimeout(() => {
-          setLoading(false);
-          console.log("This will run after 0.75 seconds!");
-        }, 750);
-        return () => clearTimeout(timer);
-      });
+      setHolidayStatus(final)
+      console.log("second", final)
+      data = final
+      setEmpMonthly(final);
+      const timer = setTimeout(() => {
+        setLoading(false);
+        console.log('This will run after 0.75 seconds!')
+      }, 750);
+      return () => clearTimeout(timer);
+    });
       // getWithLeave(userdata);
       console.log("last");
     });
@@ -203,6 +243,7 @@ function AttendanceLog({ empDetails }) {
     AttendanceContext.getAllUsers().then((userdata) => {
       console.log("first");
       AttendanceContext.updateWithLeave(userdata).then((final) => {
+      // setHolidayStatus(final)
         console.log("second", final);
         setallEmp(final);
         setFilteredEmp(final);
@@ -218,7 +259,6 @@ function AttendanceLog({ empDetails }) {
     });
   }
 
-  function getWithLeave(userdata) {}
 
   const onReset = () => {
     form.resetFields();

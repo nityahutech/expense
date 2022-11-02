@@ -1,6 +1,6 @@
-import React,{useState, useRef} from 'react'
+import React,{useState, useRef,useEffect} from 'react'
+import { useAuth } from "../../contexts/AuthContext";
 import "../../style/CertificationID.css"
-
 import { 
   PlusCircleOutlined,
   UploadOutlined,
@@ -16,11 +16,14 @@ import {
   Input,
   Modal,
   message, 
+  notification,
   Upload,
   Space,
   Popconfirm,
 } from 'antd'
 import { upload } from '@testing-library/user-event/dist/upload';
+import DocumentContext from '../../contexts/DocumentContext';
+import { getDatasetAtEvent } from 'react-chartjs-2';
 
 // -----------------------code and data of table
 
@@ -70,19 +73,20 @@ const props = {
     format: (percent) => percent && `${parseFloat(percent.toFixed(2))}%`,
   },
 };
-
-// --------------------------------------------------------------------------------
-
 function IDTags() {
-
-// --------------------------------------------------------------------------------
-
-// ---------------------------------------usestate for adding data
 const [allIdDetails, setAllIdDetails] = useState([])
 const [visible,setVisible]= useState(false)
 const [uploadFile,setUploadFile]=useState([])
 const [form]=Form.useForm()
-const imgRef = useRef(null);
+const { currentUser } = useAuth();
+
+const [file, setFile] = useState("");
+
+// Handle file upload event and update state
+function handleChange(event) {
+    setFile(event.target.files[0]);
+}
+
 // ----------------------------------------usestate for add buttob
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -100,25 +104,59 @@ const imgRef = useRef(null);
     form.resetFields()
   };
 
-  const deleteData = (idtitle, e) => {
-    const filteredData = allIdDetails.filter((item) => item.idtitle !== idtitle);
-    setAllIdDetails(filteredData);
+  // const deleteData = (idtitle, e) => {
+  //   const filteredData = allIdDetails.filter((item) => item.idtitle !== idtitle);
+  //   setAllIdDetails(filteredData);
+  // };
+
+  async function addNewDetail (values) {
+    try {
+      await DocumentContext.addDocument({...values,empId:currentUser.uid,type:"id"}, file)
+      showNotification("success", "Success", "Upload Complete");
+      const timer = setTimeout(() => {
+        getData();
+      }, 3500);
+      return () => clearTimeout(timer);
+    } catch {
+      showNotification("error", "Error", "Upload Failed");
+    }
   };
 
-  const confirm = (e) => {
-    console.log(e);
-    message.success('Click on Yes');
-  };
-  const cancel = (e) => {
-    console.log(e);
-    message.error('Click on No');
-  };
+  const showNotification = (type, msg, desc) => {
+    notification[type]({
+        message: msg,
+        description: desc,
+    });
+};
 
-  function addNewDetail (values) {
-    console.log({values})
-    setAllIdDetails([...allIdDetails,values])
-    setUploadFile([...uploadFile,values])
-  }
+  const deleteData = (id, fileName) => {
+    Modal.confirm({
+        title: "Are you sure, you want to delete this record?",
+        okText: "Yes",
+        okType: "danger",
+
+        onOk: () => {
+          DocumentContext.deleteDocument(id, fileName)
+                .then(response => {
+                  showNotification("success", "Success", "Succesfully deleted");
+                  getData();
+                })
+                .catch(error => {
+                  showNotification("error", "Error", "Record not deleted");
+                })
+        },
+    });
+  };
+  useEffect(()=>{
+    getData();
+  },[]);
+  const getData = async () => {
+    console.log("alldata")
+    let alldata = await DocumentContext.getDocument(currentUser.uid, "id");
+    console.log(alldata)
+    setAllIdDetails(alldata);
+  };
+  
   const columns = [
     {
       title: 'ID Title',
@@ -132,8 +170,8 @@ const imgRef = useRef(null);
     },
     {
       title: "Uploaded File",
-      dataIndex: "file",
-      key: "file",
+      dataIndex: "upload",
+      key: "upload",
       render: (data, record) => {
         console.log("record: ", record);
         console.log("data:: ", data);
@@ -142,10 +180,9 @@ const imgRef = useRef(null);
         // fReader.onload = function (event) {
         //   setImgPreview(event.target.result);
         // };
-        const hrefVal = imgRef?.current?.input?.files[0]?.idtitle;
         return (
-          <a href={hrefVal} target="_blank">
-            {hrefVal}
+          <a href={data} target="_blank">
+            {record.fileName}
           </a>
         );
       },
@@ -153,22 +190,14 @@ const imgRef = useRef(null);
     {
       title: "Action",
       key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <Popconfirm
-            title="Are you sure to delete this task?"
-            onConfirm={(e) => deleteData(record.idtitle, e)}
-            // onCancel={cancel}
-            // okText="Yes"
-            // cancelText="No"
-          >
-          <Button type="link" style={{color:"#E64949"}}>
-            <DeleteOutlined />
-          </Button>
-          </Popconfirm>
-        </Space>
-      ),
+      render: (_, record) => {
+        return (
+          <DeleteOutlined
+                          onClick={() => deleteData(record.id, record.fileName)}
+                      />
+      );
     },
+  },
   ];
 
   // ------------------------------------code for upload button 
@@ -192,11 +221,9 @@ const imgRef = useRef(null);
   // };
 
 
-// --------------------------------------------------------------------- 
   return (
     <>
       <Table 
-        // dataSource={dataSource}
         columns={columns}
         pagination={false}
         dataSource={allIdDetails}
@@ -219,20 +246,6 @@ const imgRef = useRef(null);
           initialValues={{ remember: true }}
           autoComplete="off"
           onFinish={addNewDetail}
-          // fields={[
-          //   {
-          //     name: ["title"],
-          //     value: title,
-          //   },
-          //   {
-          //     name: ["description"],
-          //     value: description,
-          //   },
-          //   {
-          //     name: ["file"],
-          //     value: file,
-          //   },
-          // ]}
           layout="vertical"
         >
           <FormItem 
@@ -240,7 +253,7 @@ const imgRef = useRef(null);
           rules={[
             {
               required: true,
-              message: 'Please enter the Id title',
+              message: 'Enter the Id title',
             },
           ]}
           >
@@ -252,11 +265,11 @@ const imgRef = useRef(null);
           rules={[
             {
               required: true,
-              message: 'Please enter the Id description',
+              message: 'Enter Id Number',
             },
           ]}
           >
-            <Input placeholder="Enter Experience Description"
+            <Input placeholder="Enter Id Number"
             required />
           </FormItem>
           <FormItem 
@@ -272,10 +285,9 @@ const imgRef = useRef(null);
           <Input
               type="file"
               // accept="image/gif, image/jpeg, image/png"
-              id="myfile"
-              name="file"
-              ref={imgRef}
-              required
+              id="upload"
+              name="upload"
+              onChange={handleChange}
             />
             </div>
           {/* <Upload {...props}>

@@ -9,7 +9,9 @@ import {
     Modal,
     Tag,
     notification,
+    DatePicker,
     Spin,
+    Space
 
 } from 'antd';
 import { Button } from 'antd';
@@ -23,7 +25,7 @@ import { useAuth } from '../contexts/AuthContext'
 import Notification from "./Notification";
 import HolidayList from "./HolidayList";
 import "../style/leave.css";
-import DatePicker from "react-multi-date-picker";
+// import DatePicker from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
 
 const Leave = () => {
@@ -61,6 +63,7 @@ const Leave = () => {
     const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
     const [employeeRecord, setEmployeeRecord] = useState();
     const [repManager, setRepManager] = useState();
+    const { RangePicker } = DatePicker;
 
 
     function addNewHoliday() {
@@ -201,6 +204,7 @@ const Leave = () => {
         });
         setLeaves(d);
         getDateFormatted(d)
+        getDateSorted(d)
         setHistory(d)
         let temp = {
             'Earn Leave': empRecord.earnLeave?empRecord.earnLeave:12,
@@ -242,6 +246,8 @@ const Leave = () => {
         });
         let temp = []
         getDateFormatted(req)
+        getDateSorted(req)
+        console.log(req)
         req.forEach(dur => {
         if (dur.status == "Pending") {
                 temp.push(dur)
@@ -261,6 +267,7 @@ const Leave = () => {
             };
         });
         getDateFormatted(req)
+        getDateSorted(req)
         setAllRequests(req);
     }
 
@@ -323,13 +330,25 @@ const Leave = () => {
             sortDirections: ["ascend", "descend"],
 
         },
+        // {
+        //     title: 'Slot',
+        //     dataIndex: 'slot',
+        //     width: 100,
+        //     align: "left",
+        //     sorter: (a, b) => {
+        //         return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+        //     },
+        //     sortDirections: ["ascend", "descend"],
+
+
+        // },
         {
-            title: 'Slot',
-            dataIndex: 'slot',
+            title: 'No. Of Days',
+            dataIndex: 'len',
             width: 100,
             align: "left",
             sorter: (a, b) => {
-                return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+                return a.len !== b.len ? (a.len < b.len ? -1 : 1) : 0;
             },
             sortDirections: ["ascend", "descend"],
 
@@ -423,9 +442,18 @@ const Leave = () => {
     const getDateFormatted = ((data) => {
         data.forEach(dur => {
             let len = dur.date.length
+            dur.len = len
             dur.dateCalc = dur.date
             dur.date = len == 1 ?dur.date[0] : dur.date[0] + " to " + dur.date[len - 1]
         })
+    })
+
+    const getDateSorted = ((data) => {
+        data.sort(function(c, d) {
+            let a = moment(c.dateCalc[0],"Do MMM, YYYY")
+            let b = moment(d.dateCalc[0],"Do MMM, YYYY")
+            return a - b
+        });
     })
 
     const showNotification = (type, msg, desc) => {
@@ -530,14 +558,29 @@ const Leave = () => {
             width: 150,
 
         },
+        // {
+        //     title: 'Slot',
+        //     dataIndex: 'slot',
+        //     width: 100,
+        //     align: "left",
+        //     sorter: (a, b) => {
+        //         return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+        //     },
+        //     sortDirections: ["ascend", "descend"],
+
+
+        // },
         {
-            title: 'Slot',
-            dataIndex: 'slot',
-            width: 150,
+            title: 'No. Of Days',
+            dataIndex: 'len',
+            width: 100,
+            align: "left",
             sorter: (a, b) => {
-                return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+                return a.len !== b.len ? (a.len < b.len ? -1 : 1) : 0;
             },
             sortDirections: ["ascend", "descend"],
+
+
         },
         {
             title: 'Reason',
@@ -628,6 +671,7 @@ const Leave = () => {
             </div>)
     }
 
+    console.log(isHr)
     return (
         <>
             <Row
@@ -661,7 +705,7 @@ const Leave = () => {
                                         <div className='leave-status'>
                                             <p className='leave' Total style={{
                                                 fontWeight: '500', fontSize: '15px', margin: '0px',
-                                            }}>Total :- </p>
+                                            }}>Total</p>
                                             <p style={{
                                                 fontWeight: '500', fontSize: '15px', margin: '0px'
                                             }}>{totaldays[user]}</p>
@@ -670,7 +714,7 @@ const Leave = () => {
                                         <div className='leave-status'>
                                             <p className='leave' Total style={{
                                                 fontWeight: '500', fontSize: '15px', margin: '0px'
-                                            }}>Taken :- </p>
+                                            }}>Taken</p>
                                             <p style={{
                                                 fontWeight: '500', fontSize: '15px', margin: '0px'
                                             }}>{totaldays[user]-leavedays[user]}</p>
@@ -679,7 +723,7 @@ const Leave = () => {
                                         <div className='leave-status'>
                                             <p className='leave' Total style={{
                                                 fontWeight: '500', fontSize: '15px', margin: '0px'
-                                            }}>Remaining :- </p>
+                                            }}>Remaining</p>
                                             <p style={{
                                                 fontWeight: '500', fontSize: '15px', margin: '0px'
                                             }}>{leavedays[user]}</p>
@@ -754,31 +798,8 @@ const Leave = () => {
                     <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
                         background: 'flex', padding: '10px', width: '400px'
                     }} >
-                        {/* <Form.Item labelAlign="left"
-                                style={{ marginBottom: "20px", }}
-                                label={<label style={{ color: "black", fontWeight: '400' }}>Employee Name<span style={{ color: 'red' }}> *</span></label>}
-                                name="employeename"
-
-                            >
-                                <Input maxLength={20}
-                                    onChange={(e) => {
-                                        const inputval = e.target.value;
-                                        const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                                        form.setFieldsValue({ employeename: newVal });
-
-                                    }}
-                                    placeholder="Employee Name" />
-                            </Form.Item> */}
-
-                        {/* <Form.Item labelAlign="left"
-                                style={{ marginBottom: "20px", color: 'white', }}
-                                label={<label style={{ color: "black", fontWeight: '400' }}>Duration<span style={{ color: 'red' }}> *</span></label>}
-                                name="durationid"
-                                initialValue={'abc'}
-
-                            > */}
-                        {/* <Space direction="vertical" size={12} style={{ width: '100%' }}> */}
-                        <div class="field required" style={{ backgroundColor: '', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingBottom: '8px' }}>
+                    {/* <Space direction="vertical" size={12} style={{ width: '100%' }}> */}
+                        {/* <div class="field required" style={{ backgroundColor: '', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingBottom: '8px' }}>
                             <div className='date-pick-label' style={{ backgroundColor: '', width: '27%', textAlign: 'left' }}>
                                 <label for="id_username" style={{ fontWeight: '400', width: '100%' }}>Duration<span style={{ color: 'red' }}> *</span></label>
                             </div>
@@ -844,40 +865,9 @@ const Leave = () => {
                                     }}
                                 />
                             </div>
-                        </div>
-                        {/* <RangePicker
-
-                                        ranges={{
-                                            Today: [moment(), moment()],
-                                            "This Month": [moment().startOf("month"), moment().endOf("month")]
-                                        }}
-                                        // showTime
-                                        format="Do MMM, YYYY"
-                                        onChange={onLeaveDateChange}
-                                        disabledDate={disabledDate}
-
-                                    // dateRender={(current) => {
-                                    //     const style = {};
-
-                                    //     if (moment(current).day() === 0) {
-                                    //       style.border = "1px solid #1890ff";
-                                    //       style.borderRadius = '50%';
-                                    //       style.color = "red";
-                                    //       style.backgroundColor = "grey";
-                                    //     }
-
-                                    //     return (
-                                    //       <div className="ant-picker-cell" style={style}>
-                                    //         {current.date()}
-                                    //       </div>
-                                    //     );
-                                    //   }}
-                                    /> */}
-
+                        </div> */}
                         {/* </Space> */}
-                        {/* </Form.Item> */}
-
-                        <Form
+                     <Form
                             {...Leave}
                             labelCol={{
                                 span: 6,
@@ -897,6 +887,204 @@ const Leave = () => {
 
                         // }}
                         >
+                        {/* <Form.Item labelAlign="left"
+                                style={{ marginBottom: "20px", }}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>Employee Name<span style={{ color: 'red' }}> *</span></label>}
+                                name="employeename"
+
+                            >
+                                <Input maxLength={20}
+                                    onChange={(e) => {
+                                        const inputval = e.target.value;
+                                        const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                                        form.setFieldsValue({ employeename: newVal });
+
+                                    }}
+                                    placeholder="Employee Name" />
+                            </Form.Item> */}
+                        <Row>
+                        <Form.Item labelAlign="left"
+                                style={{ marginBottom: "20px", color: 'white', width: "50%" }}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>Start Date<span style={{ color: 'red' }}> *</span></label>}
+                                name="durationidStart"
+                                // initialValue={'abc'}
+
+                            >
+                        {/* <Space direction="vertical" size={12} style={{ width: '100%' }}> */}
+                        {/* <div class="field required" style={{ backgroundColor: '', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingBottom: '8px' }}>
+                            <div className='date-pick-label' style={{ backgroundColor: '', width: '27%', textAlign: 'left' }}>
+                                <label for="id_username" style={{ fontWeight: '400', width: '100%' }}>Duration<span style={{ color: 'red' }}> *</span></label>
+                            </div>
+                            <div className='date-picker' style={{ backgroundColor: '', width: '80%' }}>
+                                <DatePicker style={{ width: '92%', backgroundColor: '', marginBottom: '20px', marginLeft: '', height: '32px', borderRadius: '0px', border: '1px solid #d9d9d9', paddingLeft: '10px' }}
+                                    // label='Duration'
+                                    value={dateSelected}
+                                    onChange={setDateSelected}
+                                    type='input'
+                                    // range
+                                    multiple
+                                    sort
+                                    minDate={new Date()}
+                                    format={format}
+                                    plugins={[<DatePanel />]}
+
+                                    // placeholder='Pick select Leave Date'
+
+                                    mapDays={({ date }) => {
+                                        let props = {}
+                                        let isWeekend = [0, 6].includes(date.weekDay.index)
+                                        let matchingHolidayList = companyholiday.filter(item => {
+                                            return item.Date == date.toString()
+
+                                        })
+                                        let comp = date.toString()
+                                        let leavedates = leaves.filter((item) => {
+                                            if (item.dateCalc.includes(moment(comp, "D MMM, YYYY").format("Do MMM, YYYY"))) {
+                                                return true
+                                            }
+                                            else {
+                                                return false
+                                            }
+
+                                        })
+                                        if (isWeekend) return {
+                                            disabled: true,
+                                            style: { color: "#ccc" },
+
+                                        }
+                                        if (matchingHolidayList.length > 0 && matchingHolidayList[0].optionalHoliday == false) return {
+
+                                            disabled: true,
+                                            style: { color: "rgb(252, 143, 1)", backgroundColor: 'rgba(252, 143, 10, 0.2)', },
+
+                                        }
+                                        if (matchingHolidayList.length > 0 && matchingHolidayList[0].optionalHoliday == true) return {
+
+                                            disabled: true,
+                                            style: { color: "rgba(0, 119, 137, 1)", backgroundColor: "rgba(0, 119, 137, 0.2)" },
+
+                                        }
+
+                                        if (leavedates.length > 0) return {
+
+                                            disabled: true,
+                                            style: { color: "rgba(10, 91, 204, 1)", backgroundColor: "rgb(10, 91, 204, 0.2)" },
+
+                                        }
+
+
+                                        return props
+                                    }}
+                                />
+                            </div>
+                        </div> */}
+                        <DatePicker 
+                                    style={{width : "100%"}}
+                                    // ranges={{
+                                    //     Today: [moment(), moment()],
+                                    //     "This Month": [moment().startOf("month"), moment().endOf("month")]
+                                    // }}
+                                    format="Do MMM, YYYY"
+                                    // onChange={onLeaveDateChange}
+                                    // disabledDate={disabledDate}
+                                    // dateRender={(current) => {
+                                    //     const style = {};
+                                    //     if (moment(current).day() === 0) {
+                                    //         style.border = "1px solid #1890ff";
+                                    //         style.borderRadius = '50%';
+                                    //         style.color = "red";
+                                    //         style.backgroundColor = "grey";
+                                    //     }
+
+                                    //     return (
+                                    //       <div className="ant-picker-cell" style={style}>
+                                    //         {current.date()}
+                                    //       </div>
+                                    //     );
+                                    // }}
+                            />
+                        
+                        </Form.Item>
+                        <Form.Item labelAlign="left"
+                                style={{ marginBottom: "20px", color: 'white', width: "50%" }}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>End Date<span style={{ color: 'red' }}> *</span></label>}
+                                name="durationidEnd"
+                                // initialValue={'abc'}
+
+                            >
+                        
+                        <DatePicker 
+                                    style={{width : "100%"}}
+                                    // ranges={{
+                                    //     Today: [moment(), moment()],
+                                    //     "This Month": [moment().startOf("month"), moment().endOf("month")]
+                                    // }}
+                                    format="Do MMM, YYYY"
+                                    // onChange={onLeaveDateChange}
+                                    // disabledDate={disabledDate}
+                                    // dateRender={(current) => {
+                                    //     const style = {};
+                                    //     if (moment(current).day() === 0) {
+                                    //         style.border = "1px solid #1890ff";
+                                    //         style.borderRadius = '50%';
+                                    //         style.color = "red";
+                                    //         style.backgroundColor = "grey";
+                                    //     }
+
+                                    //     return (
+                                    //       <div className="ant-picker-cell" style={style}>
+                                    //         {current.date()}
+                                    //       </div>
+                                    //     );
+                                    // }}
+                            />
+                        {/* </Space> */}
+                        </Form.Item>
+                        </Row>
+                        <Row>
+                            <Form.Item labelAlign="left"
+                                name="slotStart"
+                                style={{ marginBottom: "25px", width: "50%" }}
+                                // label="Slot&nbsp;"
+                                className='div-slot'
+                                label={<label style={{ color: "black", fontWeight: '400' }}> Slot<span style={{ color: 'red' }}> *</span></label>}
+                                rules={[{ message: "Please select an option!" }]}
+                                initialValue={"Full Day"}
+
+                            >
+
+                                <Radio.Group defaultValue="Full Day"
+                                    onChange={onLeaveSlotChange}
+                                >
+                                    <Radio style={{ color: "black", fontWeight: '400' }} disabled={ dateSelected.length > 1 ? true:false } value="Half Day">Half Day</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
+
+                                </Radio.Group>
+                            </Form.Item>
+
+                            
+
+                            <Form.Item labelAlign="left"
+                                name="slotEnd"
+                                style={{ marginBottom: "25px", width: "50%" }}
+                                // label="Slot&nbsp;"
+                                className='div-slot'
+                                label={<label style={{ color: "black", fontWeight: '400' }}> Slot<span style={{ color: 'red' }}> *</span></label>}
+                                rules={[{ message: "Please select an option!" }]}
+                                initialValue={"Full Day"}
+
+                            >
+
+                                <Radio.Group defaultValue="Full Day"
+                                    onChange={onLeaveSlotChange}
+                                >
+                                    <Radio style={{ color: "black", fontWeight: '400' }} disabled={ dateSelected.length > 1 ? true:false } value="Half Day">Half Day</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
+
+                                </Radio.Group>
+                            </Form.Item>
+                            </Row>
+                       
 
 
                             <Form.Item labelAlign="left"
@@ -917,29 +1105,6 @@ const Leave = () => {
                                         ))
                                     }
                                 </Select>
-                            </Form.Item>
-
-                            <Form.Item labelAlign="left"
-                                name="slot"
-                                style={{ marginBottom: "25px", }}
-                                // label="Slot&nbsp;"
-                                className='div-slot'
-                                label={<label style={{ color: "black", fontWeight: '400' }}> Slot<span style={{ color: 'red' }}> *</span></label>}
-                                rules={[{ message: "Please select an option!" }]}
-                                initialValue={"Full Day"}
-
-                            >
-
-                                <Radio.Group defaultValue="Full Day"
-                                    onChange={onLeaveSlotChange}
-
-
-                                >
-                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
-                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Evening" >Evening</Radio>
-                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
-
-                                </Radio.Group>
                             </Form.Item>
 
                             <Form.Item labelAlign="left"
@@ -999,7 +1164,6 @@ const Leave = () => {
 
                     </Col>
                 </Row>
-
                 {
                     isMgr
                         ? <Notification data={pendingRequests} />
@@ -1038,7 +1202,6 @@ const Leave = () => {
                 </Row> :
                 null
                 }
-
                 {
                     isHr ?
                     <Row style={{

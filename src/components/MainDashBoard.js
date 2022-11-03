@@ -102,7 +102,7 @@ function MainDashBoard() {
             </Link>
           </Col>
           <Col span={8} className="hi">
-            <Link to="/DashBoard">
+            <Link to="/Expense/ExpenseList">
           <Card 
               bordered={false}
               hoverable={true}

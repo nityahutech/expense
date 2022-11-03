@@ -89,7 +89,7 @@ function AddressCust() {
                             </Row>
                         ) : null}
                         {editContactInfo === true ? (
-                            <Row gutter={[16, 16]}>
+                            <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                                 <Col span={24}>
                                     <div>
                                         <div className='div-discription'>

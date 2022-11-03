@@ -34,8 +34,8 @@ const NewSidebar = (props) => {
         breakpoint="lg"
         style={{ backgroundColor: "#05445E" }}
         collapsedWidth="0"
-        onBreakpoint={(broken) => {}}
-        onCollapse={(collapsed, type) => {}}
+        onBreakpoint={(broken) => { }}
+        onCollapse={(collapsed, type) => { }}
       >
         <Menu
           defaultOpenKeys={props.activeSubMenu || []}
@@ -48,7 +48,7 @@ const NewSidebar = (props) => {
             keyPath,
             selectedKeys,
             domEvent,
-          }) {}}
+          }) { }}
           mode="inline"
           style={{
             padding: "0px",
@@ -241,9 +241,10 @@ const NewSidebar = (props) => {
             <Menu.Item
               className="arrow"
               icon={<img src={dot} alt="profile" className="dot" />}
-              key="34"
+              key="20a"
             >
-              Half Yearly Appraisal
+              Half Year Goal
+              <NavLink to="/Appraisal/HalfYearGoalPage" />
             </Menu.Item>
           </Menu.SubMenu>
 

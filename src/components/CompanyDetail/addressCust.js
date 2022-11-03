@@ -60,6 +60,39 @@ function AddressCust() {
                                 <Col span={24}>
                                     <div>
                                         <div className='div-discription'>
+                                            Address Tittle
+                                        </div>
+                                        {editContactInfo === false ? (
+                                            <div>{data.mailid ? data.mailid : ""}
+                                            </div>
+                                        ) : (
+                                            <Form.Item
+                                                initialValue={data ? data.mailid : null}
+                                                name="Addresstittle"
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: "Please enter Address Tittle",
+                                                        type: "text",
+                                                    },
+                                                    {
+                                                        message: "Please enter Valid Address Tittle ",
+                                                    },
+                                                ]}
+                                            >
+                                                <Input style={{ paddingLeft: '0px' }} type='AddressName' required placeholder="" />
+
+                                            </Form.Item>
+                                        )}
+                                    </div>
+                                </Col>
+                            </Row>
+                        ) : null}
+                        {editContactInfo === true ? (
+                            <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
+                                <Col span={24}>
+                                    <div>
+                                        <div className='div-discription'>
                                             Address Line 1
                                         </div>
                                         {editContactInfo === false ? (

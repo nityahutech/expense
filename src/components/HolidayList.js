@@ -102,11 +102,12 @@ const LeaveList = (props) => {
             optionalHoliday: values.holidaytype === 'Official' ? false : true,
         }
         console.log(values, newHoliday)
-        let matchingHolidayList = holidaylist.filter((item) => {return item.date == newHoliday.date})
+        let matchingHolidayList = holidaylist.filter((item) => {return item.name == newHoliday.name})
         if (!(matchingHolidayList.length > 0)) {
             CompanyHolidayContext.createHoliday(newHoliday, "compId001")
                 .then(response => {
                     console.log(response);
+                    showNotification("success", "Success", "Holiday Created successfuly");
                     props.refershCalendar(newHoliday);
                 })
                 .catch(error => {
@@ -115,7 +116,8 @@ const LeaveList = (props) => {
                 })
             form.resetFields();
         } else {
-            showNotification("error", "Error", "This date is already a holiday!")
+            showNotification("error", "Error", "This holiday name already exists!")
+            form.resetFields();
         }
     };
 
@@ -141,7 +143,6 @@ const LeaveList = (props) => {
 
     const handleOk = () => {
         setIsModalOpen(false);
-        showNotification("success", "Success", "Holiday Created successfuly");
     };
 
 

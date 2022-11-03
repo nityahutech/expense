@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Input, Button, DatePicker, Select, Form, Tabs, Table } from "antd";
-import { CloseOutlined, EditFilled } from "@ant-design/icons";
+import { CloseOutlined, EditFilled, CheckOutlined, SearchOutlined, PlusCircleOutlined } from "@ant-design/icons";
 // import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { useAuth } from "../../contexts/AuthContext";
 import "./companystyle.css";
+import FormItem from "antd/es/form/FormItem";
 
 
 const { TextArea } = Input;
@@ -13,7 +14,8 @@ const { Option } = Select;
 const Statutory = () => {
 
   const [editContent, showEditContent] = useState(false);
-  const [editContactInfo, showEditContactInfo] = useState(false);
+  const [editCompanyID, showeditCompanyID] = useState(false);
+  const [editBankInfo, showEditBankInfo] = useState(false);
   const [dob, setDob] = useState("");
   const [scrs, setScrs] = useState("");
   const [lccs, setLccs] = useState("");
@@ -54,7 +56,7 @@ const Statutory = () => {
     // EmpInfoContext.updateEduDetails(currentUser.uid, values);
     //  setData(values)
     getData();
-    showEditContactInfo(false);
+    showeditCompanyID(false);
   };
   // const [addressdata, setAddressData] = useState([]);
   const onEditAddressFinish = (newvalue) => {
@@ -187,14 +189,19 @@ const Statutory = () => {
     }
   ]
 
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+
   return (
 
     <div
       className="personalCardDiv"
       style={{
         display: "flex",
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "center",
+        height:'100rem',
       }}
     >
       <Form
@@ -213,23 +220,22 @@ const Statutory = () => {
       >
         <Card
           title=" COMPANY ID"
+          style={{marginTop:"1rem",width:'800px'}}
+          // className="card1"
           extra={
             <>
-              {editContactInfo === false ? (
+              {editCompanyID === false ? (
                 <Button
                   type="text"
                   style={{ color: "#4ec0f1" }}
-                  onClick={() => showEditContactInfo(!editContactInfo)}
+                  onClick={() => showeditCompanyID(!editCompanyID)}
                 >
                   <EditFilled />
                 </Button>
               ) : null}
             </>
           }
-          style={{
-            width: 800,
-            marginTop: 10,
-          }}
+          
         >
           <Row gutter={[16, 16]}>
             <Col span={8}>
@@ -237,8 +243,8 @@ const Statutory = () => {
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   Entity Type
                 </div>
-                {editContactInfo === false ? (
-                  <div>{data.mailid ? data.mailid : ""}
+                {editCompanyID === false ? (
+                  <div>{data.mailid ? data.mailid : "-"}
                   </div>
                 ) : (
                   <Form.Item
@@ -267,8 +273,8 @@ const Statutory = () => {
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   CIN
                 </div>
-                {editContactInfo === false ? (
-                  <div>{data.contactEmail ? data.contactEmail : ""}</div>
+                {editCompanyID === false ? (
+                  <div>{data.contactEmail ? data.contactEmail : "-"}</div>
                 ) : (
                   <Form.Item
                     initialValue={data ? data.contactEmail : null}
@@ -295,8 +301,8 @@ const Statutory = () => {
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   Date of Incorporation
                 </div>
-                {editContactInfo === false ? (
-                  <div>{data.mailid ? data.mailid : ""}
+                {editCompanyID === false ? (
+                  <div>{data.mailid ? data.mailid : "-"}
                   </div>
                 ) : (
                   <Form.Item
@@ -323,15 +329,13 @@ const Statutory = () => {
 
           <Row gutter={[16, 16]} style={{ marginTop: "5%", }}>
 
-
-            {/* <Col span={8}></Col> */}
             <Col span={8}>
               <div>
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   Company PAN
                 </div>
-                {editContactInfo === false ? (
-                  <div>{data.mailid ? data.mailid : ""}
+                {editCompanyID === false ? (
+                  <div>{data.mailid ? data.mailid : "-"}
                   </div>
                 ) : (
                   <Form.Item
@@ -360,8 +364,8 @@ const Statutory = () => {
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   Company TAN
                 </div>
-                {editContactInfo === false ? (
-                  <div>{data.mailid ? data.mailid : ""}
+                {editCompanyID === false ? (
+                  <div>{data.mailid ? data.mailid : "-"}
                   </div>
                 ) : (
                   <Form.Item
@@ -390,8 +394,8 @@ const Statutory = () => {
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   GST
                 </div>
-                {editContactInfo === false ? (
-                  <div>{data.mailid ? data.mailid : ""}
+                {editCompanyID === false ? (
+                  <div>{data.mailid ? data.mailid : "-"}
                   </div>
                 ) : (
                   <Form.Item
@@ -416,7 +420,7 @@ const Statutory = () => {
             </Col>
 
           </Row>
-          {editContactInfo === true ? (
+          {editCompanyID === true ? (
             <Row
               style={{
                 display: "flex",
@@ -427,7 +431,7 @@ const Statutory = () => {
               <Button
                 type="text"
                 style={{ fontSize: 15 }}
-                onClick={() => showEditContactInfo(false)}
+                onClick={() => showeditCompanyID(false)}
               >
                 <CloseOutlined /> CANCEL
               </Button>
@@ -444,17 +448,16 @@ const Statutory = () => {
           ) : null}
         </Card>
         <Card
-          style={{marginTop:'1rem'}}
-          // className='card2'
+          style={{marginTop:"1rem",width:'800px'}}
         >
-          <Tabs defaultActiveKey="1">
+          <Tabs defaultActiveKey="1" className='tabs'>
             <Tabs.TabPane tab="Directors" key="1">
                 <Card
                 className="tabcard1"
                   title="Directors"
                   bordered={false}
                 >
-                  <Table columns={columnone} dataSource={dataone} bordered={false} pagination={false} className='table1' />
+                  <Table columns={columnone} dataSource={dataone} bordered={false} pagination={false} />
                 </Card>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Auditors" key="2">
@@ -476,9 +479,159 @@ const Statutory = () => {
           </Tabs>
         </Card>
         <Card
-           style={{marginTop:'1rem'}}
+           title="BANK ACCOUNT INFO"
+           style={{marginTop:"1rem",width:'800px'}}
         >
-
+          {editBankInfo === false ? (
+            <Button 
+              type="text"
+              onClick={() => showEditBankInfo(!editBankInfo)}
+            ><PlusCircleOutlined />Add</Button>
+          ):(
+          <Form>
+            <Row gutter={[16,48]}>
+              <Col span={24}>
+                <FormItem
+                  name="accountitle"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter account title',
+                    },
+                  ]}
+                >
+                  <Input
+                  placeholder="Account Title"
+                  bordered={false}
+                  style={{borderBottom: '1px solid #ccc '}} />
+                </FormItem>
+              </Col>
+              <Col span={24}>
+                <Button type='primary'> <SearchOutlined /> FIND MY BRANCH</Button>
+              </Col>
+              <Col span={8}>
+                <FormItem
+                  name="bankname"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter bank name',
+                    },
+                  ]}
+                >
+                  <Input 
+                  placeholder="Bank Name"
+                  bordered={false}
+                  style={{borderBottom: '1px solid #ccc '}} />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem
+                  name="city"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter city',
+                    },
+                  ]}
+                >
+                  <Input
+                  placeholder="City"
+                  bordered={false}
+                  style={{borderBottom: '1px solid #ccc '}} />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem
+                  name="branchname"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter branch name',
+                    },
+                  ]}
+                >
+                  <Input
+                  placeholder="Branch Name"
+                  bordered={false}
+                  style={{borderBottom: '1px solid #ccc '}} />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem
+                  name="ifsccode"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter the IFSC code',
+                    },
+                  ]}
+                >
+                  <Input
+                  placeholder="IFSC Code"
+                  bordered={false}
+                  style={{borderBottom: '1px solid #ccc '}} />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem
+                  name="accounttype"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please select account type',
+                    },
+                  ]}
+                >
+                  <Select
+                    defaultValue="Account Type"
+                    style={{
+                      width: '100%',
+                      borderBottom: '1px solid #ccc ',
+                    }}
+                    bordered={false}
+                    onChange={handleChange}
+                    options={[
+                      {
+                        value: 'Account Type',
+                        label: 'Account Type',
+                      },
+                      {
+                        value: 'Current Account',
+                        label: 'Current Account',
+                      },
+                      {
+                        value: 'Fixed Deposit',
+                        label: 'Fixed Deposit',
+                      },
+                    ]}
+                  />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem
+                  name="accountnumber"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter account number',
+                    },
+                  ]}
+                >
+                  <Input
+                  placeholder="Account Number"
+                  bordered={false}
+                  style={{borderBottom: '1px solid #ccc '}} />
+                </FormItem>
+              </Col>
+              <Col span={24} style={{display:'flex', justifyContent:'flex-end'}}>
+                <FormItem>
+                  <Button type='text' style={{marginRight:'1rem'}} onClick={() => showEditBankInfo(false)}> <CloseOutlined />CANCLE</Button>
+                  <Button type='primary' htmlType="submit"> <CheckOutlined />SAVE</Button>
+                </FormItem>
+              </Col>
+            </Row>
+          </Form>)}
         </Card>
       </Form>
     </div>

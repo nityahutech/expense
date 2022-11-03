@@ -26,10 +26,11 @@ import Notification from "./Notification";
 import HolidayList from "./HolidayList";
 import "../style/leave.css";
 // import DatePicker from "react-multi-date-picker";
-import DatePanel from "react-multi-date-picker/plugins/date_panel";
+// import DatePanel from "react-multi-date-picker/plugins/date_panel";
 
 const Leave = () => {
     const [dateSelected, setDateSelected] = useState([]);
+    const [dateStart, setDateStart] = useState([]);
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const [leaves, setLeaves] = useState([]);
@@ -43,7 +44,7 @@ const Leave = () => {
     const [isHr, setIsHr] = useState(sessionStorage.getItem("role") === "hr" ? true : false);
     const [isMgr, setIsMgr] = useState(false);
     const { currentUser } = useAuth();
-    const format = "D MMM, YYYY"
+    const format = "Do MMM, YYYY"
     const [leavedays, setLeaveDays] = useState({
         'Earn Leave': 0,
         'Sick Leave': 0,
@@ -58,7 +59,8 @@ const Leave = () => {
     })
     const [leavetype, setLeavetype] = useState()
     const [validleaverequest, setValidleaverequest] = useState('false')
-    const [leaveslot, setLeaveslot] = useState(null)
+    const [startSlot, setStartSlot] = useState(null)
+    const [endSlot, setEndSlot] = useState(null)
     const [companyholiday, setCompanyholiday] = useState([])
     const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
     const [employeeRecord, setEmployeeRecord] = useState();
@@ -72,11 +74,10 @@ const Leave = () => {
 
     const getHoliday = async () => {
 
-        const allData = await CompanyHolidayContext.getAllCompanyHoliday();
+        const allData = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
             let d = allData.docs.map((doc) => {
                 return {
                     ...doc.data(),
-                    Date: moment(doc.data()["Date"].seconds * 1000).format(format),
                     id: doc.id,
                 };
             });
@@ -86,11 +87,11 @@ const Leave = () => {
     const getListData = (value) => {
         let listData;
         let currdate = value.format(("Do MMM, YYYY"));
-        let companyHolidayRecord = companyholiday.filter(record => record.Date == value.format("D MMM, YYYY"));
+        let companyHolidayRecord = companyholiday.filter(record => record.date == currdate);
         if (companyHolidayRecord.length > 0) {
             listData = [
                 {
-                    type: companyHolidayRecord[0].Name,
+                    type: companyHolidayRecord[0].name,
                     isOptional: companyHolidayRecord[0]?.optionalHoliday
                 }
             ]
@@ -115,43 +116,29 @@ const Leave = () => {
         }
     };
 
-    const onFinish = values => {
+    const onFinish = (values) => {
+        console.log(values, dateSelected)
+       
         if (values.leaveNature === "Optional Leave" || dateSelected.length == 1) {
 
-            let optionalHolidays = companyholiday.filter((item) => {
-                if (item.optionalHoliday == true) {
-                    return true
-                }
-                else {
-                    return false
-                }
-            })
-            let matchOptionalHoliday = optionalHolidays.filter((item) => {
-                if (item.Date == dateSelected[0].format(format)) {
-                    return true
-                }
-                else {
-                    return false
-                }
-            })
+            let optionalHolidays = companyholiday.filter((item) => {return item.optionalHoliday})
+            let matchOptionalHoliday = optionalHolidays.filter((item) => {return item.date == dateSelected[0].format(format)})
             if (matchOptionalHoliday.length > 0 && values.leaveNature != "Optional Leave") {
-
-
                 showNotification("error", "Error", "Optional Leave Can only be apply on Optional Holiday");
                 return
             }
-
+            console.log(optionalHolidays, matchOptionalHoliday)
         }
 
-        let array = []
-        dateSelected.map((date, index) => {
-            let temp = date.format("DD-MM-YYYY")
-            array.push(moment(temp, "DD-MM-YYYY").format("Do MMM, YYYY"))
-        })
-        setDateSelected(array)
+        // let array = []
+        // dateSelected.map((date, index) => {
+        //     let temp = date.format("DD-MM-YYYY")
+        //     array.push(moment(temp, "DD-MM-YYYY").format("Do MMM, YYYY"))
+        // })
+        // setDateSelected(array)
         let matchingdates = leaves.filter((item) => {
-            for (let i = 0; i < array.length; i++) {
-                if (item.dateCalc.includes(array[i])) {
+            for (let i = 0; i < dateSelected.length; i++) {
+                if (item.dateCalc.includes(dateSelected[i])) {
                     return true
                 }
             }
@@ -160,31 +147,32 @@ const Leave = () => {
 
         })
         if (matchingdates.length > 0) {
-            showNotification("error", "Error", "Allready apply Leave on one of the day");
+            showNotification("error", "Error", "Leave already applied on one of the days");
             return
         }
         let newLeave = {
             empId: employeeRecord.empId,
             approver: values.approver,
-            date: array,
+            date: dateSelected,
             name: currentUser.displayName,
             nature: values.leaveNature,
-            slot: values.slot,
+            slotStart: values.slotStart,
+            slotEnd: values.slotEnd,
             reason: values.reason,
             status: 'Pending'
         }
+        console.log(newLeave)
+        // LeaveContext.createLeave(newLeave)
+        //     .then(response => {
+        //         getData();
+        //         showNotification("success", "Success", "Leave apply successfuly");
 
-        LeaveContext.createLeave(newLeave)
-            .then(response => {
-                getData();
-                showNotification("success", "Success", "Leave apply successfuly");
+        //     })
+        //     .catch(error => {
+        //         console.log(error.message);
 
-            })
-            .catch(error => {
-                console.log(error.message);
-
-            })
-        form.resetFields();
+        //     })
+        // form.resetFields();
     };
 
 
@@ -293,9 +281,7 @@ const Leave = () => {
 
     const onReset = () => {
         form.resetFields()
-        setLeavetype(null)
         setValidleaverequest('false')
-        setLeaveslot(null)
     }
     const { Option } = Select;
 
@@ -464,9 +450,10 @@ const Leave = () => {
     };
 
     const validateLeaveRequest = (noOfDays, leavetype) => {
-        if (leavetype != null && dateSelected.length > 0) {
-            if (leavedays[leavetype] < noOfDays) {
-                showNotification("error", "Error", "Leave requested is more than available leave, will be unpaid");
+        console.log(dateSelected.length-noOfDays)
+        if (leavetype != null && dateSelected.length-noOfDays > 0) {
+            if (leavedays[leavetype] < dateSelected.length-noOfDays) {
+                showNotification("error", "Error", "Leave requested is more than available leave");
             }
             else {
                 setValidleaverequest('true')
@@ -476,21 +463,42 @@ const Leave = () => {
 
     const onLeaveNatureChange = (value) => {
         setLeavetype(value)
-        let noOfDays = dateSelected.length
-        if (dateSelected.length == 1 && leaveslot != 'Full Day') {
+        let noOfDays;
+        if (endSlot != 'Full Day') {
             noOfDays = 0.5
+        }
+        if (startSlot != 'Full Day') {
+            noOfDays += 0.5
         }
         validateLeaveRequest(noOfDays, value)
     };
 
-    const onLeaveSlotChange = (e) => {
-        setLeaveslot(e.target.value);
-        let noOfDays = dateSelected.length
-        if (dateSelected.length == 1 && leaveslot != 'Full Day') {
-            noOfDays = 0.5
+    // const onLeaveSlotChange = (e) => {
+    //     setLeaveslot(e.target.value);
+    //     let noOfDays = dateSelected.length
+    //     if (dateSelected.length == 1 && leaveslot != 'Full Day') {
+    //         noOfDays = 0.5
+    //     }
+    //     validateLeaveRequest(noOfDays, leavetype)
+    // };
+
+    const onLeaveDateChange = (e) => {
+        console.log(e, dateStart)
+        let holidayList = companyholiday.map((hol) => {return (!hol.optionalHoliday)? hol.date: null})
+        console.log(companyholiday, holidayList)
+        let temp = [];
+        for (let i = dateStart.clone(); i.isSameOrBefore(e); i = i.clone().add(1, 'days')){
+            let day = i.format("dddd")
+            if (!(day == "Saturday" || day == "Sunday")) {
+                console.log(holidayList.includes(i.format("Do MMM, YYYY")))
+                if (!(holidayList.includes(i.format("Do MMM, YYYY")))) {
+                    temp.push(i.format("Do MMM, YYYY"))
+                }
+            }
         }
-        validateLeaveRequest(noOfDays, leavetype)
-    };
+        console.log(temp)
+        setDateSelected(temp)
+    }
 
     const [date, setDate] = useState(moment());
     const monthCellRender = (value) => {
@@ -904,11 +912,9 @@ const Leave = () => {
                             </Form.Item> */}
                         <Row>
                         <Form.Item labelAlign="left"
-                                style={{ marginBottom: "20px", color: 'white', width: "50%" }}
-                                label={<label style={{ color: "black", fontWeight: '400' }}>Start Date<span style={{ color: 'red' }}> *</span></label>}
-                                name="durationidStart"
-                                // initialValue={'abc'}
-
+                                style={{ marginBottom: "20px", color: 'white', width: "50%", minWidth: '70px'  }}
+                                label={<label style={{ color: "black", fontWeight: '400'}}>Start Date<span style={{ color: 'red' }}> *</span></label>}
+                                name="dateStart"
                             >
                         {/* <Space direction="vertical" size={12} style={{ width: '100%' }}> */}
                         {/* <div class="field required" style={{ backgroundColor: '', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingBottom: '8px' }}>
@@ -979,14 +985,14 @@ const Leave = () => {
                             </div>
                         </div> */}
                         <DatePicker 
-                                    style={{width : "100%"}}
+                                style={{width : "100%"}}
                                     // ranges={{
                                     //     Today: [moment(), moment()],
                                     //     "This Month": [moment().startOf("month"), moment().endOf("month")]
                                     // }}
-                                    format="Do MMM, YYYY"
-                                    // onChange={onLeaveDateChange}
-                                    // disabledDate={disabledDate}
+                                format="Do MMM, YYYY"
+                                onChange={setDateStart}
+                                disabledDate={disabledDate}
                                     // dateRender={(current) => {
                                     //     const style = {};
                                     //     if (moment(current).day() === 0) {
@@ -1006,20 +1012,45 @@ const Leave = () => {
                         
                         </Form.Item>
                         <Form.Item labelAlign="left"
+                                name="slotStart"
+                                style={{ marginBottom: "25px", width: "45%" }}
+                                // label="Slot&nbsp;"
+                                className='div-slot'
+                                label={<label style={{ color: "black", fontWeight: '400' }}>Start Slot<span style={{ color: 'red' }}> *</span></label>}
+                                rules={[{ message: "Please select an option!" }]}
+                                initialValue={"Full Day"}
+                                allowClear
+                            >
+                                <Select required defaultValue={"Full Day"}
+                                    style={{width : "100%"}}
+                                    >
+                                    <Option value="Full Day">Full Day</Option>
+                                    <Option value="Half Day">Half Day</Option>
+
+                                </Select>
+                                {/* <Radio.Group defaultValue="Full Day"
+                                    onChange={onLeaveSlotChange}
+                                >
+                                    <Radio style={{ color: "black", fontWeight: '400' }} disabled={ dateSelected.length > 1 ? true:false } value="Half Day">Half Day</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
+
+                                </Radio.Group> */}
+                            </Form.Item>
+                        
+                        </Row>
+                        <Row>
+                        <Form.Item labelAlign="left"
                                 style={{ marginBottom: "20px", color: 'white', width: "50%" }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>End Date<span style={{ color: 'red' }}> *</span></label>}
-                                name="durationidEnd"
+                                name="dateEnd"
                                 // initialValue={'abc'}
 
                             >
                         
                         <DatePicker 
-                                    style={{width : "100%"}}
-                                    // ranges={{
-                                    //     Today: [moment(), moment()],
-                                    //     "This Month": [moment().startOf("month"), moment().endOf("month")]
-                                    // }}
-                                    format="Do MMM, YYYY"
+                            style={{width : "100%"}}
+                            format="Do MMM, YYYY"
+                            onChange={onLeaveDateChange}
                                     // onChange={onLeaveDateChange}
                                     // disabledDate={disabledDate}
                                     // dateRender={(current) => {
@@ -1040,56 +1071,41 @@ const Leave = () => {
                             />
                         {/* </Space> */}
                         </Form.Item>
-                        </Row>
-                        <Row>
-                            <Form.Item labelAlign="left"
-                                name="slotStart"
-                                style={{ marginBottom: "25px", width: "50%" }}
-                                // label="Slot&nbsp;"
-                                className='div-slot'
-                                label={<label style={{ color: "black", fontWeight: '400' }}> Slot<span style={{ color: 'red' }}> *</span></label>}
-                                rules={[{ message: "Please select an option!" }]}
-                                initialValue={"Full Day"}
-
-                            >
-
-                                <Radio.Group defaultValue="Full Day"
-                                    onChange={onLeaveSlotChange}
-                                >
-                                    <Radio style={{ color: "black", fontWeight: '400' }} disabled={ dateSelected.length > 1 ? true:false } value="Half Day">Half Day</Radio>
-                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
-
-                                </Radio.Group>
-                            </Form.Item>
+                            
 
                             
 
                             <Form.Item labelAlign="left"
                                 name="slotEnd"
-                                style={{ marginBottom: "25px", width: "50%" }}
+                                style={{ marginBottom: "25px", width: "45%" }}
                                 // label="Slot&nbsp;"
                                 className='div-slot'
-                                label={<label style={{ color: "black", fontWeight: '400' }}> Slot<span style={{ color: 'red' }}> *</span></label>}
+                                label={<label style={{ color: "black", fontWeight: '400' }}>End Slot<span style={{ color: 'red' }}> *</span></label>}
                                 rules={[{ message: "Please select an option!" }]}
                                 initialValue={"Full Day"}
-
+                                allowClear
                             >
+                                <Select required defaultValue={"Full Day"}
+                                    style={{width : "100%"}}
+                                    >
+                                    <Option value="Full Day">Full Day</Option>
+                                    <Option value="Half Day">Half Day</Option>
 
-                                <Radio.Group defaultValue="Full Day"
+                                </Select>
+
+                                {/* <Radio.Group defaultValue="Full Day"
                                     onChange={onLeaveSlotChange}
                                 >
                                     <Radio style={{ color: "black", fontWeight: '400' }} disabled={ dateSelected.length > 1 ? true:false } value="Half Day">Half Day</Radio>
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
 
-                                </Radio.Group>
+                                </Radio.Group> */}
                             </Form.Item>
                             </Row>
                        
-
-
                             <Form.Item labelAlign="left"
                                 name="leaveNature"
-                                style={{ marginBottom: "25px", }}
+                                style={{ marginBottom: "25px" }}
                                 label={<label style={{ color: "black", fontWeight: '400' }}>Nature of Leave<span style={{ color: 'red' }}> *</span></label>}
 
                             >
@@ -1104,6 +1120,7 @@ const Leave = () => {
                                             </Option>
                                         ))
                                     }
+                                    <Option>Loss of Pay</Option>
                                 </Select>
                             </Form.Item>
 

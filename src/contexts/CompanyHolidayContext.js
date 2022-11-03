@@ -15,21 +15,21 @@ import {
 } from "firebase/firestore";
 
 
-const companyholidayCollectionRef = collection(db, "companyholiday");
+const companyholidayCollectionRef = (compId) => {return collection(db, `companyprofile/${compId}/companyholiday`);}
 
 class CompanyHolidayContext {
-    getAllCompanyHoliday = () => {
-        const q = query(companyholidayCollectionRef, orderBy("Date", "asc"));
+    getAllCompanyHoliday = (compId) => {
+        const q = query(companyholidayCollectionRef(compId), orderBy("date", "asc"));
         // console.log(q);
         return getDocs(q);
     };
     
-    createHoliday = (newHoliday) => {
-        return addDoc(companyholidayCollectionRef, newHoliday);
+    createHoliday = (newHoliday, compId) => {
+        return addDoc(companyholidayCollectionRef(compId), newHoliday);
     };
 
-    deleteHoliday = (id) => {
-        const newHoliday = doc(db, "companyholiday", id);
+    deleteHoliday = (id, compId) => {
+        const newHoliday = doc(db, `companyprofile/${compId}/companyholiday`, id);
         return deleteDoc(newHoliday);
     };
 }

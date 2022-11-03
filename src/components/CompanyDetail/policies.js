@@ -12,16 +12,14 @@ import {
   Card
 } from "antd";
 import {
-  PlusCircleOutlined,
+  PlusCircleOutlined, DeleteOutlined
 } from "@ant-design/icons";
 import FormItem from "antd/es/form/FormItem";
-import {upload } from '@testing-library/user-event/dist/upload';
+import { upload } from '@testing-library/user-event/dist/upload';
 import PolicyContext from '../../contexts/PolicyContext';
 
 const Policies = () => {
-  const [policy, setPolicy] = useState([
-
-  ]);
+  const [policy, setPolicy] = useState([]);
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const imgRef = useRef(null);
@@ -30,93 +28,136 @@ const Policies = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [file, setFile] = useState("");
 
+  const columns = [
+    {
+      title: 'Policy Title',
+      dataIndex: 'title',
+      key: 'idtitle',
+    },
+    {
+      title: 'Policy Description',
+      dataIndex: 'description',
+      key: 'iddescription ',
+    },
+    {
+      title: "Uploaded File",
+      dataIndex: "upload",
+      key: "upload",
+      render: (data, record) => {
+        console.log("record: ", record);
+        console.log("data:: ", data);
+        // var fReader = new FileReader();
+        // fReader.readAsDataURL(imgRef.current.input.files[0]);
+        // fReader.onload = function (event) {
+        //   setImgPreview(event.target.result);
+        // };
+        return (
+          <a href={data} target="_blank">
+            {record.fileName}
+          </a>
+        );
+      },
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => {
+        return (
+          <DeleteOutlined
+            onClick={() => deleteData(record.id, record.fileName)}
+          />
+        );
+      },
+    },
+  ];
+
   function handleChange(event) {
     setFile(event.target.files[0]);
   }
   async function addPolicy(values) {
-    console.log(file,values)
-    try{
-   await PolicyContext.createPolicy("compId001",values,file)
-   showNotification("success", "Success", "Upload Complete");
-   const timer = setTimeout(() => {
-   getData();
- }, 3500);
- return()=>clearTimeout(timer);
-}catch{
- showNotification("error", "Error", "Upload Failed");
- }
-};
-const showNotification=(type,msg,desc)=>{
- notification[type]({
-   message:msg,
-   description:desc,
- });
-};
+    console.log(file, values)
+    try {
+      await PolicyContext.createPolicy("compId001", values, file)
+      showNotification("success", "Success", "Upload Complete");
+      const timer = setTimeout(() => {
+        getData();
+      }, 3500);
+      return () => clearTimeout(timer);
+    } catch {
+      showNotification("error", "Error", "Upload Failed");
+    }
+  };
+  const showNotification = (type, msg, desc) => {
+    notification[type]({
+      message: msg,
+      description: desc,
+    });
+  };
 
-//   async function updatePolicy(values) {
-//     console.log(values,file)
-//     try{
-//    await PolicyContext.updateCompInfo("compID001",values,file)
-//    showNotification("success", "Success", "Upload Complete");
-//    const timer = setTimeout(() => {
-//    getData();
-//   }, 3500);
-//   return()=>clearTimeout(timer);
-//   }catch{
-//   showNotification("error", "Error", "Upload Failed");
-//   }
-// };
-// const showNotification=(type,msg,desc)=>{
-//  notification[type]({
-//    message:msg,
-//    description:desc,
-//  });
-// };
+  //   async function updatePolicy(values) {
+  //     console.log(values,file)
+  //     try{
+  //    await PolicyContext.updateCompInfo("compID001",values,file)
+  //    showNotification("success", "Success", "Upload Complete");
+  //    const timer = setTimeout(() => {
+  //    getData();
+  //   }, 3500);
+  //   return()=>clearTimeout(timer);
+  //   }catch{
+  //   showNotification("error", "Error", "Upload Failed");
+  //   }
+  // };
+  // const showNotification=(type,msg,desc)=>{
+  //  notification[type]({
+  //    message:msg,
+  //    description:desc,
+  //  });
+  // };
 
-const displayPolicy = () => {
-  return (
-    policy.forEach((pol) => {
-      Object.keys(pol).map(u =>{
-        <p>{u}: {policy.u}</p>
-        {console.log(u,policy)}
+  const displayPolicy = () => {
+    return (
+      policy.forEach((pol) => {
+        Object.keys(pol).map(u => {
+          <p>{u}: {policy.u}</p>
+          { console.log(u, policy) }
+        })
       })
-    })
-    // <Table dataSource={policy}></Table>
-    // Object.keys(policy).map(u => {
-    //   <p>{u}: {policy.u}</p>
-    //   {console.log(u,policy)}
-    // })
-  )
-}
+      // <Table dataSource={policy}></Table>
+      // Object.keys(policy).map(u => {
+      //   <p>{u}: {policy.u}</p>
+      //   {console.log(u,policy)}
+      // })
+    )
+  }
 
-const deleteData = (id,fileName) => {
-  Modal.confirm({
+  const deleteData = (id, fileName) => {
+    Modal.confirm({
       title: "Are you sure, you want to delete this record?",
       okText: "Yes",
       okType: "danger",
 
       onOk: () => {
-        PolicyContext.deletePolicy(id,fileName)
-              .then(response => {
-                showNotification("success","Success","Successfully deleted")
-                getData();
-              })
-              .catch(error=>{
-                showNotification("error","Error","Record not deleted "); 
-              })
+        PolicyContext.deletePolicy(id, fileName)
+          .then(response => {
+            showNotification("success", "Success", "Successfully deleted")
+            getData();
+          })
+          .catch(error => {
+            showNotification("error", "Error", "Record not deleted ");
+          })
       },
-  });
-};
+    });
+  };
 
-useEffect(()=>{
-  getData();
-},[]);
-const getData=async()=>{
-  let alldata=await PolicyContext.getPolicy("compId001");
-  console.log(alldata)
-  // setData(alldata);
-  setPolicy(alldata);
-};
+  useEffect(() => {
+    getData();
+  }, []);
+  const getData = async () => {
+    let alldata = await PolicyContext.getPolicy("compId001");
+    console.log(alldata)
+    // setData(alldata);
+    setPolicy(alldata);
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -136,69 +177,30 @@ const getData=async()=>{
 
   return (
     <>
-
       <div
-        className="personalCardDiv"
+        className="education"
         style={{
+          margin: "10px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginBottom: '10px'
+          width: "100%",
         }}
       >
-        <Form
-          // form={form}
-          labelcol={{
-            span: 4,
-          }}
-          wrappercol={{
-            span: 14,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          autoComplete="off"
-        >
-          <div className="site-card-border-less-wrapper">
-            <Card
-              title="COMPANY POLICIES"
-              bordered={false}
-              style={{
-                width: 800,
-              }}
-            >
-              {/* {
-                policy.forEach((pol) => {
-                  Object.keys(pol).map(u =>(
-                    <p>{u}: {policy.u}</p>
-                  ))
-                  })
-            } */}
-            {/* {JSON.stringify(policy)} */}
-
-{
-                policy.map((pol) => {
-                  return <>
-                  <h3>POLICY</h3>
-                  {
-                     Object.keys(pol).map((k)=><h6>{k}: {pol[k]}</h6>)
-                  }
-                  </>
-                } )
-            }
-              {/* <p>{policy? {
-                
-              }
-                         : "No policies uploaded yet."}</p> */}
-              <Divider ></Divider>
-              <Button type="primary" onClick={showModal} style={{ marginLeft: "10px" }}>
-                <PlusCircleOutlined />
-                Add
-              </Button>
-            </Card>
-          </div>
-
-
+        <Card title='Company Policies'
+          bordered={false}
+          style={{
+            width: 800,
+          }}>
+          <Table
+            columns={columns}
+            pagination={false}
+            dataSource={policy}
+          />
+          <Button type="primary" onClick={showModal} style={{ marginLeft: "10px" }}>
+            <PlusCircleOutlined />
+            Add
+          </Button>
           <Modal
             title="Add Policy"
             open={isModalOpen}
@@ -248,7 +250,7 @@ const getData=async()=>{
                   },
                 ]}
               >
-                <Input style={{ paddingLeft: '0px' }}  required placeholder="Enter Policy Name" />
+                <Input style={{ paddingLeft: '0px' }} required placeholder="Enter Policy Name" />
               </Form.Item>
 
               <div className='div-discription'>
@@ -271,13 +273,13 @@ const getData=async()=>{
                 <Input style={{ paddingLeft: '0px' }} required placeholder="Enter Description" />
               </Form.Item>
 
-              <FormItem name="upload" 
-              rules={[
-                {
-                  required:true,
-                  message:'upload file',
-                },
-              ]}
+              <FormItem name="upload"
+                rules={[
+                  {
+                    required: true,
+                    message: 'upload file',
+                  },
+                ]}
               >
                 <div className="choose">
                   <Input
@@ -285,15 +287,16 @@ const getData=async()=>{
                     id="upload"
                     name="upload"
                     onChange={handleChange}
-                    // ref={imgRef}
-                    // required
+                  // ref={imgRef}
+                  // required
                   />
                 </div>
               </FormItem>
 
             </Form>
           </Modal>
-        </Form>
+
+        </Card>
       </div>
     </>
   )

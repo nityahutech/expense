@@ -31,6 +31,7 @@ import "../style/leave.css";
 const Leave = () => {
     const [dateSelected, setDateSelected] = useState([]);
     const [dateStart, setDateStart] = useState([]);
+    const [dateEnd, setDateEnd] = useState([]);
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const [leaves, setLeaves] = useState([]);
@@ -118,6 +119,13 @@ const Leave = () => {
 
     const onFinish = (values) => {
         console.log(values, dateSelected)
+        setEndSlot(values.slotEnd)
+        setDateStart(values.dateStart)
+        setDateEnd(values.dateEnd)
+        setStartSlot(values.slotStart)
+        setLeavetype(values.leaveNature)
+
+        onLeaveNatureChange(values.leaveNature)
        
         if (values.leaveNature === "Optional Leave" || dateSelected.length == 1) {
 
@@ -161,18 +169,22 @@ const Leave = () => {
             reason: values.reason,
             status: 'Pending'
         }
-        console.log(newLeave)
-        // LeaveContext.createLeave(newLeave)
-        //     .then(response => {
-        //         getData();
-        //         showNotification("success", "Success", "Leave apply successfuly");
+        if(validleaverequest) {
+            console.log(newLeave)
+            // LeaveContext.createLeave(newLeave)
+            // .then(response => {
+            //     getData();
+                showNotification("success", "Success", "Leave apply successfuly");
 
-        //     })
-        //     .catch(error => {
-        //         console.log(error.message);
+            // })
+            // .catch(error => {
+            //     console.log(error.message);
 
-        //     })
-        // form.resetFields();
+            // })
+            // form.resetFields();
+        } else {
+            showNotification("error", "Error", "Leave requested is more than available leave");
+        }
     };
 
 
@@ -450,13 +462,14 @@ const Leave = () => {
     };
 
     const validateLeaveRequest = (noOfDays, leavetype) => {
-        console.log(dateSelected.length-noOfDays)
+        console.log(dateSelected.length,noOfDays,dateSelected.length-noOfDays)
         if (leavetype != null && dateSelected.length-noOfDays > 0) {
             if (leavedays[leavetype] < dateSelected.length-noOfDays) {
                 showNotification("error", "Error", "Leave requested is more than available leave");
+                setValidleaverequest(false)
             }
             else {
-                setValidleaverequest('true')
+                setValidleaverequest(true)
             }
         }
     }
@@ -483,7 +496,8 @@ const Leave = () => {
     // };
 
     const onLeaveDateChange = (e) => {
-        console.log(e, dateStart)
+        console.log(e, dateStart, duration)
+        setDateEnd(e)
         let holidayList = companyholiday.map((hol) => {return (!hol.optionalHoliday)? hol.date: null})
         console.log(companyholiday, holidayList)
         let temp = [];
@@ -491,7 +505,7 @@ const Leave = () => {
             let day = i.format("dddd")
             if (!(day == "Saturday" || day == "Sunday")) {
                 console.log(holidayList.includes(i.format("Do MMM, YYYY")))
-                if (!(holidayList.includes(i.format("Do MMM, YYYY")))) {
+                if (!(holidayList.includes(i.format("Do MMM, YYYY"))) && !(duration.includes(i.format("Do MMM, YYYY")))) {
                     temp.push(i.format("Do MMM, YYYY"))
                 }
             }
@@ -661,8 +675,25 @@ const Leave = () => {
 
     ];
     function disabledDate(current) {
-        return moment(current).day() === 0 || (current).day() === 6
+        if (dateStart!=null?moment(current).isBefore(dateStart.startOf('day')):false) {
+            return true
+        }
+        if (moment(current).day() === 0 || (current).day() === 6 || moment(current).isBefore(moment().startOf('day'))){
+            return true
+        }
+        if (duration.includes(moment(current).format("Do MMM, YYYY"))) {
+            return true
+        }
+        let matchOptionalHoliday = companyholiday.filter((item) => {return item.date == moment(current).format("Do MMM, YYYY")})
+        if (matchOptionalHoliday > 0){
+            return true
+        }
+        return false
     };
+
+    const disabledCalendarDate = (current) => {
+        return moment(current).day() === 0 || (current).day() === 6
+    }
 
     if (loading) {
         return (
@@ -784,7 +815,7 @@ const Leave = () => {
                             onChange={setDate}
                             dateCellRender={dateCellRender}
                             monthCellRender={monthCellRender}
-                            disabledDate={disabledDate}
+                            disabledDate={disabledCalendarDate}
                         />
                     </div>
                 </Col>
@@ -1051,6 +1082,8 @@ const Leave = () => {
                             style={{width : "100%"}}
                             format="Do MMM, YYYY"
                             onChange={onLeaveDateChange}
+                            disabledDate={disabledDate}
+
                                     // onChange={onLeaveDateChange}
                                     // disabledDate={disabledDate}
                                     // dateRender={(current) => {

@@ -1,4 +1,4 @@
-Input[type="CompamyName"],
+Input[type="regCompName"],
 [type="brandName"],
 [type="WebsiteName"],
 [type="DomainName"],
@@ -51,4 +51,3 @@ Input[type="CompamyName"],
   margin-right: auto;
   margin-left: auto;
 }
-

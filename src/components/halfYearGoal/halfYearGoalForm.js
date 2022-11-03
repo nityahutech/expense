@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react'
 import AppraisalContext from '../../contexts/AppraisalContext';
 import ReactToPrint, { useReactToPrint } from "react-to-print";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+
 import "./halfYearGoal.css";
 import {
     Row,
@@ -12,59 +14,14 @@ import {
     Divider,
     Table,
     notification,
-    Layout
+    Layout,
+    Rate,
+    Checkbox
 } from "antd";
 const currDate = new Date().toLocaleDateString();
 const currTime = new Date().toLocaleTimeString();
-
 const { TextArea } = Input;
-
 const { Text, Link } = Typography;
-const fixedColumns = [
-    {
-        title: "Assessment Area",
-        dataIndex: "name",
-
-        width: 140,
-        fixed: "left",
-    },
-    {
-        title: "Rating Guidance",
-        dataIndex: "description"
-    }
-];
-const fixedData = [
-    {
-        key: '1',
-        name: 'Far Exceeds (Role Model)',
-        description: 'Performance far exceeds job requirements (i.e., consistently far exceeds performance objectives)',
-
-    },
-    {
-        key: '2',
-        name: 'Exceeds (Exceeds Expectations)',
-        description: 'Consistently meets job requirements and exceeds in most areas (i.e., achieves performance objectives and exceeds on most)'
-
-    },
-    {
-        key: '3',
-        name: 'Meets All (Solid Performer)',
-        description: 'Consistently meets job requirements (i.e., achieves performance objectives)'
-
-    },
-    {
-        key: '4',
-        name: 'Meets Some (Development Needed)',
-        description: 'Meets some (but not all) job requirements (i.e., achieves some but not all performance objectives)'
-
-    },
-    {
-        key: '5',
-        name: 'Does Not Meet (Below Expectations)',
-        description: 'Performance does not consistently meet job requirements (i.e., does not achieve performance objectives)'
-
-    },
-];
 
 const HalfYearGoalForm = (props) => {
     console.log('employeeRecord', props.currentEmployee)
@@ -89,6 +46,52 @@ const HalfYearGoalForm = (props) => {
     const onReset = () => {
         form.resetFields()
     };
+
+
+    const [selectedNumber, setSelectedNumber] = useState(0);
+
+    const selectNumber = numberSelected => {
+        setSelectedNumber(numberSelected)
+    }
+
+
+    //--------------------------------------------------------------------------checkbox-1
+    function onChange(checkedValues) {
+        console.log("checked = ", checkedValues);
+    }
+
+    // initial values (generally coming from json)
+    // const defaults = ["Pear", "Orange"];
+    // const initalValues = {
+    //     fruits: defaults
+    // };
+
+    // all options, also coming from json
+    const options = [
+        { label: "Taking Interview,", value: "interview" },
+        { label: "Refering friends", value: "friends" },
+        { label: " Mentoring", value: "mentoring" },
+        { label: " Walkin involvement", value: "involvement" },
+        { label: " Creating knowledge repositorys", value: "knowledge" },
+        { label: "  Implementing best practices", value: "practices" }
+    ];
+
+    //--------------------------------------------------------------------------checkbox-2
+
+    // initial values (generally coming from json)
+    const defaults = ["Pear", "Orange"];
+    const initalValues = {
+        fruits: defaults
+    };
+
+    // all options, also coming from json
+    const optionsTwo = [
+        { label: "Certifications,", value: "certifications" },
+        { label: " Soft skills", value: "soft" },
+        { label: " Interpersonal skills", value: "interpersonal" },
+        { label: "  learning new technical skills", value: "technical" },
+
+    ];
 
     const buttonStyle = {
         marginRight: "5px",
@@ -253,17 +256,6 @@ const HalfYearGoalForm = (props) => {
                             </div>
                         </Col>
 
-                        {/* <Col xs={{ span: 12 }}
-                        lg={{ span: 8 }}>
-                        <div>
-                            <div style={{ fontWeight: "600", fontSize: "15px" }}>
-                                Date Of Joining
-                            </div>
-
-                            <Text type="secondary">{props.currentEmployee.doj
-                            } </Text>
-                        </div>
-                    </Col> */}
 
                         <Col xs={{ span: 12 }}
                             lg={{ span: 8 }}>
@@ -292,31 +284,6 @@ const HalfYearGoalForm = (props) => {
                     </Row>
                 </Col>
 
-
-                <Col title="Refrence Guide"
-                    style={{
-                        width: 700,
-                        marginTop: 10,
-                        padding: 'px',
-
-                    }}
-
-                >
-                    <Table
-                        style={{
-                            padding: '10px',
-
-                        }}
-                        size="small"
-                        columns={fixedColumns}
-                        dataSource={fixedData}
-                        // bordered
-                        pagination={false
-                        }
-                        summary={() => <Table.Summary fixed></Table.Summary>}
-                    />
-                </Col>
-
                 <Row gutter={[8, 32]}>
                     <Col xl={24} lg={24} md={24} sm={24} xs={24} >
 
@@ -343,37 +310,144 @@ const HalfYearGoalForm = (props) => {
 
                             }}
                             fields={[
-                                {
-                                    // name: ["userRecord"],
-                                    // values: userRecord,
-                                },
 
                             ]}
 
                             autoComplete="off"
                             form={form}
                             onFinish={onFinish}
-                        // onFieldsChange={(changedFields, allvalues) => onFieldsChangeHandler(changedFields, allvalues)}
-                        // onValuesChange={onFormLayoutChange}
+
 
                         >
 
 
                             <Divider orientation='left' orientationMargin={0}>To Be Fill By Employee<span style={{ color: 'red' }}> *</span></Divider>
+
+                            {/* //-------------------------------------dynamic field---- */}
+
+                            <Form.List name="fields">
+                                {(fields, { add, remove }) => {
+                                    return (
+                                        <div>
+                                            {fields.map((field, index) => (
+                                                <div key={field.key}>
+                                                    <Divider>Project Related Activities : {index + 1}</Divider>
+                                                    <Form.Item
+                                                        name={[index, "name"]}
+                                                        label="Project Name"
+                                                        rules={[{ required: true }]}
+                                                    >
+                                                        <Input placeholder="project name" />
+                                                    </Form.Item>
+
+                                                    <Form.Item name={[index, "options"]} label="Project Detail">
+                                                        <TextArea
+                                                            maxLength={100}
+                                                            autoSize={{
+                                                                minRows: 3,
+
+                                                            }}
+                                                            required
+                                                            placeholder="project Detail," />
+                                                    </Form.Item>
+                                                    {fields.length > 1 ? (
+                                                        <Button
+                                                            type="danger"
+                                                            className="dynamic-delete-button"
+                                                            onClick={() => remove(field.name)}
+                                                            icon={<MinusCircleOutlined />}
+                                                        >
+                                                            Remove Above Project
+                                                        </Button>
+                                                    ) : null}
+                                                </div>
+                                            ))}
+                                            <Divider />
+                                            <Form.Item>
+                                                <Button
+                                                    type="dashed"
+                                                    onClick={() => add()}
+                                                    style={{ width: "60%" }}
+                                                >
+                                                    <PlusOutlined /> Add field
+                                                </Button>
+                                            </Form.Item>
+                                        </div>
+                                    );
+                                }}
+                            </Form.List>
+                            <span className="ant-rate-text">Rate Your Self</span>
+
+                            <Rate defaultValue={3} />
+
+                            {/* //----------------------------------------------- */}
+
+                            <Divider>Organizational Activities: </Divider>
+
+                            <Form.Item name="Organizational" colon={false} valuePropName="checked" initialValue={defaults}>
+                                <Checkbox.Group
+                                    options={options}
+                                    defaultValue={defaults}
+                                    onChange={onChange}
+                                />
+                            </Form.Item>
+
                             <Form.Item labelAlign="left"
                                 style={{ marginBottom: "10px", width: '100%', }}
-                                // title='Project Name and Description '
+                                label='Give Discription: '
+                                name="organizationalActivities"
+
+                            >
+                                <TextArea className='textArea-ant'
+                                    maxLength={100}
+                                    autoSize={{
+                                        minRows: 3,
+                                    }}
+                                    required
+                                    placeholder=""
+                                    disabled={empEditable}
+                                />
+                            </Form.Item>
+
+                            {/* //----------------------------------------------- */}
+                            <Divider>Personal Growth : </Divider>
+
+                            <Form.Item name="Personal" valuePropName="checked" initialValue={defaults}>
+                                <Checkbox.Group
+                                    options={optionsTwo}
+                                    defaultValue={defaults}
+                                    onChange={onChange}
+                                />
+                            </Form.Item>
+
+                            <Form.Item labelAlign="left"
+                                style={{ marginBottom: "10px", width: '100%', }}
+                                label='Give Discription: '
+                                name="personalGrowth"
+
+                            >
+                                <TextArea className='textArea-ant-two'
+                                    maxLength={100}
+                                    autoSize={{
+                                        minRows: 3,
+                                    }}
+                                    required
+                                    placeholder=""
+                                    disabled={empEditable}
+                                />
+                            </Form.Item>
+
+                            <div >
+                                <Button onClick={selectNumber} value="7">7</Button>
+                                <Button onClick={selectNumber} value="8">8</Button>
+                                <Button onClick={selectNumber} value="9">9</Button>
+                            </div >
+
+                            {/* <Form.Item labelAlign="left"
+                                style={{ marginBottom: "10px", width: '100%', }}                          
                                 label='Project Name and Description '
-
                                 name="projectName"
-
-
-                            // onKeyPress={(event) => {
-                            //     if (checkAlphabets(event)) {
-                            //         event.preventDefault();
-                            //     }
-                            // }}
-
+                        
                             >
                                 <TextArea className='textArea-ant'
                                     maxLength={100}
@@ -386,23 +460,12 @@ const HalfYearGoalForm = (props) => {
                                     placeholder=""
                                     disabled={empEditable}
                                 />
-                                {/* <Input placeholder="Associate Id" /> */}
+                            </Form.Item> */}
 
-                            </Form.Item>
-
-
-
-                            <Form.Item labelAlign="left"
+                            {/* <Form.Item labelAlign="left"
                                 style={{ marginBottom: "10px" }}
                                 label='What were your best traits or contribution to the company this quarter?'
-
-                                name="contribution"
-
-                            // onKeyPress={(event) => {
-                            //     if (checkAlphabets(event)) {
-                            //         event.preventDefault();
-                            //     }
-                            // }}
+                                name="contribution"                
 
                             >
                                 <TextArea
@@ -415,21 +478,13 @@ const HalfYearGoalForm = (props) => {
                                     placeholder=""
                                     disabled={empEditable}
                                 />
-                            </Form.Item>
+                            </Form.Item> */}
 
-
-                            <Form.Item labelAlign="left"
+                            {/* <Form.Item labelAlign="left"
                                 style={{ marginBottom: "10px" }}
                                 label='What are your goal for next quarter?'
-
                                 name="employeeGoal"
-
-                            // onKeyPress={(event) => {
-                            //     if (checkAlphabets(event)) {
-                            //         event.preventDefault();
-                            //     }
-                            // }}
-
+                     
                             >
                                 <TextArea
                                     maxLength={100}
@@ -441,8 +496,8 @@ const HalfYearGoalForm = (props) => {
                                     placeholder=""
                                     disabled={empEditable}
                                 />
-                            </Form.Item>
-
+                            </Form.Item> */}
+                            {/* 
                             <Form.Item className='page-break4' labelAlign="left"
                                 style={{ marginBottom: "10px" }}
                                 label='What are your Strength and Development Area?'
@@ -466,11 +521,11 @@ const HalfYearGoalForm = (props) => {
                                     placeholder=""
                                     disabled={empEditable}
                                 />
-                            </Form.Item>
+                            </Form.Item> */}
 
                             {/* //--------------lead---------------------------*/}
 
-                            <div className='page-break-lead' style={{ display: leadEditable || mgrEditable || props.hrMode ? 'block' : 'none' }}>
+                            {/* <div className='page-break-lead' style={{ display: leadEditable || mgrEditable || props.hrMode ? 'block' : 'none' }}>
                                 <Divider orientation='left' orientationMargin={0}>To Be Fill By Team Lead<span style={{ color: 'red' }}> *</span></Divider>
 
 
@@ -528,11 +583,11 @@ const HalfYearGoalForm = (props) => {
                                         disabled={!leadEditable}
                                     />
                                 </Form.Item>
-                            </div>
+                            </div> */}
 
                             {/* //-------------------mgr------- */}
 
-                            <div className='page-break-mgr' style={{ display: mgrEditable || props.hrMode ? 'block' : 'none' }}>
+                            {/* <div className='page-break-mgr' style={{ display: mgrEditable || props.hrMode ? 'block' : 'none' }}>
                                 <Divider orientation='left' orientationMargin={0}>To Be Fill By Manager<span style={{ color: 'red' }}> *</span></Divider>
 
                                 <Form.Item labelAlign="left"
@@ -611,7 +666,8 @@ const HalfYearGoalForm = (props) => {
                                     />
                                 </Form.Item>
 
-                            </div>
+                            </div> */}
+
 
                             <Col span={30} >
 

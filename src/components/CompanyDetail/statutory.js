@@ -19,12 +19,7 @@ const Statutory = () => {
   const [dob, setDob] = useState("");
   const [scrs, setScrs] = useState("");
   const [lccs, setLccs] = useState("");
-  // const [houseType, setHouseType] = useState("");
-  // const [currentAdd, setCurrentAdd] = useState("");
-  // const [permanentAdd, setPermanentAdd] = useState("");
-  // const [contactEmail, setContactEmail] = useState("");
-  // const [phonenumber, setPhoneNumber] = useState("");
-  // const [mailid, setMailId] = useState("");
+ 
   const [editAddressInfo, showEditAddressInfo] = useState(false);
   // const [cancelEditContent, setcancelEditContent] = useState(false);
   const [data, setData] = useState([]);
@@ -42,38 +37,17 @@ const Statutory = () => {
       dob: dob ? dob : null,
     };
     delete record["name"];
-    // EmpInfoContext.updateEduDetails(currentUser.uid, record);
-    // setData(record)
+    
     getData();
     showEditContent(false);
   };
-  // function disabledDate(current) {
-  //   // Can not select days before today and today
-  //   return current && current > moment().endOf('day');
-  // }
-  // const [contactdata, setContactData] = useState([]);
+  
   const onContactFinish = (values) => {
-    // EmpInfoContext.updateEduDetails(currentUser.uid, values);
-    //  setData(values)
+   
     getData();
     showeditCompanyID(false);
   };
-  // const [addressdata, setAddressData] = useState([]);
-  const onEditAddressFinish = (newvalue) => {
-    let record = {
-      ...newvalue,
-      scrs: scrs ? scrs : null,
-      lccs: lccs ? lccs : null,
-    };
-    // EmpInfoContext.updateEduDetails(currentUser.uid, record);
-    showEditAddressInfo(false);
-    getData();
-  };
-  useEffect(() => {
-    getData();
-    // getContactData();
-    // getAddressData();
-  }, []);
+  
   const getData = async () => {
     // let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setData(data);
@@ -81,20 +55,7 @@ const Statutory = () => {
     setLccs(data.lccs ? data.lccs : null);
     setScrs(data.scrs ? data.scrs : null);
   };
-  const getContactData = async () => {
-    // let alldata = await EmpInfoContext.getEduDetails(currentUser.uid);
-    getData();
-    // setMailId(data.mailid?data.mailid:null)
-    // setContactEmail(data.contactEmail?data.contactEmail:null)
-    // setPhoneNumber(data.phonenumber?data.phonenumber:null)
-  };
-  const getAddressData = async () => {
-    // let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    getData();
-    // setCurrentAdd(data.currentAdd?data.currentAdd:null)
-    // setPermanentAdd(data.permanentAdd?data.permanentAdd:null)
-    // setHouseType(data.houseType?data.houseType:null)
-  };
+  
 
   const columnone = [
     {
@@ -240,7 +201,7 @@ const Statutory = () => {
           <Row gutter={[16, 16]}>
             <Col span={8}>
               <div>
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+                <div style={{ fontWeight: "bold", fontSize: "15px", }}>
                   Entity Type
                 </div>
                 {editCompanyID === false ? (
@@ -249,6 +210,7 @@ const Statutory = () => {
                 ) : (
                   <Form.Item
                     initialValue={data ? data.mailid : null}
+                    
                     name="companyName"
                     rules={[
                       {
@@ -261,7 +223,8 @@ const Statutory = () => {
                       },
                     ]}
                   >
-                    <Input type='CompamyName' required placeholder="Enter Comapany Name" />
+                    <Input type='CompamyName' required placeholder="Enter Comapany Name"bordered={false}
+                   style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
                 )}
@@ -290,7 +253,8 @@ const Statutory = () => {
                       },
                     ]}
                   >
-                    <Input type='brandName' required placeholder="Enter Brand Name" />
+                    <Input type='brandName' required placeholder="Enter Brand Name" bordered={false}
+                   style={{borderBottom: '1px solid #ccc '}}/>
                   </Form.Item>
                 )}
               </div>
@@ -319,7 +283,8 @@ const Statutory = () => {
                       },
                     ]}
                   >
-                    <Input type='WebsiteName' required placeholder="Enter Website Name" />
+                    <Input type='WebsiteName' required placeholder="Enter Website Name" bordered={false}
+                   style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
                 )}
@@ -352,7 +317,8 @@ const Statutory = () => {
                       },
                     ]}
                   >
-                    <Input type='DomainName' required placeholder="Enter Domain Name" />
+                    <Input type='DomainName' required placeholder="Enter Domain Name" bordered={false}
+                   style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
                 )}
@@ -382,7 +348,8 @@ const Statutory = () => {
                       },
                     ]}
                   >
-                    <Input type='DomainName' required placeholder="Enter Domain Name" />
+                    <Input type='DomainName' required placeholder="Enter Domain Name" bordered={false}
+                   style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
                 )}
@@ -412,7 +379,8 @@ const Statutory = () => {
                       },
                     ]}
                   >
-                    <Input type='DomainName' required placeholder="Enter Domain Name" />
+                    <Input type='DomainName' required placeholder="Enter Domain Name" bordered={false}
+                   style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
                 )}
@@ -506,9 +474,9 @@ const Statutory = () => {
                   style={{borderBottom: '1px solid #ccc '}} />
                 </FormItem>
               </Col>
-              <Col span={24}>
+              {/* <Col span={24}>
                 <Button type='primary'> <SearchOutlined /> FIND MY BRANCH</Button>
-              </Col>
+              </Col> */}
               <Col span={8}>
                 <FormItem
                   name="bankname"

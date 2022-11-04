@@ -43,19 +43,21 @@ const LeaveList = (props) => {
     const getData = async () => {
         // props.addNewHoliday()
 
-        const allData = await CompanyHolidayContext.getAllCompanyHoliday();
+        const allData = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
         // 33-40 to be written in context
-        allData.docs.map((doc) => {
-            let d = allData.docs.map((doc) => {
-
-                return {
+        let data = allData.docs.map((doc) => {
+            return {
                     ...doc.data(),
-                    Date: moment(doc.data()["Date"].seconds * 1000).format('Do MMM, YYYY'),
                     id: doc.id,
                 };
-            });
-            setHolidaylist(d)
         });
+        data.sort(function(c, d) {
+            let a = moment(c.date,"Do MMM, YYYY")
+            let b = moment(d.date,"Do MMM, YYYY")
+            return a - b
+        });
+        console.log(allData, data)
+        setHolidaylist(data)
     }
 
     const onDeleteLeave = (newHoliday) => {
@@ -65,7 +67,7 @@ const LeaveList = (props) => {
             okType: "danger",
 
             onOk: () => {
-                CompanyHolidayContext.deleteHoliday(newHoliday.id)
+                CompanyHolidayContext.deleteHoliday(newHoliday.id, "compId001")
                     .then(response => {
                         console.log(response);
                         getData();
@@ -95,27 +97,32 @@ const LeaveList = (props) => {
 
     const onFinish = (values) => {
         let newHoliday = {
-            Name: values.holidayname,
-            Date: values.holidaydate.toDate(),
+            name: values.holidayname,
+            date: values.holidaydate.format("Do MMM, YYYY"),
             optionalHoliday: values.holidaytype === 'Official' ? false : true,
         }
-        let matchingHolidayList = holidaylist.filter(item => item.Date == newHoliday.Date)
+        console.log(values, newHoliday)
+        let matchingHolidayList = holidaylist.filter((item) => {return item.name == newHoliday.name})
         if (!(matchingHolidayList.length > 0)) {
-            CompanyHolidayContext.createHoliday(newHoliday)
+            CompanyHolidayContext.createHoliday(newHoliday, "compId001")
                 .then(response => {
                     console.log(response);
+                    showNotification("success", "Success", "Holiday Created successfuly");
                     props.refershCalendar(newHoliday);
                 })
                 .catch(error => {
                     console.log(error.message);
-
+                    showNotification("error", "Error", "Unable to create holiday!")
                 })
+            form.resetFields();
+        } else {
+            showNotification("error", "Error", "This holiday name already exists!")
             form.resetFields();
         }
     };
 
     const disabledDate = (current) => {
-        let matchingHolidayList = holidaylist.filter(item => item.Date == current.format('Do MMM, YYYY'))
+        let matchingHolidayList = holidaylist.filter(item => item.date == current.format('Do MMM, YYYY'))
         return matchingHolidayList.length > 0;
     };
 
@@ -136,7 +143,6 @@ const LeaveList = (props) => {
 
     const handleOk = () => {
         setIsModalOpen(false);
-        showNotification("success", "Success", "Holiday Created successfuly");
     };
 
 
@@ -207,7 +213,7 @@ const LeaveList = (props) => {
                                             gap: '0px', justifyContent: 'space-between'
                                         }}
                                         >
-                                            <Text className='holiday-name' style={holiday.optionalHoliday === true ? { color: "rgba(0, 119, 137, 0.96)", } : { color: "rgba(252, 143, 10, 1)" }}>{holiday.Name}</Text>
+                                            <Text className='holiday-name' style={holiday.optionalHoliday === true ? { color: "rgba(0, 119, 137, 0.96)", } : { color: "rgba(252, 143, 10, 1)" }}>{holiday.name}</Text>
                                             {props.isHr ?
                                                 <DeleteOutlined
                                                     style={{
@@ -221,7 +227,7 @@ const LeaveList = (props) => {
                                                 : null}
                                         </div>
 
-                                        <Text style={holiday.optionalHoliday === true ? { color: "rgba(0, 119, 137, 0.96)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.Date} / {holiday.optionalHoliday === true ? <span  >Optional </span> : <span>Official</span>}</Text>
+                                        <Text style={holiday.optionalHoliday === true ? { color: "rgba(0, 119, 137, 0.96)", } : { color: "rgba(252, 143, 10, 1)" }} type="secondary">{holiday.date} / {holiday.optionalHoliday === true ? <span  >Optional </span> : <span>Official</span>}</Text>
 
                                     </Space>
                                 </div>
@@ -289,7 +295,7 @@ const LeaveList = (props) => {
 
                                         <DatePicker style={{ width: '100% ' }}
                                             disabledDate={disabledDate}
-                                            format="MMM D, YYYY"
+                                            format="Do MMM, YYYY"
                                         />
                                     </Form.Item>
 
@@ -298,7 +304,7 @@ const LeaveList = (props) => {
                                         name='holidaytype'
                                         labelAlign="left"
                                         style={{ marginBottom: "10px", }}
-                                        defaultValue="Official"
+                                        initialValue="Official"
                                     >
                                         <Radio.Group defaultValue="Official"
                                         >

@@ -80,7 +80,7 @@ class AppraisalContext {
             cc: `${appraisal.mailid}`,
             subject: `Appraisal self Assesment completed By ${appraisal.fname} ${appraisal.lname} `,
             html: `<p>Hello ${appraisal.lead},</p><br />
-            <p> ${appraisal.fname} ${appraisal.lname} has completed their self Assessment=></p>
+            <p> ${appraisal.fname} ${appraisal.lname} has completed their self Assessment</p>
         <br />
         <p>Please fill lead Assessment through HR portal.</p>
         <br />
@@ -98,7 +98,7 @@ class AppraisalContext {
             cc: `${appraisal.mailid}`,
             subject: `Appraisal lead assesment completed for ${appraisal.fname} ${appraisal.lname} `,
             html: `<p>Hello ${appraisal.repManager},</p><br />
-            <p> lead assesment has completed for ${appraisal.fname} ${appraisal.lname} =></p>
+            <p> lead assesment has completed for ${appraisal.fname} ${appraisal.lname} </p>
         <br />
         <p>Please fill Manager Assessment through HR portal.</p>
         <br />

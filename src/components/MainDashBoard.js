@@ -11,20 +11,17 @@ import Myprofile from "../images/Myprofile.png";
 import Companyprofile from "../images/Companyprofile.png";
 import Settings from "../images/Settings.png";
 import { Link } from "react-router-dom";
+
 function MainDashBoard() {
   return (
     <div className="icon-container">
       <Card>
         <Row gutter={[8, 24]}>
           <Col span={8} className="hi">
-            <Link to="/Attendance/AttendanceLog">
-              <Card
-                bordered={false}
-                hoverable={true}
-                style={{ fontWeight: "600" }}
-              >
+            <Link>
+              <Card bordered={false} hoverable={true}>
                 <img
-                  style={{ width: "70px" }}
+                  style={{ width: "150px" }}
                   alt="example"
                   src={Attendancelog}
                 />
@@ -33,112 +30,65 @@ function MainDashBoard() {
             </Link>
           </Col>
           <Col span={8} className="hi">
-            <Link to="/Employee/Leave">
-              <Card
-                bordered={false}
-                hoverable={true}
-                style={{ fontWeight: "600" }}
-              >
-                <img style={{ width: "70px" }} alt="example" src={leaveicon} />
-                Leave
-              </Card>
-            </Link>
+            <Card bordered={false} hoverable={true}>
+              <img style={{ width: "150px" }} alt="example" src={leaveicon} />
+              Leave
+            </Card>
           </Col>
           <Col span={8} className="hi">
-            <Link to="/PaySlipPage/PaySlip">
-              <Card
-                bordered={false}
-                hoverable={true}
-                style={{ fontWeight: "600" }}
-              >
-                <img style={{ width: "70px" }} alt="example" src={Payslip} />
-                Pay Slip Generator
-              </Card>
-            </Link>
+            <Card bordered={false} hoverable={true}>
+              <img style={{ width: "150px" }} alt="example" src={Payslip} />
+              Pay Slip Generator
+            </Card>
           </Col>
           <Col span={8} className="hi">
-            <Link to="/Payslip2/HrPaySlip">
-              <Card
-                bordered={false}
-                hoverable={true}
-                style={{ fontWeight: "600" }}
-              >
-                <img style={{ width: "70px" }} alt="example" src={Payroll} />
-                Payroll
-              </Card>
-            </Link>
+            <Card bordered={false} hoverable={true}>
+              <img style={{ width: "150px" }} alt="example" src={Payroll} />
+              Payroll
+            </Card>
           </Col>
           <Col span={8} className="hi">
-            <Link to="/EmployeeListPage/EmployeeList">
-              <Card
-                bordered={false}
-                hoverable={true}
-                style={{ fontWeight: "600" }}
-              >
-                <img
-                  style={{ width: "70px" }}
-                  alt="example"
-                  src={Employeelist}
-                />
-                Employee List
-              </Card>
-            </Link>
+            <Card bordered={false} hoverable={true}>
+              <img
+                style={{ width: "150px" }}
+                alt="example"
+                src={Employeelist}
+              />
+              Employee List
+            </Card>
           </Col>
           <Col span={8} className="hi">
-            <Link to="/Expense/ExpenseList">
-              <Card
-                bordered={false}
-                hoverable={true}
-                style={{ fontWeight: "600" }}
-              >
-                <img style={{ width: "70px" }} alt="example" src={Expenses} />
-                Expense
-              </Card>
-            </Link>
+            <Card bordered={false} hoverable={true}>
+              <img style={{ width: "150px" }} alt="example" src={Expenses} />
+              Expense
+            </Card>
           </Col>
           <Col span={8} className="hi">
-            <Link to="/Profile">
-              <Card
-                bordered={false}
-                hoverable={true}
-                style={{ fontWeight: "600" }}
-              >
-                <img style={{ width: "70px" }} alt="example" src={Myprofile} />
-                My Profile
-              </Card>
-            </Link>
+            <Card bordered={false} hoverable={true}>
+              <img style={{ width: "150px" }} alt="example" src={Myprofile} />
+              My Profile
+            </Card>
           </Col>
           <Col span={8} className="hi">
-            <Link to="/CompanyProfilepage">
-              <Card
-                bordered={false}
-                hoverable={true}
-                style={{ fontWeight: "600" }}
-              >
-                <img
-                  style={{ width: "70px" }}
-                  alt="example"
-                  src={Companyprofile}
-                />
-                Company Profile
-              </Card>
-            </Link>
+            <Card bordered={false} hoverable={true}>
+              <img
+                style={{ width: "150px" }}
+                alt="example"
+                src={Companyprofile}
+              />
+              Company Profile
+            </Card>
           </Col>
           <Col span={8} className="hi">
-            <Link to="/Setting">
-              <Card
-                bordered={false}
-                hoverable={true}
-                style={{ fontWeight: "600" }}
-              >
-                <img style={{ width: "70px" }} alt="example" src={Settings} />
-                Setting
-              </Card>
-            </Link>
+            <Card bordered={false} hoverable={true}>
+              <img style={{ width: "150px" }} alt="example" src={Settings} />
+              Setting
+            </Card>
           </Col>
         </Row>
       </Card>
     </div>
   );
 }
+
 export default MainDashBoard;

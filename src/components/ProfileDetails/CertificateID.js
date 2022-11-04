@@ -9,6 +9,7 @@ import {
   message, 
   Upload,
   Space,
+  notification,
 } from 'antd'
 
 import { 
@@ -19,6 +20,9 @@ import {
 
 import FormItem from "antd/es/form/FormItem";
 import DocumentContext from "../../contexts/DocumentContext";
+import { upload } from '@testing-library/user-event/dist/upload';
+import { type } from "@testing-library/user-event/dist/type";
+import { async } from "@firebase/util";
 
 function CertificateID() { 
   const [certificatioDetails, setCertificationDetails] = useState([])
@@ -28,7 +32,11 @@ function CertificateID() {
   const [form]=Form.useForm()
   const imgRef = useRef(null);
   const { currentUser } = useAuth();
+  const [file, setFile] = useState("");
 
+  function handleChange(event) {
+    setFile(event.target.files[0]);
+  }
   // -----------------code for model
   const showModal = () => {
     setIsModalOpen(true);
@@ -44,33 +52,43 @@ function CertificateID() {
     setVisible(false)
     form.resetFields()
   };
-  function addNewDetail (values) {
-      console.log({values})
-       DocumentContext.addDocument({...values,empId:currentUser.uid,type:"certificate"});
+   async function addNewDetail (values) {
+    console.log(file)
+    try{
+      await DocumentContext.addDocument({...values,empId:currentUser.uid,type:"certificate"},file)
+      showNotification("success","Success","Upload Complete");
+      const timer = setTimeout(()=>{
       getData();
-       setCertificationDetails([...certificatioDetails,values])
-       setUploadFile([...uploadFile,values])
-     };
-    //  const deleteData=(id)=>{
-    //  DocumentContext.deleteDocument(id)
-    //   getData();
+    }, 3500);
+    return ()=> clearTimeout(timer);
+  } catch {
+    showNotification("error","Error","Upload Failed");
+  }
+};
+const showNotification=(type, msg, desc) => {
+  notification[type]({
+    message:msg,
+    description:desc,
+  });
+};
+    //   setCertificationDetails([...certificatioDetails,values])
+    //    setUploadFile([...uploadFile,values])
     //  };
-    const deleteData = (id) => {
+    const deleteData = (id,fileName) => {
       Modal.confirm({
           title: "Are you sure, you want to delete this record?",
           okText: "Yes",
           okType: "danger",
   
           onOk: () => {
-            DocumentContext.deleteDocument(id)
+            DocumentContext.deleteDocument(id,fileName)
                   .then(response => {
-                      console.log(response);
+                    showNotification("success","Success","Successfully deleted");
                       getData();
                   })
                   .catch(error => {
-                      console.log(error.message);
-  
-                  })
+                    showNotification("error","Error","Record not deleted");
+                   })
           },
       });
     };
@@ -102,8 +120,8 @@ const getData=async()=>{
     },
     {
       title: "Uploaded File",
-      dataIndex: "file",
-      key: "file",
+      dataIndex: "upload",
+      key: "upload",
       render: (data, record) => {
         console.log("record: ", record);
         console.log("data:: ", data);
@@ -117,10 +135,10 @@ const getData=async()=>{
         //     {imgRef.current.input.files[0].name}
         //   </a>
         // );
-        const hrefVal = imgRef?.current?.input?.files[0]?.name;
+        //const hrefVal = imgRef?.current?.input?.files[0]?.name;
         return (
-          <a href={hrefVal} target="_blank">
-            {hrefVal}
+          <a href={data} target="_blank">
+            {record.fileName}
           </a>
         );
       },
@@ -132,7 +150,7 @@ const getData=async()=>{
       render: (_, record) => {
         return (
           <DeleteOutlined
-                          onClick={() => deleteData(record.id)}
+                          onClick={() => deleteData(record.id,record.fileName)}
                       />
       );
     },
@@ -199,14 +217,23 @@ const getData=async()=>{
             <FormItem name="duration">
               <Input placeholder="Enter Duration" />
             </FormItem>
-            <FormItem name="file">
+            <FormItem name="upload"
+            rules={[
+              {
+                required:true,
+                message:'upload file',
+              },
+            ]}>
+              <div className='certificatepage'>
             <Input
               type="file"
               // accept="image/gif, image/jpeg, image/png"
-              id="myfile"
-              name="file"
-              ref={imgRef}
+              id="upload"
+              name="upload"
+              onChange={handleChange}
+              //ref={imgRef}
             />
+            </div>
             {/* <Upload {...props}>
               <Button icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload> */}

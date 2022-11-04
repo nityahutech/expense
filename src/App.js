@@ -31,6 +31,7 @@ import Payslip2 from "./pages/Payslip2";
 import MainDashboardPage from "./pages/MainDashboardPage";
 import OnboardingPage from "./pages/OnboardingPage";
 import CompanyProfilepage from "./pages/CompanyProfilepage";
+import HalfYearGoalPage from "./pages/halfYearGoalPage";
 
 function App() {
   return (
@@ -69,6 +70,8 @@ function App() {
           <Route path="/Notification" element={<Notification />} />
           <Route path="/Appraisal/AppraisalPage" element={<Appraisal />} />
           <Route path="/Appraisal/AppraisalPageHr" element={<AppraisalHr />} />
+          <Route path="/Appraisal/HalfYearGoalPage" element={<HalfYearGoalPage />} />
+
           <Route
             path="/MainDashboardPage/MainDashBoard"
             element={<MainDashboardPage />}

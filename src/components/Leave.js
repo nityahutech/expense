@@ -185,15 +185,15 @@ const Leave = () => {
     if (validleaverequest) {
       console.log(newLeave)
       LeaveContext.createLeave(newLeave)
-      .then(response => {
+        .then(response => {
           getData();
-      showNotification("success", "Success", "Leave apply successfuly");
+          showNotification("success", "Success", "Leave apply successfuly");
 
-      })
-      .catch(error => {
+        })
+        .catch(error => {
           console.log(error.message);
 
-      })
+        })
       form.resetFields();
       setEndSlot(null);
       setDateStart(null);
@@ -394,8 +394,8 @@ const Leave = () => {
               status === "Approved"
                 ? "green"
                 : status === "Pending"
-                ? "blue"
-                : "volcano"
+                  ? "blue"
+                  : "volcano"
             }
             key={status}
           >
@@ -426,13 +426,13 @@ const Leave = () => {
                   style={
                     record?.status === "Approved"
                       ? {
-                          color: "green",
-                          cursor: "not-allowed",
-                          marginLeft: 10,
-                        }
+                        color: "green",
+                        cursor: "not-allowed",
+                        marginLeft: 10,
+                      }
                       : record?.status === "Pending"
-                      ? { color: "blue", marginLeft: 10 }
-                      : { color: "red", marginLeft: 10 }
+                        ? { color: "blue", marginLeft: 10 }
+                        : { color: "red", marginLeft: 10 }
                   }
                 />
               </>
@@ -457,7 +457,7 @@ const Leave = () => {
   const getDateFormatted = (data) => {
     data.forEach((dur) => {
       let len = dur.date.length;
-      dur.len = len - (dur.slotStart == 'Full Day' ? 0 : 0.5) - (dur.date.length == 1?0:(dur.slotEnd == 'Full Day' ? 0 : 0.5));
+      dur.len = len - (dur.slotStart == 'Full Day' ? 0 : 0.5) - (dur.date.length == 1 ? 0 : (dur.slotEnd == 'Full Day' ? 0 : 0.5));
       dur.dateCalc = dur.date;
       dur.date =
         dur.date.length == 1 ? dur.date[0] : dur.date[0] + " to " + dur.date[dur.date.length - 1];
@@ -532,7 +532,7 @@ const Leave = () => {
     console.log(dateStart, dateEnd, duration);
     let tempDateEnd = dateEnd
     if (e != undefined) {
-        tempDateEnd = e
+      tempDateEnd = e
     }
     let holidayList = companyholiday.map((hol) => {
       return !hol.optionalHoliday ? hol.date : null;
@@ -540,24 +540,24 @@ const Leave = () => {
     console.log(companyholiday, holidayList);
     let temp = [];
     try {
-        for (
-            let i = dateStart.clone();
-            i.isSameOrBefore(tempDateEnd);
-            i = i.clone().add(1, "days")
+      for (
+        let i = dateStart.clone();
+        i.isSameOrBefore(tempDateEnd);
+        i = i.clone().add(1, "days")
+      ) {
+        let day = i.format("dddd");
+        if (!(day == "Saturday" || day == "Sunday")) {
+          console.log(holidayList.includes(i.format("Do MMM, YYYY")));
+          if (
+            !holidayList.includes(i.format("Do MMM, YYYY")) &&
+            !duration.includes(i.format("Do MMM, YYYY"))
           ) {
-            let day = i.format("dddd");
-            if (!(day == "Saturday" || day == "Sunday")) {
-              console.log(holidayList.includes(i.format("Do MMM, YYYY")));
-              if (
-                !holidayList.includes(i.format("Do MMM, YYYY")) &&
-                !duration.includes(i.format("Do MMM, YYYY"))
-              ) {
-                temp.push(i.format("Do MMM, YYYY"));
-              }
-            }
+            temp.push(i.format("Do MMM, YYYY"));
           }
-    } catch(error) {
-        console.log(error.message)
+        }
+      }
+    } catch (error) {
+      console.log(error.message)
     }
     console.log(temp);
     setDateSelected(temp);
@@ -583,17 +583,17 @@ const Leave = () => {
             style={
               item.type === "On Leave"
                 ? {
-                    color: "rgba(0, 128, 0,  1)",
-                    fontSize: "8px",
-                    backgroundColor: "rgb(15, 255, 80,0.2)",
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    margin: "0px",
-                    borderRadius: "5px",
-                    justifyContent: "center",
-                  }
+                  color: "rgba(0, 128, 0,  1)",
+                  fontSize: "8px",
+                  backgroundColor: "rgb(15, 255, 80,0.2)",
+                  paddingLeft: "5px",
+                  paddingRight: "5px",
+                  margin: "0px",
+                  borderRadius: "5px",
+                  justifyContent: "center",
+                }
                 : item.type === "Pending"
-                ? {
+                  ? {
                     color: "rgba(10, 91, 204,  1)",
                     fontSize: "8px",
                     backgroundColor: "rgba(10, 91, 204,0.2)",
@@ -603,27 +603,27 @@ const Leave = () => {
                     borderRadius: "5px",
                     justifyContent: "center",
                   }
-                : item.isOptional
-                ? {
-                    color: "rgba(0, 119, 137, 0.96)",
-                    fontSize: "8px",
-                    backgroundColor: "rgba(154, 214, 224, 0.96)",
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    margin: "0px",
-                    borderRadius: "5px",
-                    justifyContent: "center",
-                  }
-                : {
-                    color: "rgba(252, 143, 10, 1)",
-                    fontSize: "8px",
-                    backgroundColor: "rgba(252, 143, 10,0.2)",
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    margin: "0px",
-                    borderRadius: "5px",
-                    justifyContent: "center",
-                  }
+                  : item.isOptional
+                    ? {
+                      color: "rgba(0, 119, 137, 0.96)",
+                      fontSize: "8px",
+                      backgroundColor: "rgba(154, 214, 224, 0.96)",
+                      paddingLeft: "5px",
+                      paddingRight: "5px",
+                      margin: "0px",
+                      borderRadius: "5px",
+                      justifyContent: "center",
+                    }
+                    : {
+                      color: "rgba(252, 143, 10, 1)",
+                      fontSize: "8px",
+                      backgroundColor: "rgba(252, 143, 10,0.2)",
+                      paddingLeft: "5px",
+                      paddingRight: "5px",
+                      margin: "0px",
+                      borderRadius: "5px",
+                      justifyContent: "center",
+                    }
             }
           >
             <div className="present"> {item.type} </div>
@@ -710,8 +710,8 @@ const Leave = () => {
               status === "Approved"
                 ? "green"
                 : status === "Pending"
-                ? "blue"
-                : "volcano"
+                  ? "blue"
+                  : "volcano"
             }
             key={status}
           >
@@ -743,8 +743,8 @@ const Leave = () => {
                     record?.status === "Approved"
                       ? { color: "green", marginLeft: 10 }
                       : record?.status === "Pending"
-                      ? { color: "blue", marginLeft: 10 }
-                      : { color: "red", marginLeft: 10 }
+                        ? { color: "blue", marginLeft: 10 }
+                        : { color: "red", marginLeft: 10 }
                   }
                 />
               </>
@@ -819,8 +819,8 @@ const Leave = () => {
   const disableEnd = () => {
     console.log(dateStart, dateEnd)
     if (dateStart == null || dateStart == 0) {
-        form.setFieldsValue({dateEnd : null})
-        return true
+      form.setFieldsValue({ dateEnd: null })
+      return true
     }
     return false
   }
@@ -833,49 +833,49 @@ const Leave = () => {
     //     setDateSelected([])
     // }
     if (tempSelected == null || tempSelected == 0) {
-        form.setFieldsValue({leaveNature : null})
-        return true
+      form.setFieldsValue({ leaveNature: null })
+      return true
     }
     if (dateStart == null || dateStart == 0) {
-        form.setFieldsValue({leaveNature : null})
-        return true
+      form.setFieldsValue({ leaveNature: null })
+      return true
     }
     if (dateEnd == null || dateEnd == 0) {
-        form.setFieldsValue({leaveNature : null})
-        return true
+      form.setFieldsValue({ leaveNature: null })
+      return true
     }
     return false
   }
 
   const disableEndSlot = () => {
     if (dateStart == null || dateStart == 0) {
-        return true
+      return true
     }
     console.log(dateStart, dateEnd)
-    if (dateEnd != null && dateEnd != 0 ? 
-        dateStart.format("DDMMYYYY") == dateEnd.format("DDMMYYYY") : false
-       ) {
-        return true
-       }
+    if (dateEnd != null && dateEnd != 0 ?
+      dateStart.format("DDMMYYYY") == dateEnd.format("DDMMYYYY") : false
+    ) {
+      return true
+    }
     return false
   }
 
   const disabledLeaveNature = (u) => {
     if (leavedays[u] <= 0) {
-        return true
+      return true
     }
     console.log(moment().add(1, 'days').format("DD-MM-yyyy"))
     if ((u == "Optional Leave" || u == "Sick Leave") && dateSelected.length > 1) {
-        return true
+      return true
     }
     if (u == "Optional Leave" && dateSelected.length == 1) {
-        let holidayMatch = companyholiday.filter((hol) => hol.optionalHoliday ? hol.date == dateSelected[0]: false)
-        console.log(companyholiday, holidayMatch)
-        return !(holidayMatch.length > 0)
+      let holidayMatch = companyholiday.filter((hol) => hol.optionalHoliday ? hol.date == dateSelected[0] : false)
+      console.log(companyholiday, holidayMatch)
+      return !(holidayMatch.length > 0)
     }
     if (u == "Sick Leave" && dateSelected.length == 1) {
-        //disable if start date = date+2
-        return dateStart != null || dateStart != undefined ? !(dateStart.format("DD-MM-yyyy")==moment().format("DD-MM-yyyy") || dateStart.format("DD-MM-yyyy")==moment().add(1, 'days').format("DD-MM-yyyy")):false
+      //disable if start date = date+2
+      return dateStart != null || dateStart != undefined ? !(dateStart.format("DD-MM-yyyy") == moment().format("DD-MM-yyyy") || dateStart.format("DD-MM-yyyy") == moment().add(1, 'days').format("DD-MM-yyyy")) : false
     }
     return false
   }
@@ -1129,7 +1129,7 @@ const Leave = () => {
           }}
         >
           <Col
-            span={12}
+            span={24}
             style={{
               display: "flex",
               flexDirection: "row",
@@ -1151,141 +1151,153 @@ const Leave = () => {
             <Form
               {...Leave}
               labelCol={{
-                span: 6,
+                span: 8,
               }}
               wrapperCol={{
                 span: 16,
               }}
               form={form}
               onFinish={onFinish}
+            // layout="vertical"
             >
-              <Row>
-                <Form.Item
-                  labelAlign="left"
-                  style={{
-                    marginBottom: "20px",
-                    color: "white",
-                    width: "50%",
-                    minWidth: "70px",
-                  }}
-                  label={
-                    <label style={{ color: "black", fontWeight: "400" }}>
-                      Start Date<span style={{ color: "red" }}> *</span>
-                    </label>
-                  }
-                  name="dateStart"
-                >
-                  <DatePicker
-                    style={{ width: "100%" }}
-                    format="Do MMM, YYYY"
-                    onChange={(e) => {
+
+              <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-around' }}>
+                <Col xl={12} lg={24} md={24} sm={24} xs={24} >
+                  <Form.Item
+                    labelAlign="left"
+                    style={{
+                      marginBottom: "20px",
+                      color: "white",
+
+                      minWidth: "70px",
+                    }}
+                    label={
+                      <label style={{ color: "black", fontWeight: "400" }}>
+                        Start Date<span style={{ color: "red" }}> *</span>
+                      </label>
+                    }
+                    name="dateStart"
+                  >
+                    <DatePicker
+                      style={{ width: "100%" }}
+                      format="Do MMM, YYYY"
+                      onChange={(e) => {
                         setDateStart(e);
                         onLeaveDateChange();
-                    }}
-                    disabledDate={disabledDate}
-                  />
-                </Form.Item>
-                <Form.Item
-                  labelAlign="left"
-                  name="slotStart"
-                  style={{ marginBottom: "25px", width: "45%" }}
-                  className="div-slot"
-                  label={
-                    <label style={{ color: "black", fontWeight: "400" }}>
-                      Start Slot<span style={{ color: "red" }}> *</span>
-                    </label>
-                  }
-                  rules={[{ message: "Please select an option!" }]}
-                  initialValue={"Full Day"}
-                  allowClear
-                >
-                  <Select
-                    required
-                    defaultValue={"Full Day"}
-                    style={{ width: "100%" }}
-                    onChange={(e) => {
+                      }}
+                      disabledDate={disabledDate}
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col xl={12} lg={24} md={24} sm={24} xs={24} >
+                  <Form.Item
+                    labelAlign="left"
+                    name="slotStart"
+                    style={{ marginBottom: "25px", }}
+                    className="div-slot"
+                    label={
+                      <label style={{ color: "black", fontWeight: "400" }}>
+                        Start Slot<span style={{ color: "red" }}> *</span>
+                      </label>
+                    }
+                    rules={[{ message: "Please select an option!" }]}
+                    initialValue={"Full Day"}
+                    allowClear
+                  >
+                    <Select
+                      required
+                      defaultValue={"Full Day"}
+                      style={{ width: "100%" }}
+                      onChange={(e) => {
                         setStartSlot(e);
                         onLeaveDateChange();
-                    }}
-                  >
-                    <Option value="Full Day">Full Day</Option>
-                    <Option value="Half Day">Half Day</Option>
-                  </Select>
-                  {/* <Radio.Group defaultValue="Full Day"
+                      }}
+                    >
+                      <Option value="Full Day">Full Day</Option>
+                      <Option value="Half Day">Half Day</Option>
+                    </Select>
+                    {/* <Radio.Group defaultValue="Full Day"
                                     onChange={onLeaveSlotChange}
                                 >
                                     <Radio style={{ color: "black", fontWeight: '400' }} disabled={ dateSelected.length > 1 ? true:false } value="Half Day">Half Day</Radio>
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
 
                                 </Radio.Group> */}
-                </Form.Item>
+                  </Form.Item>
+                </Col>
               </Row>
-              <Row>
-                <Form.Item
-                  labelAlign="left"
-                  style={{ marginBottom: "20px", color: "white", width: "50%" }}
-                  label={
-                    <label style={{ color: "black", fontWeight: "400" }}>
-                      End Date<span style={{ color: "red" }}> *</span>
-                    </label>
-                  }
-                  name="dateEnd"
-                >
-                  <DatePicker
-                    style={{ width: "100%" }}
-                    format="Do MMM, YYYY"
-                    onChange={(e) => {
+
+              <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                <Col xl={12} lg={24} md={24} sm={24} xs={24} >
+                  <Form.Item
+                    labelAlign="left"
+                    style={{ marginBottom: "20px", color: "white", }}
+                    label={
+                      <label style={{ color: "black", fontWeight: "400" }}>
+                        End Date<span style={{ color: "red" }}> *</span>
+                      </label>
+                    }
+                    name="dateEnd"
+                  >
+                    <DatePicker
+                      style={{ width: "100%" }}
+                      format="Do MMM, YYYY"
+                      onChange={(e) => {
                         console.log(e)
                         setDateEnd(e);
                         onLeaveDateChange(e);
-                    }}
-                    disabledDate={disabledDate}
-                    disabled={disableEnd()}
-                  />
-                </Form.Item>
+                      }}
+                      disabledDate={disabledDate}
+                      disabled={disableEnd()}
+                    />
+                  </Form.Item>
+                </Col>
 
-                <Form.Item
-                  labelAlign="left"
-                  name="slotEnd"
-                  style={{ marginBottom: "25px", width: "45%" }}
-                  className="div-slot"
-                  label={
-                    <label style={{ color: "black", fontWeight: "400" }}>
-                      End Slot<span style={{ color: "red" }}> *</span>
-                    </label>
-                  }
-                  rules={[{ message: "Please select an option!" }]}
-                  initialValue={"Full Day"}
-                  allowClear
-                >
-                  <Select
-                    required
-                    defaultValue={"Full Day"}
-                    style={{ width: "100%" }}
-                    disabled={disableEndSlot()} 
-                    onChange={(e) => {
+                <Col xl={12} lg={24} md={24} sm={24} xs={24} >
+                  <Form.Item
+                    labelAlign="left"
+                    name="slotEnd"
+                    style={{ marginBottom: "25px", }}
+                    className="div-slot"
+                    label={
+                      <label style={{ color: "black", fontWeight: "400" }}>
+                        End Slot<span style={{ color: "red" }}> *</span>
+                      </label>
+                    }
+                    rules={[{ message: "Please select an option!" }]}
+                    initialValue={"Full Day"}
+                    allowClear
+                  >
+                    <Select
+                      required
+                      defaultValue={"Full Day"}
+                      style={{ width: "100%" }}
+                      disabled={disableEndSlot()}
+                      onChange={(e) => {
                         setEndSlot(e);
                         onLeaveDateChange();
-                    }}
-                  >
-                    <Option value="Full Day">Full Day</Option>
-                    <Option value="Half Day">Half Day</Option>
-                  </Select>
+                      }}
+                    >
+                      <Option value="Full Day">Full Day</Option>
+                      <Option value="Half Day">Half Day</Option>
+                    </Select>
 
-                  {/* <Radio.Group defaultValue="Full Day"
+                    {/* <Radio.Group defaultValue="Full Day"
                                     onChange={onLeaveSlotChange}
                                 >
                                     <Radio style={{ color: "black", fontWeight: '400' }} disabled={ dateSelected.length > 1 ? true:false } value="Half Day">Half Day</Radio>
                                     <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
 
                                 </Radio.Group> */}
-                </Form.Item>
+                  </Form.Item>
+                </Col>
               </Row>
 
               <Form.Item
                 labelAlign="left"
                 name="leaveNature"
-                style={{ marginBottom: "25px" }}
+                style={{ marginBottom: "20px" }}
                 label={
                   <label style={{ color: "black", fontWeight: "400" }}>
                     Nature of Leave<span style={{ color: "red" }}> *</span>
@@ -1314,7 +1326,7 @@ const Leave = () => {
               <Form.Item
                 labelAlign="left"
                 name="reason"
-                style={{ marginBottom: "25px" }}
+                style={{ marginBottom: "20px" }}
                 label={
                   <label style={{ color: "black", fontWeight: "400" }}>
                     Reason<span style={{ color: "red" }}> *</span>{" "}
@@ -1337,7 +1349,7 @@ const Leave = () => {
               <Form.Item
                 labelAlign="left"
                 name="approver"
-                style={{ marginBottom: "25px" }}
+                style={{ marginBottom: "20px" }}
                 label={
                   <label style={{ color: "black", fontWeight: "400" }}>
                     Approver<span style={{ color: "red" }}> *</span>
@@ -1361,7 +1373,7 @@ const Leave = () => {
               </Form.Item>
 
               <Form.Item
-                style={{ paddingTop: "15px" }}
+                style={{ paddingTop: "px" }}
                 wrapperCol={{
                   offset: 8,
                   span: 24,

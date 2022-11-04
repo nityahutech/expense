@@ -1,7 +1,11 @@
 import React, { useState, useRef } from 'react'
 import AppraisalContext from '../../contexts/AppraisalContext';
 import ReactToPrint, { useReactToPrint } from "react-to-print";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import FloatInput from "./floatInput";
+import FloatTextArea from "./floatTextarea";
+
+// import styles from "./halfYearGoal.css";
 
 import "./halfYearGoal.css";
 import {
@@ -12,7 +16,7 @@ import {
     Typography,
     Form,
     Divider,
-    Table,
+    Radio,
     notification,
     Layout,
     Rate,
@@ -20,7 +24,7 @@ import {
 } from "antd";
 const currDate = new Date().toLocaleDateString();
 const currTime = new Date().toLocaleTimeString();
-const { TextArea } = Input;
+
 const { Text, Link } = Typography;
 
 const HalfYearGoalForm = (props) => {
@@ -32,6 +36,7 @@ const HalfYearGoalForm = (props) => {
     const [empEditable, setEmpEditable] = useState(!(currentAppraisal.status === 'empPending'));
     const [leadEditable, setLeadEditable] = useState((currentAppraisal.status === 'leadPending' && props.hrMode == false));
     const [mgrEditable, setMgrEditable] = useState((currentAppraisal.status === 'mgrPending' && props.hrMode == false));
+    const [selectedNumber, setSelectedNumber] = useState(0);
 
 
     const componentRef = useRef();
@@ -47,11 +52,14 @@ const HalfYearGoalForm = (props) => {
         form.resetFields()
     };
 
-
-    const [selectedNumber, setSelectedNumber] = useState(0);
-
     const selectNumber = numberSelected => {
         setSelectedNumber(numberSelected)
+    }
+    const [active, setActive] = useState("");
+
+    const handleClick = (event) => {
+        setActive(event.target.id);
+
     }
 
 
@@ -60,11 +68,6 @@ const HalfYearGoalForm = (props) => {
         console.log("checked = ", checkedValues);
     }
 
-    // initial values (generally coming from json)
-    // const defaults = ["Pear", "Orange"];
-    // const initalValues = {
-    //     fruits: defaults
-    // };
 
     // all options, also coming from json
     const options = [
@@ -73,7 +76,8 @@ const HalfYearGoalForm = (props) => {
         { label: " Mentoring", value: "mentoring" },
         { label: " Walkin involvement", value: "involvement" },
         { label: " Creating knowledge repositorys", value: "knowledge" },
-        { label: "  Implementing best practices", value: "practices" }
+        { label: "  Implementing best practices", value: "practices" },
+        { label: "  Others", value: "others" }
     ];
 
     //--------------------------------------------------------------------------checkbox-2
@@ -90,6 +94,7 @@ const HalfYearGoalForm = (props) => {
         { label: " Soft skills", value: "soft" },
         { label: " Interpersonal skills", value: "interpersonal" },
         { label: "  learning new technical skills", value: "technical" },
+        { label: "  Others", value: "otherstwo" }
 
     ];
 
@@ -125,78 +130,10 @@ const HalfYearGoalForm = (props) => {
     };
 
     const onFinish = (values) => {
-        console.log('appraisal1', values);
+        console.log('appraisalGoal', values);
+    }
 
-        let newAppraisalForm = {
-            projectName: values.projectName,
-            employeeContribution: values.contribution,
-            employeeGoal: values.employeeGoal,
-            employeeStrength: values.employeeStrength,
-            lead: props.appraisal.lead,
-            repManager: props.appraisal.repManager,
-            mailid: props.appraisal.mailid,
-            fname: props.appraisal.fname,
-            lname: props.appraisal.lname,
-            status: 'leadPending'
 
-        }
-        if (leadEditable) {
-            newAppraisalForm = {
-
-                status: 'mgrPending',
-                leadGoal: values.leadGoal,
-                leadRating: values.leadRating,
-                lead: props.appraisal.lead,
-                repManager: props.appraisal.repManager,
-                mailid: props.appraisal.mailid,
-                fname: props.appraisal.fname,
-                lname: props.appraisal.lname,
-
-            }
-        }
-
-        if (mgrEditable) {
-            newAppraisalForm = {
-
-                status: 'completed',
-                managerComments: values.managerComments,
-                managerObjective: values.managerObjective,
-                diversityGoal: values.diversityGoal,
-                lead: props.appraisal.lead,
-                repManager: props.appraisal.repManager,
-                mailid: props.appraisal.mailid,
-                fname: props.appraisal.fname,
-                lname: props.appraisal.lname,
-            }
-        }
-        console.log('appraisal2', newAppraisalForm)
-
-        AppraisalContext.updateAppraisal(currentAppraisal.id, newAppraisalForm)
-            .then(response => {
-                console.log("appraisal Form Created", response);
-                if (newAppraisalForm.status === 'leadPending') {
-                    console.log('newAppraisalForm.status', newAppraisalForm.status)
-                    AppraisalContext.sendEmailToLead(newAppraisalForm)
-
-                }
-                else if (newAppraisalForm.status === 'mgrPending') {
-                    AppraisalContext.sendEmailToManager(newAppraisalForm)
-                }
-
-                showNotification("success", "Success", "Appraisal successfully submited");
-                setEmpEditable(false)
-            })
-            .catch(error => {
-                console.log('appraisalForm', error.message);
-                showNotification("error", "Error", "Error Submiting Appraisal");
-
-            })
-        console.log('appraisalForm', 'appraisal created');
-
-        // setQuarter('')
-        // form.resetFields();
-
-    };
 
     return (
         <Layout classname='layout-antd' style={{ backgroundColor: 'white' }}>
@@ -284,10 +221,10 @@ const HalfYearGoalForm = (props) => {
                     </Row>
                 </Col>
 
-                <Row gutter={[8, 32]}>
+                <Row gutter={[8, 8]}>
                     <Col xl={24} lg={24} md={24} sm={24} xs={24} >
 
-                        <Form className='appraisall-div'
+                        <Form className='appraisall-div' style={{ width: '600px' }}
                             layout="vertical"
                             labelCol={{
                                 span: 24,
@@ -317,103 +254,188 @@ const HalfYearGoalForm = (props) => {
                             form={form}
                             onFinish={onFinish}
 
-
                         >
-
-
                             <Divider orientation='left' orientationMargin={0}>To Be Fill By Employee<span style={{ color: 'red' }}> *</span></Divider>
 
                             {/* //-------------------------------------dynamic field---- */}
+                            <Divider>Project Related Activities </Divider>
+                            <Form.Item name="projectName"
+                            // rules={[{ required: true }]}
+                            >
+                                <FloatInput
+                                    label="Project Name"
+                                    placeholder="Project name"
+                                    name="name"
+                                />
+                            </Form.Item>
 
+                            <Form.Item name="projectDetal">
+                                <FloatTextArea className='textArea-ant-two'
+                                    label="Project Detail"
+
+                                    // required
+                                    placeholder="Project Detail" />
+                            </Form.Item>
                             <Form.List name="fields">
                                 {(fields, { add, remove }) => {
                                     return (
-                                        <div>
+                                        <div >
                                             {fields.map((field, index) => (
-                                                <div key={field.key}>
-                                                    <Divider>Project Related Activities : {index + 1}</Divider>
+                                                <div key={field.key} style={{ marginBottom: '10px' }}>
+
                                                     <Form.Item
-                                                        name={[index, "name"]}
-                                                        label="Project Name"
-                                                        rules={[{ required: true }]}
+                                                        name={[index, "projectName"]}
+
+                                                    // rules={[{ required: true }]}
                                                     >
-                                                        <Input placeholder="project name" />
+                                                        <FloatInput
+                                                            label="Project Name"
+                                                            placeholder="Project name"
+                                                            name="name"
+                                                        />
                                                     </Form.Item>
 
-                                                    <Form.Item name={[index, "options"]} label="Project Detail">
-                                                        <TextArea
-                                                            maxLength={100}
-                                                            autoSize={{
-                                                                minRows: 3,
+                                                    <Form.Item name="projectDetal">
+                                                        <FloatTextArea className='textArea-ant-two'
+                                                            label="Project Detail"
 
-                                                            }}
-                                                            required
-                                                            placeholder="project Detail," />
+                                                            // required
+                                                            placeholder="Project Detail" />
                                                     </Form.Item>
-                                                    {fields.length > 1 ? (
+                                                    {fields.length ? (
                                                         <Button
                                                             type="danger"
                                                             className="dynamic-delete-button"
                                                             onClick={() => remove(field.name)}
                                                             icon={<MinusCircleOutlined />}
                                                         >
-                                                            Remove Above Project
+
                                                         </Button>
                                                     ) : null}
                                                 </div>
                                             ))}
-                                            <Divider />
+
                                             <Form.Item>
                                                 <Button
-                                                    type="dashed"
+                                                    type="primary"
+                                                    className="dynamic-delete-button"
                                                     onClick={() => add()}
-                                                    style={{ width: "60%" }}
+                                                    style={{ width: "" }}
+                                                    icon={<PlusCircleOutlined />}
                                                 >
-                                                    <PlusOutlined /> Add field
+
                                                 </Button>
+
                                             </Form.Item>
                                         </div>
                                     );
                                 }}
                             </Form.List>
-                            <span className="ant-rate-text">Rate Your Self</span>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Form.Item className='rating-div'
+                                        name="rating"
+                                        label="Rate YourSelf"
+                                    // rules={[{ required: true }]}
+                                    >
+                                        <div >
+                                            <Radio.Group defaultValue="a" buttonStyle="solid">
+                                                <Radio.Button style={{ marginRight: '5px' }} value="a">1</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="b">2</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="c">3</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="d">4</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="2">5</Radio.Button>
+                                            </Radio.Group>
 
-                            <Rate defaultValue={3} />
+                                        </div >
+                                    </Form.Item>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Form.Item className='rating-div'
+                                        name="ratingManager"
+                                        label="Manager Rating"
+                                    // rules={[{ required: true }]}
+                                    >
+                                        <div >
+
+                                            <Radio.Group defaultValue="a" buttonStyle="solid">
+                                                <Radio.Button style={{ marginRight: '5px' }} value="a">1</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="b">2</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="c">3</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="d">4</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="2">5</Radio.Button>
+                                            </Radio.Group>
+
+                                        </div >
+                                    </Form.Item>
+                                </div>
+                            </div>
 
                             {/* //----------------------------------------------- */}
 
                             <Divider>Organizational Activities: </Divider>
-
                             <Form.Item name="Organizational" colon={false} valuePropName="checked" initialValue={defaults}>
-                                <Checkbox.Group
+                                <Checkbox.Group style={{ display: 'flex', flexDirection: 'column' }}
                                     options={options}
                                     defaultValue={defaults}
                                     onChange={onChange}
                                 />
                             </Form.Item>
 
-                            <Form.Item labelAlign="left"
-                                style={{ marginBottom: "10px", width: '100%', }}
-                                label='Give Discription: '
-                                name="organizationalActivities"
+                            <Form.Item name="giveDescription">
+                                <FloatTextArea className='textArea-ant-two'
+                                    label="Give Detail"
 
-                            >
-                                <TextArea className='textArea-ant'
-                                    maxLength={100}
-                                    autoSize={{
-                                        minRows: 3,
-                                    }}
-                                    required
-                                    placeholder=""
-                                    disabled={empEditable}
-                                />
+                                    // required
+                                    placeholder="Give Detail" />
                             </Form.Item>
 
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Form.Item className='rating-div'
+                                        name="organisationRating"
+                                        label="Rate YourSelf"
+                                    // rules={[{ required: true }]}
+                                    >
+
+                                        <div >
+                                            <Radio.Group defaultValue="a" buttonStyle="solid">
+                                                <Radio.Button style={{ marginRight: '5px' }} value="a">1</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="b">2</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="c">3</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="d">4</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="2">5</Radio.Button>
+                                            </Radio.Group>
+
+                                        </div >
+                                    </Form.Item>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Form.Item className='rating-div'
+                                        name="organisationRatingManager"
+                                        label="Manager Rating"
+                                    // rules={[{ required: true }]}
+                                    >
+
+                                        <div >
+                                            <Radio.Group defaultValue="a" buttonStyle="solid">
+                                                <Radio.Button style={{ marginRight: '5px' }} value="a">1</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="b">2</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="c">3</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="d">4</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="2">5</Radio.Button>
+                                            </Radio.Group>
+
+
+                                        </div >
+                                    </Form.Item>
+                                </div>
+                            </div>
                             {/* //----------------------------------------------- */}
                             <Divider>Personal Growth : </Divider>
 
                             <Form.Item name="Personal" valuePropName="checked" initialValue={defaults}>
-                                <Checkbox.Group
+                                <Checkbox.Group style={{ display: 'flex', flexDirection: 'column' }}
                                     options={optionsTwo}
                                     defaultValue={defaults}
                                     onChange={onChange}
@@ -422,256 +444,77 @@ const HalfYearGoalForm = (props) => {
 
                             <Form.Item labelAlign="left"
                                 style={{ marginBottom: "10px", width: '100%', }}
-                                label='Give Discription: '
                                 name="personalGrowth"
 
                             >
-                                <TextArea className='textArea-ant-two'
-                                    maxLength={100}
-                                    autoSize={{
-                                        minRows: 3,
-                                    }}
-                                    required
-                                    placeholder=""
-                                    disabled={empEditable}
-                                />
+                                <Form.Item name="givePersonalDescription">
+                                    <FloatTextArea className='textArea-ant-two'
+                                        label="Give Detail"
+
+                                        // required
+                                        placeholder="Give Detail" />
+                                </Form.Item>
                             </Form.Item>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Form.Item className='rating-div'
+                                        name="personalRating"
+                                        label="Rate YourSelf"
+                                    // rules={[{ required: true }]}
+                                    >
 
-                            <div >
-                                <Button onClick={selectNumber} value="7">7</Button>
-                                <Button onClick={selectNumber} value="8">8</Button>
-                                <Button onClick={selectNumber} value="9">9</Button>
-                            </div >
+                                        <div >
+                                            <Radio.Group defaultValue="a" buttonStyle="solid">
+                                                <Radio.Button style={{ marginRight: '5px' }} value="a">1</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="b">2</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="c">3</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="d">4</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="2">5</Radio.Button>
+                                            </Radio.Group>
 
-                            {/* <Form.Item labelAlign="left"
-                                style={{ marginBottom: "10px", width: '100%', }}                          
-                                label='Project Name and Description '
-                                name="projectName"
-                        
-                            >
-                                <TextArea className='textArea-ant'
-                                    maxLength={100}
-                                    autoSize={{
-                                        minRows: 3,
+                                        </div >
+                                    </Form.Item>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Form.Item className='rating-div'
+                                        name="persoanalRatingManager"
+                                        label="Manager Rating"
+                                    // rules={[{ required: true }]}
+                                    >
+
+                                        <div >
+
+                                            <Radio.Group defaultValue="a" buttonStyle="solid">
+                                                <Radio.Button style={{ marginRight: '5px' }} value="a">1</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="b">2</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="c">3</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="d">4</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="2">5</Radio.Button>
+                                            </Radio.Group>
 
 
-                                    }}
-                                    required
-                                    placeholder=""
-                                    disabled={empEditable}
-                                />
-                            </Form.Item> */}
-
-                            {/* <Form.Item labelAlign="left"
-                                style={{ marginBottom: "10px" }}
-                                label='What were your best traits or contribution to the company this quarter?'
-                                name="contribution"                
-
-                            >
-                                <TextArea
-                                    maxLength={100}
-                                    autoSize={{
-                                        minRows: 3,
-
-                                    }}
-                                    required
-                                    placeholder=""
-                                    disabled={empEditable}
-                                />
-                            </Form.Item> */}
-
-                            {/* <Form.Item labelAlign="left"
-                                style={{ marginBottom: "10px" }}
-                                label='What are your goal for next quarter?'
-                                name="employeeGoal"
-                     
-                            >
-                                <TextArea
-                                    maxLength={100}
-                                    autoSize={{
-                                        minRows: 3,
-
-                                    }}
-                                    required
-                                    placeholder=""
-                                    disabled={empEditable}
-                                />
-                            </Form.Item> */}
-                            {/* 
-                            <Form.Item className='page-break4' labelAlign="left"
-                                style={{ marginBottom: "10px" }}
-                                label='What are your Strength and Development Area?'
-
-                                name="employeeStrength"
-
-                            // onKeyPress={(event) => {
-                            //     if (checkAlphabets(event)) {
-                            //         event.preventDefault();
-                            //     }
-                            // }}
+                                        </div >
+                                    </Form.Item>
+                                </div>
+                            </div>
+                            <Divider orientation='left' orientationMargin={0}>To Be Fill By Manager<span style={{ color: 'red' }}> *</span></Divider>
+                            <Form.Item labelAlign="left"
+                                style={{ marginBottom: "10px", width: '100%', }}
+                                name="managerComment"
 
                             >
-                                <TextArea
-                                    maxLength={100}
-                                    autoSize={{
-                                        minRows: 3,
+                                <Form.Item name="managerComment">
+                                    <FloatTextArea className='textArea-ant-two'
+                                        label="Manager Comments"
 
-                                    }}
-                                    required
-                                    placeholder=""
-                                    disabled={empEditable}
-                                />
-                            </Form.Item> */}
-
-                            {/* //--------------lead---------------------------*/}
-
-                            {/* <div className='page-break-lead' style={{ display: leadEditable || mgrEditable || props.hrMode ? 'block' : 'none' }}>
-                                <Divider orientation='left' orientationMargin={0}>To Be Fill By Team Lead<span style={{ color: 'red' }}> *</span></Divider>
-
-
-                                <Form.Item labelAlign="left"
-                                    style={{ marginBottom: "10px", }}
-                                    label='Set goals and objective for upcoming assement year'
-
-                                    name="leadGoal"
-
-                                // onKeyPress={(event) => {
-                                //     if (checkAlphabets(event)) {
-                                //         event.preventDefault();
-                                //     }
-                                // }}
-
-                                >
-
-                                    <TextArea
-                                        style={{ overflow: 'hidden', }}
-                                        maxLength={100}
-                                        autoSize={{
-                                            minRows: 3,
-
-
-                                        }}
-                                        required
-                                        // bordered={false}
-                                        placeholder=""
-                                        disabled={!leadEditable}
-                                    />
+                                        // required
+                                        placeholder="Manager Comments" />
                                 </Form.Item>
-
-                                <Form.Item labelAlign="left"
-                                    style={{ marginBottom: "10px" }}
-                                    label='Overall Rating'
-
-                                    name="leadRating"
-
-                                // onKeyPress={(event) => {
-                                //     if (checkAlphabets(event)) {
-                                //         event.preventDefault();
-                                //     }
-                                // }}
-
-                                >
-
-                                    <TextArea
-                                        maxLength={100}
-                                        autoSize={{
-                                            minRows: 3,
-
-                                        }}
-                                        required
-                                        placeholder=""
-                                        disabled={!leadEditable}
-                                    />
-                                </Form.Item>
-                            </div> */}
-
-                            {/* //-------------------mgr------- */}
-
-                            {/* <div className='page-break-mgr' style={{ display: mgrEditable || props.hrMode ? 'block' : 'none' }}>
-                                <Divider orientation='left' orientationMargin={0}>To Be Fill By Manager<span style={{ color: 'red' }}> *</span></Divider>
-
-                                <Form.Item labelAlign="left"
-                                    style={{ marginBottom: "10px" }}
-                                    label='Associate Engagement Comments:'
-                                    name="managerComments"
-
-                                // onKeyPress={(event) => {
-                                //     if (checkAlphabets(event)) {
-                                //         event.preventDefault();
-                                //     }
-                                // }}
-
-                                >
-                                    <TextArea
-                                        maxLength={100}
-                                        autoSize={{
-                                            minRows: 3,
-
-                                        }}
-                                        required
-                                        placeholder=""
-                                        disabled={!mgrEditable}
-                                    />
-                                </Form.Item>
-
-
-                                <Form.Item labelAlign="left"
-                                    style={{ marginBottom: "10px" }}
-                                    label='People Management/Leadership Objectives:'
-
-                                    name="managerObjective"
-
-                                // onKeyPress={(event) => {
-                                //     if (checkAlphabets(event)) {
-                                //         event.preventDefault();
-                                //     }
-                                // }}
-
-                                >
-                                    <TextArea
-                                        maxLength={100}
-                                        autoSize={{
-                                            minRows: 3,
-
-                                        }}
-                                        required
-                                        placeholder=""
-                                        disabled={!mgrEditable}
-                                    />
-                                </Form.Item>
-
-
-                                <Form.Item labelAlign="left"
-                                    style={{ marginBottom: "10px" }}
-                                    label='Diversity Goals Comments (if applicable):'
-
-                                    name="diversityGoal"
-
-                                // onKeyPress={(event) => {
-                                //     if (checkAlphabets(event)) {
-                                //         event.preventDefault();
-                                //     }
-                                // }}
-
-                                >
-                                    <TextArea
-                                        maxLength={100}
-                                        autoSize={{
-                                            minRows: 3,
-
-                                        }}
-                                        required
-                                        placeholder=""
-                                        disabled={!mgrEditable}
-                                    />
-                                </Form.Item>
-
-                            </div> */}
-
+                            </Form.Item>
 
                             <Col span={30} >
 
-                                <Form.Item className="noprint">
+                                <Form.Item className="noprint" style={{ marginTop: '30px' }}>
                                     <Button
                                         style={cancelStyle}
                                         onClick={handleOk}

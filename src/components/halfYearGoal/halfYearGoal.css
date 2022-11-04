@@ -1,3 +1,10 @@
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
 .appraisal-div {
   display: flex;
   flex-direction: row;
@@ -15,6 +22,38 @@
 .edIt:hover {
   box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
 }
+
+.float-label {
+  position: relative;
+}
+
+.label {
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 12px;
+  top: 11px;
+  transition: 0.2s ease all;
+}
+
+.as-placeholder {
+  color: gray;
+}
+
+.as-label {
+  top: -8px;
+  font-size: 12px !important;
+  background: white;
+  padding: 0 4px;
+  margin-left: -4px;
+}
+
+
+
+/* .active {
+  background-color: green !important;
+  color: white !important;
+} */
 
 @media only screen and (max-width: 600px) {
   .appraisal-div {

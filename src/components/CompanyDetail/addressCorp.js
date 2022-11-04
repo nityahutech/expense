@@ -1,15 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Button, Select, Input, Form } from "antd";
 import { useAuth } from "../../contexts/AuthContext";
+import CompanyProContext from "../../contexts/CompanyProContext";
 import { CloseOutlined, EditFilled, PlusCircleOutlined } from "@ant-design/icons";
 const { Option } = Select;
 const { TextArea } = Input;
 
 function AddressCorp() {
-    const [editContent, showEditContent] = useState(false);
-    const [editContactInfo, showEditContactInfo] = useState(false);
+    const [editCropAddress, showEditCropAddress] = useState(false);
+    const [editCropInfo, showEditCropInfo] = useState(false);
     const [data, setData] = useState([]);
     const { currentUser } = useAuth();
+
+    const onFinish = (value) => {
+        const valueToservice = {
+            addLine1: value.address,
+            addLine2: value.address1,
+            city: value.city,
+            state: value.state,
+            country:value.country,
+            pincode:value.pin
+          
+        }
+        CompanyProContext.updateCompInfo("compId001",{cropOffice:valueToservice});
+        getData();
+        showEditCropAddress(false);
+      };
+      useEffect(() => {
+        getData();
+        }, []);
+        const getData = async () => {
+          let data = await CompanyProContext.getCompanyProfile("compId001");
+          setData(data);
+          
+        };
 
     return (
         <>
@@ -33,17 +57,17 @@ function AddressCorp() {
                         remember: true,
                     }}
                     autoComplete="off"
-                // onFinish={onContactFinish}
+                 onFinish={onFinish}
                 >
                     <Card
                         title=" CORPORATE OFFICE"
                         extra={
                             <>
-                                {editContactInfo === false ? (
+                                {editCropInfo === false ? (
                                     <Button
                                         type="text"
                                         style={{ color: "#4ec0f1" }}
-                                        onClick={() => showEditContactInfo(!editContactInfo)}
+                                        onClick={() => showEditCropInfo(!editCropInfo)}
                                     >
                                         <EditFilled />
                                     </Button>
@@ -55,32 +79,32 @@ function AddressCorp() {
                             marginTop: 10,
                         }}
                     >
-                        {editContactInfo === true ? (
+                        {editCropInfo === true ? (
                             <Row gutter={[16, 16]}>
                                 <Col span={24}>
                                     <div>
                                         <div className='div-discription'>
                                             Address Line 1
                                         </div>
-                                        {editContactInfo === false ? (
-                                            <div>{data.mailid ? data.mailid : ""}
+                                        {editCropInfo === false ? (
+                                            <div>{data.cropOffice.address1}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.mailid : null}
-                                                name="Address1"
+                                                initialValue={data ? data.address1 : null}
+                                                name="address1"
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: "Please enter Address",
+                                                        message: "Enter Address",
                                                         type: "text",
                                                     },
                                                     {
-                                                        message: "Please enter Valid Address ",
+                                                        message: "Enter Valid Address ",
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} type='AddressName' required placeholder="" />
+                                                <Input style={{ paddingLeft: '0px' }} required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -89,32 +113,32 @@ function AddressCorp() {
                             </Row>
                         ) : null}
 
-                        {editContactInfo === true ? (
+                        {editCropInfo === true ? (
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                                 <Col span={24}>
                                     <div>
                                         <div className='div-discription'>
                                             Address Line 2
                                         </div>
-                                        {editContactInfo === false ? (
-                                            <div>{data.mailid ? data.mailid : ""}
+                                        {editCropInfo === false ? (
+                                            <div>{data.cropOffice.address2}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.mailid : null}
-                                                name="Address"
+                                                initialValue={data ? data.address2 : null}
+                                                name="address2"
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: "Please enter Address ",
+                                                        message: "Enter Address ",
                                                         type: "text",
                                                     },
                                                     {
-                                                        message: "Please enter Valid Address ",
+                                                        message: "Enter Valid Address ",
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} type='AddressName2' required placeholder="" />
+                                                <Input style={{ paddingLeft: '0px' }} required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -123,28 +147,28 @@ function AddressCorp() {
                             </Row>
                         ) : null}
 
-                        {editContactInfo === true ? (
+                        {editCropInfo === true ? (
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                                 <Col span={6}>
                                     <div>
                                         <div className='div-discription'>
                                             City
                                         </div>
-                                        {editContactInfo === false ? (
-                                            <div>{data.mailid ? data.mailid : ""}
+                                        {editCropInfo === false ? (
+                                            <div>{data.cropOffice.city}
                                             </div>
                                         ) : (
                                             <Form.Item style={{ width: '100%' }}
-                                                initialValue={data ? data.mailid : null}
-                                                name="City"
+                                                initialValue={data ? data.city : null}
+                                                name="city"
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: "Please enter City ",
+                                                        message: "Enter City ",
 
                                                     },
                                                     {
-                                                        message: "Please enter Valid City ",
+                                                        message: "Enter Valid City ",
                                                     },
                                                 ]}
                                             >
@@ -159,21 +183,21 @@ function AddressCorp() {
                                         <div className='div-discription'>
                                             State
                                         </div>
-                                        {editContactInfo === false ? (
-                                            <div>{data.mailid ? data.mailid : ""}
+                                        {editCropInfo === false ? (
+                                            <div>{data.cropOffice.state}
                                             </div>
                                         ) : (
                                             <Form.Item style={{ width: '100%' }}
-                                                initialValue={data ? data.mailid : null}
-                                                name="State"
+                                                initialValue={data ? data.state : null}
+                                                name="state"
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: "Please enter State ",
+                                                        message: "Enter State ",
                                                         type: "text",
                                                     },
                                                     {
-                                                        message: "Please enter Valid State ",
+                                                        message: "Enter Valid State ",
                                                     },
                                                 ]}
                                             >
@@ -188,25 +212,25 @@ function AddressCorp() {
                                         <div className='div-discription'>
                                             Country
                                         </div>
-                                        {editContactInfo === false ? (
-                                            <div>{data.mailid ? data.mailid : ""}
+                                        {editCropInfo === false ? (
+                                            <div>{data.cropOffice.country}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.mailid : null}
-                                                name="Country"
+                                                initialValue={data ? data.country : null}
+                                                name="country"
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: "Please enter Country ",
+                                                        message: "Enter Country ",
                                                         type: "text",
                                                     },
                                                     {
-                                                        message: "Please enter Valid Country ",
+                                                        message: "Enter Valid Country ",
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} type='Country' required placeholder="" />
+                                                <Input style={{ paddingLeft: '0px' }} required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -217,25 +241,25 @@ function AddressCorp() {
                                         <div className='div-discription'>
                                             Pin Code
                                         </div>
-                                        {editContactInfo === false ? (
-                                            <div>{data.mailid ? data.mailid : ""}
+                                        {editCropInfo === false ? (
+                                            <div>{data.cropOffice.pin}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.mailid : null}
-                                                name="Pin"
+                                                initialValue={data ? data.pin : null}
+                                                name="pin"
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: "Please enter Pin",
+                                                        message: "Enter Pin",
                                                         type: "text",
                                                     },
                                                     {
-                                                        message: "Please enter Valid Pin",
+                                                        message: "Enter Valid Pin",
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} type='Pin' required placeholder="" />
+                                                <Input style={{ paddingLeft: '0px' }}  required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -245,7 +269,7 @@ function AddressCorp() {
                             </Row>
                         ) : null}
 
-                        {editContactInfo === true ? (
+                        {editCropInfo === true ? (
                             <Row
                                 style={{
                                     display: "flex",
@@ -256,7 +280,7 @@ function AddressCorp() {
                                 <Button
                                     type="text"
                                     style={{ fontSize: 15 }}
-                                    onClick={() => showEditContactInfo(false)}
+                                    onClick={() => showEditCropInfo(false)}
                                 >
                                     <CloseOutlined /> CANCEL
                                 </Button>
@@ -272,7 +296,7 @@ function AddressCorp() {
                             </Row>
                         ) : null}
 
-                        {editContactInfo == false &&
+                        {/* {editContactInfo == false &&
                             <Button type="primary" style={{ marginLeft: "10px" }}
                                 onClick={() => showEditContactInfo(!editContactInfo)}
                             >
@@ -280,7 +304,7 @@ function AddressCorp() {
                                 Add
 
                             </Button>
-                        }
+                        } */}
                     </Card>
                 </Form>
             </div>

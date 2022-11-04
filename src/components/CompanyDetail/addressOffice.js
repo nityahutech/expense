@@ -88,11 +88,10 @@ function AddressOffice() {
                                         <div className='div-discription'>
                                             Address Line 1
                                         </div>
+                                        {editAddress === false ? (
                                         <div>
                                                 {data ? data.regOffice.addLine1 : null}
                                         </div>
-                                        {editAddress === false ? (
-                                            <></>
                                         ) : (
                                             <Form.Item
                                                 initialValue={data ? data.address1 : null}
@@ -125,7 +124,7 @@ function AddressOffice() {
                                             Address Line 2
                                         </div>
                                         {editAddress === false ? (
-                                            <div>{data ? data.regOffice.addLine1 : null}
+                                            <div>{data ? data.regOffice.addLine2 : null}
                                             </div>
                                         ) : (
                                             <Form.Item

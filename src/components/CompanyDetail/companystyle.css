@@ -1,4 +1,4 @@
-Input[type="regCompName"],
+/* Input[type="regCompName"],
 [type="brandName"],
 [type="WebsiteName"],
 [type="DomainName"],
@@ -14,7 +14,7 @@ Input[type="regCompName"],
   border: 0 !important;
   border-bottom: 1px solid #ccc !important;
   outline: 0 !important;
-}
+} */
 
 .table-responsive {
   overflow-x: auto;

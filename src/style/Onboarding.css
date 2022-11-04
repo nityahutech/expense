@@ -1,0 +1,43 @@
+.upload .ant-upload.ant-upload-select-picture-card{
+    width: 60px;
+    height: 60px;
+    
+}
+.form .ant-form{
+    margin: 30px 40px 30px 10px;
+    
+}
+.details .ant-form-item-label > label{
+    font-weight: 600;
+    font-size: 13px;
+}
+.inputLabel .ant-form label{
+    font-weight: 600;
+    font-size: 13px;
+}
+.addUserForm .ant-form-item-label > label{
+    font-weight: 600;
+    font-size: 13px;
+    
+}
+.inputLabel .ant-input{
+    border: 1px solid #8692A6;
+    border-radius: 4px;
+
+}
+.mainTabs .ant-tabs-nav .ant-tabs-nav-list{
+    margin: 13px;
+}
+.home{
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.tableTab .ant-table-thead>tr>th{
+    background:#1963A6;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    
+ }

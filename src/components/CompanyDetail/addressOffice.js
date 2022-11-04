@@ -94,7 +94,7 @@ function AddressOffice() {
                                         </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.address1 : null}
+                                                initialValue={data ? data.regOffice.addLine1 : null}
                                                 name="address1"
                                                 rules={[
                                                     {
@@ -128,7 +128,7 @@ function AddressOffice() {
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.address2 : null}
+                                                initialValue={data ? data.regOffice.addLine2 : null}
                                                 name="address2"
                                                 rules={[
                                                     {
@@ -162,7 +162,7 @@ function AddressOffice() {
                                             </div>
                                         ) : (
                                             <Form.Item style={{ width: '100%' }}
-                                                initialValue={data ? data.city : null}
+                                                initialValue={data ? data.regOffice.city : null}
                                                 name="city"
                                                 rules={[
                                                     {
@@ -192,7 +192,7 @@ function AddressOffice() {
                                             </div>
                                         ) : (
                                             <Form.Item style={{ width: '100%' }}
-                                                initialValue={data ? data.state : null}
+                                                initialValue={data ? data.regOffice.state : null}
                                                 name="state"
                                                 rules={[
                                                     {
@@ -221,7 +221,7 @@ function AddressOffice() {
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.country : null}
+                                                initialValue={data ? data.regOffice.country : null}
                                                 name="country"
                                                 rules={[
                                                     {
@@ -250,7 +250,7 @@ function AddressOffice() {
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.pin : null}
+                                                initialValue={data ? data.regOffice.pincode : null}
                                                 name="pin"
                                                 rules={[
                                                     {

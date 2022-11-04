@@ -7,24 +7,24 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 function AddressCorp() {
-    const [editCropAddress, showEditCropAddress] = useState(false);
-    const [editCropInfo, showEditCropInfo] = useState(false);
+    const [editCorpAddress, showEditCorpAddress] = useState(false);
+    const [editcorpInfo, showEditcorpInfo] = useState(false);
     const [data, setData] = useState([]);
     const { currentUser } = useAuth();
 
     const onFinish = (value) => {
         const valueToservice = {
-            addLine1: value.address,
-            addLine2: value.address1,
+            addLine1: value.address1,
+            addLine2: value.address2,
             city: value.city,
             state: value.state,
             country:value.country,
             pincode:value.pin
           
         }
-        CompanyProContext.updateCompInfo("compId001",{cropOffice:valueToservice});
+        CompanyProContext.updateCompInfo("compId001",{corpOffice:valueToservice});
         getData();
-        showEditCropAddress(false);
+        showEditCorpAddress(false);
       };
       useEffect(() => {
         getData();
@@ -32,8 +32,8 @@ function AddressCorp() {
         const getData = async () => {
           let data = await CompanyProContext.getCompanyProfile("compId001");
           setData(data);
-          
         };
+        console.log(data)
 
     return (
         <>
@@ -63,11 +63,11 @@ function AddressCorp() {
                         title=" CORPORATE OFFICE"
                         extra={
                             <>
-                                {editCropInfo === false ? (
+                                {editCorpAddress === false ? (
                                     <Button
                                         type="text"
                                         style={{ color: "#4ec0f1" }}
-                                        onClick={() => showEditCropInfo(!editCropInfo)}
+                                        onClick={() => showEditCorpAddress(!editCorpAddress)}
                                     >
                                         <EditFilled />
                                     </Button>
@@ -79,19 +79,19 @@ function AddressCorp() {
                             marginTop: 10,
                         }}
                     >
-                        {editCropInfo === true ? (
+                        {/* {editcorpInfo === true ? ( */}
                             <Row gutter={[16, 16]}>
                                 <Col span={24}>
                                     <div>
                                         <div className='div-discription'>
                                             Address Line 1
                                         </div>
-                                        {editCropInfo === false ? (
-                                            <div>{data.cropOffice.address1}
+                                        {editCorpAddress === false ? (
+                                            <div>{data.corpOffice ? data.corpOffice.addLine1 : null}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.address1 : null}
+                                                initialValue={data.corpOffice ? data.corpOffice.addLine1 : null}
                                                 name="address1"
                                                 rules={[
                                                     {
@@ -111,21 +111,21 @@ function AddressCorp() {
                                     </div>
                                 </Col>
                             </Row>
-                        ) : null}
+                        {/* ) : null} */}
 
-                        {editCropInfo === true ? (
+                        {/* {editcorpInfo === true ? ( */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                                 <Col span={24}>
                                     <div>
                                         <div className='div-discription'>
                                             Address Line 2
                                         </div>
-                                        {editCropInfo === false ? (
-                                            <div>{data.cropOffice.address2}
+                                        {editCorpAddress === false ? (
+                                            <div>{data.corpOffice ? data.corpOffice.addLine2 : null}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.address2 : null}
+                                                initialValue={data.corpOffice ? data.corpOffice.addLine2 : null}
                                                 name="address2"
                                                 rules={[
                                                     {
@@ -145,21 +145,21 @@ function AddressCorp() {
                                     </div>
                                 </Col>
                             </Row>
-                        ) : null}
+                        {/* ) : null} */}
 
-                        {editCropInfo === true ? (
+                         {/* {editcorpInfo === true ? (  */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                                 <Col span={6}>
                                     <div>
                                         <div className='div-discription'>
                                             City
                                         </div>
-                                        {editCropInfo === false ? (
-                                            <div>{data.cropOffice.city}
+                                        {editCorpAddress === false ? (
+                                            <div>{data.corpOffice ? data.corpOffice.city : null}
                                             </div>
                                         ) : (
                                             <Form.Item style={{ width: '100%' }}
-                                                initialValue={data ? data.city : null}
+                                                initialValue={data.corpOffice ? data.corpOffice.city : null}
                                                 name="city"
                                                 rules={[
                                                     {
@@ -183,12 +183,12 @@ function AddressCorp() {
                                         <div className='div-discription'>
                                             State
                                         </div>
-                                        {editCropInfo === false ? (
-                                            <div>{data.cropOffice.state}
+                                        {editCorpAddress === false ? (
+                                            <div>{data.corpOffice ? data.corpOffice.state : null}
                                             </div>
                                         ) : (
                                             <Form.Item style={{ width: '100%' }}
-                                                initialValue={data ? data.state : null}
+                                                initialValue={data.corpOffice ? data.corpOffice.state : null}
                                                 name="state"
                                                 rules={[
                                                     {
@@ -212,12 +212,12 @@ function AddressCorp() {
                                         <div className='div-discription'>
                                             Country
                                         </div>
-                                        {editCropInfo === false ? (
-                                            <div>{data.cropOffice.country}
+                                        {editCorpAddress === false ? (
+                                            <div>{data.corpOffice ? data.corpOffice.country : null}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.country : null}
+                                                initialValue={data.corpOffice ? data.corpOffice.country : null}
                                                 name="country"
                                                 rules={[
                                                     {
@@ -241,12 +241,12 @@ function AddressCorp() {
                                         <div className='div-discription'>
                                             Pin Code
                                         </div>
-                                        {editCropInfo === false ? (
-                                            <div>{data.cropOffice.pin}
+                                        {editCorpAddress === false ? (
+                                            <div>{data.corpOffice ? data.corpOffice.pincode : null}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.pin : null}
+                                                initialValue={data.corpOffice ? data.corpOffice.pincode : null}
                                                 name="pin"
                                                 rules={[
                                                     {
@@ -267,9 +267,9 @@ function AddressCorp() {
                                 </Col>
 
                             </Row>
-                        ) : null}
+                        {/* ) : null} */}
 
-                        {editCropInfo === true ? (
+                        {editCorpAddress === true ? (
                             <Row
                                 style={{
                                     display: "flex",
@@ -280,7 +280,7 @@ function AddressCorp() {
                                 <Button
                                     type="text"
                                     style={{ fontSize: 15 }}
-                                    onClick={() => showEditCropInfo(false)}
+                                    onClick={() => showEditCorpAddress(false)}
                                 >
                                     <CloseOutlined /> CANCEL
                                 </Button>

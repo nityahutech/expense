@@ -31,7 +31,6 @@ export function AuthProvider({ children }) {
     let companyId = res.data().compId
     setCompId(companyId)
     sessionStorage.setItem("compId", companyId)
-    return companyId
   }
 
   function login(email, password) {
@@ -42,6 +41,7 @@ export function AuthProvider({ children }) {
     sessionStorage.setItem("accessToken", null)
     sessionStorage.setItem("user", null)
     sessionStorage.setItem("role", null)
+    sessionStorage.setItem("compId", null)
     return signOut(auth)
   }
 
@@ -76,9 +76,9 @@ export function AuthProvider({ children }) {
       return; 
     }
     let rec = await getDoc(doc(db, `companyprofile/${compId}/users`, user.uid))
-    sessionStorage.setItem("role", rec.role)
-    sessionStorage.setItem("role", "hr")
-    setRole(rec.role);
+    let role = rec.data().role
+    sessionStorage.setItem("role", role)
+    setRole(role);
   }
 
   useEffect(() => {

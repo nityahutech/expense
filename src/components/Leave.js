@@ -175,7 +175,7 @@ const Leave = () => {
       return;
     }
     let newLeave = {
-      empId: employeeRecord.empId,
+      empId: currentUser.uid,
       approver: values.approver,
       date: dateSelected,
       name: currentUser.displayName,
@@ -226,10 +226,10 @@ const Leave = () => {
 
   const getData = async (temp) => {
     let empRecord = await EmpInfoContext.getEduDetails(compId, currentUser.uid);
-    setRepManager(empRecord.repManager);
+    setRepManager(empRecord?.repManager);
     setEmployeeRecord(empRecord);
-    setIsMgr(empRecord.isManager);
-    let data = await LeaveContext.getAllById(empRecord.empId, compId);
+    setIsMgr(empRecord?.isManager);
+    let data = await LeaveContext.getAllById(currentUser.uid, compId);
     let d = data.docs.map((doc) => {
       return {
         ...doc.data(),

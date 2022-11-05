@@ -86,9 +86,9 @@ function Personal() {
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(compId, currentUser.uid);
     setData(data);
-    setDob(data.dob ? data.dob : null);
-    setLccs(data.lccs ? data.lccs : null);
-    setScrs(data.scrs ? data.scrs : null);
+    setDob(data?.dob ? data.dob : null);
+    setLccs(data?.lccs ? data.lccs : null);
+    setScrs(data?.scrs ? data.scrs : null);
   };
 
   return (
@@ -187,7 +187,7 @@ function Personal() {
                     Date of Birth
                   </div>
                   {editContent === false ? (
-                    <div>{data.dob ? data.dob : "-"}</div>
+                    <div>{data?.dob ? data.dob : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={dob?moment(dob, "DD-MM-YYYY"):null}
@@ -252,7 +252,7 @@ function Personal() {
                     Blood Group
                   </div>
                   {editContent === false ? (
-                    <div>{data.bloodGroup ? data.bloodGroup : "-"}</div>
+                    <div>{data?.bloodGroup ? data.bloodGroup : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.bloodGroup : null}
@@ -287,7 +287,7 @@ function Personal() {
                     Marital Status
                   </div>
                   {editContent === false ? (
-                    <div>{data.maritalStatus ? data.maritalStatus : "-"}</div>
+                    <div>{data?.maritalStatus ? data.maritalStatus : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.maritalStatus : null}
@@ -390,7 +390,7 @@ function Personal() {
                     Official Email ID
                   </div>
                   {editContactInfo === false ? (
-                    <div>{data.mailid ? data.mailid : "-"}</div>
+                    <div>{data?.mailid ? data.mailid : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.mailid : null}
@@ -419,7 +419,7 @@ function Personal() {
                     Personal Email ID
                   </div>
                   {editContactInfo === false ? (
-                    <div>{data.contactEmail ? data.contactEmail : "-"}</div>
+                    <div>{data?.contactEmail ? data.contactEmail : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.contactEmail : null}
@@ -448,7 +448,7 @@ function Personal() {
                     Phone Number
                   </div>
                   {editContactInfo === false ? (
-                    <div>{data.phonenumber ? data.phonenumber : "-"}</div>
+                    <div>{data?.phonenumber ? data.phonenumber : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.phonenumber : null}
@@ -479,7 +479,7 @@ function Personal() {
                     Alternate Phone Number
                   </div>
                   {editContactInfo === false ? (
-                    <div>{data.altPhnNo ? data.altPhnNo : "-"}</div>
+                    <div>{data?.altPhnNo ? data.altPhnNo : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.altPhnNo : null}
@@ -585,7 +585,7 @@ function Personal() {
                     Current Address
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data.currentAdd ? data.currentAdd : "-"}</div>
+                    <div>{data?.currentAdd ? data.currentAdd : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.currentAdd : null}
@@ -620,7 +620,7 @@ function Personal() {
                     Permanent Address
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data.permanentAdd ? data.permanentAdd : "-"}</div>
+                    <div>{data?.permanentAdd ? data.permanentAdd : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.permanentAdd : null}
@@ -656,7 +656,7 @@ function Personal() {
                     House Type
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data.houseType ? data.houseType : "-"}</div>
+                    <div>{data?.houseType ? data.houseType : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={data ? data.houseType : null}
@@ -722,7 +722,7 @@ function Personal() {
                     Staying at Current Residence Since
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data.scrs ? data.scrs : "-"}</div>
+                    <div>{data?.scrs ? data.scrs : "-"}</div>
                   ) : (
                     <Form.Item
                       // name="dob"
@@ -757,7 +757,7 @@ function Personal() {
                     Living in Current City Since
                   </div>
                   {editAddressInfo === false ? (
-                    <div>{data.lccs ? data.lccs : "-"}</div>
+                    <div>{data?.lccs ? data.lccs : "-"}</div>
                   ) : (
                     <Form.Item
                       initialValue={lccs?moment(lccs, "DD-MM-YYYY"):null}

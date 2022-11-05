@@ -701,7 +701,7 @@ function AddEmployee() {
                     message: "Please enter Location",
                   },
                   {
-                    pattern: /^[a-zA-Z\s]*$/,
+                    // pattern: /^[a-zA-Z\s]*$/,
                     message: "Please enter Valid Location",
                   },
                 ]}

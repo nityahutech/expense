@@ -81,7 +81,7 @@ function AddressOffice() {
                             marginTop: 10,
                         }}
                     >
-                         {editAddress === true ? ( 
+                         {/* {editAddress === true ? (  */}
                             <Row gutter={[16, 16]}>
                                 <Col span={24}>
                                     <div>
@@ -89,12 +89,12 @@ function AddressOffice() {
                                             Address Line 1
                                         </div>
                                         {editAddress === false ? (
-                                            <div>
-                                                {data.regOffice.address1 }
-                                            </div>
+                                        <div>
+                                                {data ? data.regOffice.addLine1 : null}
+                                        </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.address1 : null}
+                                                initialValue={data ? data.regOffice.addLine1 : null}
                                                 name="address1"
                                                 rules={[
                                                     {
@@ -114,9 +114,9 @@ function AddressOffice() {
                                     </div>
                                 </Col>
                             </Row> 
-                         ) : null}
+                         {/* ) : null} */}
 
-                        {editAddress === true ? (
+                        {/* {editAddress === true ? ( */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                                 <Col span={24}>
                                     <div>
@@ -124,11 +124,11 @@ function AddressOffice() {
                                             Address Line 2
                                         </div>
                                         {editAddress === false ? (
-                                            <div>{data.regOffice.address2}
+                                            <div>{data ? data.regOffice.addLine2 : null}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.address2 : null}
+                                                initialValue={data ? data.regOffice.addLine2 : null}
                                                 name="address2"
                                                 rules={[
                                                     {
@@ -148,9 +148,9 @@ function AddressOffice() {
                                     </div>
                                 </Col>
                             </Row>
-                        ) : null}
+                        {/* ) : null} */}
 
-                        {editAddress === true ? (
+                        {/* {editAddress === true ? ( */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                                 <Col span={6}>
                                     <div>
@@ -158,11 +158,11 @@ function AddressOffice() {
                                             City
                                         </div>
                                         {editAddress === false ? (
-                                            <div>{data.regOffice.city}
+                                            <div>{data ? data.regOffice.city : null}
                                             </div>
                                         ) : (
                                             <Form.Item style={{ width: '100%' }}
-                                                initialValue={data ? data.city : null}
+                                                initialValue={data ? data.regOffice.city : null}
                                                 name="city"
                                                 rules={[
                                                     {
@@ -187,12 +187,12 @@ function AddressOffice() {
                                             State
                                         </div>
                                         {editAddress === false ? (
-                                            <div>{data.regOffice.state}
+                                            <div>{data ? data.regOffice.state : null}
                                             
                                             </div>
                                         ) : (
                                             <Form.Item style={{ width: '100%' }}
-                                                initialValue={data ? data.state : null}
+                                                initialValue={data ? data.regOffice.state : null}
                                                 name="state"
                                                 rules={[
                                                     {
@@ -217,11 +217,11 @@ function AddressOffice() {
                                             Country
                                         </div>
                                         {editAddress === false ? (
-                                            <div>{data.regOffice.country}
+                                            <div>{data ? data.regOffice.country : null}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.country : null}
+                                                initialValue={data ? data.regOffice.country : null}
                                                 name="country"
                                                 rules={[
                                                     {
@@ -246,11 +246,11 @@ function AddressOffice() {
                                             Pin Code
                                         </div>
                                         {editAddress === false ? (
-                                            <div>{data.regOffice.pin}
+                                            <div>{data ? data.regOffice.pincode : null}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.pin : null}
+                                                initialValue={data ? data.regOffice.pincode : null}
                                                 name="pin"
                                                 rules={[
                                                     {
@@ -271,7 +271,7 @@ function AddressOffice() {
                                 </Col>
 
                             </Row>
-                         ) : null} 
+                         {/* ) : null}  */}
 
                         {editAddress === true ? (
                             <Row

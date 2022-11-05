@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react"
-import { auth } from "../firebase-config"
+import { auth, db } from "../firebase-config"
 import { signInWithEmailAndPassword,
          signOut,
          sendPasswordResetEmail,
@@ -9,7 +9,7 @@ import { signInWithEmailAndPassword,
          updatePhoneNumber,
          updateProfile
 } from "@firebase/auth"
-import ProfileContext from "./ProfileContext"
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 const AuthContext = React.createContext()
 
@@ -21,6 +21,18 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState()
   const [loading, setLoading] = useState(true)
   const [role, setRole] = useState();
+  const [compId, setCompId] = useState();
+
+  async function getCompId(user) {
+    if (!user) { 
+      return; 
+    }
+    let res = await getDoc(doc(db, 'users', user.uid))
+    let companyId = res.data().compId
+    setCompId(companyId)
+    sessionStorage.setItem("compId", companyId)
+    return companyId
+  }
 
   function login(email, password) {
     return signInWithEmailAndPassword(auth, email, password)
@@ -46,7 +58,7 @@ export function AuthProvider({ children }) {
   }
 
   function updateMyEmail(email) {
-    ProfileContext.updateProfile(currentUser.uid, {mailid: email})
+    updateDoc(doc(db, `companyprofile/${compId}/users`, currentUser.uid), {mailid: email});
     return updateEmail(currentUser, email)
   }
 
@@ -63,13 +75,15 @@ export function AuthProvider({ children }) {
     if (!user) { 
       return; 
     }
-    let rec = await ProfileContext.getProfile(user.uid);
+    let rec = await getDoc(doc(db, `companyprofile/${compId}/users`, user.uid))
     sessionStorage.setItem("role", rec.role)
+    sessionStorage.setItem("role", "hr")
     setRole(rec.role);
   }
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
+      getCompId(user)
       setCurrentUser(user)
       setLoading(false)
       getRole(user);
@@ -79,6 +93,7 @@ export function AuthProvider({ children }) {
   }, [])
 
   const value = {
+    compId,
     currentUser,
     role,
     login,

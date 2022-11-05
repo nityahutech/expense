@@ -25,16 +25,15 @@ function BankAccount() {
   const [data, setData] = useState([]);
   //const [bankName, setBankName] = useState("");
   //const [accountNumber, setAccountNumber] = useState("");
+  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   const { currentUser } = useAuth();
   const onFinish = () => {
     let record = {
-      ...data,
-      bankName: bankName,
-      accountNumber: accountNumber,
-      ifscCode: ifscCode,
-      //bankName:bankName?bankName:null
+      bankName: bankName ? bankName : null,
+      accountNumber: accountNumber ? accountNumber : null,
+      ifscCode: ifscCode ? ifscCode : null,
     };
-    EmpInfoContext.updateEduDetails(currentUser.uid, record);
+    EmpInfoContext.updateEduDetails(compId, currentUser.uid, record);
     setData(record);
     showEditContent(false);
     getData();
@@ -43,7 +42,7 @@ function BankAccount() {
     getData();
   }, []);
   const getData = async () => {
-    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+    let data = await EmpInfoContext.getEduDetails(compId, currentUser.uid);
     setData(data);
     //getData();
     setBankName(data.bankName ? data.bankName : null);

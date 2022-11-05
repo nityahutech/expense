@@ -1,10 +1,7 @@
-// ------------------------------------Place for import
 import React, { useEffect } from "react";
 import moment from "moment";
 import { useState } from "react";
-
 import { Card, Col, Row, Input, DatePicker, Button, Form, Select } from "antd";
-
 import {
   PlusCircleOutlined,
   CloseOutlined,
@@ -18,25 +15,24 @@ import { useAuth } from "../../contexts/AuthContext";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { async } from "@firebase/util";
 
-// ----------------------------------------place for const declaration
-
-const { Option } = Select;
-
-
-// --------------------------------------place for functions
-
 function Education() {
   const [editContent, showEditContent] = useState(false);
   const [dateStart, setDateStart] = useState();
   const [dateEnd, setDateEnd] = useState();
   const { currentUser } = useAuth();
-  const onFinish = (values) => {
+  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
+  const onFinish = (value) => {
     let record = {
-      ...values,
-      courseStartDate: dateStart,
-      courseEndDate: dateEnd,
+      qualificationType: value.qualificationType ? value.qualificationType : null,
+      courseName: value.courseName ? value.courseName : null,
+      courseType: value.courseType ? value.courseType : null,
+      stream: value.stream ? value.stream : null,
+      universityName: value.universityName ? value.universityName : null,
+      courseStartDate: dateStart?dateStart:null,
+      courseEndDate: dateEnd?dateEnd:null,
     };
-    EmpInfoContext.updateEduDetails(currentUser.uid, record);
+    console.log(record)
+    EmpInfoContext.updateEduDetails(compId, currentUser.uid, record);
     setData(record);
     showEditContent(false);
   };
@@ -50,7 +46,7 @@ function Education() {
   }, []);
 
   const getData = async () => {
-    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+    let data = await EmpInfoContext.getEduDetails(compId, currentUser.uid);
     setData(data);
     setDateEnd(data.courseEndDate);
     setDateStart(data.courseStartDate);
@@ -147,7 +143,7 @@ function Education() {
     
                     rules={[
                       {
-                        required: true,
+                        required: false,
                         minLength: 3, maxLength: 25,
                         message: 'Please Enter Qualification type',
                         pattern: /^[a-zA-Z.\s]*$/,
@@ -189,7 +185,7 @@ function Education() {
     
                     rules={[
                       {
-                        required: true,
+                        required: false,
                         minLength: 3, maxLength: 25,
                         message: 'Please Enter Valid Course Name',
                         pattern: /^[ A-Za-z.]*$/,
@@ -228,7 +224,7 @@ function Education() {
     
                     rules={[
                       {
-                        required: true,
+                        required: false,
                         minLength: 3, maxLength: 25,
                         message: 'Please Enter Course Type',
                         pattern: /^[a-zA-Z\s]*$/,
@@ -273,7 +269,7 @@ function Education() {
     
                     rules={[
                       {
-                        required: true,
+                        required: false,
                         minLength: 3, maxLength: 25,
                         message: 'Please Enter Stream',
                         pattern: /^[a-zA-Z\s]*$/,
@@ -295,7 +291,7 @@ function Education() {
                         e.target.value= caps
                       }}
                       defaultValue={data ? data.stream : null}
-                      placeholder=""
+                      placeholder="Enter Stream"
                     />
                   </Form.Item>
                 )}
@@ -315,7 +311,7 @@ function Education() {
                   name="courseStartDate"
                   rules={[
                     {
-                      required: true,
+                      required: false,
                       message: "Please select Start Date ",
                     },
                   ]}
@@ -349,7 +345,7 @@ function Education() {
                   name="courseEndDate"
                   rules={[
                     {
-                      required: true,
+                      required: false,
                       message: "Please select End Date",
                     },
                   ]}
@@ -388,7 +384,7 @@ function Education() {
     
                     rules={[
                       {
-                        required: true,
+                        required: false,
                         minLength: 3, maxLength: 25,
                         message: 'Please Enter University Name',
                         pattern: /^[a-zA-Z.\s]*$/,
@@ -402,7 +398,7 @@ function Education() {
                     <Input
                       
                       defaultValue={data.universityName ? data.universityName : null}
-                      placeholder=""
+                      placeholder="Enter University Name"
                     />
                   </Form.Item>
                 )}

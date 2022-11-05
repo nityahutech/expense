@@ -1,15 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Button, Select, Input, Form } from "antd";
 import { useAuth } from "../../contexts/AuthContext";
+import CompanyProContext from "../../contexts/CompanyProContext";
 import { CloseOutlined, EditFilled, PlusCircleOutlined } from "@ant-design/icons";
 const { Option } = Select;
 const { TextArea } = Input;
 
 function AddressCust() {
-    const [editContent, showEditContent] = useState(false);
+    const [editAddressContent, showEditAddressContent] = useState(false);
     const [editContactInfo, showEditContactInfo] = useState(false);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState();
     const { currentUser } = useAuth();
+    const onFinish = (values) => {
+        const valuesToservice = {
+            addressTitle:values.addresstitle,
+            addLine1: values.address1,
+            addLine2: values.address2,
+            city: values.city,
+            state: values.state,
+            country:values.country,
+            pincode:values.pin
+          
+        }
+        CompanyProContext.updateCompInfo("compId001",{custOffice:valuesToservice});
+        getData();
+        showEditAddressContent(false);
+      };
+      useEffect(() => {
+        getData();
+        }, []);
+        const getData = async () => {
+          let data = await CompanyProContext.getCompanyProfile("compId001");
+          setData(data);
+          
+        };
 
     return (
         <>
@@ -33,7 +57,7 @@ function AddressCust() {
                         remember: true,
                     }}
                     autoComplete="off"
-                // onFinish={onContactFinish}
+                 onFinish={onFinish}
                 >
                     <Card
                         title=" CUSTOM ADDRESS TITLE"
@@ -43,7 +67,7 @@ function AddressCust() {
                                     <Button
                                         type="text"
                                         style={{ color: "#4ec0f1" }}
-                                        onClick={() => showEditContactInfo(!editContactInfo)}
+                                        onClick={() => showEditAddressContent(!editAddressContent)}
                                     >
                                         <EditFilled />
                                     </Button>
@@ -55,133 +79,133 @@ function AddressCust() {
                             marginTop: 10,
                         }}
                     >
-                        {editContactInfo === true ? (
+                        {/* {editContactInfo === true ? ( */}
                             <Row gutter={[16, 16]}>
                                 <Col span={24}>
                                     <div>
                                         <div className='div-discription'>
-                                            Address Tittle
+                                            Address Title
                                         </div>
-                                        {editContactInfo === false ? (
-                                            <div>{data.mailid ? data.mailid : ""}
+                                        {editAddressContent === false ? (
+                                            <div>{data ? data.custOffice.addressTitle : null}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.mailid : null}
-                                                name="Addresstittle"
+                                                initialValue={data ? data.custOffice.addressTitle : null}
+                                                name="addresstitle"
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: "Please enter Address Tittle",
+                                                        message: "Enter Address Title",
                                                         type: "text",
                                                     },
                                                     {
-                                                        message: "Please enter Valid Address Tittle ",
+                                                        message: "Enter Valid Address Title ",
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} type='AddressName' required placeholder="" />
+                                                <Input style={{ paddingLeft: '0px' }} required placeholder="" />
 
                                             </Form.Item>
                                         )}
                                     </div>
                                 </Col>
                             </Row>
-                        ) : null}
-                        {editContactInfo === true ? (
+                        {/* ) : null} */}
+                        {/* {editContactInfo === true ? ( */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                                 <Col span={24}>
                                     <div>
                                         <div className='div-discription'>
                                             Address Line 1
                                         </div>
-                                        {editContactInfo === false ? (
-                                            <div>{data.mailid ? data.mailid : ""}
+                                        {editAddressContent === false ? (
+                                            <div>{data ? data.custOffice.addLine1 : null}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.mailid : null}
-                                                name="Address1"
+                                                initialValue={data ? data.addLine1 : null}
+                                                name="address1"
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: "Please enter Address",
+                                                        message: "Enter Address",
                                                         type: "text",
                                                     },
                                                     {
-                                                        message: "Please enter Valid Address ",
+                                                        message: "Enter Valid Address ",
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} type='AddressName' required placeholder="" />
+                                                <Input style={{ paddingLeft: '0px' }}  required placeholder="" />
 
                                             </Form.Item>
                                         )}
                                     </div>
                                 </Col>
                             </Row>
-                        ) : null}
+                        {/* ) : null} */}
 
-                        {editContactInfo === true ? (
+                        {/* {editContactInfo === true ? ( */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                                 <Col span={24}>
                                     <div>
                                         <div className='div-discription'>
                                             Address Line 2
                                         </div>
-                                        {editContactInfo === false ? (
-                                            <div>{data.mailid ? data.mailid : ""}
+                                        {editAddressContent === false ? (
+                                            <div>{data ? data.custOffice.addLine2 : null}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.mailid : null}
-                                                name="mailid"
+                                                initialValue={data ? data.custOffice.addLine2 : null}
+                                                name="address2"
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: "Please enter Address Name",
+                                                        message: "Enter Address Name",
                                                         type: "text",
                                                     },
                                                     {
-                                                        message: "Please enter Valid Address Name",
+                                                        message: "Enter Valid Address Name",
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} type='AddressName2' required placeholder="" />
+                                                <Input style={{ paddingLeft: '0px' }} required placeholder="" />
 
                                             </Form.Item>
                                         )}
                                     </div>
                                 </Col>
                             </Row>
-                        ) : null}
+                        {/* ) : null} */}
 
-                        {editContactInfo === true ? (
+                        {/* {editContactInfo === true ? ( */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                                 <Col span={6}>
                                     <div>
                                         <div className='div-discription'>
                                             City
                                         </div>
-                                        {editContactInfo === false ? (
-                                            <div>{data.mailid ? data.mailid : ""}
+                                        {editAddressContent === false ? (
+                                            <div>{data ? data.custOffice.city : null}
                                             </div>
                                         ) : (
                                             <Form.Item style={{ width: '100%' }}
-                                                initialValue={data ? data.mailid : null}
-                                                name="City"
+                                                initialValue={data ? data.custOffice.city : null}
+                                                name="city"
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: "Please enter City ",
+                                                        message: "Enter City ",
                                                         type: "text",
                                                     },
                                                     {
-                                                        message: "Please enter Valid City ",
+                                                        message: "Enter Valid City ",
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} type='City' required placeholder="" />
+                                                <Input style={{ paddingLeft: '0px' }}  required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -192,25 +216,25 @@ function AddressCust() {
                                         <div className='div-discription'>
                                             State
                                         </div>
-                                        {editContactInfo === false ? (
-                                            <div>{data.mailid ? data.mailid : ""}
+                                        {editAddressContent === false ? (
+                                            <div>{data ? data.custOffice.state : null}
                                             </div>
                                         ) : (
                                             <Form.Item style={{ width: '100%' }}
-                                                initialValue={data ? data.mailid : null}
-                                                name="State"
+                                                initialValue={data ? data.custOffice.state : null}
+                                                name="state"
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: "Please enter State ",
+                                                        message: "Enter State ",
                                                         type: "text",
                                                     },
                                                     {
-                                                        message: "Please enter Valid State ",
+                                                        message: "Enter Valid State ",
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} type='State' required placeholder="" />
+                                                <Input style={{ paddingLeft: '0px' }}  required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -221,25 +245,25 @@ function AddressCust() {
                                         <div className='div-discription'>
                                             Country
                                         </div>
-                                        {editContactInfo === false ? (
-                                            <div>{data.mailid ? data.mailid : ""}
+                                        {editAddressContent === false ? (
+                                            <div>{data ? data.custOffice.country : null}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.mailid : null}
-                                                name="Country"
+                                                initialValue={data ? data.custOffice.country : null}
+                                                name="country"
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: "Please enter Country",
+                                                        message: "Enter Country",
                                                         type: "text",
                                                     },
                                                     {
-                                                        message: "Please enter Valid Country",
+                                                        message: "Enter Valid Country",
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} type='Country' required placeholder="" />
+                                                <Input style={{ paddingLeft: '0px' }}  required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -250,25 +274,25 @@ function AddressCust() {
                                         <div className='div-discription'>
                                             Pin Code
                                         </div>
-                                        {editContactInfo === false ? (
-                                            <div>{data.mailid ? data.mailid : ""}
+                                        {editAddressContent === false ? (
+                                            <div>{data ? data.custOffice.pincode : null}
                                             </div>
                                         ) : (
                                             <Form.Item
-                                                initialValue={data ? data.mailid : null}
-                                                name="Pin"
+                                                initialValue={data ? data.custOffice.pincode : null}
+                                                name="pin"
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: "Please enter Pin",
+                                                        message: "Enter Pin",
                                                         type: "text",
                                                     },
                                                     {
-                                                        message: "Please enter Valid Pin",
+                                                        message: "Enter Valid Pin",
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} type='Pin' required placeholder="" />
+                                                <Input style={{ paddingLeft: '0px' }} required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -276,9 +300,9 @@ function AddressCust() {
                                 </Col>
 
                             </Row>
-                        ) : null}
+                        {/* ) : null} */}
 
-                        {editContactInfo === true ? (
+                        {editAddressContent === true ? (
                             <Row
                                 style={{
                                     display: "flex",
@@ -289,7 +313,7 @@ function AddressCust() {
                                 <Button
                                     type="text"
                                     style={{ fontSize: 15 }}
-                                    onClick={() => showEditContactInfo(false)}
+                                    onClick={() => showEditAddressContent(false)}
                                 >
                                     <CloseOutlined /> CANCEL
                                 </Button>
@@ -306,7 +330,7 @@ function AddressCust() {
                         ) : null}
                         {editContactInfo == false &&
                             <Button type="primary" style={{ marginLeft: "10px" }}
-                                onClick={() => showEditContactInfo(!editContactInfo)}
+                                onClick={() => showEditAddressContent(!editAddressContent)}
                             >
                                 <PlusCircleOutlined />
                                 Add

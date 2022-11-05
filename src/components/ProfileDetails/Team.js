@@ -1,18 +1,17 @@
-import { Card, Row, Col, Form } from "antd";
+import { Card, Row, Col } from "antd";
 import React, { useState, useEffect } from "react";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { useAuth } from "../../contexts/AuthContext";
 function Team() {
   const { currentUser } = useAuth();
-  const [data, setData] = useState([]);
   const [repManager, setRepManager] = useState("");
   const [secManager, setSecManager] = useState("");
+  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   useEffect(() => {
     getData();
   }, []);
   const getData = async () => {
-    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    //setData(data);
+    let data = await EmpInfoContext.getEduDetails(compId, currentUser.uid);
     setRepManager(data.repManager ? data.repManager : null);
     setSecManager(data.secManager ? data.secManager : null);
   };
@@ -26,20 +25,6 @@ function Team() {
           justifyContent: "center",
         }}
       >
-        <Form
-          // form={form}
-          labelcol={{
-            span: 4,
-          }}
-          wrappercol={{
-            span: 14,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          autoComplete="off"
-          // onFinish={onFinish}
-        >
           <Card
             title="TEAMS"
             style={{
@@ -52,51 +37,16 @@ function Team() {
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   Reporting Manager
                 </div>
-                <Form.Item
-                  // initialValue={data.fname + " " + data.lname}
-                  name="repManager"
-                  rules={[
-                    {
-                      // required: true,
-                      minLength: 3,
-                      maxLength: 20,
-                      // message: "Please enter First Name",
-                    },
-                    {
-                      pattern: /^[a-zA-Z\s]*$/,
-                      message: "Please enter Valid Name",
-                    },
-                  ]}
-                >
-                  <div>{repManager}</div>
-                </Form.Item>
+                  <div>{repManager?repManager:"-"}</div>
               </Col>
               <Col span={12}>
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   Secondary Manager
                 </div>
-                <Form.Item
-                  // initialValue={data.fname + " " + data.lname}
-                  name="secManager"
-                  rules={[
-                    {
-                      // required: true,
-                      minLength: 3,
-                      maxLength: 20,
-                      // message: "Please enter First Name",
-                    },
-                    {
-                      pattern: /^[a-zA-Z\s]*$/,
-                      message: "Please enter Valid Name",
-                    },
-                  ]}
-                >
-                  <div>{secManager}</div>
-                </Form.Item>
+                  <div>{secManager?secManager:"-"}</div>
               </Col>
             </Row>
           </Card>
-        </Form>
       </div>
     </>
   );

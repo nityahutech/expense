@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Col,
   Divider,
@@ -13,10 +13,36 @@ import {
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../contexts/CreateContext";
+import ConfigureContext from "../contexts/ConfigureContext";
+import CompanyProContext from "../contexts/CompanyProContext";
 const { Option } = Select;
 function AddEmployee() {
+  const page = "addemployeePage";
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
+  const [configurations, setConfigurations] = useState(null);
+  const [workLoc, setWorkLoc] = useState(null);
+
+  useEffect(() => {
+    console.log(compId, page)
+    getData()
+  }, [])
+
+  const getData = async () => {
+    let temp = await CompanyProContext.getCompanyProfile(compId)
+    let data = await ConfigureContext.getConfigurations(compId, page)
+    console.log(data, temp)
+    let add = ["Registered Office"]
+    if(temp.corpOffice) {add.push("Corporate Office")}
+    temp.address?.map((rec) => {
+      add.push(rec.title)
+    })
+    console.log(add)
+    setWorkLoc(add)
+    setConfigurations(data)
+  }
+
   const handleListEmployee = () => {
     navigate("/EmployeeListPage/EmployeeList");
   };
@@ -39,28 +65,9 @@ function AddEmployee() {
     });
 };
   const onFinish = (values) => {
-    createUser(values).then((response) => showNotification("success", "Success", "Employee Created"))
+    createUser(values, "compId001").then((response) => showNotification("success", "Success", "Employee Created"))
     .catch((error) => showNotification("error", "Error", "This user already exists!"))
     navigate("/EmployeeListPage/EmployeeList");
-    // const valuesToservice = {
-    //   fname: values.fname,
-    //   lname: values['lname'],
-    //   email: values['email'],
-    //   doj: values['doj'].format('DD-MM-YYYY'),
-    //   phone: values['phone'],
-    //   gender: values['gender'],
-    //   designation: values['designation'],
-    //   role: values['role'],
-    //   // status: 'Unpaid',
-    //   // status:  values['paymentDate'],
-    //   // subtotal: values['subTotal'],
-    // }
-    // createUser.addExpenses(valuesToservice)
-    //   .then(response => {
-    //     navigate('/EmployeeListPage/EmployeeList');
-    //   })
-    //   .catch(error => {
-    //   })
   };
   return (
     <>
@@ -172,7 +179,7 @@ function AddEmployee() {
               style={{ background: "" }}
             >
               <Divider orientation="left" orientationMargin={0}>
-                Middle Name<span style={{ color: "red" }}> *</span>
+                Middle Name
               </Divider>
               <Form.Item
                 name="mname"
@@ -183,7 +190,7 @@ function AddEmployee() {
                 }}
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     minLength: 3,
                     maxLength: 20,
                     message: "Please enter Middle Name",
@@ -206,7 +213,6 @@ function AddEmployee() {
                     // setPaidBy(newVal);
                     form.setFieldsValue({ mname: newVal, mname: caps });
                   }}
-                  required
                   placeholder="Enter Middle Name"
                 />
               </Form.Item>
@@ -430,29 +436,11 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                  <Option value="Internship">Internship</Option>
-                  <Option value="Software Trainee">Software Trainee</Option>
-                  <Option value="Asst. Software Developer">
-                    Asst. Software Developer
-                  </Option>
-                  <Option value="Sr. Software Developer">
-                    Sr. Software Developer
-                  </Option>
-                  <Option value="Jr. Software Developer">
-                    Jr. Software Developer
-                  </Option>
-                  <Option value="Business Analyst(BA)">
-                    Business Analyst(BA)
-                  </Option>
-                  <Option value="Quality Analyst(QA)">
-                    Quality Analyst(QA)
-                  </Option>
-                  <Option value="Human Resource(HR)">Human Resource(HR)</Option>
-                  <Option value="Manager">Manager</Option>
-                  <Option value="Director">Director</Option>
-                  <Option value="Chief Executive Officer(CEO)">
-                    Chief Executive Officer(CEO)
-                  </Option>
+                {
+                  configurations?.designations.map((des) => (
+                    <Option value={des}>{des}</Option>
+                  ))
+                }
                 </Select>
               </Form.Item>
             </Col>
@@ -503,16 +491,16 @@ function AddEmployee() {
               </Divider>
               <Form.Item
                 name="repManager"
-                onKeyPress={(event) => {
-                  if (checkAlphabets(event)) {
-                    event.preventDefault();
-                  }
-                }}
+                // onKeyPress={(event) => {
+                //   if (checkAlphabets(event)) {
+                //     event.preventDefault();
+                //   }
+                // }}
                 rules={[
                   {
-                    // required: true,
-                    minLength: 3,
-                    maxLength: 20,
+                    required: false,
+                    // minLength: 3,
+                    // maxLength: 20,
                     message: "Please enter Reporting Manager Name",
                   },
                   {
@@ -521,7 +509,23 @@ function AddEmployee() {
                   },
                 ]}
               >
-                <Input
+              <Select
+                  // showSearch
+                  placeholder="Select a Manager"
+                  // optionFilterProp="children"
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                {
+                  configurations?.repManager.map((des) => (
+                    <Option value={des}>{des}</Option>
+                  ))
+                }
+                </Select>
+                {/* <Input
                   maxLength={20}
                   onChange={(e) => {
                     const inputval = e.target.value;
@@ -537,7 +541,7 @@ function AddEmployee() {
                     });
                   }}
                   placeholder="Enter Reporting Manager Name"
-                />
+                /> */}
               </Form.Item>
             </Col>
             <Col
@@ -551,16 +555,16 @@ function AddEmployee() {
               </Divider>
               <Form.Item
                 name="secManager"
-                onKeyPress={(event) => {
-                  if (checkAlphabets(event)) {
-                    event.preventDefault();
-                  }
-                }}
+                // onKeyPress={(event) => {
+                //   if (checkAlphabets(event)) {
+                //     event.preventDefault();
+                //   }
+                // }}
                 rules={[
                   {
-                    // required: true,
-                    minLength: 3,
-                    maxLength: 20,
+                    required: false,
+                    // minLength: 3,
+                    // maxLength: 20,
                     message: "Please enter Sec. Manager Name",
                   },
                   {
@@ -569,7 +573,23 @@ function AddEmployee() {
                   },
                 ]}
               >
-                <Input
+              <Select
+                  // showSearch
+                  placeholder="Select a Manager"
+                  // optionFilterProp="children"
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                {
+                  configurations?.secManager.map((des) => (
+                    <Option value={des}>{des}</Option>
+                  ))
+                }
+                </Select>
+                {/* <Input
                   maxLength={20}
                   onChange={(e) => {
                     const inputval = e.target.value;
@@ -585,7 +605,7 @@ function AddEmployee() {
                     });
                   }}
                   placeholder="Enter Secondary Manager Name"
-                />
+                /> */}
               </Form.Item>
             </Col>
           </Row>
@@ -612,6 +632,7 @@ function AddEmployee() {
                 {/* format={dateFormatList} */}
                 <DatePicker
                   style={{ width: "100%" }}
+                  format={"DD-MM-YYYY"}
                   //  disabledDate={disabledDate}
                   placeholder="Choose Date"
                 />
@@ -625,18 +646,18 @@ function AddEmployee() {
               style={{ background: "" }}
             >
               <Divider orientation="left" orientationMargin={0}>
-                Department<span style={{ color: "red" }}> *</span>
+                Department
               </Divider>
               <Form.Item
                 name="department"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "Choose Department",
                   },
                 ]}
               >
-                <Select
+              <Select
                   // showSearch
                   placeholder="Select a Field"
                   // optionFilterProp="children"
@@ -646,9 +667,11 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                  <Option value="Consulting Service">Consulting Service</Option>
-                  <Option value="Human Resource">Human Resource</Option>
-                  <Option value="Finance">Finance</Option>
+                {
+                  configurations?.field.map((des) => (
+                    <Option value={des}>{des}</Option>
+                  ))
+                }
                 </Select>
               </Form.Item>
             </Col>
@@ -665,16 +688,16 @@ function AddEmployee() {
               </Divider>
               <Form.Item
                 name="location"
-                onKeyPress={(event) => {
-                  if (checkAlphabets(event)) {
-                    event.preventDefault();
-                  }
-                }}
+                // onKeyPress={(event) => {
+                //   if (checkAlphabets(event)) {
+                //     event.preventDefault();
+                //   }
+                // }}
                 rules={[
                   {
                     required: true,
-                    minLength: 3,
-                    maxLength: 20,
+                    // minLength: 3,
+                    // maxLength: 20,
                     message: "Please enter Location",
                   },
                   {
@@ -683,7 +706,24 @@ function AddEmployee() {
                   },
                 ]}
               >
-                <Input
+              
+              <Select
+                  // showSearch
+                  placeholder="Select a Location"
+                  // optionFilterProp="children"
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                {
+                  workLoc?.map((des) => (
+                    <Option value={des}>{des}</Option>
+                  ))
+                }
+                </Select>
+                {/* <Input
                   maxLength={20}
                   onChange={(e) => {
                     const inputval = e.target.value;
@@ -697,7 +737,7 @@ function AddEmployee() {
                   }}
                   required
                   placeholder="Enter Location"
-                />
+                /> */}
               </Form.Item>
             </Col>
           </Row>

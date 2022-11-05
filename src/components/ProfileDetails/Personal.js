@@ -13,6 +13,7 @@ function Personal() {
   const [dob, setDob] = useState("");
   const [scrs, setScrs] = useState("");
   const [lccs, setLccs] = useState("");
+  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   // const [houseType, setHouseType] = useState("");
   // const [currentAdd, setCurrentAdd] = useState("");
   // const [permanentAdd, setPermanentAdd] = useState("");
@@ -23,43 +24,57 @@ function Personal() {
   // const [cancelEditContent, setcancelEditContent] = useState(false);
   const [data, setData] = useState([]);
   const { currentUser } = useAuth();
+  console.log(currentUser)
+  const [form] = Form.useForm();
   const onFinish = (value) => {
     let nameArray = value.name.split(" ");
-    let fname = "";
-    for (let i = 0; i < nameArray.length - 1; i++) {
-      fname = i != 0 ? " " + fname + nameArray[i] : fname + nameArray[i];
+    let mname = "";
+    for (let i = 1; i < nameArray.length - 1; i++) {
+      mname = mname + ((i != 1 ? " " : "") + nameArray[i]);
+      console.log(mname)
     }
     let record = {
       ...value,
       lname: nameArray[nameArray.length - 1],
-      fname: fname,
+      fname: nameArray[0],
       dob: dob ? dob : null,
+      bloodGroup: value.bloodGroup ? value.bloodGroup : null,
+      maritalStatus: value.maritalStatus ? value.maritalStatus : null,
+      mname: mname
     };
-    delete record["name"];
-    EmpInfoContext.updateEduDetails(currentUser.uid, record);
+    console.log(record)
+    EmpInfoContext.updateEduDetails(compId, currentUser.uid, record);
     // setData(record)
     getData();
     showEditContent(false);
   };
-  // function disabledDate(current) {
-  //   // Can not select days before today and today
-  //   return current && current > moment().endOf('day');
-  // }
-  // const [contactdata, setContactData] = useState([]);
+  
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   const onContactFinish = (values) => {
-    EmpInfoContext.updateEduDetails(currentUser.uid, values);
+    let record = {
+      ...values,
+      altPhnNo: values.altPhnNo ? values.altPhnNo : ""
+    }
+    console.log(record)
+    EmpInfoContext.updateEduDetails(compId, currentUser.uid, record);
     //  setData(values)
     getData();
     showEditContactInfo(false);
   };
   // const [addressdata, setAddressData] = useState([]);
-  const onEditAddressFinish = (newvalue) => {
+  const onEditAddressFinish = (values) => {
     let record = {
-      ...newvalue,
+      currentAdd: values.currentAdd ? values.currentAdd : "",
+      houseType: values.houseType ? values.houseType : "",
+      permanentAdd: values.permanentAdd ? values.permanentAdd : "",
       scrs: scrs ? scrs : null,
       lccs: lccs ? lccs : null,
     };
-    EmpInfoContext.updateEduDetails(currentUser.uid, record);
+    console.log(record)
+    EmpInfoContext.updateEduDetails(compId, currentUser.uid, record);
     showEditAddressInfo(false);
     getData();
   };
@@ -69,26 +84,13 @@ function Personal() {
     // getAddressData();
   }, []);
   const getData = async () => {
-    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+    let data = await EmpInfoContext.getEduDetails(compId, currentUser.uid);
     setData(data);
     setDob(data.dob ? data.dob : null);
     setLccs(data.lccs ? data.lccs : null);
     setScrs(data.scrs ? data.scrs : null);
   };
-  const getContactData = async () => {
-    let alldata = await EmpInfoContext.getEduDetails(currentUser.uid);
-    getData();
-    // setMailId(data.mailid?data.mailid:null)
-    // setContactEmail(data.contactEmail?data.contactEmail:null)
-    // setPhoneNumber(data.phonenumber?data.phonenumber:null)
-  };
-  const getAddressData = async () => {
-    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    getData();
-    // setCurrentAdd(data.currentAdd?data.currentAdd:null)
-    // setPermanentAdd(data.permanentAdd?data.permanentAdd:null)
-    // setHouseType(data.houseType?data.houseType:null)
-  };
+
   return (
     <>
       <div
@@ -100,7 +102,7 @@ function Personal() {
         }}
       >
         <Form
-          // form={form}
+          form={form}
           labelcol={{
             span: 4,
           }}
@@ -143,16 +145,16 @@ function Personal() {
                     Name
                   </div>
                   {editContent === false ? (
-                    <div>{data ? data.fname + " " + data.lname : null}</div>
+                    <div>{data ? data.name : null}</div>
                   ) : (
                     <Form.Item
-                      initialValue={data.fname + " " + data.lname}
+                      initialValue={data.name}
                       name="name"
                       rules={[
                         {
-                          // required: true,
+                          required: true,
                           minLength: 3,
-                          maxLength: 20,
+                          maxLength: 50,
                           // message: "Please enter First Name",
                         },
                         {
@@ -162,12 +164,18 @@ function Personal() {
                       ]}
                     >
                       <Input
-                      disabled={true}
-                        value={data.fname + " " + data.lname}
+                        // disabled={true}
+                        initialValue={data.name ? data.name : null}
                         maxLength={50}
                         required
                         placeholder="Enter Your Name"
-                        //defaultValue = {data?data.fname+" "+data.lname:null}
+                        onChange={(e) => {
+                          const inputval = e.target.value;
+                          const str = e.target.value;
+                          const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                          const caps = str.split(" ").map(capitalize).join(" ");
+                          form.setFieldsValue({ name: newVal, name: caps });
+                        }}
                       />
                     </Form.Item>
                   )}
@@ -186,7 +194,7 @@ function Personal() {
                       name="dob"
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Please Choose a Date",
                         },
                       ]}
@@ -251,7 +259,7 @@ function Personal() {
                       name="bloodGroup"
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Please Choose Blood Groop",
                         },
                       ]}
@@ -286,7 +294,7 @@ function Personal() {
                       name="maritalStatus"
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Your Marrige Status",
                         },
                       ]}
@@ -479,7 +487,7 @@ function Personal() {
                       name="altPhnNo"
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Please enter Phone Number",
                           pattern: /^[0-9\b]+$/,
                         },
@@ -488,7 +496,6 @@ function Personal() {
                     >
                       <Input
                         maxLength={10}
-                        required
                         placeholder="Enter Alternate Number"
                       />
                     </Form.Item>
@@ -723,7 +730,7 @@ function Personal() {
                       name="scrs"
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Please Choose a Date",
                         },
                       ]}
@@ -757,7 +764,7 @@ function Personal() {
                       name="lccs"
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Please Choose a Date",
                         },
                       ]}

@@ -18,11 +18,12 @@ import moment from "moment";
 import { DeleteOutlined, RetweetOutlined } from "@ant-design/icons";
 import LeaveContext from "../contexts/LeaveContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
-import EmployeeContext from "../contexts/EmployeeContext";
+import EmpInfoContext from "../contexts/EmpInfoContext";
 import { useAuth } from "../contexts/AuthContext";
 import Notification from "./Notification";
 import HolidayList from "./HolidayList";
 import "../style/leave.css";
+import ConfigureContext from "../contexts/ConfigureContext";
 
 const Leave = () => {
   const [dateSelected, setDateSelected] = useState([]);
@@ -41,21 +42,25 @@ const Leave = () => {
   const [isHr, setIsHr] = useState(
     sessionStorage.getItem("role") === "hr" ? true : false
   );
+  const page = "leavePage"
+  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   const [isMgr, setIsMgr] = useState(false);
   const { currentUser } = useAuth();
   const format = "Do MMM, YYYY";
-  const [leavedays, setLeaveDays] = useState({
-    "Earn Leave": 0,
-    "Sick Leave": 0,
-    "Casual Leave": 0,
-    "Optional Leave": 0,
-  });
-  const [totaldays, setTotalDays] = useState({
-    "Earn Leave": 0,
-    "Sick Leave": 0,
-    "Casual Leave": 0,
-    "Optional Leave": 0,
-  });
+  // const [leavedays, setLeaveDays] = useState({
+  //   "Earn Leave": 0,
+  //   "Sick Leave": 0,
+  //   "Casual Leave": 0,
+  //   "Optional Leave": 0,
+  // });
+  // const [totaldays, setTotalDays] = useState({
+  //   "Earn Leave": 0,
+  //   "Sick Leave": 0,
+  //   "Casual Leave": 0,
+  //   "Optional Leave": 0,
+  // });
+  const [leavedays, setLeaveDays] = useState(null);
+  const [totaldays, setTotalDays] = useState(null);
   const [leavetype, setLeavetype] = useState();
   const [validleaverequest, setValidleaverequest] = useState("false");
   const [startSlot, setStartSlot] = useState(null);
@@ -71,9 +76,7 @@ const Leave = () => {
   }
 
   const getHoliday = async () => {
-    const allData = await CompanyHolidayContext.getAllCompanyHoliday(
-      "compId001"
-    );
+    const allData = await CompanyHolidayContext.getAllCompanyHoliday(compId);
     let d = allData.docs.map((doc) => {
       return {
         ...doc.data(),
@@ -184,7 +187,7 @@ const Leave = () => {
     };
     if (validleaverequest) {
       console.log(newLeave)
-      LeaveContext.createLeave(newLeave)
+      LeaveContext.createLeave(newLeave, compId)
         .then(response => {
           getData();
           showNotification("success", "Success", "Leave apply successfuly");
@@ -209,13 +212,24 @@ const Leave = () => {
     }
   };
 
-  const getData = async () => {
-    setLoading(true);
-    let empRecord = await EmployeeContext.getEmployee(currentUser.uid);
+  const getConfigurations = async () => {
+    let data = await ConfigureContext.getConfigurations(compId, page)
+    let temp = {}
+    Object.keys(data?.leaveNature).map((nat) => {
+      temp[`${nat}`] = data.leaveNature[`${nat}`]
+    })
+    console.log(temp)
+    setTotalDays(temp)
+    // setLeaveDays(temp)
+    getData(temp)
+  }
+
+  const getData = async (temp) => {
+    let empRecord = await EmpInfoContext.getEduDetails(compId, currentUser.uid);
     setRepManager(empRecord.repManager);
     setEmployeeRecord(empRecord);
     setIsMgr(empRecord.isManager);
-    let data = await LeaveContext.getAllById(empRecord.empId);
+    let data = await LeaveContext.getAllById(empRecord.empId, compId);
     let d = data.docs.map((doc) => {
       return {
         ...doc.data(),
@@ -224,21 +238,21 @@ const Leave = () => {
     });
     setLeaves(d);
     getDateFormatted(d);
-    console.log(d)
+    console.log(d, totaldays, leavedays, temp)
     getDateSorted(d);
     setHistory(d);
-    let temp = {
-      "Earn Leave": empRecord.earnLeave ? empRecord.earnLeave : 12,
-      "Sick Leave": empRecord.sickLeave ? empRecord.sickLeave : 6,
-      "Casual Leave": empRecord.casualLeave ? empRecord.casualLeave : 6,
-      "Optional Leave": empRecord.optionalLeave ? empRecord.optionalLeave : 2,
-    };
-    setTotalDays({
-      "Earn Leave": empRecord.earnLeave ? empRecord.earnLeave : 12,
-      "Sick Leave": empRecord.sickLeave ? empRecord.sickLeave : 6,
-      "Casual Leave": empRecord.casualLeave ? empRecord.casualLeave : 6,
-      "Optional Leave": empRecord.optionalLeave ? empRecord.optionalLeave : 2,
-    });
+    // let temp = {
+    //   "Earn Leave": empRecord.earnLeave ? empRecord.earnLeave : 12,
+    //   "Sick Leave": empRecord.sickLeave ? empRecord.sickLeave : 6,
+    //   "Casual Leave": empRecord.casualLeave ? empRecord.casualLeave : 6,
+    //   "Optional Leave": empRecord.optionalLeave ? empRecord.optionalLeave : 2,
+    // };
+    // setTotalDays({
+    //   "Earn Leave": empRecord.earnLeave ? empRecord.earnLeave : 12,
+    //   "Sick Leave": empRecord.sickLeave ? empRecord.sickLeave : 6,
+    //   "Casual Leave": empRecord.casualLeave ? empRecord.casualLeave : 6,
+    //   "Optional Leave": empRecord.optionalLeave ? empRecord.optionalLeave : 2,
+    // });
     let days = await LeaveContext.getLeaveDays(d, temp);
     setLeaveDays(days);
     let array = [];
@@ -251,11 +265,11 @@ const Leave = () => {
     });
     setDuration([].concat.apply([], array));
     setDataSource(stats);
-    setLoading(false);
+    console.log(stats)
   };
 
   const getRequestData = async () => {
-    let reqData = await LeaveContext.getAllByApprover(currentUser.displayName);
+    let reqData = await LeaveContext.getAllByApprover(currentUser.displayName, compId);
     let req = reqData.docs.map((doc) => {
       return {
         ...doc.data(),
@@ -276,7 +290,7 @@ const Leave = () => {
   };
 
   const getAllRequests = async () => {
-    let reqData = await LeaveContext.getLeaves();
+    let reqData = await LeaveContext.getLeaves(compId);
     let req = reqData.docs.map((doc) => {
       return {
         ...doc.data(),
@@ -295,7 +309,7 @@ const Leave = () => {
       okType: "danger",
 
       onOk: () => {
-        LeaveContext.deleteLeave(record.id)
+        LeaveContext.deleteLeave(record.id, compId)
           .then((response) => {
             console.log(response);
             getData();
@@ -443,10 +457,17 @@ const Leave = () => {
     },
   ];
   useEffect(() => {
+    setLoading(true);
+    getConfigurations();
+    const timer = setTimeout(() => {
+      console.log('This will run after 0.75 seconds!')
+    }, 750);
     getRequestData();
     if (isHr) getAllRequests();
-    getData();
+    // getData();
     getHoliday();
+    setLoading(false);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -455,6 +476,7 @@ const Leave = () => {
   }, [loading]);
 
   const getDateFormatted = (data) => {
+    console.log(data)
     data.forEach((dur) => {
       let len = dur.date.length;
       dur.len = len - (dur.slotStart == 'Full Day' ? 0 : 0.5) - (dur.date.length == 1 ? 0 : (dur.slotEnd == 'Full Day' ? 0 : 0.5));
@@ -879,6 +901,7 @@ const Leave = () => {
     }
     return false
   }
+  console.log(leavedays)
 
   console.log(isHr);
   return (
@@ -898,7 +921,8 @@ const Leave = () => {
       >
         <Col xl={24} lg={24} md={24} sm={24} xs={24}>
           <div className="leavediv">
-            {Object.keys(leavedays).map((user, id) => {
+          { leavedays != null ? 
+            (Object.keys(leavedays).map((user, id) => {
               return (
                 <div
                   className="Col-2-center"
@@ -991,7 +1015,9 @@ const Leave = () => {
                   </div>
                 </div>
               );
-            })}
+            }))
+          : null }
+           
           </div>
         </Col>
         {/* </Col> */}
@@ -1003,7 +1029,7 @@ const Leave = () => {
           }}
         >
           {/* <HolidayList isHr={isHr} /> */}
-          <HolidayList isHr={isHr} refershCalendar={addNewHoliday} />
+          <HolidayList isHr={isHr} refreshCalendar={addNewHoliday} />
           <div
             className="calender-div"
             style={{
@@ -1310,15 +1336,16 @@ const Leave = () => {
                   allowClear
                   disabled={disableNature()}
                   onChange={onLeaveNatureChange}
-                >
-                  {Object.keys(leavedays).map((u) => (
+                >{ leavedays != null ?
+                  (Object.keys(leavedays).map((u) => (
                     <Option
                       disabled={disabledLeaveNature(u)}
                       value={u}
                     >
                       {u}
                     </Option>
-                  ))}
+                  )))
+                  : null}
                   <Option value={"Loss of Pay"}>Loss of Pay</Option>
                 </Select>
               </Form.Item>
@@ -1334,7 +1361,7 @@ const Leave = () => {
                 }
               >
                 <Input.TextArea
-                  maxLength={20}
+                  maxLength={60}
                   onChange={(e) => {
                     const inputval = e.target.value;
                     const newVal =

@@ -23,6 +23,7 @@ const { Text, } = Typography;
 
 
 const LeaveList = (props) => {
+    console.log(props)
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,6 +71,7 @@ const LeaveList = (props) => {
                 CompanyHolidayContext.deleteHoliday(newHoliday.id, "compId001")
                     .then(response => {
                         console.log(response);
+                        props.refreshCalendar();
                         getData();
                     })
                     .catch(error => {
@@ -108,7 +110,7 @@ const LeaveList = (props) => {
                 .then(response => {
                     console.log(response);
                     showNotification("success", "Success", "Holiday Created successfuly");
-                    props.refershCalendar(newHoliday);
+                    props.refreshCalendar();
                 })
                 .catch(error => {
                     console.log(error.message);
@@ -119,6 +121,7 @@ const LeaveList = (props) => {
             showNotification("error", "Error", "This holiday name already exists!")
             form.resetFields();
         }
+        setIsModalOpen(false);
     };
 
     const disabledDate = (current) => {
@@ -142,7 +145,6 @@ const LeaveList = (props) => {
     };
 
     const handleOk = () => {
-        setIsModalOpen(false);
     };
 
 
@@ -285,7 +287,11 @@ const LeaveList = (props) => {
                                     </Form.Item>
 
                                     <Form.Item
-
+                                        rules={[
+                                            {
+                                                required: true,
+                                            },
+                                        ]}
                                         label="Date"
                                         name='holidaydate'
                                         labelAlign="left"

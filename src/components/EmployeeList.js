@@ -24,6 +24,7 @@ function EmployeeList() {
   const [data, setData] = React.useState([]);
   const [disableItem, setDisableItem] = useState(false);
   const { disablePerson } = useAuth();
+  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
 
   window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 768 ? "" : "left")
@@ -214,7 +215,7 @@ function EmployeeList() {
     //hit api to get the employees
     //set that employees to data state
     setLoading(true);
-    const allData = await getUsers();
+    const allData = await getUsers(compId);
     let d = allData.docs.map((doc, i) => {
       return {
         ...doc.data(),

@@ -3,7 +3,6 @@ import AttendanceLog from "../../components/AttendanceLog";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 import { useAuth } from "../../contexts/AuthContext";
-import ProfileContext from "../../contexts/ProfileContext";
 
 function Attendance() {
   const [accessToken, setAccessToken] = useState(null);

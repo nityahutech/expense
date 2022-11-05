@@ -31,20 +31,21 @@ const Family = () => {
   const [editEmergency, showeditEmergency] = useState(false);
   const [data, setData] = useState(false);
   const [form] = Form.useForm();
+  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   const { currentUser } = useAuth();
   useEffect(()=>{
     getData();
     
   },[]);
   const onFinish = (values) => {
-    EmpInfoContext.updateEduDetails(currentUser.uid,values)
+    EmpInfoContext.updateEduDetails(compId, currentUser.uid,values)
     setData(values)
     showeditfamilymember(false)
     showeditEmergency(false)
     getData();
   };
   const getData=async()=>{
-    let data = await EmpInfoContext.getEduDetails(currentUser.uid)
+    let data = await EmpInfoContext.getEduDetails(compId, currentUser.uid)
     setData(data)
   }
   

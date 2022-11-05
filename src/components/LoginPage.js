@@ -25,6 +25,7 @@ function LoginPage() {
       setLoading(true);
 
       let res = await login(loginEmail, loginPassword);
+      console.log(res)
       sessionStorage.setItem("accessToken", res.user.accessToken);
       sessionStorage.setItem("user", JSON.stringify(res.user));
       navigate("MainDashboardPage/MainDashBoard", { replace: true });

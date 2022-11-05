@@ -14,9 +14,11 @@ import {
 } from "antd";
 // import { useNavigate } from 'react-router-dom';
 import moment from "moment";
-import ProfileContext from "../contexts/ProfileContext";
-import EmployeeContext from "../contexts/EmployeeContext";
+import EmpInfoContext from "../contexts/EmpInfoContext";
 import "../style/CertificationID.css";
+import { getDatasetAtEvent } from "react-chartjs-2";
+import ConfigureContext from "../contexts/ConfigureContext";
+import CompanyProContext from "../contexts/CompanyProContext";
 
 const { Option } = Select;
 const showNotification = (type, msg, desc) => {
@@ -45,6 +47,10 @@ function Editemployee(props) {
   const [sickLeave, setSickLeave] = useState("");
   const [optionalLeave, setOptionalLeave] = useState("");
   const [casualLeave, setCasualLeave] = useState("");
+  const page = "addemployeePage"
+  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
+  const [configurations, setConfigurations] = useState(null);
+  const [workLoc, setWorkLoc] = useState(null);
 
   async function submitEdit() {
     try {
@@ -67,7 +73,13 @@ function Editemployee(props) {
         casualLeave,
         optionalLeave,
       };
-      EmployeeContext.updateEmployee(props.record.id, editedRecord);
+      let name = editedRecord.fname + (editedRecord.mname?` ${editedRecord.mname} `:" ") + editedRecord.lname
+      let record = {
+        ...editedRecord,
+        name: name
+      }
+      console.log(record);
+      EmpInfoContext.updateEduDetails(compId, props.record.id, record);
       props.setIsModalVisible(false);
       // props.reloadData();
       showNotification("success", "Success", "Record updated successfully");
@@ -80,7 +92,22 @@ function Editemployee(props) {
     }
   }
 
+  const getData = async () => {
+    let temp = await CompanyProContext.getCompanyProfile(compId)
+    let data = await ConfigureContext.getConfigurations(compId, page)
+    console.log(data, temp)
+    let add = ["Registered Office"]
+    if(temp.corpOffice) {add.push("Corporate Office")}
+    temp.address?.map((rec) => {
+      add.push(rec.title)
+    })
+    console.log(add)
+    setWorkLoc(add)
+    setConfigurations(data)
+  }
+
   useEffect(() => {
+    getData();
     const fnameVal = props.record ? props.record.fname : "";
     const mnameVal = props.record ? props.record.mname : "";
     const lnameVal = props.record ? props.record.lname : "";
@@ -147,9 +174,6 @@ function Editemployee(props) {
       return true;
     }
   };
-  const onFinish = async (values) => {
-    let res = await ProfileContext.updateProfile(values.id, values);
-  };
 
   return (
     <>
@@ -165,7 +189,6 @@ function Editemployee(props) {
           remember: true,
         }}
         autoComplete="off"
-        onFinish={onFinish}
         fields={[
           {
             name: ["fname"],
@@ -442,14 +465,6 @@ function Editemployee(props) {
               <Select
                 style={{ width: "80%" }}
                 onChange={(e) => setGender(e)}
-                // showSearch
-
-                // optionFilterProp="children"
-                //   onChange={onChange}
-                //   onSearch={onSearch}
-                // filterOption={(input, option) =>
-                //   option.children.toLowerCase().includes(input.toLowerCase())
-                // }
               >
                 <Option value="Male">Male</Option>
                 <Option value="Female">Female</Option>
@@ -471,55 +486,27 @@ function Editemployee(props) {
                 },
               ]}
             >
-              <Select
-                style={{ width: "80%" }}
-                onChange={(e) => setDesignation(e)}
-                // showSearch
-
-                // optionFilterProp="children"
-                //   onChange={onChange}
-                //   onSearch={onSearch}
-                // filterOption={(input, option) =>
-                //   option.children.toLowerCase().includes(input.toLowerCase())
-                // }
-              >
-                <Option value="Internship">Internship</Option>
-                <Option value="Software Trainee">Software Trainee</Option>
-                <Option value="Asst. Software Developer">
-                  Asst. Software Developer
-                </Option>
-                <Option value="Sr. Software Developer">
-                  Sr. Software Developer
-                </Option>
-                <Option value="Jr. Software Developer">
-                  Jr. Software Developer
-                </Option>
-                <Option value="Business Analyst">Business Analyst(BA)</Option>
-                <Option value="Quality Analyst">Quality Analyst(QA)</Option>
-                <Option value="Human Resource">Human Resource(HR)</Option>
-                <Option value="Manager">Manager</Option>
-                <Option value="Director">Director</Option>
-                <Option value="Chief Executive Officer">
-                  Chief Executive Officer(CEO)
-                </Option>
-              </Select>
+                <Select
+                  onChange={(e) => setDesignation(e)}
+                  style={{ width: "80%" }}
+                  placeholder="Select a Designation"
+                >
+                {
+                  configurations?.designations.map((des) => (
+                    <Option value={des}>{des}</Option>
+                  ))
+                }
+                </Select>
             </Form.Item>
           </Col>
           <Col xs={22} sm={22} md={12}>
             <Form.Item
               style={{ marginBottom: "17px" }}
               name="repManager"
-              label="Reporting Manager&nbsp;"
-              onKeyPress={(event) => {
-                if (checkAlphabets(event)) {
-                  event.preventDefault();
-                }
-              }}
+              label="Reporting Manager"
               rules={[
                 {
-                  required: true,
-                  minLength: 3,
-                  maxLength: 20,
+                  required: false,
                   message: "Please enter Reporting Manager Name",
                 },
                 {
@@ -528,16 +515,17 @@ function Editemployee(props) {
                 },
               ]}
             >
-              <Input
-                style={{ width: "80%" }}
-                onChange={(e) => {
-                  const inputval = e.target.value;
-                  const newVal =
-                    inputval.substring(0, 1).toUpperCase() +
-                    inputval.substring(1);
-                  setRepManager(newVal);
-                }}
-              ></Input>
+              <Select
+                  onChange={(e) => setRepManager(e)}
+                  style={{ width: "80%" }}
+                  placeholder="Select a Manager"
+                >
+                {
+                  configurations?.repManager.map((des) => (
+                    <Option value={des}>{des}</Option>
+                  ))
+                }
+                </Select>
             </Form.Item>
           </Col>
         </Row>
@@ -546,17 +534,10 @@ function Editemployee(props) {
             <Form.Item
               style={{ marginBottom: "17px" }}
               name="secManager"
-              label="Secondary Manager&nbsp;"
-              onKeyPress={(event) => {
-                if (checkAlphabets(event)) {
-                  event.preventDefault();
-                }
-              }}
+              label="Secondary Manager"
               rules={[
                 {
-                  required: true,
-                  minLength: 3,
-                  maxLength: 20,
+                  required: false,
                   message: "Please enter Sec. Manager Name",
                 },
                 {
@@ -565,46 +546,42 @@ function Editemployee(props) {
                 },
               ]}
             >
-              <Input
-                style={{ width: "80%" }}
-                onChange={(e) => {
-                  const inputval = e.target.value;
-                  const newVal =
-                    inputval.substring(0, 1).toUpperCase() +
-                    inputval.substring(1);
-                  setSecManager(newVal);
-                }}
-              ></Input>
+              <Select
+                  onChange={(e) => setSecManager(e)}
+                  style={{ width: "80%" }}
+                  placeholder="Select a Manager"
+                >
+                {
+                  configurations?.secManager.map((des) => (
+                    <Option value={des}>{des}</Option>
+                  ))
+                }
+                </Select>
             </Form.Item>
           </Col>
           <Col xs={22} sm={22} md={12}>
             <Form.Item
               style={{ marginBottom: "17px" }}
               name="department"
-              label="Department&nbsp;"
+              label="Department"
               rules={[
                 {
-                  required: true,
+                  required: false,
                   message: "Choose Your Department",
                 },
               ]}
             >
               <Select
-                style={{ width: "80%" }}
-                onChange={(e) => setDepartment(e)}
-                // showSearch
-
-                // optionFilterProp="children"
-                //   onChange={onChange}
-                //   onSearch={onSearch}
-                // filterOption={(input, option) =>
-                //   option.children.toLowerCase().includes(input.toLowerCase())
-                // }
-              >
-                <Option value="Consulting Service">Consulting Service</Option>
-                <Option value="Human Resource">Human Resource</Option>
-                <Option value="Finance">Finance</Option>
-              </Select>
+                  placeholder="Select a Field"
+                  style={{ width: "80%" }}
+                  onChange={(e) => setDepartment(e)}
+                >
+                {
+                  configurations?.field.map((des) => (
+                    <Option value={des}>{des}</Option>
+                  ))
+                }
+                </Select>
             </Form.Item>
           </Col>
         </Row>
@@ -614,45 +591,43 @@ function Editemployee(props) {
               className="managerError"
               style={{ marginBottom: "17px" }}
               name="isManager"
-              label="Is Manager&nbsp;"
-              // onKeyPress={(event) => {
-              //   if (checkNumbervalue(event)) {
-              //     event.preventDefault();
-              //   }
-              // }}
-              // onKeyPress={(event) => {
-              //   if (checkNumbervalue(event)) {
-              //     event.preventDefault();
-              //   }
-              // }}
-              rules={[
-                {
-                  required: false,
-                  message: "Please enter Phone Number",
-                  // pattern: /^[0-9\b]+$/,
-                },
-                { whitespace: true },
-              ]}
+              label="Is Manager"
+              // rules={[
+              //   {
+              //     required: false,
+              //     message: "Please enter Phone Number",
+              //     // pattern: /^[0-9\b]+$/,
+              //   },
+              //   { whitespace: true },
+              // ]}
+              initialValue={props.record.isManager == "true"}
             >
+            {props.record.isManager == "true"? (
               <Checkbox
-                // defaultChecked={isManager}
+                // defaultChecked={props.record.isManager == "true"}
+                defaultChecked={props.record.isManager == "true"}
                 style={{ width: "80%" }}
                 maxLength={10}
                 onChange={(e) => {
                   const number = e.target.checked;
                   setIsMgr(number);
                 }}
-
-                //   onChange={(e) => {
-                //     const amt = e.target.value;
-                //     setAmount(amt);
-                //     setTotal(amt * quantity);
-                //     form.setFieldsValue({ subTotal: amt * quantity });
-
-                //   }}
               >
+              {console.log("true")}
                 Manager
-              </Checkbox>
+              </Checkbox>) 
+              : (
+              <Checkbox
+                style={{ width: "80%" }}
+                maxLength={10}
+                onChange={(e) => {
+                  const number = e.target.checked;
+                  setIsMgr(number);
+                }}
+              >
+              {console.log("false")}
+                Manager
+              </Checkbox>) }
             </Form.Item>
           </Col>
           <Col xs={22} sm={22} md={12}>
@@ -677,19 +652,17 @@ function Editemployee(props) {
                 },
               ]}
             >
-              <Input
-                style={{ width: "80%" }}
-                maxLength={20}
-                onChange={(e) => {
-                  const inputval = e.target.value;
-
-                  const newVal =
-                    inputval.substring(0, 1).toUpperCase() +
-                    inputval.substring(1);
-
-                  setLocation(newVal);
-                }}
-              />
+              <Select
+                  style={{ width: "80%" }}
+                  onChange={(e) => setWorkLoc(e)}
+                  placeholder="Select a Location"
+                >
+                {
+                  workLoc?.map((des) => (
+                    <Option value={des}>{des}</Option>
+                  ))
+                }
+              </Select>
             </Form.Item>
           </Col>
         </Row>

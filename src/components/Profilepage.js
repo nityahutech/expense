@@ -1,18 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "antd/dist/antd.css";
 import "../style/profile.css";
-import { Card, Col, Row, Tabs } from "antd";
-import {
-  EnvironmentOutlined,
-  CalendarOutlined,
-  HomeOutlined,
-} from "@ant-design/icons";
-import { Upload } from "antd";
+import { Tabs } from "antd";
 import "../style/profilepage.css";
-import { Button, Modal } from "antd";
-import { Form, Input, Radio, notification } from "antd";
-import { useAuth } from "../contexts/AuthContext";
-import ProfileContext from "../contexts/ProfileContext";
 
 import Personal from "./ProfileDetails/Personal";
 import Work from "./ProfileDetails/Work";
@@ -23,8 +13,6 @@ import Document from "./ProfileDetails/Document";
 import WorkWeek from "./ProfileDetails/WorkWeek";
 import PaySlip from "./ProfileDetails/PaySlip";
 import BankAccount from "./ProfileDetails/BankAccount";
-
-const { Meta } = Card;
 
 const Profile = () => {
   return (

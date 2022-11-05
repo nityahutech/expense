@@ -5,41 +5,41 @@ import {
   updatePhoneNumber,
   updateProfile,
 } from "@firebase/auth";
-import ProfileContext from "./ProfileContext";
 import {
   collection,
   getDocs,
-  get,
+  setDoc,
   query,
   orderBy,
-  addDoc,
-  updateDoc,
-  deleteDoc,
   doc,
 } from "firebase/firestore";
 import { db } from "../firebase-config";
-const users = collection(db, "users");
 
-function generateEmpId() {
-  let len = getDocs(users).then((snapshot) => {
+const users = (compId) => {return collection(db, `companyprofile/${compId}/users`);}
+
+function generateEmpId(compId) {
+  let len = getDocs(users(compId)).then((snapshot) => {
     let res = snapshot.docs.length + 1;
     return "HTS" + ("00" + res.toString()).slice(-3);
   });
   return len;
 }
 
-export async function createUser(values) {
+export async function createUser(values, compId) {
   let res = await createUserWithEmailAndPassword(
     createAuth,
     values.mailid,
     "password"
   );
-  updateProfile(res.user, { displayName: values.fname + " " + values.lname });
+  let name = values.fname + (values.mname?` ${values.mname} `:" ") + values.lname
+  console.log(name);
+  updateProfile(res.user, { displayName: name });
   // updatePhoneNumber(res.user, values.phone)
   const valuesToservice = {
-    empId: await generateEmpId(),
+    empId: await generateEmpId(compId),
+    name: name,
     fname: values.fname,
-    mname: values.mname,
+    mname: values.mname ? values.mname : "",
     lname: values.lname,
     mailid: values.mailid,
     contactEmail: values.email,
@@ -55,7 +55,7 @@ export async function createUser(values) {
     empType: values.empType,
     repManager: values.repManager ? values.repManager : "",
     secManager: values.secManager ? values.secManager : "",
-    department: values.department,
+    department: values.department ? values.department : "",
     location: values.location,
     isManager: false,
     earnLeave: 12,
@@ -63,18 +63,21 @@ export async function createUser(values) {
     casualLeave: 6,
     optionalLeave: 2,
   };
-  ProfileContext.addProfile(res.user.uid, valuesToservice)
+  console.log(res.user.uid, valuesToservice, compId)
+  setDoc(doc(db, `users`, res.user.uid), {compId: compId});
+  setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
     .then((result) => {
       signOut(createAuth);
       console.log(result);
       return result;
     })
     .catch((error) => {
+      console.log(error.message);
       return false;
     });
 }
 
-export async function getUsers() {
-  const q = query(users, orderBy("empId", "asc"));
+export async function getUsers(compId) {
+  const q = query(users(compId), orderBy("empId", "asc"));
   return getDocs(q);
 }

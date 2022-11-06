@@ -28,9 +28,11 @@ export function AuthProvider({ children }) {
       return; 
     }
     let res = await getDoc(doc(db, 'users', user.uid))
-    let companyId = res.data().compId
-    setCompId(companyId)
-    sessionStorage.setItem("compId", companyId)
+    let rec = res.data()
+    sessionStorage.setItem("role", rec.role)
+    sessionStorage.setItem("compId", rec.compId)
+    setCompId(rec.compId)
+    setRole(rec.role)
   }
 
   function login(email, password) {
@@ -71,22 +73,11 @@ export function AuthProvider({ children }) {
     return 
   }
 
-  async function getRole(user) {
-    if (!user) { 
-      return; 
-    }
-    let rec = await getDoc(doc(db, `companyprofile/${compId}/users`, user.uid))
-    let role = rec.data().role
-    sessionStorage.setItem("role", role)
-    setRole(role);
-  }
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       getCompId(user)
       setCurrentUser(user)
       setLoading(false)
-      getRole(user);
     })
 
     return unsubscribe

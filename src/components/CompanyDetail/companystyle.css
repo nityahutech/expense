@@ -51,3 +51,7 @@
   margin-right: auto;
   margin-left: auto;
 }
+
+.divider .ant-divider-horizontal{
+border-top: 1px solid red;
+}

@@ -3,7 +3,7 @@ import {
     collection,
     getDoc,
     doc,
-    addDoc,
+    setDoc,
     updateDoc,
     deleteDoc,
 
@@ -19,7 +19,7 @@ class CompanyProContext {
     };
    
     createCompInfo = (newInfo) => {
-        return addDoc(companyProfileCollectionRef,newInfo);
+        return setDoc(doc(db,"companyprofile",newInfo.orgcode),newInfo);
     };
 
     deleteCompInfo = (id) => {

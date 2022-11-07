@@ -80,6 +80,6 @@
 .DailyTable .ant-table table{
     cursor: pointer;
 }
-.ant-picker-input > input {
+.Range .ant-picker-input > input {
     color: white;
 }

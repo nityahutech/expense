@@ -7,18 +7,20 @@ import {
     doc,
 } from "firebase/firestore";
 
+const compId = sessionStorage.getItem("compId");
+
 class EmpInfoContext {
 
-    addEduDetails = async (compId, id, newEdu) => {
+    addEduDetails = async (id, newEdu) => {
         return setDoc(doc(db, `companyprofile/${compId}/users`, id), newEdu);
     };
 
-    updateEduDetails = (compId, id, updateEdu) => {
+    updateEduDetails = (id, updateEdu) => {
         const eduDoc = doc(db, `companyprofile/${compId}/users`, id);
         return updateDoc(eduDoc, updateEdu);
     };
 
-    getEduDetails = async (compId, id) => { 
+    getEduDetails = async (id) => { 
         const eduDoc = doc(db, `companyprofile/${compId}/users`, id);
         let rec = await getDoc(eduDoc);
         return rec.data();

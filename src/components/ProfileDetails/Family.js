@@ -7,10 +7,8 @@ import {
   Col,
   Input,
   Button,
-  DatePicker,
   Select,
   Form,
-  Divider,
 } from "antd";
 import {
   PlusCircleOutlined,
@@ -22,30 +20,25 @@ import {
 } 
 from "@ant-design/icons";
 
-// --------------------------------------------------------------------------------
-
-const { TextArea } = Input;
-const { Option } = Select;
 const Family = () => {
   const [editfamilymember, showeditfamilymember] = useState(false);
   const [editEmergency, showeditEmergency] = useState(false);
   const [data, setData] = useState(false);
   const [form] = Form.useForm();
-  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   const { currentUser } = useAuth();
   useEffect(()=>{
     getData();
     
   },[]);
   const onFinish = (values) => {
-    EmpInfoContext.updateEduDetails(compId, currentUser.uid,values)
+    EmpInfoContext.updateEduDetails(currentUser.uid,values)
     setData(values)
     showeditfamilymember(false)
     showeditEmergency(false)
     getData();
   };
   const getData=async()=>{
-    let data = await EmpInfoContext.getEduDetails(compId, currentUser.uid)
+    let data = await EmpInfoContext.getEduDetails(currentUser.uid)
     setData(data)
   }
   
@@ -82,8 +75,6 @@ const Family = () => {
                 ?<Card
                   title="FAMILY MEMBERS"
                   extra={
-                    <>
-                      {editfamilymember === false ? (
                         <Button
                           type="text"
                           style={{ color: "#4ec0f1" }}
@@ -91,8 +82,6 @@ const Family = () => {
                         >
                           <EditFilled />
                         </Button>
-                      ) : null}
-                    </>
                   }
                   style={{
                     width: 800,
@@ -103,7 +92,7 @@ const Family = () => {
                     {/* ------------------------------------father */}
                     <Col span={12}>
                       <Form.Item
-                x                name="father"
+                        name="father"
                         rules={[
                           { required: false, message: "Please enter Father's name" },
                         ]}
@@ -114,7 +103,7 @@ const Family = () => {
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Father
                           </h1>
-                        <div>{data.father?data.father:"-"}</div>
+                        <div>{data?.father?data.father:"-"}</div>
                           </div>
                       </Form.Item>
                       {/* --------------------------------------father-contact------------------------------------ */}
@@ -135,7 +124,7 @@ const Family = () => {
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Contact no.
                           </h1>
-                        <div>{data.fatherContact?data.fatherContact:"-"}</div>
+                        <div>{data?.fatherContact?data.fatherContact:"-"}</div>
                         </div>
                       </Form.Item>
                       </Col>
@@ -154,7 +143,7 @@ const Family = () => {
                             Mother
                           </h1>
                           
-                            <div>{data.mother?data.mother:"-"}</div>
+                            <div>{data?.mother?data.mother:"-"}</div>
                             </div>
                       </Form.Item>
                     </Col>
@@ -176,7 +165,7 @@ const Family = () => {
                             Contact no.
                           </h1>
                           
-                            <div>{data.motherContact?data.motherContact:"-"}</div> </div>
+                            <div>{data?.motherContact?data.motherContact:"-"}</div> </div>
                       </Form.Item>
                     </Col>
                     </Row>
@@ -198,19 +187,6 @@ const Family = () => {
                 >
                 <Card
                   title="FAMILY MEMBERS"
-                  extra={
-                    <>
-                      {editfamilymember === false ? (
-                        <Button
-                          type="text"
-                          style={{ color: "#4ec0f1" }}
-                          onClick={() => showeditfamilymember(!editfamilymember)}
-                        >
-                          <EditFilled />
-                        </Button>
-                      ) : null}
-                    </>
-                  }
                   style={{
                     width: 800,
                     marginTop: 10,
@@ -223,9 +199,6 @@ const Family = () => {
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Father 
                           </h1>
-                          {editfamilymember === false ? (
-                            <h4>{data?data.father:null}</h4>
-                          ) : (
                       <Form.Item
                         name="father"
                         onKeyPress={(event) => {
@@ -262,7 +235,7 @@ const Family = () => {
                               defaultValue={data?data.father:'breh'} 
                               maxLength={40}
                               placeholder="Enter Father's Name"/>
-                      </Form.Item>)}
+                      </Form.Item>
                             </div>
                       {/* --------------------------------------father-contact------------------------------------ */}
                     </Col>
@@ -271,9 +244,6 @@ const Family = () => {
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Contact no.
                           </h1>
-                          {editfamilymember === false ? (
-                            <h4>{data?data.fatherContact:null}</h4>
-                          ) : (
                       <Form.Item
                         name="fatherContact"
                         onKeyPress={(event) => {
@@ -293,7 +263,7 @@ const Family = () => {
                         initialValue = {data.fatherContact? data.fatherContact : ''}
                       >
                             <Input  maxLength={11} defaultValue={data?data.fatherContact:''} placeholder="Enter Contact no." />
-                      </Form.Item>) }
+                      </Form.Item>
                         </div>
                       </Col>
                       {/* -------------------------------------mother------------------------------------------ */}
@@ -302,9 +272,6 @@ const Family = () => {
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Mother
                           </h1>
-                          {editfamilymember === false ? (
-                            <h4>{data?data.mother:null}</h4>
-                          ) : (
                       <Form.Item
                         name="mother"
                        onKeyPress={(event) => {
@@ -341,7 +308,7 @@ const Family = () => {
                               defaultValue={data?data.mother:''} 
                               maxLength={40}
                               placeholder="Enter Mother's Name" />
-                      </Form.Item>) }
+                      </Form.Item>
                         </div>
                     </Col>
                     {/* ---------------------------------------------mother Contact------------------------------ */}
@@ -350,9 +317,6 @@ const Family = () => {
                           <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
                             Contact no.
                           </h1>
-                          {editfamilymember === false ? (
-                            <h4>{data?data.motherContact:null}</h4>
-                          ) : (
                     <Form.Item
                         name="motherContact"
                         onKeyPress={(event) => {
@@ -372,11 +336,10 @@ const Family = () => {
                         initialValue = {data.motherContact?data.motherContact:''}
                       >
                             <Input  maxLength={11} defaultValue={data?data.motherContact:''} placeholder="Enter Contact no."  />
-                      </Form.Item> ) }
+                      </Form.Item>
                         </div>
                     </Col>
                     </Row>
-                  {editfamilymember === true ? (
                     <Row
                       style={{
                         display: "flex",
@@ -405,7 +368,6 @@ const Family = () => {
                         </Button>
                       </Col>
                     </Row>
-                  ) : null}
                 </Card>
                 </Form>
               }
@@ -418,8 +380,6 @@ const Family = () => {
                       //   <EditOutlined key="edit" />,
                       // ]}
                       extra={
-                        <>
-                          {editEmergency === false ? (
                             <Button
                               type="text"
                               style={{ color: "#4ec0f1" }}
@@ -427,8 +387,6 @@ const Family = () => {
                             >
                               <EditFilled />
                             </Button>
-                          ) : null}
-                        </>
                       }
                       style={{
                         width: 800,
@@ -452,7 +410,7 @@ const Family = () => {
                                 Other
                               </h1>
                               
-                                <div>{data.other?data.other:"-"}</div>
+                                <div>{data?.other?data.other:"-"}</div>
                               
                             </div>
                           </Form.Item>
@@ -467,7 +425,7 @@ const Family = () => {
                                 Relation
                               </h1>
                             
-                                <div>{data.relation?data.relation:"-"}</div>
+                                <div>{data?.relation?data.relation:"-"}</div>
                               
                             </div>
                           </Form.Item>
@@ -494,7 +452,7 @@ const Family = () => {
                                 Contact no.
                               </h1>
                             
-                                <div>{data.otherContact?data.otherContact:"-"}</div>
+                                <div>{data?.otherContact?data.otherContact:"-"}</div>
                             
                             </div>
                           </Form.Item>
@@ -518,19 +476,6 @@ const Family = () => {
               >
               <Card
                 title="EMERGENCY CONTACTS"
-                extra={
-                  <>
-                    {editEmergency === false ? (
-                      <Button
-                        type="text"
-                        style={{ color: "#4ec0f1" }}
-                        onClick={() => showeditEmergency(!editEmergency)}
-                      >
-                        <EditFilled />
-                      </Button>
-                    ) : null}
-                  </>
-                }
                 style={{
                   width: 800,
                   marginTop: 10,
@@ -618,7 +563,6 @@ const Family = () => {
                               const str = e.target.value;
                               const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
                               const caps = str.split(' ').map(capitalize).join(' ');
-                              console.log('caps',caps)
                               form.setFieldsValue({ relation: newVal, relation: caps });
                               } }      
                               defaultValue={data?data.relation:''} 
@@ -650,7 +594,6 @@ const Family = () => {
                       </div>
                     </Form.Item>
                   </Col></Row>
-                {editEmergency === true ? (
                   <Row
                     style={{
                       display: "flex",
@@ -678,7 +621,6 @@ const Family = () => {
                       </Button>
                     </Col>
                   </Row>
-                ) : null}
               </Card>
                 </Form>
               }

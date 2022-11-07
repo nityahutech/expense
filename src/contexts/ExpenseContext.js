@@ -12,7 +12,9 @@ import {
     doc,
 } from "firebase/firestore";
 
-const expenseCollectionRef = collection(db, "expenses");
+const compId = sessionStorage.getItem("compId");
+
+const expenseCollectionRef = collection(db, `companyprofile/${compId}/expense`);
 
 class ExpenseContext {
 
@@ -21,12 +23,12 @@ class ExpenseContext {
     };
 
     updateExpense = (id, updateExpense) => {
-        const expenseDoc = doc(db, "expenses", id);
+        const expenseDoc = doc(db, `companyprofile/${compId}/expense`, id);
         return updateDoc(expenseDoc, updateExpense);
     };
 
     deleteExpense = (id) => {
-        const expenseDoc = doc(db, "expenses", id);
+        const expenseDoc = doc(db, `companyprofile/${compId}/expense`, id);
         return deleteDoc(expenseDoc);
     };
 
@@ -44,7 +46,7 @@ class ExpenseContext {
     };
 
     getExpense = (id) => { 
-        const expenseDoc = doc(db, "expenses", id);
+        const expenseDoc = doc(db, `companyprofile/${compId}/expense`, id);
         return getDoc(expenseDoc);
     };
 }

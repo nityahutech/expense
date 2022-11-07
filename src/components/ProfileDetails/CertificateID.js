@@ -1,14 +1,11 @@
 import { useAuth } from "../../contexts/AuthContext";
-import React,{useState, useRef,useEffect} from "react";
+import React,{useState, useEffect} from "react";
 import { 
   Table,
   Form,
   Button,
   Input,
   Modal,
-  message, 
-  Upload,
-  Space,
   notification,
 } from 'antd'
 
@@ -20,17 +17,11 @@ import {
 
 import FormItem from "antd/es/form/FormItem";
 import DocumentContext from "../../contexts/DocumentContext";
-import { upload } from '@testing-library/user-event/dist/upload';
-import { type } from "@testing-library/user-event/dist/type";
-import { async } from "@firebase/util";
 
 function CertificateID() { 
   const [certificatioDetails, setCertificationDetails] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [visible,setVisible]= useState(false);
-  const [uploadFile,setUploadFile]=useState([])
   const [form]=Form.useForm()
-  const imgRef = useRef(null);
   const { currentUser } = useAuth();
   const [file, setFile] = useState("");
 
@@ -40,28 +31,26 @@ function CertificateID() {
   // -----------------code for model
   const showModal = () => {
     setIsModalOpen(true);
-    setVisible(true)
     form.resetFields()
   };
   const handleOk = () => {
-    setIsModalOpen(false);
-    setVisible(false)
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-    setVisible(false)
     form.resetFields()
   };
    async function addNewDetail (values) {
     console.log(file)
     try{
       await DocumentContext.addDocument({...values,empId:currentUser.uid,type:"certificate"},file)
-      showNotification("success","Success","Upload Complete");
+    setIsModalOpen(false);
+    showNotification("success","Success","Upload Complete");
       const timer = setTimeout(()=>{
       getData();
-    }, 3500);
+    }, 5000);
     return ()=> clearTimeout(timer);
   } catch {
+    setIsModalOpen(false);
     showNotification("error","Error","Upload Failed");
   }
 };
@@ -81,7 +70,7 @@ const showNotification=(type, msg, desc) => {
           okType: "danger",
   
           onOk: () => {
-            DocumentContext.deleteDocument(id,fileName)
+            DocumentContext.deleteDocument(currentUser.uid, id, fileName)
                   .then(response => {
                     showNotification("success","Success","Successfully deleted");
                       getData();
@@ -98,8 +87,6 @@ useEffect(()=>{
 },[]);
 const getData=async()=>{
   let alldata=await DocumentContext.getDocument(currentUser.uid, "certificate");
-  console.log(alldata)
-   //setData(alldata);
   setCertificationDetails(alldata);
 };
 
@@ -123,24 +110,13 @@ const getData=async()=>{
       dataIndex: "upload",
       key: "upload",
       render: (data, record) => {
-        console.log("record: ", record);
-        console.log("data:: ", data);
-        // var fReader = new FileReader();
-        // fReader.readAsDataURL(imgRef.current.input.files[0]);
-        // fReader.onload = function (event) {
-        //   setImgPreview(event.target.result);
-        // };
-        // return (
-        //   <a href={imgRef.current.input.files[0].name} target="_blank">
-        //     {imgRef.current.input.files[0].name}
-        //   </a>
-        // );
-        //const hrefVal = imgRef?.current?.input?.files[0]?.name;
-        return (
+        return record.fileName? (
           <a href={data} target="_blank">
             {record.fileName}
           </a>
-        );
+        ) : (
+          <div>-</div>
+        )
       },
     },
 
@@ -156,34 +132,7 @@ const getData=async()=>{
     },
   },
   ];
-  // --------------------code for upload 
-  // const props = {
-  //   name: 'file',
-  //   maxLength:10 ,
-  //   action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-  //   headers: {
-  //     authorization: 'authorization-text',
-  //   },
-  //   onChange(info) {
-  //     if (info.file.status !== 'uploading') {
-  //       console.log(info.file, info.fileList);
-  //     }
-  //     if (info.file.status === 'done') {
-  //       message.success(`${info.file.name} file uploaded successfully`);
-  //     } else if (info.file.status === 'error') {
-  //       message.error(`${info.file.name} file upload failed.`);
-  //     }
-  //   },
-  //   progress: {
-  //     strokeColor: {
-  //       '0%': '#108ee9',
-  //       '100%': '#87d068',
-  //     },
-  //     strokeWidth: 3,
-  //     format: (percent) => percent && `${parseFloat(percent.toFixed(2))}%`,
-  //   },
-  // };
-// ------------------------------------------------------------
+
   return (
     <>
       <Table
@@ -192,7 +141,7 @@ const getData=async()=>{
         pagination={false}
       >
       </Table>
-        <Button type="primary" onClick={showModal}>
+        <Button type="primary" onClick={showModal} style={{marginLeft:"10px"}} >
           <PlusCircleOutlined />
           Add
         </Button>
@@ -201,6 +150,7 @@ const getData=async()=>{
           open={isModalOpen}
           onOk={()=>{form.submit(); handleOk()}}
           onCancel={handleCancel} 
+          okText="Save" 
         >
           <Form
           form={form}
@@ -211,19 +161,34 @@ const getData=async()=>{
             onFinish={addNewDetail}
             layout="vertical"
           >
-            <FormItem name="courseTitle">
-              <Input placeholder="Enter Course Name" />
+            <FormItem name="courseTitle"
+              rules={[
+                {
+                  required: true,
+                  message: 'Enter the Course Name',
+                },
+              ]}
+            >
+              <Input placeholder="Enter Course Name" required />
             </FormItem>
-            <FormItem name="duration">
-              <Input placeholder="Enter Duration" />
+            <FormItem name="duration"
+              rules={[
+                {
+                  required: true,
+                  message: 'Enter Duration',
+                },
+              ]}
+            >
+              <Input placeholder="Enter Duration" required />
             </FormItem>
             <FormItem name="upload"
-            rules={[
-              {
-                required:true,
-                message:'upload file',
-              },
-            ]}>
+              rules={[
+                {
+                  required: false,
+                  message: 'Please upload file',
+                },
+              ]}
+            >
               <div className='certificatepage'>
             <Input
               type="file"

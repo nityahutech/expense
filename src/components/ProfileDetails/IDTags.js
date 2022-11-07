@@ -1,4 +1,4 @@
-import React,{useState, useRef,useEffect} from 'react'
+import React,{useState, useEffect} from 'react'
 import { useAuth } from "../../contexts/AuthContext";
 import { 
   PlusCircleOutlined,
@@ -14,72 +14,17 @@ import {
   Button,
   Input,
   Modal,
-  message, 
   notification,
-  Upload,
-  Space,
-  Popconfirm,
 } from 'antd'
-import { upload } from '@testing-library/user-event/dist/upload';
 import DocumentContext from '../../contexts/DocumentContext';
-import { getDatasetAtEvent } from 'react-chartjs-2';
-
-// -----------------------code and data of table
-
-// const dataSource = [
-//   {
-//     key: '1',
-//     idtitle: 'Aadhar Card',
-//     iddescription: 52632158479321552,
-//     upload: 'My Aadhar.pdf',
-//     action: 'Edit Delete'
-//   },
-//   {
-//     key: '2',
-//     idtitle: 'PAN Card',
-//     iddescription: 'EDW85565255',
-//     upload: 'My PAN.pdf',
-//     action: 'Edit Delete'
-//   },
-// ];
 
 
-
-// ---------------------------code of Upload button
-
-const props = {
-  name: 'file',
-  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-  headers: {
-    authorization: 'authorization-text',
-  },
-  onChange(info) {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  progress: {
-    strokeColor: {
-      '0%': '#108ee9',
-      '100%': '#87d068',
-    },
-    strokeWidth: 3,
-    format: (percent) => percent && `${parseFloat(percent.toFixed(2))}%`,
-  },
-};
 function IDTags() {
 const [allIdDetails, setAllIdDetails] = useState([])
-const [visible,setVisible]= useState(false)
-const [uploadFile,setUploadFile]=useState([])
 const [form]=Form.useForm()
 const { currentUser } = useAuth();
-
 const [file, setFile] = useState("");
+const [isModalOpen, setIsModalOpen] = useState(false);
 
 // Handle file upload event and update state
 function handleChange(event) {
@@ -87,19 +32,14 @@ function handleChange(event) {
 }
 
 // ----------------------------------------usestate for add buttob
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
-    setVisible(true)
     form.resetFields()
   };
   const handleOk = () => {
-    setIsModalOpen(false);
-    setVisible(false)
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-    setVisible(false)
     form.resetFields()
   };
 
@@ -111,12 +51,14 @@ function handleChange(event) {
   async function addNewDetail (values) {
     try {
       await DocumentContext.addDocument({...values,empId:currentUser.uid,type:"id"}, file)
+      setIsModalOpen(false);
       showNotification("success", "Success", "Upload Complete");
       const timer = setTimeout(() => {
         getData();
-      }, 3500);
+      }, 5000);
       return () => clearTimeout(timer);
     } catch {
+      setIsModalOpen(false);
       showNotification("error", "Error", "Upload Failed");
     }
   };
@@ -135,7 +77,7 @@ function handleChange(event) {
         okType: "danger",
 
         onOk: () => {
-          DocumentContext.deleteDocument(id, fileName)
+          DocumentContext.deleteDocument(currentUser.uid, id, fileName)
                 .then(response => {
                   showNotification("success", "Success", "Successfully deleted");
                   getData();
@@ -150,9 +92,7 @@ function handleChange(event) {
     getData();
   },[]);
   const getData = async () => {
-    console.log("alldata")
     let alldata = await DocumentContext.getDocument(currentUser.uid, "id");
-    console.log(alldata)
     setAllIdDetails(alldata);
   };
   
@@ -172,18 +112,13 @@ function handleChange(event) {
       dataIndex: "upload",
       key: "upload",
       render: (data, record) => {
-        console.log("record: ", record);
-        console.log("data:: ", data);
-        // var fReader = new FileReader();
-        // fReader.readAsDataURL(imgRef.current.input.files[0]);
-        // fReader.onload = function (event) {
-        //   setImgPreview(event.target.result);
-        // };
-        return (
+        return record.fileName? (
           <a href={data} target="_blank">
             {record.fileName}
           </a>
-        );
+        ) : (
+          <div>-</div>
+        )
       },
     },
     {
@@ -227,7 +162,7 @@ function handleChange(event) {
         pagination={false}
         dataSource={allIdDetails}
       />
-      <Button type="primary" onClick={showModal} style={{marginLeft:"10px"}}>
+      <Button type="primary" onClick={showModal} style={{marginLeft:"10px"}} >
         <PlusCircleOutlined />
         Add
       </Button>
@@ -252,11 +187,11 @@ function handleChange(event) {
           rules={[
             {
               required: true,
-              message: 'Enter the Id title',
+              message: 'Enter the ID Name',
             },
           ]}
           >
-            <Input placeholder="Enter ID details" 
+            <Input placeholder="Enter ID Name" 
             required/>
           </FormItem>
           <FormItem 
@@ -264,18 +199,18 @@ function handleChange(event) {
           rules={[
             {
               required: true,
-              message: 'Enter Id Number',
+              message: 'Enter ID Number',
             },
           ]}
           >
-            <Input placeholder="Enter Id Number"
+            <Input placeholder="Enter ID Number"
             required />
           </FormItem>
           <FormItem 
           name="upload"
           rules={[
             {
-              required: true,
+              required: false,
               message: 'Please upload file',
             },
           ]}

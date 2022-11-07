@@ -38,7 +38,7 @@ const dateFormat = "DD-MM-YYYY";
 function AttendanceLog({ empDetails }) {
   const [monthlydata, setMonthlydata] = useState([]);
   const [allEmp, setallEmp] = useState([]);
-  const [role, setRole] = useState(empDetails);
+  const [role, setRole] = useState(sessionStorage.getItem("role"));
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
   const { currentUser } = useAuth();
@@ -46,6 +46,7 @@ function AttendanceLog({ empDetails }) {
   const [loading, setLoading] = useState(false);
   const [empMonthly, setEmpMonthly] = useState([]);
   const [holidays, setHolidays] = useState([]);
+  const [month, setMonth] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
@@ -105,7 +106,7 @@ useEffect(() => {
 
   useEffect(() => {
     form.resetFields();
-    if (empDetails.userType === "emp") {
+    if (role === "emp") {
       if (activetab == "1") {
         setSelectemp({ id: currentUser.uid });
         getEmpDetails(currentUser.uid, [
@@ -152,19 +153,25 @@ useEffect(() => {
   }
 
 const getHolidayList = async () => {
-  let data = await CompanyHolidayContext.getAllCompanyHoliday();
+  let data = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
+  console.log("holidya",data)
   let req = data.docs.map((doc) => {
-    if (!(doc.data().optionalHoliday))
-      return moment(doc.data().Date.seconds*1000).format("DD-MM-YYYY");
+    console.log("holidya", doc.data().optionalHoliday)
+    if (!(doc.data().optionalHoliday)){
+      console.log("holidya", doc.data().date)
+      return doc.data().date;
+    }
+    return null
   });
   console.log("holidya", req)
   setHolidays(req)
 }
 
 const setHolidayStatus = (data) => {
+  console.log(data)
   data.forEach((rec) =>{
-    console.log(rec.data)
-    if(holidays.includes(rec.date) && rec.status!="Present"){
+    console.log(rec.date)
+    if(holidays.includes(moment(rec.date, "DD-MM-YYYY").format("Do MMM, YYYY")) && rec.status!="Present"){
       rec.status = "Holiday"
     }
   })
@@ -220,7 +227,7 @@ const setHolidayStatus = (data) => {
     setLoading(true);
     let data;
     AttendanceContext.getAllAttendance(id, date).then((userdata) => {
-      console.log("first");
+      console.log("first1");
       AttendanceContext.updateLeaves(userdata).then((final) => {
       setHolidayStatus(final)
       console.log("second", final)
@@ -241,9 +248,9 @@ const setHolidayStatus = (data) => {
   function allEmpDetails() {
     setLoading(true);
     AttendanceContext.getAllUsers().then((userdata) => {
-      console.log("first");
-      AttendanceContext.updateWithLeave(userdata).then((final) => {
-      // setHolidayStatus(final)
+      console.log("first",moment().format("Do MMM, YYYY"));
+      AttendanceContext.updateWithLeave(userdata, holidays.includes(moment().format("Do MMM, YYYY"))).then((final) => {
+        // setHolidayStatus(final)
         console.log("second", final);
         setallEmp(final);
         setFilteredEmp(final);
@@ -321,6 +328,7 @@ const setHolidayStatus = (data) => {
   ];
 
   async function onHrDateFilter(value) {
+    setMonth(value)
     if (value == null) {
       const modifiedFilterExpense = await getEmpDetails(selectemp.id, [
         moment().subtract(30, "days"),
@@ -360,7 +368,7 @@ const setHolidayStatus = (data) => {
             setSelectemp({ id: "" });
           }}
         >
-          {role.userType === "emp" ? (
+          {role === "emp" ? (
             <>
               <Tabs.TabPane tab="Monthly Log" key="1">
                 <div className="monthColor">
@@ -369,7 +377,8 @@ const setHolidayStatus = (data) => {
                     placeholder="Select Month"
                     className="Range"
                     bordered={true}
-                    // defaultValue={[]}
+                    value={month}
+                    defaultValue={month?month:null}
                     format="MM-YYYY"
                     style={{
                       background: "#1890ff",
@@ -513,7 +522,8 @@ const setHolidayStatus = (data) => {
                     picker="month"
                     placeholder="Select Month"
                     className="Range "
-                    // defaultValue={[]}
+                    value={month}
+                    defaultValue={month?month:null}
                     format={"MM-YYYY"}
                     style={{
                       background: "#1890ff",

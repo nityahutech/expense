@@ -1,31 +1,21 @@
 import React, { useState, useEffect } from "react";
-//import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import {
   Card,
   Row,
   Col,
-  Divider,
   Input,
   Button,
-  Space,
-  DatePicker,
-  Select,
   Form,
 } from "antd";
 import { EditFilled, CloseOutlined } from "@ant-design/icons";
-const { TextArea } = Input;
-const { Option } = Select;
+
 function BankAccount() {
   const [editContent, showEditContent] = useState(false);
   const [bankName, setBankName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [ifscCode, setIfscCode] = useState("");
-  const [data, setData] = useState([]);
-  //const [bankName, setBankName] = useState("");
-  //const [accountNumber, setAccountNumber] = useState("");
-  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   const { currentUser } = useAuth();
   const onFinish = () => {
     let record = {
@@ -33,8 +23,7 @@ function BankAccount() {
       accountNumber: accountNumber ? accountNumber : null,
       ifscCode: ifscCode ? ifscCode : null,
     };
-    EmpInfoContext.updateEduDetails(compId, currentUser.uid, record);
-    setData(record);
+    EmpInfoContext.updateEduDetails(currentUser.uid, record);
     showEditContent(false);
     getData();
   };
@@ -42,9 +31,7 @@ function BankAccount() {
     getData();
   }, []);
   const getData = async () => {
-    let data = await EmpInfoContext.getEduDetails(compId, currentUser.uid);
-    setData(data);
-    //getData();
+    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setBankName(data.bankName ? data.bankName : null);
     setAccountNumber(data.accountNumber ? data.accountNumber : null);
     setIfscCode(data.ifscCode ? data.ifscCode : null);
@@ -123,7 +110,7 @@ function BankAccount() {
                       Bank Name
                     </div>
                     {editContent === false ? (
-                      <div>{data.bankName ? data.bankName : "-"}</div>
+                      <div>{bankName ? bankName : "-"}</div>
                     ) : (
                       <Form.Item
                         name="bankname"
@@ -142,7 +129,7 @@ function BankAccount() {
                         ]}
                       >
                         <Input
-                          defaultValue={data ? data.bankName : null}
+                          defaultValue={bankName ? bankName : null}
                           placeholder="Enter Bank Name"
                           onChange={(e) => {
                             setBankName(e.target.value);
@@ -159,7 +146,7 @@ function BankAccount() {
                       Account Number
                     </div>
                     {editContent === false ? (
-                      <div>{data.accountNumber ? data.accountNumber : "-"}</div>
+                      <div>{accountNumber ? accountNumber : "-"}</div>
                     ) : (
                       <Form.Item
                         name="accountnumber"
@@ -181,7 +168,7 @@ function BankAccount() {
                         ]}
                       >
                         <Input
-                          defaultValue={data ? data.accountNumber : null}
+                          defaultValue={accountNumber ? accountNumber : null}
                           placeholder="Enter Account Number"
                           onChange={(e) => {
                             setAccountNumber(e.target.value);
@@ -198,7 +185,7 @@ function BankAccount() {
                       IFSC Code
                     </div>
                     {editContent === false ? (
-                      <div>{data.ifscCode ? data.ifscCode : "-"}</div>
+                      <div>{ifscCode ? ifscCode : "-"}</div>
                     ) : (
                       <Form.Item
                         name="ifsccode"
@@ -223,7 +210,7 @@ function BankAccount() {
                         ]}
                       >
                         <Input
-                          defaultValue={data ? data.ifscCode : null}
+                          defaultValue={ifscCode ? ifscCode : null}
                           placeholder="Enter IFSC Code"
                           maxLength={15}
                           onChange={(e) => {

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useEffect } from "react";
 import {
   Form,
   Tabs,
@@ -9,6 +9,7 @@ import {
   message,
   Upload,
   Button,
+  notification,
   Space,
   Card,
   Table,
@@ -19,6 +20,7 @@ import {
   CloseCircleOutlined,
 } from "@ant-design/icons";
 import "../style/Onboarding.css";
+import CompanyProContext from "../contexts/CompanyProContext";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -27,6 +29,7 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+
 const beforeUpload = (file) => {
   const isJpgOrPng =
     file.type === "image/jpeg/png" || file.type === "image/png";
@@ -45,11 +48,52 @@ function Onboarding(props) {
   const [form2] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
+  const [data, setData] = useState([]);
   const [accessList, setAccessList] = useState([]);
   const [addAccess, setAddAccess] = useState(false);
+
   const [fileName, setFileName] = useState("");
   const [isFileSizeInvalid, setIsFileSizeInvalid] = useState(false);
   const imgRef = React.useRef(null);
+
+  const onFinish = values => {
+    const valuesToservice = {
+      orgcode: values.orgcode,
+      orgname: values.orgname,
+      state: values.state,
+      cinnumber: values.cinnumber,
+      gstnumber: values.gstnumber,
+      domname: values.domname,
+      address1: values.address1,
+      address2: values.address2,
+      phone: values.phone,
+      city: values.city,
+      pincode: values.pincode,
+      country:values.country
+    }
+    console.log(values,valuesToservice);
+  //   CompanyProContext.updateCompInfo(compId,value);
+  //    getData();
+  //    setAddAccess(false);
+  // };
+
+    CompanyProContext.createCompInfo(valuesToservice)
+      .then(response => {
+      showNotification("success", "Success", "Onboarding Completed");
+      })
+      .catch(error => {
+      })
+      setAddAccess(false);
+    };
+        
+        
+          const showNotification = (type, msg, desc) => {
+            notification[type]({
+                message: msg,
+                description: desc,
+            });
+
+};
 
   const handleClick = (event) => {
     console.log("imgRef:: ", imgRef);
@@ -87,16 +131,27 @@ function Onboarding(props) {
     const filteredData = accessList.filter(
       (item) => item.emailaddress !== delItem.emailaddress
     );
+    CompanyProContext.deleteCompInfo(delItem.id)
+    .then((response) => {
+               console.log(response);
+               })
     setAccessList(filteredData);
   }
 
   function addUseRole(values) {
+    const value={
+      userole: values.userole,
+      name: values.name,
+      emailaddress: values.emailaddress,
+      phone: values.phone,
+      twitter: values.twitter,
+      }
     setAccessList([...accessList, values]);
     form2.resetFields();
     setAddAccess(false);
     // setAccessList([...accessList, newAccess]);
     // setNewAccess({ userole: "", name: "", emailaddress: "", phone: "" });
-  }
+  };
   const columns = [
     {
       title: "Name",
@@ -166,7 +221,7 @@ function Onboarding(props) {
                   remember: true,
                 }}
                 autoComplete="off"
-                // onFinish={onFinish}
+                 onFinish={onFinish}
               >
                 <Row gutter={[24, 8]}>
                   <Col xs={22} sm={15} md={8}>
@@ -301,13 +356,13 @@ function Onboarding(props) {
                       label="Domain Name"
                       rules={[
                         {
-                          required: true,
+                          required:true,
                           message: "Please Enter Domain Name",
                         },
                         {
-                          pattern:
-                            "/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
-                          message: "Please Enter Valid Name",
+                         // pattern:
+                            //"/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
+                          //message: "Please Enter Valid Name",
                         },
                       ]}
                     >
@@ -642,7 +697,7 @@ function Onboarding(props) {
                   remember: true,
                 }}
                 autoComplete="off"
-                onFinish={addUseRole}
+                //onFinish={addUseRole}
               >
                 {accessList.map((u, i) => (
                   <div style={{ marginTop: "10px" }} className="inputLabel">
@@ -823,7 +878,7 @@ function Onboarding(props) {
                     lineHeight: "14.4px",
                     float: "right",
                   }}
-                  htmlType={addAccess ? "submit" : "button"}
+                  htmlType= "submit" 
                   onClick={() => {
                     if (!addAccess) {
                       setAddAccess(true);
@@ -898,12 +953,13 @@ function Onboarding(props) {
               <div>
                 <Table className="tableTab" columns={columns} />
               </div>
-            </div>
+            </div>s
           </Card>
         </Tabs.TabPane>
       </Tabs>
     </div>
   );
-}
+
+              }
 
 export default Onboarding;

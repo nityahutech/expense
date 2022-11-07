@@ -31,7 +31,7 @@ function AddEmployee() {
 
   const getData = async () => {
     let temp = await CompanyProContext.getCompanyProfile(compId)
-    let data = await ConfigureContext.getConfigurations(compId, page)
+    let data = await ConfigureContext.getConfigurations(page)
     console.log(data, temp)
     let add = ["Registered Office"]
     if(temp.corpOffice) {add.push("Corporate Office")}
@@ -65,9 +65,12 @@ function AddEmployee() {
     });
 };
   const onFinish = (values) => {
-    createUser(values, "compId001").then((response) => showNotification("success", "Success", "Employee Created"))
+    createUser(values, "compId001")
+    .then((response) => {
+      showNotification("success", "Success", "Employee Created")
+      navigate("/EmployeeListPage/EmployeeList");
+    })
     .catch((error) => showNotification("error", "Error", "This user already exists!"))
-    navigate("/EmployeeListPage/EmployeeList");
   };
   return (
     <>

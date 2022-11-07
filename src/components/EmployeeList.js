@@ -6,16 +6,13 @@ import {
 } from "@ant-design/icons";
 import Editemployee from "./Editemployee";
 import React, { useEffect, useState } from "react";
-import { createUser, getUsers } from "../contexts/CreateContext";
+import { getUsers } from "../contexts/CreateContext";
 import { useAuth } from "../contexts/AuthContext";
-import moment from "moment";
 import "../style/EmployeeList.css";
-import { doc } from "firebase/firestore";
 
 function EmployeeList() {
   const [modaldata, setmodaldata] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [filterExpenses, setFilterExpense] = useState([]);
   const [editedRecord, setEditedRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [size, setSize] = useState(window.innerWidth <= 768 ? "" : "left");
@@ -24,7 +21,6 @@ function EmployeeList() {
   const [data, setData] = React.useState([]);
   const [disableItem, setDisableItem] = useState(false);
   const { disablePerson } = useAuth();
-  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
 
   window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 768 ? "" : "left")
@@ -215,7 +211,7 @@ function EmployeeList() {
     //hit api to get the employees
     //set that employees to data state
     setLoading(true);
-    const allData = await getUsers(compId);
+    const allData = await getUsers();
     let d = allData.docs.map((doc, i) => {
       return {
         ...doc.data(),

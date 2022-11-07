@@ -11,13 +11,15 @@ import {
     where
 } from "firebase/firestore";
 
-const documentCollectionRef = collection(db, "document");
+const compId = sessionStorage.getItem("compId");
+
+const documentCollectionRef = collection(db, `companyprofile/${compId}/document`);
 
 class DocumentContext {
 
     addDocument = (newDocument, file) => {
         if (file) {
-            const storageRef = ref(storage, `/files/${file.name}`);
+            const storageRef = ref(storage, `/${compId}/${newDocument.empId}/files/${file.name}`);
             uploadBytesResumable(storageRef, file).then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((url) => {
                     console.log(url);
@@ -29,6 +31,7 @@ class DocumentContext {
                 })
             });
         } else {
+            newDocument.upload = null;
             console.log("FINAL", newDocument) 
             addDoc(documentCollectionRef, newDocument)
             return Promise.resolve();
@@ -36,18 +39,19 @@ class DocumentContext {
     };
 
     updateDocument = (id, updateDocument) => {
-        const documentDoc = doc(db, "document", id);
+        const documentDoc = doc(db, `companyprofile/${compId}/document`, id);
         return updateDoc(documentDoc, updateDocument);
     };
 
-    deleteDocument = (id, file) => {
+    deleteDocument = (uid, id, file) => {
         if(file) {
-            const storageRef = ref(storage, `/files/${file}`);
+            const storageRef = ref(storage, `/${compId}/${uid}/files/${file}`);
             deleteObject(storageRef)
         }
-        const documentDoc = doc(db, "document", id);
+        const documentDoc = doc(db, `companyprofile/${compId}/document`, id);
         return deleteDoc(documentDoc);
     };
+    
     getDocument = async (empId, type) => { 
         const q = query(documentCollectionRef, where("empId", "==", empId), where("type", "==", type));
         let temp = await getDocs(q);

@@ -13,18 +13,9 @@ function Personal() {
   const [dob, setDob] = useState("");
   const [scrs, setScrs] = useState("");
   const [lccs, setLccs] = useState("");
-  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
-  // const [houseType, setHouseType] = useState("");
-  // const [currentAdd, setCurrentAdd] = useState("");
-  // const [permanentAdd, setPermanentAdd] = useState("");
-  // const [contactEmail, setContactEmail] = useState("");
-  // const [phonenumber, setPhoneNumber] = useState("");
-  // const [mailid, setMailId] = useState("");
   const [editAddressInfo, showEditAddressInfo] = useState(false);
-  // const [cancelEditContent, setcancelEditContent] = useState(false);
   const [data, setData] = useState([]);
   const { currentUser } = useAuth();
-  console.log(currentUser)
   const [form] = Form.useForm();
   const onFinish = (value) => {
     let nameArray = value.name.split(" ");
@@ -43,7 +34,7 @@ function Personal() {
       mname: mname
     };
     console.log(record)
-    EmpInfoContext.updateEduDetails(compId, currentUser.uid, record);
+    EmpInfoContext.updateEduDetails(currentUser.uid, record);
     // setData(record)
     getData();
     showEditContent(false);
@@ -59,7 +50,7 @@ function Personal() {
       altPhnNo: values.altPhnNo ? values.altPhnNo : ""
     }
     console.log(record)
-    EmpInfoContext.updateEduDetails(compId, currentUser.uid, record);
+    EmpInfoContext.updateEduDetails(currentUser.uid, record);
     //  setData(values)
     getData();
     showEditContactInfo(false);
@@ -74,7 +65,7 @@ function Personal() {
       lccs: lccs ? lccs : null,
     };
     console.log(record)
-    EmpInfoContext.updateEduDetails(compId, currentUser.uid, record);
+    EmpInfoContext.updateEduDetails(currentUser.uid, record);
     showEditAddressInfo(false);
     getData();
   };
@@ -84,7 +75,7 @@ function Personal() {
     // getAddressData();
   }, []);
   const getData = async () => {
-    let data = await EmpInfoContext.getEduDetails(compId, currentUser.uid);
+    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setData(data);
     setDob(data?.dob ? data.dob : null);
     setLccs(data?.lccs ? data.lccs : null);

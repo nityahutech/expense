@@ -10,17 +10,14 @@ import {
   DeleteTwoTone,
   EditFilled
 } from "@ant-design/icons";
-import FormItem from "antd/es/form/FormItem";
 import { useAuth } from "../../contexts/AuthContext";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
-import { async } from "@firebase/util";
 
 function Education() {
   const [editContent, showEditContent] = useState(false);
   const [dateStart, setDateStart] = useState();
   const [dateEnd, setDateEnd] = useState();
   const { currentUser } = useAuth();
-  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   const onFinish = (value) => {
     let record = {
       qualificationType: value.qualificationType ? value.qualificationType : null,
@@ -32,7 +29,7 @@ function Education() {
       courseEndDate: dateEnd?dateEnd:null,
     };
     console.log(record)
-    EmpInfoContext.updateEduDetails(compId, currentUser.uid, record);
+    EmpInfoContext.updateEduDetails(currentUser.uid, record);
     setData(record);
     showEditContent(false);
   };
@@ -46,7 +43,7 @@ function Education() {
   }, []);
 
   const getData = async () => {
-    let data = await EmpInfoContext.getEduDetails(compId, currentUser.uid);
+    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setData(data);
     setDateEnd(data.courseEndDate);
     setDateStart(data.courseStartDate);
@@ -131,7 +128,7 @@ function Education() {
                   Qualification Type
                 </h1>
                 {editContent === false ? (
-                  <div>{data.qualificationType ? data.qualificationType : "-"}</div>
+                  <div>{data?.qualificationType ? data.qualificationType : "-"}</div>
                 ) : (
                   <Form.Item
                     name="qualificationType"
@@ -153,7 +150,7 @@ function Education() {
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
                     initialValue={
-                      data.qualificationType ? data.qualificationType : ""
+                      data?.qualificationType ? data.qualificationType : ""
                     }
                   >
                     <Input
@@ -173,7 +170,7 @@ function Education() {
                   Course Name
                 </h1>
                 {editContent === false ? (
-                  <h4>{data.courseName ? data.courseName : "-"}</h4>
+                  <h4>{data?.courseName ? data.courseName : "-"}</h4>
                 ) : (
                   <Form.Item
                     name="courseName"
@@ -195,7 +192,7 @@ function Education() {
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
-                    initialValue={data.courseName ? data.courseName : null}
+                    initialValue={data?.courseName ? data.courseName : null}
                   >
                     <Input
                       initialValue={data ? data.courseName : null}
@@ -212,7 +209,7 @@ function Education() {
                   Course Type
                 </h1>
                 {editContent === false ? (
-                  <h4>{data.courseType ? data.courseType : "-"}</h4>
+                  <h4>{data?.courseType ? data.courseType : "-"}</h4>
                 ) : (
                   <Form.Item
                     name="courseType"
@@ -233,7 +230,7 @@ function Education() {
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
-                    initialValue={data.courseType}
+                    initialValue={data?.courseType ? data.courseType : null}
                   >
                     <Input
                       onInput={(e)=>{
@@ -257,7 +254,7 @@ function Education() {
               <div>
                 <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>Stream</h1>
                 {editContent === false ? (
-                  <h4>{data.stream ? data.stream : "-"}</h4>
+                  <h4>{data?.stream ? data.stream : "-"}</h4>
                 ) : (
                   <Form.Item
                     name="stream"
@@ -278,7 +275,7 @@ function Education() {
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
-                    initialValue={data.stream}
+                    initialValue={data?.stream ? data.stream : null}
                   >
                     <Input
                       onInput={(e)=>{
@@ -305,7 +302,7 @@ function Education() {
 
               {/* <div> */}
               {editContent === false ? (
-                <div>{data.courseStartDate? data.courseStartDate : "-"}</div>
+                <div>{data?.courseStartDate? data.courseStartDate : "-"}</div>
               ) : (
                 <Form.Item
                   name="courseStartDate"
@@ -339,7 +336,7 @@ function Education() {
 
               {/* <div> */}
               {editContent === false ? (
-                <div>{data.courseEndDate ? data.courseEndDate : "-"}</div>
+                <div>{data?.courseEndDate ? data.courseEndDate : "-"}</div>
               ) : (
                 <Form.Item
                   name="courseEndDate"
@@ -372,7 +369,7 @@ function Education() {
                   University Name
                 </h1>
                 {editContent === false ? (
-                  <div>{data.universityName ? data.universityName : "-"}</div>
+                  <div>{data?.universityName ? data.universityName : "-"}</div>
                 ) : (
                   <Form.Item
                     name="universityName"
@@ -393,11 +390,11 @@ function Education() {
                     ]}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 32 }}
-                    initialValue={data.universityName ? data.universityName : null}
+                    initialValue={data?.universityName ? data.universityName : null}
                   >
                     <Input
                       
-                      defaultValue={data.universityName ? data.universityName : null}
+                      defaultValue={data?.universityName ? data.universityName : null}
                       placeholder="Enter University Name"
                     />
                   </Form.Item>

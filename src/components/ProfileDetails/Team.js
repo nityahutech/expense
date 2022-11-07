@@ -6,12 +6,11 @@ function Team() {
   const { currentUser } = useAuth();
   const [repManager, setRepManager] = useState("");
   const [secManager, setSecManager] = useState("");
-  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   useEffect(() => {
     getData();
   }, []);
   const getData = async () => {
-    let data = await EmpInfoContext.getEduDetails(compId, currentUser.uid);
+    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setRepManager(data.repManager ? data.repManager : null);
     setSecManager(data.secManager ? data.secManager : null);
   };

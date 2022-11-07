@@ -10,25 +10,27 @@ import {
     deleteDoc,
 } from "firebase/firestore";
 
+const compId = sessionStorage.getItem("compId");
+
 class ConfigureContext {
 
-    getConfigurations = async (compId, page) => {
+    getConfigurations = async (page) => {
         const rec = await getDoc(doc(db, `companyprofile/${compId}/configurations`, page));
         return rec.data();
     };
     
-    // createConfiguration = (compId, page) => {
+    // createConfiguration = (page) => {
         //make all the confiurations here and set empty array
     //     return setDoc(doc(db, `companyprofile/${compId}/configurations`), newHoliday);
     // };
 
-    updateConfigurations = (compId, page, values) => {
+    updateConfigurations = (page, values) => {
         const newHoliday = doc(db, `companyprofile/${compId}/configurations`, page);
         // may need to change to array functions
         return updateDoc(newHoliday, values);
     };
 
-    // deleteHoliday = (id, compId) => {
+    // deleteHoliday = (id) => {
     //     const newHoliday = doc(db, `companyprofile/${compId}/configurations`, id);
     //     return deleteDoc(newHoliday);
     // };

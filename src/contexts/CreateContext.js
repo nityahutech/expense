@@ -15,10 +15,12 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase-config";
 
-const users = (compId) => {return collection(db, `companyprofile/${compId}/users`);}
+const compId = sessionStorage.getItem("compId");
+
+const users = collection(db, `companyprofile/${compId}/users`);
 
 function generateEmpId(compId) {
-  let len = getDocs(users(compId)).then((snapshot) => {
+  let len = getDocs(users).then((snapshot) => {
     let res = snapshot.docs.length + 1;
     return "HTS" + ("00" + res.toString()).slice(-3);
   });
@@ -64,7 +66,7 @@ export async function createUser(values, compId) {
     optionalLeave: 2,
   };
   console.log(res.user.uid, valuesToservice, compId)
-  setDoc(doc(db, `users`, res.user.uid), {compId: compId});
+  setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role});
   setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
     .then((result) => {
       signOut(createAuth);
@@ -77,7 +79,7 @@ export async function createUser(values, compId) {
     });
 }
 
-export async function getUsers(compId) {
-  const q = query(users(compId), orderBy("empId", "asc"));
+export async function getUsers() {
+  const q = query(users, orderBy("empId", "asc"));
   return getDocs(q);
 }

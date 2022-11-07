@@ -9,12 +9,11 @@ function Work() {
   const [department, setDepartment] = useState("");
   const [workLocation, setWorkLocation] = useState("");
   const [empType, setEmpType] = useState("");
-  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   useEffect(() => {
     getData();
   }, [])
   const getData=async()=>{
-    let data=await EmpInfoContext.getEduDetails(compId, currentUser.uid)
+    let data=await EmpInfoContext.getEduDetails(currentUser.uid)
     setDesignation(data.designation?data.designation:null)
     setDoj(data.doj?data.doj:null)
     setWorkLocation(data.workLocation?data.workLocation:null)

@@ -67,10 +67,9 @@ function WorkWeek() {
     getData();
   }, [])
   const{currentUser}=useAuth()
-  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
 
   const getData = async () => {
-    let data=await EmpInfoContext.getEduDetails(compId, currentUser.uid)
+    let data=await EmpInfoContext.getEduDetails(currentUser.uid)
     setDoj(data.doj?data.doj:null)
   }
 

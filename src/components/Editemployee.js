@@ -79,7 +79,7 @@ function Editemployee(props) {
         name: name
       }
       console.log(record);
-      EmpInfoContext.updateEduDetails(compId, props.record.id, record);
+      EmpInfoContext.updateEduDetails(props.record.id, record);
       props.setIsModalVisible(false);
       // props.reloadData();
       showNotification("success", "Success", "Record updated successfully");
@@ -94,7 +94,7 @@ function Editemployee(props) {
 
   const getData = async () => {
     let temp = await CompanyProContext.getCompanyProfile(compId)
-    let data = await ConfigureContext.getConfigurations(compId, page)
+    let data = await ConfigureContext.getConfigurations(page)
     console.log(data, temp)
     let add = ["Registered Office"]
     if(temp.corpOffice) {add.push("Corporate Office")}

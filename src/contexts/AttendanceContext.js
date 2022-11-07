@@ -19,12 +19,12 @@ import {
     runTransaction,
     get
 } from "firebase/firestore";
-import { async } from "@firebase/util";
-import { MacCommandFilled } from "@ant-design/icons";
 
-const attendCollectionRef = collection(db, "attendance");
-const usersCollectionRef = collection(db, "users");
-const leaveCollectionRef = collection(db, "leave");
+const compId = sessionStorage.getItem("compId");
+
+const attendCollectionRef = collection(db, `companyprofile/${compId}/attendance`);
+const usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
+const leaveCollectionRef = collection(db, `companyprofile/${compId}/leave`);
 
 class AttendanceContext {
 
@@ -45,7 +45,7 @@ class AttendanceContext {
         break: moment().subtract(d[0].clockOut).format("HH:mm:ss"),
         clockOut: null,
       }
-      const attendDoc = doc(db, "attendance", d[0].id);
+      const attendDoc = doc(db, `companyprofile/${compId}/attendance`, d[0].id);
       updateDoc(attendDoc, newrec)
       return d;
     };
@@ -59,7 +59,8 @@ class AttendanceContext {
                 id: doc.id
             };
         });
-        const attendDoc = doc(db, "attendance", d[0].id);
+        console.log(d)
+        const attendDoc = doc(db, `companyprofile/${compId}/attendance`, d[0].id);
         updateDoc(attendDoc, record)
         return 
     };
@@ -108,20 +109,20 @@ class AttendanceContext {
                 id: doc.id
             };
         });
-        const attendDoc = doc(db, "attendance", d[0].id);
+        const attendDoc = doc(db, `companyprofile/${compId}/attendance`, d[0].id);
         updateDoc(attendDoc, record)
         return 
     };
 
     deleteAttendance = (id) => {
-        const attendDoc = doc(db, "attendance", id);
+        const attendDoc = doc(db, `companyprofile/${compId}/attendance`, id);
         return deleteDoc(attendDoc);
     };
 
     getAllAttendance =  async (id, date) => {
-        const profileDoc = doc(db, "users", id);
-        let rec = await getDoc(profileDoc);
-        let empId = rec.data().empId
+        // const profileDoc = doc(db, "users", id);
+        // let rec = await getDoc(profileDoc);
+        // let empId = rec.data().empId
         const q = query(attendCollectionRef, where("empId", "==", id));
         let data = await getDocs(q);
         let d = data.docs.map((doc) => {
@@ -129,8 +130,7 @@ class AttendanceContext {
               ...doc.data(),
               id: doc.id,
               status: "Present",
-              empId: empId,
-              eId: id
+              empId: id
             };
           });
           const momentRange = extendMoment(Moment);
@@ -151,8 +151,7 @@ class AttendanceContext {
             temp[x++] = {
               date: day.format("DD-MM-YYYY"),
               status: "Absent",
-              eId: id,
-              empId: empId
+              empId: id
             }
           })
         return temp.reverse();
@@ -262,7 +261,7 @@ class AttendanceContext {
 
     getAttendance = (id) => { 
         const q = query(attendCollectionRef, where("empId", "==", id),limit(1))
-        const attendDoc = doc(db, "attendance", id);
+        // const attendDoc = doc(db, `companyprofile/${compId}/attendance`, id);
         return getDoc(q);
     };
 

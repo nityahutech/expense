@@ -1,16 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 
 import {
   Button,
   Table,
-  Space,
   Modal,
   Form,
   Input,
-  Popconfirm,
-  Upload,
-  message,
   notification,
 } from "antd";
 import {
@@ -20,22 +16,14 @@ import {
 } from "@ant-design/icons";
 import FormItem from "antd/es/form/FormItem";
 import "../../style/CertificationID.css"
-
-import Item from "antd/lib/list/Item";
-import { upload } from '@testing-library/user-event/dist/upload';
 import DocumentContext from "../../contexts/DocumentContext";
-import { async } from "@firebase/util";
 
 function WorkID() {
-  const [allWorkDetails, setAllWorkDetails] = useState([
-  ]);
-  const [visible, setVisible] = useState(false);
+  const [allWorkDetails, setAllWorkDetails] = useState([]);
   const [form] = Form.useForm();
-  const [imgPreview, setImgPreview] = useState();
-  const imgRef = useRef(null);
-  const [deleteRow, setDeleteRow] = useState("");
   const { currentUser } = useAuth();
   const [file, setFile] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   function handleChange(event) {
     setFile(event.target.files[0]);
@@ -44,13 +32,15 @@ function WorkID() {
    async function addNewWork(values) {
      try{
     await DocumentContext.addDocument({ ...values, empId: currentUser.uid, type: "work" },file)
-    showNotification("success", "Success", "Upload Complete");
+      setIsModalOpen(false);
+      showNotification("success", "Success", "Upload Complete");
     const timer = setTimeout(() => {
     getData();
-  }, 3500);
+  }, 5000);
   return()=>clearTimeout(timer);
 }catch{
-  showNotification("error", "Error", "Upload Failed");
+      setIsModalOpen(false);
+      showNotification("error", "Error", "Upload Failed");
   }
 };
 const showNotification=(type,msg,desc)=>{
@@ -67,7 +57,7 @@ const showNotification=(type,msg,desc)=>{
         okType: "danger",
 
         onOk: () => {
-          DocumentContext.deleteDocument(id,fileName)
+          DocumentContext.deleteDocument(currentUser.uid, id, fileName)
                 .then(response => {
                   showNotification("success","Success","Successfully deleted")
                   getData();
@@ -104,19 +94,13 @@ const showNotification=(type,msg,desc)=>{
       dataIndex: "upload",
       key: "upload",
       render: (data, record) => {
-        console.log("record: ", record);
-        console.log("data:: ", data);
-        // var fReader = new FileReader();
-        // fReader.readAsDataURL(imgRef.current.input.files[0]);
-        // fReader.onload = function (event) {
-        //   setImgPreview(event.target.result);
-        // };
-        //const hrefVal = imgRef?.current?.input?.files[0]?.name;
-        return (
+        return record.fileName? (
           <a href={data} target="_blank">
             {record.fileName}
           </a>
-        );
+        ) : (
+          <div>-</div>
+        )
       },
     },
 
@@ -133,19 +117,14 @@ const showNotification=(type,msg,desc)=>{
     },
   ];
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
-    setVisible(true);
     form.resetFields();
   };
   const handleOk = () => {
-    setIsModalOpen(false);
-    setVisible(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-    setVisible(false);
     form.resetFields();
   };
   const checkAlphabets = (event) => {
@@ -162,7 +141,7 @@ const showNotification=(type,msg,desc)=>{
 
   return (
     <>
-      <Table columns={columns} dataSource={allWorkDetails} />
+      <Table columns={columns} pagination={false} dataSource={allWorkDetails} />
       <Button type="primary" onClick={showModal} style={{ marginLeft: "10px" }}>
         <PlusCircleOutlined />
         Add
@@ -175,44 +154,43 @@ const showNotification=(type,msg,desc)=>{
           handleOk();
         }}
         onCancel={handleCancel}
-        visible={visible}
         okText="Save"
       >
         <Form
-          action="/action_page.php"
+          // action="/action_page.php"
           form={form}
           labelCol={{ span: 20 }}
           wrapperCol={{ span: 20 }}
           initialValues={{ remember: true }}
           autoComplete="off"
           onFinish={addNewWork}
-          // fields={[
-          //   {
-          //     name: ["title"],
-          //     value: title,
-          //   },
-          //   {
-          //     name: ["description"],
-          //     value: description,
-          //   },
-          //   {
-          //     name: ["file"],
-          //     value: file,
-          //   },
-          // ]}
           layout="vertical"
         >
-          <FormItem name="name">
+          <FormItem name="name"
+          rules={[
+            {
+              required:true,
+              message:'Enter Company Name',
+            },
+          ]}
+          >
             <Input placeholder="Enter Company Name" required />
           </FormItem>
-          <FormItem name="duration">
+          <FormItem name="duration"
+          rules={[
+            {
+              required:true,
+              message:'Enter Duration',
+            },
+          ]}
+          >
             <Input placeholder="Enter Duration" required />
           </FormItem>
           <FormItem name="upload"
           rules={[
             {
-              required:true,
-              message:'upload file',
+              required:false,
+              message:'Please upload file',
             },
           ]}
           >

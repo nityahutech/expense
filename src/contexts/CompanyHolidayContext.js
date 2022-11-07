@@ -14,21 +14,21 @@ import {
   
 } from "firebase/firestore";
 
+const compId = sessionStorage.getItem("compId");
 
-const companyholidayCollectionRef = (compId) => {return collection(db, `companyprofile/${compId}/companyholiday`);}
+const companyholidayCollectionRef = collection(db, `companyprofile/${compId}/companyholiday`);
 
 class CompanyHolidayContext {
-    getAllCompanyHoliday = (compId) => {
-        const q = query(companyholidayCollectionRef(compId), orderBy("date", "asc"));
-        // console.log(q);
+    getAllCompanyHoliday = () => {
+        const q = query(companyholidayCollectionRef, orderBy("date", "asc"));
         return getDocs(q);
     };
     
-    createHoliday = (newHoliday, compId) => {
-        return addDoc(companyholidayCollectionRef(compId), newHoliday);
+    createHoliday = (newHoliday) => {
+        return addDoc(companyholidayCollectionRef, newHoliday);
     };
 
-    deleteHoliday = (id, compId) => {
+    deleteHoliday = (id) => {
         const newHoliday = doc(db, `companyprofile/${compId}/companyholiday`, id);
         return deleteDoc(newHoliday);
     };

@@ -199,11 +199,14 @@ class AttendanceContext {
       return data;
     }
 
-    updateWithLeave = async (data) => {
-      console.log(data)
+    updateWithLeave = async (data, isHoiday) => {
+      console.log(data, isHoiday)
       data.forEach((emp) => {
-        console.log(emp)
         if(emp.status == "Absent") {
+          if (isHoiday) {
+            emp.status = "Holiday"
+            return;
+          }
           this.getLeaveStatus(emp.empId).then((leave) => {
             console.log(leave)
             if (leave) {

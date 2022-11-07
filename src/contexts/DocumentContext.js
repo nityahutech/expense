@@ -22,17 +22,14 @@ class DocumentContext {
             const storageRef = ref(storage, `/${compId}/${newDocument.empId}/files/${file.name}`);
             uploadBytesResumable(storageRef, file).then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((url) => {
-                    console.log(url);
                     newDocument.upload = url;
                     newDocument.fileName = file.name
-                    console.log("FINAL", newDocument)
                     addDoc(documentCollectionRef, newDocument)
                     return Promise.resolve();
                 })
             });
         } else {
             newDocument.upload = null;
-            console.log("FINAL", newDocument) 
             addDoc(documentCollectionRef, newDocument)
             return Promise.resolve();
         }
@@ -51,7 +48,7 @@ class DocumentContext {
         const documentDoc = doc(db, `companyprofile/${compId}/document`, id);
         return deleteDoc(documentDoc);
     };
-    
+
     getDocument = async (empId, type) => { 
         const q = query(documentCollectionRef, where("empId", "==", empId), where("type", "==", type));
         let temp = await getDocs(q);
@@ -61,7 +58,6 @@ class DocumentContext {
                 id: doc.id
             };
         });
-        console.log(req)
         return req;
     };
 

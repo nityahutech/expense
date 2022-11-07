@@ -12,14 +12,16 @@ import {
 } from "firebase/firestore";
 import { sendEmail } from "./EmailContext";
 
-const leaveCollectionRef = (compId) => {return collection(db, `companyprofile/${compId}/leave`);}
-const usersCollectionRef = (compId) => {return collection(db, `companyprofile/${compId}/users`);}
+const compId = sessionStorage.getItem("compId");
+
+const leaveCollectionRef = collection(db, `companyprofile/${compId}/leave`);
+const usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
 
 class LeaveContext {
     leaves = [];
     leaveDays = {};
-    createLeave = async (newLeave, compId) => {
-        let email = await this.getEmailApproverList(newLeave.approver, compId)
+    createLeave = async (newLeave) => {
+        let email = await this.getEmailApproverList(newLeave.approver)
         email.forEach((id) => {
         let mailOptions = {
             from: 'hutechhr@gmail.com',
@@ -40,26 +42,26 @@ class LeaveContext {
         }
         sendEmail(mailOptions)
         })
-        return addDoc(leaveCollectionRef(compId), newLeave);
+        return addDoc(leaveCollectionRef, newLeave);
     };
-    deleteLeave = (id, compId) => {
+    deleteLeave = (id) => {
         const leaveDoc = doc(db, `companyprofile/${compId}/leave`, id);
         return deleteDoc(leaveDoc);
     };
-    getLeaves = (compId) => {
-        return getDocs(leaveCollectionRef(compId));
+    getLeaves = () => {
+        return getDocs(leaveCollectionRef);
     };
-    getAllById = (id, compId) => {
-        const q = query(leaveCollectionRef(compId), where("empId", "==", id));
+    getAllById = (id) => {
+        const q = query(leaveCollectionRef, where("empId", "==", id));
         return getDocs(q);
     };
-    getAllByApprover = (name, compId) => {
-        const q = query(leaveCollectionRef(compId), where("approver", "==", name));
+    getAllByApprover = (name) => {
+        const q = query(leaveCollectionRef, where("approver", "==", name));
         return getDocs(q);
     };
-    approveLeave = async (id, compId, name) => {
+    approveLeave = async (id, name) => {
         const leaveDoc = doc(db, `companyprofile/${compId}/leave`, id);
-        let email = await this.getEmailId(name, compId)
+        let email = await this.getEmailId(name)
         let mailOptions = {
             from: 'hutechhr@gmail.com',
             to: `${email}`,
@@ -71,9 +73,9 @@ class LeaveContext {
         sendEmail(mailOptions)
         return updateDoc(leaveDoc, { status: "Approved"})
     }
-    rejectLeave = async (id, compId, name, comment) => {
+    rejectLeave = async (id, name, comment) => {
         const leaveDoc = doc(db, `companyprofile/${compId}/leave`, id);
-        let email = await this.getEmailId(name, compId)
+        let email = await this.getEmailId(name)
         let mailOptions = {
             from: 'hutechhr@gmail.com',
             to: `${email}`,
@@ -101,9 +103,9 @@ class LeaveContext {
         return leavedays
     }
 
-    getEmailId = async (manager, compId) => {
+    getEmailId = async (manager) => {
         let name = manager.split(" ");
-        const q = query(usersCollectionRef(compId), where("lname", "==", name[name.length - 1]), where("fname", "==", name[0]));
+        const q = query(usersCollectionRef, where("lname", "==", name[name.length - 1]), where("fname", "==", name[0]));
         let reqData = await getDocs(q);
         let req = reqData.docs.map((doc) => {
             return {
@@ -114,9 +116,9 @@ class LeaveContext {
         return req[0].mailid;
     }
 
-    getEmailApproverList = async (manager, compId) => {
+    getEmailApproverList = async (manager) => {
         let name = manager.split(" ");
-        const q = query(usersCollectionRef(compId), where("lname", "==", name[name.length - 1]), where("fname", "==", name[0]));
+        const q = query(usersCollectionRef, where("lname", "==", name[name.length - 1]), where("fname", "==", name[0]));
         let reqData = await getDocs(q);
         let req = reqData.docs.map((doc) => {
             return {
@@ -124,7 +126,7 @@ class LeaveContext {
                 id: doc.id
             };
         });
-        const q1 = query(usersCollectionRef(compId), where ("role", "==", "hr"));
+        const q1 = query(usersCollectionRef, where ("role", "==", "hr"));
         let hrData = await getDocs(q1);
         let hr = hrData.docs.map((doc) => {
             return doc.data().mailid;

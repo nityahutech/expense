@@ -158,9 +158,10 @@ const getHolidayList = async () => {
   let req = data.docs.map((doc) => {
     console.log("holidya", doc.data().optionalHoliday)
     if (!(doc.data().optionalHoliday)){
-      console.log("holidya", moment(doc.data().Date.seconds*1000).format("DD-MM-YYYY"))
-      return moment(doc.data().Date.seconds*1000).format("DD-MM-YYYY");
+      console.log("holidya", doc.data().date)
+      return doc.data().date;
     }
+    return null
   });
   console.log("holidya", req)
   setHolidays(req)
@@ -170,7 +171,7 @@ const setHolidayStatus = (data) => {
   console.log(data)
   data.forEach((rec) =>{
     console.log(rec.date)
-    if(holidays.includes(rec.date) && rec.status!="Present"){
+    if(holidays.includes(moment(rec.date, "DD-MM-YYYY").format("Do MMM, YYYY")) && rec.status!="Present"){
       rec.status = "Holiday"
     }
   })
@@ -247,9 +248,9 @@ const setHolidayStatus = (data) => {
   function allEmpDetails() {
     setLoading(true);
     AttendanceContext.getAllUsers().then((userdata) => {
-      console.log("first");
-      AttendanceContext.updateWithLeave(userdata).then((final) => {
-      // setHolidayStatus(final)
+      console.log("first",moment().format("Do MMM, YYYY"));
+      AttendanceContext.updateWithLeave(userdata, holidays.includes(moment().format("Do MMM, YYYY"))).then((final) => {
+        // setHolidayStatus(final)
         console.log("second", final);
         setallEmp(final);
         setFilteredEmp(final);
@@ -521,7 +522,8 @@ const setHolidayStatus = (data) => {
                     picker="month"
                     placeholder="Select Month"
                     className="Range "
-                    // defaultValue={[]}
+                    value={month}
+                    defaultValue={month?month:null}
                     format={"MM-YYYY"}
                     style={{
                       background: "#1890ff",

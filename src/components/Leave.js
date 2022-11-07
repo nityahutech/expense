@@ -43,7 +43,6 @@ const Leave = () => {
     sessionStorage.getItem("role") === "hr" ? true : false
   );
   const page = "leavePage"
-  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   const [isMgr, setIsMgr] = useState(false);
   const { currentUser } = useAuth();
   const format = "Do MMM, YYYY";
@@ -76,7 +75,7 @@ const Leave = () => {
   }
 
   const getHoliday = async () => {
-    const allData = await CompanyHolidayContext.getAllCompanyHoliday(compId);
+    const allData = await CompanyHolidayContext.getAllCompanyHoliday();
     let d = allData.docs.map((doc) => {
       return {
         ...doc.data(),
@@ -187,7 +186,7 @@ const Leave = () => {
     };
     if (validleaverequest) {
       console.log(newLeave)
-      LeaveContext.createLeave(newLeave, compId)
+      LeaveContext.createLeave(newLeave)
         .then(response => {
           getData();
           showNotification("success", "Success", "Leave apply successfuly");
@@ -213,7 +212,7 @@ const Leave = () => {
   };
 
   const getConfigurations = async () => {
-    let data = await ConfigureContext.getConfigurations(compId, page)
+    let data = await ConfigureContext.getConfigurations(page)
     let temp = {}
     Object.keys(data?.leaveNature).map((nat) => {
       temp[`${nat}`] = data.leaveNature[`${nat}`]
@@ -225,11 +224,11 @@ const Leave = () => {
   }
 
   const getData = async (temp) => {
-    let empRecord = await EmpInfoContext.getEduDetails(compId, currentUser.uid);
+    let empRecord = await EmpInfoContext.getEduDetails(currentUser.uid);
     setRepManager(empRecord?.repManager);
     setEmployeeRecord(empRecord);
     setIsMgr(empRecord?.isManager);
-    let data = await LeaveContext.getAllById(currentUser.uid, compId);
+    let data = await LeaveContext.getAllById(currentUser.uid);
     let d = data.docs.map((doc) => {
       return {
         ...doc.data(),
@@ -269,7 +268,7 @@ const Leave = () => {
   };
 
   const getRequestData = async () => {
-    let reqData = await LeaveContext.getAllByApprover(currentUser.displayName, compId);
+    let reqData = await LeaveContext.getAllByApprover(currentUser.displayName);
     let req = reqData.docs.map((doc) => {
       return {
         ...doc.data(),
@@ -290,7 +289,7 @@ const Leave = () => {
   };
 
   const getAllRequests = async () => {
-    let reqData = await LeaveContext.getLeaves(compId);
+    let reqData = await LeaveContext.getLeaves();
     let req = reqData.docs.map((doc) => {
       return {
         ...doc.data(),
@@ -309,7 +308,7 @@ const Leave = () => {
       okType: "danger",
 
       onOk: () => {
-        LeaveContext.deleteLeave(record.id, compId)
+        LeaveContext.deleteLeave(record.id)
           .then((response) => {
             console.log(response);
             getData();

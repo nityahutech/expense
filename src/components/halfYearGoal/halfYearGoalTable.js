@@ -110,27 +110,30 @@ const HalfYearGoalTable = (props) => {
             dataIndex: "action",
             key: "action",
             fixed: "right",
-            width: 180,
+            width: 150,
 
             render: (_, appraisal) => {
 
                 return (
                     <>
                         {console.log('render', appraisal)}
-                        <Button type="primary"
-                            style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', }}
 
-                            className="edIt"
-                            onClick={() => {
+                        {(sessionStorage.getItem("role") != 'hr') &&
+                            <Button type="primary"
+                                style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', }}
 
-                                setEditedAppraisal(appraisal);
-                                setSecondModal(true)
+                                className="edIt"
+                                onClick={() => {
 
-                            }}
-                        >
-                            {<FileImageOutlined style={{ color: 'white', }} />}
+                                    setEditedAppraisal(appraisal);
+                                    setSecondModal(true)
 
-                        </Button>
+                                }}
+                            >
+                                {<FileImageOutlined style={{ color: 'white', }} />}
+
+                            </Button>
+                        }
 
                         {(sessionStorage.getItem("role") === 'hr') &&
                             <Button type='danger'
@@ -274,20 +277,33 @@ const HalfYearGoalTable = (props) => {
                 </Col>
             </Row>
 
-            <Modal footer={null}
+            <Modal className='viewModal'
+                footer={null}
                 title="Appraisal Form"
-                centered
+                // centered
                 open={secondModal}
                 visible={secondModal}
                 onOk={() => setSecondModal(false)}
-                onCancel={() => setSecondModal(false)}
+                // onCancel={() => setSecondModal(false)}
                 width={800}
+                closeIcon={
+                    <div
+                        onClick={() => {
+                            setSecondModal(false);
+                        }}
+                        style={{ color: "#ffffff" }}
+                    >
+                        X
+                    </div>
+                }
             >
                 <HalfYearGoalForm currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} hrMode={props.listType === 'hr'} />
 
             </Modal>
 
-            <Modal footer={null}
+            <Modal className='viewModal'
+
+                footer={null}
                 title={<Button
                     className="button"
                     style={{
@@ -302,12 +318,23 @@ const HalfYearGoalTable = (props) => {
                 >
                     Download
                 </Button>}
-                centered
+                // centered
                 open={thirdModal}
                 visible={thirdModal}
                 onOk={() => setThirdModal(false)}
-                onCancel={() => setThirdModal(false)}
+                // onCancel={() => setThirdModal(false)}
                 width={600}
+
+                closeIcon={
+                    <div
+                        onClick={() => {
+                            setThirdModal(false);
+                        }}
+                        style={{ color: "#ffffff" }}
+                    >
+                        X
+                    </div>
+                }
 
             >
                 <div className="mainBorder A4" id="appraisal">

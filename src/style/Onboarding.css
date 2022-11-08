@@ -7,11 +7,23 @@
     margin: 30px 40px 30px 10px;
     
 }
+.access .ant-form{
+    margin: 30px 40px 30px 10px;
+    
+}
 .details .ant-form-item-label > label{
     font-weight: 600;
     font-size: 13px;
 }
+.organization .ant-form-item-label > label{
+    font-weight: 600;
+    font-size: 13px;
+}
 .inputLabel .ant-form label{
+    font-weight: 600;
+    font-size: 13px;
+}
+.editInput .ant-form label{
     font-weight: 600;
     font-size: 13px;
 }
@@ -20,7 +32,17 @@
     font-size: 13px;
     
 }
+.editUserForm .ant-form-item-label > label{
+    font-weight: 600;
+    font-size: 13px;
+    
+}
 .inputLabel .ant-input{
+    border: 1px solid #8692A6;
+    border-radius: 4px;
+
+}
+.editInput .ant-input{
     border: 1px solid #8692A6;
     border-radius: 4px;
 
@@ -40,4 +62,38 @@
     font-size: 14px;
     line-height: 18px;
     
+ }
+ .viewModal .ant-modal-content{
+    border-radius: 10px;
+    width:820px;
+ }
+
+ .viewModal .ant-modal-header{
+    border-radius: 10px 10px 0px 0px;
+    background: #043661;
+    color: #ffffff;
+ }
+ .viewModal .ant-modal-title{
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 18px;
+line-height: 25px;
+ }
+
+ .mainTabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #000000;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    
+ }
+ .mainTabs .ant-tabs-tab:hover{
+    color: #000000;
+    
+ }
+ .mainTabs .ant-tabs-ink-bar {
+    /* position: absolute; */
+    background: #F9A01F;
+    pointer-events: none;
+
  }

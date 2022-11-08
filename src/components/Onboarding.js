@@ -13,41 +13,28 @@ import {
   Space,
   Card,
   Table,
+  Tag,
+  Modal,
 } from "antd";
 import {
   PlusCircleOutlined,
   PlusOutlined,
   CloseCircleOutlined,
+  CheckCircleFilled,
+  ClockCircleFilled,
+  StopFilled,
+  EyeFilled,
+  EditFilled,
 } from "@ant-design/icons";
 import "../style/Onboarding.css";
 import CompanyProContext from "../contexts/CompanyProContext";
+import reload from "../images/reload.png";
+import ViewModal from "./ViewModal";
+import EditOnboarding from "./EditOnboarding";
 
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-
-const beforeUpload = (file) => {
-  const isJpgOrPng =
-    file.type === "image/jpeg/png" || file.type === "image/png";
-  if (!isJpgOrPng) {
-    message.error("You can only upload JPG/PNG file!");
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error("Image must smaller than 200kb!");
-  }
-  return isJpgOrPng && isLt2M;
-};
-
-function Onboarding(props) {
+function Onboarding() {
   const [form] = Form.useForm();
   const [form2] = Form.useForm();
-  const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState();
   const [data, setData] = useState([]);
   const [accessList, setAccessList] = useState([]);
   const [addAccess, setAddAccess] = useState(false);
@@ -55,6 +42,8 @@ function Onboarding(props) {
   const [fileName, setFileName] = useState("");
   const [isFileSizeInvalid, setIsFileSizeInvalid] = useState(false);
   const imgRef = React.useRef(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isEditOrganization, setIsEditOrganization] = useState(false);
 
   const onFinish = values => {
     const valuesToservice = {
@@ -126,6 +115,25 @@ function Onboarding(props) {
     }
   };
 
+  const showModal = (record) => {
+    // setmodaldata(record);
+    setIsModalVisible(true);
+  };
+
+  const showOnboarding = (record) => {
+    setIsEditOrganization(true);
+  };
+
+  const cancelOnboarding = () => {
+    setIsEditOrganization(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+
+    // submit form data
+  };
+
   function onDelete(delItem) {
     console.log(delItem);
     const filteredData = accessList.filter(
@@ -157,27 +165,191 @@ function Onboarding(props) {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      width: 200,
     },
     {
       title: "Code",
       dataIndex: "code",
       key: "code",
+      width: 120,
     },
     {
       title: "Address",
       dataIndex: "address",
       key: "address",
+      width: 250,
     },
     {
       title: "Status",
       key: "status",
       dataIndex: "status",
+      width: 140,
+
+      // responsive: ["md"],
+
+      render: (_, { status }) => getStatusUi(status),
     },
     {
       title: "Action",
       key: "action",
+      dataIndex: "action",
+      width: 180,
+      align: "center",
+
+      render: (_, record) => {
+        return (
+          <>
+            <Button
+              disabled={record?.disabled}
+              style={{ width: "40px", marginRight: "10px" }}
+              onClick={() => {
+                showModal(record);
+              }}
+            >
+              <EyeFilled
+                disabled={record?.disabled}
+                style={
+                  record?.disabled
+                    ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
+                    : { color: "#268FEE", marginLeft: "-2px" }
+                }
+              />
+            </Button>
+            <Button
+              disabled={record?.disabled}
+              style={
+                record?.disabled
+                  ? { width: "40px", marginRight: "10px" }
+                  : { width: "40px", marginRight: "10px" }
+              }
+              onClick={() => {
+                showOnboarding(record);
+              }}
+            >
+              <EditFilled
+                disabled={record?.disabled}
+                style={
+                  record?.disabled
+                    ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
+                    : { color: "#268FEE", marginLeft: "-2px" }
+                }
+              />
+            </Button>
+            <Button
+              disabled={record?.disabled}
+              style={record?.disabled ? { width: "40px" } : { width: "40px" }}
+            >
+              {record?.disabled ? (
+                <CheckCircleFilled
+                  disabled={record?.disabled}
+                  style={
+                    record?.disabled
+                      ? { color: "#268FEE", marginLeft: "-2px" }
+                      : { color: "#268FEE", marginLeft: "-2px" }
+                  }
+                />
+              ) : (
+                <StopFilled
+                  disabled={record?.disabled}
+                  style={
+                    record?.disabled
+                      ? { color: "#268FEE", marginLeft: "-2px" }
+                      : { color: "#268FEE", marginLeft: "-2px" }
+                  }
+                />
+              )}
+            </Button>
+          </>
+        );
+      },
     },
   ];
+  function getStatusUi(status) {
+    switch (status) {
+      case "Activated":
+        return (
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <div>
+              <CheckCircleFilled
+                style={{ color: "#1fca1f", marginRight: "6px" }}
+              />
+            </div>
+            {status}
+          </div>
+        );
+      case "Pending":
+        return (
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <div>
+              <ClockCircleFilled
+                style={{ color: "orange", marginRight: "6px" }}
+              />
+            </div>
+            {status},
+          </div>
+        );
+      case "Deactivated":
+        return (
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <div>
+              <StopFilled
+                style={{ color: "rgb(129 212 236)", marginRight: "6px" }}
+              />
+            </div>
+            {status}
+          </div>
+        );
+      case "Reactivate":
+        return (
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <div>
+              <img
+                src={reload}
+                style={{ color: "#1fca1f", marginRight: "6px" }}
+              />
+            </div>
+            {status}
+          </div>
+        );
+      default:
+        return null;
+    }
+  }
+  const dummyData = [
+    {
+      key: "1",
+      name: "Hutech Solutions pvt ltd",
+      code: "HS0000123",
+      address: "HSR BDA Comples",
+      status: "Activated",
+    },
+    {
+      key: "2",
+      name: "Blueelement Pvt Ltd",
+      code: "HS0000124",
+      address: "HSR BDA Comples",
+      status: "Pending",
+    },
+    {
+      key: "3",
+      name: "Blueelement Pvt Ltd",
+      code: "HS0000124",
+      address: "HSR BDA Comples",
+      status: "Deactivated",
+      disabled: true,
+    },
+    {
+      key: "4",
+      name: "Blueelement Pvt Ltd",
+      code: "HS0000124",
+      address: "HSR BDA Comples",
+      status: "Reactivate",
+    },
+  ];
+  function onReset() {
+    form.resetFields();
+  }
+
   return (
     <div className="main">
       <Tabs
@@ -625,13 +797,9 @@ function Onboarding(props) {
                           </span>
                         </Button>
                         {isFileSizeInvalid ? "" : fileName}
-                        {isFileSizeInvalid ? (
-                          <p style={{ color: "red" }}>
-                            File size must be less than 200Kb.
-                          </p>
-                        ) : (
-                          ""
-                        )}
+                        {isFileSizeInvalid
+                          ? message.error("File size must be less than 200Kb.")
+                          : ""}
                         <input
                           style={{
                             height: "72px",
@@ -907,6 +1075,7 @@ function Onboarding(props) {
                       lineHeight: "17px",
                       width: "99px",
                     }}
+                    onClick={onReset}
                   >
                     CANCEL
                   </Button>
@@ -922,6 +1091,7 @@ function Onboarding(props) {
                       lineHeight: "17px",
                       width: "99px",
                     }}
+                    htmlType="submit"
                   >
                     SAVE
                   </Button>
@@ -950,9 +1120,54 @@ function Onboarding(props) {
                 Organization Details
               </div>
               <Divider />
-              <div>
-                <Table className="tableTab" columns={columns} />
-              </div>
+
+              <Table
+                className="tableTab"
+                columns={columns}
+                dataSource={dummyData}
+                size="middle"
+                rowClassName={(record) => record.disabled && "disabled-row"}
+              />
+              <Modal
+                style={{ width: "800px" }}
+                className="viewModal"
+                centered
+                visible={isModalVisible}
+                footer={null}
+                title="ORGANIZATION DETAILS"
+                closeIcon={
+                  <div
+                    onClick={() => {
+                      setIsModalVisible(false);
+                    }}
+                    style={{ color: "#ffffff" }}
+                  >
+                    X
+                  </div>
+                }
+              >
+                <ViewModal setIsModalVisible={setIsModalVisible} />
+              </Modal>
+              <Modal
+                style={{ width: "840px" }}
+                className="viewModal"
+                // centered
+                visible={isEditOrganization}
+                footer={null}
+                title="ORGANIZATION DETAILS"
+                closeIcon={
+                  <div
+                    onClick={() => {
+                      setIsEditOrganization(false);
+                    }}
+                    style={{ color: "#ffffff" }}
+                  >
+                    X
+                  </div>
+                }
+              >
+                <EditOnboarding setIsEditOrganization={setIsEditOrganization} />
+              </Modal>
             </div>s
           </Card>
         </Tabs.TabPane>

@@ -5,7 +5,7 @@ import "../../style/Payslip.css";
 import { DeleteOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { createPdfFromHtml } from "./downloadLogic";
-import hutechLogo from "../../images/hutech-logo.png";
+import hutechLogo from "../../images/hutechlogo.png";
 
 function PaySlip() {
   const [month, setMonth] = useState(null);

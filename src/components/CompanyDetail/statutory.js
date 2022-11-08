@@ -18,8 +18,9 @@ const Statutory = () => {
   const [editCompanyID, showeditCompanyID] = useState(false);
 
   // ------------------------------------------------------states for Bank Info
-  const [editBAI, setEditBAI] = useState(false);
-  const [bIAList, setBIAList] = useState(false);
+  const [editBai, setEditBai] = useState(false);
+  const [baiList, setBaiList] = useState([]);
+  const [form3] = Form.useForm();
 
   // -------------------------------------------------------states for Director tag
   const [editDirectors, showEditDirectors] = useState(false);
@@ -140,6 +141,24 @@ const Statutory = () => {
     setCSList(filterCSData);
   }
 
+  // ------------function for adding Bank Account Information
+  function addBAI (values) {
+    console.log(values);
+    setBaiList([...baiList,values]);
+    setEditBai(false);
+    form3.resetFields();
+  }
+
+  // ---------function for deleting data entered in Bank account Information
+  function deleteBAI (delBAI) {
+    console.log(delBAI);
+    const filterBAIData = baiList.filter(
+      (item) => item.baibranchname !== delBAI.baibranchname
+    );
+    setBaiList(filterBAIData);
+  }
+
+
   return (
 
     <div
@@ -190,20 +209,20 @@ const Statutory = () => {
                 ) : (
                   <Form.Item
                     initialValue={data ? data.mailid : null}
-                    
-                    name="companyName"
+                    name="entityType"
                     rules={[
                       {
                         required: true,
-                        message: "Please enter Company Name",
-                        type: "name",
+                        message: "Please enter Entity Type",
+                        type: "name",                        
                       },
                       {
+                        pattern: /^[a-zA-Z\s]*$/,
                         message: "Please enter Valid Company Name",
                       },
                     ]}
                   >
-                    <Input type='CompamyName' required placeholder="Enter Comapany Name"bordered={false}
+                    <Input type='CompamyName' required placeholder="Enter Entity Type" bordered={false}
                    style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
@@ -221,19 +240,17 @@ const Statutory = () => {
                 ) : (
                   <Form.Item
                     initialValue={data ? data.contactEmail : null}
-                    name="brandName"
+                    name="cinnumber"
                     rules={[
                       {
+                        pattern: /^[0-9\b]+$/,
                         required: true,
-                        message: "Please enter Brand Name",
+                        message: "Please enter CIN number",
                         type: "email",
-                      },
-                      {
-                        message: "Please enter Valid Brand Name",
                       },
                     ]}
                   >
-                    <Input type='brandName' required placeholder="Enter Brand Name" bordered={false}
+                    <Input maxLength={20} type='brandName' required placeholder="Enter CIN Number" bordered={false}
                    style={{borderBottom: '1px solid #ccc '}}/>
                   </Form.Item>
                 )}
@@ -251,28 +268,27 @@ const Statutory = () => {
                 ) : (
                   <Form.Item
                     initialValue={data ? data.mailid : null}
-                    name="websiteName"
+                    name="DOI"
                     rules={[
                       {
                         required: true,
-                        message: "Please enter Website Name",
+                        message: "Please enter DOI",
                         type: "Website",
                       },
                       {
-                        message: "Please enter Valid Website Name",
+                        pattern: /^[0-9/\s]*$/,
+                        message: "Please enter Valid DOI",
                       },
                     ]}
                   >
-                    <Input type='WebsiteName' required placeholder="Enter Website Name" bordered={false}
+                    <Input  placeholder="Enter DOI" bordered={false}
+                    maxLength="10"
                    style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
                 )}
               </div>
             </Col>
-          </Row>
-
-          <Row gutter={[16, 16]} style={{ marginTop: "5%", }}>
 
             <Col span={8}>
               <div>
@@ -285,19 +301,21 @@ const Statutory = () => {
                 ) : (
                   <Form.Item
                     initialValue={data ? data.mailid : null}
-                    name="domain"
+                    name="companypan"
                     rules={[
                       {
                         required: true,
-                        message: "Please enter Domain Name",
-                        type: "domain",
+                        message: "Please enter Company PAN",
+                        type: "companypan",
                       },
                       {
-                        message: "Please enter Valid Domain Name",
+                        pattern: /^[0-9A-Z\s]*$/,
+                        message: "Please enter Valid Company PAN",
                       },
                     ]}
                   >
-                    <Input type='DomainName' required placeholder="Enter Domain Name" bordered={false}
+                    <Input type='DomainName' required placeholder="Enter Conpany PAN" bordered={false}
+                   maxLength="10"
                    style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
@@ -316,19 +334,21 @@ const Statutory = () => {
                 ) : (
                   <Form.Item
                     initialValue={data ? data.mailid : null}
-                    name="domain"
+                    name="companytan"
                     rules={[
                       {
                         required: true,
-                        message: "Please enter Domain Name",
-                        type: "domain",
+                        message: "Please enter Company TAN",
+                        type: "companytan",
                       },
                       {
-                        message: "Please enter Valid Domain Name",
+                        pattern: /^[0-9A-Z\s]*$/,
+                        message: "Please enter Valid Company TAN",
                       },
                     ]}
                   >
-                    <Input type='DomainName' required placeholder="Enter Domain Name" bordered={false}
+                    <Input type='DomainName' required placeholder="Enter Company TAN" bordered={false}
+                    maxLength="10"
                    style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
@@ -351,23 +371,26 @@ const Statutory = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Please enter Domain Name",
+                        message: "Please enter GST Number",
                         type: "domain",
                       },
                       {
-                        message: "Please enter Valid Domain Name",
+                        pattern: /^[0-9A-Z\s]*$/,
+                        message: "Please enter Valid GST Number",
                       },
                     ]}
                   >
-                    <Input type='DomainName' required placeholder="Enter Domain Name" bordered={false}
+                    <Input type='DomainName' required placeholder="Enter GST Number" bordered={false}
+                    maxLength="14"
                    style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
                 )}
               </div>
             </Col>
-
           </Row>
+
+          
           {editCompanyID === true ? (
             <Row
               style={{
@@ -531,8 +554,11 @@ const Statutory = () => {
                             label="Email ID"
                             rules={[
                               {
+                                type:'email',
                                 required: true,
                                 message: 'Please enter valid email ID',
+                                pattern:
+                                        "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;"
                               },
                               // {
                               //   pattern:
@@ -585,7 +611,7 @@ const Statutory = () => {
                                 message: 'Please enter your phone no',
                               },
                               {
-                                pattern: /^[6-9]\d{9}$/,
+                                pattern: /^[0-9]\d{9}$/,
                                 message: "Please Enter Valid Number",
                               },
                             ]}
@@ -763,8 +789,11 @@ const Statutory = () => {
                                   label="Email ID"
                                   rules={[
                                     {
+                                      type:'email',
                                       required: true,
                                       message: 'Please enter valid email ID',
+                                      pattern:
+                                        "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;"
                                     },
                                     // {
                                     //   pattern:
@@ -983,14 +1012,15 @@ const Statutory = () => {
                                   label="Email ID"
                                   rules={[
                                     {
+                                      type:'email',
                                       required: true,
                                       message: 'Please enter valid email ID',
+                                      pattern:
+                                        "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
                                     },
-                                    // {
-                                    //   pattern:
-                                    //     "/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
-                                    //   message: "Please Enter Valid Name",
-                                    // },
+                                    {
+                                      message: "Please Enter Valid Name",
+                                    },
                                   ]}
                                 >
                                   <Input
@@ -1052,27 +1082,155 @@ const Statutory = () => {
            title="BANK ACCOUNT INFO"
            style={{marginTop:"1rem",width:'800px'}}
         >
-           <Form>
-            {/* ----------State for the Bank Account information list */}
-              {bIAList.map((u,i)=>(
+           <Form
+            wrappercol={{
+              span: 14,
+            }}
+            labelcol={{
+              span: 4,
+            }}
+            layout="vertical"
+            onFinish={addBAI}
+            form={form3}
+           >
+             {/* ----------State for the Bank Account information list */}
+              {baiList.map((u,i)=>(
                 <div>
-
+                  <Row gutter={[16,48]}>
+                    <Col span={24}>
+                      <label>Account Title</label>
+                      <Input 
+                        style={{
+                                width: '100%',
+                                borderBottom: '1px solid #ccc ',
+                              }}
+                        bordered={false}
+                        value={u.baiaccountitle} 
+                      />
+                    </Col>
+                    <Col span={8}>
+                      <label>Bank Name</label>
+                      <Input 
+                        style={{
+                                width: '100%',
+                                borderBottom: '1px solid #ccc ',
+                              }}
+                        bordered={false}
+                        value={u.baibankname} 
+                            />
+                    </Col>
+                    <Col span={8}>
+                      <label>City</label>
+                      <Input 
+                        style={{
+                                width: '100%',
+                                borderBottom: '1px solid #ccc ',
+                              }}
+                        bordered={false}
+                        value={u.baicity} 
+                            />
+                    </Col>
+                    <Col span={8}>
+                      <label>Branch Name</label>
+                      <Input 
+                        style={{
+                                width: '100%',
+                                borderBottom: '1px solid #ccc ',
+                              }}
+                        bordered={false}
+                        value={u.baibranchname} 
+                            />
+                    </Col>
+                    <Col span={8}>
+                      <label>IFSC Code</label>
+                      <Input 
+                        style={{
+                                width: '100%',
+                                borderBottom: '1px solid #ccc ',
+                              }}
+                        bordered={false}
+                        value={u.baiifsccode} 
+                            />
+                    </Col>
+                    <Col span={8}>
+                    <lable>Type</lable>
+                                    <Select
+                                      value={u.baiaccounttype} 
+                                      defaultValue="Account Type"
+                                      style={{
+                                        width: '100%',
+                                        borderBottom: '1px solid #ccc ',
+                                      }}
+                                      bordered={false}
+                                      onChange={handleChange}
+                                      options={[
+                                        {
+                                          value: 'Account Type',
+                                          label: 'Account Type',
+                                        },
+                                        {
+                                          value: 'Current Account',
+                                          label: 'Current Account',
+                                        },
+                                        {
+                                          value: 'Fixed Deposit',
+                                          label: 'Fixed Deposit',
+                                        },
+                                      ]}
+                                    />
+                    </Col>
+                    <Col span={8}>
+                      <label>Account Number</label>
+                      <Input 
+                        style={{
+                                width: '100%',
+                                borderBottom: '1px solid #ccc ',
+                              }}
+                        bordered={false}
+                        value={u.baiaccountnumber} 
+                            />
+                    </Col>
+                    <Col 
+                      span={24} 
+                      style={{
+                              display:'flex', 
+                              justifyContent:'center', 
+                              alignItems:'end'}}>
+                      <Button
+                                      style={{
+                                        width:"10px",
+                                        border:'none',
+                                        display:"flex",
+                                        justifyContent:"center",
+                                        alignItems:"end",
+                                      }}
+                                      onClick={() => {
+                                        deleteBAI(u);
+                                      }}
+                                    >
+                                      <DeleteOutlined />
+                                    </Button>
+                    </Col>
+                    <Divider />
+                  </Row>
                 </div>
-              ))}
+              ))} 
             {/* -----------------State for the Bank Account Information Form */}
-          {editBAI === false ? (
+          {editBai === false ? (
             <Button 
               type="primary"
-              onClick={() => setEditBAI(!editBAI)}
+              onClick={() => setEditBai(!editBai)}
             ><PlusCircleOutlined />Add</Button>
           ):(
             <div>
               <Row gutter={[16,48]}>
                 <Col span={24}>
                   <FormItem
-                    name="accountitle"
+                    label="Account Title"
+                    name="baiaccountitle"
                     rules={[
                       {
+                        pattern: /^[a-zA-Z\s]*$/,
                         required: true,
                         message: 'Please enter account title',
                       },
@@ -1084,14 +1242,13 @@ const Statutory = () => {
                     style={{borderBottom: '1px solid #ccc '}} />
                   </FormItem>
                 </Col>
-                {/* <Col span={24}>
-                  <Button type='primary'> <SearchOutlined /> FIND MY BRANCH</Button>
-                </Col> */}
                 <Col span={8}>
                   <FormItem
-                    name="bankname"
+                    label="Bank Name"
+                    name="baibankname"
                     rules={[
                       {
+                        pattern: /^[a-zA-Z\s]*$/,
                         required: true,
                         message: 'Please enter bank name',
                       },
@@ -1105,9 +1262,11 @@ const Statutory = () => {
                 </Col>
                 <Col span={8}>
                   <FormItem
-                    name="city"
+                    label="City"
+                    name="baicity"
                     rules={[
                       {
+                        pattern: /^[a-zA-Z\s]*$/,
                         required: true,
                         message: 'Please enter city',
                       },
@@ -1121,9 +1280,11 @@ const Statutory = () => {
                 </Col>
                 <Col span={8}>
                   <FormItem
-                    name="branchname"
+                    label="Branch Name"
+                    name="baibranchname"
                     rules={[
                       {
+                        pattern: /^[a-zA-Z\s]*$/,
                         required: true,
                         message: 'Please enter branch name',
                       },
@@ -1137,15 +1298,18 @@ const Statutory = () => {
                 </Col>
                 <Col span={8}>
                   <FormItem
-                    name="ifsccode"
+                    label="IFSC Code"
+                    name="baiifsccode"
                     rules={[
                       {
+                        pattern: /^[A-Z0-9\s]*$/,
                         required: true,
                         message: 'Please enter the IFSC code',
                       },
                     ]}
                   >
                     <Input
+                    maxLength={11}
                     placeholder="IFSC Code"
                     bordered={false}
                     style={{borderBottom: '1px solid #ccc '}} />
@@ -1153,7 +1317,8 @@ const Statutory = () => {
                 </Col>
                 <Col span={8}>
                   <FormItem
-                    name="accounttype"
+                    label="Account Type"
+                    name="baiaccounttype"
                     rules={[
                       {
                         required: true,
@@ -1182,21 +1347,28 @@ const Statutory = () => {
                           value: 'Fixed Deposit',
                           label: 'Fixed Deposit',
                         },
+                        {
+                          value: 'Salary Account',
+                          label: 'Salary Account',
+                        },
                       ]}
                     />
                   </FormItem>
                 </Col>
                 <Col span={8}>
                   <FormItem
-                    name="accountnumber"
+                    label="Account Number"
+                    name="baiaccountnumber"
                     rules={[
                       {
+                        pattern: /^[0-9\b]+$/,
                         required: true,
                         message: 'Please enter account number',
                       },
                     ]}
                   >
                     <Input
+                    maxLength={14}
                     placeholder="Account Number"
                     bordered={false}
                     style={{borderBottom: '1px solid #ccc '}} />
@@ -1204,7 +1376,7 @@ const Statutory = () => {
                 </Col>
                 <Col span={24} style={{display:'flex', justifyContent:'flex-end'}}>
                   <FormItem>
-                    <Button type='text' style={{marginRight:'1rem'}} onClick={() => setEditBAI(false)}> <CloseOutlined />CANCLE</Button>
+                    <Button type='text' style={{marginRight:'1rem'}} onClick={() => setEditBai(false)}> <CloseOutlined />CANCLE</Button>
                     <Button type='primary' htmlType="submit"> <CheckOutlined />SAVE</Button>
                   </FormItem>
                 </Col>

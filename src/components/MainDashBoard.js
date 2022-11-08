@@ -16,6 +16,7 @@ import Companyprofile from "../images/Companyprofile.png"
 import Settings from "../images/Settings.png"
 import { Link } from 'react-router-dom';
 function MainDashBoard() {
+  const isHr = sessionStorage.getItem("role");
   return (
     <div className='icon-container'>
       <Card>
@@ -52,22 +53,24 @@ function MainDashBoard() {
               </Card>
             </Link>
           </Col>
-          <Col span={8} className="hi">
+          { isHr == "hr" ? (
+            <Col span={8} className="hi">
             <Link to="/PaySlipPage/PaySlip">
               <Card 
-                  bordered={false}
-                  hoverable={true}
-                  style={{fontWeight:"600"}}
-                >
-                  <img
-                      style={{width:"70px"}}
-                      alt="example"
-                      src={Payslip}
+                bordered={false}
+                hoverable={true}
+                style={{fontWeight:"600"}}
+              >
+                <img
+                  style={{width:"70px"}}
+                  alt="example"
+                  src={Payslip}
                 />
-                  Pay Slip Generator
-                </Card>
-            </Link>
-          </Col>
+                Pay Slip Generator
+              </Card>
+            </Link>            
+            </Col>
+          ) : null}
           <Col span={8} className="hi">
             <Link to="/Payslip2/HrPaySlip">
           <Card
@@ -84,6 +87,8 @@ function MainDashBoard() {
             </Card>
             </Link>
           </Col>
+          { isHr == "hr" ? (
+            <>
           <Col span={8} className="hi">
             <Link to="/EmployeeListPage/EmployeeList">
           <Card 
@@ -116,6 +121,8 @@ function MainDashBoard() {
             </Card>
             </Link>
           </Col>
+          </>
+          ) :null}
           <Col span={8} className="hi">
             <Link to="/Profile">
           <Card 
@@ -132,7 +139,24 @@ function MainDashBoard() {
             </Card>
             </Link>
           </Col>
-          <Col span={8} className="hi">
+          {/* <Col span={8} className="hi">
+            <Link to="/Appraisal">
+          <Card 
+              bordered={false}
+              hoverable={true}
+              style={{fontWeight:"600"}}
+            >
+              <img
+                   style={{width:"70px"}}
+                  alt="example"
+                  src={Appraisal}
+             />
+              Appraisal
+            </Card>
+            </Link>
+          </Col> */}
+          { isHr == "hr" ? (
+            <Col span={8} className="hi">
             <Link to="/CompanyProfilepage">
           <Card 
               bordered={false}
@@ -148,6 +172,7 @@ function MainDashBoard() {
             </Card>
             </Link>
           </Col>
+          ) : null}
           <Col span={8} className="hi">
             <Link to="/Setting">
           <Card 

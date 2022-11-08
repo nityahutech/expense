@@ -1,4 +1,4 @@
-import React, { useState, useRef,useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Form,
   Tabs,
@@ -9,7 +9,6 @@ import {
   message,
   Upload,
   Button,
-  notification,
   Space,
   Card,
   Table,
@@ -27,7 +26,6 @@ import {
   EditFilled,
 } from "@ant-design/icons";
 import "../style/Onboarding.css";
-import CompanyProContext from "../contexts/CompanyProContext";
 import reload from "../images/reload.png";
 import ViewModal from "./ViewModal";
 import EditOnboarding from "./EditOnboarding";
@@ -35,71 +33,37 @@ import EditOnboarding from "./EditOnboarding";
 function Onboarding() {
   const [form] = Form.useForm();
   const [form2] = Form.useForm();
-  const [data, setData] = useState([]);
   const [accessList, setAccessList] = useState([]);
   const [addAccess, setAddAccess] = useState(false);
-
   const [fileName, setFileName] = useState("");
-  const [isFileSizeInvalid, setIsFileSizeInvalid] = useState(false);
+  const [isBigFile, setIsBigFile] = useState(false);
   const imgRef = React.useRef(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditOrganization, setIsEditOrganization] = useState(false);
-
-  const onFinish = values => {
-    const valuesToservice = {
-      orgcode: values.orgcode,
-      orgname: values.orgname,
-      state: values.state,
-      cinnumber: values.cinnumber,
-      gstnumber: values.gstnumber,
-      domname: values.domname,
-      address1: values.address1,
-      address2: values.address2,
-      phone: values.phone,
-      city: values.city,
-      pincode: values.pincode,
-      country:values.country
-    }
-    console.log(values,valuesToservice);
-  //   CompanyProContext.updateCompInfo(compId,value);
-  //    getData();
-  //    setAddAccess(false);
-  // };
-
-    CompanyProContext.createCompInfo(valuesToservice)
-      .then(response => {
-      showNotification("success", "Success", "Onboarding Completed");
-      })
-      .catch(error => {
-      })
-      setAddAccess(false);
-    };
-        
-        
-          const showNotification = (type, msg, desc) => {
-            notification[type]({
-                message: msg,
-                description: desc,
-            });
-
-};
 
   const handleClick = (event) => {
     console.log("imgRef:: ", imgRef);
     imgRef.current.click();
   };
 
+  useEffect(() => {
+    setFileName(fileName);
+    setIsBigFile(false);
+  });
+
   const handleChange = (event) => {
     const fileUploaded = event.target.files[0];
-    setFileName(fileUploaded.name);
-    checkFileSize(fileUploaded.size);
+    checkFileSize(fileUploaded.size, fileUploaded.name);
   };
 
-  function checkFileSize(size) {
+  function checkFileSize(size, fileName) {
+    console.log({ size });
     if (Math.round(size / 1024) <= 200) {
-      setIsFileSizeInvalid(false);
+      setFileName(fileName);
+      setIsBigFile(false);
     } else {
-      setIsFileSizeInvalid(true);
+      setFileName(null);
+      setIsBigFile(true);
     }
   }
 
@@ -139,27 +103,16 @@ function Onboarding() {
     const filteredData = accessList.filter(
       (item) => item.emailaddress !== delItem.emailaddress
     );
-    CompanyProContext.deleteCompInfo(delItem.id)
-    .then((response) => {
-               console.log(response);
-               })
     setAccessList(filteredData);
   }
 
   function addUseRole(values) {
-    const value={
-      userole: values.userole,
-      name: values.name,
-      emailaddress: values.emailaddress,
-      phone: values.phone,
-      twitter: values.twitter,
-      }
     setAccessList([...accessList, values]);
     form2.resetFields();
     setAddAccess(false);
     // setAccessList([...accessList, newAccess]);
     // setNewAccess({ userole: "", name: "", emailaddress: "", phone: "" });
-  };
+  }
   const columns = [
     {
       title: "Name",
@@ -199,66 +152,74 @@ function Onboarding() {
       render: (_, record) => {
         return (
           <>
-            <Button
-              disabled={record?.disabled}
-              style={{ width: "40px", marginRight: "10px" }}
-              onClick={() => {
-                showModal(record);
-              }}
-            >
-              <EyeFilled
-                disabled={record?.disabled}
-                style={
-                  record?.disabled
-                    ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
-                    : { color: "#268FEE", marginLeft: "-2px" }
-                }
-              />
-            </Button>
-            <Button
-              disabled={record?.disabled}
-              style={
-                record?.disabled
-                  ? { width: "40px", marginRight: "10px" }
-                  : { width: "40px", marginRight: "10px" }
-              }
-              onClick={() => {
-                showOnboarding(record);
-              }}
-            >
-              <EditFilled
-                disabled={record?.disabled}
-                style={
-                  record?.disabled
-                    ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
-                    : { color: "#268FEE", marginLeft: "-2px" }
-                }
-              />
-            </Button>
-            <Button
-              disabled={record?.disabled}
-              style={record?.disabled ? { width: "40px" } : { width: "40px" }}
-            >
-              {record?.disabled ? (
-                <CheckCircleFilled
+            <Row>
+              <Col xs={22} sm={15} md={8}>
+                <Button
+                  disabled={record?.disabled}
+                  style={{ width: "40px" }}
+                  onClick={() => {
+                    showModal(record);
+                  }}
+                >
+                  <EyeFilled
+                    disabled={record?.disabled}
+                    style={
+                      record?.disabled
+                        ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
+                        : { color: "#268FEE", marginLeft: "-2px" }
+                    }
+                  />
+                </Button>
+              </Col>
+              <Col xs={22} sm={15} md={8}>
+                <Button
                   disabled={record?.disabled}
                   style={
-                    record?.disabled
-                      ? { color: "#268FEE", marginLeft: "-2px" }
-                      : { color: "#268FEE", marginLeft: "-2px" }
+                    record?.disabled ? { width: "40px" } : { width: "40px" }
                   }
-                />
-              ) : (
-                <StopFilled
+                  onClick={() => {
+                    showOnboarding(record);
+                  }}
+                >
+                  <EditFilled
+                    disabled={record?.disabled}
+                    style={
+                      record?.disabled
+                        ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
+                        : { color: "#268FEE", marginLeft: "-2px" }
+                    }
+                  />
+                </Button>
+              </Col>
+              <Col xs={22} sm={15} md={8}>
+                <Button
                   disabled={record?.disabled}
                   style={
-                    record?.disabled
-                      ? { color: "#268FEE", marginLeft: "-2px" }
-                      : { color: "#268FEE", marginLeft: "-2px" }
+                    record?.disabled ? { width: "40px" } : { width: "40px" }
                   }
-                />
-              )}
-            </Button>
+                >
+                  {record?.disabled ? (
+                    <CheckCircleFilled
+                      disabled={record?.disabled}
+                      style={
+                        record?.disabled
+                          ? { color: "#268FEE", marginLeft: "-2px" }
+                          : { color: "#268FEE", marginLeft: "-2px" }
+                      }
+                    />
+                  ) : (
+                    <StopFilled
+                      disabled={record?.disabled}
+                      style={
+                        record?.disabled
+                          ? { color: "#268FEE", marginLeft: "-2px" }
+                          : { color: "#268FEE", marginLeft: "-2px" }
+                      }
+                    />
+                  )}
+                </Button>
+              </Col>
+            </Row>
           </>
         );
       },
@@ -393,7 +354,7 @@ function Onboarding() {
                   remember: true,
                 }}
                 autoComplete="off"
-                 onFinish={onFinish}
+                // onFinish={onFinish}
               >
                 <Row gutter={[24, 8]}>
                   <Col xs={22} sm={15} md={8}>
@@ -528,13 +489,13 @@ function Onboarding() {
                       label="Domain Name"
                       rules={[
                         {
-                          required:true,
+                          required: true,
                           message: "Please Enter Domain Name",
                         },
                         {
-                         // pattern:
-                            //"/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
-                          //message: "Please Enter Valid Name",
+                          pattern:
+                            "/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:.[a-zA-Z]{2,})+$/",
+                          message: "Please Enter Valid Name",
                         },
                       ]}
                     >
@@ -768,11 +729,11 @@ function Onboarding() {
                           borderWidth: "thin",
                           borderRadius: "4px",
                           display: "flex",
-                          alignItems: "flex-end",
+                          alignItems: "center",
                         }}
                       >
                         <Button
-                          onClick={handleClick}
+                          onClick={(e) => handleClick(e)}
                           style={{
                             width: " 60px",
                             height: "60px",
@@ -796,8 +757,8 @@ function Onboarding() {
                             Upload
                           </span>
                         </Button>
-                        {isFileSizeInvalid ? "" : fileName}
-                        {isFileSizeInvalid
+                        {isBigFile ? null : fileName}
+                        {isBigFile
                           ? message.error("File size must be less than 200Kb.")
                           : ""}
                         <input
@@ -811,19 +772,23 @@ function Onboarding() {
                           id="myfile"
                           name="file"
                           ref={imgRef}
-                          onChange={handleChange}
+                          onChange={(e) => handleChange(e)}
                         />
-                        <p
-                          style={{
-                            fontWeight: "400",
-                            fontSize: "13px",
-                            lineHeight: "19px",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          Upload logo. Use the 200 kb size image. PNG or JPEG
-                          file format accepted
-                        </p>
+                        {fileName ? (
+                          ""
+                        ) : (
+                          <p
+                            style={{
+                              fontWeight: "400",
+                              fontSize: "13px",
+                              lineHeight: "19px",
+                              marginLeft: "10px",
+                            }}
+                          >
+                            Upload logo. Use the 200 kb size image. PNG or JPEG
+                            file format accepted
+                          </p>
+                        )}
                       </div>
                     </Form.Item>
                   </Col>
@@ -865,7 +830,7 @@ function Onboarding() {
                   remember: true,
                 }}
                 autoComplete="off"
-                //onFinish={addUseRole}
+                onFinish={addUseRole}
               >
                 {accessList.map((u, i) => (
                   <div style={{ marginTop: "10px" }} className="inputLabel">
@@ -1046,7 +1011,7 @@ function Onboarding() {
                     lineHeight: "14.4px",
                     float: "right",
                   }}
-                  htmlType= "submit" 
+                  htmlType={addAccess ? "submit" : "button"}
                   onClick={() => {
                     if (!addAccess) {
                       setAddAccess(true);
@@ -1168,13 +1133,12 @@ function Onboarding() {
               >
                 <EditOnboarding setIsEditOrganization={setIsEditOrganization} />
               </Modal>
-            </div>s
+            </div>
           </Card>
         </Tabs.TabPane>
       </Tabs>
     </div>
   );
-
-              }
+}
 
 export default Onboarding;

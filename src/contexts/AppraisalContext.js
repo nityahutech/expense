@@ -14,15 +14,28 @@ import {
     writeBatch
 
 } from "firebase/firestore";
+
 import { sendEmail } from "./EmailContext";
-const usersCollectionRef = collection(db, "users");
 
+// const usersCollectionRef = collection(db, "users");
 
-const appraisalCollectionRef = collection(db, "appraisal");
+const compId = sessionStorage.getItem("compId");
+const usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
+
+const appraisalCollectionRef = collection(db, `companyprofile/${compId}/appraisal`);
+// const appraisalCollectionRef = collection(db, "appraisal");
+const midYearAppraisalCollectionRef = collection(db, `companyprofile/${compId}/midYearAppraisal`);
+
+// const midYearAppraisalCollectionRef = collection(db, "midYearAppraisal");
 
 class AppraisalContext {
     getAllAppraisal = () => {
         const q = query(appraisalCollectionRef, orderBy("quarter", "desc"));
+        return getDocs(q);
+    };
+
+    getAllMidYearAppraisal = () => {
+        const q = query(midYearAppraisalCollectionRef, orderBy("quarter", "desc"));
         return getDocs(q);
     };
 
@@ -36,8 +49,19 @@ class AppraisalContext {
         return getDocs(q);
     };
 
+    getManagerMidYearAppraisal = (mgrName) => {
+        const q = query(midYearAppraisalCollectionRef, where("repManager", "==", mgrName));
+        return getDocs(q);
+    };
+
     getUserAppraisal = (id) => {
         const q = query(appraisalCollectionRef, where("empId", "==", id));
+        // console.log(q);
+        return getDocs(q);
+    }
+
+    getUserMidYearAppraisal = (id) => {
+        const q = query(midYearAppraisalCollectionRef, where("empId", "==", id));
         // console.log(q);
         return getDocs(q);
     }
@@ -46,6 +70,7 @@ class AppraisalContext {
         console.log('appraisal', 'received in service')
         return addDoc(appraisalCollectionRef, appraisal);
     };
+
 
 
     createBatchAppraisal = (appraisalList) => {
@@ -60,13 +85,38 @@ class AppraisalContext {
 
     };
 
+    createMidYearBatchAppraisal = (appraisalList) => {
+        console.log('Mid Year appraisal received in service', appraisalList)
+        var db = getFirestore();
+        const batch = writeBatch(db);
+
+        appraisalList.forEach((appraisal) => {
+            addDoc(midYearAppraisalCollectionRef, appraisal);
+        });
+        return batch.commit()
+
+    };
+
     deleteAppraisal = (id) => {
-        const appraisal = doc(db, "appraisal", id);
+        const appraisal = doc(db, `companyprofile/${compId}/appraisal`, id);
+        return deleteDoc(appraisal);
+    };
+
+    deleteMidYearAppraisal = (id) => {
+        const appraisal = doc(db, `companyprofile/${compId}/midYearAppraisal`, id);
         return deleteDoc(appraisal);
     };
 
     updateAppraisal = (id, updateAppraisal) => {
-        const apprasialDoc = doc(db, "appraisal", id);
+        const apprasialDoc = doc(db, `companyprofile/${compId}/appraisal`, id);
+        console.log('apprasialDoc', apprasialDoc)
+        return updateDoc(apprasialDoc, updateAppraisal);
+    };
+
+    updateMidYearAppraisal = (id, updateAppraisal) => {
+        console.log('updateMidYearAppraisal', updateAppraisal, compId)
+
+        const apprasialDoc = doc(db, `companyprofile/${compId}/midYearAppraisal`, id);
         console.log('apprasialDoc', apprasialDoc)
         return updateDoc(apprasialDoc, updateAppraisal);
     };

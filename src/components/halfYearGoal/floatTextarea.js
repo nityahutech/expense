@@ -7,7 +7,7 @@ import TextArea from "antd/lib/input/TextArea";
 
 const FloatTextArea = (props) => {
     const [focus, setFocus] = useState(false);
-    let { label, value, placeholder, type, required } = props;
+    let { label, value, placeholder, type, required, disabled } = props;
     if (!placeholder) placeholder = label;
     const isOccupied = focus || (value && value.length !== 0);
     const labelClass = isOccupied ? "label as-label" : "label as-placeholder";
@@ -19,13 +19,14 @@ const FloatTextArea = (props) => {
             onBlur={() => setFocus(false)}
             onFocus={() => setFocus(true)}
         >
-            <TextArea className="Textarea-Border"   style={{ width: '100%', borderRadius: '10px', }}
+            <TextArea disabled={disabled} className="Textarea-Border" style={{ width: '100%', borderRadius: '10px', }}
                 showCount
                 maxLength={500}
                 autoSize={{
                     minRows: 6,
 
                 }}
+
                 onChange={props.onChange} type={type} defaultValue={value} />
             <label className={labelClass}>
                 {isOccupied ? label : placeholder} {requiredMark}

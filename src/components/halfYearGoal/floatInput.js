@@ -5,7 +5,7 @@ import "./float.css";
 
 const FloatInput = (props) => {
     const [focus, setFocus] = useState(false);
-    let { label, value, placeholder, type, required } = props;
+    let { label, value, placeholder, type, required, disabled } = props;
     if (!placeholder) placeholder = label;
     const isOccupied = focus || (value && value.length !== 0);
     const labelClass = isOccupied ? "label as-label" : "label as-placeholder";
@@ -17,7 +17,7 @@ const FloatInput = (props) => {
             onBlur={() => setFocus(false)}
             onFocus={() => setFocus(true)}
         >
-            <Input style={{ width: '50%', borderRadius: '10px', }} onChange={props.onChange} type={type} defaultValue={value} />
+            <Input disabled={disabled} style={{ width: '100%', borderRadius: '10px', }} onChange={props.onChange} type={type} defaultValue={value} />
             <label className={labelClass}>
                 {isOccupied ? label : placeholder} {requiredMark}
             </label>

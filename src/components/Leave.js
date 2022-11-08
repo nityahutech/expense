@@ -303,7 +303,7 @@ const Leave = () => {
 
   const onDeleteLeave = (record) => {
     Modal.confirm({
-      title: "Are you sure, you want to delete  Leave record?",
+      title: "Are you sure, you want to delete Leave record?",
       okText: "Yes",
       okType: "danger",
 

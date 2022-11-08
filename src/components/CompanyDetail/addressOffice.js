@@ -62,7 +62,7 @@ function AddressOffice() {
                  onFinish={onFinish}
                 >
                     <Card
-                        title=" REGISTERED OFFICE"
+                        title="REGISTERED OFFICE"
                         extra={
                             <>
                                 {editAddress === false ? (
@@ -101,10 +101,7 @@ function AddressOffice() {
                                                         required: true,
                                                         message: "Enter Address",
                                                         type: "text",
-                                                    },
-                                                    {
-                                                        message: "Enter Valid Address ",
-                                                    },
+                                                    }
                                                 ]}
                                             >
                                                 <Input style={{ paddingLeft: '0px' }} required placeholder="" />
@@ -135,10 +132,7 @@ function AddressOffice() {
                                                         required: true,
                                                         message: "Enter Address ",
                                                         type: "text",
-                                                    },
-                                                    {
-                                                        message: "Enter Valid Address",
-                                                    },
+                                                    }
                                                 ]}
                                             >
                                                 <Input style={{ paddingLeft: '0px' }}  required placeholder="" />
@@ -171,6 +165,7 @@ function AddressOffice() {
                                                         type: "text",
                                                     },
                                                     {
+                                                        pattern: /^[a-zA-Z\s]*$/,
                                                         message: "Enter Valid City",
                                                     },
                                                 ]}
@@ -201,6 +196,7 @@ function AddressOffice() {
                                                         type: "text",
                                                     },
                                                     {
+                                                        pattern: /^[a-zA-Z\s]*$/,
                                                         message: " Enter Valid State",
                                                     },
                                                 ]}
@@ -230,6 +226,7 @@ function AddressOffice() {
                                                         type: "text",
                                                     },
                                                     {
+                                                        pattern: /^[a-zA-Z\s]*$/,
                                                         message: "Enter Valid Country",
                                                     },
                                                 ]}
@@ -259,6 +256,7 @@ function AddressOffice() {
                                                         type: "text",
                                                     },
                                                     {
+                                                        pattern: /^[0-9\b]+$/,
                                                         message: "Enter Valid Pin-Code",
                                                     },
                                                 ]}

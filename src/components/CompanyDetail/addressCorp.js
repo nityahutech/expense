@@ -60,7 +60,7 @@ function AddressCorp() {
                  onFinish={onFinish}
                 >
                     <Card
-                        title=" CORPORATE OFFICE"
+                        title="CORPORATE OFFICE"
                         extra={
                             <>
                                 {editCorpAddress === false ? (
@@ -98,10 +98,7 @@ function AddressCorp() {
                                                         required: true,
                                                         message: "Enter Address",
                                                         type: "text",
-                                                    },
-                                                    {
-                                                        message: "Enter Valid Address ",
-                                                    },
+                                                    }
                                                 ]}
                                             >
                                                 <Input style={{ paddingLeft: '0px' }} required placeholder="" />
@@ -132,10 +129,7 @@ function AddressCorp() {
                                                         required: true,
                                                         message: "Enter Address ",
                                                         type: "text",
-                                                    },
-                                                    {
-                                                        message: "Enter Valid Address ",
-                                                    },
+                                                    }
                                                 ]}
                                             >
                                                 <Input style={{ paddingLeft: '0px' }} required placeholder="" />
@@ -168,6 +162,7 @@ function AddressCorp() {
 
                                                     },
                                                     {
+                                                        pattern: /^[a-zA-Z\s]*$/,
                                                         message: "Enter Valid City ",
                                                     },
                                                 ]}
@@ -197,6 +192,7 @@ function AddressCorp() {
                                                         type: "text",
                                                     },
                                                     {
+                                                        pattern: /^[a-zA-Z\s]*$/,
                                                         message: "Enter Valid State ",
                                                     },
                                                 ]}
@@ -226,6 +222,7 @@ function AddressCorp() {
                                                         type: "text",
                                                     },
                                                     {
+                                                        pattern: /^[a-zA-Z\s]*$/,
                                                         message: "Enter Valid Country ",
                                                     },
                                                 ]}
@@ -255,6 +252,7 @@ function AddressCorp() {
                                                         type: "text",
                                                     },
                                                     {
+                                                        pattern: /^[0-9\b]+$/,
                                                         message: "Enter Valid Pin",
                                                     },
                                                 ]}

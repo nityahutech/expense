@@ -76,7 +76,7 @@ const CreatehalfYearGoal = (props) => {
 
         console.log('appraisal', appraisals)
 
-        AppraisalContext.createBatchAppraisal(appraisals)
+        AppraisalContext.createMidYearBatchAppraisal(appraisals)
             .then(response => {
                 console.log("appraisal Created", response);
 
@@ -163,9 +163,10 @@ const CreatehalfYearGoal = (props) => {
                                 <DatePicker style={{ width: '100%' }}
 
                                     onChange={onQuarterChange}
-                                    picker="quarter"
+                                    picker="month"
 
                                 />
+
 
                             </div>
                             <div>

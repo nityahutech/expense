@@ -19,6 +19,8 @@ const currTime = new Date().toLocaleTimeString();
 
 const { TextArea } = Input;
 
+
+
 const { Text, Link } = Typography;
 const fixedColumns = [
     {
@@ -317,10 +319,10 @@ const Appraisal = (props) => {
                     />
                 </Col>
 
-                <Row gutter={[8, 32]}>
+                <Row gutter={[8, 8]}>
                     <Col xl={24} lg={24} md={24} sm={24} xs={24} >
 
-                        <Form className='appraisall-div'
+                        <Form className='appraisall-div' style={{ width: '600px', }}
                             layout="vertical"
                             labelCol={{
                                 span: 24,
@@ -405,7 +407,7 @@ const Appraisal = (props) => {
                             // }}
 
                             >
-                                <TextArea
+                                <TextArea className='textArea-ant'
                                     maxLength={100}
                                     autoSize={{
                                         minRows: 3,
@@ -431,7 +433,7 @@ const Appraisal = (props) => {
                             // }}
 
                             >
-                                <TextArea
+                                <TextArea className='textArea-ant'
                                     maxLength={100}
                                     autoSize={{
                                         minRows: 3,
@@ -456,7 +458,7 @@ const Appraisal = (props) => {
                             // }}
 
                             >
-                                <TextArea
+                                <TextArea className='textArea-ant'
                                     maxLength={100}
                                     autoSize={{
                                         minRows: 3,
@@ -488,7 +490,7 @@ const Appraisal = (props) => {
 
                                 >
 
-                                    <TextArea
+                                    <TextArea className='textArea-ant'
                                         style={{ overflow: 'hidden', }}
                                         maxLength={100}
                                         autoSize={{
@@ -517,7 +519,7 @@ const Appraisal = (props) => {
 
                                 >
 
-                                    <TextArea
+                                    <TextArea className='textArea-ant'
                                         maxLength={100}
                                         autoSize={{
                                             minRows: 3,
@@ -547,7 +549,7 @@ const Appraisal = (props) => {
                                 // }}
 
                                 >
-                                    <TextArea
+                                    <TextArea className='textArea-ant'
                                         maxLength={100}
                                         autoSize={{
                                             minRows: 3,
@@ -573,7 +575,7 @@ const Appraisal = (props) => {
                                 // }}
 
                                 >
-                                    <TextArea
+                                    <TextArea className='textArea-ant'
                                         maxLength={100}
                                         autoSize={{
                                             minRows: 3,
@@ -599,7 +601,7 @@ const Appraisal = (props) => {
                                 // }}
 
                                 >
-                                    <TextArea
+                                    <TextArea className='textArea-ant'
                                         maxLength={100}
                                         autoSize={{
                                             minRows: 3,

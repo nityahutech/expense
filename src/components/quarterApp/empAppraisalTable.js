@@ -9,7 +9,7 @@ import { Card, Input, Modal, Row, Table, Tag } from 'antd';
 import Appraisal from "./appraisalForm";
 import "./appraisal.css";
 import AppraisalContext from '../../contexts/AppraisalContext';
-import EmployeeContext from '../../contexts/EmployeeContext';
+import EmpInfoContext from '../../contexts/EmpInfoContext';
 import { useAuth } from '../../contexts/AuthContext'
 
 const EmpAppraisalTable = (props) => {
@@ -179,7 +179,7 @@ const EmpAppraisalTable = (props) => {
     const getAppraisalList = async () => {
 
         let allData = []
-        let empRecord = await EmployeeContext.getEmployee(currentUser.uid)
+        let empRecord = await EmpInfoContext.getEduDetails(currentUser.uid)
         setEmployeeRecord(empRecord)
         if (props.listType === 'hr') {
             allData = await AppraisalContext.getAllAppraisal();
@@ -244,10 +244,11 @@ const EmpAppraisalTable = (props) => {
                 }} >
 
                     <Table
+                        rowClassName={() => "rowClassName1"}
                         loading={loading}
                         columns={columns}
                         dataSource={appraisalList}
-                        bordered
+                        bordered={false}
 
                         pagination={{
                             position: ["bottomCenter"],
@@ -273,7 +274,7 @@ const EmpAppraisalTable = (props) => {
                 onCancel={() => setSecondModal(false)}
                 width={800}
             >
-                <Appraisal currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} hrMode={props.listType === 'hr'}/>
+                <Appraisal currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} hrMode={props.listType === 'hr'} />
 
             </Modal>
 

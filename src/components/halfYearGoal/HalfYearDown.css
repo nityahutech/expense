@@ -21,25 +21,9 @@
   border: 1px solid black;
   width: 48%;
 }
-
-.splitLeft2 {
-  border: 1px solid black;
-  width: 96%;
-}
-
-.splitthird {
-  border: 1px solid black;
-  width: 36%;
-}
-
-.splitforth {
-  border: 1px solid black;
-  width: 20%;
-}
-
 .firstSplit,
 .secondSplit,
-.thridSplit {
+.thirdSplit {
   display: flex;
 }
 
@@ -51,7 +35,7 @@
 }
 td,
 th {
-  padding-left: 10px;
+  padding-left: 0px;
 }
 .netPay {
   font-weight: 500;
@@ -80,11 +64,11 @@ th {
 
 /** Paper sizes **/
 
-#payslip.A4 .sheet {
+#appraisal.A4 .sheet {
   width: 210mm;
   height: 190mm;
 }
-#payslip.A4.landscape .sheet {
+#appraisal.A4.landscape .sheet {
   width: 297mm;
   height: 209mm;
 }

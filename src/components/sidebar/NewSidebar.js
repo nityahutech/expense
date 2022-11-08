@@ -8,6 +8,7 @@ import userIcon from "../../images/user.png";
 import logo from "../../images/logo_1.png";
 import appraisalIcon from "../../images/appraisal.png";
 import Organization from "../../images/Organization.png"
+import enterprise from "../../images/enterprise.png"
 import "./newSlidebar.css";
 import { NavLink } from "react-router-dom";
 
@@ -115,8 +116,8 @@ const NewSidebar = (props) => {
           </Menu.SubMenu>
           <Menu.Item
             icon={
-              <img
-                src={userIcon}
+              <img style={{ color: 'white' }}
+                src={enterprise}
                 // src="/user.png"
                 alt="profile"
                 className="Dash"
@@ -268,14 +269,12 @@ const NewSidebar = (props) => {
                 mode="inline"
               >
                 <Menu.Item
-                  icon={
-                    <img
-                      src={dashIcon}
-                      // src="/Dashboard.png"
-                      alt="profile"
-                      className="Dash"
-                    />
-                  }
+                  className="arrow"
+                  //  style={{
+                  //     background: "#05445E",
+
+                  //   }}
+                  icon={<img src={dot} alt="profile" className="dot" />}
                   key="1"
                 >
                   Dashboard

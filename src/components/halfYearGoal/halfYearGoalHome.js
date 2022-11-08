@@ -3,7 +3,7 @@ import { Button, Col } from 'antd';
 import { Input, Modal, Row, DatePicker, } from 'antd';
 import "./halfYearGoal.css";
 import CreatehalfYearGoal from "./createhalfYearGoal";
-import EmployeeContext from '../../contexts/EmployeeContext';
+import EmpInfoContext from '../../contexts/EmpInfoContext';
 import { useAuth } from '../../contexts/AuthContext'
 import HalfYearGoalTable from './halfYearGoalTable';
 
@@ -29,7 +29,7 @@ const HalfYearGoalHome = () => {
     }, [])
 
     const getEmployeeRecord = async () => {
-        EmployeeContext.getEmployee(currentUser.uid)
+        EmpInfoContext.getEduDetails(currentUser.uid)
             .then(response => {
                 console.log('empRecorddd', response)
                 setEmployeeRecord(response)

@@ -11,6 +11,7 @@ const CONTENT_HEIGHT = 419 * RATE;
 const PAGE_MARGINS = [15 * RATE, 0 * RATE];
 const FONT_SIZE = 14 * RATE;
 
+
 export async function createPdfFromHtml(element) {
   console.log("element:: ", element.innerHTML);
   const pdfProps = await createPdfProps(element);
@@ -34,7 +35,10 @@ async function createPdfProps(element) {
     contentSize: {
       width: CONTENT_WIDTH,
       height: CONTENT_HEIGHT,
+
     },
+
+
     pageMargins: PAGE_MARGINS,
     fontSize: FONT_SIZE,
   };
@@ -57,6 +61,8 @@ function createPdf(pdfProps) {
     pageMargins,
     fontSize,
   };
+
+
 
   pdfMake.createPdf(documentDefinitions).download();
 }

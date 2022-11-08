@@ -192,7 +192,7 @@ const CreateApparaisal = (props) => {
 
                 </Radio.Group>
 
-                <Table
+                <Table 
                     rowSelection={{
                         type: selectionType,
                         ...rowSelection,

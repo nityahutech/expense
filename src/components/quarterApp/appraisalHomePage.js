@@ -3,7 +3,7 @@ import { Button, Col } from 'antd';
 import { Input, Modal, Row, DatePicker, } from 'antd';
 import "./appraisal.css";
 import CreateApparaisal from "./createApparaisal";
-import EmployeeContext from '../../contexts/EmployeeContext';
+import EmpInfoContext from '../../contexts/EmpInfoContext';
 import { useAuth } from '../../contexts/AuthContext'
 import EmpAppraisalTable from './empAppraisalTable';
 
@@ -29,7 +29,7 @@ const AppraisalHr = () => {
     }, [])
 
     const getEmployeeRecord = async () => {
-        EmployeeContext.getEmployee(currentUser.uid)
+        EmpInfoContext.getEduDetail(currentUser.uid)
             .then(response => {
                 console.log('empRecorddd', response)
                 setEmployeeRecord(response)

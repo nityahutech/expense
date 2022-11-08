@@ -2,23 +2,31 @@ import React, { useState, useEffect } from 'react'
 import {
     // PrinterFilled,
     FileImageOutlined,
-    DeleteOutlined
+    DeleteOutlined,
+    DownloadOutlined
 } from "@ant-design/icons";
 import { Button, Col } from 'antd';
 import { Card, Input, Modal, Row, Table, Tag } from 'antd';
 import HalfYearGoalForm from "./halfYearGoalForm";
+import HalfyearGoalPdf from "./halfyearGoalPdf";
 import "./halfYearGoal.css";
 import AppraisalContext from '../../contexts/AppraisalContext';
-import EmployeeContext from '../../contexts/EmployeeContext';
+import EmpInfoContext from '../../contexts/EmpInfoContext';
 import { useAuth } from '../../contexts/AuthContext'
+import { createPdfFromHtml } from "./../ProfileDetails/downloadLogic";
+
+
 
 const HalfYearGoalTable = (props) => {
     const [secondModal, setSecondModal] = useState(false)
+    const [thirdModal, setThirdModal] = useState(false)
     const [editedAppraisal, setEditedAppraisal] = useState(null);
+    const [downloadAppraisal, setDownloadAppraisal] = useState(null);
     const [loading, setLoading] = useState(false);
     const [employeeRecord, setEmployeeRecord] = useState();
     const { currentUser } = useAuth();
     const [appraisalList, setAppraisalList] = useState([]);
+    const [printContent, setPrintContent] = useState(null);
 
     const columns = [
 
@@ -67,26 +75,7 @@ const HalfYearGoalTable = (props) => {
                     </Tag>
                 ),
         },
-        {
-            title: "Lead Assessment",
-            dataIndex: "Leadassessment",
-            // fixed: "left",
-            width: 150,
-            sorter: (a, b) => {
-                return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
-            },
-            sortDirections: ["ascend", "descend"],
-            render: (_, { status }) =>
-                status !== "" && (
-                    <Tag style={{ width: '100px' }}
-                        className="statusTag"
-                        color={status === "mgrPending" || status === 'completed' ? "green" : status === "leadPending" ? 'blue' : "volcano"}
-                        key={status}
-                    >
-                        {status === 'mgrPending' || status === 'completed' ? 'Completed' : 'Pending'}
-                    </Tag>
-                ),
-        },
+
         {
             title: "Manager Assessment",
             dataIndex: "Mangassessment",
@@ -121,7 +110,7 @@ const HalfYearGoalTable = (props) => {
             dataIndex: "action",
             key: "action",
             fixed: "right",
-            width: 120,
+            width: 180,
 
             render: (_, appraisal) => {
 
@@ -161,6 +150,30 @@ const HalfYearGoalTable = (props) => {
 
                         }
 
+                        {(sessionStorage.getItem("role") === 'hr') &&
+                            <Button type='secondary'
+                                style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', marginLeft: '10px' }}
+                                // type="link"
+                                className="edIt"
+                                onClick={() => {
+
+                                    setDownloadAppraisal(appraisal);
+                                    setThirdModal(true)
+
+                                }}
+
+
+                            >
+                                {< DownloadOutlined style={{ color: 'grey', }}
+
+                                />}
+                            </Button>
+
+                        }
+
+
+
+
                     </>
                 );
 
@@ -168,9 +181,9 @@ const HalfYearGoalTable = (props) => {
         },
     ];
 
-    useEffect(() => {
-        getAppraisalList()
-    }, [])
+    // useEffect(() => {
+    //     getAppraisalList()
+    // }, [])
 
     useEffect(() => {
         getAppraisalList()
@@ -179,19 +192,16 @@ const HalfYearGoalTable = (props) => {
     const getAppraisalList = async () => {
 
         let allData = []
-        let empRecord = await EmployeeContext.getEmployee(currentUser.uid)
+        let empRecord = await EmpInfoContext.getEduDetails(currentUser.uid)
         setEmployeeRecord(empRecord)
         if (props.listType === 'hr') {
-            allData = await AppraisalContext.getAllAppraisal();
+            allData = await AppraisalContext.getAllMidYearAppraisal();
         }
         else if (props.listType === 'emp') {
-            allData = await AppraisalContext.getUserAppraisal(empRecord.empId)
-        }
-        else if (props.listType === 'lead') {
-            allData = await AppraisalContext.getLeadAppraisal(empRecord.fname + ' ' + empRecord.lname)
+            allData = await AppraisalContext.getUserMidYearAppraisal(empRecord.empId)
         }
         else if (props.listType === 'mgr') {
-            allData = await AppraisalContext.getManagerAppraisal(empRecord.fname + ' ' + empRecord.lname)
+            allData = await AppraisalContext.getManagerMidYearAppraisal(empRecord.fname + ' ' + empRecord.lname)
 
         }
 
@@ -215,7 +225,7 @@ const HalfYearGoalTable = (props) => {
             okType: "danger",
 
             onOk: () => {
-                AppraisalContext.deleteAppraisal(appraisal.id)
+                AppraisalContext.deleteMidYearAppraisal(appraisal.id)
                     .then(response => {
                         console.log(response);
                         getAppraisalList()
@@ -247,7 +257,7 @@ const HalfYearGoalTable = (props) => {
                         loading={loading}
                         columns={columns}
                         dataSource={appraisalList}
-                        bordered
+                        bordered={false}
 
                         pagination={{
                             position: ["bottomCenter"],
@@ -274,6 +284,43 @@ const HalfYearGoalTable = (props) => {
                 width={800}
             >
                 <HalfYearGoalForm currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} hrMode={props.listType === 'hr'} />
+
+            </Modal>
+
+            <Modal footer={null}
+                title={<Button
+                    className="button"
+                    style={{
+                        background: "#1890ff",
+                        color: "white",
+
+                    }}
+                    type="button"
+                    onClick={() => {
+                        createPdfFromHtml(printContent);
+                    }}
+                >
+                    Download
+                </Button>}
+                centered
+                open={thirdModal}
+                visible={thirdModal}
+                onOk={() => setThirdModal(false)}
+                onCancel={() => setThirdModal(false)}
+                width={600}
+
+            >
+                <div className="mainBorder A4" id="appraisal">
+                    <div
+                        ref={(el) => {
+                            setPrintContent(el);
+                        }}
+                    >
+                        <HalfyearGoalPdf />
+                    </div>
+                </div>
+
+                {/* <HalfyearGoalPdf currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} hrMode={props.listType === 'hr'} /> */}
 
             </Modal>
 

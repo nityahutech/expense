@@ -5,7 +5,7 @@ import "./HalfYearDown.css";
 import { DeleteOutlined } from "@ant-design/icons";
 import moment from "moment";
 
-import hutechLogo from "../../images/hutech-logo.png";
+import hutechLogo from "../../images/hutechlogo.png";
 
 function AppraisalPdf() {
     const [month, setMonth] = useState(null);

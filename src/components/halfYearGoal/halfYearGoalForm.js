@@ -4,14 +4,10 @@ import ReactToPrint, { useReactToPrint } from "react-to-print";
 import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import FloatInput from "./floatInput";
 import FloatTextArea from "./floatTextarea";
-
-// import styles from "./halfYearGoal.css";
-
 import "./halfYearGoal.css";
 import {
     Row,
     Col,
-    Input,
     Button,
     Typography,
     Form,
@@ -19,7 +15,6 @@ import {
     Radio,
     notification,
     Layout,
-    Rate,
     Checkbox
 } from "antd";
 const currDate = new Date().toLocaleDateString();
@@ -33,20 +28,37 @@ const HalfYearGoalForm = (props) => {
     const [form] = Form.useForm();
     const [formLayout, setFormLayout] = useState('horizontal');
     const [currentAppraisal, setCurrentAppraisal] = useState(props.appraisal);
-    const [empEditable, setEmpEditable] = useState(!(currentAppraisal.status === 'empPending'));
-    const [leadEditable, setLeadEditable] = useState((currentAppraisal.status === 'leadPending' && props.hrMode == false));
+    const [empEditable, setEmpEditable] = useState((currentAppraisal.status === 'empPending'));
     const [mgrEditable, setMgrEditable] = useState((currentAppraisal.status === 'mgrPending' && props.hrMode == false));
     const [selectedNumber, setSelectedNumber] = useState(0);
 
-
     const componentRef = useRef();
-    const handlePrint = useReactToPrint({
-        content: () => componentRef.current,
-        documentTitle: 'Quarter Appraisal Form',
-        onafterprint: () => alert('Print Succes')
+    const [active, setActive] = useState("");
+    let initialProjectList = [{ projectName: '', projectDetail: '' }]
+    if (mgrEditable || props.hrMode == true) {
+        initialProjectList = currentAppraisal.projectList
+    }
 
-    });
+    //check Box
+    const [projectList, setProjectList] = useState(initialProjectList);
+    let organizationActivities = currentAppraisal.empOrganizationalCheckBox
+    let personalGrowthActivities = currentAppraisal.empPersonalCheckBox
 
+
+
+    let intEmployeeRating = currentAppraisal.empOrganisationActivitiesRating
+    if (intEmployeeRating == 0 || intEmployeeRating == null) {
+        intEmployeeRating = 1
+
+    }
+
+
+    // const handlePrint = useReactToPrint({
+    //     content: () => componentRef.current,
+    //     documentTitle: 'Quarter Appraisal Form',
+    //     onafterprint: () => alert('Print Succes')
+
+    // });
 
     const onReset = () => {
         form.resetFields()
@@ -55,19 +67,17 @@ const HalfYearGoalForm = (props) => {
     const selectNumber = numberSelected => {
         setSelectedNumber(numberSelected)
     }
-    const [active, setActive] = useState("");
+
 
     const handleClick = (event) => {
         setActive(event.target.id);
 
     }
 
-
     //--------------------------------------------------------------------------checkbox-1
     function onChange(checkedValues) {
         console.log("checked = ", checkedValues);
     }
-
 
     // all options, also coming from json
     const options = [
@@ -83,10 +93,7 @@ const HalfYearGoalForm = (props) => {
     //--------------------------------------------------------------------------checkbox-2
 
     // initial values (generally coming from json)
-    const defaults = ["Pear", "Orange"];
-    const initalValues = {
-        fruits: defaults
-    };
+    const defaults = ["1"];
 
     // all options, also coming from json
     const optionsTwo = [
@@ -131,18 +138,109 @@ const HalfYearGoalForm = (props) => {
 
     const onFinish = (values) => {
         console.log('appraisalGoal', values);
+        let appraisalDetail = {}
+        if (empEditable) {
+            let projectList = []
+            appraisalDetail = {
+                personalGrowthDetail: values.personalGrowthDetail,
+                organizationalActivitiesDetail: values.organizationalActivitiesDetail,
+
+                //checkBox
+                empOrganizationalCheckBox: values.empOrganizationalCheckBox,
+                empPersonalCheckBox: values.empPersonalCheckBox,
+
+                //rating
+                empProjectActivitiesRating: values.empProjectActivitiesRating,
+                empOrganisationActivitiesRating: values.empOrganisationActivitiesRating,
+                empPersonalGrowthRating: values.empPersonalGrowthRating,
+                projectList: projectList,
+
+                repManager: props.appraisal.repManager,
+                mailid: props.appraisal.mailid,
+                fname: props.appraisal.fname,
+                lname: props.appraisal.lname,
+
+                status: 'mgrPending'
+
+
+            }
+            // let projectDetail = {
+            //     projectDetail: values.projectDetail,
+            //     projectName: values.projectName,
+
+            // }
+            // appraisalDetail.projectList.push(projectDetail)
+
+            if (values.fields != null) {
+                for (let i = 0; i < values.fields.length; i++) {
+                    let n = values.fields[i]
+                    console.log('appraisalGoal2', n)
+                    appraisalDetail.projectList.push({
+                        projectDetail: n.projectDetail,
+                        projectName: n.projectName,
+
+                    })
+
+                }
+
+            }
+
+
+        }
+
+        if (mgrEditable) {
+            appraisalDetail = {
+
+                status: 'completed',
+                managerComment: values.managerComment,
+
+                mgrProjectActivitiesRating: values.mgrProjectActivitiesRating,
+                mgrOrganisationActivitiesRating: values.mgrOrganisationActivitiesRating,
+                mgrPersonalGrowthRating: values.mgrPersonalGrowthRating,
+
+
+                repManager: props.appraisal.repManager,
+                mailid: props.appraisal.mailid,
+                fname: props.appraisal.fname,
+                lname: props.appraisal.lname,
+            }
+        }
+
+        console.log('currentAppraisalhr', props.hrMode)
+        console.log('currentAppraisalemp', empEditable)
+        console.log('currentAppraisalmgr', mgrEditable)
+        console.log('currentAppraisal', currentAppraisal.id)
+        console.log('currentAppraisal', appraisalDetail)
+        AppraisalContext.updateMidYearAppraisal(currentAppraisal.id, appraisalDetail)
+            .then(response => {
+                console.log("appraisal Form Created", response);
+
+                if (appraisalDetail.status === 'mgrPending') {
+                    AppraisalContext.sendEmailToManager(appraisalDetail)
+                }
+
+                showNotification("success", "Success", "Appraisal successfully submited");
+                setEmpEditable(false)
+            })
+            .catch(error => {
+                console.log('appraisalForm', error.message);
+                showNotification("error", "Error", "Error Submiting Appraisal");
+
+            })
+        console.log('appraisalForm', 'appraisal created');
+
+        console.log('appraisalGoal3', values.fields)
+        console.log('appraisalGoal1', appraisalDetail)
     }
-
-
 
     return (
         <Layout classname='layout-antd' style={{ backgroundColor: 'white' }}>
-            <button style={{
+            {/* <button style={{
                 width: '50px', position: 'absolute',
                 top: 15, right: 50
             }}
                 onClick={handlePrint}>Print
-            </button>
+            </button> */}
             <div className='page-header'
                 ref={componentRef}
                 style={{ display: "flex", flexDirection: "column", alignItems: 'center' }}>
@@ -198,7 +296,7 @@ const HalfYearGoalForm = (props) => {
                             lg={{ span: 8 }}>
                             <div>
                                 <div style={{ fontWeight: "600", fontSize: "15px" }}>
-                                    Quarter
+                                    Date
                                 </div>
 
                                 <Text type="secondary">{currentAppraisal.quarter}
@@ -235,15 +333,37 @@ const HalfYearGoalForm = (props) => {
                             }}
                             initialValues={{
                                 remember: true,
-                                projectName: currentAppraisal.projectName,
-                                contribution: currentAppraisal.employeeContribution,
-                                employeeGoal: currentAppraisal.employeeGoal,
-                                employeeStrength: currentAppraisal.employeeStrength,
-                                leadGoal: currentAppraisal.leadGoal,
-                                leadRating: currentAppraisal.leadRating,
-                                managerComments: currentAppraisal.managerComments,
-                                managerObjective: currentAppraisal.managerObjective,
-                                diversityGoal: currentAppraisal.diversityGoal,
+                                // projectName: currentAppraisal.projectName,
+                                // contribution: currentAppraisal.employeeContribution,
+                                // employeeGoal: currentAppraisal.employeeGoal,
+                                // employeeStrength: currentAppraisal.employeeStrength,
+                                // leadGoal: currentAppraisal.leadGoal,
+                                // leadRating: currentAppraisal.leadRating,
+                                // managerComments: currentAppraisal.managerComments,
+                                // managerObjective: currentAppraisal.managerObjective,
+                                // diversityGoal: currentAppraisal.diversityGoal,
+
+                                // projectDetail: currentAppraisal.projectList[0].projectDetail,
+                                // projectName: currentAppraisal.projectList[0].projectName,
+                                fields: projectList,
+
+
+                                personalGrowthDetail: currentAppraisal.personalGrowthDetail,
+                                organizationalActivitiesDetail: currentAppraisal.organizationalActivitiesDetail,
+
+                                //checkBox
+                                empOrganizationalCheckBox: currentAppraisal.empOrganizationalCheckBox,
+                                empPersonalCheckBox: currentAppraisal.empPersonalCheckBox,
+
+                                //rating
+                                empProjectActivitiesRating: currentAppraisal.empProjectActivitiesRating,
+                                empOrganisationActivitiesRating: currentAppraisal.empOrganisationActivitiesRating,
+                                empPersonalGrowthRating: currentAppraisal.empPersonalGrowthRating,
+
+                                managerComment: currentAppraisal.managerComment,
+                                mgrProjectActivitiesRating: currentAppraisal.mgrProjectActivitiesRating,
+                                mgrOrganisationActivitiesRating: currentAppraisal.mgrOrganisationActivitiesRating,
+                                mgrPersonalGrowthRating: currentAppraisal.mgrPersonalGrowthRating,
 
                             }}
                             fields={[
@@ -259,23 +379,26 @@ const HalfYearGoalForm = (props) => {
 
                             {/* //-------------------------------------dynamic field---- */}
                             <Divider>Project Related Activities </Divider>
-                            <Form.Item name="projectName"
+                            {/* <Form.Item name="projectName"
                             // rules={[{ required: true }]}
                             >
                                 <FloatInput
                                     label="Project Name"
                                     placeholder="Project name"
                                     name="name"
+                                // disabled={empEditable}
                                 />
-                            </Form.Item>
+                            </Form.Item> */}
 
-                            <Form.Item name="projectDetal">
+                            {/* <Form.Item name="projectDetail">
                                 <FloatTextArea className='textArea-ant-two'
                                     label="Project Detail"
+                                    // disabled={empEditable}
 
                                     // required
                                     placeholder="Project Detail" />
-                            </Form.Item>
+                            </Form.Item> */}
+
                             <Form.List name="fields">
                                 {(fields, { add, remove }) => {
                                     return (
@@ -285,6 +408,7 @@ const HalfYearGoalForm = (props) => {
 
                                                     <Form.Item
                                                         name={[index, "projectName"]}
+                                                    // disabled={empEditable}
 
                                                     // rules={[{ required: true }]}
                                                     >
@@ -292,12 +416,16 @@ const HalfYearGoalForm = (props) => {
                                                             label="Project Name"
                                                             placeholder="Project name"
                                                             name="name"
+                                                            disabled={!empEditable}
                                                         />
                                                     </Form.Item>
 
-                                                    <Form.Item name="projectDetal">
+                                                    <Form.Item
+                                                        name={[index, "projectDetail"]}
+                                                    >
                                                         <FloatTextArea className='textArea-ant-two'
                                                             label="Project Detail"
+                                                            disabled={empEditable}
 
                                                             // required
                                                             placeholder="Project Detail" />
@@ -322,6 +450,7 @@ const HalfYearGoalForm = (props) => {
                                                     onClick={() => add()}
                                                     style={{ width: "" }}
                                                     icon={<PlusCircleOutlined />}
+
                                                 >
 
                                                 </Button>
@@ -334,57 +463,64 @@ const HalfYearGoalForm = (props) => {
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     <Form.Item className='rating-div'
-                                        name="rating"
+                                        name="empProjectActivitiesRating"
                                         label="Rate YourSelf"
                                     // rules={[{ required: true }]}
+                                    // disabled={empEditable}
+
                                     >
                                         <div >
-                                            <Radio.Group defaultValue="a" buttonStyle="solid">
-                                                <Radio.Button style={{ marginRight: '5px' }} value="a">1</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="b">2</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="c">3</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="d">4</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="2">5</Radio.Button>
+                                            <Radio.Group defaultValue="1" buttonStyle="solid">
+                                                <Radio.Button style={{ marginRight: '5px' }} value="1">1</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="2">2</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="3">3</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="4">4</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="5">5</Radio.Button>
                                             </Radio.Group>
 
                                         </div >
                                     </Form.Item>
                                 </div>
-                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+                                <div style={{ display: mgrEditable || props.hrMode ? 'flex' : 'none', flexDirection: 'column' }}>
                                     <Form.Item className='rating-div'
-                                        name="ratingManager"
+                                        name="mgrProjectActivitiesRating"
                                         label="Manager Rating"
                                     // rules={[{ required: true }]}
+                                    // disabled={!mgrEditable}
                                     >
                                         <div >
-
-                                            <Radio.Group defaultValue="a" buttonStyle="solid">
-                                                <Radio.Button style={{ marginRight: '5px' }} value="a">1</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="b">2</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="c">3</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="d">4</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="2">5</Radio.Button>
+                                            <Radio.Group initialValues="1" buttonStyle="solid">
+                                                <Radio.Button style={{ marginRight: '5px' }} value="1">1</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="2">2</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="3">3</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="4">4</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="5">5</Radio.Button>
                                             </Radio.Group>
 
                                         </div >
                                     </Form.Item>
                                 </div>
+
                             </div>
 
                             {/* //----------------------------------------------- */}
 
                             <Divider>Organizational Activities: </Divider>
-                            <Form.Item name="Organizational" colon={false} valuePropName="checked" initialValue={defaults}>
+                            <Form.Item name="empOrganizationalCheckBox" colon={false} valuePropName="checked" initialValue={defaults}>
                                 <Checkbox.Group style={{ display: 'flex', flexDirection: 'column' }}
                                     options={options}
-                                    defaultValue={defaults}
+                                    initialValues={defaults}
                                     onChange={onChange}
+                                    value={organizationActivities}
+                                // disabled={empEditable}
                                 />
                             </Form.Item>
 
-                            <Form.Item name="giveDescription">
+                            <Form.Item name="organizationalActivitiesDetail">
                                 <FloatTextArea className='textArea-ant-two'
                                     label="Give Detail"
+                                    // disabled={empEditable}
 
                                     // required
                                     placeholder="Give Detail" />
@@ -393,124 +529,141 @@ const HalfYearGoalForm = (props) => {
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     <Form.Item className='rating-div'
-                                        name="organisationRating"
+                                        name="empOrganisationActivitiesRating"
                                         label="Rate YourSelf"
                                     // rules={[{ required: true }]}
+                                    // disabled={empEditable}
                                     >
 
                                         <div >
-                                            <Radio.Group defaultValue="a" buttonStyle="solid">
-                                                <Radio.Button style={{ marginRight: '5px' }} value="a">1</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="b">2</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="c">3</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="d">4</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="2">5</Radio.Button>
+                                            <Radio.Group defaultValue={intEmployeeRating} buttonStyle="solid">
+                                                <Radio.Button style={{ marginRight: '5px' }} value="1">1</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="2">2</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="3">3</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="4">4</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="5">5</Radio.Button>
                                             </Radio.Group>
 
                                         </div >
                                     </Form.Item>
                                 </div>
-                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+                                <div style={{ display: mgrEditable || props.hrMode ? 'flex' : 'none', flexDirection: 'column' }}>
                                     <Form.Item className='rating-div'
-                                        name="organisationRatingManager"
+                                        name="mgrOrganisationActivitiesRating"
                                         label="Manager Rating"
                                     // rules={[{ required: true }]}
+                                    // disabled={!mgrEditable}
                                     >
 
                                         <div >
-                                            <Radio.Group defaultValue="a" buttonStyle="solid">
-                                                <Radio.Button style={{ marginRight: '5px' }} value="a">1</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="b">2</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="c">3</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="d">4</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="2">5</Radio.Button>
+                                            <Radio.Group initialValues="1" buttonStyle="solid">
+                                                <Radio.Button style={{ marginRight: '5px' }} value="1">1</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="2">2</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="3">3</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="4">4</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="5">5</Radio.Button>
                                             </Radio.Group>
 
 
                                         </div >
                                     </Form.Item>
                                 </div>
+
                             </div>
                             {/* //----------------------------------------------- */}
                             <Divider>Personal Growth : </Divider>
 
-                            <Form.Item name="Personal" valuePropName="checked" initialValue={defaults}>
+                            <Form.Item name="empPersonalCheckBox" valuePropName="checked" initialValue={defaults}>
                                 <Checkbox.Group style={{ display: 'flex', flexDirection: 'column' }}
                                     options={optionsTwo}
-                                    defaultValue={defaults}
+                                    initialValues={defaults}
                                     onChange={onChange}
+                                    value={personalGrowthActivities}
+                                // disabled={empEditable}
                                 />
                             </Form.Item>
 
-                            <Form.Item labelAlign="left"
-                                style={{ marginBottom: "10px", width: '100%', }}
-                                name="personalGrowth"
 
-                            >
-                                <Form.Item name="givePersonalDescription">
-                                    <FloatTextArea className='textArea-ant-two'
-                                        label="Give Detail"
+                            <Form.Item name="personalGrowthDetail">
+                                <FloatTextArea className='textArea-ant-two'
+                                    label="Give Detail"
+                                    // disabled={empEditable}
 
-                                        // required
-                                        placeholder="Give Detail" />
-                                </Form.Item>
+                                    // required
+                                    placeholder="Give Detail" />
                             </Form.Item>
+
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     <Form.Item className='rating-div'
-                                        name="personalRating"
+                                        name="empPersonalGrowthRating"
                                         label="Rate YourSelf"
+                                    // disabled={empEditable}
                                     // rules={[{ required: true }]}
                                     >
 
                                         <div >
-                                            <Radio.Group defaultValue="a" buttonStyle="solid">
-                                                <Radio.Button style={{ marginRight: '5px' }} value="a">1</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="b">2</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="c">3</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="d">4</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="2">5</Radio.Button>
+                                            <Radio.Group initialValues="1" buttonStyle="solid">
+                                                <Radio.Button style={{ marginRight: '5px' }} value="1">1</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="2">2</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="3">3</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="4">4</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="5">5</Radio.Button>
                                             </Radio.Group>
 
                                         </div >
                                     </Form.Item>
                                 </div>
-                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+
+                                <div style={{ display: mgrEditable || props.hrMode ? 'flex' : 'none', flexDirection: 'column' }}>
                                     <Form.Item className='rating-div'
-                                        name="persoanalRatingManager"
+                                        name="mgrPersonalGrowthRating"
                                         label="Manager Rating"
+                                    // disabled={!mgrEditable}
                                     // rules={[{ required: true }]}
                                     >
 
                                         <div >
 
-                                            <Radio.Group defaultValue="a" buttonStyle="solid">
-                                                <Radio.Button style={{ marginRight: '5px' }} value="a">1</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="b">2</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="c">3</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="d">4</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="2">5</Radio.Button>
+                                            <Radio.Group initialValues="1" buttonStyle="solid">
+                                                <Radio.Button style={{ marginRight: '5px' }} value="1">1</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="2">2</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="3">3</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="4">4</Radio.Button>
+                                                <Radio.Button style={{ marginRight: '5px' }} value="5">5</Radio.Button>
                                             </Radio.Group>
 
 
                                         </div >
                                     </Form.Item>
                                 </div>
+
                             </div>
-                            <Divider orientation='left' orientationMargin={0}>To Be Fill By Manager<span style={{ color: 'red' }}> *</span></Divider>
+                            {mgrEditable ? (
+                                <Divider orientation='left' orientationMargin={0}>To Be Fill By Manager<span style={{ color: 'red' }}> *</span></Divider>
+                            ) : null}
+
+
+
                             <Form.Item labelAlign="left"
-                                style={{ marginBottom: "10px", width: '100%', }}
+                                style={{ display: mgrEditable || props.hrMode ? 'block' : 'none', marginBottom: "10px", width: '100%', }}
                                 name="managerComment"
 
                             >
                                 <Form.Item name="managerComment">
                                     <FloatTextArea className='textArea-ant-two'
                                         label="Manager Comments"
+                                        // disabled={!mgrEditable}
+
+
 
                                         // required
                                         placeholder="Manager Comments" />
                                 </Form.Item>
                             </Form.Item>
+
 
                             <Col span={30} >
 

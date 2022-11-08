@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Form,
   Tabs,
@@ -30,29 +30,35 @@ import reload from "../images/reload.png";
 
 function EditOnboarding(props) {
   const [fileName, setFileName] = useState("");
-  const [isFileSizeInvalid, setIsFileSizeInvalid] = useState(false);
+  const [isBigFile, setIsBigFile] = useState(false);
   const imgRef = React.useRef(null);
   const [form] = Form.useForm();
   const [form2] = Form.useForm();
   const [accessList, setAccessList] = useState([]);
   const [addAccess, setAddAccess] = useState(false);
 
-  const handleClick = (event) => {
+  const handleClickEdit = (event) => {
     console.log("imgRef:: ", imgRef);
     imgRef.current.click();
   };
 
-  const handleChange = (event) => {
+  const handleEdit = (event) => {
     const fileUploaded = event.target.files[0];
-    setFileName(fileUploaded.name);
-    checkFileSize(fileUploaded.size);
+    checkFileSize(fileUploaded.size, fileUploaded.name);
   };
 
-  function checkFileSize(size) {
+  useEffect(() => {
+    setFileName(fileName);
+    setIsBigFile(false);
+  });
+
+  function checkFileSize(size, fileName) {
     if (Math.round(size / 1024) <= 200) {
-      setIsFileSizeInvalid(false);
+      setFileName(fileName);
+      setIsBigFile(false);
     } else {
-      setIsFileSizeInvalid(true);
+      setFileName(null);
+      setIsBigFile(true);
     }
   }
 
@@ -75,7 +81,7 @@ function EditOnboarding(props) {
     setAccessList(filteredData);
   }
 
-  function addUseRole(values) {
+  function editUseRole(values) {
     setAccessList([...accessList, values]);
     form2.resetFields();
     setAddAccess(false);
@@ -494,10 +500,11 @@ function EditOnboarding(props) {
                     borderWidth: "thin",
                     borderRadius: "4px",
                     display: "flex",
+                    alignItems: "center",
                   }}
                 >
                   <Button
-                    onClick={handleClick}
+                    onClick={handleClickEdit}
                     style={{
                       width: " 60px",
                       height: "60px",
@@ -521,8 +528,8 @@ function EditOnboarding(props) {
                       Upload
                     </span>
                   </Button>
-                  {isFileSizeInvalid ? "" : fileName}
-                  {isFileSizeInvalid
+                  {isBigFile ? null : fileName}
+                  {isBigFile
                     ? message.error("File size must be less than 200Kb.")
                     : ""}
                   <input
@@ -536,8 +543,24 @@ function EditOnboarding(props) {
                     id="myfile"
                     name="file"
                     ref={imgRef}
-                    onChange={handleChange}
+                    onChange={handleEdit}
                   />
+                  {fileName ? (
+                    ""
+                  ) : (
+                    <p
+                      style={{
+                        fontWeight: "400",
+                        fontSize: "11px",
+                        lineHeight: "13px",
+                        marginLeft: "10px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      Upload logo. Use the 200 kb size image. PNG or JPEG file
+                      format accepted
+                    </p>
+                  )}
                 </div>
               </Form.Item>
             </Col>
@@ -579,128 +602,195 @@ function EditOnboarding(props) {
             remember: true,
           }}
           autoComplete="off"
-          onFinish={addUseRole}
+          onFinish={editUseRole}
         >
-          <div style={{ marginTop: "15px" }}>
-            <Row gutter={[24, 8]} className="editUserForm">
-              <Col xs={22} sm={15} md={6}>
-                <Form.Item
-                  name="userole"
-                  label="Use Role"
-                  onKeyPress={(event) => {
-                    if (checkAlphabets(event)) {
-                      event.preventDefault();
-                    }
-                  }}
-                  rules={[
-                    {
-                      required: true,
+          {accessList.map((u, i) => (
+            <div style={{ marginTop: "10px" }} className="inputLabel">
+              <Row gutter={[24, 20]}>
+                <Col xs={22} sm={15} md={6}>
+                  <label style={{ fontSize: "13px", fontWeight: "600" }}>
+                    Use Role
+                  </label>
+                  <Input value={u.userole}></Input>
+                </Col>
+                <Col xs={22} sm={15} md={6}>
+                  <label style={{ fontSize: "13px", fontWeight: "600" }}>
+                    Name
+                  </label>
+                  <Input value={u.name}></Input>
+                </Col>
+                <Col xs={22} sm={15} md={6}>
+                  <label style={{ fontSize: "13px", fontWeight: "600" }}>
+                    Email Address
+                  </label>
+                  <Input value={u.emailaddress}></Input>
+                </Col>
+                <Col xs={22} sm={15} md={6}>
+                  <label style={{ fontSize: "13px", fontWeight: "600" }}>
+                    Phone Number
+                  </label>
 
-                      message: "Please enter Role",
-                    },
-                    {
-                      pattern: /^[a-zA-Z\s]*$/,
-                      message: "Please enter Valid Role",
-                    },
-                  ]}
-                >
-                  <Input
-                    maxLength={10}
-                    placeholder="Use Role"
+                  <Input value={u.phone}></Input>
+                  <Button
                     style={{
-                      border: "1px solid #8692A6",
-                      borderRadius: "4px",
+                      background: "#f8f8f8",
+                      border: "none",
+                      color: "#095AA4",
+                      position: "absolute",
+                      width: "10px",
                     }}
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={22} sm={15} md={6}>
-                <Form.Item
-                  name="name"
-                  label="Name"
-                  onKeyPress={(event) => {
-                    if (checkAlphabets(event)) {
-                      event.preventDefault();
-                    }
-                  }}
-                  rules={[
-                    {
-                      required: true,
+                    onClick={() => {
+                      onDelete(u);
+                    }}
+                  >
+                    <CloseCircleOutlined />
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          ))}
+          {addAccess ? (
+            <div style={{ marginRight: "60px", marginTop: "15px" }}>
+              <Row gutter={[20, 8]} className="addUserForm">
+                <Col xs={22} sm={15} md={6}>
+                  <Form.Item
+                    name="userole"
+                    label="Use Role"
+                    onKeyPress={(event) => {
+                      if (checkAlphabets(event)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    rules={[
+                      {
+                        required: true,
 
-                      message: "Please Enter Name",
-                    },
-                    {
-                      pattern: /^[a-zA-Z\s]*$/,
-                      message: "Please Enter Valid Name",
-                    },
-                  ]}
-                >
-                  <Input
-                    maxLength={20}
-                    placeholder="Name"
-                    style={{
-                      border: "1px solid #8692A6",
-                      borderRadius: "4px",
+                        message: "Please enter Role",
+                      },
+                      {
+                        pattern: /^[a-zA-Z\s]*$/,
+                        message: "Please enter Valid Role",
+                      },
+                    ]}
+                  >
+                    <Input
+                      maxLength={10}
+                      placeholder="Use Role"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={22} sm={15} md={6}>
+                  <Form.Item
+                    name="name"
+                    label="Name"
+                    onKeyPress={(event) => {
+                      if (checkAlphabets(event)) {
+                        event.preventDefault();
+                      }
                     }}
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={22} sm={15} md={6}>
-                <Form.Item
-                  name="emailaddress"
-                  label="Email Address"
-                  rules={[
-                    {
-                      type: "email",
-                      required: true,
-                      message: "Enter Email address",
-                      pattern: "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
-                    },
-                  ]}
-                >
-                  <Input
-                    maxLength={30}
-                    placeholder="Email Address"
-                    style={{
-                      border: "1px solid #8692A6",
-                      borderRadius: "4px",
-                    }}
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={22} sm={15} md={6}>
-                <Form.Item
-                  name="phone"
-                  label="Phone Number"
-                  onKeyPress={(event) => {
-                    if (checkNumbervalue(event)) {
-                      event.preventDefault();
-                    }
-                  }}
-                  rules={[
-                    {
-                      required: true,
+                    rules={[
+                      {
+                        required: true,
 
-                      message: "Please enter Phone Number",
-                    },
-                    {
-                      pattern: /^[6-9]\d{9}$/,
-                      message: "Please Enter Valid Number",
-                    },
-                  ]}
-                >
-                  <Input
-                    maxLength={10}
-                    placeholder="Phone Number"
-                    style={{
-                      border: "1px solid #8692A6",
-                      borderRadius: "4px",
+                        message: "Please Enter Name",
+                      },
+                      {
+                        pattern: /^[a-zA-Z\s]*$/,
+                        message: "Please Enter Valid Name",
+                      },
+                    ]}
+                  >
+                    <Input
+                      maxLength={20}
+                      placeholder="Name"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={22} sm={15} md={6}>
+                  <Form.Item
+                    name="emailaddress"
+                    label="Email Address"
+                    rules={[
+                      {
+                        type: "email",
+                        required: true,
+                        message: "Enter Email address",
+                        pattern: "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
+                      },
+                    ]}
+                  >
+                    <Input
+                      maxLength={30}
+                      placeholder="Email Address"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={22} sm={15} md={6}>
+                  <Form.Item
+                    name="phone"
+                    label="Phone Number"
+                    onKeyPress={(event) => {
+                      if (checkNumbervalue(event)) {
+                        event.preventDefault();
+                      }
                     }}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </div>
+                    rules={[
+                      {
+                        required: true,
+
+                        message: "Please enter Phone Number",
+                      },
+                      {
+                        pattern: /^[6-9]\d{9}$/,
+                        message: "Please Enter Valid Number",
+                      },
+                    ]}
+                  >
+                    <Input
+                      maxLength={10}
+                      placeholder="Phone Number"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </div>
+          ) : null}
+          <Button
+            style={{
+              border: "none",
+              // marginLeft: "49rem",
+              background: "#f8f8f8",
+              color: "#095AA4",
+              fontWeight: "600",
+              fontSize: "13px",
+              lineHeight: "14.4px",
+              float: "right",
+            }}
+            htmlType={addAccess ? "submit" : "button"}
+            onClick={() => {
+              if (!addAccess) {
+                setAddAccess(true);
+              }
+            }}
+          >
+            <PlusCircleOutlined /> Add User
+          </Button>
         </Form>
       </Card>
       <div

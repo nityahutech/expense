@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Form,
   Tabs,
@@ -36,7 +36,7 @@ function Onboarding() {
   const [accessList, setAccessList] = useState([]);
   const [addAccess, setAddAccess] = useState(false);
   const [fileName, setFileName] = useState("");
-  const [isFileSizeInvalid, setIsFileSizeInvalid] = useState(false);
+  const [isBigFile, setIsBigFile] = useState(false);
   const imgRef = React.useRef(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditOrganization, setIsEditOrganization] = useState(false);
@@ -46,17 +46,24 @@ function Onboarding() {
     imgRef.current.click();
   };
 
+  useEffect(() => {
+    setFileName(fileName);
+    setIsBigFile(false);
+  });
+
   const handleChange = (event) => {
     const fileUploaded = event.target.files[0];
-    setFileName(fileUploaded.name);
-    checkFileSize(fileUploaded.size);
+    checkFileSize(fileUploaded.size, fileUploaded.name);
   };
 
-  function checkFileSize(size) {
+  function checkFileSize(size, fileName) {
+    console.log({ size });
     if (Math.round(size / 1024) <= 200) {
-      setIsFileSizeInvalid(false);
+      setFileName(fileName);
+      setIsBigFile(false);
     } else {
-      setIsFileSizeInvalid(true);
+      setFileName(null);
+      setIsBigFile(true);
     }
   }
 
@@ -145,66 +152,74 @@ function Onboarding() {
       render: (_, record) => {
         return (
           <>
-            <Button
-              disabled={record?.disabled}
-              style={{ width: "40px", marginRight: "10px" }}
-              onClick={() => {
-                showModal(record);
-              }}
-            >
-              <EyeFilled
-                disabled={record?.disabled}
-                style={
-                  record?.disabled
-                    ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
-                    : { color: "#268FEE", marginLeft: "-2px" }
-                }
-              />
-            </Button>
-            <Button
-              disabled={record?.disabled}
-              style={
-                record?.disabled
-                  ? { width: "40px", marginRight: "10px" }
-                  : { width: "40px", marginRight: "10px" }
-              }
-              onClick={() => {
-                showOnboarding(record);
-              }}
-            >
-              <EditFilled
-                disabled={record?.disabled}
-                style={
-                  record?.disabled
-                    ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
-                    : { color: "#268FEE", marginLeft: "-2px" }
-                }
-              />
-            </Button>
-            <Button
-              disabled={record?.disabled}
-              style={record?.disabled ? { width: "40px" } : { width: "40px" }}
-            >
-              {record?.disabled ? (
-                <CheckCircleFilled
+            <Row>
+              <Col xs={22} sm={15} md={8}>
+                <Button
+                  disabled={record?.disabled}
+                  style={{ width: "40px" }}
+                  onClick={() => {
+                    showModal(record);
+                  }}
+                >
+                  <EyeFilled
+                    disabled={record?.disabled}
+                    style={
+                      record?.disabled
+                        ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
+                        : { color: "#268FEE", marginLeft: "-2px" }
+                    }
+                  />
+                </Button>
+              </Col>
+              <Col xs={22} sm={15} md={8}>
+                <Button
                   disabled={record?.disabled}
                   style={
-                    record?.disabled
-                      ? { color: "#268FEE", marginLeft: "-2px" }
-                      : { color: "#268FEE", marginLeft: "-2px" }
+                    record?.disabled ? { width: "40px" } : { width: "40px" }
                   }
-                />
-              ) : (
-                <StopFilled
+                  onClick={() => {
+                    showOnboarding(record);
+                  }}
+                >
+                  <EditFilled
+                    disabled={record?.disabled}
+                    style={
+                      record?.disabled
+                        ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
+                        : { color: "#268FEE", marginLeft: "-2px" }
+                    }
+                  />
+                </Button>
+              </Col>
+              <Col xs={22} sm={15} md={8}>
+                <Button
                   disabled={record?.disabled}
                   style={
-                    record?.disabled
-                      ? { color: "#268FEE", marginLeft: "-2px" }
-                      : { color: "#268FEE", marginLeft: "-2px" }
+                    record?.disabled ? { width: "40px" } : { width: "40px" }
                   }
-                />
-              )}
-            </Button>
+                >
+                  {record?.disabled ? (
+                    <CheckCircleFilled
+                      disabled={record?.disabled}
+                      style={
+                        record?.disabled
+                          ? { color: "#268FEE", marginLeft: "-2px" }
+                          : { color: "#268FEE", marginLeft: "-2px" }
+                      }
+                    />
+                  ) : (
+                    <StopFilled
+                      disabled={record?.disabled}
+                      style={
+                        record?.disabled
+                          ? { color: "#268FEE", marginLeft: "-2px" }
+                          : { color: "#268FEE", marginLeft: "-2px" }
+                      }
+                    />
+                  )}
+                </Button>
+              </Col>
+            </Row>
           </>
         );
       },
@@ -479,7 +494,7 @@ function Onboarding() {
                         },
                         {
                           pattern:
-                            "/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
+                            "/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:.[a-zA-Z]{2,})+$/",
                           message: "Please Enter Valid Name",
                         },
                       ]}
@@ -714,11 +729,11 @@ function Onboarding() {
                           borderWidth: "thin",
                           borderRadius: "4px",
                           display: "flex",
-                          alignItems: "flex-end",
+                          alignItems: "center",
                         }}
                       >
                         <Button
-                          onClick={handleClick}
+                          onClick={(e) => handleClick(e)}
                           style={{
                             width: " 60px",
                             height: "60px",
@@ -742,8 +757,8 @@ function Onboarding() {
                             Upload
                           </span>
                         </Button>
-                        {isFileSizeInvalid ? "" : fileName}
-                        {isFileSizeInvalid
+                        {isBigFile ? null : fileName}
+                        {isBigFile
                           ? message.error("File size must be less than 200Kb.")
                           : ""}
                         <input
@@ -757,19 +772,23 @@ function Onboarding() {
                           id="myfile"
                           name="file"
                           ref={imgRef}
-                          onChange={handleChange}
+                          onChange={(e) => handleChange(e)}
                         />
-                        <p
-                          style={{
-                            fontWeight: "400",
-                            fontSize: "13px",
-                            lineHeight: "19px",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          Upload logo. Use the 200 kb size image. PNG or JPEG
-                          file format accepted
-                        </p>
+                        {fileName ? (
+                          ""
+                        ) : (
+                          <p
+                            style={{
+                              fontWeight: "400",
+                              fontSize: "13px",
+                              lineHeight: "19px",
+                              marginLeft: "10px",
+                            }}
+                          >
+                            Upload logo. Use the 200 kb size image. PNG or JPEG
+                            file format accepted
+                          </p>
+                        )}
                       </div>
                     </Form.Item>
                   </Col>

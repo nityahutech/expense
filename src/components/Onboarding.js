@@ -9,7 +9,6 @@ import {
   message,
   Upload,
   Button,
-  notification,
   Space,
   Card,
   Table,
@@ -36,51 +35,11 @@ function Onboarding() {
   const [form2] = Form.useForm();
   const [accessList, setAccessList] = useState([]);
   const [addAccess, setAddAccess] = useState(false);
-
   const [fileName, setFileName] = useState("");
   const [isBigFile, setIsBigFile] = useState(false);
   const imgRef = React.useRef(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditOrganization, setIsEditOrganization] = useState(false);
-
-  const onFinish = values => {
-    const valuesToservice = {
-      orgcode: values.orgcode,
-      orgname: values.orgname,
-      state: values.state,
-      cinnumber: values.cinnumber,
-      gstnumber: values.gstnumber,
-      domname: values.domname,
-      address1: values.address1,
-      address2: values.address2,
-      phone: values.phone,
-      city: values.city,
-      pincode: values.pincode,
-      country:values.country
-    }
-    console.log(values,valuesToservice);
-  //   CompanyProContext.updateCompInfo(compId,value);
-  //    getData();
-  //    setAddAccess(false);
-  // };
-
-    CompanyProContext.createCompInfo(valuesToservice)
-      .then(response => {
-      showNotification("success", "Success", "Onboarding Completed");
-      })
-      .catch(error => {
-      })
-      setAddAccess(false);
-    };
-        
-        
-          const showNotification = (type, msg, desc) => {
-            notification[type]({
-                message: msg,
-                description: desc,
-            });
-
-};
 
   const handleClick = (event) => {
     console.log("imgRef:: ", imgRef);
@@ -144,27 +103,16 @@ function Onboarding() {
     const filteredData = accessList.filter(
       (item) => item.emailaddress !== delItem.emailaddress
     );
-    CompanyProContext.deleteCompInfo(delItem.id)
-    .then((response) => {
-               console.log(response);
-               })
     setAccessList(filteredData);
   }
 
   function addUseRole(values) {
-    const value={
-      userole: values.userole,
-      name: values.name,
-      emailaddress: values.emailaddress,
-      phone: values.phone,
-      twitter: values.twitter,
-      }
     setAccessList([...accessList, values]);
     form2.resetFields();
     setAddAccess(false);
     // setAccessList([...accessList, newAccess]);
     // setNewAccess({ userole: "", name: "", emailaddress: "", phone: "" });
-  };
+  }
   const columns = [
     {
       title: "Name",
@@ -406,7 +354,7 @@ function Onboarding() {
                   remember: true,
                 }}
                 autoComplete="off"
-                 onFinish={onFinish}
+                // onFinish={onFinish}
               >
                 <Row gutter={[24, 8]}>
                   <Col xs={22} sm={15} md={8}>
@@ -541,7 +489,7 @@ function Onboarding() {
                       label="Domain Name"
                       rules={[
                         {
-                          required:true,
+                          required: true,
                           message: "Please Enter Domain Name",
                         },
                         {
@@ -882,7 +830,7 @@ function Onboarding() {
                   remember: true,
                 }}
                 autoComplete="off"
-                //onFinish={addUseRole}
+                onFinish={addUseRole}
               >
                 {accessList.map((u, i) => (
                   <div style={{ marginTop: "10px" }} className="inputLabel">
@@ -1063,7 +1011,7 @@ function Onboarding() {
                     lineHeight: "14.4px",
                     float: "right",
                   }}
-                  htmlType= "submit" 
+                  htmlType={addAccess ? "submit" : "button"}
                   onClick={() => {
                     if (!addAccess) {
                       setAddAccess(true);
@@ -1191,7 +1139,6 @@ function Onboarding() {
       </Tabs>
     </div>
   );
-
-              }
+}
 
 export default Onboarding;

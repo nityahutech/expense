@@ -5,7 +5,8 @@ import {
     doc,
     setDoc,
     updateDoc,
-    deleteDoc,
+    arrayUnion,
+    arrayRemove
 
 } from "firebase/firestore";
 const companyProfileCollectionRef = collection(db, "companyprofile");
@@ -22,10 +23,22 @@ class CompanyProContext {
         return setDoc(doc(db,"companyprofile",newInfo.orgcode),newInfo);
     };
 
-    deleteCompInfo = (id) => {
-        const deleteInfo = doc(db, "companyprofile", id);
-        return deleteDoc(deleteInfo);
+    deleteCompInfo = (id, updateCompInfo) => {
+        const companyDoc = doc(db, "companyprofile", id);
+        let field = Object.keys(updateCompInfo)[0]
+        return updateDoc(companyDoc, {[`${field}`]: arrayRemove(updateCompInfo.address)});
     };
+    
+    addCompInfo = (id, updateCompInfo) => {
+        const companyDoc = doc(db, "companyprofile", id);
+        let field = Object.keys(updateCompInfo)[0]
+        return updateDoc(companyDoc, {[`${field}`]: arrayUnion(updateCompInfo.address)});
+    };
+
+    editCompInfo = (id, updateCompInfo) => {
+        return;
+    }
+    
     updateCompInfo = (id, updateCompInfo) => {
         const companyDoc = doc(db, "companyprofile", id);
         return updateDoc(companyDoc, updateCompInfo);

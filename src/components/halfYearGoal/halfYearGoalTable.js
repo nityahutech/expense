@@ -13,7 +13,8 @@ import "./halfYearGoal.css";
 import AppraisalContext from '../../contexts/AppraisalContext';
 import EmpInfoContext from '../../contexts/EmpInfoContext';
 import { useAuth } from '../../contexts/AuthContext'
-import { createPdfFromHtml } from "./../ProfileDetails/downloadLogic";
+import { createPdfFromHtml } from "./../ProfileDetails/downloadLogicAppraisal";
+
 
 
 
@@ -27,6 +28,7 @@ const HalfYearGoalTable = (props) => {
     const { currentUser } = useAuth();
     const [appraisalList, setAppraisalList] = useState([]);
     const [printContent, setPrintContent] = useState(null);
+
 
     const columns = [
 
@@ -167,7 +169,7 @@ const HalfYearGoalTable = (props) => {
 
 
                             >
-                                {< DownloadOutlined style={{ color: 'grey', }}
+                                {< HalfyearGoalPdf style={{ color: 'grey', }}
 
                                 />}
                             </Button>
@@ -266,7 +268,7 @@ const HalfYearGoalTable = (props) => {
                             position: ["bottomCenter"],
                         }}
                         scroll={{ x: 800 }}
-                        className="employeeTable"
+                        className="employeeAppraisalTable"
                         style={{ marginLeft: '10px', marginRight: '10px' }}
                         size="small"
                         onClick={() => {
@@ -277,7 +279,7 @@ const HalfYearGoalTable = (props) => {
                 </Col>
             </Row>
 
-            <Modal className='viewModal'
+            <Modal className='viewAppraisalModal'
                 footer={null}
                 title="Appraisal Form"
                 // centered
@@ -301,36 +303,36 @@ const HalfYearGoalTable = (props) => {
 
             </Modal>
 
-            <Modal className='viewModal'
+            {/* <Modal className='viewAppraisalModal'
 
                 footer={null}
-                title={<Button
-                    className="button"
-                    style={{
-                        background: "#1890ff",
-                        color: "white",
+                // title={<Button
+                //     className="button"
+                //     style={{
+                //         background: "#1890ff",
+                //         color: "white",
 
-                    }}
-                    type="button"
-                    onClick={() => {
-                        createPdfFromHtml(printContent);
-                    }}
-                >
-                    Download
-                </Button>}
+                //     }}
+                //     type="button"
+                //     onClick={() => {
+                //         createPdfFromHtml();
+                //     }}
+                // >
+                //     Download
+                // </Button>}
                 // centered
                 open={thirdModal}
                 visible={thirdModal}
                 onOk={() => setThirdModal(false)}
                 // onCancel={() => setThirdModal(false)}
-                width={600}
+                width={200}
 
                 closeIcon={
                     <div
                         onClick={() => {
                             setThirdModal(false);
                         }}
-                        style={{ color: "#ffffff" }}
+                        style={{ color: "" }}
                     >
                         X
                     </div>
@@ -339,17 +341,14 @@ const HalfYearGoalTable = (props) => {
             >
                 <div className="mainBorder A4" id="appraisal">
                     <div
-                        ref={(el) => {
-                            setPrintContent(el);
-                        }}
+
                     >
-                        <HalfyearGoalPdf />
+                        <HalfyearGoalPdf appraisal={editedAppraisal} />
                     </div>
                 </div>
 
-                {/* <HalfyearGoalPdf currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} hrMode={props.listType === 'hr'} /> */}
 
-            </Modal>
+            </Modal> */}
 
         </div>
     )

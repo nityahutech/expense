@@ -26,6 +26,7 @@ import "../style/leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
 
 const Leave = () => {
+  const [secondModal, setSecondModal] = useState(false)
   const [dateSelected, setDateSelected] = useState([]);
   const [dateStart, setDateStart] = useState([]);
   const [dateEnd, setDateEnd] = useState([]);
@@ -69,6 +70,10 @@ const Leave = () => {
   const [employeeRecord, setEmployeeRecord] = useState();
   const [repManager, setRepManager] = useState();
   const { RangePicker } = DatePicker;
+
+  const showModal = () => {
+    setSecondModal(true);
+  };
 
   function addNewHoliday() {
     getHoliday();
@@ -202,6 +207,7 @@ const Leave = () => {
       setDateEnd(null);
       setStartSlot(null);
       setLeavetype(null);
+      setSecondModal(false)
     } else {
       showNotification(
         "error",
@@ -367,7 +373,7 @@ const Leave = () => {
     {
       title: "No. Of Days",
       dataIndex: "len",
-      width: 100,
+      width: 150,
       align: "left",
       sorter: (a, b) => {
         return a.len !== b.len ? (a.len < b.len ? -1 : 1) : 0;
@@ -693,7 +699,7 @@ const Leave = () => {
     {
       title: "No. Of Days",
       dataIndex: "len",
-      width: 100,
+      width: 150,
       align: "left",
       sorter: (a, b) => {
         return a.len !== b.len ? (a.len < b.len ? -1 : 1) : 0;
@@ -920,131 +926,134 @@ const Leave = () => {
       >
         <Col xl={24} lg={24} md={24} sm={24} xs={24}>
           <div className="leavediv">
-          { leavedays != null ? 
-            (Object.keys(leavedays).map((user, id) => {
-              return (
-                <div
-                  className="Col-2-center"
-                  style={{ background: colors[id], color: "#fff" }}
-                >
-                  <p
-                    className="heading"
-                    style={{
-                      fontWeight: "500",
-                      fontSize: "20px",
-                    }}
-                  >
-                    {user}
-                  </p>
-
+            {leavedays != null ?
+              (Object.keys(leavedays).map((user, id) => {
+                return (
                   <div
-                    className="total-leave"
-                    style={{
-                      width: "90%",
-                    }}
+                    className="Col-2-center"
+                    style={{ background: colors[id], color: "#fff" }}
                   >
-                    <div className="leave-status">
-                      <p
-                        className="leave"
-                        Total
-                        style={{
-                          fontWeight: "500",
-                          fontSize: "15px",
-                          margin: "0px",
-                        }}
-                      >
-                        Total
-                      </p>
-                      <p
-                        style={{
-                          fontWeight: "500",
-                          fontSize: "15px",
-                          margin: "0px",
-                        }}
-                      >
-                        {totaldays[user]}
-                      </p>
-                    </div>
+                    <p
+                      className="heading"
+                      style={{
+                        fontWeight: "500",
+                        fontSize: "20px",
+                      }}
+                    >
+                      {user}
+                    </p>
 
-                    <div className="leave-status">
-                      <p
-                        className="leave"
-                        Total
-                        style={{
-                          fontWeight: "500",
-                          fontSize: "15px",
-                          margin: "0px",
-                        }}
-                      >
-                        Taken
-                      </p>
-                      <p
-                        style={{
-                          fontWeight: "500",
-                          fontSize: "15px",
-                          margin: "0px",
-                        }}
-                      >
-                        {totaldays[user] - leavedays[user]}
-                      </p>
-                    </div>
+                    <div
+                      className="total-leave"
+                      style={{
+                        width: "90%",
+                      }}
+                    >
+                      <div className="leave-status">
+                        <p
+                          className="leave"
+                          Total
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "15px",
+                            margin: "0px",
+                          }}
+                        >
+                          Total
+                        </p>
+                        <p
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "15px",
+                            margin: "0px",
+                          }}
+                        >
+                          {totaldays[user]}
+                        </p>
+                      </div>
 
-                    <div className="leave-status">
-                      <p
-                        className="leave"
-                        Total
-                        style={{
-                          fontWeight: "500",
-                          fontSize: "15px",
-                          margin: "0px",
-                        }}
-                      >
-                        Remaining
-                      </p>
-                      <p
-                        style={{
-                          fontWeight: "500",
-                          fontSize: "15px",
-                          margin: "0px",
-                        }}
-                      >
-                        {leavedays[user]}
-                      </p>
+                      <div className="leave-status">
+                        <p
+                          className="leave"
+                          Total
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "15px",
+                            margin: "0px",
+                          }}
+                        >
+                          Taken
+                        </p>
+                        <p
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "15px",
+                            margin: "0px",
+                          }}
+                        >
+                          {totaldays[user] - leavedays[user]}
+                        </p>
+                      </div>
+
+                      <div className="leave-status">
+                        <p
+                          className="leave"
+                          Total
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "15px",
+                            margin: "0px",
+                          }}
+                        >
+                          Remaining
+                        </p>
+                        <p
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "15px",
+                            margin: "0px",
+                          }}
+                        >
+                          {leavedays[user]}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            }))
-          : null }
-           
+                );
+              }))
+              : null}
+
           </div>
         </Col>
         {/* </Col> */}
 
         <Col
-          xl={12} lg={12} md={12} sm={24} xs={24} span={2}
+          xl={24} lg={24} md={24} sm={24} xs={24} span={2}
           style={{
             marginTop: "10px",
           }}
         >
-          {/* <HolidayList isHr={isHr} /> */}
-          <HolidayList isHr={isHr} refreshCalendar={addNewHoliday} />
+
+          {/* <HolidayList isHr={isHr} refreshCalendar={addNewHoliday} /> */}
           <div
             className="calender-div"
             style={{
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
+
             }}
           >
             <div
               className="badge-div"
               style={{
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: "row",
                 backgroundColor: "white",
-                justifyContent: "center",
+                justifyContent: "space-between",
                 paddingTop: "0px",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
               }}
             >
               {/* <Typography.Title level={4} >Calendar</Typography.Title> */}
@@ -1056,10 +1065,11 @@ const Leave = () => {
                   justifyContent: "center",
                 }}
               >
-                <button
+                <Button
                   className="reprentation"
                   style={{
-                    marginRight: "5px",
+                    marginLeft: '10px',
+                    marginRight: "5px", marginTop: '10px',
                     backgroundColor: "rgba(10, 91, 204,0.2)",
                   }}
                 >
@@ -1069,11 +1079,11 @@ const Leave = () => {
                   >
                     Leave
                   </h5>
-                </button>
-                <button
+                </Button>
+                <Button
                   className="reprentation"
                   style={{
-                    marginRight: "5px",
+                    marginRight: "5px", marginTop: '10px',
                     backgroundColor: "rgba(154, 214, 224, 0.96)",
                   }}
                 >
@@ -1083,11 +1093,11 @@ const Leave = () => {
                   >
                     Optional Holiday
                   </h5>
-                </button>
-                <button
+                </Button>
+                <Button
                   className="reprentation"
                   style={{
-                    marginRight: "5px",
+                    marginRight: "5px", marginTop: '10px',
                     backgroundColor: "rgba(252, 143, 10,0.2)",
                   }}
                 >
@@ -1097,11 +1107,11 @@ const Leave = () => {
                   >
                     Official Holiday
                   </h5>
-                </button>
-                <button
+                </Button>
+                <Button
                   className="reprentation"
                   style={{
-                    marginRight: "5px",
+                    marginRight: "5px", marginTop: '10px',
                     backgroundColor: "rgba(74, 67, 67,0.2)",
                   }}
                 >
@@ -1111,9 +1121,20 @@ const Leave = () => {
                   >
                     Weekly Off
                   </h5>
-                </button>
+                </Button>
               </div>
-              <div
+              <div style={{ display: 'flex' }}>
+                <div>
+                  <HolidayList isHr={isHr} refreshCalendar={addNewHoliday} />
+                </div>
+                <Button
+                  style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '10px' }}
+                  type="default" onClick={showModal}>
+                  Apply Leave
+                </Button>
+              </div>
+
+              {/* <div
                 className="rep-div2"
                 style={{
                   display: "flex",
@@ -1122,14 +1143,15 @@ const Leave = () => {
                   marginTop: "0px",
                 }}
               >
-                {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 204, 107,0.2)" }}><h5 style={{ color: "rgba(10, 204, 107, 1)" }} className='rep-text'>Present</h5></button> */}
-              </div>
+                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 204, 107,0.2)" }}><h5 style={{ color: "rgba(10, 204, 107, 1)" }} className='rep-text'>Present</h5></button>
+              </div> */}
             </div>
             {/* style={holiday.optionalHoliday === false ? {
                                     borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(204, 204, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
                                 } : {
                                     borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(252, 143, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
                                 }} */}
+
 
             <Calendar
               style={{
@@ -1143,283 +1165,303 @@ const Leave = () => {
               dateCellRender={dateCellRender}
               monthCellRender={monthCellRender}
               disabledDate={disabledCalendarDate}
+
             />
+
           </div>
         </Col>
 
-        <Row
-          className="apply-leave"
-          style={{
-            marginTop: "10px",
-          }}
-        >
-          <Col
-            span={24}
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignContent: "flex-start",
-              color: "black",
-            }}
-          >
-            <h3 className="apply-leave">Apply Leave</h3>
-          </Col>
 
-          <Col xl={24} lg={24} md={24} sm={24} xs={24}
-            style={{
-              background: "flex",
-              padding: "10px",
-              width: "400px",
-            }}
-          >
-            <Form
-              {...Leave}
-              labelCol={{
-                span: 8,
+
+        <Modal className='viewAppraisal'
+          footer={null}
+          title="Apply Leave"
+          centered
+          open={secondModal}
+          visible={secondModal}
+          onOk={() => setSecondModal(false)}
+          // onCancel={() => setSecondModal(false)}
+          width={450}
+          closeIcon={
+            <div
+              onClick={() => {
+                setSecondModal(false);
               }}
-              wrapperCol={{
-                span: 16,
-              }}
-              form={form}
-              onFinish={onFinish}
-            // layout="vertical"
+              style={{ color: "#ffffff" }}
             >
+              X
+            </div>
+          }
+        >
+          <Row
+            className="apply-leave"
+            style={{
+              marginTop: "10px",
+            }}
+          >
 
-              <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-around' }}>
-                <Col xl={12} lg={24} md={24} sm={24} xs={24} >
-                  <Form.Item
-                    labelAlign="left"
-                    style={{
-                      marginBottom: "20px",
-                      color: "white",
 
-                      minWidth: "70px",
-                    }}
-                    label={
-                      <label style={{ color: "black", fontWeight: "400" }}>
-                        Start Date<span style={{ color: "red" }}> *</span>
-                      </label>
-                    }
-                    name="dateStart"
-                  >
-                    <DatePicker
-                      style={{ width: "100%" }}
-                      format="Do MMM, YYYY"
-                      onChange={(e) => {
-                        setDateStart(e);
-                        onLeaveDateChange();
-                      }}
-                      disabledDate={disabledDate}
-                    />
-                  </Form.Item>
-                </Col>
-
-                <Col xl={12} lg={24} md={24} sm={24} xs={24} >
-                  <Form.Item
-                    labelAlign="left"
-                    name="slotStart"
-                    style={{ marginBottom: "25px", }}
-                    className="div-slot"
-                    label={
-                      <label style={{ color: "black", fontWeight: "400" }}>
-                        Start Slot<span style={{ color: "red" }}> *</span>
-                      </label>
-                    }
-                    rules={[{ message: "Please select an option!" }]}
-                    initialValue={"Full Day"}
-                    allowClear
-                  >
-                    <Select
-                      required
-                      defaultValue={"Full Day"}
-                      style={{ width: "100%" }}
-                      onChange={(e) => {
-                        setStartSlot(e);
-                        onLeaveDateChange();
-                      }}
-                    >
-                      <Option value="Full Day">Full Day</Option>
-                      <Option value="Half Day">Half Day</Option>
-                    </Select>
-                    {/* <Radio.Group defaultValue="Full Day"
-                                    onChange={onLeaveSlotChange}
-                                >
-                                    <Radio style={{ color: "black", fontWeight: '400' }} disabled={ dateSelected.length > 1 ? true:false } value="Half Day">Half Day</Radio>
-                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
-
-                                </Radio.Group> */}
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                <Col xl={12} lg={24} md={24} sm={24} xs={24} >
-                  <Form.Item
-                    labelAlign="left"
-                    style={{ marginBottom: "20px", color: "white", }}
-                    label={
-                      <label style={{ color: "black", fontWeight: "400" }}>
-                        End Date<span style={{ color: "red" }}> *</span>
-                      </label>
-                    }
-                    name="dateEnd"
-                  >
-                    <DatePicker
-                      style={{ width: "100%" }}
-                      format="Do MMM, YYYY"
-                      onChange={(e) => {
-                        console.log(e)
-                        setDateEnd(e);
-                        onLeaveDateChange(e);
-                      }}
-                      disabledDate={disabledDate}
-                      disabled={disableEnd()}
-                    />
-                  </Form.Item>
-                </Col>
-
-                <Col xl={12} lg={24} md={24} sm={24} xs={24} >
-                  <Form.Item
-                    labelAlign="left"
-                    name="slotEnd"
-                    style={{ marginBottom: "25px", }}
-                    className="div-slot"
-                    label={
-                      <label style={{ color: "black", fontWeight: "400" }}>
-                        End Slot<span style={{ color: "red" }}> *</span>
-                      </label>
-                    }
-                    rules={[{ message: "Please select an option!" }]}
-                    initialValue={"Full Day"}
-                    allowClear
-                  >
-                    <Select
-                      required
-                      defaultValue={"Full Day"}
-                      style={{ width: "100%" }}
-                      disabled={disableEndSlot()}
-                      onChange={(e) => {
-                        setEndSlot(e);
-                        onLeaveDateChange();
-                      }}
-                    >
-                      <Option value="Full Day">Full Day</Option>
-                      <Option value="Half Day">Half Day</Option>
-                    </Select>
-
-                    {/* <Radio.Group defaultValue="Full Day"
-                                    onChange={onLeaveSlotChange}
-                                >
-                                    <Radio style={{ color: "black", fontWeight: '400' }} disabled={ dateSelected.length > 1 ? true:false } value="Half Day">Half Day</Radio>
-                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
-
-                                </Radio.Group> */}
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              <Form.Item
-                labelAlign="left"
-                name="leaveNature"
-                style={{ marginBottom: "20px" }}
-                label={
-                  <label style={{ color: "black", fontWeight: "400" }}>
-                    Nature of Leave<span style={{ color: "red" }}> *</span>
-                  </label>
-                }
-              >
-                <Select
-                  required
-                  placeholder="Select a option "
-                  allowClear
-                  disabled={disableNature()}
-                  onChange={onLeaveNatureChange}
-                >{ leavedays != null ?
-                  (Object.keys(leavedays).map((u) => (
-                    <Option
-                      disabled={disabledLeaveNature(u)}
-                      value={u}
-                    >
-                      {u}
-                    </Option>
-                  )))
-                  : null}
-                  <Option value={"Loss of Pay"}>Loss of Pay</Option>
-                </Select>
-              </Form.Item>
-
-              <Form.Item
-                labelAlign="left"
-                name="reason"
-                style={{ marginBottom: "20px" }}
-                label={
-                  <label style={{ color: "black", fontWeight: "400" }}>
-                    Reason<span style={{ color: "red" }}> *</span>{" "}
-                  </label>
-                }
-              >
-                <Input.TextArea
-                  maxLength={60}
-                  onChange={(e) => {
-                    const inputval = e.target.value;
-                    const newVal =
-                      inputval.substring(0, 1).toUpperCase() +
-                      inputval.substring(1);
-                    form.setFieldsValue({ reason: newVal });
-                  }}
-                  required
-                />
-              </Form.Item>
-
-              <Form.Item
-                labelAlign="left"
-                name="approver"
-                style={{ marginBottom: "20px" }}
-                label={
-                  <label style={{ color: "black", fontWeight: "400" }}>
-                    Approver<span style={{ color: "red" }}> *</span>
-                  </label>
-                }
-                initialValue={repManager}
-              >
-                <Input
-                  maxLength={20}
-                  onChange={(e) => {
-                    const inputval = e.target.value;
-                    const newVal =
-                      inputval.substring(0, 1).toUpperCase() +
-                      inputval.substring(1);
-                    form.setFieldsValue({ approver: newVal });
-                  }}
-                  // rules={[{ required: true }]}
-                  // placeholder="Reporting Manager"
-                  disabled
-                />
-              </Form.Item>
-
-              <Form.Item
-                style={{ paddingTop: "px" }}
-                wrapperCol={{
-                  offset: 8,
-                  span: 24,
+            <Col xl={24} lg={24} md={24} sm={24} xs={24}
+              style={{
+                background: "flex",
+                padding: "10px",
+                // width: "400px",
+              }}
+            >
+              <Form
+                {...Leave}
+                labelCol={{
+                  span: 8,
                 }}
+                wrapperCol={{
+                  span: 16,
+                }}
+                form={form}
+                onFinish={onFinish}
+              // layout="vertical"
               >
-                <Button type="primary" htmlType="submit">
-                  {" "}
-                  Submit{" "}
-                </Button>
-                <Button
-                  htmlType="button"
-                  style={{ marginLeft: "10px" }}
-                  onClick={onReset}
+
+                <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-around' }}>
+                  <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                    <Form.Item
+                      labelAlign="left"
+                      style={{
+                        marginBottom: "20px",
+                        color: "white",
+
+                        minWidth: "70px",
+                      }}
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          Start Date<span style={{ color: "red" }}> *</span>
+                        </label>
+                      }
+                      name="dateStart"
+                    >
+                      <DatePicker
+                        style={{ width: "100%" }}
+                        format="Do MMM, YYYY"
+                        onChange={(e) => {
+                          setDateStart(e);
+                          onLeaveDateChange();
+                        }}
+                        disabledDate={disabledDate}
+                      />
+                    </Form.Item>
+                  </Col>
+
+                  <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                    <Form.Item
+                      labelAlign="left"
+                      name="slotStart"
+                      style={{ marginBottom: "25px", }}
+                      className="div-slot"
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          Start Slot<span style={{ color: "red" }}> *</span>
+                        </label>
+                      }
+                      rules={[{ message: "Please select an option!" }]}
+                      initialValue={"Full Day"}
+                      allowClear
+                    >
+                      <Select
+                        required
+                        defaultValue={"Full Day"}
+                        style={{ width: "100%" }}
+                        onChange={(e) => {
+                          setStartSlot(e);
+                          onLeaveDateChange();
+                        }}
+                      >
+                        <Option value="Full Day">Full Day</Option>
+                        <Option value="Half Day">Half Day</Option>
+                      </Select>
+                      {/* <Radio.Group defaultValue="Full Day"
+                                    onChange={onLeaveSlotChange}
+                                >
+                                    <Radio style={{ color: "black", fontWeight: '400' }} disabled={ dateSelected.length > 1 ? true:false } value="Half Day">Half Day</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
+
+                                </Radio.Group> */}
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                  <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                    <Form.Item
+                      labelAlign="left"
+                      style={{ marginBottom: "20px", color: "white", }}
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          End Date<span style={{ color: "red" }}> *</span>
+                        </label>
+                      }
+                      name="dateEnd"
+                    >
+                      <DatePicker
+                        style={{ width: "100%" }}
+                        format="Do MMM, YYYY"
+                        onChange={(e) => {
+                          console.log(e)
+                          setDateEnd(e);
+                          onLeaveDateChange(e);
+                        }}
+                        disabledDate={disabledDate}
+                        disabled={disableEnd()}
+                      />
+                    </Form.Item>
+                  </Col>
+
+                  <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                    <Form.Item
+                      labelAlign="left"
+                      name="slotEnd"
+                      style={{ marginBottom: "25px", }}
+                      className="div-slot"
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          End Slot<span style={{ color: "red" }}> *</span>
+                        </label>
+                      }
+                      rules={[{ message: "Please select an option!" }]}
+                      initialValue={"Full Day"}
+                      allowClear
+                    >
+                      <Select
+                        required
+                        defaultValue={"Full Day"}
+                        style={{ width: "100%" }}
+                        disabled={disableEndSlot()}
+                        onChange={(e) => {
+                          setEndSlot(e);
+                          onLeaveDateChange();
+                        }}
+                      >
+                        <Option value="Full Day">Full Day</Option>
+                        <Option value="Half Day">Half Day</Option>
+                      </Select>
+
+                      {/* <Radio.Group defaultValue="Full Day"
+                                    onChange={onLeaveSlotChange}
+                                >
+                                    <Radio style={{ color: "black", fontWeight: '400' }} disabled={ dateSelected.length > 1 ? true:false } value="Half Day">Half Day</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
+
+                                </Radio.Group> */}
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Form.Item
+                  labelAlign="left"
+                  name="leaveNature"
+                  style={{ marginBottom: "20px" }}
+                  label={
+                    <label style={{ color: "black", fontWeight: "400" }}>
+                      Nature of Leave<span style={{ color: "red" }}> *</span>
+                    </label>
+                  }
                 >
-                  Reset
-                </Button>
-              </Form.Item>
-            </Form>
-          </Col>
-        </Row>
+                  <Select
+                    required
+                    placeholder="Select a option "
+                    allowClear
+                    disabled={disableNature()}
+                    onChange={onLeaveNatureChange}
+                  >{leavedays != null ?
+                    (Object.keys(leavedays).map((u) => (
+                      <Option
+                        disabled={disabledLeaveNature(u)}
+                        value={u}
+                      >
+                        {u}
+                      </Option>
+                    )))
+                    : null}
+                    <Option value={"Loss of Pay"}>Loss of Pay</Option>
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  labelAlign="left"
+                  name="reason"
+                  style={{ marginBottom: "20px" }}
+                  label={
+                    <label style={{ color: "black", fontWeight: "400" }}>
+                      Reason<span style={{ color: "red" }}> *</span>{" "}
+                    </label>
+                  }
+                >
+                  <Input.TextArea
+                    maxLength={60}
+                    onChange={(e) => {
+                      const inputval = e.target.value;
+                      const newVal =
+                        inputval.substring(0, 1).toUpperCase() +
+                        inputval.substring(1);
+                      form.setFieldsValue({ reason: newVal });
+                    }}
+                    required
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  labelAlign="left"
+                  name="approver"
+                  style={{ marginBottom: "20px" }}
+                  label={
+                    <label style={{ color: "black", fontWeight: "400" }}>
+                      Approver<span style={{ color: "red" }}> *</span>
+                    </label>
+                  }
+                  initialValue={repManager}
+                >
+                  <Input
+                    maxLength={20}
+                    onChange={(e) => {
+                      const inputval = e.target.value;
+                      const newVal =
+                        inputval.substring(0, 1).toUpperCase() +
+                        inputval.substring(1);
+                      form.setFieldsValue({ approver: newVal });
+                    }}
+                    // rules={[{ required: true }]}
+                    // placeholder="Reporting Manager"
+                    disabled
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  style={{ paddingTop: "px" }}
+                  wrapperCol={{
+                    offset: 8,
+                    span: 24,
+                  }}
+                >
+                  <Button type="primary" htmlType="submit"
+                  // onClick={oncloseModal} 
+                  >
+                    {" "}
+                    Submit{" "}
+
+                  </Button>
+                  <Button
+                    htmlType="button"
+                    style={{ marginLeft: "10px" }}
+                    onClick={onReset}
+                  >
+                    Reset
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Col>
+          </Row>
+
+        </Modal>
+
+
         {isMgr ? <Notification data={pendingRequests} /> : null}
 
         {isMgr && !isHr ? (
@@ -1460,8 +1502,9 @@ const Leave = () => {
                 padding: "10px",
               }}
             >
-              <div className="history-table">
+              <div >
                 <Table
+                  className="leaveTable"
                   columns={reqColumns}
                   dataSource={requests}
                   pagination={{
@@ -1469,6 +1512,7 @@ const Leave = () => {
                   }}
                   scroll={{ x: 600 }}
                   size="small"
+
                 />
               </div>
             </Col>
@@ -1514,6 +1558,7 @@ const Leave = () => {
             >
               <div className="history-table">
                 <Table
+                  className="leaveTable"
                   columns={reqColumns}
                   dataSource={allRequests}
                   pagination={{
@@ -1566,6 +1611,7 @@ const Leave = () => {
           >
             <div className="history-table">
               <Table
+                className="leaveTable "
                 columns={columns}
                 dataSource={history}
                 pagination={{

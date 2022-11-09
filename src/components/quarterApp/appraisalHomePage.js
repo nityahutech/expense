@@ -65,14 +65,25 @@ const AppraisalHr = () => {
                 empRole === 'hr' && <EmpAppraisalTable reload={!isModalOpen} listType='hr' title='Appraisal Created by Hr' />
 
             }
-            <Modal
+            <Modal className='viewModal'
                 maskClosable={false}
-                centered title="Employee List"
+                // centered
+                title="Employee List"
                 footer={null}
                 visible={isModalOpen}
                 open={isModalOpen}
                 onCancel={closeCreateAppraisalModal}
                 width={800}
+                closeIcon={
+                    <div
+                        onClick={() => {
+                            closeCreateAppraisalModal(false);
+                        }}
+                        style={{ color: "#ffffff" }}
+                    >
+                        X
+                    </div>
+                }
             >
                 <CreateApparaisal closeCreateAppraisalModal={closeCreateAppraisalModal} />
             </Modal>

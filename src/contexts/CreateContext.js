@@ -64,6 +64,7 @@ export async function createUser(values, compId) {
     sickLeave: 6,
     casualLeave: 6,
     optionalLeave: 2,
+    disabled: false
   };
   console.log(res.user.uid, valuesToservice, compId)
   setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role});

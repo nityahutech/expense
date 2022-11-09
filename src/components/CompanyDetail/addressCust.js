@@ -27,7 +27,7 @@ function AddressCust() {
         showAddAddressContent(false);
       };
 
-      const editOnFinish = (values, i) => {
+      const editOnFinish = async (values, i) => {
         const valuesToservice = {
             title: values.addresstitle,
             addLine1: values.address1,
@@ -37,7 +37,7 @@ function AddressCust() {
             country: values.country,
             pincode: values.pin
         }
-        CompanyProContext.editCompInfo("compId001", { address: valuesToservice });
+        await CompanyProContext.editCompInfo("compId001", {address: data[i]}, { address: valuesToservice });
         getData();
         let array = editAddressContent;
         array[i] = true

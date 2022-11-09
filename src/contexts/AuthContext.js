@@ -5,7 +5,6 @@ import { signInWithEmailAndPassword,
          sendPasswordResetEmail,
          updateEmail,
          updatePassword,
-         deleteUser,
          updatePhoneNumber,
          updateProfile
 } from "@firebase/auth"

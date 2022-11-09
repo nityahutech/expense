@@ -68,8 +68,7 @@ function AddressCust() {
         getData();
         }, []);
     console.log(data);
-
-
+    
         const getData = async () => {
           let data = await CompanyProContext.getCompanyProfile("compId001");
           let array = [...data.address]

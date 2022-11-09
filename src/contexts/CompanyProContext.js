@@ -26,20 +26,20 @@ class CompanyProContext {
     deleteCompInfo = (id, updateCompInfo) => {
         const companyDoc = doc(db, "companyprofile", id);
         let field = Object.keys(updateCompInfo)[0]
-        return updateDoc(companyDoc, {[`${field}`]: arrayRemove(updateCompInfo.address)});
+        return updateDoc(companyDoc, {[`${field}`]: arrayRemove(updateCompInfo[`${field}`])});
     };
     
     addCompInfo = (id, updateCompInfo) => {
         const companyDoc = doc(db, "companyprofile", id);
         let field = Object.keys(updateCompInfo)[0]
-        return updateDoc(companyDoc, {[`${field}`]: arrayUnion(updateCompInfo.address)});
+        return updateDoc(companyDoc, {[`${field}`]: arrayUnion(updateCompInfo[`${field}`])});
     };
 
     editCompInfo = async (id, oldCompInfo, newCompInfo) => {
         const companyDoc = doc(db, "companyprofile", id);
         let field = Object.keys(newCompInfo)[0]
-        await updateDoc(companyDoc, {[`${field}`]: arrayRemove(oldCompInfo.address)});
-        updateDoc(companyDoc, {[`${field}`]: arrayUnion(newCompInfo.address)});
+        await updateDoc(companyDoc, {[`${field}`]: arrayRemove(oldCompInfo[`${field}`])});
+        updateDoc(companyDoc, {[`${field}`]: arrayUnion(newCompInfo[`${field}`])});
         return;
     }
     

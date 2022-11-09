@@ -35,7 +35,11 @@ class CompanyProContext {
         return updateDoc(companyDoc, {[`${field}`]: arrayUnion(updateCompInfo.address)});
     };
 
-    editCompInfo = (id, updateCompInfo) => {
+    editCompInfo = async (id, oldCompInfo, newCompInfo) => {
+        const companyDoc = doc(db, "companyprofile", id);
+        let field = Object.keys(newCompInfo)[0]
+        await updateDoc(companyDoc, {[`${field}`]: arrayRemove(oldCompInfo.address)});
+        updateDoc(companyDoc, {[`${field}`]: arrayUnion(newCompInfo.address)});
         return;
     }
     

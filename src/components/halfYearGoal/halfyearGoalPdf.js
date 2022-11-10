@@ -3,6 +3,7 @@ import "./HalfYearDown.css";
 import hutechLogo from "../../images/hutechlogo.png";
 import pdfMake from "pdfmake/build/pdfmake";
 import { DownloadOutlined } from "@ant-design/icons";
+import { Card, Space } from "antd";
 
 const HalfyearGoalPdf = (props) => {
   const [currentAppraisal, setCurrentAppraisal] = useState(props.appraisal);

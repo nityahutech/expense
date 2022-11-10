@@ -262,32 +262,32 @@ function MainDashBoard() {
           <Card>
             <Row gutter={[24,24]}>
 
-              <Col span={8} className="hi">
+              <Col xs={22} sm={15} md={8} className="hi">
                 {attendanceIcon()}
               </Col>
 
-              <Col span={8} className="hi">
+              <Col xs={22} sm={15} md={8} className="hi">
                 {leaveIcon()}
               </Col>
 
-              <Col span={8} className="hi">
+              <Col xs={22} sm={15} md={8} className="hi">
                 {paySlipIcon()}
               </Col>
              
-              <Col span={8} className="hi">
+              <Col xs={22} sm={15} md={8} className="hi">
                 {payrollIcon()}
               </Col>
               
-              <Col span={8} className="hi">
+              <Col xs={22} sm={15} md={8} className="hi">
                 {employeeIcon()}
               </Col>
 
-              <Col span={8} className="hi">
+              <Col xs={22} sm={15} md={8} className="hi">
                 {expenseIcon()}
               </Col>
               
               
-              <Col span={8} className="hi">
+              <Col xs={22} sm={15} md={8} className="hi">
                 {myProfileIcon()}
               </Col>
 
@@ -308,11 +308,11 @@ function MainDashBoard() {
                 </Link>
               </Col> */}
               
-              <Col span={8} className="hi">
+              <Col xs={22} sm={15} md={8} className="hi">
                   {companyProfileIcon()}
               </Col>
               
-              <Col span={8} className="hi">
+              <Col xs={22} sm={15} md={8} className="hi">
                 {settingIcon()}
               </Col>
 

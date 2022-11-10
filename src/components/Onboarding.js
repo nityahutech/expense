@@ -112,6 +112,13 @@ function Onboarding() {
   };
 
   useEffect(() => {
+    console.log(!isEditOrganization || !isModalVisible)
+    if (!isEditOrganization || !isModalVisible) {
+      getData();
+    }
+  }, [isEditOrganization, isModalVisible])
+
+  useEffect(() => {
     getData();
   }, [])
 
@@ -211,7 +218,8 @@ function Onboarding() {
   }
 
   async function addUseRole(values) {
-    if (await CompanyProContext.checkUserExists(values.mailid)) {
+    let exists = accessList.filter((user) => values.mailid == user.mailid || values.name == user.name)
+    if (exists.length > 0 || await CompanyProContext.checkUserExists(values.mailid)) {
       showNotification("error", "Error", "This user already exists!");
       form2.resetFields();
       setAddAccess(false);
@@ -224,6 +232,7 @@ function Onboarding() {
     // setAccessList([...accessList, newAccess]);
     // setNewAccess({ userole: "", name: "", mailid: "", phone: "" });
   };
+
   const columns = [
     {
       title: "Code",
@@ -527,33 +536,8 @@ function Onboarding() {
                         },
                         {
                           validator: validateOrgId,
-                          // message: "This id already exists!"
                         }
-                      // ({ getFieldValue }) => ({
-                      //   validator(_, value) {
-                      //   let id = value;
-                      //   if (id) {
-                      //     return await CompanyProContext.checkOrgIdExists(id) ?
-                      //     <div>this id exists</div> : null
-                      //   }
-                      //     // if (!value || getFieldValue("password1") === value) {
-                      //     //   return Promise.resolve();
-                      //     // }
-                      //     // return Promise.reject(
-                      //     //   new Error(
-                      //     //     "The two passwords that you entered do not match!"
-                      //     //   )
-                      //     // );
-                      //   },
-                      // }),
                       ]}
-                      // onChange={async (e) => {
-                      //   let id = e.target.value;
-                      //   if (id) {
-                      //     return await CompanyProContext.checkOrgIdExists(id) ?
-                      //     <div>this id exists</div> : null
-                      //   }
-                      // }}
                     >
                       <Input
                         maxLength={15}
@@ -577,7 +561,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter Organization Name",
                         },
                         {
@@ -608,7 +591,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter CIN Number",
                         },
                         {
@@ -641,7 +623,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter GST Number",
                         },
                         {
@@ -670,9 +651,8 @@ function Onboarding() {
                           message: "Please Enter Domain Name",
                         },
                         {
-                         // pattern:
-                            //"/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
-                          //message: "Please Enter Valid Name",
+                          pattern:/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i,
+                          message: "Please Enter Valid Name",
                         },
                       ]}
                     >
@@ -698,7 +678,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter Phone Number",
                         },
                         {
@@ -730,14 +709,13 @@ function Onboarding() {
                         },
                         {
                           pattern: /^[0-9a-zA-Z.,\s]+$/,
-
                           message: "Please Enter Valid Address",
                         },
                       ]}
                     >
                       <Input
                         maxLength={50}
-                        placeholder="Address Line1"
+                        placeholder="Address Line 1"
                         style={{
                           border: "1px solid #8692A6",
                           borderRadius: "4px",
@@ -748,7 +726,7 @@ function Onboarding() {
                   <Col xs={22} sm={15} md={8}>
                     <Form.Item
                       name="addLine2"
-                      label="Address Line2"
+                      label="Address Line 2"
                       rules={[
                         {
                           required: true,
@@ -756,14 +734,13 @@ function Onboarding() {
                         },
                         {
                           pattern: /^[0-9a-zA-Z.,\s]+$/,
-
                           message: "Please Enter Valid Address",
                         },
                       ]}
                     >
                       <Input
                         maxLength={50}
-                        placeholder="Address Line2"
+                        placeholder="Address Line 2"
                         style={{
                           border: "1px solid #8692A6",
                           borderRadius: "4px",
@@ -783,7 +760,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please Enter City Name",
                         },
                         {
@@ -815,7 +791,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter State",
                         },
                         {
@@ -846,7 +821,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter Country Name",
                         },
                         {
@@ -878,7 +852,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter Pin Code",
                         },
                         {
@@ -952,7 +925,6 @@ function Onboarding() {
                           ref={imgRef}
                           onChange={(e) => handleChange(e)}
                         />
-                        {console.log(fileName)}
                         {fileName ? (
                           ""
                         ) : (
@@ -1010,7 +982,6 @@ function Onboarding() {
                 autoComplete="off"
                 onFinish={addUseRole}
               >
-              {console.log(accessList)}
                 {accessList.map((u, i) => (
                   <div style={{ marginTop: "10px" }} className="inputLabel">
                     <Row gutter={[24, 20]}>
@@ -1036,7 +1007,6 @@ function Onboarding() {
                         <label style={{ fontSize: "13px", fontWeight: "600" }}>
                           Phone Number
                         </label>
-
                         <Input value={u.phone}></Input>
                         <Button
                           style={{
@@ -1101,7 +1071,6 @@ function Onboarding() {
                           rules={[
                             {
                               required: true,
-
                               message: "Please Enter Name",
                             },
                             {
@@ -1130,7 +1099,7 @@ function Onboarding() {
                               required: true,
                               message: "Enter Email address",
                               pattern:
-                                "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
+                                /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i,
                             },
                           ]}
                         >
@@ -1156,7 +1125,6 @@ function Onboarding() {
                           rules={[
                             {
                               required: true,
-
                               message: "Please enter Phone Number",
                             },
                             {

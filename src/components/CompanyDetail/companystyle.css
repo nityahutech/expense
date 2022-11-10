@@ -55,3 +55,16 @@
 .divider .ant-divider-horizontal{
 border-top: 1px solid red;
 }
+.overview .ant-card-head-title{
+  font-size: 17px;
+    font-weight: bold;
+    line-height: 19px;
+    text-transform: uppercase;
+}
+
+.social .ant-card-head-title{
+  font-size: 17px;
+    font-weight: bold;
+    line-height: 19px;
+    text-transform: uppercase;
+}

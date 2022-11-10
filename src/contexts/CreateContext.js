@@ -28,6 +28,7 @@ function generateEmpId(compId) {
 }
 
 export async function createUser(values, compId) {
+  console.log(values)
   let res = await createUserWithEmailAndPassword(
     createAuth,
     values.mailid,
@@ -49,11 +50,11 @@ export async function createUser(values, compId) {
     phonenumber: values.phone,
     gender: values.gender,
     designation: values.designation,
-    role:
-      values.designation == "Chief Executive Officer(CEO)" ||
+    role: values.role? values.role :
+      (values.designation == "Chief Executive Officer(CEO)" ||
       values.designation == "Human Resource(HR)"
         ? "hr"
-        : "emp",
+        : "emp"),
     empType: values.empType,
     repManager: values.repManager ? values.repManager : "",
     secManager: values.secManager ? values.secManager : "",
@@ -67,7 +68,7 @@ export async function createUser(values, compId) {
     disabled: false
   };
   console.log(res.user.uid, valuesToservice, compId)
-  setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role});
+  setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid});
   setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
     .then((result) => {
       signOut(createAuth);

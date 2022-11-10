@@ -7,8 +7,8 @@ import {
 import Editemployee from "./Editemployee";
 import React, { useEffect, useState } from "react";
 import { getUsers } from "../contexts/CreateContext";
-import { useAuth } from "../contexts/AuthContext";
 import "../style/EmployeeList.css";
+import EmpInfoContext from "../contexts/EmpInfoContext";
 
 function EmployeeList() {
   const [modaldata, setmodaldata] = useState([]);
@@ -20,7 +20,6 @@ function EmployeeList() {
   const [allEmployees, setAllEmployees] = useState([]);
   const [data, setData] = React.useState([]);
   const [disableItem, setDisableItem] = useState(false);
-  const { disablePerson } = useAuth();
 
   window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 768 ? "" : "left")
@@ -247,7 +246,8 @@ function EmployeeList() {
 
   const onDelete = (idx, e) => {
     e.preventDefault();
-    disablePerson(data[idx].id);
+    EmpInfoContext.disablePerson(data[idx].id);
+    // EmpInfoContext.enablePerson(data[idx].id)
     const filteredData = data.map((doc, i) => {
       let disabled = false;
       if (idx == i) {

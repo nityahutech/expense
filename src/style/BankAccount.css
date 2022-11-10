@@ -35,15 +35,12 @@ margin-right: 15px;
 .save.ant-btn-primary{
     width: 11%;
 }
-/* .name.ant-form-item-with-help {
-    margin: 4px 0px 14px 61px;
+.personal .ant-card-head-title{
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 19px;
+    text-transform: uppercase;
 }
-.number.ant-form-item-with-help {
-    margin: 4px 0px 14px 61px;
-} */
-/* .ant-form-item-with-help .ant-form-item-explain{
-    margin: 4px 0px 10px 60px;
-} */
 
 
  

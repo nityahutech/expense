@@ -530,6 +530,7 @@ const Statutory = () => {
       </Form>
 
         <Card style={{marginTop:"1rem",width:'800px'}}>
+          
           <Tabs defaultActiveKey="1" className='tabs'>
             <Tabs.TabPane tab="Directors" key="1">
                 <Card
@@ -750,6 +751,8 @@ const Statutory = () => {
                 </Form>                  
                 </Card>
             </Tabs.TabPane>
+
+
             <Tabs.TabPane tab="Auditors" key="2">
                   <Card
                         title="Auditors"

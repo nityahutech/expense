@@ -9,6 +9,7 @@ import {
   message,
   Upload,
   Button,
+  notification,
   Space,
   Card,
   Table,
@@ -18,6 +19,7 @@ import {
 import {
   PlusCircleOutlined,
   PlusOutlined,
+  LoadingOutlined,
   CloseCircleOutlined,
   CheckCircleFilled,
   ClockCircleFilled,
@@ -26,35 +28,134 @@ import {
   EditFilled,
 } from "@ant-design/icons";
 import "../style/Onboarding.css";
+import CompanyProContext from "../contexts/CompanyProContext";
 import reload from "../images/reload.png";
 import ViewModal from "./ViewModal";
 import EditOnboarding from "./EditOnboarding";
+import { getDatasetAtEvent } from "react-chartjs-2";
+import { set } from "react-hook-form";
 
 function Onboarding() {
   const [form] = Form.useForm();
   const [form2] = Form.useForm();
+  const [modalData, setModalData] = useState([]);
   const [accessList, setAccessList] = useState([]);
+  const [allCompany, setAllCompany] = useState([]);
   const [addAccess, setAddAccess] = useState(false);
   const [fileName, setFileName] = useState("");
   const [isBigFile, setIsBigFile] = useState(false);
+  const [orgIdExists, setOrgIdExists] = useState(false);
+  const [activetab, setActivetab] = useState("1");
+  const [isFileSizeInvalid, setIsFileSizeInvalid] = useState(false);
   const imgRef = React.useRef(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditOrganization, setIsEditOrganization] = useState(false);
+
+  const onFinish = async (values) => {
+    if (orgIdExists) {
+      showNotification("error", "Error", "This user already exists!");
+      return;
+    }
+    if (accessList.length == 0) {
+      showNotification("error", "Error", "There must be at least 1 user!");
+      return;
+    }
+    const valuesToservice = {
+      accessList: [],
+      address: [],
+      auditor: [],
+      bank:[],
+      regCompName: values.regCompName,
+      regOffice: {
+        addLine1: values.addLine1,
+        addLine2: values.addLine2,
+        city: values.city,
+        state: values.state,
+        country: values.country,
+        pincode: values.pincode,
+      },
+      cinNumber: values.cinNumber,
+      gst: values.gst,
+      domain: values.domain,
+      phone: values.phone,
+      status: "Deactivated"
+    }
+    console.log(values,fileName,valuesToservice,values.orgcode);
+
+    CompanyProContext.createCompInfo(values.orgcode, valuesToservice, fileName, accessList)
+      .then((response) => {
+        notification.open({
+          message: "Creating Company",
+          duration: 2,
+          icon: <LoadingOutlined />
+        });
+        const timer = setTimeout(() => {
+          showNotification("success", "Success", "Onboarding Completed");
+          getData()
+          setAddAccess(false);
+          onReset()
+          setActivetab("1")
+        }, 5000);
+        return () => clearTimeout(timer);
+      })
+      .catch((error) => {
+      showNotification("error", "Error", error.message);
+    })
+    };
+        
+        
+  const showNotification = (type, msg, desc) => {
+    notification[type]({
+      message: msg,
+      description: desc,
+    });
+  };
+
+  useEffect(() => {
+    getData();
+  }, [])
+
+  const changeCompStatus = (id, status) => {
+    console.log(id, status)
+    CompanyProContext.updateCompInfo(id, {status: status == "Deactivated"? "Activated" : "Deactivated"})
+    getData();
+  }
+
+  const getData = async () => {
+    let data = await CompanyProContext.getAllCompany();
+    setAllCompany(data)
+    console.log(data)
+  }
 
   const handleClick = (event) => {
     console.log("imgRef:: ", imgRef);
     imgRef.current.click();
   };
 
-  useEffect(() => {
-    setFileName(fileName);
-    setIsBigFile(false);
-  });
-
   const handleChange = (event) => {
+    console.log(event.target.files[0])
+    if(!event) {return;}
     const fileUploaded = event.target.files[0];
-    checkFileSize(fileUploaded.size, fileUploaded.name);
+    checkFileSize(fileUploaded.size, fileUploaded);
   };
+
+  const validateOrgId = async (rule, value, callback) => {
+    console.log(rule, value)
+    try {
+      let exists = await CompanyProContext.checkOrgIdExists(value)
+      if (exists) {
+        console.log('this id exists')
+        setOrgIdExists(true)
+        throw new Error('this id exists')
+      }
+      setOrgIdExists(false)
+      // return exists;
+    } catch (err) {
+      console.log(err, 'yo this id exists')
+      callback(err.message);
+    }
+    // CompanyProContext.checkOrgIdExists(value)
+  }
 
   function checkFileSize(size, fileName) {
     console.log({ size });
@@ -80,11 +181,12 @@ function Onboarding() {
   };
 
   const showModal = (record) => {
-    // setmodaldata(record);
+    setModalData(record);
     setIsModalVisible(true);
   };
 
   const showOnboarding = (record) => {
+    setModalData(record);
     setIsEditOrganization(true);
   };
 
@@ -94,44 +196,53 @@ function Onboarding() {
 
   const handleCancel = () => {
     setIsModalVisible(false);
-
-    // submit form data
   };
 
   function onDelete(delItem) {
     console.log(delItem);
     const filteredData = accessList.filter(
-      (item) => item.emailaddress !== delItem.emailaddress
+      (item) => item.mailid !== delItem.mailid
     );
+    // CompanyProContext.deleteCompInfo(delItem.id)
+    // .then((response) => {
+    //            console.log(response);
+    //            })
     setAccessList(filteredData);
   }
 
-  function addUseRole(values) {
+  async function addUseRole(values) {
+    if (await CompanyProContext.checkUserExists(values.mailid)) {
+      showNotification("error", "Error", "This user already exists!");
+      form2.resetFields();
+      setAddAccess(false);
+      return;
+    }
     setAccessList([...accessList, values]);
+    console.log([...accessList, values])
     form2.resetFields();
     setAddAccess(false);
     // setAccessList([...accessList, newAccess]);
-    // setNewAccess({ userole: "", name: "", emailaddress: "", phone: "" });
-  }
+    // setNewAccess({ userole: "", name: "", mailid: "", phone: "" });
+  };
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      width: 200,
-    },
-    {
       title: "Code",
-      dataIndex: "code",
-      key: "code",
+      dataIndex: "id",
+      key: "id",
       width: 120,
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-      width: 250,
+      title: "Name",
+      dataIndex: "regCompName",
+      key: "regCompName",
+      width: 200,
     },
+    // {
+    //   title: "Address",
+    //   dataIndex: "regOffice",
+    //   key: "address",
+    //   width: 250,
+    // },
     {
       title: "Status",
       key: "status",
@@ -150,21 +261,22 @@ function Onboarding() {
       align: "center",
 
       render: (_, record) => {
+        console.log("recore", record, record.status == "Deactivated")
         return (
           <>
             <Row>
               <Col xs={22} sm={15} md={8}>
                 <Button
-                  disabled={record?.disabled}
+                  disabled={record.status == "Deactivated"}
                   style={{ width: "40px" }}
                   onClick={() => {
                     showModal(record);
                   }}
                 >
                   <EyeFilled
-                    disabled={record?.disabled}
+                    disabled={record.status == "Deactivated"}
                     style={
-                      record?.disabled
+                      record.status == "Deactivated"
                         ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
                         : { color: "#268FEE", marginLeft: "-2px" }
                     }
@@ -173,18 +285,16 @@ function Onboarding() {
               </Col>
               <Col xs={22} sm={15} md={8}>
                 <Button
-                  disabled={record?.disabled}
-                  style={
-                    record?.disabled ? { width: "40px" } : { width: "40px" }
-                  }
+                  disabled={record.status == "Deactivated"}
+                  style={{ width: "40px" }}
                   onClick={() => {
                     showOnboarding(record);
                   }}
                 >
                   <EditFilled
-                    disabled={record?.disabled}
+                    disabled={record.status == "Deactivated"}
                     style={
-                      record?.disabled
+                      record.status == "Deactivated"
                         ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
                         : { color: "#268FEE", marginLeft: "-2px" }
                     }
@@ -193,28 +303,19 @@ function Onboarding() {
               </Col>
               <Col xs={22} sm={15} md={8}>
                 <Button
-                  disabled={record?.disabled}
-                  style={
-                    record?.disabled ? { width: "40px" } : { width: "40px" }
-                  }
+                  // disabled={record.status == "Deactivated"}
+                  style={{ width: "40px" }}
+                  onClick={() => {
+                    changeCompStatus(record.id, record.status)
+                  }}
                 >
-                  {record?.disabled ? (
+                  {record.status == "Deactivated" ? (
                     <CheckCircleFilled
-                      disabled={record?.disabled}
-                      style={
-                        record?.disabled
-                          ? { color: "#268FEE", marginLeft: "-2px" }
-                          : { color: "#268FEE", marginLeft: "-2px" }
-                      }
+                      style={{ color: "#268FEE", marginLeft: "-2px" }}
                     />
                   ) : (
                     <StopFilled
-                      disabled={record?.disabled}
-                      style={
-                        record?.disabled
-                          ? { color: "#268FEE", marginLeft: "-2px" }
-                          : { color: "#268FEE", marginLeft: "-2px" }
-                      }
+                      style={{ color: "#268FEE", marginLeft: "-2px" }}
                     />
                   )}
                 </Button>
@@ -225,6 +326,7 @@ function Onboarding() {
       },
     },
   ];
+  
   function getStatusUi(status) {
     switch (status) {
       case "Activated":
@@ -238,17 +340,17 @@ function Onboarding() {
             {status}
           </div>
         );
-      case "Pending":
-        return (
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <div>
-              <ClockCircleFilled
-                style={{ color: "orange", marginRight: "6px" }}
-              />
-            </div>
-            {status},
-          </div>
-        );
+      // case "Pending":
+      //   return (
+      //     <div style={{ display: "flex", flexDirection: "row" }}>
+      //       <div>
+      //         <ClockCircleFilled
+      //           style={{ color: "orange", marginRight: "6px" }}
+      //         />
+      //       </div>
+      //       {status},
+      //     </div>
+      //   );
       case "Deactivated":
         return (
           <div style={{ display: "flex", flexDirection: "row" }}>
@@ -260,65 +362,113 @@ function Onboarding() {
             {status}
           </div>
         );
-      case "Reactivate":
-        return (
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <div>
-              <img
-                src={reload}
-                style={{ color: "#1fca1f", marginRight: "6px" }}
-              />
-            </div>
-            {status}
-          </div>
-        );
+      // case "Reactivate":
+      //   return (
+      //     <div style={{ display: "flex", flexDirection: "row" }}>
+      //       <div>
+      //         <img
+      //           src={reload}
+      //           style={{ color: "#1fca1f", marginRight: "6px" }}
+      //         />
+      //       </div>
+      //       {status}
+      //     </div>
+      //   );
       default:
         return null;
     }
   }
-  const dummyData = [
-    {
-      key: "1",
-      name: "Hutech Solutions pvt ltd",
-      code: "HS0000123",
-      address: "HSR BDA Comples",
-      status: "Activated",
-    },
-    {
-      key: "2",
-      name: "Blueelement Pvt Ltd",
-      code: "HS0000124",
-      address: "HSR BDA Comples",
-      status: "Pending",
-    },
-    {
-      key: "3",
-      name: "Blueelement Pvt Ltd",
-      code: "HS0000124",
-      address: "HSR BDA Comples",
-      status: "Deactivated",
-      disabled: true,
-    },
-    {
-      key: "4",
-      name: "Blueelement Pvt Ltd",
-      code: "HS0000124",
-      address: "HSR BDA Comples",
-      status: "Reactivate",
-    },
-  ];
+
   function onReset() {
     form.resetFields();
+    form2.resetFields();
+    setAccessList([])
+    setIsBigFile(false);
+    setFileName(null);
   }
 
   return (
     <div className="main">
       <Tabs
-        defaultActiveKey="1"
+        defaultActiveKey={activetab}
         className="mainTabs"
-        // onChange={onChange}
+        activeKey={activetab}
+        onChange={(tabKey) => {
+          setActivetab(tabKey);
+        }}
       >
-        <Tabs.TabPane tab="Organization Onboarding" key="1">
+        <Tabs.TabPane tab="View All Organization" key="1">
+        <Card
+            style={{
+              background: "#fff",
+              margin: "0px 15px 20px 15px",
+
+              // height: "55rem",
+            }}
+          >
+            <div style={{ background: "#fff" }}>
+              <div
+                style={{
+                  fontWeight: "600",
+                  fontSize: "14px",
+                  lineHeight: "19px",
+                }}
+              >
+                Organization Details
+              </div>
+              <Divider />
+
+              <Table
+                className="tableTab"
+                columns={columns}
+                dataSource={allCompany}
+                size="middle"
+                rowClassName={(record) => record.status == "Deactivated" && "disabled-row"}
+              />
+              <Modal
+                style={{ width: "800px" }}
+                className="viewModal"
+                centered
+                visible={isModalVisible}
+                footer={null}
+                title="ORGANIZATION DETAILS"
+                closeIcon={
+                  <div
+                    onClick={() => {
+                      setIsModalVisible(false);
+                    }}
+                    style={{ color: "#ffffff" }}
+                  >
+                    X
+                  </div>
+                }
+              >
+                <ViewModal modalData={modalData} setIsModalVisible={setIsModalVisible} />
+              </Modal>
+              <Modal
+                style={{ width: "840px" }}
+                className="viewModal"
+                // centered
+                visible={isEditOrganization}
+                footer={null}
+                title="ORGANIZATION DETAILS"
+                closeIcon={
+                  <div
+                    onClick={() => {
+                      setIsEditOrganization(false);
+                    }}
+                    style={{ color: "#ffffff" }}
+                  >
+                    X
+                  </div>
+                }
+              >
+                <EditOnboarding  modalData={modalData} setIsEditOrganization={setIsEditOrganization} />
+              </Modal>
+            </div>
+          </Card>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Organization Onboarding" key="2">
           <Card
             style={{
               background: "#fff",
@@ -354,7 +504,7 @@ function Onboarding() {
                   remember: true,
                 }}
                 autoComplete="off"
-                // onFinish={onFinish}
+                 onFinish={onFinish}
               >
                 <Row gutter={[24, 8]}>
                   <Col xs={22} sm={15} md={8}>
@@ -369,14 +519,41 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter Organization Code",
                         },
                         {
                           pattern: /^[0-9a-zA-Z]+$/,
                           message: "Please enter Valid Code",
                         },
+                        {
+                          validator: validateOrgId,
+                          // message: "This id already exists!"
+                        }
+                      // ({ getFieldValue }) => ({
+                      //   validator(_, value) {
+                      //   let id = value;
+                      //   if (id) {
+                      //     return await CompanyProContext.checkOrgIdExists(id) ?
+                      //     <div>this id exists</div> : null
+                      //   }
+                      //     // if (!value || getFieldValue("password1") === value) {
+                      //     //   return Promise.resolve();
+                      //     // }
+                      //     // return Promise.reject(
+                      //     //   new Error(
+                      //     //     "The two passwords that you entered do not match!"
+                      //     //   )
+                      //     // );
+                      //   },
+                      // }),
                       ]}
+                      // onChange={async (e) => {
+                      //   let id = e.target.value;
+                      //   if (id) {
+                      //     return await CompanyProContext.checkOrgIdExists(id) ?
+                      //     <div>this id exists</div> : null
+                      //   }
+                      // }}
                     >
                       <Input
                         maxLength={15}
@@ -390,7 +567,7 @@ function Onboarding() {
                   </Col>
                   <Col xs={22} sm={15} md={8}>
                     <Form.Item
-                      name="orgname"
+                      name="regCompName"
                       label="Organization Name"
                       onKeyPress={(event) => {
                         if (checkAlphabets(event)) {
@@ -421,7 +598,7 @@ function Onboarding() {
                   </Col>
                   <Col xs={22} sm={15} md={8}>
                     <Form.Item
-                      name="cinnumber"
+                      name="cinNumber"
                       label="CIN Number"
                       onKeyPress={(event) => {
                         if (checkNumbervalue(event) && checkAlphabets(event)) {
@@ -454,7 +631,7 @@ function Onboarding() {
                 <Row gutter={[24, 8]}>
                   <Col xs={22} sm={15} md={8}>
                     <Form.Item
-                      name="gstnumber"
+                      name="gst"
                       label="GST Number"
                       onKeyPress={(event) => {
                         if (checkNumbervalue(event) && checkAlphabets(event)) {
@@ -485,77 +662,23 @@ function Onboarding() {
                   </Col>
                   <Col xs={22} sm={15} md={8}>
                     <Form.Item
-                      name="domname"
+                      name="domain"
                       label="Domain Name"
                       rules={[
                         {
-                          required: true,
+                          required:true,
                           message: "Please Enter Domain Name",
                         },
                         {
-                          pattern:
-                            "/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:.[a-zA-Z]{2,})+$/",
-                          message: "Please Enter Valid Name",
+                         // pattern:
+                            //"/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
+                          //message: "Please Enter Valid Name",
                         },
                       ]}
                     >
                       <Input
                         maxLength={25}
                         placeholder="Domain Name"
-                        style={{
-                          border: "1px solid #8692A6",
-                          borderRadius: "4px",
-                        }}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col xs={22} sm={15} md={8}>
-                    <Form.Item
-                      name="address1"
-                      label="Address Line1"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please Enter Company Address",
-                        },
-                        {
-                          pattern: /^[0-9a-zA-Z.,]+$/,
-
-                          message: "Please Enter Valid Address",
-                        },
-                      ]}
-                    >
-                      <Input
-                        maxLength={50}
-                        placeholder="Address Line1"
-                        style={{
-                          border: "1px solid #8692A6",
-                          borderRadius: "4px",
-                        }}
-                      />
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={[24, 8]}>
-                  <Col xs={22} sm={15} md={8}>
-                    <Form.Item
-                      name="address2"
-                      label="Address Line2"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please Enter Company Address",
-                        },
-                        {
-                          pattern: /^[0-9a-zA-Z.,]+$/,
-
-                          message: "Please Enter Valid Address",
-                        },
-                      ]}
-                    >
-                      <Input
-                        maxLength={50}
-                        placeholder="Address Line2"
                         style={{
                           border: "1px solid #8692A6",
                           borderRadius: "4px",
@@ -579,7 +702,7 @@ function Onboarding() {
                           message: "Please enter Phone Number",
                         },
                         {
-                          pattern: /^[6-9]\d{9}$/,
+                          pattern: /^[0-9]\d{9}$/,
                           message: "Please Enter Valid Number",
                         },
                       ]}
@@ -587,6 +710,60 @@ function Onboarding() {
                       <Input
                         maxLength={10}
                         placeholder="Phone"
+                        style={{
+                          border: "1px solid #8692A6",
+                          borderRadius: "4px",
+                        }}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={[24, 8]}>
+                  <Col xs={22} sm={15} md={8}>
+                    <Form.Item
+                      name="addLine1"
+                      label="Address Line 1"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Enter Company Address",
+                        },
+                        {
+                          pattern: /^[0-9a-zA-Z.,\s]+$/,
+
+                          message: "Please Enter Valid Address",
+                        },
+                      ]}
+                    >
+                      <Input
+                        maxLength={50}
+                        placeholder="Address Line1"
+                        style={{
+                          border: "1px solid #8692A6",
+                          borderRadius: "4px",
+                        }}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={22} sm={15} md={8}>
+                    <Form.Item
+                      name="addLine2"
+                      label="Address Line2"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Enter Company Address",
+                        },
+                        {
+                          pattern: /^[0-9a-zA-Z.,\s]+$/,
+
+                          message: "Please Enter Valid Address",
+                        },
+                      ]}
+                    >
+                      <Input
+                        maxLength={50}
+                        placeholder="Address Line2"
                         style={{
                           border: "1px solid #8692A6",
                           borderRadius: "4px",
@@ -657,38 +834,6 @@ function Onboarding() {
                       />
                     </Form.Item>
                   </Col>
-
-                  <Col xs={22} sm={15} md={4}>
-                    <Form.Item
-                      name="pincode"
-                      label="Pin Code"
-                      onKeyPress={(event) => {
-                        if (checkNumbervalue(event)) {
-                          event.preventDefault();
-                        }
-                      }}
-                      rules={[
-                        {
-                          required: true,
-
-                          message: "Please enter Pin Code",
-                        },
-                        {
-                          pattern: /^[0-9\b]+$/,
-                          message: "Please Enter Valid Code",
-                        },
-                      ]}
-                    >
-                      <Input
-                        maxLength={6}
-                        placeholder="Pin Code"
-                        style={{
-                          border: "1px solid #8692A6",
-                          borderRadius: "4px",
-                        }}
-                      />
-                    </Form.Item>
-                  </Col>
                   <Col xs={22} sm={15} md={4}>
                     <Form.Item
                       name="country"
@@ -721,8 +866,41 @@ function Onboarding() {
                     </Form.Item>
                   </Col>
 
+                  <Col xs={22} sm={15} md={4}>
+                    <Form.Item
+                      name="pincode"
+                      label="Pin Code"
+                      onKeyPress={(event) => {
+                        if (checkNumbervalue(event)) {
+                          event.preventDefault();
+                        }
+                      }}
+                      rules={[
+                        {
+                          required: true,
+
+                          message: "Please enter Pin Code",
+                        },
+                        {
+                          pattern: /^[0-9\b]+$/,
+                          message: "Please Enter Valid Code",
+                        },
+                      ]}
+                    >
+                      <Input
+                        maxLength={6}
+                        placeholder="Pin Code"
+                        style={{
+                          border: "1px solid #8692A6",
+                          borderRadius: "4px",
+                        }}
+                      />
+                    </Form.Item>
+                  </Col>
+
+
                   <Col xs={22} sm={8}>
-                    <Form.Item name="file" className="uploadLogo">
+                    <Form.Item name="logo" className="uploadLogo">
                       <div
                         style={{
                           border: "dashed #B9B9B9",
@@ -757,7 +935,7 @@ function Onboarding() {
                             Upload
                           </span>
                         </Button>
-                        {isBigFile ? null : fileName}
+                        {isBigFile ? null : fileName?.name}
                         {isBigFile
                           ? message.error("File size must be less than 200Kb.")
                           : ""}
@@ -769,34 +947,34 @@ function Onboarding() {
                           }}
                           type="file"
                           // accept="image/gif, image/jpeg, image/png"
-                          id="myfile"
-                          name="file"
+                          id="logo"
+                          name="logo"
                           ref={imgRef}
                           onChange={(e) => handleChange(e)}
                         />
+                        {console.log(fileName)}
                         {fileName ? (
                           ""
                         ) : (
-                          <p
-                            style={{
-                              fontWeight: "400",
-                              fontSize: "13px",
-                              lineHeight: "19px",
-                              marginLeft: "10px",
-                            }}
-                          >
-                            Upload logo. Use the 200 kb size image. PNG or JPEG
-                            file format accepted
-                          </p>
+                        <p
+                          style={{
+                            fontWeight: "400",
+                            fontSize: "13px",
+                            lineHeight: "19px",
+                            marginLeft: "10px",
+                          }}
+                        >
+                          Upload logo. Use the 200 kb size image. PNG or JPEG
+                          file format accepted
+                        </p>
                         )}
                       </div>
                     </Form.Item>
                   </Col>
                 </Row>
-              </Form>
-            </div>
 
             <Divider />
+
             <Card
               style={{
                 margin: "56px",
@@ -832,14 +1010,15 @@ function Onboarding() {
                 autoComplete="off"
                 onFinish={addUseRole}
               >
+              {console.log(accessList)}
                 {accessList.map((u, i) => (
                   <div style={{ marginTop: "10px" }} className="inputLabel">
                     <Row gutter={[24, 20]}>
                       <Col xs={22} sm={15} md={6}>
                         <label style={{ fontSize: "13px", fontWeight: "600" }}>
-                          Use Role
+                          User Role
                         </label>
-                        <Input value={u.userole}></Input>
+                        <Input value={u.userRole}></Input>
                       </Col>
                       <Col xs={22} sm={15} md={6}>
                         <label style={{ fontSize: "13px", fontWeight: "600" }}>
@@ -851,7 +1030,7 @@ function Onboarding() {
                         <label style={{ fontSize: "13px", fontWeight: "600" }}>
                           Email Address
                         </label>
-                        <Input value={u.emailaddress}></Input>
+                        <Input value={u.mailid}></Input>
                       </Col>
                       <Col xs={22} sm={15} md={6}>
                         <label style={{ fontSize: "13px", fontWeight: "600" }}>
@@ -882,8 +1061,8 @@ function Onboarding() {
                     <Row gutter={[20, 8]} className="addUserForm">
                       <Col xs={22} sm={15} md={6}>
                         <Form.Item
-                          name="userole"
-                          label="Use Role"
+                          name="userRole"
+                          label="User Role"
                           onKeyPress={(event) => {
                             if (checkAlphabets(event)) {
                               event.preventDefault();
@@ -892,7 +1071,6 @@ function Onboarding() {
                           rules={[
                             {
                               required: true,
-
                               message: "Please enter Role",
                             },
                             {
@@ -903,7 +1081,7 @@ function Onboarding() {
                         >
                           <Input
                             maxLength={10}
-                            placeholder="Use Role"
+                            placeholder="User Role"
                             style={{
                               border: "1px solid #8692A6",
                               borderRadius: "4px",
@@ -944,7 +1122,7 @@ function Onboarding() {
                       </Col>
                       <Col xs={22} sm={15} md={6}>
                         <Form.Item
-                          name="emailaddress"
+                          name="mailid"
                           label="Email Address"
                           rules={[
                             {
@@ -982,7 +1160,7 @@ function Onboarding() {
                               message: "Please enter Phone Number",
                             },
                             {
-                              pattern: /^[6-9]\d{9}$/,
+                              pattern: /^[0-9]\d{9}$/,
                               message: "Please Enter Valid Number",
                             },
                           ]}
@@ -1000,6 +1178,7 @@ function Onboarding() {
                     </Row>
                   </div>
                 ) : null}
+
                 <Button
                   style={{
                     border: "none",
@@ -1011,17 +1190,19 @@ function Onboarding() {
                     lineHeight: "14.4px",
                     float: "right",
                   }}
-                  htmlType={addAccess ? "submit" : "button"}
+                  // htmlType={addAccess ? "submit" : "button"}
                   onClick={() => {
-                    if (!addAccess) {
-                      setAddAccess(true);
+                    if(addAccess) {
+                      form2.submit();
                     }
+                    setAddAccess(!addAccess);
                   }}
                 >
-                  <PlusCircleOutlined /> Add User
+                  <PlusCircleOutlined /> {addAccess?"Save":"Add User"}
                 </Button>
               </Form>
             </Card>
+
             <div
               style={{
                 display: "flex",
@@ -1063,76 +1244,7 @@ function Onboarding() {
                 </Form.Item>
               </Space>
             </div>
-          </Card>
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="View All Organization" key="2">
-          <Card
-            style={{
-              background: "#fff",
-              margin: "0px 15px 20px 15px",
-
-              // height: "55rem",
-            }}
-          >
-            <div style={{ background: "#fff" }}>
-              <div
-                style={{
-                  fontWeight: "600",
-                  fontSize: "14px",
-                  lineHeight: "19px",
-                }}
-              >
-                Organization Details
-              </div>
-              <Divider />
-
-              <Table
-                className="tableTab"
-                columns={columns}
-                dataSource={dummyData}
-                size="middle"
-                rowClassName={(record) => record.disabled && "disabled-row"}
-              />
-              <Modal
-                style={{ width: "800px" }}
-                className="viewModal"
-                centered
-                visible={isModalVisible}
-                footer={null}
-                title="ORGANIZATION DETAILS"
-                closeIcon={
-                  <div
-                    onClick={() => {
-                      setIsModalVisible(false);
-                    }}
-                    style={{ color: "#ffffff" }}
-                  >
-                    X
-                  </div>
-                }
-              >
-                <ViewModal setIsModalVisible={setIsModalVisible} />
-              </Modal>
-              <Modal
-                style={{ width: "840px" }}
-                className="viewModal"
-                // centered
-                visible={isEditOrganization}
-                footer={null}
-                title="ORGANIZATION DETAILS"
-                closeIcon={
-                  <div
-                    onClick={() => {
-                      setIsEditOrganization(false);
-                    }}
-                    style={{ color: "#ffffff" }}
-                  >
-                    X
-                  </div>
-                }
-              >
-                <EditOnboarding setIsEditOrganization={setIsEditOrganization} />
-              </Modal>
+            </Form>
             </div>
           </Card>
         </Tabs.TabPane>

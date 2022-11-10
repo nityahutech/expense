@@ -3,14 +3,114 @@ import React from "react";
 import hutechlogo from "../images/hutechlogo.png";
 import imageavailable from "../images/imageavailable.png";
 
-function ViewModal() {
+function ViewModal(props) {
+  console.log("props", props.modalData)
+  const modalData = props.modalData
   return (
     <div>
       <h3 style={{ fontWeight: "600", fontSize: "18px", lineheight: "22px" }}>
-        Hutech Solutions Pvt. Ltd.
+        {modalData.regCompName}
       </h3>
       <Divider />
       <Row gutter={[50, 8]}>
+        <Col span={8} >
+          <div>
+            <h4 style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }} >
+              Organization Details
+            </h4>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginTop: "17px",
+              }}
+            >
+              <span>Code: {modalData.id}</span>
+              <span>CIN: {modalData.cinNumber}</span>
+              <span>GSTN: {modalData.gst}</span>
+              <span>Domain: {modalData.domain}</span>
+            </div>
+          </div>
+        </Col>
+        <Col span={8} >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <h4
+              style={{
+                fontWeight: "600",
+                fontSize: "16px",
+                lineheight: "20px",
+              }}
+            >
+              Address
+            </h4>
+            <span>{modalData.regOffice.addLine1},</span>
+            <span>{modalData.regOffice.addLine2},</span>
+            <span>{modalData.regOffice.city}, {modalData.regOffice.state},</span>
+            <span>{modalData.regOffice.country} - {modalData.regOffice.pincode}</span>
+          </div>
+        </Col>
+        <Col span={8} >
+          <div>
+            <h4 style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }} >
+              Organization Logo
+            </h4>
+            <div
+            style={{
+              border: "1px solid #d0d0d0",
+              width: "180px",
+              height: "90px",
+              borderRadius: "6px",
+            }}
+          >
+            <img src={modalData.logo?modalData.logo:imageavailable} style={{ width: "132px", margin: "22px" }} alt={"logo not found"} />
+          </div>
+          </div>
+        </Col> 
+      </Row>
+      <Row gutter={[50, 8]} style={{marginTop: "17px", padding: "0 25px"}}>
+          <div>
+            <h4 style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }} >
+              Organization Access
+            </h4>
+            <div style={{display:"flex", flexDirection: "row", justifyContent: "left"}}>
+
+            { modalData.accessList.map((user) => (
+              <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginLeft: "17px",
+              }}
+            >
+              <span>Code: {user.name}</span>
+              <span>CIN: {user.mailid}</span>
+              <span>GSTN: {user.phone}</span>
+              <span
+                style={{
+                  borderRadius: "10px",
+                  background: "#C9E5FF",
+                  // width: "101px",
+                  display: "flex",
+                  justifyContent: "center",
+                  color: "#000000",
+                  fontWeight: "400",
+                  fontSize: "14px",
+                  marginTop: "7px",
+                }}
+              >
+                {user.userRole}
+              </span>
+            </div>
+            ))}
+          </div>
+          </div>
+      </Row>
+      {/* <Row gutter={[50, 8]}>
         <Col span={8}>
           <h4
             style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }}
@@ -24,13 +124,13 @@ function ViewModal() {
               marginTop: "17px",
             }}
           >
-            <span>Code:EL00675</span>
-            <span>CIN:23445633i4</span>
-            <span>GSTN:23348968586</span>
-            <span>Domain:hutechsolutions.com</span>
+            <span>Code: {modalData.id}</span>
+            <span>CIN: {modalData.cinNumber}</span>
+            <span>GSTN: {modalData.gst}</span>
+            <span>Domain: {modalData.domain}</span>
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <h4
             style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }}
           >
@@ -63,7 +163,7 @@ function ViewModal() {
             </span>
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <h4
             style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }}
           >
@@ -80,7 +180,7 @@ function ViewModal() {
             <img src={hutechlogo} style={{ width: "132px", margin: "22px" }} />
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <div
             style={{
               display: "flex",
@@ -101,7 +201,7 @@ function ViewModal() {
             <span>Bangalore, Karnataka, 560068, India +91 93439 27070</span>
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <div
             style={{
               display: "flex",
@@ -129,7 +229,7 @@ function ViewModal() {
             </span>
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <div
             style={{
               border: "1px solid #d0d0d0",
@@ -144,7 +244,7 @@ function ViewModal() {
             />
           </div>
         </Col>
-      </Row>
+      </Row> */}
     </div>
   );
 }

@@ -12,7 +12,7 @@ import Payroll from "../images/Payroll.png"
 import Employeelist from "../images/Employeelist.png"
 import Expenses from "../images/Expenses.png"
 import Myprofile from "../images/Myprofile.png"
-import Companyprofile from "../images/Companyprofile.png"
+import Companyprofile from "../images/companyvision.png"
 import Settings from "../images/Settings.png"
 import { Link } from 'react-router-dom';
 

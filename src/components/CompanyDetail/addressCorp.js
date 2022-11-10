@@ -45,6 +45,8 @@ function AddressCorp() {
                     justifyContent: "center",
                 }}
             >
+                <Row>
+                   <Col xs={24} sm={15} md={24}>
                 <Form
                     // form={form}
                     labelcol={{
@@ -61,6 +63,7 @@ function AddressCorp() {
                 >
                     <Card
                         title="CORPORATE OFFICE"
+                        className="corpcard"
                         extra={
                             <>
                                 {editCorpAddress === false ? (
@@ -81,7 +84,7 @@ function AddressCorp() {
                     >
                         {/* {editcorpInfo === true ? ( */}
                             <Row gutter={[16, 16]}>
-                                <Col span={24}>
+                                <Col xs={24} sm={15} md={24}>
                                     <div>
                                         <div className='div-discription'>
                                             Address Line 1
@@ -100,8 +103,14 @@ function AddressCorp() {
                                                         type: "text",
                                                     }
                                                 ]}
+                                                
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} required placeholder="" />
+                                                <Input style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                  }}
+                                                bordered={false} required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -112,7 +121,7 @@ function AddressCorp() {
 
                         {/* {editcorpInfo === true ? ( */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                                <Col span={24}>
+                                <Col xs={24} sm={15} md={24}>
                                     <div>
                                         <div className='div-discription'>
                                             Address Line 2
@@ -132,7 +141,12 @@ function AddressCorp() {
                                                     }
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} required placeholder="" />
+                                                <Input style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                  }}
+                                                bordered={false} required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -143,7 +157,7 @@ function AddressCorp() {
 
                          {/* {editcorpInfo === true ? (  */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                                <Col span={6}>
+                                <Col xs={24} sm={15} md={6}>
                                     <div>
                                         <div className='div-discription'>
                                             City
@@ -167,13 +181,18 @@ function AddressCorp() {
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} type='City' required placeholder="" />
+                                                <Input style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                  }}
+                                                bordered={false} type='City' required placeholder="" />
 
                                             </Form.Item>
                                         )}
                                     </div>
                                 </Col>
-                                <Col span={6}>
+                                <Col xs={24} sm={15} md={6}>
                                     <div>
                                         <div className='div-discription'>
                                             State
@@ -197,13 +216,18 @@ function AddressCorp() {
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} type='State' required placeholder="" />
+                                                <Input style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                  }}
+                                                bordered={false} type='State' required placeholder="" />
 
                                             </Form.Item>
                                         )}
                                     </div>
                                 </Col>
-                                <Col span={6}>
+                                <Col xs={24} sm={15} md={6}>
                                     <div>
                                         <div className='div-discription'>
                                             Country
@@ -227,13 +251,18 @@ function AddressCorp() {
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} required placeholder="" />
+                                                <Input style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                  }}
+                                                bordered={false} required placeholder="" />
 
                                             </Form.Item>
                                         )}
                                     </div>
                                 </Col>
-                                <Col span={6}>
+                                <Col xs={24} sm={15} md={6}>
                                     <div>
                                         <div className='div-discription'>
                                             Pin Code
@@ -257,7 +286,12 @@ function AddressCorp() {
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }}  required placeholder="" />
+                                                <Input style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                  }}
+                                                bordered={false}  required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -305,6 +339,8 @@ function AddressCorp() {
                         } */}
                     </Card>
                 </Form>
+                </Col>
+                </Row>
             </div>
         </>
     );

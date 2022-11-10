@@ -31,7 +31,7 @@ function LoginPage() {
       const timer = setTimeout(() => {
         console.log('This will run after 0.75 seconds!')
         navigate("MainDashboardPage/MainDashBoard", { replace: true });
-      }, 1000);
+      }, 2000);
     } catch {
       setError("Failed to log in");
       setTimeout(() => {

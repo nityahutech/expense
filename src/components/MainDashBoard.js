@@ -206,21 +206,21 @@ function MainDashBoard() {
                 {leaveIcon()}
               </Col>
 
-              <Col span={8} className="hi">
+               {/* <Col span={8} className="hi">
                 {paySlipIcon()}
-              </Col>
+              </Col> */}
              
-              <Col span={8} className="hi">
+              {/* <Col span={8} className="hi">
                 {payrollIcon()}
-              </Col>
+              </Col> */}
               
-              <Col span={8} className="hi">
+              {/* <Col span={8} className="hi">
                 {employeeIcon()}
-              </Col>
+              </Col> */}
 
-              <Col span={8} className="hi">
+              {/* <Col span={8} className="hi">
                 {expenseIcon()}
-              </Col>
+              </Col>  */}
               
               
               <Col span={8} className="hi">
@@ -244,9 +244,9 @@ function MainDashBoard() {
                 </Link>
               </Col> */}
               
-              <Col span={8} className="hi">
+              {/* <Col span={8} className="hi">
                   {companyProfileIcon()}
-              </Col>
+              </Col> */}
               
               <Col span={8} className="hi">
                 {settingIcon()}
@@ -320,7 +320,70 @@ function MainDashBoard() {
           </Card>
         </Row>
       </>):null}
-      {isHr == "super" ? (<></>):null}
+      {isHr == "super" ? (<>
+        <Row >
+          <Col span={2}></Col>
+          <Card>
+            <Row gutter={[24,24]}>
+
+              {/* <Col span={8} className="hi">
+                {attendanceIcon()}
+              </Col> */}
+
+              {/* <Col span={8} className="hi">
+                {leaveIcon()}
+              </Col> */}
+
+              {/* <Col span={8} className="hi">
+                {paySlipIcon()}
+              </Col> */}
+             
+              {/* <Col span={8} className="hi">
+                {payrollIcon()}
+              </Col> */}
+              
+              {/* <Col span={8} className="hi">
+                {employeeIcon()}
+              </Col> */}
+
+              {/* <Col span={8} className="hi">
+                {expenseIcon()}
+              </Col> */}
+              
+              
+              <Col span={8} className="hi">
+                {myProfileIcon()}
+              </Col>
+
+              {/* <Col span={8} className="hi">
+                <Link to="/Appraisal">
+              <Card 
+                  bordered={false}
+                  hoverable={true}
+                  style={{fontWeight:"600"}}
+                >
+                  <img
+                      style={{width:"70px"}}
+                      alt="example"
+                      src={Appraisal}
+                />
+                  Appraisal
+                </Card>
+                </Link>
+              </Col> */}
+              
+              <Col span={8} className="hi">
+                  Orgazination
+              </Col>
+              
+              <Col span={8} className="hi">
+                {settingIcon()}
+              </Col>
+
+            </Row>
+          </Card>
+        </Row>
+      </>):null}
     </div>
   )
 }

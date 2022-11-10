@@ -200,6 +200,11 @@ const handleCancel = () => {
                   <Input placeholder="No. of Employee"></Input>
                 </FormItem>
               </Col>
+              <Col span={24}>
+                <FormItem>
+                  <Input placeholder=""></Input>
+                </FormItem>
+              </Col>
             </Row>
            </Form>
           </Modal>

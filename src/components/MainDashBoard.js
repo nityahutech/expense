@@ -15,182 +15,312 @@ import Myprofile from "../images/Myprofile.png"
 import Companyprofile from "../images/Companyprofile.png"
 import Settings from "../images/Settings.png"
 import { Link } from 'react-router-dom';
+
 function MainDashBoard() {
   const isHr = sessionStorage.getItem("role");
-  return (
-    <div className='icon-container'>
-      <Card>
-        <Row gutter={[8,24]}>
-          <Col span={8} className="hi">
-            <Link to="/Attendance/AttendanceLog">
+
+  const attendanceIcon = () => {
+    return (
+      <Link to="/Attendance/AttendanceLog">
               <Card 
                 bordered={false}
                 hoverable={true}
-                style={{fontWeight:"600"}}
+                style={{fontWeight:"600",fontSize:"20px", letterSpacing:"4px"}}
               >
                 <img 
-                style={{width:"70px"}}
+                style={{width:"140px"}}
                     alt="example"
                     src={Attendancelog}
               />
               Attendance Log
               </Card>
             </Link>
-          </Col>
-          <Col span={8} className="hi">
-            <Link to="/Employee/Leave">
-            <Card 
-                bordered={false}
-                hoverable={true}
-                style={{fontWeight:"600"}}
-              >
-                <img
-                    style={{width:"70px"}}
-                    alt="example"
-                    src={leaveicon}
-              />
-                Leave
-              </Card>
-            </Link>
-          </Col>
-          { isHr == "hr" ? (
-            <Col span={8} className="hi">
-            <Link to="/PaySlipPage/PaySlip">
-              <Card 
-                bordered={false}
-                hoverable={true}
-                style={{fontWeight:"600"}}
-              >
-                <img
-                  style={{width:"70px"}}
-                  alt="example"
-                  src={Payslip}
+    )
+  }
+
+  const leaveIcon = () => {
+    return(
+      <Link to="/Employee/Leave">
+                <Card 
+                    bordered={false}
+                    hoverable={true}
+                    style={{fontWeight:"600",fontSize:"20px", letterSpacing:"6px"}}
+                  >
+                    <img
+                        style={{width:"140px"}}
+                        alt="example"
+                        src={leaveicon}
+                  />
+                    Leave
+                  </Card>
+                </Link>
+    )
+  }
+  
+  const paySlipIcon = () => {
+    return (
+      <Link to="/PaySlipPage/PaySlip">
+                  <Card 
+                    bordered={false}
+                    hoverable={true}
+                    style={{fontWeight:"600",fontSize:"20px", letterSpacing:"6px"}}
+                  >
+                    <img
+                      style={{width:"140px"}}
+                      alt="example"
+                      src={Payslip}
+                    />
+                    Pay Slip Generator
+                  </Card>
+                </Link>            
+    )
+  }
+
+  const payrollIcon = () => {
+    return (
+      <Link to="/Payslip2/HrPaySlip">
+              <Card
+                  bordered={false}
+                  hoverable={true}
+                  style={{fontWeight:"600",fontSize:"20px", letterSpacing:"6px"}}
+                >
+                  <img
+                      style={{width:"140px"}} 
+                      alt="example"
+                      src={Payroll}
                 />
-                Pay Slip Generator
-              </Card>
-            </Link>            
-            </Col>
-          ) : null}
-          <Col span={8} className="hi">
-            <Link to="/Payslip2/HrPaySlip">
-          <Card
-              bordered={false}
-              hoverable={true}
-              style={{fontWeight:"600"}}
-            >
-              <img
-                  style={{width:"70px"}} 
-                  alt="example"
-                  src={Payroll}
-             />
-              Payroll
-            </Card>
-            </Link>
-          </Col>
-          { isHr == "hr" ? (
-            <>
-          <Col span={8} className="hi">
-            <Link to="/EmployeeListPage/EmployeeList">
-          <Card 
-              bordered={false}
-              hoverable={true}
-              style={{fontWeight:"600"}}
-            >
-              <img
-                  style={{width:"70px"}}
-                  alt="example"
-                  src={Employeelist}
-             />
-              Employee List
-            </Card>
-            </Link>
-          </Col>
-          <Col span={8} className="hi">
-            <Link to="/Expense/ExpenseList">
-          <Card 
-              bordered={false}
-              hoverable={true}
-              style={{fontWeight:"600"}}
-            >
-              <img
-                  style={{width:"70px"}}
-                  alt="example"
-                  src={Expenses}
-             />
-              Expense
-            </Card>
-            </Link>
-          </Col>
-          </>
-          ) :null}
-          <Col span={8} className="hi">
-            <Link to="/Profile">
-          <Card 
-              bordered={false}
-              hoverable={true}
-              style={{fontWeight:"600"}}
-            >
-              <img
-                   style={{width:"70px"}}
-                  alt="example"
-                  src={Myprofile}
-             />
-              My Profile
-            </Card>
-            </Link>
-          </Col>
-          {/* <Col span={8} className="hi">
-            <Link to="/Appraisal">
-          <Card 
-              bordered={false}
-              hoverable={true}
-              style={{fontWeight:"600"}}
-            >
-              <img
-                   style={{width:"70px"}}
-                  alt="example"
-                  src={Appraisal}
-             />
-              Appraisal
-            </Card>
-            </Link>
-          </Col> */}
-          { isHr == "hr" ? (
-            <Col span={8} className="hi">
-            <Link to="/CompanyProfilepage">
-          <Card 
-              bordered={false}
-              hoverable={true}
-              style={{fontWeight:"600"}}
-            >
-              <img
-                  style={{width:"70px"}}
-                  alt="example"
-                  src={Companyprofile}
-             />
-              Company Profile
-            </Card>
-            </Link>
-          </Col>
-          ) : null}
-          <Col span={8} className="hi">
-            <Link to="/Setting">
-          <Card 
-              bordered={false}
-              hoverable={true}
-              style={{fontWeight:"600"}}
-            >
-              <img
-                  style={{width:"70px"}}
-                  alt="example"
-                  src={Settings}
-             />
-              Setting
-            </Card>
-            </Link>
-          </Col>
+                  Payroll
+                </Card>
+                </Link>
+    )
+  }
+
+  const employeeIcon = () => {
+    return (
+      <Link to="/EmployeeListPage/EmployeeList">
+              <Card 
+                  bordered={false}
+                  hoverable={true}
+                  style={{fontWeight:"600",fontSize:"20px", letterSpacing:"6px"}}
+                >
+                  <img
+                      style={{width:"140px"}}
+                      alt="example"
+                      src={Employeelist}
+                />
+                  Employee List
+                </Card>
+                </Link>
+    )
+  }
+
+  const expenseIcon = () => {
+    return (
+      <Link to="/Expense/ExpenseList">
+      <Card 
+          bordered={false}
+          hoverable={true}
+          style={{fontWeight:"600",fontSize:"20px", letterSpacing:"6px"}}
+        >
+          <img
+              style={{width:"140px"}}
+              alt="example"
+              src={Expenses}
+        />
+          Expense
+        </Card>
+        </Link>
+    )
+  }
+
+  const myProfileIcon = () => {
+    return(
+      <Link to="/Profile">
+              <Card 
+                  bordered={false}
+                  hoverable={true}
+                  style={{fontWeight:"600",fontSize:"20px", letterSpacing:"6px"}}
+                >
+                  <img
+                      style={{width:"140px"}}
+                      alt="example"
+                      src={Myprofile}
+                />
+                  My Profile
+                </Card>
+                </Link>
+    )
+  }
+
+  const companyProfileIcon = () => {
+    return(
+      <Link to="/CompanyProfilepage">
+                  <Card 
+                    bordered={false}
+                    hoverable={true}
+                    style={{fontWeight:"600",fontSize:"20px", letterSpacing:"6px"}}
+                  >
+                    <img
+                        style={{width:"140px"}}
+                        alt="example"
+                        src={Companyprofile}
+                  />
+                    Company Profile
+                  </Card>
+                  </Link>
+    )
+  }
+
+  const settingIcon = () => {
+    return(
+      <Link to="/Setting">
+      <Card 
+          bordered={false}
+          hoverable={true}
+          style={{fontWeight:"600",fontSize:"20px", letterSpacing:"6px"}}
+        >
+          <img
+              style={{width:"140px"}}
+              alt="example"
+              src={Settings}
+        />
+          Setting
+        </Card>
+        </Link>
+    )
+  }
+
+  return (
+    <div className='icon-container'>
+      {isHr == "emp" ? (<>
+        <Row >
+          <Col span={2}></Col>
+          <Card>
+            <Row gutter={[24,24]}>
+
+              <Col span={8} className="hi">
+                {attendanceIcon()}
+              </Col>
+
+              <Col span={8} className="hi">
+                {leaveIcon()}
+              </Col>
+
+              <Col span={8} className="hi">
+                {paySlipIcon()}
+              </Col>
+             
+              <Col span={8} className="hi">
+                {payrollIcon()}
+              </Col>
+              
+              <Col span={8} className="hi">
+                {employeeIcon()}
+              </Col>
+
+              <Col span={8} className="hi">
+                {expenseIcon()}
+              </Col>
+              
+              
+              <Col span={8} className="hi">
+                {myProfileIcon()}
+              </Col>
+
+              {/* <Col span={8} className="hi">
+                <Link to="/Appraisal">
+              <Card 
+                  bordered={false}
+                  hoverable={true}
+                  style={{fontWeight:"600"}}
+                >
+                  <img
+                      style={{width:"70px"}}
+                      alt="example"
+                      src={Appraisal}
+                />
+                  Appraisal
+                </Card>
+                </Link>
+              </Col> */}
+              
+              <Col span={8} className="hi">
+                  {companyProfileIcon()}
+              </Col>
+              
+              <Col span={8} className="hi">
+                {settingIcon()}
+              </Col>
+
+            </Row>
+          </Card>
         </Row>
-      </Card>
+      </>):null}
+      {isHr == "hr" ? (<>
+        <Row >
+          <Col span={2}></Col>
+          <Card>
+            <Row gutter={[24,24]}>
+
+              <Col span={8} className="hi">
+                {attendanceIcon()}
+              </Col>
+
+              <Col span={8} className="hi">
+                {leaveIcon()}
+              </Col>
+
+              <Col span={8} className="hi">
+                {paySlipIcon()}
+              </Col>
+             
+              <Col span={8} className="hi">
+                {payrollIcon()}
+              </Col>
+              
+              <Col span={8} className="hi">
+                {employeeIcon()}
+              </Col>
+
+              <Col span={8} className="hi">
+                {expenseIcon()}
+              </Col>
+              
+              
+              <Col span={8} className="hi">
+                {myProfileIcon()}
+              </Col>
+
+              {/* <Col span={8} className="hi">
+                <Link to="/Appraisal">
+              <Card 
+                  bordered={false}
+                  hoverable={true}
+                  style={{fontWeight:"600"}}
+                >
+                  <img
+                      style={{width:"70px"}}
+                      alt="example"
+                      src={Appraisal}
+                />
+                  Appraisal
+                </Card>
+                </Link>
+              </Col> */}
+              
+              <Col span={8} className="hi">
+                  {companyProfileIcon()}
+              </Col>
+              
+              <Col span={8} className="hi">
+                {settingIcon()}
+              </Col>
+
+            </Row>
+          </Card>
+        </Row>
+      </>):null}
+      {isHr == "super" ? (<></>):null}
     </div>
   )
 }

@@ -81,7 +81,7 @@ const AppraisalHr = () => {
             {empRole === 'lead' && <EmpAppraisalTable listType='lead' title='Appraisal Pending For Review (Lead)' />}
             {employeeRecord && employeeRecord.isManager && <EmpAppraisalTable listType='mgr' title='Appraisal Pending For Review (Manager)' />}
 
-        </div >
+        </div>
     )
 }
 

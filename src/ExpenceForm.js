@@ -51,7 +51,7 @@ const ExpenceForm = () => {
       amount: values['amount'],
       catname: values['expence'],
       date: values['paymentDate'].format('DD-MM-YYYY'),
-      description: values['description'],
+      description: values['description']?values['description']:null,
       name: values['paidByInput'],
       paidname: values['paidto'],
       quantity: values['Quantity'],
@@ -345,12 +345,12 @@ function capitalize(str) {
                 <Divider orientation='left' orientationMargin={0}>Descriptions</Divider>
                 <Form.Item
                   name="description"
-                  rules={[
-                    {
-                      required: '',
-                      message: "Please enter the Description ",
-                    },
-                  ]}
+                  // rules={[
+                  //   {
+                  //     required: 'false',
+                  //     message: "Please enter the Description ",
+                  //   },
+                  // ]}
                 >
                   <TextArea rows={3} />
                 </Form.Item>

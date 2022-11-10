@@ -43,7 +43,7 @@ const Statutory = () => {
   const onFinish = (value) => {
     const valuesToservice = {
       entityType: value.entityType,
-      cinNumber: value.cinNumber,
+      cinName: value.cinName,
       dateOfIncorp: value.dateOfIncorp,
       compPan: value.compPan,
       compTan: value.compTan,
@@ -349,11 +349,11 @@ const Statutory = () => {
                   CIN
                 </div>
                 {editContent === false ? (
-                  <div>{data.cinNumber ? data.cinNumber : "-"}</div>
+                  <div>{data.cinName ? data.cinName : "-"}</div>
                 ) : (
                   <Form.Item
-                    initialValue={data ? data.cinNumber : null}
-                    name="cinNumber"
+                    initialValue={data ? data.cinName : null}
+                    name="cinName"
                     rules={[
                       {
                         // required: true,
@@ -530,6 +530,7 @@ const Statutory = () => {
       </Form>
 
         <Card style={{marginTop:"1rem",width:'800px'}}>
+          
           <Tabs defaultActiveKey="1" className='tabs'>
             <Tabs.TabPane tab="Directors" key="1">
                 <Card
@@ -750,6 +751,8 @@ const Statutory = () => {
                 </Form>                  
                 </Card>
             </Tabs.TabPane>
+
+
             <Tabs.TabPane tab="Auditors" key="2">
                   <Card
                         title="Auditors"

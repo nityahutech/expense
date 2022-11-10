@@ -47,13 +47,40 @@ body {
   padding: 0 4px;
   margin-left: -4px;
 }
+/* 
+input[type="text"][disabled] {
+  background-color: white !important;
+  border: none !important;
+  color: #000 !important;
+}
 
-
+.ant-input[disabled] {
+  background-color: white !important;
+  border: none !important;
+  color: #000 !important;
+} */
 
 /* .active {
   background-color: green !important;
   color: white !important;
 } */
+
+.viewAppraisalModal .ant-modal-content {
+  border-radius: 10px;
+  /* width:820px; */
+}
+
+.viewAppraisalModal .ant-modal-header {
+  border-radius: 10px 10px 0px 0px;
+  background: #043661;
+  color: #ffffff;
+}
+.viewAppraisalModal .ant-modal-title {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 25px;
+}
 
 @media only screen and (max-width: 600px) {
   .appraisal-div {

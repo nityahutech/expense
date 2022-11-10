@@ -16,7 +16,7 @@
   box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
 }
 
-.employeeTable .ant-table-thead > tr > th {
+.employeeAppraisalTable .ant-table-thead > tr > th {
   background: #1963a6;
   color: #ffffff;
   font-weight: 500;
@@ -24,7 +24,7 @@
   line-height: 18px;
 }
 
-.employeeTable:hover .ant-table-thead > tr > th {
+.employeeAppraisalTable:hover .ant-table-thead > tr > th {
   background: #1963a6;
   color: #ffffff;
   font-weight: 500;

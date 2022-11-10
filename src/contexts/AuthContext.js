@@ -5,7 +5,6 @@ import { signInWithEmailAndPassword,
          sendPasswordResetEmail,
          updateEmail,
          updatePassword,
-         deleteUser,
          updatePhoneNumber,
          updateProfile
 } from "@firebase/auth"
@@ -52,25 +51,20 @@ export function AuthProvider({ children }) {
   }
 
   function updateMyProfile(name) {
-    return updateProfile(currentUser, name)
+    return updateProfile(currentUser, {displayName: name})
   }
 
   function updateMyPhNo(phno) {
-    return updatePhoneNumber(currentUser, phno)
+    return updatePhoneNumber(currentUser, {displayName: phno})
   }
 
   function updateMyEmail(email) {
     updateDoc(doc(db, `companyprofile/${compId}/users`, currentUser.uid), {mailid: email});
-    return updateEmail(currentUser, email)
+    return updateEmail(currentUser, {displayName: email})
   }
 
   function updateMyPassword(password) {
     return updatePassword(currentUser, password)
-  }
-
-  async function disablePerson(id) {
-    await updateProfile(id, {disabled: true})
-    return 
   }
 
   useEffect(() => {
@@ -92,7 +86,6 @@ export function AuthProvider({ children }) {
     resetPassword,
     updateMyEmail,
     updateMyPassword,
-    disablePerson,
     updateMyProfile,
     updateMyPhNo
   }

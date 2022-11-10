@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Input, Button, DatePicker, Select, Form, Tabs, Table, Divider } from "antd";
+import { Card, Row, Col, Input, Button, DatePicker, Select, Form,Modal, Tabs, Table, Divider } from "antd";
 import { CloseOutlined, EditFilled, CheckOutlined, SearchOutlined, PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 // import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { useAuth } from "../../contexts/AuthContext";
 import "./companystyle.css";
 import FormItem from "antd/es/form/FormItem";
-
+import CompanyProContext from "../../contexts/CompanyProContext";
 
 const { TextArea } = Input;
+const compId = sessionStorage.getItem("compId");
 const { Option } = Select;
-
 
 const Statutory = () => {
 
@@ -18,8 +18,8 @@ const Statutory = () => {
   const [editCompanyID, showeditCompanyID] = useState(false);
 
   // ------------------------------------------------------states for Bank Info
-  const [editBai, setEditBai] = useState(false);
-  const [baiList, setBaiList] = useState([]);
+  const [editBai, setEditBAI] = useState(false);
+  const [baiList, setBAIList] = useState([]);
   const [form3] = Form.useForm();
 
   // -------------------------------------------------------states for Director tag
@@ -36,50 +36,44 @@ const Statutory = () => {
   const [editCS, setEditCS] = useState(false);
   const [cSList, setCSList] = useState([]);
   const [form2] = Form.useForm();
-
-  
-  const [dob, setDob] = useState("");
-  const [scrs, setScrs] = useState("");
-  const [lccs, setLccs] = useState("");
  
   const [editAddressInfo, showEditAddressInfo] = useState(false);
   // const [cancelEditContent, setcancelEditContent] = useState(false);
   const [data, setData] = useState([]);
-  const { currentUser } = useAuth();
   const onFinish = (value) => {
-    let nameArray = value.name.split(" ");
-    let fname = "";
-    for (let i = 0; i < nameArray.length - 1; i++) {
-      fname = i != 0 ? " " + fname + nameArray[i] : fname + nameArray[i];
+    const valuesToservice = {
+      entityType: value.entityType,
+      cinName: value.cinName,
+      dateOfIncorp: value.dateOfIncorp,
+      compPan: value.compPan,
+      compTan: value.compTan,
+      gst: value.gst      
     }
-    let record = {
-      ...value,
-      lname: nameArray[nameArray.length - 1],
-      fname: fname,
-      dob: dob ? dob : null,
-    };
-    delete record["name"];
     
+    CompanyProContext.updateCompInfo("compId001",valuesToservice);
     getData();
     showEditContent(false);
   };
   
-  const onContactFinish = (values) => {
-   
+  useEffect(() => {
     getData();
-    showeditCompanyID(false);
-  };
+    }, []);
+    const getData = async () => {
+      let data = await CompanyProContext.getCompanyProfile("compId001");
+      setData(data);
+      setDirectorList(data.director);
+      setAuditorList(data.auditor);
+      setCSList(data.secretary);
+      setBAIList(data.bank);
+      
+    };
+    
+  // const onContactFinish = (values) => {
+   
+  //   getData();
+  //   showeditCompanyID(false);
+  // };
   
-  const getData = async () => {
-    // let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    setData(data);
-    setDob(data.dob ? data.dob : null);
-    setLccs(data.lccs ? data.lccs : null);
-    setScrs(data.scrs ? data.scrs : null);
-  };
-  
-
-
   const handleChange = (value) => {
     console.log(`selected ${value}`);
   };
@@ -88,76 +82,194 @@ const Statutory = () => {
       return true;
     }
   };
-
-
   // ------------------------------------function for addDirector
   function addDirector (values) {
-    console.log(values);
-    setDirectorList([...directorList,values])
-    showEditDirectors(false)
-    form.resetFields();
-  }
+    const record = {
+      directorName: values.directorName,
+      directoremailid: values.directoremailid,
+      directordin: values.directordin,
+      directorphone: values.directorphone,    
+    }
+    console.log(record)
+    CompanyProContext.addCompInfo("compId001", { director: record });
+        form.resetFields()
+        getData();
+        showEditDirectors(false);
+      };
 
   //-------------------------------------function for deleting data entered in the director tab
-  function deleteDirector (deldir) {
-    console.log(deldir);
-    const filterDirectorData = directorList.filter(
-      (item) => item.directoremailid !== deldir.directoremailid
-    );
-    setDirectorList(filterDirectorData);
-  }
+  // function deleteDirector (deldir) {
+  //   let record={
+  //     directorName:null,
+  //     directoremailid: null,
+  //     directordin: null,
+  //     directorphone: null, 
+  //   }
+  //   console.log(deldir);
+  //   const filterDirectorData = directorList.filter(
+  //     (item) => item.directoremailid !== deldir.directoremailid
+  //   );
+  //   CompanyProContext.updateCompInfo(compId,record)
+  //   .then((response) => {
+  //              console.log(response);
+  //              })
+  //     setDirectorList(filterDirectorData);
+  //     showEditDirectors(false)
+  // }
+  const onDeleteDirector = (record) => {
+    Modal.confirm({
+    title: "Are you sure, you want to delete Director?",
+    okText: "Yes",
+    okType: "danger",
 
-  // -----------------------------------function for addAuditor
+    onOk: () => {
+        CompanyProContext.deleteCompInfo("compId001", { director: record })
+        .then((response) => {
+          console.log(response);
+          getData();
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    },
+  });
+  }
+  
+ // // -----------------------------------function for addAuditor
   function addAuditor (values) {
-    console.log(values);
-    setAuditorList([...auditorList,values])
-    setEditAuditor(false);
-    form1.resetFields();
-  }
+    let record1={
+      auditorName:values.auditorName,
+      auditormailid:values.auditormailid,
+      auditortype:values.auditortype,
+      auditorphone: values.auditorphone, 
+    }
+    console.log(record1)
+    CompanyProContext.addCompInfo("compId001", { auditor: record1 });
+        form1.resetFields()
+        getData();
+        setEditAuditor(false);
+      };
 
-  // ----------------------------------Function for deleting data entered in the auditor tab
-  function deleteAuditor (delAudit) {
-    console.log(delAudit);
-    const filterAuditorData = auditorList.filter(
-      (item) => item.auditormailid !== delAudit.auditormailid
-    );
-    setAuditorList(filterAuditorData);
-  }
+      const onDeleteAuditor = (record1) => {
+        Modal.confirm({
+        title: "Are you sure, you want to delete Auditor?",
+        okText: "Yes",
+        okType: "danger",
+    
+        onOk: () => {
+            CompanyProContext.deleteCompInfo("compId001", { auditor: record1 })
+            .then((response) => {
+              console.log(response);
+              getData();
+            })
+            .catch((error) => {
+              console.log(error.message);
+            });
+        },
+      });
+      }
+      
+   // ----------------------------------Function for deleting data entered in the auditor tab
+  // function deleteAuditor (delAudit) {
+  //   let record1={
+  //     auditorName:null,
+  //     auditormailid: null,
+  //     auditortype: null,
+  //     auditorphone: null, 
+  //   }
+  //   console.log(delAudit);
+  //   const filterAuditorData = auditorList.filter(
+  //     (item) => item.auditormailid !== delAudit.auditormailid
+  //   );
+  //   CompanyProContext.updateCompInfo(compId,record1)
+  //   .then((response) => {
+  //              console.log(response);
+  //              })
+  //     setAuditorList(filterAuditorData);
+  //     setEditAuditor(false)
+  // }
 
   // ------------------function for add Company Sacretary
   function addCS (values) {
-    console.log(values);
-    setCSList([...cSList,values])
-    setEditCS(false);
-    form2.resetFields();
-  }
-
-  // -------------function for deleting data entered in Company Sacretary tab
-  function deleteCS (delComp) {
-    // console.log(delComp);
-    const filterCSData = cSList.filter(
-      (item) => item.sacmailid !== delComp.sacmailid
-    );
-    setCSList(filterCSData);
-  }
-
-  // ------------function for adding Bank Account Information
+    let record2={
+      secName:values.secName,
+      secmailid:values.secmailid,
+      secphone:values.secphone,
+    }
+    CompanyProContext.addCompInfo("compId001", { secretary: record2 });
+        form2.resetFields()
+        getData();
+        setEditCS(false);
+      };
+      const onDeleteSecretary = (record2) => {
+        Modal.confirm({
+        title: "Are you sure, you want to delete Secretary?",
+        okText: "Yes",
+        okType: "danger",
+    
+        onOk: () => {
+            CompanyProContext.deleteCompInfo("compId001", { secretary: record2 })
+            .then((response) => {
+              console.log(response);
+              getData();
+            })
+            .catch((error) => {
+              console.log(error.message);
+            });
+        },
+      });
+      }
+        // -------------function for deleting data entered in Company Sacretary tab
+  // function deleteCS (delComp) {
+  //   // console.log(delComp);
+  //   const filterCSData = cSList.filter(
+  //     (item) => item.sacmailid !== delComp.sacmailid
+  //   );
+  //   setCSList(filterCSData);
+  // }
+  //------------function for adding Bank Account Information
   function addBAI (values) {
-    console.log(values);
-    setBaiList([...baiList,values]);
-    setEditBai(false);
-    form3.resetFields();
-  }
-
-  // ---------function for deleting data entered in Bank account Information
-  function deleteBAI (delBAI) {
-    console.log(delBAI);
-    const filterBAIData = baiList.filter(
-      (item) => item.baibranchname !== delBAI.baibranchname
-    );
-    setBaiList(filterBAIData);
-  }
-
+    let record3={
+      baiaccountitle:values.baiaccountitle,
+      baiifsccode:values.baiifsccode,
+      baiaccounttype:values.baiaccounttype,
+      baibankname:values.baibankname,
+      baicity:values.baicity,
+      baibranchname:values.baibranchname,
+      baiaccountnumber:values.baiaccountnumber,
+    }
+    CompanyProContext.addCompInfo("compId001", { bank: record3 });
+        form3.resetFields()
+        getData();
+        setEditBAI(false);
+      };
+      const onDeleteBank = (record3) => {
+        Modal.confirm({
+        title: "Are you sure, you want to delete Bank Account?",
+        okText: "Yes",
+        okType: "danger",
+    
+        onOk: () => {
+            CompanyProContext.deleteCompInfo("compId001", { bank: record3 })
+            .then((response) => {
+              console.log(response);
+              getData();
+            })
+            .catch((error) => {
+              console.log(error.message);
+            });
+        },
+      });
+      }
+      
+  // // ---------function for deleting data entered in Bank account Information
+  // function deleteBAI (delBAI) {
+  //   console.log(delBAI);
+  //   const filterBAIData = baiList.filter(
+  //     (item) => item.baibranchname !== delBAI.baibranchname
+  //   );
+  //   setBAIList(filterBAIData);
+  // }
 
   return (
 
@@ -176,7 +288,7 @@ const Statutory = () => {
           remember: true,
         }}
         autoComplete="off"
-        onFinish={onContactFinish}
+        onFinish={onFinish}
       >
         <Card
           title=" COMPANY ID"
@@ -184,11 +296,11 @@ const Statutory = () => {
           // className="card1"
           extra={
             <>
-              {editCompanyID === false ? (
+              {editContent === false ? (
                 <Button
                   type="text"
                   style={{ color: "#4ec0f1" }}
-                  onClick={() => showeditCompanyID(!editCompanyID)}
+                  onClick={() => showEditContent(!editContent)}
                 >
                   <EditFilled />
                 </Button>
@@ -197,32 +309,33 @@ const Statutory = () => {
           }
           
         >
+          
           <Row gutter={[16, 16]}>
             <Col span={8}>
               <div>
                 <div style={{ fontWeight: "bold", fontSize: "15px", }}>
                   Entity Type
                 </div>
-                {editCompanyID === false ? (
-                  <div>{data.mailid ? data.mailid : "-"}
+                {editContent === false ? (
+                  <div>{data.entityType ? data.entityType : "-"}
                   </div>
                 ) : (
                   <Form.Item
-                    initialValue={data ? data.mailid : null}
+                    initialValue={data ? data.entityType : null}
+                    
                     name="entityType"
                     rules={[
                       {
                         required: true,
-                        message: "Please enter Entity Type",
-                        type: "name",                        
+                        message: "Please enter Company Name",
+                        type: "name",
                       },
                       {
-                        pattern: /^[a-zA-Z\s]*$/,
                         message: "Please enter Valid Company Name",
                       },
                     ]}
                   >
-                    <Input type='CompamyName' required placeholder="Enter Entity Type" bordered={false}
+                    <Input type='CompamyName' required placeholder="Enter Comapany Name"bordered={false}
                    style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
@@ -235,22 +348,24 @@ const Statutory = () => {
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   CIN
                 </div>
-                {editCompanyID === false ? (
-                  <div>{data.contactEmail ? data.contactEmail : "-"}</div>
+                {editContent === false ? (
+                  <div>{data.cinName ? data.cinName : "-"}</div>
                 ) : (
                   <Form.Item
-                    initialValue={data ? data.contactEmail : null}
-                    name="cinnumber"
+                    initialValue={data ? data.cinName : null}
+                    name="cinName"
                     rules={[
                       {
-                        pattern: /^[0-9\b]+$/,
-                        required: true,
-                        message: "Please enter CIN number",
-                        type: "email",
+                        // required: true,
+                        // message: "Please enter Brand Name",
+                        // type: "email",
+                      },
+                      {
+                        message: "Please enter Valid Brand Name",
                       },
                     ]}
                   >
-                    <Input maxLength={20} type='brandName' required placeholder="Enter CIN Number" bordered={false}
+                    <Input type='brandName' required placeholder="Enter Brand Name" bordered={false}
                    style={{borderBottom: '1px solid #ccc '}}/>
                   </Form.Item>
                 )}
@@ -262,60 +377,59 @@ const Statutory = () => {
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   Date of Incorporation
                 </div>
-                {editCompanyID === false ? (
-                  <div>{data.mailid ? data.mailid : "-"}
+                {editContent === false ? (
+                  <div>{data.dateOfIncorp ? data.dateOfIncorp : "-"}
                   </div>
                 ) : (
                   <Form.Item
-                    initialValue={data ? data.mailid : null}
-                    name="DOI"
+                    initialValue={data ? data.dateOfIncorp : null}
+                    name="dateOfIncorp"
                     rules={[
                       {
                         required: true,
-                        message: "Please enter DOI",
+                        message: "Please enter Website Name",
                         type: "Website",
                       },
                       {
-                        pattern: /^[0-9/\s]*$/,
-                        message: "Please enter Valid DOI",
+                        message: "Please enter Valid Website Name",
                       },
                     ]}
                   >
-                    <Input  placeholder="Enter DOI" bordered={false}
-                    maxLength="10"
+                    <Input type='WebsiteName' required placeholder="Enter Website Name" bordered={false}
                    style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
                 )}
               </div>
             </Col>
+          </Row>
+
+          <Row gutter={[16, 16]} style={{ marginTop: "5%", }}>
 
             <Col span={8}>
               <div>
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   Company PAN
                 </div>
-                {editCompanyID === false ? (
-                  <div>{data.mailid ? data.mailid : "-"}
+                {editContent === false ? (
+                  <div>{data.compPan ? data.compPan : "-"}
                   </div>
                 ) : (
                   <Form.Item
-                    initialValue={data ? data.mailid : null}
-                    name="companypan"
+                    initialValue={data ? data.compPan : null}
+                    name="compPan"
                     rules={[
                       {
                         required: true,
-                        message: "Please enter Company PAN",
-                        type: "companypan",
+                        message: "Please enter Domain Name",
+                        type: "domain",
                       },
                       {
-                        pattern: /^[0-9A-Z\s]*$/,
-                        message: "Please enter Valid Company PAN",
+                        message: "Please enter Valid Domain Name",
                       },
                     ]}
                   >
-                    <Input type='DomainName' required placeholder="Enter Conpany PAN" bordered={false}
-                   maxLength="10"
+                    <Input type='DomainName' required placeholder="Enter Domain Name" bordered={false}
                    style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
@@ -328,27 +442,25 @@ const Statutory = () => {
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   Company TAN
                 </div>
-                {editCompanyID === false ? (
-                  <div>{data.mailid ? data.mailid : "-"}
+                {editContent === false ? (
+                  <div>{data.compTan ? data.compTan : "-"}
                   </div>
                 ) : (
                   <Form.Item
-                    initialValue={data ? data.mailid : null}
-                    name="companytan"
+                    initialValue={data ? data.compTan : null}
+                    name="compTan"
                     rules={[
                       {
                         required: true,
-                        message: "Please enter Company TAN",
-                        type: "companytan",
+                        message: "Please enter Domain Name",
+                        type: "domain",
                       },
                       {
-                        pattern: /^[0-9A-Z\s]*$/,
-                        message: "Please enter Valid Company TAN",
+                        message: "Please enter Valid Domain Name",
                       },
                     ]}
                   >
-                    <Input type='DomainName' required placeholder="Enter Company TAN" bordered={false}
-                    maxLength="10"
+                    <Input type='DomainName' required placeholder="Enter Domain Name" bordered={false}
                    style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
@@ -361,37 +473,34 @@ const Statutory = () => {
                 <div style={{ fontWeight: "bold", fontSize: "15px" }}>
                   GST
                 </div>
-                {editCompanyID === false ? (
-                  <div>{data.mailid ? data.mailid : "-"}
+                {editContent === false ? (
+                  <div>{data.gst ? data.gst : "-"}
                   </div>
                 ) : (
                   <Form.Item
-                    initialValue={data ? data.mailid : null}
-                    name="domain"
+                    initialValue={data ? data.gst : null}
+                    name="gst"
                     rules={[
                       {
                         required: true,
-                        message: "Please enter GST Number",
+                        message: "Please enter Domain Name",
                         type: "domain",
                       },
                       {
-                        pattern: /^[0-9A-Z\s]*$/,
-                        message: "Please enter Valid GST Number",
+                        message: "Please enter Valid Domain Name",
                       },
                     ]}
                   >
-                    <Input type='DomainName' required placeholder="Enter GST Number" bordered={false}
-                    maxLength="14"
+                    <Input type='DomainName' required placeholder="Enter Domain Name" bordered={false}
                    style={{borderBottom: '1px solid #ccc '}} />
                     {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                   </Form.Item>
                 )}
               </div>
             </Col>
-          </Row>
 
-          
-          {editCompanyID === true ? (
+          </Row>
+          {editContent === true ? (
             <Row
               style={{
                 display: "flex",
@@ -402,7 +511,7 @@ const Statutory = () => {
               <Button
                 type="text"
                 style={{ fontSize: 15 }}
-                onClick={() => showeditCompanyID(false)}
+                onClick={() => showEditContent(false)}
               >
                 <CloseOutlined /> CANCEL
               </Button>
@@ -497,7 +606,7 @@ const Statutory = () => {
                             alignItems:"end",
                           }}
                           onClick={() => {
-                            deleteDirector(u);
+                            onDeleteDirector(u);
                           }}
                         >
                           <DeleteOutlined />
@@ -554,11 +663,8 @@ const Statutory = () => {
                             label="Email ID"
                             rules={[
                               {
-                                type:'email',
                                 required: true,
                                 message: 'Please enter valid email ID',
-                                pattern:
-                                        "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;"
                               },
                               // {
                               //   pattern:
@@ -611,7 +717,7 @@ const Statutory = () => {
                                 message: 'Please enter your phone no',
                               },
                               {
-                                pattern: /^[0-9]\d{9}$/,
+                                pattern: /^[6-9]\d{9}$/,
                                 message: "Please Enter Valid Number",
                               },
                             ]}
@@ -732,7 +838,7 @@ const Statutory = () => {
                                         alignItems:"end",
                                       }}
                                       onClick={() => {
-                                        deleteAuditor(u);
+                                        onDeleteAuditor(u);
                                       }}
                                     >
                                       <DeleteOutlined />
@@ -789,11 +895,8 @@ const Statutory = () => {
                                   label="Email ID"
                                   rules={[
                                     {
-                                      type:'email',
                                       required: true,
                                       message: 'Please enter valid email ID',
-                                      pattern:
-                                        "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;"
                                     },
                                     // {
                                     //   pattern:
@@ -916,7 +1019,7 @@ const Statutory = () => {
                                 borderBottom: '1px solid #ccc ',
                               }}
                               bordered={false}
-                              value={u.sacName} 
+                              value={u.secName} 
                             />
                           </Col>
                           <Col xs={22} sm={15} md={10}>
@@ -927,7 +1030,7 @@ const Statutory = () => {
                               borderBottom: '1px solid #ccc ',
                             }}
                             bordered={false}
-                            value={u.sacmailid} 
+                            value={u.secmailid} 
                             />
                           </Col>
                           <Col xs={22} sm={15} md={6}>
@@ -938,7 +1041,7 @@ const Statutory = () => {
                                 borderBottom: '1px solid #ccc ',
                               }}
                               bordered={false}
-                              value={u.sacphone}
+                              value={u.secphone}
                             />
                           </Col>
                           <Col xs={22} sm={15} md={2}
@@ -956,7 +1059,7 @@ const Statutory = () => {
                                         alignItems:"end",
                                       }}
                                       onClick={() => {
-                                        deleteCS(u);
+                                        onDeleteSecretary(u);
                                       }}
                                     >
                                       <DeleteOutlined />
@@ -978,7 +1081,7 @@ const Statutory = () => {
                         <Col xs={22} sm={15} md={8}>
                           <FormItem
                                     label="Name"
-                                    name="sacName"
+                                    name="secName"
                                     onKeyPress={(event) => {
                                       if (checkAlphabets(event)) {
                                         event.preventDefault();
@@ -1008,19 +1111,18 @@ const Statutory = () => {
                         </Col>
                         <Col xs={22} sm={15} md={8}>
                         <FormItem
-                                  name="sacmailid"
+                                  name="secmailid"
                                   label="Email ID"
                                   rules={[
                                     {
-                                      type:'email',
                                       required: true,
                                       message: 'Please enter valid email ID',
-                                      pattern:
-                                        "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
                                     },
-                                    {
-                                      message: "Please Enter Valid Name",
-                                    },
+                                    // {
+                                    //   pattern:
+                                    //     "/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
+                                    //   message: "Please Enter Valid Name",
+                                    // },
                                   ]}
                                 >
                                   <Input
@@ -1035,7 +1137,7 @@ const Statutory = () => {
                         </Col>
                         <Col xs={22} sm={15} md={8}>
                         <FormItem
-                                  name="sacphone"
+                                  name="secphone"
                                   label="Phone Number"
                                   rules={[
                                     {
@@ -1205,7 +1307,7 @@ const Statutory = () => {
                                         alignItems:"end",
                                       }}
                                       onClick={() => {
-                                        deleteBAI(u);
+                                        onDeleteBank(u);
                                       }}
                                     >
                                       <DeleteOutlined />
@@ -1219,7 +1321,7 @@ const Statutory = () => {
           {editBai === false ? (
             <Button 
               type="primary"
-              onClick={() => setEditBai(!editBai)}
+              onClick={() => setEditBAI(!editBai)}
             ><PlusCircleOutlined />Add</Button>
           ):(
             <div>
@@ -1376,7 +1478,7 @@ const Statutory = () => {
                 </Col>
                 <Col span={24} style={{display:'flex', justifyContent:'flex-end'}}>
                   <FormItem>
-                    <Button type='text' style={{marginRight:'1rem'}} onClick={() => setEditBai(false)}> <CloseOutlined />CANCLE</Button>
+                    <Button type='text' style={{marginRight:'1rem'}} onClick={() => setEditBAI(false)}> <CloseOutlined />CANCLE</Button>
                     <Button type='primary' htmlType="submit"> <CheckOutlined />SAVE</Button>
                   </FormItem>
                 </Col>
@@ -1392,3 +1494,4 @@ const Statutory = () => {
 }
 
 export default Statutory
+

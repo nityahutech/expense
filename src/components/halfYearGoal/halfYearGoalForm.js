@@ -31,6 +31,8 @@ const HalfYearGoalForm = (props) => {
     const [empEditable, setEmpEditable] = useState((currentAppraisal.status === 'empPending'));
     const [mgrEditable, setMgrEditable] = useState((currentAppraisal.status === 'mgrPending' && props.hrMode == false));
     const [selectedNumber, setSelectedNumber] = useState(0);
+    // const role = sessionStorage.getItem("role")
+
 
     const componentRef = useRef();
     const [active, setActive] = useState("");
@@ -45,12 +47,47 @@ const HalfYearGoalForm = (props) => {
     let personalGrowthActivities = currentAppraisal.empPersonalCheckBox
 
 
-
+    //rating Emp
     let intEmployeeRating = currentAppraisal.empOrganisationActivitiesRating
     if (intEmployeeRating == 0 || intEmployeeRating == null) {
         intEmployeeRating = 1
 
     }
+
+    let intProjectEmployeeRating = currentAppraisal.empProjectActivitiesRating
+    if (intProjectEmployeeRating == 0 || intProjectEmployeeRating == null) {
+        intProjectEmployeeRating = 1
+
+    }
+
+    let intPersonalGrowthEmployeeRating = currentAppraisal.empPersonalGrowthRating
+    if (intPersonalGrowthEmployeeRating == 0 || intPersonalGrowthEmployeeRating == null) {
+        intPersonalGrowthEmployeeRating = 1
+
+    }
+
+    //Rating Manager
+
+    let intManagerRating = currentAppraisal.mgrProjectActivitiesRating
+    if (intManagerRating == 0 || intManagerRating == null) {
+        intManagerRating = 1
+
+    }
+
+    let intProjectManagerRating = currentAppraisal.mgrOrganisationActivitiesRating
+    if (intProjectManagerRating == 0 || intProjectManagerRating == null) {
+        intProjectManagerRating = 1
+
+    }
+
+    let intPersonalGrowthManagerRating = currentAppraisal.mgrPersonalGrowthRating
+    if (intPersonalGrowthManagerRating == 0 || intPersonalGrowthManagerRating == null) {
+        intPersonalGrowthManagerRating = 1
+
+    }
+
+
+
 
 
     // const handlePrint = useReactToPrint({
@@ -195,7 +232,7 @@ const HalfYearGoalForm = (props) => {
                 managerComment: values.managerComment,
 
                 mgrProjectActivitiesRating: values.mgrProjectActivitiesRating,
-                mgrOrganisationActivitiesRating: values.mgrOrganisationActivitiesRating,
+                empOrganisationActivitiesRating: values.empOrganisationActivitiesRating,
                 mgrPersonalGrowthRating: values.mgrPersonalGrowthRating,
 
 
@@ -374,6 +411,7 @@ const HalfYearGoalForm = (props) => {
                             form={form}
                             onFinish={onFinish}
 
+
                         >
                             <Divider orientation='left' orientationMargin={0}>To Be Fill By Employee<span style={{ color: 'red' }}> *</span></Divider>
 
@@ -417,6 +455,7 @@ const HalfYearGoalForm = (props) => {
                                                             placeholder="Project name"
                                                             name="name"
                                                             disabled={!empEditable}
+
                                                         />
                                                     </Form.Item>
 
@@ -425,7 +464,8 @@ const HalfYearGoalForm = (props) => {
                                                     >
                                                         <FloatTextArea className='textArea-ant-two'
                                                             label="Project Detail"
-                                                            disabled={empEditable}
+                                                            disabled={!empEditable}
+
 
                                                             // required
                                                             placeholder="Project Detail" />
@@ -444,16 +484,18 @@ const HalfYearGoalForm = (props) => {
                                             ))}
 
                                             <Form.Item>
-                                                <Button
-                                                    type="primary"
-                                                    className="dynamic-delete-button"
-                                                    onClick={() => add()}
-                                                    style={{ width: "" }}
-                                                    icon={<PlusCircleOutlined />}
+                                                {!mgrEditable ? (
+                                                    <Button
+                                                        type="primary"
+                                                        className="dynamic-delete-button"
+                                                        onClick={() => add()}
+                                                        style={{ width: "" }}
+                                                        icon={<PlusCircleOutlined />}
 
-                                                >
+                                                    >
 
-                                                </Button>
+                                                    </Button>
+                                                ) : null}
 
                                             </Form.Item>
                                         </div>
@@ -469,13 +511,13 @@ const HalfYearGoalForm = (props) => {
                                     // disabled={empEditable}
 
                                     >
-                                        <div >
-                                            <Radio.Group defaultValue="1" buttonStyle="solid">
-                                                <Radio.Button style={{ marginRight: '5px' }} value="1">1</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="2">2</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="3">3</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="4">4</Radio.Button>
-                                                <Radio.Button style={{ marginRight: '5px' }} value="5">5</Radio.Button>
+                                        <div>
+                                            <Radio.Group disabled={!empEditable} defaultValue={intProjectEmployeeRating} buttonStyle="solid">
+                                                <Radio.Button className='radio-one' style={{ marginRight: '5px' }} value="1">1</Radio.Button>
+                                                <Radio.Button className='radio-one' style={{ marginRight: '5px' }} value="2">2</Radio.Button>
+                                                <Radio.Button className='radio-one' style={{ marginRight: '5px' }} value="3">3</Radio.Button>
+                                                <Radio.Button className='radio-one' style={{ marginRight: '5px' }} value="4">4</Radio.Button>
+                                                <Radio.Button className='radio-one' style={{ marginRight: '5px' }} value="5">5</Radio.Button>
                                             </Radio.Group>
 
                                         </div >
@@ -490,7 +532,7 @@ const HalfYearGoalForm = (props) => {
                                     // disabled={!mgrEditable}
                                     >
                                         <div >
-                                            <Radio.Group initialValues="1" buttonStyle="solid">
+                                            <Radio.Group defaultValue={intProjectManagerRating} buttonStyle="solid">
                                                 <Radio.Button style={{ marginRight: '5px' }} value="1">1</Radio.Button>
                                                 <Radio.Button style={{ marginRight: '5px' }} value="2">2</Radio.Button>
                                                 <Radio.Button style={{ marginRight: '5px' }} value="3">3</Radio.Button>
@@ -513,14 +555,15 @@ const HalfYearGoalForm = (props) => {
                                     initialValues={defaults}
                                     onChange={onChange}
                                     value={organizationActivities}
-                                // disabled={empEditable}
+                                    disabled={!empEditable}
+
                                 />
                             </Form.Item>
 
                             <Form.Item name="organizationalActivitiesDetail">
                                 <FloatTextArea className='textArea-ant-two'
                                     label="Give Detail"
-                                    // disabled={empEditable}
+                                    disabled={!empEditable}
 
                                     // required
                                     placeholder="Give Detail" />
@@ -536,7 +579,7 @@ const HalfYearGoalForm = (props) => {
                                     >
 
                                         <div >
-                                            <Radio.Group defaultValue={intEmployeeRating} buttonStyle="solid">
+                                            <Radio.Group disabled={!empEditable} defaultValue={intEmployeeRating} buttonStyle="solid">
                                                 <Radio.Button style={{ marginRight: '5px' }} value="1">1</Radio.Button>
                                                 <Radio.Button style={{ marginRight: '5px' }} value="2">2</Radio.Button>
                                                 <Radio.Button style={{ marginRight: '5px' }} value="3">3</Radio.Button>
@@ -557,7 +600,7 @@ const HalfYearGoalForm = (props) => {
                                     >
 
                                         <div >
-                                            <Radio.Group initialValues="1" buttonStyle="solid">
+                                            <Radio.Group defaultValue={intManagerRating} buttonStyle="solid">
                                                 <Radio.Button style={{ marginRight: '5px' }} value="1">1</Radio.Button>
                                                 <Radio.Button style={{ marginRight: '5px' }} value="2">2</Radio.Button>
                                                 <Radio.Button style={{ marginRight: '5px' }} value="3">3</Radio.Button>
@@ -575,12 +618,12 @@ const HalfYearGoalForm = (props) => {
                             <Divider>Personal Growth : </Divider>
 
                             <Form.Item name="empPersonalCheckBox" valuePropName="checked" initialValue={defaults}>
-                                <Checkbox.Group style={{ display: 'flex', flexDirection: 'column' }}
+                                <Checkbox.Group className='checkbox-field-one' style={{ display: 'flex', flexDirection: 'column' }}
                                     options={optionsTwo}
                                     initialValues={defaults}
                                     onChange={onChange}
                                     value={personalGrowthActivities}
-                                // disabled={empEditable}
+                                    disabled={!empEditable}
                                 />
                             </Form.Item>
 
@@ -588,7 +631,7 @@ const HalfYearGoalForm = (props) => {
                             <Form.Item name="personalGrowthDetail">
                                 <FloatTextArea className='textArea-ant-two'
                                     label="Give Detail"
-                                    // disabled={empEditable}
+                                    disabled={!empEditable}
 
                                     // required
                                     placeholder="Give Detail" />
@@ -604,7 +647,7 @@ const HalfYearGoalForm = (props) => {
                                     >
 
                                         <div >
-                                            <Radio.Group initialValues="1" buttonStyle="solid">
+                                            <Radio.Group disabled={!empEditable} defaultValue={intPersonalGrowthEmployeeRating} buttonStyle="solid">
                                                 <Radio.Button style={{ marginRight: '5px' }} value="1">1</Radio.Button>
                                                 <Radio.Button style={{ marginRight: '5px' }} value="2">2</Radio.Button>
                                                 <Radio.Button style={{ marginRight: '5px' }} value="3">3</Radio.Button>
@@ -627,7 +670,7 @@ const HalfYearGoalForm = (props) => {
 
                                         <div >
 
-                                            <Radio.Group initialValues="1" buttonStyle="solid">
+                                            <Radio.Group defaultValue={intPersonalGrowthManagerRating} buttonStyle="solid">
                                                 <Radio.Button style={{ marginRight: '5px' }} value="1">1</Radio.Button>
                                                 <Radio.Button style={{ marginRight: '5px' }} value="2">2</Radio.Button>
                                                 <Radio.Button style={{ marginRight: '5px' }} value="3">3</Radio.Button>
@@ -655,7 +698,7 @@ const HalfYearGoalForm = (props) => {
                                 <Form.Item name="managerComment">
                                     <FloatTextArea className='textArea-ant-two'
                                         label="Manager Comments"
-                                        // disabled={!mgrEditable}
+
 
 
 

@@ -15,7 +15,7 @@ function Address() {
       <div style={{ marginBottom: '10px' }}>
         <AddressOffice />
         <AddressCorp />
-        {/* <AddressCust /> */}
+        <AddressCust />
       </div>
     </>
   );

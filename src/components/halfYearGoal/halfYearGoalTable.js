@@ -13,7 +13,8 @@ import "./halfYearGoal.css";
 import AppraisalContext from '../../contexts/AppraisalContext';
 import EmpInfoContext from '../../contexts/EmpInfoContext';
 import { useAuth } from '../../contexts/AuthContext'
-import { createPdfFromHtml } from "./../ProfileDetails/downloadLogic";
+import { createPdfFromHtml } from "./../ProfileDetails/downloadLogicAppraisal";
+
 
 
 
@@ -27,6 +28,7 @@ const HalfYearGoalTable = (props) => {
     const { currentUser } = useAuth();
     const [appraisalList, setAppraisalList] = useState([]);
     const [printContent, setPrintContent] = useState(null);
+
 
     const columns = [
 
@@ -110,27 +112,30 @@ const HalfYearGoalTable = (props) => {
             dataIndex: "action",
             key: "action",
             fixed: "right",
-            width: 180,
+            width: 150,
 
             render: (_, appraisal) => {
 
                 return (
                     <>
                         {console.log('render', appraisal)}
-                        <Button type="primary"
-                            style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', }}
 
-                            className="edIt"
-                            onClick={() => {
+                        {(sessionStorage.getItem("role") != 'hr') &&
+                            <Button type="primary"
+                                style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', }}
 
-                                setEditedAppraisal(appraisal);
-                                setSecondModal(true)
+                                className="edIt"
+                                onClick={() => {
 
-                            }}
-                        >
-                            {<FileImageOutlined style={{ color: 'white', }} />}
+                                    setEditedAppraisal(appraisal);
+                                    setSecondModal(true)
 
-                        </Button>
+                                }}
+                            >
+                                {<FileImageOutlined style={{ color: 'white', }} />}
+
+                            </Button>
+                        }
 
                         {(sessionStorage.getItem("role") === 'hr') &&
                             <Button type='danger'
@@ -164,7 +169,7 @@ const HalfYearGoalTable = (props) => {
 
 
                             >
-                                {< DownloadOutlined style={{ color: 'grey', }}
+                                {< HalfyearGoalPdf style={{ color: 'grey', }}
 
                                 />}
                             </Button>
@@ -263,7 +268,7 @@ const HalfYearGoalTable = (props) => {
                             position: ["bottomCenter"],
                         }}
                         scroll={{ x: 800 }}
-                        className="employeeTable"
+                        className="employeeAppraisalTable"
                         style={{ marginLeft: '10px', marginRight: '10px' }}
                         size="small"
                         onClick={() => {
@@ -274,55 +279,76 @@ const HalfYearGoalTable = (props) => {
                 </Col>
             </Row>
 
-            <Modal footer={null}
+            <Modal className='viewAppraisalModal'
+                footer={null}
                 title="Appraisal Form"
-                centered
+                // centered
                 open={secondModal}
                 visible={secondModal}
                 onOk={() => setSecondModal(false)}
-                onCancel={() => setSecondModal(false)}
+                // onCancel={() => setSecondModal(false)}
                 width={800}
+                closeIcon={
+                    <div
+                        onClick={() => {
+                            setSecondModal(false);
+                        }}
+                        style={{ color: "#ffffff" }}
+                    >
+                        X
+                    </div>
+                }
             >
                 <HalfYearGoalForm currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} hrMode={props.listType === 'hr'} />
 
             </Modal>
 
-            <Modal footer={null}
-                title={<Button
-                    className="button"
-                    style={{
-                        background: "#1890ff",
-                        color: "white",
+            {/* <Modal className='viewAppraisalModal'
 
-                    }}
-                    type="button"
-                    onClick={() => {
-                        createPdfFromHtml(printContent);
-                    }}
-                >
-                    Download
-                </Button>}
-                centered
+                footer={null}
+                // title={<Button
+                //     className="button"
+                //     style={{
+                //         background: "#1890ff",
+                //         color: "white",
+
+                //     }}
+                //     type="button"
+                //     onClick={() => {
+                //         createPdfFromHtml();
+                //     }}
+                // >
+                //     Download
+                // </Button>}
+                // centered
                 open={thirdModal}
                 visible={thirdModal}
                 onOk={() => setThirdModal(false)}
-                onCancel={() => setThirdModal(false)}
-                width={600}
+                // onCancel={() => setThirdModal(false)}
+                width={200}
+
+                closeIcon={
+                    <div
+                        onClick={() => {
+                            setThirdModal(false);
+                        }}
+                        style={{ color: "" }}
+                    >
+                        X
+                    </div>
+                }
 
             >
                 <div className="mainBorder A4" id="appraisal">
                     <div
-                        ref={(el) => {
-                            setPrintContent(el);
-                        }}
+
                     >
-                        <HalfyearGoalPdf />
+                        <HalfyearGoalPdf appraisal={editedAppraisal} />
                     </div>
                 </div>
 
-                {/* <HalfyearGoalPdf currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} hrMode={props.listType === 'hr'} /> */}
 
-            </Modal>
+            </Modal> */}
 
         </div>
     )

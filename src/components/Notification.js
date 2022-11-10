@@ -110,7 +110,7 @@ const Notification = ({ data }) => {
         {
             title: 'No. Of Days',
             dataIndex: 'len',
-            width: 100,
+            width: 150,
             align: "left",
             sorter: (a, b) => {
                 return a.len !== b.len ? (a.len < b.len ? -1 : 1) : 0;
@@ -185,6 +185,7 @@ const Notification = ({ data }) => {
                 <div>
                     <Table columns={columns}
                         dataSource={dataSource}
+                        className='leaveTable'
                         pagination={{
                             position: ["bottomCenter"],
                         }}

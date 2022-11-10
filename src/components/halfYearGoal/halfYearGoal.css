@@ -65,21 +65,21 @@ input[type="text"][disabled] {
   color: white !important;
 } */
 
-.viewModal .ant-modal-content{
+.viewAppraisalModal .ant-modal-content {
   border-radius: 10px;
-  width:820px;
+  /* width:820px; */
 }
 
-.viewModal .ant-modal-header{
+.viewAppraisalModal .ant-modal-header {
   border-radius: 10px 10px 0px 0px;
   background: #043661;
   color: #ffffff;
 }
-.viewModal .ant-modal-title{
+.viewAppraisalModal .ant-modal-title {
   color: #ffffff;
   font-weight: 400;
   font-size: 18px;
-line-height: 25px;
+  line-height: 25px;
 }
 
 @media only screen and (max-width: 600px) {

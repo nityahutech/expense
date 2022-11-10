@@ -250,7 +250,7 @@ const EmpAppraisalTable = (props) => {
                             position: ["bottomCenter"],
                         }}
                         scroll={{ x: 800 }}
-                        className="employeeTable"
+                        className="employeeAppraisalTable"
                         style={{ marginLeft: '10px', marginRight: '10px' }}
                         size="small"
                         onClick={() => {
@@ -261,9 +261,10 @@ const EmpAppraisalTable = (props) => {
                 </Col>
             </Row>
 
-            <Modal footer={null}
+            <Modal className='viewAppraisalModal'
+                footer={null}
                 title="Appraisal Form"
-                centered
+                // centered
                 open={secondModal}
                 visible={secondModal}
                 onOk={() => {
@@ -272,6 +273,17 @@ const EmpAppraisalTable = (props) => {
                 }}
                 onCancel={() => setSecondModal(false)}
                 width={800}
+
+                closeIcon={
+                    <div
+                        onClick={() => {
+                            setSecondModal(false);
+                        }}
+                        style={{ color: "#ffffff" }}
+                    >
+                        X
+                    </div>
+                }
             >
                 <Appraisal currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} hrMode={props.listType === 'hr'} />
 

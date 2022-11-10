@@ -48,13 +48,13 @@ const LeaveList = (props) => {
         // 33-40 to be written in context
         let data = allData.docs.map((doc) => {
             return {
-                    ...doc.data(),
-                    id: doc.id,
-                };
+                ...doc.data(),
+                id: doc.id,
+            };
         });
-        data.sort(function(c, d) {
-            let a = moment(c.date,"Do MMM, YYYY")
-            let b = moment(d.date,"Do MMM, YYYY")
+        data.sort(function (c, d) {
+            let a = moment(c.date, "Do MMM, YYYY")
+            let b = moment(d.date, "Do MMM, YYYY")
             return a - b
         });
         console.log(allData, data)
@@ -104,7 +104,7 @@ const LeaveList = (props) => {
             optionalHoliday: values.holidaytype === 'Official' ? false : true,
         }
         console.log(values, newHoliday)
-        let matchingHolidayList = holidaylist.filter((item) => {return item.name == newHoliday.name})
+        let matchingHolidayList = holidaylist.filter((item) => { return item.name == newHoliday.name })
         if (!(matchingHolidayList.length > 0)) {
             CompanyHolidayContext.createHoliday(newHoliday, "compId001")
                 .then(response => {
@@ -125,9 +125,12 @@ const LeaveList = (props) => {
     };
 
     const disabledDate = (current) => {
+        // let currentYear = current.year() !== (new Date).getFullYear();
         let matchingHolidayList = holidaylist.filter(item => item.date == current.format('Do MMM, YYYY'))
         return matchingHolidayList.length > 0;
+
     };
+
 
     const onClose = () => {
         setOpen(false);
@@ -167,14 +170,14 @@ const LeaveList = (props) => {
 
 
     return (
-        <Row style={{
-            display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start',
+        <Row className='row-holiday-list-div' style={{
+            display: 'flex', flexDirection: 'row',
             borderTopLeftRadius: '10px', borderTopRightRadius: '10px', padding: '10px', marginBottom: '0px', backgroundColor: 'white'
         }}
         >
-            <Col xl={12} lg={12} md={12} sm={24} xs={24} span={12}
+            <Col className='holiday-list-div' xl={12} lg={12} md={12} sm={24} xs={24} span={12}
                 style={{
-                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start',
+                    display: 'flex', flexDirection: 'row',
                     borderRadius: '10px',
 
 
@@ -183,7 +186,7 @@ const LeaveList = (props) => {
 
                 <div >
                     <Button className='button-div' style={{
-                        marginLeft: '10px'
+                        marginLeft: '10px', borderRadius: '15px'
                     }} onClick={showDrawer}>
                         Holiday List
                     </Button>
@@ -246,13 +249,30 @@ const LeaveList = (props) => {
                         ?
                         <div>
                             <Button className='button-div' style={{
-                                marginLeft: '10px', backgroundColor: ''
+                                marginLeft: '10px', borderRadius: '15px'
                             }} onClick={showModal}>
                                 Create Holiday
                             </Button>
 
 
-                            <Modal title=" Create Holiday" maskClosable={false} footer={null} open={isModalOpen} visible={isModalOpen} onCancel={handleCancel}>
+                            <Modal className='viewAppraisal'
+                                title=" Create Holiday"
+                                maskClosable={false}
+                                footer={null}
+                                open={isModalOpen}
+                                visible={isModalOpen}
+                                onCancel={handleCancel}
+                                closeIcon={
+                                    <div
+                                        onClick={() => {
+                                            setIsModalOpen(false);
+                                        }}
+                                        style={{ color: "#ffffff" }}
+                                    >
+                                        X
+                                    </div>
+                                }
+                            >
                                 <Form
 
                                     labelCol={{
@@ -301,6 +321,7 @@ const LeaveList = (props) => {
 
                                         <DatePicker style={{ width: '100% ' }}
                                             disabledDate={disabledDate}
+                                            // disabledYear={disabledYear}
                                             format="Do MMM, YYYY"
                                         />
                                     </Form.Item>

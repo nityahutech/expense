@@ -43,7 +43,7 @@ const Statutory = () => {
   const onFinish = (value) => {
     const valuesToservice = {
       entityType: value.entityType,
-      cinName: value.cinName,
+      cinNumber: value.cinNumber,
       dateOfIncorp: value.dateOfIncorp,
       compPan: value.compPan,
       compTan: value.compTan,
@@ -349,11 +349,11 @@ const Statutory = () => {
                   CIN
                 </div>
                 {editContent === false ? (
-                  <div>{data.cinName ? data.cinName : "-"}</div>
+                  <div>{data.cinNumber ? data.cinNumber : "-"}</div>
                 ) : (
                   <Form.Item
-                    initialValue={data ? data.cinName : null}
-                    name="cinName"
+                    initialValue={data ? data.cinNumber : null}
+                    name="cinNumber"
                     rules={[
                       {
                         // required: true,

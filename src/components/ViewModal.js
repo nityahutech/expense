@@ -11,7 +11,7 @@ function ViewModal() {
       </h3>
       <Divider />
       <Row gutter={[50, 8]}>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <h4
             style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }}
           >
@@ -30,7 +30,7 @@ function ViewModal() {
             <span>Domain:hutechsolutions.com</span>
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <h4
             style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }}
           >
@@ -63,7 +63,7 @@ function ViewModal() {
             </span>
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <h4
             style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }}
           >
@@ -80,7 +80,7 @@ function ViewModal() {
             <img src={hutechlogo} style={{ width: "132px", margin: "22px" }} />
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <div
             style={{
               display: "flex",
@@ -101,7 +101,7 @@ function ViewModal() {
             <span>Bangalore, Karnataka, 560068, India +91 93439 27070</span>
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <div
             style={{
               display: "flex",
@@ -129,7 +129,7 @@ function ViewModal() {
             </span>
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <div
             style={{
               border: "1px solid #d0d0d0",

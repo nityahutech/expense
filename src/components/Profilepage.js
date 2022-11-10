@@ -11,7 +11,7 @@ import Education from "./ProfileDetails/Education";
 import Family from "./ProfileDetails/Family";
 import Document from "./ProfileDetails/Document";
 import WorkWeek from "./ProfileDetails/WorkWeek";
-import PaySlip from "./ProfileDetails/PaySlip";
+// import PaySlip from "./ProfileDetails/PaySlip";
 import BankAccount from "./ProfileDetails/BankAccount";
 
 const Profile = () => {
@@ -40,9 +40,9 @@ const Profile = () => {
           <Tabs.TabPane tab="Work Week" key="7">
             <WorkWeek></WorkWeek>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Pay Slip" key="8">
+          {/* <Tabs.TabPane tab="Pay Slip" key="8">
             <PaySlip></PaySlip>
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
           <Tabs.TabPane tab="Bank Account" key="9">
             <BankAccount></BankAccount>
           </Tabs.TabPane>

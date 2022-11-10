@@ -797,6 +797,7 @@ function Onboarding() {
             </div>
 
             <Divider />
+
             <Card
               style={{
                 margin: "56px",
@@ -1000,6 +1001,7 @@ function Onboarding() {
                     </Row>
                   </div>
                 ) : null}
+
                 <Button
                   style={{
                     border: "none",
@@ -1022,6 +1024,7 @@ function Onboarding() {
                 </Button>
               </Form>
             </Card>
+
             <div
               style={{
                 display: "flex",
@@ -1094,7 +1097,6 @@ function Onboarding() {
                 rowClassName={(record) => record.disabled && "disabled-row"}
               />
               <Modal
-                style={{ width: "800px" }}
                 className="viewModal"
                 centered
                 visible={isModalVisible}
@@ -1114,7 +1116,6 @@ function Onboarding() {
                 <ViewModal setIsModalVisible={setIsModalVisible} />
               </Modal>
               <Modal
-                style={{ width: "840px" }}
                 className="viewModal"
                 // centered
                 visible={isEditOrganization}

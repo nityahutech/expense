@@ -475,8 +475,8 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                  <Option value="fullTime">Full-Time</Option>
-                  <Option value="partTime">Part-Time</Option>
+                  <Option value="Full-Time">Full-Time</Option>
+                  <Option value="Part-Time">Part-Time</Option>
                   {/* <Option value="pns">Prefer Not To Say</Option> */}
                 </Select>
               </Form.Item>

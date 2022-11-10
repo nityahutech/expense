@@ -194,18 +194,14 @@ const EmpAppraisalTable = (props) => {
             allData = await AppraisalContext.getManagerAppraisal(empRecord.fname + ' ' + empRecord.lname)
 
         }
-
-        allData.docs.map((doc) => {
-            let d = allData.docs.map((doc) => {
-
-                return {
-                    ...doc.data(),
-                    id: doc.id,
-                };
-            });
-            console.log('appraisalLIST3', d)
-            setAppraisalList(d)
+        let d = allData.docs.map((doc) => {
+            return {
+                ...doc.data(),
+                id: doc.id,
+            };
         });
+        console.log('appraisalLIST3', d)
+        setAppraisalList(d)
     }
     const onDeleteAppraisal = (appraisal) => {
         console.log('deleteappraisal', appraisal)
@@ -271,7 +267,10 @@ const EmpAppraisalTable = (props) => {
                 // centered
                 open={secondModal}
                 visible={secondModal}
-                onOk={() => setSecondModal(false)}
+                onOk={() => {
+                    setSecondModal(false)
+                    getAppraisalList()
+                }}
                 onCancel={() => setSecondModal(false)}
                 width={800}
 

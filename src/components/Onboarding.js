@@ -186,6 +186,7 @@ function Onboarding() {
   };
 
   const showOnboarding = (record) => {
+    setModalData(record);
     setIsEditOrganization(true);
   };
 
@@ -462,7 +463,7 @@ function Onboarding() {
                   </div>
                 }
               >
-                <EditOnboarding setIsEditOrganization={setIsEditOrganization} />
+                <EditOnboarding  modalData={modalData} setIsEditOrganization={setIsEditOrganization} />
               </Modal>
             </div>
           </Card>

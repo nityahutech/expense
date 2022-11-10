@@ -24,28 +24,45 @@ function Team() {
           justifyContent: "center",
         }}
       >
-          <Card
-            title="TEAMS"
-            style={{
-              width: 800,
-              margin: 20,
-            }}
-          >
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                  Reporting Manager
-                </div>
-                  <div>{repManager?repManager:"-"}</div>
-              </Col>
-              <Col span={12}>
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                  Secondary Manager
-                </div>
-                  <div>{secManager?secManager:"-"}</div>
-              </Col>
-            </Row>
-          </Card>
+        <Card
+          title="TEAMS"
+          className="personal"
+          style={{
+            width: 800,
+            margin: 20,
+          }}
+        >
+          <Row gutter={[16, 16]}>
+            <Col xs={22} sm={20} md={12}>
+              <div
+                style={{
+                  fontWeight: 600,
+                  lineHeight: "18px",
+                  color: "#07182b",
+                  fontSize: "15px",
+                  fontFamily: "Open Sans,sans-serif",
+                }}
+              >
+                Reporting Manager
+              </div>
+              <div>{repManager ? repManager : "-"}</div>
+            </Col>
+            <Col xs={22} sm={20} md={12}>
+              <div
+                style={{
+                  fontWeight: 600,
+                  lineHeight: "18px",
+                  color: "#07182b",
+                  fontSize: "15px",
+                  fontFamily: "Open Sans,sans-serif",
+                }}
+              >
+                Secondary Manager
+              </div>
+              <div>{secManager ? secManager : "-"}</div>
+            </Col>
+          </Row>
+        </Card>
       </div>
     </>
   );

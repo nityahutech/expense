@@ -74,6 +74,7 @@ const Family = () => {
       {editfamilymember === false 
                 ?<Card
                   title="FAMILY MEMBERS"
+                  className="familyCard"
                   extra={
                         <Button
                           type="text"
@@ -94,13 +95,19 @@ const Family = () => {
                       <Form.Item
                         name="father"
                         rules={[
-                          { required: false, message: "Please enter Father's name" },
+                          { required: false, message: "Please enter Father's name",pattern: /^[a-zA-Z\s]*$/, },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
                       >
                         <div>
-                          <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                          <h1 style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                             Father
                           </h1>
                         <div>{data?.father?data.father:"-"}</div>
@@ -115,13 +122,20 @@ const Family = () => {
                           {
                             required: false,
                             message: "Please enter the Contact no.",
+                            pattern: /^[0-9\b]+$/,
                           },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
                       >
                         <div>
-                          <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                          <h1 style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                             Contact no.
                           </h1>
                         <div>{data?.fatherContact?data.fatherContact:"-"}</div>
@@ -133,13 +147,19 @@ const Family = () => {
                       <Form.Item
                         name="mother"
                         rules={[
-                          { required: false, message: "Please enter Mother's Name" },
+                          { required: false, message: "Please enter Mother's Name",pattern: /^[a-zA-Z\s]*$/, },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
                       >
                         <div>
-                          <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                          <h1 style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                             Mother
                           </h1>
                           
@@ -155,13 +175,20 @@ const Family = () => {
                           {
                             required: false,
                             message: "Please enter the Contact no.",
+                            pattern: /^[0-9\b]+$/,
                           },
                         ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
                       >
                         <div>
-                          <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                          <h1 style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                             Contact no.
                           </h1>
                           
@@ -187,6 +214,7 @@ const Family = () => {
                 >
                 <Card
                   title="FAMILY MEMBERS"
+                  className="familyCard"
                   style={{
                     width: 800,
                     marginTop: 10,
@@ -194,9 +222,16 @@ const Family = () => {
                 >
                   <Row gutter={[16, 16]}>
                     {/* ------------------------------------father */}
-                    <Col span={12}>
+                    <Col xs={22} sm={15} md={12}>
                         <div>
-                          <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                          <h1 
+                          style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                             Father 
                           </h1>
                       <Form.Item
@@ -239,9 +274,15 @@ const Family = () => {
                             </div>
                       {/* --------------------------------------father-contact------------------------------------ */}
                     </Col>
-                    <Col span={12}>
+                    <Col xs={22} sm={15} md={12}>
                         <div>
-                          <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                          <h1 style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                             Contact no.
                           </h1>
                       <Form.Item
@@ -267,9 +308,15 @@ const Family = () => {
                         </div>
                       </Col>
                       {/* -------------------------------------mother------------------------------------------ */}
-                    <Col span={12}>
+                    <Col xs={22} sm={15} md={12}>
                         <div>
-                          <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                          <h1 style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                             Mother
                           </h1>
                       <Form.Item
@@ -312,9 +359,15 @@ const Family = () => {
                         </div>
                     </Col>
                     {/* ---------------------------------------------mother Contact------------------------------ */}
-                    <Col span={12}>
+                    <Col xs={22} sm={15} md={12}>
                         <div>
-                          <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                          <h1 style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                             Contact no.
                           </h1>
                     <Form.Item
@@ -376,6 +429,7 @@ const Family = () => {
         {editEmergency === false
                 ?<Card
                       title="EMERGENCY CONTACTS"
+                      className="familyCard"
                       //   actions={[
                       //   <EditOutlined key="edit" />,
                       // ]}
@@ -393,7 +447,8 @@ const Family = () => {
                         marginTop: 10,
                       }}
                       >
-                      <Row gutter={[16, 16]}><Col span={8}>
+                      <Row gutter={[16, 16]}>
+                        <Col xs={22} sm={15} md={8}>
                         <Form.Item
                             name="other"
                             rules={[
@@ -406,7 +461,13 @@ const Family = () => {
                             wrapperCol={{ span: 32 }}
                           >
                             <div>
-                              <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                              <h1 style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                                 Other
                               </h1>
                               
@@ -414,14 +475,20 @@ const Family = () => {
                               
                             </div>
                           </Form.Item>
-                        </Col><Col span={8}>
+                        </Col><Col xs={22} sm={15} md={8}>
                         <Form.Item
                             name="relation"
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 32 }}
                           >
                             <div>
-                              <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                              <h1 style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                                 Relation
                               </h1>
                             
@@ -429,7 +496,7 @@ const Family = () => {
                               
                             </div>
                           </Form.Item>
-                        </Col><Col span={8}>
+                        </Col><Col xs={22} sm={15} md={8}>
                         <Form.Item
                             name="otherContact"
                             onKeyPress={(event) => {
@@ -448,7 +515,13 @@ const Family = () => {
                             wrapperCol={{ span: 32 }}
                           >
                             <div>
-                              <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                              <h1 style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                                 Contact no.
                               </h1>
                             
@@ -476,15 +549,22 @@ const Family = () => {
               >
               <Card
                 title="EMERGENCY CONTACTS"
+                className="familyCard"
                 style={{
                   width: 800,
                   marginTop: 10,
                 }}
               >
                 <Row gutter={[16, 16]}>
-                  <Col span={8}>
+                  <Col xs={22} sm={15} md={8}>
                   <div>
-                        <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                        <h1 style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                           Other
                         </h1>
                   <Form.Item
@@ -527,9 +607,15 @@ const Family = () => {
                             /> 
                     </Form.Item>
                       </div>
-                  </Col><Col span={8}>
+                  </Col><Col xs={22} sm={15} md={8}>
                       <div>
-                        <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                        <h1 style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                           Relation
                         </h1>
                   <Form.Item
@@ -571,7 +657,7 @@ const Family = () => {
                             /> 
                     </Form.Item>
                       </div>
-                  </Col><Col span={8}>
+                  </Col><Col xs={22} sm={15} md={8}>
                   <Form.Item
                       name="otherContact"
                       rules={[
@@ -586,7 +672,13 @@ const Family = () => {
                       initialValue = {data.otherContact?data.otherContact:''}
                     >
                       <div>
-                        <h1 style={{ fontWeight: "bold", fontSize: "15px" }}>
+                        <h1 style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}>
                           Contact no.
                         </h1>
                         

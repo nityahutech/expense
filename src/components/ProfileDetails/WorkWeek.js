@@ -281,7 +281,7 @@ function WorkWeek() {
                     marginRight: "17px",
                   }}
                 >
-                  <input
+                  {/* <input
                     checked="true"
                     type="checkbox"
                     style={{
@@ -289,7 +289,7 @@ function WorkWeek() {
                       cursor: "not-allowed",
                     }}
                   />
-                  <p>Half Day</p>
+                  <p>Half Day</p> */}
                 </div>
 
                 <div>

@@ -368,6 +368,7 @@ function Overview() {
                     className="iconface"
                     style={{
                       paddingBottom: "10px",
+                      paddingRight:"10px"
                     }}
                     gutter={[48, 8]}
                   >
@@ -378,13 +379,25 @@ function Overview() {
                           display: "flex",
                           flexDirection: "row",
                           paddingRight: "10px",
+                          justifyContent:"center",
+                          alignItems:"center"
+                          // paddingLeft:"10px"
                         }}
                       >
-                        <div>
+                        <div 
+                          style={{
+                            display:"flex",
+                            justifyContent:"center",
+                            alignItems:"center"
+                          }}
+                        >
                           <img
                             src={linkedin}
                             alt="downArrow"
-                            style={{ cursor: "pointer", width: "30px" }}
+                            style={{ 
+                              cursor: "pointer", 
+                              width: "30px",
+                              margin:"10px" }}
                           />
                         </div>
                         {editContactIconInfo === false ? (
@@ -398,6 +411,7 @@ function Overview() {
                             <Input
                               style={{
                                 paddingLeft: "0px",
+                                marginLeft:"10px",
                                 borderBottom: "1px solid #ccc ",
                               }}
                               bordered={false}
@@ -425,13 +439,19 @@ function Overview() {
                           display: "flex",
                           flexDirection: "row",
                           paddingRight: "10px",
+                          justifyContent:"center",
+                          alignItems:"center"
                         }}
                       >
                         <div>
                           <img
                             src={facebook}
                             alt="downArrow"
-                            style={{ cursor: "pointer", width: "30px" }}
+                            style={{ 
+                              cursor: "pointer", 
+                              width: "30px",
+                              margin:"10px",
+                            }}
                           />
                         </div>
                         {editContactIconInfo === false ? (
@@ -445,6 +465,7 @@ function Overview() {
                             <Input
                               style={{
                                 paddingLeft: "0px",
+                                marginLeft:"10px",
                                 borderBottom: "1px solid #ccc ",
                               }}
                               bordered={false}
@@ -470,6 +491,8 @@ function Overview() {
                         className="icon-position"
                         style={{
                           display: "flex",
+                          justifyContent:"center",
+                          alignItems:"center",
                           flexDirection: "row",
                           paddingRight: "10px",
                         }}
@@ -478,7 +501,11 @@ function Overview() {
                           <img
                             src={twitter}
                             alt="downArrow"
-                            style={{ cursor: "pointer", width: "30px" }}
+                            style={{ 
+                              cursor: "pointer", 
+                              width: "30px",
+                              margin:"10px"
+                            }}
                           />
                         </div>
                         {editContactIconInfo === false ? (
@@ -492,6 +519,7 @@ function Overview() {
                             <Input
                               style={{
                                 paddingLeft: "0px",
+                                marginLeft:"10px",
                                 borderBottom: "1px solid #ccc ",
                               }}
                               bordered={false}

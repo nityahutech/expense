@@ -169,6 +169,7 @@ const showNotification=(type,msg,desc)=>{
           <FormItem name="name"
           rules={[
             {
+              pattern: /^[a-zA-Z\s]*$/,
               required:true,
               message:'Enter Company Name',
             },
@@ -179,6 +180,7 @@ const showNotification=(type,msg,desc)=>{
           <FormItem name="duration"
           rules={[
             {
+              pattern: /^[a-zA-Z0-9-\s]*$/,
               required:true,
               message:'Enter Duration',
             },

@@ -69,7 +69,9 @@
     position:relative;
     right: 90px;
     /* width: 100%; */
-    resize:vertical
+    resize:vertical;
+    /* height: 500px; */
+
  }
 
  .viewModal .ant-modal-header{

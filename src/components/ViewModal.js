@@ -4,8 +4,8 @@ import hutechlogo from "../images/hutechlogo.png";
 import imageavailable from "../images/imageavailable.png";
 
 function ViewModal(props) {
-  console.log("props", props.modalData)
-  const modalData = props.modalData
+  console.log("props", props.modalData);
+  const modalData = props.modalData;
   return (
     <div>
       <h3 style={{ fontWeight: "600", fontSize: "18px", lineheight: "22px" }}>
@@ -13,9 +13,15 @@ function ViewModal(props) {
       </h3>
       <Divider />
       <Row gutter={[50, 8]}>
-        <Col span={8} >
+        <Col xs={22} sm={15} md={8}>
           <div>
-            <h4 style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }} >
+            <h4
+              style={{
+                fontWeight: "600",
+                fontSize: "16px",
+                lineheight: "20px",
+              }}
+            >
               Organization Details
             </h4>
             <div
@@ -32,7 +38,7 @@ function ViewModal(props) {
             </div>
           </div>
         </Col>
-        <Col span={8} >
+        <Col xs={22} sm={15} md={7}>
           <div
             style={{
               display: "flex",
@@ -50,65 +56,88 @@ function ViewModal(props) {
             </h4>
             <span>{modalData.regOffice.addLine1},</span>
             <span>{modalData.regOffice.addLine2},</span>
-            <span>{modalData.regOffice.city}, {modalData.regOffice.state},</span>
-            <span>{modalData.regOffice.country} - {modalData.regOffice.pincode}</span>
+            <span>
+              {modalData.regOffice.city}, {modalData.regOffice.state},
+            </span>
+            <span>
+              {modalData.regOffice.country} - {modalData.regOffice.pincode}
+            </span>
           </div>
         </Col>
-        <Col span={8} >
+        <Col xs={22} sm={15} md={9}>
           <div>
-            <h4 style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }} >
+            <h4
+              style={{
+                fontWeight: "600",
+                fontSize: "16px",
+                lineheight: "20px",
+              }}
+            >
               Organization Logo
             </h4>
             <div
-            style={{
-              border: "1px solid #d0d0d0",
-              width: "180px",
-              height: "90px",
-              borderRadius: "6px",
-            }}
-          >
-            <img src={modalData.logo?modalData.logo:imageavailable} style={{ width: "132px", margin: "22px" }} alt={"logo not found"} />
-          </div>
-          </div>
-        </Col> 
-      </Row>
-      <Row gutter={[50, 8]} style={{marginTop: "17px", padding: "0 25px"}}>
-          <div>
-            <h4 style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }} >
-              Organization Access
-            </h4>
-            <div style={{display:"flex", flexDirection: "row", justifyContent: "left"}}>
-
-            { modalData.accessList.map((user) => (
-              <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                marginLeft: "17px",
+                border: "1px solid #d0d0d0",
+                maxWidth: "180px",
+                height: "90px",
+                borderRadius: "6px",
+                display: "inline-block",
               }}
             >
-              <span>Code: {user.name}</span>
-              <span>CIN: {user.mailid}</span>
-              <span>GSTN: {user.phone}</span>
-              <span
+              <img
+                src={modalData.logo ? modalData.logo : imageavailable}
                 style={{
-                  borderRadius: "10px",
-                  background: "#C9E5FF",
-                  // width: "101px",
-                  display: "flex",
-                  justifyContent: "center",
-                  color: "#000000",
-                  fontWeight: "400",
-                  fontSize: "14px",
-                  marginTop: "7px",
+                  maxWidth: "132px",
+                  width: "auto",
+                  height: "90px",
+                  padding: "10px",
                 }}
-              >
-                {user.userRole}
-              </span>
+                alt={"logo not found"}
+              />
             </div>
-            ))}
           </div>
+        </Col>
+      </Row>
+      <Row gutter={[50, 8]} style={{ marginTop: "17px", padding: "0 25px" }}>
+        <div>
+          <h4
+            style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }}
+          >
+            Organization Access
+          </h4>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Row gutter={[50, 8]}>
+              {modalData.accessList.map((user) => (
+                <Col xs={22} sm={15} md={8}>
+                  <span>{user.name}</span>
+                  <span> {user.mailid}</span>
+                  <span> {user.phone}</span>
+                  <span
+                    style={{
+                      borderRadius: "10px",
+                      background: "#C9E5FF",
+                      // width: "101px",
+                      display: "flex",
+                      justifyContent: "center",
+                      color: "#000000",
+                      fontWeight: "400",
+                      fontSize: "14px",
+                      marginTop: "7px",
+                    }}
+                  >
+                    {user.userRole}
+                  </span>
+                </Col>
+              ))}
+            </Row>
           </div>
+        </div>
       </Row>
       {/* <Row gutter={[50, 8]}>
         <Col span={8}>

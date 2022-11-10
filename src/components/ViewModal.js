@@ -130,7 +130,7 @@ function ViewModal(props) {
             <span>Domain: {modalData.domain}</span>
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <h4
             style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }}
           >
@@ -163,7 +163,7 @@ function ViewModal(props) {
             </span>
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <h4
             style={{ fontWeight: "600", fontSize: "16px", lineheight: "20px" }}
           >
@@ -180,7 +180,7 @@ function ViewModal(props) {
             <img src={hutechlogo} style={{ width: "132px", margin: "22px" }} />
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <div
             style={{
               display: "flex",
@@ -201,7 +201,7 @@ function ViewModal(props) {
             <span>Bangalore, Karnataka, 560068, India +91 93439 27070</span>
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <div
             style={{
               display: "flex",
@@ -229,7 +229,7 @@ function ViewModal(props) {
             </span>
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={22} sm={15} md={8}>
           <div
             style={{
               border: "1px solid #d0d0d0",

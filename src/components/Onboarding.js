@@ -973,6 +973,7 @@ function Onboarding() {
                 </Row>
 
             <Divider />
+
             <Card
               style={{
                 margin: "56px",
@@ -1176,6 +1177,7 @@ function Onboarding() {
                     </Row>
                   </div>
                 ) : null}
+
                 <Button
                   style={{
                     border: "none",
@@ -1199,6 +1201,7 @@ function Onboarding() {
                 </Button>
               </Form>
             </Card>
+
             <div
               style={{
                 display: "flex",

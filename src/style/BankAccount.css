@@ -3,11 +3,11 @@ body{
 }
 
  
-.form.ant-form{
+/* .form.ant-form{
     margin-top: 46px;
     position: relative;
     right: 156px;
-}
+} */
 .inputNumber.ant-input{
     margin-left: 26px;
     width: 58%;

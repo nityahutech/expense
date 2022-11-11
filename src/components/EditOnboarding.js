@@ -150,7 +150,7 @@ function EditOnboarding(props) {
   };
 
   const checkCharacterRole = (event) => {
-    if (!/^[a-zA-Z().-]*$/.test(event.key) && event.key !== "Backspace") {
+    if (!/^[a-zA-Z ().-]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
@@ -359,11 +359,10 @@ function EditOnboarding(props) {
                   {
                     required: true,
                     message: "Please Enter Domain Name",
-                    type: "domain",
                   },
                   {
                     pattern:
-                      /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}\.[a-zA-Z]{2,$/,
+                      /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/,
                     message: "Please Enter Valid Name",
                   },
                 ]}

@@ -26,10 +26,11 @@ function MainDashBoard() {
           style={{ 
             fontWeight: "600", 
             fontSize: "20px", 
-            letterSpacing: "4px",
+            letterSpacing: "1px",
+            borderRadius: "15px",
           }}
         >
-          <img style={{ width: "140px" }} alt="example" src={Organization} />
+          <img style={{ width: "90px" }} alt="example" src={Organization} />
           Organization
         </Card>
       </Link>
@@ -42,9 +43,14 @@ function MainDashBoard() {
         <Card
           bordered={false}
           hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "4px" }}
+          style={{ 
+            fontWeight: "600", 
+            fontSize: "20px", 
+            letterSpacing: "1px",
+            borderRadius: "15px",
+          }}
         >
-          <img style={{ width: "140px" }} alt="example" src={Attendancelog} />
+          <img style={{ width: "90px" }} alt="example" src={Attendancelog} />
           Attendance Log
         </Card>
       </Link>
@@ -57,9 +63,9 @@ function MainDashBoard() {
         <Card
           bordered={false}
           hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "6px" }}
+          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px",borderRadius: "15px", }}
         >
-          <img style={{ width: "140px" }} alt="example" src={leaveicon} />
+          <img style={{ width: "90px" }} alt="example" src={leaveicon} />
           Leave
         </Card>
       </Link>
@@ -72,9 +78,9 @@ function MainDashBoard() {
         <Card
           bordered={false}
           hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "6px" }}
+          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px",  borderRadius: "15px", }}
         >
-          <img style={{ width: "140px" }} alt="example" src={Payslip} />
+          <img style={{ width: "90px" }} alt="example" src={Payslip} />
           Pay Slip Generator
         </Card>
       </Link>
@@ -87,9 +93,9 @@ function MainDashBoard() {
         <Card
           bordered={false}
           hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "6px" }}
+          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px",  borderRadius: "15px", }}
         >
-          <img style={{ width: "140px" }} alt="example" src={Payroll} />
+          <img style={{ width: "90px" }} alt="example" src={Payroll} />
           Payroll
         </Card>
       </Link>
@@ -102,9 +108,9 @@ function MainDashBoard() {
         <Card
           bordered={false}
           hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "6px" }}
+          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px",  borderRadius: "15px", }}
         >
-          <img style={{ width: "140px" }} alt="example" src={Employeelist} />
+          <img style={{ width: "90px" }} alt="example" src={Employeelist} />
           Employee List
         </Card>
       </Link>
@@ -117,9 +123,9 @@ function MainDashBoard() {
         <Card
           bordered={false}
           hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "6px" }}
+          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px",   borderRadius: "15px", }}
         >
-          <img style={{ width: "140px" }} alt="example" src={Expenses} />
+          <img style={{ width: "90px" }} alt="example" src={Expenses} />
           Expense
         </Card>
       </Link>
@@ -132,9 +138,9 @@ function MainDashBoard() {
         <Card
           bordered={false}
           hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "6px" }}
+          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px", borderRadius: "15px", }}
         >
-          <img style={{ width: "140px" }} alt="example" src={Myprofile} />
+          <img style={{ width: "90px" }} alt="example" src={Myprofile} />
           My Profile
         </Card>
       </Link>
@@ -147,9 +153,9 @@ function MainDashBoard() {
         <Card
           bordered={false}
           hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "6px" }}
+          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px", borderRadius: "15px", }}
         >
-          <img style={{ width: "140px" }} alt="example" src={Companyprofile} />
+          <img style={{ width: "90px" }} alt="example" src={Companyprofile} />
           Company Profile
         </Card>
       </Link>
@@ -162,9 +168,9 @@ function MainDashBoard() {
         <Card
           bordered={false}
           hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "6px" }}
+          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px", borderRadius: "15px", }}
         >
-          <img style={{ width: "140px" }} alt="example" src={Settings} />
+          <img style={{ width: "90px" }} alt="example" src={Settings} />
           Setting
         </Card>
       </Link>
@@ -173,64 +179,28 @@ function MainDashBoard() {
 
   return (
     <div className="icon-container" >
+
       {isHr == "emp" ? (
         <>
           <Row>
-            <Col xs={22} sm={15} md={6}></Col>
-            <Card>
+            <Col xs={8} sm={8} md={8}></Col>
+            <Card style={{width:"25%"}}>
               <Row gutter={[24, 24]}>
-                <Col xs={22} sm={15} md={6} className="hi">
+                <Col xs={22} sm={15} md={24} className="hi">
                   {attendanceIcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={6} className="hi">
+                <Col xs={22} sm={15} md={24} className="hi">
                   {leaveIcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={6} className="hi">
+                <Col xs={22} sm={15} md={24} className="hi">
                   {myProfileIcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={6} className="hi">
+                <Col xs={22} sm={15} md={24} className="hi">
                   {settingIcon()}
                 </Col>
-
-                {/* <Col span={8} className="hi">
-                {paySlipIcon()}
-              </Col> */}
-
-                {/* <Col span={8} className="hi">
-                {payrollIcon()}
-              </Col> */}
-
-                {/* <Col span={8} className="hi">
-                {employeeIcon()}
-              </Col> */}
-
-                {/* <Col span={8} className="hi">
-                {expenseIcon()}
-              </Col>  */}
-
-                {/* <Col span={8} className="hi">
-                <Link to="/Appraisal">
-              <Card 
-                  bordered={false}
-                  hoverable={true}
-                  style={{fontWeight:"600"}}
-                >
-                  <img
-                      style={{width:"70px"}}
-                      alt="example"
-                      src={Appraisal}
-                />
-                  Appraisal
-                </Card>
-                </Link>
-              </Col> */}
-
-                {/* <Col span={8} className="hi">
-                  {companyProfileIcon()}
-              </Col> */}
 
               </Row>
             </Card>
@@ -241,53 +211,36 @@ function MainDashBoard() {
       {isHr == "hr" ? (
         <>
           <Row>
-            <Col span={2}></Col>
-            <Card>
+            <Col xs={4} sm={4} md={4}></Col>
+            <Card style={{width:"70%"}}>
               <Row gutter={[24, 24]}>
-                <Col xs={22} sm={15} md={8} className="hi">
+                <Col xs={24} sm={24} md={8} className="hi">
                   {attendanceIcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={8} className="hi">
+                <Col xs={24} sm={24} md={8} className="hi">
                   {leaveIcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={8} className="hi">
+                <Col xs={24} sm={24} md={8} className="hi">
                   {paySlipIcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={8} className="hi">
+                <Col xs={24} sm={24} md={8} className="hi">
                   {payrollIcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={8} className="hi">
+                <Col xs={24} sm={24} md={8} className="hi">
                   {employeeIcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={8} className="hi">
+                <Col xs={24} sm={24} md={8} className="hi">
                   {expenseIcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={8} className="hi">
+                <Col xs={24} sm={24} md={8} className="hi">
                   {myProfileIcon()}
                 </Col>
-
-                {/* <Col span={8} className="hi">
-                <Link to="/Appraisal">
-              <Card 
-                  bordered={false}
-                  hoverable={true}
-                  style={{fontWeight:"600"}}
-                >
-                  <img
-                      style={{width:"70px"}}
-                      alt="example"
-                      src={Appraisal}
-                />
-                  Appraisal
-                </Card>
-                </Link>
-              </Col> */}
 
                 <Col xs={22} sm={15} md={8} className="hi">
                   {companyProfileIcon()}
@@ -305,71 +258,30 @@ function MainDashBoard() {
       {isHr == "super" ? (
         <>
           <Row>
-            <Col xs={22} sm={15} md={6}></Col>
+            <Col xs={8} sm={8} md={8}></Col>
             <Card 
-            style={{width:"50%"}}
+            style={{width:"25%"}}
             >
-              <Row >
+              <Row gutter={[24, 24]}>
 
-              <Col xs={22} sm={15} md={8} className="hi">
+              <Col xs={22} sm={15} md={24} className="hi">
                   {myProfileIcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={8} className="hi">
+                <Col xs={22} sm={15} md={24} className="hi">
                   {organizationcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={8} className="hi">
+                <Col xs={22} sm={15} md={24} className="hi">
                   {settingIcon()}
                 </Col>
-
-                {/* <Col span={8} className="hi">
-                {attendanceIcon()}
-              </Col> */}
-
-                {/* <Col span={8} className="hi">
-                {leaveIcon()}
-              </Col> */}
-
-                {/* <Col span={8} className="hi">
-                {paySlipIcon()}
-              </Col> */}
-
-                {/* <Col span={8} className="hi">
-                {payrollIcon()}
-              </Col> */}
-
-                {/* <Col span={8} className="hi">
-                {employeeIcon()}
-              </Col> */}
-
-                {/* <Col span={8} className="hi">
-                {expenseIcon()}
-              </Col> */}
-
-                {/* <Col span={8} className="hi">
-                <Link to="/Appraisal">
-              <Card 
-                  bordered={false}
-                  hoverable={true}
-                  style={{fontWeight:"600"}}
-                >
-                  <img
-                      style={{width:"70px"}}
-                      alt="example"
-                      src={Appraisal}
-                />
-                  Appraisal
-                </Card>
-                </Link>
-              </Col> */}
-
-                
+               
               </Row>
             </Card>
           </Row>
         </>
       ) : null}
+
     </div>
   );
 }

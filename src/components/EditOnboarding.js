@@ -149,6 +149,18 @@ function EditOnboarding(props) {
     }
   };
 
+  const checkCharacterRole = (event) => {
+    if (!/^[a-zA-Z().-]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
+  const checkAlphabetUpper = (event) => {
+    if (!/^[A-Z]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
   async function addUseRole(values) {
     let exists = accessList.filter((user) => values.mailid == user.mailid);
     if (
@@ -231,15 +243,15 @@ function EditOnboarding(props) {
                 name="orgcode"
                 label="Organization Code"
                 initialValue={props.modalData.id}
-                disabled
               >
                 <Input
-                  maxLength={15}
+                  maxLength={20}
                   placeholder="Organization Code"
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
                   }}
+                  disabled
                 />
               </Form.Item>
             </Col>
@@ -265,7 +277,7 @@ function EditOnboarding(props) {
                 initialValue={props.modalData.regCompName}
               >
                 <Input
-                  maxLength={35}
+                  maxLength={30}
                   placeholder="Organization Name"
                   style={{
                     border: "1px solid #8692A6",
@@ -312,7 +324,7 @@ function EditOnboarding(props) {
                 name="gst"
                 label="GST Number"
                 onKeyPress={(event) => {
-                  if (checkNumbervalue(event) && checkAlphabets(event)) {
+                  if (checkNumbervalue(event) && checkAlphabetUpper(event)) {
                     event.preventDefault();
                   }
                 }}
@@ -322,14 +334,15 @@ function EditOnboarding(props) {
                     message: "Please enter GST Number",
                   },
                   {
-                    pattern: /^[0-9a-zA-Z]+$/,
+                    pattern:
+                      /^[0-9]{2}[A-Z]{3}[ABCFGHLJPTF]{1}[A-Z]{1}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
                     message: "Please enter Valid Number",
                   },
                 ]}
                 initialValue={props.modalData.gst}
               >
                 <Input
-                  maxLength={22}
+                  maxLength={15}
                   placeholder="GST Number"
                   style={{
                     border: "1px solid #8692A6",
@@ -346,16 +359,18 @@ function EditOnboarding(props) {
                   {
                     required: true,
                     message: "Please Enter Domain Name",
+                    type: "domain",
                   },
                   {
-                    pattern: /^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i,
+                    pattern:
+                      /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}\.[a-zA-Z]{2,$/,
                     message: "Please Enter Valid Name",
                   },
                 ]}
                 initialValue={props.modalData.domain}
               >
                 <Input
-                  maxLength={25}
+                  maxLength={30}
                   placeholder="Domain Name"
                   style={{
                     border: "1px solid #8692A6",
@@ -471,6 +486,7 @@ function EditOnboarding(props) {
                 initialValue={props.modalData.regOffice?.city}
               >
                 <Input
+                  maxLength={20}
                   placeholder="City"
                   style={{
                     border: "1px solid #8692A6",
@@ -503,7 +519,7 @@ function EditOnboarding(props) {
                 initialValue={props.modalData.regOffice?.state}
               >
                 <Input
-                  maxLength={10}
+                  maxLength={25}
                   placeholder="State"
                   style={{
                     border: "1px solid #8692A6",
@@ -535,7 +551,7 @@ function EditOnboarding(props) {
                 initialValue={props.modalData.regOffice?.country}
               >
                 <Input
-                  maxLength={10}
+                  maxLength={20}
                   placeholder="Country"
                   style={{
                     border: "1px solid #8692A6",
@@ -576,7 +592,7 @@ function EditOnboarding(props) {
               </Form.Item>
             </Col>
 
-            <Col xs={22} sm={8}>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item name="logo" className="uploadLogo">
                 <div
                   style={{
@@ -698,24 +714,25 @@ function EditOnboarding(props) {
                       </div>
                       <div>{u.userRole}</div>
                     </Col>
-                    <Col xs={22} sm={15} md={5}>
+                    <Col xs={22} sm={15} md={6}>
                       <div style={{ fontSize: "13px", fontWeight: "600" }}>
                         Name
                       </div>
                       <div> {u.name}</div>
                     </Col>
-                    <Col xs={22} sm={15} md={7}>
+                    <Col xs={22} sm={15} md={6}>
                       <div style={{ fontSize: "13px", fontWeight: "600" }}>
-                        Email Address
+                        Email
                       </div>
                       <div>{u.mailid}</div>
                     </Col>
-                    <Col xs={22} sm={15} md={6}>
+                    <Col xs={22} sm={15} md={7}>
                       <div style={{ fontSize: "13px", fontWeight: "600" }}>
-                        Phone Number
+                        Mobile
                       </div>
 
                       <div>{u.phone}</div>
+
                       <Button
                         style={{
                           background: "#f8f8f8",
@@ -743,7 +760,7 @@ function EditOnboarding(props) {
                         name="userRole"
                         label="User Role"
                         onKeyPress={(event) => {
-                          if (checkAlphabets(event)) {
+                          if (checkCharacterRole(event)) {
                             event.preventDefault();
                           }
                         }}
@@ -753,7 +770,7 @@ function EditOnboarding(props) {
                             message: "Please enter Role",
                           },
                           {
-                            pattern: /^[a-zA-Z\s]*$/,
+                            pattern: /^[a-zA-Z().-\s]*$/,
                             message: "Please enter Valid Role",
                           },
                         ]}
@@ -790,7 +807,7 @@ function EditOnboarding(props) {
                         ]}
                       >
                         <Input
-                          maxLength={20}
+                          maxLength={30}
                           placeholder="Name"
                           style={{
                             border: "1px solid #8692A6",
@@ -802,7 +819,7 @@ function EditOnboarding(props) {
                     <Col xs={22} sm={15} md={6}>
                       <Form.Item
                         name="mailid"
-                        label="Email Address"
+                        label="Email"
                         rules={[
                           {
                             type: "email",
@@ -826,7 +843,7 @@ function EditOnboarding(props) {
                     <Col xs={22} sm={15} md={6}>
                       <Form.Item
                         name="phone"
-                        label="Phone Number"
+                        label="Mobile"
                         onKeyPress={(event) => {
                           if (checkNumbervalue(event)) {
                             event.preventDefault();

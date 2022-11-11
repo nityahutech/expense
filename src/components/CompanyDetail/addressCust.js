@@ -95,12 +95,12 @@ function AddressCust() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          flexDirection: "column",
+          //   flexDirection: "column",
         }}
       >
-        {data && data != 0
-          ? data.map((add, i) => (
-              <Row>
+        <Row>
+          {data && data != 0
+            ? data.map((add, i) => (
                 <Col xs={22} sm={15} md={24}>
                   <Form
                     // form={form1}
@@ -427,9 +427,19 @@ function AddressCust() {
                     </Card>
                   </Form>
                 </Col>
-              </Row>
-            ))
-          : null}
+              ))
+            : null}
+        </Row>
+      </div>
+      <div
+        className="personalCardDiv"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          //   flexDirection: "column",
+        }}
+      >
         <Row>
           <Col xs={24} sm={15} md={8}>
             <Form

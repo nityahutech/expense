@@ -68,6 +68,7 @@ function Onboarding() {
     const valuesToservice = {
       accessList: [],
       address: [],
+      secretary: [],
       auditor: [],
       bank: [],
       regCompName: values.regCompName,
@@ -196,6 +197,12 @@ function Onboarding() {
 
   const checkAlphabets = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
+  const checkCharacterRole = (event) => {
+    if (!/^[a-zA-Z().-]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
@@ -603,7 +610,7 @@ function Onboarding() {
                       ]}
                     >
                       <Input
-                        maxLength={20}
+                        maxLength={30}
                         placeholder="Organization Name"
                         style={{
                           border: "1px solid #8692A6",
@@ -696,6 +703,7 @@ function Onboarding() {
                       ]}
                     >
                       <Input
+                        maxLength={30}
                         placeholder="Domain Name"
                         style={{
                           border: "1px solid #8692A6",
@@ -1082,7 +1090,7 @@ function Onboarding() {
                               name="userRole"
                               label="User Role"
                               onKeyPress={(event) => {
-                                if (checkAlphabets(event)) {
+                                if (checkCharacterRole(event)) {
                                   event.preventDefault();
                                 }
                               }}
@@ -1092,13 +1100,13 @@ function Onboarding() {
                                   message: "Please enter Role",
                                 },
                                 {
-                                  pattern: /^[a-zA-Z\s]*$/,
+                                  pattern: /^[a-zA-Z().-\s]*$/,
                                   message: "Please enter Valid Role",
                                 },
                               ]}
                             >
                               <Input
-                                maxLength={10}
+                                maxLength={30}
                                 placeholder="User Role"
                                 style={{
                                   border: "1px solid #8692A6",
@@ -1129,7 +1137,7 @@ function Onboarding() {
                               ]}
                             >
                               <Input
-                                maxLength={20}
+                                maxLength={30}
                                 placeholder="Name"
                                 style={{
                                   border: "1px solid #8692A6",

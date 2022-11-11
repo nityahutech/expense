@@ -323,22 +323,22 @@ const HalfyearGoalPdf = (props) => {
     return (
         <>
             <div
-              className="date"
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexDirection: "row",
-              }}
+                className="date"
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    flexDirection: "row",
+                }}
             >
-              <DownloadOutlined
-                onClick={() => pdfMake.createPdf(docDefinition).download()}
-              ></DownloadOutlined>
+                <DownloadOutlined
+                    onClick={() => pdfMake.createPdf(docDefinition).download()}
+                ></DownloadOutlined>
             </div>
-          </Space>
-        </Card>
-      </div>
-    </>
-  );
+
+
+
+        </>
+    );
 };
 
 export default HalfyearGoalPdf;

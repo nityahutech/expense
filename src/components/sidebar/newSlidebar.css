@@ -72,12 +72,12 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
   background-color: #05445e;
 }
 
-.ant-menu-title-content {
+/* .ant-menu-title-content {
   font-size: 13px;
   font-weight: 600;
   color: #ffffff;
   margin-left: 10px;
-}
+} */
 
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background-color: #3f8bae;
@@ -114,4 +114,18 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
 }
 .ant-layout.ant-layout-has-sider {
   background-color: #05445e;
+}
+
+.leaveletter {
+  padding: 0px;
+  margin-bottom: 0px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.sideFont {
+  margin-bottom: 0px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
 }

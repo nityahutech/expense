@@ -78,7 +78,7 @@ const Policies = () => {
   async function addPolicy(values) {
     console.log(file, values);
     try {
-      await PolicyContext.createPolicy("compId001", values, file);
+      await PolicyContext.createPolicy(values, file);
       showNotification("success", "Success", "Upload Complete");
       const timer = setTimeout(() => {
         getData();
@@ -98,7 +98,7 @@ const Policies = () => {
   //   async function updatePolicy(values) {
   //     console.log(values,file)
   //     try{
-  //    await PolicyContext.updateCompInfo("compID001",values,file)
+  //    await PolicyContext.updateCompInfo(id,values,file)
   //    showNotification("success", "Success", "Upload Complete");
   //    const timer = setTimeout(() => {
   //    getData();
@@ -156,7 +156,7 @@ const Policies = () => {
     getData();
   }, []);
   const getData = async () => {
-    let alldata = await PolicyContext.getPolicy("compId001");
+    let alldata = await PolicyContext.getPolicy();
     console.log(alldata);
     // setData(alldata);
     setPolicy(alldata);

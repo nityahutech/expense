@@ -11,7 +11,8 @@ import Organization from "../../images/Organization.png";
 import CompanyProfile from "../../images/Companyprofile.png";
 import SettingIcon from "../../images/gear.png";
 import homePage from "../../images/homeIcon.png";
-
+import LeaveIcon from "../../images/smallLeaveLogo.png";
+import SmallAttd from "../../images/samllattlogo.png"
 import "./newSlidebar.css";
 import { NavLink } from "react-router-dom";
 
@@ -19,9 +20,7 @@ const { Sider } = Layout;
 
 
 const NewSidebar = (props) => {
-  const [isHr, setIsHr] = useState(
-    sessionStorage.getItem("role") === "hr" ? true : false
-  );
+  const role = sessionStorage.getItem("role");
 
   return (
     <Layout className="sidelayout">
@@ -73,12 +72,16 @@ const NewSidebar = (props) => {
             }
             key="30"
           >
-            Home
+            <p className="sideFont">Home</p>
             <NavLink to="/MainDashboardPage/MainDashBoard" />
           </Menu.Item>
-          <Menu.SubMenu
+          { role == "super" ? (
+            <Menu.SubMenu
             style={{
               width: "100%",
+              fontSize: '13px',
+                  fontWeight: '600',
+                  color: '#ffffff',
             }}
             icon={
               <img
@@ -118,11 +121,13 @@ const NewSidebar = (props) => {
               }
               key="31"
             >
-              Onboarding
+              <p className="sideFont">Onboarding</p>
               <NavLink to="/OnboardingPage/Onboarding" />
             </Menu.Item>
           </Menu.SubMenu>
-          <Menu.Item
+          ) : null}
+          { role == "hr" ? (
+            <Menu.Item
             icon={
               <img
                 style={{ color: "white" }}
@@ -134,13 +139,56 @@ const NewSidebar = (props) => {
             }
             key="32"
           >
-            Company Profile
+            <p className="sideFont">Company Profile</p>
             <NavLink to="/CompanyProfilepage" />
           </Menu.Item>
+          ) : null}
+          { role != "super" ?(
+            <>
+            <Menu.Item
+              className="arrow"
+              icon={
+                <img
+                  // src="/dot.png"
+                  src={SmallAttd}
+                  alt="profile"
+                  style={{width: "21px",
+                  marginLeft: "-5px",}}
+                  // className="dot"
+                />
+              }
+              key="6"
+            >
+              <p className="sideFont">Attendance</p>
+              <NavLink to="/Attendance/AttendanceLog" />
+            </Menu.Item>
+            <Menu.Item
+              
+              icon={
+                <img
+                  src={LeaveIcon}
+                  alt="profile"
+                  className="dot"
+                  style={{width: "32px",
+                    marginLeft: "-9px",}}
+                />
+              }
+              key="7"
+            >
+              <p className="leaveletter">Leave</p>
+              <NavLink to="/Employee/Leave" />
+            </Menu.Item>
+            </>
+            ): null}
+            
+            {role == "hr" ? (
 
           <Menu.SubMenu
             style={{
               width: "100%",
+              fontSize: '13px',
+                  fontWeight: '600',
+                  color: '#ffffff',
             }}
             icon={
               <img
@@ -152,47 +200,15 @@ const NewSidebar = (props) => {
               />
             }
             key="sub2"
-            title="Employee"
+            title="Employees"
             mode="inline"
           >
-            <Menu.Item
-              className="arrow"
-              icon={
-                <img
-                  // src="/dot.png"
-                  src={dot}
-                  alt="profile"
-                  className="dot"
-                />
-              }
-              key="6"
-            >
-              Attendance Log
-              <NavLink to="/Attendance/AttendanceLog" />
-            </Menu.Item>
-            <Menu.Item
-              className="arrow"
-              icon={
-                <img
-                  // src="/dot.png"
-                  src={dot}
-                  alt="profile"
-                  className="dot"
-                />
-              }
-              key="7"
-            >
-              Leave
-              <NavLink to="/Employee/Leave" />
-            </Menu.Item>
-            {isHr ? (
-              <>
                 <Menu.Item
                   className="arrow"
                   icon={<img src={dot} alt="profile" className="dot" />}
                   key="8"
                 >
-                  Add Employee
+                 <p className="sideFont">Leave</p> 
                   <NavLink to="/Addemployee/AddEmployee" />
                 </Menu.Item>
                 <Menu.Item
@@ -211,9 +227,8 @@ const NewSidebar = (props) => {
                   Hr PaySlip
                   <NavLink to="/Payslip2/HrPaySlip" />
                 </Menu.Item> */}
-              </>
-            ) : null}
           </Menu.SubMenu>
+            ) : null}
           {/* <Menu.SubMenu
             className="arrow-div"
             style={{
@@ -241,12 +256,14 @@ const NewSidebar = (props) => {
               <NavLink to="/Appraisal/HalfYearGoalPage" />
             </Menu.Item>
           </Menu.SubMenu> */}
-          {isHr ? (
-            <>
-              <Menu.SubMenu
+          {role == "hr" ? (
+            <Menu.SubMenu
                 className="arrow-div"
                 style={{
                   width: "100%",
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  color: '#ffffff',
                 }}
                 icon={
                   <img
@@ -259,6 +276,7 @@ const NewSidebar = (props) => {
                 key="sub1"
                 title="Expense"
                 mode="inline"
+                
               >
                 {/* <Menu.Item
                   className="arrow"
@@ -281,7 +299,7 @@ const NewSidebar = (props) => {
                   icon={<img src={dot} alt="profile" className="dot" />}
                   key="2"
                 >
-                  Add Expense
+                  <p className="sideFont">Add Expense</p>
                   <NavLink to="/Expense/AddExpense" />
                 </Menu.Item>
                 <Menu.Item
@@ -289,11 +307,10 @@ const NewSidebar = (props) => {
                   icon={<img src={dot} alt="profile" className="dot" />}
                   key="3"
                 >
-                  Expense List
+                   <p className="sideFont">Expense List</p>
                   <NavLink to="/Expense/ExpenseList" />
                 </Menu.Item>
               </Menu.SubMenu>
-            </>
           ) : null}
 
           <Menu.Item
@@ -307,7 +324,7 @@ const NewSidebar = (props) => {
             }
             key="21"
           >
-            My Profile
+            <p className="sideFont">My Profile</p>
             <NavLink to="/Profile" />
           </Menu.Item>
           <Menu.Item
@@ -321,7 +338,7 @@ const NewSidebar = (props) => {
             }
             key="22"
           >
-            Settings
+            <p className="sideFont">Settings</p>
             <NavLink to="/Setting" />
           </Menu.Item>
         </Menu>

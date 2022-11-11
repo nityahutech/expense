@@ -26,7 +26,7 @@ function AddressCust() {
       country: values.country,
       pincode: values.pin,
     };
-    CompanyProContext.addCompInfo("compId001", { address: valuesToservice });
+    CompanyProContext.addCompInfo(compId, { address: valuesToservice });
     form.resetFields();
     getData();
     showAddAddressContent(false);
@@ -43,7 +43,7 @@ function AddressCust() {
       pincode: values.pin,
     };
     await CompanyProContext.editCompInfo(
-      "compId001",
+      compId,
       { address: data[i] },
       { address: valuesToservice }
     );
@@ -61,7 +61,7 @@ function AddressCust() {
       okType: "danger",
 
       onOk: () => {
-        CompanyProContext.deleteCompInfo("compId001", { address: record })
+        CompanyProContext.deleteCompInfo(compId, { address: record })
           .then((response) => {
             console.log(response);
             getData();
@@ -79,7 +79,7 @@ function AddressCust() {
   console.log(data);
 
   const getData = async () => {
-    let data = await CompanyProContext.getCompanyProfile("compId001");
+    let data = await CompanyProContext.getCompanyProfile(compId);
     let array = [...data.address];
     showEditAddressContent(array.fill(false));
     setData(data.address);

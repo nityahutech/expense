@@ -62,14 +62,14 @@ const Statutory = () => {
   const onFinish = (value) => {
     const valuesToservice = {
       entityType: value.entityType,
-      cinName: value.cinName,
+      cinNumber: value.cinNumber,
       dateOfIncorp: value.dateOfIncorp,
       compPan: value.compPan,
       compTan: value.compTan,
       gst: value.gst,
     };
 
-    CompanyProContext.updateCompInfo("compId001", valuesToservice);
+    CompanyProContext.updateCompInfo(compId, valuesToservice);
     getData();
     showEditContent(false);
   };
@@ -78,7 +78,7 @@ const Statutory = () => {
     getData();
   }, []);
   const getData = async () => {
-    let data = await CompanyProContext.getCompanyProfile("compId001");
+    let data = await CompanyProContext.getCompanyProfile(compId);
     setData(data);
     setDirectorList(data.director);
     setAuditorList(data.auditor);
@@ -109,7 +109,7 @@ const Statutory = () => {
       directorphone: values.directorphone,
     };
     console.log(record);
-    CompanyProContext.addCompInfo("compId001", { director: record });
+    CompanyProContext.addCompInfo(compId, { director: record });
     form.resetFields();
     getData();
     showEditDirectors(false);
@@ -141,7 +141,7 @@ const Statutory = () => {
       okType: "danger",
 
       onOk: () => {
-        CompanyProContext.deleteCompInfo("compId001", { director: record })
+        CompanyProContext.deleteCompInfo(compId, { director: record })
           .then((response) => {
             console.log(response);
             getData();
@@ -162,7 +162,7 @@ const Statutory = () => {
       auditorphone: values.auditorphone,
     };
     console.log(record1);
-    CompanyProContext.addCompInfo("compId001", { auditor: record1 });
+    CompanyProContext.addCompInfo(compId, { auditor: record1 });
     form1.resetFields();
     getData();
     setEditAuditor(false);
@@ -175,7 +175,7 @@ const Statutory = () => {
       okType: "danger",
 
       onOk: () => {
-        CompanyProContext.deleteCompInfo("compId001", { auditor: record1 })
+        CompanyProContext.deleteCompInfo(compId, { auditor: record1 })
           .then((response) => {
             console.log(response);
             getData();
@@ -214,7 +214,7 @@ const Statutory = () => {
       secmailid: values.secmailid,
       secphone: values.secphone,
     };
-    CompanyProContext.addCompInfo("compId001", { secretary: record2 });
+    CompanyProContext.addCompInfo(compId, { secretary: record2 });
     form2.resetFields();
     getData();
     setEditCS(false);
@@ -226,7 +226,7 @@ const Statutory = () => {
       okType: "danger",
 
       onOk: () => {
-        CompanyProContext.deleteCompInfo("compId001", { secretary: record2 })
+        CompanyProContext.deleteCompInfo(compId, { secretary: record2 })
           .then((response) => {
             console.log(response);
             getData();
@@ -256,7 +256,7 @@ const Statutory = () => {
       baibranchname: values.baibranchname,
       baiaccountnumber: values.baiaccountnumber,
     };
-    CompanyProContext.addCompInfo("compId001", { bank: record3 });
+    CompanyProContext.addCompInfo(compId, { bank: record3 });
     form3.resetFields();
     getData();
     setEditBAI(false);
@@ -268,7 +268,7 @@ const Statutory = () => {
       okType: "danger",
 
       onOk: () => {
-        CompanyProContext.deleteCompInfo("compId001", { bank: record3 })
+        CompanyProContext.deleteCompInfo(compId, { bank: record3 })
           .then((response) => {
             console.log(response);
             getData();
@@ -376,11 +376,11 @@ const Statutory = () => {
                   <div>
                     <div className="div-discription">CIN</div>
                     {editContent === false ? (
-                      <div>{data.cinName ? data.cinName : "-"}</div>
+                      <div>{data.cinNumber ? data.cinNumber : "-"}</div>
                     ) : (
                       <Form.Item
-                        initialValue={data ? data.cinName : null}
-                        name="cinName"
+                        initialValue={data ? data.cinNumber : null}
+                        name="cinNumber"
                         rules={[
                           {
                             required: true,
@@ -393,10 +393,10 @@ const Statutory = () => {
                         ]}
                       >
                         <Input
-                          type="brandName"
+                          type="cinNumber"
                           maxLength={21}
                           required
-                          placeholder="Enter Brand Name"
+                          placeholder="Enter CIN Number"
                           bordered={false}
                           style={{
                             width: "100%",
@@ -463,12 +463,12 @@ const Statutory = () => {
                         rules={[
                           {
                             required: true,
-                            message: "Please enter Domain Name",
+                            message: "Please enter Company PAN",
                             type: "domain",
                           },
                           {
                             pattern: /^[0-9A-Z\s]*$/,
-                            message: "Please enter Valid Domain Name",
+                            message: "Please enter Valid Company PAN",
                           },
                         ]}
                       >

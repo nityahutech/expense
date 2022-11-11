@@ -11,43 +11,43 @@ import {
     where
 } from "firebase/firestore";
 
-const policyCollectionRef = collection(db, "policy");
+const compId = sessionStorage.getItem("compId")
+const policyCollectionRef = collection(db, `companyprofile/${compId}/policy`);
 
 class PolicyContext {
 
-    createPolicy = (id,updateCompInfo, file) => {
+    createPolicy = (updateCompInfo, file) => {
         if (file) {
-            const storageRef = ref(storage, `/policy/${file.name}`);
+            const storageRef = ref(storage, `/${compId}/policy/${file.name}`);
             uploadBytesResumable(storageRef, file).then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((url) => {
-                    console.log(url);
                     updateCompInfo.upload = url;
                     updateCompInfo.fileName = file.name
-                    console.log("FINAL", id)
-                    addDoc(policyCollectionRef,updateCompInfo)
+                    addDoc(policyCollectionRef, updateCompInfo)
                     return Promise.resolve();
                 })
             });
         } else {
-            console.log("FINAL", id) 
             addDoc(policyCollectionRef, updateCompInfo)
             return Promise.resolve();
         }
     };
-    updatePolicy = (id, updateDocument) => {
-        const documentDoc = doc(db, "policy", id);
-        return updateDoc(documentDoc, updateDocument);
-    };
+
+    // updatePolicy = (id, updateDocument) => {
+    //     const documentDoc = doc(db, "policy", id);
+    //     return updateDoc(documentDoc, updateDocument);
+    // };
 
     deletePolicy = (id, file) => {
         if(file) {
-            const storageRef = ref(storage, `/policy/${file}`);
+            const storageRef = ref(storage, `/${compId}/policy/${file}`);
             deleteObject(storageRef)
         }
         const documentDoc = doc(db, "policy", id);
         return deleteDoc(documentDoc);
     };
-    getPolicy = async (compId) => { 
+    
+    getPolicy = async () => { 
         const q = query(policyCollectionRef);
         let temp = await getDocs(q);
         let req = temp.docs.map((doc) => {

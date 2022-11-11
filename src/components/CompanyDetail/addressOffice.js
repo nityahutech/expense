@@ -25,7 +25,7 @@ function AddressOffice() {
             pincode:values.pin
           
         }
-        CompanyProContext.updateCompInfo("compId001",{regOffice:valuesToservice});
+        CompanyProContext.updateCompInfo(compId,{regOffice:valuesToservice});
         getData();
         showEditAddress(false);
       };
@@ -33,7 +33,7 @@ function AddressOffice() {
         getData();
         }, []);
         const getData = async () => {
-          let data = await CompanyProContext.getCompanyProfile("compId001");
+          let data = await CompanyProContext.getCompanyProfile(compId);
           setData(data);
           
         };

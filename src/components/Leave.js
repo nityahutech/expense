@@ -15,7 +15,7 @@ import {
 import { Button } from "antd";
 import { Form, Input } from "antd";
 import moment from "moment";
-import { DeleteOutlined, RetweetOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, RetweetOutlined } from "@ant-design/icons";
 import LeaveContext from "../contexts/LeaveContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
 import EmpInfoContext from "../contexts/EmpInfoContext";
@@ -24,6 +24,11 @@ import Notification from "./Notification";
 import HolidayList from "./HolidayList";
 import "../style/leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
+
+moment.updateLocale('en', {
+  weekdaysMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+});
+
 
 const Leave = () => {
   const [secondModal, setSecondModal] = useState(false)
@@ -69,7 +74,12 @@ const Leave = () => {
   const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
   const [employeeRecord, setEmployeeRecord] = useState();
   const [repManager, setRepManager] = useState();
+  const [editedLeave, setEditedLeave] = useState({});
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  // const [currentLeave, setCurrentLeave] = useState(record);
   const { RangePicker } = DatePicker;
+
+
 
   const showModal = () => {
     setSecondModal(true);
@@ -115,6 +125,7 @@ const Leave = () => {
         ];
       }
     }
+
 
     return listData || [];
   };
@@ -230,6 +241,7 @@ const Leave = () => {
   }
 
   const getData = async (temp) => {
+    setLoading(true);
     let empRecord = await EmpInfoContext.getEduDetails(currentUser.uid);
     setRepManager(empRecord?.repManager);
     setEmployeeRecord(empRecord);
@@ -246,6 +258,7 @@ const Leave = () => {
     console.log(d, totaldays, leavedays, temp)
     getDateSorted(d);
     setHistory(d);
+    setLoading(false);
     // let temp = {
     //   "Earn Leave": empRecord.earnLeave ? empRecord.earnLeave : 12,
     //   "Sick Leave": empRecord.sickLeave ? empRecord.sickLeave : 6,
@@ -325,6 +338,14 @@ const Leave = () => {
       },
     });
   };
+
+  const onEditLeave = (values) => {
+    console.log('value', values)
+
+    setEditedLeave(values);
+    setIsEditModalOpen(true)
+  };
+
 
   const onReset = () => {
     form.resetFields();
@@ -442,6 +463,30 @@ const Leave = () => {
                   onClick={() => {
                     if (record?.status !== "Approved") onDeleteLeave(record);
                   }}
+                  style={
+                    record?.status === "Approved"
+                      ? {
+                        color: "green",
+                        cursor: "not-allowed",
+                        marginLeft: 10,
+                      }
+                      : record?.status === "Pending"
+                        ? { color: "blue", marginLeft: 10 }
+                        : { color: "red", marginLeft: 10 }
+                  }
+                />
+              </>
+            }
+            {
+              <>
+                <EditOutlined
+                  disabled={record?.status === "Approved"}
+                  onClick={() => {
+                    if (record?.status !== "Approved") onEditLeave(record);
+                  }}
+                  // onClick={() => {
+                  //   ;
+                  // }}
                   style={
                     record?.status === "Approved"
                       ? {
@@ -601,11 +646,42 @@ const Leave = () => {
     ) : null;
   };
 
+
+
   const dateCellRender = (value) => {
+    console.log(value.format("dddd"))
     const listData = getListData(value);
+    let bgColor = "rgba(74, 67, 67, 0.2)";
+    let color = "rgba(74, 67, 67, 1)";
+    let textVal = value.format("dddd");
+    if (!(listData.length == 0)) {
+      textVal = listData[0].type;
+      color = listData[0].type == "On Leave" ?
+        "rgba(0, 128, 0,  1)" : listData[0].type === "Pending" ?
+          "rgba(10, 91, 204,  1)" : listData[0].isOptional ?
+            "rgba(0, 119, 137, 0.96)" : "rgba(252, 143, 10, 1)";
+      bgColor = listData[0].type == "On Leave" ?
+        "rgb(15, 255, 80,0.2)" : listData[0].type === "Pending" ?
+          "rgba(10, 91, 204,0.2)" : listData[0].isOptional ?
+            "rgba(154, 214, 224, 0.96)" : "rgba(252, 143, 10,0.2)";
+    }
     return (
       <div className="events" style={{}}>
-        {listData.map((item) => (
+        <div
+          style={{
+            backgroundColor: bgColor,
+            color: color,
+            fontSize: "8px",
+            paddingLeft: "5px",
+            paddingRight: "5px",
+            margin: "0px",
+            borderRadius: "5px",
+            justifyContent: "center",
+          }}
+        >
+          <div className="present"> {textVal} </div>
+        </div>
+        {/* {listData.map((item) => (
           <div
             style={
               item.type === "On Leave"
@@ -655,7 +731,7 @@ const Leave = () => {
           >
             <div className="present"> {item.type} </div>
           </div>
-        ))}
+        ))} */}
       </div>
     );
   };
@@ -1123,11 +1199,11 @@ const Leave = () => {
                   </h5>
                 </Button>
               </div>
-              <div style={{ display: 'flex' }}>
+              <div className='holiday-button' style={{ display: 'flex' }}>
                 <div>
                   <HolidayList isHr={isHr} refreshCalendar={addNewHoliday} />
                 </div>
-                <Button
+                <Button className="button-applyleave"
                   style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '10px' }}
                   type="default" onClick={showModal}>
                   Apply Leave
@@ -1163,6 +1239,11 @@ const Leave = () => {
               value={date}
               onChange={setDate}
               dateCellRender={dateCellRender}
+              // dateCellRender={() => (
+              //   <div>
+              //     <Button>date</Button>
+              //   </div>
+              // )}
               monthCellRender={monthCellRender}
               disabledDate={disabledCalendarDate}
 
@@ -1223,7 +1304,8 @@ const Leave = () => {
 
                 <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-around' }}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24} >
-                    <Form.Item
+                    <Form.Item required={false}
+
                       labelAlign="left"
                       style={{
                         marginBottom: "20px",
@@ -1237,8 +1319,16 @@ const Leave = () => {
                         </label>
                       }
                       name="dateStart"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Please Select Date!',
+                        },
+                      ]}
                     >
+
                       <DatePicker
+
                         style={{ width: "100%" }}
                         format="Do MMM, YYYY"
                         onChange={(e) => {
@@ -1354,7 +1444,7 @@ const Leave = () => {
                   </Col>
                 </Row>
 
-                <Form.Item
+                <Form.Item required={false}
                   labelAlign="left"
                   name="leaveNature"
                   style={{ marginBottom: "20px" }}
@@ -1363,6 +1453,12 @@ const Leave = () => {
                       Nature of Leave<span style={{ color: "red" }}> *</span>
                     </label>
                   }
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please Leave Nature!',
+                    },
+                  ]}
                 >
                   <Select
                     required
@@ -1624,6 +1720,263 @@ const Leave = () => {
           </Col>
         </Row>
       </Row>
+      {/* //editModal */}
+      <Modal
+        style={{ width: "450px" }}
+        className="viewAppraisal"
+        // centered
+        visible={isEditModalOpen}
+        footer={null}
+        title="Edit Apply Leave"
+        closeIcon={
+          <div
+            onClick={() => {
+              setIsEditModalOpen(false);
+            }}
+            style={{ color: "#ffffff" }}
+          >
+            X
+          </div>
+        }
+      >
+        <Row
+          className="apply-leave"
+          style={{
+            marginTop: "10px",
+          }}
+        >
+
+
+          <Col xl={24} lg={24} md={24} sm={24} xs={24}
+            style={{
+              background: "flex",
+              padding: "10px",
+              // width: "400px",
+            }}
+          >
+            <Form
+              {...Leave}
+              labelCol={{
+                span: 8,
+              }}
+              wrapperCol={{
+                span: 16,
+              }}
+              initialValues={{
+                remember: true,
+
+
+              }}
+              form={form}
+              onFinish={onFinish}
+            // layout="vertical"
+            >
+
+              <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-around' }}>
+                <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                  <Form.Item
+
+                    labelAlign="left"
+                    style={{
+                      marginBottom: "20px",
+                      color: "white",
+
+                      minWidth: "70px",
+                    }}
+                    label={
+                      <label style={{ color: "black", fontWeight: "400" }}>
+                        Start Date<span style={{ color: "red" }}> *</span>
+                      </label>
+                    }
+                    name="editleavedateStart"
+                  >
+                    <DatePicker
+                      defaultValue={editedLeave.dateCalc == null ? null : moment(editedLeave.dateCalc[0], 'Do MMM, YYYY')}
+                      style={{ width: "100%" }}
+                      format="Do MMM, YYYY"
+                      onChange={(e) => {
+                        setDateStart(e);
+                        onLeaveDateChange();
+                      }}
+                      disabledDate={disabledDate}
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                  <Form.Item
+                    labelAlign="left"
+                    name="editleaveslotStart"
+                    style={{ marginBottom: "25px", }}
+                    className="div-slot"
+                    label={
+                      <label style={{ color: "black", fontWeight: "400" }}>
+                        Start Slot<span style={{ color: "red" }}> *</span>
+                      </label>
+                    }
+                    rules={[{ message: "Please select an option!" }]}
+                    initialValue={"Full Day"}
+                    allowClear
+                  >
+                    <Select
+                      required
+                      defaultValue={"Full Day"}
+                      style={{ width: "100%" }}
+                      onChange={(e) => {
+                        setStartSlot(e);
+                        onLeaveDateChange();
+                      }}
+                    >
+                      <Option value="Full Day">Full Day</Option>
+                      <Option value="Half Day">Half Day</Option>
+                    </Select>
+                    {/* <Radio.Group defaultValue="Full Day"
+                                    onChange={onLeaveSlotChange}
+                                >
+                                    <Radio style={{ color: "black", fontWeight: '400' }} disabled={ dateSelected.length > 1 ? true:false } value="Half Day">Half Day</Radio>
+                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
+
+                                </Radio.Group> */}
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                  <Form.Item
+                    labelAlign="left"
+                    style={{ marginBottom: "20px", color: "white", }}
+                    label={
+                      <label style={{ color: "black", fontWeight: "400" }}>
+                        End Date<span style={{ color: "red" }}> *</span>
+                      </label>
+                    }
+                    name="editLeavedateEnd"
+                  >
+                    <DatePicker
+                      defaultValue={editedLeave.dateCalc == null ? null : moment(editedLeave.dateCalc[1], 'Do MMM, YYYY')}
+                      style={{ width: "100%" }}
+                      format="Do MMM, YYYY"
+                      onChange={(e) => {
+                        console.log(e)
+                        setDateEnd(e);
+                        onLeaveDateChange(e);
+                      }}
+                      disabledDate={disabledDate}
+                      disabled={disableEnd()}
+                    />
+                  </Form.Item>
+                </Col>
+
+
+              </Row>
+
+              <Form.Item
+                labelAlign="left"
+                name="editleaveNature"
+                style={{ marginBottom: "20px" }}
+                label={
+                  <label style={{ color: "black", fontWeight: "400" }}>
+                    Nature of Leave<span style={{ color: "red" }}> *</span>
+                  </label>
+                }
+              >
+                <Select defaultValue={editedLeave.nature}
+                  required
+                  placeholder="Select a option "
+                  allowClear
+                  disabled={disableNature()}
+                  onChange={onLeaveNatureChange}
+                >{leavedays != null ?
+                  (Object.keys(leavedays).map((u) => (
+                    <Option
+                      disabled={disabledLeaveNature(u)}
+                      value={u}
+                    >
+                      {u}
+                    </Option>
+                  )))
+                  : null}
+                  <Option value={"Loss of Pay"}>Loss of Pay</Option>
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                initialValue={editedLeave.reason}
+                labelAlign="left"
+                name="editleavereason"
+                style={{ marginBottom: "20px" }}
+                label={
+                  <label style={{ color: "black", fontWeight: "400" }}>
+                    Reason<span style={{ color: "red" }}> *</span>{" "}
+                  </label>
+                }
+              >
+                <Input.TextArea
+                  maxLength={60}
+                  onChange={(e) => {
+                    const inputval = e.target.value;
+                    const newVal =
+                      inputval.substring(0, 1).toUpperCase() +
+                      inputval.substring(1);
+                    form.setFieldsValue({ reason: newVal });
+                  }}
+                  required
+                />
+              </Form.Item>
+
+              <Form.Item
+                labelAlign="left"
+                name="approver"
+                style={{ marginBottom: "20px" }}
+                label={
+                  <label style={{ color: "black", fontWeight: "400" }}>
+                    Approver<span style={{ color: "red" }}> *</span>
+                  </label>
+                }
+                initialValue={repManager}
+              >
+                <Input
+                  maxLength={20}
+                  onChange={(e) => {
+                    const inputval = e.target.value;
+                    const newVal =
+                      inputval.substring(0, 1).toUpperCase() +
+                      inputval.substring(1);
+                    form.setFieldsValue({ approver: newVal });
+                  }}
+                  // rules={[{ required: true }]}
+                  // placeholder="Reporting Manager"
+                  disabled
+                />
+              </Form.Item>
+
+              <Form.Item
+                style={{ paddingTop: "px" }}
+                wrapperCol={{
+                  offset: 8,
+                  span: 24,
+                }}
+              >
+                <Button type="primary" htmlType="submit"
+                // onClick={oncloseModal} 
+                >
+                  {" "}
+                  Submit{" "}
+
+                </Button>
+                <Button
+                  htmlType="button"
+                  style={{ marginLeft: "10px" }}
+                  onClick={onReset}
+                >
+                  Reset
+                </Button>
+              </Form.Item>
+            </Form>
+          </Col>
+        </Row>
+      </Modal>
     </>
   );
 };

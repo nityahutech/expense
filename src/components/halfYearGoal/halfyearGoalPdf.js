@@ -11,6 +11,7 @@ import {
 
 const HalfyearGoalPdf = (props) => {
     const [currentAppraisal, setCurrentAppraisal] = useState(props.appraisal);
+    console.log('currentAppraisal', currentAppraisal)
     const docDefinition = {
         content: [
             {
@@ -37,97 +38,71 @@ const HalfyearGoalPdf = (props) => {
                     }
                 },
                 table: {
-                    widths: ['100%'],
-                    heights: [10, 10],
+                    widths: ['25%', '25%', '25%', '25%',],
+                    heights: [10, 10, 10, 10],
                     body: [
                         [
                             {
                                 text: 'Employee Name :',
+                                // colSpan: 3,
+                                bold: true,
+                                fontSize: 9
+                            },
+                            {
+                                text: currentAppraisal.fname,
                                 fontSize: 9,
                                 bold: true,
-                            }
+                            },
                         ],
                         [
                             {
-                                text: 'Employee ID',
+                                text: 'Employee ID :',
+                                // colSpan: 3,
+                                bold: true,
+                                fontSize: 9
+                            },
+
+                            {
+                                text: currentAppraisal.empId,
                                 fontSize: 9,
                                 bold: true
                             }
                         ],
+
                         [
+
                             {
-                                text: 'Designation',
+                                text: 'Designation :',
+                                // colSpan: 3,
+                                bold: true,
+                                fontSize: 9
+                            },
+                            {
+                                text: currentAppraisal.designation,
                                 fontSize: 9,
                                 bold: true
-                            }
+                            },
+
+
                         ],
                         [
                             {
-                                text: 'Manager:',
+                                text: 'Reporting Manager :',
                                 fontSize: 9,
                                 bold: true
-                            }
+                            },
+
+                            {
+                                text: currentAppraisal.repManager,
+                                fontSize: 9,
+                                bold: true
+                            },
+
+
                         ],
                     ],
                 }
             },
-            {
-                text: 'Project Name : ',
-                fontSize: 12,
-                bold: true
-            },
-            {
-                text: 'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh',
-                fontSize: 9,
-                bold: true
-            },
-            {
-                text: 'Project Description :',
-                fontSize: 12,
-                bold: true
-            },
-            {
-                text: 'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh'
-
-                ,
-                
-                fontSize: 9,
-                bold: true
-            },
-            {
-                text: 'Organizational Activities :',
-                fontSize: 12,
-                bold: true
-            },
-            {
-                text: 'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh',
-                fontSize: 9,
-                bold: true
-            },
-            {
-                text: 'Organizational Activities :',
-                fontSize: 12,
-                bold: true
-            },
-            {
-                text: 'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh',
-                fontSize: 9,
-                bold: true
-            },
-            {
-                text: 'Manager Comments :',
-                fontSize: 12,
-                bold: true
-            },
-            {
-                text: 'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh',
-                fontSize: 9,
-                bold: true
-            },
-
-
-
-
             {
                 style: 'tableExample',
                 layout: {
@@ -137,12 +112,12 @@ const HalfyearGoalPdf = (props) => {
                 },
                 table: {
                     widths: ['40%', '20%', '20%', '20%'],
-                    heights: [10, 10, 10, 10, 30, 10, 25],
+                    heights: [10, 10, 10, 10, 10],
                     headerRows: 1,
                     body: [
                         [
                             {
-                                text: '',
+                                text: 'Description',
                                 // colSpan: 3,
                                 bold: true,
                                 fontSize: 9
@@ -174,20 +149,20 @@ const HalfyearGoalPdf = (props) => {
                                 fontSize: 9
                             },
                             {
-                                text: '5',
+                                text: currentAppraisal.empProjectActivitiesRating,
                                 // colSpan: 3,
                                 bold: true,
                                 fontSize: 9
                             },
                             {
-                                text: '5',
+                                text: currentAppraisal.mgrProjectActivitiesRating,
                                 // colSpan: 3,
                                 bold: true,
                                 fontSize: 9
                             },
 
                             {
-                                text: '5',
+                                text: (currentAppraisal.empProjectActivitiesRating + currentAppraisal.mgrProjectActivitiesRating) / 2,
                                 fontSize: 9,
                                 bold: true
                             }
@@ -200,20 +175,20 @@ const HalfyearGoalPdf = (props) => {
                                 fontSize: 9
                             },
                             {
-                                text: '5',
+                                text: currentAppraisal.empOrganisationActivitiesRating,
                                 // colSpan: 3,
                                 bold: true,
                                 fontSize: 9
                             },
                             {
-                                text: '5',
+                                text: currentAppraisal.mgrOrganisationActivitiesRating,
                                 // colSpan: 3,
                                 bold: true,
                                 fontSize: 9
                             },
 
                             {
-                                text: '5',
+                                text: (currentAppraisal.empOrganisationActivitiesRating + currentAppraisal.mgrOrganisationActivitiesRating) / 2,
                                 fontSize: 9,
                                 bold: true
                             }
@@ -226,20 +201,20 @@ const HalfyearGoalPdf = (props) => {
                                 fontSize: 9
                             },
                             {
-                                text: '5',
+                                text: currentAppraisal.empPersonalGrowthRating,
                                 // colSpan: 3,
                                 bold: true,
                                 fontSize: 9
                             },
                             {
-                                text: '5',
+                                text: currentAppraisal.mgrPersonalGrowthRating,
                                 // colSpan: 3,
                                 bold: true,
                                 fontSize: 9
                             },
 
                             {
-                                text: '5',
+                                text: (currentAppraisal.empPersonalGrowthRating + currentAppraisal.mgrPersonalGrowthRating) / 2,
                                 fontSize: 9,
                                 bold: true
                             }
@@ -252,34 +227,101 @@ const HalfyearGoalPdf = (props) => {
                                 fontSize: 9
                             },
                             {
-                                text: '5',
+                                text: (currentAppraisal.empProjectActivitiesRating + currentAppraisal.empOrganisationActivitiesRating + currentAppraisal.empPersonalGrowthRating) / 3,
                                 // colSpan: 3,
                                 bold: true,
                                 fontSize: 9
                             },
                             {
-                                text: '5',
+                                text: (currentAppraisal.mgrProjectActivitiesRating + currentAppraisal.mgrOrganisationActivitiesRating + currentAppraisal.mgrPersonalGrowthRating) / 3,
                                 // colSpan: 3,
                                 bold: true,
                                 fontSize: 9
                             },
 
                             {
-                                text: '5',
+                                text: (currentAppraisal.empProjectActivitiesRating + currentAppraisal.empOrganisationActivitiesRating + currentAppraisal.empPersonalGrowthRating + currentAppraisal.mgrProjectActivitiesRating + currentAppraisal.mgrOrganisationActivitiesRating + currentAppraisal.mgrPersonalGrowthRating) / 6,
                                 fontSize: 9,
                                 bold: true
                             }
                         ],
-
-
-
-
 
                     ]
                 }
             }
         ]
     };
+
+    for (let i = 0; i < currentAppraisal.projectList.length; i++) {
+        let currentProject = currentAppraisal.projectList[i]
+        docDefinition.content.push(
+            {
+                text: 'Project Name : ',
+                fontSize: 12,
+                bold: true
+            },
+            {
+                text: currentProject.projectName,
+                fontSize: 9,
+                bold: true
+            }
+
+        )
+        docDefinition.content.push(
+            {
+                text: 'Project Description :',
+                fontSize: 12,
+                bold: true
+            },
+            {
+                text: currentProject.projectDetail,
+                fontSize: 9,
+                bold: true
+            }
+
+        )
+
+    }
+
+    docDefinition.content.push(
+        {
+            text: 'Organizational Activities :',
+            fontSize: 12,
+            bold: true
+        },
+        {
+            text: currentAppraisal.organizationalActivitiesDetail,
+            fontSize: 9,
+            bold: true
+        },
+        {
+            text: 'Personal Growth :',
+            fontSize: 12,
+            bold: true
+        },
+        {
+            text: currentAppraisal.personalGrowthDetail,
+            fontSize: 9,
+            bold: true
+        },
+        {
+            text: 'Manager Comments',
+            fontSize: 12,
+            bold: true
+        },
+        {
+            text: currentAppraisal.managerComment,
+            fontSize: 9,
+            bold: true
+        },
+
+
+    )
+
+
+
+
+
 
 
     return (

@@ -125,9 +125,9 @@ const LeaveList = (props) => {
     };
 
     const disabledDate = (current) => {
-        // let currentYear = current.year() !== (new Date).getFullYear();
+        let isCurrentYear = current.year() !== (new Date).getFullYear();
         let matchingHolidayList = holidaylist.filter(item => item.date == current.format('Do MMM, YYYY'))
-        return matchingHolidayList.length > 0;
+        return matchingHolidayList.length > 0 || isCurrentYear;
 
     };
 

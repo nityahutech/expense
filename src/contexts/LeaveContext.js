@@ -1,14 +1,14 @@
 import { db } from "../firebase-config";
 import {
-  collection,
-  getDocs,
-  query,
-  where,
-  addDoc,
-  deleteDoc,
-  updateDoc,
-  doc,
-  orderBy,
+    collection,
+    getDocs,
+    query,
+    where,
+    addDoc,
+    deleteDoc,
+    updateDoc,
+    doc,
+    orderBy,
 } from "firebase/firestore";
 import { sendEmail } from "./EmailContext";
 
@@ -23,11 +23,11 @@ class LeaveContext {
     createLeave = async (newLeave) => {
         let email = await this.getEmailApproverList(newLeave.approver)
         email.forEach((id) => {
-        let mailOptions = {
-            from: 'hutechhr@gmail.com',
-            to: `${id}`,
-            subject: `Leave Request for ${newLeave.name}`,
-            html: `<p>Hello,</p><br /><p>Leave Request for ${newLeave.name}</p>
+            let mailOptions = {
+                from: 'hutechhr@gmail.com',
+                to: `${id}`,
+                subject: `Leave Request for ${newLeave.name}`,
+                html: `<p>Hello,</p><br /><p>Leave Request for ${newLeave.name}</p>
             <br />
             <ul>
             <li>Date(s): ${newLeave.date.join(", ")}</li>
@@ -39,8 +39,8 @@ class LeaveContext {
             <p>Please approve leave request through HR portal.</p>
             <br />
             <p>Hutech HR</p>`,
-        }
-        sendEmail(mailOptions)
+            }
+            sendEmail(mailOptions)
         })
         return addDoc(leaveCollectionRef, newLeave);
     };
@@ -59,6 +59,10 @@ class LeaveContext {
         const q = query(leaveCollectionRef, where("approver", "==", name));
         return getDocs(q);
     };
+    updateLeaves = (id, updateLea) => {
+        const leaveDoc = doc(db, `companyprofile/${compId}/leave`, id);
+        return updateDoc(leaveDoc, updateLea);
+    };
     approveLeave = async (id, name) => {
         const leaveDoc = doc(db, `companyprofile/${compId}/leave`, id);
         let email = await this.getEmailId(name)
@@ -71,7 +75,7 @@ class LeaveContext {
             <p>Hutech HR</p>`,
         }
         sendEmail(mailOptions)
-        return updateDoc(leaveDoc, { status: "Approved"})
+        return updateDoc(leaveDoc, { status: "Approved" })
     }
     rejectLeave = async (id, name, comment) => {
         const leaveDoc = doc(db, `companyprofile/${compId}/leave`, id);
@@ -91,7 +95,7 @@ class LeaveContext {
     }
     getLeaveDays = (records, leavedays) => {
         records.forEach((rec) => {
-            if(rec.status == "Approved"){
+            if (rec.status == "Approved") {
                 let dur = rec.dateCalc.length
                 if (dur === 1 && rec.slot != 'Full Day') {
                     dur = 0.5;
@@ -126,7 +130,7 @@ class LeaveContext {
                 id: doc.id
             };
         });
-        const q1 = query(usersCollectionRef, where ("role", "==", "hr"));
+        const q1 = query(usersCollectionRef, where("role", "==", "hr"));
         let hrData = await getDocs(q1);
         let hr = hrData.docs.map((doc) => {
             return doc.data().mailid;

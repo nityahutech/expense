@@ -13,6 +13,8 @@ const Department = () => {
 
 // ---------------------------------usestate for adding Department
 const [addDepartmentOpen, setAddDepartmentOPen] = useState(false);
+const compId=sessionStorage.getItem("compId")
+
 const showAddDepartment = () => {
   setAddDepartmentOPen(true);
 };

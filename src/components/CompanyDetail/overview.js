@@ -14,6 +14,8 @@ function Overview() {
   const [editContactIconInfo, showEditCompanyIconInfo] = useState(false);
   const [data, setData] = useState([]);
   const { currentUser } = useAuth();
+  const compId=sessionStorage.getItem("compId")
+
   const [companyName, setCompanyName] = useState();
 
   const onFinish = (values) => {

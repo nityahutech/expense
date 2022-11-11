@@ -20,6 +20,8 @@ const Designation = () => {
   const [lccs, setLccs] = useState("");
   const [editAddressInfo, showEditAddressInfo] = useState(false);
   const [data, setData] = useState([]);
+  const compId=sessionStorage.getItem("compId")
+
   const { currentUser } = useAuth();
 
   const dataSource = [

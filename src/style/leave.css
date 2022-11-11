@@ -192,3 +192,44 @@
     width: 100%;
   }
 }
+
+@media only screen and (max-width: 900px) {
+  .badge-div {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .rep-div {
+    justify-content: flex-start !important;
+  }
+  .holiday-button {
+    justify-content: center !important;
+  }
+}
+@media only screen and (max-width: 700px) {
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-calendar-date-content {
+    height: 30px;
+    overflow: hidden;
+    font-size: 5px;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .rep-div {
+    display: none !important;
+  }
+  .holiday-button {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .button-applyleave {
+    margin-right: 0px !important;
+    margin-top: 0px !important;
+  }
+  .button-applyleave {
+    margin-right: 0px !important;
+    margin-top: 0px !important;
+  }
+}

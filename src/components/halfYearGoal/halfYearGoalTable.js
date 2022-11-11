@@ -162,14 +162,14 @@ const HalfYearGoalTable = (props) => {
                                 className="edIt"
                                 onClick={() => {
 
-                                    setDownloadAppraisal(appraisal);
-                                    setThirdModal(true)
+                                    // setDownloadAppraisal(appraisal);
+                                    // setThirdModal(true)
 
                                 }}
 
 
                             >
-                                {< HalfyearGoalPdf style={{ color: 'grey', }}
+                                {< HalfyearGoalPdf appraisal={appraisal}
 
                                 />}
                             </Button>

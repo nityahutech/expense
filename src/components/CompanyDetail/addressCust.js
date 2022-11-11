@@ -90,8 +90,26 @@ function AddressCust() {
                 }}
             >
                 { data && data != 0 ? data.map((add, i) => (
+                    
+                    <Row>
+                    <Col xs={24} sm={15} md={8}> 
+                     <Form
+                     // form={form1}
+                     labelcol={{
+                         span: 4,
+                     }}
+                     wrappercol={{
+                         span: 14,
+                     }}
+                     initialValues={{
+                         remember: true,
+                     }}
+                     autoComplete="off"
+                     onFinish={(values) => editOnFinish(values,i)}
+                 >
                     <Card
                         title={add ? add.title : "CUSTOM ADDRESS TITLE"}
+                        className="customaddrcard"
                         extra={
                             <>
                                 {editAddressContent[i] === false ? (
@@ -121,23 +139,10 @@ function AddressCust() {
                         }}
                     >
                     {console.log(add)}
-                    <Form
-                    // form={form1}
-                    labelcol={{
-                        span: 4,
-                    }}
-                    wrappercol={{
-                        span: 14,
-                    }}
-                    initialValues={{
-                        remember: true,
-                    }}
-                    autoComplete="off"
-                    onFinish={(values) => editOnFinish(values,i)}
-                >
+                    
                         {/* {editContactInfo === true ? ( */}
                             <Row gutter={[16, 16]}>
-                                <Col span={24}>
+                                <Col xs={22} sm={22} md={20}>
                                     <div>
                                         <div className='div-discription'>
                                             Address Title
@@ -168,7 +173,7 @@ function AddressCust() {
                         {/* ) : null} */}
                         {/* {editContactInfo === true ? ( */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                                <Col span={24}>
+                                <Col  xs={22} sm={22} md={20}>
                                     <div>
                                         <div className='div-discription'>
                                             Address Line 1
@@ -199,7 +204,7 @@ function AddressCust() {
 
                         {/* {editContactInfo === true ? ( */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                                <Col span={24}>
+                                <Col  xs={22} sm={22} md={20}>
                                     <div>
                                         <div className='div-discription'>
                                             Address Line 2
@@ -230,7 +235,7 @@ function AddressCust() {
 
                         {/* {editContactInfo === true ? ( */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                                <Col span={6}>
+                                <Col  xs={22} sm={15} md={6}>
                                     <div>
                                         <div className='div-discription'>
                                             City
@@ -260,7 +265,7 @@ function AddressCust() {
                                         )}
                                     </div>
                                 </Col>
-                                <Col span={6}>
+                                <Col  xs={22} sm={15} md={6}>
                                     <div>
                                         <div className='div-discription'>
                                             State
@@ -290,7 +295,7 @@ function AddressCust() {
                                         )}
                                     </div>
                                 </Col>
-                                <Col span={6}>
+                                <Col  xs={22} sm={15} md={6}>
                                     <div>
                                         <div className='div-discription'>
                                             Country
@@ -320,7 +325,7 @@ function AddressCust() {
                                         )}
                                     </div>
                                 </Col>
-                                <Col span={6}>
+                                <Col  xs={22} sm={15} md={6}>
                                     <div>
                                         <div className='div-discription'>
                                             Pin Code
@@ -398,10 +403,32 @@ function AddressCust() {
                         </>
 
                         } */}
-                    </Form>
-                </Card>)) : null }
+                    
+                    </Card></Form>
+                    </Col>
+                    </Row>
+                    
+               
+                    )) : null }
+                    <Row>
+                    <Col xs={24} sm={15} md={8}>
+                    <Form
+                    form={form}
+                    labelcol={{
+                        span: 4,
+                    }}
+                    wrappercol={{
+                        span: 14,
+                    }}
+                    initialValues={{
+                        remember: true,
+                    }}
+                    autoComplete="off"
+                    onFinish={onFinish}
+                    >
                     <Card
                         title={"CUSTOM ADDRESS TITLE"}
+                        className="customaddrcard"
                         extra={
                             <>
                                 {addAddressContent === false ? (
@@ -421,22 +448,10 @@ function AddressCust() {
                         }}
                     >
                     { addAddressContent ?
-                    (<Form
-                    form={form}
-                    labelcol={{
-                        span: 4,
-                    }}
-                    wrappercol={{
-                        span: 14,
-                    }}
-                    initialValues={{
-                        remember: true,
-                    }}
-                    autoComplete="off"
-                 onFinish={onFinish}
-                >
+                   ( <>
+                    
                     <Row gutter={[16, 16]}>
-                        <Col span={24}>
+                        <Col xs={22} sm={22} md={20}>
                             <div>
                                 <div className='div-discription'>
                                     Address Title
@@ -451,13 +466,19 @@ function AddressCust() {
                                         }
                                     ]}
                                 >
-                                    <Input style={{ paddingLeft: '0px' }} required placeholder="" />
+                                    <Input  style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                    marginTop: '10px',
+                                                  }}
+                                                bordered={false} required placeholder="" />
                                 </Form.Item>
                             </div>
                         </Col>
                     </Row>   
                     <Row gutter={[16, 16]}>
-                        <Col span={24}>
+                        <Col xs={22} sm={22} md={20}>
                             <div>
                                 <div className='div-discription'>
                                     Address Line 1
@@ -472,13 +493,19 @@ function AddressCust() {
                                         }
                                     ]}
                                 >
-                                    <Input style={{ paddingLeft: '0px' }} required placeholder="" />
+                                    <Input style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                    marginTop: '10px',
+                                                  }}
+                                                bordered={false} required placeholder="" />
                                 </Form.Item>
                             </div>
                         </Col>
                     </Row>   
                     <Row gutter={[16, 16]}>
-                        <Col span={24}>
+                        <Col xs={22} sm={22} md={20}>
                             <div>
                                 <div className='div-discription'>
                                     Address Line 2
@@ -493,13 +520,19 @@ function AddressCust() {
                                         }
                                     ]}
                                 >
-                                    <Input style={{ paddingLeft: '0px' }} required placeholder="" />
+                                    <Input style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                    marginTop: '10px',
+                                                  }}
+                                                bordered={false} required placeholder="" />
                                 </Form.Item>
                             </div>
                         </Col>
                     </Row>
                     <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                        <Col span={6}>
+                        <Col xs={22} sm={22} md={20}>
                             <div>
                                 <div className='div-discription'>
                                     City
@@ -518,11 +551,17 @@ function AddressCust() {
                                         },
                                     ]}
                                 >
-                                    <Input style={{ paddingLeft: '0px' }} required placeholder="" />
+                                    <Input style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                    marginTop: '10px',
+                                                  }}
+                                                bordered={false} required placeholder="" />
                                 </Form.Item>
                             </div>
                         </Col>
-                        <Col span={6}>
+                        <Col xs={22} sm={22} md={20}>
                             <div>
                                 <div className='div-discription'>
                                     State
@@ -541,11 +580,17 @@ function AddressCust() {
                                         },
                                     ]}
                                 >
-                                    <Input style={{ paddingLeft: '0px' }} required placeholder="" />
+                                    <Input style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                    marginTop: '10px',
+                                                  }}
+                                                bordered={false} required placeholder="" />
                                 </Form.Item>
                             </div>
                         </Col>
-                        <Col span={6}>
+                        <Col xs={22} sm={22} md={20}>
                             <div>
                                 <div className='div-discription'>
                                     Country
@@ -564,11 +609,17 @@ function AddressCust() {
                                         },
                                     ]}
                                 >
-                                    <Input style={{ paddingLeft: '0px' }} required placeholder="" />
+                                    <Input style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                    marginTop: '10px',
+                                                  }}
+                                                bordered={false} required placeholder="" />
                                 </Form.Item>
                             </div>
                         </Col>
-                        <Col span={6}>
+                        <Col xs={22} sm={22} md={20}>
                             <div>
                                 <div className='div-discription'>
                                     Pin Code
@@ -587,7 +638,13 @@ function AddressCust() {
                                         },
                                     ]}
                                 >
-                                    <Input maxLength={6} style={{ paddingLeft: '0px' }} required placeholder="" />
+                                    <Input maxLength={6} style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                    marginTop: '10px',
+                                                  }}
+                                                bordered={false} required placeholder="" />
                                 </Form.Item>
                             </div>
                         </Col>
@@ -616,7 +673,8 @@ function AddressCust() {
                             </Button>
                         </Col>
                     </Row>
-                </Form>)
+                    </> 
+                )
                 : (
                     <Button 
                         type="primary"
@@ -628,7 +686,9 @@ function AddressCust() {
                     </Button>
                 )}
                 </Card>
-               
+                </Form>
+                </Col>
+                </Row>
             </div>
         </>
     );

@@ -8,6 +8,8 @@ import {
   Table,
   Input,
   Divider,
+  Row,
+  Col,
   notification,
   Card
 } from "antd";
@@ -187,7 +189,20 @@ const Policies = () => {
           width: "100%",
         }}
       >
+        <Row>
+                   <Col xs={24} sm={15} md={24}> 
+        <Form style={{ marginLeft: 0 }}
+              action="/action_page.php"
+              form={form}
+              labelCol={{ span: 30 }}
+              wrapperCol={{ span: 30 }}
+              initialValues={{ remember: true }}
+              autoComplete="off"
+              onFinish={addPolicy}
+              layout="vertical"
+            >
         <Card title='Company Policies'
+          className="policyCard"
           bordered={false}
           style={{
             width: 800,
@@ -223,16 +238,7 @@ const Policies = () => {
             }
 
           >
-            <Form style={{ marginLeft: 0 }}
-              action="/action_page.php"
-              form={form}
-              labelCol={{ span: 30 }}
-              wrapperCol={{ span: 30 }}
-              initialValues={{ remember: true }}
-              autoComplete="off"
-              onFinish={addPolicy}
-              layout="vertical"
-            >
+            
               <div className='div-discription'>
                 Title
               </div>
@@ -246,11 +252,20 @@ const Policies = () => {
                     type: "domain",
                   },
                   {
+                    pattern: /^[a-zA-Z\s]*$/,
                     message: "Enter Description ",
                   },
                 ]}
               >
-                <Input style={{ paddingLeft: '0px' }} required placeholder="Enter Policy Name" />
+                <Input 
+                style={{
+                        width: '100%',
+                        borderBottom: '1px solid #ccc ',
+                        paddingLeft: '0px',
+                        marginTop: '10px',
+                      }}
+                bordered={false}  
+                required placeholder="Enter Policy Name" />
               </Form.Item>
 
               <div className='div-discription'>
@@ -266,13 +281,25 @@ const Policies = () => {
                     type: "domain",
                   },
                   {
+                    pattern: /^[a-zA-Z\s]*$/,
                     message: "Enter Description",
                   },
                 ]}
               >
-                <Input style={{ paddingLeft: '0px' }} required placeholder="Enter Description" />
+                <Input 
+                  style={{
+                          width: '100%',
+                          borderBottom: '1px solid #ccc ',
+                          paddingLeft: '0px',
+                          marginTop: '10px',
+                        }}
+                  bordered={false}  
+                  required placeholder="Enter Description" />
               </Form.Item>
-
+              
+              <div className='div-discription'>
+                Uplode File
+              </div>
               <FormItem name="upload"
                 rules={[
                   {
@@ -287,16 +314,26 @@ const Policies = () => {
                     id="upload"
                     name="upload"
                     onChange={handleChange}
+                    style={{
+                      width: '100%',
+                      borderBottom: '1px solid #ccc ',
+                      paddingLeft: '0px',
+                      marginTop: '10px',
+                    }}
+                  bordered={false} 
                   // ref={imgRef}
                   // required
                   />
                 </div>
               </FormItem>
 
-            </Form>
+            
           </Modal>
 
         </Card>
+        </Form>
+        </Col>
+                </Row>
       </div>
     </>
   )

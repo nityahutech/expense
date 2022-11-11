@@ -62,7 +62,7 @@ const Statutory = () => {
   const onFinish = (value) => {
     const valuesToservice = {
       entityType: value.entityType,
-      cinName: value.cinName,
+      cinNumber: value.cinNumber,
       dateOfIncorp: value.dateOfIncorp,
       compPan: value.compPan,
       compTan: value.compTan,
@@ -380,11 +380,11 @@ const Statutory = () => {
                       CIN
                     </div>
                     {editContent === false ? (
-                      <div>{data.cinName ? data.cinName : "-"}</div>
+                      <div>{data.cinNumber ? data.cinNumber : "-"}</div>
                     ) : (
                       <Form.Item
-                        initialValue={data ? data.cinName : null}
-                        name="cinName"
+                        initialValue={data ? data.cinNumber : null}
+                        name="cinNumber"
                         rules={[
                           {
                             required: true,
@@ -397,10 +397,10 @@ const Statutory = () => {
                         ]}
                       >
                         <Input
-                          type="brandName"
+                          type="cinNumber"
                           maxLength={21}
                           required
-                          placeholder="Enter Brand Name"
+                          placeholder="Enter CIN Number"
                           bordered={false}
                           style={{
                             width: "100%",
@@ -471,12 +471,12 @@ const Statutory = () => {
                         rules={[
                           {
                             required: true,
-                            message: "Please enter Domain Name",
+                            message: "Please enter Company PAN",
                             type: "domain",
                           },
                           {
                             pattern: /^[0-9A-Z\s]*$/,
-                            message: "Please enter Valid Domain Name",
+                            message: "Please enter Valid Company PAN",
                           },
                         ]}
                       >

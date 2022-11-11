@@ -121,9 +121,20 @@ class CompanyProContext {
         return;
     }
     
-    updateCompInfo = (id, updateCompInfo) => {
-        const companyDoc = doc(db, "companyprofile", id);
-        return updateDoc(companyDoc, updateCompInfo);
+    updateCompInfo = (id, updateCompInfo, file) => {
+        if (file) {
+            const storageRef = ref(storage, `/${id}/logo`);
+            uploadBytesResumable(storageRef, file).then((snapshot) => {
+                getDownloadURL(snapshot.ref).then((url) => {
+                    updateCompInfo.logo = url;
+                    updateDoc(doc(db, "companyprofile", id), updateCompInfo);
+                    return Promise.resolve();
+                })
+            });
+        } else {
+            updateDoc(doc(db, "companyprofile", id), updateCompInfo);
+            return Promise.resolve();
+        }
     };
 }
 

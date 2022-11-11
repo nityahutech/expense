@@ -69,7 +69,7 @@ function Onboarding() {
       accessList: [],
       address: [],
       auditor: [],
-      bank: [],
+      bank:[],
       regCompName: values.regCompName,
       regOffice: {
         addLine1: values.addLine1,
@@ -83,28 +83,23 @@ function Onboarding() {
       gst: values.gst,
       domain: values.domain,
       phone: values.phone,
-      status: "Deactivated",
-    };
-    console.log(values, fileName, valuesToservice, values.orgcode);
+      status: "Deactivated"
+    }
+    console.log(values,fileName,valuesToservice,values.orgcode);
 
-    CompanyProContext.createCompInfo(
-      values.orgcode,
-      valuesToservice,
-      fileName,
-      accessList
-    )
+    CompanyProContext.createCompInfo(values.orgcode, valuesToservice, fileName, accessList)
       .then((response) => {
         notification.open({
           message: "Creating Company",
           duration: 2,
-          icon: <LoadingOutlined />,
+          icon: <LoadingOutlined />
         });
         const timer = setTimeout(() => {
           showNotification("success", "Success", "Onboarding Completed");
-          getData();
+          getData()
           setAddAccess(false);
-          onReset();
-          setActivetab("1");
+          onReset()
+          setActivetab("1")
         }, 5000);
         return () => clearTimeout(timer);
       })
@@ -121,8 +116,15 @@ function Onboarding() {
   };
 
   useEffect(() => {
+    console.log(!isEditOrganization || !isModalVisible)
+    if (!isEditOrganization || !isModalVisible) {
+      getData();
+    }
+  }, [isEditOrganization, isModalVisible])
+
+  useEffect(() => {
     getData();
-  }, []);
+  }, [])
 
   const changeCompStatus = (id, status) => {
     console.log(id, status);
@@ -230,7 +232,8 @@ function Onboarding() {
   }
 
   async function addUseRole(values) {
-    if (await CompanyProContext.checkUserExists(values.mailid)) {
+    let exists = accessList.filter((user) => values.mailid == user.mailid || values.name == user.name)
+    if (exists.length > 0 || await CompanyProContext.checkUserExists(values.mailid)) {
       showNotification("error", "Error", "This user already exists!");
       form2.resetFields();
       setAddAccess(false);
@@ -242,7 +245,8 @@ function Onboarding() {
     setAddAccess(false);
     // setAccessList([...accessList, newAccess]);
     // setNewAccess({ userole: "", name: "", mailid: "", phone: "" });
-  }
+  };
+
   const columns = [
     {
       title: "Code",
@@ -468,11 +472,13 @@ function Onboarding() {
                 <ViewModal
                   modalData={modalData}
                   setIsModalVisible={setIsModalVisible}
+                  getData={getData}
                 />
               </Modal>
 
               <Modal
                 className="viewModal"
+                destroyOnClose
                 // centered
                 visible={isEditOrganization}
                 footer={null}
@@ -555,33 +561,8 @@ function Onboarding() {
                         },
                         {
                           validator: validateOrgId,
-                          // message: "This id already exists!"
-                        },
-                        // ({ getFieldValue }) => ({
-                        //   validator(_, value) {
-                        //   let id = value;
-                        //   if (id) {
-                        //     return await CompanyProContext.checkOrgIdExists(id) ?
-                        //     <div>this id exists</div> : null
-                        //   }
-                        //     // if (!value || getFieldValue("password1") === value) {
-                        //     //   return Promise.resolve();
-                        //     // }
-                        //     // return Promise.reject(
-                        //     //   new Error(
-                        //     //     "The two passwords that you entered do not match!"
-                        //     //   )
-                        //     // );
-                        //   },
-                        // }),
+                        }
                       ]}
-                      // onChange={async (e) => {
-                      //   let id = e.target.value;
-                      //   if (id) {
-                      //     return await CompanyProContext.checkOrgIdExists(id) ?
-                      //     <div>this id exists</div> : null
-                      //   }
-                      // }}
                     >
                       <Input
                         maxLength={20}
@@ -605,7 +586,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter Organization Name",
                         },
                         {
@@ -636,7 +616,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter CIN Number",
                         },
                         {
@@ -672,7 +651,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter GST Number",
                         },
                         {
@@ -730,7 +708,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter Phone Number",
                         },
                         {
@@ -762,14 +739,13 @@ function Onboarding() {
                         },
                         {
                           pattern: /^[0-9a-zA-Z.,\s]+$/,
-
                           message: "Please Enter Valid Address",
                         },
                       ]}
                     >
                       <Input
                         maxLength={50}
-                        placeholder="Address Line1"
+                        placeholder="Address Line 1"
                         style={{
                           border: "1px solid #8692A6",
                           borderRadius: "4px",
@@ -780,7 +756,7 @@ function Onboarding() {
                   <Col xs={22} sm={15} md={8}>
                     <Form.Item
                       name="addLine2"
-                      label="Address Line2"
+                      label="Address Line 2"
                       rules={[
                         {
                           required: true,
@@ -788,14 +764,13 @@ function Onboarding() {
                         },
                         {
                           pattern: /^[0-9a-zA-Z.,\s]+$/,
-
                           message: "Please Enter Valid Address",
                         },
                       ]}
                     >
                       <Input
                         maxLength={50}
-                        placeholder="Address Line2"
+                        placeholder="Address Line 2"
                         style={{
                           border: "1px solid #8692A6",
                           borderRadius: "4px",
@@ -815,7 +790,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please Enter City Name",
                         },
                         {
@@ -848,7 +822,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter State",
                         },
                         {
@@ -879,7 +852,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter Country Name",
                         },
                         {
@@ -911,7 +883,6 @@ function Onboarding() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please enter Pin Code",
                         },
                         {
@@ -984,7 +955,6 @@ function Onboarding() {
                           ref={imgRef}
                           onChange={(e) => handleChange(e)}
                         />
-                        {console.log(fileName)}
                         {fileName ? (
                           ""
                         ) : (
@@ -1007,43 +977,42 @@ function Onboarding() {
 
                 <Divider />
 
-                <Card
-                  style={{
-                    margin: "27px",
-                    padding: "10px",
-                    background: "#f8f8f8",
-                    // height: "auto",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontWeight: "600",
-                      fontSize: "14px",
-                      lineHeight: "17px",
-                    }}
-                  >
-                    Organization Access
-                  </div>
-                  <Divider />
-                  <Form
-                    className="form"
-                    style={{ margin: "30px" }}
-                    form={form2}
-                    layout="vertical"
-                    labelcol={{
-                      span: 4,
-                    }}
-                    wrappercol={{
-                      span: 14,
-                    }}
-                    initialValues={{
-                      remember: true,
-                    }}
-                    autoComplete="off"
-                    onFinish={addUseRole}
-                  >
-                    {console.log(accessList)}
-                    {accessList.map((u, i) => (
+            <Card
+              style={{
+                margin: "27px",
+                padding: "10px",
+                background: "#f8f8f8",
+                // height: "auto",
+              }}
+            >
+              <div
+                style={{
+                  fontWeight: "600",
+                  fontSize: "14px",
+                  lineHeight: "17px",
+                }}
+              >
+                Organization Access
+              </div>
+              <Divider />
+              <Form
+                className="form"
+                style={{ margin: "30px" }}
+                form={form2}
+                layout="vertical"
+                labelcol={{
+                  span: 4,
+                }}
+                wrappercol={{
+                  span: 14,
+                }}
+                initialValues={{
+                  remember: true,
+                }}
+                autoComplete="off"
+                onFinish={addUseRole}
+              >
+                {accessList.map((u, i) => (
                       <div style={{ marginTop: "10px" }} className="inputLabel">
                         <Row gutter={[24, 20]}>
                           <Col xs={22} sm={15} md={5}>

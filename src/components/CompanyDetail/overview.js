@@ -139,7 +139,7 @@ function Overview() {
                           ]}
                         >
                           <Input
-                            maxLength={20}
+                            maxLength={50}
                             placeholder="Enter Comapany Name"
                             bordered={false}
                             style={{
@@ -179,7 +179,7 @@ function Overview() {
                           ]}
                         >
                           <Input
-                            maxLength={20}
+                            maxLength={30}
                             style={{
                               paddingLeft: "0px",
                               borderBottom: "1px solid #ccc ",

@@ -5,7 +5,7 @@ import dot from "../../images/dot.png";
 import dashIcon from "../../images/Dashboard.png";
 import empIcon from "../../images/employees.png";
 import userIcon from "../../images/user.png";
-import logo from "../../images/logo_1.png";
+import logo from "../../images/NewHUTechLogowhite.png";
 import appraisalIcon from "../../images/appraisal.png";
 import Organization from "../../images/Organization.png";
 import CompanyProfile from "../../images/Companyprofile.png";
@@ -17,15 +17,6 @@ import { NavLink } from "react-router-dom";
 
 const { Sider } = Layout;
 
-function getItem(label, key, icon, children = null, type = null) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  };
-}
 
 const NewSidebar = (props) => {
   const [isHr, setIsHr] = useState(
@@ -59,11 +50,11 @@ const NewSidebar = (props) => {
             height: "100vh",
           }}
         >
-          <div className="sidebarTittle">
+          <div className="sidebarTittle" style={{height:"auto"}}>
             <img
               style={{
                 background: "#05445E",
-                height: "30px",
+                height: "100px",
               }}
               // src="/logo_1.png"
               src={logo}

@@ -36,6 +36,7 @@ const Leave = () => {
   const [dateStart, setDateStart] = useState([]);
   const [dateEnd, setDateEnd] = useState([]);
   const [form] = Form.useForm();
+  const [editform] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [leaves, setLeaves] = useState([]);
   const [history, setHistory] = useState([]);
@@ -52,18 +53,7 @@ const Leave = () => {
   const [isMgr, setIsMgr] = useState(false);
   const { currentUser } = useAuth();
   const format = "Do MMM, YYYY";
-  // const [leavedays, setLeaveDays] = useState({
-  //   "Earn Leave": 0,
-  //   "Sick Leave": 0,
-  //   "Casual Leave": 0,
-  //   "Optional Leave": 0,
-  // });
-  // const [totaldays, setTotalDays] = useState({
-  //   "Earn Leave": 0,
-  //   "Sick Leave": 0,
-  //   "Casual Leave": 0,
-  //   "Optional Leave": 0,
-  // });
+
   const [leavedays, setLeaveDays] = useState(null);
   const [totaldays, setTotalDays] = useState(null);
   const [leavetype, setLeavetype] = useState();
@@ -76,10 +66,7 @@ const Leave = () => {
   const [repManager, setRepManager] = useState();
   const [editedLeave, setEditedLeave] = useState({});
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  // const [currentLeave, setCurrentLeave] = useState(record);
   const { RangePicker } = DatePicker;
-
-
 
   const showModal = () => {
     setSecondModal(true);
@@ -135,6 +122,9 @@ const Leave = () => {
       return 1394;
     }
   };
+  const onFinishEditLeave = (values) => {
+    console.log('editLeave', values)
+  }
 
   const onFinish = (values) => {
     console.log(values, dateSelected);
@@ -167,12 +157,6 @@ const Leave = () => {
       console.log(optionalHolidays, matchOptionalHoliday);
     }
 
-    // let array = []
-    // dateSelected.map((date, index) => {
-    //     let temp = date.format("DD-MM-YYYY")
-    //     array.push(moment(temp, "DD-MM-YYYY").format("Do MMM, YYYY"))
-    // })
-    // setDateSelected(array)
     let matchingdates = leaves.filter((item) => {
       for (let i = 0; i < dateSelected.length; i++) {
         if (item.dateCalc.includes(dateSelected[i])) {
@@ -259,18 +243,7 @@ const Leave = () => {
     getDateSorted(d);
     setHistory(d);
     setLoading(false);
-    // let temp = {
-    //   "Earn Leave": empRecord.earnLeave ? empRecord.earnLeave : 12,
-    //   "Sick Leave": empRecord.sickLeave ? empRecord.sickLeave : 6,
-    //   "Casual Leave": empRecord.casualLeave ? empRecord.casualLeave : 6,
-    //   "Optional Leave": empRecord.optionalLeave ? empRecord.optionalLeave : 2,
-    // };
-    // setTotalDays({
-    //   "Earn Leave": empRecord.earnLeave ? empRecord.earnLeave : 12,
-    //   "Sick Leave": empRecord.sickLeave ? empRecord.sickLeave : 6,
-    //   "Casual Leave": empRecord.casualLeave ? empRecord.casualLeave : 6,
-    //   "Optional Leave": empRecord.optionalLeave ? empRecord.optionalLeave : 2,
-    // });
+
     let days = await LeaveContext.getLeaveDays(d, temp);
     setLeaveDays(days);
     let array = [];
@@ -478,28 +451,28 @@ const Leave = () => {
               </>
             }
             {
-              <>
-                <EditOutlined
-                  disabled={record?.status === "Approved"}
-                  onClick={() => {
-                    if (record?.status !== "Approved") onEditLeave(record);
-                  }}
-                  // onClick={() => {
-                  //   ;
-                  // }}
-                  style={
-                    record?.status === "Approved"
-                      ? {
-                        color: "green",
-                        cursor: "not-allowed",
-                        marginLeft: 10,
-                      }
-                      : record?.status === "Pending"
-                        ? { color: "blue", marginLeft: 10 }
-                        : { color: "red", marginLeft: 10 }
-                  }
-                />
-              </>
+              // <>
+              //   <EditOutlined
+              //     disabled={record?.status === "Approved"}
+              //     onClick={() => {
+              //       if (record?.status !== "Approved") onEditLeave(record);
+              //     }}
+              //     // onClick={() => {
+              //     //   ;
+              //     // }}
+              //     style={
+              //       record?.status === "Approved"
+              //         ? {
+              //           color: "green",
+              //           cursor: "not-allowed",
+              //           marginLeft: 10,
+              //         }
+              //         : record?.status === "Pending"
+              //           ? { color: "blue", marginLeft: 10 }
+              //           : { color: "red", marginLeft: 10 }
+              //     }
+              //   />
+              // </>
             }
           </>
         );
@@ -601,7 +574,7 @@ const Leave = () => {
   // };
 
   const onLeaveDateChange = (e) => {
-    console.log(dateStart, dateEnd, duration);
+    console.log('onleavedate', dateStart, dateEnd, duration);
     let tempDateEnd = dateEnd
     if (e != undefined) {
       tempDateEnd = e
@@ -646,14 +619,13 @@ const Leave = () => {
     ) : null;
   };
 
-
-
-  const dateCellRender = (value) => {
+  const dateCellRender = (value,) => {
     console.log(value.format("dddd"))
     const listData = getListData(value);
-    let bgColor = "rgba(74, 67, 67, 0.2)";
-    let color = "rgba(74, 67, 67, 1)";
+    let bgColor = "rgba(225 39 116 / 20%)";
+    let color = "rgb(181 111 111)";
     let textVal = value.format("dddd");
+
     if (!(listData.length == 0)) {
       textVal = listData[0].type;
       color = listData[0].type == "On Leave" ?
@@ -666,8 +638,8 @@ const Leave = () => {
             "rgba(154, 214, 224, 0.96)" : "rgba(252, 143, 10,0.2)";
     }
     return (
-      <div className="events" style={{}}>
-        <div
+      <div >
+        <div className="events"
           style={{
             backgroundColor: bgColor,
             color: color,
@@ -681,57 +653,7 @@ const Leave = () => {
         >
           <div className="present"> {textVal} </div>
         </div>
-        {/* {listData.map((item) => (
-          <div
-            style={
-              item.type === "On Leave"
-                ? {
-                  color: "rgba(0, 128, 0,  1)",
-                  fontSize: "8px",
-                  backgroundColor: "rgb(15, 255, 80,0.2)",
-                  paddingLeft: "5px",
-                  paddingRight: "5px",
-                  margin: "0px",
-                  borderRadius: "5px",
-                  justifyContent: "center",
-                }
-                : item.type === "Pending"
-                  ? {
-                    color: "rgba(10, 91, 204,  1)",
-                    fontSize: "8px",
-                    backgroundColor: "rgba(10, 91, 204,0.2)",
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    margin: "0px",
-                    borderRadius: "5px",
-                    justifyContent: "center",
-                  }
-                  : item.isOptional
-                    ? {
-                      color: "rgba(0, 119, 137, 0.96)",
-                      fontSize: "8px",
-                      backgroundColor: "rgba(154, 214, 224, 0.96)",
-                      paddingLeft: "5px",
-                      paddingRight: "5px",
-                      margin: "0px",
-                      borderRadius: "5px",
-                      justifyContent: "center",
-                    }
-                    : {
-                      color: "rgba(252, 143, 10, 1)",
-                      fontSize: "8px",
-                      backgroundColor: "rgba(252, 143, 10,0.2)",
-                      paddingLeft: "5px",
-                      paddingRight: "5px",
-                      margin: "0px",
-                      borderRadius: "5px",
-                      justifyContent: "center",
-                    }
-            }
-          >
-            <div className="present"> {item.type} </div>
-          </div>
-        ))} */}
+
       </div>
     );
   };
@@ -889,6 +811,7 @@ const Leave = () => {
   }
 
   const disabledCalendarDate = (current) => {
+
     return moment(current).day() === 0 || current.day() === 6;
   };
 
@@ -983,7 +906,6 @@ const Leave = () => {
     return false
   }
   console.log(leavedays)
-
   console.log(isHr);
   return (
     <>
@@ -1144,6 +1066,7 @@ const Leave = () => {
                 <Button
                   className="reprentation"
                   style={{
+                    cursor: 'default',
                     marginLeft: '10px',
                     marginRight: "5px", marginTop: '10px',
                     backgroundColor: "rgba(10, 91, 204,0.2)",
@@ -1159,6 +1082,7 @@ const Leave = () => {
                 <Button
                   className="reprentation"
                   style={{
+                    cursor: 'default',
                     marginRight: "5px", marginTop: '10px',
                     backgroundColor: "rgba(154, 214, 224, 0.96)",
                   }}
@@ -1173,6 +1097,7 @@ const Leave = () => {
                 <Button
                   className="reprentation"
                   style={{
+                    cursor: 'default',
                     marginRight: "5px", marginTop: '10px',
                     backgroundColor: "rgba(252, 143, 10,0.2)",
                   }}
@@ -1187,6 +1112,7 @@ const Leave = () => {
                 <Button
                   className="reprentation"
                   style={{
+                    cursor: 'default',
                     marginRight: "5px", marginTop: '10px',
                     backgroundColor: "rgba(74, 67, 67,0.2)",
                   }}
@@ -1209,25 +1135,7 @@ const Leave = () => {
                   Apply Leave
                 </Button>
               </div>
-
-              {/* <div
-                className="rep-div2"
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginTop: "0px",
-                }}
-              >
-                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 204, 107,0.2)" }}><h5 style={{ color: "rgba(10, 204, 107, 1)" }} className='rep-text'>Present</h5></button>
-              </div> */}
             </div>
-            {/* style={holiday.optionalHoliday === false ? {
-                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(204, 204, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
-                                } : {
-                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(252, 143, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
-                                }} */}
-
 
             <Calendar
               style={{
@@ -1251,8 +1159,6 @@ const Leave = () => {
 
           </div>
         </Col>
-
-
 
         <Modal className='viewAppraisal'
           footer={null}
@@ -1280,8 +1186,6 @@ const Leave = () => {
               marginTop: "10px",
             }}
           >
-
-
             <Col xl={24} lg={24} md={24} sm={24} xs={24}
               style={{
                 background: "flex",
@@ -1554,9 +1458,7 @@ const Leave = () => {
               </Form>
             </Col>
           </Row>
-
         </Modal>
-
 
         {isMgr ? <Notification data={pendingRequests} /> : null}
 
@@ -1768,7 +1670,7 @@ const Leave = () => {
 
               }}
               form={form}
-              onFinish={onFinish}
+              onFinish={onFinishEditLeave}
             // layout="vertical"
             >
 
@@ -1794,8 +1696,10 @@ const Leave = () => {
                       defaultValue={editedLeave.dateCalc == null ? null : moment(editedLeave.dateCalc[0], 'Do MMM, YYYY')}
                       style={{ width: "100%" }}
                       format="Do MMM, YYYY"
-                      onChange={(e) => {
-                        setDateStart(e);
+                      onChange={(date, dateString) => {
+                        console.log('ondateChange', date, dateString, dateEnd)
+                        setDateStart(moment(dateString, "Do MMM, YYYY"));
+                        console.log('ondateChangeafter', dateEnd)
                         onLeaveDateChange();
                       }}
                       disabledDate={disabledDate}
@@ -1857,13 +1761,14 @@ const Leave = () => {
                       defaultValue={editedLeave.dateCalc == null ? null : moment(editedLeave.dateCalc[1], 'Do MMM, YYYY')}
                       style={{ width: "100%" }}
                       format="Do MMM, YYYY"
-                      onChange={(e) => {
-                        console.log(e)
-                        setDateEnd(e);
-                        onLeaveDateChange(e);
+                      onChange={(date, dateString) => {
+                        console.log('ondateChange', date, dateString, dateEnd)
+                        setDateEnd(date);
+                        console.log('ondateChangeafter', dateEnd)
+                        onLeaveDateChange(date);
                       }}
                       disabledDate={disabledDate}
-                      disabled={disableEnd()}
+                    // disabled={disableEnd()}
                     />
                   </Form.Item>
                 </Col>
@@ -1963,7 +1868,6 @@ const Leave = () => {
                 >
                   {" "}
                   Submit{" "}
-
                 </Button>
                 <Button
                   htmlType="button"

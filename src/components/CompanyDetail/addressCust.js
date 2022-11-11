@@ -9,6 +9,7 @@ function AddressCust() {
     const [addAddressContent, showAddAddressContent] = useState(false);
     const [data, setData] = useState([]);
     const [form] = Form.useForm();
+    const compId=sessionStorage.getItem("compId")
     
     const onFinish = (values) => {
         const valuesToservice = {

@@ -11,6 +11,7 @@ function AddressCorp() {
     const [editcorpInfo, showEditcorpInfo] = useState(false);
     const [data, setData] = useState([]);
     const { currentUser } = useAuth();
+    const compId=sessionStorage.getItem("compId")
 
     const onFinish = (value) => {
         const valueToservice = {

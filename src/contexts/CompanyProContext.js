@@ -51,7 +51,7 @@ class CompanyProContext {
     createAdmins = (accessList, id) => {
         const timer = setTimeout(()=>{
             accessList.map(async (user) => {
-                let name = user.name.split();
+                let name = user.name.split(" ");
                 let mname = "";
                 for (let i = 1; i < name.length - 1; i++) {
                   mname = mname + ((i != 1 ? " " : "") + name[i]);

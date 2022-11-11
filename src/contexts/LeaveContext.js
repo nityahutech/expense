@@ -59,9 +59,9 @@ class LeaveContext {
         const q = query(leaveCollectionRef, where("approver", "==", name));
         return getDocs(q);
     };
-    updateLeaves = (id, updateLea) => {
+    updateLeaves = (id, updateLeave) => {
         const leaveDoc = doc(db, `companyprofile/${compId}/leave`, id);
-        return updateDoc(leaveDoc, updateLea);
+        return updateDoc(leaveDoc, updateLeave);
     };
     approveLeave = async (id, name) => {
         const leaveDoc = doc(db, `companyprofile/${compId}/leave`, id);

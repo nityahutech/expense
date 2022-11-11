@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Table } from "antd";
+import { Card, Table, Row, Col } from "antd";
 import "../../style/WorkWeek.css";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { useAuth } from "../../contexts/AuthContext";
@@ -248,14 +248,17 @@ function WorkWeek() {
 
   return (
     <>
-      <div
+      {/* <div
         className="week"
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
-      >
+      > */}
+      <Row>
+        <Col xs={24} sm={24} md={5}></Col>
+        <Col xs={24} sm={24} md={13}>
         <Card className="workWeek">
           <div style={{ background: "#fff" }}>
             {" "}
@@ -374,7 +377,10 @@ function WorkWeek() {
             </>
           </div>
         </Card>
-      </div>
+        </Col>
+      </Row>
+
+      {/* </div> */}
     </>
   );
 }

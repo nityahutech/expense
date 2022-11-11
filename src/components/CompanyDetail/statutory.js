@@ -290,15 +290,10 @@ const Statutory = () => {
   // }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <>
+    
       <Row>
+        <Col xs={22} sm={15} md={5}></Col>
         <Col xs={22} sm={15} md={8}>
           <Form
             labelcol={{
@@ -614,6 +609,10 @@ const Statutory = () => {
         </Col>
       </Row>
 
+
+      <Row>
+        <Col xs={22} sm={15} md={5}></Col>
+        <Col xs={22} sm={15} md={8}>
       <Card className="tagsCard" style={{ marginTop: "1rem", width: "800px" }}>
         <Tabs defaultActiveKey="1" className="tabs">
           <Tabs.TabPane tab="Directors" key="1">
@@ -882,6 +881,7 @@ const Statutory = () => {
                 )}
               </Card>
             </Form>
+            
           </Tabs.TabPane>
 
           <Tabs.TabPane tab="Auditors" key="2">
@@ -1367,7 +1367,13 @@ const Statutory = () => {
           </Tabs.TabPane>
         </Tabs>
       </Card>
+      </Col>
+      </Row>
 
+
+      <Row>
+        <Col xs={24} sm={24} md={5} />
+        <Col xs={24} sm={24} md={8}>
       <Card
         title="BANK ACCOUNT INFO"
         style={{ marginTop: "1rem", width: "800px" }}
@@ -1748,7 +1754,9 @@ const Statutory = () => {
           )}
         </Form>
       </Card>
-    </div>
+      </Col>
+      </Row>
+    </>
   );
 };
 

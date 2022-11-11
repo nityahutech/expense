@@ -164,6 +164,7 @@ const getData=async()=>{
             <FormItem name="courseTitle"
               rules={[
                 {
+                  pattern: /^[a-zA-Z\s]*$/,
                   required: true,
                   message: 'Enter the Course Name',
                 },
@@ -174,6 +175,7 @@ const getData=async()=>{
             <FormItem name="duration"
               rules={[
                 {
+                  pattern: /^[a-zA-Z0-9-\s]*$/,
                   required: true,
                   message: 'Enter Duration',
                 },

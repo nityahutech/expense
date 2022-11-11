@@ -29,6 +29,8 @@ const Policies = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [file, setFile] = useState("");
+  const compId=sessionStorage.getItem("compId")
+
 
   const columns = [
     {

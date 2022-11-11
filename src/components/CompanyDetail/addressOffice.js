@@ -12,6 +12,8 @@ function AddressOffice() {
     const [editAddressInfo, showEditAddressInfo] = useState(false);
     const [data, setData] = useState();
     const { currentUser } = useAuth();
+    const compId=sessionStorage.getItem("compId")
+
 
     const onFinish = (values) => {
         const valuesToservice = {

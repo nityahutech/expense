@@ -36,6 +36,8 @@ const Admin = () => {
   const [data, setData] = useState([]);
   const { currentUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const compId=sessionStorage.getItem("compId")
+
 
   const showModal = () => {
     setIsModalOpen(true);

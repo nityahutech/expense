@@ -74,7 +74,7 @@ function MainDashBoard() {
 
   const paySlipIcon = () => {
     return (
-      <Link to="/PaySlipPage/PaySlip">
+      // <Link to="/PaySlipPage/PaySlip">
         <Card
           bordered={false}
           hoverable={true}
@@ -83,13 +83,13 @@ function MainDashBoard() {
           <img style={{ width: "90px" }} alt="example" src={Payslip} />
           Pay Slip Generator
         </Card>
-      </Link>
+      // </Link>
     );
   };
 
   const payrollIcon = () => {
     return (
-      <Link to="/Payslip2/HrPaySlip">
+      // <Link to="/Payslip2/HrPaySlip">
         <Card
           bordered={false}
           hoverable={true}
@@ -98,7 +98,7 @@ function MainDashBoard() {
           <img style={{ width: "90px" }} alt="example" src={Payroll} />
           Payroll
         </Card>
-      </Link>
+      // </Link>
     );
   };
 

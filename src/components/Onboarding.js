@@ -202,7 +202,7 @@ function Onboarding() {
   };
 
   const checkCharacterRole = (event) => {
-    if (!/^[a-zA-Z().-]*$/.test(event.key) && event.key !== "Backspace") {
+    if (!/^[a-zA-Z ().-]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
@@ -426,7 +426,8 @@ function Onboarding() {
   }
 
   return (
-    <div className="main">
+    <>
+      {/* <div className="main"> */}
       <Tabs
         defaultActiveKey={activetab}
         className="mainTabs"
@@ -466,30 +467,33 @@ function Onboarding() {
                   record.status == "Deactivated" && "disabled-row"
                 }
               />
-
-              <Modal
-                className="viewModal"
-                centered
-                visible={isModalVisible}
-                footer={null}
-                title="ORGANIZATION DETAILS"
-                closeIcon={
-                  <div
-                    onClick={() => {
-                      setIsModalVisible(false);
-                    }}
-                    style={{ color: "#ffffff" }}
+              <Row>
+                <Col xs={22} sm={22} md={22}>
+                  <Modal
+                    className="viewModal"
+                    centered
+                    visible={isModalVisible}
+                    footer={null}
+                    title="ORGANIZATION DETAILS"
+                    closeIcon={
+                      <div
+                        onClick={() => {
+                          setIsModalVisible(false);
+                        }}
+                        style={{ color: "#ffffff" }}
+                      >
+                        X
+                      </div>
+                    }
                   >
-                    X
-                  </div>
-                }
-              >
-                <ViewModal
-                  modalData={modalData}
-                  setIsModalVisible={setIsModalVisible}
-                  getData={getData}
-                />
-              </Modal>
+                    <ViewModal
+                      modalData={modalData}
+                      setIsModalVisible={setIsModalVisible}
+                      getData={getData}
+                    />
+                  </Modal>
+                </Col>
+              </Row>
 
               <Modal
                 className="viewModal"
@@ -693,7 +697,6 @@ function Onboarding() {
                         {
                           required: true,
                           message: "Please Enter Domain Name",
-                          type: "domain",
                         },
                         {
                           pattern:
@@ -1276,7 +1279,8 @@ function Onboarding() {
           </Card>
         </Tabs.TabPane>
       </Tabs>
-    </div>
+      {/* </div> */}
+    </>
   );
 }
 

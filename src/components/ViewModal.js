@@ -123,13 +123,13 @@ function ViewModal(props) {
                       style={{
                         borderRadius: "10px",
                         background: "#C9E5FF",
-                        // width: "101px",
+                        width: "120px",
                         display: "flex",
                         justifyContent: "center",
                         color: "#000000",
                         fontWeight: "400",
                         fontSize: "14px",
-                        // marginTop: "7px",
+                        marginTop: "7px",
                       }}
                     >
                       {user.userRole}

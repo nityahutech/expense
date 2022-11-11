@@ -66,11 +66,9 @@
  .viewModal .ant-modal-content{
     border-radius: 10px;
     width:820px;
-    position:relative;
-    right: 90px;
-    /* width: 100%; */
-    resize:vertical;
-    /* height: 500px; */
+    /* right: 90px; */
+    display: flex;
+    flex-direction: column;
 
  }
 

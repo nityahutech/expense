@@ -10,7 +10,7 @@ import { getUsers } from "../contexts/CreateContext";
 import "../style/EmployeeList.css";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 
-function EmployeeList() {
+  function EmployeeList() {
   const [modaldata, setmodaldata] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editedRecord, setEditedRecord] = useState(null);
@@ -234,7 +234,9 @@ function EmployeeList() {
         (ex) =>
           ex.fname.toLowerCase().includes(search.toLowerCase()) ||
           ex.lname.toLowerCase().includes(search.toLowerCase()) ||
-          ex?.mname?.toLowerCase()?.includes(search?.toLowerCase())
+          ex?.mname?.toLowerCase()?.includes(search?.toLowerCase()) ||
+          ex?.designation?.toLowerCase()?.includes(search?.toLowerCase()) ||
+          ex.gender?.toLowerCase() == search
       );
       console.log({ result });
       const modifiedFilterExpense = [...result];
@@ -243,6 +245,19 @@ function EmployeeList() {
       setFilterEmployees(allEmployees);
     }
   };
+
+  // const searchByGender = (e) => {
+  //   let value = e.target.value;
+  //   // setFilterCriteria({ ...filterCriteria, search: search });
+  //   if (value) {
+  //     let result = data.filter((ex) => ex.gender == value);
+  //     console.log({ result });
+  //     const modifiedFilterExpense = [...result];
+  //     setFilterEmployees(modifiedFilterExpense);
+  //   } else {
+  //     setFilterEmployees(allEmployees);
+  //   }
+  // };
 
   const onDelete = (idx, e) => {
     e.preventDefault();
@@ -274,6 +289,17 @@ function EmployeeList() {
             onChange={searchChange}
           />
         </Col>
+        {/* <Col>
+          <Select
+            style={{marginLeft: "10px", width: "132px"}}
+            allowClear
+            placeholder="Select Gender"
+            onChange={searchByGender}
+          >
+            <Option value="Male">Male</Option>
+            <Option value="Female">Female</Option>
+          </Select>
+        </Col> */}
       </Row>
       <Table
         loading={loading}

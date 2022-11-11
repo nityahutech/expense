@@ -181,7 +181,7 @@ function LoginPage() {
                 </div> */}
                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                   <p className="loginFooter">
-                    © 2022 Expense. All rights reserved. Terms of Service
+                    © 2022 Hutech HR. All rights reserved. Terms of Service
                   </p>
                 </Col>
               </Form>

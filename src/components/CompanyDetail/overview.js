@@ -25,7 +25,7 @@ function Overview() {
       website: values.website,
       domain: values.domain,
     };
-    CompanyProContext.updateCompInfo("compId001", valuesToservice);
+    CompanyProContext.updateCompInfo(compId, valuesToservice);
     getData();
     showEditCompanyInfo(false);
   };
@@ -36,7 +36,7 @@ function Overview() {
       facebook: values.facebook,
       twitter: values.twitter,
     };
-    CompanyProContext.updateCompInfo("compId001", value);
+    CompanyProContext.updateCompInfo(compId, value);
     getData();
     showEditCompanyIconInfo(false);
   };
@@ -45,7 +45,7 @@ function Overview() {
     getData();
   }, []);
   const getData = async () => {
-    let data = await CompanyProContext.getCompanyProfile("compId001");
+    let data = await CompanyProContext.getCompanyProfile(compId);
     setData(data);
   };
 

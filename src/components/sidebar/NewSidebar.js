@@ -11,7 +11,7 @@ import Organization from "../../images/Organization.png";
 import CompanyProfile from "../../images/Companyprofile.png";
 import SettingIcon from "../../images/gear.png";
 import homePage from "../../images/homeIcon.png";
-
+import LeaveIcon from "../../images/smallLeaveLogo.png";
 import "./newSlidebar.css";
 import { NavLink } from "react-router-dom";
 
@@ -19,9 +19,7 @@ const { Sider } = Layout;
 
 
 const NewSidebar = (props) => {
-  const [isHr, setIsHr] = useState(
-    sessionStorage.getItem("role") === "hr" ? true : false
-  );
+  const role = sessionStorage.getItem("role");
 
   return (
     <Layout className="sidelayout">
@@ -76,7 +74,8 @@ const NewSidebar = (props) => {
             Home
             <NavLink to="/MainDashboardPage/MainDashBoard" />
           </Menu.Item>
-          <Menu.SubMenu
+          { role == "super" ? (
+            <Menu.SubMenu
             style={{
               width: "100%",
             }}
@@ -122,7 +121,9 @@ const NewSidebar = (props) => {
               <NavLink to="/OnboardingPage/Onboarding" />
             </Menu.Item>
           </Menu.SubMenu>
-          <Menu.Item
+          ) : null}
+          { role == "hr" ? (
+            <Menu.Item
             icon={
               <img
                 style={{ color: "white" }}
@@ -137,6 +138,43 @@ const NewSidebar = (props) => {
             Company Profile
             <NavLink to="/CompanyProfilepage" />
           </Menu.Item>
+          ) : null}
+          { role != "super" ?(
+            <>
+            <Menu.Item
+              className="arrow"
+              icon={
+                <img
+                  // src="/dot.png"
+                  src={dot}
+                  alt="profile"
+                  className="dot"
+                />
+              }
+              key="6"
+            >
+              Attendance
+              <NavLink to="/Attendance/AttendanceLog" />
+            </Menu.Item>
+            <Menu.Item
+              className="arrow"
+              icon={
+                <img
+                  // src="/dot.png"
+                  src={LeaveIcon}
+                  alt="profile"
+                  className="dot"
+                />
+              }
+              key="7"
+            >
+              Leave
+              <NavLink to="/Employee/Leave" />
+            </Menu.Item>
+            </>
+            ): null}
+            
+            {role == "hr" ? (
 
           <Menu.SubMenu
             style={{
@@ -152,41 +190,9 @@ const NewSidebar = (props) => {
               />
             }
             key="sub2"
-            title="Employee"
+            title="Employees"
             mode="inline"
           >
-            <Menu.Item
-              className="arrow"
-              icon={
-                <img
-                  // src="/dot.png"
-                  src={dot}
-                  alt="profile"
-                  className="dot"
-                />
-              }
-              key="6"
-            >
-              Attendance Log
-              <NavLink to="/Attendance/AttendanceLog" />
-            </Menu.Item>
-            <Menu.Item
-              className="arrow"
-              icon={
-                <img
-                  // src="/dot.png"
-                  src={dot}
-                  alt="profile"
-                  className="dot"
-                />
-              }
-              key="7"
-            >
-              Leave
-              <NavLink to="/Employee/Leave" />
-            </Menu.Item>
-            {isHr ? (
-              <>
                 <Menu.Item
                   className="arrow"
                   icon={<img src={dot} alt="profile" className="dot" />}
@@ -211,9 +217,8 @@ const NewSidebar = (props) => {
                   Hr PaySlip
                   <NavLink to="/Payslip2/HrPaySlip" />
                 </Menu.Item> */}
-              </>
-            ) : null}
           </Menu.SubMenu>
+            ) : null}
           {/* <Menu.SubMenu
             className="arrow-div"
             style={{
@@ -241,9 +246,8 @@ const NewSidebar = (props) => {
               <NavLink to="/Appraisal/HalfYearGoalPage" />
             </Menu.Item>
           </Menu.SubMenu> */}
-          {isHr ? (
-            <>
-              <Menu.SubMenu
+          {role == "hr" ? (
+            <Menu.SubMenu
                 className="arrow-div"
                 style={{
                   width: "100%",
@@ -293,7 +297,6 @@ const NewSidebar = (props) => {
                   <NavLink to="/Expense/ExpenseList" />
                 </Menu.Item>
               </Menu.SubMenu>
-            </>
           ) : null}
 
           <Menu.Item

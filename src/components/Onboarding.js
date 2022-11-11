@@ -556,7 +556,7 @@ function Onboarding() {
                           message: "Please enter Organization Code",
                         },
                         {
-                          pattern: /^[0-9A-Z]+$/,
+                          pattern: /^[0-9A-Za-z]+$/,
                           message: "Please enter Valid Code",
                         },
                         {

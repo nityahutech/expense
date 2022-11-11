@@ -1,5 +1,5 @@
 import { db } from "../firebase-config";
-
+import { disableAccount } from "./EmailContext"
 import {
     setDoc,
     getDoc,
@@ -25,6 +25,17 @@ class EmpInfoContext {
         let rec = await getDoc(eduDoc);
         return rec.data();
     };
+    
+    disablePerson = (id) => {
+        updateDoc(doc(db,`companyprofile/${compId}/users`, id), { disabled: true })
+        return disableAccount(id, true)
+    };
+
+    enablePerson = (id) => {
+        updateDoc(doc(db,`companyprofile/${compId}/users`, id), { disabled: false })
+        return disableAccount(id, false)
+    };
+
 }
 
 export default new EmpInfoContext();

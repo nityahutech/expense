@@ -5,24 +5,18 @@ import dot from "../../images/dot.png";
 import dashIcon from "../../images/Dashboard.png";
 import empIcon from "../../images/employees.png";
 import userIcon from "../../images/user.png";
-import logo from "../../images/logo_1.png";
+import logo from "../../images/NewHUTechLogowhite.png";
 import appraisalIcon from "../../images/appraisal.png";
-import Organization from "../../images/Organization.png"
-import enterprise from "../../images/enterprise.png"
+import Organization from "../../images/Organization.png";
+import CompanyProfile from "../../images/Companyprofile.png";
+import SettingIcon from "../../images/gear.png";
+import homePage from "../../images/homeIcon.png";
+
 import "./newSlidebar.css";
 import { NavLink } from "react-router-dom";
 
 const { Sider } = Layout;
 
-function getItem(label, key, icon, children = null, type = null) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  };
-}
 
 const NewSidebar = (props) => {
   const [isHr, setIsHr] = useState(
@@ -35,8 +29,8 @@ const NewSidebar = (props) => {
         breakpoint="lg"
         style={{ backgroundColor: "#05445E" }}
         collapsedWidth="0"
-        onBreakpoint={(broken) => { }}
-        onCollapse={(collapsed, type) => { }}
+        onBreakpoint={(broken) => {}}
+        onCollapse={(collapsed, type) => {}}
       >
         <Menu
           defaultOpenKeys={props.activeSubMenu || []}
@@ -49,24 +43,39 @@ const NewSidebar = (props) => {
             keyPath,
             selectedKeys,
             domEvent,
-          }) { }}
+          }) {}}
           mode="inline"
           style={{
             padding: "0px",
             height: "100vh",
           }}
         >
-          <div className="sidebarTittle">
+          <div className="sidebarTittle" style={{height:"auto"}}>
             <img
               style={{
                 background: "#05445E",
-                height: "30px",
+                height: "100px",
               }}
               // src="/logo_1.png"
               src={logo}
               alt="hello"
             />
           </div>
+          <Menu.Item
+            className="arrow"
+            icon={
+              <img
+                // src="/dot.png"
+                src={homePage}
+                width="16px"
+                alt="home"
+              />
+            }
+            key="30"
+          >
+            Home
+            <NavLink to="/MainDashboardPage/MainDashBoard" />
+          </Menu.Item>
           <Menu.SubMenu
             style={{
               width: "100%",
@@ -83,7 +92,7 @@ const NewSidebar = (props) => {
             title="Organization"
             mode="inline"
           >
-            <Menu.Item
+            {/* <Menu.Item
               className="arrow"
               icon={
                 <img
@@ -97,14 +106,13 @@ const NewSidebar = (props) => {
             >
               Dashboard
               <NavLink to="/MainDashboardPage/MainDashBoard" />
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item
-              className="arrow"
               icon={
                 <img
                   // src="/dot.png"
                   src={dot}
-                  alt="profile"
+                  alt="onboarding"
                   className="dot"
                 />
               }
@@ -116,8 +124,9 @@ const NewSidebar = (props) => {
           </Menu.SubMenu>
           <Menu.Item
             icon={
-              <img style={{ color: 'white' }}
-                src={enterprise}
+              <img
+                style={{ color: "white" }}
+                src={CompanyProfile}
                 // src="/user.png"
                 alt="profile"
                 className="Dash"
@@ -194,34 +203,18 @@ const NewSidebar = (props) => {
                   Employee List
                   <NavLink to="/EmployeeListPage/EmployeeList" />
                 </Menu.Item>
-                <Menu.Item
+                {/* <Menu.Item
                   className="arrow"
                   icon={<img src={dot} alt="profile" className="dot" />}
                   key="25"
                 >
                   Hr PaySlip
                   <NavLink to="/Payslip2/HrPaySlip" />
-                </Menu.Item>
+                </Menu.Item> */}
               </>
             ) : null}
           </Menu.SubMenu>
-
-          <Menu.Item
-            icon={
-              <img
-                src={userIcon}
-                // src="/user.png"
-                alt="profile"
-                className="Dash"
-              />
-            }
-            key="21"
-          >
-            My Profile
-            <NavLink to="/Profile" />
-          </Menu.Item>
-
-          <Menu.SubMenu
+          {/* <Menu.SubMenu
             className="arrow-div"
             style={{
               width: "100%",
@@ -247,8 +240,7 @@ const NewSidebar = (props) => {
               Half Year Goal
               <NavLink to="/Appraisal/HalfYearGoalPage" />
             </Menu.Item>
-          </Menu.SubMenu>
-
+          </Menu.SubMenu> */}
           {isHr ? (
             <>
               <Menu.SubMenu
@@ -268,7 +260,7 @@ const NewSidebar = (props) => {
                 title="Expense"
                 mode="inline"
               >
-                <Menu.Item
+                {/* <Menu.Item
                   className="arrow"
                   //  style={{
                   //     background: "#05445E",
@@ -279,7 +271,7 @@ const NewSidebar = (props) => {
                 >
                   Dashboard
                   <NavLink to="/DashBoard" />
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item
                   className="arrow"
                   //  style={{
@@ -303,6 +295,35 @@ const NewSidebar = (props) => {
               </Menu.SubMenu>
             </>
           ) : null}
+
+          <Menu.Item
+            icon={
+              <img
+                src={userIcon}
+                // src="/user.png"
+                alt="profile"
+                className="Dash"
+              />
+            }
+            key="21"
+          >
+            My Profile
+            <NavLink to="/Profile" />
+          </Menu.Item>
+          <Menu.Item
+            icon={
+              <img
+                src={SettingIcon}
+                // src="/user.png"
+                alt="Setting"
+                className="Dash"
+              />
+            }
+            key="22"
+          >
+            Settings
+            <NavLink to="/Setting" />
+          </Menu.Item>
         </Menu>
       </Sider>
     </Layout>

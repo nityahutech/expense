@@ -3,6 +3,7 @@ import { Card, Row, Col, Button, Select, Input, Form } from "antd";
 import { useAuth } from "../../contexts/AuthContext";
 import CompanyProContext from "../../contexts/CompanyProContext";
 import { CloseOutlined, EditFilled } from "@ant-design/icons";
+import "../../components/CompanyDetail/companystyle.css"
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -47,6 +48,8 @@ function AddressOffice() {
                     justifyContent: "center",
                 }}
             >
+                <Row>
+                   <Col xs={24} sm={15} md={24}> 
                 <Form
                     // form={form}
                     labelcol={{
@@ -59,10 +62,12 @@ function AddressOffice() {
                         remember: true,
                     }}
                     autoComplete="off"
-                 onFinish={onFinish}
+                    onFinish={onFinish}
                 >
+                 
                     <Card
                         title="REGISTERED OFFICE"
+                        className="regcard"
                         extra={
                             <>
                                 {editAddress === false ? (
@@ -83,7 +88,7 @@ function AddressOffice() {
                     >
                          {/* {editAddress === true ? (  */}
                             <Row gutter={[16, 16]}>
-                                <Col span={24}>
+                                <Col xs={22} sm={15} md={24}>
                                     <div>
                                         <div className='div-discription'>
                                             Address Line 1
@@ -104,7 +109,15 @@ function AddressOffice() {
                                                     }
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} required placeholder="" />
+                                                <Input 
+                                                // style={{ paddingLeft: '0px' }} 
+                                                style={{
+                                                    width: '100%',
+                                                    borderBottom: '1px solid #ccc ',
+                                                    paddingLeft: '0px',
+                                                  }}
+                                                bordered={false}
+                                                required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -115,7 +128,7 @@ function AddressOffice() {
 
                         {/* {editAddress === true ? ( */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                                <Col span={24}>
+                                <Col xs={22} sm={15} md={24}>
                                     <div>
                                         <div className='div-discription'>
                                             Address Line 2
@@ -135,7 +148,14 @@ function AddressOffice() {
                                                     }
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }}  required placeholder="" />
+                                                <Input  
+                                                    style={{
+                                                        width: '100%',
+                                                        borderBottom: '1px solid #ccc ',
+                                                        paddingLeft: '0px'
+                                                      }}
+                                                    bordered={false}
+                                                    required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -146,7 +166,7 @@ function AddressOffice() {
 
                         {/* {editAddress === true ? ( */}
                             <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                                <Col span={6}>
+                                <Col xs={22} sm={15} md={6}>
                                     <div>
                                         <div className='div-discription'>
                                             City
@@ -170,13 +190,18 @@ function AddressOffice() {
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} required placeholder="" />
+                                                <Input  style={{
+                                                        width: '100%',
+                                                        borderBottom: '1px solid #ccc ',
+                                                        paddingLeft: '0px'
+                                                      }}
+                                                    bordered={false} required placeholder="" />
 
                                             </Form.Item>
                                         )}
                                     </div>
                                 </Col>
-                                <Col span={6}>
+                                <Col xs={22} sm={15} md={6}>
                                     <div>
                                         <div className='div-discription'>
                                             State
@@ -201,13 +226,18 @@ function AddressOffice() {
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} required placeholder="" />
+                                                <Input  style={{
+                                                        width: '100%',
+                                                        borderBottom: '1px solid #ccc ',
+                                                        paddingLeft: '0px'
+                                                      }}
+                                                    bordered={false} required placeholder="" />
 
                                             </Form.Item>
                                         )}
                                     </div>
                                 </Col>
-                                <Col span={6}>
+                                <Col xs={22} sm={15} md={6}>
                                     <div>
                                         <div className='div-discription'>
                                             Country
@@ -231,13 +261,18 @@ function AddressOffice() {
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }} required placeholder="" />
+                                                <Input  style={{
+                                                        width: '100%',
+                                                        borderBottom: '1px solid #ccc ',
+                                                        paddingLeft: '0px'
+                                                      }}
+                                                    bordered={false} required placeholder="" />
 
                                             </Form.Item>
                                         )}
                                     </div>
                                 </Col>
-                                <Col span={6}>
+                                <Col xs={22} sm={15} md={6}>
                                     <div>
                                         <div className='div-discription'>
                                             Pin Code
@@ -261,7 +296,12 @@ function AddressOffice() {
                                                     },
                                                 ]}
                                             >
-                                                <Input style={{ paddingLeft: '0px' }}  required placeholder="" />
+                                                <Input  style={{
+                                                        width: '100%',
+                                                        borderBottom: '1px solid #ccc ',
+                                                        paddingLeft: '0px'
+                                                      }}
+                                                    bordered={false}  required placeholder="" />
 
                                             </Form.Item>
                                         )}
@@ -298,7 +338,10 @@ function AddressOffice() {
                             </Row>
                         ) : null}
                     </Card>
+                 
                 </Form>
+                </Col>
+                </Row>
             </div>
         </>
     );

@@ -1,44 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Button, Select, Input, Form, Divider, Space, Upload } from "antd";
-// import EmpInfoContext from "../../contexts/EmpInfoContext";
-import { useAuth } from "../../contexts/AuthContext";
+import { Card, Button, Row, Col, Select, Input, Form, Divider, Table, Modal } from "antd";
 import { CloseOutlined, EditFilled } from "@ant-design/icons";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import "./companystyle.css";
-
-import { Table } from 'antd';
-const { Option } = Select;
-
-const { TextArea } = Input;
+import FormItem from "antd/es/form/FormItem";
 
 
+
+// ------------------------------------------------------------------------------const part
 const Department = () => {
-  const [editContent, showEditContent] = useState(false);
-  const [editContactInfo, showEditContactInfo] = useState(false);
-  const [dob, setDob] = useState("");
-  const [scrs, setScrs] = useState("");
-  const [lccs, setLccs] = useState("");
-  const [editAddressInfo, showEditAddressInfo] = useState(false);
-  const [data, setData] = useState([]);
-  const { currentUser } = useAuth();
 
 
+// ---------------------------------usestate for adding Department
+const [addDepartmentOpen, setAddDepartmentOPen] = useState(false);
+const showAddDepartment = () => {
+  setAddDepartmentOPen(true);
+};
+const handleOk = () => {
+  setAddDepartmentOPen(false);
+}
+const handleCancel = () => {
+  setAddDepartmentOPen(false);
+}
 
-  const [dataSource, setDataSource] = useState([
+// --------------------------------code for the table
+  const data = [
     {
       key: '0',
-      department: 'Edward King 0',
-      subDepartments: '32',
-      employees: 'London, Park Lane no. 0',
+      department: 'Sales',
+      hod: 'Ram',
+      totalemployees: '17',
+      // description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
     },
+   
     {
-      key: '0',
-      department: 'Edward King 0',
-      subDepartments: '32',
-      employees: 'London, Park Lane no. 0',
+      key: '1',
+      department: 'Service',
+      hod: 'Shyam',
+      totalemployees: '27',
     },
-  ]);
-  const [count, setCount] = useState(2);
+  ];
 
   const columns = [
     {
@@ -46,37 +47,70 @@ const Department = () => {
       dataIndex: 'department',
       key: 'department',
     },
-
+    // Table.EXPAND_COLUMN,
     {
-      title: '	Sub Departments',
-      dataIndex: 'subDepartments',
-      key: 'subDepartments',
+      title: 'H.O.D',
+      dataIndex: 'hod',
+      key: 'hod',
     },
-
+    
     {
-      title: 'Employees',
-      dataIndex: 'employees',
-      key: 'employees',
+      title: 'Total Employees',
+      dataIndex: 'totalemployees',
+      key: 'totalemployees',
     },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+      render: (_, record) => {
+        return (
+          <>
+            <Row>
+              <Col>
+                <Button><EditFilled /></Button>
+              </Col>
+            </Row>
+          </>
+        )
+    },
+   },
   ];
-
-  const handleAdd = () => {
-    const newData = {
-      key: count,
-      name: `Edward King ${count}`,
-      age: '32',
-      address: `London, Park Lane no. ${count}`,
-    };
-    setDataSource([...dataSource, newData]);
-    setCount(count + 1);
+// -------------------------------code for extra data in expandable row
+  const expandedRowRender = () => {
+    const columns = [
+      {
+        title: 'Email ID',
+        dataIndex: 'emailid',
+        key: 'emailid',
+      },
+      {
+        title: 'Phone No.',
+        dataIndex: 'phoneno',
+        key: 'phoneno',
+      },
+      
+      {
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        render: () => <a>Active</a>
+      },
+      
+    ];
+    const data = [];
+    for (let i = 0; i < 1; ++i) {
+      data.push({
+        key: i.toString(),
+        emailid: 'ram@gmail.com',
+        phoneno: '+91658556552',
+        status: 'Active',
+      });
+    }
+    return <Table columns={columns} dataSource={data} pagination={false} />;
   };
 
-
-  const onFinish = (values) => {
-    console.log('Received values of form:', values);
-
-
-  };
+// --------------------------------------------------------------------------------Return part 
   return (
     <>
 
@@ -89,7 +123,6 @@ const Department = () => {
         }}
       >
         <Form
-          // form={form}
           labelcol={{
             span: 4,
           }}
@@ -100,133 +133,81 @@ const Department = () => {
             remember: true,
           }}
           autoComplete="off"
-        // onFinish={onContactFinish}
         >
           <Card
             title=" DEPARTMENT"
             extra={
               <>
-                {editContactInfo === false ? (
-                  <Button
-                    type="text"
-                    style={{ color: "#4ec0f1" }}
-                    onClick={() => showEditContactInfo(!editContactInfo)}
-                  >
-                    <EditFilled />
+                  <Button 
+                    type="primary"
+                    onClick={showAddDepartment}
+                    >
+                    Add Department
                   </Button>
-                ) : null}
               </>
             }
             style={{
               width: 800,
               marginTop: 10,
             }}
-
           >
 
             <div className="table-responsive">
               <Table
                 columns={columns}
-                dataSource={dataSource}
+                dataSource={data}
                 pagination={false}
-                className="ant-border-space"
+                rowSelection={{}}
+                // expandable={{
+                //   expandedRowRender: (record) => (
+                //     <p
+                //       style={{
+                //         margin: 0,
+                //       }}
+                //     >
+                //       {record.description}
+                //     </p>
+                //   ),
+                // }}
+                expandable={{
+                  expandedRowRender,
+                  defaultExpandedRowKeys: ['0'],
+                }}
               />
             </div>
 
-
-
-
-            <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-              <Col span={12}>
-                <Form name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
-                  <Form.List name="users">
-                    {(fields, { add, remove }) => (
-                      <>
-                        {fields.map(({ key, name, ...restField }) => (
-                          <Space
-                            key={key}
-                            style={{
-                              display: 'flex',
-                              marginBottom: 8,
-                            }}
-                            align="baseline"
-                          >
-                            <Form.Item
-                              {...restField}
-                              name={[name, 'first']}
-                              rules={[
-                                {
-                                  required: true,
-                                  message: 'Missing first name',
-                                },
-                              ]}
-                            >
-                              <Input placeholder="First Name" />
-                            </Form.Item>
-
-                            <MinusCircleOutlined onClick={() => remove(name)} />
-                          </Space>
-                        ))}
-                        <Form.Item>
-                          <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                            Add field
-                          </Button>
-                        </Form.Item>
-                      </>
-                    )}
-                  </Form.List>
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Submit
-                    </Button>
-                  </Form.Item>
-                  <Button
-                    onClick={handleAdd}
-                    type="primary"
-                    style={{
-                      marginBottom: 16,
-                    }}
-                  >
-                    Add a row
-                  </Button>
-                </Form>
-              </Col>
-
-
-
-
-            </Row>
-
-
-
-            {editContactInfo === true ? (
-              <Row
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  marginTop: "3%",
-                }}
-              >
-
-                <Button
-                  type="text"
-                  style={{ fontSize: 15 }}
-                  onClick={() => showEditContactInfo(false)}
-                >
-                  <CloseOutlined /> CANCEL
-                </Button>
-                <Col>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    style={{ marginLeft: "10px" }}
-                  >
-                    SAVE
-                  </Button>
-                </Col>
-              </Row>
-            ) : null}
           </Card>
+          <Modal 
+            title="Basic Modal" 
+            open={addDepartmentOpen} 
+            onOk={handleOk} 
+            onCancel={handleCancel}
+          >
+           <Form>
+            <Row gutter={[16,]}>
+              <Col span={24}>
+                <FormItem label=''>
+                  <Input placeholder="Department Name"></Input>
+                </FormItem>
+              </Col>
+              <Col span={24}>
+                <FormItem>
+                  <Input placeholder="H.O.D"></Input>
+                </FormItem>
+              </Col>
+              <Col span={24}>
+                <FormItem>
+                  <Input placeholder="No. of Employee"></Input>
+                </FormItem>
+              </Col>
+              <Col span={24}>
+                <FormItem>
+                  <Input placeholder=""></Input>
+                </FormItem>
+              </Col>
+            </Row>
+           </Form>
+          </Modal>
         </Form>
       </div>
     </>

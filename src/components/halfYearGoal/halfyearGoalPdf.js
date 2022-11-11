@@ -2,12 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./HalfYearDown.css";
 import hutechLogo from "../../images/hutechlogo.png";
 import pdfMake from "pdfmake/build/pdfmake";
-import {
-
-
-    DownloadOutlined
-} from "@ant-design/icons";
-
+import { DownloadOutlined } from "@ant-design/icons";
+import { Card, Space } from "antd";
 
 const HalfyearGoalPdf = (props) => {
     const [currentAppraisal, setCurrentAppraisal] = useState(props.appraisal);
@@ -327,22 +323,22 @@ const HalfyearGoalPdf = (props) => {
     return (
         <>
             <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
+              className="date"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexDirection: "row",
+              }}
             >
-                <DownloadOutlined onClick={() => pdfMake.createPdf(docDefinition).download()}>
-
-                </DownloadOutlined>
-
-
-
+              <DownloadOutlined
+                onClick={() => pdfMake.createPdf(docDefinition).download()}
+              ></DownloadOutlined>
             </div>
-
-        </>
-    );
-}
+          </Space>
+        </Card>
+      </div>
+    </>
+  );
+};
 
 export default HalfyearGoalPdf;

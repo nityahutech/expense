@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 import loginBg from "../images/login-img.png"
-import loginLogo from "../images/ExepnseLogo.png"
+import loginLogo from "../images/NewHUTechLgo.png"
 
 function LoginPage() {
   const [loginEmail, setLoginEmail] = useState("");
@@ -31,7 +31,7 @@ function LoginPage() {
       const timer = setTimeout(() => {
         console.log('This will run after 0.75 seconds!')
         navigate("MainDashboardPage/MainDashBoard", { replace: true });
-      }, 1000);
+      }, 2000);
     } catch {
       setError("Failed to log in");
       setTimeout(() => {
@@ -71,7 +71,7 @@ function LoginPage() {
             <div className="form-div">
               <div className="exepnse-logo">
                 {/* <img src={process.env.PUBLIC_URL + "ExepnseLogo.png"} alt="" /> */}
-                <img src={loginLogo} alt="" />
+                <img src={loginLogo} alt="" style={{width:"260px"}}/>
               </div>
               <Form
                 name="basic"

@@ -186,6 +186,7 @@ function handleChange(event) {
           name="idtitle"
           rules={[
             {
+              pattern: /^[a-zA-Z\s]*$/,
               required: true,
               message: 'Enter the ID Name',
             },
@@ -198,6 +199,7 @@ function handleChange(event) {
           name="iddescription"
           rules={[
             {
+              pattern: /^[0-9A-Z\s]*$/,
               required: true,
               message: 'Enter ID Number',
             },

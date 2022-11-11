@@ -66,6 +66,12 @@
  .viewModal .ant-modal-content{
     border-radius: 10px;
     width:820px;
+    position:relative;
+    right: 90px;
+    /* width: 100%; */
+    resize:vertical;
+    /* height: 500px; */
+
  }
 
  .viewModal .ant-modal-header{
@@ -97,3 +103,4 @@ line-height: 25px;
     pointer-events: none;
 
  }
+ 

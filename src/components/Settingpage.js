@@ -209,7 +209,7 @@ const Settingpage = () => {
                 </Col>
                 <Col xs={22} sm={10} md={10} lg={10}>
                   <Button
-                    className="save"
+                    // className="save"
                     htmlType="submit"
                     type="primary"
                     onClick={handlePasswordSubmit}

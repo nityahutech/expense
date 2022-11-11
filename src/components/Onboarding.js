@@ -472,11 +472,13 @@ function Onboarding() {
                 <ViewModal
                   modalData={modalData}
                   setIsModalVisible={setIsModalVisible}
+                  getData={getData}
                 />
               </Modal>
 
               <Modal
                 className="viewModal"
+                destroyOnClose
                 // centered
                 visible={isEditOrganization}
                 footer={null}

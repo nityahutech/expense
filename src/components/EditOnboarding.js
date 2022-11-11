@@ -15,7 +15,7 @@ import {
   Table,
   Tag,
   Modal,
-  notification
+  notification,
 } from "antd";
 import {
   PlusCircleOutlined,
@@ -33,7 +33,7 @@ import reload from "../images/reload.png";
 import CompanyProContext from "../contexts/CompanyProContext";
 
 function EditOnboarding(props) {
-  console.log(props)
+  console.log(props);
   const [fileName, setFileName] = useState(props.modalData.logo);
   const [fileEdited, setFileEdited] = useState(false);
   const [isBigFile, setIsBigFile] = useState(false);
@@ -44,35 +44,33 @@ function EditOnboarding(props) {
   const [accessList, setAccessList] = useState(props.modalData.accessList);
   const [addAccess, setAddAccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  
-  console.log("test", "modalData", modalData)
-  console.log("test", "accessList", accessList)
 
+  console.log("test", "modalData", modalData);
+  console.log("test", "accessList", accessList);
 
-    const timer = setTimeout(() => {
-    setLoading(false)
-    console.log('This will run after 0.75 seconds!')
-    }, 500);
+  const timer = setTimeout(() => {
+    setLoading(false);
+    console.log("This will run after 0.75 seconds!");
+  }, 500);
 
   useEffect(() => {
-    setAccessList(props.modalData.accessList)
-    setModalData(props.modalData)
-  }, [])
+    setAccessList(props.modalData.accessList);
+    setModalData(props.modalData);
+  }, []);
 
   const handleClickEdit = (event) => {
     console.log("imgRef:: ", imgRef);
     imgRef.current.click();
   };
-  console.log("values", modalData, modalData.accessList, accessList)
+  console.log("values", modalData, modalData.accessList, accessList);
 
   function onReset() {
-
-    props.setIsEditOrganization(false)
+    props.setIsEditOrganization(false);
     form.resetFields();
     form2.resetFields();
     modalData = {};
-    setModalData(props.modalData)
-    setAccessList(props.modalData.accessList)
+    setModalData(props.modalData);
+    setAccessList(props.modalData.accessList);
     // setIsBigFile(false);
     // setFileName(null);
   }
@@ -97,17 +95,21 @@ function EditOnboarding(props) {
       gst: values.gst,
       domain: values.domain,
       phone: values.phone,
-    }
-    console.log(values,fileName,valuesToservice,values.orgcode);
-    CompanyProContext.updateCompInfo(values.orgcode, valuesToservice, (fileEdited? fileName:null))
-      .then((res)=>showNotification("success", "Success", "Edit Successful"))
-      .catch((err)=> showNotification("error", "Error", err.message))
+    };
+    console.log(values, fileName, valuesToservice, values.orgcode);
+    CompanyProContext.updateCompInfo(
+      values.orgcode,
+      valuesToservice,
+      fileEdited ? fileName : null
+    )
+      .then((res) => showNotification("success", "Success", "Edit Successful"))
+      .catch((err) => showNotification("error", "Error", err.message));
 
-    onReset()
+    onReset();
     props.getData();
-    props.setIsEditOrganization(false)
-  }
-       
+    props.setIsEditOrganization(false);
+  };
+
   const showNotification = (type, msg, desc) => {
     notification[type]({
       message: msg,
@@ -116,8 +118,10 @@ function EditOnboarding(props) {
   };
 
   const handleEdit = (event) => {
-    console.log(event.target.files[0])
-    if(!event) {return;}
+    console.log(event.target.files[0]);
+    if (!event) {
+      return;
+    }
     const fileUploaded = event.target.files[0];
     checkFileSize(fileUploaded.size, fileUploaded);
   };
@@ -126,7 +130,7 @@ function EditOnboarding(props) {
     if (Math.round(size / 1024) <= 200) {
       setFileName(fileName);
       setIsBigFile(false);
-      setFileEdited(true)
+      setFileEdited(true);
     } else {
       setFileName(null);
       setIsBigFile(true);
@@ -146,20 +150,23 @@ function EditOnboarding(props) {
   };
 
   async function addUseRole(values) {
-    let exists = accessList.filter((user) => values.mailid == user.mailid || values.name == user.name)
-    if (exists.length > 0 || await CompanyProContext.checkUserExists(values.mailid)) {
+    let exists = accessList.filter((user) => values.mailid == user.mailid);
+    if (
+      exists.length > 0 ||
+      (await CompanyProContext.checkUserExists(values.mailid))
+    ) {
       showNotification("error", "Error", "This user already exists!");
       form2.resetFields();
       setAddAccess(false);
       return;
     }
     setAccessList([...accessList, values]);
-    console.log([...accessList, values])
+    console.log([...accessList, values]);
     form2.resetFields();
     setAddAccess(false);
     // setAccessList([...accessList, newAccess]);
     // setNewAccess({ userole: "", name: "", mailid: "", phone: "" });
-  };
+  }
 
   function onDelete(delItem) {
     console.log(delItem);
@@ -181,8 +188,7 @@ function EditOnboarding(props) {
     props.setIsEditOrganization(false);
   }
 
-  console.log(fileName, accessList)
-  
+  console.log(fileName, accessList);
 
   return (
     <Card
@@ -649,286 +655,278 @@ function EditOnboarding(props) {
           <Divider />
 
           <Card
+            style={{
+              margin: "27px",
+              padding: "10px",
+              background: "#f8f8f8",
+              // height: "auto",
+            }}
+          >
+            <div
               style={{
-                margin: "27px",
-                padding: "10px",
-                background: "#f8f8f8",
-                // height: "auto",
+                fontWeight: "600",
+                fontSize: "14px",
+                lineHeight: "17px",
               }}
             >
-              <div
-                style={{
-                  fontWeight: "600",
-                  fontSize: "14px",
-                  lineHeight: "17px",
-                }}
-              >
-                Organization Access
-              </div>
-              <Divider />
-              <Form
-                className="form"
-                style={{ margin: "30px" }}
-                form={form2}
-                layout="vertical"
-                labelcol={{
-                  span: 4,
-                }}
-                wrappercol={{
-                  span: 14,
-                }}
-                initialValues={{
-                  remember: true,
-                }}
-                autoComplete="off"
-                onFinish={addUseRole}
-              >
-                {accessList.map((u, i) => (
-                      <div style={{ marginTop: "10px" }} className="inputLabel">
-                        <Row gutter={[24, 20]}>
-                          <Col xs={22} sm={15} md={5}>
-                            <div
-                              style={{ fontSize: "13px", fontWeight: "600" }}
-                            >
-                              User Role
-                            </div>
-                            <div>{u.userRole}</div>
-                          </Col>
-                          <Col xs={22} sm={15} md={5}>
-                            <div
-                              style={{ fontSize: "13px", fontWeight: "600" }}
-                            >
-                              Name
-                            </div>
-                            <div> {u.name}</div>
-                          </Col>
-                          <Col xs={22} sm={15} md={7}>
-                            <div
-                              style={{ fontSize: "13px", fontWeight: "600" }}
-                            >
-                              Email Address
-                            </div>
-                            <div>{u.mailid}</div>
-                          </Col>
-                          <Col xs={22} sm={15} md={6}>
-                            <div
-                              style={{ fontSize: "13px", fontWeight: "600" }}
-                            >
-                              Phone Number
-                            </div>
-
-                            <div>{u.phone}</div>
-                            <Button
-                              style={{
-                                background: "#f8f8f8",
-                                border: "none",
-                                color: "#095AA4",
-                                float: "right",
-                                bottom: " 35px",
-                                width: "10px",
-                              }}
-                              onClick={() => {
-                                onDelete(u);
-                              }}
-                            >
-                              <CloseCircleOutlined />
-                            </Button>
-                          </Col>
-                        </Row>
+              Organization Access
+            </div>
+            <Divider />
+            <Form
+              className="form"
+              style={{ margin: "30px" }}
+              form={form2}
+              layout="vertical"
+              labelcol={{
+                span: 4,
+              }}
+              wrappercol={{
+                span: 14,
+              }}
+              initialValues={{
+                remember: true,
+              }}
+              autoComplete="off"
+              onFinish={addUseRole}
+            >
+              {accessList.map((u, i) => (
+                <div style={{ marginTop: "10px" }} className="inputLabel">
+                  <Row gutter={[24, 20]}>
+                    <Col xs={22} sm={15} md={5}>
+                      <div style={{ fontSize: "13px", fontWeight: "600" }}>
+                        User Role
                       </div>
-                    ))}
-                    {addAccess ? (
-                      <div>
-                        <Row gutter={[20, 8]} className="addUserForm">
-                          <Col xs={22} sm={15} md={6}>
-                            <Form.Item
-                              name="userRole"
-                              label="User Role"
-                              onKeyPress={(event) => {
-                                if (checkAlphabets(event)) {
-                                  event.preventDefault();
-                                }
-                              }}
-                              rules={[
-                                {
-                                  required: true,
-                                  message: "Please enter Role",
-                                },
-                                {
-                                  pattern: /^[a-zA-Z\s]*$/,
-                                  message: "Please enter Valid Role",
-                                },
-                              ]}
-                            >
-                              <Input
-                                maxLength={10}
-                                placeholder="User Role"
-                                style={{
-                                  border: "1px solid #8692A6",
-                                  borderRadius: "4px",
-                                }}
-                              />
-                            </Form.Item>
-                          </Col>
-                          <Col xs={22} sm={15} md={6}>
-                            <Form.Item
-                              name="name"
-                              label="Name"
-                              onKeyPress={(event) => {
-                                if (checkAlphabets(event)) {
-                                  event.preventDefault();
-                                }
-                              }}
-                              rules={[
-                                {
-                                  required: true,
-
-                                  message: "Please Enter Name",
-                                },
-                                {
-                                  pattern: /^[a-zA-Z\s]*$/,
-                                  message: "Please Enter Valid Name",
-                                },
-                              ]}
-                            >
-                              <Input
-                                maxLength={20}
-                                placeholder="Name"
-                                style={{
-                                  border: "1px solid #8692A6",
-                                  borderRadius: "4px",
-                                }}
-                              />
-                            </Form.Item>
-                          </Col>
-                          <Col xs={22} sm={15} md={6}>
-                            <Form.Item
-                              name="mailid"
-                              label="Email Address"
-                              rules={[
-                                {
-                                  type: "email",
-                                  required: true,
-                                  message: "Enter Email address",
-                                  pattern:
-                                    "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
-                                },
-                              ]}
-                            >
-                              <Input
-                                maxLength={30}
-                                placeholder="Email Address"
-                                style={{
-                                  border: "1px solid #8692A6",
-                                  borderRadius: "4px",
-                                }}
-                              />
-                            </Form.Item>
-                          </Col>
-                          <Col xs={22} sm={15} md={6}>
-                            <Form.Item
-                              name="phone"
-                              label="Phone Number"
-                              onKeyPress={(event) => {
-                                if (checkNumbervalue(event)) {
-                                  event.preventDefault();
-                                }
-                              }}
-                              rules={[
-                                {
-                                  required: true,
-
-                                  message: "Please enter Phone Number",
-                                },
-                                {
-                                  pattern: /^[0-9]\d{9}$/,
-                                  message: "Please Enter Valid Number",
-                                },
-                              ]}
-                            >
-                              <Input
-                                maxLength={10}
-                                placeholder="Phone Number"
-                                style={{
-                                  border: "1px solid #8692A6",
-                                  borderRadius: "4px",
-                                }}
-                              />
-                            </Form.Item>
-                          </Col>
-                        </Row>
+                      <div>{u.userRole}</div>
+                    </Col>
+                    <Col xs={22} sm={15} md={5}>
+                      <div style={{ fontSize: "13px", fontWeight: "600" }}>
+                        Name
                       </div>
-                    ) : null}
+                      <div> {u.name}</div>
+                    </Col>
+                    <Col xs={22} sm={15} md={7}>
+                      <div style={{ fontSize: "13px", fontWeight: "600" }}>
+                        Email Address
+                      </div>
+                      <div>{u.mailid}</div>
+                    </Col>
+                    <Col xs={22} sm={15} md={6}>
+                      <div style={{ fontSize: "13px", fontWeight: "600" }}>
+                        Phone Number
+                      </div>
 
-                    <Button
-                      style={{
-                        border: "none",
-                        // marginLeft: "49rem",
-                        background: "#1565D8",
-                        color: "#FFFFFF",
-                        fontWeight: "600",
-                        fontSize: "13px",
-                        lineHeight: "14.4px",
-                        float: "right",
-                        top: "1rem",
-                      }}
-                      // htmlType={addAccess ? "submit" : "button"}
-                      onClick={() => {
-                        if (addAccess) {
-                          form2.submit();
-                        }
-                        setAddAccess(!addAccess);
-                      }}
-                    >
-                      <PlusCircleOutlined /> {addAccess ? "Save" : "Add User"}
-                    </Button>
-                  </Form>
-                </Card>
+                      <div>{u.phone}</div>
+                      <Button
+                        style={{
+                          background: "#f8f8f8",
+                          border: "none",
+                          color: "#095AA4",
+                          float: "right",
+                          bottom: " 35px",
+                          width: "10px",
+                        }}
+                        onClick={() => {
+                          onDelete(u);
+                        }}
+                      >
+                        <CloseCircleOutlined />
+                      </Button>
+                    </Col>
+                  </Row>
+                </div>
+              ))}
+              {addAccess ? (
+                <div>
+                  <Row gutter={[20, 8]} className="addUserForm">
+                    <Col xs={22} sm={15} md={6}>
+                      <Form.Item
+                        name="userRole"
+                        label="User Role"
+                        onKeyPress={(event) => {
+                          if (checkAlphabets(event)) {
+                            event.preventDefault();
+                          }
+                        }}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter Role",
+                          },
+                          {
+                            pattern: /^[a-zA-Z\s]*$/,
+                            message: "Please enter Valid Role",
+                          },
+                        ]}
+                      >
+                        <Input
+                          maxLength={10}
+                          placeholder="User Role"
+                          style={{
+                            border: "1px solid #8692A6",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={22} sm={15} md={6}>
+                      <Form.Item
+                        name="name"
+                        label="Name"
+                        onKeyPress={(event) => {
+                          if (checkAlphabets(event)) {
+                            event.preventDefault();
+                          }
+                        }}
+                        rules={[
+                          {
+                            required: true,
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "end",
-            marginRight: "94px",
-          }}
-        >
-          <Space>
-            <Form.Item>
+                            message: "Please Enter Name",
+                          },
+                          {
+                            pattern: /^[a-zA-Z\s]*$/,
+                            message: "Please Enter Valid Name",
+                          },
+                        ]}
+                      >
+                        <Input
+                          maxLength={20}
+                          placeholder="Name"
+                          style={{
+                            border: "1px solid #8692A6",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={22} sm={15} md={6}>
+                      <Form.Item
+                        name="mailid"
+                        label="Email Address"
+                        rules={[
+                          {
+                            type: "email",
+                            required: true,
+                            message: "Enter Email address",
+                            pattern:
+                              "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
+                          },
+                        ]}
+                      >
+                        <Input
+                          maxLength={30}
+                          placeholder="Email Address"
+                          style={{
+                            border: "1px solid #8692A6",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={22} sm={15} md={6}>
+                      <Form.Item
+                        name="phone"
+                        label="Phone Number"
+                        onKeyPress={(event) => {
+                          if (checkNumbervalue(event)) {
+                            event.preventDefault();
+                          }
+                        }}
+                        rules={[
+                          {
+                            required: true,
+
+                            message: "Please enter Phone Number",
+                          },
+                          {
+                            pattern: /^[0-9]\d{9}$/,
+                            message: "Please Enter Valid Number",
+                          },
+                        ]}
+                      >
+                        <Input
+                          maxLength={10}
+                          placeholder="Phone Number"
+                          style={{
+                            border: "1px solid #8692A6",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </div>
+              ) : null}
+
               <Button
                 style={{
-                  border: "1px solid #1565D8",
-                  color: "#1565D8",
-                  fontWeight: "600",
-                  fontSize: "14px",
-                  lineHeight: "17px",
-                  width: "99px",
-                }}
-                onClick={onReset}
-              >
-                CANCEL
-              </Button>
-            </Form.Item>
-            <Form.Item>
-              <Button
-                style={{
-                  border: "1px solid #1565D8",
+                  border: "none",
+                  // marginLeft: "49rem",
                   background: "#1565D8",
-                  color: "#ffffff",
+                  color: "#FFFFFF",
                   fontWeight: "600",
-                  fontSize: "14px",
-                  lineHeight: "17px",
-                  width: "99px",
+                  fontSize: "13px",
+                  lineHeight: "14.4px",
+                  float: "right",
+                  top: "1rem",
                 }}
-                htmlType="submit"
+                // htmlType={addAccess ? "submit" : "button"}
+                onClick={() => {
+                  if (addAccess) {
+                    form2.submit();
+                  }
+                  setAddAccess(!addAccess);
+                }}
               >
-                SAVE
+                <PlusCircleOutlined /> {addAccess ? "Save" : "Add User"}
               </Button>
-            </Form.Item>
-          </Space>
-        </div>
-      </Form>
-    </div>
-  </Card>
+            </Form>
+          </Card>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "end",
+              marginRight: "94px",
+            }}
+          >
+            <Space>
+              <Form.Item>
+                <Button
+                  style={{
+                    border: "1px solid #1565D8",
+                    color: "#1565D8",
+                    fontWeight: "600",
+                    fontSize: "14px",
+                    lineHeight: "17px",
+                    width: "99px",
+                  }}
+                  onClick={onReset}
+                >
+                  CANCEL
+                </Button>
+              </Form.Item>
+              <Form.Item>
+                <Button
+                  style={{
+                    border: "1px solid #1565D8",
+                    background: "#1565D8",
+                    color: "#ffffff",
+                    fontWeight: "600",
+                    fontSize: "14px",
+                    lineHeight: "17px",
+                    width: "99px",
+                  }}
+                  htmlType="submit"
+                >
+                  SAVE
+                </Button>
+              </Form.Item>
+            </Space>
+          </div>
+        </Form>
+      </div>
+    </Card>
   );
 }
 

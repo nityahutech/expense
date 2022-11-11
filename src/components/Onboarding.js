@@ -69,7 +69,7 @@ function Onboarding() {
       accessList: [],
       address: [],
       auditor: [],
-      bank:[],
+      bank: [],
       regCompName: values.regCompName,
       regOffice: {
         addLine1: values.addLine1,
@@ -83,23 +83,28 @@ function Onboarding() {
       gst: values.gst,
       domain: values.domain,
       phone: values.phone,
-      status: "Deactivated"
-    }
-    console.log(values,fileName,valuesToservice,values.orgcode);
+      status: "Deactivated",
+    };
+    console.log(values, fileName, valuesToservice, values.orgcode);
 
-    CompanyProContext.createCompInfo(values.orgcode, valuesToservice, fileName, accessList)
+    CompanyProContext.createCompInfo(
+      values.orgcode,
+      valuesToservice,
+      fileName,
+      accessList
+    )
       .then((response) => {
         notification.open({
           message: "Creating Company",
           duration: 2,
-          icon: <LoadingOutlined />
+          icon: <LoadingOutlined />,
         });
         const timer = setTimeout(() => {
           showNotification("success", "Success", "Onboarding Completed");
-          getData()
+          getData();
           setAddAccess(false);
-          onReset()
-          setActivetab("1")
+          onReset();
+          setActivetab("1");
         }, 5000);
         return () => clearTimeout(timer);
       })
@@ -116,15 +121,15 @@ function Onboarding() {
   };
 
   useEffect(() => {
-    console.log(!isEditOrganization || !isModalVisible)
+    console.log(!isEditOrganization || !isModalVisible);
     if (!isEditOrganization || !isModalVisible) {
       getData();
     }
-  }, [isEditOrganization, isModalVisible])
+  }, [isEditOrganization, isModalVisible]);
 
   useEffect(() => {
     getData();
-  }, [])
+  }, []);
 
   const changeCompStatus = (id, status) => {
     console.log(id, status);
@@ -232,8 +237,11 @@ function Onboarding() {
   }
 
   async function addUseRole(values) {
-    let exists = accessList.filter((user) => values.mailid == user.mailid || values.name == user.name)
-    if (exists.length > 0 || await CompanyProContext.checkUserExists(values.mailid)) {
+    let exists = accessList.filter((user) => values.mailid == user.mailid);
+    if (
+      exists.length > 0 ||
+      (await CompanyProContext.checkUserExists(values.mailid))
+    ) {
       showNotification("error", "Error", "This user already exists!");
       form2.resetFields();
       setAddAccess(false);
@@ -245,7 +253,7 @@ function Onboarding() {
     setAddAccess(false);
     // setAccessList([...accessList, newAccess]);
     // setNewAccess({ userole: "", name: "", mailid: "", phone: "" });
-  };
+  }
 
   const columns = [
     {
@@ -561,7 +569,7 @@ function Onboarding() {
                         },
                         {
                           validator: validateOrgId,
-                        }
+                        },
                       ]}
                     >
                       <Input
@@ -977,42 +985,42 @@ function Onboarding() {
 
                 <Divider />
 
-            <Card
-              style={{
-                margin: "27px",
-                padding: "10px",
-                background: "#f8f8f8",
-                // height: "auto",
-              }}
-            >
-              <div
-                style={{
-                  fontWeight: "600",
-                  fontSize: "14px",
-                  lineHeight: "17px",
-                }}
-              >
-                Organization Access
-              </div>
-              <Divider />
-              <Form
-                className="form"
-                style={{ margin: "30px" }}
-                form={form2}
-                layout="vertical"
-                labelcol={{
-                  span: 4,
-                }}
-                wrappercol={{
-                  span: 14,
-                }}
-                initialValues={{
-                  remember: true,
-                }}
-                autoComplete="off"
-                onFinish={addUseRole}
-              >
-                {accessList.map((u, i) => (
+                <Card
+                  style={{
+                    margin: "27px",
+                    padding: "10px",
+                    background: "#f8f8f8",
+                    // height: "auto",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "14px",
+                      lineHeight: "17px",
+                    }}
+                  >
+                    Organization Access
+                  </div>
+                  <Divider />
+                  <Form
+                    className="form"
+                    style={{ margin: "30px" }}
+                    form={form2}
+                    layout="vertical"
+                    labelcol={{
+                      span: 4,
+                    }}
+                    wrappercol={{
+                      span: 14,
+                    }}
+                    initialValues={{
+                      remember: true,
+                    }}
+                    autoComplete="off"
+                    onFinish={addUseRole}
+                  >
+                    {accessList.map((u, i) => (
                       <div style={{ marginTop: "10px" }} className="inputLabel">
                         <Row gutter={[24, 20]}>
                           <Col xs={22} sm={15} md={5}>

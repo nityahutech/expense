@@ -622,9 +622,9 @@ const Leave = () => {
   const dateCellRender = (value,) => {
     console.log(value.format("dddd"))
     const listData = getListData(value);
-    let bgColor = "rgba(225 39 116 / 20%)";
-    let color = "rgb(181 111 111)";
     let textVal = value.format("dddd");
+    let bgColor = textVal == "Sunday" || textVal == "Saturday" ? "rgba(74, 67, 67, 0.2)" : "rgba(40, 168, 144, 0.2)";
+    let color = textVal == "Sunday" || textVal == "Saturday" ? "rgba(74, 67, 67, 1)" : "rgb(40, 168, 144)";
 
     if (!(listData.length == 0)) {
       textVal = listData[0].type;

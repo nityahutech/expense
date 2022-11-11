@@ -16,3 +16,9 @@
 .worktab .ant-modal-body {
     margin: 0;
 }
+
+.tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #000;
+    font-size: 14px;
+    font-weight: 600;
+}

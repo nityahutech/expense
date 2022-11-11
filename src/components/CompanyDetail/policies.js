@@ -11,14 +11,12 @@ import {
   Row,
   Col,
   notification,
-  Card
+  Card,
 } from "antd";
-import {
-  PlusCircleOutlined, DeleteOutlined
-} from "@ant-design/icons";
+import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import FormItem from "antd/es/form/FormItem";
-import { upload } from '@testing-library/user-event/dist/upload';
-import PolicyContext from '../../contexts/PolicyContext';
+import { upload } from "@testing-library/user-event/dist/upload";
+import PolicyContext from "../../contexts/PolicyContext";
 
 const Policies = () => {
   const [policy, setPolicy] = useState([]);
@@ -29,19 +27,18 @@ const Policies = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [file, setFile] = useState("");
-  const compId=sessionStorage.getItem("compId")
-
+  const compId = sessionStorage.getItem("compId");
 
   const columns = [
     {
-      title: 'Policy Title',
-      dataIndex: 'title',
-      key: 'idtitle',
+      title: "Policy Title",
+      dataIndex: "title",
+      key: "idtitle",
     },
     {
-      title: 'Policy Description',
-      dataIndex: 'description',
-      key: 'iddescription ',
+      title: "Policy Description",
+      dataIndex: "description",
+      key: "iddescription ",
     },
     {
       title: "Uploaded File",
@@ -79,9 +76,9 @@ const Policies = () => {
     setFile(event.target.files[0]);
   }
   async function addPolicy(values) {
-    console.log(file, values)
+    console.log(file, values);
     try {
-      await PolicyContext.createPolicy("compId001", values, file)
+      await PolicyContext.createPolicy(values, file);
       showNotification("success", "Success", "Upload Complete");
       const timer = setTimeout(() => {
         getData();
@@ -90,7 +87,7 @@ const Policies = () => {
     } catch {
       showNotification("error", "Error", "Upload Failed");
     }
-  };
+  }
   const showNotification = (type, msg, desc) => {
     notification[type]({
       message: msg,
@@ -101,7 +98,7 @@ const Policies = () => {
   //   async function updatePolicy(values) {
   //     console.log(values,file)
   //     try{
-  //    await PolicyContext.updateCompInfo("compID001",values,file)
+  //    await PolicyContext.updateCompInfo(id,values,file)
   //    showNotification("success", "Success", "Upload Complete");
   //    const timer = setTimeout(() => {
   //    getData();
@@ -119,20 +116,22 @@ const Policies = () => {
   // };
 
   const displayPolicy = () => {
-    return (
-      policy.forEach((pol) => {
-        Object.keys(pol).map(u => {
-          <p>{u}: {policy.u}</p>
-          { console.log(u, policy) }
-        })
-      })
-      // <Table dataSource={policy}></Table>
-      // Object.keys(policy).map(u => {
-      //   <p>{u}: {policy.u}</p>
-      //   {console.log(u,policy)}
-      // })
-    )
-  }
+    return policy.forEach((pol) => {
+      Object.keys(pol).map((u) => {
+        <p>
+          {u}: {policy.u}
+        </p>;
+        {
+          console.log(u, policy);
+        }
+      });
+    });
+    // <Table dataSource={policy}></Table>
+    // Object.keys(policy).map(u => {
+    //   <p>{u}: {policy.u}</p>
+    //   {console.log(u,policy)}
+    // })
+  };
 
   const deleteData = (id, fileName) => {
     Modal.confirm({
@@ -142,13 +141,13 @@ const Policies = () => {
 
       onOk: () => {
         PolicyContext.deletePolicy(id, fileName)
-          .then(response => {
-            showNotification("success", "Success", "Successfully deleted")
+          .then((response) => {
+            showNotification("success", "Success", "Successfully deleted");
             getData();
           })
-          .catch(error => {
+          .catch((error) => {
             showNotification("error", "Error", "Record not deleted ");
-          })
+          });
       },
     });
   };
@@ -157,8 +156,8 @@ const Policies = () => {
     getData();
   }, []);
   const getData = async () => {
-    let alldata = await PolicyContext.getPolicy("compId001");
-    console.log(alldata)
+    let alldata = await PolicyContext.getPolicy();
+    console.log(alldata);
     // setData(alldata);
     setPolicy(alldata);
   };
@@ -178,7 +177,6 @@ const Policies = () => {
     form.resetFields();
   };
 
-
   return (
     <>
       <div
@@ -188,12 +186,12 @@ const Policies = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          width: "100%",
         }}
       >
         <Row>
-                   <Col xs={24} sm={15} md={24}> 
-        <Form style={{ marginLeft: 0 }}
+          <Col xs={24} sm={15} md={8}>
+            <Form
+              style={{ marginLeft: 0 }}
               action="/action_page.php"
               form={form}
               labelCol={{ span: 30 }}
@@ -203,142 +201,139 @@ const Policies = () => {
               onFinish={addPolicy}
               layout="vertical"
             >
-        <Card title='Company Policies'
-          className="policyCard"
-          bordered={false}
-          style={{
-            width: 800,
-          }}>
-          <Table
-            columns={columns}
-            pagination={false}
-            dataSource={policy}
-          />
-          <Button type="primary" onClick={showModal} style={{ marginLeft: "10px" }}>
-            <PlusCircleOutlined />
-            Add
-          </Button>
-          <Modal
-            title="Add Policy"
-            open={isModalOpen}
-            onOk={() => {
-              form.submit();
-              handleOk();
-            }}
-            onCancel={handleCancel}
-            visible={isModalVisible}
-            okText="Save"
-            width={400}
-            closeIcon={
-              <div className='modal-close-x'
-                onClick={() => {
-                  setIsModalVisible(false);
+              <Card
+                title="Company Policies"
+                className="policyCard"
+                bordered={false}
+                style={{
+                  width: 800,
                 }}
               >
-                X
-              </div>
-            }
-
-          >
-            
-              <div className='div-discription'>
-                Title
-              </div>
-              <Form.Item
-
-                name="title"
-                rules={[
-                  {
-                    required: true,
-                    message: "Enter Policy Name",
-                    type: "domain",
-                  },
-                  {
-                    pattern: /^[a-zA-Z\s]*$/,
-                    message: "Enter Description ",
-                  },
-                ]}
-              >
-                <Input 
-                style={{
-                        width: '100%',
-                        borderBottom: '1px solid #ccc ',
-                        paddingLeft: '0px',
-                        marginTop: '10px',
+                <Table
+                  columns={columns}
+                  pagination={false}
+                  dataSource={policy}
+                />
+                <Button
+                  type="primary"
+                  onClick={showModal}
+                  style={{ marginLeft: "10px" }}
+                >
+                  <PlusCircleOutlined />
+                  Add
+                </Button>
+                <Modal
+                  title="Add Policy"
+                  open={isModalOpen}
+                  onOk={() => {
+                    form.submit();
+                    handleOk();
+                  }}
+                  onCancel={handleCancel}
+                  visible={isModalVisible}
+                  okText="Save"
+                  width={400}
+                  closeIcon={
+                    <div
+                      className="modal-close-x"
+                      onClick={() => {
+                        setIsModalVisible(false);
                       }}
-                bordered={false}  
-                required placeholder="Enter Policy Name" />
-              </Form.Item>
+                    >
+                      X
+                    </div>
+                  }
+                >
+                  <div className="div-discription">Title</div>
+                  <Form.Item
+                    name="title"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Enter Policy Name",
+                      },
+                      {
+                        pattern: /^[a-zA-Z\s]*$/,
+                        message: "Please Enter Valid Name ",
+                      },
+                    ]}
+                  >
+                    <Input
+                      style={{
+                        width: "100%",
+                        borderBottom: "1px solid #ccc ",
+                        paddingLeft: "0px",
+                        marginTop: "10px",
+                      }}
+                      bordered={false}
+                      required
+                      placeholder="Enter Policy Name"
+                    />
+                  </Form.Item>
 
-              <div className='div-discription'>
-                Description
-              </div>
-              <Form.Item
+                  <div className="div-discription">Description</div>
+                  <Form.Item
+                    name="description"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Enter Description ",
+                      },
+                      {
+                        pattern: /^[a-zA-Z\s]*$/,
+                        message: " Please Enter Description",
+                      },
+                    ]}
+                  >
+                    <Input
+                      style={{
+                        width: "100%",
+                        borderBottom: "1px solid #ccc ",
+                        paddingLeft: "0px",
+                        marginTop: "10px",
+                      }}
+                      bordered={false}
+                      required
+                      placeholder="Enter Description"
+                    />
+                  </Form.Item>
 
-                name="description"
-                rules={[
-                  {
-                    required: true,
-                    message: "Enter Policy Name",
-                    type: "domain",
-                  },
-                  {
-                    pattern: /^[a-zA-Z\s]*$/,
-                    message: "Enter Description",
-                  },
-                ]}
-              >
-                <Input 
-                  style={{
-                          width: '100%',
-                          borderBottom: '1px solid #ccc ',
-                          paddingLeft: '0px',
-                          marginTop: '10px',
-                        }}
-                  bordered={false}  
-                  required placeholder="Enter Description" />
-              </Form.Item>
-              
-              <div className='div-discription'>
-                Uplode File
-              </div>
-              <FormItem name="upload"
-                rules={[
-                  {
-                    required: true,
-                    message: 'upload file',
-                  },
-                ]}
-              >
-                <div className="choose">
-                  <Input
-                    type="file"
-                    id="upload"
+                  <div className="div-discription">Uplode File</div>
+                  <FormItem
                     name="upload"
-                    onChange={handleChange}
-                    style={{
-                      width: '100%',
-                      borderBottom: '1px solid #ccc ',
-                      paddingLeft: '0px',
-                      marginTop: '10px',
-                    }}
-                  bordered={false} 
-                  // ref={imgRef}
-                  // required
-                  />
-                </div>
-              </FormItem>
-
-            
-          </Modal>
-
-        </Card>
-        </Form>
-        </Col>
-                </Row>
+                    rules={[
+                      {
+                        required: true,
+                        message: "upload file",
+                      },
+                    ]}
+                  >
+                    <div className="choose">
+                      <Input
+                        type="file"
+                        id="upload"
+                        name="upload"
+                        onChange={handleChange}
+                        style={{
+                          width: "100%",
+                          borderBottom: "1px solid #ccc ",
+                          paddingLeft: "0px",
+                          marginTop: "10px",
+                        }}
+                        bordered={false}
+                        // ref={imgRef}
+                        // required
+                      />
+                    </div>
+                  </FormItem>
+                </Modal>
+              </Card>
+            </Form>
+          </Col>
+        </Row>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Policies
+export default Policies;

@@ -114,25 +114,27 @@ function ViewModal(props) {
           >
             <Row gutter={[50, 8]}>
               {modalData.accessList.map((user) => (
-                <Col xs={22} sm={15} md={8}>
-                  <span>{user.name}</span>
-                  <span> {user.mailid}</span>
-                  <span> {user.phone}</span>
-                  <span
-                    style={{
-                      borderRadius: "10px",
-                      background: "#C9E5FF",
-                      // width: "101px",
-                      display: "flex",
-                      justifyContent: "center",
-                      color: "#000000",
-                      fontWeight: "400",
-                      fontSize: "14px",
-                      marginTop: "7px",
-                    }}
-                  >
-                    {user.userRole}
-                  </span>
+                <Col xs={22} sm={15} md={9}>
+                  <div>
+                    <span>{user.name} </span>
+                    <span>{user.mailid} </span>
+                    <span>{user.phone} </span>
+                    <span
+                      style={{
+                        borderRadius: "10px",
+                        background: "#C9E5FF",
+                        // width: "101px",
+                        display: "flex",
+                        justifyContent: "center",
+                        color: "#000000",
+                        fontWeight: "400",
+                        fontSize: "14px",
+                        // marginTop: "7px",
+                      }}
+                    >
+                      {user.userRole}
+                    </span>
+                  </div>
                 </Col>
               ))}
             </Row>

@@ -58,7 +58,7 @@ function Onboarding() {
 
   const onFinish = async (values) => {
     if (orgIdExists) {
-      showNotification("error", "Error", "This user already exists!");
+      showNotification("error", "Error", "This Organization Code already exists!");
       return;
     }
     if (accessList.length == 0) {
@@ -69,6 +69,7 @@ function Onboarding() {
       accessList: [],
       address: [],
       secretary: [],
+      director: [],
       auditor: [],
       bank: [],
       regCompName: values.regCompName,
@@ -700,7 +701,7 @@ function Onboarding() {
                         },
                         {
                           pattern:
-                            /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}\.[a-zA-Z]{2,$/,
+                          /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/,
                           message: "Please Enter Valid Name",
                         },
                       ]}

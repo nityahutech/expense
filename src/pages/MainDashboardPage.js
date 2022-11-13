@@ -1,11 +1,11 @@
-
 import Navbar from "../components/navbar/Navbar";
 import Sidebar from "../components/sidebar/NewSidebar";
-
 import MainDashBoard from "../components/MainDashBoard";
 function MainDashboardPage() {
 
-  return (
+  const accessToken = sessionStorage.getItem("accessToken");
+  
+  return accessToken && !(accessToken == "null") ? (
     <div className="home">
       <div className="sidecontainer">
         <Sidebar
@@ -23,6 +23,6 @@ function MainDashboardPage() {
         </div>
       </div>
     </div>
-  ) 
+  ) : window.location.href = "/";
 }
 export default MainDashboardPage;

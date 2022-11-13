@@ -35,7 +35,7 @@ const tailLayout = {
   },
 };
 const dateFormat = "DD-MM-YYYY";
-function AttendanceLog({ empDetails }) {
+function AttendanceLog() {
   const [monthlydata, setMonthlydata] = useState([]);
   const [allEmp, setallEmp] = useState([]);
   const [role, setRole] = useState(sessionStorage.getItem("role"));

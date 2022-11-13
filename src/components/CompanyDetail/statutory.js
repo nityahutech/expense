@@ -294,7 +294,7 @@ const Statutory = () => {
     
       <Row>
         <Col xs={22} sm={15} md={5}></Col>
-        <Col xs={22} sm={15} md={8}>
+        <Col xs={22} sm={15} md={8} >
           <Form
             labelcol={{
               span: 4,

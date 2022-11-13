@@ -7,12 +7,14 @@ import {
     Input
 } from 'antd';
 import LeaveContext from '../contexts/LeaveContext'
+import moment from "moment";
 import "../style/leave.css";
 import checkedIcon from "../images/checkmark.png"
 import rejectIcon from "../images/rejected.png"
 
-const Notification = ({ data }) => {
-    const [dataSource, setDataSource] = useState(data);
+const Notification = (props) => {
+
+    const dataSource = props.data.filter(data => data.status == "Pending")
     let value = '';
 
     const Bbb = () => {
@@ -69,8 +71,10 @@ const Notification = ({ data }) => {
             dataIndex: 'date',
             width: 240,
             align: "left",
-            sorter: (a, b) => {
-                return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
+            sorter: (c, d) => {
+              let a = moment(c.dateCalc[0], "Do MMM, YYYY");
+              let b = moment(d.dateCalc[0], "Do MMM, YYYY");
+              return a - b;
             },
             sortDirections: ["ascend", "descend"],
 

@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Checkbox, Form, Input, Alert, Row, Col, Divider } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +12,11 @@ function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login, resetPassword } = useAuth()
+  const { login, resetPassword, logout } = useAuth()
+
+  useEffect(() => {
+    logout();
+  }, [])
 
   const win = window.sessionStorage;
 
@@ -30,7 +33,7 @@ function LoginPage() {
       sessionStorage.setItem("user", JSON.stringify(res.user));
       const timer = setTimeout(() => {
         console.log('This will run after 0.75 seconds!')
-        navigate("MainDashboardPage/MainDashBoard", { replace: true });
+        navigate("DashBoard", { replace: true });
       }, 2000);
     } catch {
       setError("Failed to log in");

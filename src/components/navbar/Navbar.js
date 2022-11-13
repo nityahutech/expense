@@ -12,6 +12,7 @@ import settingsIcon from "../../images/abstractuserflat4.png"
 import logoutIcon from "../../images/logoutsvgrepocom.png"
 import logo from "../../images/logo.png"
 import dropdown from "../../images/dropdown.png"
+import CompanyProContext from "../../contexts/CompanyProContext";
 // ---------------------------------------------------------------------
 
 const Navbar = () => {
@@ -21,6 +22,10 @@ const Navbar = () => {
   let loc = useLocation();
   const { logout, currentUser } = useAuth();
   const [clockinfo, setClockInfo] = useState()
+  const role=sessionStorage.getItem("role")
+  const user=JSON.parse(sessionStorage.getItem("user"))
+  // let data = CompanyProContext.getCompanyProfile()
+  // const logo = data.logo
 
   const isClockRunning = async () => {
     let res = await AttendanceContext.getStartTime(currentUser.uid);
@@ -46,7 +51,7 @@ const Navbar = () => {
           key: "1",
           label: (
             <Link
-              to="/Setting"
+              to="/Settings"
               style={{ color: "#171832", fontWeight: "normal" }}
               rel="noopener noreferrer"
             >
@@ -88,6 +93,7 @@ const Navbar = () => {
   );
 
   useEffect(() => {
+    console.log(role, user)
     setIsRunning(isClockRunning());
   }, [])
 

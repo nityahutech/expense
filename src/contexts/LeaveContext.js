@@ -100,7 +100,6 @@ class LeaveContext {
                 if (dur === 1 && rec.slot != 'Full Day') {
                     dur = 0.5;
                 }
-                console.log(leavedays[rec.nature])
                 leavedays[rec.nature] -= dur;
             }
         })

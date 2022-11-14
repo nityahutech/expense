@@ -8,10 +8,10 @@ import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
-import settingsIcon from "../../images/abstractuserflat4.png"
-import logoutIcon from "../../images/logoutsvgrepocom.png"
-import Logo from "../../images/smallerLogo.png"
-import dropdown from "../../images/dropdown.png"
+import settingsIcon from "../../images/abstractuserflat4.png";
+import logoutIcon from "../../images/logoutsvgrepocom.png";
+import Logo from "../../images/smallerLogo.png";
+import dropdown from "../../images/dropdown.png";
 import CompanyProContext from "../../contexts/CompanyProContext";
 // ---------------------------------------------------------------------
 
@@ -21,29 +21,31 @@ const Navbar = () => {
   const [activePage, setActivePage] = useState("/DashBoard");
   let loc = useLocation();
   const { logout, currentUser } = useAuth();
-  const [clockinfo, setClockInfo] = useState()
-  const role = sessionStorage.getItem("role")
-  const user = JSON.parse(sessionStorage.getItem("user"))
-  let temp = sessionStorage.getItem("logo")
+  const [clockinfo, setClockInfo] = useState();
+  const role = sessionStorage.getItem("role");
+  const user = JSON.parse(sessionStorage.getItem("user"));
+  let temp = sessionStorage.getItem("logo");
   const logo = temp == null ? Logo : temp;
-  console.log(logo)
+  console.log(logo);
 
   const isClockRunning = async () => {
     let res = await AttendanceContext.getStartTime(currentUser.uid);
     if (res == null || res.clockOut != null) {
-      setIsRunning(false)
+      setIsRunning(false);
       return false;
-    }
-    else {
-      setIsRunning(true)
-      let offset = moment().subtract(res.clockIn)
+    } else {
+      setIsRunning(true);
+      let offset = moment().subtract(res.clockIn);
       let offsettime = res.break ? offset.subtract(res.break) : offset;
-      const offsetTime = moment(offsettime, "HH:mm:ss").diff(moment().startOf('day'), 'seconds')
-      setStartTime(res.clockIn)
-      setClockInfo(offsetTime)
+      const offsetTime = moment(offsettime, "HH:mm:ss").diff(
+        moment().startOf("day"),
+        "seconds"
+      );
+      setStartTime(res.clockIn);
+      setClockInfo(offsetTime);
       return true;
     }
-  }
+  };
 
   const menu = (
     <Menu
@@ -86,7 +88,8 @@ const Navbar = () => {
               src={logoutIcon}
               // src="/logoutsvgrepocom.png"
               alt="downArrow"
-              className="avatarimg" />
+              className="avatarimg"
+            />
           ),
         },
       ]}
@@ -94,41 +97,45 @@ const Navbar = () => {
   );
 
   useEffect(() => {
-    console.log(role, user)
+    console.log(role, user);
     setIsRunning(isClockRunning());
-  }, [])
+  }, []);
 
   useEffect(() => {
-    isClockRunning()
+    isClockRunning();
     const timer = setInterval(() => {
       if (isRunning) {
-        setClockInfo(clockinfo => clockinfo + 1)
+        setClockInfo((clockinfo) => clockinfo + 1);
       }
-    }, 1000)
+    }, 1000);
     return () => {
       clearInterval(timer);
     };
-  }, [isRunning])
+  }, [isRunning]);
 
-  const buttonStyle = !isRunning ? {
-    padding: "1px",
-    background: "#FF002A",
-    color: "white",
-    display: "inline-block",
-    width: "200px",
-    borderRadius: "5px",
-    border: "1px solid white",
-  } : {
-    padding: "1px",
-    background: "skyblue",
-    color: "white",
-    display: "inline-block",
-    width: "200px",
-    borderRadius: "5px",
-    border: "1px solid white",
-  };
+  const buttonStyle = !isRunning
+    ? {
+        padding: "1px",
+        background: "#FF002A",
+        color: "white",
+        display: "inline-block",
+        width: "200px",
+        borderRadius: "5px",
+        border: "1px solid white",
+      }
+    : {
+        padding: "1px",
+        background: "skyblue",
+        color: "white",
+        display: "inline-block",
+        width: "200px",
+        borderRadius: "5px",
+        border: "1px solid white",
+      };
 
-  const [buttonText, setButtonText] = useState(!isRunning ? "Web Clock In" : "");
+  const [buttonText, setButtonText] = useState(
+    !isRunning ? "Web Clock In" : ""
+  );
   let clockTime = isRunning ? clockinfo : "";
 
   const onMouseEnter = (event) => {
@@ -142,8 +149,7 @@ const Navbar = () => {
     if (isRunning) {
       event.target.style.background = "skyblue";
       setButtonText("");
-    }
-    else {
+    } else {
       setButtonText("Web Clock In ");
       event.target.style.background = "#FF002A";
     }
@@ -155,20 +161,20 @@ const Navbar = () => {
       name: currentUser.displayName,
       date: moment().format("DD-MM-YYYY"),
       clockIn: moment().format("HH:mm:ss"),
-      clockOut: null
-    }
-    await AttendanceContext.addClockData(clickedDate)
-    setIsRunning(true)
+      clockOut: null,
+    };
+    await AttendanceContext.addClockData(clickedDate);
+    setIsRunning(true);
   };
 
   const stopClockState = async () => {
     let clickedDate = {
       clockOut: moment().format("HH:mm:ss"),
-      duration: moment.utc(clockTime * 1000).format('HH:mm:ss')
-    }
+      duration: moment.utc(clockTime * 1000).format("HH:mm:ss"),
+    };
     await AttendanceContext.updateClockData(currentUser.uid, clickedDate);
-    setIsRunning(false)
-    setClockInfo(0)
+    setIsRunning(false);
+    setClockInfo(0);
     setStartTime("");
     setButtonText("Web Clock In ");
   };
@@ -176,12 +182,11 @@ const Navbar = () => {
   const handleClock = () => {
     if (isRunning) {
       stopClockState();
-    }
-    else {
+    } else {
       setClockState();
     }
-  }
-  
+  };
+
   return (
     <div className="navbar" style={{ background: "white" }}>
       <div className="wrapper">
@@ -203,7 +208,6 @@ const Navbar = () => {
           className="stopwatch"
         >
           {/* {`${ctime.hrs}:${ctime.min}:${ctime.sec}`} */}
-
         </div>
         <button
           style={buttonStyle}
@@ -212,7 +216,9 @@ const Navbar = () => {
           onMouseEnter={onMouseEnter}
         >
           {buttonText ? buttonText : ""} <br />
-          {clockinfo && isRunning ? moment.utc(clockTime * 1000).format('HH:mm:ss') : ""}
+          {clockinfo && isRunning
+            ? moment.utc(clockTime * 1000).format("HH:mm:ss")
+            : ""}
         </button>
         <div className="image">
           <div className="item">
@@ -232,7 +238,7 @@ const Navbar = () => {
               src={dropdown}
               // src="/dropdown.png"
               alt="downArrow"
-              style={{ cursor: "pointer", width: '15px' }}
+              style={{ cursor: "pointer", width: "15px" }}
             />
           </Space>
         </Dropdown>

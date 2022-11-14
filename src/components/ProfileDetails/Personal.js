@@ -119,8 +119,17 @@ function Personal() {
                   <>
                     {editContent === false ? (
                       <Button
+                        className="personal"
                         type="text"
-                        style={{ color: "#4ec0f1" }}
+                        style={{
+                          color: "#4ec0f1",
+                          display: "none",
+                          paddingTop: "7px",
+                          paddingRight: "7px",
+                          position: "absolute",
+                          right: 10,
+                          top: 10,
+                        }}
                         onClick={() => showEditContent(!editContent)}
                       >
                         <EditFilled />
@@ -418,8 +427,17 @@ function Personal() {
                   <>
                     {editContactInfo === false ? (
                       <Button
+                        className="personal"
                         type="text"
-                        style={{ color: "#4ec0f1" }}
+                        style={{
+                          color: "#4ec0f1",
+                          display: "none",
+                          paddingTop: "7px",
+                          paddingRight: "7px",
+                          position: "absolute",
+                          right: 10,
+                          top: 10,
+                        }}
                         onClick={() => showEditContactInfo(!editContactInfo)}
                       >
                         <EditFilled />
@@ -663,8 +681,17 @@ function Personal() {
                   <>
                     {editAddressInfo === false ? (
                       <Button
+                        className="personal"
                         type="text"
-                        style={{ color: "#4ec0f1" }}
+                        style={{
+                          color: "#4ec0f1",
+                          display: "none",
+                          paddingTop: "7px",
+                          paddingRight: "7px",
+                          position: "absolute",
+                          right: 10,
+                          top: 10,
+                        }}
                         onClick={() => showEditAddressInfo(!editAddressInfo)}
                       >
                         <EditFilled />

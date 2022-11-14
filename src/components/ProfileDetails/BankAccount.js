@@ -3,6 +3,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { Card, Row, Col, Input, Button, Form } from "antd";
 import { EditFilled, CloseOutlined } from "@ant-design/icons";
+import "../../style/BankAccount.css";
 
 function BankAccount() {
   const [editContent, showEditContent] = useState(false);
@@ -80,8 +81,17 @@ function BankAccount() {
                   <>
                     {editContent === false ? (
                       <Button
+                        className="personal"
                         type="text"
-                        style={{ color: "#4ec0f1" }}
+                        style={{
+                          color: "#4ec0f1",
+                          display: "none",
+                          paddingTop: "7px",
+                          paddingRight: "7px",
+                          position: "absolute",
+                          right: 10,
+                          top: 10,
+                        }}
                         onClick={() => showEditContent(!editContent)}
                       >
                         <EditFilled />

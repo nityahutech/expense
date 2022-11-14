@@ -10,6 +10,7 @@ import {
   CloseOutlined,
   EditFilled,
 } from "@ant-design/icons";
+import "../../style/BankAccount.css";
 
 const Family = () => {
   const [editfamilymember, showeditfamilymember] = useState(false);
@@ -84,8 +85,17 @@ const Family = () => {
                   className="familyCard"
                   extra={
                     <Button
+                      className="personal"
                       type="text"
-                      style={{ color: "#4ec0f1" }}
+                      style={{
+                        color: "#4ec0f1",
+                        display: "none",
+                        paddingTop: "7px",
+                        paddingRight: "7px",
+                        position: "absolute",
+                        right: 10,
+                        top: 10,
+                      }}
                       onClick={() => showeditfamilymember(!editfamilymember)}
                     >
                       <EditFilled />
@@ -531,8 +541,17 @@ const Family = () => {
                   // ]}
                   extra={
                     <Button
+                      className="personal"
                       type="text"
-                      style={{ color: "#4ec0f1" }}
+                      style={{
+                        color: "#4ec0f1",
+                        display: "none",
+                        paddingTop: "7px",
+                        paddingRight: "7px",
+                        position: "absolute",
+                        right: 10,
+                        top: 10,
+                      }}
                       onClick={() => showeditEmergency(!editEmergency)}
                     >
                       <EditFilled />

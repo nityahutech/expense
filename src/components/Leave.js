@@ -35,7 +35,6 @@ const Leave = () => {
   const [loading, setLoading] = useState(false);
   const isHr = sessionStorage.getItem("role") === "hr" ? true : false;
   const isMgr = sessionStorage.getItem("isMgr");
-  console.log(isMgr)
   const [leavedays, setLeaveDays] = useState(null); //leave nature & total in obj
   const [totaldays, setTotalDays] = useState(null); //leave nature & taken in obj
   const [date, setDate] = useState(moment()); //date for calendar

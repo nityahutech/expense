@@ -28,7 +28,6 @@ const showNotification = (type, msg, desc) => {
   });
 };
 const dateFormat = "DD-MM-YYYY";
-
 function Editemployee(props) {
   const [fname, setFname] = useState("");
   const [mname, setMname] = useState("");
@@ -51,7 +50,6 @@ function Editemployee(props) {
   const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   const [configurations, setConfigurations] = useState(null);
   const [workLoc, setWorkLoc] = useState(null);
-
   async function submitEdit() {
     try {
       const editedRecord = {
@@ -62,7 +60,6 @@ function Editemployee(props) {
         doj,
         designation,
         gender,
-        // phonenumber,
         repManager,
         secManager,
         department,
@@ -78,34 +75,27 @@ function Editemployee(props) {
         ...editedRecord,
         name: name
       }
-      console.log(record);
       EmpInfoContext.updateEduDetails(props.record.id, record);
       props.setIsModalVisible(false);
       // props.reloadData();
       showNotification("success", "Success", "Record updated successfully");
-
       return;
     } catch (error) {
-      console.log(error);
       props.setIsModalVisible(false);
       showNotification("error", "Failed", "Record update failed");
     }
   }
-
   const getData = async () => {
     let temp = await CompanyProContext.getCompanyProfile(compId)
     let data = await ConfigureContext.getConfigurations(page)
-    console.log(data, temp)
     let add = ["Registered Office"]
     if(temp.corpOffice) {add.push("Corporate Office")}
     temp.address?.map((rec) => {
       add.push(rec.title)
     })
-    console.log(add)
     setWorkLoc(add)
     setConfigurations(data)
   }
-
   useEffect(() => {
     getData();
     const fnameVal = props.record ? props.record.fname : "";
@@ -125,7 +115,6 @@ function Editemployee(props) {
     const sickLeaveVal = props.record ? props.record.sickLeave : "";
     const casualLeaveVal = props.record ? props.record.casualLeave : "";
     const optionalLeaveVal = props.record ? props.record.optionalLeave : "";
-
     setFname(fnameVal);
     setMname(mnameVal);
     setLname(lnameVal);
@@ -147,7 +136,6 @@ function Editemployee(props) {
   function cancel() {
     props.setIsModalVisible(false);
   }
-
   const cancelStyle = {
     position: "relative",
     bottom: "4px",
@@ -168,13 +156,11 @@ function Editemployee(props) {
       return true;
     }
   };
-
   const checkAlphabets = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   return (
     <>
       <Form
@@ -289,20 +275,16 @@ function Editemployee(props) {
                 maxLength={20}
                 onChange={(e) => {
                   const inputval = e.target.value;
-
                   const newVal =
                     inputval.substring(0, 1).toUpperCase() +
                     inputval.substring(1);
-
                   setFname(newVal);
                 }}
-
                 // required
                 // placeholder="Enter Your First Name"
               />
             </Form.Item>
           </Col>
-
           <Col xs={22} sm={22} md={12}>
             <Form.Item
               style={{ marginBottom: "17px" }}
@@ -330,18 +312,15 @@ function Editemployee(props) {
                 maxLength={20}
                 onChange={(e) => {
                   const inputval = e.target.value;
-
                   const newVal =
                     inputval.substring(0, 1).toUpperCase() +
                     inputval.substring(1);
-
                   setMname(newVal);
                 }}
               />
             </Form.Item>
           </Col>
         </Row>
-
         <Row>
           <Col xs={22} sm={22} md={12}>
             <Form.Item
@@ -380,7 +359,6 @@ function Editemployee(props) {
               />
             </Form.Item>
           </Col>
-
           <Col xs={22} sm={22} md={12}>
             <Form.Item
               style={{ marginBottom: "17px" }}
@@ -393,7 +371,6 @@ function Editemployee(props) {
                 },
               ]}
             >
-              {/* format={dateFormatList} */}
               <DatePicker
                 format={dateFormat}
                 style={{ width: "80%" }}
@@ -404,7 +381,6 @@ function Editemployee(props) {
             </Form.Item>
           </Col>
         </Row>
-
         <Row>
           <Col xs={22} sm={22} md={12}>
             <Form.Item
@@ -417,7 +393,6 @@ function Editemployee(props) {
               //     event.preventDefault();
               //   }
               // }}
-
               rules={[
                 {
                   required: true,
@@ -449,7 +424,6 @@ function Editemployee(props) {
               />
             </Form.Item>
           </Col>
-
           <Col xs={22} sm={22} md={12}>
             <Form.Item
               style={{ marginBottom: "17px" }}
@@ -613,7 +587,6 @@ function Editemployee(props) {
                   setIsMgr(number);
                 }}
               >
-              {console.log("true")}
                 Manager
               </Checkbox>) 
               : (
@@ -625,7 +598,6 @@ function Editemployee(props) {
                   setIsMgr(number);
                 }}
               >
-              {console.log("false")}
                 Manager
               </Checkbox>) }
             </Form.Item>
@@ -666,7 +638,6 @@ function Editemployee(props) {
             </Form.Item>
           </Col>
         </Row>
-
         <Row>
           <Col xs={22} sm={22} md={12}>
             <Form.Item
@@ -725,7 +696,6 @@ function Editemployee(props) {
             </Form.Item>
           </Col>
         </Row>
-
         <Row>
           <Col xs={22} sm={22} md={12}>
             <Form.Item

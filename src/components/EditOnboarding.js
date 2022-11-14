@@ -33,7 +33,6 @@ import reload from "../images/reload.png";
 import CompanyProContext from "../contexts/CompanyProContext";
 
 function EditOnboarding(props) {
-  console.log(props);
   const [fileName, setFileName] = useState(props.modalData.logo);
   const [fileEdited, setFileEdited] = useState(false);
   const [isBigFile, setIsBigFile] = useState(false);
@@ -44,26 +43,16 @@ function EditOnboarding(props) {
   const [accessList, setAccessList] = useState(props.modalData.accessList);
   const [addAccess, setAddAccess] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  console.log("test", "modalData", modalData);
-  console.log("test", "accessList", accessList);
-
   const timer = setTimeout(() => {
     setLoading(false);
-    console.log("This will run after 0.75 seconds!");
   }, 500);
-
   useEffect(() => {
     setAccessList(props.modalData.accessList);
     setModalData(props.modalData);
   }, []);
-
   const handleClickEdit = (event) => {
-    console.log("imgRef:: ", imgRef);
     imgRef.current.click();
   };
-  console.log("values", modalData, modalData.accessList, accessList);
-
   function onReset() {
     props.setIsEditOrganization(false);
     form.resetFields();
@@ -71,10 +60,7 @@ function EditOnboarding(props) {
     modalData = {};
     setModalData(props.modalData);
     setAccessList(props.modalData.accessList);
-    // setIsBigFile(false);
-    // setFileName(null);
   }
-
   const onFinish = (values) => {
     if (accessList.length == 0) {
       showNotification("error", "Error", "There must be at least 1 user!");
@@ -96,7 +82,6 @@ function EditOnboarding(props) {
       domain: values.domain,
       phone: values.phone,
     };
-    console.log(values, fileName, valuesToservice, values.orgcode);
     CompanyProContext.updateCompInfo(
       values.orgcode,
       valuesToservice,
@@ -104,28 +89,23 @@ function EditOnboarding(props) {
     )
       .then((res) => showNotification("success", "Success", "Edit Successful"))
       .catch((err) => showNotification("error", "Error", err.message));
-
     onReset();
     props.getData();
     props.setIsEditOrganization(false);
   };
-
   const showNotification = (type, msg, desc) => {
     notification[type]({
       message: msg,
       description: desc,
     });
   };
-
   const handleEdit = (event) => {
-    console.log(event.target.files[0]);
     if (!event) {
       return;
     }
     const fileUploaded = event.target.files[0];
     checkFileSize(fileUploaded.size, fileUploaded);
   };
-
   function checkFileSize(size, fileName) {
     if (Math.round(size / 1024) <= 200) {
       setFileName(fileName);
@@ -136,31 +116,26 @@ function EditOnboarding(props) {
       setIsBigFile(true);
     }
   }
-
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   const checkAlphabets = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   const checkCharacterRole = (event) => {
     if (!/^[a-zA-Z ().-]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   const checkAlphabetUpper = (event) => {
     if (!/^[A-Z]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   async function addUseRole(values) {
     let exists = accessList.filter((user) => values.mailid == user.mailid);
     if (
@@ -173,21 +148,15 @@ function EditOnboarding(props) {
       return;
     }
     setAccessList([...accessList, values]);
-    console.log([...accessList, values]);
     form2.resetFields();
     setAddAccess(false);
-    // setAccessList([...accessList, newAccess]);
-    // setNewAccess({ userole: "", name: "", mailid: "", phone: "" });
   }
-
   function onDelete(delItem) {
-    console.log(delItem);
     const filteredData = accessList.filter(
       (item) => item.mailid !== delItem.mailid
     );
     setAccessList(filteredData);
   }
-
   // function editUseRole(values) {
   //   setAccessList([...accessList, values]);
   //   form2.resetFields();
@@ -195,13 +164,9 @@ function EditOnboarding(props) {
   //   // setAccessList([...accessList, newAccess]);
   //   // setNewAccess({ userole: "", name: "", emailaddress: "", phone: "" });
   // }
-
   function cancel() {
     props.setIsEditOrganization(false);
   }
-
-  console.log(fileName, accessList);
-
   return (
     <Card
       style={{
@@ -527,7 +492,6 @@ function EditOnboarding(props) {
                 />
               </Form.Item>
             </Col>
-
             <Col xs={22} sm={15} md={4}>
               <Form.Item
                 name="country"
@@ -590,7 +554,6 @@ function EditOnboarding(props) {
                 />
               </Form.Item>
             </Col>
-
             <Col xs={22} sm={15} md={8}>
               <Form.Item name="logo" className="uploadLogo">
                 <div
@@ -627,9 +590,6 @@ function EditOnboarding(props) {
                       Upload
                     </span>
                   </Button>
-                  {/* {console.log("isBigFile", isBigFile)} */}
-                  {/* {console.log("fileName.name", fileName.name)}
-                  {console.log("fileName", fileName)} */}
                   {/* <img src={isBigFile ? "" : fileName.name!=null ? fileName.name : fileName!=null ?fileName:imageavailable} alt="Logo not found" /> */}
                   {isBigFile
                     ? message.error("File size must be less than 200Kb.")
@@ -668,7 +628,6 @@ function EditOnboarding(props) {
             </Col>
           </Row>
           <Divider />
-
           <Card
             style={{
               margin: "27px",
@@ -729,9 +688,7 @@ function EditOnboarding(props) {
                       <div style={{ fontSize: "13px", fontWeight: "600" }}>
                         Mobile
                       </div>
-
                       <div>{u.phone}</div>
-
                       <Button
                         style={{
                           background: "#f8f8f8",
@@ -873,7 +830,6 @@ function EditOnboarding(props) {
                   </Row>
                 </div>
               ) : null}
-
               <Button
                 style={{
                   border: "none",
@@ -898,7 +854,6 @@ function EditOnboarding(props) {
               </Button>
             </Form>
           </Card>
-
           <div
             style={{
               display: "flex",

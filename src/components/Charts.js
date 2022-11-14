@@ -26,13 +26,11 @@ ChartJS.register(
   ArcElement
 );
 const { Option } = Select;
-// ------------------------------------------------------
 const Charts = () => {
   const handleExpenselist = () => {
     navigate("/Expense/Expenselist");
   };
   const navigate = useNavigate();
-
   const [total, setTotal] = useState(0);
   const [avg, setAvg] = useState(0);
   let col = 0;
@@ -74,12 +72,10 @@ const Charts = () => {
   useEffect(() => {
     values();
   }, []);
-  // --------------------------------------------------------------------
-  return (
+    return (
     <>
       <div className="content container-fluid">
         <div className="rowcards">
-
           <Card
             hoverable
             style={{
@@ -116,7 +112,6 @@ const Charts = () => {
               }}
             >
               <Bar
-                // className="bar-style"
                 data={{
                   labels: [
                     "January",
@@ -314,7 +309,6 @@ const Charts = () => {
                   <Option value="12">December</Option>
                 </Select>
               </div>
-
             </Card>
           </div>
         </div>

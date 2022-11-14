@@ -12,7 +12,6 @@ import {
   Tag,
 } from "antd";
 import moment from "moment";
-// import axios from "axios";
 import { EditOutlined, SearchOutlined } from "@ant-design/icons";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -24,11 +23,9 @@ import { async } from "@firebase/util";
 const { RangePicker } = DatePicker;
 const dateFormat = "DD-MM-YYYY";
 const PHE = require("print-html-element");
-
 const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;
 const { Content } = Layout;
-
 function ExpenseList() {
   const [data, setData] = useState([]);
   const [allExpenses, setAllExpenses] = useState(data || []);
@@ -37,16 +34,11 @@ function ExpenseList() {
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState("");
   const [size, setSize] = useState(window.innerWidth <= 760 ? "" : "left");
-
   useEffect(() => {
     getData();
   }, []);
-
   // useEffect(() => {
   //   getData();
-  //   console.log("hello1");
-  //   console.log(data);
-  //   console.log(allExpenses);
   //   if (filterExpenses.length > 0) {
   //     const totalAmount = filterExpenses.reduce((acc, expense) => {
   //       acc += expense.amount * expense.quantity;
@@ -73,13 +65,10 @@ function ExpenseList() {
   //   }
   //   // setFilterExpense(data);
   // }, [filterExpenses]);
-
   async function getData() {
     setLoading(true);
     const allData = await ExpenseContext.getAllExpenses();
-    // console.log(allData.docs);
     let d = allData.docs.map((doc) => {
-      //  console.log(JSON.stringify(new Date(doc.data()['date'])));
       var longDateStr = moment(doc.data()["date"], "D/M/Y").format("MM-DDY");
       return {
         ...doc.data(),
@@ -88,13 +77,10 @@ function ExpenseList() {
         id: doc.id,
       };
     });
-    // console.log({ d });
     let filtered = d.sort(function (a, b) {
       return b["dt"].getTime() - a["dt"].getTime();
     });
-    console.log(filtered);
     setData(d);
-    console.log(data);
     let exp = filtered.map((person, i) => ({
       key: person.id,
       sn: i + 1,
@@ -113,51 +99,21 @@ function ExpenseList() {
       acc += expense.amount * expense.quantity;
       return acc;
     }, 0);
-    console.log({ exp });
-    // const modifiedFilterExpense = [...exp];
-    //   ...exp,
-    //   {
-    //     key: "subTotal",
-    //     sn: "",
-    //     name: "",
-    //     catname: "",
-    //     paidname: "",
-    //     date: "",
-    //     quantity: "",
-    //     amount: "Total",
-    //     subtotal: totalAmount,
-    //     // status: "",
-    //     description: "",
-    //   },
-    // ];
-    console.log(exp);
     setTotal(totalAmount);
     setAllExpenses(exp);
     setFilterExpense(exp);
     setLoading(false);
   }
-  // useEffect(() => {
-  //   const resize =() =>  {
-  //     // this.setState({hideNav: window.innerWidth <= 760});
-
-  //     console.log({left: window.innerWidth <= 760});
-  // }
-  //   window.addEventListener("resize", resize());
-  // }, [window.innerWidth])
-
-  window.addEventListener("resize", () =>
+   window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 760 ? "" : "left")
   );
-
   const navigate = useNavigate();
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
     date: [],
     category: "all",
   });
-
   const [modaldata, setmodaldata] = useState([]);
-
   const columns = [
     {
       title: "Sl. No.",
@@ -272,7 +228,6 @@ function ExpenseList() {
       // responsive: ["sm"],
 
       render: (_, record) => {
-        // console.log("record:: ", record);
         return (
           record.key !== "subTotal" && (
             <>
@@ -303,73 +258,20 @@ function ExpenseList() {
         );
       },
     },
-    // {
-    //   title: "Upload",
-    //   className: "row11",
-    //   key: "upload",
-    //   responsive: ["md"],
-    //   sorter: (a, b) => a.action - b.action,
-    //   render: (_, record) => {
-    //     console.log("record:: ", record);
-    //     return (
-    //       record.quantity !== "" && (
-    //         <Upload
-    //           multiple
-    //           listType="text"
-    //           action={"http://localhost:3001/"}
-    //           showUploadList={{ showRemoveIcon: true }}
-    //           beforeUpload={(file) => {
-    //             console.log({ file });
-    //             return false;
-    //           }}
-    //         >
-    //           <Button className="upload">Upload</Button>
-    //         </Upload>
-    //       )
-    //     );
-    //   },
-    // },
+    
   ];
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
-  // const getData = async () => {
-  //   const res = await axios.get(`https://jsonplaceholder.typicode.com/users`);
-  //   setdata(
-  //     res.data.map((row) => ({
-  //       category: row.catname,
-  //       paidby: row.name,
-  //       statuspayment: row.status,g
-  //       address: row.quantity,
-  //       amount: row.amount,
-  //       newdate: row.date,
-  //       describe: row.description,
-  //     }))
-  //   );
-  // };
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
+    const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = (record) => {
-    console.log(record);
     setmodaldata(record);
     setIsModalVisible(true);
   };
-
   const handleCancel = () => {
     setIsModalVisible(false);
     // submit form data
   };
-
   const handleEditExpense = (record) => {
-    console.log("record: ", record);
     setEditedRecord(record);
   };
-
-  //   const onSort = (pagination, sorter) => {
-  //     console.log("param", pagination, sorter);
-  //   };
-
   const onChange = (date, dateString) => {
     setFilterCriteria({ ...filterCriteria, date });
     if (date) {
@@ -381,42 +283,21 @@ function ExpenseList() {
             moment(ex.date, dateFormat).isSameOrBefore(date[1]))
         );
       });
-      //find sub
       const totalAmount = result.reduce((acc, expense) => {
         acc += expense.amount * expense.quantity;
         return acc;
       }, 0);
       setTotal(totalAmount);
-      //new row with subtotal
       const modifiedFilterExpense = [...result];
-      // ...result,
-      //   {
-      //     key: "subTotal",
-      //     sn: "",
-      //     name: "",
-      //     catname: "",
-      //     paidname: "",
-      //     date: "",
-      //     quantity: "",
-      //     amount: "Total",
-      //     subtotal: totalAmount,
-      //     // status: "",
-      //     description: "",
-      //   },
-      // ];
       setFilterExpense(modifiedFilterExpense);
     } else {
       setFilterExpense(allExpenses);
     }
   };
-
   const searchChange = (e) => {
-    console.log(e.target.value);
-
     let search = e.target.value;
     setFilterCriteria({ ...filterCriteria, search: search });
     if (search) {
-      console.log({ search });
       let result = allExpenses.filter(
         (ex) =>
           ex.catname.toLowerCase().includes(search.toLowerCase()) ||
@@ -425,15 +306,12 @@ function ExpenseList() {
           ex.amount == Number(search) ||
           ex.sn == Number(search)
       );
-
       const totalAmount = result.reduce((acc, expense) => {
         acc += expense.amount * expense.quantity;
         return acc;
       }, 0);
-      console.log({ totalAmount });
       setTotal(totalAmount);
       const modifiedFilterExpense = [...result];
-
       setFilterExpense(modifiedFilterExpense);
     } else {
       const totalAmount = allExpenses.reduce((acc, expense) => {
@@ -445,9 +323,7 @@ function ExpenseList() {
     }
   };
   const { Option } = Select;
-
   const onSelect = (value) => {
-    console.log(`selected ${value}`);
     setFilterCriteria({ ...filterCriteria, category: value });
     if (value && value !== "all") {
       let result = allExpenses.filter((ex) =>
@@ -458,20 +334,7 @@ function ExpenseList() {
       setFilterExpense(allExpenses);
     }
   };
-  // const onChoose = (value) => {
-  //   console.log(`selected ${value}`);
-  //   setFilterCriteria({ ...filterCriteria, status: value });
-  //   if (value && value !== "all") {
-  //     let result = allExpenses.filter((ex) =>
-  //       ex.status.toLowerCase().split().includes(value.toLowerCase())
-  //     );
-  //     setFilterExpense(result);
-  //   } else {
-  //     setFilterExpense(allExpenses);
-  //   }
-  // };
-
-  const onSearch = (value) => {
+    const onSearch = (value) => {
     console.log("search:", value);
   };
   // const onDelete = (sn, e) => {
@@ -539,11 +402,9 @@ function ExpenseList() {
           ++pageNum;
         }
       }
-
       tableRowString.push(
         `<tr style="${i % 2 === 1 ? oddRowStyle : evenRowStyle}">`
       );
-
       for (let i = 0; i < dataIndexs.length; i++) {
         tableRowString.push(
           `<td style="color: grey; padding: 10px; textAlign: center; ">${
@@ -555,9 +416,6 @@ function ExpenseList() {
       tableAllRow.push(tableRowString);
     });
     // let tableAllRowString = tableAllRow.toString().replaceAll(",", "");
-    // console.log(tableHeaderString);
-    // console.log(tableAllRowString);
-
     console.log(`<div>
     <h1 textAlign= center>Expense Report<h1/>
         </br>${allTableString.toString().replaceAll(",", "")}</div>`);
@@ -568,7 +426,6 @@ function ExpenseList() {
       opts
     );
   }
-
   return (
     <Layout>
       <Content>
@@ -645,7 +502,6 @@ function ExpenseList() {
               }
             </Space>
           </Col> */}
-
           <Col>
             <Button
               // className="addExpense"
@@ -678,7 +534,6 @@ function ExpenseList() {
           </Col>
         </Row>
         <div style={{ padding: "10px 0px" }}></div>
-        {/* --------------------Tablelist------------------ */}
         <Table
           loading={loading}
           columns={columns}
@@ -689,7 +544,6 @@ function ExpenseList() {
           }}
           className="expenseTable"
           scroll={{ x: 1300 }}
-
           //   onChange={onSort}
         />
       </Content>
@@ -708,7 +562,6 @@ function ExpenseList() {
             X
           </div>
         }
-
         // onCancel={handleCancel}
       >
         <Editexpense

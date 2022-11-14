@@ -23,26 +23,20 @@ function AddEmployee() {
   const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   const [configurations, setConfigurations] = useState(null);
   const [workLoc, setWorkLoc] = useState(null);
-
   useEffect(() => {
-    console.log(compId, page)
     getData()
   }, [])
-
   const getData = async () => {
     let temp = await CompanyProContext.getCompanyProfile(compId)
     let data = await ConfigureContext.getConfigurations(page)
-    console.log(data, temp)
     let add = ["Registered Office"]
     if(temp.corpOffice) {add.push("Corporate Office")}
     temp.address?.map((rec) => {
       add.push(rec.title)
     })
-    console.log(add)
     setWorkLoc(add)
     setConfigurations(data)
   }
-
   const handleListEmployee = () => {
     navigate("/EmployeeListPage/EmployeeList");
   };
@@ -57,7 +51,6 @@ function AddEmployee() {
   function onReset() {
     form.resetFields();
   }
-  
   const showNotification = (type, msg, desc) => {
     notification[type]({
         message: msg,
@@ -101,7 +94,6 @@ function AddEmployee() {
               justifyContent: "space-around",
             }}
           >
-            {/* -----------------Back button------------- */}
             <Col
               xs={{ span: 24 }}
               sm={{ span: 12 }}
@@ -709,8 +701,7 @@ function AddEmployee() {
                   },
                 ]}
               >
-              
-              <Select
+                 <Select
                   // showSearch
                   placeholder="Select a Location"
                   // optionFilterProp="children"

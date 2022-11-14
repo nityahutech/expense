@@ -93,8 +93,15 @@ function Personal() {
           justifyContent: "center",
         }}
       >
-        <Row>
-          <Col xs={22} sm={15} md={8}>
+        <Row className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <Col span={24}>
             <Form
               form={form}
               labelcol={{
@@ -129,12 +136,12 @@ function Personal() {
                   </>
                 }
                 style={{
-                  width: 800,
+                  width: '100%',
                   marginTop: 10,
                 }}
               >
                 <Row gutter={[16, 16]}>
-                  <Col xs={22} sm={15} md={8}>
+                  <Col xs={22} sm={15} md={8} >
                     <div>
                       <div
                         style={{
@@ -392,8 +399,16 @@ function Personal() {
           justifyContent: "center",
         }}
       >
-        <Row>
-          <Col xs={22} sm={15} md={8}>
+        <Row
+          className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <Col span={24}>
             <Form
               // form={form}
               labelcol={{
@@ -428,7 +443,7 @@ function Personal() {
                   </>
                 }
                 style={{
-                  width: 800,
+                  width: '100%',
                   marginTop: 10,
                 }}
               >
@@ -637,8 +652,15 @@ function Personal() {
           justifyContent: "center",
         }}
       >
-        <Row>
-          <Col xs={22} sm={15} md={8}>
+        <Row
+          className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+          <Col span={24}>
             <Form
               // form={form}
               labelcol={{
@@ -673,7 +695,7 @@ function Personal() {
                   </>
                 }
                 style={{
-                  width: 800,
+                  width: '100%',
                   marginTop: 10,
                 }}
               >

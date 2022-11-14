@@ -36,7 +36,7 @@ const Admin = () => {
   const [data, setData] = useState([]);
   const { currentUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const compId=sessionStorage.getItem("compId")
+  const compId = sessionStorage.getItem("compId")
 
 
   const showModal = () => {
@@ -61,10 +61,14 @@ const Admin = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginBottom: '10px'
+          marginBottom: '10px',
+          width: '100%'
         }}
       >
-        <Form
+        <Form style={{
+
+          width: '75%'
+        }}
           // form={form}
           labelcol={{
             span: 4,
@@ -85,7 +89,7 @@ const Admin = () => {
               title="CEO"
               bordered={false}
               style={{
-                width: 800,
+                width: '100%',
               }}
             >
 
@@ -188,6 +192,10 @@ const Admin = () => {
         }}
       >
         <Form
+          style={{
+
+            width: '75%'
+          }}
           // form={form}
           labelcol={{
             span: 4,
@@ -208,7 +216,7 @@ const Admin = () => {
               title="HR ADMIN"
               bordered={false}
               style={{
-                width: 800,
+                width: '100%',
               }}
             >
 
@@ -308,6 +316,10 @@ const Admin = () => {
         }}
       >
         <Form
+          style={{
+
+            width: '75%'
+          }}
           // form={form}
           labelcol={{
             span: 4,
@@ -328,7 +340,7 @@ const Admin = () => {
               title="FINANCE ADMIN"
               bordered={false}
               style={{
-                width: 800,
+                width: '100%',
               }}
             >
 
@@ -379,7 +391,7 @@ const Admin = () => {
                   </Col>
                 </Row>
               ) : null}
-              
+
               {editFinanceContactInfo == false &&
                 <Button
                   type="primary" onClick={() => showEditFinanceContactInfo(!editFinanceContactInfo)} style={{ marginLeft: "10px" }}
@@ -430,6 +442,10 @@ const Admin = () => {
         }}
       >
         <Form
+          style={{
+
+            width: '75%'
+          }}
           // form={form}
           labelcol={{
             span: 4,
@@ -450,7 +466,7 @@ const Admin = () => {
               title="HR EXECUTIVE"
               bordered={false}
               style={{
-                width: 800,
+                width: '100%',
               }}
             >
 

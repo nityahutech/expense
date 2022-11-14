@@ -34,16 +34,19 @@ const Policies = () => {
       title: "Policy Title",
       dataIndex: "title",
       key: "idtitle",
+      width: 150,
     },
     {
       title: "Policy Description",
       dataIndex: "description",
       key: "iddescription ",
+      width: 200,
     },
     {
       title: "Uploaded File",
       dataIndex: "upload",
       key: "upload",
+      width: 200,
       render: (data, record) => {
         console.log("record: ", record);
         console.log("data:: ", data);
@@ -62,6 +65,8 @@ const Policies = () => {
     {
       title: "Action",
       key: "action",
+      fixed: 'right',
+      width: 80,
       render: (_, record) => {
         return (
           <DeleteOutlined
@@ -188,8 +193,15 @@ const Policies = () => {
           justifyContent: "center",
         }}
       >
-        <Row>
-          <Col xs={24} sm={15} md={8}>
+        <Row
+          className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+          <Col span={24}>
             <Form
               style={{ marginLeft: 0 }}
               action="/action_page.php"
@@ -206,13 +218,14 @@ const Policies = () => {
                 className="policyCard"
                 bordered={false}
                 style={{
-                  width: 800,
+                  width: '100%',
                 }}
               >
                 <Table
                   columns={columns}
                   pagination={false}
                   dataSource={policy}
+                  scroll={{ x: 400 }}
                 />
                 <Button
                   type="primary"
@@ -321,8 +334,8 @@ const Policies = () => {
                           marginTop: "10px",
                         }}
                         bordered={false}
-                        // ref={imgRef}
-                        // required
+                      // ref={imgRef}
+                      // required
                       />
                     </div>
                   </FormItem>

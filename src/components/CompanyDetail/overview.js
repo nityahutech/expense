@@ -14,7 +14,7 @@ function Overview() {
   const [editContactIconInfo, showEditCompanyIconInfo] = useState(false);
   const [data, setData] = useState([]);
   const { currentUser } = useAuth();
-  const compId=sessionStorage.getItem("compId")
+  const compId = sessionStorage.getItem("compId")
 
   const [companyName, setCompanyName] = useState();
 
@@ -65,8 +65,15 @@ function Overview() {
           justifyContent: "center",
         }}
       >
-        <Row>
-          <Col xs={22} sm={15} md={8}>
+        <Row
+          className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+          <Col span={24}>
             <Form
               // form={form}
               labelcol={{
@@ -107,7 +114,7 @@ function Overview() {
                   </>
                 }
                 style={{
-                  width: 800,
+                  width: '100%',
                   marginTop: 10,
                 }}
               >
@@ -311,8 +318,15 @@ function Overview() {
           marginBottom: "10px",
         }}
       >
-        <Row>
-          <Col xs={22} sm={15} md={8}>
+        <Row
+          className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+          <Col span={24}>
             <Form
               // form={form}
               labelcol={{
@@ -355,7 +369,7 @@ function Overview() {
                   </>
                 }
                 style={{
-                  width: 800,
+                  width: '100%',
                   marginTop: 10,
                 }}
               >
@@ -370,7 +384,7 @@ function Overview() {
                     className="iconface"
                     style={{
                       paddingBottom: "10px",
-                      paddingRight:"10px"
+                      paddingRight: "10px"
                     }}
                     gutter={[48, 8]}
                   >
@@ -381,29 +395,31 @@ function Overview() {
                           display: "flex",
                           flexDirection: "row",
                           paddingRight: "10px",
-                          justifyContent:"center",
-                          alignItems:"center"
+                          justifyContent: "center",
+                          alignItems: "center"
                           // paddingLeft:"10px"
                         }}
                       >
-                        <div 
+                        <div
                           style={{
-                            display:"flex",
-                            justifyContent:"center",
-                            alignItems:"center"
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center"
                           }}
                         >
                           <img
                             src={linkedin}
                             alt="downArrow"
-                            style={{ 
-                              cursor: "pointer", 
+                            style={{
+                              cursor: "pointer",
                               width: "30px",
-                              margin:"10px" }}
+                              margin: "10px",
+
+                            }}
                           />
                         </div>
                         {editContactIconInfo === false ? (
-                          <div>{data.linkedin}</div>
+                          <div style={{ display: "none" }}>{data.linkedin}</div>
                         ) : (
                           <Form.Item
                             style={{ width: "50%" }}
@@ -413,8 +429,9 @@ function Overview() {
                             <Input
                               style={{
                                 paddingLeft: "0px",
-                                marginLeft:"10px",
+                                marginLeft: "10px",
                                 borderBottom: "1px solid #ccc ",
+
                               }}
                               bordered={false}
                               type="linkedin"
@@ -441,23 +458,23 @@ function Overview() {
                           display: "flex",
                           flexDirection: "row",
                           paddingRight: "10px",
-                          justifyContent:"center",
-                          alignItems:"center"
+                          justifyContent: "center",
+                          alignItems: "center"
                         }}
                       >
                         <div>
                           <img
                             src={facebook}
                             alt="downArrow"
-                            style={{ 
-                              cursor: "pointer", 
+                            style={{
+                              cursor: "pointer",
                               width: "30px",
-                              margin:"10px",
+                              margin: "10px",
                             }}
                           />
                         </div>
                         {editContactIconInfo === false ? (
-                          <div>{data.facebook}</div>
+                          <div style={{ display: "none" }}>{data.facebook}</div>
                         ) : (
                           <Form.Item
                             style={{ width: "50%" }}
@@ -467,7 +484,7 @@ function Overview() {
                             <Input
                               style={{
                                 paddingLeft: "0px",
-                                marginLeft:"10px",
+                                marginLeft: "10px",
                                 borderBottom: "1px solid #ccc ",
                               }}
                               bordered={false}
@@ -493,8 +510,8 @@ function Overview() {
                         className="icon-position"
                         style={{
                           display: "flex",
-                          justifyContent:"center",
-                          alignItems:"center",
+                          justifyContent: "center",
+                          alignItems: "center",
                           flexDirection: "row",
                           paddingRight: "10px",
                         }}
@@ -503,15 +520,15 @@ function Overview() {
                           <img
                             src={twitter}
                             alt="downArrow"
-                            style={{ 
-                              cursor: "pointer", 
+                            style={{
+                              cursor: "pointer",
                               width: "30px",
-                              margin:"10px"
+                              margin: "10px"
                             }}
                           />
                         </div>
                         {editContactIconInfo === false ? (
-                          <div>{data.twitter}</div>
+                          <div style={{ display: "none" }}>{data.twitter}</div>
                         ) : (
                           <Form.Item
                             style={{ width: "50%" }}
@@ -521,7 +538,7 @@ function Overview() {
                             <Input
                               style={{
                                 paddingLeft: "0px",
-                                marginLeft:"10px",
+                                marginLeft: "10px",
                                 borderBottom: "1px solid #ccc ",
                               }}
                               bordered={false}

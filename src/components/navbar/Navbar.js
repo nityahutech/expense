@@ -10,7 +10,7 @@ import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
 import settingsIcon from "../../images/abstractuserflat4.png"
 import logoutIcon from "../../images/logoutsvgrepocom.png"
-import logo from "../../images/logo.png"
+import Logo from "../../images/smallerLogo.png"
 import dropdown from "../../images/dropdown.png"
 import CompanyProContext from "../../contexts/CompanyProContext";
 // ---------------------------------------------------------------------
@@ -22,10 +22,11 @@ const Navbar = () => {
   let loc = useLocation();
   const { logout, currentUser } = useAuth();
   const [clockinfo, setClockInfo] = useState()
-  const role=sessionStorage.getItem("role")
-  const user=JSON.parse(sessionStorage.getItem("user"))
-  // let data = CompanyProContext.getCompanyProfile()
-  // const logo = data.logo
+  const role = sessionStorage.getItem("role")
+  const user = JSON.parse(sessionStorage.getItem("user"))
+  let temp = sessionStorage.getItem("logo")
+  const logo = temp == null ? Logo : temp;
+  console.log(logo)
 
   const isClockRunning = async () => {
     let res = await AttendanceContext.getStartTime(currentUser.uid);
@@ -227,15 +228,6 @@ const Navbar = () => {
 
         <Dropdown overlay={menu}>
           <Space>
-            <h1
-              style={{
-                cursor: "pointer",
-                fontSize: "16px",
-                marginTop: "10px"
-              }}
-            >
-              {"  "}Hutech{""}
-            </h1>
             <img
               src={dropdown}
               // src="/dropdown.png"

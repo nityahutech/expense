@@ -1,10 +1,12 @@
-import React from "react";
 import Navbar from "../components/navbar/Navbar";
 import Sidebar from "../components/sidebar/NewSidebar";
 import CompanyProfile from "../components/CompanyProfile";
 
 function CompanyProfilepage() {
-  return (
+
+  const accessToken = sessionStorage.getItem("accessToken");
+  
+  return accessToken && !(accessToken == "null") ? (
     <div className="home">
       <div className="sidecontainer">
         <Sidebar activeMenu={["32"]} selectedkey={["32"]} />
@@ -18,7 +20,7 @@ function CompanyProfilepage() {
         </div>
       </div>
     </div>
-  );
-}
+  ) : window.location.href = "/";
+};
 
 export default CompanyProfilepage;

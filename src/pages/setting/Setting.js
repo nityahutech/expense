@@ -1,21 +1,15 @@
-import React, {useState, useEffect} from "react";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 import Settingpage from "../../components/Settingpage";
-const DashBoard = () => {
-  const [accessToken, setAccessToken] = useState(null);
-  useEffect(() => {
-    let token = sessionStorage.getItem("accessToken");
-    if (token === 'null') {
-      window.location.href = "/";
-    } else {
-      setAccessToken(token);
-    }
-  }, []);
-  return (
+
+const Setting = () => {
+
+  const accessToken = sessionStorage.getItem("accessToken");
+  
+  return accessToken && !(accessToken == "null") ? (
     <div className="home">
       <div className="sidecontainer">
-        <Sidebar activeMenu={["5"]}  selectedkey={['5']} accessToken={accessToken}/>
+        <Sidebar activeMenu={["22"]}  selectedkey={['22']}/>
       </div>
       <div className="homeContainer">
         <div className="table">
@@ -26,6 +20,6 @@ const DashBoard = () => {
         </div>
       </div>
     </div>
-  );
+  ) : window.location.href = "/";
 };
-export default DashBoard;
+export default Setting;

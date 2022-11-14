@@ -14,6 +14,7 @@ import homePage from "../../images/homeIcon.png";
 import LeaveIcon from "../../images/smallLeaveLogo.png";
 import SmallAttd from "../../images/samllattlogo.png"
 import "./newSlidebar.css";
+import SmallerLogo from "../../images/smallerLogo.png"
 import { NavLink } from "react-router-dom";
 
 const { Sider } = Layout;
@@ -26,7 +27,9 @@ const NewSidebar = (props) => {
     <Layout className="sidelayout">
       <Sider
         breakpoint="lg"
-        style={{ backgroundColor: "#05445E" }}
+        style={{ 
+          backgroundColor: "#05445E",
+        }}
         collapsedWidth="0"
         onBreakpoint={(broken) => {}}
         onCollapse={(collapsed, type) => {}}
@@ -34,15 +37,6 @@ const NewSidebar = (props) => {
         <Menu
           defaultOpenKeys={props.activeSubMenu || []}
           selectedKeys={props.activeMenu}
-          // openKeys={props.openkey}
-          // selectedKeys={props.selectedkey}
-          onSelect={function ({
-            item,
-            key,
-            keyPath,
-            selectedKeys,
-            domEvent,
-          }) {}}
           mode="inline"
           style={{
             padding: "0px",
@@ -55,7 +49,6 @@ const NewSidebar = (props) => {
                 background: "#05445E",
                 height: "100px",
               }}
-              // src="/logo_1.png"
               src={logo}
               alt="hello"
             />
@@ -64,7 +57,6 @@ const NewSidebar = (props) => {
             className="arrow"
             icon={
               <img
-                // src="/dot.png"
                 src={homePage}
                 width="16px"
                 alt="home"
@@ -73,7 +65,7 @@ const NewSidebar = (props) => {
             key="30"
           >
             <p className="sideFont">Home</p>
-            <NavLink to="/MainDashboardPage/MainDashBoard" />
+            <NavLink to="/DashBoard" />
           </Menu.Item>
           { role == "super" ? (
             <Menu.SubMenu
@@ -95,25 +87,9 @@ const NewSidebar = (props) => {
             title="Organization"
             mode="inline"
           >
-            {/* <Menu.Item
-              className="arrow"
-              icon={
-                <img
-                  // src="/dot.png"
-                  src={dot}
-                  alt="profile"
-                  className="dot"
-                />
-              }
-              key="30"
-            >
-              Dashboard
-              <NavLink to="/MainDashboardPage/MainDashBoard" />
-            </Menu.Item> */}
             <Menu.Item
               icon={
                 <img
-                  // src="/dot.png"
                   src={dot}
                   alt="onboarding"
                   className="dot"
@@ -122,7 +98,7 @@ const NewSidebar = (props) => {
               key="31"
             >
               <p className="sideFont">Onboarding</p>
-              <NavLink to="/OnboardingPage/Onboarding" />
+              <NavLink to="/Organization/Onboarding" />
             </Menu.Item>
           </Menu.SubMenu>
           ) : null}
@@ -132,7 +108,6 @@ const NewSidebar = (props) => {
               <img
                 style={{ color: "white" }}
                 src={CompanyProfile}
-                // src="/user.png"
                 alt="profile"
                 className="Dash"
               />
@@ -140,7 +115,7 @@ const NewSidebar = (props) => {
             key="32"
           >
             <p className="sideFont">Company Profile</p>
-            <NavLink to="/CompanyProfilepage" />
+            <NavLink to="/CompanyProfile" />
           </Menu.Item>
           ) : null}
           { role != "super" ?(
@@ -149,18 +124,16 @@ const NewSidebar = (props) => {
               className="arrow"
               icon={
                 <img
-                  // src="/dot.png"
                   src={SmallAttd}
                   alt="profile"
                   style={{width: "21px",
                   marginLeft: "-5px",}}
-                  // className="dot"
                 />
               }
               key="6"
             >
               <p className="sideFont">Attendance</p>
-              <NavLink to="/Attendance/AttendanceLog" />
+              <NavLink to="/Attendance" />
             </Menu.Item>
             <Menu.Item
               
@@ -176,7 +149,7 @@ const NewSidebar = (props) => {
               key="7"
             >
               <p className="leaveletter">Leave</p>
-              <NavLink to="/Employee/Leave" />
+              <NavLink to="/Leave" />
             </Menu.Item>
             </>
             ): null}
@@ -194,7 +167,6 @@ const NewSidebar = (props) => {
               <img
                 style={{ color: "white" }}
                 src={empIcon}
-                // src="/employees.png"
                 alt="profile"
                 className="Dash"
               />
@@ -209,7 +181,7 @@ const NewSidebar = (props) => {
                   key="8"
                 >
                  <p className="sideFont">Add Employee</p> 
-                  <NavLink to="/Addemployee/AddEmployee" />
+                  <NavLink to="/Employee/AddEmployee" />
                 </Menu.Item>
                 <Menu.Item
                   className="arrow"
@@ -217,7 +189,7 @@ const NewSidebar = (props) => {
                   key="9"
                 >
                   Employee List
-                  <NavLink to="/EmployeeListPage/EmployeeList" />
+                  <NavLink to="/Employee/EmployeeList" />
                 </Menu.Item>
                 {/* <Menu.Item
                   className="arrow"
@@ -225,7 +197,7 @@ const NewSidebar = (props) => {
                   key="25"
                 >
                   Hr PaySlip
-                  <NavLink to="/Payslip2/HrPaySlip" />
+                  <NavLink to="/Employee/Payroll" />
                 </Menu.Item> */}
           </Menu.SubMenu>
             ) : null}
@@ -268,7 +240,6 @@ const NewSidebar = (props) => {
                 icon={
                   <img
                     src={expenseIcon}
-                    // src="/Expense.png"
                     alt="profile"
                     className="Dash"
                   />
@@ -276,26 +247,9 @@ const NewSidebar = (props) => {
                 key="sub1"
                 title="Expense"
                 mode="inline"
-                
               >
-                {/* <Menu.Item
-                  className="arrow"
-                  //  style={{
-                  //     background: "#05445E",
-
-                  //   }}
-                  icon={<img src={dot} alt="profile" className="dot" />}
-                  key="1"
-                >
-                  Dashboard
-                  <NavLink to="/DashBoard" />
-                </Menu.Item> */}
                 <Menu.Item
                   className="arrow"
-                  //  style={{
-                  //     background: "#05445E",
-
-                  //   }}
                   icon={<img src={dot} alt="profile" className="dot" />}
                   key="2"
                 >
@@ -317,7 +271,6 @@ const NewSidebar = (props) => {
             icon={
               <img
                 src={userIcon}
-                // src="/user.png"
                 alt="profile"
                 className="Dash"
               />
@@ -327,11 +280,24 @@ const NewSidebar = (props) => {
             <p className="sideFont">My Profile</p>
             <NavLink to="/Profile" />
           </Menu.Item>
+        {/* </Menu>
+        <Menu
+          selectedKeys={props.activeMenu}
+          mode="inline"
+          style={{
+            padding: "0px",
+            position: "absolute",
+            bottom: "0" 
+            // height: "37%",
+            // display: "flex",
+            // flexDirection: "column",
+            // justifyContent: "flex-end"
+          }}
+        > */}
           <Menu.Item
             icon={
               <img
                 src={SettingIcon}
-                // src="/user.png"
                 alt="Setting"
                 className="Dash"
               />
@@ -339,7 +305,7 @@ const NewSidebar = (props) => {
             key="22"
           >
             <p className="sideFont">Settings</p>
-            <NavLink to="/Setting" />
+            <NavLink to="/Settings" />
           </Menu.Item>
         </Menu>
       </Sider>

@@ -1,0 +1,57 @@
+
+.expForm{
+    padding-left :100px;
+    padding-right: 100px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    height: auto;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 5px;
+   
+
+}
+
+/* .ant-divider-horizontal.ant-divider-with-text{
+    border-top-color: rgba(0, 0, 0, 0.0);
+    margin: 5px 0;
+    font-size: 12px;
+} */
+
+
+/* .ant-form-item{
+    margin-bottom: 25px;
+} */
+
+@media (max-width: 800px) {
+    .expForm{
+        padding-left :10px;
+        padding-right: 10px;
+       
+    }
+
+    .submitButton{
+        display : flex;
+        align-items: center;
+        margin-left: -40px;
+    }
+
+   .ant-layout-has-sider{
+        position: absolute;
+        z-index: 10;
+        height: 100vh;
+       
+    }
+  
+
+}
+
+/* @media (max-width: 1024px) {
+ 
+   .ant-layout-has-sider{
+     
+        height: 100vh;
+    }
+  
+
+} */
+

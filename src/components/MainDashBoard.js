@@ -19,7 +19,7 @@ function MainDashBoard() {
 
   const organizationcon = () => {
     return(
-      <Link to="/OnboardingPage/Onboarding">
+      <Link to="/Organization/Onboarding">
         <Card
           bordered={false}
           hoverable={true}
@@ -39,7 +39,7 @@ function MainDashBoard() {
 
   const attendanceIcon = () => {
     return (
-      <Link to="/Attendance/AttendanceLog">
+      <Link to="/Attendance">
         <Card
           bordered={false}
           hoverable={true}
@@ -51,7 +51,7 @@ function MainDashBoard() {
           }}
         >
           <img style={{ width: "90px" }} alt="example" src={Attendancelog} />
-          Attendance Log
+          Attendance
         </Card>
       </Link>
     );
@@ -59,7 +59,7 @@ function MainDashBoard() {
 
   const leaveIcon = () => {
     return (
-      <Link to="/Employee/Leave">
+      <Link to="/Leave">
         <Card
           bordered={false}
           hoverable={true}
@@ -74,6 +74,7 @@ function MainDashBoard() {
 
   const paySlipIcon = () => {
     return (
+      // This Link will not work remove icon, Replace with appraisal
       // <Link to="/PaySlipPage/PaySlip">
         <Card
           bordered={false}
@@ -81,7 +82,7 @@ function MainDashBoard() {
           style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px",  borderRadius: "15px", }}
         >
           <img style={{ width: "90px" }} alt="example" src={Payslip} />
-          Pay Slip Generator
+          Pay Slip
         </Card>
       // </Link>
     );
@@ -89,14 +90,14 @@ function MainDashBoard() {
 
   const payrollIcon = () => {
     return (
-      // <Link to="/Payslip2/HrPaySlip">
+      // <Link to="/Employee/Payroll">
         <Card
           bordered={false}
           hoverable={true}
           style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px",  borderRadius: "15px", }}
         >
           <img style={{ width: "90px" }} alt="example" src={Payroll} />
-          Payroll
+          Payroll Generator
         </Card>
       // </Link>
     );
@@ -104,7 +105,7 @@ function MainDashBoard() {
 
   const employeeIcon = () => {
     return (
-      <Link to="/EmployeeListPage/EmployeeList">
+      <Link to="/Employee/EmployeeList">
         <Card
           bordered={false}
           hoverable={true}
@@ -149,7 +150,7 @@ function MainDashBoard() {
 
   const companyProfileIcon = () => {
     return (
-      <Link to="/CompanyProfilepage">
+      <Link to="/CompanyProfile">
         <Card
           bordered={false}
           hoverable={true}
@@ -164,7 +165,7 @@ function MainDashBoard() {
 
   const settingIcon = () => {
     return (
-      <Link to="/Setting">
+      <Link to="/Settings">
         <Card
           bordered={false}
           hoverable={true}

@@ -1,25 +1,17 @@
-import React from "react";
-import { useState, useEffect } from "react";
 import Navbar from "../components/navbar/Navbar";
 import HrPaySlip from "../components/ProfileDetails/HrPaySlip";
 import Sidebar from "../components/sidebar/NewSidebar";
+
 const Payslip2 = () => {
-  const [accessToken, setAccessToken] = useState(null);
-  useEffect(() => {
-    let token = sessionStorage.getItem("accessToken");
-    if (token === "null") {
-      window.location.href = "/";
-    } else {
-      setAccessToken(token);
-    }
-  }, []);
-  return (
+
+  const accessToken = sessionStorage.getItem("accessToken");
+  
+  return accessToken && !(accessToken == "null") ? (
     <div className="home">
       <div className="sidecontainer">
         <Sidebar
           activeSubMenu={["sub2"]}
           activeMenu={["25"]}
-          accessToken={accessToken}
         />
       </div>
       <div className="homeContainer">
@@ -31,6 +23,7 @@ const Payslip2 = () => {
         </div>
       </div>
     </div>
-  );
+  ) : window.location.href = "/";
 };
+
 export default Payslip2;

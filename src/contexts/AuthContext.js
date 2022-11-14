@@ -9,6 +9,7 @@ import { signInWithEmailAndPassword,
          updateProfile
 } from "@firebase/auth"
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import EmpInfoContext from "./EmpInfoContext";
 
 const AuthContext = React.createContext()
 
@@ -21,8 +22,9 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
   const [role, setRole] = useState();
   const [compId, setCompId] = useState();
+  const [isMgr, setIsMgr] = useState();
 
-  async function getCompId(user) {
+  async function getUserData(user) {
     if (!user) { 
       return; 
     }
@@ -30,8 +32,12 @@ export function AuthProvider({ children }) {
     let rec = res.data()
     sessionStorage.setItem("role", rec.role)
     sessionStorage.setItem("compId", rec.compId)
-    setCompId(rec.compId)
-    setRole(rec.role)
+    setCompId(rec?.compId)
+    setRole(rec?.role)
+    let empRecord = await EmpInfoContext.getEduDetails(user.uid);
+    console.log(empRecord)
+    sessionStorage.setItem("isMgr", empRecord?.isManager);
+    setIsMgr(empRecord?.isManager)   
   }
 
   function login(email, password) {
@@ -43,6 +49,7 @@ export function AuthProvider({ children }) {
     sessionStorage.setItem("user", null)
     sessionStorage.setItem("role", null)
     sessionStorage.setItem("compId", null)
+    sessionStorage.setItem("isMgr", null)
     return signOut(auth)
   }
 
@@ -69,7 +76,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
-      getCompId(user)
+      getUserData(user)
       setCurrentUser(user)
       setLoading(false)
     })
@@ -81,6 +88,7 @@ export function AuthProvider({ children }) {
     compId,
     currentUser,
     role,
+    isMgr,
     login,
     logout,
     resetPassword,

@@ -24,13 +24,10 @@ import { formatCountdown } from 'antd/lib/statistic/utils';
 import moment from 'moment';
 const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
 const ExpenceForm = () => {
-  // const [category, setCategory] = useState("");
-  // const [paidBy, setPaidBy] = useState("");
   const [form] = Form.useForm();
   const [amount, setAmount] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [total, setTotal] = useState(0);
-    // const [description, setDescription] = useState("");
   const { TextArea } = Input;
   const navigate = useNavigate();
   const handleListExpense = () => {
@@ -57,7 +54,6 @@ const ExpenceForm = () => {
       quantity: values['Quantity'],
       paymenttype: values['paymentMode'],
       status: 'Unpaid',
-      // status:  values['paymentDate'],
       subtotal: values['subTotal'],
     }
     ExpenseContext.addExpenses(valuesToservice)
@@ -81,7 +77,6 @@ function capitalize(str) {
     form.resetFields()
   }
   function disabledDate(current) {
-    // Can not select days before today and today
     return current && current > moment().endOf('day');
   }
   return (
@@ -106,10 +101,7 @@ function capitalize(str) {
             className="rowform"
             gutter={[0, 8]}
             style={{ marginBottom: "1.5rem", marginTop: "1.5rem", display: 'flex', flexDirection: 'column', alignitems: 'center', justifyContent: 'space-around' }}
-
           >
-            {/* -----------------Back button------------- */}
-
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-center' style={{ background: '', height: '50px', display: 'flex', justifyContent: 'flex-start' }}>
               <Button
                 className="listExpense"
@@ -122,7 +114,6 @@ function capitalize(str) {
               </Button>
             </Col>
           </Row>
- {/* -----------------Expense Name-------------- */}
           <Row gutter={[24, 0]} >
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
               <Divider orientation='left' orientationMargin={0}>Expense Name<span style={{ color: 'red' }}> *</span></Divider>
@@ -142,7 +133,6 @@ function capitalize(str) {
                   }, {
                     pattern: /^[a-zA-Z\s]*$/,
                     message: 'Please enter Valid Name',
-
                   }
                 ]}
               >
@@ -158,7 +148,6 @@ function capitalize(str) {
                   required placeholder='Enter Expense For' />
               </Form.Item>
             </Col>
-            {/* -----------------Date-------------- */}
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
               <Divider orientation='left' orientationMargin={0}>Date<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
@@ -177,7 +166,6 @@ function capitalize(str) {
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
-            {/* -----------------paid by-------------- */}
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
               <Divider orientation='left' orientationMargin={0}>Paid By<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
@@ -209,7 +197,6 @@ function capitalize(str) {
                   placeholder='Enter  Name' />
               </Form.Item>
             </Col>
-            {/* -----------------paid to-------------- */}
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
               <Divider orientation='left' orientationMargin={0}>Paid to<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
@@ -242,7 +229,6 @@ function capitalize(str) {
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
-            {/* -----------------amount-------------- */}
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
               <Divider orientation='left' orientationMargin={0}>Amount<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
@@ -274,7 +260,6 @@ function capitalize(str) {
                 />
               </Form.Item>
             </Col>
-            {/* -----------------Quanitity--------------- */}
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
               <Divider orientation='left' orientationMargin={0}>Quantity<span style={{ color: 'red' }}> *</span></Divider>
               <Form.Item
@@ -305,7 +290,6 @@ function capitalize(str) {
               </Form.Item>
             </Col>
           </Row>
-          {/* -----------------Mode of Payment--------------- */}
           <Row gutter={[24, 8]}>
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
               <Divider orientation='left' orientationMargin={0}>Mode of Payment<span style={{ color: 'red' }}> *</span></Divider>
@@ -337,7 +321,6 @@ function capitalize(str) {
               </Form.Item>
             </Col>
           </Row>
-          {/* -----------------Text-area--------------- */}
           <Row gutter={24}>
             <Col className='gutter-row' span={4}></Col>
             <Col className='gutter-row' span={16}>
@@ -358,7 +341,6 @@ function capitalize(str) {
             </Col>
             <Col className='gutter-row' span={6}></Col>
           </Row>
-          {/* -----------------------Buttons--------------- */}
           <Row gutter={[24, 16]}>
             <Col classsname='gutter-row' span={9}></Col>
             <Col classsname='gutter-row' >
@@ -392,7 +374,6 @@ function capitalize(str) {
                 </Space>
               </div>
             </Col>
-            {/* <Col classsname='gutter-row' span={3}></Col> */}
           </Row>
         </Form>
       </div>

@@ -9,7 +9,6 @@ import React, { useEffect, useState } from "react";
 import { getUsers } from "../contexts/CreateContext";
 import "../style/EmployeeList.css";
 import EmpInfoContext from "../contexts/EmpInfoContext";
-
   function EmployeeList() {
   const [modaldata, setmodaldata] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -20,7 +19,6 @@ import EmpInfoContext from "../contexts/EmpInfoContext";
   const [allEmployees, setAllEmployees] = useState([]);
   const [data, setData] = React.useState([]);
   const [disableItem, setDisableItem] = useState(false);
-
   window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 768 ? "" : "left")
   );
@@ -124,7 +122,6 @@ import EmpInfoContext from "../contexts/EmpInfoContext";
       key: "location",
       width: 150,
     },
-
     {
       title: "Earn Leave",
       dataIndex: "earnLeave",
@@ -156,7 +153,6 @@ import EmpInfoContext from "../contexts/EmpInfoContext";
       fixed: "right",
       align: "center",
       width: 120,
-
       render: (_, record) => {
         return (
           record.disabled === false && (
@@ -188,27 +184,20 @@ import EmpInfoContext from "../contexts/EmpInfoContext";
       },
     },
   ];
-
   useEffect(() => {
     getData();
   }, []);
-
   const showModal = (record) => {
     setmodaldata(record);
     setIsModalVisible(true);
   };
-
   const handleCancel = () => {
     setIsModalVisible(false);
-    // submit form data
   };
-
   const handleEditEmployee = (record) => {
     setEditedRecord(record);
   };
   async function getData() {
-    //hit api to get the employees
-    //set that employees to data state
     setLoading(true);
     const allData = await getUsers();
     let d = allData.docs.map((doc, i) => {
@@ -225,7 +214,6 @@ import EmpInfoContext from "../contexts/EmpInfoContext";
     setAllEmployees(d);
     setLoading(false);
   }
-
   const searchChange = (e) => {
     let search = e.target.value;
     // setFilterCriteria({ ...filterCriteria, search: search });
@@ -238,14 +226,12 @@ import EmpInfoContext from "../contexts/EmpInfoContext";
           ex?.designation?.toLowerCase()?.includes(search?.toLowerCase()) ||
           ex.gender?.toLowerCase() == search
       );
-      console.log({ result });
       const modifiedFilterExpense = [...result];
       setFilterEmployees(modifiedFilterExpense);
     } else {
       setFilterEmployees(allEmployees);
     }
   };
-
   // const searchByGender = (e) => {
   //   let value = e.target.value;
   //   // setFilterCriteria({ ...filterCriteria, search: search });
@@ -258,7 +244,6 @@ import EmpInfoContext from "../contexts/EmpInfoContext";
   //     setFilterEmployees(allEmployees);
   //   }
   // };
-
   const onDelete = (idx, e) => {
     e.preventDefault();
     EmpInfoContext.disablePerson(data[idx].id);
@@ -278,7 +263,6 @@ import EmpInfoContext from "../contexts/EmpInfoContext";
     setData(filteredData);
     setFilterEmployees(filteredData);
   };
-
   return (
     <Layout>
       <Row className="employeeRow">
@@ -329,7 +313,6 @@ import EmpInfoContext from "../contexts/EmpInfoContext";
             X
           </div>
         }
-
         // onCancel={handleCancel}
       >
         <Editemployee

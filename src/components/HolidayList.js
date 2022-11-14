@@ -10,8 +10,6 @@ import {
     DatePicker,
     Table,
     notification
-
-
 } from 'antd';
 import 'antd/dist/antd.css';
 import { Button, Drawer, Modal, } from 'antd';
@@ -19,19 +17,13 @@ import CompanyHolidayContext from '../contexts/CompanyHolidayContext';
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import moment from 'moment/moment';
 const { Text, } = Typography;
-
-
-
 const LeaveList = (props) => {
-    console.log(props)
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [holidaylist, setHolidaylist] = useState([])
-
     const colors = ['rgba(154, 214, 224, 0.96)', 'rgba(252, 143, 10,0.2)',];
     // const fontColors = ['rgba(204, 204, 10, 1)', 'color: "rgba(252, 143, 10, 1)', ];
-
     const columns = [
         {
             title: 'Name',
@@ -40,10 +32,8 @@ const LeaveList = (props) => {
             render: (text) => <a>{text}</a>,
         },
     ]
-
     const getData = async () => {
         // props.addNewHoliday()
-
         const allData = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
         // 33-40 to be written in context
         let data = allData.docs.map((doc) => {
@@ -57,36 +47,27 @@ const LeaveList = (props) => {
             let b = moment(d.date, "Do MMM, YYYY")
             return a - b
         });
-        console.log(allData, data)
         setHolidaylist(data)
     }
-
     const onDeleteLeave = (newHoliday) => {
         Modal.confirm({
             title: "Are you sure, you want to delete Holiday record?",
             okText: "Yes",
             okType: "danger",
-
             onOk: () => {
                 CompanyHolidayContext.deleteHoliday(newHoliday.id, "compId001")
                     .then(response => {
-                        console.log(response);
                         props.refreshCalendar();
                         getData();
                     })
                     .catch(error => {
-                        console.log(error.message);
-
                     })
             },
         });
     };
-
     useEffect(() => {
         getData()
     }, [])
-
-
     const showDrawer = () => {
         getData()
         setOpen(true);
@@ -96,24 +77,20 @@ const LeaveList = (props) => {
         form.resetFields()
 
     }
-
     const onFinish = (values) => {
         let newHoliday = {
             name: values.holidayname,
             date: values.holidaydate.format("Do MMM, YYYY"),
             optionalHoliday: values.holidaytype === 'Official' ? false : true,
         }
-        console.log(values, newHoliday)
         let matchingHolidayList = holidaylist.filter((item) => { return item.name == newHoliday.name })
         if (!(matchingHolidayList.length > 0)) {
             CompanyHolidayContext.createHoliday(newHoliday, "compId001")
                 .then(response => {
-                    console.log(response);
                     showNotification("success", "Success", "Holiday Created successfuly");
                     props.refreshCalendar();
                 })
                 .catch(error => {
-                    console.log(error.message);
                     showNotification("error", "Error", "Unable to create holiday!")
                 })
             form.resetFields();
@@ -123,43 +100,32 @@ const LeaveList = (props) => {
         }
         setIsModalOpen(false);
     };
-
     const disabledDate = (current) => {
         let isCurrentYear = current.year() !== (new Date).getFullYear();
         let matchingHolidayList = holidaylist.filter(item => item.date == current.format('Do MMM, YYYY'))
         return matchingHolidayList.length > 0 || isCurrentYear;
-
     };
-
-
     const onClose = () => {
         setOpen(false);
     };
-
     const showModal = () => {
         setIsModalOpen(true);
     };
-
     const showNotification = (type, msg, desc) => {
         notification[type]({
             message: msg,
             description: desc,
         });
     };
-
     const handleOk = () => {
     };
-
-
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-
     const cancelStyle = {
         float: "right",
 
     };
-
     const buttonStyle = {
         marginRight: "5px",
         color: "white",
@@ -167,8 +133,6 @@ const LeaveList = (props) => {
         float: "right",
         backgroundColor: '#d9d9d9'
     };
-
-
     return (
         <Row className='row-holiday-list-div' style={{
             display: 'flex', flexDirection: 'row',
@@ -179,11 +143,8 @@ const LeaveList = (props) => {
                 style={{
                     display: 'flex', flexDirection: 'row',
                     borderRadius: '10px',
-
-
                 }}
             >
-
                 <div >
                     <Button className='button-div' style={{
                         marginLeft: '10px', borderRadius: '15px'
@@ -194,9 +155,7 @@ const LeaveList = (props) => {
                         width={300}
                         title="List of Holiday" placement="right" onClose={onClose} visible={open} open={open}>
                         {/* <Table columns={columns} dataSource={holidaylist} > */}
-
                         {/* {JSON.stringify(colors[id])} */}
-
                         {holidaylist.map((holiday, id,) => {
                             return (
                                 // colors={}
@@ -242,9 +201,7 @@ const LeaveList = (props) => {
                         {/* </Table> */}
                     </Drawer>
                 </div>
-
                 {
-
                     props.isHr
                         ?
                         <div>
@@ -253,8 +210,6 @@ const LeaveList = (props) => {
                             }} onClick={showModal}>
                                 Create Holiday
                             </Button>
-
-
                             <Modal className='viewAppraisal'
                                 title=" Create Holiday"
                                 maskClosable={false}
@@ -288,8 +243,6 @@ const LeaveList = (props) => {
                                     onFinish={onFinish}
                                     form={form}
                                     autoComplete="off"
-
-
                                 >
                                     <Form.Item labelAlign="left"
                                         style={{ marginBottom: "10px", }}
@@ -305,7 +258,6 @@ const LeaveList = (props) => {
                                     >
                                         <Input placeholder="Please Type Holiday Name" />
                                     </Form.Item>
-
                                     <Form.Item
                                         rules={[
                                             {
@@ -316,16 +268,13 @@ const LeaveList = (props) => {
                                         name='holidaydate'
                                         labelAlign="left"
                                         style={{ marginBottom: "10px", width: '100% ' }}
-
                                     >
-
                                         <DatePicker style={{ width: '100% ' }}
                                             disabledDate={disabledDate}
                                             // disabledYear={disabledYear}
                                             format="Do MMM, YYYY"
                                         />
                                     </Form.Item>
-
                                     <Form.Item
                                         label="Type Of Leave"
                                         name='holidaytype'
@@ -339,9 +288,7 @@ const LeaveList = (props) => {
                                             <Radio value="Official"> Official </Radio>
                                         </Radio.Group>
                                     </Form.Item>
-
                                     <Form.Item >
-
                                         <Button
                                             style={cancelStyle}
                                             onClick={handleOk}
@@ -353,18 +300,13 @@ const LeaveList = (props) => {
                                             onClick={onReset}>
                                             Reset</Button>
                                     </Form.Item>
-
                                 </Form>
                             </Modal>
                         </div>
-
                         :
                         null
-
                 }
-
             </Col>
-
         </Row>
     )
 }

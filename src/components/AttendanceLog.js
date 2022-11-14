@@ -54,14 +54,12 @@ function AttendanceLog() {
     category: "all",
   });
   const [filteredEmp, setFilteredEmp] = useState([]);
-
   const columns = [
     {
       title: "Employee Code",
       dataIndex: "empId",
       className: "code",
       key: "empId",
-
       render: (text) => <a>{text}</a>,
     },
     {
@@ -74,7 +72,6 @@ function AttendanceLog() {
       dataIndex: "status",
       key: "status",
     },
-
     {
       title: "Project Name",
       dataIndex: "project",
@@ -92,18 +89,15 @@ function AttendanceLog() {
     //   key: "action",
     // },
   ];
-
   const showNotification = (type, msg, desc) => {
     notification[type]({
         message: msg,
         description: desc,
     });
 };
-
 useEffect(() => {
   getHolidayList()
 }, [])
-
   useEffect(() => {
     form.resetFields();
     if (role === "emp") {
@@ -120,9 +114,7 @@ useEffect(() => {
       }
     }
   }, [activetab]);
-
   const [form] = Form.useForm();
-
   function getFormateDateString() {
     return (
       (new Date().getDate() > 9
@@ -151,33 +143,24 @@ useEffect(() => {
         : "0" + new Date().getSeconds())
     );
   }
-
 const getHolidayList = async () => {
   let data = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
-  console.log("holidya",data)
   let req = data.docs.map((doc) => {
-    console.log("holidya", doc.data().optionalHoliday)
     if (!(doc.data().optionalHoliday)){
-      console.log("holidya", doc.data().date)
       return doc.data().date;
     }
     return null
   });
-  console.log("holidya", req)
   setHolidays(req)
 }
-
 const setHolidayStatus = (data) => {
-  console.log(data)
   data.forEach((rec) =>{
-    console.log(rec.date)
     if(holidays.includes(moment(rec.date, "DD-MM-YYYY").format("Do MMM, YYYY")) && rec.status!="Present"){
       rec.status = "Holiday"
     }
   })
   return data;
 }
-
   const onFinish = (values) => {
     const newData = {
       report: values?.project_details || "-",
@@ -190,12 +173,10 @@ const setHolidayStatus = (data) => {
     ).then((response) => {
       showNotification("success", "Success", "Record updated successfuly");
     }).catch((error) => {
-      console.log("error");
       showNotification("error", "Error", "No records exist for this day");
     })
     setActivetab("1");
   };
-
   if (loading) {
     return (
       <div
@@ -222,63 +203,44 @@ const setHolidayStatus = (data) => {
       </div>
     );
   }
-
   async function getEmpDetails(id, date) {
     setLoading(true);
     let data;
     AttendanceContext.getAllAttendance(id, date).then((userdata) => {
-      console.log("first1");
       AttendanceContext.updateLeaves(userdata).then((final) => {
       setHolidayStatus(final)
-      console.log("second", final)
       data = final
       setEmpMonthly(final);
       const timer = setTimeout(() => {
         setLoading(false);
-        console.log('This will run after 0.75 seconds!')
       }, 750);
       return () => clearTimeout(timer);
     });
       // getWithLeave(userdata);
-      console.log("last");
     });
     return data;
   }
-
   function allEmpDetails() {
     setLoading(true);
     AttendanceContext.getAllUsers().then((userdata) => {
-      console.log("first",moment().format("Do MMM, YYYY"));
       AttendanceContext.updateWithLeave(userdata, holidays.includes(moment().format("Do MMM, YYYY"))).then((final) => {
         // setHolidayStatus(final)
-        console.log("second", final);
         setallEmp(final);
         setFilteredEmp(final);
         setEmpMonthly(final);
         const timer = setTimeout(() => {
           setLoading(false);
-          console.log("This will run after 0.75 seconds!");
         }, 750);
         return () => clearTimeout(timer);
       });
       // getWithLeave(userdata);
-      console.log("last");
     });
   }
-
-
   const onReset = () => {
     form.resetFields();
   };
-
   const columns1 = [
-    // {
-    //   title: "Employee Code",
-    //   dataIndex: "code",
-    //   key: "code",
-    //   render: (text) => <a>{text}</a>,
-    // },
-    {
+       {
       title: "Date",
       dataIndex: "date",
       key: "date",
@@ -321,12 +283,7 @@ const setHolidayStatus = (data) => {
       width: 180,
       ellipsis: true,
     },
-    // {
-    //   title: "Action",
-    //   key: "action",
-    // },
-  ];
-
+      ];
   async function onHrDateFilter(value) {
     setMonth(value)
     if (value == null) {
@@ -355,7 +312,6 @@ const setHolidayStatus = (data) => {
       setFilteredEmp(allEmp);
     }
   };
-
   return (
     <>
       <div className="hrtab">

@@ -7,8 +7,6 @@ import {
   Cascader,
   Input,
   Select,
-  // handleChange,
-  //   Option,
   Radio,
   Space,
   notification,
@@ -164,7 +162,6 @@ const Editexpense = (props) => {
       ]}
       layout="vertical"
     >
-      {/* ------------------------------Paid By------- */}
       <Row>
         <Col xs={22} sm={22} md={12}>
           <Form.Item
@@ -317,10 +314,6 @@ const Editexpense = (props) => {
           </Form.Item>
         </Col> */}
       </Row>
-
-      {/* ----------------------------------Datepicker------- */}
-
-      {/* --------------------------------------Amount------- */}
       <Row>
         <Col xs={22} sm={22} md={12}>
           <Form.Item
@@ -383,8 +376,6 @@ const Editexpense = (props) => {
           </Form.Item>
         </Col>
       </Row>
-      {/* --------------------------------------Quantity------- */}
-      {/* --------------------------------------Sub-subtotal------- */}
       <Row>
         <Col xs={22} sm={22} md={12}>
           <Form.Item
@@ -417,7 +408,6 @@ const Editexpense = (props) => {
           </Form.Item>
         </Col>
       </Row>
-      {/* -----------------------Text-area--------------- */}
       <br />
       <Button style={cancelStyle} onClick={cancel}>
         Cancel

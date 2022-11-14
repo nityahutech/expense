@@ -102,3 +102,21 @@ line-height: 25px;
 
  }
  
+ .profileTabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #000000;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    
+ }
+ .profileTabs .ant-tabs-tab:hover{
+    color: #000000;
+    
+ }
+ .profileTabs .ant-tabs-ink-bar {
+    /* position: absolute; */
+    background: #F9A01F;
+    pointer-events: none;
+
+ }
+ 

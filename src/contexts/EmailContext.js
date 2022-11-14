@@ -6,7 +6,6 @@ export const sendEmail = async (mailOptions) => {
     //         mailOptions
     //     })
     // } catch (error) {
-    //     console.log(error)
     // }
 }
 
@@ -16,6 +15,5 @@ export const disableAccount = async (uid, action) => {
     //         uid, action
     //     })
     // } catch (error) {
-    //     console.log(error)
     // }
 }

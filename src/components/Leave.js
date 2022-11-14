@@ -25,7 +25,6 @@ import "../style/leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
 
 const Leave = () => {
-
   const page = "leavePage"
   const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
   // const { currentUser } = useAuth();
@@ -49,15 +48,12 @@ const Leave = () => {
   const [editedLeave, setEditedLeave] = useState({}); //leave record to be edited
   const [requests, setRequests] = useState([]); //leave requests for managers in array of objects
   const [allRequests, setAllRequests] = useState([]); //leave requests for hr in array of objects
-
-
   const [dateSelected, setDateSelected] = useState([]);
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
   const [startSlot, setStartSlot] = useState(null);
   const [endSlot, setEndSlot] = useState(null);
   const [validleaverequest, setValidleaverequest] = useState("false");
-
   const getHoliday = async () => {
     const allData = await CompanyHolidayContext.getAllCompanyHoliday();
     let d = allData.docs.map((doc) => {
@@ -68,7 +64,6 @@ const Leave = () => {
     });
     setCompanyholiday(d);
   };
-
   const getListData = (value) => {
     let listData = [];
     let currdate = value.format("Do MMM, YYYY");
@@ -94,11 +89,8 @@ const Leave = () => {
         ];
       }
     }
-
-
     return listData;
   };
-
   const onFinishEditLeave = (values) => {
     if (
       editedLeave.dateCalc === dateSelected &&
@@ -129,7 +121,6 @@ const Leave = () => {
         return;
       }
     }
-
     let tempdur = duration.filter(dates => !editedLeave.dateCalc.includes(dates))
     let matchingdates = dateSelected.filter(item => tempdur.includes(item))
     if (matchingdates.length > 0) {
@@ -179,7 +170,6 @@ const Leave = () => {
       );
     }
   }
-
   const onFinish = (values) => {
     if (values.leaveNature === "Optional Leave") {
       let optionalHolidays = companyholiday.filter((item) => {
@@ -200,7 +190,6 @@ const Leave = () => {
         return;
       }
     }
-
     let matchingdates = dateSelected.filter(item => duration.includes(item))
     if (matchingdates.length > 0) {
       showNotification(
@@ -222,7 +211,6 @@ const Leave = () => {
       status: "Pending",
     };
     if (validleaverequest) {
-      // console.log(newLeave)
       LeaveContext.createLeave(newLeave)
         .then(response => {
           getData();
@@ -251,7 +239,6 @@ const Leave = () => {
       );
     }
   };
-
   const getConfigurations = async () => {
     let data = await ConfigureContext.getConfigurations(page)
     let sorted = Object.keys(data?.leaveNature).sort((k1, k2) => k1 < k2 ? -1 : k1 > k2 ? 1 : 0)
@@ -262,7 +249,6 @@ const Leave = () => {
     setTotalDays(temp)
     getData({...temp})
   }
-
   const getData = async (temp) => {
     setLoading(true);
     let empRecord = await EmpInfoContext.getEduDetails(currentUser.uid);
@@ -275,7 +261,6 @@ const Leave = () => {
       };
     });
     getDateFormatted(d);
-    console.log(d, totaldays, leavedays, temp, temp? temp : {...totaldays})
     getDateSorted(d);
     setLeaves(d);
     setLoading(false);
@@ -293,7 +278,6 @@ const Leave = () => {
     setDuration([].concat.apply([], array));
     setDurStatus(stats);
   };
-
   const getRequestData = async () => {
     let reqData = await LeaveContext.getAllByApprover(currentUser.displayName);
     let req = reqData.docs.map((doc) => {
@@ -306,7 +290,6 @@ const Leave = () => {
     getDateSorted(req);
     setRequests(req);
   };
-
   const getAllRequests = async () => {
     let reqData = await LeaveContext.getLeaves();
     let req = reqData.docs.map((doc) => {
@@ -319,7 +302,6 @@ const Leave = () => {
     getDateSorted(req);
     setAllRequests(req);
   };
-
   const onDeleteLeave = (record) => {
     Modal.confirm({
       title: "Are you sure, you want to delete Leave record?",
@@ -338,7 +320,6 @@ const Leave = () => {
       },
     });
   };
-
   const columns = [
     {
       title: "Duration",
@@ -394,7 +375,6 @@ const Leave = () => {
       align: "left",
       width: 150,
     },
-
     {
       title: "Status",
       className: "row5",
@@ -485,27 +465,22 @@ const Leave = () => {
       },
     },
   ];
-
   useEffect(() => {
     setLoading(true);
     getConfigurations();
     getHoliday();
     const timer = setTimeout(() => {
       setLoading(false);
-      console.log('This will run after 0.75 seconds!')
     }, 750);
-    console.log(isHr, isMgr)
     if (isHr) getAllRequests();
     if (isMgr) getRequestData();
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    console.log(isHr, isMgr)
     if (isHr) getAllRequests();
     if (isMgr) getRequestData();
   }, [loading]);
-
   const getDateFormatted = (data) => {
     data.forEach((dur) => {
       let len = dur.date.length;
@@ -515,7 +490,6 @@ const Leave = () => {
         dur.date.length == 1 ? dur.date[0] : dur.date[0] + " to " + dur.date[dur.date.length - 1];
     });
   };
-
   const getDateSorted = (data) => {
     data.sort(function (c, d) {
       let a = moment(c.dateCalc[0], "Do MMM, YYYY");
@@ -523,16 +497,13 @@ const Leave = () => {
       return a - b;
     });
   };
-
   const showNotification = (type, msg, desc) => {
     notification[type]({
       message: msg,
       description: desc,
     });
   };
-
   const validateLeaveRequest = (noOfDays, leavetype) => {
-    console.log(dateSelected.length, noOfDays, dateSelected.length - noOfDays);
     if (leavetype != null && dateSelected.length - noOfDays > 0) {
       if (leavedays[leavetype] < dateSelected.length - noOfDays) {
         showNotification(
@@ -546,7 +517,6 @@ const Leave = () => {
       }
     }
   };
-
   const onLeaveNatureChange = (value) => {
     if (value == "Optional Leave") {
       if (dateSelected.length == 1) {
@@ -569,9 +539,7 @@ const Leave = () => {
     }
     validateLeaveRequest(noOfDays, value);
   };
-
   const onLeaveDateChange = (e) => {
-    console.log('onleavedate', dateStart, dateEnd, duration);
     let tempDateEnd = dateEnd
     if (e != undefined) {
       tempDateEnd = e
@@ -597,11 +565,9 @@ const Leave = () => {
         }
       }
     } catch (error) {
-      console.log(error.message)
     }
     setDateSelected(temp);
   };
-
   const dateCellRender = (value,) => {
     const listData = getListData(value);
     let textVal = value.format("dddd");
@@ -639,7 +605,6 @@ const Leave = () => {
       </div>
     );
   };
-
   const reqColumns = [
     {
       title: "Duration",
@@ -761,7 +726,6 @@ const Leave = () => {
       },
     },
   ];
-
   function disabledDate(current) {
     if (
       moment(current).day() === 0 ||
@@ -794,7 +758,6 @@ const Leave = () => {
     }
     return false;
   }
-
   const disabledCalendarDate = (current) => {
     return moment(current).day() === 0 || current.day() === 6;
   };
@@ -825,9 +788,7 @@ const Leave = () => {
       </div>
     );
   }
-
   const disableEnd = () => {
-    // console.log(dateStart, dateEnd)
     if (dateStart == null || dateStart == 0) {
       if (isEditModalOpen) {
         form1.setFieldsValue({ dateEnd: null })
@@ -838,7 +799,6 @@ const Leave = () => {
     }
     return false
   }
-
   const disableNature = () => {
     if (dateStart == null || dateStart == 0) {
       if (isEditModalOpen) {
@@ -858,7 +818,6 @@ const Leave = () => {
     }
     return false
   }
-
   const disableEndSlot = () => {
     if (dateStart == null || dateStart == 0) {
       return true
@@ -870,7 +829,6 @@ const Leave = () => {
     }
     return false
   }
-
   const disabledLeaveNature = (u) => {
     if (leavedays[u] <= 0) {
       return true
@@ -887,23 +845,6 @@ const Leave = () => {
     }
     return false
   }
-
-  console.log("totaldays", totaldays)
-  console.log("leavedays", leavedays)
-  // console.log("date", date)
-  // console.log("companyholiday", companyholiday)
-  console.log("leaves", leaves)
-  console.log("durStatus", durStatus)
-  console.log("duration", duration)
-  console.log("isMgr", isMgr)
-  console.log("isHr", isHr)
-  console.log("dateSelected", dateSelected)
-  console.log("dateStart", dateStart)
-  console.log("dateEnd", dateEnd)
-  console.log("startSlot", startSlot)
-  console.log("endSlot", endSlot)
-  console.log("validleaverequest", validleaverequest)
-
   return (
     <>
       <Row
@@ -1028,7 +969,6 @@ const Leave = () => {
             marginTop: "10px",
           }}
         >
-
           {/* <HolidayList isHr={isHr} refreshCalendar={addNewHoliday} /> */}
           <div
             className="calender-div"

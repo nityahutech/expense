@@ -7,13 +7,9 @@ function SignupPage() {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const { signup, login, updateMyProfile } = useAuth();
-
   const win = window.sessionStorage;
-
   async function handleSubmit(formData) {
-    console.log(formData.user.name);
     // e.preventDefault();
-    // console.log(signupEmail, signupPassword);
     win.clear();
     try {
       setError("");
@@ -22,7 +18,6 @@ function SignupPage() {
       // sessionStorage.setItem("accessToken", res.user.accessToken);
       setSuccess("Registration Successful. Please LogIn!")
     } catch (err)  {
-      console.log(err, err.message);
       setError(err?.message=== 'Firebase: Error (auth/email-already-in-use).'?"Email id Already Registered!":"Failed to Register!"||"Failed to Register!");
       setTimeout(() => {
         setError("");

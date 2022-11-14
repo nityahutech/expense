@@ -59,7 +59,6 @@ class AttendanceContext {
                 id: doc.id
             };
         });
-        console.log(d)
         const attendDoc = doc(db, `companyprofile/${compId}/attendance`, d[0].id);
         updateDoc(attendDoc, record)
         return 
@@ -74,7 +73,6 @@ class AttendanceContext {
     //             clockOut: "23:59:59"
     //         };
     //     });
-    //     console.log(d)
     //     const attendDoc = doc(db, "attendance", d[0].id);
     //     update(attendDoc, record)
     // }
@@ -185,12 +183,9 @@ class AttendanceContext {
     };
 
     updateLeaves = async (data) => {
-      console.log(data)
       let list = await this.getLeaveList(data[0].empId);
-      console.log(list)
       data.forEach((emp) => {
         if(emp.status == "Absent") {
-          console.log(emp)
           if (list.includes(moment(emp.date, "DD-MM-YYYY").format("Do MMM, YYYY"))) {
             emp.status = "On Leave";
           }
@@ -200,7 +195,6 @@ class AttendanceContext {
     }
 
     updateWithLeave = async (data, isHoiday) => {
-      console.log(data, isHoiday)
       data.forEach((emp) => {
         if(emp.status == "Absent") {
           if (isHoiday) {
@@ -208,7 +202,6 @@ class AttendanceContext {
             return;
           }
           this.getLeaveStatus(emp.empId).then((leave) => {
-            console.log(leave)
             if (leave) {
               emp.status = "On Leave";
 
@@ -250,7 +243,6 @@ class AttendanceContext {
   }
 
   getLeaveList = async (id) => {
-    console.log(id)
     const q = query(leaveCollectionRef, where("empId", "==", id), where("status", "==", "Approved"));
     let stats = await getDocs(q);
     let temp = []
@@ -258,7 +250,6 @@ class AttendanceContext {
       temp.push(doc.data().date)
     });
     let leaves = [].concat.apply([], temp)
-    console.log(leaves)
     return leaves;
 }
 

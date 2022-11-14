@@ -28,14 +28,12 @@ function generateEmpId(compId) {
 }
 
 export async function createUser(values, compId) {
-  console.log(values)
   let res = await createUserWithEmailAndPassword(
     createAuth,
     values.mailid,
     "password"
   );
   let name = values.fname + (values.mname?` ${values.mname} `:" ") + values.lname
-  console.log(name);
   updateProfile(res.user, { displayName: name });
   // updatePhoneNumber(res.user, values.phone)
   const valuesToservice = {
@@ -67,16 +65,13 @@ export async function createUser(values, compId) {
     optionalLeave: 2,
     disabled: false
   };
-  console.log(res.user.uid, valuesToservice, compId)
   setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid});
   setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
     .then((result) => {
       signOut(createAuth);
-      console.log(result);
       return result;
     })
     .catch((error) => {
-      console.log(error.message);
       return false;
     });
 }

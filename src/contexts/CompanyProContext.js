@@ -38,13 +38,11 @@ class CompanyProContext {
     checkUserExists = async (email) => {
         let q = query(collection(db, "users"), where("mailid", "==", email))
         let req = await getDocs(q);
-        console.log(!req.empty)
         return !req.empty;
     }
     
     checkOrgIdExists = async (id) => {
         let req = await getDoc(doc(db, "companyprofile", id));
-        console.log(req.data(),req.data()?true:false)
         return req.data()? true : false;
     }
    
@@ -55,7 +53,6 @@ class CompanyProContext {
                 let mname = "";
                 for (let i = 1; i < name.length - 1; i++) {
                   mname = mname + ((i != 1 ? " " : "") + name[i]);
-                  console.log(mname)
                 }
                 let newRec = {
                     department: null,
@@ -74,7 +71,6 @@ class CompanyProContext {
                     repManager: "",
                     secManager: "",
                 };
-                console.log(newRec, id)
                 await createUser(newRec, id)
             })
             this.updateCompInfo(id, {accessList: accessList} )

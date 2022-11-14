@@ -1,24 +1,17 @@
-import React, { useState, useEffect } from "react";
 import Navbar from "../../components/navbar/Navbar";
 import Sidebar from "../../components/sidebar/NewSidebar";
 import Expenselist from "../../components/Expenselist";
 import "../home/home.css";
+
 const ExpenseListpage = () => {
-  const [accessToken, setAccessToken] = useState(null);
-  useEffect(() => {
-    let token = sessionStorage.getItem("accessToken");
-    if (token === 'null') {
-      window.location.href = "/";
-    } else {
-      setAccessToken(token);
-    }
-  }, []);
-  return accessToken ?
-  (
+
+  const accessToken = sessionStorage.getItem("accessToken");
+  
+  return accessToken && !(accessToken == "null") ? (
     <div className="home">
       <div className="sidecontainer">
         <Sidebar activeSubMenu={["sub1"]}
-          activeMenu={["3"]} accessToken={accessToken}/>
+          activeMenu={["3"]} />
       </div>
       <div className="homeContainer">
         <div className="table">
@@ -29,6 +22,7 @@ const ExpenseListpage = () => {
         </div>
       </div>
     </div>
-  ): null;
+  ) : window.location.href = "/";
 };
+
 export default ExpenseListpage;

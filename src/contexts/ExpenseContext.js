@@ -34,14 +34,12 @@ class ExpenseContext {
 
     getAllExpenses = () => {
         const q = query(expenseCollectionRef, orderBy("date", "desc"));
-        // console.log(q);
         return getDocs(q);
     };
 
 
     getAllByTotal = () => {
         const q = query(expenseCollectionRef, orderBy("subtotal", "desc"));
-        // console.log(q);
         return getDocs(q);
     };
 

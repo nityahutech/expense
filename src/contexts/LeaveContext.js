@@ -94,13 +94,13 @@ class LeaveContext {
         return updateDoc(leaveDoc, { status: "Rejected", comment: comment })
     }
     getLeaveDays = (records, leavedays) => {
+        console.log(records, leavedays)
         records.forEach((rec) => {
             if (rec.status == "Approved") {
                 let dur = rec.dateCalc.length
                 if (dur === 1 && rec.slot != 'Full Day') {
                     dur = 0.5;
                 }
-                console.log(leavedays[rec.nature])
                 leavedays[rec.nature] -= dur;
             }
         })

@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Checkbox, Form, Input, Alert, Row, Col, Divider } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -13,24 +12,22 @@ function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login, resetPassword } = useAuth()
-
+  const { login, resetPassword, logout } = useAuth()
+  useEffect(() => {
+    logout();
+  }, [])
   const win = window.sessionStorage;
-
   async function handleSubmit(e) {
     e.preventDefault();
     win.clear();
     try {
       setError("");
       setLoading(true);
-
       let res = await login(loginEmail, loginPassword);
-      console.log(res)
       sessionStorage.setItem("accessToken", res.user.accessToken);
       sessionStorage.setItem("user", JSON.stringify(res.user));
       const timer = setTimeout(() => {
-        console.log('This will run after 0.75 seconds!')
-        navigate("MainDashboardPage/MainDashBoard", { replace: true });
+        navigate("DashBoard", { replace: true });
       }, 2000);
     } catch {
       setError("Failed to log in");
@@ -38,10 +35,8 @@ function LoginPage() {
         setError("");
       }, 3000);
     }
-
     setLoading(false);
   }
-
   async function handleReset(e) {
     e.preventDefault();
     win.clear();
@@ -55,11 +50,9 @@ function LoginPage() {
         setError("");
       }, 3000);
     }
-
     setLoading(false);
   }
-  
-  return (
+    return (
     <>
       <div className="main-div">
         <div className="img-div">
@@ -127,7 +120,6 @@ function LoginPage() {
                     />
                   </Form.Item>
                 </div>
-
                 <div style={{ display: "flex" }}>
                   <Form.Item
                     name="remember"
@@ -143,7 +135,6 @@ function LoginPage() {
                   </Form.Item>
                   <div className="forgotpwd" onClick={handleReset} style={{marginLeft: '3.5rem', marginTop:'5px'}}>Forgot Password</div>
                 </div>
-
                 <Form.Item
                   wrapperCol={
                     {

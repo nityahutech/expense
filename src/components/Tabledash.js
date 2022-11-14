@@ -85,7 +85,6 @@ function Tabledash() {
       // responsive: ["sm"],
 
       render: (_, record) => {
-        // console.log("record:: ", record);
         return (
           record.key !== "subTotal" && (
             <>

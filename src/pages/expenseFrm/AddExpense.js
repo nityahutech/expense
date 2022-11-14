@@ -1,25 +1,16 @@
-  import React, {useEffect, useState} from 'react'
 import Navbar from '../../components/navbar/Navbar';
 import Sidebar from "../../components/sidebar/NewSidebar";
-import ExpenceForm from '../../ExpenceForm';
+import ExpenceForm from '../../components/ExpenceForm';
+
 const ExpenseFrm = () => {
-    const [accessToken, setAccessToken] = useState(null)
-    useEffect(() => {
-        let token = sessionStorage.getItem ("accessToken")
-        if(token === 'null'){
-          window.location.href="/"
-        }
-        else{
-          setAccessToken(token)
-        }
-      }, [])
-    return accessToken 
-    ?
-    (
+
+  const accessToken = sessionStorage.getItem("accessToken");
+  
+  return accessToken && !(accessToken == "null") ? (
         <div className="home">
         <div className="sidecontainer">
             <Sidebar activeSubMenu={["sub1"]}
-          activeMenu={["2"]}  accessToken={accessToken}/>
+          activeMenu={["2"]} />
         </div>
         <div className="homeContainer">
             <div className="table" >
@@ -30,6 +21,7 @@ const ExpenseFrm = () => {
             </div>
         </div>
     </div>
-    ) : null;
-}
+  ) : window.location.href = "/";
+};
+
 export default ExpenseFrm

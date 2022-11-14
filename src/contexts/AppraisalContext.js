@@ -18,16 +18,12 @@ import {
 import { sendEmail } from "./EmailContext";
 
 // const usersCollectionRef = collection(db, "users");
-
 const compId = sessionStorage.getItem("compId");
 const usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
-
 const appraisalCollectionRef = collection(db, `companyprofile/${compId}/appraisal`);
 // const appraisalCollectionRef = collection(db, "appraisal");
 const midYearAppraisalCollectionRef = collection(db, `companyprofile/${compId}/midYearAppraisal`);
-
 // const midYearAppraisalCollectionRef = collection(db, "midYearAppraisal");
-
 class AppraisalContext {
     getAllAppraisal = () => {
         const q = query(appraisalCollectionRef, orderBy("quarter", "desc"));
@@ -56,25 +52,19 @@ class AppraisalContext {
 
     getUserAppraisal = (id) => {
         const q = query(appraisalCollectionRef, where("empId", "==", id));
-        // console.log(q);
         return getDocs(q);
     }
 
     getUserMidYearAppraisal = (id) => {
         const q = query(midYearAppraisalCollectionRef, where("empId", "==", id));
-        // console.log(q);
         return getDocs(q);
     }
 
     createAppraisal = (appraisal) => {
-        console.log('appraisal', 'received in service')
         return addDoc(appraisalCollectionRef, appraisal);
     };
 
-
-
     createBatchAppraisal = (appraisalList) => {
-        console.log('appraisal received in service', appraisalList)
         var db = getFirestore();
         const batch = writeBatch(db);
 
@@ -86,7 +76,6 @@ class AppraisalContext {
     };
 
     createMidYearBatchAppraisal = (appraisalList) => {
-        console.log('Mid Year appraisal received in service', appraisalList)
         var db = getFirestore();
         const batch = writeBatch(db);
 
@@ -109,21 +98,17 @@ class AppraisalContext {
 
     updateAppraisal = (id, updateAppraisal) => {
         const apprasialDoc = doc(db, `companyprofile/${compId}/appraisal`, id);
-        console.log('apprasialDoc', apprasialDoc)
         return updateDoc(apprasialDoc, updateAppraisal);
     };
 
     updateMidYearAppraisal = (id, updateAppraisal) => {
-        console.log('updateMidYearAppraisal', updateAppraisal, compId)
 
         const apprasialDoc = doc(db, `companyprofile/${compId}/midYearAppraisal`, id);
-        console.log('apprasialDoc', apprasialDoc)
         return updateDoc(apprasialDoc, updateAppraisal);
     };
 
     sendEmailToLead = async (appraisal) => {
         let email = await this.getEmailList(appraisal.lead)
-        console.log('email', email)
         let mailOptions = {
             from: 'hutechhr@gmail.com',
             to: `${email}`,
@@ -168,11 +153,9 @@ class AppraisalContext {
                 id: doc.id
             };
         });
-        console.log('emailid')
         return req[0].mailid;
 
     }
 }
-
 
 export default new AppraisalContext();

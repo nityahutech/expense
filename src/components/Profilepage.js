@@ -15,6 +15,7 @@ import WorkWeek from "./ProfileDetails/WorkWeek";
 import BankAccount from "./ProfileDetails/BankAccount";
 
 const Profile = () => {
+  const role =sessionStorage.getItem("role")
   return (
     <>
       <div className="myProfile" style={{}}>

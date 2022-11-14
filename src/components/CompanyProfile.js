@@ -32,27 +32,27 @@ function CompanyProfile() {
           <Tabs.TabPane tab="Address" key="2">
             <Address></Address>
           </Tabs.TabPane>
-          {/* <Tabs.TabPane tab="Department" key="3">
+          <Tabs.TabPane tab="Department" key="3">
             <Department></Department>
-          </Tabs.TabPane> */}
-          {/* <Tabs.TabPane tab="Designation" key="4">
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Designation" key="4">
             <Designation></Designation>
-          </Tabs.TabPane> */}
-          {/* <Tabs.TabPane tab="Announcement" key="5">
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Announcement" key="5">
             <Announcement></Announcement>
-          </Tabs.TabPane> */}
+          </Tabs.TabPane>
           <Tabs.TabPane tab="Policies" key="6">
             <Policies></Policies>
           </Tabs.TabPane>
-          {/* <Tabs.TabPane tab="Admin" key="7">
+          <Tabs.TabPane tab="Admin" key="7">
             <Admin></Admin>
-          </Tabs.TabPane> */}
+          </Tabs.TabPane>
           <Tabs.TabPane tab="Statutory" key="8">
             <Statutory></Statutory>
           </Tabs.TabPane>
-          {/* <Tabs.TabPane tab="My Plan" key="9">
+          <Tabs.TabPane tab="My Plan" key="9">
             <MyPlan></MyPlan>
-          </Tabs.TabPane> */}
+          </Tabs.TabPane>
         </Tabs>
       </div>
     </>

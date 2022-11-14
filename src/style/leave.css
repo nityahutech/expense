@@ -27,7 +27,7 @@
 }
 
 .reprentation {
-  width: 105px;
+  width: 110px;
   border-radius: 15px;
   /* opacity: 0.5; */
   border: none;
@@ -161,12 +161,6 @@
   padding-right: 18px;
 }
 
-.rmdp-input {
-  /* color: rgba(0, 0, 0, 0.25);
-  background-color: #f5f5f5;
-  border-color: #d9d9d9;
-  box-shadow: none; */
-}
 .rmdp-input:focus {
   /* box-shadow: none !important; */
   outline: none !important;

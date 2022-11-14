@@ -7,14 +7,13 @@ import {
     Input
 } from 'antd';
 import LeaveContext from '../contexts/LeaveContext'
+import moment from "moment";
 import "../style/leave.css";
 import checkedIcon from "../images/checkmark.png"
 import rejectIcon from "../images/rejected.png"
-
-const Notification = ({ data }) => {
-    const [dataSource, setDataSource] = useState(data);
+const Notification = (props) => {
+    const dataSource = props.data.filter(data => data.status == "Pending")
     let value = '';
-
     const Bbb = () => {
         return (
             <Input
@@ -23,7 +22,6 @@ const Notification = ({ data }) => {
             />
         );
     };
-
     const onApproveLeave = (record) => {
         Modal.confirm({
             title: `Are you sure, you want to approve Leave of ${record?.name || ''}!`,
@@ -32,11 +30,8 @@ const Notification = ({ data }) => {
             onOk: () => {
                 LeaveContext.approveLeave(record.id, record.name)
                     .then(response => {
-                        console.log(response);
                     })
                     .catch(error => {
-                        console.log(error.message);
-
                     })
             },
         });
@@ -51,30 +46,25 @@ const Notification = ({ data }) => {
             onOk: () => {
                 LeaveContext.rejectLeave(record.id, record.name, value)
                     .then(response => {
-                        console.log(response);
                         // getData();
                     })
                     .catch(error => {
-                        console.log(error.message);
-
                     })
             },
         });
     };
-
-
     const columns = [
         {
             title: 'Duration',
             dataIndex: 'date',
             width: 240,
             align: "left",
-            sorter: (a, b) => {
-                return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
+            sorter: (c, d) => {
+              let a = moment(c.dateCalc[0], "Do MMM, YYYY");
+              let b = moment(d.dateCalc[0], "Do MMM, YYYY");
+              return a - b;
             },
             sortDirections: ["ascend", "descend"],
-
-
         },
         {
             title: 'Employee Name',
@@ -85,8 +75,6 @@ const Notification = ({ data }) => {
                 return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
             },
             sortDirections: ["ascend", "descend"],
-
-
         },
         {
             title: 'Nature of Leave',
@@ -104,8 +92,6 @@ const Notification = ({ data }) => {
         //         return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
         //     },
         //     sortDirections: ["ascend", "descend"],
-
-
         // },
         {
             title: 'No. Of Days',
@@ -116,8 +102,6 @@ const Notification = ({ data }) => {
                 return a.len !== b.len ? (a.len < b.len ? -1 : 1) : 0;
             },
             sortDirections: ["ascend", "descend"],
-
-
         },
         {
             title: 'Reason',
@@ -134,9 +118,7 @@ const Notification = ({ data }) => {
                 return (
                     <>
                         {
-
                             <>{
-
                             }
                                 <img
                                     style={{ color: "white", width: '20px', marginRight: 10 }}
@@ -148,7 +130,6 @@ const Notification = ({ data }) => {
 
                                     }}
                                 />
-
                                 <img
                                     style={{ color: "white", width: '20px', marginRight: 10 }}
                                     src={rejectIcon}
@@ -157,7 +138,6 @@ const Notification = ({ data }) => {
                                     onClick={() => {
                                         onRejectedLeave(record);
                                     }}
-
                                 />
                             </>
                         }
@@ -167,7 +147,6 @@ const Notification = ({ data }) => {
         }
 
     ];
-
     return (
         <Row style={{
             display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',

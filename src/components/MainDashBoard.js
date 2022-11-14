@@ -12,11 +12,8 @@ import Companyprofile from "../images/companyvision.png";
 import Settings from "../images/Settings.png";
 import Organization from "../images/organizationLogoNew.png"
 import { Link } from "react-router-dom";
-// import { display } from "html2canvas/dist/types/css/property-descriptors/display";
-
 function MainDashBoard() {
   const isHr = sessionStorage.getItem("role");
-
   const organizationcon = () => {
     return(
       <Link to="/Organization/Onboarding">
@@ -74,7 +71,6 @@ function MainDashBoard() {
 
   const paySlipIcon = () => {
     return (
-      // This Link will not work remove icon, Replace with appraisal
       // <Link to="/PaySlipPage/PaySlip">
         <Card
           bordered={false}
@@ -102,7 +98,6 @@ function MainDashBoard() {
       // </Link>
     );
   };
-
   const employeeIcon = () => {
     return (
       <Link to="/Employee/EmployeeList">

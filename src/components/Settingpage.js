@@ -7,9 +7,7 @@ import { Tabs } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 
 const onChange = (e) => {
-  console.log(`checked = ${e.target.checked}`);
 };
-
 const showNotification = (type, msg, desc) => {
   notification[type]({
     message: msg,
@@ -22,7 +20,6 @@ const openNotificationWithIcon = (type) => {
     description: "Password changed successfully",
   });
 };
-
 const Settingpage = () => {
   const [tabPosition, setTabPosition] = useState("left");
   const [message, setMessage] = useState("");
@@ -35,14 +32,12 @@ const Settingpage = () => {
 
   const { currentUser, updateMyPassword, deletePerson, updateMyEmail, login } =
     useAuth();
-
   const openUpdateEmail = (type) => {
     notification[type]({
       message: "Successfully",
       description: "Email Address changed successfully",
     });
   };
-
   useEffect(() => {
     setTabPosition(window.innerWidth <= 768 ? "top" : "left");
   }, []);
@@ -50,9 +45,7 @@ const Settingpage = () => {
   window.addEventListener("resize", () => {
     setTabPosition(window.innerWidth <= 768 ? "top" : "left");
   });
-
   const handleEmailSubmit = async () => {
-    console.log(email);
     try {
       await updateMyEmail(email);
       showNotification("success", "Success", "Record updated successfuly");
@@ -64,15 +57,12 @@ const Settingpage = () => {
   const checkPassword = async () => {
     try {
       let check = await login(currentUser.email, password);
-      console.log(check);
-      console.log("Correct Password!");
       return true;
     } catch {
       showNotification("error", "Failed", "Incorrect password");
       return false;
     }
   };
-
   const handlePasswordSubmit = async () => {
     let check = await checkPassword();
     if (check) {

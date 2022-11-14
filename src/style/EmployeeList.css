@@ -33,3 +33,10 @@
     
     }
 
+    .employeeTable .ant-table-thead>tr>th{
+      background:#1963A6;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    }

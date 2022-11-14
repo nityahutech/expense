@@ -116,13 +116,13 @@ function ExpenseList() {
   const [modaldata, setmodaldata] = useState([]);
   const columns = [
     {
-      title: "SL No.",
+      title: "Sl. No.",
       dataIndex: "sn",
       key: "sn",
       // responsive: ["sm"],
       fixed: "left",
       className: "row1",
-      width: 74,
+      width: 80,
     },
     {
       title: "Expense Name",
@@ -134,12 +134,7 @@ function ExpenseList() {
       onFilter: (value, record) => record.name.indexOf(value) === 0,
       // sorter: (a, b) => a.catname - b.catname,
       onFilter: (value, record) => record.name.indexOf(value) === 0,
-      sorter: (a, b) => {
-        if (a.catname < b.catname) return -1;
-        if (a.catname > b.catname) return 1;
-        return 0;
-      },
-      sortDirections: ["ascend", "descend"],
+
       render: (text) => <a className="catName">{text}</a>,
     },
     {
@@ -149,10 +144,6 @@ function ExpenseList() {
       key: "name",
       width: 150,
       // responsive: ["sm"],
-      sorter: (a, b) => {
-        return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
-      },
-      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Paid To",
@@ -162,10 +153,6 @@ function ExpenseList() {
       width: 150,
       // responsive: ["sm"],
       // sorter: (a, b) => a.name - b.name,
-      sorter: (a, b) => {
-        return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
-      },
-      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Date",
@@ -173,7 +160,6 @@ function ExpenseList() {
       dataIndex: "date",
       key: "date",
       // responsive: ["sm"],
-      sorter: (a, b) => a.date - b.date,
     },
     // {
     //   title: "Status",
@@ -200,7 +186,6 @@ function ExpenseList() {
       key: "quantity",
       align: "center",
       // responsive: ["sm"],
-      sorter: (a, b) => a.quantity - b.quantity,
     },
     {
       title: "Amount",
@@ -209,7 +194,6 @@ function ExpenseList() {
       key: "amount",
       align: "center",
       // responsive: ["md"],
-      sorter: (a, b) => a.amount - b.amount,
     },
     {
       title: "Sub Total",
@@ -218,7 +202,6 @@ function ExpenseList() {
       key: "subtotal",
       align: "center",
       // responsive: ["sm"],
-      sorter: (a, b) => a.subtotal - b.subtotal,
     },
     {
       title: "Description",
@@ -227,7 +210,7 @@ function ExpenseList() {
       key: "description",
       // responsive: ["sm"],
       ellipsis: true,
-      sorter: (a, b) => a.description - b.description,
+
       // render: (_, view) =>
       //   view.description !== "" && (
       //     <Popover content={view.description} trigger="click">
@@ -243,7 +226,7 @@ function ExpenseList() {
       fixed: "right",
 
       // responsive: ["sm"],
-      sorter: (a, b) => a.action - b.action,
+
       render: (_, record) => {
         return (
           record.key !== "subTotal" && (
@@ -528,7 +511,7 @@ function ExpenseList() {
               style={{
                 width: "95%",
                 borderRadius: "5px",
-                background: "#189AB4",
+                background: "#1963A6",
               }}
             >
               Print
@@ -540,7 +523,11 @@ function ExpenseList() {
               className="addExpense"
               type="primary"
               onClick={handleAddNewExpense}
-              style={{ width: "95%", borderRadius: "5px" }}
+              style={{
+                width: "95%",
+                borderRadius: "5px",
+                background: "#1963A6",
+              }}
             >
               + Add New Expenses
             </Button>

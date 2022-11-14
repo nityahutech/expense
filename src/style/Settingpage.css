@@ -26,4 +26,11 @@
     .copsw{
         width: 120px;
     } */
+    .new input[type='text'], input[type='password']{
+        width:18rem
+    }
+    .confirm input[type='text'], input[type='password']{
+        width:18rem
+    }
+    
     

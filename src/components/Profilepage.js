@@ -15,11 +15,11 @@ import WorkWeek from "./ProfileDetails/WorkWeek";
 import BankAccount from "./ProfileDetails/BankAccount";
 
 const Profile = () => {
-  const role =sessionStorage.getItem("role")
+  const role = sessionStorage.getItem("role");
   return (
     <>
-      <div className="myProfile" style={{}}>
-        <Tabs defaultActiveKey="1" className="tabs">
+      <div className="myProfile">
+        <Tabs defaultActiveKey="1" className="myProfileTabs">
           <Tabs.TabPane tab="Personal" key="1">
             <Personal></Personal>
           </Tabs.TabPane>

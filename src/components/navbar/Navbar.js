@@ -16,6 +16,8 @@ import CompanyProContext from "../../contexts/CompanyProContext";
 // ---------------------------------------------------------------------
 
 const Navbar = () => {
+  const isHr = sessionStorage.getItem("role");
+
   const [startTime, setStartTime] = useState();
   const [isRunning, setIsRunning] = useState(false);
   const [activePage, setActivePage] = useState("/DashBoard");
@@ -119,16 +121,16 @@ const Navbar = () => {
         background: "#FF002A",
         color: "white",
         display: "inline-block",
-        width: "200px",
+        width: "150px",
         borderRadius: "5px",
         border: "1px solid white",
       }
     : {
         padding: "1px",
-        background: "skyblue",
+        background: "#3ab8eb",
         color: "white",
         display: "inline-block",
-        width: "200px",
+        width: "150px",
         borderRadius: "5px",
         border: "1px solid white",
       };
@@ -148,9 +150,9 @@ const Navbar = () => {
   const onMouseLeave = (event) => {
     if (isRunning) {
       event.target.style.background = "skyblue";
-      setButtonText("");
+      setButtonText("Web Clock In");
     } else {
-      setButtonText("Web Clock In ");
+      setButtonText("Web Clock In");
       event.target.style.background = "#FF002A";
     }
   };
@@ -209,17 +211,20 @@ const Navbar = () => {
         >
           {/* {`${ctime.hrs}:${ctime.min}:${ctime.sec}`} */}
         </div>
-        <button
-          style={buttonStyle}
-          onClick={handleClock}
-          onMouseLeave={onMouseLeave}
-          onMouseEnter={onMouseEnter}
-        >
-          {buttonText ? buttonText : ""} <br />
-          {clockinfo && isRunning
-            ? moment.utc(clockTime * 1000).format("HH:mm:ss")
-            : ""}
-        </button>
+        {isHr == "super" ? null : (
+          <button
+            style={buttonStyle}
+            onClick={handleClock}
+            onMouseLeave={onMouseLeave}
+            onMouseEnter={onMouseEnter}
+          >
+            {buttonText ? buttonText : ""} <br />
+            {clockinfo && isRunning
+              ? moment.utc(clockTime * 1000).format("HH:mm:ss")
+              : ""}
+          </button>
+        )}
+
         <div className="image">
           <div className="item">
             <img

@@ -11,12 +11,9 @@ import moment from "moment";
 import "../style/leave.css";
 import checkedIcon from "../images/checkmark.png"
 import rejectIcon from "../images/rejected.png"
-
 const Notification = (props) => {
-
     const dataSource = props.data.filter(data => data.status == "Pending")
     let value = '';
-
     const Bbb = () => {
         return (
             <Input
@@ -25,7 +22,6 @@ const Notification = (props) => {
             />
         );
     };
-
     const onApproveLeave = (record) => {
         Modal.confirm({
             title: `Are you sure, you want to approve Leave of ${record?.name || ''}!`,
@@ -34,11 +30,8 @@ const Notification = (props) => {
             onOk: () => {
                 LeaveContext.approveLeave(record.id, record.name)
                     .then(response => {
-                        console.log(response);
                     })
                     .catch(error => {
-                        console.log(error.message);
-
                     })
             },
         });
@@ -53,18 +46,13 @@ const Notification = (props) => {
             onOk: () => {
                 LeaveContext.rejectLeave(record.id, record.name, value)
                     .then(response => {
-                        console.log(response);
                         // getData();
                     })
                     .catch(error => {
-                        console.log(error.message);
-
                     })
             },
         });
     };
-
-
     const columns = [
         {
             title: 'Duration',
@@ -77,8 +65,6 @@ const Notification = (props) => {
               return a - b;
             },
             sortDirections: ["ascend", "descend"],
-
-
         },
         {
             title: 'Employee Name',
@@ -89,8 +75,6 @@ const Notification = (props) => {
                 return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
             },
             sortDirections: ["ascend", "descend"],
-
-
         },
         {
             title: 'Nature of Leave',
@@ -108,8 +92,6 @@ const Notification = (props) => {
         //         return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
         //     },
         //     sortDirections: ["ascend", "descend"],
-
-
         // },
         {
             title: 'No. Of Days',
@@ -120,8 +102,6 @@ const Notification = (props) => {
                 return a.len !== b.len ? (a.len < b.len ? -1 : 1) : 0;
             },
             sortDirections: ["ascend", "descend"],
-
-
         },
         {
             title: 'Reason',
@@ -138,9 +118,7 @@ const Notification = (props) => {
                 return (
                     <>
                         {
-
                             <>{
-
                             }
                                 <img
                                     style={{ color: "white", width: '20px', marginRight: 10 }}
@@ -152,7 +130,6 @@ const Notification = (props) => {
 
                                     }}
                                 />
-
                                 <img
                                     style={{ color: "white", width: '20px', marginRight: 10 }}
                                     src={rejectIcon}
@@ -161,7 +138,6 @@ const Notification = (props) => {
                                     onClick={() => {
                                         onRejectedLeave(record);
                                     }}
-
                                 />
                             </>
                         }
@@ -171,7 +147,6 @@ const Notification = (props) => {
         }
 
     ];
-
     return (
         <Row style={{
             display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',

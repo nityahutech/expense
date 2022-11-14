@@ -55,7 +55,6 @@ function Onboarding() {
     setFileName(fileName);
     setIsBigFile(false);
   });
-
   const onFinish = async (values) => {
     if (orgIdExists) {
       showNotification("error", "Error", "This Organization Code already exists!");
@@ -87,8 +86,6 @@ function Onboarding() {
       phone: values.phone,
       status: "Deactivated",
     };
-    console.log(values, fileName, valuesToservice, values.orgcode);
-
     CompanyProContext.createCompInfo(
       values.orgcode,
       valuesToservice,
@@ -114,16 +111,13 @@ function Onboarding() {
         showNotification("error", "Error", error.message);
       });
   };
-
   const showNotification = (type, msg, desc) => {
     notification[type]({
       message: msg,
       description: desc,
     });
   };
-
   useEffect(() => {
-    console.log(!isEditOrganization || !isModalVisible);
     if (!isEditOrganization || !isModalVisible) {
       getData();
     }
@@ -134,26 +128,19 @@ function Onboarding() {
   }, []);
 
   const changeCompStatus = (id, status) => {
-    console.log(id, status);
     CompanyProContext.updateCompInfo(id, {
       status: status == "Deactivated" ? "Activated" : "Deactivated",
     });
     getData();
   };
-
   const getData = async () => {
     let data = await CompanyProContext.getAllCompany();
     setAllCompany(data);
-    console.log(data);
   };
-
   const handleClick = (event) => {
-    console.log("imgRef:: ", imgRef);
     imgRef.current.click();
   };
-
   const handleChange = (event) => {
-    console.log(event.target.files[0]);
     if (!event) {
       return;
     }
@@ -162,25 +149,20 @@ function Onboarding() {
   };
 
   const validateOrgId = async (rule, value, callback) => {
-    console.log(rule, value);
     try {
       let exists = await CompanyProContext.checkOrgIdExists(value);
       if (exists) {
-        console.log("this id exists");
         setOrgIdExists(true);
         throw new Error("this id exists");
       }
       setOrgIdExists(false);
       // return exists;
     } catch (err) {
-      console.log(err, "yo this id exists");
       callback(err.message);
     }
     // CompanyProContext.checkOrgIdExists(value)
   };
-
   function checkFileSize(size, fileName) {
-    console.log({ size });
     if (Math.round(size / 1024) <= 200) {
       setFileName(fileName);
       setIsBigFile(false);
@@ -189,61 +171,49 @@ function Onboarding() {
       setIsBigFile(true);
     }
   }
-
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   const checkAlphabets = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   const checkCharacterRole = (event) => {
     if (!/^[a-zA-Z ().-]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   const checkAlphabetUpper = (event) => {
     if (!/^[A-Z]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   const showModal = (record) => {
     setModalData(record);
     setIsModalVisible(true);
   };
-
   const showOnboarding = (record) => {
     setModalData(record);
     setIsEditOrganization(true);
   };
-
   const cancelOnboarding = () => {
     setIsEditOrganization(false);
   };
-
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
   function onDelete(delItem) {
-    console.log(delItem);
     const filteredData = accessList.filter(
       (item) => item.mailid !== delItem.mailid
     );
     // CompanyProContext.deleteCompInfo(delItem.id)
     // .then((response) => {
-    //            console.log(response);
-    //            })
+   //            })
     setAccessList(filteredData);
   }
-
   async function addUseRole(values) {
     let exists = accessList.filter((user) => values.mailid == user.mailid);
     if (
@@ -256,13 +226,9 @@ function Onboarding() {
       return;
     }
     setAccessList([...accessList, values]);
-    console.log([...accessList, values]);
     form2.resetFields();
     setAddAccess(false);
-    // setAccessList([...accessList, newAccess]);
-    // setNewAccess({ userole: "", name: "", mailid: "", phone: "" });
   }
-
   const columns = [
     {
       title: "Code",
@@ -287,9 +253,7 @@ function Onboarding() {
       key: "status",
       dataIndex: "status",
       width: 140,
-
       // responsive: ["md"],
-
       render: (_, { status }) => getStatusUi(status),
     },
     {
@@ -298,9 +262,7 @@ function Onboarding() {
       dataIndex: "action",
       width: 130,
       align: "center",
-
       render: (_, record) => {
-        console.log("recore", record, record.status == "Deactivated");
         return (
           <>
             <Row gutter={[0, 0]}>
@@ -425,7 +387,6 @@ function Onboarding() {
     setIsBigFile(false);
     setFileName(null);
   }
-
   return (
     <>
       {/* <div className="main"> */}
@@ -458,7 +419,6 @@ function Onboarding() {
                 Organization Details
               </div>
               <Divider />
-
               <Table
                 className="tableTab"
                 columns={columns}
@@ -495,7 +455,6 @@ function Onboarding() {
                   </Modal>
                 </Col>
               </Row>
-
               <Modal
                 className="viewModal"
                 destroyOnClose

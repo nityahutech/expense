@@ -56,7 +56,6 @@ class PolicyContext {
                 id: doc.id
             };
         });
-        console.log(req)
         return req;
     };
 

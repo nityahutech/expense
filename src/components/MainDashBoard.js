@@ -10,46 +10,73 @@ import Expenses from "../images/Expenses.png";
 import Myprofile from "../images/Myprofile.png";
 import Companyprofile from "../images/companyvision.png";
 import Settings from "../images/Settings.png";
-import Organization from "../images/organizationLogoNew.png"
+import Organization from "../images/organizationLogoNew.png";
 import { Link } from "react-router-dom";
 function MainDashBoard() {
   const isHr = sessionStorage.getItem("role");
+
   const organizationcon = () => {
-    return(
+    return (
       <Link to="/Organization/Onboarding">
-        <Card
-          bordered={false}
-          hoverable={true}
-          style={{ 
-            fontWeight: "600", 
-            fontSize: "20px", 
-            letterSpacing: "1px",
-            borderRadius: "15px",
-          }}
-        >
-          <img style={{ width: "90px" }} alt="example" src={Organization} />
-          Organization
-        </Card>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Card
+            bordered={false}
+            hoverable={true}
+            style={{
+              fontWeight: "600",
+              fontSize: "20px",
+              letterSpacing: "1px",
+              borderRadius: "15px",
+              width: "250px",
+              padding: "10px",
+            }}
+          >
+            <img
+              style={{
+                width: "80%",
+                backgroundColor: "#dce1e3",
+                borderRadius: "5px",
+                padding: "10px",
+              }}
+              alt="example"
+              src={Organization}
+            />
+            <span style={{ paddingTop: "10px" }}>Organization</span>
+          </Card>
+        </div>
       </Link>
-    )
+    );
   };
 
   const attendanceIcon = () => {
     return (
       <Link to="/Attendance">
-        <Card
-          bordered={false}
-          hoverable={true}
-          style={{ 
-            fontWeight: "600", 
-            fontSize: "20px", 
-            letterSpacing: "1px",
-            borderRadius: "15px",
-          }}
-        >
-          <img style={{ width: "90px" }} alt="example" src={Attendancelog} />
-          Attendance
-        </Card>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Card
+            bordered={true}
+            hoverable={true}
+            style={{
+              fontWeight: "600",
+              fontSize: "20px",
+              letterSpacing: "1px",
+              borderRadius: "15px",
+              width: "250px",
+              padding: "10px",
+            }}
+          >
+            <img
+              style={{
+                width: "80%",
+                backgroundColor: "#dce1e3",
+                borderRadius: "5px",
+                padding: "10px",
+              }}
+              alt="example"
+              src={Attendancelog}
+            />
+            <span style={{ paddingTop: "10px" }}>Attendance</span>
+          </Card>
+        </div>
       </Link>
     );
   };
@@ -57,14 +84,32 @@ function MainDashBoard() {
   const leaveIcon = () => {
     return (
       <Link to="/Leave">
-        <Card
-          bordered={false}
-          hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px",borderRadius: "15px", }}
-        >
-          <img style={{ width: "90px" }} alt="example" src={leaveicon} />
-          Leave
-        </Card>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Card
+            bordered={true}
+            hoverable={true}
+            style={{
+              fontWeight: "600",
+              fontSize: "20px",
+              letterSpacing: "1px",
+              borderRadius: "15px",
+              width: "250px",
+              padding: "10px",
+            }}
+          >
+            <img
+              style={{
+                width: "80%",
+                backgroundColor: "#dce1e3",
+                borderRadius: "5px",
+                padding: "10px",
+              }}
+              alt="example"
+              src={leaveicon}
+            />
+            <span style={{ paddingTop: "10px" }}>Leave</span>
+          </Card>
+        </div>
       </Link>
     );
   };
@@ -72,14 +117,32 @@ function MainDashBoard() {
   const paySlipIcon = () => {
     return (
       // <Link to="/PaySlipPage/PaySlip">
+      <div style={{ display: "flex", justifyContent: "center" }}>
         <Card
           bordered={false}
           hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px",  borderRadius: "15px", }}
+          style={{
+            fontWeight: "600",
+            fontSize: "20px",
+            letterSpacing: "1px",
+            borderRadius: "15px",
+            width: "250px",
+            padding: "10px",
+          }}
         >
-          <img style={{ width: "90px" }} alt="example" src={Payslip} />
-          Pay Slip
+          <img
+            style={{
+              width: "80%",
+              backgroundColor: "#dce1e3",
+              borderRadius: "5px",
+              padding: "10px",
+            }}
+            alt="example"
+            src={Payslip}
+          />
+          <span style={{ paddingTop: "10px" }}>Appraisal</span>
         </Card>
+      </div>
       // </Link>
     );
   };
@@ -87,28 +150,64 @@ function MainDashBoard() {
   const payrollIcon = () => {
     return (
       // <Link to="/Employee/Payroll">
+      <div style={{ display: "flex", justifyContent: "center" }}>
         <Card
           bordered={false}
           hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px",  borderRadius: "15px", }}
+          style={{
+            fontWeight: "600",
+            fontSize: "20px",
+            letterSpacing: "1px",
+            borderRadius: "15px",
+            width: "250px",
+            padding: "10px",
+          }}
         >
-          <img style={{ width: "90px" }} alt="example" src={Payroll} />
-          Payroll Generator
+          <img
+            style={{
+              width: "80%",
+              backgroundColor: "#dce1e3",
+              borderRadius: "5px",
+              padding: "10px",
+            }}
+            alt="example"
+            src={Payroll}
+          />
+          <span style={{ paddingTop: "10px" }}>Payroll Generator</span>
         </Card>
+      </div>
       // </Link>
     );
   };
   const employeeIcon = () => {
     return (
       <Link to="/Employee/EmployeeList">
-        <Card
-          bordered={false}
-          hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px",  borderRadius: "15px", }}
-        >
-          <img style={{ width: "90px" }} alt="example" src={Employeelist} />
-          Employee List
-        </Card>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Card
+            bordered={false}
+            hoverable={true}
+            style={{
+              fontWeight: "600",
+              fontSize: "20px",
+              letterSpacing: "1px",
+              borderRadius: "15px",
+              width: "250px",
+              padding: "10px",
+            }}
+          >
+            <img
+              style={{
+                width: "80%",
+                backgroundColor: "#dce1e3",
+                borderRadius: "5px",
+                padding: "10px",
+              }}
+              alt="example"
+              src={Employeelist}
+            />
+            <span style={{ paddingTop: "10px" }}>Employee List</span>
+          </Card>
+        </div>
       </Link>
     );
   };
@@ -116,14 +215,32 @@ function MainDashBoard() {
   const expenseIcon = () => {
     return (
       <Link to="/Expense/ExpenseList">
-        <Card
-          bordered={false}
-          hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px",   borderRadius: "15px", }}
-        >
-          <img style={{ width: "90px" }} alt="example" src={Expenses} />
-          Expense
-        </Card>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Card
+            bordered={false}
+            hoverable={true}
+            style={{
+              fontWeight: "600",
+              fontSize: "20px",
+              letterSpacing: "1px",
+              borderRadius: "15px",
+              width: "250px",
+              padding: "10px",
+            }}
+          >
+            <img
+              style={{
+                width: "80%",
+                backgroundColor: "#dce1e3",
+                borderRadius: "5px",
+                padding: "10px",
+              }}
+              alt="example"
+              src={Expenses}
+            />
+            <span style={{ paddingTop: "10px" }}>Expense</span>
+          </Card>
+        </div>
       </Link>
     );
   };
@@ -131,14 +248,32 @@ function MainDashBoard() {
   const myProfileIcon = () => {
     return (
       <Link to="/Profile">
-        <Card
-          bordered={false}
-          hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px", borderRadius: "15px", }}
-        >
-          <img style={{ width: "90px" }} alt="example" src={Myprofile} />
-          My Profile
-        </Card>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Card
+            bordered={false}
+            hoverable={true}
+            style={{
+              fontWeight: "600",
+              fontSize: "20px",
+              letterSpacing: "1px",
+              borderRadius: "15px",
+              width: "250px",
+              padding: "10px",
+            }}
+          >
+            <img
+              style={{
+                width: "80%",
+                backgroundColor: "#dce1e3",
+                borderRadius: "5px",
+                padding: "10px",
+              }}
+              alt="example"
+              src={Myprofile}
+            />
+            <span style={{ paddingTop: "10px" }}>My Profile</span>
+          </Card>
+        </div>
       </Link>
     );
   };
@@ -146,14 +281,32 @@ function MainDashBoard() {
   const companyProfileIcon = () => {
     return (
       <Link to="/CompanyProfile">
-        <Card
-          bordered={false}
-          hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px", borderRadius: "15px", }}
-        >
-          <img style={{ width: "90px" }} alt="example" src={Companyprofile} />
-          Company Profile
-        </Card>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Card
+            bordered={false}
+            hoverable={true}
+            style={{
+              fontWeight: "600",
+              fontSize: "20px",
+              letterSpacing: "1px",
+              borderRadius: "15px",
+              width: "250px",
+              padding: "10px",
+            }}
+          >
+            <img
+              style={{
+                width: "80%",
+                backgroundColor: "#dce1e3",
+                borderRadius: "5px",
+                padding: "10px",
+              }}
+              alt="example"
+              src={Companyprofile}
+            />
+            <span style={{ paddingTop: "10px" }}>Company Profile</span>
+          </Card>
+        </div>
       </Link>
     );
   };
@@ -161,123 +314,120 @@ function MainDashBoard() {
   const settingIcon = () => {
     return (
       <Link to="/Settings">
-        <Card
-          bordered={false}
-          hoverable={true}
-          style={{ fontWeight: "600", fontSize: "20px", letterSpacing: "1px", borderRadius: "15px", }}
-        >
-          <img style={{ width: "90px" }} alt="example" src={Settings} />
-          Setting
-        </Card>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Card
+            bordered={false}
+            hoverable={true}
+            style={{
+              fontWeight: "600",
+              fontSize: "20px",
+              letterSpacing: "1px",
+              borderRadius: "15px",
+              width: "250px",
+              padding: "10px",
+            }}
+          >
+            <img
+              style={{
+                width: "80%",
+                backgroundColor: "#dce1e3",
+                borderRadius: "5px",
+                padding: "10px",
+              }}
+              alt="example"
+              src={Settings}
+            />
+            <span style={{ paddingTop: "10px" }}>Setting</span>
+          </Card>
+        </div>
       </Link>
     );
   };
 
   return (
-    <div className="icon-container" >
-
+    <div className="icon-container">
       {isHr == "emp" ? (
         <>
-          <Row>
-            <Col xs={8} sm={8} md={8}></Col>
-            <Card style={{width:"25%"}}>
+          
               <Row gutter={[24, 24]}>
-                <Col xs={22} sm={15} md={24} className="hi">
+                <Col xs={22} sm={15} md={6} className="hi">
                   {attendanceIcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={24} className="hi">
+                <Col xs={22} sm={15} md={6} className="hi">
                   {leaveIcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={24} className="hi">
+                <Col xs={22} sm={15} md={6} className="hi">
                   {myProfileIcon()}
                 </Col>
 
-                <Col xs={22} sm={15} md={24} className="hi">
+                <Col xs={22} sm={15} md={6} className="hi">
                   {settingIcon()}
                 </Col>
-
               </Row>
-            </Card>
-          </Row>
         </>
       ) : null}
 
       {isHr == "hr" ? (
         <>
-          <Row>
-            <Col xs={4} sm={4} md={4}></Col>
-            <Card style={{width:"70%"}}>
-              <Row gutter={[24, 24]}>
-                <Col xs={24} sm={24} md={8} className="hi">
-                  {attendanceIcon()}
-                </Col>
+          <Row gutter={[12, 48]}>
+            <Col xs={24} sm={24} md={6} className="hi">
+              {attendanceIcon()}
+            </Col>
 
-                <Col xs={24} sm={24} md={8} className="hi">
-                  {leaveIcon()}
-                </Col>
+            <Col xs={24} sm={24} md={6} className="hi">
+              {leaveIcon()}
+            </Col>
 
-                <Col xs={24} sm={24} md={8} className="hi">
-                  {paySlipIcon()}
-                </Col>
+            <Col xs={24} sm={24} md={6} className="hi">
+              {paySlipIcon()}
+            </Col>
 
-                <Col xs={24} sm={24} md={8} className="hi">
-                  {payrollIcon()}
-                </Col>
+            <Col xs={24} sm={24} md={6} className="hi">
+              {payrollIcon()}
+            </Col>
 
-                <Col xs={24} sm={24} md={8} className="hi">
-                  {employeeIcon()}
-                </Col>
+            <Col xs={24} sm={24} md={6} className="hi">
+              {employeeIcon()}
+            </Col>
 
-                <Col xs={24} sm={24} md={8} className="hi">
-                  {expenseIcon()}
-                </Col>
+            <Col xs={24} sm={24} md={6} className="hi">
+              {expenseIcon()}
+            </Col>
 
-                <Col xs={24} sm={24} md={8} className="hi">
-                  {myProfileIcon()}
-                </Col>
+            <Col xs={24} sm={24} md={6} className="hi">
+              {myProfileIcon()}
+            </Col>
 
-                <Col xs={22} sm={15} md={8} className="hi">
-                  {companyProfileIcon()}
-                </Col>
+            <Col xs={24} sm={24} md={6} className="hi">
+              {companyProfileIcon()}
+            </Col>
 
-                <Col xs={22} sm={15} md={8} className="hi">
-                  {settingIcon()}
-                </Col>
-              </Row>
-            </Card>
+            {/* <Col xs={22} sm={15} md={6} className="hi">
+              {settingIcon()}
+            </Col> */}
           </Row>
         </>
       ) : null}
 
       {isHr == "super" ? (
         <>
-          <Row>
-            <Col xs={8} sm={8} md={8}></Col>
-            <Card 
-            style={{width:"25%"}}
-            >
-              <Row gutter={[24, 24]}>
+          <Row gutter={[24, 24]}>
+            <Col xs={22} sm={15} md={8} className="hi">
+              {myProfileIcon()}
+            </Col>
 
-              <Col xs={22} sm={15} md={24} className="hi">
-                  {myProfileIcon()}
-                </Col>
+            <Col xs={22} sm={15} md={8} className="hi">
+              {organizationcon()}
+            </Col>
 
-                <Col xs={22} sm={15} md={24} className="hi">
-                  {organizationcon()}
-                </Col>
-
-                <Col xs={22} sm={15} md={24} className="hi">
-                  {settingIcon()}
-                </Col>
-               
-              </Row>
-            </Card>
+            <Col xs={22} sm={15} md={8} className="hi">
+              {settingIcon()}
+            </Col>
           </Row>
         </>
       ) : null}
-
     </div>
   );
 }

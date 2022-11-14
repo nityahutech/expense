@@ -97,11 +97,7 @@ class LeaveContext {
         console.log(records, leavedays)
         records.forEach((rec) => {
             if (rec.status == "Approved") {
-                let dur = rec.dateCalc.length
-                if (dur === 1 && rec.slot != 'Full Day') {
-                    dur = 0.5;
-                }
-                leavedays[rec.nature] -= dur;
+                leavedays[rec.nature] -= rec.len;
             }
         })
         return leavedays

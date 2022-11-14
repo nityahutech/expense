@@ -34,7 +34,7 @@ const Leave = () => {
   const [form1] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const isHr = sessionStorage.getItem("role") === "hr" ? true : false;
-  const isMgr = sessionStorage.getItem("isMgr");
+  const isMgr = JSON.parse(sessionStorage.getItem("isMgr"));
   const [leavedays, setLeaveDays] = useState(null); //leave nature & total in obj
   const [totaldays, setTotalDays] = useState(null); //leave nature & taken in obj
   const [date, setDate] = useState(moment()); //date for calendar

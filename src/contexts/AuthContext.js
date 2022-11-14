@@ -10,6 +10,7 @@ import { signInWithEmailAndPassword,
 } from "@firebase/auth"
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import EmpInfoContext from "./EmpInfoContext";
+import CompanyProContext from "./CompanyProContext";
 
 const AuthContext = React.createContext()
 
@@ -23,21 +24,33 @@ export function AuthProvider({ children }) {
   const [role, setRole] = useState();
   const [compId, setCompId] = useState();
   const [isMgr, setIsMgr] = useState();
+  const [isHr, setIsHr] = useState();
+  const [isLead, setIsLead] = useState();
 
-  async function getUserData(user) {
+  function getUserData(user) {
     if (!user) { 
       return; 
     }
-    let res = await getDoc(doc(db, 'users', user.uid))
-    let rec = res.data()
-    sessionStorage.setItem("role", rec.role)
-    sessionStorage.setItem("compId", rec.compId)
-    setCompId(rec?.compId)
-    setRole(rec?.role)
-    let empRecord = await EmpInfoContext.getEduDetails(user.uid);
-    console.log(empRecord)
-    sessionStorage.setItem("isMgr", empRecord?.isManager);
-    setIsMgr(empRecord?.isManager)   
+    let empdoc = getDoc(doc(db, 'users', user.uid)).then((res) => {
+      let rec = res.data()
+      console.log(rec)
+      sessionStorage.setItem("role", rec?.role)
+      sessionStorage.setItem("compId", rec?.compId)
+      setCompId(rec?.compId)
+      setRole(rec?.role)
+      CompanyProContext.getCompanyProfile(rec?.compId).then((rec) => {
+        sessionStorage.setItem("logo", rec?.logo)
+      })
+    })
+    let empRecord = EmpInfoContext.getEduDetails(user.uid).then((rec) => {
+      sessionStorage.setItem("isMgr", rec?.isManager);
+      sessionStorage.setItem("isHr", rec?.isHr);
+      sessionStorage.setItem("isLead", rec?.isLead);
+      setIsMgr(rec?.isManager)
+      setIsHr(rec?.isHr)
+      setIsLead(rec?.isLead)
+    })
+    console.log(empdoc, empRecord)
   }
 
   function login(email, password) {
@@ -50,6 +63,9 @@ export function AuthProvider({ children }) {
     sessionStorage.setItem("role", null)
     sessionStorage.setItem("compId", null)
     sessionStorage.setItem("isMgr", null)
+    sessionStorage.setItem("isHr", null);
+    sessionStorage.setItem("isLead", null);
+    sessionStorage.setItem("logo", null);
     return signOut(auth)
   }
 
@@ -89,6 +105,8 @@ export function AuthProvider({ children }) {
     currentUser,
     role,
     isMgr,
+    isHr,
+    isLead,
     login,
     logout,
     resetPassword,

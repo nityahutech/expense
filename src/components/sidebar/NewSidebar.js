@@ -27,12 +27,12 @@ const NewSidebar = (props) => {
     <Layout className="sidelayout">
       <Sider
         breakpoint="lg"
-        style={{ 
+        style={{
           backgroundColor: "#05445E",
         }}
         collapsedWidth="0"
-        onBreakpoint={(broken) => {}}
-        onCollapse={(collapsed, type) => {}}
+        onBreakpoint={(broken) => { }}
+        onCollapse={(collapsed, type) => { }}
       >
         <Menu
           defaultOpenKeys={props.activeSubMenu || []}
@@ -43,7 +43,7 @@ const NewSidebar = (props) => {
             height: "100vh",
           }}
         >
-          <div className="sidebarTittle" style={{height:"auto"}}>
+          <div className="sidebarTittle" style={{ height: "auto" }}>
             <img
               style={{
                 background: "#05445E",
@@ -67,131 +67,135 @@ const NewSidebar = (props) => {
             <p className="sideFont">Home</p>
             <NavLink to="/DashBoard" />
           </Menu.Item>
-          { role == "super" ? (
+          {role == "super" ? (
             <Menu.SubMenu
-            style={{
-              width: "100%",
-              fontSize: '13px',
-                  fontWeight: '600',
-                  color: '#ffffff',
-            }}
-            icon={
-              <img
-                style={{ color: "white" }}
-                src={Organization}
-                alt="organization"
-                className="Dash"
-              />
-            }
-            key="sub5"
-            title="Organization"
-            mode="inline"
-          >
+              style={{
+                width: "100%",
+                fontSize: '13px',
+                fontWeight: '600',
+                color: '#ffffff',
+              }}
+              icon={
+                <img
+                  style={{ color: "white" }}
+                  src={Organization}
+                  alt="organization"
+                  className="Dash"
+                />
+              }
+              key="sub5"
+              title="Organization"
+              mode="inline"
+            >
+              <Menu.Item
+                icon={
+                  <img
+                    src={dot}
+                    alt="onboarding"
+                    className="dot"
+                  />
+                }
+                key="31"
+              >
+                <p className="sideFont">Onboarding</p>
+                <NavLink to="/Organization/Onboarding" />
+              </Menu.Item>
+            </Menu.SubMenu>
+          ) : null}
+          {role == "hr" ? (
             <Menu.Item
               icon={
                 <img
-                  src={dot}
-                  alt="onboarding"
-                  className="dot"
+                  style={{ color: "white" }}
+                  src={CompanyProfile}
+                  alt="profile"
+                  className="Dash"
                 />
               }
-              key="31"
+              key="32"
             >
-              <p className="sideFont">Onboarding</p>
-              <NavLink to="/Organization/Onboarding" />
+              <p className="sideFont">Company Profile</p>
+              <NavLink to="/CompanyProfile" />
             </Menu.Item>
-          </Menu.SubMenu>
           ) : null}
-          { role == "hr" ? (
-            <Menu.Item
-            icon={
-              <img
-                style={{ color: "white" }}
-                src={CompanyProfile}
-                alt="profile"
-                className="Dash"
-              />
-            }
-            key="32"
-          >
-            <p className="sideFont">Company Profile</p>
-            <NavLink to="/CompanyProfile" />
-          </Menu.Item>
-          ) : null}
-          { role != "super" ?(
+          {role != "super" ? (
             <>
-            <Menu.Item
-              className="arrow"
-              icon={
-                <img
-                  src={SmallAttd}
-                  alt="profile"
-                  style={{width: "21px",
-                  marginLeft: "-5px",}}
-                />
-              }
-              key="6"
-            >
-              <p className="sideFont">Attendance</p>
-              <NavLink to="/Attendance" />
-            </Menu.Item>
-            <Menu.Item
-              
-              icon={
-                <img
-                  src={LeaveIcon}
-                  alt="profile"
-                  className="dot"
-                  style={{width: "32px",
-                    marginLeft: "-9px",}}
-                />
-              }
-              key="7"
-            >
-              <p className="leaveletter">Leave</p>
-              <NavLink to="/Leave" />
-            </Menu.Item>
-            </>
-            ): null}
-            
-            {role == "hr" ? (
+              <Menu.Item
+                className="arrow"
+                icon={
+                  <img
+                    src={SmallAttd}
+                    alt="profile"
+                    style={{
+                      width: "21px",
+                      marginLeft: "-5px",
+                    }}
+                  />
+                }
+                key="6"
+              >
+                <p className="sideFont">Attendance</p>
+                <NavLink to="/Attendance" />
+              </Menu.Item>
+              <Menu.Item
 
-          <Menu.SubMenu
-            style={{
-              width: "100%",
-              fontSize: '13px',
-                  fontWeight: '600',
-                  color: '#ffffff',
-            }}
-            icon={
-              <img
-                style={{ color: "white" }}
-                src={empIcon}
-                alt="profile"
-                className="Dash"
-              />
-            }
-            key="sub2"
-            title="Employees"
-            mode="inline"
-          >
-                <Menu.Item
-                  className="arrow"
-                  icon={<img src={dot} alt="profile" className="dot" />}
-                  key="8"
-                >
-                 <p className="sideFont">Add Employee</p> 
-                  <NavLink to="/Employee/AddEmployee" />
-                </Menu.Item>
-                <Menu.Item
-                  className="arrow"
-                  icon={<img src={dot} alt="profile" className="dot" />}
-                  key="9"
-                >
-                  Employee List
-                  <NavLink to="/Employee/EmployeeList" />
-                </Menu.Item>
-                {/* <Menu.Item
+                icon={
+                  <img
+                    src={LeaveIcon}
+                    alt="profile"
+                    className="dot"
+                    style={{
+                      width: "32px",
+                      marginLeft: "-9px",
+                    }}
+                  />
+                }
+                key="7"
+              >
+                <p className="leaveletter">Leave</p>
+                <NavLink to="/Leave" />
+              </Menu.Item>
+            </>
+          ) : null}
+
+          {role == "hr" ? (
+
+            <Menu.SubMenu
+              style={{
+                width: "100%",
+                fontSize: '13px',
+                fontWeight: '600',
+                color: '#ffffff',
+              }}
+              icon={
+                <img
+                  style={{ color: "white" }}
+                  src={empIcon}
+                  alt="profile"
+                  className="Dash"
+                />
+              }
+              key="sub2"
+              title="Employees"
+              mode="inline"
+            >
+              <Menu.Item
+                className="arrow"
+                icon={<img src={dot} alt="profile" className="dot" />}
+                key="8"
+              >
+                <p className="sideFont">Add Employee</p>
+                <NavLink to="/Employee/AddEmployee" />
+              </Menu.Item>
+              <Menu.Item
+                className="arrow"
+                icon={<img src={dot} alt="profile" className="dot" />}
+                key="9"
+              >
+                Employee List
+                <NavLink to="/Employee/EmployeeList" />
+              </Menu.Item>
+              {/* <Menu.Item
                   className="arrow"
                   icon={<img src={dot} alt="profile" className="dot" />}
                   key="25"
@@ -199,8 +203,8 @@ const NewSidebar = (props) => {
                   Hr PaySlip
                   <NavLink to="/Employee/Payroll" />
                 </Menu.Item> */}
-          </Menu.SubMenu>
-            ) : null}
+            </Menu.SubMenu>
+          ) : null}
           {/* <Menu.SubMenu
             className="arrow-div"
             style={{
@@ -230,41 +234,41 @@ const NewSidebar = (props) => {
           </Menu.SubMenu> */}
           {role == "hr" ? (
             <Menu.SubMenu
-                className="arrow-div"
-                style={{
-                  width: "100%",
-                  fontSize: '13px',
-                  fontWeight: '600',
-                  color: '#ffffff',
-                }}
-                icon={
-                  <img
-                    src={expenseIcon}
-                    alt="profile"
-                    className="Dash"
-                  />
-                }
-                key="sub1"
-                title="Expense"
-                mode="inline"
+              className="arrow-div"
+              style={{
+                width: "100%",
+                fontSize: '13px',
+                fontWeight: '600',
+                color: '#ffffff',
+              }}
+              icon={
+                <img
+                  src={expenseIcon}
+                  alt="profile"
+                  className="Dash"
+                />
+              }
+              key="sub1"
+              title="Expense"
+              mode="inline"
+            >
+              <Menu.Item
+                className="arrow"
+                icon={<img src={dot} alt="profile" className="dot" />}
+                key="2"
               >
-                <Menu.Item
-                  className="arrow"
-                  icon={<img src={dot} alt="profile" className="dot" />}
-                  key="2"
-                >
-                  <p className="sideFont">Add Expense</p>
-                  <NavLink to="/Expense/AddExpense" />
-                </Menu.Item>
-                <Menu.Item
-                  className="arrow"
-                  icon={<img src={dot} alt="profile" className="dot" />}
-                  key="3"
-                >
-                   <p className="sideFont">Expense List</p>
-                  <NavLink to="/Expense/ExpenseList" />
-                </Menu.Item>
-              </Menu.SubMenu>
+                <p className="sideFont">Add Expense</p>
+                <NavLink to="/Expense/AddExpense" />
+              </Menu.Item>
+              <Menu.Item
+                className="arrow"
+                icon={<img src={dot} alt="profile" className="dot" />}
+                key="3"
+              >
+                <p className="sideFont">Expense List</p>
+                <NavLink to="/Expense/ExpenseList" />
+              </Menu.Item>
+            </Menu.SubMenu>
           ) : null}
 
           <Menu.Item
@@ -280,21 +284,32 @@ const NewSidebar = (props) => {
             <p className="sideFont">My Profile</p>
             <NavLink to="/Profile" />
           </Menu.Item>
-        {/* </Menu>
-        <Menu
-          selectedKeys={props.activeMenu}
-          mode="inline"
-          style={{
-            padding: "0px",
-            position: "absolute",
-            bottom: "0" 
-            // height: "37%",
-            // display: "flex",
-            // flexDirection: "column",
-            // justifyContent: "flex-end"
-          }}
-        > */}
+          {/* </Menu>
+        // <Menu
+        //   selectedKeys={props.activeMenu}
+        //   mode="inline"
+        //   style={{
+        //     padding: "0px",
+        //     position: "absolute",
+        //     bottom: "0" 
+        //     // height: "37%",
+        //     // display: "flex",
+        //     // flexDirection: "column",
+        //     // justifyContent: "flex-end"
+        //   }}
+        // > */}
+
           <Menu.Item
+
+            style={{
+              padding: "20px",
+              position: "absolute",
+              bottom: "0",
+              zIndex: 100,
+              // backgroundColor: 'rgb(5, 68, 94)'
+
+
+            }}
             icon={
               <img
                 src={SettingIcon}

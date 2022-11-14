@@ -63,8 +63,15 @@ const Family = () => {
       >
         {/* -------------------------------------------form-1------------------------------------------ */}
         {editfamilymember === false ? (
-          <Row>
-            <Col xs={22} sm={15} md={8}>
+          <Row
+            className="Row-Card"
+            style={{
+              width: '75%',
+              margin: '10px',
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+            <Col span={24}>
               <Form
                 form={form}
                 labelcol={{
@@ -92,7 +99,7 @@ const Family = () => {
                     </Button>
                   }
                   style={{
-                    width: 800,
+                    width: '100%',
                     marginTop: 10,
                   }}
                 >
@@ -228,7 +235,8 @@ const Family = () => {
             </Col>
           </Row>
         ) : (
-          <Row>
+          <Row
+          >
             <Col xs={22} sm={15} md={8}>
               <Form
                 form={form}
@@ -482,7 +490,7 @@ const Family = () => {
                         type="primary"
                         htmlType="submit"
                         style={{ marginLeft: "10px" }}
-                        // onClick={() => onContactsFinish()}
+                      // onClick={() => onContactsFinish()}
                       >
                         <CheckOutlined />
                         SAVE
@@ -507,8 +515,16 @@ const Family = () => {
       >
         {/* -------------------------------------------form-2----------------------------------------- */}
         {editEmergency === false ? (
-          <Row>
-            <Col xs={22} sm={15} md={8}>
+          <Row
+            className="Row-Card"
+            style={{
+              width: '75%',
+              margin: '10px',
+              display: 'flex',
+              alignItems: 'center'
+            }}
+          >
+            <Col span={24}>
               <Form
                 form={form}
                 labelcol={{
@@ -539,7 +555,7 @@ const Family = () => {
                     </Button>
                   }
                   style={{
-                    width: 800,
+                    width: '100%',
                     marginTop: 10,
                   }}
                 >
@@ -639,8 +655,15 @@ const Family = () => {
             </Col>
           </Row>
         ) : (
-          <Row>
-            <Col xs={22} sm={15} md={8}>
+          <Row
+            className="Row-Card"
+            style={{
+              width: '75%',
+              margin: '10px',
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+            <Col span={24}>
               <Form
                 form={form}
                 labelcol={{
@@ -659,7 +682,7 @@ const Family = () => {
                   title="EMERGENCY CONTACTS"
                   className="familyCard"
                   style={{
-                    width: 800,
+                    width: '100%',
                     marginTop: 10,
                   }}
                 >
@@ -840,7 +863,7 @@ const Family = () => {
                         type="primary"
                         htmlType="submit"
                         style={{ marginLeft: "10px" }}
-                        // onClick={() => onEmergencyFinish()}
+                      // onClick={() => onEmergencyFinish()}
                       >
                         <CheckOutlined />
                         SAVE

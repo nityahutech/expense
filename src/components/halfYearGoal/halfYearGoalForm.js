@@ -118,12 +118,12 @@ const HalfYearGoalForm = (props) => {
 
     // all options, also coming from json
     const options = [
-        { label: "Taking Interview,", value: "interview" },
-        { label: "Refering friends", value: "friends" },
-        { label: " Mentoring", value: "mentoring" },
-        { label: " Walkin involvement", value: "involvement" },
-        { label: " Creating knowledge repositorys", value: "knowledge" },
-        { label: "  Implementing best practices", value: "practices" },
+        { label: "Taking Interview,", value: "Taking Interview" },
+        { label: "Refering friends", value: "Refering friends" },
+        { label: " Mentoring", value: "Mentoring" },
+        { label: " Walkin involvement", value: "Walkin involvement" },
+        { label: " Creating knowledge repositorys", value: "Creating knowledge repositorys" },
+        { label: "  Implementing best practices", value: "Implementing best practices" },
         { label: "  Others", value: "others" }
     ];
 
@@ -134,11 +134,11 @@ const HalfYearGoalForm = (props) => {
 
     // all options, also coming from json
     const optionsTwo = [
-        { label: "Certifications,", value: "certifications" },
-        { label: " Soft skills", value: "soft" },
-        { label: " Interpersonal skills", value: "interpersonal" },
-        { label: "  learning new technical skills", value: "technical" },
-        { label: "  Others", value: "otherstwo" }
+        { label: "Certifications,", value: "Certifications" },
+        { label: " Soft skills", value: "Soft skills" },
+        { label: " Interpersonal skills", value: "Interpersonal skills" },
+        { label: "  learning new technical skills", value: "learning new technical skills" },
+        { label: "  Others", value: "others" }
 
     ];
 

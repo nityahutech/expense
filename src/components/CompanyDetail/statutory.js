@@ -291,318 +291,332 @@ const Statutory = () => {
 
   return (
     <>
-    
-      <Row>
-        <Col xs={22} sm={15} md={5}></Col>
-        <Col xs={22} sm={15} md={8} >
-          <Form
-            labelcol={{
-              span: 4,
-            }}
-            wrappercol={{
-              span: 14,
-            }}
-            initialValues={{
-              remember: true,
-            }}
-            autoComplete="off"
-            onFinish={onFinish}
-          >
-            <Card
-              title=" COMPANY ID"
-              style={{ marginTop: "1rem", width: 800 }}
-              className="companyCard"
-              // className="card1"
-              extra={
-                <>
-                  {editContent === false ? (
-                    <Button
-                      type="text"
-                      style={{ color: "#4ec0f1" }}
-                      onClick={() => showEditContent(!editContent)}
-                    >
-                      <EditFilled />
-                    </Button>
-                  ) : null}
-                </>
-              }
+      <div
+        className="personalCardDiv"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Row>
+          <Col xs={22} sm={15} md={8} >
+            <Form
+              labelcol={{
+                span: 4,
+              }}
+              wrappercol={{
+                span: 14,
+              }}
+              initialValues={{
+                remember: true,
+              }}
+              autoComplete="off"
+              onFinish={onFinish}
             >
-              <Row gutter={[48, 8]}>
-                <Col xs={22} sm={15} md={8}>
-                  <div>
-                    <div className="div-discription">Entity Type</div>
+              <Card
+                title=" COMPANY ID"
+                style={{ marginTop: "1rem", width: 800 }}
+                className="companyCard"
+                // className="card1"
+                extra={
+                  <>
                     {editContent === false ? (
-                      <div>{data.entityType ? data.entityType : "-"}</div>
-                    ) : (
-                      <Form.Item
-                        initialValue={data ? data.entityType : null}
-                        name="entityType"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter Company Name",
-                            type: "name",
-                          },
-                          {
-                            pattern: /^[a-zA-Z\s]*$/,
-                            message: "Please enter Valid Company Name",
-                          },
-                        ]}
+                      <Button
+                        type="text"
+                        style={{ color: "#4ec0f1" }}
+                        onClick={() => showEditContent(!editContent)}
                       >
-                        <Input
-                          type="CompamyName"
-                          required
-                          placeholder="Enter Comapany Name"
-                          bordered={false}
-                          style={{
-                            width: "100%",
-                            borderBottom: "1px solid #ccc ",
-                            paddingLeft: "0px",
-                            marginTop: "10px",
-                          }}
-                        />
-                        {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
-                      </Form.Item>
-                    )}
-                  </div>
-                </Col>
+                        <EditFilled />
+                      </Button>
+                    ) : null}
+                  </>
+                }
+              >
+                <Row gutter={[48, 8]}>
+                  <Col xs={22} sm={15} md={8}>
+                    <div>
+                      <div className="div-discription">Entity Type</div>
+                      {editContent === false ? (
+                        <div>{data.entityType ? data.entityType : "-"}</div>
+                      ) : (
+                        <Form.Item
+                          initialValue={data ? data.entityType : null}
+                          name="entityType"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter Company Name",
+                              type: "name",
+                            },
+                            {
+                              pattern: /^[a-zA-Z\s]*$/,
+                              message: "Please enter Valid Company Name",
+                            },
+                          ]}
+                        >
+                          <Input
+                            type="CompamyName"
+                            required
+                            placeholder="Enter Comapany Name"
+                            bordered={false}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                          {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
+                        </Form.Item>
+                      )}
+                    </div>
+                  </Col>
 
-                <Col xs={22} sm={15} md={8}>
-                  <div>
-                    <div className="div-discription">CIN</div>
-                    {editContent === false ? (
-                      <div>{data.cinNumber ? data.cinNumber : "-"}</div>
-                    ) : (
-                      <Form.Item
-                        initialValue={data ? data.cinNumber : null}
-                        name="cinNumber"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter Brand Name",
-                          },
-                          {
-                            pattern: /^[0-9A-Z\s]*$/,
-                            message: "Please enter Valid Brand Name",
-                          },
-                        ]}
-                      >
-                        <Input
-                          type="cinNumber"
-                          maxLength={21}
-                          required
-                          placeholder="Enter CIN Number"
-                          bordered={false}
-                          style={{
-                            width: "100%",
-                            borderBottom: "1px solid #ccc ",
-                            paddingLeft: "0px",
-                            marginTop: "10px",
-                          }}
-                        />
-                      </Form.Item>
-                    )}
-                  </div>
-                </Col>
+                  <Col xs={22} sm={15} md={8}>
+                    <div>
+                      <div className="div-discription">CIN</div>
+                      {editContent === false ? (
+                        <div>{data.cinNumber ? data.cinNumber : "-"}</div>
+                      ) : (
+                        <Form.Item
+                          initialValue={data ? data.cinNumber : null}
+                          name="cinNumber"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter Brand Name",
+                            },
+                            {
+                              pattern: /^[0-9A-Z\s]*$/,
+                              message: "Please enter Valid Brand Name",
+                            },
+                          ]}
+                        >
+                          <Input
+                            type="cinNumber"
+                            maxLength={21}
+                            required
+                            placeholder="Enter CIN Number"
+                            bordered={false}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                        </Form.Item>
+                      )}
+                    </div>
+                  </Col>
 
-                <Col xs={22} sm={15} md={8}>
-                  <div>
-                    <div className="div-discription">Date of Incorporation</div>
-                    {editContent === false ? (
-                      <div>{data.dateOfIncorp ? data.dateOfIncorp : "-"}</div>
-                    ) : (
-                      <Form.Item
-                        initialValue={data ? data.dateOfIncorp : null}
-                        name="dateOfIncorp"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter Website Name",
-                            type: "Website",
-                          },
-                          {
-                            pattern: /^[0-9/A-Za-z\s]*$/,
-                            message: "Please enter Valid Website Name",
-                          },
-                        ]}
-                      >
-                        <Input
-                          type="WebsiteName"
-                          required
-                          placeholder="Enter Website Name"
-                          bordered={false}
-                          style={{
-                            width: "100%",
-                            borderBottom: "1px solid #ccc ",
-                            paddingLeft: "0px",
-                            marginTop: "10px",
-                          }}
-                        />
-                        {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
-                      </Form.Item>
-                    )}
-                  </div>
-                </Col>
-              </Row>
-
-              <Row gutter={[48, 8]} style={{ marginTop: "5%" }}>
-                <Col xs={22} sm={15} md={8}>
-                  <div>
-                    <div className="div-discription">Company PAN</div>
-                    {editContent === false ? (
-                      <div>{data.compPan ? data.compPan : "-"}</div>
-                    ) : (
-                      <Form.Item
-                        initialValue={data ? data.compPan : null}
-                        name="compPan"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter Company PAN",
-                            type: "domain",
-                          },
-                          {
-                            pattern: /^[0-9A-Z\s]*$/,
-                            message: "Please enter Valid Company PAN",
-                          },
-                        ]}
-                      >
-                        <Input
-                          maxlength={10}
-                          type="DomainName"
-                          required
-                          placeholder="Enter Domain Name"
-                          bordered={false}
-                          style={{
-                            width: "100%",
-                            borderBottom: "1px solid #ccc ",
-                            paddingLeft: "0px",
-                            marginTop: "10px",
-                          }}
-                        />
-                        {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
-                      </Form.Item>
-                    )}
-                  </div>
-                </Col>
-
-                <Col xs={22} sm={15} md={8}>
-                  <div>
-                    <div className="div-discription">Company TAN</div>
-                    {editContent === false ? (
-                      <div>{data.compTan ? data.compTan : "-"}</div>
-                    ) : (
-                      <Form.Item
-                        initialValue={data ? data.compTan : null}
-                        name="compTan"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter Domain Name",
-                            type: "domain",
-                          },
-                          {
-                            pattern: /^[0-9A-Z\s]*$/,
-                            message: "Please enter Valid Domain Name",
-                          },
-                        ]}
-                      >
-                        <Input
-                          maxLength={10}
-                          type="DomainName"
-                          required
-                          placeholder="Enter Domain Name"
-                          bordered={false}
-                          style={{
-                            width: "100%",
-                            borderBottom: "1px solid #ccc ",
-                            paddingLeft: "0px",
-                            marginTop: "10px",
-                          }}
-                        />
-                        {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
-                      </Form.Item>
-                    )}
-                  </div>
-                </Col>
-
-                <Col xs={22} sm={15} md={8}>
-                  <div>
-                    <div className="div-discription">GST</div>
-                    {editContent === false ? (
-                      <div>{data.gst ? data.gst : "-"}</div>
-                    ) : (
-                      <Form.Item
-                        initialValue={data ? data.gst : null}
-                        name="gst"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter Domain Name",
-                            type: "domain",
-                          },
-                          {
-                            pattern: /^[0-9A-Z\s]*$/,
-                            message: "Please enter Valid Domain Name",
-                          },
-                        ]}
-                      >
-                        <Input
-                          maxLength={10}
-                          type="DomainName"
-                          required
-                          placeholder="Enter Domain Name"
-                          bordered={false}
-                          style={{
-                            width: "100%",
-                            borderBottom: "1px solid #ccc ",
-                            paddingLeft: "0px",
-                            marginTop: "10px",
-                          }}
-                        />
-                        {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
-                      </Form.Item>
-                    )}
-                  </div>
-                </Col>
-              </Row>
-              {editContent === true ? (
-                <Row
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "3%",
-                  }}
-                >
-                  <Button
-                    type="text"
-                    style={{ fontSize: 15 }}
-                    onClick={() => showEditContent(false)}
-                  >
-                    <CloseOutlined /> CANCEL
-                  </Button>
-                  <Col>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      style={{ marginLeft: "10px" }}
-                    >
-                      SAVE
-                    </Button>
+                  <Col xs={22} sm={15} md={8}>
+                    <div>
+                      <div className="div-discription">Date of Incorporation</div>
+                      {editContent === false ? (
+                        <div>{data.dateOfIncorp ? data.dateOfIncorp : "-"}</div>
+                      ) : (
+                        <Form.Item
+                          initialValue={data ? data.dateOfIncorp : null}
+                          name="dateOfIncorp"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter Website Name",
+                              type: "Website",
+                            },
+                            {
+                              pattern: /^[0-9/A-Za-z\s]*$/,
+                              message: "Please enter Valid Website Name",
+                            },
+                          ]}
+                        >
+                          <Input
+                            type="WebsiteName"
+                            required
+                            placeholder="Enter Website Name"
+                            bordered={false}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                          {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
+                        </Form.Item>
+                      )}
+                    </div>
                   </Col>
                 </Row>
-              ) : null}
-            </Card>
-          </Form>
-        </Col>
-      </Row>
 
+                <Row gutter={[48, 8]} style={{ marginTop: "5%" }}>
+                  <Col xs={22} sm={15} md={8}>
+                    <div>
+                      <div className="div-discription">Company PAN</div>
+                      {editContent === false ? (
+                        <div>{data.compPan ? data.compPan : "-"}</div>
+                      ) : (
+                        <Form.Item
+                          initialValue={data ? data.compPan : null}
+                          name="compPan"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter Company PAN",
+                              type: "domain",
+                            },
+                            {
+                              pattern: /^[0-9A-Z\s]*$/,
+                              message: "Please enter Valid Company PAN",
+                            },
+                          ]}
+                        >
+                          <Input
+                            maxlength={10}
+                            type="DomainName"
+                            required
+                            placeholder="Enter Domain Name"
+                            bordered={false}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                          {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
+                        </Form.Item>
+                      )}
+                    </div>
+                  </Col>
 
+                  <Col xs={22} sm={15} md={8}>
+                    <div>
+                      <div className="div-discription">Company TAN</div>
+                      {editContent === false ? (
+                        <div>{data.compTan ? data.compTan : "-"}</div>
+                      ) : (
+                        <Form.Item
+                          initialValue={data ? data.compTan : null}
+                          name="compTan"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter Domain Name",
+                              type: "domain",
+                            },
+                            {
+                              pattern: /^[0-9A-Z\s]*$/,
+                              message: "Please enter Valid Domain Name",
+                            },
+                          ]}
+                        >
+                          <Input
+                            maxLength={10}
+                            type="DomainName"
+                            required
+                            placeholder="Enter Domain Name"
+                            bordered={false}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                          {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
+                        </Form.Item>
+                      )}
+                    </div>
+                  </Col>
+
+                  <Col xs={22} sm={15} md={8}>
+                    <div>
+                      <div className="div-discription">GST</div>
+                      {editContent === false ? (
+                        <div>{data.gst ? data.gst : "-"}</div>
+                      ) : (
+                        <Form.Item
+                          initialValue={data ? data.gst : null}
+                          name="gst"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter Domain Name",
+                              type: "domain",
+                            },
+                            {
+                              pattern: /^[0-9A-Z\s]*$/,
+                              message: "Please enter Valid Domain Name",
+                            },
+                          ]}
+                        >
+                          <Input
+                            maxLength={10}
+                            type="DomainName"
+                            required
+                            placeholder="Enter Domain Name"
+                            bordered={false}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                          {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
+                        </Form.Item>
+                      )}
+                    </div>
+                  </Col>
+                </Row>
+                {editContent === true ? (
+                  <Row
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "3%",
+                    }}
+                  >
+                    <Button
+                      type="text"
+                      style={{ fontSize: 15 }}
+                      onClick={() => showEditContent(false)}
+                    >
+                      <CloseOutlined /> CANCEL
+                    </Button>
+                    <Col>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{ marginLeft: "10px" }}
+                      >
+                        SAVE
+                      </Button>
+                    </Col>
+                  </Row>
+                ) : null}
+              </Card>
+            </Form>
+          </Col>
+        </Row>
+        </div>
+
+        <div
+        className="personalCardDiv"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
       <Row>
-        <Col xs={22} sm={15} md={5}></Col>
         <Col xs={22} sm={15} md={8}>
       <Card className="tagsCard" style={{ marginTop: "1rem", width: "800px" }}>
         <Tabs defaultActiveKey="1" className="tabs">
+
           <Tabs.TabPane tab="Directors" key="1">
             <Form
               wrappercol={{
@@ -872,7 +886,7 @@ const Statutory = () => {
             
           </Tabs.TabPane>
 
-              <Tabs.TabPane tab="Auditors" key="2">
+          <Tabs.TabPane tab="Auditors" key="2">
                 <Card title="Auditors" bordered={false}>
                   <Row>
                     <Col xs={22} sm={22} md={22}>
@@ -1175,7 +1189,7 @@ const Statutory = () => {
                     </Col>
                   </Row>
                 </Card>
-              </Tabs.TabPane>
+          </Tabs.TabPane>
 
           <Tabs.TabPane tab="Company Secretary" key="3">
             <Card title="Company Secretary" bordered={false}>
@@ -1392,14 +1406,22 @@ const Statutory = () => {
               </Form>
             </Card>
           </Tabs.TabPane>
+
         </Tabs>
       </Card>
       </Col>
       </Row>
+      </div>
 
-
+      <div
+        className="personalCardDiv"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
       <Row>
-        <Col xs={24} sm={24} md={5} />
         <Col xs={24} sm={24} md={8}>
       <Card
         title="BANK ACCOUNT INFO"
@@ -1784,6 +1806,8 @@ const Statutory = () => {
       </Card>
       </Col>
       </Row>
+      </div>
+
     </>
   );
 };

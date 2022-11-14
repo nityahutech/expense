@@ -10,7 +10,7 @@ import { getUsers } from "../contexts/CreateContext";
 import "../style/EmployeeList.css";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 
-  function EmployeeList() {
+function EmployeeList() {
   const [modaldata, setmodaldata] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editedRecord, setEditedRecord] = useState(null);

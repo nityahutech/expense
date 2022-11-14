@@ -182,6 +182,16 @@ width: 90px;
 ::-webkit-scrollbar-thumb:hover {
   background: #189ab4;
 }
+
+.expenseTable .ant-table-thead>tr>th{
+  background:#1963A6;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+
 @media (max-width: 990px) {
   .addExpense.ant-btn-primary {
     background: #189ab4;

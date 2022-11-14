@@ -21,7 +21,10 @@ const { Sider } = Layout;
 
 
 const NewSidebar = (props) => {
+  const [collapsed, setCollapsed] = useState(true);
+
   const role = sessionStorage.getItem("role");
+
 
   return (
     <Layout className="sidelayout">
@@ -39,7 +42,7 @@ const NewSidebar = (props) => {
           selectedKeys={props.activeMenu}
           mode="inline"
           style={{
-            padding: "0px",
+            paddingBottom: "40px",
             height: "100vh",
           }}
         >
@@ -322,9 +325,27 @@ const NewSidebar = (props) => {
             <p className="sideFont">Settings</p>
             <NavLink to="/Settings" />
           </Menu.Item>
+
         </Menu>
+        {/* <div
+          style={{
+            padding: "20px",
+            position: "absolute",
+            bottom: "0",
+            zIndex: 100,
+            backgroundColor: 'rgb(5, 68, 94)'
+
+
+          }}
+
+        >
+          <p>dddd</p>
+
+        </div> */}
       </Sider>
+
     </Layout>
+
   );
 };
 

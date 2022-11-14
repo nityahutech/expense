@@ -42,6 +42,13 @@ margin-right: 15px;
     text-transform: uppercase;
 }
 
+.personalCardDiv:hover .personal {
+display: block !important;
+}
+
+.education:hover .personal {
+    display: block !important;
+    }
 
  
 

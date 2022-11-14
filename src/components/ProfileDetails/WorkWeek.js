@@ -3,6 +3,10 @@ import { Card, Table, Row, Col } from "antd";
 import "../../style/WorkWeek.css";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { useAuth } from "../../contexts/AuthContext";
+import Green from "../../images/green.png";
+import Red from "../../images/red.png";
+import Orange from "../../images/orange.png";
+
 const data = [
   {
     key: "1",
@@ -65,13 +69,13 @@ function WorkWeek() {
 
   useEffect(() => {
     getData();
-  }, [])
-  const{currentUser}=useAuth()
+  }, []);
+  const { currentUser } = useAuth();
 
   const getData = async () => {
-    let data=await EmpInfoContext.getEduDetails(currentUser.uid)
-    setDoj(data.doj?data.doj:null)
-  }
+    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+    setDoj(data.doj ? data.doj : null);
+  };
 
   const sharedOnCell = (_, index) => {
     if (index === 5) {
@@ -248,43 +252,42 @@ function WorkWeek() {
 
   return (
     <>
-      {/* <div
+      <div
         className="week"
         style={{
           display: "flex",
-          alignItems: "center",
+          // alignItems: "center",
           justifyContent: "center",
         }}
-      > */}
-      <Row>
-        <Col xs={24} sm={24} md={5}></Col>
-        <Col xs={24} sm={24} md={13}>
-        <Card className="workWeek">
-          <div style={{ background: "#fff" }}>
-            {" "}
-            <>
-              <div style={{ marginLeft: "2px", background: "#fff" }}>
-                <div className="header" style={{ marginLeft: "10px" }}>
-                  <h1>Saturday Sunday Off</h1>
-                  <h4>Description</h4>
-                  <p>
-                    This is a five days Work Week rule with Weekly Off set as
-                    Saturday and Sunday.
-                  </p>
-                  <h4>Effective Date</h4>
-                  <p> {doj}</p>
-                  {/* <hr style={{ marginRight: "21.7rem" }} /> */}
-                </div>
-                <h4 style={{ marginLeft: "10px" }}>Rule Settings1</h4>
-                <div
-                  style={{
-                    float: "right",
-                    display: "flex",
-                    alignItems: "baseline",
-                    marginRight: "17px",
-                  }}
-                >
-                  {/* <input
+      >
+        <Row>
+          {/* <Col xs={24} sm={24} md={6}></Col> */}
+          <Col xs={24} sm={24} md={24}>
+            <Card className="workWeek" style={{ display: "flex" }}>
+              <div style={{ background: "#fff" }}>
+                <>
+                  <div style={{ marginLeft: "2px", background: "#fff" }}>
+                    <div className="header" style={{ marginLeft: "10px" }}>
+                      <h1>Saturday Sunday Off</h1>
+                      <h4>Description</h4>
+                      <p>
+                        This is a five days Work Week rule with Weekly Off set
+                        as Saturday and Sunday.
+                      </p>
+                      <h4>Effective Date</h4>
+                      <p> {doj}</p>
+                      {/* <hr style={{ marginRight: "21.7rem" }} /> */}
+                    </div>
+                    <h4 style={{ marginLeft: "10px" }}>Rule Settings1</h4>
+                    <div
+                      style={{
+                        float: "right",
+                        display: "flex",
+                        alignItems: "baseline",
+                        marginRight: "17px",
+                      }}
+                    >
+                      {/* <input
                     checked="true"
                     type="checkbox"
                     style={{
@@ -293,94 +296,88 @@ function WorkWeek() {
                     }}
                   />
                   <p>Half Day</p> */}
-                </div>
+                    </div>
 
-                <div>
-                  <Table
-                    className="Table"
-                    columns={columns}
-                    dataSource={data}
-                    pagination={false}
-                    size="small"
-                    bordered
-                  />
-                </div>
-                <ul>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-evenly",
-                      marginTop: "10px",
-                      marginRight: "6rem",
-                    }}
-                  >
-                    <div
-                      style={{
-                        background: "#1fcb1f",
-                        width: "15px",
-                        height: "15px",
-                      }}
-                    >
-                      <li
+                    <div style={{ display: "flex" }}>
+                      <Table
+                        className="Table"
+                        columns={columns}
+                        dataSource={data}
+                        pagination={false}
+                        size="small"
+                        bordered
+                      />
+                    </div>
+
+                    <Row gutter={[8, 8]} style={{ marginLeft: "7px" }}>
+                      <Col
+                        xs={24}
+                        sm={24}
+                        md={6}
                         style={{
-                          paddingLeft: "15px",
-                          width: "100px",
                           display: "flex",
-                          justifyContent: "space-evenly",
-                          marginTop: "-3px ",
+                          justifyContent: "start",
+                          alignItems: "center",
                         }}
                       >
+                        <div
+                          style={{
+                            backgroundColor: "green",
+                            width: "15px",
+                            height: "15px",
+                            marginRight: "5px",
+                          }}
+                        ></div>
                         Working Day
-                      </li>
-                    </div>
-                    <div
-                      style={{
-                        background: "#da2828",
-                        width: "15px",
-                        height: "15px",
-                      }}
-                    >
-                      <li
+                      </Col>
+                      <Col
+                        xs={24}
+                        sm={24}
+                        md={6}
                         style={{
-                          paddingLeft: "6px",
-                          width: "100px",
                           display: "flex",
-                          justifyContent: "space-evenly",
-                          marginTop: "-3px ",
+                          justifyContent: "start",
+                          alignItems: "center",
                         }}
                       >
+                        <div
+                          style={{
+                            backgroundColor: "red",
+                            width: "15px",
+                            height: "15px",
+                            marginRight: "5px",
+                          }}
+                        ></div>
                         Weekly Off
-                      </li>
-                    </div>
-                    <div
-                      style={{
-                        background: "#ffc107",
-                        width: "15px",
-                        height: "15px",
-                      }}
-                    >
-                      <li
+                      </Col>
+                      <Col
+                        xs={24}
+                        sm={24}
+                        md={6}
                         style={{
-                          paddingRight: "8px",
-                          width: "100px",
                           display: "flex",
-                          justifyContent: "space-evenly",
-                          marginTop: "-3px ",
+                          justifyContent: "start",
+                          alignItems: "center",
                         }}
                       >
+                        <div
+                          style={{
+                            backgroundColor: "yellow",
+                            width: "15px",
+                            height: "15px",
+                            marginRight: "5px",
+                          }}
+                        ></div>
                         Half Day
-                      </li>
-                    </div>
+                      </Col>
+                    </Row>
                   </div>
-                </ul>
+                </>
               </div>
-            </>
-          </div>
-        </Card>
-        </Col>
-      </Row>
-
-      {/* </div> */}
+            </Card>
+          </Col>
+        </Row>
+      </div>
     </>
   );
 }

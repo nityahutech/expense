@@ -9,96 +9,64 @@ const HalfyearGoalPdf = (props) => {
     const [currentAppraisal, setCurrentAppraisal] = useState(props.appraisal);
     console.log('currentAppraisal', currentAppraisal)
     const docDefinition = {
+        background: {
+            alignment: 'center',
+            text: 'Humantech Solutions India Private Limited',
+            style: 'header',
+            fontSize: 16,
+            bold: true,
+            margin: [0, 0, 0, 10],
+        },
+
+        // function(page) {
+        //     if (page !== 0) {
+        //         return [
+
+
+        //         ];
+        //     }
+        // },
+
+        footer: function (currentPage, pageCount) { return currentPage.toString() + ' of ' + pageCount; },
+        header: function (currentPage,) {
+            // you can apply any logic and return any valid pdfmake element
+
+            return [
+                { text: currentAppraisal.empId, alignment: (currentPage) ? 'left' : 'right' },
+
+            ]
+        },
+        watermark: { text: 'Hutech', color: 'blue', opacity: 0.1, bold: true, italics: false },
+
+
         content: [
+
+
+
+
+
+            // {
+
+            //     image: 'data:image/png;base64,...encodedContent...'
+            // },
+
+
+
             {
-                alignment: 'center',
-                text: 'Humantech Solutions India Private Limited',
-                style: 'header',
-                fontSize: 23,
-                bold: true,
-                margin: [0, 10],
-            },
-            {
-                alignment: 'center',
-                text: 'Appraisal For Month Oct - 2022',
-                style: 'header',
-                fontSize: 23,
-                bold: true,
-                margin: [0, 10],
-            },
-            {
-                margin: [0, 0, 0, 10],
-                layout: {
-                    fillColor: function (rowIndex, node, columnIndex) {
-                        return (rowIndex % 2 === 0) ? '#ebebeb' : '#f5f5f5';
-                    }
-                },
+                style: 'tableExample',
                 table: {
-                    widths: ['25%', '25%', '25%', '25%',],
-                    heights: [10, 10, 10, 10],
+                    widths: ['20%', '20%', '20%', '20%', '20%',],
+                    margin: [0, 10, 0, 10],
+
                     body: [
-                        [
-                            {
-                                text: 'Employee Name :',
-                                // colSpan: 3,
-                                bold: true,
-                                fontSize: 9
-                            },
-                            {
-                                text: currentAppraisal.fname,
-                                fontSize: 9,
-                                bold: true,
-                            },
-                        ],
-                        [
-                            {
-                                text: 'Employee ID :',
-                                // colSpan: 3,
-                                bold: true,
-                                fontSize: 9
-                            },
-
-                            {
-                                text: currentAppraisal.empId,
-                                fontSize: 9,
-                                bold: true
-                            }
-                        ],
-
-                        [
-
-                            {
-                                text: 'Designation :',
-                                // colSpan: 3,
-                                bold: true,
-                                fontSize: 9
-                            },
-                            {
-                                text: currentAppraisal.designation,
-                                fontSize: 9,
-                                bold: true
-                            },
-
-
-                        ],
-                        [
-                            {
-                                text: 'Reporting Manager :',
-                                fontSize: 9,
-                                bold: true
-                            },
-
-                            {
-                                text: currentAppraisal.repManager,
-                                fontSize: 9,
-                                bold: true
-                            },
-
-
-                        ],
-                    ],
+                        ['Employee Name ', 'Employee ID ', 'Designation ', 'Reporting Manager ', 'Appraisal Month ',],
+                        [{ text: currentAppraisal.fname, italics: true, color: 'gray' }, { text: currentAppraisal.empId, italics: true, color: 'gray' }, { text: currentAppraisal.designation, italics: true, color: 'gray' }, { text: currentAppraisal.repManager, italics: true, color: 'gray' }, { text: currentAppraisal.quarter, italics: true, color: 'gray' }]
+                    ]
                 }
             },
+
+            { text: 'Rating :-', style: 'subheader', margin: [0, 20, 0, 8] },
+
             {
                 style: 'tableExample',
                 layout: {
@@ -158,7 +126,7 @@ const HalfyearGoalPdf = (props) => {
                             },
 
                             {
-                                text: (currentAppraisal.empProjectActivitiesRating + currentAppraisal.mgrProjectActivitiesRating) / 2,
+                                text: (parseInt(currentAppraisal.empProjectActivitiesRating, 10) + parseInt(currentAppraisal.mgrProjectActivitiesRating, 10)) / 2,
                                 fontSize: 9,
                                 bold: true
                             }
@@ -244,76 +212,105 @@ const HalfyearGoalPdf = (props) => {
 
                     ]
                 }
-            }
-        ]
+            },
+
+
+        ],
+
     };
+
 
     for (let i = 0; i < currentAppraisal.projectList.length; i++) {
         let currentProject = currentAppraisal.projectList[i]
         docDefinition.content.push(
+
+
+            { text: 'Projects :', style: 'subheader', margin: [0, 10, 0, 10] },
             {
-                text: 'Project Name : ',
-                fontSize: 12,
-                bold: true
+                style: 'tableExample',
+
+                table: {
+                    heights: 10,
+                    border: [true, false, false, false],
+                    widths: [150, '*',],
+                    margin: [0, 10, 0, 0],
+                    body: [
+                        ['Project Name :', currentProject.projectName],
+
+
+                    ]
+                }
             },
-            {
-                text: currentProject.projectName,
-                fontSize: 9,
-                bold: true
-            }
+
 
         )
         docDefinition.content.push(
+
             {
-                text: 'Project Description :',
-                fontSize: 12,
-                bold: true
+                style: 'tableExample',
+                table: {
+                    heights: 100,
+                    widths: [150, '*',],
+                    margin: [0, 10, 0, 0],
+                    body: [
+                        ['Project Description :', currentProject.projectDetail],
+
+
+                    ]
+                }
             },
-            {
-                text: currentProject.projectDetail,
-                fontSize: 9,
-                bold: true
-            }
+
 
         )
 
     }
 
     docDefinition.content.push(
+
+
+        { text: 'Employee Comments:-', style: 'subheader', margin: [0, 10, 0, 10] },
         {
-            text: 'Organizational Activities :',
-            fontSize: 12,
-            bold: true
+            style: 'tableExample',
+            table: {
+                // heights: function (row) {
+                //     let h = row * 25;
+                //     return h
+                // },
+                heights: 'auto',
+
+                widths: [150, '*',],
+                margin: [0, 10, 0, 0],
+                body: [
+                    ['Organizational Activities:', currentAppraisal.empOrganizationalCheckBox],
+                    [' Description:', currentAppraisal.organizationalActivitiesDetail],
+                    ['Personal Growth Activities :', currentAppraisal.empPersonalCheckBox],
+                    [' Description:', currentAppraisal.personalGrowthDetail],
+
+                ]
+            }
         },
+
+
+
+
+        { text: 'Manager FeedBack :-', style: 'subheader', pageBreak: 'before', margin: [0, 10, 0, 10] },
         {
-            text: currentAppraisal.organizationalActivitiesDetail,
-            fontSize: 9,
-            bold: true
+            style: 'tableExample',
+            table: {
+                heights: 100,
+                widths: [150, '*',],
+                margin: [0, 10, 0, 0],
+                body: [
+                    ['Manager Comments :', currentAppraisal.managerComment],
+
+
+                ]
+            }
         },
-        {
-            text: 'Personal Growth :',
-            fontSize: 12,
-            bold: true
-        },
-        {
-            text: currentAppraisal.personalGrowthDetail,
-            fontSize: 9,
-            bold: true
-        },
-        {
-            text: 'Manager Comments',
-            fontSize: 12,
-            bold: true
-        },
-        {
-            text: currentAppraisal.managerComment,
-            fontSize: 9,
-            bold: true
-        },
+
 
 
     )
-
 
 
 

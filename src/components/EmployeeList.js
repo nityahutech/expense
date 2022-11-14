@@ -20,7 +20,6 @@ function EmployeeList() {
   const [allEmployees, setAllEmployees] = useState([]);
   const [data, setData] = React.useState([]);
   const [disableItem, setDisableItem] = useState(false);
-
   window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 768 ? "" : "left")
   );
@@ -124,7 +123,6 @@ function EmployeeList() {
       key: "location",
       width: 150,
     },
-
     {
       title: "Earn Leave",
       dataIndex: "earnLeave",
@@ -156,7 +154,6 @@ function EmployeeList() {
       fixed: "right",
       align: "center",
       width: 120,
-
       render: (_, record) => {
         return (
           record.disabled === false && (
@@ -188,27 +185,20 @@ function EmployeeList() {
       },
     },
   ];
-
   useEffect(() => {
     getData();
   }, []);
-
   const showModal = (record) => {
     setmodaldata(record);
     setIsModalVisible(true);
   };
-
   const handleCancel = () => {
     setIsModalVisible(false);
-    // submit form data
   };
-
   const handleEditEmployee = (record) => {
     setEditedRecord(record);
   };
   async function getData() {
-    //hit api to get the employees
-    //set that employees to data state
     setLoading(true);
     const allData = await getUsers();
     let d = allData.docs.map((doc, i) => {
@@ -225,7 +215,6 @@ function EmployeeList() {
     setAllEmployees(d);
     setLoading(false);
   }
-
   const searchChange = (e) => {
     let search = e.target.value;
     // setFilterCriteria({ ...filterCriteria, search: search });
@@ -238,14 +227,12 @@ function EmployeeList() {
           ex?.designation?.toLowerCase()?.includes(search?.toLowerCase()) ||
           ex.gender?.toLowerCase() == search
       );
-      console.log({ result });
       const modifiedFilterExpense = [...result];
       setFilterEmployees(modifiedFilterExpense);
     } else {
       setFilterEmployees(allEmployees);
     }
   };
-
   // const searchByGender = (e) => {
   //   let value = e.target.value;
   //   // setFilterCriteria({ ...filterCriteria, search: search });
@@ -258,7 +245,6 @@ function EmployeeList() {
   //     setFilterEmployees(allEmployees);
   //   }
   // };
-
   const onDelete = (idx, e) => {
     e.preventDefault();
     EmpInfoContext.disablePerson(data[idx].id);
@@ -278,7 +264,6 @@ function EmployeeList() {
     setData(filteredData);
     setFilterEmployees(filteredData);
   };
-
   return (
     <Layout>
       <Row className="employeeRow">
@@ -329,7 +314,6 @@ function EmployeeList() {
             X
           </div>
         }
-
         // onCancel={handleCancel}
       >
         <Editemployee

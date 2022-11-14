@@ -34,7 +34,7 @@ const Leave = () => {
   const [form1] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const isHr = sessionStorage.getItem("role") === "hr" ? true : false;
-  const isMgr = sessionStorage.getItem("isMgr");
+  const isMgr = JSON.parse(sessionStorage.getItem("isMgr"));
   const [leavedays, setLeaveDays] = useState(null); //leave nature & total in obj
   const [totaldays, setTotalDays] = useState(null); //leave nature & taken in obj
   const [date, setDate] = useState(moment()); //date for calendar
@@ -144,17 +144,17 @@ const Leave = () => {
     };
     if (validleaverequest) {
       LeaveContext.updateLeaves(editedLeave.id, newLeave)
-      .then(response => {
-        getData();
-        showNotification("success", "Success", "Leave edited successfully");
-      })
-      .catch(error => {
-        showNotification(
-          "error",
-          "Error",
-          "Unable to process leave request!"
-        );
-      })
+        .then(response => {
+          getData();
+          showNotification("success", "Success", "Leave edited successfully");
+        })
+        .catch(error => {
+          showNotification(
+            "error",
+            "Error",
+            "Unable to process leave request!"
+          );
+        })
       setDateSelected([]);
       setDateStart(null);
       setStartSlot(null);
@@ -247,7 +247,7 @@ const Leave = () => {
       temp[`${nat}`] = data.leaveNature[`${nat}`]
     })
     setTotalDays(temp)
-    getData({...temp})
+    getData({ ...temp })
   }
   const getData = async (temp) => {
     setLoading(true);
@@ -264,7 +264,7 @@ const Leave = () => {
     getDateSorted(d);
     setLeaves(d);
     setLoading(false);
-    let tempDays = temp? temp : {...totaldays}
+    let tempDays = temp ? temp : { ...totaldays }
     let days = await LeaveContext.getLeaveDays(d, tempDays);
     setLeaveDays(days);
     let array = [];
@@ -571,18 +571,18 @@ const Leave = () => {
   const dateCellRender = (value,) => {
     const listData = getListData(value);
     let textVal = value.format("dddd");
-    let bgColor = textVal == "Sunday" || textVal == "Saturday" ? "rgba(74, 67, 67, 0.2)" : "rgba(40, 168, 144, 0.2)";
-    let color = textVal == "Sunday" || textVal == "Saturday" ? "rgba(74, 67, 67, 1)" : "rgb(40, 168, 144)";
+    let bgColor = textVal == "Sunday" || textVal == "Saturday" ? "rgba(74, 67, 67, 0.2)" : "rgba(10, 91, 204, 0.2)";
+    let color = textVal == "Sunday" || textVal == "Saturday" ? "rgba(74, 67, 67, 1)" : "rgb(10, 91, 204)";
 
     if (!(listData.length == 0)) {
       textVal = listData[0].type;
       color = listData[0].type == "On Leave" ?
         "rgba(0, 128, 0,  1)" : listData[0].type === "Pending" ?
-          "rgba(10, 91, 204,  1)" : listData[0].isOptional ?
+          "rgb(166 168 69)" : listData[0].isOptional ?
             "rgba(0, 119, 137, 0.96)" : "rgba(252, 143, 10, 1)";
       bgColor = listData[0].type == "On Leave" ?
         "rgb(15, 255, 80,0.2)" : listData[0].type === "Pending" ?
-          "rgba(10, 91, 204,0.2)" : listData[0].isOptional ?
+          "rgb(205 227 36 / 25%)" : listData[0].isOptional ?
             "rgba(154, 214, 224, 0.96)" : "rgba(252, 143, 10,0.2)";
     }
 
@@ -1068,7 +1068,7 @@ const Leave = () => {
                 </div>
                 <Button className="button-applyleave"
                   style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '10px' }}
-                  type="default" onClick={() => {setSecondModal(true)}}>
+                  type="default" onClick={() => { setSecondModal(true) }}>
                   Apply Leave
                 </Button>
               </div>
@@ -1284,7 +1284,7 @@ const Leave = () => {
                           {u}
                         </Option>
                       )))
-                    : null}
+                      : null}
                     <Option value={"Loss of Pay"}>Loss of Pay</Option>
                   </Select>
                 </Form.Item>
@@ -1659,7 +1659,7 @@ const Leave = () => {
                         message: 'Please Select Date',
                       },
                     ]}
-                    initialValue={editedLeave.dateCalc == null ? null : moment(editedLeave.dateCalc[editedLeave.dateCalc.length-1], 'Do MMM, YYYY')}
+                    initialValue={editedLeave.dateCalc == null ? null : moment(editedLeave.dateCalc[editedLeave.dateCalc.length - 1], 'Do MMM, YYYY')}
                   >
                     <DatePicker
                       style={{ width: "100%" }}
@@ -1717,7 +1717,7 @@ const Leave = () => {
                 ]}
                 initialValue={editedLeave.nature}
               >
-                <Select 
+                <Select
                   placeholder="Select an option"
                   allowClear
                   disabled={disableNature()}
@@ -1732,7 +1732,7 @@ const Leave = () => {
                         {u}
                       </Option>
                     )))
-                  : null}
+                    : null}
                   <Option value={"Loss of Pay"}>Loss of Pay</Option>
                 </Select>
               </Form.Item>

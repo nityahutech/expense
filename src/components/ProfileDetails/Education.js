@@ -37,7 +37,7 @@ function Education() {
     showEditContent(false);
   };
 
-  const onFinishFailed = (errorInfo) => {};
+  const onFinishFailed = (errorInfo) => { };
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -84,8 +84,15 @@ function Education() {
         justifyContent: "center",
       }}
     >
-      <Row>
-        <Col xs={22} sm={15} md={8}>
+      <Row
+        className="Row-Card"
+        style={{
+          width: '75%',
+          margin: '10px',
+          display: 'flex',
+          alignItems: 'center'
+        }}>
+        <Col span={24}>
           <Form
             name="basic"
             labelCol={{
@@ -130,7 +137,7 @@ function Education() {
                 </>
               }
               style={{
-                width: 800,
+                width: '100%',
                 marginTop: 10,
               }}
             >

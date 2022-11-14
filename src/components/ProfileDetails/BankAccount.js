@@ -56,8 +56,16 @@ function BankAccount() {
           justifyContent: "center",
         }}
       >
-        <Row>
-          <Col xs={22} sm={15} md={8}>
+        <Row
+          className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <Col span={24}>
             <Form
               // form={form}
               labelcol={{
@@ -100,7 +108,7 @@ function BankAccount() {
                   </>
                 }
                 style={{
-                  width: 800,
+                  width: '100%',
                   margin: "15px",
                 }}
               >
@@ -273,7 +281,7 @@ function BankAccount() {
                         type="primary"
                         htmlType="submit"
                         style={{ marginLeft: "10px" }}
-                        // onClick={() => onFinish()}
+                      // onClick={() => onFinish()}
                       >
                         SAVE
                       </Button>

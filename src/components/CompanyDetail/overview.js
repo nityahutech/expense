@@ -15,7 +15,6 @@ function Overview() {
   const [data, setData] = useState([]);
   const { currentUser } = useAuth();
   const compId = sessionStorage.getItem("compId")
-
   const [companyName, setCompanyName] = useState();
 
   const onFinish = (values) => {
@@ -160,7 +159,6 @@ function Overview() {
                       )}
                     </div>
                   </Col>
-
                   <Col xs={22} sm={15} md={12}>
                     <div>
                       <div className="div-discription">Brand Name</div>
@@ -201,7 +199,6 @@ function Overview() {
                     </div>
                   </Col>
                 </Row>
-
                 <Row gutter={[48, 8]} style={{ marginTop: "6%" }}>
                   <Col xs={22} sm={15} md={12}>
                     <div>
@@ -237,7 +234,6 @@ function Overview() {
                       )}
                     </div>
                   </Col>
-
                   {/* <Col span={8}></Col> */}
                   <Col xs={22} sm={15} md={12}>
                     <div>
@@ -306,9 +302,6 @@ function Overview() {
           </Col>
         </Row>
       </div>
-
-      {/* //--------------Card-2----------------------------- */}
-
       <div
         className="personalCardDiv"
         style={{
@@ -431,7 +424,6 @@ function Overview() {
                                 paddingLeft: "0px",
                                 marginLeft: "10px",
                                 borderBottom: "1px solid #ccc ",
-
                               }}
                               bordered={false}
                               type="linkedin"
@@ -443,7 +435,6 @@ function Overview() {
                       </div>
                     </Col>
                   </Row>
-
                   <Row
                     className="iconface"
                     style={{
@@ -497,7 +488,6 @@ function Overview() {
                       </div>
                     </Col>
                   </Row>
-
                   <Row
                     className="iconface"
                     style={{
@@ -552,7 +542,6 @@ function Overview() {
                     </Col>
                   </Row>
                 </div>
-
                 {editContactIconInfo === true ? (
                   <Row
                     style={{

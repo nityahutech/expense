@@ -48,9 +48,7 @@ const Family = () => {
       return true;
     }
   };
-  // ---------------------------------------------------------------------------------------------------------
-
-  return (
+    return (
     <>
       <div
         className="personalCardDiv"
@@ -62,7 +60,6 @@ const Family = () => {
           margin: "15px",
         }}
       >
-        {/* -------------------------------------------form-1------------------------------------------ */}
         {editfamilymember === false ? (
           <Row
             className="Row-Card"
@@ -114,7 +111,6 @@ const Family = () => {
                   }}
                 >
                   <Row gutter={[48, 8]}>
-                    {/* ------------------------------------father */}
                     <Col xs={22} sm={15} md={6}>
                       <Form.Item
                         name="father"
@@ -143,7 +139,6 @@ const Family = () => {
                           <div>{data?.father ? data.father : "-"}</div>
                         </div>
                       </Form.Item>
-                      {/* --------------------------------------father-contact------------------------------------ */}
                     </Col>
                     <Col xs={22} sm={15} md={6}>
                       <Form.Item
@@ -176,7 +171,6 @@ const Family = () => {
                         </div>
                       </Form.Item>
                     </Col>
-                    {/* -------------------------------------mother------------------------------------------ */}
                     <Col xs={22} sm={15} md={6}>
                       <Form.Item
                         name="mother"
@@ -207,7 +201,6 @@ const Family = () => {
                         </div>
                       </Form.Item>
                     </Col>
-                    {/* ---------------------------------------------mother Contact------------------------------ */}
                     <Col xs={22} sm={15} md={6}>
                       <Form.Item
                         name="motherContact"
@@ -271,7 +264,6 @@ const Family = () => {
                   }}
                 >
                   <Row gutter={[16, 16]}>
-                    {/* ------------------------------------father */}
                     <Col xs={22} sm={15} md={12}>
                       <div>
                         <h1
@@ -331,7 +323,6 @@ const Family = () => {
                           />
                         </Form.Item>
                       </div>
-                      {/* --------------------------------------father-contact------------------------------------ */}
                     </Col>
                     <Col xs={22} sm={15} md={12}>
                       <div>
@@ -374,7 +365,6 @@ const Family = () => {
                         </Form.Item>
                       </div>
                     </Col>
-                    {/* -------------------------------------mother------------------------------------------ */}
                     <Col xs={22} sm={15} md={12}>
                       <div>
                         <h1
@@ -435,7 +425,6 @@ const Family = () => {
                         </Form.Item>
                       </div>
                     </Col>
-                    {/* ---------------------------------------------mother Contact------------------------------ */}
                     <Col xs={22} sm={15} md={12}>
                       <div>
                         <h1
@@ -523,7 +512,6 @@ const Family = () => {
           margin: "15px",
         }}
       >
-        {/* -------------------------------------------form-2----------------------------------------- */}
         {editEmergency === false ? (
           <Row
             className="Row-Card"

@@ -28,7 +28,6 @@ function CertificateID() {
   function handleChange(event) {
     setFile(event.target.files[0]);
   }
-  // -----------------code for model
   const showModal = () => {
     setIsModalOpen(true);
     form.resetFields()
@@ -40,7 +39,6 @@ function CertificateID() {
     form.resetFields()
   };
    async function addNewDetail (values) {
-    console.log(file)
     try{
       await DocumentContext.addDocument({...values,empId:currentUser.uid,type:"certificate"},file)
     setIsModalOpen(false);
@@ -90,10 +88,6 @@ const getData=async()=>{
   setCertificationDetails(alldata);
 };
 
-  // const deleteData = (courseTitle, e) => {
-  //   const filteredData = certificatioDetails.filter((item) => item.courseTitle !== courseTitle);
-  //   setCertificationDetais(filteredData);
-  // };
   const columns = [
     {
       title: 'Course Title',

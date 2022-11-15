@@ -23,7 +23,6 @@ function Personal() {
     let mname = "";
     for (let i = 1; i < nameArray.length - 1; i++) {
       mname = mname + ((i != 1 ? " " : "") + nameArray[i]);
-      console.log(mname);
     }
     let record = {
       ...value,
@@ -34,7 +33,6 @@ function Personal() {
       maritalStatus: value.maritalStatus ? value.maritalStatus : null,
       mname: mname,
     };
-    console.log(record);
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
     // setData(record)
     getData();
@@ -50,7 +48,6 @@ function Personal() {
       ...values,
       altPhnNo: values.altPhnNo ? values.altPhnNo : "",
     };
-    console.log(record);
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
     //  setData(values)
     getData();
@@ -65,15 +62,12 @@ function Personal() {
       scrs: scrs ? scrs : null,
       lccs: lccs ? lccs : null,
     };
-    console.log(record);
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
     showEditAddressInfo(false);
     getData();
   };
   useEffect(() => {
     getData();
-    // getContactData();
-    // getAddressData();
   }, []);
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);

@@ -3,20 +3,15 @@ import pdfMake from "pdfmake/build/pdfmake";
 // import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
 const RATE = 2.83464566929;
-
 const PAGE_WIDTH = 297 * RATE;
 const PAGE_HEIGHT = 419 * RATE;
-
 const CONTENT_WIDTH = 270 * RATE;
 const CONTENT_HEIGHT = 419 * RATE;
 const PAGE_MARGINS = [15 * RATE, 0 * RATE];
 const FONT_SIZE = 14 * RATE;
 
-
 export function createPdfFromHtml(element) {
-  // console.log("element:: ", element.innerHTML);
   // const pdfProps = await createPdfProps(element);
   // createPdf(pdfProps);
   var docDefinition = {
@@ -30,9 +25,6 @@ export function createPdfFromHtml(element) {
       { text: 'Multiple styles appliednnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn', style: ['header', 'anotherStyle'] },
       { text: 'Multiple styles appliednnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn', style: ['header', 'anotherStyle'] },
       { text: 'Multiple styles appliednnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn', style: ['header', 'anotherStyle'] },
-
-
-
     ],
 
     styles: {
@@ -68,9 +60,7 @@ async function createPdfProps(element) {
       height: CONTENT_HEIGHT,
 
     },
-
-
-    pageMargins: PAGE_MARGINS,
+   pageMargins: PAGE_MARGINS,
     fontSize: FONT_SIZE,
   };
 

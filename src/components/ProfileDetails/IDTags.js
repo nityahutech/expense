@@ -18,7 +18,6 @@ import {
 } from 'antd'
 import DocumentContext from '../../contexts/DocumentContext';
 
-
 function IDTags() {
 const [allIdDetails, setAllIdDetails] = useState([])
 const [form]=Form.useForm()
@@ -26,12 +25,10 @@ const { currentUser } = useAuth();
 const [file, setFile] = useState("");
 const [isModalOpen, setIsModalOpen] = useState(false);
 
-// Handle file upload event and update state
 function handleChange(event) {
     setFile(event.target.files[0]);
 }
 
-// ----------------------------------------usestate for add buttob
   const showModal = () => {
     setIsModalOpen(true);
     form.resetFields()
@@ -42,11 +39,6 @@ function handleChange(event) {
     setIsModalOpen(false);
     form.resetFields()
   };
-
-  // const deleteData = (idtitle, e) => {
-  //   const filteredData = allIdDetails.filter((item) => item.idtitle !== idtitle);
-  //   setAllIdDetails(filteredData);
-  // };
 
   async function addNewDetail (values) {
     try {
@@ -133,28 +125,6 @@ function handleChange(event) {
     },
   },
   ];
-
-  // ------------------------------------code for upload button 
-
-  // const props = {
-  //   name: 'file',
-  //   action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-  //   headers: {
-  //     authorization: 'authorization-text',
-  //   },
-  //   onChange(info) {
-  //     if (info.file.status !== 'uploading') {
-  //       console.log(info.file, info.fileList);
-  //     }
-  //     if (info.file.status === 'done') {
-  //       message.success(`${info.file.name} file uploaded successfully`);
-  //     } else if (info.file.status === 'error') {
-  //       message.error(`${info.file.name} file upload failed.`);
-  //     }
-  //   },
-  // };
-
-
   return (
     <>
       <Table 

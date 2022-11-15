@@ -1,16 +1,9 @@
 import React from "react";
-
 import { Tabs } from "antd";
-
 import "../../style/Documents.css";
-
 import WorkID from "../ProfileDetails/WorkID";
 import CertificateID from "../ProfileDetails/CertificateID";
 import IDTags from "../ProfileDetails/IDTags";
-
-// ----------------------------------------------------------------------------------------------------------------------------
-
-
 
 function Document() {
   
@@ -36,19 +29,12 @@ function Document() {
         }}
       >
         <Tabs defaultActiveKey="1" className="tabs">
-          {/* ------------------------------------IDs tabs------------------------------------- */}
           <Tabs.TabPane tab="IDs" key="1">
             <IDTags />
           </Tabs.TabPane>
-
-          {/* ------------------------Certification tab---------------- */}
-
           <Tabs.TabPane tab="Certification" key="2">
             <CertificateID />
           </Tabs.TabPane>
-
-          {/* -------------------------------------------------Work tabs-------------------------- */}
-
           <Tabs.TabPane tab="Work" key="3">
             <WorkID />
           </Tabs.TabPane>

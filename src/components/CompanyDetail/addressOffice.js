@@ -34,7 +34,6 @@ function AddressOffice() {
     let data = await CompanyProContext.getCompanyProfile(compId);
     setData(data);
   };
-  console.log(data);
 
   return (
     <>
@@ -46,8 +45,15 @@ function AddressOffice() {
           justifyContent: "center",
         }}
       >
-        <Row>
-          <Col xs={24} sm={15} md={24}>
+        <Row
+          className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+          <Col span={24}>
             <Form
               // form={form}
               labelcol={{
@@ -70,6 +76,7 @@ function AddressOffice() {
                     {editAddress === false ? (
                       <Button
                         type="text"
+                        className="edit"
                         style={{
                           color: "#4ec0f1",
                           display: "none",
@@ -87,7 +94,7 @@ function AddressOffice() {
                   </>
                 }
                 style={{
-                  width: 800,
+                  width: '100%',
                   marginTop: 10,
                 }}
               >
@@ -163,7 +170,6 @@ function AddressOffice() {
                   </Col>
                 </Row>
                 {/* ) : null} */}
-
                 {/* {editAddress === true ? ( */}
                 <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                   <Col xs={22} sm={15} md={6}>
@@ -310,7 +316,6 @@ function AddressOffice() {
                   </Col>
                 </Row>
                 {/* ) : null}  */}
-
                 {editAddress === true ? (
                   <Row
                     style={{

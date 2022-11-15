@@ -31,7 +31,6 @@ function Education() {
       courseStartDate: dateStart ? dateStart : null,
       courseEndDate: dateEnd ? dateEnd : null,
     };
-    console.log(record);
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
     setData(record);
     showEditContent(false);
@@ -60,7 +59,6 @@ function Education() {
       return true;
     }
   };
-
   const checkAlphabets = (event) => {
     if (!/^[ A-Za-z.]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
@@ -71,9 +69,7 @@ function Education() {
       return true;
     }
   };
-
   const [form] = Form.useForm();
-
   return (
     <div
       className="education"
@@ -142,7 +138,6 @@ function Education() {
               }}
             >
               <Row gutter={[16, 16]}>
-                {/* --------------------------------------------------------Qulification Type */}
                 <Col xs={22} sm={15} md={8}>
                   <div>
                     <h1
@@ -192,7 +187,6 @@ function Education() {
                     )}
                   </div>
                 </Col>
-                {/* --------------------------------------------------------------Course Name */}
                 <Col xs={22} sm={15} md={8}>
                   <div>
                     <h1
@@ -237,7 +231,6 @@ function Education() {
                     )}
                   </div>
                 </Col>
-                {/* -------------------------------------------------------Course Type */}
                 <Col xs={22} sm={15} md={8}>
                   <div>
                     <h1
@@ -295,7 +288,6 @@ function Education() {
                   </div>
                 </Col>
               </Row>
-              {/* ----------------------------------------------------------Stream */}
               <Row gutter={[16, 16]}>
                 <Col xs={22} sm={15} md={8}>
                   <div>
@@ -353,7 +345,6 @@ function Education() {
                     )}
                   </div>
                 </Col>
-                {/* ---------------------------------------------------------Course Start Date */}
                 <Col xs={22} sm={15} md={8}>
                   <h1
                     style={{
@@ -367,7 +358,6 @@ function Education() {
                     Course Start Date
                   </h1>
 
-                  {/* <div> */}
                   {editContent === false ? (
                     <div>
                       {data?.courseStartDate ? data.courseStartDate : "-"}
@@ -399,7 +389,6 @@ function Education() {
                   )}
                   {/* </div> */}
                 </Col>
-                {/* ----------------------------------------------------------Course End Date */}
                 <Col xs={22} sm={15} md={8}>
                   <h1
                     style={{
@@ -444,7 +433,6 @@ function Education() {
                   {/* </div> */}
                 </Col>
               </Row>
-              {/* ----------------------------------------------------------University Name */}
               <Row>
                 <Col xs={22} sm={15} md={8}>
                   <div>

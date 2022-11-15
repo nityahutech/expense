@@ -20,9 +20,7 @@ import {
 } from "@ant-design/icons";
 
 import { useState } from "react";
-
 import "../../style/HrPaySlip.css";
-
 const styleDefaults = {
   height: "160px",
   color: "black",
@@ -109,25 +107,18 @@ function HrPaySlip() {
   const [showComponent, setShowComponent] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState([]);
   const [form] = Form.useForm();
-
   const [rows, setRows] = useState(data1);
   const [componentValues, setComponentValues] = useState({});
-
   const carouselRef = React.createRef();
-
   const handleInputChange = (key, e) => {
     const data = {
       ...componentValues,
       [key]: e.target.value,
     };
-    console.log("data:: ", data);
     setComponentValues(data);
   };
 
-  console.log("componentValues:: ", componentValues);
-
   const handleChange = (value) => {
-    console.log(componentValues);
     let temp = [...selectedComponent];
     temp.push(value);
     setSelectedComponent(temp);
@@ -167,7 +158,6 @@ function HrPaySlip() {
   };
 
   const onChange = (value) => {
-    console.log("changed", value);
   };
 
   const columns = [
@@ -270,11 +260,9 @@ function HrPaySlip() {
     },
     getCheckboxProps: (record) => ({
       disabled: record.name === "Disabled User",
-      // Column configuration not to be checked
       name: record.name,
     }),
   };
-  //   console.log(Carousel);
 
   const onReset = () => {
     form.resetFields();
@@ -525,7 +513,6 @@ function HrPaySlip() {
                 form={form}
                 onClick={(e) => {
                   onReset();
-                  console.log(componentValues);
                   carouselRef.current.next();
                 }}
               >

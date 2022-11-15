@@ -14,12 +14,10 @@ const AppraisalHr = () => {
     const [empRole, setEmpRole] = useState(sessionStorage.getItem("role"));
 
     const showModal = () => {
-        console.log('hi')
         setIsModalOpen(true);
     };
 
     const closeCreateAppraisalModal = () => {
-        console.log('hiii')
         setIsModalOpen(!isModalOpen);
     };
 
@@ -31,11 +29,9 @@ const AppraisalHr = () => {
     const getEmployeeRecord = async () => {
         EmpInfoContext.getEduDetail(currentUser.uid)
             .then(response => {
-                console.log('empRecorddd', response)
                 setEmployeeRecord(response)
             })
     }
-
     return (
         <div style={{
             display: 'flex',
@@ -43,7 +39,6 @@ const AppraisalHr = () => {
             alignItems: 'center',
             // width: '100%',
             borderRadius: '10px'
-
         }}>
 
             {empRole === 'hr' &&
@@ -53,14 +48,11 @@ const AppraisalHr = () => {
                             <Input
                                 placeholder="Search"
                             />
-
                         </Col>
                         <Button type="primary" onClick={showModal}>Create Appraisal</Button>
-
                     </Row>
                 </div>
             }
-
             {
                 empRole === 'hr' && <EmpAppraisalTable reload={!isModalOpen} listType='hr' title='Appraisal Created by Hr' />
 

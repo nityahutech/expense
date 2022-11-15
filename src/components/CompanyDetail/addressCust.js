@@ -51,7 +51,6 @@ function AddressCust() {
     let array = editAddressContent;
     array[i] = true;
     showEditAddressContent(array);
-    console.log(array);
   };
 
   const onDeleteAddress = (record) => {
@@ -63,11 +62,9 @@ function AddressCust() {
       onOk: () => {
         CompanyProContext.deleteCompInfo(compId, { address: record })
           .then((response) => {
-            console.log(response);
             getData();
           })
           .catch((error) => {
-            console.log(error.message);
           });
       },
     });
@@ -76,17 +73,14 @@ function AddressCust() {
   useEffect(() => {
     getData();
   }, []);
-  console.log(data);
 
   const getData = async () => {
     let data = await CompanyProContext.getCompanyProfile(compId);
     let array = [...data.address];
     showEditAddressContent(array.fill(false));
     setData(data.address);
-    console.log(data.address, array.fill(false));
   };
 
-  console.log(data);
   return (
     <>
       <div
@@ -98,320 +92,328 @@ function AddressCust() {
           //   flexDirection: "column",
         }}
       >
-        <Row>
+        <Row
+          className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
           {data && data != 0
             ? data.map((add, i) => (
-                <Col xs={22} sm={15} md={24}>
-                  <Form
-                    // form={form1}
-                    labelcol={{
-                      span: 4,
-                    }}
-                    wrappercol={{
-                      span: 14,
-                    }}
-                    initialValues={{
-                      remember: true,
-                    }}
-                    autoComplete="off"
-                    onFinish={(values) => editOnFinish(values, i)}
-                  >
-                    <Card
-                      title={add ? add.title : "CUSTOM ADDRESS TITLE"}
-                      className="customaddrcard"
-                      extra={
-                        <>
-                          {editAddressContent[i] === false ? (
-                            <Button
-                              type="text"
-                              style={{ color: "#4ec0f1" }}
-                              onClick={() => {
-                                let array = [...editAddressContent];
-                                array[i] = !array[i];
-                                showEditAddressContent(array);
-                                console.log(array);
-                              }}
-                            >
-                              <EditFilled />
-                            </Button>
-                          ) : null}
-                          <DeleteOutlined
-                            style={{ color: "lightblue" }}
-                            onClick={() => {
-                              console.log(add);
-                              onDeleteAddress(add);
-                            }}
-                          />
-                        </>
-                      }
-                      style={{
-                        width: 800,
-                        marginTop: 10,
-                      }}
-                    >
-                      {console.log(add)}
-
-                      {/* {editContactInfo === true ? ( */}
-                      <Row gutter={[16, 16]}>
-                        <Col xs={22} sm={22} md={20}>
-                          <div>
-                            <div className="div-discription">Address Title</div>
-                            {console.log(
-                              "no",
-                              add,
-                              editAddressContent[i] === false
-                            )}
-                            {editAddressContent[i] === false ? (
-                              <div>{add ? add.title : null}</div>
-                            ) : (
-                              <Form.Item
-                                initialValue={add ? add.title : null}
-                                name="addresstitle"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Enter Address Title",
-                                    type: "text",
-                                  },
-                                ]}
-                              >
-                                <Input
-                                  style={{ paddingLeft: "0px" }}
-                                  required
-                                  placeholder=""
-                                />
-                              </Form.Item>
-                            )}
-                          </div>
-                        </Col>
-                      </Row>
-                      {/* ) : null} */}
-                      {/* {editContactInfo === true ? ( */}
-                      <Row gutter={[16, 16]}>
-                        <Col xs={22} sm={22} md={20}>
-                          <div>
-                            <div className="div-discription">
-                              Address Line 1
-                            </div>
-                            {editAddressContent[i] === false ? (
-                              <div>{add ? add.addLine1 : null}</div>
-                            ) : (
-                              <Form.Item
-                                initialValue={add ? add.addLine1 : null}
-                                name="address1"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Enter Address",
-                                    type: "text",
-                                  },
-                                ]}
-                              >
-                                <Input
-                                  style={{ paddingLeft: "0px" }}
-                                  required
-                                  placeholder=""
-                                />
-                              </Form.Item>
-                            )}
-                          </div>
-                        </Col>
-                      </Row>
-                      {/* ) : null} */}
-
-                      {/* {editContactInfo === true ? ( */}
-                      <Row gutter={[16, 16]}>
-                        <Col xs={22} sm={22} md={20}>
-                          <div>
-                            <div className="div-discription">
-                              Address Line 2
-                            </div>
-                            {editAddressContent[i] === false ? (
-                              <div>{add ? add.addLine2 : null}</div>
-                            ) : (
-                              <Form.Item
-                                initialValue={add ? add.addLine2 : null}
-                                name="address2"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Enter Address Name",
-                                    type: "text",
-                                  },
-                                ]}
-                              >
-                                <Input
-                                  style={{ paddingLeft: "0px" }}
-                                  required
-                                  placeholder=""
-                                />
-                              </Form.Item>
-                            )}
-                          </div>
-                        </Col>
-                      </Row>
-                      {/* ) : null} */}
-
-                      {/* {editContactInfo === true ? ( */}
-                      <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                        <Col xs={22} sm={15} md={6}>
-                          <div>
-                            <div className="div-discription">City</div>
-                            {editAddressContent[i] === false ? (
-                              <div>{add ? add.city : null}</div>
-                            ) : (
-                              <Form.Item
-                                style={{ width: "100%" }}
-                                initialValue={add ? add.city : null}
-                                name="city"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Enter City ",
-                                    type: "text",
-                                  },
-                                  {
-                                    pattern: /^[a-zA-Z\s]*$/,
-                                    message: "Enter Valid City ",
-                                  },
-                                ]}
-                              >
-                                <Input
-                                  style={{ paddingLeft: "0px" }}
-                                  required
-                                  placeholder=""
-                                />
-                              </Form.Item>
-                            )}
-                          </div>
-                        </Col>
-                        <Col xs={22} sm={15} md={6}>
-                          <div>
-                            <div className="div-discription">State</div>
-                            {editAddressContent[i] === false ? (
-                              <div>{add ? add.state : null}</div>
-                            ) : (
-                              <Form.Item
-                                style={{ width: "100%" }}
-                                initialValue={add ? add.state : null}
-                                name="state"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Enter State ",
-                                    type: "text",
-                                  },
-                                  {
-                                    pattern: /^[a-zA-Z\s]*$/,
-                                    message: "Enter Valid State ",
-                                  },
-                                ]}
-                              >
-                                <Input
-                                  style={{ paddingLeft: "0px" }}
-                                  required
-                                  placeholder=""
-                                />
-                              </Form.Item>
-                            )}
-                          </div>
-                        </Col>
-                        <Col xs={22} sm={15} md={6}>
-                          <div>
-                            <div className="div-discription">Country</div>
-                            {editAddressContent[i] === false ? (
-                              <div>{add ? add.country : null}</div>
-                            ) : (
-                              <Form.Item
-                                initialValue={add ? add.country : null}
-                                name="country"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Enter Country",
-                                    type: "text",
-                                  },
-                                  {
-                                    pattern: /^[a-zA-Z\s]*$/,
-                                    message: "Enter Valid Country",
-                                  },
-                                ]}
-                              >
-                                <Input
-                                  style={{ paddingLeft: "0px" }}
-                                  required
-                                  placeholder=""
-                                />
-                              </Form.Item>
-                            )}
-                          </div>
-                        </Col>
-                        <Col xs={22} sm={15} md={6}>
-                          <div>
-                            <div className="div-discription">Pin Code</div>
-                            {editAddressContent[i] === false ? (
-                              <div>{add ? add.pincode : null}</div>
-                            ) : (
-                              <Form.Item
-                                initialValue={add ? add.pincode : null}
-                                name="pin"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Enter Pin",
-                                    type: "text",
-                                  },
-                                  {
-                                    pattern: /^[0-9\b]+$/,
-                                    message: "Enter Valid Pin",
-                                  },
-                                ]}
-                              >
-                                <Input
-                                  maxLength={6}
-                                  style={{ paddingLeft: "0px" }}
-                                  required
-                                  placeholder=""
-                                />
-                              </Form.Item>
-                            )}
-                          </div>
-                        </Col>
-                      </Row>
-                      {/* ) : null} */}
-
-                      {editAddressContent[i] === true ? (
-                        <Row
-                        //   style={{
-                        //     display: "flex",
-                        //     justifyContent: "flex-end",
-                        //     marginTop: "3%",
-                        //   }}
-                        >
+              <Col span={24}>
+                <Form
+                  // form={form1}
+                  labelcol={{
+                    span: 4,
+                  }}
+                  wrappercol={{
+                    span: 14,
+                  }}
+                  initialValues={{
+                    remember: true,
+                  }}
+                  autoComplete="off"
+                  onFinish={(values) => editOnFinish(values, i)}
+                >
+                  <Card
+                    title={add ? add.title : "CUSTOM ADDRESS TITLE"}
+                    className="customaddrcard"
+                    extra={
+                      <>
+                        {editAddressContent[i] === false ? (
                           <Button
                             type="text"
-                            style={{ fontSize: 15 }}
+                            className="edit"
+                            style={{
+                              color: "#4ec0f1",
+                              display: "none",
+                              paddingTop: "7px",
+                              paddingRight: "7px",
+                              position: "absolute",
+                              right: 10,
+                              top: 10,
+                            }}
                             onClick={() => {
                               let array = [...editAddressContent];
                               array[i] = !array[i];
                               showEditAddressContent(array);
-                              console.log(array);
                             }}
                           >
-                            <CloseOutlined /> CANCEL
+                            <EditFilled />
                           </Button>
-                          <Col>
-                            <Button
-                              type="primary"
-                              htmlType="submit"
-                              style={{ marginLeft: "10px" }}
+                        ) : null}
+                        <DeleteOutlined
+                          style={{ color: "lightblue", paddingRight: "25px", }}
+                          onClick={() => {
+                            onDeleteAddress(add);
+                          }}
+                        />
+                      </>
+                    }
+                    style={{
+                      width: '100%',
+                      marginTop: 10,
+                    }}
+                  >
+                    {/* {editContactInfo === true ? ( */}
+                    <Row gutter={[16, 16]}>
+                      <Col xs={22} sm={22} md={20}>
+                        <div>
+                          <div className="div-discription">Address Title</div>
+                          {console.log(
+                            "no",
+                            add,
+                            editAddressContent[i] === false
+                          )}
+                          {editAddressContent[i] === false ? (
+                            <div>{add ? add.title : null}</div>
+                          ) : (
+                            <Form.Item
+                              initialValue={add ? add.title : null}
+                              name="addresstitle"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter Address Title",
+                                  type: "text",
+                                },
+                              ]}
                             >
-                              SAVE
-                            </Button>
-                          </Col>
-                        </Row>
-                      ) : null}
-                      {/* {editContactInfo == false && i == (data.length-1) &&
+                              <Input
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          )}
+                        </div>
+                      </Col>
+                    </Row>
+                    {/* ) : null} */}
+                    {/* {editContactInfo === true ? ( */}
+                    <Row gutter={[16, 16]}>
+                      <Col xs={22} sm={22} md={20}>
+                        <div>
+                          <div className="div-discription">
+                            Address Line 1
+                          </div>
+                          {editAddressContent[i] === false ? (
+                            <div>{add ? add.addLine1 : null}</div>
+                          ) : (
+                            <Form.Item
+                              initialValue={add ? add.addLine1 : null}
+                              name="address1"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter Address",
+                                  type: "text",
+                                },
+                              ]}
+                            >
+                              <Input
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          )}
+                        </div>
+                      </Col>
+                    </Row>
+                    {/* ) : null} */}
+                    {/* {editContactInfo === true ? ( */}
+                    <Row gutter={[16, 16]}>
+                      <Col xs={22} sm={22} md={20}>
+                        <div>
+                          <div className="div-discription">
+                            Address Line 2
+                          </div>
+                          {editAddressContent[i] === false ? (
+                            <div>{add ? add.addLine2 : null}</div>
+                          ) : (
+                            <Form.Item
+                              initialValue={add ? add.addLine2 : null}
+                              name="address2"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter Address Name",
+                                  type: "text",
+                                },
+                              ]}
+                            >
+                              <Input
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          )}
+                        </div>
+                      </Col>
+                    </Row>
+                    {/* ) : null} */}
+                    {/* {editContactInfo === true ? ( */}
+                    <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
+                      <Col xs={22} sm={15} md={6}>
+                        <div>
+                          <div className="div-discription">City</div>
+                          {editAddressContent[i] === false ? (
+                            <div>{add ? add.city : null}</div>
+                          ) : (
+                            <Form.Item
+                              style={{ width: "100%" }}
+                              initialValue={add ? add.city : null}
+                              name="city"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter City ",
+                                  type: "text",
+                                },
+                                {
+                                  pattern: /^[a-zA-Z\s]*$/,
+                                  message: "Enter Valid City ",
+                                },
+                              ]}
+                            >
+                              <Input
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          )}
+                        </div>
+                      </Col>
+                      <Col xs={22} sm={15} md={6}>
+                        <div>
+                          <div className="div-discription">State</div>
+                          {editAddressContent[i] === false ? (
+                            <div>{add ? add.state : null}</div>
+                          ) : (
+                            <Form.Item
+                              style={{ width: "100%" }}
+                              initialValue={add ? add.state : null}
+                              name="state"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter State ",
+                                  type: "text",
+                                },
+                                {
+                                  pattern: /^[a-zA-Z\s]*$/,
+                                  message: "Enter Valid State ",
+                                },
+                              ]}
+                            >
+                              <Input
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          )}
+                        </div>
+                      </Col>
+                      <Col xs={22} sm={15} md={6}>
+                        <div>
+                          <div className="div-discription">Country</div>
+                          {editAddressContent[i] === false ? (
+                            <div>{add ? add.country : null}</div>
+                          ) : (
+                            <Form.Item
+                              initialValue={add ? add.country : null}
+                              name="country"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter Country",
+                                  type: "text",
+                                },
+                                {
+                                  pattern: /^[a-zA-Z\s]*$/,
+                                  message: "Enter Valid Country",
+                                },
+                              ]}
+                            >
+                              <Input
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          )}
+                        </div>
+                      </Col>
+                      <Col xs={22} sm={15} md={6}>
+                        <div>
+                          <div className="div-discription">Pin Code</div>
+                          {editAddressContent[i] === false ? (
+                            <div>{add ? add.pincode : null}</div>
+                          ) : (
+                            <Form.Item
+                              initialValue={add ? add.pincode : null}
+                              name="pin"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter Pin",
+                                  type: "text",
+                                },
+                                {
+                                  pattern: /^[0-9\b]+$/,
+                                  message: "Enter Valid Pin",
+                                },
+                              ]}
+                            >
+                              <Input
+                                maxLength={6}
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          )}
+                        </div>
+                      </Col>
+                    </Row>
+                    {/* ) : null} */}
+                    {editAddressContent[i] === true ? (
+                      <Row
+                      //   style={{
+                      //     display: "flex",
+                      //     justifyContent: "flex-end",
+                      //     marginTop: "3%",
+                      //   }}
+                      >
+                        <Button
+                          type="text"
+                          style={{ fontSize: 15 }}
+                          onClick={() => {
+                            let array = [...editAddressContent];
+                            array[i] = !array[i];
+                            showEditAddressContent(array);
+                          }}
+                        >
+                          <CloseOutlined /> CANCEL
+                        </Button>
+                        <Col>
+                          <Button
+                            type="primary"
+                            htmlType="submit"
+                            style={{ marginLeft: "10px" }}
+                          >
+                            SAVE
+                          </Button>
+                        </Col>
+                      </Row>
+                    ) : null}
+                    {/* {editContactInfo == false && i == (data.length-1) &&
                         <>
                             <br />
                             <Button type="primary" style={{ marginLeft: "10px" }}
@@ -419,15 +421,13 @@ function AddressCust() {
                             >
                                 <PlusCircleOutlined />
                                 Add
-
                             </Button>
                         </>
-
                         } */}
-                    </Card>
-                  </Form>
-                </Col>
-              ))
+                  </Card>
+                </Form>
+              </Col>
+            ))
             : null}
         </Row>
       </div>
@@ -440,8 +440,15 @@ function AddressCust() {
           //   flexDirection: "column",
         }}
       >
-        <Row>
-          <Col xs={24} sm={15} md={8}>
+        <Row
+          className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+          <Col span={24}>
             <Form
               form={form}
               labelcol={{
@@ -464,7 +471,16 @@ function AddressCust() {
                     {addAddressContent === false ? (
                       <Button
                         type="text"
-                        style={{ color: "#4ec0f1" }}
+                        className="edit"
+                        style={{
+                          color: "#4ec0f1",
+                          display: "none",
+                          paddingTop: "7px",
+                          paddingRight: "7px",
+                          position: "absolute",
+                          right: 10,
+                          top: 10,
+                        }}
                         onClick={() => showAddAddressContent(true)}
                       >
                         <EditFilled />
@@ -473,7 +489,7 @@ function AddressCust() {
                   </>
                 }
                 style={{
-                  width: 800,
+                  width: '100%',
                   marginTop: 10,
                 }}
               >

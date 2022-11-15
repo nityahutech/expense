@@ -13,19 +13,13 @@ import {
   Divider,
   Card
 } from "antd";
-
 import {
-
   PlusCircleOutlined,
   CloseOutlined
-
 } from "@ant-design/icons";
 const { Text, Link } = Typography;
-
-
 const Admin = () => {
   const [allWorkDetails, setAllWorkDetails] = useState([
-
   ]);
   const [editContactInfo, showEditContactInfo] = useState(false);
   const [editHrContactInfo, showEditHrContactInfo] = useState(false);
@@ -36,8 +30,7 @@ const Admin = () => {
   const [data, setData] = useState([]);
   const { currentUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const compId=sessionStorage.getItem("compId")
-
+  const compId = sessionStorage.getItem("compId")
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -61,10 +54,14 @@ const Admin = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginBottom: '10px'
+          marginBottom: '10px',
+          width: '100%'
         }}
       >
-        <Form
+        <Form style={{
+
+          width: '75%'
+        }}
           // form={form}
           labelcol={{
             span: 4,
@@ -78,24 +75,19 @@ const Admin = () => {
           autoComplete="off"
         // onFinish={onContactFinish}
         >
-          {/* //----------------CEO----------------------- */}
-
           <div className="site-card-border-less-wrapper">
             <Card
               title="CEO"
               bordered={false}
               style={{
-                width: 800,
+                width: '100%',
               }}
             >
-
-
               <p>CEO is the head of the organization.<br />
                 For Organisation Chart, addition of CEO is required.
               </p>
               <p>CEO is also the HR Admin.<br />
                 CEO's permissions apply to all employees.</p>
-
               <p>CEO can:</p>
               <div className="div-text" style={{ paddingLeft: '20px' }}>
                 <Text>View all employee profile<br />
@@ -105,7 +97,6 @@ const Admin = () => {
                   Create and remove admins, and edit admin permissions</Text>
               </div>
               <Divider ></Divider>
-
               {editContactInfo === true ? (
                 <Row gutter={[16, 16]}>
                   <Col span={24}>
@@ -146,7 +137,6 @@ const Admin = () => {
                   Change
                 </Button>
               }
-
               {editContactInfo === true ? (
                 <Row
                   style={{
@@ -177,7 +167,6 @@ const Admin = () => {
           </div>
         </Form>
       </div>
-
       <div
         className="personalCardDiv"
         style={{
@@ -188,6 +177,9 @@ const Admin = () => {
         }}
       >
         <Form
+          style={{
+            width: '75%'
+          }}
           // form={form}
           labelcol={{
             span: 4,
@@ -201,22 +193,16 @@ const Admin = () => {
           autoComplete="off"
         // onFinish={onContactFinish}
         >
-          {/* //----------------HR----------------------- */}
-
           <div className="site-card-border-less-wrapper">
             <Card
               title="HR ADMIN"
               bordered={false}
               style={{
-                width: 800,
+                width: '100%',
               }}
             >
-
-
               <p>HR Admin's permissions apply to all employees.
               </p>
-
-
               <p>This admin can:</p>
               <div className="div-text" style={{ paddingLeft: '20px' }}>
                 <Text>View all employee profile information<br />
@@ -226,7 +212,6 @@ const Admin = () => {
                   Create and remove admins, and edit admin permissions</Text>
               </div>
               <Divider ></Divider>
-
               {editHrContactInfo === true ? (
                 <Row gutter={[16, 16]}>
                   <Col span={24}>
@@ -254,7 +239,6 @@ const Admin = () => {
                           ]}
                         >
                           <Input style={{ paddingLeft: '0px' }} type='AddressName' required placeholder="" />
-
                         </Form.Item>
                       )}
                     </div>
@@ -297,7 +281,6 @@ const Admin = () => {
           </div>
         </Form>
       </div >
-
       <div
         className="personalCardDiv"
         style={{
@@ -308,6 +291,9 @@ const Admin = () => {
         }}
       >
         <Form
+          style={{
+            width: '75%'
+          }}
           // form={form}
           labelcol={{
             span: 4,
@@ -321,27 +307,20 @@ const Admin = () => {
           autoComplete="off"
         // onFinish={onContactFinish}
         >
-          {/* //----------------FINANCE----------------------- */}
-
           <div className="site-card-border-less-wrapper">
             <Card
               title="FINANCE ADMIN"
               bordered={false}
               style={{
-                width: 800,
+                width: '100%',
               }}
             >
-
-
               <p>Finance admin's permissions apply to all employees.
               </p>
-
-
               <p>This admin can:</p>
               <div className="div-text" style={{ paddingLeft: '20px' }}>
                 <Text>View salary and bank details of employee profiles<br />
                   View sensitive employee information (such as PAN Card, IDs and salary)<br />
-
                 </Text>
               </div>
               <Divider ></Divider>
@@ -379,11 +358,10 @@ const Admin = () => {
                   </Col>
                 </Row>
               ) : null}
-              
+
               {editFinanceContactInfo == false &&
                 <Button
                   type="primary" onClick={() => showEditFinanceContactInfo(!editFinanceContactInfo)} style={{ marginLeft: "10px" }}
-
                 >
                   <PlusCircleOutlined />
                   Change
@@ -419,7 +397,6 @@ const Admin = () => {
           </div>
         </Form>
       </div>
-
       <div
         className="personalCardDiv"
         style={{
@@ -430,6 +407,10 @@ const Admin = () => {
         }}
       >
         <Form
+          style={{
+
+            width: '75%'
+          }}
           // form={form}
           labelcol={{
             span: 4,
@@ -443,22 +424,16 @@ const Admin = () => {
           autoComplete="off"
         // onFinish={onContactFinish}
         >
-          {/* //----------------EXECUTIVE----------------------- */}
-
           <div className="site-card-border-less-wrapper">
             <Card
               title="HR EXECUTIVE"
               bordered={false}
               style={{
-                width: 800,
+                width: '100%',
               }}
             >
-
-
               <p>HR Executive's permissions apply to all employees.
               </p>
-
-
               <p>This admin can:</p>
               <div className="div-text" style={{ paddingLeft: '20px' }}>
                 <Text>View all employee profile information (Non-payroll)<br />
@@ -466,7 +441,6 @@ const Admin = () => {
                   Add and edit employee profiles<br />
                   Edit, Upload and Approve Attendance and Leaves<br />
                   This Admin will not have any payroll access.<br />
-
                 </Text>
               </div>
               <Divider ></Divider>
@@ -497,21 +471,18 @@ const Admin = () => {
                           ]}
                         >
                           <Input style={{ paddingLeft: '0px' }} type='AddressName' required placeholder="" />
-
                         </Form.Item>
                       )}
                     </div>
                   </Col>
                 </Row>
               ) : null}
-
               {editExecutiveContactInfo == false &&
                 <Button type="primary" onClick={() => showEditExecutiveContactInfo(!editExecutiveContactInfo)} style={{ marginLeft: "10px" }}>
                   <PlusCircleOutlined />
                   Change
                 </Button>
               }
-
               {editExecutiveContactInfo === true ? (
                 <Row
                   style={{
@@ -542,9 +513,7 @@ const Admin = () => {
           </div>
         </Form>
       </div>
-
     </>
-
   )
 }
 

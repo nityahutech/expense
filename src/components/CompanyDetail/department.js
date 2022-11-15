@@ -11,21 +11,21 @@ import FormItem from "antd/es/form/FormItem";
 const Department = () => {
 
 
-// ---------------------------------usestate for adding Department
-const [addDepartmentOpen, setAddDepartmentOPen] = useState(false);
-const compId=sessionStorage.getItem("compId")
+  // ---------------------------------usestate for adding Department
+  const [addDepartmentOpen, setAddDepartmentOPen] = useState(false);
+  const compId = sessionStorage.getItem("compId")
 
-const showAddDepartment = () => {
-  setAddDepartmentOPen(true);
-};
-const handleOk = () => {
-  setAddDepartmentOPen(false);
-}
-const handleCancel = () => {
-  setAddDepartmentOPen(false);
-}
+  const showAddDepartment = () => {
+    setAddDepartmentOPen(true);
+  };
+  const handleOk = () => {
+    setAddDepartmentOPen(false);
+  }
+  const handleCancel = () => {
+    setAddDepartmentOPen(false);
+  }
 
-// --------------------------------code for the table
+  // --------------------------------code for the table
   const data = [
     {
       key: '0',
@@ -34,7 +34,7 @@ const handleCancel = () => {
       totalemployees: '17',
       // description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
     },
-   
+
     {
       key: '1',
       department: 'Service',
@@ -55,7 +55,7 @@ const handleCancel = () => {
       dataIndex: 'hod',
       key: 'hod',
     },
-    
+
     {
       title: 'Total Employees',
       dataIndex: 'totalemployees',
@@ -65,6 +65,8 @@ const handleCancel = () => {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
+      fixed: 'right',
+      width: 80,
       render: (_, record) => {
         return (
           <>
@@ -75,10 +77,10 @@ const handleCancel = () => {
             </Row>
           </>
         )
+      },
     },
-   },
   ];
-// -------------------------------code for extra data in expandable row
+  // -------------------------------code for extra data in expandable row
   const expandedRowRender = () => {
     const columns = [
       {
@@ -91,14 +93,16 @@ const handleCancel = () => {
         dataIndex: 'phoneno',
         key: 'phoneno',
       },
-      
+
       {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
+        fixed: 'right',
+        width: 80,
         render: () => <a>Active</a>
       },
-      
+
     ];
     const data = [];
     for (let i = 0; i < 1; ++i) {
@@ -112,7 +116,7 @@ const handleCancel = () => {
     return <Table columns={columns} dataSource={data} pagination={false} />;
   };
 
-// --------------------------------------------------------------------------------Return part 
+  // --------------------------------------------------------------------------------Return part 
   return (
     <>
 
@@ -124,93 +128,105 @@ const handleCancel = () => {
           justifyContent: "center",
         }}
       >
-        <Form
-          labelcol={{
-            span: 4,
-          }}
-          wrappercol={{
-            span: 14,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          autoComplete="off"
-        >
-          <Card
-            title=" DEPARTMENT"
-            extra={
-              <>
-                  <Button 
-                    type="primary"
-                    onClick={showAddDepartment}
+        <Row
+          className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+          <Col span={24}>
+            <Form
+              labelcol={{
+                span: 4,
+              }}
+              wrappercol={{
+                span: 14,
+              }}
+              initialValues={{
+                remember: true,
+              }}
+              autoComplete="off"
+            >
+              <Card
+                title=" DEPARTMENT"
+                extra={
+                  <>
+                    <Button
+                      type="primary"
+                      onClick={showAddDepartment}
                     >
-                    Add Department
-                  </Button>
-              </>
-            }
-            style={{
-              width: 800,
-              marginTop: 10,
-            }}
-          >
-
-            <div className="table-responsive">
-              <Table
-                columns={columns}
-                dataSource={data}
-                pagination={false}
-                rowSelection={{}}
-                // expandable={{
-                //   expandedRowRender: (record) => (
-                //     <p
-                //       style={{
-                //         margin: 0,
-                //       }}
-                //     >
-                //       {record.description}
-                //     </p>
-                //   ),
-                // }}
-                expandable={{
-                  expandedRowRender,
-                  defaultExpandedRowKeys: ['0'],
+                      Add Department
+                    </Button>
+                  </>
+                }
+                style={{
+                  width: +'100%',
+                  marginTop: 10,
                 }}
-              />
-            </div>
+              >
 
-          </Card>
-          <Modal 
-            title="Basic Modal" 
-            open={addDepartmentOpen} 
-            onOk={handleOk} 
-            onCancel={handleCancel}
-          >
-           <Form>
-            <Row gutter={[16,]}>
-              <Col span={24}>
-                <FormItem label=''>
-                  <Input placeholder="Department Name"></Input>
-                </FormItem>
-              </Col>
-              <Col span={24}>
-                <FormItem>
-                  <Input placeholder="H.O.D"></Input>
-                </FormItem>
-              </Col>
-              <Col span={24}>
-                <FormItem>
-                  <Input placeholder="No. of Employee"></Input>
-                </FormItem>
-              </Col>
-              <Col span={24}>
-                <FormItem>
-                  <Input placeholder=""></Input>
-                </FormItem>
-              </Col>
-            </Row>
-           </Form>
-          </Modal>
-        </Form>
+                <div className="table-responsive">
+                  <Table
+                    columns={columns}
+                    dataSource={data}
+                    pagination={false}
+                    rowSelection={{}}
+                    scroll={{ x: 400 }}
+                    // expandable={{
+                    //   expandedRowRender: (record) => (
+                    //     <p
+                    //       style={{
+                    //         margin: 0,
+                    //       }}
+                    //     >
+                    //       {record.description}
+                    //     </p>
+                    //   ),
+                    // }}
+                    expandable={{
+                      expandedRowRender,
+                      defaultExpandedRowKeys: ['0'],
+                    }}
+                  />
+                </div>
+
+              </Card>
+              <Modal
+                title="Basic Modal"
+                open={addDepartmentOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+              >
+                <Form>
+                  <Row gutter={[16,]}>
+                    <Col span={24}>
+                      <FormItem label=''>
+                        <Input placeholder="Department Name"></Input>
+                      </FormItem>
+                    </Col>
+                    <Col span={24}>
+                      <FormItem>
+                        <Input placeholder="H.O.D"></Input>
+                      </FormItem>
+                    </Col>
+                    <Col span={24}>
+                      <FormItem>
+                        <Input placeholder="No. of Employee"></Input>
+                      </FormItem>
+                    </Col>
+                    <Col span={24}>
+                      <FormItem>
+                        <Input placeholder=""></Input>
+                      </FormItem>
+                    </Col>
+                  </Row>
+                </Form>
+              </Modal>
+            </Form>
+          </Col>
+        </Row>
       </div>
     </>
   )

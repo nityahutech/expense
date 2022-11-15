@@ -173,6 +173,10 @@ function AttendanceLog() {
     };
     AttendanceContext.updateAttendance(currentUser.uid, values.date, newData)
       .then((response) => {
+        getEmpDetails(currentUser.uid, [
+          moment().subtract(30, "days"),
+          moment(),
+        ]);
         showNotification("success", "Success", "Record updated successfuly");
       })
       .catch((error) => {

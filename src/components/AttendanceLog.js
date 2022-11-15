@@ -96,7 +96,7 @@ function AttendanceLog() {
     });
 };
 useEffect(() => {
-  getHolidayList()
+   getHolidayList()
 }, [])
   useEffect(() => {
     form.resetFields();
@@ -171,6 +171,10 @@ const setHolidayStatus = (data) => {
       values.date,
       newData
     ).then((response) => {
+      getEmpDetails(currentUser.uid, [
+        moment().subtract(30, "days"),
+        moment(),
+      ]);
       showNotification("success", "Success", "Record updated successfuly");
     }).catch((error) => {
       showNotification("error", "Error", "No records exist for this day");

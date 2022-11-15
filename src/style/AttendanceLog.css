@@ -28,7 +28,11 @@
     position: relative;
     bottom: 3.7rem;
     left: 42rem;
+    
 }
+/* .Range .ant-picker-focused{
+    background: #1963A6;
+} */
 .monthly{
     position: relative;
     bottom: 31px;
@@ -83,3 +87,38 @@
 .Range .ant-picker-input > input {
     color: white;
 }
+
+.monthly .ant-table-thead>tr>th{
+    background:#1963A6;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    
+ }
+
+ .DailyTable .ant-table-thead>tr>th{
+    background:#1963A6;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+ }
+
+ .Tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #000000;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    
+ }
+ .Tabs .ant-tabs-tab:hover{
+    color: #000000;
+    
+ }
+ .Tabs .ant-tabs-ink-bar {
+    /* position: absolute; */
+    background: #F9A01F;
+    pointer-events: none;
+
+ }

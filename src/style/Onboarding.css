@@ -65,11 +65,7 @@
  }
  .viewModal .ant-modal-content{
     border-radius: 10px;
-    width:820px;
-    /* right: 90px; */
-    display: flex;
-    flex-direction: column;
-
+    
  }
 
  .viewModal .ant-modal-header{
@@ -78,6 +74,22 @@
     color: #ffffff;
  }
  .viewModal .ant-modal-title{
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 18px;
+line-height: 25px;
+ }
+ .editModal .ant-modal-content{
+    border-radius: 10px;
+    
+ }
+
+ .editModal .ant-modal-header{
+    border-radius: 10px 10px 0px 0px;
+    background: #043661;
+    color: #ffffff;
+ }
+ .editModal .ant-modal-title{
     color: #ffffff;
     font-weight: 400;
     font-size: 18px;

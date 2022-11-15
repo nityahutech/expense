@@ -9,7 +9,6 @@ import AppraisalContext from '../../contexts/AppraisalContext';
 import moment from "moment";
 
 const CreateApparaisal = (props) => {
-
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [filterEmployees, setFilterEmployees] = useState([]);
@@ -17,7 +16,6 @@ const CreateApparaisal = (props) => {
     const [selectionType, setSelectionType] = useState('checkbox');
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [selectedQuarter, setSelectedQuarter] = useState();
-
     const columns = [
         {
             title: "Employee Code",
@@ -42,7 +40,6 @@ const CreateApparaisal = (props) => {
         },
 
     ]
-
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
             setSelectedEmployees(selectedRows)
@@ -53,9 +50,7 @@ const CreateApparaisal = (props) => {
             );
         },
     }
-    //--------------onFinish------------------------
     const handleCreateAppraisal = () => {
-        console.log('appraisal',);
         let appraisals = []
         for (let i = 0; i < selectedEmployees.length; i++) {
             let currentEmp = selectedEmployees[i]
@@ -73,25 +68,15 @@ const CreateApparaisal = (props) => {
             }
             appraisals[i] = newAppraisal
         }
-
-        console.log('appraisal', appraisals)
-
         AppraisalContext.createBatchAppraisal(appraisals)
             .then(response => {
-                console.log("appraisal Created", response);
-                
-                // getAppraisalList()
             })
             .catch(error => {
-                console.log('appraisal', error.message);
-
             })
-        console.log('appraisal', 'appraisal created');
         showNotification("success", "Success", "Appraisal Created");
         setSelectedQuarter('')
         props.closeCreateAppraisalModal()
     };
-
     const showNotification = (type, msg, desc) => {
         notification[type]({
             message: msg,
@@ -134,7 +119,6 @@ const CreateApparaisal = (props) => {
                 key: doc.data()["empId"],
             };
         });
-        console.log('abcr', { d });
         setData(d);
         setFilterEmployees(d);
         setAllEmployees(d);
@@ -185,13 +169,10 @@ const CreateApparaisal = (props) => {
                 <Radio.Group
                     onChange={({ target: { value } }) => {
                         setSelectionType(value);
-
                     }}
                     value={selectionType}
                 >
-
                 </Radio.Group>
-
                 <Table 
                     rowSelection={{
                         type: selectionType,

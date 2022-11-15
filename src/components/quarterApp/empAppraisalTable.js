@@ -200,11 +200,9 @@ const EmpAppraisalTable = (props) => {
                 id: doc.id,
             };
         });
-        console.log('appraisalLIST3', d)
         setAppraisalList(d)
     }
     const onDeleteAppraisal = (appraisal) => {
-        console.log('deleteappraisal', appraisal)
         Modal.confirm({
             title: "Are you sure, you want to delete Appraisal?",
             okText: "Yes",
@@ -213,11 +211,9 @@ const EmpAppraisalTable = (props) => {
             onOk: () => {
                 AppraisalContext.deleteAppraisal(appraisal.id)
                     .then(response => {
-                        console.log(response);
                         getAppraisalList()
                     })
                     .catch(error => {
-                        console.log(error.message);
 
                     })
             },

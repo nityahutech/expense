@@ -37,7 +37,6 @@ function PaySlip() {
     let mname = "";
     for (let i = 1; i < nameArray.length - 1; i++) {
       mname = mname + ((i != 1 ? " " : "") + nameArray[i]);
-      console.log(mname)
     }
     let record = {
       ...value,
@@ -49,7 +48,6 @@ function PaySlip() {
       tPaid: value.tPaid ? value.tPaid : null,
       mname: mname
     };
-    console.log(record)
     EmpInfoContext.addEduDetails(currentUser.uid, record);
     getData();
     showEditContent(false);
@@ -257,7 +255,6 @@ function SlipHtml() {
                 </tr>
               </table>
             </div>
-
             <div className="splitRight">
               <table>
                 <tr>
@@ -349,7 +346,6 @@ function SlipHtml() {
                     </th>
                   </tr>
                 </thead>
-
                 <tr>
                   <td
                     style={{

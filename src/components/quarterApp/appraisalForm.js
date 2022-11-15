@@ -16,11 +16,7 @@ import {
 } from "antd";
 const currDate = new Date().toLocaleDateString();
 const currTime = new Date().toLocaleTimeString();
-
 const { TextArea } = Input;
-
-
-
 const { Text, Link } = Typography;
 const fixedColumns = [
     {
@@ -40,37 +36,30 @@ const fixedData = [
         key: '1',
         name: 'Far Exceeds (Role Model)',
         description: 'Performance far exceeds job requirements (i.e., consistently far exceeds performance objectives)',
-
     },
     {
         key: '2',
         name: 'Exceeds (Exceeds Expectations)',
         description: 'Consistently meets job requirements and exceeds in most areas (i.e., achieves performance objectives and exceeds on most)'
-
     },
     {
         key: '3',
         name: 'Meets All (Solid Performer)',
         description: 'Consistently meets job requirements (i.e., achieves performance objectives)'
-
     },
     {
         key: '4',
         name: 'Meets Some (Development Needed)',
         description: 'Meets some (but not all) job requirements (i.e., achieves some but not all performance objectives)'
-
     },
     {
         key: '5',
         name: 'Does Not Meet (Below Expectations)',
         description: 'Performance does not consistently meet job requirements (i.e., does not achieve performance objectives)'
-
     },
 ];
 
 const Appraisal = (props) => {
-    console.log('employeeRecord', props.currentEmployee)
-    console.log('employeeAppraisal', props.appraisal)
     const [form] = Form.useForm();
     const [formLayout, setFormLayout] = useState('horizontal');
     const [currentAppraisal, setCurrentAppraisal] = useState(props.appraisal);
@@ -78,15 +67,12 @@ const Appraisal = (props) => {
     const [leadEditable, setLeadEditable] = useState((currentAppraisal.status === 'leadPending' && props.hrMode == false));
     const [mgrEditable, setMgrEditable] = useState((currentAppraisal.status === 'mgrPending' && props.hrMode == false));
 
-
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
         documentTitle: 'Quarter Appraisal Form',
         onafterprint: () => alert('Print Succes')
-
     });
-
 
     const onReset = () => {
         form.resetFields()
@@ -101,31 +87,24 @@ const Appraisal = (props) => {
     };
 
     const handleOk = () => {
-        console.log('hiii')
         props.setSecondModal(false)
     };
-
     const cancelStyle = {
         float: "right",
 
     };
-
     const checkAlphabets = (event) => {
         if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
             return true;
         }
     };
-
     const showNotification = (type, msg, desc) => {
         notification[type]({
             message: msg,
             description: desc,
         });
     };
-
     const onFinish = (values) => {
-        console.log('appraisal1', values);
-
         let newAppraisalForm = {
             projectName: values.projectName,
             employeeContribution: values.contribution,
@@ -141,7 +120,6 @@ const Appraisal = (props) => {
         }
         if (leadEditable) {
             newAppraisalForm = {
-
                 status: 'mgrPending',
                 leadGoal: values.leadGoal,
                 leadRating: values.leadRating,
@@ -150,7 +128,6 @@ const Appraisal = (props) => {
                 mailid: props.appraisal.mailid,
                 fname: props.appraisal.fname,
                 lname: props.appraisal.lname,
-
             }
         }
 
@@ -168,13 +145,10 @@ const Appraisal = (props) => {
                 lname: props.appraisal.lname,
             }
         }
-        console.log('appraisal2', newAppraisalForm)
 
         AppraisalContext.updateAppraisal(currentAppraisal.id, newAppraisalForm)
             .then(response => {
-                console.log("appraisal Form Created", response);
                 if (newAppraisalForm.status === 'leadPending') {
-                    console.log('newAppraisalForm.status', newAppraisalForm.status)
                     AppraisalContext.sendEmailToLead(newAppraisalForm)
 
                 }
@@ -186,11 +160,9 @@ const Appraisal = (props) => {
                 setEmpEditable(false)
             })
             .catch(error => {
-                console.log('appraisalForm', error.message);
                 showNotification("error", "Error", "Error Submiting Appraisal");
 
             })
-        console.log('appraisalForm', 'appraisal created');
 
         // setQuarter('')
         // form.resetFields();
@@ -294,7 +266,6 @@ const Appraisal = (props) => {
                     </Row>
                 </Col>
 
-
                 <Col title="Refrence Guide"
                     style={{
                         width: 700,
@@ -318,7 +289,6 @@ const Appraisal = (props) => {
                         summary={() => <Table.Summary fixed></Table.Summary>}
                     />
                 </Col>
-
                 <Row gutter={[8, 8]}>
                     <Col xl={24} lg={24} md={24} sm={24} xs={24} >
 
@@ -357,112 +327,84 @@ const Appraisal = (props) => {
                             onFinish={onFinish}
                         // onFieldsChange={(changedFields, allvalues) => onFieldsChangeHandler(changedFields, allvalues)}
                         // onValuesChange={onFormLayoutChange}
-
                         >
-
-
                             <Divider orientation='left' orientationMargin={0}>To Be Fill By Employee<span style={{ color: 'red' }}> *</span></Divider>
                             <Form.Item labelAlign="left"
                                 style={{ marginBottom: "10px", width: '100%', }}
                                 // title='Project Name and Description '
                                 label='Project Name and Description '
-
                                 name="projectName"
-
-
                             // onKeyPress={(event) => {
                             //     if (checkAlphabets(event)) {
                             //         event.preventDefault();
                             //     }
                             // }}
-
                             >
                                 <TextArea className='textArea-ant'
                                     maxLength={100}
                                     autoSize={{
                                         minRows: 3,
-
-
                                     }}
                                     required
                                     placeholder=""
                                     disabled={empEditable}
                                 />
                                 {/* <Input placeholder="Associate Id" /> */}
-
                             </Form.Item>
-
-
-
                             <Form.Item labelAlign="left"
                                 style={{ marginBottom: "10px" }}
                                 label='What were your best traits or contribution to the company this quarter?'
-
                                 name="contribution"
-
                             // onKeyPress={(event) => {
                             //     if (checkAlphabets(event)) {
                             //         event.preventDefault();
                             //     }
                             // }}
-
                             >
                                 <TextArea className='textArea-ant'
                                     maxLength={100}
                                     autoSize={{
                                         minRows: 3,
-
                                     }}
                                     required
                                     placeholder=""
                                     disabled={empEditable}
                                 />
                             </Form.Item>
-
-
                             <Form.Item labelAlign="left"
                                 style={{ marginBottom: "10px" }}
                                 label='What are your goal for next quarter?'
-
                                 name="employeeGoal"
-
                             // onKeyPress={(event) => {
                             //     if (checkAlphabets(event)) {
                             //         event.preventDefault();
                             //     }
                             // }}
-
                             >
                                 <TextArea className='textArea-ant'
                                     maxLength={100}
                                     autoSize={{
                                         minRows: 3,
-
                                     }}
                                     required
                                     placeholder=""
                                     disabled={empEditable}
                                 />
                             </Form.Item>
-
                             <Form.Item className='page-break4' labelAlign="left"
                                 style={{ marginBottom: "10px" }}
                                 label='What are your Strength and Development Area?'
-
                                 name="employeeStrength"
-
                             // onKeyPress={(event) => {
                             //     if (checkAlphabets(event)) {
                             //         event.preventDefault();
                             //     }
                             // }}
-
                             >
                                 <TextArea className='textArea-ant'
                                     maxLength={100}
                                     autoSize={{
                                         minRows: 3,
-
                                     }}
                                     required
                                     placeholder=""
@@ -470,33 +412,23 @@ const Appraisal = (props) => {
                                 />
                             </Form.Item>
 
-                            {/* //--------------lead---------------------------*/}
-
                             <div className='page-break-lead' style={{ display: leadEditable || mgrEditable || props.hrMode ? 'block' : 'none' }}>
                                 <Divider orientation='left' orientationMargin={0}>To Be Fill By Team Lead<span style={{ color: 'red' }}> *</span></Divider>
-
-
                                 <Form.Item labelAlign="left"
                                     style={{ marginBottom: "10px", }}
                                     label='Set goals and objective for upcoming assement year'
-
                                     name="leadGoal"
-
                                 // onKeyPress={(event) => {
                                 //     if (checkAlphabets(event)) {
                                 //         event.preventDefault();
                                 //     }
                                 // }}
-
                                 >
-
                                     <TextArea className='textArea-ant'
                                         style={{ overflow: 'hidden', }}
                                         maxLength={100}
                                         autoSize={{
                                             minRows: 3,
-
-
                                         }}
                                         required
                                         // bordered={false}
@@ -504,21 +436,16 @@ const Appraisal = (props) => {
                                         disabled={!leadEditable}
                                     />
                                 </Form.Item>
-
                                 <Form.Item labelAlign="left"
                                     style={{ marginBottom: "10px" }}
                                     label='Overall Rating'
-
                                     name="leadRating"
-
                                 // onKeyPress={(event) => {
                                 //     if (checkAlphabets(event)) {
                                 //         event.preventDefault();
                                 //     }
                                 // }}
-
                                 >
-
                                     <TextArea className='textArea-ant'
                                         maxLength={100}
                                         autoSize={{
@@ -531,8 +458,6 @@ const Appraisal = (props) => {
                                     />
                                 </Form.Item>
                             </div>
-
-                            {/* //-------------------mgr------- */}
 
                             <div className='page-break-mgr' style={{ display: mgrEditable || props.hrMode ? 'block' : 'none' }}>
                                 <Divider orientation='left' orientationMargin={0}>To Be Fill By Manager<span style={{ color: 'red' }}> *</span></Divider>
@@ -547,7 +472,6 @@ const Appraisal = (props) => {
                                 //         event.preventDefault();
                                 //     }
                                 // }}
-
                                 >
                                     <TextArea className='textArea-ant'
                                         maxLength={100}
@@ -560,20 +484,15 @@ const Appraisal = (props) => {
                                         disabled={!mgrEditable}
                                     />
                                 </Form.Item>
-
-
                                 <Form.Item labelAlign="left"
                                     style={{ marginBottom: "10px" }}
                                     label='People Management/Leadership Objectives:'
-
                                     name="managerObjective"
-
                                 // onKeyPress={(event) => {
                                 //     if (checkAlphabets(event)) {
                                 //         event.preventDefault();
                                 //     }
                                 // }}
-
                                 >
                                     <TextArea className='textArea-ant'
                                         maxLength={100}
@@ -586,20 +505,15 @@ const Appraisal = (props) => {
                                         disabled={!mgrEditable}
                                     />
                                 </Form.Item>
-
-
                                 <Form.Item labelAlign="left"
                                     style={{ marginBottom: "10px" }}
                                     label='Diversity Goals Comments (if applicable):'
-
                                     name="diversityGoal"
-
                                 // onKeyPress={(event) => {
                                 //     if (checkAlphabets(event)) {
                                 //         event.preventDefault();
                                 //     }
                                 // }}
-
                                 >
                                     <TextArea className='textArea-ant'
                                         maxLength={100}
@@ -612,18 +526,14 @@ const Appraisal = (props) => {
                                         disabled={!mgrEditable}
                                     />
                                 </Form.Item>
-
                             </div>
-
                             <Col span={30} >
-
                                 <Form.Item className="noprint">
                                     <Button
                                         style={cancelStyle}
                                         onClick={handleOk}
                                         // onClick={submitEdit}
                                         htmlType="submit"
-
                                         type="primary">Submit
                                     </Button>
                                     <Button

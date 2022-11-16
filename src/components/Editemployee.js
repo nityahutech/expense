@@ -40,13 +40,15 @@ function Editemployee(props) {
   const [repManager, setRepManager] = useState("");
   const [secManager, setSecManager] = useState("");
   const [department, setDepartment] = useState("");
+  const [lead, setLead] = useState("");
   const [location, setLocation] = useState("");
   const [isManager, setIsMgr] = useState("");
+  const [isLead, setIsLd] = useState("");
   const [earnLeave, setEarnLeave] = useState("");
   const [sickLeave, setSickLeave] = useState("");
   const [optionalLeave, setOptionalLeave] = useState("");
   const [casualLeave, setCasualLeave] = useState("");
-  const page = "addemployeePage"
+  const page = "addemployeePage";
   const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
   const [configurations, setConfigurations] = useState(null);
   const [workLoc, setWorkLoc] = useState(null);
@@ -60,21 +62,27 @@ function Editemployee(props) {
         doj,
         designation,
         gender,
+        phonenumber,
         repManager,
         secManager,
         department,
+        lead,
         location,
         isManager,
+        isLead,
         earnLeave,
         sickLeave,
         casualLeave,
         optionalLeave,
       };
-      let name = editedRecord.fname + (editedRecord.mname?` ${editedRecord.mname} `:" ") + editedRecord.lname
+      let name =
+        editedRecord.fname +
+        (editedRecord.mname ? ` ${editedRecord.mname} ` : " ") +
+        editedRecord.lname;
       let record = {
         ...editedRecord,
-        name: name
-      }
+        name: name,
+      };
       EmpInfoContext.updateEduDetails(props.record.id, record);
       props.setIsModalVisible(false);
       // props.reloadData();
@@ -86,16 +94,18 @@ function Editemployee(props) {
     }
   }
   const getData = async () => {
-    let temp = await CompanyProContext.getCompanyProfile(compId)
-    let data = await ConfigureContext.getConfigurations(page)
-    let add = ["Registered Office"]
-    if(temp.corpOffice) {add.push("Corporate Office")}
+    let temp = await CompanyProContext.getCompanyProfile(compId);
+    let data = await ConfigureContext.getConfigurations(page);
+    let add = ["Registered Office"];
+    if (temp.corpOffice) {
+      add.push("Corporate Office");
+    }
     temp.address?.map((rec) => {
-      add.push(rec.title)
-    })
-    setWorkLoc(add)
-    setConfigurations(data)
-  }
+      add.push(rec.title);
+    });
+    setWorkLoc(add);
+    setConfigurations(data);
+  };
   useEffect(() => {
     getData();
     const fnameVal = props.record ? props.record.fname : "";
@@ -109,7 +119,9 @@ function Editemployee(props) {
     const repManagerVal = props.record ? props.record.repManager : "";
     const secManagerVal = props.record ? props.record.secManager : "";
     const setDepartmentVal = props.record ? props.record.department : "";
+    const leadVal = props.record ? props.record.lead : "";
     const locationVal = props.record ? props.record.location : "";
+    const isLeadVal = props.record ? props.record.isLead : "";
     const isMgrVal = props.record ? props.record.isManager : "";
     const earnLeaveVal = props.record ? props.record.earnLeave : "";
     const sickLeaveVal = props.record ? props.record.sickLeave : "";
@@ -126,8 +138,10 @@ function Editemployee(props) {
     setRepManager(repManagerVal);
     setSecManager(secManagerVal);
     setDepartment(setDepartmentVal);
+    setLead(leadVal);
     setLocation(locationVal);
     setIsMgr(isMgrVal);
+    setIsLd(isLeadVal);
     setEarnLeave(earnLeaveVal);
     setSickLeave(sickLeaveVal);
     setCasualLeave(casualLeaveVal);
@@ -221,8 +235,16 @@ function Editemployee(props) {
             value: department,
           },
           {
+            name: ["lead"],
+            value: lead,
+          },
+          {
             name: ["location"],
             value: location,
+          },
+          {
+            name: ["isLead"],
+            value: isLead,
           },
           {
             name: ["isManager"],
@@ -436,10 +458,7 @@ function Editemployee(props) {
                 },
               ]}
             >
-              <Select
-                style={{ width: "80%" }}
-                onChange={(e) => setGender(e)}
-              >
+              <Select style={{ width: "80%" }} onChange={(e) => setGender(e)}>
                 <Option value="Male">Male</Option>
                 <Option value="Female">Female</Option>
                 {/* <Option value="pns">Prefer Not To Say</Option> */}
@@ -460,17 +479,15 @@ function Editemployee(props) {
                 },
               ]}
             >
-                <Select
-                  onChange={(e) => setDesignation(e)}
-                  style={{ width: "80%" }}
-                  placeholder="Select a Designation"
-                >
-                {
-                  configurations?.designations.map((des) => (
-                    <Option value={des}>{des}</Option>
-                  ))
-                }
-                </Select>
+              <Select
+                onChange={(e) => setDesignation(e)}
+                style={{ width: "80%" }}
+                placeholder="Select a Designation"
+              >
+                {configurations?.designations.map((des) => (
+                  <Option value={des}>{des}</Option>
+                ))}
+              </Select>
             </Form.Item>
           </Col>
           <Col xs={22} sm={22} md={12}>
@@ -490,16 +507,14 @@ function Editemployee(props) {
               ]}
             >
               <Select
-                  onChange={(e) => setRepManager(e)}
-                  style={{ width: "80%" }}
-                  placeholder="Select a Manager"
-                >
-                {
-                  configurations?.repManager.map((des) => (
-                    <Option value={des}>{des}</Option>
-                  ))
-                }
-                </Select>
+                onChange={(e) => setRepManager(e)}
+                style={{ width: "80%" }}
+                placeholder="Select a Manager"
+              >
+                {configurations?.repManager.map((des) => (
+                  <Option value={des}>{des}</Option>
+                ))}
+              </Select>
             </Form.Item>
           </Col>
         </Row>
@@ -521,16 +536,14 @@ function Editemployee(props) {
               ]}
             >
               <Select
-                  onChange={(e) => setSecManager(e)}
-                  style={{ width: "80%" }}
-                  placeholder="Select a Manager"
-                >
-                {
-                  configurations?.secManager.map((des) => (
-                    <Option value={des}>{des}</Option>
-                  ))
-                }
-                </Select>
+                onChange={(e) => setSecManager(e)}
+                style={{ width: "80%" }}
+                placeholder="Select a Manager"
+              >
+                {configurations?.secManager.map((des) => (
+                  <Option value={des}>{des}</Option>
+                ))}
+              </Select>
             </Form.Item>
           </Col>
           <Col xs={22} sm={22} md={12}>
@@ -546,62 +559,56 @@ function Editemployee(props) {
               ]}
             >
               <Select
-                  placeholder="Select a Field"
-                  style={{ width: "80%" }}
-                  onChange={(e) => setDepartment(e)}
-                >
-                {
-                  configurations?.field.map((des) => (
-                    <Option value={des}>{des}</Option>
-                  ))
-                }
-                </Select>
+                placeholder="Select a Field"
+                style={{ width: "80%" }}
+                onChange={(e) => setDepartment(e)}
+              >
+                {configurations?.field.map((des) => (
+                  <Option value={des}>{des}</Option>
+                ))}
+              </Select>
             </Form.Item>
           </Col>
         </Row>
         <Row>
           <Col xs={22} sm={22} md={12}>
             <Form.Item
-              className="managerError"
               style={{ marginBottom: "17px" }}
-              name="isManager"
-              label="Is Manager"
-              // rules={[
-              //   {
-              //     required: false,
-              //     message: "Please enter Phone Number",
-              //     // pattern: /^[0-9\b]+$/,
-              //   },
-              //   { whitespace: true },
-              // ]}
-              initialValue={props.record.isManager == "true"}
+              name="lead"
+              label="Lead&nbsp;"
+              onKeyPress={(event) => {
+                if (checkAlphabets(event)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[
+                {
+                  required: true,
+
+                  message: "Please enter Lead Name",
+                },
+                {
+                  pattern: /^[a-zA-Z\s]*$/,
+                  message: "Please enter Valid Name",
+                },
+              ]}
             >
-            {props.record.isManager == "true"? (
-              <Checkbox
-                // defaultChecked={props.record.isManager == "true"}
-                defaultChecked={props.record.isManager == "true"}
+              <Input
                 style={{ width: "80%" }}
-                maxLength={10}
+                maxLength={20}
                 onChange={(e) => {
-                  const number = e.target.checked;
-                  setIsMgr(number);
+                  const inputval = e.target.value;
+                  const newVal =
+                    inputval.substring(0, 1).toUpperCase() +
+                    inputval.substring(1);
+                  setLead(newVal);
                 }}
-              >
-                Manager
-              </Checkbox>) 
-              : (
-              <Checkbox
-                style={{ width: "80%" }}
-                maxLength={10}
-                onChange={(e) => {
-                  const number = e.target.checked;
-                  setIsMgr(number);
-                }}
-              >
-                Manager
-              </Checkbox>) }
+                // required
+                // placeholder="Enter Your First Name"
+              />
             </Form.Item>
           </Col>
+
           <Col xs={22} sm={22} md={12}>
             <Form.Item
               style={{ marginBottom: "17px" }}
@@ -625,16 +632,102 @@ function Editemployee(props) {
               ]}
             >
               <Select
-                  style={{ width: "80%" }}
-                  onChange={(e) => setWorkLoc(e)}
-                  placeholder="Select a Location"
-                >
-                {
-                  workLoc?.map((des) => (
-                    <Option value={des}>{des}</Option>
-                  ))
-                }
+                style={{ width: "80%" }}
+                onChange={(e) => setWorkLoc(e)}
+                placeholder="Select a Location"
+              >
+                {workLoc?.map((des) => (
+                  <Option value={des}>{des}</Option>
+                ))}
               </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              className="managerError"
+              style={{ marginBottom: "17px" }}
+              name="isManager"
+              label="Is Manager"
+              // rules={[
+              //   {
+              //     required: false,
+              //     message: "Please enter Phone Number",
+              //     // pattern: /^[0-9\b]+$/,
+              //   },
+              //   { whitespace: true },
+              // ]}
+              initialValue={props.record.isManager == "true"}
+            >
+              {props.record.isManager == "true" ? (
+                <Checkbox
+                  // defaultChecked={props.record.isManager == "true"}
+                  defaultChecked={props.record.isManager == "true"}
+                  style={{ width: "80%" }}
+                  maxLength={10}
+                  onChange={(e) => {
+                    const number = e.target.checked;
+                    setIsMgr(number);
+                  }}
+                >
+                  Manager
+                </Checkbox>
+              ) : (
+                <Checkbox
+                  style={{ width: "80%" }}
+                  maxLength={10}
+                  onChange={(e) => {
+                    const number = e.target.checked;
+                    setIsMgr(number);
+                  }}
+                >
+                  Manager
+                </Checkbox>
+              )}
+            </Form.Item>
+          </Col>
+          <Col xs={22} sm={22} md={12}>
+            <Form.Item
+              className="leadError"
+              style={{ marginBottom: "17px" }}
+              name="isLead"
+              label="Is Lead"
+              // rules={[
+              //   {
+              //     required: false,
+              //     message: "Please enter Phone Number",
+              //     // pattern: /^[0-9\b]+$/,
+              //   },
+              //   { whitespace: true },
+              // ]}
+              initialValue={props.record.isLead == "true"}
+            >
+              {props.record.isLead == "true" ? (
+                <Checkbox
+                  // defaultChecked={props.record.isManager == "true"}
+                  defaultChecked={props.record.isLead == "true"}
+                  style={{ width: "80%" }}
+                  maxLength={10}
+                  onChange={(e) => {
+                    const number = e.target.checked;
+                    setIsLd(number);
+                  }}
+                >
+                  Lead
+                </Checkbox>
+              ) : (
+                <Checkbox
+                  style={{ width: "80%" }}
+                  maxLength={10}
+                  onChange={(e) => {
+                    const number = e.target.checked;
+                    setIsLd(number);
+                  }}
+                >
+                  Lead
+                </Checkbox>
+              )}
             </Form.Item>
           </Col>
         </Row>

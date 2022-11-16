@@ -73,14 +73,14 @@ function AddressCorp() {
                                                 type="text"
                                                 className="edit"
                                                 style={{
-                                                    color: "#4ec0f1",
+                                                    color: "#ffff",
                                                     display: "none",
                                                     paddingTop: "7px",
                                                     paddingRight: "7px",
                                                     position: "absolute",
                                                     right: 10,
                                                     top: 10,
-                                                }}
+                                                  }}
                                                 onClick={() => showEditCorpAddress(!editCorpAddress)}
                                             >
                                                 <EditFilled />
@@ -91,6 +91,7 @@ function AddressCorp() {
                                 style={{
                                     width: '100%',
                                     marginTop: 10,
+                                    borderRadius:"10px",
                                 }}
                             >
                                 {/* {editcorpInfo === true ? ( */}

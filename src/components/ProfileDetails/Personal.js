@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Card, Row, Col, Input, Button, DatePicker, Select, Form } from "antd";
+import { Card, Row, Col, Input, Button, DatePicker, Select, Form, Divider } from "antd";
 import { CloseOutlined, EditFilled } from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
@@ -232,10 +232,7 @@ function Personal() {
                             style={{ 
                               marginTop: "10px", 
                               width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              padding: "2px",
                             }}
-                            bordered={false}
                             // format={dateFormatList}
                             // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
                             onChange={(e) => {
@@ -515,7 +512,13 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            style={{ marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              padding: "2px",
+                            }}
+                            bordered={false}
                             disabled={true}
                             required
                             placeholder="Enter Email Address"
@@ -525,7 +528,6 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  {/* <Col span={8}></Col> */}
                   <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
@@ -559,7 +561,13 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            style={{ marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              padding: "2px",
+                            }}
+                            bordered={false}
                             required
                             placeholder="Enter Email Address"
                           />
@@ -599,7 +607,13 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            style={{ marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              padding: "2px",
+                            }}
+                            bordered={false}
                             maxLength={10}
                             required
                             placeholder="Enter Phone Number"
@@ -608,7 +622,6 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  {/* <Col span={8}></Col> */}
                   <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
@@ -639,7 +652,13 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            style={{ marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              padding: "2px",
+                            }}
+                            bordered={false}
                             maxLength={10}
                             placeholder="Enter Alternate Number"
                           />
@@ -872,7 +891,13 @@ function Personal() {
                       /> */}
                           <Select
                             placeholder="Select Your HouseType"
-                            style={{ width: "100%", marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              padding: "2px",
+                            }}
+                            bordered={false}
                           >
                             <Option value="House Type">House Type</Option>
                             <Option value="Owned by Self/Spouse">

@@ -177,6 +177,13 @@ function Education() {
                           defaultValue={data ? data.qualificationType : null}
                           maxLength={25}
                           placeholder="Enter Qualification Type"
+                          style={{ 
+                            marginTop: "10px", 
+                            width: "100%",
+                            borderBottom: "1px solid #ccc ",
+                            paddingLeft: "0px",
+                          }}
+                          bordered={false}
                         />
                       </Form.Item>
                     )}
@@ -221,6 +228,13 @@ function Education() {
                         <Input
                           initialValue={data ? data.courseName : null}
                           placeholder="Enter Course Name"
+                          style={{ 
+                            marginTop: "10px", 
+                            width: "100%",
+                            borderBottom: "1px solid #ccc ",
+                            paddingLeft: "0px",
+                          }}
+                          bordered={false}
                         />
                       </Form.Item>
                     )}
@@ -277,13 +291,18 @@ function Education() {
                           }}
                           initialValue={data ? data.courseType : null}
                           placeholder="Enter Course Type"
+                          style={{ 
+                            marginTop: "10px", 
+                            width: "100%",
+                            borderBottom: "1px solid #ccc ",
+                            paddingLeft: "0px",
+                          }}
+                          bordered={false}
                         />
                       </Form.Item>
                     )}
                   </div>
                 </Col>
-              </Row>
-              <Row gutter={[16, 16]}>
                 <Col xs={22} sm={15} md={8}>
                   <div>
                     <h1
@@ -335,6 +354,13 @@ function Education() {
                           }}
                           defaultValue={data ? data.stream : null}
                           placeholder="Enter Stream"
+                          style={{ 
+                            marginTop: "10px", 
+                            width: "100%",
+                            borderBottom: "1px solid #ccc ",
+                            paddingLeft: "0px",
+                          }}
+                          bordered={false}
                         />
                       </Form.Item>
                     )}
@@ -427,8 +453,6 @@ function Education() {
                   )}
                   {/* </div> */}
                 </Col>
-              </Row>
-              <Row>
                 <Col xs={22} sm={15} md={8}>
                   <div>
                     <h1
@@ -474,13 +498,19 @@ function Education() {
                             data?.universityName ? data.universityName : null
                           }
                           placeholder="Enter University Name"
+                          style={{ 
+                            marginTop: "10px", 
+                            width: "100%",
+                            borderBottom: "1px solid #ccc ",
+                            paddingLeft: "0px",
+                          }}
+                          bordered={false}
                         />
                       </Form.Item>
                     )}
                   </div>
                 </Col>
               </Row>
-
               {editContent === true ? (
                 <Row
                   style={{

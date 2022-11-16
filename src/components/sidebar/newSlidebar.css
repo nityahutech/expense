@@ -1,7 +1,7 @@
 .ant-layout-sider-zero-width-trigger {
   top: 0;
   right: 10;
-  background-color: #05445e;
+  background-color: #1963A6;
 }
 
 .ant-menu-root.ant-menu-vertical,
@@ -113,7 +113,7 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
   background-color: #f4f4f4;
 }
 .ant-layout.ant-layout-has-sider {
-  background-color: #05445e;
+  background-color: #1963A6;
 }
 
 .leaveletter {

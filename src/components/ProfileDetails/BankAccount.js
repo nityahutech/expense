@@ -96,7 +96,7 @@ function BankAccount() {
                         className="personal"
                         type="text"
                         style={{
-                          color: "#4ec0f1",
+                          color: "#ffff",
                           display: "none",
                           paddingTop: "7px",
                           paddingRight: "7px",
@@ -117,7 +117,7 @@ function BankAccount() {
                   borderRadius: "10px",
                 }}
               >
-                <Row gutter={[48, 8]}>
+                <Row gutter={[16, 16]}>
                   <Col xs={22} sm={20} md={12}>
                     <div>
                       <div
@@ -157,7 +157,13 @@ function BankAccount() {
                               setBankName(e.target.value);
                             }}
                             maxLength={20}
-                            style={{ marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       )}
@@ -205,15 +211,19 @@ function BankAccount() {
                               setAccountNumber(e.target.value);
                             }}
                             maxLength={20}
-                            style={{ marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       )}
                     </div>
                   </Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                  <Col xs={22} sm={15} md={12} style={{ marginTop: "10px" }}>
+                  <Col xs={22} sm={15} md={12}>
                     <div>
                       <div
                         style={{
@@ -258,7 +268,13 @@ function BankAccount() {
                             onChange={(e) => {
                               setIfscCode(e.target.value);
                             }}
-                            style={{ marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       )}

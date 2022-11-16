@@ -127,10 +127,11 @@ function AddressCust() {
                             type="text"
                             className="edit"
                             style={{
-                              color: "#4ec0f1",
+                              color: "#ffff",
                               display: "none",
                               paddingTop: "7px",
-                              paddingRight: "7px",
+                              // paddingRight: "7px",
+                              // marginLeft:"7px",
                               position: "absolute",
                               right: 10,
                               top: 10,
@@ -144,17 +145,38 @@ function AddressCust() {
                             <EditFilled />
                           </Button>
                         ) : null}
+                        <>
+                        {editAddressContent[i] === false ? (
+                        <Button
+                          type="text"
+                          className="edit"
+                           style={{ 
+                            color: "#ffff", 
+                            marginRight: "25px", 
+                            display: "none",
+                            paddingTop: "7px",
+                              // paddingRight: "7px",
+                              // marginLeft:"7px",
+                              position: "absolute",
+                              right: 10,
+                              top: 10,
+                          }}
+                        >
                         <DeleteOutlined
-                          style={{ color: "lightblue", paddingRight: "25px", }}
+                         
                           onClick={() => {
                             onDeleteAddress(add);
                           }}
                         />
+                        </Button>
+                        ) : null}
+                        </>
                       </>
                     }
                     style={{
                       width: '100%',
                       marginTop: 10,
+                       borderRadius:"10px",
                     }}
                   >
                     {/* {editContactInfo === true ? ( */}
@@ -473,7 +495,7 @@ function AddressCust() {
                         type="text"
                         className="edit"
                         style={{
-                          color: "#4ec0f1",
+                          color: "#ffff",
                           display: "none",
                           paddingTop: "7px",
                           paddingRight: "7px",

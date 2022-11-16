@@ -330,6 +330,13 @@ const Family = () => {
                             defaultValue={data ? data.father : "breh"}
                             maxLength={40}
                             placeholder="Enter Father's Name"
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       </div>
@@ -371,6 +378,13 @@ const Family = () => {
                             maxLength={11}
                             defaultValue={data ? data.fatherContact : ""}
                             placeholder="Enter Contact no."
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       </div>
@@ -431,6 +445,13 @@ const Family = () => {
                             defaultValue={data ? data.mother : ""}
                             maxLength={40}
                             placeholder="Enter Mother's Name"
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       </div>
@@ -472,6 +493,13 @@ const Family = () => {
                             maxLength={11}
                             defaultValue={data ? data.motherContact : ""}
                             placeholder="Enter Contact no."
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       </div>
@@ -760,6 +788,13 @@ const Family = () => {
                             defaultValue={data ? data.other : null}
                             placeholder="Enter Other Name"
                             maxLength={40}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       </div>
@@ -819,6 +854,13 @@ const Family = () => {
                             defaultValue={data ? data.relation : ""}
                             placeholder="Enter the Relation"
                             maxLength={40}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       </div>
@@ -856,6 +898,13 @@ const Family = () => {
                             maxLength={11}
                             defaultValue={data ? data.otherContact : ""}
                             placeholder="Enter Contact no."
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </div>
                       </Form.Item>

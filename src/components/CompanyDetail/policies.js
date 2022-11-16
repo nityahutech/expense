@@ -14,6 +14,7 @@ import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import FormItem from "antd/es/form/FormItem";
 import { upload } from "@testing-library/user-event/dist/upload";
 import PolicyContext from "../../contexts/PolicyContext";
+import "../../components/CompanyDetail/companystyle.css";
 
 const Policies = () => {
   const [policy, setPolicy] = useState([]);
@@ -184,6 +185,8 @@ const Policies = () => {
                 bordered={false}
                 style={{
                   width: '100%',
+                  marginTop: 10,
+                  borderRadius:"10px",
                 }}
               >
                 <Table
@@ -191,6 +194,7 @@ const Policies = () => {
                   pagination={false}
                   dataSource={policy}
                   scroll={{ x: 400 }}
+                  className="policies"
                 />
                 <Button
                   type="primary"

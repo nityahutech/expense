@@ -4,7 +4,6 @@ import {
   Layout,
   Table,
   Button,
-  Modal,
   Form,
   Input,
   DatePicker,
@@ -15,11 +14,9 @@ import {
 import "../style/AttendanceLog.css";
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { useAuth } from "../contexts/AuthContext";
 import AttendanceContext from "../contexts/AttendanceContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
-const { RangePicker } = DatePicker;
-const { Content } = Layout;
+
 const layout = {
   labelCol: {
     span: 8,
@@ -34,20 +31,18 @@ const tailLayout = {
     span: 16,
   },
 };
-const dateFormat = "DD-MM-YYYY";
+
 function AttendanceLog() {
-  const [monthlydata, setMonthlydata] = useState([]);
+
   const [allEmp, setallEmp] = useState([]);
-  const [role, setRole] = useState(sessionStorage.getItem("role"));
+  const role = sessionStorage.getItem("role");
+  const currentUser = JSON.parse(sessionStorage.getItem("user"))
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
-  const { currentUser } = useAuth();
-  const [key, setKey] = useState("1");
   const [loading, setLoading] = useState(false);
   const [empMonthly, setEmpMonthly] = useState([]);
   const [holidays, setHolidays] = useState([]);
   const [month, setMonth] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
     date: [],
@@ -173,6 +168,10 @@ function AttendanceLog() {
     };
     AttendanceContext.updateAttendance(currentUser.uid, values.date, newData)
       .then((response) => {
+        getEmpDetails(currentUser.uid, [
+          moment().subtract(30, "days"),
+          moment(),
+        ]);
         showNotification("success", "Success", "Record updated successfuly");
       })
       .catch((error) => {

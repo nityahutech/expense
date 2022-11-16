@@ -13,7 +13,9 @@ import Settings from "../images/Settings.png";
 import Organization from "../images/organizationLogoNew.png";
 import { Link } from "react-router-dom";
 function MainDashBoard() {
-  const isHr = sessionStorage.getItem("role");
+  const role = sessionStorage.getItem("role");
+  const isHr = JSON.parse(sessionStorage.getItem("isHr"));
+  console.log(role, isHr)
 
   const organizationcon = () => {
     return (
@@ -346,7 +348,7 @@ function MainDashBoard() {
 
   return (
     <div className="icon-container">
-      {isHr == "emp" ? (
+      {role == "emp" &&  !isHr ? (
         <>
           
               <Row gutter={[24, 24]}>
@@ -369,7 +371,7 @@ function MainDashBoard() {
         </>
       ) : null}
 
-      {isHr == "hr" ? (
+      {role == "admin" || isHr ? (
         <>
           <Row gutter={[12, 48]}>
             <Col xs={24} sm={24} md={6} className="hi">
@@ -411,7 +413,7 @@ function MainDashBoard() {
         </>
       ) : null}
 
-      {isHr == "super" ? (
+      {role == "super" ? (
         <>
           <Row gutter={[24, 24]}>
             <Col xs={22} sm={15} md={8} className="hi">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../style/Settingpage.css";
 import "antd/dist/antd.css";
 import { Card, Col, Row, Form, Input, notification } from "antd";
@@ -6,38 +6,23 @@ import { Button } from "antd";
 import { Tabs } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 
-const onChange = (e) => {
-};
 const showNotification = (type, msg, desc) => {
   notification[type]({
     message: msg,
     description: desc,
   });
 };
-const openNotificationWithIcon = (type) => {
-  notification[type]({
-    message: "Successfully",
-    description: "Password changed successfully",
-  });
-};
+
 const Settingpage = () => {
   const [tabPosition, setTabPosition] = useState("left");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState(null);
   const [form] = Form.useForm();
   const [emailForm] = Form.useForm();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNew] = useState("");
-
-  const { currentUser, updateMyPassword, deletePerson, updateMyEmail, login } =
-    useAuth();
-  const openUpdateEmail = (type) => {
-    notification[type]({
-      message: "Successfully",
-      description: "Email Address changed successfully",
-    });
-  };
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const { updateMyPassword, updateMyEmail, login } = useAuth();
+  
   useEffect(() => {
     setTabPosition(window.innerWidth <= 768 ? "top" : "left");
   }, []);
@@ -45,6 +30,7 @@ const Settingpage = () => {
   window.addEventListener("resize", () => {
     setTabPosition(window.innerWidth <= 768 ? "top" : "left");
   });
+
   const handleEmailSubmit = async () => {
     try {
       await updateMyEmail(email);
@@ -56,7 +42,7 @@ const Settingpage = () => {
 
   const checkPassword = async () => {
     try {
-      let check = await login(currentUser.email, password);
+      await login(currentUser.email, password);
       return true;
     } catch {
       showNotification("error", "Failed", "Incorrect password");

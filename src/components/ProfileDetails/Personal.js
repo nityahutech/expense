@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, Row, Col, Input, Button, DatePicker, Select, Form } from "antd";
 import { CloseOutlined, EditFilled } from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
-import { useAuth } from "../../contexts/AuthContext";
 import "../../style/BankAccount.css";
 import moment from "moment";
 const { TextArea } = Input;
 const { Option } = Select;
-// const dateFormatList = ["DD/MM/YYYY"];
+
 function Personal() {
   const [editContent, showEditContent] = useState(false);
   const [editContactInfo, showEditContactInfo] = useState(false);
@@ -16,7 +15,7 @@ function Personal() {
   const [lccs, setLccs] = useState("");
   const [editAddressInfo, showEditAddressInfo] = useState(false);
   const [data, setData] = useState([]);
-  const { currentUser } = useAuth();
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [form] = Form.useForm();
   const onFinish = (value) => {
     let nameArray = value.name.split(" ");

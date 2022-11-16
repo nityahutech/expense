@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useState, useEffect } from "react";
 import {
   Button,
   Table,
@@ -20,7 +19,7 @@ import DocumentContext from "../../contexts/DocumentContext";
 function WorkID() {
   const [allWorkDetails, setAllWorkDetails] = useState([]);
   const [form] = Form.useForm();
-  const { currentUser } = useAuth();
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [file, setFile] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 

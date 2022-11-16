@@ -32,8 +32,6 @@ import CompanyProContext from "../contexts/CompanyProContext";
 import reload from "../images/reload.png";
 import ViewModal from "./ViewModal";
 import EditOnboarding from "./EditOnboarding";
-import { getDatasetAtEvent } from "react-chartjs-2";
-import { set } from "react-hook-form";
 
 function Onboarding() {
   const [form] = Form.useForm();
@@ -46,7 +44,6 @@ function Onboarding() {
   const [isBigFile, setIsBigFile] = useState(false);
   const [orgIdExists, setOrgIdExists] = useState(false);
   const [activetab, setActivetab] = useState("1");
-  const [isFileSizeInvalid, setIsFileSizeInvalid] = useState(false);
   const imgRef = React.useRef(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditOrganization, setIsEditOrganization] = useState(false);

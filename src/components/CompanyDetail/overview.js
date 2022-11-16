@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Input, Button, DatePicker, Select, Form } from "antd";
 import { CloseOutlined, EditFilled } from "@ant-design/icons";
 // import EmpInfoContext from "../../contexts/EmpInfoContext";
-import { useAuth } from "../../contexts/AuthContext";
 import "./companystyle.css";
 import linkedin from "../../images/linkedin.png";
 import facebook from "../../images/facebook.png";
@@ -13,9 +12,7 @@ function Overview() {
   const [editContactInfo, showEditCompanyInfo] = useState(false);
   const [editContactIconInfo, showEditCompanyIconInfo] = useState(false);
   const [data, setData] = useState([]);
-  const { currentUser } = useAuth();
   const compId = sessionStorage.getItem("compId")
-  const [companyName, setCompanyName] = useState();
 
   const onFinish = (values) => {
     const valuesToservice = {

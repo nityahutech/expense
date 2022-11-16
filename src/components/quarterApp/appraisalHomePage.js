@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Col } from 'antd';
-import { Input, Modal, Row, DatePicker, } from 'antd';
+import { Input, Modal, Row, DatePicker } from 'antd';
 import "./appraisal.css";
 import CreateApparaisal from "./createApparaisal";
-import EmpInfoContext from '../../contexts/EmpInfoContext';
-import { useAuth } from '../../contexts/AuthContext'
 import EmpAppraisalTable from './empAppraisalTable';
 
 const AppraisalHr = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [employeeRecord, setEmployeeRecord] = useState();
-    const { currentUser } = useAuth();
-    const [empRole, setEmpRole] = useState(sessionStorage.getItem("role"));
+    const isMgr = JSON.parse(sessionStorage.getItem("isMgr"));
+    const isLead = JSON.parse(sessionStorage.getItem("isLead"));
+    const isHr = JSON.parse(sessionStorage.getItem("isHr"));
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -21,17 +19,17 @@ const AppraisalHr = () => {
         setIsModalOpen(!isModalOpen);
     };
 
-    useEffect(() => {
-        getEmployeeRecord()
+    // useEffect(() => {
+    //     getEmployeeRecord()
 
-    }, [])
+    // }, [])
 
-    const getEmployeeRecord = async () => {
-        EmpInfoContext.getEduDetail(currentUser.uid)
-            .then(response => {
-                setEmployeeRecord(response)
-            })
-    }
+    // const getEmployeeRecord = async () => {
+    //     EmpInfoContext.getEduDetail(currentUser.uid)
+    //         .then(response => {
+    //             setEmployeeRecord(response)
+    //         })
+    // }
     return (
         <div style={{
             display: 'flex',
@@ -41,7 +39,7 @@ const AppraisalHr = () => {
             borderRadius: '10px'
         }}>
 
-            {empRole === 'hr' &&
+            {isHr &&
                 <div className="app-tab" style={{ width: '100%', marginleft: '10px' }}>
                     <Row className="employeeRow" style={{ marginLeft: '10px', marginRight: '10px', flexDirection: 'row', display: 'flex', justifyContent: 'space-between', }}>
                         <Col>
@@ -54,7 +52,7 @@ const AppraisalHr = () => {
                 </div>
             }
             {
-                empRole === 'hr' && <EmpAppraisalTable reload={!isModalOpen} listType='hr' title='Appraisal Created by Hr' />
+                isHr && <EmpAppraisalTable reload={!isModalOpen} listType='hr' title='Appraisal Created by Hr' />
 
             }
             <Modal className='viewModal'
@@ -81,8 +79,8 @@ const AppraisalHr = () => {
             </Modal>
 
             <EmpAppraisalTable listType='emp' title='My Apparisal' />
-            {empRole === 'lead' && <EmpAppraisalTable listType='lead' title='Appraisal Pending For Review (Lead)' />}
-            {employeeRecord && employeeRecord.isManager && <EmpAppraisalTable listType='mgr' title='Appraisal Pending For Review (Manager)' />}
+            {isLead && <EmpAppraisalTable listType='lead' title='Appraisal Pending For Review (Lead)' />}
+            {isMgr && <EmpAppraisalTable listType='mgr' title='Appraisal Pending For Review (Manager)' />}
 
         </div>
     )

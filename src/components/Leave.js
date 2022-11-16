@@ -1345,6 +1345,7 @@ const Leave = () => {
                   </Button>
                   <Button
                     htmlType="button"
+                    type='default'
                     style={{ marginLeft: "10px" }}
                     onClick={() => {
                       form.resetFields();
@@ -1799,6 +1800,7 @@ const Leave = () => {
                 </Button>
                 <Button
                   htmlType="button"
+                  type='default'
                   style={{ marginLeft: "10px" }}
                   onClick={() => {
                     form1.resetFields();

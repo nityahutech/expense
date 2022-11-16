@@ -128,10 +128,10 @@ const LeaveList = (props) => {
     };
     const buttonStyle = {
         marginRight: "5px",
-        color: "white",
-        backgroundColor: "#1890ff",
+        // color: "white",
+        // backgroundColor: "#1890ff",
         float: "right",
-        backgroundColor: '#d9d9d9'
+        // backgroundColor: '#d9d9d9'
     };
     return (
         <Row className='row-holiday-list-div' style={{
@@ -296,6 +296,7 @@ const LeaveList = (props) => {
                                             type="primary">Create New Holiday
                                         </Button>
                                         <Button
+                                            type='default'
                                             style={buttonStyle}
                                             onClick={onReset}>
                                             Reset</Button>

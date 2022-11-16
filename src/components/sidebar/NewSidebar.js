@@ -106,7 +106,7 @@ const NewSidebar = (props) => {
               </Menu.Item>
             </Menu.SubMenu>
           ) : null}
-          {role == "admin" ? (
+          {role == "admin" || isHr? (
             <Menu.Item
               icon={
                 <img
@@ -156,7 +156,7 @@ const NewSidebar = (props) => {
                 }
                 key="7"
               >
-                <p className="leaveletter">Leave</p>
+                <p className="sideFont leaveletter">Leave</p>
                 <NavLink to="/Leave" />
               </Menu.Item>
             </>
@@ -196,7 +196,7 @@ const NewSidebar = (props) => {
                 icon={<img src={dot} alt="profile" className="dot" />}
                 key="9"
               >
-                Employee List
+                <p className="sideFont">Employee List</p>
                 <NavLink to="/Employee/EmployeeList" />
               </Menu.Item>
               {/* <Menu.Item
@@ -204,38 +204,43 @@ const NewSidebar = (props) => {
                   icon={<img src={dot} alt="profile" className="dot" />}
                   key="25"
                 >
-                  Hr PaySlip
+                  <p className="sideFont">Hr PaySlip</p>
                   <NavLink to="/Employee/Payroll" />
                 </Menu.Item> */}
             </Menu.SubMenu>
           ) : null}
-          {/* <Menu.SubMenu
-            className="arrow-div"
-            style={{
-              width: "100%",
-            }}
-            icon={<img src={appraisalIcon} alt="appraisal" className="Dash" />}
-            key="sub4"
-            title="Appraisal"
-            mode="inline"
-          >
-            <Menu.Item
-              className="arrow"
-              icon={<img src={dot} alt="profile" className="dot" />}
-              key="20"
+          { role != "super" ? (
+            <Menu.SubMenu
+              className="arrow-div"
+              style={{
+                width: "100%",
+                fontSize: '13px',
+                fontWeight: '600',
+                color: '#ffffff',
+              }}
+              icon={<img src={appraisalIcon} alt="appraisal" className="Dash" />}
+              key="sub4"
+              title="Appraisal"
+              mode="inline"
             >
-              Quarter Appraisal
-              <NavLink to="/Appraisal/AppraisalPageHr" />
-            </Menu.Item>
-            <Menu.Item
-              className="arrow"
-              icon={<img src={dot} alt="profile" className="dot" />}
-              key="20a"
-            >
-              Half Year Goal
-              <NavLink to="/Appraisal/HalfYearGoalPage" />
-            </Menu.Item>
-          </Menu.SubMenu> */}
+              <Menu.Item
+                className="arrow"
+                icon={<img src={dot} alt="profile" className="dot" />}
+                key="20"
+              >
+                <p className="sideFont">Quarter Appraisal</p>
+                <NavLink to="/Appraisal/AppraisalPageHr" />
+              </Menu.Item>
+              <Menu.Item
+                className="arrow"
+                icon={<img src={dot} alt="profile" className="dot" />}
+                key="20a"
+              >
+                <p className="sideFont">Half Year Goal</p>
+                <NavLink to="/Appraisal/HalfYearGoalPage" />
+              </Menu.Item>
+            </Menu.SubMenu>
+          ) : null}
           {role == "admin" || isHr ? (
             <Menu.SubMenu
               className="arrow-div"

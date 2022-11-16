@@ -135,6 +135,13 @@ function Onboarding() {
     CompanyProContext.updateCompInfo(id, {
       status: status == "Deactivated" ? "Activated" : "Deactivated",
     });
+    showNotification(
+      "success",
+      "Updated",
+      `Organization status ${
+        status == "Deactivated" ? "activated" : "deactivated"
+      } Successfully`
+    );
     getData();
   };
   const getData = async () => {
@@ -345,17 +352,7 @@ function Onboarding() {
             {status}
           </div>
         );
-      // case "Pending":
-      //   return (
-      //     <div style={{ display: "flex", flexDirection: "row" }}>
-      //       <div>
-      //         <ClockCircleFilled
-      //           style={{ color: "orange", marginRight: "6px" }}
-      //         />
-      //       </div>
-      //       {status},
-      //     </div>
-      //   );
+
       case "Deactivated":
         return (
           <div style={{ display: "flex", flexDirection: "row" }}>

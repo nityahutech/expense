@@ -7,10 +7,12 @@ import {
   Input,
   notification,
 } from "antd";
+import Iframe from 'react-iframe';
 import {
-  DeleteOutlined,
   PlusCircleOutlined,
   UploadOutlined,
+  DeleteOutlined,
+  CloseCircleOutlined
 } from "@ant-design/icons";
 import FormItem from "antd/es/form/FormItem";
 import "../../style/CertificationID.css"
@@ -22,55 +24,64 @@ function WorkID() {
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [file, setFile] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showPdfModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handlePdfCancel = () => {
+    setIsModalVisible(false);
+  };
 
   function handleChange(event) {
     setFile(event.target.files[0]);
   }
 
-   async function addNewWork(values) {
-     try{
-    await DocumentContext.addDocument({ ...values, empId: currentUser.uid, type: "work" },file)
+  async function addNewWork(values) {
+    try {
+      await DocumentContext.addDocument({ ...values, empId: currentUser.uid, type: "work" }, file)
       setIsModalOpen(false);
       showNotification("success", "Success", "Upload Complete");
-    const timer = setTimeout(() => {
-    getData();
-  }, 5000);
-  return()=>clearTimeout(timer);
-}catch{
+      const timer = setTimeout(() => {
+        getData();
+      }, 5000);
+      return () => clearTimeout(timer);
+    } catch {
       setIsModalOpen(false);
       showNotification("error", "Error", "Upload Failed");
-  }
-};
-const showNotification=(type,msg,desc)=>{
-  notification[type]({
-    message:msg,
-    description:desc,
-  });
-};
-
-  const deleteData = (id,fileName) => {
-    Modal.confirm({
-        title: "Are you sure, you want to delete this record?",
-        okText: "Yes",
-        okType: "danger",
-
-        onOk: () => {
-          DocumentContext.deleteDocument(currentUser.uid, id, fileName)
-                .then(response => {
-                  showNotification("success","Success","Successfully deleted")
-                  getData();
-                })
-                .catch(error=>{
-                  showNotification("error","Error","Record not deleted "); 
-                })
-        },
+    }
+  };
+  const showNotification = (type, msg, desc) => {
+    notification[type]({
+      message: msg,
+      description: desc,
     });
   };
-  useEffect(()=>{
+
+  const deleteData = (id, fileName) => {
+    Modal.confirm({
+      title: "Are you sure, you want to delete this record?",
+      okText: "Yes",
+      okType: "danger",
+
+      onOk: () => {
+        DocumentContext.deleteDocument(currentUser.uid, id, fileName)
+          .then(response => {
+            showNotification("success", "Success", "Successfully deleted")
+            getData();
+          })
+          .catch(error => {
+            showNotification("error", "Error", "Record not deleted ");
+          })
+      },
+    });
+  };
+  useEffect(() => {
     getData();
-  },[]);
-  const getData=async()=>{
-    let alldata=await DocumentContext.getDocument(currentUser.uid, "work");
+  }, []);
+  const getData = async () => {
+    let alldata = await DocumentContext.getDocument(currentUser.uid, "work");
     setAllWorkDetails(alldata);
   };
 
@@ -79,6 +90,16 @@ const showNotification=(type,msg,desc)=>{
       title: "Company Name",
       dataIndex: "name",
       key: "name",
+    },
+    {
+      title: "Start Date",
+      dataIndex: "startdate",
+      key: "duration",
+    },
+    {
+      title: "End Date",
+      dataIndex: "enddate",
+      key: "duration",
     },
     {
       title: "Duration",
@@ -90,10 +111,14 @@ const showNotification=(type,msg,desc)=>{
       dataIndex: "upload",
       key: "upload",
       render: (data, record) => {
-        return record.fileName? (
-          <a href={data} target="_blank">
+        return record.fileName ? (
+
+          <a href={data} target="workName" onClick={showPdfModal}>
             {record.fileName}
+            {/* <Button type='primary'>Preview</Button> */}
           </a>
+
+
         ) : (
           <div>-</div>
         )
@@ -105,11 +130,11 @@ const showNotification=(type,msg,desc)=>{
       key: "action",
       render: (_, record) => {
         return (
-            <DeleteOutlined
-                            onClick={() => deleteData(record.id,record.fileName)}
-                        />
+          <DeleteOutlined
+            onClick={() => deleteData(record.id, record.fileName)}
+          />
         );
-    },
+      },
     },
   ];
 
@@ -163,46 +188,101 @@ const showNotification=(type,msg,desc)=>{
           layout="vertical"
         >
           <FormItem name="name"
-          rules={[
-            {
-              pattern: /^[a-zA-Z\s]*$/,
-              required:true,
-              message:'Enter Company Name',
-            },
-          ]}
+            rules={[
+              {
+                pattern: /^[a-zA-Z\s]*$/,
+                required: true,
+                message: 'Enter Company Name',
+              },
+            ]}
           >
             <Input placeholder="Enter Company Name" required />
           </FormItem>
           <FormItem name="duration"
-          rules={[
-            {
-              pattern: /^[a-zA-Z0-9-\s]*$/,
-              required:true,
-              message:'Enter Duration',
-            },
-          ]}
+            rules={[
+              {
+                pattern: /^[a-zA-Z0-9-\s]*$/,
+                required: true,
+                message: 'Enter Duration',
+              },
+            ]}
           >
             <Input placeholder="Enter Duration" required />
           </FormItem>
           <FormItem name="upload"
-          rules={[
-            {
-              required:false,
-              message:'Please upload file',
-            },
-          ]}
+            rules={[
+              {
+                required: true,
+                message: 'Please upload file',
+              },
+            ]}
           >
-           <div className="workId">
+            <div className='certificatepage'>
               <Input
                 type="file"
                 // accept="image/gif, image/jpeg, image/png"
+                accept='application/pdf'
                 id="upload"
                 name="upload"
                 onChange={handleChange}
-                />
+              //ref={imgRef}
+              />
             </div>
+            {/* <Upload {...props}>
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload> */}
           </FormItem>
         </Form>
+      </Modal>
+      <Modal
+        bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+        className="viewAppraisal"
+        centered
+        width={800}
+        visible={isModalVisible}
+        footer={null}
+        height="400px"
+        // closable={false}
+        title="Document Preview"
+        closeIcon={
+          <div
+            onClick={() => {
+
+              setIsModalVisible(false);
+            }}
+            style={{ color: "white" }}
+          >
+            X
+          </div>
+        }
+
+
+      >
+        <div style={{ position: 'relative', }}>
+          <Iframe style={{}}
+            // url="#"
+            width={750}
+            height="400px"
+            id="myId"
+            className="myClassname"
+            display="initial"
+            position="relative"
+            overflow="hidden"
+            name='workName'
+
+          />
+          <CloseCircleOutlined
+            onClick={handlePdfCancel}
+            style={{
+              fontSize: 24,
+              position: 'absolute',
+              left: '50%',
+              bottom: '-20px',
+            }}
+          />
+
+
+        </div>
       </Modal>
     </>
   );

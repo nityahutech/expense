@@ -32,17 +32,14 @@ const Family = () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setData(data);
   };
-
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
-
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   const checkAlphabets = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
@@ -57,8 +54,8 @@ const Family = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          // flexDirection: "column",
           margin: "15px",
+          width:"100%",
         }}
       >
         {editfamilymember === false ? (
@@ -87,32 +84,37 @@ const Family = () => {
               >
                 <Card
                   title="FAMILY MEMBERS"
-                  className="familyCard"
+                  className="personal"
                   extra={
+                    <>
+                    { editfamilymember === false ? (
                     <Button
                       className="personal"
                       type="text"
                       style={{
-                        color: "#4ec0f1",
-                        display: "none",
-                        paddingTop: "7px",
-                        paddingRight: "7px",
-                        position: "absolute",
-                        right: 10,
-                        top: 10,
+                        color: "#ffff",
+                          display: "none",
+                          paddingTop: "7px",
+                          paddingRight: "7px",
+                          position: "absolute",
+                          right: 10,
+                          top: 10,
                       }}
                       onClick={() => showeditfamilymember(!editfamilymember)}
                     >
                       <EditFilled />
                     </Button>
+                    ) : null}
+                    </>
                   }
                   style={{
                     width: '100%',
                     marginTop: 10,
+                    borderRadius:"10px",
                   }}
                 >
                   <Row gutter={[48, 8]}>
-                    <Col xs={22} sm={15} md={6}>
+                    <Col xs={22} sm={15} md={12}>
                       <Form.Item
                         name="father"
                         rules={[
@@ -141,7 +143,7 @@ const Family = () => {
                         </div>
                       </Form.Item>
                     </Col>
-                    <Col xs={22} sm={15} md={6}>
+                    <Col xs={22} sm={15} md={12}>
                       <Form.Item
                         name="fatherContact"
                         rules={[
@@ -172,7 +174,7 @@ const Family = () => {
                         </div>
                       </Form.Item>
                     </Col>
-                    <Col xs={22} sm={15} md={6}>
+                    <Col xs={22} sm={15} md={12}>
                       <Form.Item
                         name="mother"
                         rules={[
@@ -202,7 +204,7 @@ const Family = () => {
                         </div>
                       </Form.Item>
                     </Col>
-                    <Col xs={22} sm={15} md={6}>
+                    <Col xs={22} sm={15} md={12}>
                       <Form.Item
                         name="motherContact"
                         rules={[
@@ -240,8 +242,14 @@ const Family = () => {
           </Row>
         ) : (
           <Row
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}
           >
-            <Col xs={22} sm={15} md={8}>
+            <Col xs={22} sm={15} md={24}>
               <Form
                 form={form}
                 labelcol={{
@@ -258,10 +266,11 @@ const Family = () => {
               >
                 <Card
                   title="FAMILY MEMBERS"
-                  className="familyCard"
+                  className="personal"
                   style={{
-                    width: 800,
+                    width: '100%',
                     marginTop: 10,
+                    borderRadius:"10px",
                   }}
                 >
                   <Row gutter={[16, 16]}>
@@ -321,6 +330,13 @@ const Family = () => {
                             defaultValue={data ? data.father : "breh"}
                             maxLength={40}
                             placeholder="Enter Father's Name"
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       </div>
@@ -362,6 +378,13 @@ const Family = () => {
                             maxLength={11}
                             defaultValue={data ? data.fatherContact : ""}
                             placeholder="Enter Contact no."
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       </div>
@@ -422,6 +445,13 @@ const Family = () => {
                             defaultValue={data ? data.mother : ""}
                             maxLength={40}
                             placeholder="Enter Mother's Name"
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       </div>
@@ -463,6 +493,13 @@ const Family = () => {
                             maxLength={11}
                             defaultValue={data ? data.motherContact : ""}
                             placeholder="Enter Contact no."
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       </div>
@@ -503,14 +540,16 @@ const Family = () => {
           </Row>
         )}
       </div>
+
+      
       <div
         className="personalCardDiv"
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          // flexDirection: "column",
           margin: "15px",
+          width:"100%"
         }}
       >
         {editEmergency === false ? (
@@ -540,16 +579,13 @@ const Family = () => {
               >
                 <Card
                   title="EMERGENCY CONTACTS"
-                  className="familyCard"
-                  //   actions={[
-                  //   <EditOutlined key="edit" />,
-                  // ]}
+                  className="personal"
                   extra={
                     <Button
                       className="personal"
                       type="text"
                       style={{
-                        color: "#4ec0f1",
+                        color: "#ffff",
                         display: "none",
                         paddingTop: "7px",
                         paddingRight: "7px",
@@ -565,6 +601,7 @@ const Family = () => {
                   style={{
                     width: '100%',
                     marginTop: 10,
+                    borderRadius:"10px",
                   }}
                 >
                   <Row gutter={[16, 16]}>
@@ -692,6 +729,7 @@ const Family = () => {
                   style={{
                     width: '100%',
                     marginTop: 10,
+                    borderRadius:"10px",
                   }}
                 >
                   <Row gutter={[16, 16]}>
@@ -750,6 +788,13 @@ const Family = () => {
                             defaultValue={data ? data.other : null}
                             placeholder="Enter Other Name"
                             maxLength={40}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       </div>
@@ -809,6 +854,13 @@ const Family = () => {
                             defaultValue={data ? data.relation : ""}
                             placeholder="Enter the Relation"
                             maxLength={40}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </Form.Item>
                       </div>
@@ -846,6 +898,13 @@ const Family = () => {
                             maxLength={11}
                             defaultValue={data ? data.otherContact : ""}
                             placeholder="Enter Contact no."
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           />
                         </div>
                       </Form.Item>

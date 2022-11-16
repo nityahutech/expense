@@ -32,8 +32,10 @@ function Team() {
           title="TEAMS"
           className="personal"
           style={{
-            width: 800,
-            margin: 20,
+            width: '75%',
+            marginTop: 10,
+            marginBottom: 10,
+            borderRadius:"10px",
           }}
         >
           <Row gutter={[16, 16]}>

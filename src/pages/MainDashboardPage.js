@@ -11,7 +11,6 @@ function MainDashboardPage() {
         <Sidebar
           activeSubMenu={["sub5"]}
           activeMenu={["30"]}
-        
         />
       </div>
       <div className="homeContainer">

@@ -12,7 +12,6 @@ import HalfyearGoalPdf from "./halfyearGoalPdf";
 import "./halfYearGoal.css";
 import AppraisalContext from '../../contexts/AppraisalContext';
 import EmpInfoContext from '../../contexts/EmpInfoContext';
-import { useAuth } from '../../contexts/AuthContext'
 import { createPdfFromHtml } from "./../ProfileDetails/downloadLogicAppraisal";
 
 
@@ -25,9 +24,11 @@ const HalfYearGoalTable = (props) => {
     const [downloadAppraisal, setDownloadAppraisal] = useState(null);
     const [loading, setLoading] = useState(false);
     const [employeeRecord, setEmployeeRecord] = useState();
-    const { currentUser } = useAuth();
+    const currentUser = JSON.parse(sessionStorage.getItem("user"));
     const [appraisalList, setAppraisalList] = useState([]);
     const [printContent, setPrintContent] = useState(null);
+    const isMgr = JSON.parse(sessionStorage.getItem("isMgr"));
+    const isHr = JSON.parse(sessionStorage.getItem("isHr"));
 
 
     const columns = [
@@ -120,7 +121,7 @@ const HalfYearGoalTable = (props) => {
                     <>
                         {console.log('render', appraisal)}
 
-                        {(sessionStorage.getItem("role") != 'hr') &&
+                        {isHr &&
                             <Button type="primary"
                                 style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', }}
 
@@ -137,7 +138,7 @@ const HalfYearGoalTable = (props) => {
                             </Button>
                         }
 
-                        {(sessionStorage.getItem("role") === 'hr') &&
+                        {isHr &&
                             <Button type='danger'
                                 style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', marginLeft: '10px' }}
                                 // type="link"
@@ -155,7 +156,7 @@ const HalfYearGoalTable = (props) => {
 
                         }
 
-                        {(sessionStorage.getItem("role") === 'hr') &&
+                        {isHr &&
                             <Button type='secondary'
                                 style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', marginLeft: '10px' }}
                                 // type="link"

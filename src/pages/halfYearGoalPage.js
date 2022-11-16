@@ -20,8 +20,6 @@ function HalfYearGoalPage() {
         </div>
         <div className="tables">
           <HalfYearGoalHome />
-
-
         </div>
       </div>
     </div>

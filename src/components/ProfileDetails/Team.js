@@ -1,19 +1,23 @@
 import { Card, Row, Col } from "antd";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
-import { useAuth } from "../../contexts/AuthContext";
+
 function Team() {
-  const { currentUser } = useAuth();
+
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [repManager, setRepManager] = useState("");
   const [secManager, setSecManager] = useState("");
+
   useEffect(() => {
     getData();
   }, []);
+
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setRepManager(data.repManager ? data.repManager : null);
     setSecManager(data.secManager ? data.secManager : null);
   };
+  
   return (
     <>
       <div

@@ -1,13 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
-
 import {
   Button,
   Modal,
   Form,
   Table,
   Input,
-  Divider,
   Row,
   Col,
   notification,
@@ -20,14 +17,11 @@ import PolicyContext from "../../contexts/PolicyContext";
 
 const Policies = () => {
   const [policy, setPolicy] = useState([]);
-  const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const imgRef = useRef(null);
-  const { currentUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [file, setFile] = useState("");
-  const compId = sessionStorage.getItem("compId");
 
   const columns = [
     {
@@ -143,16 +137,13 @@ const Policies = () => {
 
   const showModal = () => {
     setIsModalOpen(true);
-    setVisible(true);
     form.resetFields();
   };
   const handleOk = () => {
     setIsModalOpen(false);
-    setVisible(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-    setVisible(false);
     form.resetFields();
   };
 

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, Table, Row, Col } from "antd";
 import "../../style/WorkWeek.css";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
-import { useAuth } from "../../contexts/AuthContext";
 import Green from "../../images/green.png";
 import Red from "../../images/red.png";
 import Orange from "../../images/orange.png";
@@ -66,11 +65,11 @@ const data = [
 ];
 function WorkWeek() {
   const [doj, setDoj] = useState();
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
   useEffect(() => {
     getData();
   }, []);
-  const { currentUser } = useAuth();
 
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);

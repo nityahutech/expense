@@ -13,19 +13,17 @@ import {
 } from "antd";
 import moment from "moment";
 import { EditOutlined, SearchOutlined } from "@ant-design/icons";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/expenselist.css";
 import ExpenseContext from "../contexts/ExpenseContext";
 import Editexpense from "./Editexpense";
-import { upload } from "@testing-library/user-event/dist/upload";
-import { async } from "@firebase/util";
+
 const { RangePicker } = DatePicker;
 const dateFormat = "DD-MM-YYYY";
 const PHE = require("print-html-element");
-const { Title, Paragraph, Text, Link } = Typography;
-const { Search } = Input;
 const { Content } = Layout;
+
 function ExpenseList() {
   const [data, setData] = useState([]);
   const [allExpenses, setAllExpenses] = useState(data || []);
@@ -34,37 +32,11 @@ function ExpenseList() {
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState("");
   const [size, setSize] = useState(window.innerWidth <= 760 ? "" : "left");
+  
   useEffect(() => {
     getData();
   }, []);
-  // useEffect(() => {
-  //   getData();
-  //   if (filterExpenses.length > 0) {
-  //     const totalAmount = filterExpenses.reduce((acc, expense) => {
-  //       acc += expense.amount * expense.quantity;
-  //       return acc;
-  //     }, 0);
-  //     const modifiedFilterExpense = [
-  //       ...filterExpenses,
-  //       {
-  //         key: "subTotal",
-  //         sn: "",
-  //         name: "",
-  //         catname: "",
-  //         paidname: "",
-  //         date: "",
-  //         quantity: "",
-  //         amount: "Total",
-  //         subtotal: totalAmount,
-  //         description: "",
-  //       },
-  //     ];
-  //     setTableData(modifiedFilterExpense);
-  //   } else {
-  //     setTableData([]);
-  //   }
-  //   // setFilterExpense(data);
-  // }, [filterExpenses]);
+
   async function getData() {
     setLoading(true);
     const allData = await ExpenseContext.getAllExpenses();

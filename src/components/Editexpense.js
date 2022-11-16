@@ -1,44 +1,26 @@
 import { useEffect, useState } from "react";
 import { Col, Row } from "antd";
 import moment from "moment";
-import { UploadOutlined } from "@ant-design/icons";
 import ExpenseContext from "../contexts/ExpenseContext";
 import {
-  Cascader,
   Input,
-  Select,
-  Radio,
-  Space,
   notification,
   Button,
   DatePicker,
   Form,
-  Upload,
 } from "antd";
 import "../style/Editexpense.css";
-import { Content } from "antd/lib/layout/layout";
-const { Option } = Select;
-const handleChange = (value) => {};
+
 const showNotification = (type, msg, desc) => {
   notification[type]({
     message: msg,
     description: desc,
   });
 };
-// const paystatus = [
-//   {
-//     value: "Paid",
-//     label: "Paid",
-//   },
-//   {
-//     value: "Unpaid",
-//     label: "Unpaid",
-//   },
-// ];
 const dateFormat = "DD-MM-YYYY";
 const { TextArea } = Input;
+
 const Editexpense = (props) => {
-  // const [showAlert, setShowAlert] = useState(false);
   const [amount, setAmount] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [subtotal, setsubtotal] = useState(0);
@@ -48,9 +30,7 @@ const Editexpense = (props) => {
   const [paidname, setpaidname] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  function calculatesubtotal() {
-    setsubtotal(amount * quantity);
-  }
+
   async function submitEdit() {
     try {
       const editedRecord = {

@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button, Card, Table } from "antd";
 import { DatePicker, Space } from "antd";
 import "../../style/Payslip.css";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
-import { useAuth } from "../../contexts/AuthContext";
 import { DeleteOutlined } from "@ant-design/icons";
-import moment from "moment";
 import { createPdfFromHtml } from "./downloadLogic";
 import hutechLogo from "../../images/hutechlogo.png";
 
@@ -16,7 +14,7 @@ function PaySlip() {
   const [paySlip, setPaySlip] = useState(false);
   const [data, setData] = useState([]);
   const [pfNum, setPfNum] = useState("");
-  const { currentUser } = useAuth();
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [printContent, setPrintContent] = useState(null);
   useEffect(() => {
     if (month) {

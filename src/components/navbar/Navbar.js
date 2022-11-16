@@ -12,20 +12,18 @@ import settingsIcon from "../../images/abstractuserflat4.png";
 import logoutIcon from "../../images/logoutsvgrepocom.png";
 import Logo from "../../images/smallerLogo.png";
 import dropdown from "../../images/dropdown.png";
-import CompanyProContext from "../../contexts/CompanyProContext";
 // ---------------------------------------------------------------------
 
 const Navbar = () => {
-  const isHr = sessionStorage.getItem("role");
 
   const [startTime, setStartTime] = useState();
   const [isRunning, setIsRunning] = useState(false);
   const [activePage, setActivePage] = useState("/DashBoard");
   let loc = useLocation();
-  const { logout, currentUser } = useAuth();
+  const { logout } = useAuth();
   const [clockinfo, setClockInfo] = useState();
   const role = sessionStorage.getItem("role");
-  const user = JSON.parse(sessionStorage.getItem("user"));
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
   let temp = sessionStorage.getItem("logo");
   const logo = temp == null ? Logo : temp;
   console.log(logo);
@@ -99,7 +97,7 @@ const Navbar = () => {
   );
 
   useEffect(() => {
-    console.log(role, user);
+    console.log(role);
     setIsRunning(isClockRunning());
   }, []);
 
@@ -211,7 +209,7 @@ const Navbar = () => {
         >
           {/* {`${ctime.hrs}:${ctime.min}:${ctime.sec}`} */}
         </div>
-        {isHr == "super" ? null : (
+        {role == "super" ? null : (
           <button
             style={buttonStyle}
             onClick={handleClock}

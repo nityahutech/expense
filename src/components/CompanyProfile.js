@@ -1,6 +1,5 @@
-import React from "react";
 import "antd/dist/antd.css";
-import { Card, Col, Row, Tabs } from "antd";
+import { Tabs } from "antd";
 import Overview from "./CompanyDetail/overview";
 import Address from "./CompanyDetail/address";
 import Department from "./CompanyDetail/department";
@@ -10,7 +9,6 @@ import Admin from "./CompanyDetail/admin";
 import Statutory from "./CompanyDetail/statutory";
 import "../style/Onboarding.css";
 
-const { Meta } = Card;
 function CompanyProfile() {
   return (
     <>

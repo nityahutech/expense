@@ -21,14 +21,12 @@ import {
   PlusCircleOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
-import { useAuth } from "../../contexts/AuthContext";
 import "./companystyle.css";
 import FormItem from "antd/es/form/FormItem";
 import CompanyProContext from "../../contexts/CompanyProContext";
 
 const { TextArea } = Input;
 const compId = sessionStorage.getItem("compId");
-const { Option } = Select;
 
 const Statutory = () => {
   const [editContent, showEditContent] = useState(false);

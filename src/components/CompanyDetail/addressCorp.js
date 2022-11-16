@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Button, Select, Input, Form } from "antd";
-import { useAuth } from "../../contexts/AuthContext";
+import { Card, Row, Col, Button, Input, Form } from "antd";
 import CompanyProContext from "../../contexts/CompanyProContext";
-import { CloseOutlined, EditFilled, PlusCircleOutlined } from "@ant-design/icons";
-const { Option } = Select;
-const { TextArea } = Input;
+import { CloseOutlined, EditFilled } from "@ant-design/icons";
+import "../../components/CompanyDetail/companystyle.css";
 
 function AddressCorp() {
     const [editCorpAddress, showEditCorpAddress] = useState(false);
-    const [editcorpInfo, showEditcorpInfo] = useState(false);
     const [data, setData] = useState([]);
-    const { currentUser } = useAuth();
     const compId = sessionStorage.getItem("compId")
 
     const onFinish = (value) => {

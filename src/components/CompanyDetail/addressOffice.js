@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Button, Select, Input, Form } from "antd";
-import { useAuth } from "../../contexts/AuthContext";
+import { Card, Row, Col, Button, Input, Form } from "antd";
 import CompanyProContext from "../../contexts/CompanyProContext";
 import { CloseOutlined, EditFilled } from "@ant-design/icons";
 import "../../components/CompanyDetail/companystyle.css";
-const { Option } = Select;
-const { TextArea } = Input;
 
 function AddressOffice() {
   const [editAddress, showEditAddress] = useState(false);
-  const [editAddressInfo, showEditAddressInfo] = useState(false);
   const [data, setData] = useState();
-  const { currentUser } = useAuth();
   const compId = sessionStorage.getItem("compId");
 
   const onFinish = (values) => {
@@ -34,7 +29,6 @@ function AddressOffice() {
     let data = await CompanyProContext.getCompanyProfile(compId);
     setData(data);
   };
-  console.log(data);
 
   return (
     <>
@@ -171,7 +165,6 @@ function AddressOffice() {
                   </Col>
                 </Row>
                 {/* ) : null} */}
-
                 {/* {editAddress === true ? ( */}
                 <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                   <Col xs={22} sm={15} md={6}>
@@ -318,7 +311,6 @@ function AddressOffice() {
                   </Col>
                 </Row>
                 {/* ) : null}  */}
-
                 {editAddress === true ? (
                   <Row
                     style={{

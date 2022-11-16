@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useState, useEffect } from "react";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
-import { Card, Row, Col, Input, Button, Select, Form } from "antd";
+import { Card, Row, Col, Input, Button, Form } from "antd";
 import {
   PlusCircleOutlined,
-  EditOutlined,
   CheckOutlined,
-  EditTwoTone,
   CloseOutlined,
   EditFilled,
 } from "@ant-design/icons";
@@ -18,10 +15,12 @@ const Family = () => {
   const [editEmergency, showeditEmergency] = useState(false);
   const [data, setData] = useState(false);
   const [form] = Form.useForm();
-  const { currentUser } = useAuth();
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+
   useEffect(() => {
     getData();
   }, []);
+
   const onFinish = (values) => {
     EmpInfoContext.updateEduDetails(currentUser.uid, values);
     setData(values);
@@ -29,6 +28,7 @@ const Family = () => {
     showeditEmergency(false);
     getData();
   };
+
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setData(data);
@@ -45,6 +45,7 @@ const Family = () => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
+    
   };
     return (
     <>

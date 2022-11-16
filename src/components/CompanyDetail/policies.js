@@ -1,13 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
-
 import {
   Button,
   Modal,
   Form,
   Table,
   Input,
-  Divider,
   Row,
   Col,
   notification,
@@ -20,14 +17,11 @@ import PolicyContext from "../../contexts/PolicyContext";
 
 const Policies = () => {
   const [policy, setPolicy] = useState([]);
-  const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const imgRef = useRef(null);
-  const { currentUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [file, setFile] = useState("");
-  const compId = sessionStorage.getItem("compId");
 
   const columns = [
     {
@@ -48,8 +42,6 @@ const Policies = () => {
       key: "upload",
       width: 200,
       render: (data, record) => {
-        console.log("record: ", record);
-        console.log("data:: ", data);
         // var fReader = new FileReader();
         // fReader.readAsDataURL(imgRef.current.input.files[0]);
         // fReader.onload = function (event) {
@@ -81,7 +73,6 @@ const Policies = () => {
     setFile(event.target.files[0]);
   }
   async function addPolicy(values) {
-    console.log(file, values);
     try {
       await PolicyContext.createPolicy(values, file);
       showNotification("success", "Success", "Upload Complete");
@@ -99,42 +90,20 @@ const Policies = () => {
       description: desc,
     });
   };
-
-  //   async function updatePolicy(values) {
-  //     console.log(values,file)
-  //     try{
-  //    await PolicyContext.updateCompInfo(id,values,file)
-  //    showNotification("success", "Success", "Upload Complete");
-  //    const timer = setTimeout(() => {
-  //    getData();
-  //   }, 3500);
-  //   return()=>clearTimeout(timer);
-  //   }catch{
-  //   showNotification("error", "Error", "Upload Failed");
-  //   }
-  // };
-  // const showNotification=(type,msg,desc)=>{
-  //  notification[type]({
-  //    message:msg,
-  //    description:desc,
-  //  });
-  // };
-
-  const displayPolicy = () => {
+  
+    const displayPolicy = () => {
     return policy.forEach((pol) => {
       Object.keys(pol).map((u) => {
         <p>
           {u}: {policy.u}
         </p>;
         {
-          console.log(u, policy);
         }
       });
     });
     // <Table dataSource={policy}></Table>
     // Object.keys(policy).map(u => {
     //   <p>{u}: {policy.u}</p>
-    //   {console.log(u,policy)}
     // })
   };
 
@@ -162,23 +131,19 @@ const Policies = () => {
   }, []);
   const getData = async () => {
     let alldata = await PolicyContext.getPolicy();
-    console.log(alldata);
     // setData(alldata);
     setPolicy(alldata);
   };
 
   const showModal = () => {
     setIsModalOpen(true);
-    setVisible(true);
     form.resetFields();
   };
   const handleOk = () => {
     setIsModalOpen(false);
-    setVisible(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-    setVisible(false);
     form.resetFields();
   };
 
@@ -283,7 +248,6 @@ const Policies = () => {
                       placeholder="Enter Policy Name"
                     />
                   </Form.Item>
-
                   <div className="div-discription">Description</div>
                   <Form.Item
                     name="description"
@@ -310,7 +274,6 @@ const Policies = () => {
                       placeholder="Enter Description"
                     />
                   </Form.Item>
-
                   <div className="div-discription">Uplode File</div>
                   <FormItem
                     name="upload"

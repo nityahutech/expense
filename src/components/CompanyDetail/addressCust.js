@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Button, Select, Input, Form, Modal } from "antd";
-import { useAuth } from "../../contexts/AuthContext";
+import { Card, Row, Col, Button, Input, Form, Modal } from "antd";
 import CompanyProContext from "../../contexts/CompanyProContext";
 import {
   CloseOutlined,
@@ -8,6 +7,7 @@ import {
   DeleteOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
+import "../../components/CompanyDetail/companystyle.css";
 
 function AddressCust() {
   const [editAddressContent, showEditAddressContent] = useState([false]);
@@ -51,7 +51,6 @@ function AddressCust() {
     let array = editAddressContent;
     array[i] = true;
     showEditAddressContent(array);
-    console.log(array);
   };
 
   const onDeleteAddress = (record) => {
@@ -63,11 +62,9 @@ function AddressCust() {
       onOk: () => {
         CompanyProContext.deleteCompInfo(compId, { address: record })
           .then((response) => {
-            console.log(response);
             getData();
           })
           .catch((error) => {
-            console.log(error.message);
           });
       },
     });
@@ -76,17 +73,14 @@ function AddressCust() {
   useEffect(() => {
     getData();
   }, []);
-  console.log(data);
 
   const getData = async () => {
     let data = await CompanyProContext.getCompanyProfile(compId);
     let array = [...data.address];
     showEditAddressContent(array.fill(false));
     setData(data.address);
-    console.log(data.address, array.fill(false));
   };
 
-  console.log(data);
   return (
     <>
       <div
@@ -145,7 +139,6 @@ function AddressCust() {
                               let array = [...editAddressContent];
                               array[i] = !array[i];
                               showEditAddressContent(array);
-                              console.log(array);
                             }}
                           >
                             <EditFilled />
@@ -154,7 +147,6 @@ function AddressCust() {
                         <DeleteOutlined
                           style={{ color: "lightblue", paddingRight: "25px", }}
                           onClick={() => {
-                            console.log(add);
                             onDeleteAddress(add);
                           }}
                         />
@@ -165,8 +157,6 @@ function AddressCust() {
                       marginTop: 10,
                     }}
                   >
-                    {console.log(add)}
-
                     {/* {editContactInfo === true ? ( */}
                     <Row gutter={[16, 16]}>
                       <Col xs={22} sm={22} md={20}>
@@ -234,7 +224,6 @@ function AddressCust() {
                       </Col>
                     </Row>
                     {/* ) : null} */}
-
                     {/* {editContactInfo === true ? ( */}
                     <Row gutter={[16, 16]}>
                       <Col xs={22} sm={22} md={20}>
@@ -267,7 +256,6 @@ function AddressCust() {
                       </Col>
                     </Row>
                     {/* ) : null} */}
-
                     {/* {editContactInfo === true ? ( */}
                     <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                       <Col xs={22} sm={15} md={6}>
@@ -395,7 +383,6 @@ function AddressCust() {
                       </Col>
                     </Row>
                     {/* ) : null} */}
-
                     {editAddressContent[i] === true ? (
                       <Row
                       //   style={{
@@ -411,7 +398,6 @@ function AddressCust() {
                             let array = [...editAddressContent];
                             array[i] = !array[i];
                             showEditAddressContent(array);
-                            console.log(array);
                           }}
                         >
                           <CloseOutlined /> CANCEL
@@ -435,10 +421,8 @@ function AddressCust() {
                             >
                                 <PlusCircleOutlined />
                                 Add
-
                             </Button>
                         </>
-
                         } */}
                   </Card>
                 </Form>

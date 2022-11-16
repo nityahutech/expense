@@ -2,7 +2,7 @@ import Navbar from "../../components/navbar/Navbar";
 import Profile from "../../components/Profilepage";
 import Sidebar from "../../components/sidebar/NewSidebar";
 
-const DashBoard = () => {
+const MyProfile = () => {
 
   const accessToken = sessionStorage.getItem("accessToken");
   
@@ -24,4 +24,4 @@ const DashBoard = () => {
   ) : window.location.href = "/";
 };
 
-export default DashBoard;
+export default MyProfile;

@@ -1,38 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Button, Select, Input, Form, Divider, Space, Upload } from "antd";
-// import EmpInfoContext from "../../contexts/EmpInfoContext";
-import { useAuth } from "../../contexts/AuthContext";
+import { Card, Row, Col, Button, Input, Form, Space } from "antd";
+import ConfigureContext from "../../contexts/ConfigureContext";
 import { CloseOutlined, EditFilled } from "@ant-design/icons";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import "./companystyle.css";
-
 import { Table } from 'antd';
-const { Option } = Select;
-
-const { TextArea } = Input;
-
+import { getDesigNo } from "../../contexts/CreateContext";
 
 const Designation = () => {
   const [editContent, showEditContent] = useState(false);
   const [editContactInfo, showEditContactInfo] = useState(false);
-  const [dob, setDob] = useState("");
-  const [scrs, setScrs] = useState("");
-  const [lccs, setLccs] = useState("");
-  const [editAddressInfo, showEditAddressInfo] = useState(false);
-  const [data, setData] = useState([]);
-  const compId = sessionStorage.getItem("compId")
+  const [dataSource, setDataSource] = useState([]);
+  const [form] = Form.useForm();
 
-  const { currentUser } = useAuth();
+  useEffect(() => {
+    getData()
+  }, [])
 
-  const dataSource = [
-    {
-      key: '1',
-      designation: 'Mike',
-      employees: 32,
-
-    },
-
-  ];
+  const getData = async () => {
+    let data = await ConfigureContext.getConfigurations("addemployeePage")
+    getDesigNo().then((res) => {
+      setDataSource(
+        data.designations.map((des) => {
+          return {
+            designation: des,
+            employees: res[`${des}`] ? res[`${des}`] : 0
+          }
+        })
+      )
+    })
+  }
 
   const columns = [
     {
@@ -48,10 +45,10 @@ const Designation = () => {
     },
   ];
 
-
+  const [data, setData]=useState({})
   const onFinish = (values) => {
     console.log('Received values of form:', values);
-
+    showEditContent(false)
 
   };
   return (
@@ -74,22 +71,20 @@ const Designation = () => {
             alignItems: 'center'
           }}>
           <Col span={24}>
-            <Form
-              // form={form}
-              labelcol={{
-                span: 4,
-              }}
-              wrappercol={{
-                span: 14,
-              }}
-              initialValues={{
-                remember: true,
-              }}
-              autoComplete="off"
-            // onFinish={onContactFinish}
-            >
+          <Card
+                title="DESIGNATIONS"
+                style={{
+                  width: '100%',
+                  marginTop: 10,
+                }}
+
+              >
+              Designation           Employees
+            </Card>
+          {dataSource.map((des) => (
+            
               <Card
-                title=" DESIGNATIONS"
+                // title="DESIGNATIONS"
                 extra={
                   <>
                     {editContactInfo === false ? (
@@ -119,33 +114,60 @@ const Designation = () => {
 
               >
 
-                <div className="table-responsive">
+
+                {/* <div className="table-responsive">
                   <Table
                     columns={columns}
                     dataSource={dataSource}
                     pagination={false}
                     className="ant-border-space"
                   />
-                </div>
+                </div> */}
+              </Card>
+          ))}
+            <Form
+              // form={form}
+              labelcol={{
+                span: 4,
+              }}
+              wrappercol={{
+                span: 14,
+              }}
+              initialValues={{
+                remember: true,
+              }}
+              autoComplete="off"
+            // onFinish={onContactFinish}
+            >
 
 
-
+{console.log(editContent)}
 
                 <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                  <Col span={12}>
-                    <Form name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
-                      <Form.List name="users">
+                  {/* <Col span={12}> */}
+                    <Form {...form} name="dynamic_form_nest_item" autoComplete="off">
+                      {editContent  ? (
+                        <>
+                        <Form.List name="users">
                         {(fields, { add, remove }) => (
-                          <>
+                          <div 
+                            style={{
+                              display: 'flex',
+                              flexDirection: "row",
+                              flexBasis: "33.33%"
+                            }}
+                          >
                             {fields.map(({ key, name, ...restField }) => (
                               <Space
                                 key={key}
                                 style={{
                                   display: 'flex',
                                   marginBottom: 8,
+                                  flexDirection: "row"
                                 }}
                                 align="baseline"
                               >
+                              {console.log(fields, name, key, restField)}
                                 <Form.Item
                                   {...restField}
                                   name={[name, 'first']}
@@ -156,10 +178,22 @@ const Designation = () => {
                                     },
                                   ]}
                                 >
-                                  <Input placeholder="First Name" />
+                                  <Input placeholder="First Name" 
+                                    onChange={(e) => {
+                                      let temp = { 
+                                        ...data,
+                                        [`${key}`]: e.target.value
+                                      }
+                                      setData(temp)
+                                    }}/>
                                 </Form.Item>
 
-                                <MinusCircleOutlined onClick={() => remove(name)} />
+                                <MinusCircleOutlined 
+                                  onClick={() => {
+                                    delete data[`${key}`]
+                                    remove(name)
+                                  }} 
+                                />
                               </Space>
                             ))}
                             <Form.Item>
@@ -167,51 +201,29 @@ const Designation = () => {
                                 Add field
                               </Button>
                             </Form.Item>
-                          </>
+                          </div>
                         )}
                       </Form.List>
                       <Form.Item>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" 
+                          onClick={() => {
+                            console.log(data)
+                            onFinish(data)
+                          }}>
                           Submit
                         </Button>
                       </Form.Item>
+                      </>
+                      ) : (
+                      <Form.Item>
+                        <Button type="primary" onClick={() => showEditContent(true)}>
+                          Add Designations
+                        </Button>
+                      </Form.Item>
+                      )}
                     </Form>
-                  </Col>
-
-
-
-
+                  {/* </Col> */}
                 </Row>
-
-
-
-                {editContactInfo === true ? (
-                  <Row
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "3%",
-                    }}
-                  >
-                    <Button
-                      type="text"
-                      style={{ fontSize: 15 }}
-                      onClick={() => showEditContactInfo(false)}
-                    >
-                      <CloseOutlined /> CANCEL
-                    </Button>
-                    <Col>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        style={{ marginLeft: "10px" }}
-                      >
-                        SAVE
-                      </Button>
-                    </Col>
-                  </Row>
-                ) : null}
-              </Card>
             </Form>
           </Col>
         </Row>

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useState, useEffect } from "react";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { Card, Row, Col, Input, Button, Form } from "antd";
 import { EditFilled, CloseOutlined } from "@ant-design/icons";
@@ -10,7 +9,8 @@ function BankAccount() {
   const [bankName, setBankName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [ifscCode, setIfscCode] = useState("");
-  const { currentUser } = useAuth();
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+
   const onFinish = () => {
     let record = {
       bankName: bankName ? bankName : null,
@@ -21,25 +21,30 @@ function BankAccount() {
     showEditContent(false);
     getData();
   };
+
   useEffect(() => {
     getData();
   }, []);
+
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setBankName(data.bankName ? data.bankName : null);
     setAccountNumber(data.accountNumber ? data.accountNumber : null);
     setIfscCode(data.ifscCode ? data.ifscCode : null);
   };
+
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
+
   const checkAlphabets = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
+  
   const checkUpperCase = (event) => {
     if (!/^[A-Z]*$/.test(event.key) && event.key !== "Backspace") {
       return true;

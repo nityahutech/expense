@@ -14,6 +14,7 @@ import {
 import { createUser } from "./CreateContext";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import moment from "moment";
+
 const companyProfileCollectionRef = collection(db, "companyprofile");
 
 class CompanyProContext {

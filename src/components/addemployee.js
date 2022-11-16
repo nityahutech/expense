@@ -20,7 +20,7 @@ function AddEmployee() {
   const page = "addemployeePage";
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
+  const compId = sessionStorage.getItem("compId");
   const [configurations, setConfigurations] = useState(null);
   const [workLoc, setWorkLoc] = useState(null);
   useEffect(() => {

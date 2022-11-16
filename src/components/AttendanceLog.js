@@ -4,7 +4,6 @@ import {
   Layout,
   Table,
   Button,
-  Modal,
   Form,
   Input,
   DatePicker,
@@ -15,11 +14,9 @@ import {
 import "../style/AttendanceLog.css";
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { useAuth } from "../contexts/AuthContext";
 import AttendanceContext from "../contexts/AttendanceContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
-const { RangePicker } = DatePicker;
-const { Content } = Layout;
+
 const layout = {
   labelCol: {
     span: 8,
@@ -34,20 +31,18 @@ const tailLayout = {
     span: 16,
   },
 };
-const dateFormat = "DD-MM-YYYY";
+
 function AttendanceLog() {
-  const [monthlydata, setMonthlydata] = useState([]);
+
   const [allEmp, setallEmp] = useState([]);
-  const [role, setRole] = useState(sessionStorage.getItem("role"));
+  const role = sessionStorage.getItem("role");
+  const currentUser = JSON.parse(sessionStorage.getItem("user"))
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
-  const { currentUser } = useAuth();
-  const [key, setKey] = useState("1");
   const [loading, setLoading] = useState(false);
   const [empMonthly, setEmpMonthly] = useState([]);
   const [holidays, setHolidays] = useState([]);
   const [month, setMonth] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
     date: [],
@@ -91,13 +86,13 @@ function AttendanceLog() {
   ];
   const showNotification = (type, msg, desc) => {
     notification[type]({
-        message: msg,
-        description: desc,
+      message: msg,
+      description: desc,
     });
-};
-useEffect(() => {
-  getHolidayList()
-}, [])
+  };
+  useEffect(() => {
+    getHolidayList();
+  }, []);
   useEffect(() => {
     form.resetFields();
     if (role === "emp") {
@@ -143,38 +138,45 @@ useEffect(() => {
         : "0" + new Date().getSeconds())
     );
   }
-const getHolidayList = async () => {
-  let data = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
-  let req = data.docs.map((doc) => {
-    if (!(doc.data().optionalHoliday)){
-      return doc.data().date;
-    }
-    return null
-  });
-  setHolidays(req)
-}
-const setHolidayStatus = (data) => {
-  data.forEach((rec) =>{
-    if(holidays.includes(moment(rec.date, "DD-MM-YYYY").format("Do MMM, YYYY")) && rec.status!="Present"){
-      rec.status = "Holiday"
-    }
-  })
-  return data;
-}
+  const getHolidayList = async () => {
+    let data = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
+    let req = data.docs.map((doc) => {
+      if (!doc.data().optionalHoliday) {
+        return doc.data().date;
+      }
+      return null;
+    });
+    setHolidays(req);
+  };
+  const setHolidayStatus = (data) => {
+    data.forEach((rec) => {
+      if (
+        holidays.includes(
+          moment(rec.date, "DD-MM-YYYY").format("Do MMM, YYYY")
+        ) &&
+        rec.status != "Present"
+      ) {
+        rec.status = "Holiday";
+      }
+    });
+    return data;
+  };
   const onFinish = (values) => {
     const newData = {
       report: values?.project_details || "-",
       project: values?.project_name || "-",
     };
-    AttendanceContext.updateAttendance(
-      currentUser.uid,
-      values.date,
-      newData
-    ).then((response) => {
-      showNotification("success", "Success", "Record updated successfuly");
-    }).catch((error) => {
-      showNotification("error", "Error", "No records exist for this day");
-    })
+    AttendanceContext.updateAttendance(currentUser.uid, values.date, newData)
+      .then((response) => {
+        getEmpDetails(currentUser.uid, [
+          moment().subtract(30, "days"),
+          moment(),
+        ]);
+        showNotification("success", "Success", "Record updated successfuly");
+      })
+      .catch((error) => {
+        showNotification("error", "Error", "No records exist for this day");
+      });
     setActivetab("1");
   };
   if (loading) {
@@ -208,14 +210,14 @@ const setHolidayStatus = (data) => {
     let data;
     AttendanceContext.getAllAttendance(id, date).then((userdata) => {
       AttendanceContext.updateLeaves(userdata).then((final) => {
-      setHolidayStatus(final)
-      data = final
-      setEmpMonthly(final);
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, 750);
-      return () => clearTimeout(timer);
-    });
+        setHolidayStatus(final);
+        data = final;
+        setEmpMonthly(final);
+        const timer = setTimeout(() => {
+          setLoading(false);
+        }, 750);
+        return () => clearTimeout(timer);
+      });
       // getWithLeave(userdata);
     });
     return data;
@@ -223,7 +225,10 @@ const setHolidayStatus = (data) => {
   function allEmpDetails() {
     setLoading(true);
     AttendanceContext.getAllUsers().then((userdata) => {
-      AttendanceContext.updateWithLeave(userdata, holidays.includes(moment().format("Do MMM, YYYY"))).then((final) => {
+      AttendanceContext.updateWithLeave(
+        userdata,
+        holidays.includes(moment().format("Do MMM, YYYY"))
+      ).then((final) => {
         // setHolidayStatus(final)
         setallEmp(final);
         setFilteredEmp(final);
@@ -240,7 +245,7 @@ const setHolidayStatus = (data) => {
     form.resetFields();
   };
   const columns1 = [
-       {
+    {
       title: "Date",
       dataIndex: "date",
       key: "date",
@@ -264,6 +269,7 @@ const setHolidayStatus = (data) => {
       title: "Work Duration",
       key: "duration",
       dataIndex: "duration",
+      width: 140,
     },
     {
       title: "Break Time",
@@ -280,12 +286,12 @@ const setHolidayStatus = (data) => {
       title: "Report",
       key: "report",
       dataIndex: "report",
-      width: 180,
+      width: 150,
       ellipsis: true,
     },
-      ];
+  ];
   async function onHrDateFilter(value) {
-    setMonth(value)
+    setMonth(value);
     if (value == null) {
       const modifiedFilterExpense = await getEmpDetails(selectemp.id, [
         moment().subtract(30, "days"),
@@ -334,10 +340,10 @@ const setHolidayStatus = (data) => {
                     className="Range"
                     bordered={true}
                     value={month}
-                    defaultValue={month?month:null}
+                    defaultValue={month ? month : null}
                     format="MM-YYYY"
                     style={{
-                      background: "#1890ff",
+                      background: "#1963A6",
                       cursor: "pointer",
                       marginLeft: "12rem",
                     }}
@@ -479,10 +485,10 @@ const setHolidayStatus = (data) => {
                     placeholder="Select Month"
                     className="Range "
                     value={month}
-                    defaultValue={month?month:null}
+                    defaultValue={month ? month : null}
                     format={"MM-YYYY"}
                     style={{
-                      background: "#1890ff",
+                      background: "#1963A6",
                       cursor: "pointer",
                       marginLeft: "12rem",
                     }}

@@ -49,7 +49,54 @@ display: block !important;
 .education:hover .personal {
     display: block !important;
     }
+.viewCard .ant-card-head{
+        border-radius: 10px 10px 0px 0px;
+        background: #1963A6;
+        color: #ffffff;
+}
+.personal .ant-card-head{
+    border-radius: 10px 10px 0px 0px;
+    background: #1963A6;
+    color: #ffffff;
+}
+/* -----------CSS code used for document tag----------- */
+.tabs.ant-tabs{
+    width: 100% ;
+}
+.idbutton {
+    margin-top: 10px;
+}
 
+.idselect .ant-modal-body {
+    margin: 0;
+}
+
+.certficationtable .ant-modal-body {
+    margin: 0;
+}
+
+.worktab .ant-modal-body {
+    margin: 0;
+}
+
+.tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #000;
+    font-size: 14px;
+    font-weight: 600;
+}
+/* --------------CSS code for IDTag------------ */
+.IDTags .ant-table-thead>tr>th{
+    background:#1963A6;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+ }
  
-
-
+ .Workid .ant-table-thead>tr>th{
+    background:#1963A6;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+ }

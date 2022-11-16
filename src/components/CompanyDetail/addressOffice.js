@@ -73,7 +73,7 @@ function AddressOffice() {
                         type="text"
                         className="edit"
                         style={{
-                          color: "#4ec0f1",
+                          color: "#ffff",
                           display: "none",
                           paddingTop: "7px",
                           paddingRight: "7px",
@@ -91,6 +91,7 @@ function AddressOffice() {
                 style={{
                   width: '100%',
                   marginTop: 10,
+                  borderRadius:"10px",
                 }}
               >
                 {/* {editAddress === true ? (  */}
@@ -113,7 +114,6 @@ function AddressOffice() {
                           ]}
                         >
                           <Input
-                            // style={{ paddingLeft: '0px' }}
                             style={{
                               width: "100%",
                               borderBottom: "1px solid #ccc ",

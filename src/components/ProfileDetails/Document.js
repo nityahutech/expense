@@ -1,5 +1,5 @@
 import { Tabs } from "antd";
-import "../../style/Documents.css";
+import "../../style/BankAccount.css";
 import WorkID from "../ProfileDetails/WorkID";
 import CertificateID from "../ProfileDetails/CertificateID";
 import IDTags from "../ProfileDetails/IDTags";
@@ -19,12 +19,13 @@ function Document() {
     >
       <div
         style={{
-          width: "800px",
+          width: "75%",
           marginTop: "10px",
           backgroundColor: "white",
           padding: "10px",
           display: "flex",
           justifyContent: "center",
+          borderRadius: "10px",
         }}
       >
         <Tabs defaultActiveKey="1" className="tabs">

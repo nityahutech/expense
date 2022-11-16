@@ -24,6 +24,7 @@ import {
 import "./companystyle.css";
 import FormItem from "antd/es/form/FormItem";
 import CompanyProContext from "../../contexts/CompanyProContext";
+import "../../components/CompanyDetail/companystyle.css";
 
 const { TextArea } = Input;
 const compId = sessionStorage.getItem("compId");
@@ -209,8 +210,16 @@ const Statutory = () => {
           justifyContent: "center",
         }}
       >
-        <Row>
-          <Col xs={22} sm={15} md={8} >
+        <Row
+          className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <Col span={24} >
             <Form
               labelcol={{
                 span: 4,
@@ -226,15 +235,28 @@ const Statutory = () => {
             >
               <Card
                 title=" COMPANY ID"
-                style={{ marginTop: "1rem", width: 800 }}
+                style={{
+                  width: '100%',
+                  marginTop: 10,
+                  borderRadius:"10px",
+                }}
                 className="companyCard"
                 // className="card1"
                 extra={
                   <>
                     {editContent === false ? (
                       <Button
-                        type="text"
-                        style={{ color: "#4ec0f1" }}
+                      className="personal"
+                      type="text"
+                      style={{
+                        color: "#ffff",
+                        display: "none",
+                        paddingTop: "7px",
+                        paddingRight: "7px",
+                        position: "absolute",
+                        right: 10,
+                        top: 10,
+                      }}
                         onClick={() => showEditContent(!editContent)}
                       >
                         <EditFilled />
@@ -243,7 +265,7 @@ const Statutory = () => {
                   </>
                 }
               >
-                <Row gutter={[48, 8]}>
+                <Row gutter={[16,16]}>
                   <Col xs={22} sm={15} md={8}>
                     <div>
                       <div className="div-discription">Entity Type</div>
@@ -357,8 +379,6 @@ const Statutory = () => {
                       )}
                     </div>
                   </Col>
-                </Row>
-                <Row gutter={[48, 8]} style={{ marginTop: "5%" }}>
                   <Col xs={22} sm={15} md={8}>
                     <div>
                       <div className="div-discription">Company PAN</div>
@@ -507,7 +527,8 @@ const Statutory = () => {
             </Form>
           </Col>
         </Row>
-        </div>
+      </div>
+
         <div
         className="personalCardDiv"
         style={{
@@ -516,794 +537,808 @@ const Statutory = () => {
           justifyContent: "center",
         }}
       >
-      <Row>
-        <Col xs={22} sm={15} md={8}>
-      <Card className="tagsCard" style={{ marginTop: "1rem", width: "800px" }}>
-        <Tabs defaultActiveKey="1" className="tabs">
-          <Tabs.TabPane tab="Directors" key="1">
-            <Form
-              wrappercol={{
-                span: 14,
-              }}
-              labelcol={{
-                span: 4,
-              }}
-              layout="vertical"
-              onFinish={addDirector}
-              form={form}
-            >
-              <Card className="tabcard1" title="Directors" bordered={false}>
-                {directorList.map((u, i) => (
-                  <div>
-                    <Row gutter={[20, 8]}>
-                      <Col xs={22} sm={15} md={6}>
-                        <label>Name</label>
-                        <Input
-                          style={{
-                            width: "100%",
-                            borderBottom: "1px solid #ccc ",
-                            paddingLeft: "0px",
-                            marginTop: "10px",
-                          }}
-                          bordered={false}
-                          value={u.directorName}
-                        />
-                      </Col>
-                      <Col xs={22} sm={15} md={8}>
-                        <label>Email ID</label>
-                        <Input
-                          style={{
-                            width: "100%",
-                            borderBottom: "1px solid #ccc ",
-                            paddingLeft: "0px",
-                            marginTop: "10px",
-                          }}
-                          bordered={false}
-                          value={u.directoremailid}
-                        />
-                      </Col>
-                      <Col xs={22} sm={15} md={4}>
-                        <label>DIN</label>
-                        <Input
-                          style={{
-                            width: "100%",
-                            borderBottom: "1px solid #ccc ",
-                            paddingLeft: "0px",
-                            marginTop: "10px",
-                          }}
-                          bordered={false}
-                          value={u.directordin}
-                        />
-                      </Col>
-                      <Col xs={22} sm={15} md={5}>
-                        <label>Phone Number</label>
-                        <Input
-                          style={{
-                            width: "100%",
-                            borderBottom: "1px solid #ccc ",
-                            paddingLeft: "0px",
-                            marginTop: "10px",
-                          }}
-                          bordered={false}
-                          value={u.directorphone}
-                        />
-                      </Col>
-                      <Col
-                        xs={22}
-                        sm={15}
-                        md={1}
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "end",
-                        }}
-                      >
-                        <Button
-                          style={{
-                            width: "10px",
-                            border: "none",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "end",
-                          }}
-                          onClick={() => {
-                            onDeleteDirector(u);
-                          }}
-                        >
-                          <DeleteOutlined />
-                        </Button>
-                      </Col>
-                    </Row>
-                    <Divider className="divider" />
-                  </div>
-                ))}
-                {editDirectors === false ? (
-                  <Button
-                    type="primary"
-                    onClick={() => showEditDirectors(!editDirectors)}
-                    // style={{marginTop:'50px'}}
+        <Row 
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <Col span={24}>
+            <Card 
+              className="tagsCard" 
+              style={{ 
+                marginTop: 10, 
+                width: "100%",
+                borderRadius:"10px", 
+                }}
+              >
+              <Tabs defaultActiveKey="1" className="tabs">
+                <Tabs.TabPane tab="Directors" key="1">
+                  <Form
+                    wrappercol={{
+                      span: 14,
+                    }}
+                    labelcol={{
+                      span: 4,
+                    }}
+                    layout="vertical"
+                    onFinish={addDirector}
+                    form={form}
                   >
-                    <PlusCircleOutlined />
-                    Add
-                  </Button>
-                ) : (
-                  <div style={{ marginTop: "50px" }}>
-                    <Row gutter={[20, 8]}>
-                      <Col xs={22} sm={15} md={6}>
-                        <FormItem
-                          label="Name"
-                          name="directorName"
-                          onKeyPress={(event) => {
-                            if (checkAlphabets(event)) {
-                              event.preventDefault();
-                            }
-                          }}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please enter your name",
-                            },
-                            {
-                              pattern: /^[a-zA-Z\s]*$/,
-                              message: "Please enter Valid Name",
-                            },
-                          ]}
-                        >
-                          <Input
-                            placeholder="Name"
-                            style={{
-                              width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                              marginTop: "10px",
-                            }}
-                            bordered={false}
-                          />
-                        </FormItem>
-                      </Col>
-                      <Col xs={22} sm={15} md={8}>
-                        <FormItem
-                          name="directoremailid"
-                          label="Email ID"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please enter valid email ID",
-                            },
-                            // {
-                            //   pattern:
-                            //     "/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
-                            //   message: "Please Enter Valid Name",
-                            // },
-                          ]}
-                        >
-                          <Input
-                            style={{
-                              width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                              marginTop: "10px",
-                            }}
-                            bordered={false}
-                          />
-                        </FormItem>
-                      </Col>
-                      <Col xs={22} sm={15} md={4}>
-                        <FormItem
-                          name="directordin"
-                          label="DIN"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please enter valid DIN",
-                            },
-                            {
-                              pattern: /^[0-9\s]+$/,
-                              message: "Please enter Valid Number",
-                            },
-                          ]}
-                        >
-                          <Input
-                            maxLength={8}
-                            style={{
-                              width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                              marginTop: "10px",
-                            }}
-                            bordered={false}
-                          />
-                        </FormItem>
-                      </Col>
-                      <Col xs={22} sm={15} md={6}>
-                        <FormItem
-                          name="directorphone"
-                          label="Phone Number"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please enter your phone no",
-                            },
-                            {
-                              pattern: /^[6-9]\d{9}$/,
-                              message: "Please Enter Valid Number",
-                            },
-                          ]}
-                        >
-                          <Input
-                            maxLength={10}
-                            style={{
-                              width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                              marginTop: "10px",
-                            }}
-                            bordered={false}
-                          />
-                        </FormItem>
-                      </Col>
-                      <Col
-                        span={24}
-                        style={{ display: "flex", justifyContent: "flex-end" }}
-                      >
-                        <FormItem>
-                          <Button
-                            type="text"
-                            style={{ marginRight: "1rem" }}
-                            onClick={() => showEditDirectors(false)}
-                          >
-                            {" "}
-                            <CloseOutlined />
-                            CANCLE
-                          </Button>
-                          <Button
-                            type="primary"
-                            htmlType={editDirectors ? "submit" : "button"}
-                            onClick={() => {
-                              if (!editDirectors) {
-                                showEditDirectors(true);
-                              }
-                            }}
-                          >
-                            {" "}
-                            <CheckOutlined />
-                            SAVE
-                          </Button>
-                        </FormItem>
-                      </Col>
-                    </Row>
-                    <Button
-                      type="primary"
-                      onClick={() => showEditDirectors(!editDirectors)}
-                      htmlType="submit"
-                    >
-                      <PlusCircleOutlined />
-                      Add
-                    </Button>
-                  </div>
-                )}
-              </Card>
-            </Form>
-            </Tabs.TabPane>
-          <Tabs.TabPane tab="Auditors" key="2">
-                <Card title="Auditors" bordered={false}>
-                  <Row>
-                    <Col xs={22} sm={22} md={22}>
-                      <Form
-                        wrappercol={{
-                          span: 14,
-                        }}
-                        labelcol={{
-                          span: 4,
-                        }}
-                        layout="vertical"
-                        onFinish={addAuditor}
-                        form={form1}
-                      >
-                        {auditorList.map((u, i) => (
-                          <div>
-                            <Row gutter={[20, 8]}>
-                              <Col xs={22} sm={15} md={6}>
-                                <label className="div-discription">Name</label>
-                                <Input
-                                  style={{
-                                    width: "100%",
-                                    borderBottom: "1px solid #ccc ",
-                                  }}
-                                  bordered={false}
-                                  value={u.auditorName}
-                                />
-                              </Col>
-                              <Col xs={22} sm={15} md={8}>
-                                <label className="div-discription">
-                                  Email ID
-                                </label>
-                                <Input
-                                  style={{
-                                    width: "100%",
-                                    borderBottom: "1px solid #ccc ",
-                                  }}
-                                  bordered={false}
-                                  value={u.auditormailid}
-                                />
-                              </Col>
-                              <Col xs={22} sm={15} md={4}>
-                                <lable className="div-discription">Type</lable>
-                                <Select
-                                  value={u.auditortype}
-                                  defaultValue="Type"
-                                  style={{
-                                    width: "100%",
-                                    borderBottom: "1px solid #ccc ",
-                                  }}
-                                  bordered={false}
-                                  onChange={handleChange}
-                                  options={[
-                                    {
-                                      value: "Internal",
-                                      label: "Internal",
-                                    },
-                                    {
-                                      value: "Statutory",
-                                      label: "Statutory",
-                                    },
-                                  ]}
-                                />
-                              </Col>
-                              <Col xs={22} sm={15} md={5}>
-                                <lable className="div-discription">
-                                  Phone Number
-                                </lable>
-                                <Input
-                                  style={{
-                                    width: "100%",
-                                    borderBottom: "1px solid #ccc ",
-                                  }}
-                                  bordered={false}
-                                  value={u.auditorphone}
-                                />
-                              </Col>
-                              <Col
-                                xs={22}
-                                sm={15}
-                                md={1}
+                    <Card className="tabcard1" title="Directors" bordered={false}>
+                      {directorList.map((u, i) => (
+                        <div>
+                          <Row gutter={[20, 8]}>
+                            <Col xs={22} sm={15} md={6}>
+                              <label>Name</label>
+                              <Input
                                 style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                                bordered={false}
+                                value={u.directorName}
+                              />
+                            </Col>
+                            <Col xs={22} sm={15} md={8}>
+                              <label>Email ID</label>
+                              <Input
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                                bordered={false}
+                                value={u.directoremailid}
+                              />
+                            </Col>
+                            <Col xs={22} sm={15} md={4}>
+                              <label>DIN</label>
+                              <Input
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                                bordered={false}
+                                value={u.directordin}
+                              />
+                            </Col>
+                            <Col xs={22} sm={15} md={5}>
+                              <label>Phone Number</label>
+                              <Input
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                                bordered={false}
+                                value={u.directorphone}
+                              />
+                            </Col>
+                            <Col
+                              xs={22}
+                              sm={15}
+                              md={1}
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "end",
+                              }}
+                            >
+                              <Button
+                                style={{
+                                  width: "10px",
+                                  border: "none",
                                   display: "flex",
                                   justifyContent: "center",
                                   alignItems: "end",
                                 }}
+                                onClick={() => {
+                                  onDeleteDirector(u);
+                                }}
                               >
-                                <Button
+                                <DeleteOutlined />
+                              </Button>
+                            </Col>
+                          </Row>
+                          <Divider className="divider" />
+                        </div>
+                      ))}
+                      {editDirectors === false ? (
+                        <Button
+                          type="primary"
+                          onClick={() => showEditDirectors(!editDirectors)}
+                          // style={{marginTop:'50px'}}
+                        >
+                          <PlusCircleOutlined />
+                          Add
+                        </Button>
+                      ) : (
+                        <div style={{ marginTop: "50px" }}>
+                          <Row gutter={[20, 8]}>
+                            <Col xs={22} sm={15} md={6}>
+                              <FormItem
+                                label="Name"
+                                name="directorName"
+                                onKeyPress={(event) => {
+                                  if (checkAlphabets(event)) {
+                                    event.preventDefault();
+                                  }
+                                }}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please enter your name",
+                                  },
+                                  {
+                                    pattern: /^[a-zA-Z\s]*$/,
+                                    message: "Please enter Valid Name",
+                                  },
+                                ]}
+                              >
+                                <Input
+                                  placeholder="Name"
                                   style={{
-                                    width: "10px",
-                                    border: "none",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "end",
+                                    width: "100%",
+                                    borderBottom: "1px solid #ccc ",
+                                    paddingLeft: "0px",
+                                    marginTop: "10px",
                                   }}
+                                  bordered={false}
+                                />
+                              </FormItem>
+                            </Col>
+                            <Col xs={22} sm={15} md={8}>
+                              <FormItem
+                                name="directoremailid"
+                                label="Email ID"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please enter valid email ID",
+                                  },
+                                  // {
+                                  //   pattern:
+                                  //     "/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
+                                  //   message: "Please Enter Valid Name",
+                                  // },
+                                ]}
+                              >
+                                <Input
+                                  style={{
+                                    width: "100%",
+                                    borderBottom: "1px solid #ccc ",
+                                    paddingLeft: "0px",
+                                    marginTop: "10px",
+                                  }}
+                                  bordered={false}
+                                />
+                              </FormItem>
+                            </Col>
+                            <Col xs={22} sm={15} md={4}>
+                              <FormItem
+                                name="directordin"
+                                label="DIN"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please enter valid DIN",
+                                  },
+                                  {
+                                    pattern: /^[0-9\s]+$/,
+                                    message: "Please enter Valid Number",
+                                  },
+                                ]}
+                              >
+                                <Input
+                                  maxLength={8}
+                                  style={{
+                                    width: "100%",
+                                    borderBottom: "1px solid #ccc ",
+                                    paddingLeft: "0px",
+                                    marginTop: "10px",
+                                  }}
+                                  bordered={false}
+                                />
+                              </FormItem>
+                            </Col>
+                            <Col xs={22} sm={15} md={6}>
+                              <FormItem
+                                name="directorphone"
+                                label="Phone Number"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please enter your phone no",
+                                  },
+                                  {
+                                    pattern: /^[6-9]\d{9}$/,
+                                    message: "Please Enter Valid Number",
+                                  },
+                                ]}
+                              >
+                                <Input
+                                  maxLength={10}
+                                  style={{
+                                    width: "100%",
+                                    borderBottom: "1px solid #ccc ",
+                                    paddingLeft: "0px",
+                                    marginTop: "10px",
+                                  }}
+                                  bordered={false}
+                                />
+                              </FormItem>
+                            </Col>
+                            <Col
+                              span={24}
+                              style={{ display: "flex", justifyContent: "flex-end" }}
+                            >
+                              <FormItem>
+                                <Button
+                                  type="text"
+                                  style={{ marginRight: "1rem" }}
+                                  onClick={() => showEditDirectors(false)}
+                                >
+                                  {" "}
+                                  <CloseOutlined />
+                                  CANCLE
+                                </Button>
+                                <Button
+                                  type="primary"
+                                  htmlType={editDirectors ? "submit" : "button"}
                                   onClick={() => {
-                                    onDeleteAuditor(u);
+                                    if (!editDirectors) {
+                                      showEditDirectors(true);
+                                    }
                                   }}
                                 >
-                                  <DeleteOutlined />
+                                  {" "}
+                                  <CheckOutlined />
+                                  SAVE
                                 </Button>
-                              </Col>
-                            </Row>
-                            <Divider className="divider" />
-                          </div>
-                        ))}
-                        {editAuditor === false ? (
+                              </FormItem>
+                            </Col>
+                          </Row>
                           <Button
                             type="primary"
-                            onClick={() => setEditAuditor(!editAuditor)}
+                            onClick={() => showEditDirectors(!editDirectors)}
+                            htmlType="submit"
                           >
                             <PlusCircleOutlined />
                             Add
                           </Button>
-                        ) : (
-                          <div>
-                            <Row gutter={[20, 8]}>
-                              <Col xs={22} sm={15} md={6}>
-                                <FormItem
-                                  label="Name"
-                                  name="auditorName"
-                                  style={{
-                                    fontWeight: 600,
-                                    lineHeight: "18px",
-                                    color: "#07182b",
-                                    fontSize: "14px",
-                                    fontFamily: "Open Sans,sans-serif",
-                                  }}
-                                  onKeyPress={(event) => {
-                                    if (checkAlphabets(event)) {
-                                      event.preventDefault();
-                                    }
-                                  }}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: "Please enter your name",
-                                      pattern: /^[a-zA-Z\s]*$/,
-                                    },
-                                    {
-                                      pattern: /^[a-zA-Z\s]*$/,
-                                      message: "Please enter Valid Name",
-                                    },
-                                  ]}
+                        </div>
+                      )}
+                    </Card>
+                  </Form>
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Auditors" key="2">
+                      <Card title="Auditors" bordered={false}>
+                        <Row>
+                          <Col xs={22} sm={22} md={22}>
+                            <Form
+                              wrappercol={{
+                                span: 14,
+                              }}
+                              labelcol={{
+                                span: 4,
+                              }}
+                              layout="vertical"
+                              onFinish={addAuditor}
+                              form={form1}
+                            >
+                              {auditorList.map((u, i) => (
+                                <div>
+                                  <Row gutter={[20, 8]}>
+                                    <Col xs={22} sm={15} md={6}>
+                                      <label className="div-discription">Name</label>
+                                      <Input
+                                        style={{
+                                          width: "100%",
+                                          borderBottom: "1px solid #ccc ",
+                                        }}
+                                        bordered={false}
+                                        value={u.auditorName}
+                                      />
+                                    </Col>
+                                    <Col xs={22} sm={15} md={8}>
+                                      <label className="div-discription">
+                                        Email ID
+                                      </label>
+                                      <Input
+                                        style={{
+                                          width: "100%",
+                                          borderBottom: "1px solid #ccc ",
+                                        }}
+                                        bordered={false}
+                                        value={u.auditormailid}
+                                      />
+                                    </Col>
+                                    <Col xs={22} sm={15} md={4}>
+                                      <lable className="div-discription">Type</lable>
+                                      <Select
+                                        value={u.auditortype}
+                                        defaultValue="Type"
+                                        style={{
+                                          width: "100%",
+                                          borderBottom: "1px solid #ccc ",
+                                        }}
+                                        bordered={false}
+                                        onChange={handleChange}
+                                        options={[
+                                          {
+                                            value: "Internal",
+                                            label: "Internal",
+                                          },
+                                          {
+                                            value: "Statutory",
+                                            label: "Statutory",
+                                          },
+                                        ]}
+                                      />
+                                    </Col>
+                                    <Col xs={22} sm={15} md={5}>
+                                      <lable className="div-discription">
+                                        Phone Number
+                                      </lable>
+                                      <Input
+                                        style={{
+                                          width: "100%",
+                                          borderBottom: "1px solid #ccc ",
+                                        }}
+                                        bordered={false}
+                                        value={u.auditorphone}
+                                      />
+                                    </Col>
+                                    <Col
+                                      xs={22}
+                                      sm={15}
+                                      md={1}
+                                      style={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "end",
+                                      }}
+                                    >
+                                      <Button
+                                        style={{
+                                          width: "10px",
+                                          border: "none",
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "end",
+                                        }}
+                                        onClick={() => {
+                                          onDeleteAuditor(u);
+                                        }}
+                                      >
+                                        <DeleteOutlined />
+                                      </Button>
+                                    </Col>
+                                  </Row>
+                                  <Divider className="divider" />
+                                </div>
+                              ))}
+                              {editAuditor === false ? (
+                                <Button
+                                  type="primary"
+                                  onClick={() => setEditAuditor(!editAuditor)}
                                 >
-                                  <Input
-                                    placeholder="Name"
-                                    bordered={false}
-                                    style={{
-                                      width: "100%",
-                                      borderBottom: "1px solid #ccc ",
-                                    }}
-                                  />
-                                </FormItem>
-                              </Col>
-                              <Col xs={22} sm={15} md={8}>
-                                <FormItem
-                                  name="auditormailid"
-                                  label="Email ID"
-                                  style={{
-                                    fontWeight: 600,
-                                    lineHeight: "18px",
-                                    color: "#07182b",
-                                    fontSize: "14px",
-                                    fontFamily: "Open Sans,sans-serif",
-                                  }}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: "Please enter valid email ID",
-                                    },
-                                    // {
-                                    //   pattern:
-                                    //     "/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
-                                    //   message: "Please Enter Valid Name",
-                                    // },
-                                  ]}
-                                >
-                                  <Input
-                                    placeholder="Email ID"
-                                    bordered={false}
-                                    style={{
-                                      width: "100%",
-                                      borderBottom: "1px solid #ccc ",
-                                    }}
-                                  />
-                                </FormItem>
-                              </Col>
-                              <Col xs={22} sm={15} md={4}>
-                                <FormItem
-                                  name="auditortype"
-                                  label="Type"
-                                  style={{
-                                    fontWeight: 600,
-                                    lineHeight: "18px",
-                                    color: "#07182b",
-                                    fontSize: "14px",
-                                    fontFamily: "Open Sans,sans-serif",
-                                  }}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: "Please enter type",
-                                    },
-                                  ]}
-                                >
-                                  <Select
-                                    defaultValue="Type"
-                                    style={{
-                                      width: "100%",
-                                      borderBottom: "1px solid #ccc ",
-                                    }}
-                                    bordered={false}
-                                    onChange={handleChange}
-                                    options={[
-                                      {
-                                        value: "Internal",
-                                        label: "Internal",
-                                      },
-                                      {
-                                        value: "Statutory",
-                                        label: "Statutory",
-                                      },
-                                    ]}
-                                  />
-                                </FormItem>
-                              </Col>
-                              <Col xs={22} sm={15} md={6}>
-                                <FormItem
-                                  name="auditorphone"
-                                  label="Phone Number"
-                                  style={{
-                                    fontWeight: 600,
-                                    lineHeight: "18px",
-                                    color: "#07182b",
-                                    fontSize: "14px",
-                                    fontFamily: "Open Sans,sans-serif",
-                                  }}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: "Please enter your phone no",
-                                    },
-                                    {
-                                      pattern: /^[0-9\b]+$/,
-                                      message: "Please Enter Valid Number",
-                                    },
-                                  ]}
-                                >
-                                  <Input
-                                    name="Phone Number"
-                                    bordered={false}
-                                    style={{
-                                      width: "100%",
-                                      borderBottom: "1px solid #ccc ",
-                                    }}
-                                    maxLength={10}
-                                  />
-                                </FormItem>
-                              </Col>
-                              <Col
-                                span={24}
+                                  <PlusCircleOutlined />
+                                  Add
+                                </Button>
+                              ) : (
+                                <div>
+                                  <Row gutter={[20, 8]}>
+                                    <Col xs={22} sm={15} md={6}>
+                                      <FormItem
+                                        label="Name"
+                                        name="auditorName"
+                                        style={{
+                                          fontWeight: 600,
+                                          lineHeight: "18px",
+                                          color: "#07182b",
+                                          fontSize: "14px",
+                                          fontFamily: "Open Sans,sans-serif",
+                                        }}
+                                        onKeyPress={(event) => {
+                                          if (checkAlphabets(event)) {
+                                            event.preventDefault();
+                                          }
+                                        }}
+                                        rules={[
+                                          {
+                                            required: true,
+                                            message: "Please enter your name",
+                                            pattern: /^[a-zA-Z\s]*$/,
+                                          },
+                                          {
+                                            pattern: /^[a-zA-Z\s]*$/,
+                                            message: "Please enter Valid Name",
+                                          },
+                                        ]}
+                                      >
+                                        <Input
+                                          placeholder="Name"
+                                          bordered={false}
+                                          style={{
+                                            width: "100%",
+                                            borderBottom: "1px solid #ccc ",
+                                          }}
+                                        />
+                                      </FormItem>
+                                    </Col>
+                                    <Col xs={22} sm={15} md={8}>
+                                      <FormItem
+                                        name="auditormailid"
+                                        label="Email ID"
+                                        style={{
+                                          fontWeight: 600,
+                                          lineHeight: "18px",
+                                          color: "#07182b",
+                                          fontSize: "14px",
+                                          fontFamily: "Open Sans,sans-serif",
+                                        }}
+                                        rules={[
+                                          {
+                                            required: true,
+                                            message: "Please enter valid email ID",
+                                          },
+                                          // {
+                                          //   pattern:
+                                          //     "/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
+                                          //   message: "Please Enter Valid Name",
+                                          // },
+                                        ]}
+                                      >
+                                        <Input
+                                          placeholder="Email ID"
+                                          bordered={false}
+                                          style={{
+                                            width: "100%",
+                                            borderBottom: "1px solid #ccc ",
+                                          }}
+                                        />
+                                      </FormItem>
+                                    </Col>
+                                    <Col xs={22} sm={15} md={4}>
+                                      <FormItem
+                                        name="auditortype"
+                                        label="Type"
+                                        style={{
+                                          fontWeight: 600,
+                                          lineHeight: "18px",
+                                          color: "#07182b",
+                                          fontSize: "14px",
+                                          fontFamily: "Open Sans,sans-serif",
+                                        }}
+                                        rules={[
+                                          {
+                                            required: true,
+                                            message: "Please enter type",
+                                          },
+                                        ]}
+                                      >
+                                        <Select
+                                          defaultValue="Type"
+                                          style={{
+                                            width: "100%",
+                                            borderBottom: "1px solid #ccc ",
+                                          }}
+                                          bordered={false}
+                                          onChange={handleChange}
+                                          options={[
+                                            {
+                                              value: "Internal",
+                                              label: "Internal",
+                                            },
+                                            {
+                                              value: "Statutory",
+                                              label: "Statutory",
+                                            },
+                                          ]}
+                                        />
+                                      </FormItem>
+                                    </Col>
+                                    <Col xs={22} sm={15} md={6}>
+                                      <FormItem
+                                        name="auditorphone"
+                                        label="Phone Number"
+                                        style={{
+                                          fontWeight: 600,
+                                          lineHeight: "18px",
+                                          color: "#07182b",
+                                          fontSize: "14px",
+                                          fontFamily: "Open Sans,sans-serif",
+                                        }}
+                                        rules={[
+                                          {
+                                            required: true,
+                                            message: "Please enter your phone no",
+                                          },
+                                          {
+                                            pattern: /^[0-9\b]+$/,
+                                            message: "Please Enter Valid Number",
+                                          },
+                                        ]}
+                                      >
+                                        <Input
+                                          name="Phone Number"
+                                          bordered={false}
+                                          style={{
+                                            width: "100%",
+                                            borderBottom: "1px solid #ccc ",
+                                          }}
+                                          maxLength={10}
+                                        />
+                                      </FormItem>
+                                    </Col>
+                                    <Col
+                                      span={24}
+                                      style={{
+                                        display: "flex",
+                                        justifyContent: "flex-end",
+                                      }}
+                                    >
+                                      <FormItem>
+                                        <Button
+                                          type="text"
+                                          style={{ marginRight: "1rem" }}
+                                          onClick={() => setEditAuditor(false)}
+                                        >
+                                          {" "}
+                                          <CloseOutlined />
+                                          CANCLE
+                                        </Button>
+                                        <Button type="primary" htmlType="submit">
+                                          {" "}
+                                          <CheckOutlined />
+                                          SAVE
+                                        </Button>
+                                      </FormItem>
+                                    </Col>
+                                  </Row>
+
+                                  <Button
+                                    type="primary"
+                                    onClick={() => setEditAuditor(!editAuditor)}
+                                    htmlType="submit"
+                                  >
+                                    <PlusCircleOutlined />
+                                    Add
+                                  </Button>
+                                </div>
+                              )}
+                            </Form>
+                          </Col>
+                        </Row>
+                      </Card>
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Company Secretary" key="3">
+                  <Card title="Company Secretary" bordered={false}>
+                    <Form
+                      wrappercol={{
+                        span: 14,
+                      }}
+                      labelcol={{
+                        span: 4,
+                      }}
+                      layout="vertical"
+                      onFinish={addCS}
+                      form={form2}
+                    >
+                      {cSList.map((u, i) => (
+                        <div>
+                          <Row gutter={[20, 8]}>
+                            <Col xs={22} sm={15} md={6}>
+                              <label>Name</label>
+                              <Input
                                 style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                                bordered={false}
+                                value={u.secName}
+                              />
+                            </Col>
+                            <Col xs={22} sm={15} md={10}>
+                              <label>Email ID</label>
+                              <Input
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                                bordered={false}
+                                value={u.secmailid}
+                              />
+                            </Col>
+                            <Col xs={22} sm={15} md={6}>
+                              <label>Phone Number</label>
+                              <Input
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                                bordered={false}
+                                value={u.secphone}
+                              />
+                            </Col>
+                            <Col
+                              xs={22}
+                              sm={15}
+                              md={2}
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "end",
+                              }}
+                            >
+                              <Button
+                                style={{
+                                  width: "10px",
+                                  border: "none",
                                   display: "flex",
-                                  justifyContent: "flex-end",
+                                  justifyContent: "center",
+                                  alignItems: "end",
+                                }}
+                                onClick={() => {
+                                  onDeleteSecretary(u);
                                 }}
                               >
-                                <FormItem>
-                                  <Button
-                                    type="text"
-                                    style={{ marginRight: "1rem" }}
-                                    onClick={() => setEditAuditor(false)}
-                                  >
-                                    {" "}
-                                    <CloseOutlined />
-                                    CANCLE
-                                  </Button>
-                                  <Button type="primary" htmlType="submit">
-                                    {" "}
-                                    <CheckOutlined />
-                                    SAVE
-                                  </Button>
-                                </FormItem>
-                              </Col>
-                            </Row>
-
-                            <Button
-                              type="primary"
-                              onClick={() => setEditAuditor(!editAuditor)}
-                              htmlType="submit"
-                            >
-                              <PlusCircleOutlined />
-                              Add
-                            </Button>
-                          </div>
-                        )}
-                      </Form>
-                    </Col>
-                  </Row>
-                </Card>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Company Secretary" key="3">
-            <Card title="Company Secretary" bordered={false}>
-              <Form
-                wrappercol={{
-                  span: 14,
-                }}
-                labelcol={{
-                  span: 4,
-                }}
-                layout="vertical"
-                onFinish={addCS}
-                form={form2}
-              >
-                {cSList.map((u, i) => (
-                  <div>
-                    <Row gutter={[20, 8]}>
-                      <Col xs={22} sm={15} md={6}>
-                        <label>Name</label>
-                        <Input
-                          style={{
-                            width: "100%",
-                            borderBottom: "1px solid #ccc ",
-                            paddingLeft: "0px",
-                            marginTop: "10px",
-                          }}
-                          bordered={false}
-                          value={u.secName}
-                        />
-                      </Col>
-                      <Col xs={22} sm={15} md={10}>
-                        <label>Email ID</label>
-                        <Input
-                          style={{
-                            width: "100%",
-                            borderBottom: "1px solid #ccc ",
-                            paddingLeft: "0px",
-                            marginTop: "10px",
-                          }}
-                          bordered={false}
-                          value={u.secmailid}
-                        />
-                      </Col>
-                      <Col xs={22} sm={15} md={6}>
-                        <label>Phone Number</label>
-                        <Input
-                          style={{
-                            width: "100%",
-                            borderBottom: "1px solid #ccc ",
-                            paddingLeft: "0px",
-                            marginTop: "10px",
-                          }}
-                          bordered={false}
-                          value={u.secphone}
-                        />
-                      </Col>
-                      <Col
-                        xs={22}
-                        sm={15}
-                        md={2}
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "end",
-                        }}
-                      >
-                        <Button
-                          style={{
-                            width: "10px",
-                            border: "none",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "end",
-                          }}
-                          onClick={() => {
-                            onDeleteSecretary(u);
-                          }}
-                        >
-                          <DeleteOutlined />
+                                <DeleteOutlined />
+                              </Button>
+                            </Col>
+                          </Row>
+                          <Divider />
+                        </div>
+                      ))}
+                      {editCS === false ? (
+                        <Button type="primary" onClick={() => setEditCS(!editCS)}>
+                          <PlusCircleOutlined />
+                          Add
                         </Button>
-                      </Col>
-                    </Row>
-                    <Divider />
-                  </div>
-                ))}
-                {editCS === false ? (
-                  <Button type="primary" onClick={() => setEditCS(!editCS)}>
-                    <PlusCircleOutlined />
-                    Add
-                  </Button>
-                ) : (
-                  <div>
-                    <Row gutter={[20, 8]}>
-                      <Col xs={22} sm={15} md={8}>
-                        <FormItem
-                          label="Name"
-                          name="secName"
-                          onKeyPress={(event) => {
-                            if (checkAlphabets(event)) {
-                              event.preventDefault();
-                            }
-                          }}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please enter your name",
-                              pattern: /^[a-zA-Z\s]*$/,
-                            },
-                            {
-                              pattern: /^[a-zA-Z\s]*$/,
-                              message: "Please enter Valid Name",
-                            },
-                          ]}
-                        >
-                          <Input
-                            placeholder="Name"
-                            bordered={false}
-                            style={{
-                              width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                              marginTop: "10px",
-                            }}
-                          />
-                        </FormItem>
-                      </Col>
-                      <Col xs={22} sm={15} md={8}>
-                        <FormItem
-                          name="secmailid"
-                          label="Email ID"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please enter valid email ID",
-                            },
-                            // {
-                            //   pattern:
-                            //     "/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
-                            //   message: "Please Enter Valid Name",
-                            // },
-                          ]}
-                        >
-                          <Input
-                            placeholder="Email ID"
-                            bordered={false}
-                            style={{
-                              width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                              marginTop: "10px",
-                            }}
-                          />
-                        </FormItem>
-                      </Col>
-                      <Col xs={22} sm={15} md={8}>
-                        <FormItem
-                          name="secphone"
-                          label="Phone Number"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please enter your phone no",
-                            },
-                            {
-                              pattern: /^[6-9]\d{9}$/,
-                              message: "Please Enter Valid Number",
-                            },
-                          ]}
-                        >
-                          <Input
-                            name="Phone Number"
-                            bordered={false}
-                            style={{
-                              width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                              marginTop: "10px",
-                            }}
-                            maxLength={10}
-                            placeholder="Phone Number"
-                          />
-                        </FormItem>
-                      </Col>
-                      <Col
-                        span={24}
-                        style={{ display: "flex", justifyContent: "flex-end" }}
-                      >
-                        <FormItem>
-                          <Button
-                            type="text"
-                            style={{ marginRight: "1rem" }}
-                            onClick={() => setEditCS(false)}
-                          >
-                            {" "}
-                            <CloseOutlined />
-                            CANCLE
+                      ) : (
+                        <div>
+                          <Row gutter={[20, 8]}>
+                            <Col xs={22} sm={15} md={8}>
+                              <FormItem
+                                label="Name"
+                                name="secName"
+                                onKeyPress={(event) => {
+                                  if (checkAlphabets(event)) {
+                                    event.preventDefault();
+                                  }
+                                }}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please enter your name",
+                                    pattern: /^[a-zA-Z\s]*$/,
+                                  },
+                                  {
+                                    pattern: /^[a-zA-Z\s]*$/,
+                                    message: "Please enter Valid Name",
+                                  },
+                                ]}
+                              >
+                                <Input
+                                  placeholder="Name"
+                                  bordered={false}
+                                  style={{
+                                    width: "100%",
+                                    borderBottom: "1px solid #ccc ",
+                                    paddingLeft: "0px",
+                                    marginTop: "10px",
+                                  }}
+                                />
+                              </FormItem>
+                            </Col>
+                            <Col xs={22} sm={15} md={8}>
+                              <FormItem
+                                name="secmailid"
+                                label="Email ID"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please enter valid email ID",
+                                  },
+                                  // {
+                                  //   pattern:
+                                  //     "/^[A-Z0-9._%+-]+.[A-Z0-9._%+-]+.[A-Z]{2,4}$/i;",
+                                  //   message: "Please Enter Valid Name",
+                                  // },
+                                ]}
+                              >
+                                <Input
+                                  placeholder="Email ID"
+                                  bordered={false}
+                                  style={{
+                                    width: "100%",
+                                    borderBottom: "1px solid #ccc ",
+                                    paddingLeft: "0px",
+                                    marginTop: "10px",
+                                  }}
+                                />
+                              </FormItem>
+                            </Col>
+                            <Col xs={22} sm={15} md={8}>
+                              <FormItem
+                                name="secphone"
+                                label="Phone Number"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please enter your phone no",
+                                  },
+                                  {
+                                    pattern: /^[6-9]\d{9}$/,
+                                    message: "Please Enter Valid Number",
+                                  },
+                                ]}
+                              >
+                                <Input
+                                  name="Phone Number"
+                                  bordered={false}
+                                  style={{
+                                    width: "100%",
+                                    borderBottom: "1px solid #ccc ",
+                                    paddingLeft: "0px",
+                                    marginTop: "10px",
+                                  }}
+                                  maxLength={10}
+                                  placeholder="Phone Number"
+                                />
+                              </FormItem>
+                            </Col>
+                            <Col
+                              span={24}
+                              style={{ display: "flex", justifyContent: "flex-end" }}
+                            >
+                              <FormItem>
+                                <Button
+                                  type="text"
+                                  style={{ marginRight: "1rem" }}
+                                  onClick={() => setEditCS(false)}
+                                >
+                                  {" "}
+                                  <CloseOutlined />
+                                  CANCLE
+                                </Button>
+                                <Button type="primary" htmlType="submit">
+                                  {" "}
+                                  <CheckOutlined />
+                                  SAVE
+                                </Button>
+                              </FormItem>
+                            </Col>
+                          </Row>
+                          <Button type="primary" onClick={() => setEditCS(!editCS)}>
+                            <PlusCircleOutlined />
+                            Add
                           </Button>
-                          <Button type="primary" htmlType="submit">
-                            {" "}
-                            <CheckOutlined />
-                            SAVE
-                          </Button>
-                        </FormItem>
-                      </Col>
-                    </Row>
-                    <Button type="primary" onClick={() => setEditCS(!editCS)}>
-                      <PlusCircleOutlined />
-                      Add
-                    </Button>
-                  </div>
-                )}
-              </Form>
+                        </div>
+                      )}
+                    </Form>
+                  </Card>
+                </Tabs.TabPane>
+              </Tabs>
             </Card>
-          </Tabs.TabPane>
-        </Tabs>
-      </Card>
-      </Col>
-      </Row>
+          </Col>
+        </Row>
       </div>
 
       <div
@@ -1314,11 +1349,22 @@ const Statutory = () => {
           justifyContent: "center",
         }}
       >
-      <Row>
-        <Col xs={24} sm={24} md={8}>
+      <Row
+        style={{
+          width: '75%',
+          margin: '10px',
+          display: 'flex',
+          alignItems: 'center'
+        }}
+      >
+        <Col span={24}>
       <Card
         title="BANK ACCOUNT INFO"
-        style={{ marginTop: "1rem", width: "800px" }}
+        style={{
+          width: '100%',
+          marginTop: 10,
+          borderRadius:"10px",
+        }}
         className="baiCard"
       >
         <Form

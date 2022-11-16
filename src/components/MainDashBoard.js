@@ -348,7 +348,7 @@ function MainDashBoard() {
 
   return (
     <div className="icon-container">
-      {role == "emp" ? (
+      {role == "emp" &&  !isHr ? (
         <>
           
               <Row gutter={[24, 24]}>

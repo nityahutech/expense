@@ -33,9 +33,9 @@ function CompanyProfile() {
           <Tabs.TabPane tab="Policies" key="6">
             <Policies />
           </Tabs.TabPane>
-          {/* <Tabs.TabPane tab="Admin" key="7">
+          <Tabs.TabPane tab="Admin" key="7">
             <Admin />
-          </Tabs.TabPane> */}
+          </Tabs.TabPane>
           <Tabs.TabPane tab="Statutory" key="8">
             <Statutory />
           </Tabs.TabPane>

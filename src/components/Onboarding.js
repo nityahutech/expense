@@ -433,8 +433,10 @@ function Onboarding() {
                 }
               />
               <Row>
-                <Col xs={22} sm={22} md={22}>
+                <Col xs={22} sm={20} md={18}>
                   <Modal
+                    // bodyStyle={{ height: 1000 }}
+                    width={900}
                     className="viewModal"
                     centered
                     visible={isModalVisible}
@@ -460,9 +462,15 @@ function Onboarding() {
                 </Col>
               </Row>
               <Modal
-                className="viewModal"
+                bodyStyle={{
+                  height: 440,
+                  overflowY: "scroll",
+                  overflowX: "hidden",
+                }}
+                width={900}
+                className="editModal"
                 destroyOnClose
-                // centered
+                centered
                 visible={isEditOrganization}
                 footer={null}
                 title="ORGANIZATION DETAILS"
@@ -1073,7 +1081,7 @@ function Onboarding() {
                               ]}
                             >
                               <Input
-                                maxLength={30}
+                                maxLength={10}
                                 placeholder="User Role"
                                 style={{
                                   border: "1px solid #8692A6",

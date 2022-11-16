@@ -389,13 +389,13 @@ const Leave = () => {
       render: (_, { status }) =>
         status !== "" && (
           <Tag
-            style={{ width: "70px" }}
+            style={{ width: "70px", color: 'black' }}
             className="statusTag"
             color={
               status === "Approved"
-                ? "green"
+                ? "rgba(15, 255, 80, 0.2)"
                 : status === "Pending"
-                  ? "blue"
+                  ? "rgba(205, 227, 36, 0.25)"
                   : "volcano"
             }
             key={status}
@@ -592,7 +592,7 @@ const Leave = () => {
           style={{
             backgroundColor: bgColor,
             color: color,
-            fontSize: "8px",
+            fontSize: "12px",
             paddingLeft: "5px",
             paddingRight: "5px",
             margin: "0px",
@@ -677,13 +677,14 @@ const Leave = () => {
       render: (_, { status }) =>
         status !== "" && (
           <Tag
-            style={{ width: "70px" }}
+
+            style={{ width: "70px", color: 'black' }}
             className="statusTag"
             color={
               status === "Approved"
-                ? "green"
+                ? "rgba(15, 255, 80, 0.2)"
                 : status === "Pending"
-                  ? "blue"
+                  ? "rgba(205, 227, 36, 0.25)"
                   : "volcano"
             }
             key={status}
@@ -918,7 +919,7 @@ const Leave = () => {
                             margin: "0px",
                           }}
                         >
-                          Taken
+                          Availed
                         </p>
                         <p
                           style={{
@@ -1006,11 +1007,11 @@ const Leave = () => {
                     cursor: 'default',
                     marginLeft: '10px',
                     marginRight: "5px", marginTop: '10px',
-                    backgroundColor: "rgba(10, 91, 204,0.2)",
+                    backgroundColor: "rgba(15, 255, 80, 0.2)",
                   }}
                 >
                   <h5
-                    style={{ color: "rgba(10, 91, 204,  1)" }}
+                    style={{ color: "rgb(0, 128, 0)" }}
                     className="rep-text"
                   >
                     Leave
@@ -1092,6 +1093,7 @@ const Leave = () => {
         </Col>
 
         <Modal className='viewAppraisal'
+          bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
           footer={null}
           title="Apply Leave"
           centered
@@ -1196,7 +1198,7 @@ const Leave = () => {
 
                 <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24} >
-                    <Form.Item
+                    <Form.Item required={false}
                       labelAlign="left"
                       style={{ marginBottom: "20px", color: "white", }}
                       label={
@@ -1289,7 +1291,7 @@ const Leave = () => {
                   </Select>
                 </Form.Item>
 
-                <Form.Item
+                <Form.Item required={false}
                   labelAlign="left"
                   name="reason"
                   style={{ marginBottom: "20px" }}
@@ -1527,8 +1529,12 @@ const Leave = () => {
         </Row>
       </Row>
       <Modal
-        style={{ width: "450px" }}
+        // bodyStyle={{ overflowY: 'scroll' }}
+        // style={{ height: 'calc(100vh - 200px)' }}
+        bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
         className="viewAppraisal"
+        centered
+        width={450}
         visible={isEditModalOpen}
         footer={null}
         destroyOnClose
@@ -1580,7 +1586,7 @@ const Leave = () => {
 
               <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <Col xl={24} lg={24} md={24} sm={24} xs={24} >
-                  <Form.Item
+                  <Form.Item required={false}
 
                     labelAlign="left"
                     style={{
@@ -1644,7 +1650,7 @@ const Leave = () => {
 
               <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                 <Col xl={24} lg={24} md={24} sm={24} xs={24} >
-                  <Form.Item
+                  <Form.Item required={false}
                     labelAlign="left"
                     style={{ marginBottom: "20px", color: "white", }}
                     label={
@@ -1700,7 +1706,7 @@ const Leave = () => {
                   </Form.Item>
                 </Col>
               </Row>
-              <Form.Item
+              <Form.Item required={false}
                 labelAlign="left"
                 name="leaveNature"
                 style={{ marginBottom: "20px" }}
@@ -1737,7 +1743,7 @@ const Leave = () => {
                 </Select>
               </Form.Item>
 
-              <Form.Item
+              <Form.Item required={false}
                 initialValue={editedLeave.reason}
                 labelAlign="left"
                 name="reason"

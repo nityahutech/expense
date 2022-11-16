@@ -21,7 +21,6 @@ function AddressCorp() {
             state: value.state,
             country: value.country,
             pincode: value.pin
-
         }
         CompanyProContext.updateCompInfo(compId, { corpOffice: valueToservice });
         getData();
@@ -34,7 +33,6 @@ function AddressCorp() {
         let data = await CompanyProContext.getCompanyProfile(compId);
         setData(data);
     };
-    console.log(data)
 
     return (
         <>

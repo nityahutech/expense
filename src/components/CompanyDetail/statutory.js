@@ -21,7 +21,6 @@ import {
   PlusCircleOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
-// import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { useAuth } from "../../contexts/AuthContext";
 import "./companystyle.css";
 import FormItem from "antd/es/form/FormItem";
@@ -33,31 +32,20 @@ const { Option } = Select;
 
 const Statutory = () => {
   const [editContent, showEditContent] = useState(false);
-  // -----------------------------------------------------states for company ID
   const [editCompanyID, showeditCompanyID] = useState(false);
-
-  // ------------------------------------------------------states for Bank Info
   const [editBai, setEditBAI] = useState(false);
   const [baiList, setBAIList] = useState([]);
   const [form3] = Form.useForm();
-
-  // -------------------------------------------------------states for Director tag
   const [editDirectors, showEditDirectors] = useState(false);
   const [directorList, setDirectorList] = useState([]);
   const [form] = Form.useForm();
-
-  // --------------------------------------------------------states for Auditor tag
   const [editAuditor, setEditAuditor] = useState(false);
   const [auditorList, setAuditorList] = useState([]);
   const [form1] = Form.useForm();
-
-  // --------------------------------------------------------states for Company Secretary
   const [editCS, setEditCS] = useState(false);
   const [cSList, setCSList] = useState([]);
   const [form2] = Form.useForm();
-
   const [editAddressInfo, showEditAddressInfo] = useState(false);
-  // const [cancelEditContent, setcancelEditContent] = useState(false);
   const [data, setData] = useState([]);
   const onFinish = (value) => {
     const valuesToservice = {
@@ -86,21 +74,13 @@ const Statutory = () => {
     setBAIList(data.bank);
   };
 
-  // const onContactFinish = (values) => {
-
-  //   getData();
-  //   showeditCompanyID(false);
-  // };
-
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
+    const handleChange = (value) => {
   };
   const checkAlphabets = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-  // ------------------------------------function for addDirector
   function addDirector(values) {
     const record = {
       directorName: values.directorName,
@@ -108,32 +88,12 @@ const Statutory = () => {
       directordin: values.directordin,
       directorphone: values.directorphone,
     };
-    console.log(record);
     CompanyProContext.addCompInfo(compId, { director: record });
     form.resetFields();
     getData();
     showEditDirectors(false);
   }
 
-  //-------------------------------------function for deleting data entered in the director tab
-  // function deleteDirector (deldir) {
-  //   let record={
-  //     directorName:null,
-  //     directoremailid: null,
-  //     directordin: null,
-  //     directorphone: null,
-  //   }
-  //   console.log(deldir);
-  //   const filterDirectorData = directorList.filter(
-  //     (item) => item.directoremailid !== deldir.directoremailid
-  //   );
-  //   CompanyProContext.updateCompInfo(compId,record)
-  //   .then((response) => {
-  //              console.log(response);
-  //              })
-  //     setDirectorList(filterDirectorData);
-  //     showEditDirectors(false)
-  // }
   const onDeleteDirector = (record) => {
     Modal.confirm({
       title: "Are you sure, you want to delete Director?",
@@ -143,17 +103,14 @@ const Statutory = () => {
       onOk: () => {
         CompanyProContext.deleteCompInfo(compId, { director: record })
           .then((response) => {
-            console.log(response);
             getData();
           })
           .catch((error) => {
-            console.log(error.message);
           });
       },
     });
   };
 
-  // // -----------------------------------function for addAuditor
   function addAuditor(values) {
     let record1 = {
       auditorName: values.auditorName,
@@ -161,7 +118,6 @@ const Statutory = () => {
       auditortype: values.auditortype,
       auditorphone: values.auditorphone,
     };
-    console.log(record1);
     CompanyProContext.addCompInfo(compId, { auditor: record1 });
     form1.resetFields();
     getData();
@@ -177,38 +133,15 @@ const Statutory = () => {
       onOk: () => {
         CompanyProContext.deleteCompInfo(compId, { auditor: record1 })
           .then((response) => {
-            console.log(response);
             getData();
           })
           .catch((error) => {
-            console.log(error.message);
           });
       },
     });
   };
 
-  // ----------------------------------Function for deleting data entered in the auditor tab
-  // function deleteAuditor (delAudit) {
-  //   let record1={
-  //     auditorName:null,
-  //     auditormailid: null,
-  //     auditortype: null,
-  //     auditorphone: null,
-  //   }
-  //   console.log(delAudit);
-  //   const filterAuditorData = auditorList.filter(
-  //     (item) => item.auditormailid !== delAudit.auditormailid
-  //   );
-  //   CompanyProContext.updateCompInfo(compId,record1)
-  //   .then((response) => {
-  //              console.log(response);
-  //              })
-  //     setAuditorList(filterAuditorData);
-  //     setEditAuditor(false)
-  // }
-
-  // ------------------function for add Company Sacretary
-  function addCS(values) {
+     function addCS(values) {
     let record2 = {
       secName: values.secName,
       secmailid: values.secmailid,
@@ -228,24 +161,14 @@ const Statutory = () => {
       onOk: () => {
         CompanyProContext.deleteCompInfo(compId, { secretary: record2 })
           .then((response) => {
-            console.log(response);
             getData();
           })
           .catch((error) => {
-            console.log(error.message);
           });
       },
     });
   };
-  // -------------function for deleting data entered in Company Sacretary tab
-  // function deleteCS (delComp) {
-  //   // console.log(delComp);
-  //   const filterCSData = cSList.filter(
-  //     (item) => item.sacmailid !== delComp.sacmailid
-  //   );
-  //   setCSList(filterCSData);
-  // }
-  //------------function for adding Bank Account Information
+  
   function addBAI(values) {
     let record3 = {
       baiaccountitle: values.baiaccountitle,
@@ -270,26 +193,15 @@ const Statutory = () => {
       onOk: () => {
         CompanyProContext.deleteCompInfo(compId, { bank: record3 })
           .then((response) => {
-            console.log(response);
             getData();
           })
           .catch((error) => {
-            console.log(error.message);
           });
       },
     });
   };
 
-  // // ---------function for deleting data entered in Bank account Information
-  // function deleteBAI (delBAI) {
-  //   console.log(delBAI);
-  //   const filterBAIData = baiList.filter(
-  //     (item) => item.baibranchname !== delBAI.baibranchname
-  //   );
-  //   setBAIList(filterBAIData);
-  // }
-
-  return (
+    return (
     <>
       <div
         className="personalCardDiv"
@@ -372,7 +284,6 @@ const Statutory = () => {
                       )}
                     </div>
                   </Col>
-
                   <Col xs={22} sm={15} md={8}>
                     <div>
                       <div className="div-discription">CIN</div>
@@ -410,7 +321,6 @@ const Statutory = () => {
                       )}
                     </div>
                   </Col>
-
                   <Col xs={22} sm={15} md={8}>
                     <div>
                       <div className="div-discription">Date of Incorporation</div>
@@ -450,7 +360,6 @@ const Statutory = () => {
                     </div>
                   </Col>
                 </Row>
-
                 <Row gutter={[48, 8]} style={{ marginTop: "5%" }}>
                   <Col xs={22} sm={15} md={8}>
                     <div>
@@ -491,7 +400,6 @@ const Statutory = () => {
                       )}
                     </div>
                   </Col>
-
                   <Col xs={22} sm={15} md={8}>
                     <div>
                       <div className="div-discription">Company TAN</div>
@@ -531,7 +439,6 @@ const Statutory = () => {
                       )}
                     </div>
                   </Col>
-
                   <Col xs={22} sm={15} md={8}>
                     <div>
                       <div className="div-discription">GST</div>
@@ -603,7 +510,6 @@ const Statutory = () => {
           </Col>
         </Row>
         </div>
-
         <div
         className="personalCardDiv"
         style={{
@@ -616,7 +522,6 @@ const Statutory = () => {
         <Col xs={22} sm={15} md={8}>
       <Card className="tagsCard" style={{ marginTop: "1rem", width: "800px" }}>
         <Tabs defaultActiveKey="1" className="tabs">
-
           <Tabs.TabPane tab="Directors" key="1">
             <Form
               wrappercol={{
@@ -630,7 +535,6 @@ const Statutory = () => {
               form={form}
             >
               <Card className="tabcard1" title="Directors" bordered={false}>
-                {/* -----------------------------State of the director list ----------------------------- */}
                 {directorList.map((u, i) => (
                   <div>
                     <Row gutter={[20, 8]}>
@@ -715,7 +619,6 @@ const Statutory = () => {
                     <Divider className="divider" />
                   </div>
                 ))}
-                {/* -------------------------------state of the director list form---------------- */}
                 {editDirectors === false ? (
                   <Button
                     type="primary"
@@ -883,9 +786,7 @@ const Statutory = () => {
                 )}
               </Card>
             </Form>
-            
-          </Tabs.TabPane>
-
+            </Tabs.TabPane>
           <Tabs.TabPane tab="Auditors" key="2">
                 <Card title="Auditors" bordered={false}>
                   <Row>
@@ -901,7 +802,6 @@ const Statutory = () => {
                         onFinish={addAuditor}
                         form={form1}
                       >
-                        {/* ----------------------State for the Auditor List */}
                         {auditorList.map((u, i) => (
                           <div>
                             <Row gutter={[20, 8]}>
@@ -994,7 +894,6 @@ const Statutory = () => {
                             <Divider className="divider" />
                           </div>
                         ))}
-                        {/* ----------------------State for the Auditor List Form */}
                         {editAuditor === false ? (
                           <Button
                             type="primary"
@@ -1190,7 +1089,6 @@ const Statutory = () => {
                   </Row>
                 </Card>
           </Tabs.TabPane>
-
           <Tabs.TabPane tab="Company Secretary" key="3">
             <Card title="Company Secretary" bordered={false}>
               <Form
@@ -1204,7 +1102,6 @@ const Statutory = () => {
                 onFinish={addCS}
                 form={form2}
               >
-                {/* -----------------------State for the Company Sacretary */}
                 {cSList.map((u, i) => (
                   <div>
                     <Row gutter={[20, 8]}>
@@ -1276,7 +1173,6 @@ const Statutory = () => {
                     <Divider />
                   </div>
                 ))}
-                {/* -------------------------State for the Comany Sacretary List form */}
                 {editCS === false ? (
                   <Button type="primary" onClick={() => setEditCS(!editCS)}>
                     <PlusCircleOutlined />
@@ -1406,7 +1302,6 @@ const Statutory = () => {
               </Form>
             </Card>
           </Tabs.TabPane>
-
         </Tabs>
       </Card>
       </Col>
@@ -1439,7 +1334,6 @@ const Statutory = () => {
           onFinish={addBAI}
           form={form3}
         >
-          {/* ----------State for the Bank Account information list */}
           {baiList.map((u, i) => (
             <div>
               <Row>
@@ -1581,7 +1475,6 @@ const Statutory = () => {
               <Divider />
             </div>
           ))}
-          {/* -----------------State for the Bank Account Information Form */}
           {editBai === false ? (
             <Button type="primary" onClick={() => setEditBAI(!editBai)}>
               <PlusCircleOutlined />

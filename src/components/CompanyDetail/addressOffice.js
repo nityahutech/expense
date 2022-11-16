@@ -34,7 +34,6 @@ function AddressOffice() {
     let data = await CompanyProContext.getCompanyProfile(compId);
     setData(data);
   };
-  console.log(data);
 
   return (
     <>
@@ -171,7 +170,6 @@ function AddressOffice() {
                   </Col>
                 </Row>
                 {/* ) : null} */}
-
                 {/* {editAddress === true ? ( */}
                 <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                   <Col xs={22} sm={15} md={6}>
@@ -318,7 +316,6 @@ function AddressOffice() {
                   </Col>
                 </Row>
                 {/* ) : null}  */}
-
                 {editAddress === true ? (
                   <Row
                     style={{

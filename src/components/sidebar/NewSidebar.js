@@ -43,7 +43,7 @@ const NewSidebar = (props) => {
           selectedKeys={props.activeMenu}
           mode="inline"
           style={{
-            paddingBottom: "40px",
+            // paddingBottom: "40px",
             height: "100vh",
           }}
         >
@@ -307,9 +307,9 @@ const NewSidebar = (props) => {
 
             style={{
               padding: "20px",
-              position: "absolute",
-              bottom: "0",
-              zIndex: 100,
+              // position: "sticky",
+              // bottom: "0",
+              // zIndex: 100,
               // backgroundColor: 'rgb(5, 68, 94)'
 
 

@@ -37,7 +37,7 @@ function ViewModal(props) {
             </div>
           </div>
         </Col>
-        <Col xs={22} sm={15} md={7}>
+        <Col xs={22} sm={15} md={8}>
           <div
             style={{
               display: "flex",
@@ -63,7 +63,7 @@ function ViewModal(props) {
             </span>
           </div>
         </Col>
-        <Col xs={22} sm={15} md={9}>
+        <Col xs={22} sm={15} md={8}>
           <div>
             <h4
               style={{
@@ -77,8 +77,8 @@ function ViewModal(props) {
             <div
               style={{
                 border: "1px solid #d0d0d0",
-                maxWidth: "180px",
-                height: "90px",
+                Width: "300px",
+                height: "auto",
                 borderRadius: "6px",
                 display: "inline-block",
               }}
@@ -86,10 +86,9 @@ function ViewModal(props) {
               <img
                 src={modalData.logo ? modalData.logo : imageavailable}
                 style={{
-                  maxWidth: "132px",
-                  width: "auto",
-                  height: "90px",
+                  maxWidth: "200px",
                   padding: "10px",
+                  height: "70px",
                 }}
                 alt={"logo not found"}
               />
@@ -97,6 +96,7 @@ function ViewModal(props) {
           </div>
         </Col>
       </Row>
+      <Divider />
       <Row gutter={[50, 8]} style={{ marginTop: "17px", padding: "0 25px" }}>
         <div>
           <h4
@@ -113,7 +113,7 @@ function ViewModal(props) {
           >
             <Row gutter={[50, 8]}>
               {modalData.accessList.map((user) => (
-                <Col xs={22} sm={15} md={9}>
+                <Col xs={22} sm={15} md={8}>
                   <div>
                     <span>{user.name} </span>
                     <span>{user.mailid} </span>
@@ -122,13 +122,14 @@ function ViewModal(props) {
                       style={{
                         borderRadius: "10px",
                         background: "#C9E5FF",
-                        width: "120px",
+                        width: "130px",
                         display: "flex",
                         justifyContent: "center",
                         color: "#000000",
                         fontWeight: "400",
                         fontSize: "14px",
-                        marginTop: "7px",
+
+                        padding: "3px",
                       }}
                     >
                       {user.userRole}
@@ -140,10 +141,6 @@ function ViewModal(props) {
           </div>
         </div>
       </Row>
-      {/* <Row gutter={[50, 8]}>
-        
-                  
-      </Row> */}
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-
 import {
   Button,
   Table,
@@ -73,8 +72,6 @@ const showNotification=(type,msg,desc)=>{
   },[]);
   const getData=async()=>{
     let alldata=await DocumentContext.getDocument(currentUser.uid, "work");
-    console.log(alldata)
-    // setData(alldata);
     setAllWorkDetails(alldata);
   };
 

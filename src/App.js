@@ -37,7 +37,7 @@ function App() {
           <Route path="/Expense/ExpenseList" element={<ExpenseListpage />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/Settings" element={<Setting />} />
-          <Route path="/Appraisal/AppraisalPage" element={<Appraisal />} />
+          {/* <Route path="/Appraisal/AppraisalPage" element={<Appraisal />} /> */}
           <Route path="/Appraisal/AppraisalPageHr" element={<AppraisalHr />} />
           <Route path="/Appraisal/HalfYearGoalPage" element={<HalfYearGoalPage />} />
         </Routes>

@@ -28,24 +28,28 @@ export function AuthProvider({ children }) {
   const [isLead, setIsLead] = useState();
 
   function getUserData(user) {
-    if (!user) { 
-      return; 
+    if (user==null) {
+      const timer = setTimeout(() => {
+        sessionStorage.clear();
+        console.log("null")
+      }, 1500);
+      return () => clearTimeout(timer);
     }
     let empdoc = getDoc(doc(db, 'users', user.uid)).then((res) => {
       let rec = res.data()
       console.log(rec)
       sessionStorage.setItem("role", rec?.role)
       sessionStorage.setItem("compId", rec?.compId)
-      setCompId(rec?.compId)
-      setRole(rec?.role)
+      setCompId(rec?.compId || "false")
+      setRole(rec?.role || "false")
       CompanyProContext.getCompanyProfile(rec?.compId).then((rec) => {
         sessionStorage.setItem("logo", rec?.logo)
       })
     })
     let empRecord = EmpInfoContext.getEduDetails(user.uid).then((rec) => {
-      sessionStorage.setItem("isMgr", rec?.isManager);
-      sessionStorage.setItem("isHr", rec?.isHr);
-      sessionStorage.setItem("isLead", rec?.isLead);
+      sessionStorage.setItem("isMgr", rec?.isManager || "false");
+      sessionStorage.setItem("isHr", rec?.isHr || "false");
+      sessionStorage.setItem("isLead", rec?.isLead || "false");
       setIsMgr(rec?.isManager)
       setIsHr(rec?.isHr)
       setIsLead(rec?.isLead)
@@ -58,14 +62,7 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
-    sessionStorage.setItem("accessToken", null)
-    sessionStorage.setItem("user", null)
-    sessionStorage.setItem("role", null)
-    sessionStorage.setItem("compId", null)
-    sessionStorage.setItem("isMgr", null)
-    sessionStorage.setItem("isHr", null);
-    sessionStorage.setItem("isLead", null);
-    sessionStorage.setItem("logo", null);
+    // sessionStorage.clear();
     return signOut(auth)
   }
 
@@ -92,6 +89,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
+      console.log(user)
       getUserData(user)
       setCurrentUser(user)
       setLoading(false)

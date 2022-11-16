@@ -10,14 +10,14 @@ import Appraisal from "./appraisalForm";
 import "./appraisal.css";
 import AppraisalContext from '../../contexts/AppraisalContext';
 import EmpInfoContext from '../../contexts/EmpInfoContext';
-import { useAuth } from '../../contexts/AuthContext'
 
 const EmpAppraisalTable = (props) => {
     const [secondModal, setSecondModal] = useState(false)
     const [editedAppraisal, setEditedAppraisal] = useState(null);
     const [loading, setLoading] = useState(false);
     const [employeeRecord, setEmployeeRecord] = useState();
-    const { currentUser } = useAuth();
+    const currentUser = JSON.parse(sessionStorage.getItem("user"));
+    const isHr = JSON.parse(sessionStorage.getItem("isHr"));
     const [appraisalList, setAppraisalList] = useState([]);
 
     const columns = [
@@ -143,7 +143,7 @@ const EmpAppraisalTable = (props) => {
 
                         </Button>
 
-                        {(sessionStorage.getItem("role") === 'hr') &&
+                        { isHr &&
                             <Button type='danger'
                                 style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', marginLeft: '10px' }}
                                 // type="link"
@@ -188,7 +188,7 @@ const EmpAppraisalTable = (props) => {
             allData = await AppraisalContext.getUserAppraisal(empRecord.empId)
         }
         else if (props.listType === 'lead') {
-            allData = await AppraisalContext.getLeadAppraisal(empRecord.fname + ' ' + empRecord.lname)
+            allData = await AppraisalContext.getLeadAppraisal(empRecord.name)
         }
         else if (props.listType === 'mgr') {
             allData = await AppraisalContext.getManagerAppraisal(empRecord.fname + ' ' + empRecord.lname)
@@ -200,6 +200,7 @@ const EmpAppraisalTable = (props) => {
                 id: doc.id,
             };
         });
+        console.log("data", d)
         setAppraisalList(d)
     }
     const onDeleteAppraisal = (appraisal) => {

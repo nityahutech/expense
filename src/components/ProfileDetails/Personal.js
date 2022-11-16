@@ -172,7 +172,13 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            style={{ marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                             // disabled={true}
                             initialValue={data.name ? data.name : null}
                             maxLength={50}
@@ -223,7 +229,13 @@ function Personal() {
                         >
                           {/* format={dateFormatList} */}
                           <DatePicker
-                            style={{ width: "100%", marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              padding: "2px",
+                            }}
+                            bordered={false}
                             // format={dateFormatList}
                             // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
                             onChange={(e) => {
@@ -265,7 +277,13 @@ function Personal() {
                         >
                           <Select
                             placeholder="Select a Gender"
-                            style={{ width: "100%", marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           >
                             <Option value="Male">Male</Option>
                             <Option value="Female">Female</Option>
@@ -302,7 +320,13 @@ function Personal() {
                         >
                           <Select
                             placeholder="Select a Blood Group"
-                            style={{ width: "100%", marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           >
                             <Option value="A+">A+</Option>
                             <Option value="A-">A-</Option>
@@ -345,7 +369,13 @@ function Personal() {
                             },
                           ]}
                         >
-                          <Select style={{ width: "100%", marginTop: "10px" }}>
+                          <Select style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}>
                             <Option value="Single">Single</Option>
                             <Option value="Married">Married</Option>
                           </Select>

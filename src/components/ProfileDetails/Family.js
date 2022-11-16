@@ -8,7 +8,6 @@ import {
   EditFilled,
 } from "@ant-design/icons";
 import "../../style/BankAccount.css";
-import "../../style/Family.css"
 
 const Family = () => {
   const [editfamilymember, showeditfamilymember] = useState(false);
@@ -55,7 +54,6 @@ const Family = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          // flexDirection: "column",
           margin: "15px",
           width:"100%",
         }}
@@ -64,7 +62,7 @@ const Family = () => {
           <Row
             className="Row-Card"
             style={{
-              // width: '100%',
+              width: '75%',
               margin: '10px',
               display: 'flex',
               alignItems: 'center'
@@ -86,27 +84,31 @@ const Family = () => {
               >
                 <Card
                   title="FAMILY MEMBERS"
-                  className="familyCard"
+                  className="personal"
                   extra={
+                    <>
+                    { editfamilymember === false ? (
                     <Button
                       className="personal"
                       type="text"
                       style={{
-                        color: "#4ec0f1",
-                        display: "none",
-                        paddingTop: "7px",
-                        paddingRight: "7px",
-                        position: "absolute",
-                        right: 10,
-                        top: 10,
+                        color: "#ffff",
+                          display: "none",
+                          paddingTop: "7px",
+                          paddingRight: "7px",
+                          position: "absolute",
+                          right: 10,
+                          top: 10,
                       }}
                       onClick={() => showeditfamilymember(!editfamilymember)}
                     >
                       <EditFilled />
                     </Button>
+                    ) : null}
+                    </>
                   }
                   style={{
-                    width: '800',
+                    width: '100%',
                     marginTop: 10,
                     borderRadius:"10px",
                   }}
@@ -240,8 +242,14 @@ const Family = () => {
           </Row>
         ) : (
           <Row
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}
           >
-            <Col xs={22} sm={15} md={8}>
+            <Col xs={22} sm={15} md={24}>
               <Form
                 form={form}
                 labelcol={{
@@ -258,9 +266,9 @@ const Family = () => {
               >
                 <Card
                   title="FAMILY MEMBERS"
-                  className="familyCard"
+                  className="personal"
                   style={{
-                    width: 800,
+                    width: '100%',
                     marginTop: 10,
                     borderRadius:"10px",
                   }}
@@ -504,14 +512,16 @@ const Family = () => {
           </Row>
         )}
       </div>
+
+      
       <div
         className="personalCardDiv"
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          // flexDirection: "column",
           margin: "15px",
+          width:"100%"
         }}
       >
         {editEmergency === false ? (
@@ -541,16 +551,13 @@ const Family = () => {
               >
                 <Card
                   title="EMERGENCY CONTACTS"
-                  className="familyCard"
-                  //   actions={[
-                  //   <EditOutlined key="edit" />,
-                  // ]}
+                  className="personal"
                   extra={
                     <Button
                       className="personal"
                       type="text"
                       style={{
-                        color: "#4ec0f1",
+                        color: "#ffff",
                         display: "none",
                         paddingTop: "7px",
                         paddingRight: "7px",

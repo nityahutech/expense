@@ -373,7 +373,7 @@ function MainDashBoard() {
 
       {role == "admin" || isHr ? (
         <>
-          <Row gutter={[12, 48]}>
+          <Row gutter={[24, 48]}>
             <Col xs={24} sm={24} md={6} className="hi">
               {attendanceIcon()}
             </Col>

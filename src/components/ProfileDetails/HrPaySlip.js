@@ -1,5 +1,4 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { useState } from "react";
 import {
   Carousel,
   Form,
@@ -18,9 +17,8 @@ import {
   EditOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-
-import { useState } from "react";
 import "../../style/HrPaySlip.css";
+
 const styleDefaults = {
   height: "160px",
   color: "black",
@@ -100,7 +98,10 @@ const data1 = [
     calc: "Balancing Amount of CTC",
   },
 ];
+
 function HrPaySlip() {
+  const role = sessionStorage.getItem("role");
+  const currentUser = JSON.parse(sessionStorage.getItem("user"))
   //   const [dotPosition, setDotPosition] = useState("top");
   const [componentSize, setComponentSize] = useState("default");
   const [selectionType, setSelectionType] = useState("checkbox");

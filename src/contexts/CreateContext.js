@@ -14,6 +14,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { db } from "../firebase-config";
+import { async } from "@firebase/util";
 
 const compId = sessionStorage.getItem("compId");
 
@@ -79,4 +80,14 @@ export async function createUser(values, compId) {
 export async function getUsers() {
   const q = query(users, orderBy("empId", "asc"));
   return getDocs(q);
+}
+
+export async function getDesigNo() {
+  let data = await getUsers();
+  let res = {};
+  data.docs.map((doc) => {
+    let des = doc.data().designation
+    res[`${des}`] = res[`${des}`] ? ++res[`${des}`] : 1 
+  })
+  return res;
 }

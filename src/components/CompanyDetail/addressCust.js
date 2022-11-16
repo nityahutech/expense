@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Button, Select, Input, Form, Modal } from "antd";
-import { useAuth } from "../../contexts/AuthContext";
+import { Card, Row, Col, Button, Input, Form, Modal } from "antd";
 import CompanyProContext from "../../contexts/CompanyProContext";
 import {
   CloseOutlined,
@@ -8,6 +7,7 @@ import {
   DeleteOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
+import "../../components/CompanyDetail/companystyle.css";
 
 function AddressCust() {
   const [editAddressContent, showEditAddressContent] = useState([false]);

@@ -1,16 +1,13 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import moment from "moment";
 import { useState } from "react";
-import { Card, Col, Row, Input, DatePicker, Button, Form, Select } from "antd";
+import { Card, Col, Row, Input, DatePicker, Button, Form } from "antd";
 import {
   PlusCircleOutlined,
   CloseOutlined,
   CheckOutlined,
-  EditTwoTone,
-  DeleteTwoTone,
   EditFilled,
 } from "@ant-design/icons";
-import { useAuth } from "../../contexts/AuthContext";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
 
@@ -18,7 +15,7 @@ function Education() {
   const [editContent, showEditContent] = useState(false);
   const [dateStart, setDateStart] = useState();
   const [dateEnd, setDateEnd] = useState();
-  const { currentUser } = useAuth();
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const onFinish = (value) => {
     let record = {
       qualificationType: value.qualificationType

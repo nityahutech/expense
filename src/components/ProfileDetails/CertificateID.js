@@ -1,5 +1,4 @@
-import { useAuth } from "../../contexts/AuthContext";
-import React,{useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { 
   Table,
   Form,
@@ -8,21 +7,19 @@ import {
   Modal,
   notification,
 } from 'antd'
-
 import { 
   PlusCircleOutlined,
   UploadOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
-
 import FormItem from "antd/es/form/FormItem";
 import DocumentContext from "../../contexts/DocumentContext";
 
 function CertificateID() { 
   const [certificatioDetails, setCertificationDetails] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [form]=Form.useForm()
-  const { currentUser } = useAuth();
+  const [form] = Form.useForm();
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [file, setFile] = useState("");
 
   function handleChange(event) {

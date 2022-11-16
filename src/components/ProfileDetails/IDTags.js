@@ -1,5 +1,4 @@
-import React,{useState, useEffect} from 'react'
-import { useAuth } from "../../contexts/AuthContext";
+import {useState, useEffect} from 'react';
 import { 
   PlusCircleOutlined,
   UploadOutlined,
@@ -7,7 +6,6 @@ import {
 } from "@ant-design/icons";
 
 import FormItem from "antd/es/form/FormItem";
-
 import { 
   Table,
   Form,
@@ -20,8 +18,8 @@ import DocumentContext from '../../contexts/DocumentContext';
 
 function IDTags() {
 const [allIdDetails, setAllIdDetails] = useState([])
-const [form]=Form.useForm()
-const { currentUser } = useAuth();
+const [form] = Form.useForm();
+const currentUser = JSON.parse(sessionStorage.getItem("user"));
 const [file, setFile] = useState("");
 const [isModalOpen, setIsModalOpen] = useState(false);
 

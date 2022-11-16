@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, Row, Col } from "antd";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
-import { useAuth } from "../../contexts/AuthContext";
 import "../../style/BankAccount.css";
 
 function Work() {
-  const { currentUser } = useAuth();
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [designation, setDesignation] = useState("");
   const [doj, setDoj] = useState("");
   const [department, setDepartment] = useState("");

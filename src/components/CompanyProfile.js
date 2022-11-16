@@ -1,6 +1,5 @@
-import React from "react";
 import "antd/dist/antd.css";
-import { Card, Col, Row, Tabs } from "antd";
+import { Tabs } from "antd";
 import Overview from "./CompanyDetail/overview";
 import Address from "./CompanyDetail/address";
 import Department from "./CompanyDetail/department";
@@ -10,7 +9,6 @@ import Admin from "./CompanyDetail/admin";
 import Statutory from "./CompanyDetail/statutory";
 import "../style/Onboarding.css";
 
-const { Meta } = Card;
 function CompanyProfile() {
   return (
     <>
@@ -21,25 +19,25 @@ function CompanyProfile() {
         </div> */}
         <Tabs defaultActiveKey="1" className="profileTabs">
           <Tabs.TabPane tab="Overview" key="1">
-            <Overview></Overview>
+            <Overview />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Address" key="2">
-            <Address></Address>
+            <Address />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Department" key="3">
-            <Department></Department>
+            <Department />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Designation" key="4">
-            <Designation></Designation>
+            <Designation />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Policies" key="6">
-            <Policies></Policies>
+            <Policies />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Admin" key="7">
-            <Admin></Admin>
-          </Tabs.TabPane>
+          {/* <Tabs.TabPane tab="Admin" key="7">
+            <Admin />
+          </Tabs.TabPane> */}
           <Tabs.TabPane tab="Statutory" key="8">
-            <Statutory></Statutory>
+            <Statutory />
           </Tabs.TabPane>
           
         </Tabs>

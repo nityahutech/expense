@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
 import { Typography } from 'antd';
 import {
   Button,
@@ -19,31 +18,23 @@ import {
 } from "@ant-design/icons";
 const { Text, Link } = Typography;
 const Admin = () => {
-  const [allWorkDetails, setAllWorkDetails] = useState([
-  ]);
   const [editContactInfo, showEditContactInfo] = useState(false);
   const [editHrContactInfo, showEditHrContactInfo] = useState(false);
   const [editFinanceContactInfo, showEditFinanceContactInfo] = useState(false);
   const [editExecutiveContactInfo, showEditExecutiveContactInfo] = useState(false);
-  const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
-  const { currentUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const compId = sessionStorage.getItem("compId")
 
   const showModal = () => {
     setIsModalOpen(true);
-    setVisible(true);
     form.resetFields();
   };
   const handleOk = () => {
     setIsModalOpen(false);
-    setVisible(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-    setVisible(false);
     form.resetFields();
   };
   return (

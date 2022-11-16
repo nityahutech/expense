@@ -18,7 +18,6 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import LeaveContext from "../contexts/LeaveContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
 import EmpInfoContext from "../contexts/EmpInfoContext";
-import { useAuth } from "../contexts/AuthContext";
 import Notification from "./Notification";
 import HolidayList from "./HolidayList";
 import "../style/leave.css";
@@ -27,13 +26,12 @@ import ConfigureContext from "../contexts/ConfigureContext";
 const Leave = () => {
   const page = "leavePage"
   const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-  // const { currentUser } = useAuth();
   const { Option } = Select;
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const isHr = sessionStorage.getItem("role") === "hr" ? true : false;
+  const isHr = JSON.parse(sessionStorage.getItem("isHr"));
   const isMgr = JSON.parse(sessionStorage.getItem("isMgr"));
   const [leavedays, setLeaveDays] = useState(null); //leave nature & total in obj
   const [totaldays, setTotalDays] = useState(null); //leave nature & taken in obj

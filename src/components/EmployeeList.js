@@ -11,7 +11,6 @@ import "../style/EmployeeList.css";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 
 function EmployeeList() {
-  const [modaldata, setmodaldata] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editedRecord, setEditedRecord] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -189,7 +188,6 @@ function EmployeeList() {
     getData();
   }, []);
   const showModal = (record) => {
-    setmodaldata(record);
     setIsModalVisible(true);
   };
   const handleCancel = () => {
@@ -302,7 +300,7 @@ function EmployeeList() {
       <Modal
         centered
         title="Employee Details"
-        visible={isModalVisible}
+        open={isModalVisible}
         footer={null}
         afterClose={getData}
         closeIcon={

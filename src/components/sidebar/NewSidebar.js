@@ -24,6 +24,7 @@ const NewSidebar = (props) => {
   const [collapsed, setCollapsed] = useState(true);
 
   const role = sessionStorage.getItem("role");
+  const isHr = JSON.parse(sessionStorage.getItem("isHr"));
 
 
   return (
@@ -105,7 +106,7 @@ const NewSidebar = (props) => {
               </Menu.Item>
             </Menu.SubMenu>
           ) : null}
-          {role == "hr" ? (
+          {role == "admin" ? (
             <Menu.Item
               icon={
                 <img
@@ -161,7 +162,7 @@ const NewSidebar = (props) => {
             </>
           ) : null}
 
-          {role == "hr" ? (
+          {role == "admin" || isHr ? (
 
             <Menu.SubMenu
               style={{
@@ -235,7 +236,7 @@ const NewSidebar = (props) => {
               <NavLink to="/Appraisal/HalfYearGoalPage" />
             </Menu.Item>
           </Menu.SubMenu> */}
-          {role == "hr" ? (
+          {role == "admin" || isHr ? (
             <Menu.SubMenu
               className="arrow-div"
               style={{

@@ -1,4 +1,3 @@
-import React from "react";
 import { Tabs } from "antd";
 import "../../style/Documents.css";
 import WorkID from "../ProfileDetails/WorkID";

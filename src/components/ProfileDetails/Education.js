@@ -42,18 +42,15 @@ function Education() {
   useEffect(() => {
     getData();
   }, []);
-
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setData(data);
     setDateEnd(data.courseEndDate);
     setDateStart(data.courseStartDate);
   };
-
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
-
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
@@ -70,11 +67,11 @@ function Education() {
     }
   };
   const [form] = Form.useForm();
+
   return (
     <div
       className="education"
       style={{
-        margin: "10px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -117,7 +114,7 @@ function Education() {
                       className="personal"
                       type="text"
                       style={{
-                        color: "#4ec0f1",
+                        color: "#ffff",
                         display: "none",
                         paddingTop: "7px",
                         paddingRight: "7px",
@@ -134,7 +131,8 @@ function Education() {
               }
               style={{
                 width: '100%',
-                marginTop: 10,
+                // marginTop: 10,
+                borderRadius: "10px",
               }}
             >
               <Row gutter={[16, 16]}>

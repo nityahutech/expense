@@ -38,11 +38,9 @@ function Personal() {
     getData();
     showEditContent(false);
   };
-
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
-
   const onContactFinish = (values) => {
     let record = {
       ...values,
@@ -113,9 +111,6 @@ function Personal() {
               <Card
                 title="PERSONAL INFO"
                 className="personal"
-                //   actions={[
-                //   <EditOutlined key="edit" />,
-                // ]}
                 extra={
                   <>
                     {editContent === false ? (
@@ -123,7 +118,7 @@ function Personal() {
                         className="personal"
                         type="text"
                         style={{
-                          color: "#4ec0f1",
+                          color: "#ffff",
                           display: "none",
                           paddingTop: "7px",
                           paddingRight: "7px",
@@ -141,10 +136,11 @@ function Personal() {
                 style={{
                   width: '100%',
                   marginTop: 10,
+                  borderRadius:"10px",
                 }}
               >
-                <Row gutter={[16, 16]}>
-                  <Col xs={22} sm={15} md={8} >
+                <Row gutter={[16, 42]}>
+                  <Col xs={24} sm={24} md={8} >
                     <div>
                       <div
                         style={{
@@ -200,7 +196,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  <Col xs={22} sm={15} md={8}>
+                  <Col xs={24} sm={24} md={8}>
                     <div>
                       <div
                         style={{
@@ -242,7 +238,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  <Col xs={22} sm={15} md={8}>
+                  <Col xs={24} sm={24} md={8}>
                     <div>
                       <div
                         style={{
@@ -279,9 +275,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                </Row>
-                <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                  <Col xs={22} sm={15} md={8}>
+                  <Col xs={24} sm={24} md={8}>
                     <div>
                       <div
                         style={{
@@ -324,7 +318,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  <Col xs={22} sm={15} md={8}>
+                  <Col xs={24} sm={24} md={8}>
                     <div>
                       <div
                         style={{
@@ -439,7 +433,7 @@ function Personal() {
                         className="personal"
                         type="text"
                         style={{
-                          color: "#4ec0f1",
+                          color: "#ffff",
                           display: "none",
                           paddingTop: "7px",
                           paddingRight: "7px",
@@ -457,10 +451,11 @@ function Personal() {
                 style={{
                   width: '100%',
                   marginTop: 10,
+                  borderRadius: "10px"
                 }}
               >
                 <Row gutter={[16, 16]}>
-                  <Col xs={22} sm={15} md={12}>
+                  <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
                         style={{
@@ -502,7 +497,7 @@ function Personal() {
                     </div>
                   </Col>
                   {/* <Col span={8}></Col> */}
-                  <Col xs={22} sm={15} md={12}>
+                  <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
                         style={{
@@ -545,7 +540,7 @@ function Personal() {
                   </Col>
                 </Row>
                 <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                  <Col xs={22} sm={15} md={12}>
+                  <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
                         style={{
@@ -585,7 +580,7 @@ function Personal() {
                     </div>
                   </Col>
                   {/* <Col span={8}></Col> */}
-                  <Col xs={22} sm={15} md={12}>
+                  <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
                         style={{
@@ -688,11 +683,8 @@ function Personal() {
               onFinish={onEditAddressFinish}
             >
               <Card
-                title="ADDRESSES"
+                title="ADDRESS"
                 className="personal"
-                //   actions={[
-                //   <EditOutlined key="edit" />,
-                // ]}
                 extra={
                   <>
                     {editAddressInfo === false ? (
@@ -700,7 +692,7 @@ function Personal() {
                         className="personal"
                         type="text"
                         style={{
-                          color: "#4ec0f1",
+                          color: "#ffff",
                           display: "none",
                           paddingTop: "7px",
                           paddingRight: "7px",
@@ -718,10 +710,11 @@ function Personal() {
                 style={{
                   width: '100%',
                   marginTop: 10,
+                  borderRadius: "10px",
                 }}
               >
                 <Row gutter={[16, 16]}>
-                  <Col xs={22} sm={15} md={12}>
+                  <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
                         style={{
@@ -764,8 +757,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  {/* <Col span={8}></Col> */}
-                  <Col xs={22} sm={15} md={12}>
+                  <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
                         style={{
@@ -810,9 +802,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                </Row>
-                <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                  <Col xs={22} sm={22} md={20}>
+                  <Col xs={24} sm={24} md={24}>
                     <div>
                       <div
                         style={{
@@ -882,11 +872,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  {/* <Col span={8}></Col>
-            <Col span={8}></Col> */}
-                </Row>
-                <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                  <Col xs={22} sm={22} md={20}>
+                  <Col xs={24} sm={24} md={24}>
                     <div>
                       <div
                         style={{
@@ -927,11 +913,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  {/* <Col span={8}></Col>
-            <Col span={8}></Col> */}
-                </Row>
-                <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                  <Col xs={22} sm={22} md={20}>
+                  <Col xs={24} sm={24} md={24}>
                     <div>
                       <div
                         style={{
@@ -971,8 +953,6 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  {/* <Col span={8}></Col>
-            <Col span={8}></Col> */}
                 </Row>
                 {editAddressInfo === true ? (
                   <Row

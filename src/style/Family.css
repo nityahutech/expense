@@ -4,3 +4,8 @@
     line-height: 19px;
     text-transform: uppercase;
 }
+.familyCard .ant-card-head {
+    border-radius: 10px 10px 0px 0px;
+    background: #043661;
+    color: #ffffff;
+ }

@@ -49,7 +49,15 @@ display: block !important;
 .education:hover .personal {
     display: block !important;
     }
-
- 
+.viewCard .ant-card-head{
+        border-radius: 10px 10px 0px 0px;
+        background: #1963A6;
+        color: #ffffff;
+}
+.personal .ant-card-head{
+    border-radius: 10px 10px 0px 0px;
+    background: #1963A6;
+    color: #ffffff;
+}
 
 

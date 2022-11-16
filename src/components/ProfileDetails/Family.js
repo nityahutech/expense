@@ -11,6 +11,7 @@ import {
   EditFilled,
 } from "@ant-design/icons";
 import "../../style/BankAccount.css";
+import "../../style/Family.css"
 
 const Family = () => {
   const [editfamilymember, showeditfamilymember] = useState(false);
@@ -32,17 +33,14 @@ const Family = () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setData(data);
   };
-
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
-
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
   const checkAlphabets = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
@@ -58,13 +56,14 @@ const Family = () => {
           justifyContent: "center",
           // flexDirection: "column",
           margin: "15px",
+          width:"100%",
         }}
       >
         {editfamilymember === false ? (
           <Row
             className="Row-Card"
             style={{
-              width: '75%',
+              // width: '100%',
               margin: '10px',
               display: 'flex',
               alignItems: 'center'
@@ -106,12 +105,13 @@ const Family = () => {
                     </Button>
                   }
                   style={{
-                    width: '100%',
+                    width: '800',
                     marginTop: 10,
+                    borderRadius:"10px",
                   }}
                 >
                   <Row gutter={[48, 8]}>
-                    <Col xs={22} sm={15} md={6}>
+                    <Col xs={22} sm={15} md={12}>
                       <Form.Item
                         name="father"
                         rules={[
@@ -140,7 +140,7 @@ const Family = () => {
                         </div>
                       </Form.Item>
                     </Col>
-                    <Col xs={22} sm={15} md={6}>
+                    <Col xs={22} sm={15} md={12}>
                       <Form.Item
                         name="fatherContact"
                         rules={[
@@ -171,7 +171,7 @@ const Family = () => {
                         </div>
                       </Form.Item>
                     </Col>
-                    <Col xs={22} sm={15} md={6}>
+                    <Col xs={22} sm={15} md={12}>
                       <Form.Item
                         name="mother"
                         rules={[
@@ -201,7 +201,7 @@ const Family = () => {
                         </div>
                       </Form.Item>
                     </Col>
-                    <Col xs={22} sm={15} md={6}>
+                    <Col xs={22} sm={15} md={12}>
                       <Form.Item
                         name="motherContact"
                         rules={[
@@ -261,6 +261,7 @@ const Family = () => {
                   style={{
                     width: 800,
                     marginTop: 10,
+                    borderRadius:"10px",
                   }}
                 >
                   <Row gutter={[16, 16]}>
@@ -564,6 +565,7 @@ const Family = () => {
                   style={{
                     width: '100%',
                     marginTop: 10,
+                    borderRadius:"10px",
                   }}
                 >
                   <Row gutter={[16, 16]}>
@@ -691,6 +693,7 @@ const Family = () => {
                   style={{
                     width: '100%',
                     marginTop: 10,
+                    borderRadius:"10px",
                   }}
                 >
                   <Row gutter={[16, 16]}>

@@ -81,10 +81,9 @@ function BankAccount() {
               onFinish={onFinish}
             >
               <Card
+                className="viewCard"
                 title="Bank Account Details"
-                //   actions={[
-                //   <EditOutlined key="edit" />,
-                // ]}
+                
                 extra={
                   <>
                     {editContent === false ? (
@@ -110,6 +109,7 @@ function BankAccount() {
                 style={{
                   width: '100%',
                   margin: "15px",
+                  borderRadius: "10px",
                 }}
               >
                 <Row gutter={[48, 8]}>

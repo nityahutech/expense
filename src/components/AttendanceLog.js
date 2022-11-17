@@ -35,7 +35,7 @@ const tailLayout = {
 function AttendanceLog() {
 
   const [allEmp, setallEmp] = useState([]);
-  const role = sessionStorage.getItem("role");
+  const isHr = JSON.parse(sessionStorage.getItem("isHr"));
   const currentUser = JSON.parse(sessionStorage.getItem("user"))
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
@@ -95,7 +95,7 @@ function AttendanceLog() {
   }, []);
   useEffect(() => {
     form.resetFields();
-    if (role === "emp") {
+    if (!isHr) {
       if (activetab == "1") {
         setSelectemp({ id: currentUser.uid });
         getEmpDetails(currentUser.uid, [
@@ -330,7 +330,7 @@ function AttendanceLog() {
             setSelectemp({ id: "" });
           }}
         >
-          {role === "emp" ? (
+          { !isHr ? (
             <>
               <Tabs.TabPane tab="Monthly Log" key="1">
                 <div className="monthColor">

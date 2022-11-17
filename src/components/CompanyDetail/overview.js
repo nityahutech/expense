@@ -409,7 +409,7 @@ function Overview() {
                           />
                         </div>
                         {editContactIconInfo === false ? (
-                          <div style={{ display: "none" }}>{data.linkedin}</div>
+                          <div >{data.linkedin}</div>
                         ) : (
                           <Form.Item
                             style={{ width: "50%" }}
@@ -462,7 +462,7 @@ function Overview() {
                           />
                         </div>
                         {editContactIconInfo === false ? (
-                          <div style={{ display: "none" }}>{data.facebook}</div>
+                          <div>{data.facebook}</div>
                         ) : (
                           <Form.Item
                             style={{ width: "50%" }}
@@ -515,7 +515,7 @@ function Overview() {
                           />
                         </div>
                         {editContactIconInfo === false ? (
-                          <div style={{ display: "none" }}>{data.twitter}</div>
+                          <div>{data.twitter}</div>
                         ) : (
                           <Form.Item
                             style={{ width: "50%" }}

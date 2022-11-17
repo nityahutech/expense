@@ -3,15 +3,15 @@ import { Button, Col } from 'antd';
 import { Input, Modal, Row, DatePicker, } from 'antd';
 import "./halfYearGoal.css";
 import CreatehalfYearGoal from "./createhalfYearGoal";
-import EmpInfoContext from '../../contexts/EmpInfoContext';
-import { useAuth } from '../../contexts/AuthContext'
+// import EmpInfoContext from '../../contexts/EmpInfoContext';
 import HalfYearGoalTable from './halfYearGoalTable';
 
 const HalfYearGoalHome = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [employeeRecord, setEmployeeRecord] = useState();
-    const { currentUser } = useAuth();
-    const [empRole, setEmpRole] = useState(sessionStorage.getItem("role"));
+    // const [employeeRecord, setEmployeeRecord] = useState();
+    const isMgr = JSON.parse(sessionStorage.getItem("isMgr"));
+    const isLead = JSON.parse(sessionStorage.getItem("isLead"));
+    const isHr = JSON.parse(sessionStorage.getItem("isHr"));
 
     const showModal = () => {
         console.log('hi')
@@ -23,18 +23,18 @@ const HalfYearGoalHome = () => {
         setIsModalOpen(!isModalOpen);
     };
 
-    useEffect(() => {
-        getEmployeeRecord()
+    // useEffect(() => {
+    //     getEmployeeRecord()
 
-    }, [])
+    // }, [])
 
-    const getEmployeeRecord = async () => {
-        EmpInfoContext.getEduDetails(currentUser.uid)
-            .then(response => {
-                console.log('empRecorddd', response)
-                setEmployeeRecord(response)
-            })
-    }
+    // const getEmployeeRecord = async () => {
+    //     EmpInfoContext.getEduDetails(currentUser.uid)
+    //         .then(response => {
+    //             console.log('empRecorddd', response)
+    //             setEmployeeRecord(response)
+    //         })
+    // }
 
     return (
         <div style={{
@@ -46,7 +46,7 @@ const HalfYearGoalHome = () => {
 
         }}>
 
-            {empRole === 'hr' &&
+            { isHr &&
                 <div className="app-tab" style={{ width: '100%', marginleft: '10px' }}>
                     <Row className="employeeRow" style={{ marginLeft: '10px', marginRight: '10px', flexDirection: 'row', display: 'flex', justifyContent: 'space-between', }}>
                         <Col>
@@ -62,7 +62,7 @@ const HalfYearGoalHome = () => {
             }
 
             {
-                empRole === 'hr' && <HalfYearGoalTable reload={!isModalOpen} listType='hr' title='Appraisal Created by Hr' />
+                isHr && <HalfYearGoalTable reload={!isModalOpen} listType='hr' title='Appraisal Created by Hr' />
 
             }
             <Modal className='viewModal'
@@ -89,8 +89,8 @@ const HalfYearGoalHome = () => {
             </Modal>
 
             <HalfYearGoalTable listType='emp' title='My Apparisal' />
-            {empRole === 'lead' && <HalfYearGoalTable listType='lead' title='Appraisal Pending For Review (Lead)' />}
-            {employeeRecord && employeeRecord.isManager && <HalfYearGoalTable listType='mgr' title='Appraisal Pending For Review (Manager)' />}
+            {isLead && <HalfYearGoalTable listType='lead' title='Appraisal Pending For Review (Lead)' />}
+            {isMgr && <HalfYearGoalTable listType='mgr' title='Appraisal Pending For Review (Manager)' />}
 
         </div >
     )

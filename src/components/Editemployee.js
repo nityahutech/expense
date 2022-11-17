@@ -151,19 +151,21 @@ function Editemployee(props) {
     props.setIsModalVisible(false);
   }
   const cancelStyle = {
-    position: "relative",
-    bottom: "4px",
-    left: "20rem",
-    width: "25%",
+    border: "1px solid #1565D8",
+    color: "#1565D8",
+    fontWeight: "600",
+    fontSize: "14px",
+    lineHeight: "17px",
+    width: "99px",
   };
   const buttonStyle = {
-    marginRight: "5px",
-    color: "white",
-    backgroundColor: "#1890ff",
-    position: "relative",
-    bottom: "4px",
-    left: "6rem",
-    width: "25%",
+    border: "1px solid #1565D8",
+    background: "#1565D8",
+    color: "#ffffff",
+    fontWeight: "600",
+    fontSize: "14px",
+    lineHeight: "17px",
+    width: "99px",
   };
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
@@ -178,12 +180,13 @@ function Editemployee(props) {
   return (
     <>
       <Form
+        layout="vertical"
         //   form={form}
         labelcol={{
-          span: 20,
+          span: 4,
         }}
         wrappercol={{
-          span: 20,
+          span: 14,
         }}
         initialValues={{
           remember: true,
@@ -267,12 +270,10 @@ function Editemployee(props) {
             value: optionalLeave,
           },
         ]}
-        layout="vertical"
       >
-        <Row>
-          <Col xs={22} sm={22} md={12}>
+        <Row gutter={[34, 8]}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="fname"
               label="First Name&nbsp;"
               onKeyPress={(event) => {
@@ -293,7 +294,6 @@ function Editemployee(props) {
               ]}
             >
               <Input
-                style={{ width: "80%" }}
                 maxLength={20}
                 onChange={(e) => {
                   const inputval = e.target.value;
@@ -302,14 +302,17 @@ function Editemployee(props) {
                     inputval.substring(1);
                   setFname(newVal);
                 }}
+                style={{
+                  border: "1px solid #8692A6",
+                  borderRadius: "4px",
+                }}
                 // required
                 // placeholder="Enter Your First Name"
               />
             </Form.Item>
           </Col>
-          <Col xs={22} sm={22} md={12}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="mname"
               label="Middle Name"
               onKeyPress={(event) => {
@@ -330,7 +333,7 @@ function Editemployee(props) {
               ]}
             >
               <Input
-                style={{ width: "80%" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 maxLength={20}
                 onChange={(e) => {
                   const inputval = e.target.value;
@@ -342,11 +345,8 @@ function Editemployee(props) {
               />
             </Form.Item>
           </Col>
-        </Row>
-        <Row>
-          <Col xs={22} sm={22} md={12}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="lname"
               label="Last Name&nbsp;"
               onKeyPress={(event) => {
@@ -367,7 +367,7 @@ function Editemployee(props) {
               ]}
             >
               <Input
-                style={{ width: "80%" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 maxLength={20}
                 onChange={(e) => {
                   const inputval = e.target.value;
@@ -381,9 +381,10 @@ function Editemployee(props) {
               />
             </Form.Item>
           </Col>
-          <Col xs={22} sm={22} md={12}>
+        </Row>
+        <Row gutter={[34, 8]}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="doj"
               label="Date of Joining&nbsp;"
               rules={[
@@ -395,18 +396,15 @@ function Editemployee(props) {
             >
               <DatePicker
                 format={dateFormat}
-                style={{ width: "80%" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 onChange={(e) => {
                   setDoj(e.format(dateFormat));
                 }}
               />
             </Form.Item>
           </Col>
-        </Row>
-        <Row>
-          <Col xs={22} sm={22} md={12}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="email"
               label="Email Id&nbsp;"
               // disabled={{mailid.split('@')[1]==="hutechsolutions"}}
@@ -429,7 +427,7 @@ function Editemployee(props) {
               ]}
             >
               <Input
-                style={{ width: "80%" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 maxLength={20}
                 // onChange={(e) => {
                 //   const inputval = e.target.value;
@@ -446,9 +444,8 @@ function Editemployee(props) {
               />
             </Form.Item>
           </Col>
-          <Col xs={22} sm={22} md={12}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="gender"
               label="Gender&nbsp;"
               rules={[
@@ -458,7 +455,11 @@ function Editemployee(props) {
                 },
               ]}
             >
-              <Select style={{ width: "80%" }} onChange={(e) => setGender(e)}>
+              <Select
+                bordered={false}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
+                onChange={(e) => setGender(e)}
+              >
                 <Option value="Male">Male</Option>
                 <Option value="Female">Female</Option>
                 {/* <Option value="pns">Prefer Not To Say</Option> */}
@@ -466,10 +467,9 @@ function Editemployee(props) {
             </Form.Item>
           </Col>
         </Row>
-        <Row>
-          <Col xs={22} sm={22} md={12}>
+        <Row gutter={[34, 8]}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="designation"
               label="Designation&nbsp;"
               rules={[
@@ -480,8 +480,9 @@ function Editemployee(props) {
               ]}
             >
               <Select
+                bordered={false}
                 onChange={(e) => setDesignation(e)}
-                style={{ width: "80%" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 placeholder="Select a Designation"
               >
                 {configurations?.designations.map((des) => (
@@ -490,9 +491,8 @@ function Editemployee(props) {
               </Select>
             </Form.Item>
           </Col>
-          <Col xs={22} sm={22} md={12}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="repManager"
               label="Reporting Manager"
               rules={[
@@ -507,8 +507,9 @@ function Editemployee(props) {
               ]}
             >
               <Select
+                bordered={false}
                 onChange={(e) => setRepManager(e)}
-                style={{ width: "80%" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 placeholder="Select a Manager"
               >
                 {configurations?.repManager.map((des) => (
@@ -517,11 +518,8 @@ function Editemployee(props) {
               </Select>
             </Form.Item>
           </Col>
-        </Row>
-        <Row>
-          <Col xs={22} sm={22} md={12}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="secManager"
               label="Secondary Manager"
               rules={[
@@ -536,8 +534,9 @@ function Editemployee(props) {
               ]}
             >
               <Select
+                bordered={false}
                 onChange={(e) => setSecManager(e)}
-                style={{ width: "80%" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 placeholder="Select a Manager"
               >
                 {configurations?.secManager.map((des) => (
@@ -546,9 +545,10 @@ function Editemployee(props) {
               </Select>
             </Form.Item>
           </Col>
-          <Col xs={22} sm={22} md={12}>
+        </Row>
+        <Row gutter={[34, 8]}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="department"
               label="Department"
               rules={[
@@ -559,8 +559,9 @@ function Editemployee(props) {
               ]}
             >
               <Select
+                bordered={false}
                 placeholder="Select a Field"
-                style={{ width: "80%" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 onChange={(e) => setDepartment(e)}
               >
                 {configurations?.field.map((des) => (
@@ -569,11 +570,8 @@ function Editemployee(props) {
               </Select>
             </Form.Item>
           </Col>
-        </Row>
-        <Row>
-          <Col xs={22} sm={22} md={12}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="lead"
               label="Lead"
               onKeyPress={(event) => {
@@ -593,7 +591,7 @@ function Editemployee(props) {
               ]}
             >
               <Input
-                style={{ width: "80%" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 maxLength={20}
                 onChange={(e) => {
                   const inputval = e.target.value;
@@ -603,14 +601,12 @@ function Editemployee(props) {
                   setLead(newVal);
                 }}
                 // required
-                // placeholder="Enter Your First Name"
+                placeholder="Enter Lead Name"
               />
             </Form.Item>
           </Col>
-
-          <Col xs={22} sm={22} md={12}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="location"
               label="Work Location&nbsp;"
               onKeyPress={(event) => {
@@ -631,7 +627,8 @@ function Editemployee(props) {
               ]}
             >
               <Select
-                style={{ width: "80%" }}
+                bordered={false}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 onChange={(e) => setLocation(e)}
                 placeholder="Select a Location"
               >
@@ -642,11 +639,10 @@ function Editemployee(props) {
             </Form.Item>
           </Col>
         </Row>
-        <Row>
-          <Col xs={22} sm={22} md={12}>
+        <Row gutter={[34, 8]}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
               className="managerError"
-              style={{ marginBottom: "17px" }}
               name="isManager"
               label="Is Manager"
               // rules={[
@@ -686,10 +682,9 @@ function Editemployee(props) {
               )}
             </Form.Item>
           </Col>
-          <Col xs={22} sm={22} md={12}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
               className="leadError"
-              style={{ marginBottom: "17px" }}
               name="isLead"
               label="Is Lead"
               // rules={[
@@ -729,11 +724,8 @@ function Editemployee(props) {
               )}
             </Form.Item>
           </Col>
-        </Row>
-        <Row>
-          <Col xs={22} sm={22} md={12}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="earnLeave"
               label="Earn Leave&nbsp;"
               onKeyPress={(event) => {
@@ -751,7 +743,7 @@ function Editemployee(props) {
             >
               <Input
                 maxLength={2}
-                style={{ width: "80%" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 onChange={(e) => {
                   const newVal = e.target.value;
                   setEarnLeave(newVal);
@@ -759,9 +751,10 @@ function Editemployee(props) {
               ></Input>
             </Form.Item>
           </Col>
-          <Col xs={22} sm={22} md={12}>
+        </Row>
+        <Row gutter={[34, 8]}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="sickLeave"
               label="Sick Leave&nbsp;"
               onKeyPress={(event) => {
@@ -779,7 +772,7 @@ function Editemployee(props) {
             >
               <Input
                 maxLength={2}
-                style={{ width: "80%" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 onChange={(e) => {
                   const newVal = e.target.value;
                   setSickLeave(newVal);
@@ -787,11 +780,8 @@ function Editemployee(props) {
               ></Input>
             </Form.Item>
           </Col>
-        </Row>
-        <Row>
-          <Col xs={22} sm={22} md={12}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="casualLeave"
               label="Casual Leave&nbsp;"
               onKeyPress={(event) => {
@@ -809,7 +799,7 @@ function Editemployee(props) {
             >
               <Input
                 maxLength={2}
-                style={{ width: "80%" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 onChange={(e) => {
                   const newVal = e.target.value;
                   setCasualLeave(newVal);
@@ -817,9 +807,8 @@ function Editemployee(props) {
               ></Input>
             </Form.Item>
           </Col>
-          <Col xs={22} sm={22} md={12}>
+          <Col xs={22} sm={15} md={8}>
             <Form.Item
-              style={{ marginBottom: "17px" }}
               name="optionalLeave"
               label="Optional Leave&nbsp;"
               onKeyPress={(event) => {
@@ -837,7 +826,7 @@ function Editemployee(props) {
             >
               <Input
                 maxLength={2}
-                style={{ width: "80%" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 onChange={(e) => {
                   const newVal = e.target.value;
                   setOptionalLeave(newVal);
@@ -846,14 +835,24 @@ function Editemployee(props) {
             </Form.Item>
           </Col>
         </Row>
-        <br />
-        <Button style={cancelStyle} onClick={cancel}>
-          Cancel
-        </Button>
-        <Button style={buttonStyle} onClick={submitEdit}>
-          Submit
-        </Button>
-        <br />
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "end",
+            marginRight: "40px",
+            marginTop: "13px",
+          }}
+        >
+          <Space>
+            <Button style={cancelStyle} onClick={cancel}>
+              Cancel
+            </Button>
+            <Button style={buttonStyle} onClick={submitEdit}>
+              Submit
+            </Button>
+          </Space>
+        </div>
       </Form>
     </>
   );

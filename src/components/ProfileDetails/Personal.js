@@ -1,5 +1,15 @@
 import { useState, useEffect } from "react";
-import { Card, Row, Col, Input, Button, DatePicker, Select, Form, Divider } from "antd";
+import {
+  Card,
+  Row,
+  Col,
+  Input,
+  Button,
+  DatePicker,
+  Select,
+  Form,
+  Divider,
+} from "antd";
 import { CloseOutlined, EditFilled } from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
@@ -84,12 +94,13 @@ function Personal() {
           justifyContent: "center",
         }}
       >
-        <Row className="Row-Card"
+        <Row
+          className="Row-Card"
           style={{
-            width: '75%',
-            margin: '10px',
-            display: 'flex',
-            alignItems: 'center'
+            width: "75%",
+            margin: "10px",
+            display: "flex",
+            alignItems: "center",
           }}
         >
           <Col span={24}>
@@ -133,13 +144,13 @@ function Personal() {
                   </>
                 }
                 style={{
-                  width: '100%',
+                  width: "100%",
                   marginTop: 10,
-                  borderRadius:"10px",
+                  borderRadius: "10px",
                 }}
               >
                 <Row gutter={[16, 42]}>
-                  <Col xs={24} sm={24} md={8} >
+                  <Col xs={24} sm={24} md={8}>
                     <div>
                       <div
                         style={{
@@ -172,8 +183,8 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            style={{ 
-                              marginTop: "10px", 
+                            style={{
+                              marginTop: "10px",
                               width: "100%",
                               borderBottom: "1px solid #ccc ",
                               paddingLeft: "0px",
@@ -229,8 +240,8 @@ function Personal() {
                         >
                           {/* format={dateFormatList} */}
                           <DatePicker
-                            style={{ 
-                              marginTop: "10px", 
+                            style={{
+                              marginTop: "10px",
                               width: "100%",
                             }}
                             // format={dateFormatList}
@@ -274,8 +285,8 @@ function Personal() {
                         >
                           <Select
                             placeholder="Select a Gender"
-                            style={{ 
-                              marginTop: "10px", 
+                            style={{
+                              marginTop: "10px",
                               width: "100%",
                               borderBottom: "1px solid #ccc ",
                               paddingLeft: "0px",
@@ -317,8 +328,8 @@ function Personal() {
                         >
                           <Select
                             placeholder="Select a Blood Group"
-                            style={{ 
-                              marginTop: "10px", 
+                            style={{
+                              marginTop: "10px",
                               width: "100%",
                               borderBottom: "1px solid #ccc ",
                               paddingLeft: "0px",
@@ -366,13 +377,15 @@ function Personal() {
                             },
                           ]}
                         >
-                          <Select style={{ 
-                              marginTop: "10px", 
+                          <Select
+                            style={{
+                              marginTop: "10px",
                               width: "100%",
                               borderBottom: "1px solid #ccc ",
                               paddingLeft: "0px",
                             }}
-                            bordered={false}>
+                            bordered={false}
+                          >
                             <Option value="Single">Single</Option>
                             <Option value="Married">Married</Option>
                           </Select>
@@ -425,10 +438,10 @@ function Personal() {
         <Row
           className="Row-Card"
           style={{
-            width: '75%',
-            margin: '10px',
-            display: 'flex',
-            alignItems: 'center'
+            width: "75%",
+            margin: "10px",
+            display: "flex",
+            alignItems: "center",
           }}
         >
           <Col span={24}>
@@ -475,9 +488,9 @@ function Personal() {
                   </>
                 }
                 style={{
-                  width: '100%',
+                  width: "100%",
                   marginTop: 10,
-                  borderRadius: "10px"
+                  borderRadius: "10px",
                 }}
               >
                 <Row gutter={[16, 16]}>
@@ -512,8 +525,8 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            style={{ 
-                              marginTop: "10px", 
+                            style={{
+                              marginTop: "10px",
                               width: "100%",
                               borderBottom: "1px solid #ccc ",
                               padding: "2px",
@@ -561,8 +574,8 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            style={{ 
-                              marginTop: "10px", 
+                            style={{
+                              marginTop: "10px",
                               width: "100%",
                               borderBottom: "1px solid #ccc ",
                               padding: "2px",
@@ -601,14 +614,14 @@ function Personal() {
                             {
                               required: true,
                               message: "Please enter Phone Number",
-                              pattern: /^[0-9\b]+$/,
+                              pattern: /^[0-9]\d{9}$/,
                             },
                             { whitespace: true },
                           ]}
                         >
                           <Input
-                            style={{ 
-                              marginTop: "10px", 
+                            style={{
+                              marginTop: "10px",
                               width: "100%",
                               borderBottom: "1px solid #ccc ",
                               padding: "2px",
@@ -646,14 +659,14 @@ function Personal() {
                             {
                               required: false,
                               message: "Please enter Phone Number",
-                              pattern: /^[0-9\b]+$/,
+                              pattern: /^[0-9]\d{9}$/,
                             },
                             { whitespace: true },
                           ]}
                         >
                           <Input
-                            style={{ 
-                              marginTop: "10px", 
+                            style={{
+                              marginTop: "10px",
                               width: "100%",
                               borderBottom: "1px solid #ccc ",
                               padding: "2px",
@@ -710,11 +723,12 @@ function Personal() {
         <Row
           className="Row-Card"
           style={{
-            width: '75%',
-            margin: '10px',
-            display: 'flex',
-            alignItems: 'center'
-          }}>
+            width: "75%",
+            margin: "10px",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <Col span={24}>
             <Form
               // form={form}
@@ -756,7 +770,7 @@ function Personal() {
                   </>
                 }
                 style={{
-                  width: '100%',
+                  width: "100%",
                   marginTop: 10,
                   borderRadius: "10px",
                 }}
@@ -891,8 +905,8 @@ function Personal() {
                       /> */}
                           <Select
                             placeholder="Select Your HouseType"
-                            style={{ 
-                              marginTop: "10px", 
+                            style={{
+                              marginTop: "10px",
                               width: "100%",
                               borderBottom: "1px solid #ccc ",
                               padding: "2px",

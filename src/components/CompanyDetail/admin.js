@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Typography } from 'antd';
 import CompanyProContext from "../../contexts/CompanyProContext";
-
+import "./companystyle.css";
 import {
   Button,
   Col,
@@ -28,7 +28,6 @@ const Admin = () => {
   const [data, setData] = useState([]);
   const compId = sessionStorage.getItem("compId")
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const showModal = () => {
     setIsModalOpen(true);
     form.resetFields();
@@ -40,7 +39,6 @@ const Admin = () => {
     setIsModalOpen(false);
     form.resetFields();
   };
-
   const onFinish = (values) => {
     const valuesToservice = {
       ceoAdmin: values.ceoAdmin
@@ -50,7 +48,6 @@ const Admin = () => {
     getData();
     showEditContactInfo(false);
   };
-
   const onHRFinish=(values)=>{
     const value={
      hrAdmin:values.hrAdmin
@@ -59,7 +56,6 @@ const Admin = () => {
     getData();
     showEditHrContactInfo(false);
   };
-
   const onFinanceFinish=(values)=>{
     const value={
      financerAdmin:values.financerAdmin
@@ -68,7 +64,6 @@ const Admin = () => {
     getData();
     showEditFinanceContactInfo(false);
   };
-
   const onHRExeFinish=(values)=>{
     const value={
      hrExeAdmin:values.hrExeAdmin
@@ -77,7 +72,6 @@ const Admin = () => {
     getData();
     showEditExecutiveContactInfo(false);
   }
-
   useEffect(() => {
     getData();
   }, []);
@@ -98,29 +92,36 @@ const Admin = () => {
           width: '100%'
         }}
       >
-        <Form style={{
-
-          width: '75%'
-        }}
+        <Row
+          className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <Col span={24} >
+        <Form 
            form={form}
-          labelcol={{
-            span: 4,
-          }}
-          wrappercol={{
-            span: 14,
-          }}
+          
           initialValues={{
             remember: true,
           }}
           autoComplete="off"
          onFinish={onFinish}
+         layout="vertical"
         >
           <div className="site-card-border-less-wrapper">
             <Card
+              className="ceoCard"
               title="CEO"
-              bordered={false}
+              bordered={true}
+              hoverable={true}
               style={{
                 width: '100%',
+                marginTop: 10,
+                borderRadius:"10px",
               }}
             >
               <p>CEO is the head of the organization.<br />
@@ -136,7 +137,8 @@ const Admin = () => {
                   Edit, Upload and Approve Attendance and Leaves,<br />
                   Create and remove admins, and edit admin permissions.</Text>
               </div>
-              {data?.ceoAdmin}
+              {/* ------------------------------------------------old code------------------------------------------- */}
+              {/* {data?.ceoAdmin}
               <Divider ></Divider>
               {editContactInfo === true ? (
                 <Row gutter={[16, 16]}>
@@ -166,10 +168,12 @@ const Admin = () => {
                 </Row>
               ) : null}
               {editContactInfo == false &&
+              <div>
                 <Button type="primary" onClick={() => { showEditContactInfo(!editContactInfo) }} style={{ marginLeft: "10px" }}>
                   <PlusCircleOutlined />
                   Add
                 </Button>
+              </div>
               }
               {editContactInfo === true ? (
                 <Row
@@ -196,11 +200,87 @@ const Admin = () => {
                     </Button>
                   </Col>
                 </Row>
-              ) : null}
+              ) : null} */}
+              {/* -------------------------------------------old Code----------------------------------------------- */}
+              {/* -------------------------------------------new Code----------------------------------------------- */}
+                  <Row>
+                    <Col span={24}>
+                      <div>
+                        {editContactInfo === false ? (
+                            <div style={{
+                              border:'1px solid #ccc',
+                              borderRadius:'2px',
+                              marginTop:"10px",
+                              marginBottom:"10px",
+                              padding:"5px",
+                              }}>
+                              {data.ceoAdmin ? data.ceoAdmin : "-"}
+                            </div>
+                        ) : (
+                          <Form.Item
+                            style={{marginTop:'10px'}}
+                            initialValue={data ? data.ceoAdmin : null}
+                            name="ceoAdmin"
+                          >
+                            <Input
+                              type="ceoAdmin"
+                              placeholder="Enter CEO Name"
+                              style={{
+                                width: "100%",
+                                padding:"5px",
+                              }}
+                              size="large"
+                            />
+                          </Form.Item>
+                        )}
+                      </div>
+                    </Col>
+                  </Row>
+                {editContactInfo === true ? (
+                  <Row
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "3%",
+                    }}
+                  >
+                    <Button
+                      type="text"
+                      style={{ fontSize: 15 }}
+                      onClick={() => showEditContactInfo(false)}
+                    >
+                      <CloseOutlined /> CANCEL
+                    </Button>
+                    <Col>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{ marginLeft: "10px" }}
+                      >
+                        SAVE
+                      </Button>
+                    </Col>
+                  </Row>
+                ) : null}
+                {editContactInfo == false &&
+                  <div>
+                    <Button 
+                      type="primary" 
+                      onClick={() => { showEditContactInfo(!editContactInfo) }} 
+                      >
+                      <PlusCircleOutlined />
+                      Add
+                    </Button>
+                  </div>
+                }
+              {/* -------------------------------------------new Code----------------------------------------------- */}
             </Card>
           </div>
         </Form>
+        </Col>
+        </Row>
       </div>
+
       <div
         className="personalCardDiv"
         style={{
@@ -229,10 +309,14 @@ const Admin = () => {
         >
           <div className="site-card-border-less-wrapper">
             <Card
+              className="hrCard"
               title="HR ADMIN"
-              bordered={false}
+              bordered={true}
+              hoverable={true}
               style={{
                 width: '100%',
+                marginTop: 10,
+                borderRadius:"10px",
               }}
             >
               <p>HR Admin's permissions apply to all employees.
@@ -245,7 +329,8 @@ const Admin = () => {
                   Edit, Upload and Approve Attendance and Leaves,<br />
                   Create and remove admins, and edit admin permissions.</Text>
               </div>
-              {data?.hrAdmin}
+              {/* --------------------------------------- */}
+              {/* {data?.hrAdmin}
               <Divider ></Divider>
               {editHrContactInfo === true ? (
                 <Row gutter={[16, 16]}>
@@ -305,11 +390,85 @@ const Admin = () => {
                     </Button>
                   </Col>
                 </Row>
-              ) : null}
+              ) : null} */}
+              {/* --------------------------------------- */}
+              {/* -------------------newCode------------- */}
+                <Row>
+                  <Col span={24}>
+                    <div>
+                    {editHrContactInfo === false ? (
+                      <div style={{
+                        border:'1px solid #ccc',
+                        borderRadius:'2px',
+                        marginTop:"10px",
+                        marginBottom:"10px",
+                        padding:"5px",
+                        }}>
+                        {data.hrAdmin ? data.hrAdmin : "-"}
+                      </div>
+                      ) : (
+                        <Form.Item
+                        style={{marginTop:'10px'}}
+                        initialValue={data ? data.hrAdmin : null}
+                        name="hrAdmin"
+                      >
+                        <Input
+                          type="ceoAdmin"
+                          placeholder="Enter CEO Name"
+                          style={{
+                            width: "100%",
+                            padding:"5px",
+                          }}
+                          size="large"
+                        />
+                      </Form.Item>
+                      )}     
+                    </div>
+                  </Col>
+                </Row>
+                {editHrContactInfo === true ? (
+                  <Row
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "3%",
+                    }}
+                  >
+                    <Button
+                      type="text"
+                      style={{ fontSize: 15 }}
+                      onClick={() => showEditHrContactInfo(false)}
+                    >
+                      <CloseOutlined /> CANCEL
+                    </Button>
+                    <Col>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{ marginLeft: "10px" }}
+                      >
+                        SAVE
+                      </Button>
+                    </Col>
+                  </Row>
+                ) : null}
+                {editHrContactInfo == false &&
+                  <div>
+                    <Button 
+                      type="primary" 
+                      onClick={() => { showEditHrContactInfo(!editHrContactInfo) }} 
+                      >
+                      <PlusCircleOutlined />
+                      Add
+                    </Button>
+                  </div>
+                }
+              {/* -------------------newCode------------- */}
             </Card>
           </div>
         </Form>
       </div >
+
       <div
         className="personalCardDiv"
         style={{
@@ -338,10 +497,14 @@ const Admin = () => {
         >
           <div className="site-card-border-less-wrapper">
             <Card
+              className="financeCard"
               title="FINANCE ADMIN"
-              bordered={false}
+              bordered={true}
+              hoverable={true}
               style={{
                 width: '100%',
+                marginTop: 10,
+                borderRadius:"10px",
               }}
             >
               <p>Finance admin's permissions apply to all employees.
@@ -352,7 +515,8 @@ const Admin = () => {
                   View sensitive employee information (such as PAN Card, IDs and salary.)<br />
                 </Text>
               </div>
-              {data?.financerAdmin}
+              {/* ------------------------------------------------------ */}
+              {/* {data?.financerAdmin}
               <Divider ></Divider>
               {editFinanceContactInfo === true ? (
                 <Row gutter={[16, 16]}>
@@ -381,7 +545,6 @@ const Admin = () => {
                   </Col>
                 </Row>
               ) : null}
-
               {editFinanceContactInfo == false &&
                 <Button
                   type="primary" onClick={() => showEditFinanceContactInfo(!editFinanceContactInfo)} style={{ marginLeft: "10px" }}
@@ -415,11 +578,80 @@ const Admin = () => {
                     </Button>
                   </Col>
                 </Row>
-              ) : null}
+              ) : null} */}
+              {/* ----------------------------------------------------- */}
+              {/* ----------------------newCode------------------------ */}
+                <Row>
+                  <Col span={24}>
+                  {editFinanceContactInfo === false ? (
+                    <div style={{
+                      border:'1px solid #ccc',
+                      borderRadius:'2px',
+                      marginTop:"10px",
+                      marginBottom:"10px",
+                      padding:"5px",
+                      }}>
+                      {data.financerAdmin ? data.financerAdmin : "-"}
+                    </div>
+                    ) : (
+                      <Form.Item
+                            style={{marginTop:'10px'}}
+                            initialValue={data ? data.financerAdmin : null}
+                            name="financerAdmin"
+                          >
+                            <Input
+                              type="ceoAdmin"
+                              placeholder="Enter CEO Name"
+                              style={{
+                                width: "100%",
+                                padding:"5px",
+                              }}
+                              size="large"
+                            />
+                      </Form.Item>
+                    )}
+                  </Col>
+                </Row>
+                {editFinanceContactInfo === true ? (
+                  <Row
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "3%",
+                    }}
+                  >
+                    <Button
+                      type="text"
+                      style={{ fontSize: 15 }}
+                      onClick={() => showEditFinanceContactInfo(false)}
+                    >
+                      <CloseOutlined /> CANCEL
+                    </Button>
+                    <Col>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{ marginLeft: "10px" }}
+                      >
+                        SAVE
+                      </Button>
+                    </Col>
+                  </Row>
+                ) : null}
+                {editFinanceContactInfo == false &&
+                <Button
+                  type="primary" onClick={() => showEditFinanceContactInfo(!editFinanceContactInfo)} 
+                >
+                  <PlusCircleOutlined />
+                  Add
+                </Button>
+              }
+              {/* ----------------------newCode------------------------ */}
             </Card>
           </div>
         </Form>
       </div>
+
       <div
         className="personalCardDiv"
         style={{
@@ -449,10 +681,14 @@ const Admin = () => {
         >
           <div className="site-card-border-less-wrapper">
             <Card
+              className="hreCard"
               title="HR EXECUTIVE"
-              bordered={false}
+              bordered={true}
+              hoverable={true}
               style={{
                 width: '100%',
+                marginTop: 10,
+                borderRadius:"10px",
               }}
             >
               <p>HR Executive's permissions apply to all employees.
@@ -466,7 +702,8 @@ const Admin = () => {
                   This Admin will not have any payroll access.<br />
                 </Text>
               </div>
-              {data?.hrExeAdmin}
+              {/* --------------------------------------------- */}
+              {/* {data?.hrExeAdmin}
               <Divider ></Divider>
               {editExecutiveContactInfo === true ? (
                 <Row gutter={[16, 16]}>
@@ -499,8 +736,7 @@ const Admin = () => {
                 <Button type="primary" onClick={() => showEditExecutiveContactInfo(!editExecutiveContactInfo)} style={{ marginLeft: "10px" }}>
                   <PlusCircleOutlined />
                   Add
-                </Button>
-              }
+                </Button>}
               {editExecutiveContactInfo === true ? (
                 <Row
                   style={{
@@ -526,11 +762,78 @@ const Admin = () => {
                     </Button>
                   </Col>
                 </Row>
-              ) : null}
+              ) : null} */}
+              {/* --------------------------------------------- */}
+              {/* -----------------newCard--------------------- */}
+                  <Row>
+                    <Col span={24}>
+                    {editExecutiveContactInfo === false ? (
+                      <div style={{
+                        border:'1px solid #ccc',
+                        borderRadius:'2px',
+                        marginTop:"10px",
+                        marginBottom:"10px",
+                        padding:"5px",
+                        }}>
+                        {data.hrExeAdmin ? data.hrExeAdmin : "-"}
+                      </div>
+                    ) : (
+                      <Form.Item
+                        style={{marginTop:'10px'}}
+                        initialValue={data ? data.hrExeAdmin : null}
+                        name="hrExeAdmin"
+                        
+                      >
+                        <Input
+                          type="ceoAdmin"
+                          placeholder="Enter CEO Name"
+                          style={{
+                            width: "100%",
+                            padding:"5px",
+                          }}
+                          size="large"
+                        />
+                      </Form.Item>
+                    )}
+                    </Col>
+                  </Row>
+                {editExecutiveContactInfo === true ? (
+                <Row
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "3%",
+                  }}
+                >
+                  <Button
+                    type="text"
+                    style={{ fontSize: 15 }}
+                    onClick={() => showEditExecutiveContactInfo(false)}
+                  >
+                    <CloseOutlined /> CANCEL
+                  </Button>
+                  <Col>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      style={{ marginLeft: "10px" }}
+                    >
+                      SAVE
+                    </Button>
+                  </Col>
+                </Row>
+               ) : null} 
+               {editExecutiveContactInfo == false &&
+                <Button type="primary" onClick={() => showEditExecutiveContactInfo(!editExecutiveContactInfo)}>
+                  <PlusCircleOutlined />
+                  Add
+                </Button>}
+              {/* -----------------newCard--------------------- */}
             </Card>
           </div>
         </Form>
       </div>
+
     </>
   )
 }

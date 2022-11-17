@@ -14,6 +14,7 @@ const Family = () => {
   const [editEmergency, showeditEmergency] = useState(false);
   const [data, setData] = useState(false);
   const [form] = Form.useForm();
+  const [form1] = Form.useForm();
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
   useEffect(() => {
@@ -68,26 +69,10 @@ const Family = () => {
               alignItems: 'center'
             }}>
             <Col span={24}>
-              <Form
-                form={form}
-                labelcol={{
-                  span: 4,
-                }}
-                wrappercol={{
-                  span: 14,
-                }}
-                initialValues={{
-                  remember: true,
-                }}
-                autoComplete="off"
-                onFinish={onFinish}
-              >
                 <Card
                   title="FAMILY MEMBERS"
                   className="personal"
                   extra={
-                    <>
-                    { editfamilymember === false ? (
                     <Button
                       className="personal"
                       type="text"
@@ -103,10 +88,7 @@ const Family = () => {
                       onClick={() => showeditfamilymember(!editfamilymember)}
                     >
                       <EditFilled />
-                    </Button>
-                    ) : null}
-                    </>
-                  }
+                    </Button>}
                   style={{
                     width: '100%',
                     marginTop: 10,
@@ -115,18 +97,6 @@ const Family = () => {
                 >
                   <Row gutter={[48, 8]}>
                     <Col xs={22} sm={15} md={12}>
-                      <Form.Item
-                        name="father"
-                        rules={[
-                          {
-                            required: false,
-                            message: "Please enter Father's name",
-                            pattern: /^[a-zA-Z\s]*$/,
-                          },
-                        ]}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                      >
                         <div>
                           <h1
                             style={{
@@ -141,21 +111,8 @@ const Family = () => {
                           </h1>
                           <div>{data?.father ? data.father : "-"}</div>
                         </div>
-                      </Form.Item>
                     </Col>
                     <Col xs={22} sm={15} md={12}>
-                      <Form.Item
-                        name="fatherContact"
-                        rules={[
-                          {
-                            required: false,
-                            message: "Please enter the Contact no.",
-                            pattern: /^[0-9\b]+$/,
-                          },
-                        ]}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                      >
                         <div>
                           <h1
                             style={{
@@ -172,21 +129,8 @@ const Family = () => {
                             {data?.fatherContact ? data.fatherContact : "-"}
                           </div>
                         </div>
-                      </Form.Item>
                     </Col>
                     <Col xs={22} sm={15} md={12}>
-                      <Form.Item
-                        name="mother"
-                        rules={[
-                          {
-                            required: false,
-                            message: "Please enter Mother's Name",
-                            pattern: /^[a-zA-Z\s]*$/,
-                          },
-                        ]}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                      >
                         <div>
                           <h1
                             style={{
@@ -202,21 +146,8 @@ const Family = () => {
 
                           <div>{data?.mother ? data.mother : "-"}</div>
                         </div>
-                      </Form.Item>
                     </Col>
                     <Col xs={22} sm={15} md={12}>
-                      <Form.Item
-                        name="motherContact"
-                        rules={[
-                          {
-                            required: false,
-                            message: "Please enter the Contact no.",
-                            pattern: /^[0-9\b]+$/,
-                          },
-                        ]}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                      >
                         <div>
                           <h1
                             style={{
@@ -233,11 +164,9 @@ const Family = () => {
                             {data?.motherContact ? data.motherContact : "-"}
                           </div>{" "}
                         </div>
-                      </Form.Item>
                     </Col>
                   </Row>
                 </Card>
-              </Form>
             </Col>
           </Row>
         ) : (
@@ -321,7 +250,6 @@ const Family = () => {
                                 .split(" ")
                                 .map(capitalize)
                                 .join(" ");
-                              // setPaidBy(newVal);
                               form.setFieldsValue({
                                 father: newVal,
                                 father: caps,
@@ -436,7 +364,6 @@ const Family = () => {
                                 .split(" ")
                                 .map(capitalize)
                                 .join(" ");
-                              // setPaidBy(newVal);
                               form.setFieldsValue({
                                 mother: newVal,
                                 mother: caps,
@@ -527,7 +454,6 @@ const Family = () => {
                         type="primary"
                         htmlType="submit"
                         style={{ marginLeft: "10px" }}
-                      // onClick={() => onContactsFinish()}
                       >
                         <CheckOutlined />
                         SAVE
@@ -563,20 +489,6 @@ const Family = () => {
             }}
           >
             <Col span={24}>
-              <Form
-                form={form}
-                labelcol={{
-                  span: 4,
-                }}
-                wrappercol={{
-                  span: 14,
-                }}
-                initialValues={{
-                  remember: true,
-                }}
-                autoComplete="off"
-                onFinish={onFinish}
-              >
                 <Card
                   title="EMERGENCY CONTACTS"
                   className="personal"
@@ -606,17 +518,6 @@ const Family = () => {
                 >
                   <Row gutter={[16, 16]}>
                     <Col xs={22} sm={15} md={8}>
-                      <Form.Item
-                        name="other"
-                        rules={[
-                          {
-                            required: false,
-                            message: "Please enter the Name",
-                          },
-                        ]}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                      >
                         <div>
                           <h1
                             style={{
@@ -632,14 +533,8 @@ const Family = () => {
 
                           <div>{data?.other ? data.other : "-"}</div>
                         </div>
-                      </Form.Item>
                     </Col>
                     <Col xs={22} sm={15} md={8}>
-                      <Form.Item
-                        name="relation"
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                      >
                         <div>
                           <h1
                             style={{
@@ -655,26 +550,8 @@ const Family = () => {
 
                           <div>{data?.relation ? data.relation : "-"}</div>
                         </div>
-                      </Form.Item>
                     </Col>
                     <Col xs={22} sm={15} md={8}>
-                      <Form.Item
-                        name="otherContact"
-                        onKeyPress={(event) => {
-                          if (checkNumbervalue(event)) {
-                            event.preventDefault();
-                          }
-                        }}
-                        rules={[
-                          {
-                            required: false,
-                            message: "Please enter the Contact no.",
-                            pattern: /^[0-9\b]+$/,
-                          },
-                        ]}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                      >
                         <div>
                           <h1
                             style={{
@@ -692,11 +569,9 @@ const Family = () => {
                             {data?.otherContact ? data.otherContact : "-"}
                           </div>
                         </div>
-                      </Form.Item>
                     </Col>
                   </Row>
                 </Card>
-              </Form>
             </Col>
           </Row>
         ) : (
@@ -710,7 +585,7 @@ const Family = () => {
             }}>
             <Col span={24}>
               <Form
-                form={form}
+                form={form1}
                 labelcol={{
                   span: 4,
                 }}
@@ -725,7 +600,7 @@ const Family = () => {
               >
                 <Card
                   title="EMERGENCY CONTACTS"
-                  className="familyCard"
+                  className="personal"
                   style={{
                     width: '100%',
                     marginTop: 10,
@@ -780,7 +655,7 @@ const Family = () => {
                                 .split(" ")
                                 .map(capitalize)
                                 .join(" ");
-                              form.setFieldsValue({
+                              form1.setFieldsValue({
                                 other: newVal,
                                 other: caps,
                               });
@@ -846,7 +721,7 @@ const Family = () => {
                                 .split(" ")
                                 .map(capitalize)
                                 .join(" ");
-                              form.setFieldsValue({
+                              form1.setFieldsValue({
                                 relation: newVal,
                                 relation: caps,
                               });
@@ -868,13 +743,18 @@ const Family = () => {
                     <Col xs={22} sm={15} md={8}>
                       <Form.Item
                         name="otherContact"
-                        rules={[
-                          {
-                            required: false,
-                            message: "Please enter Phone Number",
-                            pattern: /^[0-9\b]+$/,
-                          },
-                        ]}
+                          onKeyPress={(event) => {
+                            if (checkNumbervalue(event)) {
+                              event.preventDefault();
+                            }
+                          }}
+                          rules={[
+                            {
+                              required: false,
+                              message: "Please enter the Contact no.",
+                              pattern: /^[0-9\b]+$/,
+                            },
+                          ]}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 32 }}
                         initialValue={

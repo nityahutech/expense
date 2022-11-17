@@ -57,6 +57,7 @@ export async function createUser(values, compId) {
     empType: values.empType,
     repManager: values.repManager ? values.repManager : "",
     secManager: values.secManager ? values.secManager : "",
+    lead: values.lead ? values.lead : "",
     department: values.department ? values.department : "",
     location: values.location,
     isManager: false,

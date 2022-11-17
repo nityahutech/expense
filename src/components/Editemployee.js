@@ -575,7 +575,7 @@ function Editemployee(props) {
             <Form.Item
               style={{ marginBottom: "17px" }}
               name="lead"
-              label="Lead&nbsp;"
+              label="Lead"
               onKeyPress={(event) => {
                 if (checkAlphabets(event)) {
                   event.preventDefault();
@@ -583,8 +583,7 @@ function Editemployee(props) {
               }}
               rules={[
                 {
-                  required: true,
-
+                  required: false,
                   message: "Please enter Lead Name",
                 },
                 {
@@ -633,7 +632,7 @@ function Editemployee(props) {
             >
               <Select
                 style={{ width: "80%" }}
-                onChange={(e) => setWorkLoc(e)}
+                onChange={(e) => setLocation(e)}
                 placeholder="Select a Location"
               >
                 {workLoc?.map((des) => (

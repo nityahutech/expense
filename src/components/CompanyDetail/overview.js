@@ -94,7 +94,7 @@ function Overview() {
                         className="edit"
                         type="text"
                         style={{
-                          color: "#4ec0f1",
+                          color: "#ffff",
                           display: "none",
                           paddingTop: "7px",
                           paddingRight: "7px",
@@ -112,6 +112,7 @@ function Overview() {
                 style={{
                   width: '100%',
                   marginTop: 10,
+                  borderRadius:"10px",
                 }}
               >
                 <Row gutter={[48, 8]}>
@@ -341,7 +342,7 @@ function Overview() {
                         className="edit"
                         type="text"
                         style={{
-                          color: "#4ec0f1",
+                          color: "#ffff",
                           display: "none",
                           paddingTop: "7px",
                           paddingRight: "7px",
@@ -361,6 +362,7 @@ function Overview() {
                 style={{
                   width: '100%',
                   marginTop: 10,
+                  borderRadius:"10px",
                 }}
               >
                 <div
@@ -409,7 +411,9 @@ function Overview() {
                           />
                         </div>
                         {editContactIconInfo === false ? (
-                          <div >{data.linkedin}</div>
+                          <div 
+                          // style={{ display: "none" }}
+                          >{data.linkedin}</div>
                         ) : (
                           <Form.Item
                             style={{ width: "50%" }}
@@ -462,7 +466,9 @@ function Overview() {
                           />
                         </div>
                         {editContactIconInfo === false ? (
-                          <div>{data.facebook}</div>
+                          <div 
+                          // style={{ display: "none" }}
+                          >{data.facebook}</div>
                         ) : (
                           <Form.Item
                             style={{ width: "50%" }}
@@ -515,7 +521,9 @@ function Overview() {
                           />
                         </div>
                         {editContactIconInfo === false ? (
-                          <div>{data.twitter}</div>
+                          <div 
+                          // style={{ display: "none" }}
+                          >{data.twitter}</div>
                         ) : (
                           <Form.Item
                             style={{ width: "50%" }}

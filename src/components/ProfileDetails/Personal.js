@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Card, Row, Col, Input, Button, DatePicker, Select, Form } from "antd";
+import { Card, Row, Col, Input, Button, DatePicker, Select, Form, Divider } from "antd";
 import { CloseOutlined, EditFilled } from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
@@ -37,11 +37,9 @@ function Personal() {
     getData();
     showEditContent(false);
   };
-
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
-
   const onContactFinish = (values) => {
     let record = {
       ...values,
@@ -112,9 +110,6 @@ function Personal() {
               <Card
                 title="PERSONAL INFO"
                 className="personal"
-                //   actions={[
-                //   <EditOutlined key="edit" />,
-                // ]}
                 extra={
                   <>
                     {editContent === false ? (
@@ -122,7 +117,7 @@ function Personal() {
                         className="personal"
                         type="text"
                         style={{
-                          color: "#4ec0f1",
+                          color: "#ffff",
                           display: "none",
                           paddingTop: "7px",
                           paddingRight: "7px",
@@ -140,10 +135,11 @@ function Personal() {
                 style={{
                   width: '100%',
                   marginTop: 10,
+                  borderRadius:"10px",
                 }}
               >
-                <Row gutter={[16, 16]}>
-                  <Col xs={22} sm={15} md={8} >
+                <Row gutter={[16, 42]}>
+                  <Col xs={24} sm={24} md={8} >
                     <div>
                       <div
                         style={{
@@ -176,7 +172,13 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            style={{ marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                             // disabled={true}
                             initialValue={data.name ? data.name : null}
                             maxLength={50}
@@ -199,7 +201,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  <Col xs={22} sm={15} md={8}>
+                  <Col xs={24} sm={24} md={8}>
                     <div>
                       <div
                         style={{
@@ -227,7 +229,10 @@ function Personal() {
                         >
                           {/* format={dateFormatList} */}
                           <DatePicker
-                            style={{ width: "100%", marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                            }}
                             // format={dateFormatList}
                             // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
                             onChange={(e) => {
@@ -241,7 +246,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  <Col xs={22} sm={15} md={8}>
+                  <Col xs={24} sm={24} md={8}>
                     <div>
                       <div
                         style={{
@@ -269,7 +274,13 @@ function Personal() {
                         >
                           <Select
                             placeholder="Select a Gender"
-                            style={{ width: "100%", marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           >
                             <Option value="Male">Male</Option>
                             <Option value="Female">Female</Option>
@@ -278,9 +289,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                </Row>
-                <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                  <Col xs={22} sm={15} md={8}>
+                  <Col xs={24} sm={24} md={8}>
                     <div>
                       <div
                         style={{
@@ -308,7 +317,13 @@ function Personal() {
                         >
                           <Select
                             placeholder="Select a Blood Group"
-                            style={{ width: "100%", marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
                           >
                             <Option value="A+">A+</Option>
                             <Option value="A-">A-</Option>
@@ -323,7 +338,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  <Col xs={22} sm={15} md={8}>
+                  <Col xs={24} sm={24} md={8}>
                     <div>
                       <div
                         style={{
@@ -351,7 +366,13 @@ function Personal() {
                             },
                           ]}
                         >
-                          <Select style={{ width: "100%", marginTop: "10px" }}>
+                          <Select style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}>
                             <Option value="Single">Single</Option>
                             <Option value="Married">Married</Option>
                           </Select>
@@ -438,7 +459,7 @@ function Personal() {
                         className="personal"
                         type="text"
                         style={{
-                          color: "#4ec0f1",
+                          color: "#ffff",
                           display: "none",
                           paddingTop: "7px",
                           paddingRight: "7px",
@@ -456,10 +477,11 @@ function Personal() {
                 style={{
                   width: '100%',
                   marginTop: 10,
+                  borderRadius: "10px"
                 }}
               >
                 <Row gutter={[16, 16]}>
-                  <Col xs={22} sm={15} md={12}>
+                  <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
                         style={{
@@ -490,7 +512,13 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            style={{ marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              padding: "2px",
+                            }}
+                            bordered={false}
                             disabled={true}
                             required
                             placeholder="Enter Email Address"
@@ -500,8 +528,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  {/* <Col span={8}></Col> */}
-                  <Col xs={22} sm={15} md={12}>
+                  <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
                         style={{
@@ -534,7 +561,13 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            style={{ marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              padding: "2px",
+                            }}
+                            bordered={false}
                             required
                             placeholder="Enter Email Address"
                           />
@@ -544,7 +577,7 @@ function Personal() {
                   </Col>
                 </Row>
                 <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                  <Col xs={22} sm={15} md={12}>
+                  <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
                         style={{
@@ -574,7 +607,13 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            style={{ marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              padding: "2px",
+                            }}
+                            bordered={false}
                             maxLength={10}
                             required
                             placeholder="Enter Phone Number"
@@ -583,8 +622,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  {/* <Col span={8}></Col> */}
-                  <Col xs={22} sm={15} md={12}>
+                  <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
                         style={{
@@ -614,7 +652,13 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            style={{ marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              padding: "2px",
+                            }}
+                            bordered={false}
                             maxLength={10}
                             placeholder="Enter Alternate Number"
                           />
@@ -687,11 +731,8 @@ function Personal() {
               onFinish={onEditAddressFinish}
             >
               <Card
-                title="ADDRESSES"
+                title="ADDRESS"
                 className="personal"
-                //   actions={[
-                //   <EditOutlined key="edit" />,
-                // ]}
                 extra={
                   <>
                     {editAddressInfo === false ? (
@@ -699,7 +740,7 @@ function Personal() {
                         className="personal"
                         type="text"
                         style={{
-                          color: "#4ec0f1",
+                          color: "#ffff",
                           display: "none",
                           paddingTop: "7px",
                           paddingRight: "7px",
@@ -717,10 +758,11 @@ function Personal() {
                 style={{
                   width: '100%',
                   marginTop: 10,
+                  borderRadius: "10px",
                 }}
               >
                 <Row gutter={[16, 16]}>
-                  <Col xs={22} sm={15} md={12}>
+                  <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
                         style={{
@@ -763,8 +805,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  {/* <Col span={8}></Col> */}
-                  <Col xs={22} sm={15} md={12}>
+                  <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
                         style={{
@@ -809,9 +850,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                </Row>
-                <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                  <Col xs={22} sm={22} md={20}>
+                  <Col xs={24} sm={24} md={24}>
                     <div>
                       <div
                         style={{
@@ -852,7 +891,13 @@ function Personal() {
                       /> */}
                           <Select
                             placeholder="Select Your HouseType"
-                            style={{ width: "100%", marginTop: "10px" }}
+                            style={{ 
+                              marginTop: "10px", 
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              padding: "2px",
+                            }}
+                            bordered={false}
                           >
                             <Option value="House Type">House Type</Option>
                             <Option value="Owned by Self/Spouse">
@@ -881,11 +926,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  {/* <Col span={8}></Col>
-            <Col span={8}></Col> */}
-                </Row>
-                <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                  <Col xs={22} sm={22} md={20}>
+                  <Col xs={24} sm={24} md={24}>
                     <div>
                       <div
                         style={{
@@ -926,11 +967,7 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  {/* <Col span={8}></Col>
-            <Col span={8}></Col> */}
-                </Row>
-                <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                  <Col xs={22} sm={22} md={20}>
+                  <Col xs={24} sm={24} md={24}>
                     <div>
                       <div
                         style={{
@@ -970,8 +1007,6 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                  {/* <Col span={8}></Col>
-            <Col span={8}></Col> */}
                 </Row>
                 {editAddressInfo === true ? (
                   <Row

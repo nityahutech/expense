@@ -11,6 +11,7 @@ import {
   notification,
   Space,
 } from "antd";
+import "../style/Documents.css";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../contexts/CreateContext";
 import ConfigureContext from "../contexts/ConfigureContext";
@@ -24,19 +25,21 @@ function AddEmployee() {
   const [configurations, setConfigurations] = useState(null);
   const [workLoc, setWorkLoc] = useState(null);
   useEffect(() => {
-    getData()
-  }, [])
+    getData();
+  }, []);
   const getData = async () => {
-    let temp = await CompanyProContext.getCompanyProfile(compId)
-    let data = await ConfigureContext.getConfigurations(page)
-    let add = ["Registered Office"]
-    if(temp.corpOffice) {add.push("Corporate Office")}
+    let temp = await CompanyProContext.getCompanyProfile(compId);
+    let data = await ConfigureContext.getConfigurations(page);
+    let add = ["Registered Office"];
+    if (temp.corpOffice) {
+      add.push("Corporate Office");
+    }
     temp.address?.map((rec) => {
-      add.push(rec.title)
-    })
-    setWorkLoc(add)
-    setConfigurations(data)
-  }
+      add.push(rec.title);
+    });
+    setWorkLoc(add);
+    setConfigurations(data);
+  };
   const handleListEmployee = () => {
     navigate("/EmployeeListPage/EmployeeList");
   };
@@ -53,23 +56,28 @@ function AddEmployee() {
   }
   const showNotification = (type, msg, desc) => {
     notification[type]({
-        message: msg,
-        description: desc,
+      message: msg,
+      description: desc,
     });
-};
+  };
   const onFinish = (values) => {
     createUser(values, "compId001")
-    .then((response) => {
-      showNotification("success", "Success", "Employee Created")
-      navigate("/EmployeeListPage/EmployeeList");
-    })
-    .catch((error) => showNotification("error", "Error", "This user already exists!"))
+      .then((response) => {
+        showNotification("success", "Success", "Employee Created");
+        navigate("/EmployeeListPage/EmployeeList");
+      })
+      .catch((error) =>
+        showNotification("error", "Error", "This user already exists!")
+      );
   };
   return (
     <>
-      <div className="expForm" style={{ margin: "15px", background: "white" }}>
+      <div className="expForm" style={{ margin: "15px", background: "#fff" }}>
         <Form
+          className="addEmp"
+          style={{ margin: "30px" }}
           form={form}
+          layout="vertical"
           labelcol={{
             span: 4,
           }}
@@ -112,7 +120,7 @@ function AddEmployee() {
                 style={{
                   width: "120px",
                   cursor: "pointer",
-                  backgroundColor: "rgb(24, 154, 180)",
+                  backgroundColor: "#1963A6",
                   borderRadius: "5px",
                 }}
               >
@@ -121,17 +129,10 @@ function AddEmployee() {
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 8 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                First Name<span style={{ color: "red" }}> *</span>
-              </Divider>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="fname"
+                label="First Name"
                 onKeyPress={(event) => {
                   if (checkAlphabets(event)) {
                     event.preventDefault();
@@ -140,8 +141,7 @@ function AddEmployee() {
                 rules={[
                   {
                     required: true,
-                    minLength: 3,
-                    maxLength: 20,
+
                     message: "Please enter First Name",
                   },
                   {
@@ -164,20 +164,17 @@ function AddEmployee() {
                   }}
                   required
                   placeholder="Enter First Name"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
                 />
               </Form.Item>
             </Col>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 8 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Middle Name
-              </Divider>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="mname"
+                label="Middle Name"
                 onKeyPress={(event) => {
                   if (checkAlphabets(event)) {
                     event.preventDefault();
@@ -185,9 +182,8 @@ function AddEmployee() {
                 }}
                 rules={[
                   {
-                    required: false,
-                    minLength: 3,
-                    maxLength: 20,
+                    required: true,
+
                     message: "Please enter Middle Name",
                   },
                   {
@@ -209,20 +205,17 @@ function AddEmployee() {
                     form.setFieldsValue({ mname: newVal, mname: caps });
                   }}
                   placeholder="Enter Middle Name"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
                 />
               </Form.Item>
             </Col>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 8 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Last Name<span style={{ color: "red" }}> *</span>
-              </Divider>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="lname"
+                label="Last Name"
                 onKeyPress={(event) => {
                   if (checkAlphabets(event)) {
                     event.preventDefault();
@@ -231,8 +224,7 @@ function AddEmployee() {
                 rules={[
                   {
                     required: true,
-                    minLength: 3,
-                    maxLength: 20,
+
                     message: "Please enter Last Name",
                   },
                   {
@@ -255,91 +247,72 @@ function AddEmployee() {
                   }}
                   required
                   placeholder="Enter Last Name"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
                 />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Official Email Id<span style={{ color: "red" }}> *</span>
-              </Divider>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="mailid"
-                // onKeyPress={(event) => {
-                //   if (checkAlphabets(event)) {
-                //     event.preventDefault();
-                //   }
-                // }}
+                label="Official Email Id"
                 rules={[
                   {
                     required: true,
-                    // minLength: 3,
-                    // maxLength: 20,
+
                     message: "Please enter Email Id",
                     type: "email",
                   },
                   {
-                    // pattern: /^[a-zA-Z\s]*$/,
                     message: "Please enter Valid Email",
                   },
                 ]}
               >
-                <Input required placeholder="Enter Email Address" />
+                <Input
+                  required
+                  placeholder="Enter Email Address"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                />
               </Form.Item>
             </Col>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Personal Email Id<span style={{ color: "red" }}> *</span>
-              </Divider>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="email"
-                // onKeyPress={(event) => {
-                //   if (checkAlphabets(event)) {
-                //     event.preventDefault();
-                //   }
-                // }}
+                label="Personal Email Id"
                 rules={[
                   {
                     required: true,
-                    // minLength: 3,
-                    // maxLength: 20,
+
                     message: "Please enter Email Id",
                     type: "email",
                   },
                   {
-                    // pattern: /^[a-zA-Z\s]*$/,
                     message: "Please enter Valid Email",
                   },
                 ]}
               >
-                <Input required placeholder="Enter Email Address" />
+                <Input
+                  required
+                  placeholder="Enter Email Address"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                />
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={[24, 8]}>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Phone No.<span style={{ color: "red" }}> *</span>
-              </Divider>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 className="numder-inputs"
                 name="phone"
+                label="Phone Number"
                 // onKeyPress={(event) => {
                 //   if (checkNumbervalue(event)) {
                 //     event.preventDefault();
@@ -364,20 +337,19 @@ function AddEmployee() {
                   //     form.setFieldsValue({ subTotal: amt * quantity });
                   //   }}
                   placeholder="Enter Phone Number"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
                 />
               </Form.Item>
             </Col>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Gender<span style={{ color: "red" }}> *</span>
-              </Divider>
+          </Row>
+          <Row gutter={[24, 8]}>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="gender"
+                label="Gender"
                 rules={[
                   {
                     required: true,
@@ -386,34 +358,23 @@ function AddEmployee() {
                 ]}
               >
                 <Select
+                  bordered={false}
                   // showSearch
                   placeholder="Select a Gender"
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
                 >
                   <Option value="Male">Male</Option>
                   <Option value="Female">Female</Option>
-                  {/* <Option value="pns">Prefer Not To Say</Option> */}
                 </Select>
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={[24, 8]}>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Designation<span style={{ color: "red" }}> *</span>
-              </Divider>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="designation"
+                label="Designation"
                 rules={[
                   {
                     required: true,
@@ -423,7 +384,12 @@ function AddEmployee() {
               >
                 <Select
                   // showSearch
+                  bordered={false}
                   placeholder="Select a Designation"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
                   // optionFilterProp="children"
                   //   onChange={onChange}
                   //   onSearch={onSearch}
@@ -431,25 +397,16 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                {
-                  configurations?.designations.map((des) => (
+                  {configurations?.designations.map((des) => (
                     <Option value={des}>{des}</Option>
-                  ))
-                }
+                  ))}
                 </Select>
               </Form.Item>
             </Col>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Employee Type<span style={{ color: "red" }}> *</span>
-              </Divider>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="empType"
+                label="Employee Type"
                 rules={[
                   {
                     required: true,
@@ -458,8 +415,13 @@ function AddEmployee() {
                 ]}
               >
                 <Select
+                  bordered={false}
                   // showSearch
                   placeholder="Select Employee Type"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
                   // optionFilterProp="children"
                   //   onChange={onChange}
                   //   onSearch={onSearch}
@@ -475,17 +437,10 @@ function AddEmployee() {
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Reporting Manager
-              </Divider>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="repManager"
+                label="Reporting Manager"
                 // onKeyPress={(event) => {
                 //   if (checkAlphabets(event)) {
                 //     event.preventDefault();
@@ -504,9 +459,14 @@ function AddEmployee() {
                   },
                 ]}
               >
-              <Select
+                <Select
+                  bordered={false}
                   // showSearch
                   placeholder="Select a Manager"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
                   // optionFilterProp="children"
                   //   onChange={onChange}
                   //   onSearch={onSearch}
@@ -514,11 +474,9 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                {
-                  configurations?.repManager.map((des) => (
+                  {configurations?.repManager.map((des) => (
                     <Option value={des}>{des}</Option>
-                  ))
-                }
+                  ))}
                 </Select>
                 {/* <Input
                   maxLength={20}
@@ -539,17 +497,10 @@ function AddEmployee() {
                 /> */}
               </Form.Item>
             </Col>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Secondary Manager
-              </Divider>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="secManager"
+                label="Secondary Manager"
                 // onKeyPress={(event) => {
                 //   if (checkAlphabets(event)) {
                 //     event.preventDefault();
@@ -568,9 +519,14 @@ function AddEmployee() {
                   },
                 ]}
               >
-              <Select
+                <Select
+                  bordered={false}
                   // showSearch
                   placeholder="Select a Manager"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
                   // optionFilterProp="children"
                   //   onChange={onChange}
                   //   onSearch={onSearch}
@@ -578,11 +534,9 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                {
-                  configurations?.secManager.map((des) => (
+                  {configurations?.secManager.map((des) => (
                     <Option value={des}>{des}</Option>
-                  ))
-                }
+                  ))}
                 </Select>
                 {/* <Input
                   maxLength={20}
@@ -603,19 +557,55 @@ function AddEmployee() {
                 /> */}
               </Form.Item>
             </Col>
+            <Col xs={22} sm={15} md={8}>
+              <Form.Item
+                name="lead"
+                label="Lead"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
+                rules={[
+                  {
+                    required: true,
+                    minLength: 3,
+                    maxLength: 20,
+                    message: "Please enter Lead Name",
+                  },
+                  {
+                    pattern: /^[a-zA-Z\s]*$/,
+                    message: "Please enter Valid Name",
+                  },
+                ]}
+              >
+                <Input
+                  maxLength={20}
+                  onChange={(e) => {
+                    const inputval = e.target.value;
+                    const str = e.target.value;
+                    const newVal =
+                      inputval.substring(0, 1).toUpperCase() +
+                      inputval.substring(1);
+                    const caps = str.split(" ").map(capitalize).join(" ");
+                    // setPaidBy(newVal);
+                    form.setFieldsValue({ lead: newVal, lead: caps });
+                  }}
+                  required
+                  placeholder="Enter Lead Name"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                />
+              </Form.Item>
+            </Col>
           </Row>
           <Row gutter={[24, 8]}>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Date Of Joining<span style={{ color: "red" }}> *</span>
-              </Divider>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="doj"
+                label="Date Of Joining"
                 placeholder="Choose Date"
                 rules={[
                   {
@@ -626,25 +616,21 @@ function AddEmployee() {
               >
                 {/* format={dateFormatList} */}
                 <DatePicker
-                  style={{ width: "100%" }}
                   format={"DD-MM-YYYY"}
                   //  disabledDate={disabledDate}
                   placeholder="Choose Date"
+                  style={{
+                    width: "100%",
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
                 />
               </Form.Item>
             </Col>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              span={18}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Department
-              </Divider>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="department"
+                label="Department"
                 rules={[
                   {
                     required: false,
@@ -652,9 +638,14 @@ function AddEmployee() {
                   },
                 ]}
               >
-              <Select
+                <Select
+                  bordered={false}
                   // showSearch
                   placeholder="Select a Field"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
                   // optionFilterProp="children"
                   //   onChange={onChange}
                   //   onSearch={onSearch}
@@ -662,27 +653,16 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                {
-                  configurations?.field.map((des) => (
+                  {configurations?.field.map((des) => (
                     <Option value={des}>{des}</Option>
-                  ))
-                }
+                  ))}
                 </Select>
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={[24, 8]}>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-left"
-              style={{ background: "" }}
-            >
-              <Divider orientation="left" orientationMargin={0}>
-                Work Location<span style={{ color: "red" }}> *</span>
-              </Divider>
+            <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="location"
+                label="Work Loaction"
                 // onKeyPress={(event) => {
                 //   if (checkAlphabets(event)) {
                 //     event.preventDefault();
@@ -701,9 +681,14 @@ function AddEmployee() {
                   },
                 ]}
               >
-                 <Select
+                <Select
+                  bordered={false}
                   // showSearch
                   placeholder="Select a Location"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
                   // optionFilterProp="children"
                   //   onChange={onChange}
                   //   onSearch={onSearch}
@@ -711,11 +696,9 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                {
-                  workLoc?.map((des) => (
+                  {workLoc?.map((des) => (
                     <Option value={des}>{des}</Option>
-                  ))
-                }
+                  ))}
                 </Select>
                 {/* <Input
                   maxLength={20}
@@ -735,6 +718,7 @@ function AddEmployee() {
               </Form.Item>
             </Col>
           </Row>
+
           <Row gutter={[24, 16]}>
             <Col classsname="gutter-row" span={9}></Col>
             <Col classsname="gutter-row">
@@ -758,7 +742,7 @@ function AddEmployee() {
                   <Form.Item className="submit">
                     <button
                       style={{
-                        background: "#189AB4",
+                        background: "#1963A6",
                         borderRadius: "5px",
                         borderWidth: "0px",
                         width: "80px",

@@ -1,12 +1,17 @@
-import {useState, useEffect} from 'react';
-import { 
+import React, { useState, useEffect } from 'react'
+import { useAuth } from "../../contexts/AuthContext";
+import Iframe from 'react-iframe';
+import {
   PlusCircleOutlined,
   UploadOutlined,
   DeleteOutlined,
+  CloseCircleOutlined
 } from "@ant-design/icons";
+import { Upload, message } from "antd";
 
 import FormItem from "antd/es/form/FormItem";
-import { 
+
+import {
   Table,
   Form,
   Button,
@@ -17,15 +22,24 @@ import {
 import DocumentContext from '../../contexts/DocumentContext';
 
 function IDTags() {
-const [allIdDetails, setAllIdDetails] = useState([])
-const [form] = Form.useForm();
-const currentUser = JSON.parse(sessionStorage.getItem("user"));
-const [file, setFile] = useState("");
-const [isModalOpen, setIsModalOpen] = useState(false);
+  const [allIdDetails, setAllIdDetails] = useState([])
+  const [form] = Form.useForm()
+  const { currentUser } = useAuth();
+  const [file, setFile] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-function handleChange(event) {
+  const showPdfModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handlePdfCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  function handleChange(event) {
     setFile(event.target.files[0]);
-}
+  }
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -38,9 +52,23 @@ function handleChange(event) {
     form.resetFields()
   };
 
-  async function addNewDetail (values) {
+  // function beforeUpload(file) {
+  //   console.log(file.type);
+  //   const isXls = file.type === ['application/pdf'];
+  //   if (!isXls) {
+  //     message.error('You can only upload XLS file!');
+  //   }
+  //   const isLt2M = file.size / 1024 / 1024 < 2;
+  //   if (!isLt2M) {
+  //     message.error('Image must smaller than 2MB!');
+  //   }
+  //   return isXls && isLt2M;
+  // }
+
+
+  async function addNewDetail(values) {
     try {
-      await DocumentContext.addDocument({...values,empId:currentUser.uid,type:"id"}, file)
+      await DocumentContext.addDocument({ ...values, empId: currentUser.uid, type: "id" }, file)
       setIsModalOpen(false);
       showNotification("success", "Success", "Upload Complete");
       const timer = setTimeout(() => {
@@ -55,37 +83,37 @@ function handleChange(event) {
 
   const showNotification = (type, msg, desc) => {
     notification[type]({
-        message: msg,
-        description: desc,
+      message: msg,
+      description: desc,
     });
-};
+  };
 
   const deleteData = (id, fileName) => {
     Modal.confirm({
-        title: "Are you sure, you want to delete this record?",
-        okText: "Yes",
-        okType: "danger",
+      title: "Are you sure, you want to delete this record?",
+      okText: "Yes",
+      okType: "danger",
 
-        onOk: () => {
-          DocumentContext.deleteDocument(currentUser.uid, id, fileName)
-                .then(response => {
-                  showNotification("success", "Success", "Successfully deleted");
-                  getData();
-                })
-                .catch(error => {
-                  showNotification("error", "Error", "Record not deleted");
-                })
-        },
+      onOk: () => {
+        DocumentContext.deleteDocument(currentUser.uid, id, fileName)
+          .then(response => {
+            showNotification("success", "Success", "Successfully deleted");
+            getData();
+          })
+          .catch(error => {
+            showNotification("error", "Error", "Record not deleted");
+          })
+      },
     });
   };
-  useEffect(()=>{
+  useEffect(() => {
     getData();
-  },[]);
+  }, []);
   const getData = async () => {
     let alldata = await DocumentContext.getDocument(currentUser.uid, "id");
     setAllIdDetails(alldata);
   };
-  
+
   const columns = [
     {
       title: 'ID Title',
@@ -102,10 +130,14 @@ function handleChange(event) {
       dataIndex: "upload",
       key: "upload",
       render: (data, record) => {
-        return record.fileName? (
-          <a href={data} target="_blank">
+        return record.fileName ? (
+
+          <a href={data} target="documentName" onClick={showPdfModal}>
             {record.fileName}
+            {/* <Button type='primary'>Preview</Button> */}
           </a>
+
+
         ) : (
           <div>-</div>
         )
@@ -117,32 +149,32 @@ function handleChange(event) {
       render: (_, record) => {
         return (
           <DeleteOutlined
-                          onClick={() => deleteData(record.id, record.fileName)}
-                      />
-      );
+            onClick={() => deleteData(record.id, record.fileName)}
+          />
+        );
+      },
     },
-  },
   ];
   return (
     <>
-      <Table 
+      <Table
         columns={columns}
         pagination={false}
         dataSource={allIdDetails}
       />
-      <Button type="primary" onClick={showModal} style={{marginLeft:"10px"}} >
+      <Button type="primary" onClick={showModal} style={{ marginLeft: "10px" }} >
         <PlusCircleOutlined />
         Add
       </Button>
       <Modal
         title="Add IDs"
         open={isModalOpen}
-        onOk={()=>{form.submit(); handleOk()}}
+        onOk={() => { form.submit(); handleOk() }}
         onCancel={handleCancel}
-        okText="Save" 
+        okText="Save"
       >
         <Form
-        form={form}
+          form={form}
           labelCol={{ span: 20 }}
           wrapperCol={{ span: 20 }}
           initialValues={{ remember: true }}
@@ -150,55 +182,108 @@ function handleChange(event) {
           onFinish={addNewDetail}
           layout="vertical"
         >
-          <FormItem 
-          name="idtitle"
-          rules={[
-            {
-              pattern: /^[a-zA-Z\s]*$/,
-              required: true,
-              message: 'Enter the ID Name',
-            },
-          ]}
+          <FormItem
+            name="idtitle"
+            rules={[
+              {
+                pattern: /^[a-zA-Z\s]*$/,
+                required: true,
+                message: 'Enter the ID Name',
+              },
+            ]}
           >
-            <Input placeholder="Enter ID Name" 
-            required/>
+            <Input placeholder="Enter ID Name"
+              required />
           </FormItem>
-          <FormItem 
-          name="iddescription"
-          rules={[
-            {
-              pattern: /^[0-9A-Z\s]*$/,
-              required: true,
-              message: 'Enter ID Number',
-            },
-          ]}
+          <FormItem
+            name="iddescription"
+            rules={[
+              {
+                pattern: /^[0-9A-Z\s]*$/,
+                required: true,
+                message: 'Enter ID Number',
+              },
+            ]}
           >
             <Input placeholder="Enter ID Number"
-            required />
+              required />
           </FormItem>
-          <FormItem 
-          name="upload"
-          rules={[
-            {
-              required: false,
-              message: 'Please upload file',
-            },
-          ]}
+          <FormItem
+            name="upload"
+            rules={[
+              {
+                required: true,
+                message: 'Please upload file',
+              },
+            ]}
           >
             <div className='idpage'>
-          <Input
-              type="file"
-              // accept="image/gif, image/jpeg, image/png"
-              id="upload"
-              name="upload"
-              onChange={handleChange}
-            />
+              <Input
+                type="file"
+                accept='application/pdf'
+                id="upload"
+                name="upload"
+                onChange={handleChange}
+              // beforeUpload={beforeUpload}
+              />
+
             </div>
-          {/* <Upload {...props}>
-            <Button icon={<UploadOutlined />}>Click to Upload</Button>
-          </Upload> */}
+            {/* <Upload {...props} >
+              <Button onChange={handleChange}
+                icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload> */}
           </FormItem>
         </Form>
+      </Modal>
+      <Modal
+        bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+        className="viewAppraisal"
+        centered
+        width={800}
+        visible={isModalVisible}
+        footer={null}
+        height="400px"
+        // closable={false}
+        title="Document Preview"
+        closeIcon={
+          <div
+            onClick={() => {
+
+              setIsModalVisible(false);
+            }}
+            style={{ color: "white" }}
+          >
+            X
+          </div>
+        }
+
+
+      >
+        <div style={{ position: 'relative', }}>
+          <Iframe style={{}}
+            // url="#"
+            width={750}
+            height="400px"
+            id="myId"
+            className="myClassname"
+            display="initial"
+            position="relative"
+            overflow="hidden"
+            name='documentName'
+
+          />
+          <CloseCircleOutlined
+            onClick={handlePdfCancel}
+            style={{
+              fontSize: 24,
+              position: 'absolute',
+              left: '50%',
+              bottom: '-20px',
+            }}
+          />
+
+
+        </div>
       </Modal>
     </>
   )

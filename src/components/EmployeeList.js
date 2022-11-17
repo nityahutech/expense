@@ -105,6 +105,12 @@ function EmployeeList() {
       width: 200,
     },
     {
+      title: "Lead",
+      dataIndex: "lead",
+      key: "lead",
+      width: 160,
+    },
+    {
       title: "Department",
       dataIndex: "department",
       key: "department",
@@ -114,6 +120,12 @@ function EmployeeList() {
       title: "Manager",
       dataIndex: "isManager",
       key: "isManager",
+      width: 100,
+    },
+    {
+      title: "Is Lead",
+      dataIndex: "isLead",
+      key: "isLead",
       width: 100,
     },
     {
@@ -203,6 +215,7 @@ function EmployeeList() {
       return {
         ...doc.data(),
         isManager: doc.data().isManager ? "true" : "false",
+        isLead: doc.data().isLead ? "true" : "false",
         id: doc.id,
         sn: i + 1,
         disabled: false,

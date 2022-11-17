@@ -311,6 +311,13 @@ function EmployeeList() {
         rowClassName={(record) => record.disabled && "disabled-row"}
       />
       <Modal
+        className="editEmployee"
+        bodyStyle={{
+          height: 440,
+          overflowY: "scroll",
+          overflowX: "hidden",
+        }}
+        width={850}
         centered
         title="Employee Details"
         open={isModalVisible}
@@ -321,6 +328,7 @@ function EmployeeList() {
             onClick={() => {
               setIsModalVisible(false);
             }}
+            style={{ color: "#ffffff" }}
           >
             X
           </div>

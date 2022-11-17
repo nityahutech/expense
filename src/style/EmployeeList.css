@@ -40,3 +40,20 @@
     font-size: 14px;
     line-height: 18px;
     }
+
+    .editEmployee .ant-modal-content{
+      border-radius: 10px;
+      
+   }
+  
+   .editEmployee .ant-modal-header{
+      border-radius: 10px 10px 0px 0px;
+      background: #043661;
+      color: #ffffff;
+   }
+   .editEmployee .ant-modal-title{
+      color: #ffffff;
+      font-weight: 400;
+      font-size: 18px;
+  line-height: 25px;
+   }

@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Typography } from 'antd';
+import CompanyProContext from "../../contexts/CompanyProContext";
+
 import {
   Button,
   Col,
@@ -24,6 +26,7 @@ const Admin = () => {
   const [editExecutiveContactInfo, showEditExecutiveContactInfo] = useState(false);
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
+  const compId = sessionStorage.getItem("compId")
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -37,6 +40,52 @@ const Admin = () => {
     setIsModalOpen(false);
     form.resetFields();
   };
+
+  const onFinish = (values) => {
+    const valuesToservice = {
+      ceoAdmin: values.ceoAdmin
+    };
+    CompanyProContext.updateCompInfo(compId,valuesToservice);
+    form.resetFields();
+    getData();
+    showEditContactInfo(false);
+  };
+
+  const onHRFinish=(values)=>{
+    const value={
+     hrAdmin:values.hrAdmin
+    };
+    CompanyProContext.updateCompInfo(compId,value);
+    getData();
+    showEditHrContactInfo(false);
+  };
+
+  const onFinanceFinish=(values)=>{
+    const value={
+     financerAdmin:values.financerAdmin
+    };
+    CompanyProContext.updateCompInfo(compId,value);
+    getData();
+    showEditFinanceContactInfo(false);
+  };
+
+  const onHRExeFinish=(values)=>{
+    const value={
+     hrExeAdmin:values.hrExeAdmin
+    };
+    CompanyProContext.updateCompInfo(compId,value);
+    getData();
+    showEditExecutiveContactInfo(false);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+  const getData = async () => {
+    let data = await CompanyProContext.getCompanyProfile(compId);
+    setData(data);
+  };
+
   return (
     <>
       <div
@@ -53,7 +102,7 @@ const Admin = () => {
 
           width: '75%'
         }}
-          // form={form}
+           form={form}
           labelcol={{
             span: 4,
           }}
@@ -64,7 +113,7 @@ const Admin = () => {
             remember: true,
           }}
           autoComplete="off"
-        // onFinish={onContactFinish}
+         onFinish={onFinish}
         >
           <div className="site-card-border-less-wrapper">
             <Card
@@ -81,51 +130,45 @@ const Admin = () => {
                 CEO's permissions apply to all employees.</p>
               <p>CEO can:</p>
               <div className="div-text" style={{ paddingLeft: '20px' }}>
-                <Text>View all employee profile<br />
-                  View sensitive employee information (such as PAN Card, IDs and salary)<br />
-                  Edit employee profiles<br />
-                  Edit, Upload and Approve Attendance and Leaves<br />
-                  Create and remove admins, and edit admin permissions</Text>
+                <Text>View all employee profile,<br />
+                  View sensitive employee information (such as PAN Card, IDs and salary,)<br />
+                  Edit employee profiles,<br />
+                  Edit, Upload and Approve Attendance and Leaves,<br />
+                  Create and remove admins, and edit admin permissions.</Text>
               </div>
+              {data?.ceoAdmin}
               <Divider ></Divider>
               {editContactInfo === true ? (
                 <Row gutter={[16, 16]}>
                   <Col span={24}>
                     <div>
                       <div className='div-discription'>
-                        Find Employee
+                        Enter Name
                       </div>
-                      {editContactInfo === false ? (
-                        <div>
-                          {data.mailid ? data.mailid : ""}
-                        </div>
-                      ) : (
                         <Form.Item
-                          initialValue={data ? data.mailid : null}
-                          name="FindEmployee"
+                          // initialValue={data ? data.ceoAdmin : null}
+                          name="ceoAdmin"
                           rules={[
                             {
                               required: true,
-                              message: "Please enter Name",
+                              message: "Enter CEO Name",
                               type: "text",
                             },
                             {
-                              message: "Please enter Valid Name ",
+                              message: "Enter Valid Name ",
                             },
                           ]}
                         >
-                          <Input style={{ paddingLeft: '0px' }} type='AddressName' required placeholder="" />
-
+                          <Input style={{ paddingLeft: '0px' }} required placeholder="" />
                         </Form.Item>
-                      )}
-                    </div>
+                        </div>
                   </Col>
                 </Row>
               ) : null}
               {editContactInfo == false &&
                 <Button type="primary" onClick={() => { showEditContactInfo(!editContactInfo) }} style={{ marginLeft: "10px" }}>
                   <PlusCircleOutlined />
-                  Change
+                  Add
                 </Button>
               }
               {editContactInfo === true ? (
@@ -182,7 +225,7 @@ const Admin = () => {
             remember: true,
           }}
           autoComplete="off"
-        // onFinish={onContactFinish}
+         onFinish={onHRFinish}
         >
           <div className="site-card-border-less-wrapper">
             <Card
@@ -196,50 +239,45 @@ const Admin = () => {
               </p>
               <p>This admin can:</p>
               <div className="div-text" style={{ paddingLeft: '20px' }}>
-                <Text>View all employee profile information<br />
-                  View sensitive employee information (such as PAN Card, IDs and salary)<br />
-                  Edit employee profiles<br />
-                  Edit, Upload and Approve Attendance and Leaves<br />
-                  Create and remove admins, and edit admin permissions</Text>
+                <Text>View all employee profile information,<br />
+                  View sensitive employee information (such as PAN Card, IDs and salary,)<br />
+                  Edit employee profiles,<br />
+                  Edit, Upload and Approve Attendance and Leaves,<br />
+                  Create and remove admins, and edit admin permissions.</Text>
               </div>
+              {data?.hrAdmin}
               <Divider ></Divider>
               {editHrContactInfo === true ? (
                 <Row gutter={[16, 16]}>
                   <Col span={24}>
                     <div>
                       <div className='div-discription'>
-                        Find Employee
+                        Enter Name
                       </div>
-                      {editHrContactInfo === false ? (
-                        <div>
-                          {data.mailid ? data.mailid : ""}
-                        </div>
-                      ) : (
                         <Form.Item
-                          initialValue={data ? data.mailid : null}
-                          name="FindHrEmployee"
+                          //  initialValue={data ? data.hrAdmin : null}
+                          name="hrAdmin"
                           rules={[
                             {
                               required: true,
-                              message: "Please enter Name",
+                              message: "Enter Name",
                               type: "text",
                             },
                             {
-                              message: "Please enter Name ",
+                              message: "Enter Name ",
                             },
                           ]}
                         >
-                          <Input style={{ paddingLeft: '0px' }} type='AddressName' required placeholder="" />
+                          <Input style={{ paddingLeft: '0px' }} required placeholder="" />
                         </Form.Item>
-                      )}
-                    </div>
+                        </div>
                   </Col>
                 </Row>
               ) : null}
               {editHrContactInfo == false &&
                 <Button type="primary" onClick={() => showEditHrContactInfo(!editHrContactInfo)} style={{ marginLeft: "10px" }}>
                   <PlusCircleOutlined />
-                  Change
+                  Add
                 </Button>
               }
               {editHrContactInfo === true ? (
@@ -296,7 +334,7 @@ const Admin = () => {
             remember: true,
           }}
           autoComplete="off"
-        // onFinish={onContactFinish}
+         onFinish={onFinanceFinish}
         >
           <div className="site-card-border-less-wrapper">
             <Card
@@ -310,42 +348,36 @@ const Admin = () => {
               </p>
               <p>This admin can:</p>
               <div className="div-text" style={{ paddingLeft: '20px' }}>
-                <Text>View salary and bank details of employee profiles<br />
-                  View sensitive employee information (such as PAN Card, IDs and salary)<br />
+                <Text>View salary and bank details of employee profiles,<br />
+                  View sensitive employee information (such as PAN Card, IDs and salary.)<br />
                 </Text>
               </div>
+              {data?.financerAdmin}
               <Divider ></Divider>
               {editFinanceContactInfo === true ? (
                 <Row gutter={[16, 16]}>
                   <Col span={24}>
                     <div>
                       <div className='div-discription'>
-                        Find Employee
+                        Enter Name
                       </div>
-                      {editFinanceContactInfo === false ? (
-                        <div>
-                          {data.mailid ? data.mailid : ""}
-                        </div>
-                      ) : (
-                        <Form.Item
-                          initialValue={data ? data.mailid : null}
-                          name="FindFinEmployee"
+                         <Form.Item
+                          //  initialValue={data ? data.financerAdmin : null}
+                          name="financerAdmin"
                           rules={[
                             {
                               required: true,
-                              message: "Please enter Name",
+                              message: "Enter Name",
                               type: "text",
                             },
                             {
-                              message: "Please enter Name ",
+                              message: "Enter Name ",
                             },
                           ]}
                         >
-                          <Input style={{ paddingLeft: '0px' }} type='AddressName' required placeholder="" />
-
+                          <Input style={{ paddingLeft: '0px' }} required placeholder="" />
                         </Form.Item>
-                      )}
-                    </div>
+                         </div>
                   </Col>
                 </Row>
               ) : null}
@@ -355,7 +387,7 @@ const Admin = () => {
                   type="primary" onClick={() => showEditFinanceContactInfo(!editFinanceContactInfo)} style={{ marginLeft: "10px" }}
                 >
                   <PlusCircleOutlined />
-                  Change
+                  Add
                 </Button>
               }
               {editFinanceContactInfo === true ? (
@@ -413,7 +445,7 @@ const Admin = () => {
             remember: true,
           }}
           autoComplete="off"
-        // onFinish={onContactFinish}
+         onFinish={onHRExeFinish}
         >
           <div className="site-card-border-less-wrapper">
             <Card
@@ -427,29 +459,25 @@ const Admin = () => {
               </p>
               <p>This admin can:</p>
               <div className="div-text" style={{ paddingLeft: '20px' }}>
-                <Text>View all employee profile information (Non-payroll)<br />
-                  View all employee profile information (Non-payroll)<br />
-                  Add and edit employee profiles<br />
-                  Edit, Upload and Approve Attendance and Leaves<br />
+                <Text>View all employee profile information (Non-payroll),<br />
+                  View all employee profile information (Non-payroll),<br />
+                  Add and edit employee profiles,<br />
+                  Edit, Upload and Approve Attendance and Leaves,<br />
                   This Admin will not have any payroll access.<br />
                 </Text>
               </div>
+              {data?.hrExeAdmin}
               <Divider ></Divider>
               {editExecutiveContactInfo === true ? (
                 <Row gutter={[16, 16]}>
                   <Col span={24}>
                     <div>
                       <div className='div-discription'>
-                        Find Employee
+                        Enter Name
                       </div>
-                      {editExecutiveContactInfo === false ? (
-                        <div>
-                          {data.mailid ? data.mailid : ""}
-                        </div>
-                      ) : (
-                        <Form.Item
-                          initialValue={data ? data.mailid : null}
-                          name="FindExeEmployee"
+                          <Form.Item
+                          //  initialValue={data ? data.hrExeAdmin : null}
+                          name="hrExeAdmin"
                           rules={[
                             {
                               required: true,
@@ -463,15 +491,14 @@ const Admin = () => {
                         >
                           <Input style={{ paddingLeft: '0px' }} type='AddressName' required placeholder="" />
                         </Form.Item>
-                      )}
-                    </div>
+                        </div>
                   </Col>
                 </Row>
               ) : null}
               {editExecutiveContactInfo == false &&
                 <Button type="primary" onClick={() => showEditExecutiveContactInfo(!editExecutiveContactInfo)} style={{ marginLeft: "10px" }}>
                   <PlusCircleOutlined />
-                  Change
+                  Add
                 </Button>
               }
               {editExecutiveContactInfo === true ? (

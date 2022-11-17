@@ -1,4 +1,3 @@
-import React from "react";
 import LoginPage from "./components/LoginPage";
 import ExpenseFrm from "./pages/expenseFrm/AddExpense";
 import Profile from "./pages/profile/Profile";
@@ -8,7 +7,6 @@ import EmployeeListPage from "./pages/Employeelist/EmployeeListPage";
 import Addemployee from "./pages/addemployee/Addemployee";
 import ExpenseListpage from "./pages/ExpenseList/ExpenseListpage";
 import Attendance from "./pages/Attendance/Attendance";
-import Appraisal from "./pages/AppraisalPage";
 import AppraisalHr from "./pages/AppraisalPageHr";
 import Payslip2 from "./pages/Payslip2";
 import MainDashboardPage from "./pages/MainDashboardPage";
@@ -37,7 +35,6 @@ function App() {
           <Route path="/Expense/ExpenseList" element={<ExpenseListpage />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/Settings" element={<Setting />} />
-          {/* <Route path="/Appraisal/AppraisalPage" element={<Appraisal />} /> */}
           <Route path="/Appraisal/AppraisalPageHr" element={<AppraisalHr />} />
           <Route path="/Appraisal/HalfYearGoalPage" element={<HalfYearGoalPage />} />
         </Routes>

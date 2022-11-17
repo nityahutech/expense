@@ -339,7 +339,7 @@ function MainDashBoard() {
               alt="example"
               src={Settings}
             />
-            <span style={{ paddingTop: "10px" }}>Setting</span>
+            <span style={{ paddingTop: "10px" }}>Settings</span>
           </Card>
         </div>
       </Link>

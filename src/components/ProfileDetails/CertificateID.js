@@ -6,6 +6,9 @@ import {
   Input,
   Modal,
   notification,
+  Spin,
+  Col,
+  Row,
 } from 'antd'
 import Iframe from 'react-iframe';
 import {
@@ -24,6 +27,7 @@ function CertificateID() {
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [file, setFile] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showPdfModal = () => {
     setIsModalVisible(true);
@@ -66,9 +70,7 @@ function CertificateID() {
       description: desc,
     });
   };
-  //   setCertificationDetails([...certificatioDetails,values])
-  //    setUploadFile([...uploadFile,values])
-  //  };
+
   const deleteData = (id, fileName) => {
     Modal.confirm({
       title: "Are you sure, you want to delete this record?",
@@ -92,8 +94,10 @@ function CertificateID() {
     getData();
   }, []);
   const getData = async () => {
+    setLoading(true);
     let alldata = await DocumentContext.getDocument(currentUser.uid, "certificate");
     setCertificationDetails(alldata);
+    setLoading(false);
   };
 
   const columns = [
@@ -139,6 +143,33 @@ function CertificateID() {
     },
   ];
 
+  if (loading) {
+    return (
+      <div
+        style={{
+          height: "70vh",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Spin
+          size="large"
+          style={{
+            position: "absolute",
+            top: "20%",
+            left: "50%",
+            margin: "-10px",
+            zIndex: "100",
+            opacity: "0.7",
+            backgroundColor: "transparent",
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <>
       <Table
@@ -152,68 +183,92 @@ function CertificateID() {
         Add
       </Button>
       <Modal
+        bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+        className="viewAppraisal"
         title="Certification Details"
+        centered
+        width={450}
         open={isModalOpen}
         onOk={() => { form.submit(); handleOk() }}
-        onCancel={handleCancel}
         okText="Save"
+        closeIcon={
+          <div
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+            style={{ color: "#ffffff" }}
+          >
+            X
+          </div>
+        }
       >
-        <Form
-          form={form}
-          labelCol={{ span: 20 }}
-          wrapperCol={{ span: 20 }}
-          initialValues={{ remember: true }}
-          autoComplete="off"
-          onFinish={addNewDetail}
-          layout="vertical"
+        <Row
+          className="apply-leave"
+          style={{
+            marginTop: "10px",
+          }}
         >
-          <FormItem name="courseTitle"
-            rules={[
-              {
-                pattern: /^[a-zA-Z\s]*$/,
-                required: true,
-                message: 'Enter the Course Name',
-              },
-            ]}
+          <Col xl={24} lg={24} md={24} sm={24} xs={24}
+            style={{
+              background: "flex",
+              padding: "10px",
+              // width: "400px",
+            }}
           >
-            <Input placeholder="Enter Course Name" required />
-          </FormItem>
-          <FormItem name="duration"
-            rules={[
-              {
-                pattern: /^[a-zA-Z0-9-\s]*$/,
-                required: true,
-                message: 'Enter Duration',
-              },
-            ]}
-          >
+            <Form
+              form={form}
+              initialValues={{ remember: true }}
+              autoComplete="off"
+              onFinish={addNewDetail}
+              layout="vertical"
+            >
+              <FormItem name="courseTitle"
+                rules={[
+                  {
+                    pattern: /^[a-zA-Z\s]*$/,
+                    required: true,
+                    message: 'Enter the Course Name',
+                  },
+                ]}
+              >
+                <Input placeholder="Enter Course Name" required />
+              </FormItem>
+              <FormItem name="duration"
+                rules={[
+                  {
+                    pattern: /^[a-zA-Z0-9-\s]*$/,
+                    required: true,
+                    message: 'Enter Duration',
+                  },
+                ]}
+              >
 
-            <Input placeholder="Enter Duration" required />
-          </FormItem>
-          <FormItem name="upload"
-            rules={[
-              {
-                required: true,
-                message: 'Please upload file',
-              },
-            ]}
-          >
-            <div className='certificatepage'>
-              <Input
-                type="file"
-                // accept="image/gif, image/jpeg, image/png"
-                accept='application/pdf'
-                id="upload"
-                name="upload"
-                onChange={handleChange}
-              //ref={imgRef}
-              />
-            </div>
-            {/* <Upload {...props}>
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload> */}
-          </FormItem>
-        </Form>
+                <Input placeholder="Enter Duration" required />
+              </FormItem>
+              <FormItem name="upload"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please upload file',
+                  },
+                ]}
+              >
+                <div className='certificatepage'>
+                  <Input
+                    type="file"
+                    // accept="image/gif, image/jpeg, image/png"
+                    accept='application/pdf'
+                    id="upload"
+                    name="upload"
+                    onChange={handleChange}
+                  //ref={imgRef}
+                  />
+                </div>
+
+              </FormItem>
+            </Form>
+          </Col>
+        </Row>
       </Modal>
       <Modal
         bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
@@ -228,7 +283,7 @@ function CertificateID() {
         closeIcon={
           <div
             onClick={() => {
-
+              document.getElementById('certificateName').src += 'about:blank';
               setIsModalVisible(false);
             }}
             style={{ color: "white" }}
@@ -244,7 +299,7 @@ function CertificateID() {
             // url="#"
             width={750}
             height="400px"
-            id="myId"
+            id="certificateName"
             className="myClassname"
             display="initial"
             position="relative"
@@ -252,16 +307,6 @@ function CertificateID() {
             name='certificateName'
 
           />
-          <CloseCircleOutlined
-            onClick={handlePdfCancel}
-            style={{
-              fontSize: 24,
-              position: 'absolute',
-              left: '50%',
-              bottom: '-20px',
-            }}
-          />
-
 
         </div>
       </Modal>

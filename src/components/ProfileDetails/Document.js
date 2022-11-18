@@ -5,7 +5,7 @@ import CertificateID from "../ProfileDetails/CertificateID";
 import IDTags from "../ProfileDetails/IDTags";
 
 function Document() {
-  
+
   return (
     <div
       className="education"
@@ -17,12 +17,12 @@ function Document() {
         width: "100%",
       }}
     >
-      <div
+      <div className='document-tap-div'
         style={{
           width: "75%",
           marginTop: "10px",
           backgroundColor: "white",
-          padding: "10px",
+          padding: "0px",
           display: "flex",
           justifyContent: "center",
           borderRadius: "10px",

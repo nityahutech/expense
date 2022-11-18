@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Button, Input, Form, Space } from "antd";
+import { useState, useEffect } from "react";
+import { Card, Row, Col, Button, Input, Form, Space, Table, Modal, notification } from "antd";
 import ConfigureContext from "../../contexts/ConfigureContext";
-import { CloseOutlined, EditFilled } from "@ant-design/icons";
+import { DeleteOutlined, EditFilled } from "@ant-design/icons";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import "./companystyle.css";
-import { Table } from 'antd';
 import { getDesigNo } from "../../contexts/CreateContext";
 
 const Designation = () => {
+  const page = "addemployeePage";
   const [editContent, showEditContent] = useState(false);
-  const [editContactInfo, showEditContactInfo] = useState(false);
+  const [data, setData] = useState({})
+  const [des, setDes] = useState(null)
+  const [old, setOld] = useState(null)
+  const [editInfo, setEditInfo] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [form] = Form.useForm();
 
@@ -18,7 +21,7 @@ const Designation = () => {
   }, [])
 
   const getData = async () => {
-    let data = await ConfigureContext.getConfigurations("addemployeePage")
+    let data = await ConfigureContext.getConfigurations(page)
     getDesigNo().then((res) => {
       setDataSource(
         data.designations.map((des) => {
@@ -43,17 +46,113 @@ const Designation = () => {
       dataIndex: 'employees',
       key: 'employees',
     },
+    {
+      render: (record) => (
+        <Row style={{width : "100px", justifyContent: "flex-end", alignItems: "right"}}>
+        <Col span={12}>
+          <Button
+            className="editbutton"
+            type="icon"
+            style={{
+              color: "#4ec0f1",
+              display: "none",
+              border: "none",
+              padding: "0",
+              // paddingTop: "7px",
+              // paddingRight: "7px",
+              marginRight: "10px"
+            }}
+            onClick={() => {
+              setEditInfo(true);
+              setDes(record.designation);
+              setOld(record.designation);
+            }}
+          >
+            <EditFilled />
+          </Button>
+        </Col>
+        <Col span={12}>
+          <Button
+            className="editbutton"
+            type="icon"
+            style={{
+              color: "#4ec0f1",
+              display: "none",
+              border: "none",
+              padding: "0",
+              // paddingTop: "7px",
+              // paddingRight: "7px",
+            }}
+            onClick={() => onDelete(record.designation)}
+          >
+            <DeleteOutlined />
+          </Button>
+        </Col>
+        </Row>
+      )
+    }
   ];
+  
+  const showNotification = (type, msg, desc) => {
+    notification[type]({
+      message: msg,
+      description: desc,
+    });
+  };
+  
+  const onDelete = (record) => {
+    Modal.confirm({
+      title: `Are you sure, you want to delete "${record}" designation?`,
+      okText: "Yes",
+      okType: "danger",
 
-  const [data, setData]=useState({})
+      onOk: () => {
+        ConfigureContext.deleteConfigurations(page, {designations: record})
+          .then((response) => {
+            showNotification("success", "Success", "Designation deleted successfully!")
+            getData();
+          })
+          .catch((error) => {
+            showNotification("error", "Error", error.message)
+          });
+      },
+    });
+  };
+  
+  const onEdit = () => {
+    console.log(des)
+    ConfigureContext.updateConfigurations(page, {designations: old}, {designations: des})
+      .then((response) => {
+        showNotification("success", "Success", "Designation edited successfully!");
+        getData();
+        setEditInfo(false);
+        setDes(null);
+        setOld(null);
+      })
+      .catch((error) => {
+        showNotification("error", "Error", error.message);
+      })
+  };
+
   const onFinish = (values) => {
-    console.log('Received values of form:', values);
-    showEditContent(false)
-
+    let record = {
+      designations: Object.values(values)
+    }
+    console.log('Received values of form:', record);
+    ConfigureContext.addConfigurations(page, record)
+      .then((response) => {
+        showNotification("success", "Success", "Designation added successfully!");
+        getData();
+        showEditContent(false);
+        setData({});
+        form.resetFields();
+      })
+      .catch((error) => {
+        showNotification("error", "Error", error.message);
+      })
   };
   return (
     <>
-
       <div
         className="personalCardDiv"
         style={{
@@ -71,42 +170,8 @@ const Designation = () => {
             alignItems: 'center'
           }}>
           <Col span={24}>
-          <Card
-                title="DESIGNATIONS"
-                style={{
-                  width: '100%',
-                  marginTop: 10,
-                }}
-
-              >
-              Designation           Employees
-            </Card>
-          {dataSource.map((des) => (
-            
               <Card
-                // title="DESIGNATIONS"
-                extra={
-                  <>
-                    {editContactInfo === false ? (
-                      <Button
-                        className="edit"
-                        type="text"
-                        style={{
-                          color: "#4ec0f1",
-                          display: "none",
-                          paddingTop: "7px",
-                          paddingRight: "7px",
-                          position: "absolute",
-                          right: 10,
-                          top: 10,
-                        }}
-                        onClick={() => showEditContactInfo(!editContactInfo)}
-                      >
-                        <EditFilled />
-                      </Button>
-                    ) : null}
-                  </>
-                }
+                title=" DESIGNATIONS"
                 style={{
                   width: '100%',
                   marginTop: 10,
@@ -114,71 +179,40 @@ const Designation = () => {
 
               >
 
-
-                {/* <div className="table-responsive">
+                <div className="table-responsive">
                   <Table
                     columns={columns}
                     dataSource={dataSource}
                     pagination={false}
                     className="ant-border-space"
                   />
-                </div> */}
-              </Card>
-          ))}
-            <Form
-              // form={form}
-              labelcol={{
-                span: 4,
-              }}
-              wrappercol={{
-                span: 14,
-              }}
-              initialValues={{
-                remember: true,
-              }}
-              autoComplete="off"
-            // onFinish={onContactFinish}
-            >
-
-
-{console.log(editContent)}
+                </div>
 
                 <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                  {/* <Col span={12}> */}
-                    <Form {...form} name="dynamic_form_nest_item" autoComplete="off">
+                    <Form form={form} style={{width: "100%"}} autoComplete="off">
                       {editContent  ? (
                         <>
                         <Form.List name="users">
                         {(fields, { add, remove }) => (
-                          <div 
-                            style={{
-                              display: 'flex',
-                              flexDirection: "row",
-                              flexBasis: "33.33%"
-                            }}
-                          >
+                          <>
+                          <Row style={{width: "100%"}}>
                             {fields.map(({ key, name, ...restField }) => (
+                              <Col xs={24} sm={24} md={12} lg={8} xl={6}>
                               <Space
                                 key={key}
-                                style={{
-                                  display: 'flex',
-                                  marginBottom: 8,
-                                  flexDirection: "row"
-                                }}
                                 align="baseline"
                               >
-                              {console.log(fields, name, key, restField)}
                                 <Form.Item
                                   {...restField}
                                   name={[name, 'first']}
                                   rules={[
                                     {
                                       required: true,
-                                      message: 'Missing first name',
+                                      message: 'Please enter designation',
                                     },
                                   ]}
                                 >
-                                  <Input placeholder="First Name" 
+                                  <Input placeholder="Enter Designation" 
                                     onChange={(e) => {
                                       let temp = { 
                                         ...data,
@@ -195,20 +229,30 @@ const Designation = () => {
                                   }} 
                                 />
                               </Space>
+                              </Col>
                             ))}
+                          </Row>
                             <Form.Item>
-                              <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                              <Button type="dashed" style={{width: "150px"}} onClick={() => add()} block icon={<PlusOutlined />}>
                                 Add field
                               </Button>
                             </Form.Item>
-                          </div>
+                            </>
                         )}
                       </Form.List>
                       <Form.Item>
+                        <Button 
+                          type="default"
+                          style={{marginRight: "10px"}}
+                          onClick={() => {
+                            setData({});
+                            form.resetFields();
+                          }}>
+                          Cancel
+                        </Button>
                         <Button type="primary" 
                           onClick={() => {
-                            console.log(data)
-                            onFinish(data)
+                            onFinish(data);
                           }}>
                           Submit
                         </Button>
@@ -222,12 +266,22 @@ const Designation = () => {
                       </Form.Item>
                       )}
                     </Form>
-                  {/* </Col> */}
                 </Row>
-            </Form>
+              </Card>
           </Col>
         </Row>
       </div>
+      <Modal
+        title="Edit Designation"
+        open={editInfo}
+        onOk={onEdit}
+        destroyOnClose
+        onCancel={() => {
+          setEditInfo(false)
+        }}
+      >
+        <Input type="text" defaultValue={des} onChange={(e) => setDes(e.target.value)}/>
+      </Modal>
     </>
   )
 }

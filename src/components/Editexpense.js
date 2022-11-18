@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
-import { Col, Row } from "antd";
+import { Col, Row, Space } from "antd";
 import moment from "moment";
 import ExpenseContext from "../contexts/ExpenseContext";
-import {
-  Input,
-  notification,
-  Button,
-  DatePicker,
-  Form,
-} from "antd";
+import { Input, notification, Button, DatePicker, Form } from "antd";
 import "../style/Editexpense.css";
 
 const showNotification = (type, msg, desc) => {
@@ -80,13 +74,21 @@ const Editexpense = (props) => {
     props.setIsModalVisible(false);
   }
   const cancelStyle = {
-    float: "right",
+    border: "1px solid #1565D8",
+    color: "#1565D8",
+    fontWeight: "600",
+    fontSize: "14px",
+    lineHeight: "17px",
+    width: "99px",
   };
   const buttonStyle = {
-    marginRight: "5px",
-    color: "white",
-    backgroundColor: "#1890ff",
-    float: "right",
+    border: "1px solid #1565D8",
+    background: "#1565D8",
+    color: "#ffffff",
+    fontWeight: "600",
+    fontSize: "14px",
+    lineHeight: "17px",
+    width: "99px",
   };
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
@@ -388,14 +390,28 @@ const Editexpense = (props) => {
           </Form.Item>
         </Col>
       </Row>
-      <br />
-      <Button style={cancelStyle} onClick={cancel}>
-        Cancel
-      </Button>
-      <Button style={buttonStyle} onClick={submitEdit}>
-        Submit
-      </Button>
-      <br />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginRight: "80px",
+          marginTop: "15px",
+        }}
+      >
+        <Space>
+          <Form.Item>
+            <Button style={cancelStyle} onClick={cancel}>
+              Cancel
+            </Button>
+          </Form.Item>
+          <Form.Item>
+            <Button style={buttonStyle} onClick={submitEdit}>
+              Submit
+            </Button>
+          </Form.Item>
+        </Space>
+      </div>
+
       {/* <Form.Item style={{ marginBottom: "0" }}>
         <Upload
           multiple

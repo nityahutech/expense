@@ -191,6 +191,23 @@ width: 90px;
     line-height: 18px;
 }
 
+.expesneRegister .ant-modal-content{
+  border-radius: 10px;
+  
+}
+
+.expesneRegister .ant-modal-header{
+  border-radius: 10px 10px 0px 0px;
+  background: #043661;
+  color: #ffffff;
+}
+.expesneRegister .ant-modal-title{
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
+line-height: 25px;
+}
+
 
 @media (max-width: 990px) {
   .addExpense.ant-btn-primary {

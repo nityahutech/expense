@@ -722,16 +722,24 @@ function AddEmployee() {
           <Row gutter={[24, 16]}>
             <Col classsname="gutter-row" span={9}></Col>
             <Col classsname="gutter-row">
-              <div className="submitButton">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "end",
+                  marginRight: "94px",
+                }}
+              >
                 <Space>
-                  <Form.Item className="submit">
+                  <Form.Item>
                     <Button
                       style={{
-                        background: "#C1C1C1",
-                        borderRadius: "5px",
-                        width: "80px",
+                        border: "1px solid #1565D8",
+                        color: "#1565D8",
+                        fontWeight: "600",
+                        fontSize: "14px",
+                        lineHeight: "17px",
+                        width: "99px",
                         marginTop: "25px",
-                        color: "white",
                         cursor: "pointer",
                       }}
                       onClick={onReset}
@@ -739,23 +747,24 @@ function AddEmployee() {
                       Reset
                     </Button>
                   </Form.Item>
-                  <Form.Item className="submit">
-                    <button
+                  <Form.Item>
+                    <Button
                       style={{
-                        background: "#1963A6",
-                        borderRadius: "5px",
-                        borderWidth: "0px",
-                        width: "80px",
+                        border: "1px solid #1565D8",
+                        background: "#1565D8",
+                        color: "#ffffff",
+                        fontWeight: "600",
+                        fontSize: "14px",
+                        lineHeight: "17px",
+                        width: "99px",
                         marginTop: "25px",
-                        height: "30px",
-                        color: "white",
                         cursor: "pointer",
                         marginLeft: "17px",
                       }}
-                      type="primary"
+                      htmlType="submit"
                     >
                       Submit
-                    </button>
+                    </Button>
                   </Form.Item>
                 </Space>
               </div>

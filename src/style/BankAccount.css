@@ -108,3 +108,33 @@ body {
   font-size: 14px;
   line-height: 18px;
 }
+
+.documents .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+  color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.documents.ant-tabs {
+  width: 100%;
+}
+.documents .ant-tabs-ink-bar {
+  /* position: absolute; */
+  background: #F9A01F;
+  pointer-events: none;
+  height: 10px;
+
+}
+
+.Id .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.Id .ant-table table{
+  margin-left: 34px;
+  width: 90%;
+}

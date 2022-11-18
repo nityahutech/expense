@@ -246,6 +246,7 @@ const Designation = () => {
                           style={{marginRight: "10px"}}
                           onClick={() => {
                             setData({});
+                            showEditContent(false);
                             form.resetFields();
                           }}>
                           Cancel

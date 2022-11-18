@@ -1,13 +1,10 @@
 import { db } from "../firebase-config";
 import {
-    collection,
     getDoc,
     doc,
-    addDoc,
-    query,
-    orderBy,
     updateDoc,
-    deleteDoc,
+    arrayUnion,
+    arrayRemove,
 } from "firebase/firestore";
 
 const compId = sessionStorage.getItem("compId");
@@ -24,16 +21,25 @@ class ConfigureContext {
     //     return setDoc(doc(db, `companyprofile/${compId}/configurations`), newHoliday);
     // };
 
-    updateConfigurations = (page, values) => {
+    addConfigurations = (page, values) => {
         const newHoliday = doc(db, `companyprofile/${compId}/configurations`, page);
-        // may need to change to array functions
-        return updateDoc(newHoliday, values);
+        let field = Object.keys(values)[0]
+        return updateDoc(newHoliday, {[`${field}`]: arrayUnion(...values[`${field}`])});
     };
 
-    // deleteHoliday = (id) => {
-    //     const newHoliday = doc(db, `companyprofile/${compId}/configurations`, id);
-    //     return deleteDoc(newHoliday);
-    // };
+    updateConfigurations = async (page, oldValues, values) => {
+        const newHoliday = doc(db, `companyprofile/${compId}/configurations`, page);
+        let field = Object.keys(oldValues)[0]
+        await updateDoc(newHoliday, {[`${field}`]: arrayRemove(oldValues[`${field}`])});
+        updateDoc(newHoliday, {[`${field}`]: arrayUnion(values[`${field}`])});
+    };
+
+    deleteConfigurations = (page, values) => {
+        console.log(values)
+        const newHoliday = doc(db, `companyprofile/${compId}/configurations`, page);
+        let field = Object.keys(values)[0]
+        return updateDoc(newHoliday, {[`${field}`]: arrayRemove(values[`${field}`])});
+    };
 }
 
 

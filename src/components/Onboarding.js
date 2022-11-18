@@ -48,6 +48,19 @@ function Onboarding() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditOrganization, setIsEditOrganization] = useState(false);
 
+  const getData = async () => {
+    let data = await CompanyProContext.getAllCompany();
+    setAllCompany(data);
+  };
+
+  function onReset() {
+    form.resetFields();
+    form2.resetFields();
+    setAccessList([]);
+    setIsBigFile(false);
+    setFileName(null);
+  }
+
   useEffect(() => {
     setFileName(fileName);
     setIsBigFile(false);
@@ -129,22 +142,50 @@ function Onboarding() {
   }, []);
 
   const changeCompStatus = (id, status) => {
-    CompanyProContext.updateCompInfo(id, {
-      status: status == "Deactivated" ? "Activated" : "Deactivated",
+    Modal.confirm({
+      title: `Are you sure, you want to ${
+        status == "Deactivated" ? "activate" : "deactivate"
+      } this record?`,
+      okText: "Yes",
+      okType: "danger",
+
+      onOk: () => {
+        CompanyProContext.updateCompInfo(id, {
+          status: status == "Deactivated" ? "Activated" : "Deactivated",
+        });
+        showNotification(
+          "success",
+          "Updated",
+          `Organization status ${
+            status == "Deactivated" ? "activated" : "deactivated"
+          } Successfully`
+        );
+        getData();
+      },
     });
-    showNotification(
-      "success",
-      "Updated",
-      `Organization status ${
-        status == "Deactivated" ? "activated" : "deactivated"
-      } Successfully`
-    );
-    getData();
+    // status == "Deactivated"
+    //   ? Modal.confirm({
+    //       title: "Are you sure, you want to deactivate this record",
+    //       okText: "yes",
+    //       okType: "danger",
+
+    //       onOk: () => {
+    //         CompanyProContext.updateCompInfo(id, {
+    //           status: status == "Deactivated" ? "Activated" : "Deactivated",
+    //         });
+    //         showNotification(
+    //           "success",
+    //           "Updated",
+    //           `Organization status ${
+    //             status == "Deactivated" ? "activated" : "deactivated"
+    //           } Successfully`
+    //         );
+    //         getData();
+    //       },
+    //     })
+    //   : null;
   };
-  const getData = async () => {
-    let data = await CompanyProContext.getAllCompany();
-    setAllCompany(data);
-  };
+
   const handleClick = (event) => {
     imgRef.current.click();
   };
@@ -378,13 +419,6 @@ function Onboarding() {
     }
   }
 
-  function onReset() {
-    form.resetFields();
-    form2.resetFields();
-    setAccessList([]);
-    setIsBigFile(false);
-    setFileName(null);
-  }
   return (
     <>
       {/* <div className="main"> */}

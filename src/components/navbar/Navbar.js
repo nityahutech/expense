@@ -15,7 +15,6 @@ import dropdown from "../../images/dropdown.png";
 // ---------------------------------------------------------------------
 
 const Navbar = () => {
-
   const [startTime, setStartTime] = useState();
   const [isRunning, setIsRunning] = useState(false);
   const [activePage, setActivePage] = useState("/DashBoard");
@@ -224,13 +223,19 @@ const Navbar = () => {
         )}
 
         <div className="image">
-          <div className="item">
+          <div className="item" style={{ width: "40px", height: "auto" }}>
             <img
               src={logo}
               // src="/logo.png"
               alt="imagh"
               className="avatar"
-              style={{ cursor: "pointer" }}
+              style={{
+                cursor: "pointer",
+                maxWidth: "40px",
+                height: "40px",
+                background: "rgb(5, 68, 94)",
+                borderRadius: "50%",
+              }}
             />
           </div>
         </div>

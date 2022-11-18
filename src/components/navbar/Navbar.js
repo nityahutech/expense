@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "antd/dist/antd.css";
-import { Dropdown, Menu, Space, Button } from "antd";
+import { Dropdown, Menu, Space } from "antd";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
-import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import AttendanceContext from "../../contexts/AttendanceContext";
@@ -17,8 +16,6 @@ import dropdown from "../../images/dropdown.png";
 const Navbar = () => {
   const [startTime, setStartTime] = useState();
   const [isRunning, setIsRunning] = useState(false);
-  const [activePage, setActivePage] = useState("/DashBoard");
-  let loc = useLocation();
   const { logout } = useAuth();
   const [clockinfo, setClockInfo] = useState();
   const role = sessionStorage.getItem("role");
@@ -62,9 +59,7 @@ const Navbar = () => {
           ),
           icon: (
             <img
-              // src={abstractuserflat4}
               src={settingsIcon}
-              // src="/abstractuserflat4.png"
               alt="downArrow"
               className="avatarimg"
             />
@@ -85,7 +80,6 @@ const Navbar = () => {
           icon: (
             <img
               src={logoutIcon}
-              // src="/logoutsvgrepocom.png"
               alt="downArrow"
               className="avatarimg"
             />
@@ -189,24 +183,19 @@ const Navbar = () => {
   return (
     <div className="navbar" style={{ background: "white" }}>
       <div className="wrapper">
-        {/* --------------------------------stopwatch */}
         <div
           style={{
             cursor: "pointer",
             fontSize: "16px",
-            // marginTop:'9px',
             marginRight: "20px",
-            // padding: "5px",
             borderRadius: "5px",
             border: "1px solid white",
-            // backgroundColor: "#33e9f2",
             color: "white",
             fontWeight: "400",
             width: "auto",
           }}
           className="stopwatch"
         >
-          {/* {`${ctime.hrs}:${ctime.min}:${ctime.sec}`} */}
         </div>
         {role == "super" ? null : (
           <button
@@ -222,29 +211,23 @@ const Navbar = () => {
           </button>
         )}
 
-        <div className="image">
-          <div className="item" style={{ width: "40px", height: "auto" }}>
-            <img
-              src={logo}
-              // src="/logo.png"
-              alt="imagh"
-              className="avatar"
-              style={{
-                cursor: "pointer",
-                maxWidth: "40px",
-                height: "40px",
-                background: "rgb(5, 68, 94)",
-                borderRadius: "50%",
-              }}
-            />
-          </div>
+        <div>
+          <img
+            src={logo}
+            style={{
+              maxWidth: "100px",
+              maxHeight: "50px",
+              padding: "10px",
+              height: "auto",
+            }}
+            alt={"logo not found"}
+          />
         </div>
 
         <Dropdown overlay={menu}>
           <Space>
             <img
               src={dropdown}
-              // src="/dropdown.png"
               alt="downArrow"
               style={{ cursor: "pointer", width: "15px" }}
             />

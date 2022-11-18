@@ -22,6 +22,7 @@ import Notification from "./Notification";
 import HolidayList from "./HolidayList";
 import "../style/leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
+import LeaveCreate from "./LeaveCreate";
 
 const Leave = () => {
   const page = "leavePage"
@@ -1064,6 +1065,11 @@ const Leave = () => {
               <div className='holiday-button' style={{ display: 'flex' }}>
                 <div>
                   <HolidayList isHr={isHr} refreshCalendar={getHoliday} />
+                </div>
+                <div>
+                  <LeaveCreate isHr={isHr}
+                  // refreshCalendar={getHoliday}
+                  />
                 </div>
                 <Button className="button-applyleave"
                   style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '10px' }}

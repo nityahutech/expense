@@ -7,7 +7,7 @@ import {
   DeleteOutlined,
   CloseCircleOutlined
 } from "@ant-design/icons";
-import { Upload, message } from "antd";
+import { Upload, message, Tree } from "antd";
 
 import FormItem from "antd/es/form/FormItem";
 
@@ -18,6 +18,9 @@ import {
   Input,
   Modal,
   notification,
+  Spin,
+  Col,
+  Row,
 } from 'antd'
 import DocumentContext from '../../contexts/DocumentContext';
 
@@ -28,16 +31,32 @@ function IDTags() {
   const [file, setFile] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showPdfModal = () => {
+    setLoading(true)
     setIsModalVisible(true);
-  };
 
-  const handlePdfCancel = () => {
-    setIsModalVisible(false);
+
   };
 
   function handleChange(event) {
+    let file = event.target.files[0]
+    console.log('handleupload', file)
+    setFile(null);
+
+    const isPdf = file.type === 'application/pdf';
+    if (!isPdf) {
+      message.error('You can only upload Pdf file!');
+      return
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
+
+      return
+    }
+
     setFile(event.target.files[0]);
   }
 
@@ -52,21 +71,19 @@ function IDTags() {
     form.resetFields()
   };
 
-  // function beforeUpload(file) {
-  //   console.log(file.type);
-  //   const isXls = file.type === ['application/pdf'];
-  //   if (!isXls) {
-  //     message.error('You can only upload XLS file!');
-  //   }
-  //   const isLt2M = file.size / 1024 / 1024 < 2;
-  //   if (!isLt2M) {
-  //     message.error('Image must smaller than 2MB!');
-  //   }
-  //   return isXls && isLt2M;
-  // }
+
+  function beforeUpload(file) {
+    console.log(file.type);
+
+  }
 
 
   async function addNewDetail(values) {
+    if (file == null) {
+      setIsModalOpen(false);
+      showNotification("error", "Error", "Upload Failed");
+      return
+    }
     try {
       await DocumentContext.addDocument({ ...values, empId: currentUser.uid, type: "id" }, file)
       setIsModalOpen(false);
@@ -78,7 +95,9 @@ function IDTags() {
     } catch {
       setIsModalOpen(false);
       showNotification("error", "Error", "Upload Failed");
+
     }
+    setFile(null);
   };
 
   const showNotification = (type, msg, desc) => {
@@ -110,8 +129,10 @@ function IDTags() {
     getData();
   }, []);
   const getData = async () => {
+    setLoading(true);
     let alldata = await DocumentContext.getDocument(currentUser.uid, "id");
     setAllIdDetails(alldata);
+    setLoading(false);
   };
 
   const columns = [
@@ -155,6 +176,32 @@ function IDTags() {
       },
     },
   ];
+  if (loading) {
+    return (
+      <div
+        style={{
+          height: "70vh",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Spin
+          size="large"
+          style={{
+            position: "absolute",
+            top: "20%",
+            left: "50%",
+            margin: "-10px",
+            zIndex: "100",
+            opacity: "0.7",
+            backgroundColor: "transparent",
+          }}
+        />
+      </div>
+    );
+  }
   return (
     <>
       <Table
@@ -167,73 +214,97 @@ function IDTags() {
         Add
       </Button>
       <Modal
+        bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+        className="viewAppraisal"
         title="Add IDs"
+        centered
+        width={450}
         open={isModalOpen}
         onOk={() => { form.submit(); handleOk() }}
-        onCancel={handleCancel}
-        okText="Save"
-      >
-        <Form
-          form={form}
-          labelCol={{ span: 20 }}
-          wrapperCol={{ span: 20 }}
-          initialValues={{ remember: true }}
-          autoComplete="off"
-          onFinish={addNewDetail}
-          layout="vertical"
-        >
-          <FormItem
-            name="idtitle"
-            rules={[
-              {
-                pattern: /^[a-zA-Z\s]*$/,
-                required: true,
-                message: 'Enter the ID Name',
-              },
-            ]}
-          >
-            <Input placeholder="Enter ID Name"
-              required />
-          </FormItem>
-          <FormItem
-            name="iddescription"
-            rules={[
-              {
-                pattern: /^[0-9A-Z\s]*$/,
-                required: true,
-                message: 'Enter ID Number',
-              },
-            ]}
-          >
-            <Input placeholder="Enter ID Number"
-              required />
-          </FormItem>
-          <FormItem
-            name="upload"
-            rules={[
-              {
-                required: true,
-                message: 'Please upload file',
-              },
-            ]}
-          >
-            <div className='idpage'>
-              <Input
-                type="file"
-                accept='application/pdf'
-                id="upload"
-                name="upload"
-                onChange={handleChange}
-              // beforeUpload={beforeUpload}
-              />
 
-            </div>
-            {/* <Upload {...props} >
-              <Button onChange={handleChange}
-                icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload> */}
-          </FormItem>
-        </Form>
+        okText="Save"
+        closeIcon={
+          <div
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+            style={{ color: "#ffffff" }}
+          >
+            X
+          </div>
+        }
+      >
+        <Row
+          className="apply-leave"
+          style={{
+            marginTop: "10px",
+          }}
+        >
+          <Col xl={24} lg={24} md={24} sm={24} xs={24}
+            style={{
+              background: "flex",
+              padding: "10px",
+              // width: "400px",
+            }}
+          >
+            <Form
+              form={form}
+              initialValues={{ remember: true }}
+              autoComplete="off"
+              onFinish={addNewDetail}
+              layout="vertical"
+            >
+              <FormItem
+                name="idtitle"
+                rules={[
+                  {
+                    pattern: /^[a-zA-Z\s]*$/,
+                    required: true,
+                    message: 'Enter the ID Name',
+                  },
+                ]}
+              >
+                <Input placeholder="Enter ID Name"
+                  required />
+              </FormItem>
+              <FormItem
+                name="iddescription"
+                rules={[
+                  {
+                    pattern: /^[0-9A-Z\s]*$/,
+                    required: true,
+                    message: 'Enter ID Number',
+                  },
+                ]}
+              >
+                <Input placeholder="Enter ID Number"
+                  required />
+              </FormItem>
+              <FormItem
+                name="upload"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please upload file',
+                  },
+                ]}
+              >
+                <div className='idpage'>
+                  <Input
+                    type="file"
+                    accept='application/pdf'
+                    id="upload"
+                    name="upload"
+                    onChange={handleChange}
+                    beforeUpload={beforeUpload}
+                  />
+
+                </div>
+
+              </FormItem>
+            </Form>
+          </Col>
+        </Row>
       </Modal>
       <Modal
         bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
@@ -245,13 +316,14 @@ function IDTags() {
         height="400px"
         // closable={false}
         title="Document Preview"
+
         closeIcon={
           <div
             onClick={() => {
-
+              document.getElementById('documentName').src += 'about:blank';
               setIsModalVisible(false);
             }}
-            style={{ color: "white" }}
+            style={{ color: "#ffffff" }}
           >
             X
           </div>
@@ -259,12 +331,16 @@ function IDTags() {
 
 
       >
+
         <div style={{ position: 'relative', }}>
+
           <Iframe style={{}}
+
             // url="#"
             width={750}
             height="400px"
-            id="myId"
+            src='about:blank'
+            id="documentName"
             className="myClassname"
             display="initial"
             position="relative"
@@ -272,16 +348,6 @@ function IDTags() {
             name='documentName'
 
           />
-          <CloseCircleOutlined
-            onClick={handlePdfCancel}
-            style={{
-              fontSize: 24,
-              position: 'absolute',
-              left: '50%',
-              bottom: '-20px',
-            }}
-          />
-
 
         </div>
       </Modal>

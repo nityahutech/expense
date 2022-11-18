@@ -1,102 +1,110 @@
-body{
-    overflow-x: hidden;
+body {
+  overflow-x: hidden;
 }
 
- 
 /* .form.ant-form{
     margin-top: 46px;
     position: relative;
     right: 156px;
 } */
-.inputNumber.ant-input{
-    margin-left: 26px;
-    width: 58%;
+.inputNumber.ant-input {
+  margin-left: 26px;
+  width: 58%;
 }
-.inputName.ant-input{
-    margin-left: 60px;
-    width: 55%;
+.inputName.ant-input {
+  margin-left: 60px;
+  width: 55%;
 }
-.inputCode.ant-input{
-    margin-left: 66px;
-    width: 56%;
+.inputCode.ant-input {
+  margin-left: 66px;
+  width: 56%;
 }
-.number.ant-form-item{
-margin-left: 53px;
+.number.ant-form-item {
+  margin-left: 53px;
 }
-.ifsc.ant-form-item{
-margin-right: 15px;
+.ifsc.ant-form-item {
+  margin-right: 15px;
 }
-.cancel.ant-btn{
-    margin-left: 20px;
+.cancel.ant-btn {
+  margin-left: 20px;
 }
 /* .ant-form-item-explain-error{
     margin: 8px 0px 8px 61px !important;
 } */
-.save.ant-btn-primary{
-    width: 11%;
+.save.ant-btn-primary {
+  width: 11%;
 }
-.personal .ant-card-head-title{
-    font-size: 15px;
-    font-weight: bold;
-    line-height: 19px;
-    text-transform: uppercase;
+.personal .ant-card-head-title {
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 19px;
+  text-transform: uppercase;
 }
 
 .personalCardDiv:hover .personal {
-display: block !important;
+  display: block !important;
 }
 
 .education:hover .personal {
-    display: block !important;
-    }
-.viewCard .ant-card-head{
-        border-radius: 10px 10px 0px 0px;
-        background: #1963A6;
-        color: #ffffff;
+  display: block !important;
 }
-.personal .ant-card-head{
-    border-radius: 10px 10px 0px 0px;
-    background: #1963A6;
-    color: #ffffff;
+.viewCard .ant-card-head {
+  border-radius: 10px 10px 0px 0px;
+  background: #1963a6;
+  color: #ffffff;
+}
+.personal .ant-card-head {
+  border-radius: 10px 10px 0px 0px;
+  background: #1963a6;
+  color: #ffffff;
 }
 /* -----------CSS code used for document tag----------- */
-.tabs.ant-tabs{
-    width: 100% ;
+.tabs.ant-tabs {
+  width: 100%;
 }
+
+.document-tap-div .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap {
+  background-color: #1963a6;
+  border-start-end-radius: 10px;
+  border-start-start-radius: 10px;
+  color: #ffffff;
+}
+
 .idbutton {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .idselect .ant-modal-body {
-    margin: 0;
+  margin: 0;
 }
 
 .certficationtable .ant-modal-body {
-    margin: 0;
+  margin: 0;
 }
 
 .worktab .ant-modal-body {
-    margin: 0;
+  margin: 0;
 }
 
-.tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
-    color: #000;
-    font-size: 14px;
-    font-weight: 600;
+.tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
 }
+
 /* --------------CSS code for IDTag------------ */
-.IDTags .ant-table-thead>tr>th{
-    background:#1963A6;
-    color: #ffffff;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 18px;
- }
- 
- .Workid .ant-table-thead>tr>th{
-    background:#1963A6;
-    color: #ffffff;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 18px;
- }
+.IDTags .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.Workid .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}

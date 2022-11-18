@@ -219,7 +219,7 @@ function WorkID() {
   return (
     <>
       <Table columns={columns} pagination={false} dataSource={allWorkDetails} />
-      <Button type="primary" onClick={showModal} style={{ marginLeft: "10px" }}>
+      <Button type="primary" onClick={showModal} style={{ marginLeft: "10px", marginBottom: '20px' }}>
         <PlusCircleOutlined />
         Add
       </Button>

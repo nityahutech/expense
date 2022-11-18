@@ -176,32 +176,33 @@ function IDTags() {
       },
     },
   ];
-  if (loading) {
-    return (
-      <div
-        style={{
-          height: "70vh",
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Spin
-          size="large"
-          style={{
-            position: "absolute",
-            top: "20%",
-            left: "50%",
-            margin: "-10px",
-            zIndex: "100",
-            opacity: "0.7",
-            backgroundColor: "transparent",
-          }}
-        />
-      </div>
-    );
-  }
+
+  // if (loading) {
+  //   return (
+  //     <div
+  //       style={{
+  //         height: "70vh",
+  //         width: "100%",
+  //         display: "flex",
+  //         alignItems: "center",
+  //         justifyContent: "center",
+  //       }}
+  //     >
+  //       <Spin
+  //         size="large"
+  //         style={{
+  //           position: "absolute",
+  //           top: "20%",
+  //           left: "50%",
+  //           margin: "-10px",
+  //           zIndex: "100",
+  //           opacity: "0.7",
+  //           backgroundColor: "transparent",
+  //         }}
+  //       />
+  //     </div>
+  //   );
+  // }
   return (
     <>
       <Table
@@ -209,7 +210,7 @@ function IDTags() {
         pagination={false}
         dataSource={allIdDetails}
       />
-      <Button type="primary" onClick={showModal} style={{ marginLeft: "10px" }} >
+      <Button type="primary" onClick={showModal} style={{ marginLeft: "10px", marginBottom: '20px' }} >
         <PlusCircleOutlined />
         Add
       </Button>

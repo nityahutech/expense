@@ -252,6 +252,7 @@ const LeaveList = (props) => {
                                         rules={[
                                             {
                                                 required: true,
+                                                message: 'Please Type Holiday Name',
                                             },
                                         ]}
 
@@ -262,6 +263,7 @@ const LeaveList = (props) => {
                                         rules={[
                                             {
                                                 required: true,
+                                                message: 'Please Type Holiday Date',
                                             },
                                         ]}
                                         label="Date"

@@ -69,20 +69,6 @@ const Family = () => {
             }}
           >
             <Col span={24}>
-              <Form
-                form={form}
-                labelcol={{
-                  span: 4,
-                }}
-                wrappercol={{
-                  span: 14,
-                }}
-                initialValues={{
-                  remember: true,
-                }}
-                autoComplete="off"
-                onFinish={onFinish}
-              >
                 <Card
                   title="FAMILY MEMBERS"
                   className="personal"
@@ -103,29 +89,6 @@ const Family = () => {
                     >
                       <EditFilled />
                     </Button>}
-                    <>
-                      {editfamilymember === false ? (
-                        <Button
-                          className="personal"
-                          type="text"
-                          style={{
-                            color: "#ffff",
-                            display: "none",
-                            paddingTop: "7px",
-                            paddingRight: "7px",
-                            position: "absolute",
-                            right: 10,
-                            top: 10,
-                          }}
-                          onClick={() =>
-                            showeditfamilymember(!editfamilymember)
-                          }
-                        >
-                          <EditFilled />
-                        </Button>
-                      ) : null}
-                    </>
-                  }
                   style={{
                     width: "100%",
                     marginTop: 10,
@@ -150,18 +113,6 @@ const Family = () => {
                         </div>
                     </Col>
                     <Col xs={22} sm={15} md={12}>
-                      <Form.Item
-                        name="fatherContact"
-                        rules={[
-                          {
-                            required: false,
-                            message: "Please enter the Contact no.",
-                            pattern: /^[0-9]\d{9}$/,
-                          },
-                        ]}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                      >
                         <div>
                           <h1
                             style={{
@@ -197,18 +148,6 @@ const Family = () => {
                         </div>
                     </Col>
                     <Col xs={22} sm={15} md={12}>
-                      <Form.Item
-                        name="motherContact"
-                        rules={[
-                          {
-                            required: false,
-                            message: "Please enter the Contact no.",
-                            pattern: /^[0-9]\d{9}$/,
-                          },
-                        ]}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                      >
                         <div>
                           <h1
                             style={{
@@ -316,7 +255,6 @@ const Family = () => {
                                 father: caps,
                               });
                             }}
-                            defaultValue={data ? data.father : "breh"}
                             maxLength={40}
                             placeholder="Enter Father's Name"
                             style={{
@@ -365,7 +303,6 @@ const Family = () => {
                         >
                           <Input
                             maxLength={10}
-                            defaultValue={data ? data.fatherContact : ""}
                             placeholder="Enter Contact no."
                             style={{
                               marginTop: "10px",
@@ -430,7 +367,6 @@ const Family = () => {
                                 mother: caps,
                               });
                             }}
-                            defaultValue={data ? data.mother : ""}
                             maxLength={40}
                             placeholder="Enter Mother's Name"
                             style={{
@@ -479,7 +415,6 @@ const Family = () => {
                         >
                           <Input
                             maxLength={10}
-                            defaultValue={data ? data.motherContact : ""}
                             placeholder="Enter Contact no."
                             style={{
                               marginTop: "10px",
@@ -515,7 +450,6 @@ const Family = () => {
                         type="primary"
                         htmlType="submit"
                         style={{ marginLeft: "10px" }}
-                        // onClick={() => onContactsFinish()}
                       >
                         <CheckOutlined />
                         SAVE
@@ -613,23 +547,6 @@ const Family = () => {
                         </div>
                     </Col>
                     <Col xs={22} sm={15} md={8}>
-                      <Form.Item
-                        name="otherContact"
-                        onKeyPress={(event) => {
-                          if (checkNumbervalue(event)) {
-                            event.preventDefault();
-                          }
-                        }}
-                        rules={[
-                          {
-                            required: false,
-                            message: "Please enter the Contact no.",
-                            pattern: /^[0-9]\d{9}$/,
-                          },
-                        ]}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                      >
                         <div>
                           <h1
                             style={{
@@ -739,7 +656,6 @@ const Family = () => {
                                 other: caps,
                               });
                             }}
-                            defaultValue={data ? data.other : null}
                             placeholder="Enter Other Name"
                             maxLength={40}
                             style={{
@@ -805,7 +721,6 @@ const Family = () => {
                                 relation: caps,
                               });
                             }}
-                            defaultValue={data ? data.relation : ""}
                             placeholder="Enter the Relation"
                             maxLength={40}
                             style={{
@@ -820,33 +735,6 @@ const Family = () => {
                       </div>
                     </Col>
                     <Col xs={22} sm={15} md={8}>
-                      <Form.Item
-                        name="otherContact"
-                          onKeyPress={(event) => {
-                            if (checkNumbervalue(event)) {
-                              event.preventDefault();
-                            }
-                          }}
-                          rules={[
-                            {
-                              required: false,
-                              message: "Please enter the Contact no.",
-                              pattern: /^[0-9\b]+$/,
-                            },
-                          ]}
-                        rules={[
-                          {
-                            required: false,
-                            message: "Please enter Phone Number",
-                            pattern: /^[0-9]\d{9}$/,
-                          },
-                        ]}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                        initialValue={
-                          data.otherContact ? data.otherContact : ""
-                        }
-                      >
                         <div>
                           <h1
                             style={{
@@ -860,9 +748,28 @@ const Family = () => {
                             Contact no.
                           </h1>
 
+                      <Form.Item
+                        name="otherContact"
+                          onKeyPress={(event) => {
+                            if (checkNumbervalue(event)) {
+                              event.preventDefault();
+                            }
+                          }}
+                          rules={[
+                            {
+                              required: false,
+                              message: "Please enter the Contact no.",
+                              pattern: /^[0-9]\d{9}$/,
+                            },
+                          ]}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 32 }}
+                        initialValue={
+                          data.otherContact ? data.otherContact : ""
+                        }
+                      >
                           <Input
-                            maxLength={11}
-                            defaultValue={data ? data.otherContact : ""}
+                            maxLength={10}
                             placeholder="Enter Contact no."
                             style={{
                               marginTop: "10px",
@@ -872,8 +779,8 @@ const Family = () => {
                             }}
                             bordered={false}
                           />
-                        </div>
                       </Form.Item>
+                        </div>
                     </Col>
                   </Row>
                   <Row
@@ -896,7 +803,6 @@ const Family = () => {
                         type="primary"
                         htmlType="submit"
                         style={{ marginLeft: "10px" }}
-                        // onClick={() => onEmergencyFinish()}
                       >
                         <CheckOutlined />
                         SAVE

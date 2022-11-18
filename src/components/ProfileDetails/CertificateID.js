@@ -9,19 +9,19 @@ import {
   Spin,
   Col,
   Row,
-} from 'antd'
-import Iframe from 'react-iframe';
+} from "antd";
+import Iframe from "react-iframe";
 import {
   PlusCircleOutlined,
   UploadOutlined,
   DeleteOutlined,
-  CloseCircleOutlined
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import FormItem from "antd/es/form/FormItem";
 import DocumentContext from "../../contexts/DocumentContext";
 
 function CertificateID() {
-  const [certificatioDetails, setCertificationDetails] = useState([])
+  const [certificatioDetails, setCertificationDetails] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
@@ -42,17 +42,19 @@ function CertificateID() {
   }
   const showModal = () => {
     setIsModalOpen(true);
-    form.resetFields()
+    form.resetFields();
   };
-  const handleOk = () => {
-  };
+  const handleOk = () => {};
   const handleCancel = () => {
     setIsModalOpen(false);
-    form.resetFields()
+    form.resetFields();
   };
   async function addNewDetail(values) {
     try {
-      await DocumentContext.addDocument({ ...values, empId: currentUser.uid, type: "certificate" }, file)
+      await DocumentContext.addDocument(
+        { ...values, empId: currentUser.uid, type: "certificate" },
+        file
+      );
       setIsModalOpen(false);
       showNotification("success", "Success", "Upload Complete");
       const timer = setTimeout(() => {
@@ -63,7 +65,7 @@ function CertificateID() {
       setIsModalOpen(false);
       showNotification("error", "Error", "Upload Failed");
     }
-  };
+  }
   const showNotification = (type, msg, desc) => {
     notification[type]({
       message: msg,
@@ -79,13 +81,13 @@ function CertificateID() {
 
       onOk: () => {
         DocumentContext.deleteDocument(currentUser.uid, id, fileName)
-          .then(response => {
+          .then((response) => {
             showNotification("success", "Success", "Successfully deleted");
             getData();
           })
-          .catch(error => {
+          .catch((error) => {
             showNotification("error", "Error", "Record not deleted");
-          })
+          });
       },
     });
   };
@@ -95,21 +97,24 @@ function CertificateID() {
   }, []);
   const getData = async () => {
     setLoading(true);
-    let alldata = await DocumentContext.getDocument(currentUser.uid, "certificate");
+    let alldata = await DocumentContext.getDocument(
+      currentUser.uid,
+      "certificate"
+    );
     setCertificationDetails(alldata);
     setLoading(false);
   };
 
   const columns = [
     {
-      title: 'Course Title',
-      dataIndex: 'courseTitle',
-      key: 'courseTitle',
+      title: "Course Title",
+      dataIndex: "courseTitle",
+      key: "courseTitle",
     },
     {
-      title: 'Duration',
-      dataIndex: 'duration',
-      key: 'duration',
+      title: "Duration",
+      dataIndex: "duration",
+      key: "duration",
     },
     {
       title: "Uploaded File",
@@ -117,16 +122,13 @@ function CertificateID() {
       key: "upload",
       render: (data, record) => {
         return record.fileName ? (
-
           <a href={data} target="certificateName" onClick={showPdfModal}>
             {record.fileName}
             {/* <Button type='primary'>Preview</Button> */}
           </a>
-
-
         ) : (
           <div>-</div>
-        )
+        );
       },
     },
 
@@ -173,9 +175,17 @@ function CertificateID() {
   return (
     <>
       <Table
+        className="Id"
         columns={columns}
         dataSource={certificatioDetails}
         pagination={false}
+      ></Table>
+      <Button
+        type="primary"
+        onClick={showModal}
+        style={{
+          margin: "20px 0px 15px 48px",
+        }}
       >
       </Table>
       <Button type="primary" onClick={showModal} style={{ marginLeft: "10px", marginBottom: '20px' }} >
@@ -183,13 +193,16 @@ function CertificateID() {
         Add
       </Button>
       <Modal
-        bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+        bodyStyle={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
         className="viewAppraisal"
         title="Certification Details"
         centered
         width={450}
         open={isModalOpen}
-        onOk={() => { form.submit(); handleOk() }}
+        onOk={() => {
+          form.submit();
+          handleOk();
+        }}
         okText="Save"
         closeIcon={
           <div
@@ -208,7 +221,12 @@ function CertificateID() {
             marginTop: "10px",
           }}
         >
-          <Col xl={24} lg={24} md={24} sm={24} xs={24}
+          <Col
+            xl={24}
+            lg={24}
+            md={24}
+            sm={24}
+            xs={24}
             style={{
               background: "flex",
               padding: "10px",
@@ -222,56 +240,57 @@ function CertificateID() {
               onFinish={addNewDetail}
               layout="vertical"
             >
-              <FormItem name="courseTitle"
+              <FormItem
+                name="courseTitle"
                 rules={[
                   {
                     pattern: /^[a-zA-Z\s]*$/,
                     required: true,
-                    message: 'Enter the Course Name',
+                    message: "Enter the Course Name",
                   },
                 ]}
               >
                 <Input placeholder="Enter Course Name" required />
               </FormItem>
-              <FormItem name="duration"
+              <FormItem
+                name="duration"
                 rules={[
                   {
                     pattern: /^[a-zA-Z0-9-\s]*$/,
                     required: true,
-                    message: 'Enter Duration',
+                    message: "Enter Duration",
                   },
                 ]}
               >
-
                 <Input placeholder="Enter Duration" required />
               </FormItem>
-              <FormItem name="upload"
+              <FormItem
+                name="upload"
                 rules={[
                   {
                     required: true,
-                    message: 'Please upload file',
+                    message: "Please upload file",
                   },
                 ]}
               >
-                <div className='certificatepage'>
+                <div className="certificatepage">
                   <Input
                     type="file"
                     // accept="image/gif, image/jpeg, image/png"
-                    accept='application/pdf'
+                    accept="application/pdf"
                     id="upload"
                     name="upload"
                     onChange={handleChange}
-                  //ref={imgRef}
+                    //ref={imgRef}
                   />
                 </div>
-
               </FormItem>
             </Form>
           </Col>
         </Row>
       </Modal>
       <Modal
-        bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+        bodyStyle={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
         className="viewAppraisal"
         centered
         width={800}
@@ -283,7 +302,7 @@ function CertificateID() {
         closeIcon={
           <div
             onClick={() => {
-              document.getElementById('certificateName').src += 'about:blank';
+              document.getElementById("certificateName").src += "about:blank";
               setIsModalVisible(false);
             }}
             style={{ color: "white" }}
@@ -291,11 +310,10 @@ function CertificateID() {
             X
           </div>
         }
-
-
       >
-        <div style={{ position: 'relative', }}>
-          <Iframe style={{}}
+        <div style={{ position: "relative" }}>
+          <Iframe
+            style={{}}
             // url="#"
             width={750}
             height="400px"
@@ -304,16 +322,12 @@ function CertificateID() {
             display="initial"
             position="relative"
             overflow="hidden"
-            name='certificateName'
-
+            name="certificateName"
           />
-
         </div>
       </Modal>
     </>
-
-  )
+  );
 }
 
-export default CertificateID
-
+export default CertificateID;

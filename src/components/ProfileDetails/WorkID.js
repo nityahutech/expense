@@ -11,16 +11,16 @@ import {
   Col,
   Row,
 } from "antd";
-import Iframe from 'react-iframe';
+import Iframe from "react-iframe";
 import {
   PlusCircleOutlined,
   UploadOutlined,
   DeleteOutlined,
-  CloseCircleOutlined
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import FormItem from "antd/es/form/FormItem";
-import "../../style/CertificationID.css"
+import "../../style/CertificationID.css";
 import DocumentContext from "../../contexts/DocumentContext";
 
 function WorkID() {
@@ -31,7 +31,6 @@ function WorkID() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-
 
   const showPdfModal = () => {
     setIsModalVisible(true);
@@ -46,18 +45,22 @@ function WorkID() {
   }
 
   async function addNewWork(values) {
-    console.log('addnewWork', values,)
-    let durationInMonths = values.endDate.diff(values.startDate, 'months')
+    console.log("addnewWork", values);
+    let durationInMonths = values.endDate.diff(values.startDate, "months");
     try {
       let newWorkDoc = {
         ...values,
         startDate: values.startDate.format("Do MMM, YYYY"),
         endDate: values.endDate.format("Do MMM, YYYY"),
         empId: currentUser.uid,
-        duration: parseInt(durationInMonths / 12) + ' Years,' + durationInMonths % 12 + ' Months',
-        type: "work"
-      }
-      await DocumentContext.addDocument(newWorkDoc, file)
+        duration:
+          parseInt(durationInMonths / 12) +
+          " Years," +
+          (durationInMonths % 12) +
+          " Months",
+        type: "work",
+      };
+      await DocumentContext.addDocument(newWorkDoc, file);
       setIsModalOpen(false);
       showNotification("success", "Success", "Upload Complete");
       const timer = setTimeout(() => {
@@ -68,7 +71,7 @@ function WorkID() {
       setIsModalOpen(false);
       showNotification("error", "Error", "Upload Failed");
     }
-  };
+  }
   const showNotification = (type, msg, desc) => {
     notification[type]({
       message: msg,
@@ -84,13 +87,13 @@ function WorkID() {
 
       onOk: () => {
         DocumentContext.deleteDocument(currentUser.uid, id, fileName)
-          .then(response => {
-            showNotification("success", "Success", "Successfully deleted")
+          .then((response) => {
+            showNotification("success", "Success", "Successfully deleted");
             getData();
           })
-          .catch(error => {
+          .catch((error) => {
             showNotification("error", "Error", "Record not deleted ");
-          })
+          });
       },
     });
   };
@@ -102,7 +105,6 @@ function WorkID() {
     let alldata = await DocumentContext.getDocument(currentUser.uid, "work");
     setAllWorkDetails(alldata);
     setLoading(false);
-
   };
 
   const columns = [
@@ -115,13 +117,11 @@ function WorkID() {
       title: "Date Of Joining",
       dataIndex: "startDate",
       key: "startDate",
-
     },
     {
       title: "Date Of Relieving",
       dataIndex: "endDate",
       key: "endDate",
-
     },
     {
       title: "Duration",
@@ -140,23 +140,20 @@ function WorkID() {
       key: "upload",
       render: (data, record) => {
         return record.fileName ? (
-
           <a href={data} target="workName" onClick={showPdfModal}>
             {record.fileName}
             {/* <Button type='primary'>Preview</Button> */}
           </a>
-
-
         ) : (
           <div>-</div>
-        )
+        );
       },
     },
 
     {
       title: "Action",
       key: "action",
-      fixed: 'right',
+      fixed: "right",
       render: (_, record) => {
         return (
           <DeleteOutlined
@@ -171,8 +168,7 @@ function WorkID() {
     setIsModalOpen(true);
     form.resetFields();
   };
-  const handleOk = () => {
-  };
+  const handleOk = () => {};
   const handleCancel = () => {
     setIsModalOpen(false);
     form.resetFields();
@@ -218,13 +214,24 @@ function WorkID() {
 
   return (
     <>
-      <Table columns={columns} pagination={false} dataSource={allWorkDetails} />
-      <Button type="primary" onClick={showModal} style={{ marginLeft: "10px", marginBottom: '20px' }}>
+      <Table
+        className="Id"
+        columns={columns}
+        pagination={false}
+        dataSource={allWorkDetails}
+      />
+      <Button
+        type="primary"
+        onClick={showModal}
+        style={{
+          margin: "20px 0px 15px 48px",
+        }}
+      >
         <PlusCircleOutlined />
         Add
       </Button>
       <Modal
-        bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+        bodyStyle={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
         className="viewAppraisal"
         title="Work Details"
         open={isModalOpen}
@@ -244,7 +251,6 @@ function WorkID() {
             X
           </div>
         }
-
       >
         <Row
           className="apply-leave"
@@ -252,7 +258,12 @@ function WorkID() {
             marginTop: "10px",
           }}
         >
-          <Col xl={24} lg={24} md={24} sm={24} xs={24}
+          <Col
+            xl={24}
+            lg={24}
+            md={24}
+            sm={24}
+            xs={24}
             style={{
               background: "flex",
               padding: "10px",
@@ -267,68 +278,60 @@ function WorkID() {
               onFinish={addNewWork}
               layout="vertical"
             >
-              <FormItem name="name"
+              <FormItem
+                name="name"
                 rules={[
                   {
                     pattern: /^[a-zA-Z\s]*$/,
                     required: true,
-                    message: 'Enter Company Name',
+                    message: "Enter Company Name",
                   },
                 ]}
               >
                 <Input placeholder="Enter Company Name" required />
               </FormItem>
 
-              <FormItem name="startDate"
+              <FormItem
+                name="startDate"
                 rules={[
                   {
-
                     required: true,
-                    message: 'Enter Start Date',
+                    message: "Enter Start Date",
                   },
                 ]}
               >
-                <DatePicker
-                  style={{ width: "100%" }}
-                  format="Do MMM, YYYY"
-
-                />
+                <DatePicker style={{ width: "100%" }} format="Do MMM, YYYY" />
               </FormItem>
-              <FormItem name="endDate"
+              <FormItem
+                name="endDate"
                 rules={[
                   {
-
                     required: true,
-                    message: 'Enter End Date',
+                    message: "Enter End Date",
                   },
                 ]}
               >
-                <DatePicker
-                  style={{ width: "100%" }}
-                  format="Do MMM, YYYY"
-
-                />
+                <DatePicker style={{ width: "100%" }} format="Do MMM, YYYY" />
               </FormItem>
-              <FormItem name="upload"
+              <FormItem
+                name="upload"
                 rules={[
                   {
                     required: true,
-                    message: 'Please upload file',
+                    message: "Please upload file",
                   },
                 ]}
               >
-                <div className='certificatepage'>
+                <div className="certificatepage">
                   <Input
                     type="file"
                     // accept="image/gif, image/jpeg, image/png"
-                    accept='application/pdf'
+                    accept="application/pdf"
                     id="upload"
                     name="upload"
                     onChange={handleChange}
-
                   />
                 </div>
-
               </FormItem>
             </Form>
           </Col>
@@ -336,7 +339,7 @@ function WorkID() {
       </Modal>
 
       <Modal
-        bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+        bodyStyle={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
         className="viewAppraisal"
         centered
         width={800}
@@ -347,7 +350,7 @@ function WorkID() {
         closeIcon={
           <div
             onClick={() => {
-              document.getElementById('workName').src += 'about:blank';
+              document.getElementById("workName").src += "about:blank";
               setIsModalVisible(false);
             }}
             style={{ color: "white" }}
@@ -356,21 +359,19 @@ function WorkID() {
           </div>
         }
       >
-        <div style={{ position: 'relative', }}>
-          <Iframe style={{}}
+        <div style={{ position: "relative" }}>
+          <Iframe
+            style={{}}
             width={750}
             height="400px"
-            src='about:blank'
+            src="about:blank"
             id="workName"
             className="myClassname"
             display="initial"
             position="relative"
             overflow="hidden"
-            name='workName'
-
+            name="workName"
           />
-
-
         </div>
       </Modal>
     </>

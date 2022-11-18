@@ -5,7 +5,6 @@ import CertificateID from "../ProfileDetails/CertificateID";
 import IDTags from "../ProfileDetails/IDTags";
 
 function Document() {
-
   return (
     <div
       className="education"
@@ -17,7 +16,8 @@ function Document() {
         width: "100%",
       }}
     >
-      <div className='document-tap-div'
+      <div
+        className="document-tap-div"
         style={{
           width: "75%",
           marginTop: "10px",
@@ -28,7 +28,7 @@ function Document() {
           borderRadius: "10px",
         }}
       >
-        <Tabs defaultActiveKey="1" className="tabs">
+        <Tabs defaultActiveKey="1" className="documents">
           <Tabs.TabPane tab="IDs" key="1">
             <IDTags />
           </Tabs.TabPane>

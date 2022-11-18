@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "../style/Settingpage.css";
 import "antd/dist/antd.css";
-import { Card, Col, Row, Form, Input, notification } from "antd";
+import { Card, Col, Row, Form, Input, notification, Divider } from "antd";
 import { Button } from "antd";
 import { Tabs } from "antd";
 import { useAuth } from "../contexts/AuthContext";
@@ -14,7 +14,6 @@ const showNotification = (type, msg, desc) => {
 };
 
 const Settingpage = () => {
-  const [tabPosition, setTabPosition] = useState("left");
   const [form] = Form.useForm();
   const [emailForm] = Form.useForm();
   const [email, setEmail] = useState("");
@@ -22,13 +21,13 @@ const Settingpage = () => {
   const [newPassword, setNew] = useState("");
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const { updateMyPassword, updateMyEmail, login } = useAuth();
-  
+
   useEffect(() => {
-    setTabPosition(window.innerWidth <= 768 ? "top" : "left");
+    // setTabPosition(window.innerWidth <= 768 ? "top" : "left");
   }, []);
 
   window.addEventListener("resize", () => {
-    setTabPosition(window.innerWidth <= 768 ? "top" : "left");
+    // setTabPosition(window.innerWidth <= 768 ? "top" : "left");
   });
 
   const handleEmailSubmit = async () => {
@@ -64,221 +63,243 @@ const Settingpage = () => {
   return (
     <>
       <Tabs
-        tabPosition={tabPosition}
+        // tabPosition={tabPosition}
         defaultActiveKey="1"
         className="settingsTab"
+        // activeKey={activetab}
+        // onChange={(tabKey) => {
+        //   setActivetab(tabKey);
+        // }}
       >
         <Tabs.TabPane className="tabPanel" tab="Update Password" key="3">
-          <Card className="settingsCard" title="Update Password">
-            <Form
-              form={form}
-              onFinish={() => {
-                form.resetFields();
-              }}
-              name="basic"
-              className="uppsw"
-              key={"psw"}
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 24,
-              }}
-              initialValues={{
-                remember: true,
-              }}
-              autoComplete="off"
-            >
-              <Row gutter={[8, 4]}>
-                <Col xs={22} sm={10} md={8} lg={6}>
-                  <div className="cupsw">Current Password</div>
-                </Col>
-                <Col>
-                  <Form.Item
-                    key="currentpassword"
-                    name="current password"
-                    className="currentpsw"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter your current password!",
-                      },
-                    ]}
-                    hasFeedback
-                    onChange={(e) => setPassword(e.target.value)}
-                  >
-                    <Input.Password
-                      className="new"
-                      type="password"
-                      maxLength={40}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
+          <Card
+            title="UPDATE PASSWORD"
+            className="updatepsw"
+            style={{
+              width: "80%",
+              marginLeft: "7rem",
+              borderRadius: "10px",
 
-              <Row gutter={[8, 4]}>
-                <Col xs={22} sm={10} md={8} lg={6}>
-                  <div className="npsw">New Password</div>
-                </Col>
-                <Col>
-                  <Form.Item
-                    name="password1"
-                    key="password1"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter your password!",
-                      },
-                    ]}
-                    hasFeedback
-                    onChange={(e) => setNew(e.target.value)}
-                  >
-                    <Input.Password
-                      className="new"
-                      type="password"
-                      maxLength={40}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
+              // height: "55rem",
+            }}
+          >
+            <div style={{ background: "#fff", marginLeft: "10px" }}>
+              <Divider />
 
-              <Row gutter={[8, 4]}>
-                <Col xs={22} sm={10} md={8} lg={6}>
-                  <div className="copsw">Confirm Password</div>
-                </Col>
-                <Col>
-                  <Form.Item
-                    name="password2"
-                    key="password2"
-                    dependencies={["password1"]}
-                    hasFeedback
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please confirm your password!",
-                      },
-                      ({ getFieldValue }) => ({
-                        validator(_, value) {
-                          if (!value || getFieldValue("password1") === value) {
-                            return Promise.resolve();
-                          }
-                          return Promise.reject(
-                            new Error(
-                              "The two passwords that you entered do not match!"
-                            )
-                          );
+              <Form
+                form={form}
+                onFinish={() => {
+                  form.resetFields();
+                }}
+                name="basic"
+                className="uppsw"
+                key={"psw"}
+                labelCol={{
+                  span: 8,
+                }}
+                wrapperCol={{
+                  span: 24,
+                }}
+                initialValues={{
+                  remember: true,
+                }}
+                autoComplete="off"
+              >
+                <Row gutter={[8, 4]}>
+                  <Col xs={22} sm={10} md={8} lg={6}>
+                    <div className="cupsw">Current Password</div>
+                  </Col>
+                  <Col>
+                    <Form.Item
+                      key="currentpassword"
+                      name="current password"
+                      className="currentpsw"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your current password!",
                         },
-                      }),
-                    ]}
-                  >
-                    <Input.Password
-                      className="confirm"
-                      type="password"
-                      maxLength={40}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={[8, 4]}>
-                <Col xs={22} sm={10} md={8} lg={6}>
-                  {" "}
-                </Col>
-                <Col xs={22} sm={10} md={10} lg={10}>
-                  <Button
-                    // className="save"
-                    htmlType="submit"
-                    type="primary"
-                    onClick={handlePasswordSubmit}
-                  >
-                    Save Change
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
+                      ]}
+                      hasFeedback
+                      onChange={(e) => setPassword(e.target.value)}
+                    >
+                      <Input.Password
+                        className="new"
+                        type="password"
+                        maxLength={40}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Row gutter={[8, 4]}>
+                  <Col xs={22} sm={10} md={8} lg={6}>
+                    <div className="npsw">New Password</div>
+                  </Col>
+                  <Col>
+                    <Form.Item
+                      name="password1"
+                      key="password1"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your password!",
+                        },
+                      ]}
+                      hasFeedback
+                      onChange={(e) => setNew(e.target.value)}
+                    >
+                      <Input.Password
+                        className="new"
+                        type="password"
+                        maxLength={40}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Row gutter={[8, 4]}>
+                  <Col xs={22} sm={10} md={8} lg={6}>
+                    <div className="copsw">Confirm Password</div>
+                  </Col>
+                  <Col>
+                    <Form.Item
+                      name="password2"
+                      key="password2"
+                      dependencies={["password1"]}
+                      hasFeedback
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please confirm your password!",
+                        },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (
+                              !value ||
+                              getFieldValue("password1") === value
+                            ) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(
+                              new Error(
+                                "The two passwords that you entered do not match!"
+                              )
+                            );
+                          },
+                        }),
+                      ]}
+                    >
+                      <Input.Password
+                        className="confirm"
+                        type="password"
+                        maxLength={40}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={[8, 4]}>
+                  <Col xs={22} sm={10} md={8} lg={6}>
+                    {" "}
+                  </Col>
+                  <Col xs={22} sm={10} md={10} lg={10}>
+                    <Button
+                      style={{ background: "rgb(21, 101, 216)" }}
+                      // className="save"
+                      htmlType="submit"
+                      type="primary"
+                      onClick={handlePasswordSubmit}
+                    >
+                      Save Change
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            </div>
           </Card>
         </Tabs.TabPane>
         <Tabs.TabPane tab="Update Email" key="4" className="tabPanel">
           <Card
-            className="settingsCard"
-            title="Update Email"
-            // style={{
-            //   width: 550,
-            //   color: "black",
-            // }}
+            className="updatepsw"
+            title="UPDATE EMAIL"
+            style={{
+              width: "80%",
+              marginLeft: "7rem",
+              borderRadius: "10px",
+
+              // height: "55rem",
+            }}
           >
-            {/* <div
-              className="address"
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <div className="email"> */}
-            <Form
-              form={emailForm}
-              onFinish={() => {
-                // openUpdateEmail("success");
-                emailForm.resetFields();
-              }}
-              name="email"
-              key={"email"}
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 24,
-              }}
-              initialValues={{
-                remember: true,
-              }}
-              autoComplete="off"
-            >
-              <Row gutter={[8, 4]}>
-                <Col xs={22} sm={10} md={8} lg={6}>
-                  New Email Address
-                </Col>
-                <Col xs={22} sm={10} md={10} lg={10}>
-                  <Form.Item
-                    name="email"
-                    rules={[
-                      {
-                        type: "email",
-                        required: true,
-                        message: "Enter your new email address!",
-                        pattern: "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
-                      },
-                    ]}
-                  >
-                    <Input
-                      placeholder="Enter New Email Address"
-                      id="message"
-                      name="message"
-                      //   value={message}
-                      //   onChange={handleChange}
-                      onChange={(e) => setEmail(e.target.value)}
-                      maxLength={40}
-                    />
-                    {/* {error && <h2 style={{ color: "red" }}>{error}</h2>} */}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={[8, 4]}>
-                <Col xs={22} sm={10} md={8} lg={6}>
-                  {" "}
-                </Col>
-                <Col xs={22} sm={10} md={10} lg={10}>
-                  <Button
-                    className="newemail"
-                    htmlType="submit"
-                    type="primary"
-                    onClick={handleEmailSubmit}
-                  >
-                    Save Change
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
+            <div style={{ background: "#fff", marginLeft: "10px" }}>
+              <Divider />
+              <Form
+                form={emailForm}
+                onFinish={() => {
+                  // openUpdateEmail("success");
+                  emailForm.resetFields();
+                }}
+                name="email"
+                key={"email"}
+                labelCol={{
+                  span: 8,
+                }}
+                wrapperCol={{
+                  span: 24,
+                }}
+                initialValues={{
+                  remember: true,
+                }}
+                autoComplete="off"
+              >
+                <Row gutter={[8, 4]}>
+                  <Col xs={22} sm={10} md={8} lg={6}>
+                    New Email Address
+                  </Col>
+                  <Col xs={22} sm={10} md={10} lg={10}>
+                    <Form.Item
+                      name="email"
+                      rules={[
+                        {
+                          type: "email",
+                          required: true,
+                          message: "Enter your new email address!",
+                          pattern:
+                            "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
+                        },
+                      ]}
+                    >
+                      <Input
+                        placeholder="Enter New Email Address"
+                        id="message"
+                        name="message"
+                        //   value={message}
+                        //   onChange={handleChange}
+                        onChange={(e) => setEmail(e.target.value)}
+                        maxLength={40}
+                      />
+                      {/* {error && <h2 style={{ color: "red" }}>{error}</h2>} */}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={[8, 4]}>
+                  <Col xs={22} sm={10} md={8} lg={6}>
+                    {" "}
+                  </Col>
+                  <Col xs={22} sm={10} md={10} lg={10}>
+                    <Button
+                      style={{ background: "rgb(21, 101, 216)" }}
+                      className="newemail"
+                      htmlType="submit"
+                      type="primary"
+                      onClick={handleEmailSubmit}
+                    >
+                      Save Change
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            </div>
+
             {/* </div>
             </div> */}
           </Card>

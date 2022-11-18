@@ -12,7 +12,7 @@ import {
   Tag,
 } from "antd";
 import moment from "moment";
-import { EditOutlined, SearchOutlined } from "@ant-design/icons";
+import { EditFilled, SearchOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/expenselist.css";
@@ -32,7 +32,7 @@ function ExpenseList() {
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState("");
   const [size, setSize] = useState(window.innerWidth <= 760 ? "" : "left");
-  
+
   useEffect(() => {
     getData();
   }, []);
@@ -76,7 +76,7 @@ function ExpenseList() {
     setFilterExpense(exp);
     setLoading(false);
   }
-   window.addEventListener("resize", () =>
+  window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 760 ? "" : "left")
   );
   const navigate = useNavigate();
@@ -106,8 +106,6 @@ function ExpenseList() {
       onFilter: (value, record) => record.name.indexOf(value) === 0,
       // sorter: (a, b) => a.catname - b.catname,
       onFilter: (value, record) => record.name.indexOf(value) === 0,
-
-      render: (text) => <a className="catName">{text}</a>,
     },
     {
       title: "Paid By",
@@ -205,7 +203,7 @@ function ExpenseList() {
             <>
               {/* <Space size="small"> */}
               <Button
-                style={{ padding: 0 }}
+                style={{ padding: 0, color: "#40a9ff" }}
                 type="link"
                 className="edIt"
                 onClick={() => {
@@ -213,7 +211,7 @@ function ExpenseList() {
                   showModal(record);
                 }}
               >
-                {<EditOutlined />}
+                {<EditFilled />}
               </Button>
               {/* <Button
                 type="link"
@@ -230,9 +228,8 @@ function ExpenseList() {
         );
       },
     },
-    
   ];
-    const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = (record) => {
     setmodaldata(record);
     setIsModalVisible(true);
@@ -306,7 +303,7 @@ function ExpenseList() {
       setFilterExpense(allExpenses);
     }
   };
-    const onSearch = (value) => {
+  const onSearch = (value) => {
     console.log("search:", value);
   };
   // const onDelete = (sn, e) => {
@@ -521,6 +518,7 @@ function ExpenseList() {
       </Content>
       {/* <Editexpense record={editedRecord} /> */}
       <Modal
+        className="expesneRegister"
         centered
         title="Expense Register"
         visible={isModalVisible}
@@ -530,6 +528,7 @@ function ExpenseList() {
             onClick={() => {
               setIsModalVisible(false);
             }}
+            style={{ color: "#ffffff" }}
           >
             X
           </div>

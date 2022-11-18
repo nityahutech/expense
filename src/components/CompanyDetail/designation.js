@@ -48,15 +48,19 @@ const Designation = () => {
     },
     {
       render: (record) => (
-        <div style={{width: "50px"}}>
+        <Row style={{width : "100px", justifyContent: "flex-end", alignItems: "right"}}>
+        <Col span={12}>
           <Button
             className="editbutton"
-            type="text"
+            type="icon"
             style={{
               color: "#4ec0f1",
               display: "none",
-              paddingTop: "7px",
-              paddingRight: "7px",
+              border: "none",
+              padding: "0",
+              // paddingTop: "7px",
+              // paddingRight: "7px",
+              marginRight: "10px"
             }}
             onClick={() => {
               setEditInfo(true);
@@ -66,20 +70,25 @@ const Designation = () => {
           >
             <EditFilled />
           </Button>
+        </Col>
+        <Col span={12}>
           <Button
             className="editbutton"
-            type="text"
+            type="icon"
             style={{
               color: "#4ec0f1",
               display: "none",
-              paddingTop: "7px",
-              paddingRight: "7px",
+              border: "none",
+              padding: "0",
+              // paddingTop: "7px",
+              // paddingRight: "7px",
             }}
             onClick={() => onDelete(record.designation)}
           >
             <DeleteOutlined />
           </Button>
-        </div>
+        </Col>
+        </Row>
       )
     }
   ];

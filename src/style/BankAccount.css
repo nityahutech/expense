@@ -62,13 +62,13 @@ body {
 .tabs.ant-tabs {
   width: 100%;
 }
-
+/* 
 .document-tap-div .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap {
   background-color: #1963a6;
   border-start-end-radius: 10px;
   border-start-start-radius: 10px;
   color: #ffffff;
-}
+} */
 
 .idbutton {
   margin-top: 10px;
@@ -87,7 +87,7 @@ body {
 }
 
 .tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: #ffffff;
+  color: black;
   font-size: 14px;
   font-weight: 600;
 }
@@ -102,6 +102,14 @@ body {
 }
 
 .Workid .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.tabs .ant-table-thead > tr > th {
   background: #1963a6;
   color: #ffffff;
   font-weight: 500;

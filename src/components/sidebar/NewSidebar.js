@@ -343,7 +343,8 @@ const NewSidebar = (props) => {
 
                 margin: '0px',
                 borderWidth: 1,
-                borderColor: 'rgb(5 70 179)',
+                // borderColor: 'rgb(5 70 179)',
+                borderColor: '#ffffff',
 
 
               }} />

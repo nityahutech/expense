@@ -202,7 +202,7 @@ function Overview() {
                     <div>
                       <div className="div-discription">Website</div>
                       {editContactInfo === false ? (
-                        <div>{data.website}</div>
+                        <a href={`https://${data.website}`} target="_blank">{data.website}</a>
                       ) : (
                         <Form.Item
                           initialValue={data ? data.website : null}
@@ -411,14 +411,23 @@ function Overview() {
                           />
                         </div>
                         {editContactIconInfo === false ? (
-                          <div 
-                          // style={{ display: "none" }}
-                          >{data.linkedin}</div>
+                          <a href={`https://in.linkedin.com/company/${data.linkedin}`} target="_blank" >{data.linkedin}</a>
                         ) : (
                           <Form.Item
                             style={{ width: "50%" }}
                             initialValue={data ? data.linkedin : null}
                             name="linkedin"
+                            rules={[
+                              {
+                                required: false,
+                                message: "Please enter media handle",
+                              },
+                              {
+                                // pattern:
+                                  // /^(?:(?:(?:[a-zA-z\-]+)\:\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9\-\.]){1,61}(?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?:\:[0-9]{1,5})?$/,
+                                message: "Please enter Valid Website Name",
+                              },
+                            ]}
                           >
                             <Input
                               style={{
@@ -427,9 +436,7 @@ function Overview() {
                                 borderBottom: "1px solid #ccc ",
                               }}
                               bordered={false}
-                              type="linkedin"
-                              required
-                              placeholder="https://None"
+                              placeholder="Enter media handle"
                             />
                           </Form.Item>
                         )}
@@ -466,14 +473,23 @@ function Overview() {
                           />
                         </div>
                         {editContactIconInfo === false ? (
-                          <div 
-                          // style={{ display: "none" }}
-                          >{data.facebook}</div>
+                          <a href={`https://www.facebook.com/${data.facebook}`} target="_blank" >{data.facebook}</a>
                         ) : (
                           <Form.Item
                             style={{ width: "50%" }}
                             initialValue={data ? data.facebook : null}
                             name="facebook"
+                            rules={[
+                              {
+                                required: false,
+                                message: "Please enter media handle",
+                              },
+                              {
+                                // pattern:
+                                  // /^(?:(?:(?:[a-zA-z\-]+)\:\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9\-\.]){1,61}(?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?:\:[0-9]{1,5})?$/,
+                                message: "Please enter Valid Website Name",
+                              },
+                            ]}
                           >
                             <Input
                               style={{
@@ -482,9 +498,7 @@ function Overview() {
                                 borderBottom: "1px solid #ccc ",
                               }}
                               bordered={false}
-                              type="facebook"
-                              required
-                              placeholder="https://None"
+                              placeholder="Enter media handle"
                             />
                           </Form.Item>
                         )}
@@ -521,14 +535,23 @@ function Overview() {
                           />
                         </div>
                         {editContactIconInfo === false ? (
-                          <div 
-                          // style={{ display: "none" }}
-                          >{data.twitter}</div>
+                          <a href={`https://www.twitter.com/${data.twitter}`} target="_blank" >{data.twitter}</a>
                         ) : (
                           <Form.Item
                             style={{ width: "50%" }}
                             initialValue={data ? data.twitter : null}
                             name="twitter"
+                            rules={[
+                              {
+                                required: false,
+                                message: "Please enter media handle",
+                              },
+                              {
+                                // pattern:
+                                  // /^(?:(?:(?:[a-zA-z\-]+)\:\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9\-\.]){1,61}(?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?:\:[0-9]{1,5})?$/,
+                                message: "Please enter Valid Website Name",
+                              },
+                            ]}
                           >
                             <Input
                               style={{
@@ -537,9 +560,7 @@ function Overview() {
                                 borderBottom: "1px solid #ccc ",
                               }}
                               bordered={false}
-                              type="twitter"
-                              required
-                              placeholder="https://None"
+                              placeholder="Enter media handle"
                             />
                           </Form.Item>
                         )}

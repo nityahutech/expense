@@ -187,6 +187,8 @@ function CertificateID() {
           margin: "20px 0px 15px 48px",
         }}
       >
+      </Table>
+      <Button type="primary" onClick={showModal} style={{ marginLeft: "10px", marginBottom: '20px' }} >
         <PlusCircleOutlined />
         Add
       </Button>

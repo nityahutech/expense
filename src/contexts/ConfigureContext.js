@@ -4,6 +4,7 @@ import {
     doc,
     updateDoc,
     arrayUnion,
+    setDoc,
     arrayRemove,
 } from "firebase/firestore";
 
@@ -16,10 +17,9 @@ class ConfigureContext {
         return rec.data();
     };
     
-    // createConfiguration = (page) => {
-        //make all the confiurations here and set empty array
-    //     return setDoc(doc(db, `companyprofile/${compId}/configurations`), newHoliday);
-    // };
+    createConfiguration = (page, config) => {
+        return setDoc(doc(db, `companyprofile/${compId}/configurations`, page), config);
+    };
 
     addConfigurations = (page, values) => {
         const newHoliday = doc(db, `companyprofile/${compId}/configurations`, page);

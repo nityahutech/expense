@@ -168,7 +168,7 @@ function WorkID() {
     setIsModalOpen(true);
     form.resetFields();
   };
-  const handleOk = () => {};
+  const handleOk = () => { };
   const handleCancel = () => {
     setIsModalOpen(false);
     form.resetFields();
@@ -347,6 +347,7 @@ function WorkID() {
         footer={null}
         height="400px"
         title="Document Preview"
+        onCancel={handleCancel}
         closeIcon={
           <div
             onClick={() => {

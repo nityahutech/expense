@@ -41,7 +41,7 @@ function AddEmployee() {
     setConfigurations(data);
   };
   const handleListEmployee = () => {
-    navigate("/EmployeeListPage/EmployeeList");
+    navigate("/Employee/EmployeeList");
   };
   const checkAlphabets = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {

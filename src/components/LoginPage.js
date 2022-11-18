@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Button, Checkbox, Form, Input, Alert, Row, Col, Divider } from "antd";
+import { useState, useEffect } from "react";
+import { Button, Checkbox, Form, Input, Alert, Col } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
@@ -28,7 +28,7 @@ function LoginPage() {
       sessionStorage.setItem("user", JSON.stringify(res.user));
       const timer = setTimeout(() => {
         navigate("DashBoard", { replace: true });
-      }, 2000);
+      }, 3000);
     } catch {
       setError("Failed to log in");
       setTimeout(() => {

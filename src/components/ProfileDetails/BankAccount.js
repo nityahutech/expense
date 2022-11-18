@@ -5,21 +5,21 @@ import { EditFilled, CloseOutlined } from "@ant-design/icons";
 import "../../style/BankAccount.css";
 
 function BankAccount() {
+  const [form] = Form.useForm();
   const [editContent, showEditContent] = useState(false);
-  const [bankName, setBankName] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
-  const [ifscCode, setIfscCode] = useState("");
+  const [data, setData] = useState("");
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
-  const onFinish = () => {
-    let record = {
-      bankName: bankName ? bankName : null,
-      accountNumber: accountNumber ? accountNumber : null,
-      ifscCode: ifscCode ? ifscCode : null,
-    };
-    EmpInfoContext.updateEduDetails(currentUser.uid, record);
+  const onFinish = (values) => {
+    EmpInfoContext.updateEduDetails(currentUser.uid, values);
     showEditContent(false);
-    getData();
+    let temp = {
+      ...data,
+      bankName: values.bankName,
+      accountNumber: values.accountNumber,
+      ifscCode: values.ifscCode
+    }
+    setData(temp)
   };
 
   useEffect(() => {
@@ -28,9 +28,8 @@ function BankAccount() {
 
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    setBankName(data.bankName ? data.bankName : null);
-    setAccountNumber(data.accountNumber ? data.accountNumber : null);
-    setIfscCode(data.ifscCode ? data.ifscCode : null);
+    console.log(data)
+    setData(data)
   };
 
   const checkNumbervalue = (event) => {
@@ -50,6 +49,10 @@ function BankAccount() {
       return true;
     }
   };
+  
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   return (
     <>
@@ -72,7 +75,7 @@ function BankAccount() {
         >
           <Col span={24}>
             <Form
-              // form={form}
+              form={form}
               labelcol={{
                 span: 4,
               }}
@@ -132,10 +135,10 @@ function BankAccount() {
                         Bank Name
                       </div>
                       {editContent === false ? (
-                        <div>{bankName ? bankName : "-"}</div>
+                        <div>{data.bankName ? data.bankName : "-"}</div>
                       ) : (
                         <Form.Item
-                          name="bankname"
+                          name="bankName"
                           onKeyPress={(event) => {
                             if (checkAlphabets(event)) {
                               event.preventDefault();
@@ -144,23 +147,34 @@ function BankAccount() {
                           rules={[
                             {
                               required: true,
-
                               pattern: /^[a-zA-Z\s]*$/,
                               message: "Please enter Bank Name",
                             },
                           ]}
+                          initialValue={data.bankName ? data.bankName : null}
                         >
                           <Input
-                            defaultValue={bankName ? bankName : null}
                             placeholder="Enter Bank Name"
                             onChange={(e) => {
-                              setBankName(e.target.value);
+                              const inputval = e.target.value;
+                              const str = e.target.value;
+                              const newVal =
+                                inputval.substring(0, 1).toUpperCase() +
+                                inputval.substring(1);
+                              const caps = str
+                                .split(" ")
+                                .map(capitalize)
+                                .join(" ");
+                              form.setFieldsValue({
+                                bankName: newVal,
+                                bankName: caps,
+                              });
                             }}
                             maxLength={20}
                             style={{ 
                               marginTop: "10px", 
                               width: "100%",
-                              borderBottom: "1px solid #ccc ",
+                              borderBottom: "1px solid #ccc",
                               paddingLeft: "0px",
                             }}
                             bordered={false}
@@ -183,11 +197,12 @@ function BankAccount() {
                         Account Number
                       </div>
                       {editContent === false ? (
-                        <div>{accountNumber ? accountNumber : "-"}</div>
+                        <div>{data.accountNumber? data.accountNumber : "-"}</div>
                       ) : (
                         <Form.Item
-                          name="accountnumber"
+                          name="accountNumber"
                           onKeyPress={(event) => {
+                            console.log(checkNumbervalue(event))
                             if (checkNumbervalue(event)) {
                               event.preventDefault();
                             }
@@ -195,21 +210,17 @@ function BankAccount() {
                           rules={[
                             {
                               required: true,
-
                               pattern: /^[0-9\b]+$/,
                               message: "Please enter Account Number",
                             },
                             {
                               whitespace: true,
                             },
-                          ]}
+                          ]} 
+                          initialValue={data.accountNumber ? data.accountNumber : null}
                         >
                           <Input
-                            defaultValue={accountNumber ? accountNumber : null}
                             placeholder="Enter Account Number"
-                            onChange={(e) => {
-                              setAccountNumber(e.target.value);
-                            }}
                             maxLength={20}
                             style={{ 
                               marginTop: "10px", 
@@ -237,11 +248,12 @@ function BankAccount() {
                         IFSC Code
                       </div>
                       {editContent === false ? (
-                        <div>{ifscCode ? ifscCode : "-"}</div>
+                        <div>{data.ifscCode ? data.ifscCode : "-"}</div>
                       ) : (
                         <Form.Item
-                          name="ifsccode"
+                          name="ifscCode"
                           onKeyPress={(event) => {
+                            console.log(checkNumbervalue(event), checkUpperCase(event))
                             if (
                               checkNumbervalue(event) &&
                               checkUpperCase(event)
@@ -252,7 +264,6 @@ function BankAccount() {
                           rules={[
                             {
                               required: true,
-
                               pattern: /^[0-9a-zA-Z]+$/,
                               message: "Please enter IFSC Code",
                             },
@@ -260,14 +271,11 @@ function BankAccount() {
                               whitespace: true,
                             },
                           ]}
+                          initialValue={data.ifscCode ? data.ifscCode : null}
                         >
                           <Input
-                            defaultValue={ifscCode ? ifscCode : null}
                             placeholder="Enter IFSC Code"
                             maxLength={15}
-                            onChange={(e) => {
-                              setIfscCode(e.target.value);
-                            }}
                             style={{ 
                               marginTop: "10px", 
                               width: "100%",
@@ -291,7 +299,10 @@ function BankAccount() {
                     }}
                   >
                     <Button
-                      onClick={() => showEditContent(false)}
+                      onClick={() => {
+                        form.resetFields()
+                        showEditContent(false)
+                      }}
                       type="text"
                       style={{ fontSize: 15 }}
                     >
@@ -302,7 +313,6 @@ function BankAccount() {
                         type="primary"
                         htmlType="submit"
                         style={{ marginLeft: "10px" }}
-                      // onClick={() => onFinish()}
                       >
                         SAVE
                       </Button>

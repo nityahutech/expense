@@ -26,6 +26,14 @@
   display: inline-block !important;
 } */
 
+.users {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(160px, 1fr));
+}
+.ant-border-space .ant-table-row-level-0:hover .editbutton {
+  display: inline !important;
+}
+
 .personalCardDiv:hover .edit {
   display: block !important;
 }
@@ -178,4 +186,28 @@
   background: #1963A6;
   color: #ffffff;
   border-radius: 10px 10px 0px 0px;
+}
+
+.ceoCard .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.hrCard .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.financeCard .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.hreCard .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
 }

@@ -146,9 +146,10 @@ class AttendanceContext {
                 return;
               }
             }
+            let ddd = day.format("ddd")
             temp[x++] = {
               date: day.format("DD-MM-YYYY"),
-              status: "Absent",
+              status: ddd == "Sat" || ddd == "Sun" ? "Weekend": "Absent",
               empId: id
             }
           })

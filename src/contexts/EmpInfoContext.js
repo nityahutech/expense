@@ -20,8 +20,9 @@ class EmpInfoContext {
         return updateDoc(eduDoc, updateEdu);
     };
 
-    getEduDetails = async (id) => { 
-        const eduDoc = doc(db, `companyprofile/${compId}/users`, id);
+    getEduDetails = async (id, compid) => {
+        let tempId = compid ? compid : compId
+        const eduDoc = doc(db, `companyprofile/${tempId}/users`, id);
         let rec = await getDoc(eduDoc);
         return rec.data();
     };

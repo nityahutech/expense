@@ -595,7 +595,7 @@ const Leave = () => {
             paddingLeft: "5px",
             paddingRight: "5px",
             margin: "0px",
-            borderRadius: "5px",
+            borderRadius: "100px",
             justifyContent: "center",
           }}
         >
@@ -1066,16 +1066,22 @@ const Leave = () => {
                 <div>
                   <HolidayList isHr={isHr} refreshCalendar={getHoliday} />
                 </div>
-                <div>
-                  <LeaveCreate isHr={isHr}
-                  // refreshCalendar={getHoliday}
-                  />
+                <div className="resp-leaveButton" style={{
+                  display: 'flex',
+                  alignContent: 'center',
+                  alignItems: 'center'
+                }}>
+                  <div>
+                    <LeaveCreate isHr={isHr}
+                    // refreshCalendar={getHoliday}
+                    />
+                  </div>
+                  <Button className="button-applyleave"
+                    style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '0px' }}
+                    type="default" onClick={() => { setSecondModal(true) }}>
+                    Apply Leave
+                  </Button>
                 </div>
-                <Button className="button-applyleave"
-                  style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '10px' }}
-                  type="default" onClick={() => { setSecondModal(true) }}>
-                  Apply Leave
-                </Button>
               </div>
             </div>
 

@@ -40,6 +40,7 @@ export function AuthProvider({ children }) {
       sessionStorage.setItem("compId", rec?.compId)
       setCompId(rec?.compId)
       setRole(rec?.role)
+      if (rec?.role == "super") { return; }
       CompanyProContext.getCompanyProfile(rec?.compId).then((rec) => {
         sessionStorage.setItem("logo", rec?.logo)
       })

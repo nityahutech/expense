@@ -179,8 +179,8 @@ function AddressCust() {
                        borderRadius:"10px",
                     }}
                   >
-                    {/* {editContactInfo === true ? ( */}
-                    <Row gutter={[16, 16]}>
+
+                    {/* <Row gutter={[16, 16]}>
                       <Col xs={22} sm={22} md={20}>
                         <div>
                           <div className="div-discription">Address Title</div>
@@ -212,10 +212,6 @@ function AddressCust() {
                           )}
                         </div>
                       </Col>
-                    </Row>
-                    {/* ) : null} */}
-                    {/* {editContactInfo === true ? ( */}
-                    <Row gutter={[16, 16]}>
                       <Col xs={22} sm={22} md={20}>
                         <div>
                           <div className="div-discription">
@@ -244,10 +240,6 @@ function AddressCust() {
                           )}
                         </div>
                       </Col>
-                    </Row>
-                    {/* ) : null} */}
-                    {/* {editContactInfo === true ? ( */}
-                    <Row gutter={[16, 16]}>
                       <Col xs={22} sm={22} md={20}>
                         <div>
                           <div className="div-discription">
@@ -276,10 +268,6 @@ function AddressCust() {
                           )}
                         </div>
                       </Col>
-                    </Row>
-                    {/* ) : null} */}
-                    {/* {editContactInfo === true ? ( */}
-                    <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                       <Col xs={22} sm={15} md={6}>
                         <div>
                           <div className="div-discription">City</div>
@@ -403,15 +391,187 @@ function AddressCust() {
                           )}
                         </div>
                       </Col>
-                    </Row>
-                    {/* ) : null} */}
+                    </Row> */}
+
+                    {editAddressContent[i] === true ?(
+                      <>
+                        <Row gutter={[16,16]}>
+                          <Col xs={24} sm={24} md={24}>
+                            <Form.Item
+                              initialValue={add ? add.title : null}
+                              name="addresstitle"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter Address Title",
+                                  type: "text",
+                                },
+                              ]}
+                            >
+                              <Input
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} sm={24} md={24}>
+                            <Form.Item
+                              initialValue={add ? add.addLine1 : null}
+                              name="address1"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter Address",
+                                  type: "text",
+                                },
+                              ]}
+                            >
+                              <Input
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} sm={24} md={24}>
+                            <Form.Item
+                              initialValue={add ? add.addLine2 : null}
+                              name="address2"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter Address Name",
+                                  type: "text",
+                                },
+                              ]}
+                            >
+                              <Input
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} sm={24} md={6}>
+                            <Form.Item
+                              style={{ width: "100%" }}
+                              initialValue={add ? add.city : null}
+                              name="city"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter City ",
+                                  type: "text",
+                                },
+                                {
+                                  pattern: /^[a-zA-Z\s]*$/,
+                                  message: "Enter Valid City ",
+                                },
+                              ]}
+                            >
+                              <Input
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} sm={24} md={6}>
+                            <Form.Item
+                              style={{ width: "100%" }}
+                              initialValue={add ? add.state : null}
+                              name="state"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter State ",
+                                  type: "text",
+                                },
+                                {
+                                  pattern: /^[a-zA-Z\s]*$/,
+                                  message: "Enter Valid State ",
+                                },
+                              ]}
+                            >
+                              <Input
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} sm={24} md={6}>
+                            <Form.Item
+                              initialValue={add ? add.country : null}
+                              name="country"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter Country",
+                                  type: "text",
+                                },
+                                {
+                                  pattern: /^[a-zA-Z\s]*$/,
+                                  message: "Enter Valid Country",
+                                },
+                              ]}
+                            >
+                              <Input
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} sm={24} md={6}>
+                            <Form.Item
+                              initialValue={add ? add.pincode : null}
+                              name="pin"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Enter Pin",
+                                  type: "text",
+                                },
+                                {
+                                  pattern: /^[0-9\b]+$/,
+                                  message: "Enter Valid Pin",
+                                },
+                              ]}
+                            >
+                              <Input
+                                maxLength={6}
+                                style={{ paddingLeft: "0px" }}
+                                required
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                      </>
+                    ):(
+                      <>
+                        <Row span={[16,16]}>
+                          <Col span={24}>{add ? add.addLine1 : null}</Col>
+                          <Col span={24}>{add ? add.addLine2 : null}</Col>
+                          <span>
+                          {add ? add.city : null},
+                          {add ? add.state : null},
+                          {add ? add.country : null},
+                          {add ? add.pincode : null},
+                          </span>
+                        </Row>
+                      </>
+                    )}
+
                     {editAddressContent[i] === true ? (
                       <Row
-                      //   style={{
-                      //     display: "flex",
-                      //     justifyContent: "flex-end",
-                      //     marginTop: "3%",
-                      //   }}
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          marginTop: "3%",
+                        }}
                       >
                         <Button
                           type="text"
@@ -435,6 +595,7 @@ function AddressCust() {
                         </Col>
                       </Row>
                     ) : null}
+
                     {/* {editContactInfo == false && i == (data.length-1) &&
                         <>
                             <br />
@@ -453,6 +614,7 @@ function AddressCust() {
             : null}
         </Row>
       </div>
+
       <div
         className="personalCardDiv"
         style={{
@@ -513,15 +675,14 @@ function AddressCust() {
                 style={{
                   width: '100%',
                   marginTop: 10,
+                  borderRadius:"10px",
                 }}
               >
                 {addAddressContent ? (
                   <>
                     <Row gutter={[16, 16]}>
-                      <Col xs={22} sm={22} md={20}>
-                        <div>
-                          <div className="div-discription">Address Title</div>
-                          <Form.Item
+                      <Col xs={24} sm={24} md={24}>                      
+                        <Form.Item
                             name="addresstitle"
                             rules={[
                               {
@@ -540,17 +701,12 @@ function AddressCust() {
                               }}
                               bordered={false}
                               required
-                              placeholder=""
+                              placeholder="Address Title"
                             />
-                          </Form.Item>
-                        </div>
+                        </Form.Item>
                       </Col>
-                    </Row>
-                    <Row gutter={[16, 16]}>
-                      <Col xs={22} sm={22} md={20}>
-                        <div>
-                          <div className="div-discription">Address Line 1</div>
-                          <Form.Item
+                      <Col xs={24} sm={24} md={24}>                      
+                        <Form.Item
                             name="address1"
                             rules={[
                               {
@@ -569,17 +725,12 @@ function AddressCust() {
                               }}
                               bordered={false}
                               required
-                              placeholder=""
+                              placeholder="Address Line 1"
                             />
-                          </Form.Item>
-                        </div>
+                        </Form.Item>
                       </Col>
-                    </Row>
-                    <Row gutter={[16, 16]}>
-                      <Col xs={22} sm={22} md={20}>
-                        <div>
-                          <div className="div-discription">Address Line 2</div>
-                          <Form.Item
+                      <Col xs={24} sm={24} md={24}>                     
+                        <Form.Item
                             name="address2"
                             rules={[
                               {
@@ -598,17 +749,12 @@ function AddressCust() {
                               }}
                               bordered={false}
                               required
-                              placeholder=""
+                              placeholder="Address Line 2"
                             />
-                          </Form.Item>
-                        </div>
+                        </Form.Item>
                       </Col>
-                    </Row>
-                    <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                      <Col xs={22} sm={22} md={20}>
-                        <div>
-                          <div className="div-discription">City</div>
-                          <Form.Item
+                      <Col xs={22} sm={22} md={6}>                       
+                        <Form.Item
                             name="city"
                             rules={[
                               {
@@ -631,15 +777,12 @@ function AddressCust() {
                               }}
                               bordered={false}
                               required
-                              placeholder=""
+                              placeholder="City"
                             />
-                          </Form.Item>
-                        </div>
+                        </Form.Item>
                       </Col>
-                      <Col xs={22} sm={22} md={20}>
-                        <div>
-                          <div className="div-discription">State</div>
-                          <Form.Item
+                      <Col xs={22} sm={22} md={6}>                    
+                        <Form.Item
                             name="state"
                             rules={[
                               {
@@ -664,13 +807,10 @@ function AddressCust() {
                               required
                               placeholder=""
                             />
-                          </Form.Item>
-                        </div>
+                        </Form.Item>
                       </Col>
-                      <Col xs={22} sm={22} md={20}>
-                        <div>
-                          <div className="div-discription">Country</div>
-                          <Form.Item
+                      <Col xs={22} sm={22} md={6}>                       
+                        <Form.Item
                             name="country"
                             rules={[
                               {
@@ -695,13 +835,10 @@ function AddressCust() {
                               required
                               placeholder=""
                             />
-                          </Form.Item>
-                        </div>
+                        </Form.Item>
                       </Col>
-                      <Col xs={22} sm={22} md={20}>
-                        <div>
-                          <div className="div-discription">Pin Code</div>
-                          <Form.Item
+                      <Col xs={22} sm={22} md={6}>                    
+                        <Form.Item
                             name="pin"
                             rules={[
                               {
@@ -727,8 +864,7 @@ function AddressCust() {
                               required
                               placeholder=""
                             />
-                          </Form.Item>
-                        </div>
+                        </Form.Item>
                       </Col>
                     </Row>
                     <Row
@@ -771,6 +907,7 @@ function AddressCust() {
           </Col>
         </Row>
       </div>
+
     </>
   );
 }

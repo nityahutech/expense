@@ -182,11 +182,13 @@ const Policies = () => {
               <Card
                 title="Company Policies"
                 className="policyCard"
-                bordered={false}
+                bordered={true}
+                hoverable={true}
                 style={{
                   width: '100%',
                   marginTop: 10,
                   borderRadius:"10px",
+                  cursor:"default"
                 }}
               >
                 <Table
@@ -205,6 +207,7 @@ const Policies = () => {
                   Add
                 </Button>
                 <Modal
+                 className="viewModalPO"
                   title="Add Policy"
                   open={isModalOpen}
                   onOk={() => {
@@ -221,6 +224,7 @@ const Policies = () => {
                       onClick={() => {
                         setIsModalVisible(false);
                       }}
+                      style={{ color: "#ffffff" }}
                     >
                       X
                     </div>

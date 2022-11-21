@@ -55,10 +55,12 @@ function LoginPage() {
     return (
     <>
       <div className="main-div">
+
         <div className="img-div">
           {/* <img src={process.env.PUBLIC_URL + "/hutechHr/images/login-img.png"} alt="" /> */}
           <img src={loginBg} alt=""  />
         </div>
+
         <div className="login-div">
           <div className="xyz">
             <div className="form-div">
@@ -86,8 +88,6 @@ function LoginPage() {
                 Email address<span style={{ color: "red" }}> *</span>
                 </div>
                 <div className="emailInput-div">
-                  {/* <Row>
-                <Col xl={24} lg={24} sm={24} md={24} xs={24}> */}
                   <Form.Item
                     name="email"
                     rules={[
@@ -99,8 +99,6 @@ function LoginPage() {
                   >
                     <Input onChange={(e) => setLoginEmail(e.target.value)} />
                   </Form.Item>
-                  {/* </Col>
-                  </Row> */}
                 </div>
                 <div className="email-div">
                 Password<span style={{ color: "red" }}> *</span>
@@ -131,9 +129,13 @@ function LoginPage() {
                       }
                     }
                   >
-                    <Checkbox className="chkbox-color">Remember me</Checkbox>
+                    <Checkbox 
+                      // className="chkbox-color"
+                      style={{color:"#1963A6"}} 
+                    >Remember me
+                    </Checkbox>
                   </Form.Item>
-                  <div className="forgotpwd" onClick={handleReset} style={{marginLeft: '3.5rem', marginTop:'5px'}}>Forgot Password</div>
+                  <div className="forgotpwd" onClick={handleReset} style={{marginLeft: '3.5rem', marginTop:'5px', color:"#1963A6"}}>Forgot Password</div>
                 </div>
                 <Form.Item
                   wrapperCol={
@@ -148,7 +150,7 @@ function LoginPage() {
                     <Button
                       type="submit"
                       htmlType="submit"
-                      style={{ backgroundColor: "#189AB4", color: "white" }}
+                      style={{ backgroundColor: "#1963A6", color: "white" }}
                       onClick={handleSubmit}
                       disabled={loading}
                     >
@@ -166,7 +168,7 @@ function LoginPage() {
 
                 {/* <div className="signup-msg">
                   Don't Have an account?{" "}
-                  <a href="/SignupPage" style={{ color: "#0FAEAA", cursor: "pointer" }}>
+                  <a href="/SignupPage" style={{ color: "#1963A6", cursor: "pointer" }}>
                     SignUp
                   </a>
                 </div> */}
@@ -179,6 +181,7 @@ function LoginPage() {
             </div>
           </div>
         </div>
+        
       </div>
     </>
   );

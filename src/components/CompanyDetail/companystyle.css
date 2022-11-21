@@ -171,13 +171,13 @@
   color: #ffffff;
 }
 
-.policies .ant-table-thead>tr>th{
+/* .policies .ant-table-thead>tr>th{
   background:#1963A6;
   color: #ffffff;
   font-weight: 500;
   font-size: 14px;
   line-height: 18px;
-}
+} */
 
 .companyCard .ant-card-head{
   border-radius: 10px 10px 0px 0px;
@@ -220,6 +220,16 @@
   color: #ffffff;
 }
 
+.viewModalPO .ant-modal-content{
+  border-radius: 10px;
+  
+}
+
+.viewModalPO .ant-modal-header{
+  border-radius: 10px 10px 0px 0px;
+  background: #043661;
+  color: #ffff}
+  
 .designationTable .ant-table-thead > tr > th {
   background: #1963a6;
   color: #ffffff;

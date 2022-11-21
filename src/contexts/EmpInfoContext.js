@@ -12,17 +12,17 @@ const compId = sessionStorage.getItem("compId");
 class EmpInfoContext {
 
     addEduDetails = async (id, newEdu) => {
-        return setDoc(doc(db, `companyprofile/${compId}/users`, id), newEdu);
+        return setDoc(doc(db, compId != "undefined" ? `companyprofile/${compId}/users` : "admins", id), newEdu);
     };
 
     updateEduDetails = (id, updateEdu) => {
-        const eduDoc = doc(db, `companyprofile/${compId}/users`, id);
+        const eduDoc = doc(db, compId != "undefined" ? `companyprofile/${compId}/users` : "admins", id);
         return updateDoc(eduDoc, updateEdu);
     };
 
     getEduDetails = async (id, compid) => {
         let tempId = compid ? compid : compId
-        const eduDoc = doc(db, `companyprofile/${tempId}/users`, id);
+        const eduDoc = doc(db, compId == "undefined" ? "admins" : `companyprofile/${tempId}/users`, id);
         let rec = await getDoc(eduDoc);
         return rec.data();
     };

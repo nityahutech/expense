@@ -9,8 +9,11 @@ import {
   Col,
   notification,
   Card,
+  message,
+  Spin,
 } from "antd";
 import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import Iframe from 'react-iframe';
 import FormItem from "antd/es/form/FormItem";
 import { upload } from "@testing-library/user-event/dist/upload";
 import PolicyContext from "../../contexts/PolicyContext";
@@ -23,17 +26,44 @@ const Policies = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [file, setFile] = useState("");
+  const [loading, setLoading] = useState(false);
+  const showPdfModal = () => {
+    setLoading(true)
+    setIsModalVisible(true);
+  };
+
+  function beforeUpload(file) {
+    console.log(file.type);
+  }
+
+  function handleChange(event) {
+    let file = event.target.files[0]
+    console.log('handleupload', file)
+    setFile(null);
+    const isPdf = file.type === 'application/pdf';
+    if (!isPdf) {
+      message.error('You can only upload Pdf file!');
+      return
+    }
+
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
+      return
+    }
+    setFile(event.target.files[0]);
+  }
 
   const columns = [
     {
       title: "Policy Title",
-      dataIndex: "title",
+      dataIndex: "idtitle",
       key: "idtitle",
       width: 150,
     },
     {
       title: "Policy Description",
-      dataIndex: "description",
+      dataIndex: "iddescription",
       key: "iddescription ",
       width: 200,
     },
@@ -43,16 +73,14 @@ const Policies = () => {
       key: "upload",
       width: 200,
       render: (data, record) => {
-        // var fReader = new FileReader();
-        // fReader.readAsDataURL(imgRef.current.input.files[0]);
-        // fReader.onload = function (event) {
-        //   setImgPreview(event.target.result);
-        // };
-        return (
-          <a href={data} target="_blank">
+        return record.fileName ? (
+          <a href={data} target="policyName" onClick={showPdfModal}>
             {record.fileName}
+            {/* <Button type='primary'>Preview</Button> */}
           </a>
-        );
+        ) : (
+          <div>-</div>
+        )
       },
     },
     {
@@ -70,18 +98,18 @@ const Policies = () => {
     },
   ];
 
-  function handleChange(event) {
-    setFile(event.target.files[0]);
-  }
+
   async function addPolicy(values) {
     try {
       await PolicyContext.createPolicy(values, file);
+      setIsModalOpen(false);
       showNotification("success", "Success", "Upload Complete");
       const timer = setTimeout(() => {
         getData();
       }, 3500);
       return () => clearTimeout(timer);
     } catch {
+      setIsModalOpen(false);
       showNotification("error", "Error", "Upload Failed");
     }
   }
@@ -90,22 +118,6 @@ const Policies = () => {
       message: msg,
       description: desc,
     });
-  };
-  
-    const displayPolicy = () => {
-    return policy.forEach((pol) => {
-      Object.keys(pol).map((u) => {
-        <p>
-          {u}: {policy.u}
-        </p>;
-        {
-        }
-      });
-    });
-    // <Table dataSource={policy}></Table>
-    // Object.keys(policy).map(u => {
-    //   <p>{u}: {policy.u}</p>
-    // })
   };
 
   const deleteData = (id, fileName) => {
@@ -131,9 +143,11 @@ const Policies = () => {
     getData();
   }, []);
   const getData = async () => {
+    setLoading(true);
     let alldata = await PolicyContext.getPolicy();
     // setData(alldata);
     setPolicy(alldata);
+    setLoading(false);
   };
 
   const showModal = () => {
@@ -147,6 +161,33 @@ const Policies = () => {
     setIsModalOpen(false);
     form.resetFields();
   };
+
+  // if (loading) {
+  //   return (
+  //     <div
+  //       style={{
+  //         height: "70vh",
+  //         width: "100%",
+  //         display: "flex",
+  //         alignItems: "center",
+  //         justifyContent: "center",
+  //       }}
+  //     >
+  //       <Spin
+  //         size="large"
+  //         style={{
+  //           position: "absolute",
+  //           top: "20%",
+  //           left: "50%",
+  //           margin: "-10px",
+  //           zIndex: "100",
+  //           opacity: "0.7",
+  //           backgroundColor: "transparent",
+  //         }}
+  //       />
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
@@ -187,8 +228,8 @@ const Policies = () => {
                 style={{
                   width: '100%',
                   marginTop: 10,
-                  borderRadius:"10px",
-                  cursor:"default"
+                  borderRadius: "10px",
+                  cursor: "default"
                 }}
               >
                 <Table
@@ -207,8 +248,11 @@ const Policies = () => {
                   Add
                 </Button>
                 <Modal
-                 className="viewModalPO"
+                  bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+                  className="viewAppraisal"
                   title="Add Policy"
+                  centered
+                  width={450}
                   open={isModalOpen}
                   onOk={() => {
                     form.submit();
@@ -217,7 +261,7 @@ const Policies = () => {
                   onCancel={handleCancel}
                   visible={isModalVisible}
                   okText="Save"
-                  width={400}
+
                   closeIcon={
                     <div
                       className="modal-close-x"
@@ -232,7 +276,7 @@ const Policies = () => {
                 >
                   <div className="div-discription">Title</div>
                   <Form.Item
-                    name="title"
+                    name="idtitle"
                     rules={[
                       {
                         required: true,
@@ -258,7 +302,7 @@ const Policies = () => {
                   </Form.Item>
                   <div className="div-discription">Description</div>
                   <Form.Item
-                    name="description"
+                    name="iddescription"
                     rules={[
                       {
                         required: true,
@@ -288,28 +332,59 @@ const Policies = () => {
                     rules={[
                       {
                         required: true,
-                        message: "upload file",
+                        message: 'Please upload file',
                       },
                     ]}
                   >
-                    <div className="choose">
+                    <div className='idpage'>
                       <Input
                         type="file"
+                        accept='application/pdf'
                         id="upload"
                         name="upload"
                         onChange={handleChange}
-                        style={{
-                          width: "100%",
-                          borderBottom: "1px solid #ccc ",
-                          paddingLeft: "0px",
-                          marginTop: "10px",
-                        }}
-                        bordered={false}
-                      // ref={imgRef}
-                      // required
+                        beforeUpload={beforeUpload}
                       />
                     </div>
                   </FormItem>
+                </Modal>
+                <Modal
+                  bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+                  className="viewAppraisal"
+                  centered
+                  width={800}
+                  visible={isModalVisible}
+                  footer={null}
+                  height="400px"
+                  // closable={false}
+                  title="Document Preview"
+
+                  closeIcon={
+                    <div
+                      onClick={() => {
+                        document.getElementById('policyName').src += 'about:blank';
+                        setIsModalVisible(false);
+                      }}
+                      style={{ color: "#ffffff" }}
+                    >
+                      X
+                    </div>
+                  }
+                >
+                  <div style={{ position: 'relative', }}>
+                    <Iframe style={{}}
+                      // url="#"
+                      width={750}
+                      height="400px"
+                      src='about:blank'
+                      id="policyName"
+                      className="myClassname"
+                      display="initial"
+                      position="relative"
+                      overflow="hidden"
+                      name='policyName'
+                    />
+                  </div>
                 </Modal>
               </Card>
             </Form>

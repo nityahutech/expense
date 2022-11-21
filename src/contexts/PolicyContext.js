@@ -39,15 +39,17 @@ class PolicyContext {
     // };
 
     deletePolicy = (id, file) => {
-        if(file) {
+        if (file) {
             const storageRef = ref(storage, `/${compId}/policy/${file}`);
             deleteObject(storageRef)
         }
-        const documentDoc = doc(db, "policy", id);
+        const documentDoc = doc(db, `companyprofile/${compId}/policy`, id);
         return deleteDoc(documentDoc);
     };
-    
-    getPolicy = async () => { 
+
+
+
+    getPolicy = async () => {
         const q = query(policyCollectionRef);
         let temp = await getDocs(q);
         let req = temp.docs.map((doc) => {

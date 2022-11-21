@@ -32,7 +32,7 @@ const NewSidebar = (props) => {
       <Sider
         breakpoint="lg"
         style={{
-          backgroundColor: "#05445E",
+          backgroundColor: "#0D4C92",
         }}
         collapsedWidth="0"
         onBreakpoint={(broken) => { }}
@@ -50,7 +50,7 @@ const NewSidebar = (props) => {
           <div className="sidebarTittle" style={{ height: "auto" }}>
             <img
               style={{
-                background: "#05445E",
+                background: "#0D4C92",
                 height: "100px",
               }}
               src={logo}

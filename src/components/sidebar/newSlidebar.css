@@ -18,15 +18,15 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  background-color: #05445e;
+  background-color: #0D4C92;
 }
 
 ul.ant-menu-sub.ant-menu-inline {
-  background: #05445e;
+  background: #0D4C92;
 }
 
 ul.ant-menu {
-  background: #05445e;
+  background: #0D4C92;
 }
 
 .ant-menu-title-content {
@@ -41,17 +41,17 @@ ul.ant-menu {
 .Dash {
   width: 10%;
   height: auto;
-  /* background-color: #05445E; */
+  /* background-color: #0D4C92; */
   color: white;
 }
 
 .dot {
   transform: scale(0.5);
-  background-color: #05445e;
+  background-color: #0D4C92;
 }
 
 .logos {
-  background-color: #05445e;
+  background-color: #0D4C92;
 }
 
 .ant-menu-submenu-arrow {
@@ -60,16 +60,16 @@ ul.ant-menu {
 }
 
 .collapse {
-  background-color: #05445e;
+  background-color: #0D4C92;
   height: 20px;
 }
 
 ul.ant-menu .ant-menu-sub .ant-menu-vertical {
-  background-color: #05445e;
+  background-color: #0D4C92;
 }
 
 .ant-menu-submenu-popup > .ant-menu {
-  background-color: #05445e;
+  background-color: #0D4C92;
 }
 
 /* .ant-menu-title-content {
@@ -84,7 +84,7 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
 }
 
 .collapse {
-  background-color: #05445e;
+  background-color: #0D4C92;
   height: 20px;
 }
 
@@ -105,7 +105,7 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
 }
 
 .sidebarTop {
-  background-color: #05445e;
+  background-color: #0D4C92;
   height: auto;
 }
 

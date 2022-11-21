@@ -66,6 +66,8 @@ function AddressOffice() {
               <Card
                 title="REGISTERED OFFICE"
                 className="regcard"
+                bordered={true}
+                hoverable={true}
                 extra={
                   <>
                     {editAddress === false ? (
@@ -94,8 +96,7 @@ function AddressOffice() {
                   borderRadius:"10px",
                 }}
               >
-                {/* {editAddress === true ? (  */}
-                <Row gutter={[16, 16]}>
+                {/* <Row gutter={[16, 16]} >
                   <Col xs={22} sm={15} md={24}>
                     <div>
                       <div className="div-discription">Address Line 1</div>
@@ -127,11 +128,6 @@ function AddressOffice() {
                       )}
                     </div>
                   </Col>
-                </Row>
-                {/* ) : null} */}
-
-                {/* {editAddress === true ? ( */}
-                <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                   <Col xs={22} sm={15} md={24}>
                     <div>
                       <div className="div-discription">Address Line 2</div>
@@ -163,10 +159,6 @@ function AddressOffice() {
                       )}
                     </div>
                   </Col>
-                </Row>
-                {/* ) : null} */}
-                {/* {editAddress === true ? ( */}
-                <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                   <Col xs={22} sm={15} md={6}>
                     <div>
                       <div className="div-discription">City</div>
@@ -309,8 +301,187 @@ function AddressOffice() {
                       )}
                     </div>
                   </Col>
-                </Row>
-                {/* ) : null}  */}
+                </Row> */}
+                {editAddress === true ? (
+                  <>
+                    <Row gutter={[16,16]}>
+                      <Col span={24}>
+                        <Form.Item
+                          initialValue={data ? data.regOffice.addLine1 : null}
+                          name="address1"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Enter Address",
+                              type: "text",
+                            },
+                          ]}
+                        >
+                          <Input
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
+                            required
+                            placeholder=""
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={24}>
+                        <Form.Item
+                          initialValue={data ? data.regOffice.addLine2 : null}
+                          name="address2"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Enter Address ",
+                              type: "text",
+                            },
+                          ]}
+                        >
+                          <Input
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
+                            required
+                            placeholder=""
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} sm={24} md={6}>
+                        <Form.Item
+                          style={{ width: "100%" }}
+                          initialValue={data ? data.regOffice.city : null}
+                          name="city"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Enter City",
+                              type: "text",
+                            },
+                            {
+                              pattern: /^[a-zA-Z\s]*$/,
+                              message: "Enter Valid City",
+                            },
+                          ]}
+                        >
+                          <Input
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
+                            required
+                            placeholder=""
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} sm={24} md={6}>
+                        <Form.Item
+                          style={{ width: "100%" }}
+                          initialValue={data ? data.regOffice.state : null}
+                          name="state"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Enter State",
+                              type: "text",
+                            },
+                            {
+                              pattern: /^[a-zA-Z\s]*$/,
+                              message: " Enter Valid State",
+                            },
+                          ]}
+                        >
+                          <Input
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
+                            required
+                            placeholder=""
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} sm={24} md={6}>
+                        <Form.Item
+                          initialValue={data ? data.regOffice.country : null}
+                          name="country"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Enter Country",
+                              type: "text",
+                            },
+                            {
+                              pattern: /^[a-zA-Z\s]*$/,
+                              message: "Enter Valid Country",
+                            },
+                          ]}
+                        >
+                          <Input
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
+                            required
+                            placeholder=""
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} sm={24} md={6}>
+                        <Form.Item
+                          initialValue={data ? data.regOffice.pincode : null}
+                          name="pin"
+                          rules={[
+                            {
+                              required: true,
+                              message: " Enter Pin-Code",
+                              type: "text",
+                            },
+                            {
+                              pattern: /^[0-9\b]+$/,
+                              message: "Enter Valid Pin-Code",
+                            },
+                          ]}
+                        >
+                          <Input
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
+                            required
+                            placeholder=""
+                          />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </>
+                ):(
+                  <>
+                    <Row span={[16,16]}>
+                      <Col span={24}>{data ? data.regOffice?.addLine1 : null}</Col>
+                      <Col span={24}>{data ? data.regOffice?.addLine2 : null}</Col>
+                      <span>
+                        {data ? data.regOffice?.city : null},
+                        {data ? data.regOffice?.state : null},
+                        {data ? data.regOffice?.country : null},
+                        {data ? data.regOffice?.pincode : null}
+                      </span>
+                    </Row>
+                  </>)}
                 {editAddress === true ? (
                   <Row
                     style={{

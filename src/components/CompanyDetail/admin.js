@@ -122,6 +122,7 @@ const Admin = () => {
                 width: '100%',
                 marginTop: 10,
                 borderRadius:"10px",
+                cursor:"default"
               }}
             >
               <p>CEO is the head of the organization.<br />
@@ -317,6 +318,7 @@ const Admin = () => {
                 width: '100%',
                 marginTop: 10,
                 borderRadius:"10px",
+                cursor:"default"
               }}
             >
               <p>HR Admin's permissions apply to all employees.
@@ -414,7 +416,7 @@ const Admin = () => {
                       >
                         <Input
                           type="ceoAdmin"
-                          placeholder="Enter CEO Name"
+                          placeholder="Enter HR Admin Name"
                           style={{
                             width: "100%",
                             padding:"5px",
@@ -505,6 +507,7 @@ const Admin = () => {
                 width: '100%',
                 marginTop: 10,
                 borderRadius:"10px",
+                cursor:"default"
               }}
             >
               <p>Finance admin's permissions apply to all employees.
@@ -601,7 +604,7 @@ const Admin = () => {
                           >
                             <Input
                               type="ceoAdmin"
-                              placeholder="Enter CEO Name"
+                              placeholder="Enter Finance Admin Name"
                               style={{
                                 width: "100%",
                                 padding:"5px",
@@ -689,6 +692,7 @@ const Admin = () => {
                 width: '100%',
                 marginTop: 10,
                 borderRadius:"10px",
+                cursor:"default"
               }}
             >
               <p>HR Executive's permissions apply to all employees.
@@ -786,7 +790,7 @@ const Admin = () => {
                       >
                         <Input
                           type="ceoAdmin"
-                          placeholder="Enter CEO Name"
+                          placeholder="Enter HR Executive Name"
                           style={{
                             width: "100%",
                             padding:"5px",

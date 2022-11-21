@@ -10,7 +10,7 @@ function Attendance() {
     <div className="home">
       <div className="sidecontainer">
         <Sidebar
-          activeSubMenu={["sub2"]}
+          // activeSubMenu={["sub2"]}
           activeMenu={["6"]}
         />
       </div>

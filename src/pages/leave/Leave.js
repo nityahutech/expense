@@ -9,8 +9,10 @@ const DashBoard = () => {
     return accessToken && !(accessToken == "null") ? (
         <div className="home">
             <div className="sidecontainer">
-            <Sidebar activeSubMenu={["sub2"]}
-          activeMenu={["7"]} />
+            <Sidebar 
+        //   activeSubMenu={["sub2"]}
+          activeMenu={["7"]} 
+          />
             </div>
             <div className="homeContainer">
                 <div className="table">

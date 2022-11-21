@@ -1,9 +1,5 @@
 import { Table, Button, Modal, Layout, Row, Col, Input } from "antd";
-import {
-  EditOutlined,
-  SearchOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { EditFilled, SearchOutlined, DeleteFilled } from "@ant-design/icons";
 import Editemployee from "./Editemployee";
 import React, { useEffect, useState } from "react";
 import { getUsers } from "../contexts/CreateContext";
@@ -171,7 +167,7 @@ function EmployeeList() {
             <>
               {/* <Space size="small"> */}
               <Button
-                style={{ padding: 0 }}
+                style={{ padding: 0, color: "rgb(64, 169, 255)" }}
                 type="link"
                 className="edIt"
                 onClick={() => {
@@ -179,7 +175,7 @@ function EmployeeList() {
                   showModal(record);
                 }}
               >
-                {<EditOutlined />}
+                {<EditFilled />}
               </Button>
               <Button
                 type="link"
@@ -188,7 +184,7 @@ function EmployeeList() {
                   onDelete(record.sn - 1, e);
                 }}
               >
-                <DeleteOutlined />
+                <DeleteFilled />
               </Button>
             </>
           )

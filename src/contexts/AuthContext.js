@@ -31,30 +31,28 @@ export function AuthProvider({ children }) {
     if (user==null) {
       const timer = setTimeout(() => {
         sessionStorage.clear();
-        console.log("null")
       }, 1500);
       return () => clearTimeout(timer);
     }
-    let empdoc = getDoc(doc(db, 'users', user.uid)).then((res) => {
+    getDoc(doc(db, 'users', user.uid)).then((res) => {
       let rec = res.data()
-      console.log(rec)
       sessionStorage.setItem("role", rec?.role)
       sessionStorage.setItem("compId", rec?.compId)
-      setCompId(rec?.compId || "false")
-      setRole(rec?.role || "false")
+      setCompId(rec?.compId)
+      setRole(rec?.role)
+      if (rec?.role == "super") { return; }
       CompanyProContext.getCompanyProfile(rec?.compId).then((rec) => {
         sessionStorage.setItem("logo", rec?.logo)
       })
+      EmpInfoContext.getEduDetails(user.uid, rec?.compId).then((rec) => {
+        sessionStorage.setItem("isMgr", rec?.isManager);
+        sessionStorage.setItem("isHr", rec?.isHr);
+        sessionStorage.setItem("isLead", rec?.isLead);
+        setIsMgr(rec?.isManager)
+        setIsHr(rec?.isHr)
+        setIsLead(rec?.isLead)
+      })
     })
-    let empRecord = EmpInfoContext.getEduDetails(user.uid).then((rec) => {
-      sessionStorage.setItem("isMgr", rec?.isManager || "false");
-      sessionStorage.setItem("isHr", rec?.isHr || "false");
-      sessionStorage.setItem("isLead", rec?.isLead || "false");
-      setIsMgr(rec?.isManager)
-      setIsHr(rec?.isHr)
-      setIsLead(rec?.isLead)
-    })
-    console.log(empdoc, empRecord)
   }
 
   function login(email, password) {
@@ -62,7 +60,6 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
-    // sessionStorage.clear();
     return signOut(auth)
   }
 
@@ -89,7 +86,6 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
-      console.log(user)
       getUserData(user)
       setCurrentUser(user)
       setLoading(false)

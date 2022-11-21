@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import 'antd/dist/antd.css';
-import './ExpenceForm';
-import { Col, Divider, Row } from 'antd';
-import '../style/ExpenseForm.css';
-import ExpenseContext from '../contexts/ExpenseContext'
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import "antd/dist/antd.css";
+import "./ExpenceForm";
+import { Col, Divider, Row } from "antd";
+import "../style/ExpenseForm.css";
+import ExpenseContext from "../contexts/ExpenseContext";
+import { useNavigate } from "react-router-dom";
 import {
   // Cascader,
   Input,
@@ -14,11 +14,11 @@ import {
   Button,
   DatePicker,
   Form,
-  notification
-} from 'antd';
-import moment from 'moment';
+  notification,
+} from "antd";
+import moment from "moment";
 
-const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
+const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY"];
 
 const ExpenceForm = () => {
   const [form] = Form.useForm();
@@ -40,45 +40,44 @@ const ExpenceForm = () => {
       return true;
     }
   };
-  const onFinish = values => {
+  const onFinish = (values) => {
     const valuesToservice = {
-      amount: values['amount'],
-      catname: values['expence'],
-      date: values['paymentDate'].format('DD-MM-YYYY'),
-      description: values['description']?values['description']:null,
-      name: values['paidByInput'],
-      paidname: values['paidto'],
-      quantity: values['Quantity'],
-      paymenttype: values['paymentMode'],
-      status: 'Unpaid',
-      subtotal: values['subTotal'],
-    }
+      amount: values["amount"],
+      catname: values["expence"],
+      date: values["paymentDate"].format("DD-MM-YYYY"),
+      description: values["description"] ? values["description"] : null,
+      name: values["paidByInput"],
+      paidname: values["paidto"],
+      quantity: values["Quantity"],
+      paymenttype: values["paymentMode"],
+      status: "Unpaid",
+      subtotal: values["subTotal"],
+    };
     ExpenseContext.addExpenses(valuesToservice)
-      .then(response => {
-        navigate('/Expense/ExpenseList');
+      .then((response) => {
+        navigate("/Expense/ExpenseList");
         showNotification("success", "Success", "Expense Added");
       })
-      .catch(error => {
-      })
+      .catch((error) => {});
   };
-const showNotification = (type, msg, desc) => {
+  const showNotification = (type, msg, desc) => {
     notification[type]({
-        message: msg,
-        description: desc,
+      message: msg,
+      description: desc,
     });
-};
-function capitalize(str) {
+  };
+  function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
   const onReset = () => {
-    form.resetFields()
-  }
+    form.resetFields();
+  };
   function disabledDate(current) {
-    return current && current > moment().endOf('day');
+    return current && current > moment().endOf("day");
   }
   return (
     <>
-      <div className='expForm' style={{ margin: "15px", background: 'white' }} >
+      <div className="expForm" style={{ margin: "15px", background: "white" }}>
         <Form
           form={form}
           labelcol={{
@@ -90,30 +89,52 @@ function capitalize(str) {
           initialValues={{
             remember: true,
           }}
-
           autoComplete="off"
           onFinish={onFinish}
         >
           <Row
             className="rowform"
             gutter={[0, 8]}
-            style={{ marginBottom: "1.5rem", marginTop: "1.5rem", display: 'flex', flexDirection: 'column', alignitems: 'center', justifyContent: 'space-around' }}
+            style={{
+              marginBottom: "1.5rem",
+              marginTop: "1.5rem",
+              display: "flex",
+              flexDirection: "column",
+              alignitems: "center",
+              justifyContent: "space-around",
+            }}
           >
-            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-center' style={{ background: '', height: '50px', display: 'flex', justifyContent: 'flex-start' }}>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 12 }}
+              className="Col-1-center"
+              style={{
+                background: "",
+                height: "50px",
+                display: "flex",
+                justifyContent: "flex-start",
+              }}
+            >
               <Button
                 className="listExpense"
                 type="primary"
                 onClick={handleListExpense}
-                style={{ width: '120px',cursor: 'pointer',
-                 backgroundColor: 'rgb(24, 154, 180)', borderRadius: '5px', }}
+                style={{
+                  width: "120px",
+                  cursor: "pointer",
+                  backgroundColor: "rgb(25, 99, 166)",
+                  borderRadius: "5px",
+                }}
               >
                 Expense List
               </Button>
             </Col>
           </Row>
-          <Row gutter={[24, 0]} >
-            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
-              <Divider orientation='left' orientationMargin={0}>Expense Name<span style={{ color: 'red' }}> *</span></Divider>
+          <Row gutter={[24, 0]}>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className="Col-1-left">
+              <Divider orientation="left" orientationMargin={0}>
+                Expense Name<span style={{ color: "red" }}> *</span>
+              </Divider>
               <Form.Item
                 name="expence"
                 onKeyPress={(event) => {
@@ -124,47 +145,59 @@ function capitalize(str) {
                 rules={[
                   {
                     required: true,
-                    minLength: 3, maxLength: 20,
-                    message: 'Please enter Expense Name',
 
-                  }, {
+                    message: "Please enter Expense Name",
+                  },
+                  {
                     pattern: /^[a-zA-Z\s]*$/,
-                    message: 'Please enter Valid Name',
-                  }
+                    message: "Please enter Valid Name",
+                  },
                 ]}
               >
-                <Input maxLength={20}
+                <Input
+                  maxLength={30}
                   onChange={(e) => {
                     const inputval = e.target.value;
                     const str = e.target.value;
-                    const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                    const caps = str.split(' ').map(capitalize).join(' ');
+                    const newVal =
+                      inputval.substring(0, 1).toUpperCase() +
+                      inputval.substring(1);
+                    const caps = str.split(" ").map(capitalize).join(" ");
                     // setPaidBy(newVal);
                     form.setFieldsValue({ expence: newVal, expence: caps });
-                     }}
-                  required placeholder='Enter Expense For' />
+                  }}
+                  required
+                  placeholder="Enter Expense For"
+                />
               </Form.Item>
             </Col>
-            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
-              <Divider orientation='left' orientationMargin={0}>Date<span style={{ color: 'red' }}> *</span></Divider>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className="Col-1-left">
+              <Divider orientation="left" orientationMargin={0}>
+                Date<span style={{ color: "red" }}> *</span>
+              </Divider>
               <Form.Item
                 name="paymentDate"
                 rules={[
                   {
                     required: true,
-                    message: "Please Choose a Date"
+                    message: "Please Choose a Date",
                   },
                 ]}
               >
-                <DatePicker format={dateFormatList} style={{ width: '100%' }}
-                 disabledDate={disabledDate}
-                 placeholder='Choose Date' />
+                <DatePicker
+                  format={dateFormatList}
+                  style={{ width: "100%" }}
+                  disabledDate={disabledDate}
+                  placeholder="Choose Date"
+                />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
-            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
-              <Divider orientation='left' orientationMargin={0}>Paid By<span style={{ color: 'red' }}> *</span></Divider>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className="Col-1-left">
+              <Divider orientation="left" orientationMargin={0}>
+                Paid By<span style={{ color: "red" }}> *</span>
+              </Divider>
               <Form.Item
                 name="paidByInput"
                 onKeyPress={(event) => {
@@ -175,27 +208,34 @@ function capitalize(str) {
                 rules={[
                   {
                     required: true,
-                    message: 'Please enter Customer Name',
-                  }, {
+                    message: "Please enter Customer Name",
+                  },
+                  {
                     pattern: /^[a-zA-Z\s]*$/,
-                    message: 'Please enter Valid Name',
-                  }
+                    message: "Please enter Valid Name",
+                  },
                 ]}
               >
                 <Input
+                  maxLength={30}
                   onChange={(e) => {
                     const inputval = e.target.value;
-                    const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                    const newVal =
+                      inputval.substring(0, 1).toUpperCase() +
+                      inputval.substring(1);
                     // setPaidBy(newVal);
                     form.setFieldsValue({ paidByInput: newVal });
                   }}
                   type="text"
                   required
-                  placeholder='Enter  Name' />
+                  placeholder="Enter  Name"
+                />
               </Form.Item>
             </Col>
-            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
-              <Divider orientation='left' orientationMargin={0}>Paid to<span style={{ color: 'red' }}> *</span></Divider>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className="Col-1-left">
+              <Divider orientation="left" orientationMargin={0}>
+                Paid to<span style={{ color: "red" }}> *</span>
+              </Divider>
               <Form.Item
                 name="paidto"
                 onKeyPress={(event) => {
@@ -206,30 +246,37 @@ function capitalize(str) {
                 rules={[
                   {
                     required: true,
-                    message: 'Please enter Vendor Name',
-                  }, {
+                    message: "Please enter Vendor Name",
+                  },
+                  {
                     pattern: /^[a-zA-Z\s]*$/,
-                    message: 'Please enter Valid Name',
-                  }
+                    message: "Please enter Valid Name",
+                  },
                 ]}
               >
-                <Input maxLength={20}
+                <Input
+                  maxLength={30}
                   onChange={(e) => {
                     const inputval = e.target.value;
-                    const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
+                    const newVal =
+                      inputval.substring(0, 1).toUpperCase() +
+                      inputval.substring(1);
                     // setPaidBy(newVal);
                     form.setFieldsValue({ paidto: newVal });
                   }}
                   required
-                  placeholder='Enter Vendor Name' />
+                  placeholder="Enter Vendor Name"
+                />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
-            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
-              <Divider orientation='left' orientationMargin={0}>Amount<span style={{ color: 'red' }}> *</span></Divider>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className="Col-1-left">
+              <Divider orientation="left" orientationMargin={0}>
+                Amount<span style={{ color: "red" }}> *</span>
+              </Divider>
               <Form.Item
-                className='numder-inputs'
+                className="numder-inputs"
                 name="amount"
                 onKeyPress={(event) => {
                   if (checkNumbervalue(event)) {
@@ -245,7 +292,8 @@ function capitalize(str) {
                   { whitespace: true },
                 ]}
               >
-                <Input maxLength={8}
+                <Input
+                  maxLength={8}
                   required
                   onChange={(e) => {
                     const amt = e.target.value;
@@ -253,12 +301,14 @@ function capitalize(str) {
                     setTotal(amt * quantity);
                     form.setFieldsValue({ subTotal: amt * quantity });
                   }}
-                  placeholder='Enter Amount Here'
+                  placeholder="Enter Amount Here"
                 />
               </Form.Item>
             </Col>
-            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
-              <Divider orientation='left' orientationMargin={0}>Quantity<span style={{ color: 'red' }}> *</span></Divider>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className="Col-1-left">
+              <Divider orientation="left" orientationMargin={0}>
+                Quantity<span style={{ color: "red" }}> *</span>
+              </Divider>
               <Form.Item
                 name="Quantity"
                 onKeyPress={(event) => {
@@ -274,7 +324,8 @@ function capitalize(str) {
                   },
                 ]}
               >
-                <Input maxLength={4}
+                <Input
+                  maxLength={4}
                   required
                   min={0}
                   onChange={(e) => {
@@ -283,19 +334,22 @@ function capitalize(str) {
                     setTotal(amount * qnt);
                     form.setFieldsValue({ subTotal: amount * qnt });
                   }}
-                  placeholder='Quantity of the item' />
+                  placeholder="Quantity of the item"
+                />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
-            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
-              <Divider orientation='left' orientationMargin={0}>Mode of Payment<span style={{ color: 'red' }}> *</span></Divider>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className="Col-1-left">
+              <Divider orientation="left" orientationMargin={0}>
+                Mode of Payment<span style={{ color: "red" }}> *</span>
+              </Divider>
               <Form.Item
                 name="paymentMode"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter the paymeny status"
+                    message: "Please enter the paymeny status",
                   },
                 ]}
               >
@@ -306,23 +360,22 @@ function capitalize(str) {
                 </Radio.Group>
               </Form.Item>
             </Col>
-            <Col xs={{ span: 24 }} sm={{ span: 12 }} className='Col-1-left' >
-              <Divider orientation='left' orientationMargin={0}>Subtotal</Divider>
-              <Form.Item
-                name="subTotal"
-              >
-                <Input
-                  disabled={true}
-                  value={total || 0}
-                  placeholder='Total' />
+            <Col xs={{ span: 24 }} sm={{ span: 12 }} className="Col-1-left">
+              <Divider orientation="left" orientationMargin={0}>
+                Subtotal
+              </Divider>
+              <Form.Item name="subTotal">
+                <Input disabled={true} value={total || 0} placeholder="Total" />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={24}>
-            <Col className='gutter-row' span={4}></Col>
-            <Col className='gutter-row' span={16}>
-              <div className="te" style={{ padding: '0px 0' }}>
-                <Divider orientation='left' orientationMargin={0}>Descriptions</Divider>
+            <Col className="gutter-row" span={4}></Col>
+            <Col className="gutter-row" span={16}>
+              <div className="te" style={{ padding: "0px 0" }}>
+                <Divider orientation="left" orientationMargin={0}>
+                  Descriptions
+                </Divider>
                 <Form.Item
                   name="description"
                   // rules={[
@@ -336,37 +389,54 @@ function capitalize(str) {
                 </Form.Item>
               </div>
             </Col>
-            <Col className='gutter-row' span={6}></Col>
+            <Col className="gutter-row" span={6}></Col>
           </Row>
           <Row gutter={[24, 16]}>
-            <Col classsname='gutter-row' span={9}></Col>
-            <Col classsname='gutter-row' >
-              <div className='submitButton'>
+            <Col classsname="gutter-row" span={9}></Col>
+            <Col classsname="gutter-row">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "end",
+                  marginRight: "94px",
+                }}
+              >
                 <Space>
-                  <Form.Item className='submit'>
+                  <Form.Item>
                     <Button
                       style={{
-                        background: '#C1C1C1',
-                        borderRadius: '5px',
-                        width: '80px',
-                        color: 'white',
-                        cursor: 'pointer'
+                        border: "1px solid #1565D8",
+                        color: "#1565D8",
+                        width: "99px",
+                        fontWeight: "600",
+                        fontSize: "14px",
+                        lineHeight: "17px",
+
+                        cursor: "pointer",
                       }}
                       onClick={onReset}
-                    >Reset</Button>
+                    >
+                      Reset
+                    </Button>
                   </Form.Item>
-                  <Form.Item className='submit'>
-                    <button style={{
-                      background: '#189AB4',
-                      borderRadius: '5px',
-                      borderWidth: '0px',
-                      width: '80px',
-                      height: '30px',
-                      color: 'white',
-                      cursor: 'pointer',
-                      marginLeft: '17px'
-                    }}
-                      type="primary">Submit</button>
+                  <Form.Item>
+                    <Button
+                      style={{
+                        border: "1px solid #1565D8",
+                        background: "#1565D8",
+                        color: "#ffffff",
+                        fontWeight: "600",
+                        fontSize: "14px",
+                        lineHeight: "17px",
+                        width: "99px",
+
+                        cursor: "pointer",
+                        marginLeft: "17px",
+                      }}
+                      htmlType="submit"
+                    >
+                      Submit
+                    </Button>
                   </Form.Item>
                 </Space>
               </div>
@@ -375,7 +445,6 @@ function capitalize(str) {
         </Form>
       </div>
     </>
-  )
-}
+  );
+};
 export default ExpenceForm;
-

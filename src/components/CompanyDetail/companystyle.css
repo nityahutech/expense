@@ -26,6 +26,22 @@
   display: inline-block !important;
 } */
 
+.users {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(160px, 1fr));
+}
+ /* .ant-table-tbody>tr.ant-table-row.personalCardDiv:hover .editbutton  {
+  display: inline !important; 
+} */
+
+.ant-table-tbody>tr.ant-table-row:hover>td .editbutton{
+  display: block !important;
+}
+
+/* .personalCardDiv:hover .editbutton {
+  display: block !important;
+} */
+
 .personalCardDiv:hover .edit {
   display: block !important;
 }
@@ -212,14 +228,35 @@
 .viewModalPO .ant-modal-header{
   border-radius: 10px 10px 0px 0px;
   background: #043661;
+  color: #ffff}
+  
+.designationTable .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.editDesignation .ant-modal-content{
+  border-radius: 10px;
+  
+}
+
+.editDesignation .ant-modal-header{
+  border-radius: 10px 10px 0px 0px;
+  background: #043661;
   color: #ffffff;
 }
-.viewModalPO .ant-modal-title{
+.editDesignation .ant-modal-title{
   color: #ffffff;
   font-weight: 400;
   font-size: 18px;
 line-height: 25px;
 }
-.viewModalPO .ant-modal-body {
-  margin-left: 5px;
+.editDesignation .ant-modal-close{
+color: #ffffff;
+}
+.editDesignation .ant-btn-primary{
+  background:rgb(21, 101, 216) ;
 }

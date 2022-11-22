@@ -12,11 +12,17 @@ import {
     doc,
 } from "firebase/firestore";
 
-const compId = sessionStorage.getItem("compId");
+let compId = sessionStorage.getItem("compId");
 
-const expenseCollectionRef = collection(db, `companyprofile/${compId}/expense`);
+let expenseCollectionRef = collection(db, `companyprofile/${compId}/expense`);
 
 class ExpenseContext {
+
+    getCompId = () => {
+        compId = sessionStorage.getItem("compId");
+        expenseCollectionRef = collection(db, `companyprofile/${compId}/expense`);
+        return;
+    }
 
     addExpenses = (newExpense) => {
         return addDoc(expenseCollectionRef, newExpense);

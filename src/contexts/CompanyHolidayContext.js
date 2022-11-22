@@ -9,16 +9,20 @@ import {
     query,
     orderBy,
     deleteDoc,
-
-
-  
 } from "firebase/firestore";
 
-const compId = sessionStorage.getItem("compId");
+let compId = sessionStorage.getItem("compId");
 
-const companyholidayCollectionRef = collection(db, `companyprofile/${compId}/companyholiday`);
+let companyholidayCollectionRef = collection(db, `companyprofile/${compId}/companyholiday`);
 
 class CompanyHolidayContext {
+
+    getCompId = () => {
+        compId = sessionStorage.getItem("compId");
+        companyholidayCollectionRef = collection(db, `companyprofile/${compId}/companyholiday`);
+        return;
+    }
+
     getAllCompanyHoliday = () => {
         const q = query(companyholidayCollectionRef, orderBy("date", "asc"));
         return getDocs(q);

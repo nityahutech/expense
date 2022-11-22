@@ -22,9 +22,8 @@ const { Sider } = Layout;
 
 const NewSidebar = (props) => {
   const [collapsed, setCollapsed] = useState(true);
-
   const role = sessionStorage.getItem("role");
-  const isHr = JSON.parse(sessionStorage.getItem("isHr"));
+  const isHr = role == "super" ? false : sessionStorage.getItem("isHr") == "true";
 
 
   return (

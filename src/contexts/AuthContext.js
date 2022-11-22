@@ -10,7 +10,15 @@ import { signInWithEmailAndPassword,
 } from "@firebase/auth"
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import EmpInfoContext from "./EmpInfoContext";
+import AttendanceContext from "./AttendanceContext";
 import CompanyProContext from "./CompanyProContext";
+import AppraisalContext from "./AppraisalContext";
+import CompanyHolidayContext from "./CompanyHolidayContext";
+import ConfigureContext from "./ConfigureContext";
+import DocumentContext from "./DocumentContext";
+import ExpenseContext from "./ExpenseContext";
+import LeaveContext from "./LeaveContext";
+import PolicyContext from "./PolicyContext";
 
 const AuthContext = React.createContext()
 
@@ -40,6 +48,15 @@ export function AuthProvider({ children }) {
       sessionStorage.setItem("compId", rec?.compId)
       setCompId(rec?.compId)
       setRole(rec?.role)
+      EmpInfoContext.getCompId();
+      AttendanceContext.getCompId();
+      AppraisalContext.getCompId();
+      CompanyHolidayContext.getCompId();
+      ConfigureContext.getCompId();
+      DocumentContext.getCompId();
+      ExpenseContext.getCompId();
+      LeaveContext.getCompId();
+      PolicyContext.getCompId();
       if (rec?.role == "super") { return; }
       CompanyProContext.getCompanyProfile(rec?.compId).then((rec) => {
         sessionStorage.setItem("logo", rec?.logo)

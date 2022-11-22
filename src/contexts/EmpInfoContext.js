@@ -7,9 +7,15 @@ import {
     doc,
 } from "firebase/firestore";
 
-const compId = sessionStorage.getItem("compId");
+let compId = sessionStorage.getItem("compId");
 
 class EmpInfoContext {
+
+    getCompId = () => {
+        compId = sessionStorage.getItem("compId");
+        console.log(compId)
+        return;
+    }
 
     addEduDetails = async (id, newEdu) => {
         return setDoc(doc(db, compId != "undefined" ? `companyprofile/${compId}/users` : "admins", id), newEdu);
@@ -22,8 +28,10 @@ class EmpInfoContext {
 
     getEduDetails = async (id, compid) => {
         let tempId = compid ? compid : compId
-        const eduDoc = doc(db, compId == "undefined" ? "admins" : `companyprofile/${tempId}/users`, id);
+        console.log(id, compid, tempId, compId, tempId == "undefined" || !tempId ? "admins" : `companyprofile/${tempId}/users`)
+        const eduDoc = doc(db, tempId == "undefined" || !tempId ? "admins" : `companyprofile/${tempId}/users`, id);
         let rec = await getDoc(eduDoc);
+        console.log(rec.data())
         return rec.data();
     };
     

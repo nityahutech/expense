@@ -11,10 +11,16 @@ import {
     where
 } from "firebase/firestore";
 
-const compId = sessionStorage.getItem("compId")
-const policyCollectionRef = collection(db, `companyprofile/${compId}/policy`);
+let compId = sessionStorage.getItem("compId")
+let policyCollectionRef = collection(db, `companyprofile/${compId}/policy`);
 
 class PolicyContext {
+
+    getCompId = () => {
+        compId = sessionStorage.getItem("compId");
+        policyCollectionRef = collection(db, `companyprofile/${compId}/policy`);
+        return;
+    }
 
     createPolicy = (updateCompInfo, file) => {
         if (file) {

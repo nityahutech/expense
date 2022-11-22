@@ -12,14 +12,23 @@ import {
 } from "firebase/firestore";
 import { sendEmail } from "./EmailContext";
 
-const compId = sessionStorage.getItem("compId");
+let compId = sessionStorage.getItem("compId");
 
-const leaveCollectionRef = collection(db, `companyprofile/${compId}/leave`);
-const usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
+let leaveCollectionRef = collection(db, `companyprofile/${compId}/leave`);
+let usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
 
 class LeaveContext {
+
     leaves = [];
     leaveDays = {};
+
+    getCompId = () => {
+        compId = sessionStorage.getItem("compId");
+        leaveCollectionRef = collection(db, `companyprofile/${compId}/leave`);
+        usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
+        return;
+    }
+
     createLeave = async (newLeave) => {
         let email = await this.getEmailApproverList(newLeave.approver)
         email.forEach((id) => {

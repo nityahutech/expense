@@ -17,14 +17,22 @@ import {
 
 import { sendEmail } from "./EmailContext";
 
-// const usersCollectionRef = collection(db, "users");
-const compId = sessionStorage.getItem("compId");
-const usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
-const appraisalCollectionRef = collection(db, `companyprofile/${compId}/appraisal`);
-// const appraisalCollectionRef = collection(db, "appraisal");
-const midYearAppraisalCollectionRef = collection(db, `companyprofile/${compId}/midYearAppraisal`);
-// const midYearAppraisalCollectionRef = collection(db, "midYearAppraisal");
+let compId = sessionStorage.getItem("compId");
+
+let usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
+let appraisalCollectionRef = collection(db, `companyprofile/${compId}/appraisal`);
+let midYearAppraisalCollectionRef = collection(db, `companyprofile/${compId}/midYearAppraisal`);
+
 class AppraisalContext {
+
+    getCompId = () => {
+        compId = sessionStorage.getItem("compId");
+        usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
+        appraisalCollectionRef = collection(db, `companyprofile/${compId}/appraisal`);
+        midYearAppraisalCollectionRef = collection(db, `companyprofile/${compId}/midYearAppraisal`);
+        return;
+    }
+
     getAllAppraisal = () => {
         const q = query(appraisalCollectionRef, orderBy("quarter", "desc"));
         return getDocs(q);

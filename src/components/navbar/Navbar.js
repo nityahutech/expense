@@ -22,7 +22,6 @@ const Navbar = () => {
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   let temp = sessionStorage.getItem("logo");
   const logo = temp == null ? Logo : temp;
-  console.log(logo);
 
   const isClockRunning = async () => {
     let res = await AttendanceContext.getStartTime(currentUser.uid);

@@ -12,9 +12,9 @@ import WorkWeek from "./ProfileDetails/WorkWeek";
 import PaySlip from "./ProfileDetails/PaySlip";
 import BankAccount from "./ProfileDetails/BankAccount";
 
-const role = sessionStorage.getItem("role");
 
 const Profile = () => {
+const role = sessionStorage.getItem("role");
   return (
     <>
       <div className="myProfile">

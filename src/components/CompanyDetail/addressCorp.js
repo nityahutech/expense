@@ -94,211 +94,7 @@ function AddressCorp() {
                                     borderRadius:"10px",
                                 }}
                             >                     
-                                {/* <Row gutter={[16, 16]}>
-                                    <Col xs={24} sm={15} md={24}>
-                                        <div>
-                                            <div className='div-discription'>
-                                                Address Line 1
-                                            </div>
-                                            {editCorpAddress === false ? (
-                                                <div>{data.corpOffice ? data.corpOffice.addLine1 : null}
-                                                </div>
-                                            ) : (
-                                                <Form.Item
-                                                    initialValue={data.corpOffice ? data.corpOffice.addLine1 : null}
-                                                    name="address1"
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: "Enter Address",
-                                                            type: "text",
-                                                        }
-                                                    ]}
-
-                                                >
-                                                    <Input style={{
-                                                        width: '100%',
-                                                        borderBottom: '1px solid #ccc ',
-                                                        paddingLeft: '0px',
-                                                    }}
-                                                        bordered={false} required placeholder="" />
-
-                                                </Form.Item>
-                                            )}
-                                        </div>
-                                    </Col>
-                                    <Col xs={24} sm={15} md={24}>
-                                     <div>
-                                            <div className='div-discription'>
-                                                Address Line 2
-                                            </div>
-                                            {editCorpAddress === false ? (
-                                                <div>{data.corpOffice ? data.corpOffice.addLine2 : null}
-                                                </div>
-                                            ) : (
-                                                <Form.Item
-                                                    initialValue={data.corpOffice ? data.corpOffice.addLine2 : null}
-                                                    name="address2"
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: "Enter Address ",
-                                                            type: "text",
-                                                        }
-                                                    ]}
-                                                >
-                                                    <Input style={{
-                                                        width: '100%',
-                                                        borderBottom: '1px solid #ccc ',
-                                                        paddingLeft: '0px',
-                                                    }}
-                                                        bordered={false} required placeholder="" />
-
-                                                </Form.Item>
-                                            )}
-                                     </div>
-                                    </Col>
-                                    <Col xs={24} sm={15} md={6}>
-                                        <div>
-                                            <div className='div-discription'>
-                                                City
-                                            </div>
-                                            {editCorpAddress === false ? (
-                                                <div>{data.corpOffice ? data.corpOffice.city : null}
-                                                </div>
-                                            ) : (
-                                                <Form.Item style={{ width: '100%' }}
-                                                    initialValue={data.corpOffice ? data.corpOffice.city : null}
-                                                    name="city"
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: "Enter City ",
-
-                                                        },
-                                                        {
-                                                            pattern: /^[a-zA-Z\s]*$/,
-                                                            message: "Enter Valid City ",
-                                                        },
-                                                    ]}
-                                                >
-                                                    <Input style={{
-                                                        width: '100%',
-                                                        borderBottom: '1px solid #ccc ',
-                                                        paddingLeft: '0px',
-                                                    }}
-                                                        bordered={false} type='City' required placeholder="" />
-
-                                                </Form.Item>
-                                            )}
-                                        </div>
-                                    </Col>
-                                    <Col xs={24} sm={15} md={6}>
-                                        <div>
-                                            <div className='div-discription'>
-                                                State
-                                            </div>
-                                            {editCorpAddress === false ? (
-                                                <div>{data.corpOffice ? data.corpOffice.state : null}
-                                                </div>
-                                            ) : (
-                                                <Form.Item style={{ width: '100%' }}
-                                                    initialValue={data.corpOffice ? data.corpOffice.state : null}
-                                                    name="state"
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: "Enter State ",
-                                                            type: "text",
-                                                        },
-                                                        {
-                                                            pattern: /^[a-zA-Z\s]*$/,
-                                                            message: "Enter Valid State ",
-                                                        },
-                                                    ]}
-                                                >
-                                                    <Input style={{
-                                                        width: '100%',
-                                                        borderBottom: '1px solid #ccc ',
-                                                        paddingLeft: '0px',
-                                                    }}
-                                                        bordered={false} type='State' required placeholder="" />
-
-                                                </Form.Item>
-                                            )}
-                                        </div>
-                                    </Col>
-                                    <Col xs={24} sm={15} md={6}>
-                                        <div>
-                                            <div className='div-discription'>
-                                                Country
-                                            </div>
-                                            {editCorpAddress === false ? (
-                                                <div>{data.corpOffice ? data.corpOffice.country : null}
-                                                </div>
-                                            ) : (
-                                                <Form.Item
-                                                    initialValue={data.corpOffice ? data.corpOffice.country : null}
-                                                    name="country"
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: "Enter Country ",
-                                                            type: "text",
-                                                        },
-                                                        {
-                                                            pattern: /^[a-zA-Z\s]*$/,
-                                                            message: "Enter Valid Country ",
-                                                        },
-                                                    ]}
-                                                >
-                                                    <Input style={{
-                                                        width: '100%',
-                                                        borderBottom: '1px solid #ccc ',
-                                                        paddingLeft: '0px',
-                                                    }}
-                                                        bordered={false} required placeholder="" />
-
-                                                </Form.Item>
-                                            )}
-                                        </div>
-                                    </Col>
-                                    <Col xs={24} sm={15} md={6}>
-                                        <div>
-                                            <div className='div-discription'>
-                                                Pin Code
-                                            </div>
-                                            {editCorpAddress === false ? (
-                                                <div>{data.corpOffice ? data.corpOffice.pincode : null}
-                                                </div>
-                                            ) : (
-                                                <Form.Item
-                                                    initialValue={data.corpOffice ? data.corpOffice.pincode : null}
-                                                    name="pin"
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: "Enter Pin",
-                                                            type: "text",
-                                                        },
-                                                        {
-                                                            pattern: /^[0-9\b]+$/,
-                                                            message: "Enter Valid Pin",
-                                                        },
-                                                    ]}
-                                                >
-                                                    <Input style={{
-                                                        width: '100%',
-                                                        borderBottom: '1px solid #ccc ',
-                                                        paddingLeft: '0px',
-                                                    }}
-                                                        bordered={false} required placeholder="" />
-
-                                                </Form.Item>
-                                            )}
-                                        </div>
-                                    </Col>
-                                </Row> */}
+                                
 
                                 {editCorpAddress === true ? (
                                     <>
@@ -323,7 +119,8 @@ function AddressCorp() {
                                                 }}
                                                 bordered={false}
                                                 required
-                                                placeholder=""
+                                                placeholder="Address Line 1"
+                                                maxLength={100}
                                             />
                                           </Form.Item> 
                                         </Col>
@@ -344,7 +141,10 @@ function AddressCorp() {
                                                         borderBottom: '1px solid #ccc ',
                                                         paddingLeft: '0px',
                                                     }}
-                                                        bordered={false} required placeholder="" />
+                                                        bordered={false} 
+                                                        required 
+                                                        placeholder="Address Line 2"
+                                                        maxLength={100} />
 
                                           </Form.Item>
                                         </Col>
@@ -370,7 +170,11 @@ function AddressCorp() {
                                                         borderBottom: '1px solid #ccc ',
                                                         paddingLeft: '0px',
                                                     }}
-                                                        bordered={false} type='City' required placeholder="" />
+                                                        bordered={false} 
+                                                        type='City' 
+                                                        required 
+                                                        placeholder="City"
+                                                        maxLength={85} />
 
                                          </Form.Item>
                                         </Col>
@@ -396,7 +200,11 @@ function AddressCorp() {
                                                         borderBottom: '1px solid #ccc ',
                                                         paddingLeft: '0px',
                                                     }}
-                                                        bordered={false} type='State' required placeholder="" />
+                                                        bordered={false} 
+                                                        type='State' 
+                                                        required 
+                                                        placeholder="State"
+                                                        maxLength={40} />
 
                                          </Form.Item>
                                         </Col>
@@ -411,7 +219,7 @@ function AddressCorp() {
                                                             type: "text",
                                                         },
                                                         {
-                                                            pattern: /^[a-zA-Z\s]*$/,
+                                                            pattern: /^[a-zA-Z\b]*$/,
                                                             message: "Enter Valid Country ",
                                                         },
                                                     ]}
@@ -421,7 +229,10 @@ function AddressCorp() {
                                                         borderBottom: '1px solid #ccc ',
                                                         paddingLeft: '0px',
                                                     }}
-                                                        bordered={false} required placeholder="" />
+                                                        bordered={false} 
+                                                        required 
+                                                        placeholder="Country"
+                                                        maxLength={60} />
 
                                           </Form.Item>
                                         </Col>
@@ -446,7 +257,10 @@ function AddressCorp() {
                                                         borderBottom: '1px solid #ccc ',
                                                         paddingLeft: '0px',
                                                     }}
-                                                        bordered={false} required placeholder="" />
+                                                        bordered={false} 
+                                                        required 
+                                                        placeholder="Pincode"
+                                                        maxLength={6} />
 
                                           </Form.Item>
                                         </Col>

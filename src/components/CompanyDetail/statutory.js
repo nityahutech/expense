@@ -25,6 +25,7 @@ import "./companystyle.css";
 import FormItem from "antd/es/form/FormItem";
 import CompanyProContext from "../../contexts/CompanyProContext";
 import "../../components/CompanyDetail/companystyle.css";
+import moment from "moment";
 
 const { TextArea } = Input;
 const compId = sessionStorage.getItem("compId");
@@ -50,7 +51,7 @@ const Statutory = () => {
     const valuesToservice = {
       entityType: value.entityType,
       cinNumber: value.cinNumber,
-      dateOfIncorp: value.dateOfIncorp,
+      dateOfIncorp: value.dateOfIncorp.format("Do MMM, YYYY"),
       compPan: value.compPan,
       compTan: value.compTan,
       gst: value.gst,
@@ -73,8 +74,6 @@ const Statutory = () => {
     setBAIList(data.bank);
   };
 
-    const handleChange = (value) => {
-  };
   const checkAlphabets = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
@@ -199,9 +198,9 @@ const Statutory = () => {
       },
     });
   };
-
     return (
     <>
+    
       <div
         className="personalCardDiv"
         style={{
@@ -348,24 +347,19 @@ const Statutory = () => {
                         <div>{data.dateOfIncorp ? data.dateOfIncorp : "-"}</div>
                       ) : (
                         <Form.Item
-                          initialValue={data ? data.dateOfIncorp : null}
+                          initialValue={data ? moment(data.dateOfIncorp, "Do MMM, YYYY") : null}
                           name="dateOfIncorp"
                           rules={[
                             {
-                              required: true,
-                              message: "Please enter Website Name",
-                              type: "Website",
-                            },
-                            {
-                              pattern: /^[0-9/A-Za-z\s]*$/,
-                              message: "Please enter Valid Website Name",
+                              required: false,
+                              message: "Please select date",
                             },
                           ]}
                         >
-                          <Input
-                            type="WebsiteName"
+                          {/* <Input
+                            type="D.O.I"
                             required
-                            placeholder="Enter Website Name"
+                            placeholder="Enter D.O.I"
                             bordered={false}
                             style={{
                               width: "100%",
@@ -373,7 +367,20 @@ const Statutory = () => {
                               paddingLeft: "0px",
                               marginTop: "10px",
                             }}
-                          />
+                          /> */}
+
+                          <DatePicker
+                            format="Do MMM, YYYY"
+                            required
+                            placeholder="Enter D.O.I"
+                            bordered={true}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }} />
+
                           {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                         </Form.Item>
                       )}
@@ -567,7 +574,7 @@ const Statutory = () => {
                     onFinish={addDirector}
                     form={form}
                   >
-                    <Card className="tabcard1" title="Directors" bordered={false}>
+                    {/* <Card className="tabcard1" title="Directors" bordered={false}> */}
                       {directorList.map((u, i) => (
                         <div>
                           <Row gutter={[20, 8]}>
@@ -817,13 +824,13 @@ const Statutory = () => {
                           </Button>
                         </div>
                       )}
-                    </Card>
+                    {/* </Card> */}
                   </Form>
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Auditors" key="2">
-                      <Card title="Auditors" bordered={false}>
+                      {/* <Card title="Auditors" bordered={false}> */}
                         <Row>
-                          <Col xs={22} sm={22} md={22}>
+                          <Col xs={24} sm={24} md={24}>
                             <Form
                               wrappercol={{
                                 span: 14,
@@ -872,7 +879,6 @@ const Statutory = () => {
                                           borderBottom: "1px solid #ccc ",
                                         }}
                                         bordered={false}
-                                        onChange={handleChange}
                                         options={[
                                           {
                                             value: "Internal",
@@ -1034,7 +1040,6 @@ const Statutory = () => {
                                             borderBottom: "1px solid #ccc ",
                                           }}
                                           bordered={false}
-                                          onChange={handleChange}
                                           options={[
                                             {
                                               value: "Internal",
@@ -1120,10 +1125,10 @@ const Statutory = () => {
                             </Form>
                           </Col>
                         </Row>
-                      </Card>
+                      {/* </Card> */}
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Company Secretary" key="3">
-                  <Card title="Company Secretary" bordered={false}>
+                  {/* <Card title="Company Secretary" bordered={false}> */}
                     <Form
                       wrappercol={{
                         span: 14,
@@ -1333,7 +1338,7 @@ const Statutory = () => {
                         </div>
                       )}
                     </Form>
-                  </Card>
+                  {/* </Card> */}
                 </Tabs.TabPane>
               </Tabs>
             </Card>
@@ -1571,7 +1576,7 @@ const Statutory = () => {
                         name="baiaccountitle"
                         rules={[
                           {
-                            pattern: /^[a-zA-Z\s]*$/,
+                            pattern: /^[a-zA-Z-0-9\s]*$/,
                             required: true,
                             message: "Please enter account title",
                           },
@@ -1580,6 +1585,7 @@ const Statutory = () => {
                         <Input
                           placeholder="Account Title"
                           bordered={false}
+                          maxLength={25}
                           style={{
                             width: "100%",
                             borderBottom: "1px solid #ccc ",
@@ -1604,6 +1610,7 @@ const Statutory = () => {
                         <Input
                           placeholder="Bank Name"
                           bordered={false}
+                          maxLength={25}
                           style={{
                             width: "100%",
                             borderBottom: "1px solid #ccc ",
@@ -1628,6 +1635,7 @@ const Statutory = () => {
                         <Input
                           placeholder="City"
                           bordered={false}
+                          maxLength={25}
                           style={{
                             width: "100%",
                             borderBottom: "1px solid #ccc ",
@@ -1652,6 +1660,7 @@ const Statutory = () => {
                         <Input
                           placeholder="Branch Name"
                           bordered={false}
+                          maxLength={25}
                           style={{
                             width: "100%",
                             borderBottom: "1px solid #ccc ",
@@ -1706,7 +1715,6 @@ const Statutory = () => {
                             marginTop: "10px",
                           }}
                           bordered={false}
-                          onChange={handleChange}
                           options={[
                             {
                               value: "Account Type",

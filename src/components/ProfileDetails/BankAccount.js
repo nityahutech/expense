@@ -135,7 +135,7 @@ function BankAccount() {
                         Bank Name
                       </div>
                       {editContent === false ? (
-                        <div>{data.bankName ? data.bankName : "-"}</div>
+                        <div>{data?.bankName ? data.bankName : "-"}</div>
                       ) : (
                         <Form.Item
                           name="bankName"
@@ -151,7 +151,7 @@ function BankAccount() {
                               message: "Please enter Bank Name",
                             },
                           ]}
-                          initialValue={data.bankName ? data.bankName : null}
+                          initialValue={data?.bankName ? data.bankName : null}
                         >
                           <Input
                             placeholder="Enter Bank Name"
@@ -197,7 +197,7 @@ function BankAccount() {
                         Account Number
                       </div>
                       {editContent === false ? (
-                        <div>{data.accountNumber? data.accountNumber : "-"}</div>
+                        <div>{data?.accountNumber? data.accountNumber : "-"}</div>
                       ) : (
                         <Form.Item
                           name="accountNumber"
@@ -217,7 +217,7 @@ function BankAccount() {
                               whitespace: true,
                             },
                           ]} 
-                          initialValue={data.accountNumber ? data.accountNumber : null}
+                          initialValue={data?.accountNumber ? data.accountNumber : null}
                         >
                           <Input
                             placeholder="Enter Account Number"
@@ -248,7 +248,7 @@ function BankAccount() {
                         IFSC Code
                       </div>
                       {editContent === false ? (
-                        <div>{data.ifscCode ? data.ifscCode : "-"}</div>
+                        <div>{data?.ifscCode ? data.ifscCode : "-"}</div>
                       ) : (
                         <Form.Item
                           name="ifscCode"
@@ -271,7 +271,7 @@ function BankAccount() {
                               whitespace: true,
                             },
                           ]}
-                          initialValue={data.ifscCode ? data.ifscCode : null}
+                          initialValue={data?.ifscCode ? data.ifscCode : null}
                         >
                           <Input
                             placeholder="Enter IFSC Code"

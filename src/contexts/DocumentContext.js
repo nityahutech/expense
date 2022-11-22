@@ -11,11 +11,17 @@ import {
     where
 } from "firebase/firestore";
 
-const compId = sessionStorage.getItem("compId");
+let compId = sessionStorage.getItem("compId");
 
-const documentCollectionRef = collection(db, `companyprofile/${compId}/document`);
+let documentCollectionRef = collection(db, `companyprofile/${compId}/document`);
 
 class DocumentContext {
+
+    getCompId = () => {
+        compId = sessionStorage.getItem("compId");
+        documentCollectionRef = collection(db, `companyprofile/${compId}/document`);
+        return;
+    }
 
     addDocument = (newDocument, file) => {
         if (file) {

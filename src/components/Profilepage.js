@@ -12,6 +12,8 @@ import WorkWeek from "./ProfileDetails/WorkWeek";
 import PaySlip from "./ProfileDetails/PaySlip";
 import BankAccount from "./ProfileDetails/BankAccount";
 
+const role = sessionStorage.getItem("role");
+
 const Profile = () => {
   return (
     <>
@@ -20,12 +22,16 @@ const Profile = () => {
           <Tabs.TabPane tab="Personal" key="1">
             <Personal />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Work" key="2">
-            <Work />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Team" key="3">
-            <Team />
-          </Tabs.TabPane>
+          {role != "super" ? (
+            <>
+              <Tabs.TabPane tab="Work" key="2">
+                <Work />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Team" key="3">
+                <Team />
+              </Tabs.TabPane>
+            </>
+          ) : null}
           <Tabs.TabPane tab="Education" key="4">
             <Education />
           </Tabs.TabPane>
@@ -35,15 +41,19 @@ const Profile = () => {
           <Tabs.TabPane tab="Documents" key="6">
             <Document />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Work Week" key="7">
-            <WorkWeek />
-          </Tabs.TabPane>
-          {/* <Tabs.TabPane tab="Pay Slip" key="8">
-            <PaySlip />
-          </Tabs.TabPane> */}
-          <Tabs.TabPane tab="Bank Account" key="9">
-            <BankAccount />
-          </Tabs.TabPane>
+          {role != "super" ? (
+            <>
+              <Tabs.TabPane tab="Work Week" key="7">
+                <WorkWeek />
+              </Tabs.TabPane>
+              {/* <Tabs.TabPane tab="Pay Slip" key="8">
+                <PaySlip />
+              </Tabs.TabPane> */}
+              <Tabs.TabPane tab="Bank Account" key="9">
+                <BankAccount />
+              </Tabs.TabPane>
+            </>
+          ) : null}
         </Tabs>
       </div>
     </>

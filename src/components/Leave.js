@@ -240,6 +240,7 @@ const Leave = () => {
   };
   const getConfigurations = async () => {
     let data = await ConfigureContext.getConfigurations(page)
+    if (Object.keys(data).length == 0) {return}
     let sorted = Object.keys(data?.leaveNature).sort((k1, k2) => k1 < k2 ? -1 : k1 > k2 ? 1 : 0)
     let temp = {}
     sorted.map((nat) => {
@@ -1072,9 +1073,7 @@ const Leave = () => {
                   alignItems: 'center'
                 }}>
                   <div>
-                    <LeaveCreate isHr={isHr}
-                    // refreshCalendar={getHoliday}
-                    />
+                    <LeaveCreate isHr={isHr} refresh={getConfigurations}/>
                   </div>
                   <Button className="button-applyleave"
                     style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '0px' }}

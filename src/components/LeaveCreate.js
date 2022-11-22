@@ -22,6 +22,7 @@ const LeaveCreate = (props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const page = "leavePage";
     const [editContent, showEditContent] = useState(false);
+    const [nature, setNature] = useState({});
     const [data, setData] = useState({});
     const [des, setDes] = useState(null);
     const [old, setOld] = useState(null);
@@ -83,9 +84,10 @@ const LeaveCreate = (props) => {
 
                             }}
                             onClick={() => {
+                            console.log(record)
                                 setEditInfo(true);
-                                setDes(record.leaveNature);
-                                setOld(record.leaveNature);
+                                setDes(record);
+                                setOld(record);
                             }}
                         >
                             <EditFilled />
@@ -117,7 +119,10 @@ const LeaveCreate = (props) => {
 
     const getData = async () => {
         let data = await ConfigureContext.getConfigurations(page);
-        let d = Object.keys(data.leaveNature).map((nat) => {
+        console.log(data)
+        if (Object.keys(data).length == 0) {return}
+        let d = Object.keys(data?.leaveNature).map((nat) => {
+            console.log(nat)
             return {
                 leaveNature: nat,
                 leaveAllocation: data.leaveNature[`${nat}`]
@@ -143,7 +148,13 @@ const LeaveCreate = (props) => {
             okType: "danger",
 
             onOk: () => {
-                ConfigureContext.deleteConfigurations(page, { leaveNature: record })
+                let temp = {}
+                dataSource.map((d) => {
+                    temp[`${d.leaveNature}`] = d.leaveAllocation
+                });
+                delete temp[`${record}`]
+                console.log(temp)
+                ConfigureContext.createConfiguration(page, { leaveNature: temp })
                     .then((response) => {
                         showNotification(
                             "success",
@@ -151,6 +162,7 @@ const LeaveCreate = (props) => {
                             "Leave deleted successfully!"
                         );
                         getData();
+                        props.refresh();
                     })
                     .catch((error) => {
                         showNotification("error", "Error", error.message);
@@ -160,43 +172,56 @@ const LeaveCreate = (props) => {
     };
 
     const onEdit = () => {
-        // console.log(des);
-        // ConfigureContext.updateConfigurations(
-        //     page,
-        //     { leaveNature: old },
-        //     { leaveNature: des }
-        // )
-        //     .then((response) => {
-        //         showNotification(
-        //             "success",
-        //             "Success",
-        //             "leaveNature edited successfully!"
-        //         );
-        //         getData();
-        //         setEditInfo(false);
-        //         setDes(null);
-        //         setOld(null);
-        //     })
-        //     .catch((error) => {
-        //         showNotification("error", "Error", error.message);
-        //     });
-    };
-
-    const onFinish = (values) => {
-        let record = {
-            leaveNature: Object.values(values),
-        };
-        console.log("Received values of form:", record);
-        ConfigureContext.addConfigurations(page, record)
+        let record = {}
+        dataSource.map((d) => {
+            record[`${d.leaveNature}`] = d.leaveAllocation
+        });
+        delete record[`${old.leaveNature}`]
+        record = {
+            ...record,
+            [`${des.leaveNature}`]: des.leaveAllocation
+        }
+        console.log(record);
+        ConfigureContext.createConfiguration(
+            page,
+            { leaveNature: record }
+        )
             .then((response) => {
                 showNotification(
                     "success",
                     "Success",
-                    "leaveNature added successfully!"
+                    "Leave types edited successfully!"
                 );
-                getData();
+                props.refresh();
+                setEditInfo(false);
+                setDes(null);
+                setOld(null);
+            })
+            .catch((error) => {
+                showNotification("error", "Error", error.message);
+            });
+    };
+
+    const onFinish = (nature, data) => {
+        let record = {}
+        dataSource.map((d) => {
+            record[`${d.leaveNature}`] = d.leaveAllocation
+        });
+        Object.keys(nature).map((nat) => {
+            record[`${nature[`${nat}`]}`] = data[`${nat}`]
+        })
+        console.log("Received values of form:", {leaveNature: record});
+        ConfigureContext.createConfiguration(page, {leaveNature: record})
+            .then((response) => {
+                showNotification(
+                    "success",
+                    "Success",
+                    "Leave types added successfully!"
+                );
+                props.refresh();
                 showEditContent(false);
                 setData({});
+                setNature({});
                 form.resetFields();
             })
             .catch((error) => {
@@ -213,7 +238,7 @@ const LeaveCreate = (props) => {
                     }}
                         onClick={() => { showModal(true) }}
                     >
-                        Create Leave
+                        Set Leave Types
                     </Button>
                     :
                     null
@@ -300,11 +325,12 @@ const LeaveCreate = (props) => {
                                                                             <Input style={{ width: '200px' }}
                                                                                 placeholder="Nature of leave"
                                                                                 onChange={(e) => {
+                                                                                    console.log(key, name)
                                                                                     let temp = {
-                                                                                        ...data,
+                                                                                        ...nature,
                                                                                         [`${key}`]: e.target.value,
                                                                                     };
-                                                                                    setData(temp);
+                                                                                    setNature(temp);
                                                                                 }}
                                                                             />
                                                                         </Form.Item>
@@ -326,6 +352,7 @@ const LeaveCreate = (props) => {
                                                                             <Input style={{ width: '200px' }}
                                                                                 placeholder="No. of leave allocated"
                                                                                 onChange={(e) => {
+                                                                                    console.log(key, name)
                                                                                     let temp = {
                                                                                         ...data,
                                                                                         [`${key}`]: e.target.value,
@@ -337,6 +364,7 @@ const LeaveCreate = (props) => {
 
                                                                         <MinusCircleOutlined
                                                                             onClick={() => {
+                                                                                delete nature[`${key}`];
                                                                                 delete data[`${key}`];
                                                                                 remove(name);
                                                                             }}
@@ -365,6 +393,7 @@ const LeaveCreate = (props) => {
                                                     style={{ marginRight: "10px" }}
                                                     onClick={() => {
                                                         setData({});
+                                                        setNature({});
                                                         showEditContent(false);
                                                         form.resetFields();
                                                     }}
@@ -374,7 +403,7 @@ const LeaveCreate = (props) => {
                                                 <Button
                                                     type="primary"
                                                     onClick={() => {
-                                                        onFinish(data);
+                                                        onFinish(nature, data);
                                                     }}
                                                 >
                                                     Submit
@@ -413,10 +442,11 @@ const LeaveCreate = (props) => {
                     setEditInfo(false);
                 }}
             >
+            <Form>
                 <Row style={{ width: "80%", display: 'flex', flexDirection: 'row', margin: '10px' }}>
                     <Col span={12}>
                         <Form.Item
-
+                            initialValue={old?.leaveNature}
                             name="leaveNature"
                             onKeyPress={(event) => {
                                 if (checkAlphabets(event)) {
@@ -433,13 +463,13 @@ const LeaveCreate = (props) => {
                         >
                             <Input style={{ width: '150px' }}
                                 placeholder="Nature of leave"
-                                onChange={(e) => setDes(e.target.value)}
+                                onChange={(e) => setDes({...des, leaveNature: e.target.value})}
                             />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item
-
+                            initialValue={old?.leaveAllocation}
                             name="leaveAllocation"
                             onKeyPress={(event) => {
                                 if (checkNumbervalue(event)) {
@@ -455,12 +485,12 @@ const LeaveCreate = (props) => {
                         >
                             <Input style={{ width: '200px' }}
                                 placeholder="No. of leave allocated"
-                                onChange={(e) => setDes(e.target.value)}
+                                onChange={(e) => setDes({...des, leaveAllocation: e.target.value})}
                             />
                         </Form.Item>
                     </Col>
                 </Row>
-
+            </Form>
             </Modal>
         </>
     )

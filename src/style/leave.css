@@ -1,8 +1,8 @@
-/* .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content {
-  height: 30px;
+.ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content {
+  height: 50px;
   overflow: hidden;
   font-size: 5px;
-} */
+}
 
 .viewAppraisal .ant-modal-body {
   margin-left: 10px;

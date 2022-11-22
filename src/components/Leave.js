@@ -240,6 +240,7 @@ const Leave = () => {
   };
   const getConfigurations = async () => {
     let data = await ConfigureContext.getConfigurations(page)
+    if (Object.keys(data).length == 0) {return}
     let sorted = Object.keys(data?.leaveNature).sort((k1, k2) => k1 < k2 ? -1 : k1 > k2 ? 1 : 0)
     let temp = {}
     sorted.map((nat) => {
@@ -595,7 +596,7 @@ const Leave = () => {
             paddingLeft: "5px",
             paddingRight: "5px",
             margin: "0px",
-            borderRadius: "5px",
+            borderRadius: "100px",
             justifyContent: "center",
           }}
         >
@@ -1066,16 +1067,20 @@ const Leave = () => {
                 <div>
                   <HolidayList isHr={isHr} refreshCalendar={getHoliday} />
                 </div>
-                <div>
-                  <LeaveCreate isHr={isHr}
-                  // refreshCalendar={getHoliday}
-                  />
+                <div className="resp-leaveButton" style={{
+                  display: 'flex',
+                  alignContent: 'center',
+                  alignItems: 'center'
+                }}>
+                  <div>
+                    <LeaveCreate isHr={isHr} refresh={getConfigurations}/>
+                  </div>
+                  <Button className="button-applyleave"
+                    style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '0px' }}
+                    type="default" onClick={() => { setSecondModal(true) }}>
+                    Apply Leave
+                  </Button>
                 </div>
-                <Button className="button-applyleave"
-                  style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '10px' }}
-                  type="default" onClick={() => { setSecondModal(true) }}>
-                  Apply Leave
-                </Button>
               </div>
             </div>
 

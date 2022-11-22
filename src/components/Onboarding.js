@@ -614,7 +614,7 @@ function Onboarding() {
                       ]}
                     >
                       <Input
-                        maxLength={30}
+                        maxLength={50}
                         placeholder="Organization Name"
                         style={{
                           border: "1px solid #8692A6",

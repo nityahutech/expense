@@ -11,10 +11,16 @@ import {
     where
 } from "firebase/firestore";
 
-const compId = sessionStorage.getItem("compId")
-const policyCollectionRef = collection(db, `companyprofile/${compId}/policy`);
+let compId = sessionStorage.getItem("compId")
+let policyCollectionRef = collection(db, `companyprofile/${compId}/policy`);
 
 class PolicyContext {
+
+    getCompId = () => {
+        compId = sessionStorage.getItem("compId");
+        policyCollectionRef = collection(db, `companyprofile/${compId}/policy`);
+        return;
+    }
 
     createPolicy = (updateCompInfo, file) => {
         if (file) {
@@ -39,15 +45,17 @@ class PolicyContext {
     // };
 
     deletePolicy = (id, file) => {
-        if(file) {
+        if (file) {
             const storageRef = ref(storage, `/${compId}/policy/${file}`);
             deleteObject(storageRef)
         }
-        const documentDoc = doc(db, "policy", id);
+        const documentDoc = doc(db, `companyprofile/${compId}/policy`, id);
         return deleteDoc(documentDoc);
     };
-    
-    getPolicy = async () => { 
+
+
+
+    getPolicy = async () => {
         const q = query(policyCollectionRef);
         let temp = await getDocs(q);
         let req = temp.docs.map((doc) => {

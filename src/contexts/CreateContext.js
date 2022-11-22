@@ -14,13 +14,8 @@ import {
   doc,
 } from "firebase/firestore";
 import { db } from "../firebase-config";
-import { async } from "@firebase/util";
 
-const compId = sessionStorage.getItem("compId");
-
-const users = collection(db, `companyprofile/${compId}/users`);
-
-function generateEmpId(compId) {
+function generateEmpId(users) {
   let len = getDocs(users).then((snapshot) => {
     let res = snapshot.docs.length + 1;
     return "HTS" + ("00" + res.toString()).slice(-3);
@@ -38,7 +33,7 @@ export async function createUser(values, compId) {
   updateProfile(res.user, { displayName: name });
   // updatePhoneNumber(res.user, values.phone)
   const valuesToservice = {
-    empId: await generateEmpId(compId),
+    empId: await generateEmpId(),
     name: name,
     fname: values.fname,
     mname: values.mname ? values.mname : "",
@@ -79,7 +74,8 @@ export async function createUser(values, compId) {
 }
 
 export async function getUsers() {
-  const q = query(users, orderBy("empId", "asc"));
+  let compId = sessionStorage.getItem("compId")
+  const q = query(collection(db, `companyprofile/${compId}/users`), orderBy("empId", "asc"));
   return getDocs(q);
 }
 

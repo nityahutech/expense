@@ -8,11 +8,17 @@ import {
     arrayRemove,
 } from "firebase/firestore";
 
-const compId = sessionStorage.getItem("compId");
+let compId = sessionStorage.getItem("compId");
 
 class ConfigureContext {
 
+    getCompId = () => {
+        compId = sessionStorage.getItem("compId");
+        return;
+    }
+
     getConfigurations = async (page) => {
+        console.log(compId)
         const rec = await getDoc(doc(db, `companyprofile/${compId}/configurations`, page));
         return rec.data();
     };

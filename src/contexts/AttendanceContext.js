@@ -20,13 +20,22 @@ import {
     get
 } from "firebase/firestore";
 
-const compId = sessionStorage.getItem("compId");
+let compId = sessionStorage.getItem("compId");
+console.log(compId)
 
-const attendCollectionRef = collection(db, `companyprofile/${compId}/attendance`);
-const usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
-const leaveCollectionRef = collection(db, `companyprofile/${compId}/leave`);
+let attendCollectionRef = collection(db, `companyprofile/${compId}/attendance`);
+let usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
+let leaveCollectionRef = collection(db, `companyprofile/${compId}/leave`);
 
 class AttendanceContext {
+
+  getCompId = () => {
+    compId = sessionStorage.getItem("compId");
+    attendCollectionRef = collection(db, `companyprofile/${compId}/attendance`);
+    usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
+    leaveCollectionRef = collection(db, `companyprofile/${compId}/leave`);
+    return;
+  }
 
     addClockData = async (record) => {
       const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("empId", "==", record.empId), where("clockOut","!=",null), limit(1))

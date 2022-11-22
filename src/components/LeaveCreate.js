@@ -11,16 +11,16 @@ import {
     Modal,
     notification,
 } from "antd";
-// import ConfigureContext from "../../contexts/ConfigureContext";
 import { DeleteOutlined, EditFilled } from "@ant-design/icons";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import ConfigureContext from "../contexts/ConfigureContext";
 // import "./companystyle.css";
 // import { getDesigNo } from "../../contexts/CreateContext";
 
 const LeaveCreate = (props) => {
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // const page = "addemployeePage";
+    const page = "leavePage";
     const [editContent, showEditContent] = useState(false);
     const [data, setData] = useState({});
     const [des, setDes] = useState(null);
@@ -53,22 +53,20 @@ const LeaveCreate = (props) => {
     //--------------------------------
 
     useEffect(() => {
-        // getData();
+        getData();
     }, []);
 
-    // const getData = async () => {
-    //     let data = await ConfigureContext.getConfigurations(page);
-    //     getDesigNo().then((res) => {
-    //         setDataSource(
-    //             data.designations.map((des) => {
-    //                 return {
-    //                     designation: des,
-    //                     employees: res[`${des}`] ? res[`${des}`] : 0,
-    //                 };
-    //             })
-    //         );
-    //     });
-    // };
+    const getData = async () => {
+        let data = await ConfigureContext.getConfigurations(page);
+        let d = Object.keys(data.leaveNature).map((nat) => {
+            return {
+                leaveNature: nat,
+                leaveAllocation: data.leaveNature[`${nat}`]
+            }            
+        });
+        console.log(data, d)
+        setDataSource(d)
+    };
 
     const columns = [
         {

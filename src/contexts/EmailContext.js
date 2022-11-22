@@ -2,7 +2,7 @@ import axios from "axios"
 
 export const sendEmail = async (mailOptions) => {
     // try {
-    //     await axios.post("https://expense-email.herokuapp.com/api2", {
+    //     await axios.post("https://expense-server-ruddy.vercel.app/api2", {
     //         mailOptions
     //     })
     // } catch (error) {

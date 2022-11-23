@@ -32,10 +32,11 @@ const tailLayout = {
   },
 };
 
-function AttendanceLog() {
+function AttendanceLog(props) {
 
   const [allEmp, setallEmp] = useState([]);
-  const isHr = JSON.parse(sessionStorage.getItem("isHr"));
+  const isHr = props.roleView == "admin";
+  console.log(props, isHr)
   const currentUser = JSON.parse(sessionStorage.getItem("user"))
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");

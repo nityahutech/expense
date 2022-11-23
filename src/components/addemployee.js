@@ -182,7 +182,7 @@ function AddEmployee() {
                 }}
                 rules={[
                   {
-                    required: true,
+                    required: false,
 
                     message: "Please enter Middle Name",
                   },

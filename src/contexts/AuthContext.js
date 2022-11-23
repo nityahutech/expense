@@ -8,6 +8,7 @@ import { signInWithEmailAndPassword,
          updatePhoneNumber,
          updateProfile
 } from "@firebase/auth"
+import moment from "moment";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import EmpInfoContext from "./EmpInfoContext";
 import AttendanceContext from "./AttendanceContext";
@@ -39,13 +40,16 @@ export function AuthProvider({ children }) {
     if (user==null) {
       const timer = setTimeout(() => {
         sessionStorage.clear();
+        localStorage.setItem("login", null)
       }, 1500);
       return () => clearTimeout(timer);
     }
     getDoc(doc(db, 'users', user.uid)).then((res) => {
       let rec = res.data()
       sessionStorage.setItem("role", rec?.role)
+      sessionStorage.setItem("roleView", rec?.role)
       sessionStorage.setItem("compId", rec?.compId)
+      localStorage.setItem("login",  moment().format("hh:mm:ss DD-MM-YYYY"))
       setCompId(rec?.compId)
       setRole(rec?.role)
       EmpInfoContext.getCompId();

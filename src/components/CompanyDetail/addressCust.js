@@ -401,17 +401,23 @@ function AddressCust() {
                               initialValue={add ? add.title : null}
                               name="addresstitle"
                               rules={[
-                                {
-                                  required: true,
-                                  message: "Enter Address Title",
-                                  type: "text",
-                                },
-                              ]}
+                                        {
+                                          required: true,
+                                          message: "Enter Address Title",
+                                          type: "text",
+                                        },
+                                    ]}
                             >
                               <Input
-                                style={{ paddingLeft: "0px" }}
+                                style={{
+                                  width: '100%',
+                                  borderBottom: '1px solid #ccc ',
+                                  paddingLeft: '0px',
+                              }}
+                              bordered={false} 
                                 required
-                                placeholder=""
+                                maxLength={60}
+                                placeholder="Enter Title"
                               />
                             </Form.Item>
                           </Col>
@@ -422,15 +428,20 @@ function AddressCust() {
                               rules={[
                                 {
                                   required: true,
-                                  message: "Enter Address",
+                                  message: "Enter Address Line 1",
                                   type: "text",
                                 },
                               ]}
                             >
                               <Input
-                                style={{ paddingLeft: "0px" }}
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  }}
+                                  bordered={false}
                                 required
-                                placeholder=""
+                                placeholder="Enter Address Line 1"
                               />
                             </Form.Item>
                           </Col>
@@ -441,13 +452,18 @@ function AddressCust() {
                               rules={[
                                 {
                                   required: true,
-                                  message: "Enter Address Name",
+                                  message: "Enter Address Line 2",
                                   type: "text",
                                 },
                               ]}
                             >
                               <Input
-                                style={{ paddingLeft: "0px" }}
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  }}
+                                  bordered={false}
                                 required
                                 placeholder=""
                               />
@@ -471,9 +487,15 @@ function AddressCust() {
                               ]}
                             >
                               <Input
-                                style={{ paddingLeft: "0px" }}
+                                style={{
+                                  width: '100%',
+                                  borderBottom: '1px solid #ccc ',
+                                  paddingLeft: '0px',
+                                   }}
+                                  bordered={false}
                                 required
-                                placeholder=""
+                                placeholder="City"
+                                maxLength={85}
                               />
                             </Form.Item>
                           </Col>
@@ -495,9 +517,15 @@ function AddressCust() {
                               ]}
                             >
                               <Input
-                                style={{ paddingLeft: "0px" }}
+                                style={{
+                                  width: '100%',
+                                  borderBottom: '1px solid #ccc ',
+                                  paddingLeft: '0px',
+                              }}
                                 required
-                                placeholder=""
+                                placeholder="State"
+                                maxLength={40}
+                                bordered={false}
                               />
                             </Form.Item>
                           </Col>
@@ -518,9 +546,15 @@ function AddressCust() {
                               ]}
                             >
                               <Input
-                                style={{ paddingLeft: "0px" }}
+                                style={{
+                                  width: '100%',
+                                  borderBottom: '1px solid #ccc ',
+                                  paddingLeft: '0px',
+                              }}
+                                  bordered={false} 
                                 required
-                                placeholder=""
+                                placeholder="Country"
+                                maxLength={60}
                               />
                             </Form.Item>
                           </Col>
@@ -541,10 +575,15 @@ function AddressCust() {
                               ]}
                             >
                               <Input
-                                maxLength={6}
-                                style={{ paddingLeft: "0px" }}
+                                style={{
+                                  width: '100%',
+                                  borderBottom: '1px solid #ccc ',
+                                  paddingLeft: '0px',
+                              }}
+                              bordered={false}
                                 required
-                                placeholder=""
+                                placeholder="Pincode"
+                                maxLength={6}
                               />
                             </Form.Item>
                           </Col>
@@ -699,6 +738,7 @@ function AddressCust() {
                                 paddingLeft: "0px",
                                 marginTop: "10px",
                               }}
+                            
                               bordered={false}
                               required
                               placeholder="Address Title"
@@ -867,12 +907,7 @@ function AddressCust() {
                         </Form.Item>
                       </Col>
                     </Row>
-                    <Row
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "3%",
-                      }}
+                    <Row style={{ display: "flex",justifyContent: "flex-end",marginTop: "3%",}}
                     >
                       <Button
                         type="text"

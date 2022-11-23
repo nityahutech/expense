@@ -165,11 +165,12 @@ function AddressCorp() {
                                                         },
                                                     ]}
                                                 >
-                                                    <Input style={{
+                                                    <Input 
+                                                        style={{
                                                         width: '100%',
                                                         borderBottom: '1px solid #ccc ',
                                                         paddingLeft: '0px',
-                                                    }}
+                                                         }}
                                                         bordered={false} 
                                                         type='City' 
                                                         required 
@@ -224,7 +225,8 @@ function AddressCorp() {
                                                         },
                                                     ]}
                                                 >
-                                                    <Input style={{
+                                                    <Input 
+                                                    style={{
                                                         width: '100%',
                                                         borderBottom: '1px solid #ccc ',
                                                         paddingLeft: '0px',

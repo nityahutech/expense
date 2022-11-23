@@ -84,8 +84,6 @@ const Settingpage = () => {
             }}
           >
             <div style={{ background: "#fff", marginLeft: "10px" }}>
-              <Divider />
-
               <Form
                 form={form}
                 onFinish={() => {
@@ -231,7 +229,6 @@ const Settingpage = () => {
             }}
           >
             <div style={{ background: "#fff", marginLeft: "10px" }}>
-              <Divider />
               <Form
                 form={emailForm}
                 onFinish={() => {

@@ -120,6 +120,7 @@ const NewSidebar = (props) => {
                   </Menu.SubMenu>
                 ) : null}
                 {role == "admin" || isHr ? (
+                  <>
                   <Menu.Item
                     icon={
                       <img
@@ -134,7 +135,53 @@ const NewSidebar = (props) => {
                     <p className="sideFont">Company Profile</p>
                     <NavLink to="/CompanyProfile" />
                   </Menu.Item>
-                ) : null}
+
+<Menu.SubMenu
+  style={{
+    width: "100%",
+    fontSize: '13px',
+    fontWeight: '600',
+    color: '#ffffff',
+  }}
+  icon={
+    <img
+      style={{ color: "white" }}
+      src={empIcon}
+      alt="profile"
+      className="Dash"
+    />
+  }
+  key="sub2"
+  title="Employees"
+  mode="inline"
+>
+  <Menu.Item
+    className="arrow"
+    icon={<img src={dot} alt="profile" className="dot" />}
+    key="8"
+  >
+    <p className="sideFont">Add Employee</p>
+    <NavLink to="/Employee/AddEmployee" />
+  </Menu.Item>
+  <Menu.Item
+    className="arrow"
+    icon={<img src={dot} alt="profile" className="dot" />}
+    key="9"
+  >
+    <p className="sideFont">Employee List</p>
+    <NavLink to="/Employee/EmployeeList" />
+  </Menu.Item>
+  {/* <Menu.Item
+className="arrow"
+icon={<img src={dot} alt="profile" className="dot" />}
+key="25"
+>
+<p className="sideFont">Hr PaySlip</p>
+<NavLink to="/Employee/Payroll" />
+</Menu.Item> */}
+</Menu.SubMenu>
+</>
+) : null}
                 {role != "super" ? (
                   <>
                     <Menu.Item
@@ -175,53 +222,6 @@ const NewSidebar = (props) => {
                   </>
                 ) : null}
 
-                {role == "admin" || isHr ? (
-
-                  <Menu.SubMenu
-                    style={{
-                      width: "100%",
-                      fontSize: '13px',
-                      fontWeight: '600',
-                      color: '#ffffff',
-                    }}
-                    icon={
-                      <img
-                        style={{ color: "white" }}
-                        src={empIcon}
-                        alt="profile"
-                        className="Dash"
-                      />
-                    }
-                    key="sub2"
-                    title="Employees"
-                    mode="inline"
-                  >
-                    <Menu.Item
-                      className="arrow"
-                      icon={<img src={dot} alt="profile" className="dot" />}
-                      key="8"
-                    >
-                      <p className="sideFont">Add Employee</p>
-                      <NavLink to="/Employee/AddEmployee" />
-                    </Menu.Item>
-                    <Menu.Item
-                      className="arrow"
-                      icon={<img src={dot} alt="profile" className="dot" />}
-                      key="9"
-                    >
-                      <p className="sideFont">Employee List</p>
-                      <NavLink to="/Employee/EmployeeList" />
-                    </Menu.Item>
-                    {/* <Menu.Item
-                  className="arrow"
-                  icon={<img src={dot} alt="profile" className="dot" />}
-                  key="25"
-                >
-                  <p className="sideFont">Hr PaySlip</p>
-                  <NavLink to="/Employee/Payroll" />
-                </Menu.Item> */}
-                  </Menu.SubMenu>
-                ) : null}
                 {role != "super" ? (
                   <Menu.SubMenu
                     className="arrow-div"

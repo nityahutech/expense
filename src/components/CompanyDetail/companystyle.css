@@ -171,13 +171,12 @@
   color: #ffffff;
 }
 
-/* .policies .ant-table-thead>tr>th{
-  background:#1963A6;
-  color: #ffffff;
-  font-weight: 500;
+.policies .ant-table-thead>tr>th{
+  
+  font-weight: 600;
   font-size: 14px;
   line-height: 18px;
-} */
+}
 
 .companyCard .ant-card-head{
   border-radius: 10px 10px 0px 0px;
@@ -231,9 +230,15 @@
   color: #ffff}
   
 .designationTable .ant-table-thead > tr > th {
-  background: #1963a6;
-  color: #ffffff;
-  font-weight: 500;
+  
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.departTable .ant-table-thead > tr > th {
+  
+  font-weight: 600;
   font-size: 14px;
   line-height: 18px;
 }
@@ -259,4 +264,36 @@ color: #ffffff;
 }
 .editDesignation .ant-btn-primary{
   background:rgb(21, 101, 216) ;
+}
+
+.subInput .ant-input{
+  border: 1px solid #8692A6;
+    border-radius: 4px;
+}
+.subInput .ant-form label{
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.addSub .ant-form-item-label > label{
+  font-weight: 600;
+  font-size: 13px;
+  
+}
+
+.addDepart .ant-modal-content{
+  border-radius: 10px;
+  
+}
+
+.addDepart .ant-modal-header{
+  border-radius: 10px 10px 0px 0px;
+  background: #043661;
+  color: #ffffff;
+}
+.addDepart .ant-modal-title{
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
+line-height: 25px;
 }

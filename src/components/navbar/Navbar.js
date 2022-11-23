@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "antd/dist/antd.css";
-import { Dropdown, Menu, Space } from "antd";
+import { Dropdown, Menu, Space, Switch } from "antd";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
 import { Link } from "react-router-dom";
@@ -13,12 +13,14 @@ import Logo from "../../images/smallerLogo.png";
 import dropdown from "../../images/dropdown.png";
 // ---------------------------------------------------------------------
 
-const Navbar = () => {
+const Navbar = (props) => {
   const [startTime, setStartTime] = useState();
   const [isRunning, setIsRunning] = useState(false);
   const { logout } = useAuth();
   const [clockinfo, setClockInfo] = useState();
   const role = sessionStorage.getItem("role");
+  const [roleView, setRoleView] = useState(props.roleView);
+  console.log(roleView)
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   let temp = sessionStorage.getItem("logo");
   const logo = temp == null ? Logo : temp;
@@ -196,7 +198,23 @@ const Navbar = () => {
           className="stopwatch"
         >
         </div>
-        {role == "super" ? null : (
+        {role == "admin" ? (
+          <Switch 
+            checkedChildren="Admin"
+            unCheckedChildren="User"
+            defaultChecked = {roleView == "admin"}
+            style={{
+              marginRight: "10px",
+              fontWeight: "bold"
+            }}
+            onChange={()=>{
+              setRoleView(roleView == "admin" ? "emp" : "admin")
+              props.switchRole(roleView == "admin" ? "emp" : "admin")
+              sessionStorage.setItem("roleView", roleView == "admin" ? "emp" : "admin")}
+            }
+          />
+        ) : null}
+       {roleView == "emp" ? (
           <button
             style={buttonStyle}
             onClick={handleClock}
@@ -208,7 +226,7 @@ const Navbar = () => {
               ? moment.utc(clockTime * 1000).format("HH:mm:ss")
               : ""}
           </button>
-        )}
+        ) : null}
 
         <div>
           <img

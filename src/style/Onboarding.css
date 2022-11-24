@@ -131,4 +131,23 @@ line-height: 25px;
     pointer-events: none;
 
  }
+ .userLabel .ant-form-item-label > label{
+    font-weight: 400;
+font-size: 13px;
+line-height: 18px;
+color: #212529;
+ }
+ .radio .ant-radio-wrapper{
+    font-size: "13px";
+    font-weight: "400";
+    line-height: "18px";
+    color: "#212529";
+ }
+ /* .userLabel .ant-form-item-label{
+    display: flex;
+    justify-content: right;
+ } */
  
+ .userLabel .ant-row{
+gap :"10px"
+ }

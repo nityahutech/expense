@@ -21,8 +21,9 @@
     left: 96px;
     width: 91px;
 }
-.ant-form-item-label{
+.formItem .ant-form-item-label{
     font-size: 16px;
+    
 }
 .Range{
     position: relative;

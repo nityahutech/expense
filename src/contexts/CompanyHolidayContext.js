@@ -1,6 +1,4 @@
 import { db } from "../firebase-config";
-
-
 import {
     collection,
     getDocs,
@@ -12,7 +10,6 @@ import {
 } from "firebase/firestore";
 
 let compId = sessionStorage.getItem("compId");
-
 let companyholidayCollectionRef = collection(db, `companyprofile/${compId}/companyholiday`);
 
 class CompanyHolidayContext {

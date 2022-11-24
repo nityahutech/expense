@@ -19,7 +19,7 @@ const Navbar = (props) => {
   const { logout } = useAuth();
   const [clockinfo, setClockInfo] = useState();
   const role = sessionStorage.getItem("role");
-  const [roleView, setRoleView] = useState(props.roleView);
+  const [roleView, setRoleView] = useState(props.roleView || sessionStorage.getItem("role"));
   console.log(roleView)
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   let temp = sessionStorage.getItem("logo");

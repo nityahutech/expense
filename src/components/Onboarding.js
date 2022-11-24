@@ -24,6 +24,7 @@ import reload from "../images/reload.png";
 import ViewModal from "./ViewModal";
 import EditOnboarding from "./EditOnboarding";
 import OrgDetails from "./OrgDetails";
+import CostCenter from "./CostCenter"
 
 const { Step } = Steps;
 
@@ -384,7 +385,7 @@ function Onboarding() {
             </Steps>
             <Divider />
 
-            { progress == 1 ? (<>{"<CostCenter />"}</>) :
+            { progress == 1 ? (<CostCenter />) :
                 progress == 2 ? (<>{"<OranizationHierarcy />"}</>) :
                   progress == 3 ? (<>{"<AccessDetails />"}</>) :
                   (<OrgDetails />)

@@ -72,6 +72,9 @@ class CompanyProContext {
                     mailid: user.mailid,
                     repManager: "",
                     secManager: "",
+                    isLead: true,
+                    isManager: true, 
+                    isHr: true
                 };
                 await createUser(newRec, id)
             })

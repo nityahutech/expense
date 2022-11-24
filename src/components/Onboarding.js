@@ -25,6 +25,8 @@ import ViewModal from "./ViewModal";
 import EditOnboarding from "./EditOnboarding";
 import OrgDetails from "./OrgDetails";
 import CostCenter from "./CostCenter"
+import AccessDetails from "./AccessDetails"
+import oranizationHierarcy from "./oranizationHierarcy"
 
 const { Step } = Steps;
 
@@ -394,8 +396,8 @@ function Onboarding() {
           >
 
             { progress == 1 ? (<CostCenter />) :
-                progress == 2 ? (<>{"<OranizationHierarcy />"}</>) :
-                  progress == 3 ? (<>{"<AccessDetails />"}</>) :
+                progress == 2 ? (<oranizationHierarcy />) :
+                  progress == 3 ? (<AccessDetails />) :
                   (<OrgDetails />)
             }
 

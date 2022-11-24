@@ -24,6 +24,9 @@ import reload from "../images/reload.png";
 import ViewModal from "./ViewModal";
 import EditOnboarding from "./EditOnboarding";
 import OrgDetails from "./OrgDetails";
+import CostCenter from "./CostCenter"
+import AccessDetails from "./AccessDetails"
+import oranizationHierarcy from "./oranizationHierarcy"
 
 const { Step } = Steps;
 
@@ -382,11 +385,19 @@ function Onboarding() {
               <Step title="Organization Hierarchy" />
               <Step title="Access Details" />
             </Steps>
-            <Divider />
+          </Card>
+          <Card 
+            style={{
+              background: "#fff",
+              margin: "0px 15px 20px 15px",
 
-            { progress == 1 ? (<>{"<CostCenter />"}</>) :
-                progress == 2 ? (<>{"<OranizationHierarcy />"}</>) :
-                  progress == 3 ? (<>{"<AccessDetails />"}</>) :
+              // height: "55rem",
+            }}
+          >
+
+            { progress == 1 ? (<CostCenter />) :
+                progress == 2 ? (<oranizationHierarcy />) :
+                  progress == 3 ? (<AccessDetails />) :
                   (<OrgDetails />)
             }
 

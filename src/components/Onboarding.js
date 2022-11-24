@@ -25,8 +25,8 @@ import ViewModal from "./ViewModal";
 import EditOnboarding from "./EditOnboarding";
 import OrgDetails from "./OrgDetails";
 import CostCenter from "./CostCenter"
-import AccessDetails from "./AccessDetails"
-import oranizationHierarcy from "./oranizationHierarcy"
+// import AccessDetails from "./AccessDetails"
+import OranizationHierarcy from "./onBoardingComponent/organizationHierarchy";
 
 const { Step } = Steps;
 
@@ -53,7 +53,7 @@ function Onboarding() {
     getData();
   }, []);
 
-      
+
   const showNotification = (type, msg, desc) => {
     notification[type]({
       message: msg,
@@ -63,9 +63,8 @@ function Onboarding() {
 
   const changeCompStatus = (id, status) => {
     Modal.confirm({
-      title: `Are you sure, you want to ${
-        status == "Deactivated" ? "activate" : "deactivate"
-      } this record?`,
+      title: `Are you sure, you want to ${status == "Deactivated" ? "activate" : "deactivate"
+        } this record?`,
       okText: "Yes",
       okType: "danger",
 
@@ -76,8 +75,7 @@ function Onboarding() {
         showNotification(
           "success",
           "Updated",
-          `Organization status ${
-            status == "Deactivated" ? "activated" : "deactivated"
+          `Organization status ${status == "Deactivated" ? "activated" : "deactivated"
           } Successfully`
         );
         getData();
@@ -368,7 +366,7 @@ function Onboarding() {
           </Card>
         </Tabs.TabPane>
         <Tabs.TabPane tab="Organization Onboarding" key="2">
-          <Card 
+          <Card
             style={{
               background: "#fff",
               margin: "0px 15px 20px 15px",
@@ -376,7 +374,7 @@ function Onboarding() {
               // height: "55rem",
             }}
           >
-            <Steps 
+            <Steps
               current={progress}
               onChange={progressBar}
             >
@@ -386,7 +384,7 @@ function Onboarding() {
               <Step title="Access Details" />
             </Steps>
           </Card>
-          <Card 
+          <Card
             style={{
               background: "#fff",
               margin: "0px 15px 20px 15px",
@@ -395,10 +393,10 @@ function Onboarding() {
             }}
           >
 
-            { progress == 1 ? (<CostCenter />) :
-                progress == 2 ? (<oranizationHierarcy />) :
-                  progress == 3 ? (<AccessDetails />) :
-                  (<OrgDetails />)
+            {progress == 1 ? (<CostCenter />) :
+              progress == 2 ? (<OranizationHierarcy />) :
+                // progress == 3 ? (<AccessDetails />) :
+                (<OrgDetails />)
             }
 
           </Card>

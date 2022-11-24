@@ -84,7 +84,7 @@ const LeaveCreate = (props) => {
 
                             }}
                             onClick={() => {
-                            console.log(record)
+                                console.log(record)
                                 setEditInfo(true);
                                 setDes(record);
                                 setOld(record);
@@ -120,7 +120,7 @@ const LeaveCreate = (props) => {
     const getData = async () => {
         let data = await ConfigureContext.getConfigurations(page);
         console.log(data)
-        if (Object.keys(data).length == 0) {return}
+        if (Object.keys(data).length == 0) { return }
         let d = Object.keys(data?.leaveNature).map((nat) => {
             console.log(nat)
             return {
@@ -210,8 +210,8 @@ const LeaveCreate = (props) => {
         Object.keys(nature).map((nat) => {
             record[`${nature[`${nat}`]}`] = data[`${nat}`]
         })
-        console.log("Received values of form:", {leaveNature: record});
-        ConfigureContext.createConfiguration(page, {leaveNature: record})
+        console.log("Received values of form:", { leaveNature: record });
+        ConfigureContext.createConfiguration(page, { leaveNature: record })
             .then((response) => {
                 showNotification(
                     "success",
@@ -323,6 +323,7 @@ const LeaveCreate = (props) => {
                                                                             ]}
                                                                         >
                                                                             <Input style={{ width: '200px' }}
+
                                                                                 placeholder="Nature of leave"
                                                                                 onChange={(e) => {
                                                                                     console.log(key, name)
@@ -442,55 +443,55 @@ const LeaveCreate = (props) => {
                     setEditInfo(false);
                 }}
             >
-            <Form>
-                <Row style={{ width: "80%", display: 'flex', flexDirection: 'row', margin: '10px' }}>
-                    <Col span={12}>
-                        <Form.Item
-                            initialValue={old?.leaveNature}
-                            name="leaveNature"
-                            onKeyPress={(event) => {
-                                if (checkAlphabets(event)) {
-                                    event.preventDefault();
-                                }
-                            }}
+                <Form>
+                    <Row style={{ width: "80%", display: 'flex', flexDirection: 'row', margin: '10px' }}>
+                        <Col span={12}>
+                            <Form.Item
+                                initialValue={old?.leaveNature}
+                                name="leaveNature"
+                                onKeyPress={(event) => {
+                                    if (checkAlphabets(event)) {
+                                        event.preventDefault();
+                                    }
+                                }}
 
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Please enter Leave Nature",
-                                },
-                            ]}
-                        >
-                            <Input style={{ width: '150px' }}
-                                placeholder="Nature of leave"
-                                onChange={(e) => setDes({...des, leaveNature: e.target.value})}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item
-                            initialValue={old?.leaveAllocation}
-                            name="leaveAllocation"
-                            onKeyPress={(event) => {
-                                if (checkNumbervalue(event)) {
-                                    event.preventDefault();
-                                }
-                            }}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Please enter leave allocated ",
-                                },
-                            ]}
-                        >
-                            <Input style={{ width: '200px' }}
-                                placeholder="No. of leave allocated"
-                                onChange={(e) => setDes({...des, leaveAllocation: e.target.value})}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
-            </Form>
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please enter Leave Nature",
+                                    },
+                                ]}
+                            >
+                                <Input style={{ width: '150px' }}
+                                    placeholder="Nature of leave"
+                                    onChange={(e) => setDes({ ...des, leaveNature: e.target.value })}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                initialValue={old?.leaveAllocation}
+                                name="leaveAllocation"
+                                onKeyPress={(event) => {
+                                    if (checkNumbervalue(event)) {
+                                        event.preventDefault();
+                                    }
+                                }}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please enter leave allocated ",
+                                    },
+                                ]}
+                            >
+                                <Input style={{ width: '200px' }}
+                                    placeholder="No. of leave allocated"
+                                    onChange={(e) => setDes({ ...des, leaveAllocation: e.target.value })}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
             </Modal>
         </>
     )

@@ -12,11 +12,13 @@ import {
   query,
   orderBy,
   doc,
+  where,
 } from "firebase/firestore";
 import { db } from "../firebase-config";
 
-function generateEmpId(users) {
-  let len = getDocs(users).then((snapshot) => {
+function generateEmpId(compId) {
+  let q = query(collection(db, "users"), where("compId", "==", compId))
+  let len = getDocs(q).then((snapshot) => {
     let res = snapshot.docs.length + 1;
     return "HTS" + ("00" + res.toString()).slice(-3);
   });
@@ -33,7 +35,7 @@ export async function createUser(values, compId) {
   updateProfile(res.user, { displayName: name });
   // updatePhoneNumber(res.user, values.phone)
   const valuesToservice = {
-    empId: await generateEmpId(),
+    empId: await generateEmpId(compId),
     name: name,
     fname: values.fname,
     mname: values.mname ? values.mname : "",
@@ -55,13 +57,16 @@ export async function createUser(values, compId) {
     lead: values.lead ? values.lead : "",
     department: values.department ? values.department : "",
     location: values.location,
-    isManager: false,
+    isManager: values.isManager || false,
+    isHr: values.isHr || false,
+    isLead: values.isLead || false,
     earnLeave: 12,
     sickLeave: 6,
     casualLeave: 6,
     optionalLeave: 2,
     disabled: false
   };
+  console.log(compId)
   setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid});
   setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
     .then((result) => {

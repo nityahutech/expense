@@ -24,15 +24,19 @@ import "../style/leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
 import LeaveCreate from "./LeaveCreate";
 
-const Leave = () => {
+const Leave = (props) => {
   const page = "leavePage"
-  const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  const colors =
+    ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", '#fc03c2', '#b103fc', '#03d7fc'];
+
+  const isHr = props.roleView == "admin";
+  console.log(props, isHr)
   const { Option } = Select;
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const isHr = JSON.parse(sessionStorage.getItem("isHr"));
+  // const isHr = JSON.parse(sessionStorage.getItem("isHr"));
   const isMgr = JSON.parse(sessionStorage.getItem("isMgr"));
   const [leavedays, setLeaveDays] = useState(null); //leave nature & total in obj
   const [totaldays, setTotalDays] = useState(null); //leave nature & taken in obj
@@ -240,7 +244,7 @@ const Leave = () => {
   };
   const getConfigurations = async () => {
     let data = await ConfigureContext.getConfigurations(page)
-    if (Object.keys(data).length == 0) {return}
+    if (Object.keys(data).length == 0) { return }
     let sorted = Object.keys(data?.leaveNature).sort((k1, k2) => k1 < k2 ? -1 : k1 > k2 ? 1 : 0)
     let temp = {}
     sorted.map((nat) => {
@@ -1073,7 +1077,7 @@ const Leave = () => {
                   alignItems: 'center'
                 }}>
                   <div>
-                    <LeaveCreate isHr={isHr} refresh={getConfigurations}/>
+                    <LeaveCreate isHr={isHr} refresh={getConfigurations} />
                   </div>
                   <Button className="button-applyleave"
                     style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '0px' }}
@@ -1485,59 +1489,62 @@ const Leave = () => {
             </Col>
           </Row>
         ) : null}
-
-        <Row
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-evenly",
-            alignContent: "flex-start",
-            backgroundColor: "white",
-            borderRadius: "10px",
-            padding: "10px",
-            marginTop: "10px",
-          }}
-        >
-          <Col
-            span={24}
+        {!isHr ? (
+          <Row
             style={{
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-evenly",
               alignContent: "flex-start",
-              color: "black",
-              width: "100rem",
-            }}
-          >
-            <h3>Employee Leave History</h3>
-          </Col>
-
-          <Col
-            xl={24}
-            lg={24}
-            md={24}
-            sm={24}
-            xs={24}
-            style={{
-              background: "flex",
+              backgroundColor: "white",
+              borderRadius: "10px",
               padding: "10px",
+              marginTop: "10px",
             }}
           >
-            <div className="history-table">
-              <Table
-                className="leaveTable "
-                columns={columns}
-                dataSource={leaves}
-                pagination={{
-                  position: ["bottomCenter"],
-                }}
-                scroll={{ x: 600 }}
-                size="small"
-              />
-            </div>
-          </Col>
-        </Row>
+            <Col
+              span={24}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                alignContent: "flex-start",
+                color: "black",
+                width: "100rem",
+              }}
+            >
+              <h3>Employee Leave History</h3>
+            </Col>
+
+            <Col
+              xl={24}
+              lg={24}
+              md={24}
+              sm={24}
+              xs={24}
+              style={{
+                background: "flex",
+                padding: "10px",
+              }}
+            >
+              <div className="history-table">
+                <Table
+                  className="leaveTable "
+                  columns={columns}
+                  dataSource={leaves}
+                  pagination={{
+                    position: ["bottomCenter"],
+                  }}
+                  scroll={{ x: 600 }}
+                  size="small"
+                />
+              </div>
+            </Col>
+          </Row>
+        ) : null}
+
       </Row>
+
       <Modal
         // bodyStyle={{ overflowY: 'scroll' }}
         // style={{ height: 'calc(100vh - 200px)' }}

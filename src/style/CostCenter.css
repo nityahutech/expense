@@ -1,9 +1,15 @@
 .ant-card .costCenterCard {
     background-color: #FAFAFA;
 }
-.ant-table .costCenterTable   {
-    padding: 0px;
-}
+.costCenterTable .ant-table-thead>tr>th{
+    background:#1963A6;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    
+ }
+
 .costModal .ant-modal-content{
     border-radius: 10px;
     

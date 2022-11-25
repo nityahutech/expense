@@ -367,7 +367,37 @@ function Onboarding() {
           </Card>
         </Tabs.TabPane>
         <Tabs.TabPane tab="Organization Onboarding" key="2">
-          <Card
+
+        <Card 
+            className= "stepsCard"
+            style={{
+              background: "#fff",
+              margin: "0px 15px 20px 15px",
+              // height: "55rem",
+            }}
+          >
+            <Steps 
+              current={progress}
+              onChange={progressBar}
+              className="stepBars"
+            >
+              <Step 
+                className="stepOne"
+                title="Organization Details" />
+              <Step
+                className="stepTwo" 
+                title="Cost Center" />
+              <Step
+                className="stepThree" 
+                title="Organization Hierarchy" />
+              <Step
+                className="stepFour" 
+                title="Access Details" />
+            </Steps>
+          </Card>
+            
+            {/* old code delete if you want to  */}
+          {/* <Card
             style={{
               background: "#fff",
               margin: "0px 15px 20px 15px",
@@ -384,7 +414,8 @@ function Onboarding() {
               <Step title="Organization Hierarchy" />
               <Step title="Access Details" />
             </Steps>
-          </Card>
+          </Card> */}
+             {/* old code delete if you want to  */}
           <Card
             style={{
               background: "#fff",

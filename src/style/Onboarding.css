@@ -151,3 +151,83 @@ color: #212529;
  .userLabel .ant-row{
 gap :"10px"
  }
+
+ /* ---------step one------------- */
+
+ .stepOne .ant-steps-item-container {
+    outline: none;
+    display: grid;
+    margin-bottom: 30px;
+ }
+
+ .stepOne .ant-steps-item-icon {
+    margin-left: 51px;
+ }
+
+ .stepOne .ant-steps-item-tail::after {
+    margin-top: 25px;
+    margin-left: 50px;
+ }
+
+ /* ----------step two------------- */
+ .stepTwo .ant-steps-item-container {
+    outline: none;
+    display: grid;
+    margin-top: 30px;
+    margin-left: 25px;
+ }
+
+ .stepTwo .ant-steps-item-icon {
+    margin-left: 25px;
+ }
+
+ .stepTwo .ant-steps-item-tail::after {
+    margin-top: 50px;
+    margin-left: 50px;
+ }
+ 
+
+ /* ----------step three--------- */
+ .stepThree .ant-steps-item-container {
+    outline: none;
+    display: grid;
+    margin-top: 50px;
+    margin-left: -10px
+ }
+
+ .stepThree .ant-steps-item-icon {
+    margin-left: 61px;
+ }
+
+ .stepThree .ant-steps-item-tail::after {
+    margin-top: 75px;
+    margin-left: 50px;
+ }
+
+ /* --------------step four-------- */
+ .stepFour .ant-steps-item-container {
+    outline: none;
+    display: grid;
+    margin-top: 75px;
+    margin-left: 16px;
+ }
+
+ .stepFour .ant-steps-item-icon {
+    margin-left: 35px;
+ }
+
+ /* -----------invertical part */
+ .ant-steps .ant-steps-vertical .stepBars  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+ }
+
+ 
+
+ 
+
+ /* .stepThree .ant-steps-item-tail::after {
+    margin-top: 50px;
+    margin-left: 50px;
+ } */

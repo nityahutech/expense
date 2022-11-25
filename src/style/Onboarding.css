@@ -143,10 +143,10 @@ color: #212529;
     line-height: "18px";
     color: "#212529";
  }
- /* .userLabel .ant-form-item-label{
+ .userLabel .ant-form-item-label{
     display: flex;
     justify-content: right;
- } */
+ }
  
  .userLabel .ant-row{
 gap :"10px"

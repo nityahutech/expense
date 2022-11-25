@@ -24,9 +24,9 @@ import reload from "../images/reload.png";
 import ViewModal from "./ViewModal";
 import EditOnboarding from "./EditOnboarding";
 import OrgDetails from "./OrgDetails";
-import CostCenter from "./CostCenter"
-import AccessDetails from "./AccessDetails"
-import oranizationHierarcy from "./oranizationHierarcy"
+import CostCenter from "./CostCenter";
+import AccessDetails from "./AccessDetails";
+// import oranizationHierarcy from "./oranizationHierarcy"
 
 const { Step } = Steps;
 
@@ -53,7 +53,6 @@ function Onboarding() {
     getData();
   }, []);
 
-      
   const showNotification = (type, msg, desc) => {
     notification[type]({
       message: msg,
@@ -121,8 +120,8 @@ function Onboarding() {
   // };
 
   const progressBar = (value) => {
-    setProgress(value)
-  }
+    setProgress(value);
+  };
 
   const columns = [
     {
@@ -368,7 +367,7 @@ function Onboarding() {
           </Card>
         </Tabs.TabPane>
         <Tabs.TabPane tab="Organization Onboarding" key="2">
-          <Card 
+          <Card
             style={{
               background: "#fff",
               margin: "0px 15px 20px 15px",
@@ -376,17 +375,14 @@ function Onboarding() {
               // height: "55rem",
             }}
           >
-            <Steps 
-              current={progress}
-              onChange={progressBar}
-            >
+            <Steps current={progress} onChange={progressBar}>
               <Step title="Organization Details" />
               <Step title="Cost Center" />
               <Step title="Organization Hierarchy" />
               <Step title="Access Details" />
             </Steps>
           </Card>
-          <Card 
+          <Card
             style={{
               background: "#fff",
               margin: "0px 15px 20px 15px",
@@ -394,13 +390,15 @@ function Onboarding() {
               // height: "55rem",
             }}
           >
-
-            { progress == 1 ? (<CostCenter />) :
-                progress == 2 ? (<oranizationHierarcy />) :
-                  progress == 3 ? (<AccessDetails />) :
-                  (<OrgDetails />)
-            }
-
+            {progress == 1 ? (
+              <CostCenter />
+            ) : progress == 2 ? (
+              <></>
+            ) : progress == 3 ? (
+              <AccessDetails />
+            ) : (
+              <OrgDetails />
+            )}
           </Card>
         </Tabs.TabPane>
       </Tabs>

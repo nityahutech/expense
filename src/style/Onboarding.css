@@ -143,13 +143,36 @@ color: #212529;
     line-height: "18px";
     color: "#212529";
  }
- /* .userLabel .ant-form-item-label{
+ .userDetails .ant-form-item-label{
     display: flex;
     justify-content: right;
- } */
- 
- .userLabel .ant-row{
-gap :"10px"
+ }
+ .userMap .ant-form-item-label{
+    display: flex;
+    justify-content: right;
+    
+ }
+ .userMap .ant-form-item-label > label {
+    color: #000000;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+ }
+
+ .userMap .ant-form-item{
+    margin-bottom: 3px;
+ }
+
+ .userMap span{
+    color: rgba(0, 0, 0, 0.54);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+ }
+
+ .text textarea.ant-input{
+    width: 330px;
+    max-width: none;
  }
 
  /* ---------step one------------- */
@@ -240,3 +263,5 @@ gap :"10px"
     margin-top: 50px;
     margin-left: 50px;
  } */
+
+ 

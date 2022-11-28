@@ -1,22 +1,104 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
-    Form,
-    Input,
-    Col,
-    Row,
-    Button,
-    Card,
-    Table,
-    Modal,
-  } from "antd";
-  import {
-    PlusOutlined,
-    EditFilled,
-    DeleteOutlined,
-  } from "@ant-design/icons";
-  import "../style/CostCenter.css"
+  Form,
+  Input,
+  Col,
+  Row,
+  Button,
+  Card,
+  Table,
+  Modal,
+  message,
+} from "antd";
+import {
+  PlusOutlined,
+  EditFilled,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import "../style/CostCenter.css"
 import FormItem from 'antd/es/form/FormItem';
 import TextArea from 'antd/lib/input/TextArea';
+
+function CostCenter() {
+
+  const [isCostModalOpen, setIsCostModalOpen] = useState(false);
+  const [isCostEditModalOpen, setIsCostEditModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  const [costCenters, setCostCenters] = useState([]);
+  const [costCenterlength, setCostCenterlength] = useState(0);
+
+  // let costCenterlength = 0
+
+  const deleteCost = (record) => {
+    Modal.confirm({
+      title: "Are you sure, you want to delete cost Center?",
+      okText: "Yes",
+      okType: "danger",
+
+      onOk: () => {
+
+        console.log('key', record)
+        const newData = costCenters.filter((item) => item.slno !== record.slno);
+        localStorage.setItem("costCenters", JSON.stringify(newData));
+        setCostCenters(newData);
+        setCostCenterlength(newData.length)
+      }
+    })
+
+  };
+
+  const showModal = () => {
+    setIsCostModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsCostModalOpen(false);
+  };
+
+  const showEditModal = () => {
+    setIsCostEditModalOpen(true)
+  };
+
+
+  const onFinish = (values) => {
+    console.log('Success:', values);
+  };
+
+  const onFinishForm = (values) => {
+    console.log('values', values)
+    let costCenterTemp = {
+      costName: values.costName,
+      costcentercode: values.costcentercode,
+      costDescription: values.costDescription
+    }
+    costCenters.push(costCenterTemp)
+    localStorage.setItem("costCenters", JSON.stringify(costCenters));
+    setCostCenters(costCenters)
+    console.log('costCenters', costCenters.length)
+    setCostCenterlength(costCenters.length)
+  };
+
+  const getCostCentersFromLocalStr = () => {
+    const data = localStorage.getItem('costCenters');
+    if (data) {
+      return JSON.parse(data)
+    }
+    else {
+      return []
+    }
+  }
+
+  useEffect(() => {
+    let costfromDataStore = getCostCentersFromLocalStr()
+    console.log('costfromDataStore', costfromDataStore)
+    let i = 0
+    costfromDataStore.map(obj => {
+      costfromDataStore[i].slno = i + 1
+      i++
+    })
+
+    setCostCenters(costfromDataStore)
+  }, [costCenterlength]);
 
   const columns = [
     {
@@ -27,22 +109,22 @@ import TextArea from 'antd/lib/input/TextArea';
     },
     {
       title: "Cost Center Code",
-      dataIndex: "ccc",
-      key: "ccc",
+      dataIndex: "costcentercode",
+      key: "costcentercode",
       width: 150,
     },
     {
       title: "Name",
-      key: "name",
-      dataIndex: "name",
+      key: "costName",
+      dataIndex: "costName",
       width: 140,
     },
     {
-        title: "Description",
-        key: "description",
-        dataIndex: "description",
-        width: 140,
-      },
+      title: "Description",
+      key: "costDescription",
+      dataIndex: "costDescription",
+      width: 140,
+    },
     {
       title: "Action",
       key: "action",
@@ -53,32 +135,43 @@ import TextArea from 'antd/lib/input/TextArea';
         return (
           <>
             <Row gutter={[0, 0]}>
-              <Col xs={22} sm={15} md={12}>
+              <Col xs={22} sm={15} md={8}>
                 <Button
-                  style={{ width: "40px" }}
-                  onClick={() => {
-                    ;
+                  style={{
+                    color: " #007ACB",
+                    border: "none",
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '35px',
+                    height: '36px',
+                    background: '#EEEEEE',
+                    borderRadius: '10px'
                   }}
-                >
-                  <EditFilled
+                  onClick={showEditModal}
 
-                    style={
-                        //  { color: "rgb(154 201 244)", marginLeft: "-2px" }
-                         { color: "#268FEE", marginLeft: "-2px" }
-                    }
-                  />
+                >
+                  <EditFilled />
                 </Button>
               </Col>
-              <Col xs={22} sm={15} md={12}>
-                <Button >
-              <DeleteOutlined 
-                style={
+              <Col xs={22} sm={15} md={8}>
+                <Button
 
-                    //    { color: "rgb(154 201 244)", marginLeft: "-2px" }
-                       { color: "#268FEE", marginLeft: "-2px" }
-                  }
-              />
-              </Button>
+                  onClick={() => deleteCost(record)}
+                  style={{
+                    color: " #007ACB",
+                    border: "none",
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '35px',
+                    height: '36px',
+                    background: '#EEEEEE',
+                    borderRadius: '10px'
+                  }}
+                >
+                  <DeleteOutlined />
+                </Button>
               </Col>
             </Row>
           </>
@@ -87,44 +180,22 @@ import TextArea from 'antd/lib/input/TextArea';
     },
   ];
 
-  const dataSource = [
-    {
-        key:"1",
-        slno:"76",
-        ccc:"yo",
-        name:"no",
-        description:"hi"
-    }
-  ]
 
-function CostCenter() {
 
-const [isCostModalOpen, setIsCostModalOpen] = useState(false);
-
-const showModal = () => {
-    setIsCostModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsCostModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsCostModalOpen(false);
-  };
-    
   return (
-    <div style={{background: "#fff"}}>
+    <div style={{ background: "#fff" }}>
       <Card
-        title={<div style={{fontWeight: "600",fontSize: "14px",lineHeight: "19px",textTransform: "uppercase",}}>Organization Cost Center </div>}
+        title={<div style={{ fontWeight: "600", fontSize: "14px", lineHeight: "19px", textTransform: "uppercase", }}>Organization Cost Center </div>}
         extra={<>
-                <Row>
-                 <Col xs={2} sm={24} md={24}>
-                    <Button 
-                    style={{width:"100%"}}
-                    onClick={showModal}
-                    ><PlusOutlined />Add Cost Center</Button>
-                 </Col>
-                </Row>
-              </>}
+          <Row>
+            <Col xs={2} sm={24} md={24}>
+              <Button
+                style={{ width: "100%" }}
+                onClick={showModal}
+              ><PlusOutlined />Add Cost Center</Button>
+            </Col>
+          </Row>
+        </>}
         className="costCenterCard"
         footer={false}
       >
@@ -132,21 +203,26 @@ const showModal = () => {
           bordered={true}
           className="costCenterTable"
           columns={columns}
-          dataSource={dataSource}
-          style={{padding:"0px"}}
+          dataSource={costCenters}
+          style={{ padding: "0px" }}
           pagination={false}
         />
       </Card>
-      <Modal 
+
+      <Modal
         title="ORGANIZATION DETAILS"
         open={isCostModalOpen}
         onCancel={handleCancel}
         centered
         className='costModal'
+        onOk={() => {
+          form.submit();
+          setIsCostModalOpen(false);
+        }}
         closeIcon={
           <div
             onClick={() => {
-                setIsCostModalOpen(false);
+              setIsCostModalOpen(false);
             }}
             style={{ color: "#ffff" }}
           >
@@ -155,30 +231,141 @@ const showModal = () => {
         }
       >
         <Form
-        //  labelcol={{
-        //     span: 24,
-        //   }}
-        //   wrappercol={{
-        //     span: 24,
-        //   }}
+          labelCol={{
+            span: 8,
+          }}
+          wrapperCol={{
+            span: 16,
+          }}
+          // initialValues={{
+          //   remember: true,
+          // }}
+          form={form}
+          onFinish={onFinishForm}
         >
-          <Row gutter={[0,16]}>
+          <Row gutter={[0, 16]}>
+            <Col xs={24} sm={24} md={24}>
+              <FormItem
+                name="costcentercode"
+                label="Cost Center Code"
+                // value={costCenter}
+                // onChange={(e) =>
+                //   setCostCenter(e.target.value)
+                // }
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter Cost Center Code",
+                  },
+                  {
+                    pattern: /^[0-9A-Za-z]+$/,
+                    message: "Please enter Valid Cost Center Code",
+                  },
+                ]}
+                labelCol={{ span: 7 }}
+                wrapperCol={{ span: 24 }}
+              >
+                <Input />
+              </FormItem>
+            </Col>
+            <Col xs={24} sm={24} md={24}>
+              <FormItem
+                name="costName"
+                label="Name"
+                // value={costName}
+                // onChange={(e) =>
+                //   setCostName(e.target.value)
+                // }
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter Name",
+                  },
+                  {
+                    pattern: /^[A-Za-z]+$/,
+                    message: "Please enter Valid Name",
+                  },
+                ]}
+                labelCol={{ span: 3, offset: 4 }}
+                wrapperCol={{ span: 24 }}
+
+              >
+                <Input />
+              </FormItem>
+            </Col>
+            <Col xs={24} sm={24} md={24}>
+              <FormItem
+                name="costDescription"
+                label="Description"
+                // value={costDescription}
+                // onChange={(e) =>
+                //   setCostDescription(e.target.value)
+                // }
+                labelCol={{ span: 5, offset: 2 }}
+                wrapperCol={{ span: 24 }}
+              >
+                <TextArea
+                  row={5}
+                  maxlength={100}
+                  autoSize={{ minRows: 2, maxRows: 6 }}
+                />
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
+      </Modal>
+
+      <Modal
+        title="EDIT ORGANIZATION DETAILS"
+        open={isCostEditModalOpen}
+        onCancel={handleCancel}
+        centered
+        className='costModal'
+        onOk={() => {
+          form.submit();
+          setIsCostEditModalOpen(false);
+        }}
+        closeIcon={
+          <div
+            onClick={() => {
+              setIsCostEditModalOpen(false);
+            }}
+            style={{ color: "#ffff" }}
+          >
+            X
+          </div>
+        }
+      >
+        <Form
+          labelCol={{
+            span: 8,
+          }}
+          wrapperCol={{
+            span: 16,
+          }}
+          initialValues={{
+            remember: true,
+          }}
+          form={form}
+          onFinish={onFinish}
+        >
+          <Row gutter={[0, 16]}>
             <Col xs={24} sm={24} md={24}>
               <FormItem
                 name="costcentercode"
                 label="Cost Center Code"
                 rules={[
-                    {
-                      required: true,
-                      message: "Please enter Cost Center Code",
-                    },
-                    {
-                      pattern: /^[0-9A-Za-z]+$/,
-                      message: "Please enter Valid Cost Center Code",
-                    },
-                  ]}
-                  labelCol={{ span: 7 }}
-                 wrapperCol={{ span: 24 }} 
+                  {
+                    required: true,
+                    message: "Please enter Cost Center Code",
+                  },
+                  {
+                    pattern: /^[0-9A-Za-z]+$/,
+                    message: "Please enter Valid Cost Center Code",
+                  },
+                ]}
+                labelCol={{ span: 7 }}
+                wrapperCol={{ span: 24 }}
               >
                 <Input />
               </FormItem>
@@ -188,18 +375,18 @@ const showModal = () => {
                 name="costName"
                 label="Name"
                 rules={[
-                    {
-                      required: true,
-                      message: "Please enter Name",
-                    },
-                    {
-                      pattern: /^[A-Za-z]+$/,
-                      message: "Please enter Valid Name",
-                    },
-                  ]}
-                  labelCol={{ span: 3, offset: 4}}
-                 wrapperCol={{ span: 24 }}
-                  
+                  {
+                    required: true,
+                    message: "Please enter Name",
+                  },
+                  {
+                    pattern: /^[A-Za-z]+$/,
+                    message: "Please enter Valid Name",
+                  },
+                ]}
+                labelCol={{ span: 3, offset: 4 }}
+                wrapperCol={{ span: 24 }}
+
               >
                 <Input />
               </FormItem>
@@ -208,20 +395,14 @@ const showModal = () => {
               <FormItem
                 name="costDescription"
                 label="Description"
-                rules={[
-                    {
-                      required: true,
-                      message: "Please enter Name",
-                    },
-                    {
-                      pattern: /^[A-Za-z]+$/,
-                      message: "Please enter Valid Name",
-                    },
-                  ]}
-                  labelCol={{ span: 5, offset: 2 }}
-                  wrapperCol={{ span: 24 }} 
+                labelCol={{ span: 5, offset: 2 }}
+                wrapperCol={{ span: 24 }}
               >
-                <TextArea />
+                <TextArea
+                  row={5}
+                  maxlength={100}
+                  autoSize={{ minRows: 2, maxRows: 6 }}
+                />
               </FormItem>
             </Col>
           </Row>

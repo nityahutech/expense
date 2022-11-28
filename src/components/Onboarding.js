@@ -369,6 +369,39 @@ function Onboarding() {
         </Tabs.TabPane>
         <Tabs.TabPane tab="Organization Onboarding" key="2">
           <Card
+            className="stepsCard"
+            style={{
+              background: "#fff",
+              margin: "0px 15px 20px 15px",
+              // height: "55rem",
+            }}
+          >
+            <Steps
+              current={progress}
+              onChange={progressBar}
+              className="stepBars"
+            >
+              <Step
+                // className="stepOne"
+                title="Organization Details"
+              />
+              <Step
+                // className="stepTwo"
+                title="Cost Center"
+              />
+              <Step
+                // className="stepThree"
+                title="Organization Hierarchy"
+              />
+              <Step
+                // className="stepFour"
+                title="Access Details"
+              />
+            </Steps>
+          </Card>
+
+          {/* old code delete if you want to  */}
+          {/* <Card
             style={{
               background: "#fff",
               margin: "0px 15px 20px 15px",
@@ -382,7 +415,8 @@ function Onboarding() {
               <Step title="Organization Hierarchy" />
               <Step title="Access Details" />
             </Steps>
-          </Card>
+          </Card> */}
+          {/* old code delete if you want to  */}
           <Card
             style={{
               background: "#fff",
@@ -400,6 +434,29 @@ function Onboarding() {
             ) : (
               <OrgDetails />
             )}
+            <div>
+              {progress > 0 ? (
+                <Button
+                  style={{ marginLeft: "10px" }}
+                  onClick={() => setProgress(progress - 1)}
+                >
+                  Previous
+                </Button>
+              ) : null}
+              <Button
+                type="primary"
+                style={{ marginLeft: "10px" }}
+                onClick={() => {
+                  if (progress != 3) {
+                    setProgress(progress + 1);
+                  } else {
+                    console.log("form complete");
+                  }
+                }}
+              >
+                {progress == 3 ? "Finish" : "Next"}
+              </Button>
+            </div>
           </Card>
         </Tabs.TabPane>
       </Tabs>

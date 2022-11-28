@@ -16,6 +16,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import AttendanceContext from "../contexts/AttendanceContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
+import dayjs from 'dayjs';
 
 const layout = {
   labelCol: {
@@ -319,6 +320,11 @@ function AttendanceLog(props) {
       setFilteredEmp(allEmp);
     }
   };
+
+  const disabledDate = (current) => {
+    return current.month() != moment().month();
+  };
+
   return (
     <>
       <div className="hrtab">
@@ -331,7 +337,7 @@ function AttendanceLog(props) {
             setSelectemp({ id: "" });
           }}
         >
-          { !isHr ? (
+          {!isHr ? (
             <>
               <Tabs.TabPane tab="Monthly Log" key="1">
                 <div className="monthColor">
@@ -350,6 +356,7 @@ function AttendanceLog(props) {
                     }}
                     allowClear
                     onChange={onHrDateFilter}
+                    disabledDate={disabledDate}
                   />
                 </div>
                 <Table
@@ -363,9 +370,9 @@ function AttendanceLog(props) {
                 tab="Add Report"
                 key="2"
                 className="reportTabs"
-                // onClick={() => {
-                //   setIsModalOpen(true);
-                // }}
+              // onClick={() => {
+              //   setIsModalOpen(true);
+              // }}
               >
                 {/* <Button type="primary" onClick={showModal}>
               Open Modal
@@ -454,7 +461,7 @@ function AttendanceLog(props) {
                   placeholder="Search"
                   prefix={<SearchOutlined />}
                   onChange={searchChange}
-                  // style={{ width: "95%" }}
+                // style={{ width: "95%" }}
                 />
                 <Table
                   //   rowSelection={{

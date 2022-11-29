@@ -101,6 +101,8 @@ function Education() {
             <Card
               title="EDUCATIONAL INFO"
               className="personal"
+              hoverable={true}
+              bordered={true}
               //   actions={[
               //   <EditOutlined key="edit" />,
               // ]}
@@ -130,6 +132,7 @@ function Education() {
                 width: '100%',
                 // marginTop: 10,
                 borderRadius: "10px",
+                cursor:'default',
               }}
             >
               <Row gutter={[16, 16]}>

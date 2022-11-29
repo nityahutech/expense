@@ -1,4 +1,4 @@
-import { Tabs } from "antd";
+import { Tabs,Card } from "antd";
 import "../../style/BankAccount.css";
 import WorkID from "../ProfileDetails/WorkID";
 import CertificateID from "../ProfileDetails/CertificateID";
@@ -16,8 +16,10 @@ function Document() {
         width: "100%",
       }}
     >
-      <div
+      <Card
         className="document-tap-div"
+        bordered={true}
+        hoverable={true}
         style={{
           width: "75%",
           marginTop: "10px",
@@ -26,6 +28,7 @@ function Document() {
           display: "flex",
           justifyContent: "center",
           borderRadius: "10px",
+          cursor:'default',
         }}
       >
         <Tabs defaultActiveKey="1" className="documents">
@@ -39,7 +42,7 @@ function Document() {
             <WorkID />
           </Tabs.TabPane>
         </Tabs>
-      </div>
+      </Card>
     </div>
   );
 }

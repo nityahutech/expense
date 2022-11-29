@@ -120,6 +120,8 @@ function AddressCust() {
                   <Card
                     title={add ? add.title : "CUSTOM ADDRESS TITLE"}
                     className="customaddrcard"
+                    bordered={true}
+                    hoverable={true}
                     extra={
                       <>
                         {editAddressContent[i] === false ? (
@@ -160,6 +162,7 @@ function AddressCust() {
                               position: "absolute",
                               right: 10,
                               top: 10,
+                              cursor:"default"
                           }}
                         >
                         <DeleteOutlined
@@ -689,32 +692,35 @@ function AddressCust() {
               <Card
                 title={"CUSTOM ADDRESS TITLE"}
                 className="customaddrcard"
-                extra={
-                  <>
-                    {addAddressContent === false ? (
-                      <Button
-                        type="text"
-                        className="edit"
-                        style={{
-                          color: "#ffff",
-                          display: "none",
-                          paddingTop: "7px",
-                          paddingRight: "7px",
-                          position: "absolute",
-                          right: 10,
-                          top: 10,
-                        }}
-                        onClick={() => showAddAddressContent(true)}
-                      >
-                        <EditFilled />
-                      </Button>
-                    ) : null}
-                  </>
-                }
+                bordered={true}
+                hoverable={true}
+                // extra={
+                //   <>
+                //     {addAddressContent === false ? (
+                //       <Button
+                //         type="text"
+                //         className="edit"
+                //         style={{
+                //           color: "#ffff",
+                //           display: "none",
+                //           paddingTop: "7px",
+                //           paddingRight: "7px",
+                //           position: "absolute",
+                //           right: 10,
+                //           top: 10,
+                //         }}
+                //         onClick={() => showAddAddressContent(true)}
+                //       >
+                //         <EditFilled />
+                //       </Button>
+                //     ) : null}
+                //   </>
+                // }
                 style={{
                   width: '100%',
                   marginTop: 10,
                   borderRadius:"10px",
+                  cursor:"default"
                 }}
               >
                 {addAddressContent ? (

@@ -34,11 +34,14 @@ function Work() {
         <Card
           title="WORK DETAILS"
           className="personal"
+          hoverable={true}
+          bordered={true}
           style={{
             width: '75%',
             marginTop: 10,
             marginBottom: 10,
             borderRadius:"10px",
+            cursor:"default",
           }}
         >
           <Row gutter={[16, 16]}>

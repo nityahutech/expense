@@ -121,6 +121,8 @@ function Personal() {
               <Card
                 title="PERSONAL INFO"
                 className="personal"
+                hoverable={true}
+                bordered={true}
                 extra={
                   <>
                     {editContent === false ? (
@@ -147,6 +149,7 @@ function Personal() {
                   width: "100%",
                   marginTop: 10,
                   borderRadius: "10px",
+                  cursor:'default',
                 }}
               >
                 <Row gutter={[16, 42]}>
@@ -462,6 +465,8 @@ function Personal() {
               <Card
                 title="CONTACT INFO"
                 className="personal"
+                bordered={true}
+                hoverable={true}
                 //   actions={[
                 //   <EditOutlined key="edit" />,
                 // ]}
@@ -491,6 +496,7 @@ function Personal() {
                   width: "100%",
                   marginTop: 10,
                   borderRadius: "10px",
+                  cursor:'default',
                 }}
               >
                 <Row gutter={[16, 16]}>
@@ -747,6 +753,8 @@ function Personal() {
               <Card
                 title="ADDRESS"
                 className="personal"
+                hoverable={true}
+                bordered={true}
                 extra={
                   <>
                     {editAddressInfo === false ? (
@@ -773,6 +781,7 @@ function Personal() {
                   width: "100%",
                   marginTop: 10,
                   borderRadius: "10px",
+                  cursor:'default'
                 }}
               >
                 <Row gutter={[16, 16]}>

@@ -259,10 +259,13 @@ const Department = () => {
             <Card
               className="overview"
               title=" DEPARTMENT"
+              bordered={true}
+              hoverable={true}
               style={{
                 width: "100%",
                 marginTop: 10,
                 borderRadius: "10px",
+                cursor:'default'
               }}
             >
               <div className="table-responsive">

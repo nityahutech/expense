@@ -234,10 +234,13 @@ const Statutory = () => {
             >
               <Card
                 title=" COMPANY ID"
+                bordered={true}
+                hoverable={true}
                 style={{
                   width: '100%',
                   marginTop: 10,
                   borderRadius:"10px",
+                  cursor:'default'
                 }}
                 className="companyCard"
                 // className="card1"
@@ -555,10 +558,13 @@ const Statutory = () => {
           <Col span={24}>
             <Card 
               className="tagsCard" 
+              bordered={true}
+              hoverable={true}
               style={{ 
                 marginTop: 10, 
                 width: "100%",
-                borderRadius:"10px", 
+                borderRadius:"10px",
+                cursor:'default' 
                 }}
               >
               <Tabs defaultActiveKey="1" className="tabs">
@@ -1365,10 +1371,13 @@ const Statutory = () => {
         <Col span={24}>
           <Card
             title="BANK ACCOUNT INFO"
+            bordered={true}
+            hoverable={true}
             style={{
               width: '100%',
               marginTop: 10,
               borderRadius:"10px",
+              cursor:'default'
             }}
             className="baiCard"
           >

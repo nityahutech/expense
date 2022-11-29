@@ -87,6 +87,8 @@ function Overview() {
               <Card
                 title=" OVERVIEW"
                 className="overview"
+                hoverable={true}
+                bordered={true}
                 extra={
                   <>
                     {editContactInfo === false ? (
@@ -113,6 +115,7 @@ function Overview() {
                   width: '100%',
                   marginTop: 10,
                   borderRadius:"10px",
+                  cursor:'default',
                 }}
               >
                 <Row gutter={[48, 8]}>
@@ -335,6 +338,8 @@ function Overview() {
               <Card
                 title=" SOCIAL PROFILE"
                 className="social"
+                bordered={true}
+                hoverable={true}
                 extra={
                   <>
                     {editContactIconInfo === false ? (
@@ -363,6 +368,7 @@ function Overview() {
                   width: '100%',
                   marginTop: 10,
                   borderRadius:"10px",
+                  cursor:"default",
                 }}
               >
                 <div

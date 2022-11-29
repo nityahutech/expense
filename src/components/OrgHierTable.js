@@ -22,65 +22,134 @@ const OrgHierTable = () => {
     const [ismodalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [form] = Form.useForm();
+    const [form1] = Form.useForm();
     const [type, setType] = useState("Business Unit")
+    const [parent, setParent] = useState(null)
     const order = ["Business Unit", "Division", "Department", "Team"];
-    const [dataSource, setDataSource] = useState([
-        {
-            key: '0',
-            SL: '1',
-            name: `${type} Care`,
-            description: `Health care ${type} Description`,
-            action: '',
-        },
+    const [dataSource, setDataSource] = useState([])
+    const [editRecord, setEditRecord] = useState([])
+    const [data, setData] = useState([])
 
+    useEffect(() => {
+        getData()
+    }, [type])
 
-    ]);
+    const getData = async () => {
+        let data = localStorage.getItem("OrgHier")
+        if (!data) {
+            localStorage.setItem("OrgHier", "[]");
+            return;
+        }
+        console.log(JSON.parse(data))
+        setData(JSON.parse(data))
+        let temp = []
+        let place = order.indexOf(type)
+        let par = place == 0 ? null : parent[`${order[1]}`].name 
+            + ( place == 1 ? "" : "/" + parent[`${order[2]}`].name 
+                + (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
+        JSON.parse(data).map((d) => {
+            if (d.type == type && d.parent == par){
+                temp.push(d);
+            }
+        })
+        console.log(temp)
+        setDataSource(temp)
+    }
 
     const onFinish = (values) => {
-        console.log('Success:', values);
+        let temp = data;
+        let place = order.indexOf(type)
+        let par = place == 0 ? null : parent[`${order[1]}`].name 
+            + ( place == 1 ? "" : "/" + parent[`${order[2]}`].name 
+                + (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
+        temp.push({
+            ...values,
+            parent: par,
+            type: type
+        })
+        localStorage.setItem("OrgHier", JSON.stringify(temp));
+        form.resetFields();
+        setIsModalOpen(false);
+        getData();
     };
 
     const onFinishEdit = (values) => {
-        console.log('Success:', values);
+        let edited = data.map((d) => {
+            if (d.parent == editRecord.parent && d.name == editRecord.name) {
+                return {
+                    name: values.editname,
+                    description: values.editdescription,
+                    parent: d.parent,
+                    type: type
+                }
+            }
+            if (d.parent != null) {
+                let par = editRecord.parent == null ? editRecord.name : editRecord.parent;
+                if (d.parent.startsWith(par)) {
+                    return {
+                        ...d,
+                        parent: d.parent.replace(editRecord.name, values.editname)
+                    }
+                }
+            }
+            return d;
+        })
+        localStorage.setItem("OrgHier", JSON.stringify(edited))
+        setEditRecord({})
+        form1.resetFields();
+        setIsEditModalOpen(false);
+        getData();
     };
-    const deleteData = (key) => {
+
+    const deleteData = (record) => {
         Modal.confirm({
             title: `Are you sure, you want to delete this ${type}?`,
             okText: "Yes",
             okType: "danger",
-            // onOk: () => {
-            //     DocumentContext.deleteDocument(currentUser.uid, id, fileName)
-            //         .then(response => {
-            //             showNotification("success", "Success", "Successfully deleted");
-            //             getData();
-            //         })
-            //         .catch(error => {
-            //             showNotification("error", "Error", "Record not deleted");
-            //         })
-            // },
+            onOk: () => {
+                let deleted = data.filter((d) => {
+                    if (d.parent == record.parent && d.name == record.name) {
+                        console.log("same")
+                        return false
+                    }
+                    console.log(d.parent, record.parent)
+                    if (d.parent != null) {
+                        let par = record.parent == null ? record.name : `${record.parent}/${record.name}`;
+                        if (d.parent.startsWith(par)) {
+                            console.log("same par", par)
+                            return false
+                        }
+                    }
+                    console.log("none")
+                    return true;
+                })
+                localStorage.setItem("OrgHier", JSON.stringify(deleted))
+                getData();
+            },
         });
     };
-    // const deleteData = (key) => {
-    //     const newData = dataSource.filter((item) => item.key !== key);
-    //     setDataSource(newData);
-    // };
-
-
 
     const columns = [
-        {
-            title: "SLno.",
-            dataIndex: "SL",
-            key: "SL",
-            width: 50,
-
-        },
         {
             title: `${type} Name`,
             dataIndex: "name",
             key: "name",
             width: 100,
-            render: text => <a href="#" >{type} </a>,
+            render: (_, record) => 
+                <a 
+                    href="#" 
+                    onClick={() => {
+                        let temp = order.indexOf(type) + 1
+                        if (temp > 3) { return }
+                        setType(order[temp]);
+                        console.log(temp, order[temp], record)
+                        let d = parent == null ? {} : parent;
+                        d[`${order[temp]}`] = {name: record.name, description: record.description}
+                        setParent(order[temp] == order[0] ? null : d)
+                    }}
+                >
+                    {record.name} 
+                </a>,
 
 
         },
@@ -120,7 +189,8 @@ const OrgHierTable = () => {
                                     }}
                                     onClick={() => {
                                         {
-                                            console.log('hi')
+                                            setEditRecord(record)
+                                            form1.resetFields();
                                             setIsEditModalOpen(true);
                                         }
                                     }} >
@@ -143,7 +213,7 @@ const OrgHierTable = () => {
                                         background: '#EEEEEE',
                                         borderRadius: '10px'
                                     }}
-                                    onClick={() => deleteData(record.key)}
+                                    onClick={() => deleteData(record)}
                                 >
                                     <DeleteOutlined />
                                 </Button>
@@ -156,75 +226,102 @@ const OrgHierTable = () => {
         },
     ];
 
+    function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
 
-
-
-    console.log(type)
+    console.log(type, parent)
 
     return (
-        <div className="main-hier-div">
-            <Card classname='orghie-div'
-                style={{
-                    background: " #FAFAFA",
-                    border: 'none',
-                    padding: '0px',
-
-                }}
-                footer={false}
-            >
-                <div style={{ background: "#FAFAFA" }}>
-                    <div style={{
+        <div style={{ margin: "13px", background: "#fff" }} >
+            <div style={{ background: "#FAFAFA" }}>
+                <div 
+                    style={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center'
-                    }}>
-                        <div
-                            style={{
-                                fontWeight: "600",
-                                fontSize: "14px",
-                                lineHeight: "19px",
-                                // textTransform: "uppercase",
-                            }}
-                        >
-                            <div>
-                                <span style={type == 'Business Unit' ? { color: 'black' } : { color: '#007ACB' }} onClick={() => setType("Business Unit")}>Business Unit</span>
-                                {type == order[0] ? null
-                                    : (<>{" > "}<span style={type == "Division" ? { color: 'black' } : { color: '#007ACB' }} onClick={() => setType("Division")}>Division</span>
-                                        {type == order[1] ? null
-                                            : (<>{" > "}<span style={type == "Department" ? { color: 'black' } : { color: '#007ACB' }} onClick={() => setType("Department")}>Department</span>
-                                                {type == order[2] ? null
-                                                    : (<>{" > "}<span style={type == "Team" ? { color: 'black' } : { color: '#007ACB' }} onClick={() => setType("Team")}>Team</span>
-                                                    </>)}
-                                            </>)}
-                                    </>)
-                                }
-                            </div>
-                        </div>
-                        <div
-                            style={{
-                                fontWeight: "600",
-                                fontSize: "14px",
-                                lineHeight: "19px",
-                                textTransform: "uppercase",
-                            }}
-                        >
-                            <Button type='default' onClick={() => {
-                                {
-                                    console.log('hi')
-                                    setIsModalOpen(true);
-                                }
-                            }}>+ Add {type} </Button>
+                    }}
+                >
+                    <div
+                        style={{
+                            fontWeight: "600",
+                            fontSize: "14px",
+                            lineHeight: "19px",
+                        }}
+                    >
+                        <div>
+                            <span 
+                                style={type == 'Business Unit' ? { color: 'black' } : { color: '#007ACB' }} 
+                                onClick={() => {
+                                    setType("Business Unit");
+                                    setParent(null)
+                                }}
+                            >
+                                Business Unit
+                            </span>
+                            {type == order[0] ? null
+                                : (<>{" > "}
+                                    <span 
+                                        style={type == "Division" ? { color: 'black' } : { color: '#007ACB' }} 
+                                        onClick={() =>{
+                                            setType("Division");
+                                            let temp = parent;
+                                            delete temp[`${order[2]}`]
+                                            delete temp[`${order[3]}`]
+                                            setParent(temp);
+                                        }}
+                                    >
+                                        Division
+                                    </span>
+                                    {type == order[1] ? null
+                                        : (<>{" > "}
+                                            <span
+                                                style={type == "Department" ? { color: 'black' } : { color: '#007ACB' }}
+                                                onClick={() => {
+                                                    setType("Department");
+                                                    let temp = parent;
+                                                    delete temp[`${order[3]}`]
+                                                    setParent(temp)
+                                                }}
+                                            >
+                                                Department
+                                            </span>
+                                            {type == order[2] ? null
+                                                : (<>{" > "}<span style={type == "Team" ? { color: 'black' } : { color: '#007ACB' }}>Team</span>
+                                                </>)}
+                                        </>)}
+                                </>)
+                            }
                         </div>
                     </div>
-                    <Divider />
+                    <div
+                        style={{
+                            fontWeight: "600",
+                            fontSize: "14px",
+                            lineHeight: "19px",
+                            textTransform: "uppercase",
+                        }}
+                    >
+                        <Button type='default' onClick={() => {
+                            {
+                                console.log('hi')
+                                setIsModalOpen(true);
+                            }
+                        }}>+ Add {type} </Button>
+                    </div>
+                </div>
+                <Divider />
+                { type != order[0] ? (
                     <Row style={{ display: 'flex', flexDirection: 'column', margin: '20px' }}>
                         <Row>
-                            <Col style={{ fontWeight: 600 }} span={24}>{`${type} Care`}</Col>
+                            <Col style={{ fontWeight: 600 }} span={24}>{parent[`${type}`]?.name}</Col>
                         </Row>
                         <Row>
-                            <Col span={24}> {`Health care ${type} Description`} </Col>
+                            <Col span={24}> {parent[`${type}`]?.description} </Col>
                         </Row>
                     </Row>
+                ) : null}
+                    
 
                     <Table
 
@@ -234,14 +331,14 @@ const OrgHierTable = () => {
                         style={{ background: "#FAFAFA" }}
                         size="middle"
                         onRow={(record, rowIndex) => {
-                            return {
-                                onClick: () => {
-                                    let temp = order.indexOf(type) + 1
-                                    if (temp > 3) { return }
-                                    setType(order[temp]);
-                                    console.log(temp, order[temp])
-                                }, // click row
-                            };
+                            // return {
+                            //     onClick: () => {
+                            //         let temp = order.indexOf(type) + 1
+                            //         if (temp > 3) { return }
+                            //         setType(order[temp]);
+                            //         console.log(temp, order[temp])
+                            //     }, // click row
+                            // };
                         }}
 
                     />
@@ -258,14 +355,13 @@ const OrgHierTable = () => {
                             width={550}
                             visible={ismodalOpen}
                             // footer={null}
-                            destroyOnClose
+                            destroyOnClose={true}
                             onCancel={() => {
                                 setIsModalOpen(false);
                             }}
                             cancelText={<div ><CloseOutlined style={{ marginRight: '10px' }} />CANCEL</div>}
                             onOk={() => {
                                 form.submit();
-                                setIsModalOpen(false);
                             }}
                             okText={<div><CheckOutlined style={{ marginRight: '10px' }} />SAVE</div>}
                             title={type}
@@ -294,7 +390,6 @@ const OrgHierTable = () => {
                                     }}
                                 >
                                     <Form
-
                                         labelCol={{
                                             span: 8,
                                         }}
@@ -314,44 +409,66 @@ const OrgHierTable = () => {
                                             style={{ marginBottom: "20px" }}
                                             label={
                                                 <label style={{ color: "black", fontWeight: "400" }}>
-                                                    {type} Name <span style={{ color: "red" }}> *</span>
-                                                </label>
-                                            }
-
-                                        >
-                                            <Input
-
-                                            />
-                                        </Form.Item>
-
-                                        <Form.Item required={false}
-
-                                            labelAlign="left"
-                                            name="description"
-                                            style={{ marginBottom: "20px" }}
-                                            label={
-                                                <label style={{ color: "black", fontWeight: "400" }}>
-                                                    Description:<span style={{ color: "red" }}> *</span>{" "}
+                                                    {type} Name 
                                                 </label>
                                             }
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: "Please Enter Description"
-                                                }
+                                                    message: `Please enter ${type} Name`,
+                                                },
+                                                {
+                                                    pattern: /^[0-9a-zA-Z.,-\s]+$/,
+                                                    message: "Please enter Valid Name",
+                                                },
+                                            ]}
+                                        >
+                                            <Input
+                                                maxLength={30}
+                                                onChange={(e) => {
+                                                    const inputval = e.target.value;
+                                                    const str = e.target.value;
+                                                    const newVal =
+                                                        inputval.substring(0, 1).toUpperCase() +
+                                                        inputval.substring(1);
+                                                    const caps = str.split(" ").map(capitalize).join(" ");
+                                                    form.setFieldsValue({name: newVal, name: caps, });
+                                                }}
+                                            />
+                                        </Form.Item>
+
+                                        <Form.Item 
+                                            labelAlign="left"
+                                            name="description"
+                                            style={{ marginBottom: "20px" }}
+                                            label={
+                                                <label style={{ color: "black", fontWeight: "400" }}>
+                                                    Description:
+                                                </label>
+                                            }
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: `Please enter ${type} Description`,
+                                                },
+                                                {
+                                                    pattern: /^[0-9a-zA-Z.,-\s]+$/,
+                                                    message: "Please enter Valid Name",
+                                                },
                                             ]}
                                         >
                                             <Input.TextArea
-                                                maxLength={80}
+                                                maxLength={120}
                                                 rows={4}
-                                                // onChange={(e) => {
-                                                //     const inputval = e.target.value;
-                                                //     const newVal =
-                                                //         inputval.substring(0, 1).toUpperCase() +
-                                                //         inputval.substring(1);
-                                                //     form1.setFieldsValue({ reason: newVal });
-                                                // }}
-                                                required
+                                                onChange={(e) => {
+                                                    const inputval = e.target.value;
+                                                    const str = e.target.value;
+                                                    const newVal =
+                                                        inputval.substring(0, 1).toUpperCase() +
+                                                        inputval.substring(1);
+                                                    const caps = str.split(". ").map(capitalize).join(". ");
+                                                    form.setFieldsValue({description: newVal, description: caps, });
+                                                }}
                                             />
                                         </Form.Item>
 
@@ -367,22 +484,18 @@ const OrgHierTable = () => {
                 <Row>
                     <Col xs={22} sm={20} md={18}>
                         <Modal
-                            // bodyStyle={{ overflowY: 'scroll' }}
-                            // style={{ height: 'calc(100vh - 200px)' }}
                             bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)', marginLeft: '40px', marginRight: '40px' }}
                             className="viewAppraisal"
                             centered
                             width={550}
                             visible={isEditModalOpen}
-                            // footer={null}
                             destroyOnClose
                             onCancel={() => {
                                 setIsEditModalOpen(false);
                             }}
                             cancelText={<div ><CloseOutlined style={{ marginRight: '10px' }} />CANCEL</div>}
                             onOk={() => {
-                                form.submit();
-                                setIsEditModalOpen(false);
+                                form1.submit();
                             }}
                             okText={<div><CheckOutlined style={{ marginRight: '10px' }} />SAVE</div>}
                             title={<div> Edit {type}</div>}
@@ -390,6 +503,7 @@ const OrgHierTable = () => {
                                 <div
                                     onClick={() => {
                                         setIsEditModalOpen(false);
+                                        form1.resetFields();
                                     }}
                                     style={{ color: "#ffffff" }}
                                 >
@@ -411,7 +525,6 @@ const OrgHierTable = () => {
                                     }}
                                 >
                                     <Form
-
                                         labelCol={{
                                             span: 8,
                                         }}
@@ -421,7 +534,7 @@ const OrgHierTable = () => {
                                         initialValues={{
                                             remember: true,
                                         }}
-                                        form={form}
+                                        form={form1}
                                         onFinish={onFinishEdit}
                                     >
 
@@ -431,44 +544,68 @@ const OrgHierTable = () => {
                                             style={{ marginBottom: "20px" }}
                                             label={
                                                 <label style={{ color: "black", fontWeight: "400" }}>
-                                                    {type} Name <span style={{ color: "red" }}> *</span>
+                                                    {type} Name
                                                 </label>
                                             }
-
+                                            initialValue={editRecord.name}
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: `Please enter ${type} Name`,
+                                                },
+                                                {
+                                                    pattern: /^[0-9a-zA-Z.,-\s]+$/,
+                                                    message: "Please enter Valid Name",
+                                                },
+                                            ]}
                                         >
                                             <Input
-
+                                                maxLength={30}
+                                                onChange={(e) => {
+                                                    const inputval = e.target.value;
+                                                    const str = e.target.value;
+                                                    const newVal =
+                                                        inputval.substring(0, 1).toUpperCase() +
+                                                        inputval.substring(1);
+                                                    const caps = str.split(" ").map(capitalize).join(" ");
+                                                    form1.setFieldsValue({editname: newVal, editname: caps, });
+                                                }}
                                             />
                                         </Form.Item>
 
-                                        <Form.Item required={false}
-
+                                        <Form.Item 
                                             labelAlign="left"
                                             name="editdescription"
                                             style={{ marginBottom: "20px" }}
                                             label={
                                                 <label style={{ color: "black", fontWeight: "400" }}>
-                                                    Description:<span style={{ color: "red" }}> *</span>{" "}
+                                                    Description:
                                                 </label>
                                             }
+                                            initialValue={editRecord.description}
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: "Please Enter Description"
-                                                }
+                                                    message: `Please enter ${type} Description`,
+                                                },
+                                                {
+                                                    pattern: /^[0-9a-zA-Z.,-\s]+$/,
+                                                    message: "Please enter Valid Name",
+                                                },
                                             ]}
                                         >
                                             <Input.TextArea
-                                                maxLength={80}
+                                                maxLength={120}
                                                 rows={4}
-                                                // onChange={(e) => {
-                                                //     const inputval = e.target.value;
-                                                //     const newVal =
-                                                //         inputval.substring(0, 1).toUpperCase() +
-                                                //         inputval.substring(1);
-                                                //     form1.setFieldsValue({ reason: newVal });
-                                                // }}
-                                                required
+                                                onChange={(e) => {
+                                                    const inputval = e.target.value;
+                                                    const str = e.target.value;
+                                                    const newVal =
+                                                        inputval.substring(0, 1).toUpperCase() +
+                                                        inputval.substring(1);
+                                                    const caps = str.split(". ").map(capitalize).join(". ");
+                                                    form1.setFieldsValue({editdescription: newVal, editdescription: caps, });
+                                                }}
                                             />
                                         </Form.Item>
 
@@ -479,7 +616,6 @@ const OrgHierTable = () => {
                         </Modal>
                     </Col>
                 </Row>
-            </Card >
         </div>
     )
 }

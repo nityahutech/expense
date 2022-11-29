@@ -82,6 +82,7 @@ function AttendanceLog(props) {
       key: "report",
       dataIndex: "report",
       ellipsis: true,
+      fixed: 'right'
     },
     // {
     //   title: "Action",
@@ -265,45 +266,52 @@ function AttendanceLog(props) {
       title: "Date",
       dataIndex: "date",
       key: "date",
+      width: 80,
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      width: 80,
     },
     {
       title: "In Time",
       dataIndex: "clockIn",
       key: "clockIn",
+      width: 80,
     },
     {
       title: "Out Time",
       key: "clockOut",
       dataIndex: "clockOut",
+      width: 80,
     },
     {
       title: "Work Duration",
       key: "duration",
       dataIndex: "duration",
-      width: 140,
+      width: 100,
     },
     {
       title: "Break Time",
       key: "break",
       dataIndex: "break",
+      width: 80,
     },
     {
       title: "Project Name",
       dataIndex: "project",
       key: "project",
       ellipsis: true,
+      width: 80,
     },
     {
       title: "Report",
       key: "report",
       dataIndex: "report",
-      width: 150,
+      width: 100,
       ellipsis: true,
+      fixed: 'right'
     },
   ];
   async function onHrDateFilter(value) {
@@ -342,7 +350,7 @@ function AttendanceLog(props) {
   const disabledDate = current => {
     return current.isBefore(dateOfJoining) || current.isAfter(moment(dateOfJoining).add(2, 'months'))
   }
- 
+
 
 
   return (
@@ -372,7 +380,7 @@ function AttendanceLog(props) {
                     style={{
                       background: "#1963A6",
                       cursor: "pointer",
-                      marginLeft: "12rem",
+                      marginLeft: "15rem",
                     }}
                     allowClear
                     onChange={onHrDateFilter}
@@ -384,6 +392,7 @@ function AttendanceLog(props) {
                   className="monthly"
                   columns={columns1}
                   dataSource={empMonthly || []}
+                  scroll={{ x: 600 }}
                 />
               </Tabs.TabPane>
               <Tabs.TabPane

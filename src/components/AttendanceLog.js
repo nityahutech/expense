@@ -16,7 +16,8 @@ import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import AttendanceContext from "../contexts/AttendanceContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
-import dayjs from 'dayjs';
+import EmpInfoContext from "../contexts/EmpInfoContext";
+const dateFormat = "DD-MM-YYYY";
 
 const layout = {
   labelCol: {
@@ -44,6 +45,7 @@ function AttendanceLog(props) {
   const [loading, setLoading] = useState(false);
   const [empMonthly, setEmpMonthly] = useState([]);
   const [holidays, setHolidays] = useState([]);
+  const [dateOfJoining, setDateOfJoining] = useState(null);
   const [month, setMonth] = useState();
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
@@ -94,6 +96,7 @@ function AttendanceLog(props) {
   };
   useEffect(() => {
     getHolidayList();
+    getDateOfJoining()
   }, []);
   useEffect(() => {
     form.resetFields();
@@ -142,6 +145,7 @@ function AttendanceLog(props) {
   }
   const getHolidayList = async () => {
     let data = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
+    // console.log('data', data)
     let req = data.docs.map((doc) => {
       if (!doc.data().optionalHoliday) {
         return doc.data().date;
@@ -150,6 +154,16 @@ function AttendanceLog(props) {
     });
     setHolidays(req);
   };
+
+  const getDateOfJoining = async () => {
+    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+    console.log('data', data)
+    var doj = moment(data.doj, dateFormat)
+    console.log('data', doj)
+    setDateOfJoining(doj)
+
+  };
+
   const setHolidayStatus = (data) => {
     data.forEach((rec) => {
       if (
@@ -321,9 +335,15 @@ function AttendanceLog(props) {
     }
   };
 
-  const disabledDate = (current) => {
-    return current.month() != moment().month();
-  };
+  // const disabledDate = (current) => {
+  //   return current.month() != moment().month();
+  // };s
+
+  const disabledDate = current => {
+    return current.isBefore(dateOfJoining) || current.isAfter(moment(dateOfJoining).add(2, 'months'))
+  }
+ 
+
 
   return (
     <>

@@ -26,3 +26,17 @@
     font-size: 18px;
 line-height: 25px;
  }
+
+ .costModal .ant-btn-primary{
+    background: #1963A6;
+    color:#ffffff;
+    border-radius: 4px;
+    
+ }
+
+ .viewAppraisal .ant-btn-primary{
+    background: #1963A6;
+    color:#ffffff;
+    border-radius: 4px;
+    
+ }

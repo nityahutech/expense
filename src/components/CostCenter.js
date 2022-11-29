@@ -8,12 +8,14 @@ import {
   Card,
   Table,
   Modal,
-  message,
+  notification,
 } from "antd";
 import {
   PlusOutlined,
   EditFilled,
   DeleteOutlined,
+  CloseOutlined,
+  CheckOutlined
 } from "@ant-design/icons";
 import "../style/CostCenter.css"
 import FormItem from 'antd/es/form/FormItem';
@@ -24,10 +26,17 @@ function CostCenter() {
   const [isCostModalOpen, setIsCostModalOpen] = useState(false);
   const [isCostEditModalOpen, setIsCostEditModalOpen] = useState(false);
   const [form] = Form.useForm();
+  const [editForm] = Form.useForm();
   const [costCenters, setCostCenters] = useState([]);
+  const [costEditCenter, setEditCostCenter] = useState({});
   const [costCenterlength, setCostCenterlength] = useState(0);
+  const showNotification = (type, msg, desc) => {
+    notification[type]({
+      message: msg,
+      description: desc,
+    });
+  };
 
-  // let costCenterlength = 0
 
   const deleteCost = (record) => {
     Modal.confirm({
@@ -40,6 +49,7 @@ function CostCenter() {
         console.log('key', record)
         const newData = costCenters.filter((item) => item.slno !== record.slno);
         localStorage.setItem("costCenters", JSON.stringify(newData));
+        showNotification("success", "Success", "Successfully deleted");
         setCostCenters(newData);
         setCostCenterlength(newData.length)
       }
@@ -51,31 +61,66 @@ function CostCenter() {
     setIsCostModalOpen(true);
   };
 
-  const handleCancel = () => {
-    setIsCostModalOpen(false);
-  };
+  const showEditModal = (record) => {
+    console.log('editrecord', record)
 
-  const showEditModal = () => {
     setIsCostEditModalOpen(true)
+    setEditCostCenter(record)
   };
 
 
-  const onFinish = (values) => {
-    console.log('Success:', values);
+  const onFinishEdit = (values) => {
+    console.log('onFinishEdit', values);
+
+    let newCostCenterTemp = {
+      costName: values.costName,
+      costcentercode: values.costcentercode,
+      costDescription: values.costDescription
+
+    }
+    let originalCostCenterCode = costEditCenter.costcentercode
+    console.log('onFinishEdit', originalCostCenterCode);
+    for (let i = 0; i < costCenters.length; i++) {
+      if (costCenters[i].costcentercode === originalCostCenterCode) {
+        costCenters[i] = newCostCenterTemp
+      }
+    }
+
+    localStorage.setItem("costCenters", JSON.stringify(costCenters))
+    editForm.resetFields();
+    setEditCostCenter({})
+    setCostCenters(costCenters)
+    setCostCenterlength(costCenters.length - 1)
+    showNotification("success", "Success", "Successfully editted");
+    setIsCostEditModalOpen(false)
+    getCostCentersFromLocalStr()
+    setCostCenterlength(costCenters.length)
+
   };
 
   const onFinishForm = (values) => {
+
     console.log('values', values)
+    let matchingCostCenter = costCenters.filter((item) => item.costcentercode === values.costcentercode)
+    console.log('values', matchingCostCenter)
+    if (matchingCostCenter.length > 0) {
+      showNotification("error", "error", "Try Again");
+      return
+    }
+
     let costCenterTemp = {
       costName: values.costName,
       costcentercode: values.costcentercode,
       costDescription: values.costDescription
+
     }
     costCenters.push(costCenterTemp)
     localStorage.setItem("costCenters", JSON.stringify(costCenters));
+    showNotification("success", "Success", "Successfully added");
     setCostCenters(costCenters)
     console.log('costCenters', costCenters.length)
     setCostCenterlength(costCenters.length)
+    form.resetFields();
   };
 
   const getCostCentersFromLocalStr = () => {
@@ -100,13 +145,15 @@ function CostCenter() {
     setCostCenters(costfromDataStore)
   }, [costCenterlength]);
 
+
+
   const columns = [
-    {
-      title: "Sl.no.",
-      dataIndex: "slno",
-      key: "slno",
-      width: 50,
-    },
+    // {
+    //   title: "Sl.no.",
+    //   dataIndex: "slno",
+    //   key: "slno",
+    //   width: 80,
+    // },
     {
       title: "Cost Center Code",
       dataIndex: "costcentercode",
@@ -129,12 +176,13 @@ function CostCenter() {
       title: "Action",
       key: "action",
       dataIndex: "action",
-      width: 130,
-      align: "center",
+      width: 80,
+      align: "left",
+      fixed: 'right',
       render: (_, record) => {
         return (
           <>
-            <Row gutter={[0, 0]}>
+            <Row gutter={[0, 0]} style={{ display: 'flex' }}>
               <Col xs={22} sm={15} md={8}>
                 <Button
                   style={{
@@ -148,7 +196,11 @@ function CostCenter() {
                     background: '#EEEEEE',
                     borderRadius: '10px'
                   }}
-                  onClick={showEditModal}
+
+                  onClick={() => {
+                    form.resetFields();
+                    showEditModal(record)
+                  }}
 
                 >
                   <EditFilled />
@@ -167,7 +219,8 @@ function CostCenter() {
                     width: '35px',
                     height: '36px',
                     background: '#EEEEEE',
-                    borderRadius: '10px'
+                    borderRadius: '10px',
+                    marginLeft: '20px'
                   }}
                 >
                   <DeleteOutlined />
@@ -179,8 +232,6 @@ function CostCenter() {
       },
     },
   ];
-
-
 
   return (
     <div style={{ background: "#fff" }}>
@@ -200,25 +251,30 @@ function CostCenter() {
         footer={false}
       >
         <Table
-          bordered={true}
+          // bordered={true}
           className="costCenterTable"
           columns={columns}
           dataSource={costCenters}
           style={{ padding: "0px" }}
           pagination={false}
+          scroll={{ x: 600 }}
         />
       </Card>
 
       <Modal
         title="ORGANIZATION DETAILS"
         open={isCostModalOpen}
-        onCancel={handleCancel}
+        onCancel={() => {
+          setIsCostModalOpen(false);
+        }}
+        cancelText={<div ><CloseOutlined style={{ marginRight: '10px' }} />CANCEL</div>}
         centered
         className='costModal'
         onOk={() => {
           form.submit();
           setIsCostModalOpen(false);
         }}
+        okText={<div><CheckOutlined style={{ marginRight: '10px' }} />SAVE</div>}
         closeIcon={
           <div
             onClick={() => {
@@ -246,12 +302,10 @@ function CostCenter() {
           <Row gutter={[0, 16]}>
             <Col xs={24} sm={24} md={24}>
               <FormItem
+                labelAlign="left"
                 name="costcentercode"
                 label="Cost Center Code"
-                // value={costCenter}
-                // onChange={(e) =>
-                //   setCostCenter(e.target.value)
-                // }
+
                 rules={[
                   {
                     required: true,
@@ -262,20 +316,17 @@ function CostCenter() {
                     message: "Please enter Valid Cost Center Code",
                   },
                 ]}
-                labelCol={{ span: 7 }}
-                wrapperCol={{ span: 24 }}
+
               >
                 <Input />
               </FormItem>
             </Col>
             <Col xs={24} sm={24} md={24}>
               <FormItem
+                labelAlign="left"
                 name="costName"
                 label="Name"
-                // value={costName}
-                // onChange={(e) =>
-                //   setCostName(e.target.value)
-                // }
+
                 rules={[
                   {
                     required: true,
@@ -286,8 +337,7 @@ function CostCenter() {
                     message: "Please enter Valid Name",
                   },
                 ]}
-                labelCol={{ span: 3, offset: 4 }}
-                wrapperCol={{ span: 24 }}
+
 
               >
                 <Input />
@@ -295,14 +345,11 @@ function CostCenter() {
             </Col>
             <Col xs={24} sm={24} md={24}>
               <FormItem
+                labelAlign="left"
                 name="costDescription"
                 label="Description"
-                // value={costDescription}
-                // onChange={(e) =>
-                //   setCostDescription(e.target.value)
-                // }
-                labelCol={{ span: 5, offset: 2 }}
-                wrapperCol={{ span: 24 }}
+
+
               >
                 <TextArea
                   row={5}
@@ -318,17 +365,24 @@ function CostCenter() {
       <Modal
         title="EDIT ORGANIZATION DETAILS"
         open={isCostEditModalOpen}
-        onCancel={handleCancel}
+        onCancel={() => {
+          setIsCostEditModalOpen(false);
+        }}
+        cancelText={<div ><CloseOutlined style={{ marginRight: '10px' }} />CANCEL</div>}
         centered
         className='costModal'
         onOk={() => {
-          form.submit();
+          editForm.submit();
           setIsCostEditModalOpen(false);
+
         }}
+        okText={<div><CheckOutlined style={{ marginRight: '10px' }} />SAVE</div>}
         closeIcon={
           <div
             onClick={() => {
+              editForm.resetFields();
               setIsCostEditModalOpen(false);
+
             }}
             style={{ color: "#ffff" }}
           >
@@ -337,6 +391,7 @@ function CostCenter() {
         }
       >
         <Form
+
           labelCol={{
             span: 8,
           }}
@@ -346,14 +401,16 @@ function CostCenter() {
           initialValues={{
             remember: true,
           }}
-          form={form}
-          onFinish={onFinish}
+          form={editForm}
+          onFinish={onFinishEdit}
         >
           <Row gutter={[0, 16]}>
             <Col xs={24} sm={24} md={24}>
               <FormItem
+                labelAlign="left"
                 name="costcentercode"
                 label="Cost Center Code"
+                initialValue={costEditCenter.costcentercode}
                 rules={[
                   {
                     required: true,
@@ -364,16 +421,18 @@ function CostCenter() {
                     message: "Please enter Valid Cost Center Code",
                   },
                 ]}
-                labelCol={{ span: 7 }}
-                wrapperCol={{ span: 24 }}
+
               >
-                <Input />
+                <Input
+                />
               </FormItem>
             </Col>
             <Col xs={24} sm={24} md={24}>
               <FormItem
+                labelAlign="left"
                 name="costName"
                 label="Name"
+                initialValue={costEditCenter.costName}
                 rules={[
                   {
                     required: true,
@@ -384,8 +443,7 @@ function CostCenter() {
                     message: "Please enter Valid Name",
                   },
                 ]}
-                labelCol={{ span: 3, offset: 4 }}
-                wrapperCol={{ span: 24 }}
+
 
               >
                 <Input />
@@ -393,15 +451,14 @@ function CostCenter() {
             </Col>
             <Col xs={24} sm={24} md={24}>
               <FormItem
+                labelAlign="left"
                 name="costDescription"
                 label="Description"
-                labelCol={{ span: 5, offset: 2 }}
-                wrapperCol={{ span: 24 }}
+                initialValue={costEditCenter.costDescription}
+
               >
                 <TextArea
-                  row={5}
-                  maxlength={100}
-                  autoSize={{ minRows: 2, maxRows: 6 }}
+
                 />
               </FormItem>
             </Col>

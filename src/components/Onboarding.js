@@ -381,22 +381,18 @@ function Onboarding() {
               onChange={progressBar}
               className="stepBars"
             >
+              <Step 
+                className="stepOne"
+                title="Organization Details" />
               <Step
-                // className="stepOne"
-                title="Organization Details"
-              />
+                className="stepTwo" 
+                title="Cost Center" />
               <Step
-                // className="stepTwo"
-                title="Cost Center"
-              />
+                className="stepThree" 
+                title="Organization Hierarchy" />
               <Step
-                // className="stepThree"
-                title="Organization Hierarchy"
-              />
-              <Step
-                // className="stepFour"
-                title="Access Details"
-              />
+                className="stepFour" 
+                title="Access Details" />
             </Steps>
           </Card>
 

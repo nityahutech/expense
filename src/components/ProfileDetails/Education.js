@@ -33,7 +33,7 @@ function Education() {
     showEditContent(false);
   };
 
-  const onFinishFailed = (errorInfo) => { };
+  const onFinishFailed = (errorInfo) => {};
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -77,11 +77,12 @@ function Education() {
       <Row
         className="Row-Card"
         style={{
-          width: '75%',
-          margin: '10px',
-          display: 'flex',
-          alignItems: 'center'
-        }}>
+          width: "75%",
+          margin: "10px",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
         <Col span={24}>
           <Form
             name="basic"
@@ -129,10 +130,10 @@ function Education() {
                 </>
               }
               style={{
-                width: '100%',
+                width: "100%",
                 // marginTop: 10,
                 borderRadius: "10px",
-                cursor:'default',
+                cursor: "default",
               }}
             >
               <Row gutter={[16, 16]}>
@@ -180,8 +181,8 @@ function Education() {
                           defaultValue={data ? data.qualificationType : null}
                           maxLength={25}
                           placeholder="Enter Qualification Type"
-                          style={{ 
-                            marginTop: "10px", 
+                          style={{
+                            marginTop: "10px",
                             width: "100%",
                             borderBottom: "1px solid #ccc ",
                             paddingLeft: "0px",
@@ -231,8 +232,8 @@ function Education() {
                         <Input
                           initialValue={data ? data.courseName : null}
                           placeholder="Enter Course Name"
-                          style={{ 
-                            marginTop: "10px", 
+                          style={{
+                            marginTop: "10px",
                             width: "100%",
                             borderBottom: "1px solid #ccc ",
                             paddingLeft: "0px",
@@ -294,8 +295,8 @@ function Education() {
                           }}
                           initialValue={data ? data.courseType : null}
                           placeholder="Enter Course Type"
-                          style={{ 
-                            marginTop: "10px", 
+                          style={{
+                            marginTop: "10px",
                             width: "100%",
                             borderBottom: "1px solid #ccc ",
                             paddingLeft: "0px",
@@ -357,8 +358,8 @@ function Education() {
                           }}
                           defaultValue={data ? data.stream : null}
                           placeholder="Enter Stream"
-                          style={{ 
-                            marginTop: "10px", 
+                          style={{
+                            marginTop: "10px",
                             width: "100%",
                             borderBottom: "1px solid #ccc ",
                             paddingLeft: "0px",
@@ -501,8 +502,8 @@ function Education() {
                             data?.universityName ? data.universityName : null
                           }
                           placeholder="Enter University Name"
-                          style={{ 
-                            marginTop: "10px", 
+                          style={{
+                            marginTop: "10px",
                             width: "100%",
                             borderBottom: "1px solid #ccc ",
                             paddingLeft: "0px",
@@ -533,7 +534,11 @@ function Education() {
                     <Button
                       type="primary"
                       htmlType="submit"
-                      style={{ marginLeft: "10px" }}
+                      style={{
+                        marginLeft: "10px",
+                        background: "#1963A6",
+                        width: "90px",
+                      }}
                     >
                       <CheckOutlined />
                       SAVE

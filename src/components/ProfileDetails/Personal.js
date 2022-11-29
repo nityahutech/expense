@@ -10,7 +10,7 @@ import {
   Form,
   Divider,
 } from "antd";
-import { CloseOutlined, EditFilled } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, EditFilled } from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
 import moment from "moment";
@@ -84,6 +84,20 @@ function Personal() {
     setScrs(data?.scrs ? data.scrs : null);
   };
 
+  const prefixSelector = (
+    <Form.Item initialValue={data ? data.prefix : null} name="prefix" noStyle>
+      <Select
+        bordered={false}
+        style={{
+          width: 70,
+          background: "#ffffff",
+        }}
+      >
+        <Option value="91">+91</Option>
+      </Select>
+    </Form.Item>
+  );
+
   return (
     <>
       <div
@@ -149,7 +163,7 @@ function Personal() {
                   width: "100%",
                   marginTop: 10,
                   borderRadius: "10px",
-                  cursor:'default',
+                  cursor: "default",
                 }}
               >
                 <Row gutter={[16, 42]}>
@@ -408,7 +422,13 @@ function Personal() {
                     <Button
                       onClick={() => showEditContent(false)}
                       type="text"
-                      style={{ fontSize: 15 }}
+                      style={{
+                        fontSize: "14px",
+                        // color: "#1963A6",
+                        // marginRight: "10px",
+                        // border: "1px solid #1963A6",
+                        // width: "90px",
+                      }}
                     >
                       <CloseOutlined /> CANCEL
                     </Button>
@@ -417,8 +437,13 @@ function Personal() {
                       <Button
                         type="primary"
                         htmlType="submit"
-                        style={{ marginLeft: "10px" }}
+                        style={{
+                          marginLeft: "10px",
+                          background: "#1963A6",
+                          width: "90px",
+                        }}
                       >
+                        <CheckOutlined />
                         SAVE
                       </Button>
                     </Col>
@@ -496,7 +521,7 @@ function Personal() {
                   width: "100%",
                   marginTop: 10,
                   borderRadius: "10px",
-                  cursor:'default',
+                  cursor: "default",
                 }}
               >
                 <Row gutter={[16, 16]}>
@@ -610,7 +635,11 @@ function Personal() {
                         Phone Number
                       </div>
                       {editContactInfo === false ? (
-                        <div>{data?.phonenumber ? data.phonenumber : "-"}</div>
+                        <div>
+                          {data?.phonenumber
+                            ? "+" + data.prefix + data.phonenumber
+                            : "-"}
+                        </div>
                       ) : (
                         <Form.Item
                           initialValue={data ? data.phonenumber : null}
@@ -626,6 +655,7 @@ function Personal() {
                           ]}
                         >
                           <Input
+                            addonBefore={prefixSelector}
                             style={{
                               marginTop: "10px",
                               width: "100%",
@@ -655,7 +685,11 @@ function Personal() {
                         Alternate Phone Number
                       </div>
                       {editContactInfo === false ? (
-                        <div>{data?.altPhnNo ? data.altPhnNo : "-"}</div>
+                        <div>
+                          {data?.altPhnNo
+                            ? "+" + data.prefix + data.altPhnNo
+                            : "-"}
+                        </div>
                       ) : (
                         <Form.Item
                           initialValue={data ? data.altPhnNo : null}
@@ -671,6 +705,7 @@ function Personal() {
                           ]}
                         >
                           <Input
+                            addonBefore={prefixSelector}
                             style={{
                               marginTop: "10px",
                               width: "100%",
@@ -705,8 +740,13 @@ function Personal() {
                       <Button
                         type="primary"
                         htmlType="submit"
-                        style={{ marginLeft: "10px" }}
+                        style={{
+                          marginLeft: "10px",
+                          background: "#1963A6",
+                          width: "90px",
+                        }}
                       >
+                        <CheckOutlined />
                         SAVE
                       </Button>
                     </Col>
@@ -781,7 +821,7 @@ function Personal() {
                   width: "100%",
                   marginTop: 10,
                   borderRadius: "10px",
-                  cursor:'default'
+                  cursor: "default",
                 }}
               >
                 <Row gutter={[16, 16]}>
@@ -1051,8 +1091,13 @@ function Personal() {
                       <Button
                         type="primary"
                         htmlType="submit"
-                        style={{ marginLeft: "10px" }}
+                        style={{
+                          marginLeft: "10px",
+                          background: "#1963A6",
+                          width: "90px",
+                        }}
                       >
+                        <CheckOutlined />
                         SAVE
                       </Button>
                     </Col>

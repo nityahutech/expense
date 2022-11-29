@@ -382,16 +382,16 @@ function Onboarding() {
               className="stepBars"
             >
               <Step 
-                // className="stepOne"
+                className="stepOne"
                 title="Organization Details" />
               <Step
-                // className="stepTwo" 
+                className="stepTwo" 
                 title="Cost Center" />
               <Step
-                // className="stepThree" 
+                className="stepThree" 
                 title="Organization Hierarchy" />
               <Step
-                // className="stepFour" 
+                className="stepFour" 
                 title="Access Details" />
             </Steps>
           </Card>

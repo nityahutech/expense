@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import {
   Form,
   Input,
@@ -15,14 +15,13 @@ import {
   EditFilled,
   DeleteOutlined,
   CloseOutlined,
-  CheckOutlined
+  CheckOutlined,
 } from "@ant-design/icons";
-import "../style/CostCenter.css"
-import FormItem from 'antd/es/form/FormItem';
-import TextArea from 'antd/lib/input/TextArea';
+import "../style/CostCenter.css";
+import FormItem from "antd/es/form/FormItem";
+import TextArea from "antd/lib/input/TextArea";
 
 function CostCenter() {
-
   const [isCostModalOpen, setIsCostModalOpen] = useState(false);
   const [isCostEditModalOpen, setIsCostEditModalOpen] = useState(false);
   const [form] = Form.useForm();
@@ -37,7 +36,6 @@ function CostCenter() {
     });
   };
 
-
   const deleteCost = (record) => {
     Modal.confirm({
       title: "Are you sure, you want to delete cost Center?",
@@ -45,16 +43,14 @@ function CostCenter() {
       okType: "danger",
 
       onOk: () => {
-
-        console.log('key', record)
+        console.log("key", record);
         const newData = costCenters.filter((item) => item.slno !== record.slno);
         localStorage.setItem("costCenters", JSON.stringify(newData));
         showNotification("success", "Success", "Successfully deleted");
         setCostCenters(newData);
-        setCostCenterlength(newData.length)
-      }
-    })
-
+        setCostCenterlength(newData.length);
+      },
+    });
   };
 
   const showModal = () => {
@@ -62,90 +58,84 @@ function CostCenter() {
   };
 
   const showEditModal = (record) => {
-    console.log('editrecord', record)
+    console.log("editrecord", record);
 
-    setIsCostEditModalOpen(true)
-    setEditCostCenter(record)
+    setIsCostEditModalOpen(true);
+    setEditCostCenter(record);
   };
 
-
   const onFinishEdit = (values) => {
-    console.log('onFinishEdit', values);
+    console.log("onFinishEdit", values);
 
     let newCostCenterTemp = {
       costName: values.costName,
       costcentercode: values.costcentercode,
-      costDescription: values.costDescription
-
-    }
-    let originalCostCenterCode = costEditCenter.costcentercode
-    console.log('onFinishEdit', originalCostCenterCode);
+      costDescription: values.costDescription,
+    };
+    let originalCostCenterCode = costEditCenter.costcentercode;
+    console.log("onFinishEdit", originalCostCenterCode);
     for (let i = 0; i < costCenters.length; i++) {
       if (costCenters[i].costcentercode === originalCostCenterCode) {
-        costCenters[i] = newCostCenterTemp
+        costCenters[i] = newCostCenterTemp;
       }
     }
 
-    localStorage.setItem("costCenters", JSON.stringify(costCenters))
+    localStorage.setItem("costCenters", JSON.stringify(costCenters));
     editForm.resetFields();
-    setEditCostCenter({})
-    setCostCenters(costCenters)
-    setCostCenterlength(costCenters.length - 1)
+    setEditCostCenter({});
+    setCostCenters(costCenters);
+    setCostCenterlength(costCenters.length - 1);
     showNotification("success", "Success", "Successfully editted");
-    setIsCostEditModalOpen(false)
-    getCostCentersFromLocalStr()
-    setCostCenterlength(costCenters.length)
-
+    setIsCostEditModalOpen(false);
+    getCostCentersFromLocalStr();
+    setCostCenterlength(costCenters.length);
   };
 
   const onFinishForm = (values) => {
-
-    console.log('values', values)
-    let matchingCostCenter = costCenters.filter((item) => item.costcentercode === values.costcentercode)
-    console.log('values', matchingCostCenter)
+    console.log("values", values);
+    let matchingCostCenter = costCenters.filter(
+      (item) => item.costcentercode === values.costcentercode
+    );
+    console.log("values", matchingCostCenter);
     if (matchingCostCenter.length > 0) {
       showNotification("error", "error", "Try Again");
-      return
+      return;
     }
 
     let costCenterTemp = {
       costName: values.costName,
       costcentercode: values.costcentercode,
-      costDescription: values.costDescription
-
-    }
-    costCenters.push(costCenterTemp)
+      costDescription: values.costDescription,
+    };
+    costCenters.push(costCenterTemp);
     localStorage.setItem("costCenters", JSON.stringify(costCenters));
     showNotification("success", "Success", "Successfully added");
-    setCostCenters(costCenters)
-    console.log('costCenters', costCenters.length)
-    setCostCenterlength(costCenters.length)
+    setCostCenters(costCenters);
+    console.log("costCenters", costCenters.length);
+    setCostCenterlength(costCenters.length);
     form.resetFields();
   };
 
   const getCostCentersFromLocalStr = () => {
-    const data = localStorage.getItem('costCenters');
+    const data = localStorage.getItem("costCenters");
     if (data) {
-      return JSON.parse(data)
+      return JSON.parse(data);
+    } else {
+      return [];
     }
-    else {
-      return []
-    }
-  }
+  };
 
   useEffect(() => {
-    let costfromDataStore = getCostCentersFromLocalStr()
-    console.log('costfromDataStore', costfromDataStore)
-    let i = 0
-    costfromDataStore.map(obj => {
-      costfromDataStore[i].slno = i + 1
-      i++
-    })
+    let costfromDataStore = getCostCentersFromLocalStr();
+    console.log("costfromDataStore", costfromDataStore);
+    let i = 0;
+    costfromDataStore.map((obj) => {
+      costfromDataStore[i].slno = i + 1;
+      i++;
+    });
 
-    setCostCenters(costfromDataStore)
+    setCostCenters(costfromDataStore);
   }, [costCenterlength]);
-
-
 
   const columns = [
     // {
@@ -178,49 +168,46 @@ function CostCenter() {
       dataIndex: "action",
       width: 80,
       align: "left",
-      fixed: 'right',
+      fixed: "right",
       render: (_, record) => {
         return (
           <>
-            <Row gutter={[0, 0]} style={{ display: 'flex' }}>
+            <Row gutter={[0, 0]} style={{ display: "flex" }}>
               <Col xs={22} sm={15} md={8}>
                 <Button
                   style={{
                     color: " #007ACB",
                     border: "none",
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '35px',
-                    height: '36px',
-                    background: '#EEEEEE',
-                    borderRadius: '10px'
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "35px",
+                    height: "36px",
+                    background: "#EEEEEE",
+                    borderRadius: "10px",
                   }}
-
                   onClick={() => {
                     form.resetFields();
-                    showEditModal(record)
+                    showEditModal(record);
                   }}
-
                 >
                   <EditFilled />
                 </Button>
               </Col>
               <Col xs={22} sm={15} md={8}>
                 <Button
-
                   onClick={() => deleteCost(record)}
                   style={{
                     color: " #007ACB",
                     border: "none",
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '35px',
-                    height: '36px',
-                    background: '#EEEEEE',
-                    borderRadius: '10px',
-                    marginLeft: '20px'
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "35px",
+                    height: "36px",
+                    background: "#EEEEEE",
+                    borderRadius: "10px",
+                    marginLeft: "20px",
                   }}
                 >
                   <DeleteOutlined />
@@ -236,17 +223,38 @@ function CostCenter() {
   return (
     <div style={{ background: "#fff" }}>
       <Card
-        title={<div style={{ fontWeight: "600", fontSize: "14px", lineHeight: "19px", textTransform: "uppercase", }}>Organization Cost Center </div>}
-        extra={<>
-          <Row>
-            <Col xs={2} sm={24} md={24}>
-              <Button
-                style={{ width: "100%" }}
-                onClick={showModal}
-              ><PlusOutlined />Add Cost Center</Button>
-            </Col>
-          </Row>
-        </>}
+        title={
+          <div
+            style={{
+              fontWeight: "600",
+              fontSize: "14px",
+              lineHeight: "19px",
+              textTransform: "uppercase",
+            }}
+          >
+            Organization Cost Center{" "}
+          </div>
+        }
+        extra={
+          <>
+            <Row>
+              <Col xs={2} sm={24} md={24}>
+                <Button
+                  style={{
+                    width: "100%",
+                    background: "#1963A6",
+                    color: "#ffffff",
+                    borderRadius: "5px",
+                  }}
+                  onClick={showModal}
+                >
+                  <PlusOutlined />
+                  Add Cost Center
+                </Button>
+              </Col>
+            </Row>
+          </>
+        }
         className="costCenterCard"
         footer={false}
       >
@@ -267,14 +275,24 @@ function CostCenter() {
         onCancel={() => {
           setIsCostModalOpen(false);
         }}
-        cancelText={<div ><CloseOutlined style={{ marginRight: '10px' }} />CANCEL</div>}
+        cancelText={
+          <div className="cancel">
+            <CloseOutlined style={{ marginRight: "10px" }} />
+            CANCEL
+          </div>
+        }
         centered
-        className='costModal'
+        className="costModal"
         onOk={() => {
           form.submit();
           setIsCostModalOpen(false);
         }}
-        okText={<div><CheckOutlined style={{ marginRight: '10px' }} />SAVE</div>}
+        okText={
+          <div className="save">
+            <CheckOutlined style={{ marginRight: "10px" }} />
+            SAVE
+          </div>
+        }
         closeIcon={
           <div
             onClick={() => {
@@ -305,7 +323,6 @@ function CostCenter() {
                 labelAlign="left"
                 name="costcentercode"
                 label="Cost Center Code"
-
                 rules={[
                   {
                     required: true,
@@ -316,7 +333,6 @@ function CostCenter() {
                     message: "Please enter Valid Cost Center Code",
                   },
                 ]}
-
               >
                 <Input />
               </FormItem>
@@ -326,7 +342,6 @@ function CostCenter() {
                 labelAlign="left"
                 name="costName"
                 label="Name"
-
                 rules={[
                   {
                     required: true,
@@ -337,8 +352,6 @@ function CostCenter() {
                     message: "Please enter Valid Name",
                   },
                 ]}
-
-
               >
                 <Input />
               </FormItem>
@@ -348,8 +361,6 @@ function CostCenter() {
                 labelAlign="left"
                 name="costDescription"
                 label="Description"
-
-
               >
                 <TextArea
                   row={5}
@@ -368,21 +379,29 @@ function CostCenter() {
         onCancel={() => {
           setIsCostEditModalOpen(false);
         }}
-        cancelText={<div ><CloseOutlined style={{ marginRight: '10px' }} />CANCEL</div>}
+        cancelText={
+          <div>
+            <CloseOutlined style={{ marginRight: "10px" }} />
+            CANCEL
+          </div>
+        }
         centered
-        className='costModal'
+        className="costModal"
         onOk={() => {
           editForm.submit();
           setIsCostEditModalOpen(false);
-
         }}
-        okText={<div><CheckOutlined style={{ marginRight: '10px' }} />SAVE</div>}
+        okText={
+          <div>
+            <CheckOutlined style={{ marginRight: "10px" }} />
+            SAVE
+          </div>
+        }
         closeIcon={
           <div
             onClick={() => {
               editForm.resetFields();
               setIsCostEditModalOpen(false);
-
             }}
             style={{ color: "#ffff" }}
           >
@@ -391,7 +410,6 @@ function CostCenter() {
         }
       >
         <Form
-
           labelCol={{
             span: 8,
           }}
@@ -421,10 +439,8 @@ function CostCenter() {
                     message: "Please enter Valid Cost Center Code",
                   },
                 ]}
-
               >
-                <Input
-                />
+                <Input />
               </FormItem>
             </Col>
             <Col xs={24} sm={24} md={24}>
@@ -443,8 +459,6 @@ function CostCenter() {
                     message: "Please enter Valid Name",
                   },
                 ]}
-
-
               >
                 <Input />
               </FormItem>
@@ -455,18 +469,15 @@ function CostCenter() {
                 name="costDescription"
                 label="Description"
                 initialValue={costEditCenter.costDescription}
-
               >
-                <TextArea
-
-                />
+                <TextArea />
               </FormItem>
             </Col>
           </Row>
         </Form>
       </Modal>
     </div>
-  )
+  );
 }
 
-export default CostCenter
+export default CostCenter;

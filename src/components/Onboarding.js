@@ -24,8 +24,8 @@ import reload from "../images/reload.png";
 import ViewModal from "./ViewModal";
 import EditOnboarding from "./EditOnboarding";
 import OrgDetails from "./OrgDetails";
-import CostCenter from "./CostCenter"
-import AccessDetails from "./AccessDetails"
+import CostCenter from "./CostCenter";
+import AccessDetails from "./AccessDetails";
 // import OranizationHierarcy from "./onBoardingComponent/organizationHierarchy";
 import OrgHierTable from "./OrgHierTable";
 
@@ -54,7 +54,6 @@ function Onboarding() {
     getData();
   }, []);
 
-
   const showNotification = (type, msg, desc) => {
     notification[type]({
       message: msg,
@@ -64,8 +63,9 @@ function Onboarding() {
 
   const changeCompStatus = (id, status) => {
     Modal.confirm({
-      title: `Are you sure, you want to ${status == "Deactivated" ? "activate" : "deactivate"
-        } this record?`,
+      title: `Are you sure, you want to ${
+        status == "Deactivated" ? "activate" : "deactivate"
+      } this record?`,
       okText: "Yes",
       okType: "danger",
 
@@ -76,7 +76,8 @@ function Onboarding() {
         showNotification(
           "success",
           "Updated",
-          `Organization status ${status == "Deactivated" ? "activated" : "deactivated"
+          `Organization status ${
+            status == "Deactivated" ? "activated" : "deactivated"
           } Successfully`
         );
         getData();
@@ -120,8 +121,8 @@ function Onboarding() {
   // };
 
   const progressBar = (value) => {
-    setProgress(value)
-  }
+    setProgress(value);
+  };
 
   const columns = [
     {
@@ -367,16 +368,15 @@ function Onboarding() {
           </Card>
         </Tabs.TabPane>
         <Tabs.TabPane tab="Organization Onboarding" key="2">
-
-        <Card 
-            className= "stepsCard"
+          <Card
+            className="stepsCard"
             style={{
               background: "#fff",
               margin: "0px 15px 20px 15px",
               // height: "55rem",
             }}
           >
-            <Steps 
+            <Steps
               current={progress}
               onChange={progressBar}
               className="stepBars"
@@ -395,8 +395,8 @@ function Onboarding() {
                 title="Access Details" />
             </Steps>
           </Card>
-            
-            {/* old code delete if you want to  */}
+
+          {/* old code delete if you want to  */}
           {/* <Card
             style={{
               background: "#fff",
@@ -405,17 +405,14 @@ function Onboarding() {
               // height: "55rem",
             }}
           >
-            <Steps
-              current={progress}
-              onChange={progressBar}
-            >
+            <Steps current={progress} onChange={progressBar}>
               <Step title="Organization Details" />
               <Step title="Cost Center" />
               <Step title="Organization Hierarchy" />
               <Step title="Access Details" />
             </Steps>
           </Card> */}
-             {/* old code delete if you want to  */}
+          {/* old code delete if you want to  */}
           <Card
             style={{
               background: "#fff",
@@ -424,35 +421,39 @@ function Onboarding() {
               // height: "55rem",
             }}
           >
-
-            {progress == 1 ? (<CostCenter />) :
-              progress == 2 ? (<OrgHierTable />) :
-                progress == 3 ? (<AccessDetails />) :
-                (<OrgDetails />)
-            }
+            {progress == 1 ? (
+              <CostCenter />
+            ) : progress == 2 ? (
+              <OrgHierTable />
+            ) : progress == 3 ? (
+              <AccessDetails />
+            ) : (
+              <OrgDetails />
+            )}
             <div>
-              { progress > 0 ? (
-                <Button style={{marginLeft: "10px"}} onClick={()=>setProgress(progress-1)}>
+              {progress > 0 ? (
+                <Button
+                  style={{ marginLeft: "10px" }}
+                  onClick={() => setProgress(progress - 1)}
+                >
                   Previous
                 </Button>
-              ): null }
-              <Button 
+              ) : null}
+              <Button
                 type="primary"
-                style={{marginLeft: "10px"}}
+                style={{ marginLeft: "10px" }}
                 onClick={() => {
-                  if(progress != 3) {
-                    setProgress(progress+1);
+                  if (progress != 3) {
+                    setProgress(progress + 1);
                   } else {
-                    console.log("form complete")
+                    console.log("form complete");
                   }
                 }}
-              > 
-                { progress == 3 ? "Finish" : "Next"}
+              >
+                {progress == 3 ? "Finish" : "Next"}
               </Button>
             </div>
-
           </Card>
-          
         </Tabs.TabPane>
       </Tabs>
       {/* </div> */}

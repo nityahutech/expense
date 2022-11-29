@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Input, Button, DatePicker, Select, Form } from "antd";
-import { CloseOutlined, EditFilled } from "@ant-design/icons";
+import { CloseOutlined, EditFilled,CheckOutlined } from "@ant-design/icons";
 // import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "./companystyle.css";
 import linkedin from "../../images/linkedin.png";
@@ -199,8 +199,6 @@ function Overview() {
                       )}
                     </div>
                   </Col>
-                </Row>
-                <Row gutter={[48, 8]} style={{ marginTop: "6%" }}>
                   <Col xs={22} sm={15} md={12}>
                     <div>
                       <div className="div-discription">Website</div>
@@ -235,7 +233,6 @@ function Overview() {
                       )}
                     </div>
                   </Col>
-                  {/* <Col span={8}></Col> */}
                   <Col xs={22} sm={15} md={12}>
                     <div>
                       <div className="div-discription">Domain Name</div>
@@ -273,13 +270,13 @@ function Overview() {
                   </Col>
                 </Row>
                 {editContactInfo === true ? (
-                  <Row
+                  <Row gutter={[16,16]}
                     style={{
                       display: "flex",
                       justifyContent: "flex-end",
                       marginTop: "3%",
                     }}
-                  >
+                  ><Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                     <Button
                       type="text"
                       style={{ fontSize: 15 }}
@@ -287,13 +284,19 @@ function Overview() {
                     >
                       <CloseOutlined /> CANCEL
                     </Button>
-                    <Col>
+                    </Col>
+                    <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                       <Button
                         type="primary"
                         htmlType="submit"
-                        style={{ marginLeft: "10px" }}
+                        style={{ 
+                          // marginLeft: "10px",
+                          backgroundColor:"#1963A6",
+                          borderColor:"#1963A6",
+                          width:"119px",
+                        }}
                       >
-                        SAVE
+                       <CheckOutlined /> SAVE
                       </Button>
                     </Col>
                   </Row>
@@ -576,12 +579,14 @@ function Overview() {
                 </div>
                 {editContactIconInfo === true ? (
                   <Row
+                  gutter={[16,16]}
                     style={{
                       display: "flex",
                       justifyContent: "flex-end",
                       marginTop: "3%",
                     }}
                   >
+                    <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                     <Button
                       type="text"
                       style={{ fontSize: 15 }}
@@ -589,13 +594,19 @@ function Overview() {
                     >
                       <CloseOutlined /> CANCEL
                     </Button>
-                    <Col>
+                    </Col>
+                    <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                       <Button
                         type="primary"
                         htmlType="submit"
-                        style={{ marginLeft: "10px" }}
+                        style={{ 
+                          // marginLeft: "10px",
+                                  backgroundColor:"#1963A6",
+                                  borderColor:"#1963A6",
+                                  width:"119px"
+                                }}
                       >
-                        SAVE
+                        <CheckOutlined />SAVE
                       </Button>
                     </Col>
                   </Row>

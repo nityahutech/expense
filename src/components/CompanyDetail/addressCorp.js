@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Button, Input, Form } from "antd";
 import CompanyProContext from "../../contexts/CompanyProContext";
-import { CloseOutlined, EditFilled } from "@ant-design/icons";
+import { CloseOutlined, EditFilled ,CheckOutlined } from "@ant-design/icons";
 import "../../components/CompanyDetail/companystyle.css";
 
 function AddressCorp() {
@@ -287,27 +287,37 @@ function AddressCorp() {
                                 )}
 
                                 {editCorpAddress === true ? (
-                                    <Row
+                                    <Row gutter={[16,16]}
                                         style={{
                                             display: "flex",
                                             justifyContent: "flex-end",
                                             marginTop: "3%",
                                         }}
                                     >
+                                        <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                                         <Button
                                             type="text"
-                                            style={{ fontSize: 15 }}
+                                            style={{
+                                                // marginLeft: "10px", 
+                                                fontSize: 15 }}
                                             onClick={() => showEditCorpAddress(false)}
                                         >
                                             <CloseOutlined /> CANCEL
                                         </Button>
-                                        <Col>
+                                        </Col>
+                                        <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                                             <Button
-                                                type="primary"
+                                                // type="primary"
                                                 htmlType="submit"
-                                                style={{ marginLeft: "10px" }}
+                                                style={{ 
+                                                    fontSize: 15,
+                                                    backgroundColor:"#1963A6",
+                                                    borderColor:"#1963A6",
+                                                    width:"119px",
+                                                    color:"#ffff"
+                                                }}
                                             >
-                                                SAVE
+                                               <CheckOutlined /> SAVE
                                             </Button>
                                         </Col>
                                     </Row>

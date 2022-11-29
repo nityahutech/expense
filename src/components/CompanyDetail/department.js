@@ -14,7 +14,7 @@ import {
   Space,
   message,
 } from "antd";
-import { CloseCircleOutlined, EditFilled } from "@ant-design/icons";
+import { CloseCircleOutlined, EditFilled,CheckOutlined,CloseOutlined } from "@ant-design/icons";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import "./companystyle.css";
 import DepartmentContext from "../../contexts/DepartmentContext";
@@ -542,13 +542,11 @@ const Department = () => {
                     <Space>
                       <Form.Item>
                         <Button
+                          type="text"
                           style={{
-                            border: "1px solid #1565D8",
-                            color: "#1565D8",
-                            fontWeight: "600",
-                            fontSize: "14px",
+                            fontSize: "15",
                             lineHeight: "17px",
-                            width: "99px",
+                            width: "119px",
                           }}
                           onClick={() => {
                             onReset();
@@ -561,13 +559,12 @@ const Department = () => {
                       <Form.Item>
                         <Button
                           style={{
-                            border: "1px solid #1565D8",
-                            background: "#1565D8",
+                            border: "1px solid #1963A6",
+                            background: "#1963A6",
                             color: "#ffffff",
-                            fontWeight: "600",
-                            fontSize: "14px",
+                            fontSize: "15",
                             lineHeight: "17px",
-                            width: "99px",
+                            width: "119px",
                           }}
                           htmlType="submit"
                         >

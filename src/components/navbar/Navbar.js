@@ -18,6 +18,7 @@ const Navbar = (props) => {
   const [isRunning, setIsRunning] = useState(false);
   const { logout } = useAuth();
   const [clockinfo, setClockInfo] = useState();
+  const [buttonStatus,setButtonStatus]=useState(false);
   const role = sessionStorage.getItem("role");
   const [roleView, setRoleView] = useState(props.roleView || sessionStorage.getItem("role"));
   console.log(roleView)
@@ -133,22 +134,30 @@ const Navbar = (props) => {
   let clockTime = isRunning ? clockinfo : "";
 
   const onMouseEnter = (event) => {
+    
     event.target.style.background = "#DB0000";
+    setButtonStatus(false);
     if (isRunning) {
-      setButtonText("Web Clock Out ");
+      setButtonText(" ");
+    }
+    if(buttonStatus){
+      setButtonText("Web clock out");
     }
   };
 
   const onMouseLeave = (event) => {
+    
     if (isRunning) {
       event.target.style.background = "skyblue";
-      setButtonText("Web Clock In");
+      setButtonText(" ");
+      setButtonStatus(true);
     } else {
-      setButtonText("Web Clock In");
       event.target.style.background = "#FF002A";
+      setButtonText("Web Clock in");
     }
   };
-
+ 
+  console.log(buttonStatus,"button");
   const setClockState = async () => {
     let clickedDate = {
       empId: currentUser.uid,
@@ -174,6 +183,8 @@ const Navbar = (props) => {
   };
 
   const handleClock = () => {
+    
+    
     if (isRunning) {
       stopClockState();
     } else {
@@ -220,8 +231,9 @@ const Navbar = (props) => {
             onClick={handleClock}
             onMouseLeave={onMouseLeave}
             onMouseEnter={onMouseEnter}
+            className="clockButton"
           >
-            {buttonText ? buttonText : ""} <br />
+            {buttonText ? buttonText : ""} {!buttonStatus ? <br/> : null}
             {clockinfo && isRunning
               ? moment.utc(clockTime * 1000).format("HH:mm:ss")
               : ""}

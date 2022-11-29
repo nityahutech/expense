@@ -72,6 +72,8 @@ const Family = () => {
                 <Card
                   title="FAMILY MEMBERS"
                   className="personal"
+                  hoverable={true}
+                  bordered={true}
                   extra={
                     <Button
                       className="personal"
@@ -93,6 +95,7 @@ const Family = () => {
                     width: "100%",
                     marginTop: 10,
                     borderRadius: "10px",
+                    cursor:'default',
                   }}
                 >
                   <Row gutter={[48, 8]}>
@@ -196,10 +199,13 @@ const Family = () => {
                 <Card
                   title="FAMILY MEMBERS"
                   className="personal"
+                  hoverable={true}
+                  bordered={true}
                   style={{
                     width: "100%",
                     marginTop: 10,
                     borderRadius: "10px",
+                    cursor:'default'
                   }}
                 >
                   <Row gutter={[16, 16]}>
@@ -486,6 +492,8 @@ const Family = () => {
             <Col span={24}>
                 <Card
                   title="EMERGENCY CONTACTS"
+                  hoverable={true}
+                  bordered={true}
                   className="personal"
                   extra={
                     <Button
@@ -509,6 +517,7 @@ const Family = () => {
                     width: "100%",
                     marginTop: 10,
                     borderRadius: "10px",
+                    cursor:"default",
                   }}
                 >
                   <Row gutter={[16, 16]}>

@@ -91,7 +91,8 @@ function BankAccount() {
               <Card
                 className="viewCard"
                 title="Bank Account Details"
-                
+                bordered={true}
+              hoverable={true}
                 extra={
                   <>
                     {editContent === false ? (
@@ -118,6 +119,7 @@ function BankAccount() {
                   width: '100%',
                   margin: "15px",
                   borderRadius: "10px",
+                  cursor:'default'
                 }}
               >
                 <Row gutter={[16, 16]}>

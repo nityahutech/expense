@@ -66,6 +66,8 @@ function AddressCorp() {
                             <Card
                                 title="CORPORATE OFFICE"
                                 className="corpcard"
+                                bordered={true}
+                                hoverable={true}
                                 extra={
                                     <>
                                      {editCorpAddress === false ? (
@@ -92,6 +94,7 @@ function AddressCorp() {
                                     width: '100%',
                                     marginTop: 10,
                                     borderRadius:"10px",
+                                    cursor:"default"
                                 }}
                             >                     
                                 

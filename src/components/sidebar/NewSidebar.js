@@ -5,7 +5,7 @@ import dot from "../../images/dot.png";
 import dashIcon from "../../images/Dashboard.png";
 import empIcon from "../../images/employees.png";
 import userIcon from "../../images/user.png";
-import logo from "../../images/NewHUTechLogowhite.png";
+import logo from "../../images/HR22.png";
 import appraisalIcon from "../../images/appraisal.png";
 import Organization from "../../images/Organization.png";
 import CompanyProfile from "../../images/Companyprofile.png";
@@ -45,11 +45,12 @@ const NewSidebar = (props) => {
           <div className="sidelayout-div-img" style={{
             display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', height: '100vh'
           }}>
-            <div className="sidebarTittle" style={{ height: "auto", }}>
+            <div className="sidebarTittle" style={{ height: "auto",backgroundColor: "",margin:"0px",padding:"0px"}}>
               <img
                 style={{
-
-                  height: "100px",
+                  height:"auto",
+                  width: "170px",
+                  paddingBottom: "",
                 }}
                 src={logo}
                 alt="hello"

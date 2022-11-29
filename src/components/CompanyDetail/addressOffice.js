@@ -94,6 +94,7 @@ function AddressOffice() {
                   width: '100%',
                   marginTop: 10,
                   borderRadius:"10px",
+                  cursor:"default"
                 }}
               >
                 {editAddress === true ? (

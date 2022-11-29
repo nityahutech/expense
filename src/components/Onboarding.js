@@ -63,9 +63,8 @@ function Onboarding() {
 
   const changeCompStatus = (id, status) => {
     Modal.confirm({
-      title: `Are you sure, you want to ${
-        status == "Deactivated" ? "activate" : "deactivate"
-      } this record?`,
+      title: `Are you sure, you want to ${status == "Deactivated" ? "activate" : "deactivate"
+        } this record?`,
       okText: "Yes",
       okType: "danger",
 
@@ -76,8 +75,7 @@ function Onboarding() {
         showNotification(
           "success",
           "Updated",
-          `Organization status ${
-            status == "Deactivated" ? "activated" : "deactivated"
+          `Organization status ${status == "Deactivated" ? "activated" : "deactivated"
           } Successfully`
         );
         getData();
@@ -381,17 +379,17 @@ function Onboarding() {
               onChange={progressBar}
               className="stepBars"
             >
-              <Step 
+              <Step
                 className="stepOne"
                 title="Organization Details" />
               <Step
-                className="stepTwo" 
+                className="stepTwo"
                 title="Cost Center" />
               <Step
-                className="stepThree" 
+                className="stepThree"
                 title="Organization Hierarchy" />
               <Step
-                className="stepFour" 
+                className="stepFour"
                 title="Access Details" />
             </Steps>
           </Card>
@@ -430,28 +428,31 @@ function Onboarding() {
             ) : (
               <OrgDetails />
             )}
+            <Divider />
             <div>
-              {progress > 0 ? (
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                {progress > 0 ? (
+                  <Button
+                    style={{ marginLeft: "10px", }}
+                    onClick={() => setProgress(progress - 1)}
+                  >
+                    Previous
+                  </Button>
+                ) : null}
                 <Button
-                  style={{ marginLeft: "10px" }}
-                  onClick={() => setProgress(progress - 1)}
+                  type="primary"
+                  style={{ marginLeft: "10px", backgroundColor: 'rgb(25, 99, 166)' }}
+                  onClick={() => {
+                    if (progress != 3) {
+                      setProgress(progress + 1);
+                    } else {
+                      console.log("form complete");
+                    }
+                  }}
                 >
-                  Previous
+                  {progress == 3 ? "Finish" : "Next"}
                 </Button>
-              ) : null}
-              <Button
-                type="primary"
-                style={{ marginLeft: "10px" }}
-                onClick={() => {
-                  if (progress != 3) {
-                    setProgress(progress + 1);
-                  } else {
-                    console.log("form complete");
-                  }
-                }}
-              >
-                {progress == 3 ? "Finish" : "Next"}
-              </Button>
+              </div>
             </div>
           </Card>
         </Tabs.TabPane>

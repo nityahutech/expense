@@ -11,38 +11,21 @@ import {
   Button,
   notification,
   Space,
-  Card,
-  Table,
-  Tag,
-  Modal,
 } from "antd";
 import {
   PlusCircleOutlined,
-  PlusOutlined,
-  LoadingOutlined,
-  CloseCircleOutlined,
-  CheckCircleFilled,
-  ClockCircleFilled,
-  StopFilled,
-  EyeFilled,
-  EditFilled,
 } from "@ant-design/icons";
 import "../style/Onboarding.css";
 import CompanyProContext from "../contexts/CompanyProContext";
 import reload from "../images/reload.png";
-import ViewModal from "./ViewModal";
-import EditOnboarding from "./EditOnboarding";
 
 const OrgDetails = (props) => {
 
     const [form] = Form.useForm();
-    const [form2] = Form.useForm();
     const imgRef = React.useRef(null);
     const [fileName, setFileName] = useState("");
     const [isBigFile, setIsBigFile] = useState(false);
     const [orgIdExists, setOrgIdExists] = useState(false);
-    const [accessList, setAccessList] = useState([]);
-    const [addAccess, setAddAccess] = useState(false);
 
     useEffect(() => {
       setFileName(fileName);
@@ -58,17 +41,7 @@ const OrgDetails = (props) => {
         );
         return;
       }
-    //   if (accessList.length == 0) {
-    //     showNotification("error", "Error", "There must be at least 1 user!");
-    //     return;
-    //   }
-      const valuesToservice = {
-        accessList: [],
-        address: [],
-        secretary: [],
-        director: [],
-        auditor: [],
-        bank: [],
+      const value = {
         regCompName: values.regCompName,
         regOffice: {
           addLine1: values.addLine1,
@@ -82,32 +55,8 @@ const OrgDetails = (props) => {
         gst: values.gst,
         domain: values.domain,
         phone: values.phone,
-        status: "Deactivated",
       };
-    //   CompanyProContext.createCompInfo(
-    //     values.orgcode,
-    //     valuesToservice,
-    //     fileName,
-    //     accessList
-    //   )
-    //     .then((response) => {
-    //       notification.open({
-    //         message: "Creating Company",
-    //         duration: 2,
-    //         icon: <LoadingOutlined />,
-    //       });
-    //       const timer = setTimeout(() => {
-    //         showNotification("success", "Success", "Onboarding Completed");
-    //         // getData();
-    //         // setAddAccess(false);
-    //         // onReset();
-    //         // setActivetab("1");
-    //       }, 5000);
-    //       return () => clearTimeout(timer);
-    //     })
-    //     .catch((error) => {
-    //       showNotification("error", "Error", error.message);
-    //     });
+      localStorage.setItem("OrgDetails", value)
     };
 
     const showNotification = (type, msg, desc) => {
@@ -117,19 +66,10 @@ const OrgDetails = (props) => {
       });
     };
 
-    function onDelete(delItem) {
-      const filteredData = accessList.filter(
-        (item) => item.mailid !== delItem.mailid
-      );
-      // CompanyProContext.deleteCompInfo(delItem.id)
-      // .then((response) => {
-      //            })
-      setAccessList(filteredData);
-    }
-
-    const handleClick = (event) => {
+    const handleClick = () => {
       imgRef.current.click();
     };
+
     const handleChange = (event) => {
       if (!event) {
         return;
@@ -152,6 +92,7 @@ const OrgDetails = (props) => {
       }
       // CompanyProContext.checkOrgIdExists(value)
     };
+
     function checkFileSize(size, fileName) {
       if (Math.round(size / 1024) <= 200) {
         setFileName(fileName);
@@ -161,66 +102,47 @@ const OrgDetails = (props) => {
         setIsBigFile(true);
       }
     }
+
     const checkNumbervalue = (event) => {
       if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
         return true;
       }
     };
+
     const checkAlphabets = (event) => {
       if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
         return true;
       }
     };
-    const checkCharacterRole = (event) => {
-      if (!/^[a-zA-Z ().-]*$/.test(event.key) && event.key !== "Backspace") {
-        return true;
-      }
-    };
+    
     const checkAlphabetUpper = (event) => {
       if (!/^[A-Z]*$/.test(event.key) && event.key !== "Backspace") {
         return true;
       }
     };
-    
-  async function addUseRole(values) {
-    let exists = accessList.filter((user) => values.mailid == user.mailid);
-    if (
-      exists.length > 0 ||
-      (await CompanyProContext.checkUserExists(values.mailid))
-    ) {
-      showNotification("error", "Error", "This user already exists!");
-      // form2.resetFields();
-      setAddAccess(false);
-      return;
-    }
-    setAccessList([...accessList, values]);
-    // form2.resetFields();
-    setAddAccess(false);
-  }
 
     function onReset() {
         form.resetFields();
-        form2.resetFields();
         setIsBigFile(false);
         setFileName(null);
     }
 
     return (       
-        <div style={{ margin: "13px", background: "#fff" }}>
+        <div style={{ margin: "13px", background: "#fff" }} >
             <div
                 style={{
                     // paddingTop: "13px",
                     fontWeight: "600",
                     fontSize: "14px",
-                    lineHeight: "19px",
+                    lineHeight: "32px",
                 }}
             >
-                ORGANIZATION DETAILS
+                Organization Details
             </div>
             <Divider />
             <Form
                 className="details"
-                style={{ margin: "30px" }}
+                style={{ padding: "11px" }}
                 form={form}
                 layout="vertical"
                 labelcol={{
@@ -687,7 +609,7 @@ const OrgDetails = (props) => {
                             }}
                             onClick={onReset}
                         >
-                            CANCEL
+                            Reset
                         </Button>
                         <Button
                             style={{
@@ -701,7 +623,7 @@ const OrgDetails = (props) => {
                             }}
                             htmlType="submit"
                         >
-                            SAVE
+                            Save
                         </Button>
                     </Space>
                 </div>

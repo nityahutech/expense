@@ -1,125 +1,116 @@
-.ant-tabs-top.Tabs{
-    margin-left: 13px;
+.ant-tabs-top.Tabs {
+  margin-left: 13px;
 }
-.ant-tabs-nav-wrap.Tabs{
-    margin-left: 13px;
+.ant-tabs-nav-wrap.Tabs {
+  margin-left: 13px;
 }
-.ant-input.name{
-    width: 50%;
+.ant-input.name {
+  width: 50%;
 }
-.ant-form.formItem{
-    background: #fff;
-    padding: 3rem;
-    margin: 2rem 0rem 10rem 0rem;
-    width: 70%;
-    position: relative;
-    left: 7rem;
-    border-radius: 5px;
+.ant-form.formItem {
+  background: #fff;
+  padding: 3rem;
+  margin: 2rem 0rem 10rem 0rem;
+  width: 70%;
+  position: relative;
+  left: 7rem;
+  border-radius: 5px;
 }
-.ant-btn.reset{
-    position: absolute;
-    left: 96px;
-    width: 91px;
+.ant-btn.reset {
+  position: absolute;
+  left: 96px;
+  width: 91px;
 }
-.formItem .ant-form-item-label{
-    font-size: 16px;
-    
+.formItem .ant-form-item-label {
+  font-size: 16px;
 }
-.Range{
-    position: relative;
-    bottom: 3.7rem;
-    left: 42rem;
-    
+.Range {
+  position: relative;
+  bottom: 3.7rem;
+  /* left: 42rem; */
 }
 /* .Range .ant-picker-focused{
     background: #1963A6;
 } */
-.monthly{
-    position: relative;
-    bottom: 31px;
-    
-    
-    
+.monthly {
+  position: relative;
+  bottom: 31px;
 }
-.Daily{
-    width: 25%;
-    position: relative;
-    bottom: 3.7rem;
-    float: right;
-    margin-right: 24px;
+.Daily {
+  width: 25%;
+  position: relative;
+  bottom: 3.7rem;
+  float: right;
+  margin-right: 24px;
 }
-.hrtab .ant-tabs-nav .ant-tabs-nav-wrap{
-    background: #FFF;
-    margin-top: 15px;
-    padding: 5px;
+.hrtab .ant-tabs-nav .ant-tabs-nav-wrap {
+  background: #fff;
+  margin-top: 15px;
+  padding: 5px;
 }
-.DailyTable{
-    position: relative;
-    bottom: 30px;
+.DailyTable {
+  position: relative;
+  bottom: 30px;
 }
-.Tabs{
-    margin-right: 13px;
-    border-radius: 5px;
+.Tabs {
+  margin-right: 13px;
+  border-radius: 5px;
 }
-.Tabs .ant-tabs-nav .ant-tabs-nav-list{
-    margin-left: 15px;
+.Tabs .ant-tabs-nav .ant-tabs-nav-list {
+  margin-left: 15px;
 }
-.monthColor .ant-picker-input>input::placeholder {
-    color:white;
-    cursor: pointer;
+.monthColor .ant-picker-input > input::placeholder {
+  color: white;
+  cursor: pointer;
 }
 .monthColor .ant-picker .ant-picker-input span.ant-picker-suffix,
-.monthColor .ant-picker.ant-picker-range span.ant-picker-suffix{
-    color: white;
-    cursor: pointer;
+.monthColor .ant-picker.ant-picker-range span.ant-picker-suffix {
+  color: white;
+  cursor: pointer;
 }
-.Range .ant-picker-input-placeholder>input{
-    color: white;
+.Range .ant-picker-input-placeholder > input {
+  color: white;
 }
-.Range .ant-picker-input > input:placeholder-shown{
-    cursor: pointer;
+.Range .ant-picker-input > input:placeholder-shown {
+  cursor: pointer;
 }
-.monthly .ant-table table{
-    cursor: default;
+.monthly .ant-table table {
+  cursor: default;
 }
-.DailyTable .ant-table table{
-    cursor: pointer;
+.DailyTable .ant-table table {
+  cursor: pointer;
 }
 .Range .ant-picker-input > input {
-    color: white;
+  color: white;
 }
 
-.monthly .ant-table-thead>tr>th{
-    background:#1963A6;
-    color: #ffffff;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 18px;
-    
- }
+.monthly .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
 
- .DailyTable .ant-table-thead>tr>th{
-    background:#1963A6;
-    color: #ffffff;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 18px;
- }
+.DailyTable .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
 
- .Tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
-    color: #000000;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 22px;
-    
- }
- .Tabs .ant-tabs-tab:hover{
-    color: #000000;
-    
- }
- .Tabs .ant-tabs-ink-bar {
-    /* position: absolute; */
-    background: #F9A01F;
-    pointer-events: none;
-
- }
+.Tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #000000;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+}
+.Tabs .ant-tabs-tab:hover {
+  color: #000000;
+}
+.Tabs .ant-tabs-ink-bar {
+  /* position: absolute; */
+  background: #f9a01f;
+  pointer-events: none;
+}

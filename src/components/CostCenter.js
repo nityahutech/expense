@@ -98,7 +98,7 @@ function CostCenter() {
     );
     console.log("values", matchingCostCenter);
     if (matchingCostCenter.length > 0) {
-      showNotification("error", "error", "Try Again");
+      showNotification("error", "error", "Try Again cost center allready Present");
       return;
     }
 
@@ -113,6 +113,7 @@ function CostCenter() {
     setCostCenters(costCenters);
     console.log("costCenters", costCenters.length);
     setCostCenterlength(costCenters.length);
+    setIsCostModalOpen(false);
     form.resetFields();
   };
 
@@ -285,7 +286,7 @@ function CostCenter() {
         className="costModal"
         onOk={() => {
           form.submit();
-          setIsCostModalOpen(false);
+          // setIsCostModalOpen(false);
         }}
         okText={
           <div className="save">

@@ -168,7 +168,7 @@ function WorkID() {
     setIsModalOpen(true);
     form.resetFields();
   };
-  const handleOk = () => { };
+  const handleOk = () => {};
   const handleCancel = () => {
     setIsModalOpen(false);
     form.resetFields();
@@ -214,17 +214,20 @@ function WorkID() {
 
   return (
     <>
-      <Table
-        className="Id"
-        columns={columns}
-        pagination={false}
-        dataSource={allWorkDetails}
-      />
+      <div className="table-responsive">
+        <Table
+          className="Id"
+          columns={columns}
+          pagination={false}
+          dataSource={allWorkDetails}
+        />
+      </div>
       <Button
         type="primary"
         onClick={showModal}
         style={{
           margin: "20px 0px 15px 48px",
+          background: "#1963A6",
         }}
       >
         <PlusCircleOutlined />

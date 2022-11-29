@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
-import { Card, Row, Col, Input, Button, Form } from "antd";
+import { Card, Row, Col, Input, Button, Form, Select } from "antd";
 import {
   PlusCircleOutlined,
   CheckOutlined,
@@ -8,6 +8,7 @@ import {
   EditFilled,
 } from "@ant-design/icons";
 import "../../style/BankAccount.css";
+const { Option } = Select;
 
 const Family = () => {
   const [editfamilymember, showeditfamilymember] = useState(false);
@@ -46,6 +47,20 @@ const Family = () => {
       return true;
     }
   };
+
+  const prefixSelector = (
+    <Form.Item initialValue={data ? data.prefix : null} name="prefix" noStyle>
+      <Select
+        bordered={false}
+        style={{
+          width: 70,
+          background: "#ffffff",
+        }}
+      >
+        <Option value="91">+91</Option>
+      </Select>
+    </Form.Item>
+  );
   return (
     <>
       <div
@@ -69,107 +84,112 @@ const Family = () => {
             }}
           >
             <Col span={24}>
-                <Card
-                  title="FAMILY MEMBERS"
-                  className="personal"
-                  hoverable={true}
-                  bordered={true}
-                  extra={
-                    <Button
-                      className="personal"
-                      type="text"
-                      style={{
-                        color: "#ffff",
-                          display: "none",
-                          paddingTop: "7px",
-                          paddingRight: "7px",
-                          position: "absolute",
-                          right: 10,
-                          top: 10,
-                      }}
-                      onClick={() => showeditfamilymember(!editfamilymember)}
-                    >
-                      <EditFilled />
-                    </Button>}
-                  style={{
-                    width: "100%",
-                    marginTop: 10,
-                    borderRadius: "10px",
-                    cursor:'default',
-                  }}
-                >
-                  <Row gutter={[48, 8]}>
-                    <Col xs={22} sm={15} md={12}>
-                        <div>
-                          <h1
-                            style={{
-                              fontWeight: 600,
-                              lineHeight: "18px",
-                              color: "#07182b",
-                              fontSize: "15px",
-                              fontFamily: "Open Sans,sans-serif",
-                            }}
-                          >
-                            Father
-                          </h1>
-                          <div>{data?.father ? data.father : "-"}</div>
-                        </div>
-                    </Col>
-                    <Col xs={22} sm={15} md={12}>
-                        <div>
-                          <h1
-                            style={{
-                              fontWeight: 600,
-                              lineHeight: "18px",
-                              color: "#07182b",
-                              fontSize: "15px",
-                              fontFamily: "Open Sans,sans-serif",
-                            }}
-                          >
-                            Contact no.
-                          </h1>
-                          <div>
-                            {data?.fatherContact ? data.fatherContact : "-"}
-                          </div>
-                        </div>
-                    </Col>
-                    <Col xs={22} sm={15} md={12}>
-                        <div>
-                          <h1
-                            style={{
-                              fontWeight: 600,
-                              lineHeight: "18px",
-                              color: "#07182b",
-                              fontSize: "15px",
-                              fontFamily: "Open Sans,sans-serif",
-                            }}
-                          >
-                            Mother
-                          </h1>
+              <Card
+                title="FAMILY MEMBERS"
+                className="personal"
+                hoverable={true}
+                bordered={true}
+                extra={
+                  <Button
+                    className="personal"
+                    type="text"
+                    style={{
+                      color: "#ffff",
+                      display: "none",
+                      paddingTop: "7px",
+                      paddingRight: "7px",
+                      position: "absolute",
+                      right: 10,
+                      top: 10,
+                    }}
+                    onClick={() => showeditfamilymember(!editfamilymember)}
+                  >
+                    <EditFilled />
+                  </Button>
+                }
+                style={{
+                  width: "100%",
+                  marginTop: 10,
+                  borderRadius: "10px",
+                  cursor: "default",
+                }}
+              >
+                <Row gutter={[48, 8]}>
+                  <Col xs={22} sm={15} md={12}>
+                    <div>
+                      <h1
+                        style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}
+                      >
+                        Father
+                      </h1>
+                      <div>{data?.father ? data.father : "-"}</div>
+                    </div>
+                  </Col>
+                  <Col xs={22} sm={15} md={12}>
+                    <div>
+                      <h1
+                        style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}
+                      >
+                        Contact no.
+                      </h1>
+                      <div>
+                        {data?.fatherContact
+                          ? "+" + data.prefix + data.fatherContact
+                          : "-"}
+                      </div>
+                    </div>
+                  </Col>
+                  <Col xs={22} sm={15} md={12}>
+                    <div>
+                      <h1
+                        style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}
+                      >
+                        Mother
+                      </h1>
 
-                          <div>{data?.mother ? data.mother : "-"}</div>
-                        </div>
-                    </Col>
-                    <Col xs={22} sm={15} md={12}>
-                        <div>
-                          <h1
-                            style={{
-                              fontWeight: 600,
-                              lineHeight: "18px",
-                              color: "#07182b",
-                              fontSize: "15px",
-                              fontFamily: "Open Sans,sans-serif",
-                            }}
-                          >
-                            Contact no.
-                          </h1>
-                          <div>
-                            {data?.motherContact ? data.motherContact : "-"}
-                          </div>{" "}
-                        </div>
-                    </Col>
-                  </Row>
-                </Card>
+                      <div>{data?.mother ? data.mother : "-"}</div>
+                    </div>
+                  </Col>
+                  <Col xs={22} sm={15} md={12}>
+                    <div>
+                      <h1
+                        style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}
+                      >
+                        Contact no.
+                      </h1>
+                      <div>
+                        {data?.motherContact
+                          ? "+" + data.prefix + data.motherContact
+                          : "-"}
+                      </div>{" "}
+                    </div>
+                  </Col>
+                </Row>
+              </Card>
             </Col>
           </Row>
         ) : (
@@ -205,7 +225,7 @@ const Family = () => {
                     width: "100%",
                     marginTop: 10,
                     borderRadius: "10px",
-                    cursor:'default'
+                    cursor: "default",
                   }}
                 >
                   <Row gutter={[16, 16]}>
@@ -308,6 +328,7 @@ const Family = () => {
                           }
                         >
                           <Input
+                            addonBefore={prefixSelector}
                             maxLength={10}
                             placeholder="Enter Contact no."
                             style={{
@@ -420,6 +441,7 @@ const Family = () => {
                           }
                         >
                           <Input
+                            addonBefore={prefixSelector}
                             maxLength={10}
                             placeholder="Enter Contact no."
                             style={{
@@ -455,7 +477,11 @@ const Family = () => {
                       <Button
                         type="primary"
                         htmlType="submit"
-                        style={{ marginLeft: "10px" }}
+                        style={{
+                          marginLeft: "10px",
+                          background: "#1963A6",
+                          width: "90px",
+                        }}
                       >
                         <CheckOutlined />
                         SAVE
@@ -490,92 +516,94 @@ const Family = () => {
             }}
           >
             <Col span={24}>
-                <Card
-                  title="EMERGENCY CONTACTS"
-                  hoverable={true}
-                  bordered={true}
-                  className="personal"
-                  extra={
-                    <Button
-                      className="personal"
-                      type="text"
-                      style={{
-                        color: "#ffff",
-                        display: "none",
-                        paddingTop: "7px",
-                        paddingRight: "7px",
-                        position: "absolute",
-                        right: 10,
-                        top: 10,
-                      }}
-                      onClick={() => showeditEmergency(!editEmergency)}
-                    >
-                      <EditFilled />
-                    </Button>
-                  }
-                  style={{
-                    width: "100%",
-                    marginTop: 10,
-                    borderRadius: "10px",
-                    cursor:"default",
-                  }}
-                >
-                  <Row gutter={[16, 16]}>
-                    <Col xs={22} sm={15} md={8}>
-                        <div>
-                          <h1
-                            style={{
-                              fontWeight: 600,
-                              lineHeight: "18px",
-                              color: "#07182b",
-                              fontSize: "15px",
-                              fontFamily: "Open Sans,sans-serif",
-                            }}
-                          >
-                            Other
-                          </h1>
+              <Card
+                title="EMERGENCY CONTACTS"
+                hoverable={true}
+                bordered={true}
+                className="personal"
+                extra={
+                  <Button
+                    className="personal"
+                    type="text"
+                    style={{
+                      color: "#ffff",
+                      display: "none",
+                      paddingTop: "7px",
+                      paddingRight: "7px",
+                      position: "absolute",
+                      right: 10,
+                      top: 10,
+                    }}
+                    onClick={() => showeditEmergency(!editEmergency)}
+                  >
+                    <EditFilled />
+                  </Button>
+                }
+                style={{
+                  width: "100%",
+                  marginTop: 10,
+                  borderRadius: "10px",
+                  cursor: "default",
+                }}
+              >
+                <Row gutter={[16, 16]}>
+                  <Col xs={22} sm={15} md={8}>
+                    <div>
+                      <h1
+                        style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}
+                      >
+                        Other
+                      </h1>
 
-                          <div>{data?.other ? data.other : "-"}</div>
-                        </div>
-                    </Col>
-                    <Col xs={22} sm={15} md={8}>
-                        <div>
-                          <h1
-                            style={{
-                              fontWeight: 600,
-                              lineHeight: "18px",
-                              color: "#07182b",
-                              fontSize: "15px",
-                              fontFamily: "Open Sans,sans-serif",
-                            }}
-                          >
-                            Relation
-                          </h1>
+                      <div>{data?.other ? data.other : "-"}</div>
+                    </div>
+                  </Col>
+                  <Col xs={22} sm={15} md={8}>
+                    <div>
+                      <h1
+                        style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}
+                      >
+                        Relation
+                      </h1>
 
-                          <div>{data?.relation ? data.relation : "-"}</div>
-                        </div>
-                    </Col>
-                    <Col xs={22} sm={15} md={8}>
-                        <div>
-                          <h1
-                            style={{
-                              fontWeight: 600,
-                              lineHeight: "18px",
-                              color: "#07182b",
-                              fontSize: "15px",
-                              fontFamily: "Open Sans,sans-serif",
-                            }}
-                          >
-                            Contact no.
-                          </h1>
+                      <div>{data?.relation ? data.relation : "-"}</div>
+                    </div>
+                  </Col>
+                  <Col xs={22} sm={15} md={8}>
+                    <div>
+                      <h1
+                        style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                        }}
+                      >
+                        Contact no.
+                      </h1>
 
-                          <div>
-                            {data?.otherContact ? data.otherContact : "-"}
-                          </div>
-                        </div>
-                    </Col>
-                  </Row>
-                </Card>
+                      <div>
+                        {data?.otherContact
+                          ? "+" + data.prefix + data.otherContact
+                          : "-"}
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              </Card>
             </Col>
           </Row>
         ) : (
@@ -744,21 +772,21 @@ const Family = () => {
                       </div>
                     </Col>
                     <Col xs={22} sm={15} md={8}>
-                        <div>
-                          <h1
-                            style={{
-                              fontWeight: 600,
-                              lineHeight: "18px",
-                              color: "#07182b",
-                              fontSize: "15px",
-                              fontFamily: "Open Sans,sans-serif",
-                            }}
-                          >
-                            Contact no.
-                          </h1>
+                      <div>
+                        <h1
+                          style={{
+                            fontWeight: 600,
+                            lineHeight: "18px",
+                            color: "#07182b",
+                            fontSize: "15px",
+                            fontFamily: "Open Sans,sans-serif",
+                          }}
+                        >
+                          Contact no.
+                        </h1>
 
-                      <Form.Item
-                        name="otherContact"
+                        <Form.Item
+                          name="otherContact"
                           onKeyPress={(event) => {
                             if (checkNumbervalue(event)) {
                               event.preventDefault();
@@ -771,13 +799,14 @@ const Family = () => {
                               pattern: /^[0-9]\d{9}$/,
                             },
                           ]}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 32 }}
-                        initialValue={
-                          data.otherContact ? data.otherContact : ""
-                        }
-                      >
+                          labelCol={{ span: 8 }}
+                          wrapperCol={{ span: 32 }}
+                          initialValue={
+                            data.otherContact ? data.otherContact : ""
+                          }
+                        >
                           <Input
+                            addonBefore={prefixSelector}
                             maxLength={10}
                             placeholder="Enter Contact no."
                             style={{
@@ -788,8 +817,8 @@ const Family = () => {
                             }}
                             bordered={false}
                           />
-                      </Form.Item>
-                        </div>
+                        </Form.Item>
+                      </div>
                     </Col>
                   </Row>
                   <Row
@@ -811,7 +840,11 @@ const Family = () => {
                       <Button
                         type="primary"
                         htmlType="submit"
-                        style={{ marginLeft: "10px" }}
+                        style={{
+                          marginLeft: "10px",
+                          background: "#1963A6",
+                          width: "90px",
+                        }}
                       >
                         <CheckOutlined />
                         SAVE

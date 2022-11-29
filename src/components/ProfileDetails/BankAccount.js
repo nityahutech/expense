@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { Card, Row, Col, Input, Button, Form } from "antd";
-import { EditFilled, CloseOutlined } from "@ant-design/icons";
+import { EditFilled, CloseOutlined, CheckOutlined } from "@ant-design/icons";
 import "../../style/BankAccount.css";
 
 function BankAccount() {
@@ -17,9 +17,9 @@ function BankAccount() {
       ...data,
       bankName: values.bankName,
       accountNumber: values.accountNumber,
-      ifscCode: values.ifscCode
-    }
-    setData(temp)
+      ifscCode: values.ifscCode,
+    };
+    setData(temp);
   };
 
   useEffect(() => {
@@ -28,8 +28,8 @@ function BankAccount() {
 
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    console.log(data)
-    setData(data)
+    console.log(data);
+    setData(data);
   };
 
   const checkNumbervalue = (event) => {
@@ -43,13 +43,13 @@ function BankAccount() {
       return true;
     }
   };
-  
+
   const checkUpperCase = (event) => {
     if (!/^[A-Z]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-  
+
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -67,10 +67,10 @@ function BankAccount() {
         <Row
           className="Row-Card"
           style={{
-            width: '75%',
-            margin: '10px',
-            display: 'flex',
-            alignItems: 'center'
+            width: "75%",
+            margin: "10px",
+            display: "flex",
+            alignItems: "center",
           }}
         >
           <Col span={24}>
@@ -92,7 +92,7 @@ function BankAccount() {
                 className="viewCard"
                 title="Bank Account Details"
                 bordered={true}
-              hoverable={true}
+                hoverable={true}
                 extra={
                   <>
                     {editContent === false ? (
@@ -116,10 +116,10 @@ function BankAccount() {
                   </>
                 }
                 style={{
-                  width: '100%',
+                  width: "100%",
                   margin: "15px",
                   borderRadius: "10px",
-                  cursor:'default'
+                  cursor: "default",
                 }}
               >
                 <Row gutter={[16, 16]}>
@@ -173,8 +173,8 @@ function BankAccount() {
                               });
                             }}
                             maxLength={20}
-                            style={{ 
-                              marginTop: "10px", 
+                            style={{
+                              marginTop: "10px",
                               width: "100%",
                               borderBottom: "1px solid #ccc",
                               paddingLeft: "0px",
@@ -199,12 +199,14 @@ function BankAccount() {
                         Account Number
                       </div>
                       {editContent === false ? (
-                        <div>{data?.accountNumber? data.accountNumber : "-"}</div>
+                        <div>
+                          {data?.accountNumber ? data.accountNumber : "-"}
+                        </div>
                       ) : (
                         <Form.Item
                           name="accountNumber"
                           onKeyPress={(event) => {
-                            console.log(checkNumbervalue(event))
+                            console.log(checkNumbervalue(event));
                             if (checkNumbervalue(event)) {
                               event.preventDefault();
                             }
@@ -218,14 +220,16 @@ function BankAccount() {
                             {
                               whitespace: true,
                             },
-                          ]} 
-                          initialValue={data?.accountNumber ? data.accountNumber : null}
+                          ]}
+                          initialValue={
+                            data?.accountNumber ? data.accountNumber : null
+                          }
                         >
                           <Input
                             placeholder="Enter Account Number"
                             maxLength={20}
-                            style={{ 
-                              marginTop: "10px", 
+                            style={{
+                              marginTop: "10px",
                               width: "100%",
                               borderBottom: "1px solid #ccc ",
                               paddingLeft: "0px",
@@ -255,7 +259,10 @@ function BankAccount() {
                         <Form.Item
                           name="ifscCode"
                           onKeyPress={(event) => {
-                            console.log(checkNumbervalue(event), checkUpperCase(event))
+                            console.log(
+                              checkNumbervalue(event),
+                              checkUpperCase(event)
+                            );
                             if (
                               checkNumbervalue(event) &&
                               checkUpperCase(event)
@@ -278,8 +285,8 @@ function BankAccount() {
                           <Input
                             placeholder="Enter IFSC Code"
                             maxLength={15}
-                            style={{ 
-                              marginTop: "10px", 
+                            style={{
+                              marginTop: "10px",
                               width: "100%",
                               borderBottom: "1px solid #ccc ",
                               paddingLeft: "0px",
@@ -302,8 +309,8 @@ function BankAccount() {
                   >
                     <Button
                       onClick={() => {
-                        form.resetFields()
-                        showEditContent(false)
+                        form.resetFields();
+                        showEditContent(false);
                       }}
                       type="text"
                       style={{ fontSize: 15 }}
@@ -314,8 +321,13 @@ function BankAccount() {
                       <Button
                         type="primary"
                         htmlType="submit"
-                        style={{ marginLeft: "10px" }}
+                        style={{
+                          marginLeft: "10px",
+                          background: "#1963A6",
+                          width: "90px",
+                        }}
                       >
+                        <CheckOutlined />
                         SAVE
                       </Button>
                     </Col>

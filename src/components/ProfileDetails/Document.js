@@ -1,4 +1,4 @@
-import { Tabs,Card } from "antd";
+import { Tabs, Card } from "antd";
 import "../../style/BankAccount.css";
 import WorkID from "../ProfileDetails/WorkID";
 import CertificateID from "../ProfileDetails/CertificateID";
@@ -21,14 +21,16 @@ function Document() {
         bordered={true}
         hoverable={true}
         style={{
-          width: "75%",
+          width: "100%",
           marginTop: "10px",
           backgroundColor: "white",
           padding: "0px",
           display: "flex",
           justifyContent: "center",
           borderRadius: "10px",
-          cursor:'default',
+          cursor: "default",
+          marginLeft: "12.5%",
+          marginRight: "12.5%",
         }}
       >
         <Tabs defaultActiveKey="1" className="documents">

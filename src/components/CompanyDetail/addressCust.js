@@ -6,6 +6,7 @@ import {
   EditFilled,
   DeleteOutlined,
   PlusCircleOutlined,
+  CheckOutlined,
 } from "@ant-design/icons";
 import "../../components/CompanyDetail/companystyle.css";
 
@@ -608,13 +609,14 @@ function AddressCust() {
                     )}
 
                     {editAddressContent[i] === true ? (
-                      <Row
+                      <Row gitter={[16,16]}
                         style={{
                           display: "flex",
                           justifyContent: "flex-end",
                           marginTop: "3%",
                         }}
                       >
+                        <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                         <Button
                           type="text"
                           style={{ fontSize: 15 }}
@@ -626,13 +628,18 @@ function AddressCust() {
                         >
                           <CloseOutlined /> CANCEL
                         </Button>
-                        <Col>
+                        </Col>
+                        <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                           <Button
                             type="primary"
                             htmlType="submit"
-                            style={{ marginLeft: "10px" }}
+                            style={{ fontSize: 15,
+                              backgroundColor:"#1963A6",
+                              borderColor:"#1963A6",
+                              width:"119px",
+                              color:"#ffff" }}
                           >
-                            SAVE
+                           <CheckOutlined /> SAVE
                           </Button>
                         </Col>
                       </Row>
@@ -851,7 +858,7 @@ function AddressCust() {
                               }}
                               bordered={false}
                               required
-                              placeholder=""
+                              placeholder="State"
                             />
                         </Form.Item>
                       </Col>
@@ -879,7 +886,7 @@ function AddressCust() {
                               }}
                               bordered={false}
                               required
-                              placeholder=""
+                              placeholder="Country"
                             />
                         </Form.Item>
                       </Col>
@@ -908,7 +915,7 @@ function AddressCust() {
                               }}
                               bordered={false}
                               required
-                              placeholder=""
+                              placeholder="Pin Code"
                             />
                         </Form.Item>
                       </Col>
@@ -926,9 +933,9 @@ function AddressCust() {
                         <Button
                           type="primary"
                           htmlType="submit"
-                          style={{ marginLeft: "10px" }}
+                          style={{ marginLeft: "10px",background: "#1963a6",border: "1px solid #1963A6", }}
                         >
-                          SAVE
+                          <CheckOutlined />SAVE
                         </Button>
                       </Col>
                     </Row>
@@ -936,7 +943,7 @@ function AddressCust() {
                 ) : (
                   <Button
                     type="primary"
-                    style={{ marginLeft: "10px" }}
+                    style={{ marginLeft: "10px",background: "#1963a6",border: "1px solid #1963A6", }}
                     onClick={() => showAddAddressContent(true)}
                   >
                     <PlusCircleOutlined />

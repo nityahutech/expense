@@ -5,7 +5,7 @@ import dot from "../../images/dot.png";
 import dashIcon from "../../images/Dashboard.png";
 import empIcon from "../../images/employees.png";
 import userIcon from "../../images/user.png";
-import logo from "../../images/HR22.png";
+import logo from "../../images/logo29.1.png";
 import appraisalIcon from "../../images/appraisal.png";
 import Organization from "../../images/Organization.png";
 import CompanyProfile from "../../images/Companyprofile.png";
@@ -49,8 +49,10 @@ const NewSidebar = (props) => {
               <img
                 style={{
                   height:"auto",
-                  width: "170px",
-                  paddingBottom: "",
+                  width: "180px",
+                  padding: "5px",
+                  marginLeft:"10px",
+                  marginTop:"5px"
                 }}
                 src={logo}
                 alt="hello"

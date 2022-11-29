@@ -12,7 +12,7 @@ import {
   notification,
 } from "antd";
 import ConfigureContext from "../../contexts/ConfigureContext";
-import { DeleteOutlined, EditFilled } from "@ant-design/icons";
+import { DeleteOutlined, EditFilled,CheckOutlined,CloseOutlined } from "@ant-design/icons";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import "./companystyle.css";
 import { getDesigNo } from "../../contexts/CreateContext";
@@ -283,7 +283,7 @@ const Designation = () => {
                       </Form.List>
                       <Form.Item>
                         <Button
-                          type="default"
+                          type="text"
                           style={{ marginRight: "10px" }}
                           onClick={() => {
                             setData({});
@@ -291,15 +291,23 @@ const Designation = () => {
                             form.resetFields();
                           }}
                         >
-                          Cancel
+                          <CloseOutlined />Cancel
                         </Button>
                         <Button
+                          style={{
+                            border: "1px solid #1963A6",
+                            background: "#1963A6",
+                            color: "#ffffff",
+                            fontSize: "15",
+                            lineHeight: "17px",
+                            // width: "119px",
+                          }}
                           type="primary"
                           onClick={() => {
                             onFinish(data);
                           }}
                         >
-                          Submit
+                          <CheckOutlined />Submit
                         </Button>
                       </Form.Item>
                     </>

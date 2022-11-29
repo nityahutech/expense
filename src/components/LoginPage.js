@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 import loginBg from "../images/login-img.png"
-import loginLogo from "../images/New HUtech logo.png"
+import loginLogo from "../images/Logo77.png"
 
 function LoginPage() {
   const [loginEmail, setLoginEmail] = useState("");

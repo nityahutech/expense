@@ -16,7 +16,8 @@ import {
 } from "antd";
 import {
   PlusCircleOutlined,
-  CloseOutlined
+  CloseOutlined,
+  CheckOutlined 
 } from "@ant-design/icons";
 const { Text, Link } = Typography;
 const Admin = () => {
@@ -238,13 +239,13 @@ const Admin = () => {
                     </Col>
                   </Row>
                 {editContactInfo === true ? (
-                  <Row
+                  <Row gutter={[16,16]}
                     style={{
                       display: "flex",
                       justifyContent: "flex-end",
                       marginTop: "3%",
                     }}
-                  >
+                  ><Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                     <Button
                       type="text"
                       style={{ fontSize: 15 }}
@@ -252,13 +253,14 @@ const Admin = () => {
                     >
                       <CloseOutlined /> CANCEL
                     </Button>
-                    <Col>
+                    </Col>
+                    <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                       <Button
                         type="primary"
                         htmlType="submit"
-                        style={{ marginLeft: "10px" }}
+                        style={{background: "#1963a6",border: "1px solid #1963A6" }}
                       >
-                        SAVE
+                        <CheckOutlined /> SAVE
                       </Button>
                     </Col>
                   </Row>
@@ -266,6 +268,7 @@ const Admin = () => {
                 {editContactInfo == false &&
                   <div>
                     <Button 
+                      style={{ background: "#1963a6",border: "1px solid #1963A6",marginLeft: "10px"}}
                       type="primary" 
                       onClick={() => { showEditContactInfo(!editContactInfo) }} 
                       >
@@ -435,7 +438,7 @@ const Admin = () => {
                       justifyContent: "flex-end",
                       marginTop: "3%",
                     }}
-                  >
+                  ><Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                     <Button
                       type="text"
                       style={{ fontSize: 15 }}
@@ -443,20 +446,22 @@ const Admin = () => {
                     >
                       <CloseOutlined /> CANCEL
                     </Button>
-                    <Col>
+                    </Col>
+                    <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                       <Button
                         type="primary"
                         htmlType="submit"
-                        style={{ marginLeft: "10px" }}
+                        style={{ fontSize: 15,marginLeft: "10px",background: "#1963a6",border: "1px solid #1963A6" }}
                       >
-                        SAVE
+                       <CheckOutlined /> SAVE
                       </Button>
                     </Col>
                   </Row>
                 ) : null}
                 {editHrContactInfo == false &&
                   <div>
-                    <Button 
+                    <Button
+                      style={{ background: "#1963a6",border: "1px solid #1963A6", }} 
                       type="primary" 
                       onClick={() => { showEditHrContactInfo(!editHrContactInfo) }} 
                       >
@@ -622,7 +627,7 @@ const Admin = () => {
                       justifyContent: "flex-end",
                       marginTop: "3%",
                     }}
-                  >
+                  ><Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                     <Button
                       type="text"
                       style={{ fontSize: 15 }}
@@ -630,20 +635,23 @@ const Admin = () => {
                     >
                       <CloseOutlined /> CANCEL
                     </Button>
-                    <Col>
+                    </Col>
+                    <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                       <Button
                         type="primary"
                         htmlType="submit"
-                        style={{ marginLeft: "10px" }}
+                        style={{ background: "#1963a6",border: "1px solid #1963A6" }}
                       >
-                        SAVE
+                       <CheckOutlined />SAVE
                       </Button>
                     </Col>
                   </Row>
                 ) : null}
                 {editFinanceContactInfo == false &&
                 <Button
-                  type="primary" onClick={() => showEditFinanceContactInfo(!editFinanceContactInfo)} 
+                style={{ background: "#1963a6",border: "1px solid #1963A6"}}  
+                type="primary" 
+                  onClick={() => showEditFinanceContactInfo(!editFinanceContactInfo)} 
                 >
                   <PlusCircleOutlined />
                   Add
@@ -809,6 +817,7 @@ const Admin = () => {
                     marginTop: "3%",
                   }}
                 >
+                  <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                   <Button
                     type="text"
                     style={{ fontSize: 15 }}
@@ -816,19 +825,26 @@ const Admin = () => {
                   >
                     <CloseOutlined /> CANCEL
                   </Button>
-                  <Col>
+                  </Col>
+                  <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                     <Button
                       type="primary"
                       htmlType="submit"
-                      style={{ marginLeft: "10px" }}
+                      style={{ 
+                        background: "#1963a6",
+                        border: "1px solid #1963A6",
+                        width:"119px", }}
                     >
-                      SAVE
+                     <CheckOutlined /> SAVE
                     </Button>
                   </Col>
                 </Row>
                ) : null} 
                {editExecutiveContactInfo == false &&
-                <Button type="primary" onClick={() => showEditExecutiveContactInfo(!editExecutiveContactInfo)}>
+                <Button 
+                style={{ background: "#1963a6",border: "1px solid #1963A6"}}
+                type="primary" 
+                onClick={() => showEditExecutiveContactInfo(!editExecutiveContactInfo)}>
                   <PlusCircleOutlined />
                   Add
                 </Button>}

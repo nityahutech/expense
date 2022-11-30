@@ -272,23 +272,56 @@ color: #212529;
 }  */
 
  /* -----------invertical part */
- .ant-steps .ant-steps-vertical .stepBars  {
+ /* .ant-steps .ant-steps-vertical .stepBars  {
     display: flex;
     flex-direction: column;
     align-items: center;
- }
+ } */
 
  .ant-steps-item-container {
    display: flex;
    flex-direction: column;
    align-items: center;
-   min-width: 150px;
+   /* max-width: 200px;
+   min-width: 185px; */
  }
 
  .ant-steps-item-title::after {
    top: 0px;
  }
 
+ .disabledOffice .ant-select-selection-item {
+   color:rgba(0, 0, 0, 0.54)
+ }
+
+ 
+.ant-steps{
+   display: grid;
+   grid-auto-flow: column;
+   grid-auto-columns: 1fr;
+}
+ 
+@media (max-width: 850px) and (max-width: 5750px){
+   .ant-steps{
+      display: grid;
+      grid-auto-flow: row;
+      grid-auto-rows: 1fr;
+      flex-direction: column;
+   }
+
+   .ant-steps-item-container {
+      height: 80px;
+   }
+   
+   .ant-steps-item-title::after {
+      display: none;
+   }
+
+   .ant-steps-item-tail::after {
+      display: block;
+   }
+
+}
  
 
  /* .stepThree .ant-steps-item-tail::after {

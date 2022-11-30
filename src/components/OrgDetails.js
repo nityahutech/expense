@@ -22,14 +22,17 @@ const { Option } = Select;
 const OrgDetails = (props) => {
   const [form] = Form.useForm();
   const imgRef = React.useRef(null);
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState(props.fileName || "");
   const [isBigFile, setIsBigFile] = useState(false);
   const [orgIdExists, setOrgIdExists] = useState(false);
+  const [data, setData] = useState(props.data || {});
+
 
   useEffect(() => {
+    // setData()
     setFileName(fileName);
     setIsBigFile(false);
-  });
+  }, []);
 
   const onFinish = async (values) => {
     if (orgIdExists) {
@@ -40,22 +43,10 @@ const OrgDetails = (props) => {
       );
       return;
     }
-    const value = {
-      regCompName: values.regCompName,
-      regOffice: {
-        addLine1: values.addLine1,
-        addLine2: values.addLine2,
-        city: values.city,
-        state: values.state,
-        country: values.country,
-        pincode: values.pincode,
-      },
-      cinNumber: values.cinNumber,
-      gst: values.gst,
-      domain: values.domain,
-      phone: values.phone,
-    };
-    localStorage.setItem("OrgDetails", value);
+    console.log(fileName, JSON.stringify({...fileName}))
+    localStorage.setItem("OrgDetails", JSON.stringify(values));
+    localStorage.setItem("Logo", JSON.stringify({...fileName}));
+    setData(values);
   };
 
   const showNotification = (type, msg, desc) => {
@@ -141,7 +132,7 @@ const OrgDetails = (props) => {
       </Select>
     </Form.Item>
   );
-
+        console.log(data, fileName, props)
   return (
     <div style={{ margin: "13px", background: "#fff" }}>
       <div
@@ -175,6 +166,7 @@ const OrgDetails = (props) => {
         <Row gutter={[24, 8]}>
           <Col xs={22} sm={15} md={8}>
             <Form.Item
+              initialValue={data?.orgcode}
               name="orgcode"
               label="Organization Code"
               onKeyPress={(event) => {
@@ -225,6 +217,7 @@ const OrgDetails = (props) => {
                   message: "Please enter Valid Name",
                 },
               ]}
+              initialValue={data?.regCompName}
             >
               <Input
                 maxLength={50}
@@ -268,6 +261,7 @@ const OrgDetails = (props) => {
                   message: "Please enter Valid Number",
                 },
               ]}
+              initialValue={data?.cinNumber}
             >
               <Input
                 maxLength={21}
@@ -301,6 +295,7 @@ const OrgDetails = (props) => {
                   message: "Please enter Valid Number",
                 },
               ]}
+              initialValue={data?.gst}
             >
               <Input
                 maxLength={15}
@@ -327,6 +322,7 @@ const OrgDetails = (props) => {
                   message: "Please Enter Valid Name",
                 },
               ]}
+              initialValue={data?.domain}
             >
               <Input
                 maxLength={30}
@@ -357,6 +353,7 @@ const OrgDetails = (props) => {
                   message: "Please Enter Valid Number",
                 },
               ]}
+              initialValue={data?.phone}
             >
               <Input
                 addonBefore={prefixSelector}
@@ -385,6 +382,7 @@ const OrgDetails = (props) => {
                   message: "Please Enter Valid Address",
                 },
               ]}
+              initialValue={data?.addLine1}
             >
               <Input
                 maxLength={50}
@@ -410,6 +408,7 @@ const OrgDetails = (props) => {
                   message: "Please Enter Valid Address",
                 },
               ]}
+              initialValue={data?.addLine2}
             >
               <Input
                 maxLength={50}
@@ -440,6 +439,7 @@ const OrgDetails = (props) => {
                   message: "Please enter Valid Name",
                 },
               ]}
+              initialValue={data?.city}
             >
               <Input
                 maxLength={20}
@@ -472,6 +472,7 @@ const OrgDetails = (props) => {
                   message: "Please enter Valid Name",
                 },
               ]}
+              initialValue={data?.state}
             >
               <Input
                 maxLength={25}
@@ -502,6 +503,7 @@ const OrgDetails = (props) => {
                   message: "Please enter Valid Name",
                 },
               ]}
+              initialValue={data?.country}
             >
               <Input
                 maxLength={20}
@@ -532,6 +534,7 @@ const OrgDetails = (props) => {
                   message: "Please Enter Valid Code",
                 },
               ]}
+              initialValue={data?.pincode}
             >
               <Input
                 maxLength={6}

@@ -12,7 +12,7 @@ import {
   message,
   Spin,
 } from "antd";
-import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, DeleteOutlined,CheckOutlined,CloseOutlined } from "@ant-design/icons";
 import Iframe from 'react-iframe';
 import FormItem from "antd/es/form/FormItem";
 import { upload } from "@testing-library/user-event/dist/upload";
@@ -242,7 +242,7 @@ const Policies = () => {
                 <Button
                   type="primary"
                   onClick={showModal}
-                  style={{ marginLeft: "10px" }}
+                  style={{ marginLeft: "10px",background: "#1963a6",border: "1px solid #1963A6", }}
                 >
                   <PlusCircleOutlined />
                   Add
@@ -261,7 +261,6 @@ const Policies = () => {
                   onCancel={handleCancel}
                   visible={isModalVisible}
                   okText="Save"
-
                   closeIcon={
                     <div
                       className="modal-close-x"

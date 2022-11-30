@@ -5,6 +5,7 @@ import {
   Row,
   Col,
   Select,
+  notification,
   Input,
   Form,
   Divider,
@@ -16,7 +17,7 @@ import {
 import { CloseCircleOutlined, EditFilled,CheckOutlined,CloseOutlined } from "@ant-design/icons";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import "./companystyle.css";
-import FormItem from "antd/es/form/FormItem";
+import DepartmentContext from "../../contexts/DepartmentContext";
 
 // ------------------------------------------------------------------------------const part
 const Department = () => {
@@ -25,14 +26,45 @@ const Department = () => {
   const [form2] = Form.useForm();
   const [addSubDepart, setAddSubDepart] = useState(false);
   const [subDepartList, setSubDepartList] = useState([]);
+  const [dataSource, setData] = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, [])
+
+  const getData = () => {
+    DepartmentContext.getDept().then((res) => {
+      setData(res)
+      console.log(res)
+    })
+  }
 
   const showModal = () => {
     setAddDepartment(true);
     form.resetFields();
   };
-  const handleOk = () => {
+
+  const showNotification = (type, msg, desc) => {
+    notification[type]({
+        message: msg,
+        description: desc,
+    });
+  };
+
+  const onFinish = (values) => {
+    let record = {
+      ...values,
+      subDept: subDepartList
+    }
+    DepartmentContext.createDept(record).then((res) => {
+      showNotification("success", "Success", "yay")
+      getData();
+    })
+    console.log(record)
+    setSubDepartList([])
     setAddDepartment(false);
   };
+
   const handleCancel = () => {
     setAddDepartment(false);
     form.resetFields();
@@ -56,45 +88,46 @@ const Department = () => {
     form2.resetFields();
   }
 
-  const dataSource = [
-    {
-      key: "1",
-      dept: "dept-1",
-      hod: "Debashish",
-      subdept: "dept-3",
-      hod1: "Kiran",
-      workloc: "HSR",
-      empnum: "3",
-    },
-    // {},
-    {
-      key: "2",
-      dept: "dept-1",
-      hod: "Debashish",
-      subdept: "dept -5",
-      hod1: "Kiran",
-      workloc: "HSR",
-      empnum: "3",
-    },
-    {
-      key: "3",
-      dept: "dept-2",
-      hod: "Swayamprava",
-      subdept: "dept -6",
-      hod1: "ekta",
-      workloc: "BDA Complex",
-      empnum: "10",
-    },
-    {
-      key: "4",
-      dept: "dept-2",
-      hod: "Swayamprava",
-      subdept: "dept -4",
-      hod1: "saswat",
-      workloc: "HSR Layout",
-      empnum: "10",
-    },
-  ];
+  // const dataSource = [
+    // {
+    //   dept: "dept-1",
+    //   hod: "Debashish",
+    //   subdept: "dept-3",
+    //   hod1: "Kiran",
+    //   workloc: "HSR",
+    //   empnum: "3",
+    // },
+    // {
+    //   dept: "dept-1",
+    //   hod: "Debashish",
+    //   subdept: "dept -5",
+    //   hod1: "Kiran",
+    //   workloc: "HSR",
+    //   empnum: "3",
+    // },
+    // {
+    //   dept: "dept-2",
+    //   hod: "Swayamprava",
+    //   subdept: "dept -6",
+    //   hod1: "ekta",
+    //   workloc: "BDA Complex",
+    //   empnum: "3",
+    // },
+    // {
+    //   dept: "dept-2",
+    //   hod: "Swayamprava",
+    //   subdept: "dept -4",
+    //   hod1: "saswat",
+    //   workloc: "HSR Layout",
+    //   empnum: "10",
+    // },
+    // {
+    //   dept: "dept-3",
+    //   hod: "Person",
+    //   workloc: "HSR Layout",
+    //   empnum: "10",
+    // },
+  // ];
   // ---------------------------------usestate for adding Department
   // const sharedOnCell = (_, index) => {
   //   if (index === 4) {
@@ -111,6 +144,7 @@ const Department = () => {
       dataIndex: "dept",
       key: "dept",
       render: (value, row, index) => {
+        console.log(value, row, index)
         const obj = {
           children: value,
           props: {},
@@ -158,8 +192,8 @@ const Department = () => {
     {
       title: "Sub-Department",
       // colSpan: 1,
-      key: "subdept",
-      dataIndex: "subdept",
+      key: "subDept",
+      dataIndex: "subDept",
     },
     {
       title: "H.O.D.",
@@ -287,6 +321,7 @@ const Department = () => {
                   initialValues={{ remember: true }}
                   autoComplete="off"
                   layout="vertical"
+                  onFinish={onFinish}
                 >
                   <Row gutter={[24, 8]}>
                     <Col xs={22} sm={20} md={12}>
@@ -402,7 +437,7 @@ const Department = () => {
                               label="Sub-Department"
                               rules={[
                                 {
-                                  required: true,
+                                  required: false,
                                   message: "Please Enter Sub-Department",
                                 },
                                 {
@@ -428,7 +463,7 @@ const Department = () => {
                               label="H.O.D."
                               rules={[
                                 {
-                                  required: true,
+                                  required: false,
                                   message: "Please Enter HOD",
                                 },
                                 {

@@ -38,11 +38,73 @@ function Onboarding() {
   const [activetab, setActivetab] = useState("1");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditOrganization, setIsEditOrganization] = useState(false);
+  const [data, setData] = useState({});
+  const [fileName, setFileName] = useState("");
 
   const getData = async () => {
     let data = await CompanyProContext.getAllCompany();
     setAllCompany(data);
   };
+
+  const getOrgData = () => {
+    let data = localStorage.getItem("OrgDetails");
+    if (!data) {
+        localStorage.setItem("OrgDetails", "{}");
+        return;
+    }
+    console.log(JSON.parse(data));
+    setData(JSON.parse(data));
+    // setFileName(JSON.parse(data?.logo))
+  }
+
+  const createCompany = () => {
+    // const value = {
+    //   regCompName: data.regCompName,
+    //   regOffice: {
+    //     addLine1: data.addLine1,
+    //     addLine2: data.addLine2,
+    //     city: data.city,
+    //     state: data.state,
+    //     country: data.country,
+    //     pincode: data.pincode,
+    //   },
+    //   cinNumber: data.cinNumber,
+    //   gst: data.gst,
+    //   domain: data.domain,
+    //   phone: data.phone, 
+    //   accessList: [],
+    //   address: [],
+    //   secretary: [],
+    //   director: [],
+    //   auditor: [],
+    //   bank: [],
+    //   status: "Deactivated",
+    // };
+    //   CompanyProContext.createCompInfo(
+    //     data.orgcode,
+    //     valuesToservice,
+    //     fileName,
+    //     accessList
+    //   )
+    //     .then((response) => {
+    //       notification.open({
+    //         message: "Creating Company",
+    //         duration: 2,
+    //         icon: <LoadingOutlined />,
+    //       });
+    //       const timer = setTimeout(() => {
+    //         showNotification("success", "Success", "Onboarding Completed");
+    //         // getData();
+    //         // setAddAccess(false);
+    //         // onReset();
+    //         // setActivetab("1");
+    //       }, 5000);
+    //       return () => clearTimeout(timer);
+    //     })
+    //     .catch((error) => {
+    //       showNotification("error", "Error", error.message);
+    //     });
+  }
 
   useEffect(() => {
     if (!isEditOrganization || !isModalVisible) {
@@ -52,6 +114,7 @@ function Onboarding() {
 
   useEffect(() => {
     getData();
+    getOrgData();
   }, []);
 
   const showNotification = (type, msg, desc) => {
@@ -262,7 +325,7 @@ function Onboarding() {
         return null;
     }
   }
-
+  console.log(data, fileName)
   return (
     <>
       {/* <div className="main"> */}
@@ -378,18 +441,23 @@ function Onboarding() {
               current={progress}
               onChange={progressBar}
               className="stepBars"
+              // style={{
+              //   display: "grid",
+              //   gridAutoFlow: "column",
+              //   gridAutoColumns: "1fr",
+              // }}
             >
               <Step
-                className="stepOne"
+                // className="stepOne"
                 title="Organization Details" />
               <Step
-                className="stepTwo"
+                // className="stepTwo"
                 title="Cost Center" />
               <Step
-                className="stepThree"
+                // className="stepThree"
                 title="Organization Hierarchy" />
               <Step
-                className="stepFour"
+                // className="stepFour"
                 title="Access Details" />
             </Steps>
           </Card>
@@ -426,7 +494,7 @@ function Onboarding() {
             ) : progress == 3 ? (
               <AccessDetails />
             ) : (
-              <OrgDetails />
+              <OrgDetails data={data} fileName={fileName} />
             )}
             <Divider />
             <div>
@@ -446,7 +514,7 @@ function Onboarding() {
                     if (progress != 3) {
                       setProgress(progress + 1);
                     } else {
-                      console.log("form complete");
+                      createCompany();
                     }
                   }}
                 >

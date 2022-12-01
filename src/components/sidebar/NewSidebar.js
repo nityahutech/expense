@@ -12,76 +12,92 @@ import CompanyProfile from "../../images/Companyprofile.png";
 import SettingIcon from "../../images/gear.png";
 import homePage from "../../images/homeIcon.png";
 import LeaveIcon from "../../images/smallLeaveLogo.png";
-import SmallAttd from "../../images/samllattlogo.png"
+import SmallAttd from "../../images/samllattlogo.png";
 import "./newSlidebar.css";
-import SmallerLogo from "../../images/smallerLogo.png"
+import SmallerLogo from "../../images/smallerLogo.png";
 import { NavLink, Link } from "react-router-dom";
 
 const { Sider } = Layout;
 
-
 const NewSidebar = (props) => {
   const [collapsed, setCollapsed] = useState(true);
   const role = sessionStorage.getItem("role");
-  const isHr = role == "super" ? false : sessionStorage.getItem("isHr") == "true";
-
+  const isHr =
+    role == "super" ? false : sessionStorage.getItem("isHr") == "true";
 
   return (
-    <Layout className="sidelayout" >
-      <Sider className="sidelayoutSider"
+    <Layout className="sidelayout">
+      <Sider
+        className="sidelayoutSider"
         breakpoint="lg"
         style={{
           backgroundColor: "#05445e",
-          display: 'flex', flexDirection: 'column',
-
+          display: "flex",
+          flexDirection: "column",
         }}
         collapsedWidth="0"
-        onBreakpoint={(broken) => { }}
-        onCollapse={(collapsed, type) => { }}
+        onBreakpoint={(broken) => {}}
+        onCollapse={(collapsed, type) => {}}
       >
-        <div className="sidelayout-div" style={{
-          display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100vh'
-        }}>
-          <div className="sidelayout-div-img" style={{
-            display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', height: '100vh'
-          }}>
-            <div className="sidebarTittle" style={{ height: "auto",backgroundColor: "",margin:"0px",padding:"0px"}}>
+        <div
+          className="sidelayout-div"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            height: "100vh",
+          }}
+        >
+          <div
+            className="sidelayout-div-img"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              height: "100vh",
+            }}
+          >
+            <div
+              className="sidebarTittle"
+              style={{
+                height: "auto",
+                backgroundColor: "",
+                margin: "0px",
+                padding: "0px",
+              }}
+            >
               <img
                 style={{
-                  height:"auto",
+                  height: "auto",
                   width: "180px",
                   padding: "5px",
-                  marginLeft:"10px",
-                  marginTop:"5px"
+                  marginLeft: "10px",
+                  marginTop: "5px",
                 }}
                 src={logo}
                 alt="hello"
               />
             </div>
-            <div className="sidelayout-menu" style={{
-              overflowX: 'hidden',
-              overflowY: 'auto',
-              maxHeight: '70vh'
-            }}>
+            <div
+              className="sidelayout-menu"
+              style={{
+                overflowX: "hidden",
+                overflowY: "auto",
+                maxHeight: "70vh",
+              }}
+            >
               <Menu
                 defaultOpenKeys={props.activeSubMenu || []}
                 selectedKeys={props.activeMenu}
                 mode="inline"
-              // style={{
-              //   // paddingBottom: "40px",
-              //   height: "100vh",
-              // }}
+                // style={{
+                //   // paddingBottom: "40px",
+                //   height: "100vh",
+                // }}
               >
-
                 <Menu.Item
                   className="arrow"
-                  icon={
-                    <img
-                      src={homePage}
-                      width="16px"
-                      alt="home"
-                    />
-                  }
+                  icon={<img src={homePage} width="16px" alt="home" />}
                   key="30"
                 >
                   <p className="sideFont">Home</p>
@@ -91,9 +107,9 @@ const NewSidebar = (props) => {
                   <Menu.SubMenu
                     style={{
                       width: "100%",
-                      fontSize: '13px',
-                      fontWeight: '600',
-                      color: '#ffffff',
+                      fontSize: "13px",
+                      fontWeight: "600",
+                      color: "#ffffff",
                     }}
                     icon={
                       <img
@@ -108,13 +124,7 @@ const NewSidebar = (props) => {
                     mode="inline"
                   >
                     <Menu.Item
-                      icon={
-                        <img
-                          src={dot}
-                          alt="onboarding"
-                          className="dot"
-                        />
-                      }
+                      icon={<img src={dot} alt="onboarding" className="dot" />}
                       key="31"
                     >
                       <p className="sideFont">Onboarding</p>
@@ -124,57 +134,57 @@ const NewSidebar = (props) => {
                 ) : null}
                 {role == "admin" || isHr ? (
                   <>
-                  <Menu.Item
-                    icon={
-                      <img
-                        style={{ color: "white" }}
-                        src={CompanyProfile}
-                        alt="profile"
-                        className="Dash"
-                      />
-                    }
-                    key="32"
-                  >
-                    <p className="sideFont">Company Profile</p>
-                    <NavLink to="/CompanyProfile" />
-                  </Menu.Item>
+                    <Menu.Item
+                      icon={
+                        <img
+                          style={{ color: "white" }}
+                          src={CompanyProfile}
+                          alt="profile"
+                          className="Dash"
+                        />
+                      }
+                      key="32"
+                    >
+                      <p className="sideFont">Company Profile</p>
+                      <NavLink to="/CompanyProfile" />
+                    </Menu.Item>
 
-<Menu.SubMenu
-  style={{
-    width: "100%",
-    fontSize: '13px',
-    fontWeight: '600',
-    color: '#ffffff',
-  }}
-  icon={
-    <img
-      style={{ color: "white" }}
-      src={empIcon}
-      alt="profile"
-      className="Dash"
-    />
-  }
-  key="sub2"
-  title="Employees"
-  mode="inline"
->
-  <Menu.Item
-    className="arrow"
-    icon={<img src={dot} alt="profile" className="dot" />}
-    key="8"
-  >
-    <p className="sideFont">Add Employee</p>
-    <NavLink to="/Employee/AddEmployee" />
-  </Menu.Item>
-  <Menu.Item
-    className="arrow"
-    icon={<img src={dot} alt="profile" className="dot" />}
-    key="9"
-  >
-    <p className="sideFont">Employee List</p>
-    <NavLink to="/Employee/EmployeeList" />
-  </Menu.Item>
-  {/* <Menu.Item
+                    <Menu.SubMenu
+                      style={{
+                        width: "100%",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#ffffff",
+                      }}
+                      icon={
+                        <img
+                          style={{ color: "white" }}
+                          src={empIcon}
+                          alt="profile"
+                          className="Dash"
+                        />
+                      }
+                      key="sub2"
+                      title="Employees"
+                      mode="inline"
+                    >
+                      <Menu.Item
+                        className="arrow"
+                        icon={<img src={dot} alt="profile" className="dot" />}
+                        key="8"
+                      >
+                        <p className="sideFont">Add Employee</p>
+                        <NavLink to="/Employee/AddEmployee" />
+                      </Menu.Item>
+                      <Menu.Item
+                        className="arrow"
+                        icon={<img src={dot} alt="profile" className="dot" />}
+                        key="9"
+                      >
+                        <p className="sideFont">Employee List</p>
+                        <NavLink to="/Employee/EmployeeList" />
+                      </Menu.Item>
+                      {/* <Menu.Item
 className="arrow"
 icon={<img src={dot} alt="profile" className="dot" />}
 key="25"
@@ -182,9 +192,9 @@ key="25"
 <p className="sideFont">Hr PaySlip</p>
 <NavLink to="/Employee/Payroll" />
 </Menu.Item> */}
-</Menu.SubMenu>
-</>
-) : null}
+                    </Menu.SubMenu>
+                  </>
+                ) : null}
                 {role != "super" ? (
                   <>
                     <Menu.Item
@@ -205,7 +215,6 @@ key="25"
                       <NavLink to="/Attendance" />
                     </Menu.Item>
                     <Menu.Item
-
                       icon={
                         <img
                           src={LeaveIcon}
@@ -214,6 +223,7 @@ key="25"
                           style={{
                             width: "32px",
                             marginLeft: "-9px",
+                            background: "none",
                           }}
                         />
                       }
@@ -230,11 +240,17 @@ key="25"
                     className="arrow-div"
                     style={{
                       width: "100%",
-                      fontSize: '13px',
-                      fontWeight: '600',
-                      color: '#ffffff',
+                      fontSize: "13px",
+                      fontWeight: "600",
+                      color: "#ffffff",
                     }}
-                    icon={<img src={appraisalIcon} alt="appraisal" className="Dash" />}
+                    icon={
+                      <img
+                        src={appraisalIcon}
+                        alt="appraisal"
+                        className="Dash"
+                      />
+                    }
                     key="sub4"
                     title="Appraisal"
                     mode="inline"
@@ -262,16 +278,12 @@ key="25"
                     className="arrow-div"
                     style={{
                       width: "100%",
-                      fontSize: '13px',
-                      fontWeight: '600',
-                      color: '#ffffff',
+                      fontSize: "13px",
+                      fontWeight: "600",
+                      color: "#ffffff",
                     }}
                     icon={
-                      <img
-                        src={expenseIcon}
-                        alt="profile"
-                        className="Dash"
-                      />
+                      <img src={expenseIcon} alt="profile" className="Dash" />
                     }
                     key="sub1"
                     title="Expense"
@@ -297,19 +309,12 @@ key="25"
                 ) : null}
 
                 <Menu.Item
-                  icon={
-                    <img
-                      src={userIcon}
-                      alt="profile"
-                      className="Dash"
-                    />
-                  }
+                  icon={<img src={userIcon} alt="profile" className="Dash" />}
                   key="21"
                 >
                   <p className="sideFont">My Profile</p>
                   <NavLink to="/Profile" />
                 </Menu.Item>
-
 
                 {/* <Menu.Item
 
@@ -328,60 +333,64 @@ key="25"
               <p className="sideFont">Settings</p>
 
             </Menu.Item> */}
-
               </Menu>
             </div>
           </div>
-          <div className="sidelayout-setting" style={{
-            // padding: '20px',
-            // borderTop: '1px solid #6e6eff',
-            // alignItems: 'center',
-            // width: '80%',
-            // height: '80px',
-            // display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'
-          }}>
+          <div
+            className="sidelayout-setting"
+            style={
+              {
+                // padding: '20px',
+                // borderTop: '1px solid #6e6eff',
+                // alignItems: 'center',
+                // width: '80%',
+                // height: '80px',
+                // display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'
+              }
+            }
+          >
             <div>
-              <Divider style={{
-
-                margin: '0px',
-                borderWidth: 1,
-                // borderColor: 'rgb(5 70 179)',
-                borderColor: '#ffffff',
-
-
-              }} />
-            </div>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              marginBottom: '20px',
-              marginLeft: '24px',
-              marginTop: '10px'
-
-            }}>
-              <div>
-                <img style={{
-                  height: '16px'
-
+              <Divider
+                style={{
+                  margin: "0px",
+                  borderWidth: 1,
+                  // borderColor: 'rgb(5 70 179)',
+                  borderColor: "#ffffff",
                 }}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                marginBottom: "20px",
+                marginLeft: "24px",
+                marginTop: "10px",
+              }}
+            >
+              <div>
+                <img
+                  style={{
+                    height: "16px",
+                  }}
                   src={SettingIcon}
                   alt="Setting"
-                // className="Dash"
+                  // className="Dash"
                 />
               </div>
 
               <div>
-
                 <Link
                   to="/Settings"
                   className="sideFont"
                   style={{
-                    fontWeight: "normal", paddingLeft: '10px', fontSize: '13px',
+                    fontWeight: "normal",
+                    paddingLeft: "10px",
+                    fontSize: "13px",
                     fontWeight: 600,
-                    color: '#ffffff'
-
+                    color: "#ffffff",
                   }}
                   rel="noopener noreferrer"
                 >
@@ -391,13 +400,8 @@ key="25"
             </div>
           </div>
         </div>
-
-
-
       </Sider>
-
-    </Layout >
-
+    </Layout>
   );
 };
 

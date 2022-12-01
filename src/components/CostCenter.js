@@ -29,7 +29,7 @@ function CostCenter() {
   const [editForm] = Form.useForm();
   const [costCenters, setCostCenters] = useState([]);
   const [costEditCenter, setEditCostCenter] = useState({});
-  const [costCenterlength, setCostCenterlength] = useState(0);
+
   const showNotification = (type, msg, desc) => {
     notification[type]({
       message: msg,
@@ -45,11 +45,11 @@ function CostCenter() {
 
       onOk: () => {
         console.log("key", record);
-        const newData = costCenters.filter((item) => item.slno !== record.slno);
+        const newData = costCenters.filter((item) => item.costcentercode !== record.costcentercode);
         localStorage.setItem("costCenters", JSON.stringify(newData));
         showNotification("success", "Success", "Successfully deleted");
         setCostCenters(newData);
-        setCostCenterlength(newData.length);
+
       },
     });
   };
@@ -58,12 +58,6 @@ function CostCenter() {
     setIsCostModalOpen(true);
   };
 
-  const showEditModal = (record) => {
-    console.log("editrecord", record);
-
-    setIsCostEditModalOpen(true);
-    setEditCostCenter(record);
-  };
 
   const onFinishEdit = (values) => {
     console.log("onFinishEdit", values);
@@ -82,14 +76,13 @@ function CostCenter() {
     }
 
     localStorage.setItem("costCenters", JSON.stringify(costCenters));
+
+    setCostCenters(getCostCentersFromLocalStr());
+    setEditCostCenter({})
     editForm.resetFields();
-    setEditCostCenter({});
-    setCostCenters(costCenters);
-    setCostCenterlength(costCenters.length - 1);
     showNotification("success", "Success", "Successfully editted");
     setIsCostEditModalOpen(false);
-    getCostCentersFromLocalStr();
-    setCostCenterlength(costCenters.length);
+
   };
 
   const onFinishForm = (values) => {
@@ -111,9 +104,7 @@ function CostCenter() {
     costCenters.push(costCenterTemp);
     localStorage.setItem("costCenters", JSON.stringify(costCenters));
     showNotification("success", "Success", "Successfully added");
-    setCostCenters(costCenters);
-    console.log("costCenters", costCenters.length);
-    setCostCenterlength(costCenters.length);
+    setCostCenters(getCostCentersFromLocalStr());
     setIsCostModalOpen(false);
     form.resetFields();
   };
@@ -130,14 +121,8 @@ function CostCenter() {
   useEffect(() => {
     let costfromDataStore = getCostCentersFromLocalStr();
     console.log("costfromDataStore", costfromDataStore);
-    let i = 0;
-    costfromDataStore.map((obj) => {
-      costfromDataStore[i].slno = i + 1;
-      i++;
-    });
-
     setCostCenters(costfromDataStore);
-  }, [costCenterlength]);
+  }, []);
 
   const columns = [
     // {
@@ -189,8 +174,11 @@ function CostCenter() {
                     borderRadius: "10px",
                   }}
                   onClick={() => {
+
+                    setEditCostCenter(record);
                     form.resetFields();
-                    showEditModal(record);
+                    setIsCostEditModalOpen(true);
+
                   }}
                 >
                   <EditFilled />
@@ -380,8 +368,11 @@ function CostCenter() {
 
       <Modal
         title="EDIT ORGANIZATION DETAILS"
+        destroyOnClose
         open={isCostEditModalOpen}
         onCancel={() => {
+          setEditCostCenter({})
+          editForm.resetFields();
           setIsCostEditModalOpen(false);
         }}
         cancelText={
@@ -405,6 +396,8 @@ function CostCenter() {
         closeIcon={
           <div
             onClick={() => {
+
+              setEditCostCenter({})
               editForm.resetFields();
               setIsCostEditModalOpen(false);
             }}

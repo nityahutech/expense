@@ -1,14 +1,17 @@
 import { Table, Button, Modal, Layout, Row, Col, Input } from "antd";
-import { EditFilled, SearchOutlined, DeleteFilled } from "@ant-design/icons";
+import { EditFilled, SearchOutlined, DeleteFilled, EyeFilled } from "@ant-design/icons";
 import Editemployee from "./Editemployee";
 import React, { useEffect, useState } from "react";
 import { getUsers } from "../contexts/CreateContext";
 import "../style/EmployeeList.css";
 import EmpInfoContext from "../contexts/EmpInfoContext";
+import EmployeeListview from "./EmployeeListview";
 
 function EmployeeList() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isProfileModal, setIsProfileModal] = useState(false);
   const [editedRecord, setEditedRecord] = useState(null);
+  const [showRecord, setshowRecord] = useState([]);
   const [loading, setLoading] = useState(false);
   const [size, setSize] = useState(window.innerWidth <= 768 ? "" : "left");
   const [filterEmployees, setFilterEmployees] = useState([]);
@@ -24,34 +27,36 @@ function EmployeeList() {
       dataIndex: "empId",
       key: "empId",
       fixed: "left",
-      width: 120,
+      width: 100,
     },
     {
       title: "First Name",
       dataIndex: "fname",
       key: "fname",
       fixed: "left",
-      width: 160,
+      width: 120,
       fixed: size,
+      ellipsis: true,
     },
     {
       title: "Middle Name",
       dataIndex: "mname",
       key: "mname",
-
-      width: 160,
+      ellipsis: true,
+      width: 120,
     },
     {
       title: "Last Name",
       dataIndex: "lname",
       key: "lname",
-      width: 160,
+      width: 120,
+      ellipsis: true,
     },
     {
       title: "Email",
       dataIndex: "mailid",
       key: "mailid",
-      width: 200,
+      width: 120,
       ellipsis: true,
     },
     {
@@ -59,101 +64,101 @@ function EmployeeList() {
       dataIndex: "doj",
       key: "doj",
       align: "center",
-      width: 150,
-    },
-    {
-      title: "Designation",
-      dataIndex: "designation",
-      key: "designation",
-      // align: "center",
-      width: 190,
-    },
-    {
-      title: "Gender",
-      dataIndex: "gender",
-      key: "gender",
-      width: 120,
-    },
-    {
-      title: "Personal Email",
-      dataIndex: "contactEmail",
-      key: "contactEmail",
-      width: 200,
-      ellipsis: true,
-    },
-    {
-      title: "Contact No.",
-      dataIndex: "phonenumber",
-      key: "phonenumber",
-      align: "center",
-      width: 150,
-    },
-    {
-      title: "Reporting Manager",
-      dataIndex: "repManager",
-      key: "repManager",
-      width: 200,
-    },
-    {
-      title: "Secondary Manager",
-      dataIndex: "secManager",
-      key: "secManager",
-      width: 200,
-    },
-    {
-      title: "Lead",
-      dataIndex: "lead",
-      key: "lead",
-      width: 160,
-    },
-    {
-      title: "Department",
-      dataIndex: "department",
-      key: "department",
-      width: 200,
-    },
-    {
-      title: "Manager",
-      dataIndex: "isManager",
-      key: "isManager",
       width: 100,
     },
-    {
-      title: "Is Lead",
-      dataIndex: "isLead",
-      key: "isLead",
-      width: 100,
-    },
-    {
-      title: "Work Location",
-      dataIndex: "location",
-      key: "location",
-      width: 150,
-    },
-    {
-      title: "Earn Leave",
-      dataIndex: "earnLeave",
-      key: "earnLeave",
-      width: 60,
-    },
-    {
-      title: "Sick Leave",
-      dataIndex: "sickLeave",
-      key: "sickLeave",
-      width: 60,
-    },
-    {
-      title: "Casual Leave",
-      dataIndex: "casualLeave",
-      key: "casualLeave",
-      width: 60,
-    },
-    {
-      title: "Optional Leave",
-      dataIndex: "optionalLeave",
-      key: "optionalLeave",
-      width: 75,
-    },
+    // {
+    //   title: "Designation",
+    //   dataIndex: "designation",
+    //   key: "designation",
+    //   // align: "center",
+    //   width: 190,
+    // },
+    // {
+    //   title: "Gender",
+    //   dataIndex: "gender",
+    //   key: "gender",
+    //   width: 120,
+    // },
+    // {
+    //   title: "Personal Email",
+    //   dataIndex: "contactEmail",
+    //   key: "contactEmail",
+    //   width: 200,
+    //   ellipsis: true,
+    // },
+    // {
+    //   title: "Contact No.",
+    //   dataIndex: "phonenumber",
+    //   key: "phonenumber",
+    //   align: "center",
+    //   width: 150,
+    // },
+    // {
+    //   title: "Reporting Manager",
+    //   dataIndex: "repManager",
+    //   key: "repManager",
+    //   width: 200,
+    // },
+    // {
+    //   title: "Secondary Manager",
+    //   dataIndex: "repManager",
+    //   key: "secManager",
+    //   width: 200,
+    // },
+    // {
+    //   title: "Lead",
+    //   dataIndex: "lead",
+    //   key: "lead",
+    //   width: 160,
+    // },
+    // {
+    //   title: "Department",
+    //   dataIndex: "department",
+    //   key: "department",
+    //   width: 200,
+    // },
+    // {
+    //   title: "Manager",
+    //   dataIndex: "isManager",
+    //   key: "isManager",
+    //   width: 100,
+    // },
+    // {
+    //   title: "Is Lead",
+    //   dataIndex: "isLead",
+    //   key: "isLead",
+    //   width: 100,
+    // },
+    // {
+    //   title: "Work Location",
+    //   dataIndex: "location",
+    //   key: "location",
+    //   width: 150,
+    // },
+    // {
+    //   title: "Earn Leave",
+    //   dataIndex: "earnLeave",
+    //   key: "earnLeave",
+    //   width: 60,
+    // },
+    // {
+    //   title: "Sick Leave",
+    //   dataIndex: "sickLeave",
+    //   key: "sickLeave",
+    //   width: 60,
+    // },
+    // {
+    //   title: "Casual Leave",
+    //   dataIndex: "casualLeave",
+    //   key: "casualLeave",
+    //   width: 60,
+    // },
+    // {
+    //   title: "Optional Leave",
+    //   dataIndex: "optionalLeave",
+    //   key: "optionalLeave",
+    //   width: 75,
+    // },
     {
       title: "Action",
       dataIndex: "action",
@@ -165,7 +170,18 @@ function EmployeeList() {
         return (
           record.disabled === false && (
             <>
-              {/* <Space size="small"> */}
+              <Button
+                type="link"
+                className="show"
+                // style={{ width: "40px" }}
+                onClick={() => {
+                  setIsProfileModal(true)
+                  showViewModal(record);
+                }}
+              >
+                {<EyeFilled />}
+              </Button>
+
               <Button
                 style={{ padding: 0, color: "rgb(64, 169, 255)" }}
                 type="link"
@@ -197,6 +213,10 @@ function EmployeeList() {
   }, []);
   const showModal = (record) => {
     setIsModalVisible(true);
+  };
+  const showViewModal = (record) => {
+    setshowRecord(record)
+    // setIsModalVisible(true);
   };
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -300,11 +320,24 @@ function EmployeeList() {
         pagination={{
           position: ["bottomCenter"],
         }}
-        scroll={{ x: 1300 }}
+        scroll={{ x: 800 }}
         className="employeeTable"
         size="small"
         reloadData={getData}
         rowClassName={(record) => record.disabled && "disabled-row"}
+      // onRow={(record, rowIndex) => {
+      //   return {
+      //     onClick: (event) => {
+      //       setSelectemp({ ...record });
+      //       getEmpDetails(record.id, [
+      //         moment().subtract(30, "days"),
+      //         moment(),
+      //       ]);
+      //       setActivetab("2");
+      //     }, // click row
+      //   };
+      // }}
+
       />
       <Modal
         className="editEmployee"
@@ -329,12 +362,45 @@ function EmployeeList() {
             X
           </div>
         }
-        // onCancel={handleCancel}
+      // onCancel={handleCancel}
       >
         <Editemployee
           className="Edit"
           record={editedRecord}
           setIsModalVisible={setIsModalVisible}
+        />
+      </Modal>
+
+      <Modal
+        className="editEmployee"
+        bodyStyle={{
+          height: 440,
+          overflowY: "scroll",
+          overflowX: "hidden",
+        }}
+        width={850}
+        centered
+        title="Employee Profile"
+        open={isProfileModal}
+        footer={null}
+        afterClose={getData}
+        closeIcon={
+          <div
+            onClick={() => {
+              setIsProfileModal(false);
+            }}
+            style={{ color: "#ffffff" }}
+          >
+            X
+          </div>
+        }
+
+      >
+        <EmployeeListview
+          className="Edit"
+          showRecord={showRecord}
+          setIsProfileModal={setIsProfileModal}
+          getData={getData}
         />
       </Modal>
     </Layout>

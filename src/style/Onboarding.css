@@ -131,6 +131,7 @@ line-height: 25px;
     pointer-events: none;
 
  }
+
  .userLabel .ant-form-item-label > label{
     font-weight: 400;
 font-size: 13px;
@@ -143,13 +144,19 @@ color: #212529;
     line-height: "18px";
     color: "#212529";
  }
+
+.userLabel .ant-form-item-label{
+display: flex;
+justify-content: left;
+}
+
  .userDetails .ant-form-item-label{
     display: flex;
     justify-content: right;
  }
  .userMap .ant-form-item-label{
     display: flex;
-    justify-content: right;
+    justify-content: left;
     
  }
  .userMap .ant-form-item-label > label {
@@ -299,6 +306,26 @@ color: #212529;
    display: grid;
    grid-auto-flow: column;
    grid-auto-columns: 1fr;
+}
+
+.mainAccess .ant-card-head-title{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: rgba(0,0,0,0.85)
+}
+.accessCard .ant-card-head-title{
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    color:#444444;
+}
+
+.accessCardMap .ant-card-head-title{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 18px;
+    color:#444444;
 }
  
 @media (max-width: 850px) and (max-width: 5750px){

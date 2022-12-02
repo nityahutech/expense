@@ -267,7 +267,7 @@ const Statutory = () => {
                     <div>
                       <div className="div-discription">Entity Type</div>
                       {editContent === false ? (
-                        <div>{data.entityType ? data.entityType : "-"}</div>
+                        <div>{data?.entityType ? data.entityType : "-"}</div>
                       ) : (
                         <Form.Item
                           initialValue={data ? data.entityType : null}
@@ -305,7 +305,7 @@ const Statutory = () => {
                     <div>
                       <div className="div-discription">CIN</div>
                       {editContent === false ? (
-                        <div>{data.cinNumber ? data.cinNumber : "-"}</div>
+                        <div>{data?.cinNumber ? data.cinNumber : "-"}</div>
                       ) : (
                         <Form.Item
                           initialValue={data ? data.cinNumber : null}
@@ -344,7 +344,7 @@ const Statutory = () => {
                         Date of Incorporation
                       </div>
                       {editContent === false ? (
-                        <div>{data.dateOfIncorp ? data.dateOfIncorp : "-"}</div>
+                        <div>{data?.dateOfIncorp ? data.dateOfIncorp : "-"}</div>
                       ) : (
                         <Form.Item
                           initialValue={
@@ -395,7 +395,7 @@ const Statutory = () => {
                     <div>
                       <div className="div-discription">Company PAN</div>
                       {editContent === false ? (
-                        <div>{data.compPan ? data.compPan : "-"}</div>
+                        <div>{data?.compPan ? data.compPan : "-"}</div>
                       ) : (
                         <Form.Item
                           initialValue={data ? data.compPan : null}
@@ -434,7 +434,7 @@ const Statutory = () => {
                     <div>
                       <div className="div-discription">Company TAN</div>
                       {editContent === false ? (
-                        <div>{data.compTan ? data.compTan : "-"}</div>
+                        <div>{data?.compTan ? data.compTan : "-"}</div>
                       ) : (
                         <Form.Item
                           initialValue={data ? data.compTan : null}
@@ -473,7 +473,7 @@ const Statutory = () => {
                     <div>
                       <div className="div-discription">GST</div>
                       {editContent === false ? (
-                        <div>{data.gst ? data.gst : "-"}</div>
+                        <div>{data?.gst ? data.gst : "-"}</div>
                       ) : (
                         <Form.Item
                           initialValue={data ? data.gst : null}
@@ -601,7 +601,7 @@ const Statutory = () => {
                                 marginTop: "10px",
                               }}
                               bordered={false}
-                              value={u.directorName}
+                              value={u?.directorName}
                             />
                           </Col>
                           <Col xs={22} sm={15} md={8}>
@@ -614,7 +614,7 @@ const Statutory = () => {
                                 marginTop: "10px",
                               }}
                               bordered={false}
-                              value={u.directoremailid}
+                              value={u?.directoremailid}
                             />
                           </Col>
                           <Col xs={22} sm={15} md={4}>
@@ -627,7 +627,7 @@ const Statutory = () => {
                                 marginTop: "10px",
                               }}
                               bordered={false}
-                              value={u.directordin}
+                              value={u?.directordin}
                             />
                           </Col>
                           <Col xs={22} sm={15} md={5}>
@@ -642,7 +642,7 @@ const Statutory = () => {
                                 marginTop: "10px",
                               }}
                               bordered={false}
-                              value={u.directorphone}
+                              value={u?.directorphone}
                             />
                           </Col>
                           <Col
@@ -878,7 +878,7 @@ const Statutory = () => {
                                     marginTop: "10px",
                                   }}
                                   bordered={false}
-                                  value={u.auditorName}
+                                  value={u?.auditorName}
                                 />
                               </Col>
                               <Col xs={22} sm={15} md={8}>
@@ -893,7 +893,7 @@ const Statutory = () => {
                                     marginTop: "10px",
                                   }}
                                   bordered={false}
-                                  value={u.auditormailid}
+                                  value={u?.auditormailid}
                                 />
                               </Col>
                               <Col xs={22} sm={15} md={4}>
@@ -932,7 +932,7 @@ const Statutory = () => {
                                     marginTop: "8px",
                                   }}
                                   bordered={false}
-                                  value={u.auditorphone}
+                                  value={u?.auditorphone}
                                 />
                               </Col>
                               <Col
@@ -1192,7 +1192,7 @@ const Statutory = () => {
                                 marginTop: "10px",
                               }}
                               bordered={false}
-                              value={u.secName}
+                              value={u?.secName}
                             />
                           </Col>
                           <Col xs={22} sm={15} md={10}>
@@ -1205,7 +1205,7 @@ const Statutory = () => {
                                 marginTop: "10px",
                               }}
                               bordered={false}
-                              value={u.secmailid}
+                              value={u?.secmailid}
                             />
                           </Col>
                           <Col xs={22} sm={15} md={6}>
@@ -1220,7 +1220,7 @@ const Statutory = () => {
                                 marginTop: "10px",
                               }}
                               bordered={false}
-                              value={u.secphone}
+                              value={u?.secphone}
                             />
                           </Col>
                           <Col
@@ -1593,15 +1593,15 @@ const Statutory = () => {
                       <Col xs={22} sm={15} md={22}>
                         <Row>
                           <Col span={24}>
-                            <h2>{u.baiaccountitle} </h2>
+                            <h2>{u?.baiaccountitle} </h2>
                           </Col>
-                          <Col span={24}>Bank Name : {u.baibankname}</Col>
-                          <Col span={24}>City : {u.baicity}</Col>
-                          <Col span={24}>Branch Name : {u.baibranchname}</Col>
-                          <Col span={24}>IFSC Code : {u.baiifsccode}</Col>
-                          <Col span={24}>Account Type : {u.baiaccounttype}</Col>
+                          <Col span={24}>Bank Name : {u?.baibankname}</Col>
+                          <Col span={24}>City : {u?.baicity}</Col>
+                          <Col span={24}>Branch Name : {u?.baibranchname}</Col>
+                          <Col span={24}>IFSC Code : {u?.baiifsccode}</Col>
+                          <Col span={24}>Account Type : {u?.baiaccounttype}</Col>
                           <Col span={24}>
-                            Account Number : {u.baiaccountnumber}
+                            Account Number : {u?.baiaccountnumber}
                           </Col>
                         </Row>
                       </Col>

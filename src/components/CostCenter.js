@@ -176,7 +176,7 @@ function CostCenter() {
                   onClick={() => {
 
                     setEditCostCenter(record);
-                    form.resetFields();
+                    editForm.resetFields();
                     setIsCostEditModalOpen(true);
 
                   }}
@@ -396,7 +396,6 @@ function CostCenter() {
         closeIcon={
           <div
             onClick={() => {
-
               setEditCostCenter({})
               editForm.resetFields();
               setIsCostEditModalOpen(false);

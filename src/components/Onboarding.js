@@ -4,6 +4,7 @@ import {
   Col,
   Row,
   Divider,
+  Form,
   Button,
   Steps,
   notification,
@@ -32,14 +33,24 @@ import OrgHierTable from "./OrgHierTable";
 const { Step } = Steps;
 
 function Onboarding() {
+  const [form] = Form.useForm();
   const [modalData, setModalData] = useState([]);
   const [allCompany, setAllCompany] = useState([]);
   const [progress, setProgress] = useState(0);
   const [activetab, setActivetab] = useState("1");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [save, setSave] = useState(false);
   const [isEditOrganization, setIsEditOrganization] = useState(false);
   const [data, setData] = useState({});
   const [fileName, setFileName] = useState("");
+
+  const saveOrgDetails = (values, imageUrl) => {
+    delete values.logo
+    console.log("saved")
+    localStorage.setItem("OrgDetails", JSON.stringify(values));
+    localStorage.setItem("Logo", imageUrl);
+    getOrgData();
+  }
 
   const getData = async () => {
     let data = await CompanyProContext.getAllCompany();
@@ -54,56 +65,62 @@ function Onboarding() {
     }
     console.log(JSON.parse(data));
     setData(JSON.parse(data));
-    // setFileName(JSON.parse(data?.logo))
+    setFileName(localStorage.getItem("Logo"))
   }
 
   const createCompany = () => {
-    // const value = {
-    //   regCompName: data.regCompName,
-    //   regOffice: {
-    //     addLine1: data.addLine1,
-    //     addLine2: data.addLine2,
-    //     city: data.city,
-    //     state: data.state,
-    //     country: data.country,
-    //     pincode: data.pincode,
-    //   },
-    //   cinNumber: data.cinNumber,
-    //   gst: data.gst,
-    //   domain: data.domain,
-    //   phone: data.phone, 
-    //   accessList: [],
-    //   address: [],
-    //   secretary: [],
-    //   director: [],
-    //   auditor: [],
-    //   bank: [],
-    //   status: "Deactivated",
-    // };
-    //   CompanyProContext.createCompInfo(
-    //     data.orgcode,
-    //     valuesToservice,
-    //     fileName,
-    //     accessList
-    //   )
-    //     .then((response) => {
-    //       notification.open({
-    //         message: "Creating Company",
-    //         duration: 2,
-    //         icon: <LoadingOutlined />,
-    //       });
-    //       const timer = setTimeout(() => {
-    //         showNotification("success", "Success", "Onboarding Completed");
-    //         // getData();
-    //         // setAddAccess(false);
-    //         // onReset();
-    //         // setActivetab("1");
-    //       }, 5000);
-    //       return () => clearTimeout(timer);
-    //     })
-    //     .catch((error) => {
-    //       showNotification("error", "Error", error.message);
-    //     });
+    let temp = localStorage.getItem("costCenters");
+    let costCenters = temp || temp != "[]" ? JSON.parse(temp) : []
+    let temp1 = localStorage.getItem("OrgAccess");
+    let accessList = temp1 || temp1 != "[]" ? JSON.parse(temp1) : []
+    const value = {
+      regCompName: data.regCompName,
+      regOffice: {
+        addLine1: data.addLine1,
+        addLine2: data.addLine2,
+        city: data.city,
+        state: data.state,
+        country: data.country,
+        pincode: data.pincode,
+      },
+      cinNumber: data.cinNumber,
+      gst: data.gst,
+      domain: data.domain,
+      phone: data.phone, 
+      accessList: [],
+      address: [],
+      secretary: [],
+      director: [],
+      auditor: [],
+      bank: [],
+      costCenters: costCenters,
+      status: "Deactivated",
+    };
+      // CompanyProContext.createCompInfo(
+      //   data.orgcode,
+      //   value,
+      //   fileName,
+      //   accessList
+      // )
+      //   .then((response) => {
+      //     notification.open({
+      //       message: "Creating Company",
+      //       duration: 2,
+      //       icon: <LoadingOutlined />,
+      //     });
+      //     const timer = setTimeout(() => {
+      //       showNotification("success", "Success", "Onboarding Completed");
+      //       // getData();
+      //       // setAddAccess(false);
+      //       // onReset();
+      //       // setActivetab("1");
+      //     }, 5000);
+      //     return () => clearTimeout(timer);
+      //   })
+      //   .catch((error) => {
+      //     showNotification("error", "Error", error.message);
+      //   });
+      console.log("save commented for now")
   }
 
   useEffect(() => {
@@ -283,7 +300,7 @@ function Onboarding() {
       },
     },
   ];
-
+  console.log(save)
   function getStatusUi(status) {
     switch (status) {
       case "Activated":
@@ -325,7 +342,22 @@ function Onboarding() {
         return null;
     }
   }
-  console.log(data, fileName)
+
+  const onReset = () => {
+    Modal.confirm({
+      title: "Are you sure you want to reset all pages?",
+      okText: "Yes",
+      okType: "danger",
+
+      onOk: () => {
+        localStorage.removeItem("OrgDetails")
+        localStorage.removeItem("costCenters")
+        localStorage.removeItem("OrgHier")
+        localStorage.removeItem("OrgAccess")
+      },
+    });
+  }
+  
   return (
     <>
       {/* <div className="main"> */}
@@ -494,10 +526,28 @@ function Onboarding() {
             ) : progress == 3 ? (
               <AccessDetails />
             ) : (
-              <OrgDetails data={data} fileName={fileName} />
+              <OrgDetails data={data} fileName={fileName} changeSave={saveOrgDetails} form={form} />
             )}
             <Divider />
-            <div>
+            <div 
+              style={{
+                display: "flex",
+                justifyContent: "space-between"
+              }}
+            >
+              <Button
+                style={{
+                  border: "1px solid #1963A6",
+                  color: "#1963A6",
+                  fontWeight: "600",
+                  fontSize: "14px",
+                  lineHeight: "17px",
+                  width: "99px",
+                }}
+                onClick={onReset}
+              >
+                Reset
+              </Button>
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 {progress > 0 ? (
                   <Button
@@ -510,8 +560,9 @@ function Onboarding() {
                 <Button
                   type="primary"
                   style={{ marginLeft: "10px", backgroundColor: 'rgb(25, 99, 166)' }}
-                  onClick={() => {
+                  onClick={async () => {
                     if (progress != 3) {
+                      if (progress == 0) {form.submit()}
                       setProgress(progress + 1);
                     } else {
                       createCompany();

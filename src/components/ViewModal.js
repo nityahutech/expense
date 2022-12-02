@@ -5,6 +5,7 @@ import imageavailable from "../images/imageavailable.png";
 
 function ViewModal(props) {
   const modalData = props.modalData;
+  console.log('modalData', modalData)
   return (
     <div>
       <h3 style={{ fontWeight: "600", fontSize: "18px", lineheight: "22px" }}>

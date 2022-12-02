@@ -100,6 +100,14 @@
   line-height: 18px;
 }
 
+.radio .ant-radio-inner{
+  border: 2px solid #d9d9d9;
+}
+
+.weekDays .ant-table-thead > tr > th {
+  font-weight: 600;
+}
+
 .Tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   color: #000000;
   font-weight: 600;

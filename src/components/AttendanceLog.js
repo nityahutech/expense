@@ -10,6 +10,11 @@ import {
   notification,
   Spin,
   Pagination,
+  Card,
+  Divider,
+  Radio,
+  Select,
+  Switch,
 } from "antd";
 import "../style/AttendanceLog.css";
 import { SearchOutlined } from "@ant-design/icons";
@@ -35,11 +40,10 @@ const tailLayout = {
 };
 
 function AttendanceLog(props) {
-
   const [allEmp, setallEmp] = useState([]);
   const isHr = props.roleView == "admin";
-  console.log(props, isHr)
-  const currentUser = JSON.parse(sessionStorage.getItem("user"))
+  console.log(props, isHr);
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
   const [loading, setLoading] = useState(false);
@@ -82,7 +86,7 @@ function AttendanceLog(props) {
       key: "report",
       dataIndex: "report",
       ellipsis: true,
-      fixed: 'right'
+      fixed: "right",
     },
     // {
     //   title: "Action",
@@ -97,7 +101,7 @@ function AttendanceLog(props) {
   };
   useEffect(() => {
     getHolidayList();
-    getDateOfJoining()
+    getDateOfJoining();
   }, []);
   useEffect(() => {
     form.resetFields();
@@ -158,11 +162,10 @@ function AttendanceLog(props) {
 
   const getDateOfJoining = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    console.log('data', data)
-    var doj = moment(data.doj, dateFormat)
-    console.log('data', doj)
-    setDateOfJoining(doj)
-
+    console.log("data", data);
+    var doj = moment(data.doj, dateFormat);
+    console.log("data", doj);
+    setDateOfJoining(doj);
   };
 
   const setHolidayStatus = (data) => {
@@ -311,7 +314,7 @@ function AttendanceLog(props) {
       dataIndex: "report",
       width: 100,
       ellipsis: true,
-      fixed: 'right'
+      fixed: "right",
     },
   ];
   async function onHrDateFilter(value) {
@@ -347,11 +350,84 @@ function AttendanceLog(props) {
   //   return current.month() != moment().month();
   // };s
 
-  const disabledDate = current => {
-    return current.isBefore(dateOfJoining) || current.isAfter(moment(dateOfJoining).add(2, 'months'))
-  }
+  const disabledDate = (current) => {
+    return (
+      current.isBefore(dateOfJoining) ||
+      current.isAfter(moment(dateOfJoining).add(2, "months"))
+    );
+  };
 
+  const workingdays = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
 
+  const weekdays = [
+    {
+      title: "Days",
+      dataIndex: "days",
+      key: "days",
+    },
+    {
+      title: "Full Day",
+      dataIndex: "fullday",
+      key: "fullday",
+      alignItems: "center",
+      render: (text) => (
+        <Radio className="radio" value={text}>
+          {text}
+        </Radio>
+      ),
+    },
+    {
+      title: "Half Day",
+      dataIndex: "halfday",
+      key: "halfday",
+      alignItems: "center",
+      render: (text) => (
+        <Radio className="radio" value={text}>
+          {text}
+        </Radio>
+      ),
+    },
+    {
+      title: "Dayoff",
+      dataIndex: "dayoff",
+      key: "dayoff",
+      alignItems: "center",
+      render: (text) => (
+        <Radio className="radio" value={text}>
+          {text}
+        </Radio>
+      ),
+    },
+  ];
+
+  // const weekData = [
+  //   {
+  //     key: "1",
+  //     days: "Monday",
+  //     fullday: "1",
+  //     halfday: "1",
+  //     dayoff: "1",
+  //   },
+  // ];
+
+  const weekData = workingdays.map((day, i) => {
+    return {
+      key: i + 1,
+      days: day,
+    };
+  });
+
+  const onChange = (checked) => {
+    console.log(`switch to ${checked}`);
+  };
 
   return (
     <>
@@ -399,9 +475,9 @@ function AttendanceLog(props) {
                 tab="Add Report"
                 key="2"
                 className="reportTabs"
-              // onClick={() => {
-              //   setIsModalOpen(true);
-              // }}
+                // onClick={() => {
+                //   setIsModalOpen(true);
+                // }}
               >
                 {/* <Button type="primary" onClick={showModal}>
               Open Modal
@@ -490,7 +566,7 @@ function AttendanceLog(props) {
                   placeholder="Search"
                   prefix={<SearchOutlined />}
                   onChange={searchChange}
-                // style={{ width: "95%" }}
+                  // style={{ width: "95%" }}
                 />
                 <Table
                   //   rowSelection={{
@@ -540,6 +616,108 @@ function AttendanceLog(props) {
                   dataSource={empMonthly}
                   pagination={true}
                 />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Configure" key="3">
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <Card
+                    style={{
+                      width: "550px",
+                      borderRadius: "5px",
+                      marginBottom: "25px",
+                    }}
+                  >
+                    <Form
+                      labelCol={{
+                        span: 4,
+                        offset: 2,
+                      }}
+                      wrapperCol={{
+                        span: 14,
+                        offset: 1,
+                      }}
+                      layout="horizontal"
+                    >
+                      <Form.Item
+                        label="Start Time::"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Enter Start Date",
+                          },
+                        ]}
+                      >
+                        <DatePicker />
+                      </Form.Item>
+                      <Form.Item
+                        label="End Time::"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Enter End Date",
+                          },
+                        ]}
+                      >
+                        <DatePicker />
+                      </Form.Item>
+                      <Form.Item
+                        label="Work Days::"
+                        rules={[
+                          {
+                            required: true,
+                          },
+                        ]}
+                      ></Form.Item>
+                      <Divider style={{ borderTop: "2px solid #EAEAEA" }} />
+                      <Table
+                        className="weekDays"
+                        columns={weekdays}
+                        dataSource={weekData}
+                        bordered={false}
+                        pagination={false}
+                        size="small"
+                      />
+                      <Form.Item
+                        label="Max Break Duration::"
+                        labelCol={{
+                          span: 7,
+                          offset: 2,
+                        }}
+                        wrapperCol={{
+                          span: 10,
+                          // offset: 1,
+                        }}
+                      >
+                        <Select
+                          options={[
+                            {
+                              value: "1hour",
+                              label: "1 Hour",
+                            },
+
+                            { value: "2hour", label: "2 Hour" },
+                          ]}
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        label="Auto Clock Out::"
+                        labelCol={{
+                          span: 6,
+                          offset: 2,
+                        }}
+                        wrapperCol={{
+                          span: 10,
+                          offset: 2,
+                        }}
+                      >
+                        <Switch
+                          defaultChecked
+                          onChange={onChange}
+                          // style={{ marginLeft: "13rem" }}
+                        />
+                      </Form.Item>
+                    </Form>
+                  </Card>
+                </div>
               </Tabs.TabPane>
             </>
           )}

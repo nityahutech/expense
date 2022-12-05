@@ -147,16 +147,16 @@ color: #212529;
 
 .userLabel .ant-form-item-label{
 display: flex;
-justify-content: left;
-}
+ justify-content: right; }
 
- .userDetails .ant-form-item-label{
+
+ /* .userDetails .ant-form-item-label{
     display: flex;
     justify-content: right;
- }
+ } */
  .userMap .ant-form-item-label{
     display: flex;
-    justify-content: left;
+    justify-content: right;
     
  }
  .userMap .ant-form-item-label > label {
@@ -327,6 +327,11 @@ justify-content: left;
     line-height: 18px;
     color:#444444;
 }
+
+.uploadButton .ant-upload.ant-upload-select-picture-card{
+   margin-top: 10px;
+   margin-left: 10px;
+}
  
 @media (max-width: 850px) and (max-width: 5750px){
    .ant-steps{
@@ -350,10 +355,31 @@ justify-content: left;
 
 }
  
+@media (min-width:330px) and (max-width:574px) {
+   .userLabel .ant-form-item-label{
+      display: flex;
+       justify-content: left; }
+
+       .userMap .ant-form-item-label{
+         display: flex;
+         justify-content: right;
+         
+      }  
+}
 
  /* .stepThree .ant-steps-item-tail::after {
     margin-top: 50px;
     margin-left: 50px;
  } */
 
- 
+ /* <Upload
+                    className="uploadButton"
+                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    listType="picture-card"
+                    fileList={fileList}
+                    onPreview={handlePreview}
+                    onChange={imageChange}
+                  >
+                    {fileList.length >= 1 ? null : uploadButton}
+                  </Upload>
+  */

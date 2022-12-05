@@ -9,6 +9,7 @@ import {
   Table,
   Modal,
   notification,
+  Divider,
 } from "antd";
 import {
   PlusOutlined,
@@ -28,7 +29,7 @@ function CostCenter() {
   const [editForm] = Form.useForm();
   const [costCenters, setCostCenters] = useState([]);
   const [costEditCenter, setEditCostCenter] = useState({});
-  const [costCenterlength, setCostCenterlength] = useState(0);
+
   const showNotification = (type, msg, desc) => {
     notification[type]({
       message: msg,
@@ -44,11 +45,11 @@ function CostCenter() {
 
       onOk: () => {
         console.log("key", record);
-        const newData = costCenters.filter((item) => item.slno !== record.slno);
+        const newData = costCenters.filter((item) => item.costcentercode !== record.costcentercode);
         localStorage.setItem("costCenters", JSON.stringify(newData));
         showNotification("success", "Success", "Successfully deleted");
         setCostCenters(newData);
-        setCostCenterlength(newData.length);
+
       },
     });
   };
@@ -57,12 +58,6 @@ function CostCenter() {
     setIsCostModalOpen(true);
   };
 
-  const showEditModal = (record) => {
-    console.log("editrecord", record);
-
-    setIsCostEditModalOpen(true);
-    setEditCostCenter(record);
-  };
 
   const onFinishEdit = (values) => {
     console.log("onFinishEdit", values);
@@ -81,14 +76,13 @@ function CostCenter() {
     }
 
     localStorage.setItem("costCenters", JSON.stringify(costCenters));
+
+    setCostCenters(getCostCentersFromLocalStr());
+    setEditCostCenter({})
     editForm.resetFields();
-    setEditCostCenter({});
-    setCostCenters(costCenters);
-    setCostCenterlength(costCenters.length - 1);
     showNotification("success", "Success", "Successfully editted");
     setIsCostEditModalOpen(false);
-    getCostCentersFromLocalStr();
-    setCostCenterlength(costCenters.length);
+
   };
 
   const onFinishForm = (values) => {
@@ -110,9 +104,7 @@ function CostCenter() {
     costCenters.push(costCenterTemp);
     localStorage.setItem("costCenters", JSON.stringify(costCenters));
     showNotification("success", "Success", "Successfully added");
-    setCostCenters(costCenters);
-    console.log("costCenters", costCenters.length);
-    setCostCenterlength(costCenters.length);
+    setCostCenters(getCostCentersFromLocalStr());
     setIsCostModalOpen(false);
     form.resetFields();
   };
@@ -129,14 +121,8 @@ function CostCenter() {
   useEffect(() => {
     let costfromDataStore = getCostCentersFromLocalStr();
     console.log("costfromDataStore", costfromDataStore);
-    let i = 0;
-    costfromDataStore.map((obj) => {
-      costfromDataStore[i].slno = i + 1;
-      i++;
-    });
-
     setCostCenters(costfromDataStore);
-  }, [costCenterlength]);
+  }, []);
 
   const columns = [
     // {
@@ -188,8 +174,11 @@ function CostCenter() {
                     borderRadius: "10px",
                   }}
                   onClick={() => {
-                    form.resetFields();
-                    showEditModal(record);
+
+                    setEditCostCenter(record);
+                    editForm.resetFields();
+                    setIsCostEditModalOpen(true);
+
                   }}
                 >
                   <EditFilled />
@@ -222,43 +211,46 @@ function CostCenter() {
   ];
 
   return (
-    <div style={{ background: "#fff" }}>
-      <Card
-        title={
+    <div style={{ margin: "13px", background: "#fff" }}>
+      <div style={{ background: "#FAFAFA" }}>
+        <div 
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <div
             style={{
               fontWeight: "600",
               fontSize: "14px",
               lineHeight: "19px",
-              textTransform: "uppercase",
             }}
           >
-            Organization Cost Center{" "}
+            Organization Cost Center
           </div>
-        }
-        extra={
-          <>
-            <Row>
-              <Col xs={2} sm={24} md={24}>
-                <Button
-                  style={{
-                    width: "100%",
-                    background: "#1963A6",
-                    color: "#ffffff",
-                    borderRadius: "5px",
-                  }}
-                  onClick={showModal}
-                >
-                  <PlusOutlined />
-                  Add Cost Center
-                </Button>
-              </Col>
-            </Row>
-          </>
-        }
-        className="costCenterCard"
-        footer={false}
-      >
+          <div
+            style={{
+              fontWeight: "600",
+              fontSize: "14px",
+              lineHeight: "19px",
+            }}
+          >
+            <Button
+              type="default"
+              onClick={showModal}
+              style={{
+                margin: "10px 10px 0px 0px",
+                background: "#1963A6",
+                color: "#ffffff",
+                borderRadius: "5px",
+              }}
+            >
+              + Add Cost Center
+            </Button>
+          </div>
+        </div>
+        <Divider />
         <Table
           // bordered={true}
           className="costCenterTable"
@@ -268,7 +260,7 @@ function CostCenter() {
           pagination={false}
           scroll={{ x: 600 }}
         />
-      </Card>
+      </div>
 
       <Modal
         title="ORGANIZATION DETAILS"
@@ -376,8 +368,11 @@ function CostCenter() {
 
       <Modal
         title="EDIT ORGANIZATION DETAILS"
+        destroyOnClose
         open={isCostEditModalOpen}
         onCancel={() => {
+          setEditCostCenter({})
+          editForm.resetFields();
           setIsCostEditModalOpen(false);
         }}
         cancelText={
@@ -401,6 +396,7 @@ function CostCenter() {
         closeIcon={
           <div
             onClick={() => {
+              setEditCostCenter({})
               editForm.resetFields();
               setIsCostEditModalOpen(false);
             }}

@@ -50,7 +50,7 @@ function AddressCust() {
     );
     getData();
     let array = editAddressContent;
-    array[i] = true;
+    array[i] = false;
     showEditAddressContent(array);
   };
 
@@ -81,6 +81,8 @@ function AddressCust() {
     showEditAddressContent(array.fill(false));
     setData(data.address);
   };
+
+  console.log(editAddressContent)
 
   return (
     <>
@@ -141,7 +143,7 @@ function AddressCust() {
                             }}
                             onClick={() => {
                               let array = [...editAddressContent];
-                              array[i] = !array[i];
+                              array[i] = true;
                               showEditAddressContent(array);
                             }}
                           >
@@ -410,7 +412,7 @@ function AddressCust() {
                           style={{ fontSize: 15 }}
                           onClick={() => {
                             let array = [...editAddressContent];
-                            array[i] = !array[i];
+                            array[i] = false;
                             showEditAddressContent(array);
                           }}
                         >

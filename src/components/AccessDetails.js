@@ -11,7 +11,6 @@ import {
   Card,
   Col,
   DatePicker,
-  Divider,
   Form,
   Input,
   Modal,
@@ -32,11 +31,8 @@ function AccessDetails() {
   const [addAccess, setAddAccess] = useState(false);
   const [accessList, setAccessList] = useState([]);
   const [orgHier, setOrgHier] = useState([]);
-  // const [BU, setBU] = useState([]);
-  // const [div, setDiv] = useState([]);
-  // const [dept, setDept] = useState([]);
-  // const [team, setTeam] = useState([]);
-  const [editAccess, setEditAccess] = useState(false);
+  const [editAccess, setEditAccess] = useState([false]);
+  const [editIndex, setEditIndex] = useState([false]);
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const [value, setValue] = useState(1);
@@ -56,7 +52,8 @@ function AccessDetails() {
       return;
     }
     setAccessList(JSON.parse(temp));
-    // OrgHier.filter(org => )
+    let array = [...temp]
+    setEditAccess(array.fill(false))
   };
 
   const checkAlphabet = (event) => {
@@ -82,34 +79,35 @@ function AccessDetails() {
   }
 
   function addUseRole(values) {
-    console.log("accessList::: ", [
+    let temp = [
       ...accessList,
       {
         ...values,
-        dob: values.dob ? values.dob.format(dateFormat) : null,
-        doj: values.doj ? values.doj.format(dateFormat) : null,
+        dob: values.dob?._isValid ? values.dob.format(dateFormat) : null,
+        doj: values.doj?._isValid ? values.doj.format(dateFormat) : null,
       },
-    ]);
-    setAccessList([
-      ...accessList,
-      {
-        ...values,
-        dob: values.dob ? values.dob.format(dateFormat) : null,
-        doj: values.doj ? values.doj.format(dateFormat) : null,
-      },
-    ]);
-    localStorage.setItem("OrgAccess", JSON.stringify([...accessList, values]));
+    ]
+    console.log(temp);
+    localStorage.setItem("OrgAccess", JSON.stringify(temp));
+    getData();
     form.resetFields();
     setAddAccess(false);
   }
 
-  function editUseRole(values, i) {
-    let temp = accessList;
-    temp[i] = values;
+  function editUseRole(values) {
+    console.log(values, editIndex)
+    let temp = [...accessList];
+    temp[editIndex] = {
+      ...values,
+      dob: values.dob?._isValid ? values.dob.format(dateFormat) : null,
+      doj: values.doj?._isValid ? values.doj.format(dateFormat) : null,
+    };
     console.log("edited accessList::: ", temp);
-    setAccessList(temp);
     localStorage.setItem("OrgAccess", JSON.stringify(temp));
-    setEditAccess(false);
+    getData();
+    let array = editAccess;
+    array[editIndex] = false;
+    setEditAccess(array);
     form1.resetFields();
   }
 
@@ -126,18 +124,16 @@ function AccessDetails() {
     });
   };
 
-  function onDelete(delItem) {
+  function onDelete(i) {
     Modal.confirm({
       title: "Are you sure, you want to delete this record?",
       okText: "yes",
       okType: "danger",
       onOk: () => {
-        const filteredData = accessList.filter(
-          (item) => item.empId !== delItem.empId
-        );
-
+        let temp = accessList.filter((user, index) => !(index == i));
+        localStorage.setItem("OrgAccess", JSON.stringify(temp))
         showNotification("success", "Success", "Successfully deleted");
-        setAccessList(filteredData);
+        setAccessList(temp);
       },
     });
 
@@ -151,6 +147,19 @@ function AccessDetails() {
       {accessList != 0
         ? accessList.map((user, i) => (
             <Card
+              title={
+                <div
+                  style={{
+                    fontWeight: "600",
+                    fontSize: "16px",
+                    lineHeight: "17px",
+                    color: "rgba(0,0,0,0.85)",
+                    margin: "15px",
+                  }}
+                >
+                  Access Details
+                </div>
+              }
               style={{
                 background: "#FAFAFA",
                 border: "1px solid #EAEAEA",
@@ -159,7 +168,63 @@ function AccessDetails() {
                 flexDirection: "column",
                 margin: "40px",
               }}
+              extra={
+                <>
+                  {editAccess[i] === false ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between"
+                      }}
+                    >
+                      <Button
+                        style={{
+                          // marginLeft: "40px",
+                          background: "#EEEEEE",
+                          borderRadius: "10px",
+                          width: "34px",
+                        }}
+                        onClick={() => {
+                          let array = [...editAccess];
+                          array[i] = true;
+                          setEditAccess(array);
+                        }}
+                      >
+                        <EditFilled
+                          style={{
+                            position: "relative",
+                            right: "5px",
+                            color: "#007ACB",
+                            // display: "flex",
+                          }}
+                        />
+                      </Button>
+                      <Button
+                        style={{
+                          marginLeft: "10px",
+                          background: "#EEEEEE",
+                          borderRadius: "10px",
+                          width: "34px",
+                        }}
+                        onClick={() => {
+                          onDelete(i);
+                        }}
+                      >
+                        <DeleteFilled
+                          style={{
+                            position: "relative",
+                            right: "6px",
+                            color: "#007ACB",
+                            // display: "flex",
+                          }}
+                        />
+                      </Button>
+                    </div>
+                  ) : null}
+                </>
+              }                
             >
+            {/* {console.log(i)} */}
               <Form
                 colon={true}
                 name="basic"
@@ -180,77 +245,10 @@ function AccessDetails() {
                   remember: true,
                 }}
                 autoComplete="off"
-                onFinish={(values) => editUseRole(values, i)}
+                onFinish={(values) => editUseRole(values)}
               >
-                <Row>
-                  <Col xs={24} sm={20} md={19}>
-                    <div
-                      style={{
-                        fontWeight: "600",
-                        fontSize: "14px",
-                        lineHeight: "17px",
-                        color: "rgba(0,0,0,0.85)",
-                        margin: "15px",
-                      }}
-                    >
-                      Access Details
-                    </div>
-                  </Col>
-
-                  {editAccess === false ? (
-                    <Col xs={24} sm={24} md={2}>
-                      <Button
-                        style={{
-                          // marginLeft: "40px",
-                          background: "#EEEEEE",
-                          borderRadius: "10px",
-                          width: "34px",
-                        }}
-                        onClick={() => {
-                          // let array = [...editAccess];
-                          // array[i] = !array[i];
-                          setEditAccess(true);
-                        }}
-                      >
-                        <EditFilled
-                          style={{
-                            position: "relative",
-                            right: "5px",
-                            color: "#007ACB",
-                            // display: "flex",
-                          }}
-                        />
-                      </Button>
-                    </Col>
-                  ) : null}
-                  {editAccess === false ? (
-                    <Col xs={24} sm={24} md={3}>
-                      <Button
-                        style={{
-                          // marginLeft: "15px",
-                          background: "#EEEEEE",
-                          borderRadius: "10px",
-                          width: "34px",
-                        }}
-                        onClick={() => {
-                          onDelete(user);
-                        }}
-                      >
-                        <DeleteFilled
-                          style={{
-                            position: "relative",
-                            right: "6px",
-                            color: "#007ACB",
-                            // display: "flex",
-                          }}
-                        />
-                      </Button>
-                    </Col>
-                  ) : null}
-                </Row>
-                {editAccess ? (
+                {editAccess[i] ? (
                   <>
-                    <Divider />
                     <Card
                       className="accessCard"
                       title="User Details"
@@ -327,7 +325,7 @@ function AccessDetails() {
                         />
                       </Form.Item>
                       <Form.Item
-                        initialValue={moment(user?.dob, dateFormat)}
+                        initialValue={moment(user?.dob, dateFormat)._isValid ?  moment(user?.dob, dateFormat) : null}
                         className="userLabel"
                         name="dob"
                         value="dob"
@@ -483,7 +481,7 @@ function AccessDetails() {
                         />
                       </Form.Item>
                       <Form.Item
-                        initialValue={moment(user?.doj, dateFormat)}
+                        initialValue={moment(user?.doj, dateFormat)._isValid ? moment(user?.doj, dateFormat) : null}
                         className="userLabel"
                         name="doj"
                         value="doj"
@@ -508,7 +506,7 @@ function AccessDetails() {
                         />
                       </Form.Item>
                       <Form.Item
-                        initialValue={"Registerd Office"}
+                        initialValue={"Registered Office"}
                         className="userLabel"
                         name="pob"
                         label="Place of Business::"
@@ -532,14 +530,14 @@ function AccessDetails() {
                         }}
                       >
                         <Select
+                          className="disabledOffice"
                           disabled
                           bordered={false}
                           style={{
-                            color: "black",
                             width: "100%",
                             border: "1px solid #8692A6",
                             borderRadius: "4px",
-                            background: "#ffffff",
+                            background: "rgba(0,0,0,0.1)",
                           }}
                         />
                       </Form.Item>
@@ -748,7 +746,6 @@ function AccessDetails() {
                   </>
                 ) : (
                   <>
-                    <Divider style={{ border: "1px solid #EAEAEA" }} />
                     <Card
                       className="accessCardMap"
                       title="User Details"
@@ -1016,7 +1013,7 @@ function AccessDetails() {
                     </Card>
                   </>
                 )}
-                {editAccess === true ? (
+                {editAccess[i] === true ? (
                   <Row>
                     <Col
                       span={15}
@@ -1037,9 +1034,9 @@ function AccessDetails() {
                           borderRadius: "4px",
                         }}
                         onClick={() => {
-                          //   let array = [...editAccess];
-                          //   array[i] = !array[i];
-                          setEditAccess(false);
+                            let array = [...editAccess];
+                            array[i] = false;
+                            setEditAccess(array);
                         }}
                       >
                         <CloseOutlined />
@@ -1062,7 +1059,7 @@ function AccessDetails() {
                         }}
                         onClick={() => {
                           form1.submit();
-                          setEditAccess(false);
+                          setEditIndex(i)
                         }}
                       >
                         <CheckOutlined />
@@ -1078,19 +1075,29 @@ function AccessDetails() {
 
       {accessList.length == 3 ? null : (
         <div>
-          {addAccess ? (
-            <>
-              <Card
-                className="mainAccess"
-                title="Access Details"
-                style={{
-                  background: "#FAFAFA",
-                  border: "1px solid #EAEAEA",
-                  borderRadius: "5px",
-
-                  margin: "40px",
-                }}
-              >
+          <Card
+              className="mainAccess"
+              title={
+                <div
+                  style={{
+                    fontWeight: "600",
+                    fontSize: "16px",
+                    lineHeight: "17px",
+                    color: "rgba(0,0,0,0.85)",
+                    margin: "15px",
+                  }}
+                >
+                  Access Details
+                </div>
+              }
+              style={{
+                background: "#FAFAFA",
+                border: "1px solid #EAEAEA",
+                borderRadius: "5px",
+                margin: "40px",
+              }}
+          >
+            {addAccess ? (
                 <Form
                   name="basic"
                   form={form}
@@ -1713,21 +1720,7 @@ function AccessDetails() {
                     </Col>
                   </Row>
                 </Form>
-              </Card>
-            </>
-          ) : (
-            <>
-              <Card
-                className="mainAccess"
-                title="Access Details"
-                style={{
-                  background: "#FAFAFA",
-                  border: "1px solid #EAEAEA",
-                  borderRadius: "5px",
-
-                  margin: "40px",
-                }}
-              >
+            ) : (
                 <Button
                   style={{
                     color: "#095AA4",
@@ -1746,9 +1739,8 @@ function AccessDetails() {
                 >
                   <PlusCircleOutlined /> Add
                 </Button>
-              </Card>
-            </>
-          )}
+            )}
+          </Card>
         </div>
       )}
     </>

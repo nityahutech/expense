@@ -43,9 +43,12 @@ class CompanyProContext {
         return !req.empty;
     }
     
-    checkOrgIdExists = async (id) => {
-        let req = await getDoc(doc(db, "companyprofile", id));
-        return req.data()? true : false;
+    getOrgId = async () => {
+        getDocs(companyProfileCollectionRef).then((snapshot) => {
+          let res = snapshot.docs.length + 1;
+          console.log("compId" + ("00" + res.toString()).slice(-3));
+          return "compId" + ("00" + res.toString()).slice(-3);
+        })
     }
    
     createAdmins = (accessList, id) => {
@@ -82,6 +85,30 @@ class CompanyProContext {
         }, 2000);
         return () => clearTimeout(timer);
     }
+
+    createDepts = (id) => {
+        const order = ["Business Unit", "Division", "Department", "Team"]
+        let temp = localStorage.getItem("OrgHier");
+        if (!temp || temp == "[]") {
+            return;
+        }
+        let orgHier = JSON.parse(temp);
+        orgHier.map(org => {
+            let parents = org.parent == null ? [""] : org.parent.split("/")
+            let place = order.indexOf(org.type)
+            let refPath = `companyprofile/${id}/departments` + (org.parent == null ? 
+                "" : `/${parents[0]}/div` + (place == 1 ? 
+                    "" : `/${parents[1]}/dept` + (place == 2 ? 
+                        "" : `/${parents[2]}/team`
+            )));
+            console.log(org.parent, parents, refPath, org.name, place, org.type)
+            setDoc(doc(db, refPath, org.name), {
+                description: org.description,
+                workLoc: "Registered Office"
+            })
+        })
+        
+    }
    
     createCompInfo = async (id, newInfo, file, accessList) => {
         if (file) {
@@ -91,6 +118,7 @@ class CompanyProContext {
                     newInfo.logo = url;
                     setDoc(doc(db, "companyprofile", id), newInfo);
                     this.createAdmins(accessList, id)
+                    this.createDepts(id);
                     return Promise.resolve();
                 })
             });
@@ -98,6 +126,7 @@ class CompanyProContext {
             newInfo.logo = null;
             setDoc(doc(db, "companyprofile", id), newInfo);
             this.createAdmins(accessList, id)
+            this.createDepts(id);
             return Promise.resolve();
         }
     };

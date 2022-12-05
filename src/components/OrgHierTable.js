@@ -287,7 +287,7 @@ const OrgHierTable = () => {
                             <span
                                 style={
                                     type == "Business Unit"
-                                        ? { color: "black", marginLeft: "10px" }
+                                        ? { color: "black" }
                                         : { color: "#007ACB" }
                                 }
                                 onClick={() => {
@@ -359,7 +359,6 @@ const OrgHierTable = () => {
                             fontWeight: "600",
                             fontSize: "14px",
                             lineHeight: "19px",
-                            textTransform: "uppercase",
                         }}
                     >
                         <Button

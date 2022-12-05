@@ -27,7 +27,9 @@
 .Range {
   position: relative;
   bottom: 3.7rem;
-  /* left: 42rem; */
+  /* left: 44rem;
+   */
+   float: right;
 }
 /* .Range .ant-picker-focused{
     background: #1963A6;

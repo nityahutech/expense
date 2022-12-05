@@ -15,6 +15,7 @@ import {
   Radio,
   Select,
   Switch,
+  TimePicker,
 } from "antd";
 import "../style/AttendanceLog.css";
 import { SearchOutlined } from "@ant-design/icons";
@@ -51,6 +52,7 @@ function AttendanceLog(props) {
   const [holidays, setHolidays] = useState([]);
   const [dateOfJoining, setDateOfJoining] = useState(null);
   const [month, setMonth] = useState();
+  const [selectedDay, setSelectedDay] = useState({});
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
     date: [],
@@ -367,7 +369,17 @@ function AttendanceLog(props) {
     "Sunday",
   ];
 
-  const weekdays = [
+  const handleRadiochange = (value, data) => {
+    console.log(value);
+    console.log(data);
+    setSelectedDay({
+      ...selectedDay,
+      [data.days]: value,
+    });
+  };
+
+  console.log(selectedDay);
+  const tableHeaders = [
     {
       title: "Days",
       dataIndex: "days",
@@ -378,35 +390,62 @@ function AttendanceLog(props) {
       dataIndex: "fullday",
       key: "fullday",
       alignItems: "center",
-      render: (text) => (
-        <Radio className="radio" value={text}>
-          {text}
-        </Radio>
-      ),
+      render: (_, data) => {
+        return (
+          <Radio.Group
+            onChange={(e) => handleRadiochange(e.target.value, data)}
+            value={selectedDay[data.days]}
+          >
+            <Radio
+              className="radio"
+              value={`fullday_${data.key}_${data.days}`}
+            />
+          </Radio.Group>
+        );
+      },
     },
     {
       title: "Half Day",
       dataIndex: "halfday",
       key: "halfday",
       alignItems: "center",
-      render: (text) => (
-        <Radio className="radio" value={text}>
-          {text}
-        </Radio>
-      ),
+      render: (_, data) => {
+        return (
+          <Radio.Group
+            onChange={(e) => handleRadiochange(e.target.value, data)}
+            value={selectedDay[data.days]}
+          >
+            <Radio
+              className="radio"
+              value={`halfday_${data.key}_${data.days}`}
+            />
+          </Radio.Group>
+        );
+      },
     },
     {
       title: "Dayoff",
       dataIndex: "dayoff",
       key: "dayoff",
       alignItems: "center",
-      render: (text) => (
-        <Radio className="radio" value={text}>
-          {text}
-        </Radio>
-      ),
+      render: (_, data) => {
+        return (
+          <Radio.Group
+            onChange={(e) => handleRadiochange(e.target.value, data)}
+            value={selectedDay[data.days]}
+          >
+            <Radio
+              className="radio"
+              value={`dayoff_${data.key}_${data.days}`}
+            />
+          </Radio.Group>
+        );
+      },
     },
   ];
+  const timeChange = (time, timeString) => {
+    console.log(time, timeString);
+  };
 
   // const weekData = [
   //   {
@@ -646,7 +685,10 @@ function AttendanceLog(props) {
                           },
                         ]}
                       >
-                        <DatePicker />
+                        <TimePicker
+                          onChange={timeChange}
+                          defaultOpenValue={moment("00:00:00", "HH:mm:ss")}
+                        />
                       </Form.Item>
                       <Form.Item
                         label="End Time::"
@@ -657,7 +699,10 @@ function AttendanceLog(props) {
                           },
                         ]}
                       >
-                        <DatePicker />
+                        <TimePicker
+                          onChange={onChange}
+                          defaultOpenValue={moment("00:00:00", "HH:mm:ss")}
+                        />
                       </Form.Item>
                       <Form.Item
                         label="Work Days::"
@@ -670,7 +715,7 @@ function AttendanceLog(props) {
                       <Divider style={{ borderTop: "2px solid #EAEAEA" }} />
                       <Table
                         className="weekDays"
-                        columns={weekdays}
+                        columns={tableHeaders}
                         dataSource={weekData}
                         bordered={false}
                         pagination={false}
@@ -684,7 +729,7 @@ function AttendanceLog(props) {
                         }}
                         wrapperCol={{
                           span: 10,
-                          // offset: 1,
+                          offset: 1,
                         }}
                       >
                         <Select

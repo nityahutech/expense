@@ -207,7 +207,7 @@ function MainDashBoard() {
               alt="example"
               src={Employeelist}
             />
-            <span style={{ paddingTop: "10px" }}>Employee</span>
+            <span style={{ paddingTop: "10px" }}>Employees</span>
           </Card>
         </div>
       </Link>

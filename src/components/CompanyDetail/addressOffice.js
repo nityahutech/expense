@@ -278,7 +278,7 @@ function AddressOffice() {
                       <span>
                         {data ? data.regOffice?.city : null},
                         {data ? data.regOffice?.state : null},
-                        {data ? data.regOffice?.country : null},
+                        {data ? data.regOffice?.country : null}-
                         {data ? data.regOffice?.pincode : null}
                       </span>
                     </Row>

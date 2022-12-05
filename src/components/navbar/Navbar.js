@@ -9,7 +9,7 @@ import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
 import settingsIcon from "../../images/abstractuserflat4.png";
 import logoutIcon from "../../images/logoutsvgrepocom.png";
-import Logo from "../../images/smallerLogo.png";
+import Logo from "../../images/logo22 ss.png";
 import dropdown from "../../images/dropdown.png";
 // ---------------------------------------------------------------------
 

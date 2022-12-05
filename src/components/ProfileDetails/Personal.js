@@ -10,10 +10,16 @@ import {
   Form,
   Divider,
 } from "antd";
-import { CheckOutlined, CloseOutlined, EditFilled } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  EditFilled,
+  UploadOutlined,
+} from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
 import moment from "moment";
+import FormItem from "antd/lib/form/FormItem";
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -97,7 +103,10 @@ function Personal() {
       </Select>
     </Form.Item>
   );
-
+  const layout = {
+    labelCol: { span: 4 },
+    wrapperCol: { span: 12 },
+  };
   return (
     <>
       <div
@@ -454,6 +463,584 @@ function Personal() {
           </Col>
         </Row>
       </div>
+
+      {/* ------------------For testing the new layout */}
+
+      <div
+        className="personalCardDiv"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Row
+          className="Row-Card"
+          style={{
+            width: "75%",
+            margin: "10px",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Col span={24}>
+            <Form
+              form={form}
+              initialValues={{
+                remember: true,
+              }}
+              autoComplete="off"
+              onFinish={onFinish}
+              layout="horizontal"
+            >
+              <Card
+                className="personal"
+                hoverable={true}
+                bordered={true}
+                style={{
+                  width: "100%",
+                  marginTop: 10,
+                  borderRadius: "10px",
+                  cursor: "default",
+                }}
+              >
+                <Row gutter={[16, 16]}>
+                  <Col xs={24} sm={24} md={6} lg={6} xl={6} xxl={6}
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}>
+                    <Button
+                      style={{
+                        width: "150px",
+                        height: "170px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <UploadOutlined /> Upload Photo
+                    </Button>
+                  </Col>
+                  <Col xs={24} sm={24} md={18} lg={18} xl={18} xxl={18}>
+                    {editContent === false ? (
+                    <>
+                      <div
+                        style={{
+                          height:"100%",
+                          width:"100%",
+                          // display: "flex",
+                          // alignItems: 'flex-start',
+                          // justifyContent: "flex-start",
+                          // flexDirection: "column",
+                        }}
+                      >
+                        <div 
+                          style={{
+                            fontWeight:"lighter",
+                            fontSize:"27px",
+                            marginTop:"-12px",
+                            color:"black"}}
+                            >{data ? data.name : "-"}
+                            <Button
+                              className="personal"
+                              type="text"
+                              style={{
+                                color: "black",
+                                display: "none",
+                                paddingLeft:"5px",
+                                position: "absolute",
+                                right: 1,
+                                top: 1,
+                              }}
+                              onClick={() => showEditContent(!editContent)}
+                            >
+                              <EditFilled />
+                            </Button>
+                            <Divider style={{marginTop:"0px",marginBottom:"15px"}}/>
+                        </div>
+                        <Row>
+                        {/* <Col span={6} style={{
+                           display: "flex",
+                           alignItems: 'flex-start',
+                           justifyContent: "flex-start",
+                           flexDirection: "column",
+                        }}>
+                          <span style={{fontWeight:"lighter"}}>Date Of birth:</span>
+                          <span style={{fontWeight:"lighter"}}>Gender:</span>
+                          <span style={{fontWeight:"lighter"}}>Blood Group:</span>
+                          <span style={{fontWeight:"lighter"}}>Marital Status:</span>
+                        </Col> */}
+                        <Col span={24}>
+                          <Row gutter={[16,16]}>
+                          {/* <Col xs={24} sm={24} md={8}>
+                            <div>
+                              <div
+                                style={{
+                                  fontWeight: 600,
+                                  lineHeight: "18px",
+                                  color: "#07182b",
+                                  fontSize: "15px",
+                                  fontFamily: "Open Sans,sans-serif",
+                                }}
+                              >
+                                Name
+                              </div>
+                              {editContent === false ? (
+                                <div>{data ? data.name : null}</div>
+                              ) : (
+                                <Form.Item
+                                  initialValue={data.name}
+                                  name="name"
+                                  rules={[
+                                    {
+                                      required: true,
+                                      minLength: 3,
+                                      maxLength: 50,
+                                      // message: "Please enter First Name",
+                                    },
+                                    {
+                                      pattern: /^[a-zA-Z\s]*$/,
+                                      message: "Please enter Valid Name",
+                                    },
+                                  ]}
+                                >
+                                  <Input
+                                    style={{
+                                      marginTop: "10px",
+                                      width: "100%",
+                                      borderBottom: "1px solid #ccc ",
+                                      paddingLeft: "0px",
+                                    }}
+                                    bordered={false}
+                                    // disabled={true}
+                                    initialValue={data.name ? data.name : null}
+                                    maxLength={50}
+                                    required
+                                    placeholder="Enter Your Name"
+                                    onChange={(e) => {
+                                      const inputval = e.target.value;
+                                      const str = e.target.value;
+                                      const newVal =
+                                        inputval.substring(0, 1).toUpperCase() +
+                                        inputval.substring(1);
+                                      const caps = str
+                                        .split(" ")
+                                        .map(capitalize)
+                                        .join(" ");
+                                      form.setFieldsValue({ name: newVal, name: caps });
+                                    }}
+                                  />
+                                </Form.Item>
+                              )}
+                            </div>
+                          </Col> */}
+                          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                            <div>
+                              <div
+                                style={{
+                                  fontWeight: 600,
+                                  lineHeight: "18px",
+                                  color: "#07182b",
+                                  fontSize: "15px",
+                                  fontFamily: "Open Sans,sans-serif",
+                                }}
+                              >
+                                Date of Birth
+                              </div>
+                              {editContent === false ? (
+                                <div>{data?.dob ? data.dob : "-"}</div>
+                              ) : (
+                                <Form.Item
+                                  initialValue={dob ? moment(dob, "DD-MM-YYYY") : null}
+                                  name="dob"
+                                  rules={[
+                                    {
+                                      required: false,
+                                      message: "Please Choose a Date",
+                                    },
+                                  ]}
+                                >
+                                  {/* format={dateFormatList} */}
+                                  <DatePicker
+                                    style={{
+                                      marginTop: "10px",
+                                      width: "100%",
+                                    }}
+                                    // format={dateFormatList}
+                                    // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
+                                    onChange={(e) => {
+                                      setDob(e.format("DD-MM-YYYY"));
+                                    }}
+                                    //  disabledDate={disabledDate}
+                                    value={dob}
+                                    placeholder="Choose Date"
+                                  />
+                                </Form.Item>
+                              )}
+                            </div>
+                          </Col>
+                          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                            <div>
+                              <div
+                                style={{
+                                  fontWeight: 600,
+                                  lineHeight: "18px",
+                                  color: "#07182b",
+                                  fontSize: "15px",
+                                  fontFamily: "Open Sans,sans-serif",
+                                }}
+                              >
+                                Gender
+                              </div>
+                              {editContent === false ? (
+                                <div>{data ? data.gender : null}</div>
+                              ) : (
+                                <Form.Item
+                                  name="gender"
+                                  initialValue={data.gender ? data.gender : "-"}
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Please Choose Gender",
+                                    },
+                                  ]}
+                                >
+                                  <Select
+                                    placeholder="Select a Gender"
+                                    style={{
+                                      marginTop: "10px",
+                                      width: "100%",
+                                      borderBottom: "1px solid #ccc ",
+                                      paddingLeft: "0px",
+                                    }}
+                                    bordered={false}
+                                  >
+                                    <Option value="Male">Male</Option>
+                                    <Option value="Female">Female</Option>
+                                  </Select>
+                                </Form.Item>
+                              )}
+                            </div>
+                          </Col>
+                          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                            <div>
+                              <div
+                                style={{
+                                  fontWeight: 600,
+                                  lineHeight: "18px",
+                                  color: "#07182b",
+                                  fontSize: "15px",
+                                  fontFamily: "Open Sans,sans-serif",
+                                }}
+                              >
+                                Blood Group
+                              </div>
+                              {editContent === false ? (
+                                <div>{data?.bloodGroup ? data.bloodGroup : "-"}</div>
+                              ) : (
+                                <Form.Item
+                                  initialValue={data ? data.bloodGroup : null}
+                                  name="bloodGroup"
+                                  rules={[
+                                    {
+                                      required: false,
+                                      message: "Please Choose Blood Groop",
+                                    },
+                                  ]}
+                                >
+                                  <Select
+                                    placeholder="Select a Blood Group"
+                                    style={{
+                                      marginTop: "10px",
+                                      width: "100%",
+                                      borderBottom: "1px solid #ccc ",
+                                      paddingLeft: "0px",
+                                    }}
+                                    bordered={false}
+                                  >
+                                    <Option value="A+">A+</Option>
+                                    <Option value="A-">A-</Option>
+                                    <Option value="O+">O+</Option>
+                                    <Option value="O-">O-</Option>
+                                    <Option value="B+">B+</Option>
+                                    <Option value="B-">B-</Option>
+                                    <Option value="AB+">AB+</Option>
+                                    <Option value="AB-">AB-</Option>
+                                  </Select>
+                                </Form.Item>
+                              )}
+                            </div>
+                          </Col>
+                          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                            <div>
+                              <div
+                                style={{
+                                  fontWeight: 600,
+                                  lineHeight: "18px",
+                                  color: "#07182b",
+                                  fontSize: "15px",
+                                  fontFamily: "Open Sans,sans-serif",
+                                }}
+                              >
+                                Marital Status
+                              </div>
+                              {editContent === false ? (
+                                <div>
+                                  {data?.maritalStatus ? data.maritalStatus : "-"}
+                                </div>
+                              ) : (
+                                <Form.Item
+                                  initialValue={data ? data.maritalStatus : null}
+                                  name="maritalStatus"
+                                  rules={[
+                                    {
+                                      required: false,
+                                      message: "Your Marrige Status",
+                                    },
+                                  ]}
+                                >
+                                  <Select
+                                    style={{
+                                      marginTop: "10px",
+                                      width: "100%",
+                                      borderBottom: "1px solid #ccc ",
+                                      paddingLeft: "0px",
+                                    }}
+                                    bordered={false}
+                                  >
+                                    <Option value="Single">Single</Option>
+                                    <Option value="Married">Married</Option>
+                                  </Select>
+                                </Form.Item>
+                              )}
+                            </div>
+                          </Col>
+                          </Row>
+                        </Col>
+                        </Row>
+                      </div>
+                    </>
+                    ) : (
+                    <>
+                    <Row gutter={[16,16]}>
+                      <Col xs={24} sm={24} md={24}>
+                        <Form.Item
+                          label="Name::"
+                          initialValue={data.name}
+                          name="name"
+                          colon
+                          rules={[
+                            {
+                              required: true,
+                              minLength: 3,
+                              maxLength: 50,
+                              // message: "Please enter First Name",
+                            },
+                            {
+                              pattern: /^[a-zA-Z\s]*$/,
+                              message: "Please enter Valid Name",
+                            },
+                          ]}
+                          wrapperCol= {{}}
+                          labelCol= {{ span: 2 }}       
+                        >
+                          <Input
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                            }}
+                            bordered={false}
+                            // disabled={true}
+                            initialValue={data.name ? data.name : null}
+                            maxLength={50}
+                            required
+                            placeholder="Enter Your Name"
+                            onChange={(e) => {
+                              const inputval = e.target.value;
+                              const str = e.target.value;
+                              const newVal =
+                                inputval.substring(0, 1).toUpperCase() +
+                                inputval.substring(1);
+                              const caps = str.split(" ").map(capitalize).join(" ");
+                              form.setFieldsValue({ name: newVal, name: caps });
+                            }}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                        <Form.Item
+                          label="Date Of Birth::"
+                          colon={true}
+                          initialValue={dob ? moment(dob, "DD-MM-YYYY") : null}
+                          name="dob"
+                          rules={[
+                            {
+                              required: false,
+                              message: "Please Choose a Date",
+                            },
+                          ]}
+                          wrapperCol= {{}}
+                          labelCol= {{ span: 6 }}    
+                        >
+                          {/* format={dateFormatList} */}
+                          <DatePicker
+                            style={{
+                              // borderBottom: "1px solid #ccc ",
+                              width: "100%",
+                            }}
+                            // format={dateFormatList}
+                            // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
+                            onChange={(e) => {
+                              setDob(e.format("DD-MM-YYYY"));
+                            }}
+                            //  disabledDate={disabledDate}
+                            value={dob}
+                            placeholder="Choose Date"
+                            // bordered={false}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                        <Form.Item
+                          label="Gender::"
+                          name="gender"
+                          initialValue={data.gender ? data.gender : "-"}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please Choose Gender",
+                            },
+                          ]}
+                          wrapperCol= {{ span: 24, offset:0 }}
+                          labelCol= {{ span: 6 }} 
+                        >
+                          <Select
+                            placeholder="Select a Gender"
+                            style={{
+                              // width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
+                          >
+                            <Option value="Male">Male</Option>
+                            <Option value="Female">Female</Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                        <Form.Item
+                          label="Blood Group::"
+                          initialValue={data ? data.bloodGroup : null}
+                          name="bloodGroup"
+                          rules={[
+                            {
+                              required: false,
+                              message: "Please Choose Blood Groop",
+                            },
+                          ]}
+                          wrapperCol= {{ span: 24, offset:0 }}
+                          labelCol= {{ span: 6 }} 
+                        >
+                          <Select
+                            placeholder="Select a Blood Group"
+                            style={{
+                              // width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
+                          >
+                            <Option value="A+">A+</Option>
+                            <Option value="A-">A-</Option>
+                            <Option value="O+">O+</Option>
+                            <Option value="O-">O-</Option>
+                            <Option value="B+">B+</Option>
+                            <Option value="B-">B-</Option>
+                            <Option value="AB+">AB+</Option>
+                            <Option value="AB-">AB-</Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} sm={24} md={12} lg={812} xl={12} xxl={12}>
+                        <Form.Item
+                          label="Marital Status::"
+                          initialValue={data ? data.maritalStatus : null}
+                          name="maritalStatus"
+                          rules={[
+                            {
+                              required: false,
+                              message: "Your Marrige Status",
+                            },
+                          ]}
+                          wrapperCol= {{ }}
+                          labelCol= {{ span: 6 }} 
+                        >
+                          <Select
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                            }}
+                            bordered={false}
+                          >
+                            <Option value="Single">Single</Option>
+                            <Option value="Married">Married</Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    </>)}
+                  </Col>
+                </Row>
+                {editContent === true ? (
+                  <Row
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "3%",
+                    }}
+                  >
+                    <Button
+                      onClick={() => showEditContent(false)}
+                      type="text"
+                      style={{
+                        fontSize: "14px",
+                        // color: "#1963A6",
+                        // marginRight: "10px",
+                        // border: "1px solid #1963A6",
+                        // width: "90px",
+                      }}
+                    >
+                      <CloseOutlined /> CANCEL
+                    </Button>
+
+                    <Col>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{
+                          marginLeft: "10px",
+                          background: "#1963A6",
+                          width: "90px",
+                        }}
+                      >
+                        <CheckOutlined />
+                        SAVE
+                      </Button>
+                    </Col>
+                  </Row>
+                ) : null}
+              </Card>
+            </Form>
+          </Col>
+        </Row>
+      </div>
+
+      {/* ------------------For testing the new layout */}
 
       <div
         className="personalCardDiv"

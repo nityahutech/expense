@@ -9,6 +9,7 @@ import {
   Table,
   Modal,
   notification,
+  Divider,
 } from "antd";
 import {
   PlusOutlined,
@@ -175,7 +176,7 @@ function CostCenter() {
                   onClick={() => {
 
                     setEditCostCenter(record);
-                    form.resetFields();
+                    editForm.resetFields();
                     setIsCostEditModalOpen(true);
 
                   }}
@@ -210,43 +211,46 @@ function CostCenter() {
   ];
 
   return (
-    <div style={{ background: "#fff" }}>
-      <Card
-        title={
+    <div style={{ margin: "13px", background: "#fff" }}>
+      <div style={{ background: "#FAFAFA" }}>
+        <div 
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <div
             style={{
               fontWeight: "600",
               fontSize: "14px",
               lineHeight: "19px",
-              textTransform: "uppercase",
             }}
           >
-            Organization Cost Center{" "}
+            Organization Cost Center
           </div>
-        }
-        extra={
-          <>
-            <Row>
-              <Col xs={2} sm={24} md={24}>
-                <Button
-                  style={{
-                    width: "100%",
-                    background: "#1963A6",
-                    color: "#ffffff",
-                    borderRadius: "5px",
-                  }}
-                  onClick={showModal}
-                >
-                  <PlusOutlined />
-                  Add Cost Center
-                </Button>
-              </Col>
-            </Row>
-          </>
-        }
-        className="costCenterCard"
-        footer={false}
-      >
+          <div
+            style={{
+              fontWeight: "600",
+              fontSize: "14px",
+              lineHeight: "19px",
+            }}
+          >
+            <Button
+              type="default"
+              onClick={showModal}
+              style={{
+                margin: "10px 10px 0px 0px",
+                background: "#1963A6",
+                color: "#ffffff",
+                borderRadius: "5px",
+              }}
+            >
+              + Add Cost Center
+            </Button>
+          </div>
+        </div>
+        <Divider />
         <Table
           // bordered={true}
           className="costCenterTable"
@@ -256,7 +260,7 @@ function CostCenter() {
           pagination={false}
           scroll={{ x: 600 }}
         />
-      </Card>
+      </div>
 
       <Modal
         title="ORGANIZATION DETAILS"
@@ -392,7 +396,6 @@ function CostCenter() {
         closeIcon={
           <div
             onClick={() => {
-
               setEditCostCenter({})
               editForm.resetFields();
               setIsCostEditModalOpen(false);

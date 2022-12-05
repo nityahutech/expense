@@ -13,75 +13,73 @@ import {
   Space,
   Select,
 } from "antd";
-import { PlusCircleOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "../style/Onboarding.css";
 import CompanyProContext from "../contexts/CompanyProContext";
 import reload from "../images/reload.png";
 const { Option } = Select;
 
 const OrgDetails = (props) => {
-  const [form] = Form.useForm();
   const imgRef = React.useRef(null);
   const [fileName, setFileName] = useState(props.fileName || "");
+  const [imageUrl, setImageUrl] = useState(props.fileName || "");
   const [isBigFile, setIsBigFile] = useState(false);
-  const [orgIdExists, setOrgIdExists] = useState(false);
   const [data, setData] = useState(props.data || {});
-
+  const [newCompId, setNewCompId] = useState(props.data.orgcode || null);
 
   useEffect(() => {
-    // setData()
+    if(newCompId == null) {
+        setNewCompId(CompanyProContext.getOrgId());
+    }
     setFileName(fileName);
     setIsBigFile(false);
   }, []);
 
   const onFinish = async (values) => {
-    if (orgIdExists) {
-      showNotification(
-        "error",
-        "Error",
-        "This Organization Code already exists!"
-      );
-      return;
-    }
-    console.log(fileName, JSON.stringify({...fileName}))
+    delete values.logo
+    console.log("saved")
     localStorage.setItem("OrgDetails", JSON.stringify(values));
-    localStorage.setItem("Logo", JSON.stringify({...fileName}));
+    localStorage.setItem("Logo", imageUrl);
     setData(values);
-  };
-
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
   };
 
   const handleClick = () => {
     imgRef.current.click();
   };
 
+  const getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  };
+
+
   const handleChange = (event) => {
     if (!event) {
       return;
     }
     const fileUploaded = event.target.files[0];
+    getBase64(fileUploaded, (url) => {
+        // setLoading(false);
+        setImageUrl(url);
+    });
     checkFileSize(fileUploaded.size, fileUploaded);
   };
 
-  const validateOrgId = async (rule, value, callback) => {
-    try {
-      let exists = await CompanyProContext.checkOrgIdExists(value);
-      if (exists) {
-        setOrgIdExists(true);
-        throw new Error("this id exists");
-      }
-      setOrgIdExists(false);
-      // return exists;
-    } catch (err) {
-      callback(err.message);
-    }
-    // CompanyProContext.checkOrgIdExists(value)
-  };
+//   const validateOrgId = async (rule, value, callback) => {
+//     try {
+//       let exists = await CompanyProContext.checkOrgIdExists(value);
+//       if (exists) {
+//         setOrgIdExists(true);
+//         throw new Error("this id exists");
+//       }
+//       setOrgIdExists(false);
+//       // return exists;
+//     } catch (err) {
+//       callback(err.message);
+//     }
+//     // CompanyProContext.checkOrgIdExists(value)
+//   };
 
   function checkFileSize(size, fileName) {
     if (Math.round(size / 1024) <= 200) {
@@ -116,7 +114,6 @@ const OrgDetails = (props) => {
   }
 
   function onReset() {
-    form.resetFields();
     setIsBigFile(false);
     setFileName(null);
   }
@@ -132,7 +129,7 @@ const OrgDetails = (props) => {
       </Select>
     </Form.Item>
   );
-        console.log(data, fileName, props)
+        console.log(props)
   return (
     <div style={{ margin: "13px", background: "#fff" }}>
       <div
@@ -149,7 +146,7 @@ const OrgDetails = (props) => {
       <Form
         className="details"
         style={{ padding: "11px" }}
-        form={form}
+        form={props.form}
         layout="vertical"
         labelcol={{
           span: 4,
@@ -161,35 +158,17 @@ const OrgDetails = (props) => {
           remember: true,
         }}
         autoComplete="off"
-        onFinish={onFinish}
+        onFinish={(values) => props.changeSave(values, imageUrl)}
       >
         <Row gutter={[24, 8]}>
           <Col xs={22} sm={15} md={8}>
             <Form.Item
-              initialValue={data?.orgcode}
+              initialValue={newCompId}
               name="orgcode"
               label="Organization Code"
-              onKeyPress={(event) => {
-                if (checkAlphabets(event) && checkNumbervalue(event)) {
-                  event.preventDefault();
-                }
-              }}
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter Organization Code",
-                },
-                {
-                  pattern: /^[0-9A-Za-z]+$/,
-                  message: "Please enter Valid Code",
-                },
-                {
-                  validator: validateOrgId,
-                },
-              ]}
             >
               <Input
-                maxLength={20}
+                disabled
                 placeholder="Organization Code"
                 style={{
                   border: "1px solid #8692A6",
@@ -234,7 +213,7 @@ const OrgDetails = (props) => {
                     inputval.substring(1);
                   const caps = str.split(" ").map(capitalize).join(" ");
                   // setPaidBy(newVal);
-                  form.setFieldsValue({
+                  props.form.setFieldsValue({
                     regCompName: newVal,
                     regCompName: caps,
                   });
@@ -557,11 +536,12 @@ const OrgDetails = (props) => {
                   alignItems: "center",
                 }}
               >
+              <Col>
                 <Button
                   onClick={(e) => handleClick(e)}
                   style={{
-                    width: " 60px",
-                    height: "60px",
+                    width: "60px",
+                    height: "40px",
                     margin: "10px",
                   }}
                 >
@@ -582,32 +562,62 @@ const OrgDetails = (props) => {
                     Upload
                   </span>
                 </Button>
-                {isBigFile ? null : fileName?.name}
+                <Button
+                  onClick={onReset}
+                  style={{
+                    width: "60px",
+                    height: "40px",
+                    margin: "10px",
+                  }}
+                >
+                  <CloseCircleOutlined
+                    style={{
+                      display: "flex",
+                      flexDirection: "column-reverse",
+                      alignItems: "center",
+                    }}
+                  />
+                  <span
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginRight: "8px",
+                    }}
+                  >
+                    Remove
+                  </span>
+                </Button>
+                </Col>
                 {isBigFile
                   ? message.error("File size must be less than 200Kb.")
                   : ""}
                 <input
                   style={{
-                    height: "72px",
-                    marginTop: "11px",
                     display: "none",
                   }}
                   type="file"
-                  // accept="image/gif, image/jpeg, image/png"
                   id="logo"
                   name="logo"
                   ref={imgRef}
                   onChange={(e) => handleChange(e)}
                 />
                 {fileName ? (
-                  ""
+                  <img 
+                    src={imageUrl}
+                    style={{
+                        maxWidth: "120px",
+                        height: "auto",
+                        marginRight: "10px"
+                    }}
+                  />
                 ) : (
                   <p
                     style={{
                       fontWeight: "400",
                       fontSize: "13px",
                       lineHeight: "19px",
-                      marginLeft: "10px",
+                      marginLeft: "5px",
+                      marginTop: "10px",
                     }}
                   >
                     Upload logo. Use the 200 kb size image. PNG or JPEG file
@@ -618,44 +628,6 @@ const OrgDetails = (props) => {
             </Form.Item>
           </Col>
         </Row>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "end",
-            marginRight: "94px",
-          }}
-        >
-          <Space>
-            <Button
-              style={{
-                border: "1px solid #1963A6",
-                color: "#1963A6",
-                fontWeight: "600",
-                fontSize: "14px",
-                lineHeight: "17px",
-                width: "99px",
-              }}
-              onClick={onReset}
-            >
-              Reset
-            </Button>
-            <Button
-              style={{
-                border: "1px solid #1565D8",
-                background: "#1963A6",
-                color: "#ffffff",
-                fontWeight: "600",
-                fontSize: "14px",
-                lineHeight: "17px",
-                width: "99px",
-              }}
-              htmlType="submit"
-            >
-              Save
-            </Button>
-          </Space>
-        </div>
       </Form>
     </div>
   );

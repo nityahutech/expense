@@ -12,48 +12,75 @@
 .expenseTable table tbody tr td {
   padding: 5px 10px;
 }
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 12px;
-    }
-    
-    /* Track */
-    ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey; 
-    border-radius: 10px;
-    }
-    .employeeRow{
-    background: #fff;
-    padding: 10px;
-    border-radius: 5px;
-    margin: 17px 5px;}   
-    
-    .disabled-row{
-      color: #dadada;
-    
-    }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 12px;
+}
 
-    .employeeTable .ant-table-thead>tr>th{
-      background:#1963A6;
-    color: #ffffff;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 18px;
-    }
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+.employeeRow {
+  background: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 17px 5px;
+}
 
-    .editEmployee .ant-modal-content{
-      border-radius: 10px;
-      
-   }
-  
-   .editEmployee .ant-modal-header{
-      border-radius: 10px 10px 0px 0px;
-      background: #043661;
-      color: #ffffff;
-   }
-   .editEmployee .ant-modal-title{
-      color: #ffffff;
-      font-weight: 400;
-      font-size: 18px;
+.disabled-row {
+  color: #dadada;
+}
+
+.employeeTable .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.editEmployee .ant-modal-content {
+  border-radius: 10px;
+}
+
+.editEmployee .ant-modal-header {
+  border-radius: 10px 10px 0px 0px;
+  background: #043661;
+  color: #ffffff;
+}
+.editEmployee .ant-modal-title {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
   line-height: 25px;
-   }
+}
+
+/* //-------------employeeListviews */
+@media (max-width: 600px) {
+  .wrap-one {
+    height: auto;
+  }
+  .header-solid-one {
+    height: 750px;
+    margin-bottom: 0px !important;
+  }
+  .header-solid-two {
+    height: 650px;
+    margin-top: 0px !important;
+  }
+  .header-solid-four {
+    height: 500px;
+  }
+  .divider-one {
+    display: none;
+  }
+  .form-item {
+    display: flex;
+    flex-direction: row;
+  }
+  .ant-card .header-solid {
+    margin-bottom: "0px";
+  }
+}

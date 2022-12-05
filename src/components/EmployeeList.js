@@ -7,8 +7,10 @@ import "../style/EmployeeList.css";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import EmployeeListview from "./EmployeeListview";
 
+
 function EmployeeList() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [certificationDetails, setCertificationDetails] = useState([]);
   const [isProfileModal, setIsProfileModal] = useState(false);
   const [editedRecord, setEditedRecord] = useState(null);
   const [showRecord, setshowRecord] = useState([]);
@@ -170,38 +172,40 @@ function EmployeeList() {
         return (
           record.disabled === false && (
             <>
-              <Button
-                type="link"
-                className="show"
-                // style={{ width: "40px" }}
-                onClick={() => {
-                  setIsProfileModal(true)
-                  showViewModal(record);
-                }}
-              >
-                {<EyeFilled />}
-              </Button>
+              <div className="employee-button" style={{ display: 'flex', flexDirection: 'row' }}>
+                <Button
+                  type="link"
+                  className="show"
+                  // style={{ width: "40px" }}
+                  onClick={() => {
+                    setIsProfileModal(true)
+                    showViewModal(record);
 
-              <Button
-                style={{ padding: 0, color: "rgb(64, 169, 255)" }}
-                type="link"
-                className="edIt"
-                onClick={() => {
-                  handleEditEmployee(record);
-                  showModal(record);
-                }}
-              >
-                {<EditFilled />}
-              </Button>
-              <Button
-                type="link"
-                className="deleTe"
-                onClick={(e) => {
-                  onDelete(record.sn - 1, e);
-                }}
-              >
-                <DeleteFilled />
-              </Button>
+                  }}
+                >
+                  {<EyeFilled />}
+                </Button>
+                <Button
+                  style={{ padding: 0, color: "rgb(64, 169, 255)" }}
+                  type="link"
+                  className="edIt"
+                  onClick={() => {
+                    handleEditEmployee(record);
+                    showModal(record);
+                  }}
+                >
+                  {<EditFilled />}
+                </Button>
+                <Button
+                  type="link"
+                  className="deleTe"
+                  onClick={(e) => {
+                    onDelete(record.sn - 1, e);
+                  }}
+                >
+                  <DeleteFilled />
+                </Button>
+              </div>
             </>
           )
         );
@@ -216,11 +220,11 @@ function EmployeeList() {
   };
   const showViewModal = (record) => {
     setshowRecord(record)
+    setCertificationDetails(record)
     // setIsModalVisible(true);
   };
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
+
+
   const handleEditEmployee = (record) => {
     setEditedRecord(record);
   };
@@ -240,8 +244,11 @@ function EmployeeList() {
     setData(d);
     setFilterEmployees(d);
     setAllEmployees(d);
+    setCertificationDetails(d)
     setLoading(false);
   }
+
+
   const searchChange = (e) => {
     let search = e.target.value;
     // setFilterCriteria({ ...filterCriteria, search: search });
@@ -377,6 +384,8 @@ function EmployeeList() {
           height: 440,
           overflowY: "scroll",
           overflowX: "hidden",
+          backgroundColor: '#d0d0d0',
+          marginLeft: '0px'
         }}
         width={850}
         centered
@@ -395,12 +404,17 @@ function EmployeeList() {
           </div>
         }
 
+
       >
         <EmployeeListview
           className="Edit"
           showRecord={showRecord}
           setIsProfileModal={setIsProfileModal}
           getData={getData}
+          certificationDetails={certificationDetails}
+
+
+
         />
       </Modal>
     </Layout>

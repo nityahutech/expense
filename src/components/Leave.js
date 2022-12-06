@@ -7,9 +7,11 @@ import {
   Calendar,
   Modal,
   Tag,
+  Tabs,
   notification,
   DatePicker,
-  Spin
+  Spin,
+  Search,
 } from "antd";
 import { Button } from "antd";
 import { Form, Input } from "antd";
@@ -23,6 +25,7 @@ import HolidayList from "./HolidayList";
 import "../style/leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
 import LeaveCreate from "./LeaveCreate";
+import FormItem from "antd/es/form/FormItem";
 
 const Leave = (props) => {
   const page = "leavePage"
@@ -850,9 +853,388 @@ const Leave = (props) => {
     }
     return false
   }
+  const { RangePicker } = DatePicker;
+
+  const onSearch = (value) => console.log(value);
+
+  const { Search } = Input;
+
   return (
     <>
-      <Row
+     
+
+      {props.roleView === "admin" ? (
+      <div>
+        <Tabs defaultActiveKey="1"
+          style={{
+            display: "none",
+            padding: 24,
+            display: "flex",
+            width:"100%",
+          }} 
+          >
+        <Tabs.TabPane tab="Leave Request" key="1">
+
+          <Row
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              alignContent: "flex-start",
+              backgroundColor: "white",
+              borderRadius: "10px",
+              padding: "10px",
+              marginTop: "10px",
+            }}
+          >
+            <Col
+              span={24}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                alignContent: "flex-start",
+                color: "black",
+                width: "100rem",
+              }}
+            >
+              <h3>All Requests</h3>
+            </Col>
+
+            <Col
+              xl={24}
+              lg={24}
+              md={24}
+              sm={24}
+              xs={24}
+              style={{
+                background: "flex",
+                padding: "10px",
+              }}
+            >
+              <div >
+                <Table
+                  className="leaveTable"
+                  columns={reqColumns}
+                  dataSource={requests}
+                  pagination={{
+                    position: ["bottomCenter"],
+                  }}
+                  scroll={{ x: 600 }}
+                  size="small"
+
+                />
+              </div>
+            </Col>
+          </Row>
+
+          <Row 
+            gutter={[16,16]}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              backgroundColor: "white",
+              borderRadius: "10px",
+              padding: "10px",
+              marginTop: "10px",
+            }}
+          >
+            <Col span={6}><RangePicker /></Col>
+            <Col span={6}>
+              <Search
+                placeholder="input search text"
+                onSearch={onSearch}
+              />
+            </Col>
+            <Col span={6}>
+              <Form.Item
+                label="Nature of Leave::"
+                style={{paddingBottom:"0px"}}
+              >
+              <Select
+                defaultValue="Loss Of Pay"
+                options={[
+                  {
+                    value: 'CL',
+                    label: 'CL',
+                  },
+                  {
+                    value: 'EL',
+                    label: 'EL',
+                  },
+                ]}
+              />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+            <Form.Item
+                label="Nature of Leave::"
+              >
+            <Select
+                defaultValue="Loss Of Pay"
+                options={[
+                  {
+                    value: 'CL',
+                    label: 'CL',
+                  },
+                  {
+                    value: 'EL',
+                    label: 'EL',
+                  },
+                ]}
+              />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              alignContent: "flex-start",
+              backgroundColor: "white",
+              borderRadius: "10px",
+              padding: "10px",
+              marginTop: "10px",
+            }}
+          >
+            <Col
+              span={24}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                alignContent: "flex-start",
+                color: "black",
+                width: "100rem",
+              }}
+            >
+              <h3>All Requests</h3>
+            </Col>
+
+            <Col
+              xl={24}
+              lg={24}
+              md={24}
+              sm={24}
+              xs={24}
+              style={{
+                background: "flex",
+                padding: "10px",
+              }}
+            >
+              <div className="history-table">
+                <Table
+                  className="leaveTable"
+                  columns={reqColumns}
+                  dataSource={allRequests}
+                  pagination={{
+                    position: ["bottomCenter"],
+                  }}
+                  scroll={{ x: 600 }}
+                  size="small"
+                />
+              </div>
+            </Col>
+          </Row>
+
+          <Row
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              alignContent: "flex-start",
+              backgroundColor: "white",
+              borderRadius: "10px",
+              padding: "10px",
+              marginTop: "10px",
+            }}
+          >
+            <Col
+              span={24}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                alignContent: "flex-start",
+                color: "black",
+                width: "100rem",
+              }}
+            >
+              <h3>Employee Leave History</h3>
+            </Col>
+
+            <Col
+              xl={24}
+              lg={24}
+              md={24}
+              sm={24}
+              xs={24}
+              style={{
+                background: "flex",
+                padding: "10px",
+              }}
+            >
+              <div className="history-table">
+                <Table
+                  className="leaveTable "
+                  columns={columns}
+                  dataSource={leaves}
+                  pagination={{
+                    position: ["bottomCenter"],
+                  }}
+                  scroll={{ x: 600 }}
+                  size="small"
+                />
+              </div>
+            </Col>
+          </Row>
+
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Holidays" key="2">
+          <card>
+            <div
+              className="calender-div"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+
+              }}
+            >
+              <div
+                className="badge-div"
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  backgroundColor: "white",
+                  justifyContent: "space-between",
+                  paddingTop: "0px",
+                  borderTopLeftRadius: "10px",
+                  borderTopRightRadius: "10px",
+                }}
+              >
+                
+                <div
+                  className="rep-div"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Button
+                    className="reprentation"
+                    style={{
+                      cursor: 'default',
+                      marginLeft: '10px',
+                      marginRight: "5px", marginTop: '10px',
+                      backgroundColor: "rgba(15, 255, 80, 0.2)",
+                    }}
+                  >
+                    <h5
+                      style={{ color: "rgb(0, 128, 0)" }}
+                      className="rep-text"
+                    >
+                      Leave
+                    </h5>
+                  </Button>
+                  <Button
+                    className="reprentation"
+                    style={{
+                      cursor: 'default',
+                      marginRight: "5px", marginTop: '10px',
+                      backgroundColor: "rgba(154, 214, 224, 0.96)",
+                    }}
+                  >
+                    <h5
+                      style={{ color: "rgba(0, 119, 137, 0.96)" }}
+                      className="rep-text"
+                    >
+                      Optional Holiday
+                    </h5>
+                  </Button>
+                  <Button
+                    className="reprentation"
+                    style={{
+                      cursor: 'default',
+                      marginRight: "5px", marginTop: '10px',
+                      backgroundColor: "rgba(252, 143, 10,0.2)",
+                    }}
+                  >
+                    <h5
+                      style={{ color: "rgba(252, 143, 10, 1)" }}
+                      className="rep-text"
+                    >
+                      Official Holiday
+                    </h5>
+                  </Button>
+                  <Button
+                    className="reprentation"
+                    style={{
+                      cursor: 'default',
+                      marginRight: "5px", marginTop: '10px',
+                      backgroundColor: "rgba(74, 67, 67,0.2)",
+                    }}
+                  >
+                    <h5
+                      style={{ color: "rgba(74, 67, 67, 1)" }}
+                      className="rep-text"
+                    >
+                      Weekly Off
+                    </h5>
+                  </Button>
+                </div>
+                <div className='holiday-button' style={{ display: 'flex' }}>
+                  <div>
+                    <HolidayList isHr={isHr} refreshCalendar={getHoliday} />
+                  </div>
+                  <div className="resp-leaveButton" style={{
+                    display: 'flex',
+                    alignContent: 'center',
+                    alignItems: 'center'
+                  }}>
+                    <div>
+                      <LeaveCreate isHr={isHr} refresh={getConfigurations} />
+                    </div>
+                    <Button className="button-applyleave"
+                      style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '0px' }}
+                      type="default" onClick={() => { setSecondModal(true) }}>
+                      Apply Leave
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              <Calendar
+                style={{
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                  borderBottomLeftRadius: "10px",
+                  borderBottomRightRadius: "10px",
+                }}
+                value={date}
+                onChange={setDate}
+                dateCellRender={dateCellRender}
+                disabledDate={disabledCalendarDate}
+
+              />
+
+            </div>
+          </card>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Leave Type" key="3">
+          Content of Tab Pane 3
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Approvals" key="4">
+          Content of Tab Pane 4 
+        </Tabs.TabPane>
+      </Tabs>
+      </div>
+      ) : (
+      <>
+       <Row
         style={{
           display: "none",
           padding: 24,
@@ -966,7 +1348,6 @@ const Leave = (props) => {
 
           </div>
         </Col>
-        {/* </Col> */}
 
         <Col
           xl={24} lg={24} md={24} sm={24} xs={24} span={2}
@@ -974,7 +1355,7 @@ const Leave = (props) => {
             marginTop: "10px",
           }}
         >
-          {/* <HolidayList isHr={isHr} refreshCalendar={addNewHoliday} /> */}
+          
           <div
             className="calender-div"
             style={{
@@ -996,7 +1377,7 @@ const Leave = (props) => {
                 borderTopRightRadius: "10px",
               }}
             >
-              {/* <Typography.Title level={4} >Calendar</Typography.Title> */}
+              
               <div
                 className="rep-div"
                 style={{
@@ -1133,7 +1514,7 @@ const Leave = (props) => {
               style={{
                 background: "flex",
                 padding: "10px",
-                // width: "400px",
+               
               }}
             >
               <Form
@@ -1146,7 +1527,7 @@ const Leave = (props) => {
                 }}
                 form={form}
                 onFinish={onFinish}
-              // layout="vertical"
+              
               >
 
                 <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-around' }}>
@@ -1837,6 +2218,8 @@ const Leave = (props) => {
           </Col>
         </Row>
       </Modal>
+      </>)}
+
     </>
   );
 };

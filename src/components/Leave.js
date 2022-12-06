@@ -861,1364 +861,1364 @@ const Leave = (props) => {
 
   return (
     <>
-     
+
 
       {props.roleView === "admin" ? (
-      <div>
-        <Tabs defaultActiveKey="1"
-          style={{
-            display: "none",
-            padding: 24,
-            display: "flex",
-            width:"100%",
-          }} 
-          >
-        <Tabs.TabPane tab="Leave Request" key="1">
-
-          <Row
+        <div>
+          <Tabs defaultActiveKey="1"
             style={{
+              display: "none",
+              padding: 24,
               display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignContent: "flex-start",
-              backgroundColor: "white",
-              borderRadius: "10px",
-              padding: "10px",
-              marginTop: "10px",
+              width: "100%",
             }}
           >
-            <Col
-              span={24}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                alignContent: "flex-start",
-                color: "black",
-                width: "100rem",
-              }}
-            >
-              <h3>All Requests</h3>
-            </Col>
+            <Tabs.TabPane tab="Leave Request" key="1">
 
-            <Col
-              xl={24}
-              lg={24}
-              md={24}
-              sm={24}
-              xs={24}
-              style={{
-                background: "flex",
-                padding: "10px",
-              }}
-            >
-              <div >
-                <Table
-                  className="leaveTable"
-                  columns={reqColumns}
-                  dataSource={requests}
-                  pagination={{
-                    position: ["bottomCenter"],
-                  }}
-                  scroll={{ x: 600 }}
-                  size="small"
-
-                />
-              </div>
-            </Col>
-          </Row>
-
-          <Row 
-            gutter={[16,16]}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              backgroundColor: "white",
-              borderRadius: "10px",
-              padding: "10px",
-              marginTop: "10px",
-            }}
-          >
-            <Col span={6}><RangePicker /></Col>
-            <Col span={6}>
-              <Search
-                placeholder="input search text"
-                onSearch={onSearch}
-              />
-            </Col>
-            <Col span={6}>
-              <Form.Item
-                label="Nature of Leave::"
-                style={{paddingBottom:"0px"}}
-              >
-              <Select
-                defaultValue="Loss Of Pay"
-                options={[
-                  {
-                    value: 'CL',
-                    label: 'CL',
-                  },
-                  {
-                    value: 'EL',
-                    label: 'EL',
-                  },
-                ]}
-              />
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-            <Form.Item
-                label="Nature of Leave::"
-              >
-            <Select
-                defaultValue="Loss Of Pay"
-                options={[
-                  {
-                    value: 'CL',
-                    label: 'CL',
-                  },
-                  {
-                    value: 'EL',
-                    label: 'EL',
-                  },
-                ]}
-              />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignContent: "flex-start",
-              backgroundColor: "white",
-              borderRadius: "10px",
-              padding: "10px",
-              marginTop: "10px",
-            }}
-          >
-            <Col
-              span={24}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                alignContent: "flex-start",
-                color: "black",
-                width: "100rem",
-              }}
-            >
-              <h3>All Requests</h3>
-            </Col>
-
-            <Col
-              xl={24}
-              lg={24}
-              md={24}
-              sm={24}
-              xs={24}
-              style={{
-                background: "flex",
-                padding: "10px",
-              }}
-            >
-              <div className="history-table">
-                <Table
-                  className="leaveTable"
-                  columns={reqColumns}
-                  dataSource={allRequests}
-                  pagination={{
-                    position: ["bottomCenter"],
-                  }}
-                  scroll={{ x: 600 }}
-                  size="small"
-                />
-              </div>
-            </Col>
-          </Row>
-
-          <Row
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignContent: "flex-start",
-              backgroundColor: "white",
-              borderRadius: "10px",
-              padding: "10px",
-              marginTop: "10px",
-            }}
-          >
-            <Col
-              span={24}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                alignContent: "flex-start",
-                color: "black",
-                width: "100rem",
-              }}
-            >
-              <h3>Employee Leave History</h3>
-            </Col>
-
-            <Col
-              xl={24}
-              lg={24}
-              md={24}
-              sm={24}
-              xs={24}
-              style={{
-                background: "flex",
-                padding: "10px",
-              }}
-            >
-              <div className="history-table">
-                <Table
-                  className="leaveTable "
-                  columns={columns}
-                  dataSource={leaves}
-                  pagination={{
-                    position: ["bottomCenter"],
-                  }}
-                  scroll={{ x: 600 }}
-                  size="small"
-                />
-              </div>
-            </Col>
-          </Row>
-
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Holidays" key="2">
-          <card>
-            <div
-              className="calender-div"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-
-              }}
-            >
-              <div
-                className="badge-div"
+              <Row
                 style={{
                   display: "flex",
                   flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignContent: "flex-start",
                   backgroundColor: "white",
-                  justifyContent: "space-between",
-                  paddingTop: "0px",
-                  borderTopLeftRadius: "10px",
-                  borderTopRightRadius: "10px",
+                  borderRadius: "10px",
+                  padding: "10px",
+                  marginTop: "10px",
                 }}
               >
-                
-                <div
-                  className="rep-div"
+                <Col
+                  span={24}
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    justifyContent: "center",
+                    justifyContent: "space-evenly",
+                    alignContent: "flex-start",
+                    color: "black",
+                    width: "100rem",
                   }}
                 >
-                  <Button
-                    className="reprentation"
-                    style={{
-                      cursor: 'default',
-                      marginLeft: '10px',
-                      marginRight: "5px", marginTop: '10px',
-                      backgroundColor: "rgba(15, 255, 80, 0.2)",
-                    }}
-                  >
-                    <h5
-                      style={{ color: "rgb(0, 128, 0)" }}
-                      className="rep-text"
-                    >
-                      Leave
-                    </h5>
-                  </Button>
-                  <Button
-                    className="reprentation"
-                    style={{
-                      cursor: 'default',
-                      marginRight: "5px", marginTop: '10px',
-                      backgroundColor: "rgba(154, 214, 224, 0.96)",
-                    }}
-                  >
-                    <h5
-                      style={{ color: "rgba(0, 119, 137, 0.96)" }}
-                      className="rep-text"
-                    >
-                      Optional Holiday
-                    </h5>
-                  </Button>
-                  <Button
-                    className="reprentation"
-                    style={{
-                      cursor: 'default',
-                      marginRight: "5px", marginTop: '10px',
-                      backgroundColor: "rgba(252, 143, 10,0.2)",
-                    }}
-                  >
-                    <h5
-                      style={{ color: "rgba(252, 143, 10, 1)" }}
-                      className="rep-text"
-                    >
-                      Official Holiday
-                    </h5>
-                  </Button>
-                  <Button
-                    className="reprentation"
-                    style={{
-                      cursor: 'default',
-                      marginRight: "5px", marginTop: '10px',
-                      backgroundColor: "rgba(74, 67, 67,0.2)",
-                    }}
-                  >
-                    <h5
-                      style={{ color: "rgba(74, 67, 67, 1)" }}
-                      className="rep-text"
-                    >
-                      Weekly Off
-                    </h5>
-                  </Button>
-                </div>
-                <div className='holiday-button' style={{ display: 'flex' }}>
-                  <div>
-                    <HolidayList isHr={isHr} refreshCalendar={getHoliday} />
-                  </div>
-                  <div className="resp-leaveButton" style={{
-                    display: 'flex',
-                    alignContent: 'center',
-                    alignItems: 'center'
-                  }}>
-                    <div>
-                      <LeaveCreate isHr={isHr} refresh={getConfigurations} />
-                    </div>
-                    <Button className="button-applyleave"
-                      style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '0px' }}
-                      type="default" onClick={() => { setSecondModal(true) }}>
-                      Apply Leave
-                    </Button>
-                  </div>
-                </div>
-              </div>
+                  <h3>All Requests</h3>
+                </Col>
 
-              <Calendar
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                  }}
+                >
+                  <div >
+                    <Table
+                      className="leaveTable"
+                      columns={reqColumns}
+                      dataSource={requests}
+                      pagination={{
+                        position: ["bottomCenter"],
+                      }}
+                      scroll={{ x: 600 }}
+                      size="small"
+
+                    />
+                  </div>
+                </Col>
+              </Row>
+
+              {/* <Row
+                gutter={[16, 16]}
                 style={{
-                  paddingLeft: "10px",
-                  paddingRight: "10px",
-                  borderBottomLeftRadius: "10px",
-                  borderBottomRightRadius: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  padding: "10px",
+                  marginTop: "10px",
                 }}
-                value={date}
-                onChange={setDate}
-                dateCellRender={dateCellRender}
-                disabledDate={disabledCalendarDate}
-
-              />
-
-            </div>
-          </card>
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Leave Type" key="3">
-          Content of Tab Pane 3
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Approvals" key="4">
-          Content of Tab Pane 4 
-        </Tabs.TabPane>
-      </Tabs>
-      </div>
-      ) : (
-      <>
-       <Row
-        style={{
-          display: "none",
-          padding: 24,
-          background: "#fff",
-          minHeight: 150,
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-          backgroundColor: "#e9eaea",
-        }}
-        gutter={[16, 0]}
-      >
-        <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-          <div className="leavediv">
-            {leavedays != null ?
-              (Object.keys(leavedays).map((user, id) => {
-                return (
-                  <div
-                    className="Col-2-center"
-                    style={{ background: colors[id], color: "#fff" }}
+              >
+                <Col span={6}><RangePicker /></Col>
+                <Col span={6}>
+                  <Search
+                    placeholder="input search text"
+                    onSearch={onSearch}
+                  />
+                </Col>
+                <Col span={6}>
+                  <Form.Item
+                    label="Nature of Leave::"
+                    style={{ paddingBottom: "0px" }}
                   >
-                    <p
-                      className="heading"
-                      style={{
-                        fontWeight: "500",
-                        fontSize: "20px",
-                      }}
-                    >
-                      {user}
-                    </p>
+                    <Select
+                      defaultValue="Loss Of Pay"
+                      options={[
+                        {
+                          value: 'CL',
+                          label: 'CL',
+                        },
+                        {
+                          value: 'EL',
+                          label: 'EL',
+                        },
+                      ]}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item
+                    label="Nature of Leave::"
+                  >
+                    <Select
+                      defaultValue="Loss Of Pay"
+                      options={[
+                        {
+                          value: 'CL',
+                          label: 'CL',
+                        },
+                        {
+                          value: 'EL',
+                          label: 'EL',
+                        },
+                      ]}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row> */}
 
-                    <div
-                      className="total-leave"
-                      style={{
-                        width: "90%",
-                      }}
-                    >
-                      <div className="leave-status">
-                        <p
-                          className="leave"
-                          Total
-                          style={{
-                            fontWeight: "500",
-                            fontSize: "15px",
-                            margin: "0px",
-                          }}
-                        >
-                          Total
-                        </p>
-                        <p
-                          style={{
-                            fontWeight: "500",
-                            fontSize: "15px",
-                            margin: "0px",
-                          }}
-                        >
-                          {totaldays[user]}
-                        </p>
-                      </div>
-
-                      <div className="leave-status">
-                        <p
-                          className="leave"
-                          Total
-                          style={{
-                            fontWeight: "500",
-                            fontSize: "15px",
-                            margin: "0px",
-                          }}
-                        >
-                          Availed
-                        </p>
-                        <p
-                          style={{
-                            fontWeight: "500",
-                            fontSize: "15px",
-                            margin: "0px",
-                          }}
-                        >
-                          {totaldays[user] - leavedays[user]}
-                        </p>
-                      </div>
-
-                      <div className="leave-status">
-                        <p
-                          className="leave"
-                          Total
-                          style={{
-                            fontWeight: "500",
-                            fontSize: "15px",
-                            margin: "0px",
-                          }}
-                        >
-                          Remaining
-                        </p>
-                        <p
-                          style={{
-                            fontWeight: "500",
-                            fontSize: "15px",
-                            margin: "0px",
-                          }}
-                        >
-                          {leavedays[user]}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              }))
-              : null}
-
-          </div>
-        </Col>
-
-        <Col
-          xl={24} lg={24} md={24} sm={24} xs={24} span={2}
-          style={{
-            marginTop: "10px",
-          }}
-        >
-          
-          <div
-            className="calender-div"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-
-            }}
-          >
-            <div
-              className="badge-div"
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                backgroundColor: "white",
-                justifyContent: "space-between",
-                paddingTop: "0px",
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px",
-              }}
-            >
-              
-              <div
-                className="rep-div"
+              <Row
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  justifyContent: "center",
+                  justifyContent: "space-evenly",
+                  alignContent: "flex-start",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  padding: "10px",
+                  marginTop: "10px",
                 }}
               >
-                <Button
-                  className="reprentation"
+                <Col
+                  span={24}
                   style={{
-                    cursor: 'default',
-                    marginLeft: '10px',
-                    marginRight: "5px", marginTop: '10px',
-                    backgroundColor: "rgba(15, 255, 80, 0.2)",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignContent: "flex-start",
+                    color: "black",
+                    width: "100rem",
                   }}
                 >
-                  <h5
-                    style={{ color: "rgb(0, 128, 0)" }}
-                    className="rep-text"
-                  >
-                    Leave
-                  </h5>
-                </Button>
-                <Button
-                  className="reprentation"
+                  <h3>All Requests</h3>
+                </Col>
+
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
                   style={{
-                    cursor: 'default',
-                    marginRight: "5px", marginTop: '10px',
-                    backgroundColor: "rgba(154, 214, 224, 0.96)",
+                    background: "flex",
+                    padding: "10px",
                   }}
                 >
-                  <h5
-                    style={{ color: "rgba(0, 119, 137, 0.96)" }}
-                    className="rep-text"
-                  >
-                    Optional Holiday
-                  </h5>
-                </Button>
-                <Button
-                  className="reprentation"
-                  style={{
-                    cursor: 'default',
-                    marginRight: "5px", marginTop: '10px',
-                    backgroundColor: "rgba(252, 143, 10,0.2)",
-                  }}
-                >
-                  <h5
-                    style={{ color: "rgba(252, 143, 10, 1)" }}
-                    className="rep-text"
-                  >
-                    Official Holiday
-                  </h5>
-                </Button>
-                <Button
-                  className="reprentation"
-                  style={{
-                    cursor: 'default',
-                    marginRight: "5px", marginTop: '10px',
-                    backgroundColor: "rgba(74, 67, 67,0.2)",
-                  }}
-                >
-                  <h5
-                    style={{ color: "rgba(74, 67, 67, 1)" }}
-                    className="rep-text"
-                  >
-                    Weekly Off
-                  </h5>
-                </Button>
-              </div>
-              <div className='holiday-button' style={{ display: 'flex' }}>
-                <div>
-                  <HolidayList isHr={isHr} refreshCalendar={getHoliday} />
-                </div>
-                <div className="resp-leaveButton" style={{
-                  display: 'flex',
-                  alignContent: 'center',
-                  alignItems: 'center'
-                }}>
-                  <div>
-                    <LeaveCreate isHr={isHr} refresh={getConfigurations} />
+                  <div className="history-table">
+                    <Table
+                      className="leaveTable"
+                      columns={reqColumns}
+                      dataSource={allRequests}
+                      pagination={{
+                        position: ["bottomCenter"],
+                      }}
+                      scroll={{ x: 600 }}
+                      size="small"
+                    />
                   </div>
-                  <Button className="button-applyleave"
-                    style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '0px' }}
-                    type="default" onClick={() => { setSecondModal(true) }}>
-                    Apply Leave
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            <Calendar
-              style={{
-                paddingLeft: "10px",
-                paddingRight: "10px",
-                borderBottomLeftRadius: "10px",
-                borderBottomRightRadius: "10px",
-              }}
-              value={date}
-              onChange={setDate}
-              dateCellRender={dateCellRender}
-              disabledDate={disabledCalendarDate}
-
-            />
-
-          </div>
-        </Col>
-
-        <Modal className='viewAppraisal'
-          bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
-          footer={null}
-          title="Apply Leave"
-          centered
-          visible={secondModal}
-          width={450}
-          closeIcon={
-            <div
-              onClick={() => {
-                setSecondModal(false);
-              }}
-              style={{ color: "#ffffff" }}
-            >
-              X
-            </div>
-          }
-        >
-          <Row
-            className="apply-leave"
-            style={{
-              marginTop: "10px",
-            }}
-          >
-            <Col xl={24} lg={24} md={24} sm={24} xs={24}
-              style={{
-                background: "flex",
-                padding: "10px",
-               
-              }}
-            >
-              <Form
-                {...Leave}
-                labelCol={{
-                  span: 8,
+                </Col>
+              </Row>
+              {/* 
+              <Row
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignContent: "flex-start",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  padding: "10px",
+                  marginTop: "10px",
                 }}
-                wrapperCol={{
-                  span: 16,
-                }}
-                form={form}
-                onFinish={onFinish}
-              
               >
+                <Col
+                  span={24}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignContent: "flex-start",
+                    color: "black",
+                    width: "100rem",
+                  }}
+                >
+                  <h3>Employee Leave History</h3>
+                </Col>
 
-                <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-around' }}>
-                  <Col xl={24} lg={24} md={24} sm={24} xs={24} >
-                    <Form.Item required={false}
-                      labelAlign="left"
-                      style={{
-                        marginBottom: "20px",
-                        color: "white",
-                        minWidth: "70px",
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                  }}
+                >
+                  <div className="history-table">
+                    <Table
+                      className="leaveTable "
+                      columns={columns}
+                      dataSource={leaves}
+                      pagination={{
+                        position: ["bottomCenter"],
                       }}
-                      label={
-                        <label style={{ color: "black", fontWeight: "400" }}>
-                          Start Date<span style={{ color: "red" }}> *</span>
-                        </label>
-                      }
-                      name="dateStart"
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Please Select Date',
-                        },
-                      ]}
-                    >
-                      <DatePicker
-                        style={{ width: "100%" }}
-                        format="Do MMM, YYYY"
-                        onChange={(e) => {
-                          setDateStart(e);
-                          onLeaveDateChange();
-                        }}
-                        disabledDate={disabledDate}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col xl={24} lg={24} md={24} sm={24} xs={24} >
-                    <Form.Item
-                      labelAlign="left"
-                      name="slotStart"
-                      style={{ marginBottom: "25px", }}
-                      className="div-slot"
-                      label={
-                        <label style={{ color: "black", fontWeight: "400" }}>
-                          Start Slot<span style={{ color: "red" }}> *</span>
-                        </label>
-                      }
-                      initialValue={"Full Day"}
-                    >
-                      <Select
-                        style={{ width: "100%" }}
-                        onChange={(e) => {
-                          setStartSlot(e);
-                          onLeaveDateChange();
-                        }}
-                      >
-                        <Option value="Full Day">Full Day</Option>
-                        <Option value="Half Day">Half Day</Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                </Row>
+                      scroll={{ x: 600 }}
+                      size="small"
+                    />
+                  </div>
+                </Col>
+              </Row> */}
 
-                <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                  <Col xl={24} lg={24} md={24} sm={24} xs={24} >
-                    <Form.Item required={false}
-                      labelAlign="left"
-                      style={{ marginBottom: "20px", color: "white", }}
-                      label={
-                        <label style={{ color: "black", fontWeight: "400" }}>
-                          End Date<span style={{ color: "red" }}> *</span>
-                        </label>
-                      }
-                      name="dateEnd"
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Please Select Date',
-                        },
-                      ]}
-                    >
-                      <DatePicker
-                        style={{ width: "100%" }}
-                        format="Do MMM, YYYY"
-                        onChange={(e) => {
-                          setDateEnd(e);
-                          onLeaveDateChange(e);
-                        }}
-                        disabledDate={disabledDate}
-                        disabled={disableEnd()}
-                      />
-                    </Form.Item>
-                  </Col>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Holidays" key="2">
+              <card>
+                <div
+                  className="calender-div"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
 
-                  <Col xl={24} lg={24} md={24} sm={24} xs={24} >
-                    <Form.Item
-                      labelAlign="left"
-                      name="slotEnd"
-                      style={{ marginBottom: "25px", }}
-                      className="div-slot"
-                      label={
-                        <label style={{ color: "black", fontWeight: "400" }}>
-                          End Slot<span style={{ color: "red" }}> *</span>
-                        </label>
-                      }
-                      initialValue={"Full Day"}
-                    >
-                      <Select
-                        style={{ width: "100%" }}
-                        disabled={disableEndSlot()}
-                        onChange={(e) => {
-                          setEndSlot(e);
-                          onLeaveDateChange();
-                        }}
-                      >
-                        <Option value="Full Day">Full Day</Option>
-                        <Option value="Half Day">Half Day</Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                </Row>
-
-                <Form.Item required={false}
-                  labelAlign="left"
-                  name="leaveNature"
-                  style={{ marginBottom: "20px" }}
-                  label={
-                    <label style={{ color: "black", fontWeight: "400" }}>
-                      Nature of Leave<span style={{ color: "red" }}> *</span>
-                    </label>
-                  }
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Select Nature of Leave',
-                    },
-                  ]}
-                >
-                  <Select
-                    placeholder="Select an option"
-                    allowClear
-                    disabled={disableNature()}
-                    onChange={onLeaveNatureChange}
-                  >
-                    {leavedays != null ?
-                      (Object.keys(leavedays).map((u) => (
-                        <Option
-                          disabled={disabledLeaveNature(u)}
-                          value={u}
-                        >
-                          {u}
-                        </Option>
-                      )))
-                      : null}
-                    <Option value={"Loss of Pay"}>Loss of Pay</Option>
-                  </Select>
-                </Form.Item>
-
-                <Form.Item required={false}
-                  labelAlign="left"
-                  name="reason"
-                  style={{ marginBottom: "20px" }}
-                  label={
-                    <label style={{ color: "black", fontWeight: "400" }}>
-                      Reason<span style={{ color: "red" }}> *</span>{" "}
-                    </label>
-                  }
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Enter a Reason"
-                    }
-                  ]}
-                >
-                  <Input.TextArea
-                    maxLength={60}
-                    onChange={(e) => {
-                      const inputval = e.target.value;
-                      const newVal =
-                        inputval.substring(0, 1).toUpperCase() +
-                        inputval.substring(1);
-                      form.setFieldsValue({ reason: newVal });
-                    }}
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  labelAlign="left"
-                  name="approver"
-                  style={{ marginBottom: "20px" }}
-                  label={
-                    <label style={{ color: "black", fontWeight: "400" }}>
-                      Approver<span style={{ color: "red" }}> *</span>
-                    </label>
-                  }
-                  initialValue={repManager}
-                >
-                  <Input
-                    disabled
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  style={{ paddingTop: "px" }}
-                  wrapperCol={{
-                    offset: 8,
-                    span: 24,
                   }}
                 >
-                  <Button type="primary" htmlType="submit" >
-                    Submit
-                  </Button>
-                  <Button
-                    htmlType="button"
-                    type='default'
-                    style={{ marginLeft: "10px" }}
-                    onClick={() => {
-                      form.resetFields();
-                      setDateSelected([]);
-                      setDateStart(null);
-                      setStartSlot(null);
-                      setDateEnd(null);
-                      setEndSlot(null);
-                      setValidleaverequest(false);
-                    }}
-                  >
-                    Reset
-                  </Button>
-                </Form.Item>
-              </Form>
-            </Col>
-          </Row>
-        </Modal>
-
-        {isMgr ? <Notification data={[...requests]} /> : null}
-
-        {isMgr && !isHr ? (
-          <Row
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignContent: "flex-start",
-              backgroundColor: "white",
-              borderRadius: "10px",
-              padding: "10px",
-              marginTop: "10px",
-            }}
-          >
-            <Col
-              span={24}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                alignContent: "flex-start",
-                color: "black",
-                width: "100rem",
-              }}
-            >
-              <h3>All Requests</h3>
-            </Col>
-
-            <Col
-              xl={24}
-              lg={24}
-              md={24}
-              sm={24}
-              xs={24}
-              style={{
-                background: "flex",
-                padding: "10px",
-              }}
-            >
-              <div >
-                <Table
-                  className="leaveTable"
-                  columns={reqColumns}
-                  dataSource={requests}
-                  pagination={{
-                    position: ["bottomCenter"],
-                  }}
-                  scroll={{ x: 600 }}
-                  size="small"
-
-                />
-              </div>
-            </Col>
-          </Row>
-        ) : null}
-        {isHr ? (
-          <Row
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignContent: "flex-start",
-              backgroundColor: "white",
-              borderRadius: "10px",
-              padding: "10px",
-              marginTop: "10px",
-            }}
-          >
-            <Col
-              span={24}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                alignContent: "flex-start",
-                color: "black",
-                width: "100rem",
-              }}
-            >
-              <h3>All Requests</h3>
-            </Col>
-
-            <Col
-              xl={24}
-              lg={24}
-              md={24}
-              sm={24}
-              xs={24}
-              style={{
-                background: "flex",
-                padding: "10px",
-              }}
-            >
-              <div className="history-table">
-                <Table
-                  className="leaveTable"
-                  columns={reqColumns}
-                  dataSource={allRequests}
-                  pagination={{
-                    position: ["bottomCenter"],
-                  }}
-                  scroll={{ x: 600 }}
-                  size="small"
-                />
-              </div>
-            </Col>
-          </Row>
-        ) : null}
-        {!isHr ? (
-          <Row
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignContent: "flex-start",
-              backgroundColor: "white",
-              borderRadius: "10px",
-              padding: "10px",
-              marginTop: "10px",
-            }}
-          >
-            <Col
-              span={24}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                alignContent: "flex-start",
-                color: "black",
-                width: "100rem",
-              }}
-            >
-              <h3>Employee Leave History</h3>
-            </Col>
-
-            <Col
-              xl={24}
-              lg={24}
-              md={24}
-              sm={24}
-              xs={24}
-              style={{
-                background: "flex",
-                padding: "10px",
-              }}
-            >
-              <div className="history-table">
-                <Table
-                  className="leaveTable "
-                  columns={columns}
-                  dataSource={leaves}
-                  pagination={{
-                    position: ["bottomCenter"],
-                  }}
-                  scroll={{ x: 600 }}
-                  size="small"
-                />
-              </div>
-            </Col>
-          </Row>
-        ) : null}
-
-      </Row>
-
-      <Modal
-        // bodyStyle={{ overflowY: 'scroll' }}
-        // style={{ height: 'calc(100vh - 200px)' }}
-        bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
-        className="viewAppraisal"
-        centered
-        width={450}
-        visible={isEditModalOpen}
-        footer={null}
-        destroyOnClose
-        title="Edit Applied Leave"
-        closeIcon={
-          <div
-            onClick={() => {
-              setDateSelected([]);
-              setDateStart(null);
-              setStartSlot(null);
-              setDateEnd(null);
-              setEndSlot(null);
-              setValidleaverequest(false);
-              setIsEditModalOpen(false);
-            }}
-            style={{ color: "#ffffff" }}
-          >
-            X
-          </div>
-        }
-      >
-        <Row
-          className="apply-leave"
-          style={{
-            marginTop: "10px",
-          }}
-        >
-          <Col xl={24} lg={24} md={24} sm={24} xs={24}
-            style={{
-              background: "flex",
-              padding: "10px",
-              // width: "400px",
-            }}
-          >
-            <Form
-              {...Leave}
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 16,
-              }}
-              initialValues={{
-                remember: true,
-              }}
-              form={form1}
-              onFinish={onFinishEditLeave}
-            >
-
-              <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-around' }}>
-                <Col xl={24} lg={24} md={24} sm={24} xs={24} >
-                  <Form.Item required={false}
-
-                    labelAlign="left"
+                  <div
+                    className="badge-div"
                     style={{
-                      marginBottom: "20px",
-                      color: "white",
-
-                      minWidth: "70px",
+                      display: "flex",
+                      flexDirection: "row",
+                      backgroundColor: "white",
+                      justifyContent: "space-between",
+                      paddingTop: "0px",
+                      borderTopLeftRadius: "10px",
+                      borderTopRightRadius: "10px",
                     }}
-                    label={
-                      <label style={{ color: "black", fontWeight: "400" }}>
-                        Start Date<span style={{ color: "red" }}> *</span>
-                      </label>
-                    }
-                    name="dateStart"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please Select Date',
-                      },
-                    ]}
-                    initialValue={editedLeave.dateCalc == null ? null : moment(editedLeave.dateCalc[0], 'Do MMM, YYYY')}
                   >
-                    <DatePicker
-                      style={{ width: "100%" }}
-                      format="Do MMM, YYYY"
-                      onChange={(e) => {
-                        setDateStart(e);
-                        onLeaveDateChange();
-                      }}
-                      disabledDate={disabledDate}
-                    />
-                  </Form.Item>
-                </Col>
 
-                <Col xl={24} lg={24} md={24} sm={24} xs={24} >
-                  <Form.Item
-                    labelAlign="left"
-                    name="slotStart"
-                    style={{ marginBottom: "25px", }}
-                    className="div-slot"
-                    label={
-                      <label style={{ color: "black", fontWeight: "400" }}>
-                        Start Slot<span style={{ color: "red" }}> *</span>
-                      </label>
-                    }
-                    initialValue={editedLeave.slotStart}
-                  >
-                    <Select
-                      style={{ width: "100%" }}
-                      onChange={(e) => {
-                        setStartSlot(e);
-                        onLeaveDateChange();
+                    <div
+                      className="rep-div"
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
                       }}
                     >
-                      <Option value="Full Day">Full Day</Option>
-                      <Option value="Half Day">Half Day</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                <Col xl={24} lg={24} md={24} sm={24} xs={24} >
-                  <Form.Item required={false}
-                    labelAlign="left"
-                    style={{ marginBottom: "20px", color: "white", }}
-                    label={
-                      <label style={{ color: "black", fontWeight: "400" }}>
-                        End Date<span style={{ color: "red" }}> *</span>
-                      </label>
-                    }
-                    name="dateEnd"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please Select Date',
-                      },
-                    ]}
-                    initialValue={editedLeave.dateCalc == null ? null : moment(editedLeave.dateCalc[editedLeave.dateCalc.length - 1], 'Do MMM, YYYY')}
-                  >
-                    <DatePicker
-                      style={{ width: "100%" }}
-                      format="Do MMM, YYYY"
-                      onChange={(e) => {
-                        setDateEnd(e);
-                        onLeaveDateChange(e);
-                      }}
-                      disabledDate={disabledDate}
-                      disabled={disableEnd()}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col xl={24} lg={24} md={24} sm={24} xs={24} >
-                  <Form.Item
-                    labelAlign="left"
-                    name="slotEnd"
-                    style={{ marginBottom: "25px", }}
-                    className="div-slot"
-                    label={
-                      <label style={{ color: "black", fontWeight: "400" }}>
-                        End Slot<span style={{ color: "red" }}> *</span>
-                      </label>
-                    }
-                    initialValue={editedLeave.slotEnd}
-                  >
-                    <Select
-                      style={{ width: "100%" }}
-                      disabled={disableEndSlot()}
-                      onChange={(e) => {
-                        setEndSlot(e);
-                        onLeaveDateChange();
-                      }}
-                    >
-                      <Option value="Full Day">Full Day</Option>
-                      <Option value="Half Day">Half Day</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Form.Item required={false}
-                labelAlign="left"
-                name="leaveNature"
-                style={{ marginBottom: "20px" }}
-                label={
-                  <label style={{ color: "black", fontWeight: "400" }}>
-                    Nature of Leave<span style={{ color: "red" }}> *</span>
-                  </label>
-                }
-                rules={[
-                  {
-                    required: true,
-                    message: 'Select Nature of Leave',
-                  },
-                ]}
-                initialValue={editedLeave.nature}
-              >
-                <Select
-                  placeholder="Select an option"
-                  allowClear
-                  disabled={disableNature()}
-                  onChange={onLeaveNatureChange}
-                >
-                  {leavedays != null ?
-                    (Object.keys(leavedays).map((u) => (
-                      <Option
-                        disabled={disabledLeaveNature(u)}
-                        value={u}
+                      {/* <Button
+                        className="reprentation"
+                        style={{
+                          cursor: 'default',
+                          marginLeft: '10px',
+                          marginRight: "5px", marginTop: '10px',
+                          backgroundColor: "rgba(15, 255, 80, 0.2)",
+                        }}
                       >
-                        {u}
-                      </Option>
-                    )))
-                    : null}
-                  <Option value={"Loss of Pay"}>Loss of Pay</Option>
-                </Select>
-              </Form.Item>
+                        <h5
+                          style={{ color: "rgb(0, 128, 0)" }}
+                          className="rep-text"
+                        >
+                          Leave
+                        </h5>
+                      </Button> */}
+                      <Button
+                        className="reprentation"
+                        style={{
+                          cursor: 'default',
+                          marginRight: "5px", marginTop: '10px',
+                          backgroundColor: "rgba(154, 214, 224, 0.96)",
+                        }}
+                      >
+                        <h5
+                          style={{ color: "rgba(0, 119, 137, 0.96)" }}
+                          className="rep-text"
+                        >
+                          Optional Holiday
+                        </h5>
+                      </Button>
+                      <Button
+                        className="reprentation"
+                        style={{
+                          cursor: 'default',
+                          marginRight: "5px", marginTop: '10px',
+                          backgroundColor: "rgba(252, 143, 10,0.2)",
+                        }}
+                      >
+                        <h5
+                          style={{ color: "rgba(252, 143, 10, 1)" }}
+                          className="rep-text"
+                        >
+                          Official Holiday
+                        </h5>
+                      </Button>
+                      <Button
+                        className="reprentation"
+                        style={{
+                          cursor: 'default',
+                          marginRight: "5px", marginTop: '10px',
+                          backgroundColor: "rgba(74, 67, 67,0.2)",
+                        }}
+                      >
+                        <h5
+                          style={{ color: "rgba(74, 67, 67, 1)" }}
+                          className="rep-text"
+                        >
+                          Weekly Off
+                        </h5>
+                      </Button>
+                    </div>
+                    <div className='holiday-button' style={{ display: 'flex' }}>
+                      <div>
+                        <HolidayList isHr={isHr} refreshCalendar={getHoliday} />
+                      </div>
+                      {/* <div className="resp-leaveButton" style={{
+                        display: 'flex',
+                        alignContent: 'center',
+                        alignItems: 'center'
+                      }}>
+                        <div>
+                          <LeaveCreate isHr={isHr} refresh={getConfigurations} />
+                        </div>
+                        <Button className="button-applyleave"
+                          style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '0px' }}
+                          type="default" onClick={() => { setSecondModal(true) }}>
+                          Apply Leave
+                        </Button>
+                      </div> */}
+                    </div>
+                  </div>
 
-              <Form.Item required={false}
-                initialValue={editedLeave.reason}
-                labelAlign="left"
-                name="reason"
-                style={{ marginBottom: "20px" }}
-                label={
-                  <label style={{ color: "black", fontWeight: "400" }}>
-                    Reason<span style={{ color: "red" }}> *</span>{" "}
-                  </label>
-                }
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Enter a Reason"
-                  }
-                ]}
-              >
-                <Input.TextArea
-                  maxLength={60}
-                  onChange={(e) => {
-                    const inputval = e.target.value;
-                    const newVal =
-                      inputval.substring(0, 1).toUpperCase() +
-                      inputval.substring(1);
-                    form1.setFieldsValue({ reason: newVal });
-                  }}
-                  required
-                />
-              </Form.Item>
+                  <Calendar
+                    style={{
+                      paddingLeft: "10px",
+                      paddingRight: "10px",
+                      borderBottomLeftRadius: "10px",
+                      borderBottomRightRadius: "10px",
+                    }}
+                    value={date}
+                    onChange={setDate}
+                    dateCellRender={dateCellRender}
+                    disabledDate={disabledCalendarDate}
 
-              <Form.Item
-                labelAlign="left"
-                name="approver"
-                style={{ marginBottom: "20px" }}
-                label={
-                  <label style={{ color: "black", fontWeight: "400" }}>
-                    Approver<span style={{ color: "red" }}> *</span>
-                  </label>
-                }
-                initialValue={repManager}
-              >
-                <Input
-                  disabled
-                />
-              </Form.Item>
+                  />
 
-              <Form.Item
-                style={{ paddingTop: "px" }}
-                wrapperCol={{
-                  offset: 8,
-                  span: 24,
+                </div>
+              </card>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Leave Type" key="3">
+              Content of Tab Pane 3
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Approvals" key="4">
+              Content of Tab Pane 4
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+      ) : (
+        <>
+          <Row
+            style={{
+              display: "none",
+              padding: 24,
+              background: "#fff",
+              minHeight: 150,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              backgroundColor: "#e9eaea",
+            }}
+            gutter={[16, 0]}
+          >
+            <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+              <div className="leavediv">
+                {leavedays != null ?
+                  (Object.keys(leavedays).map((user, id) => {
+                    return (
+                      <div
+                        className="Col-2-center"
+                        style={{ background: colors[id], color: "#fff" }}
+                      >
+                        <p
+                          className="heading"
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "20px",
+                          }}
+                        >
+                          {user}
+                        </p>
+
+                        <div
+                          className="total-leave"
+                          style={{
+                            width: "90%",
+                          }}
+                        >
+                          <div className="leave-status">
+                            <p
+                              className="leave"
+                              Total
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              Total
+                            </p>
+                            <p
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              {totaldays[user]}
+                            </p>
+                          </div>
+
+                          <div className="leave-status">
+                            <p
+                              className="leave"
+                              Total
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              Availed
+                            </p>
+                            <p
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              {totaldays[user] - leavedays[user]}
+                            </p>
+                          </div>
+
+                          <div className="leave-status">
+                            <p
+                              className="leave"
+                              Total
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              Remaining
+                            </p>
+                            <p
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              {leavedays[user]}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }))
+                  : null}
+
+              </div>
+            </Col>
+
+            <Col
+              xl={24} lg={24} md={24} sm={24} xs={24} span={2}
+              style={{
+                marginTop: "10px",
+              }}
+            >
+
+              <div
+                className="calender-div"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+
                 }}
               >
-                <Button type="primary" htmlType="submit" >
-                  Submit
-                </Button>
-                <Button
-                  htmlType="button"
-                  type='default'
-                  style={{ marginLeft: "10px" }}
-                  onClick={() => {
-                    form1.resetFields();
-                    setDateSelected(editedLeave.dateCalc);
-                    setDateStart(moment(editedLeave.dateCalc, "Do MMM, YYYY"));
-                    setStartSlot(editedLeave.slotStart);
-                    setDateEnd(moment(editedLeave.dateCalc, "Do MMM, YYYY"));
-                    setEndSlot(editedLeave.slotEnd);
-                    setValidleaverequest(true);
+                <div
+                  className="badge-div"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    backgroundColor: "white",
+                    justifyContent: "space-between",
+                    paddingTop: "0px",
+                    borderTopLeftRadius: "10px",
+                    borderTopRightRadius: "10px",
                   }}
                 >
-                  Reset
-                </Button>
-              </Form.Item>
-            </Form>
-          </Col>
-        </Row>
-      </Modal>
-      </>)}
+
+                  <div
+                    className="rep-div"
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Button
+                      className="reprentation"
+                      style={{
+                        cursor: 'default',
+                        marginLeft: '10px',
+                        marginRight: "5px", marginTop: '10px',
+                        backgroundColor: "rgba(15, 255, 80, 0.2)",
+                      }}
+                    >
+                      <h5
+                        style={{ color: "rgb(0, 128, 0)" }}
+                        className="rep-text"
+                      >
+                        Leave
+                      </h5>
+                    </Button>
+                    <Button
+                      className="reprentation"
+                      style={{
+                        cursor: 'default',
+                        marginRight: "5px", marginTop: '10px',
+                        backgroundColor: "rgba(154, 214, 224, 0.96)",
+                      }}
+                    >
+                      <h5
+                        style={{ color: "rgba(0, 119, 137, 0.96)" }}
+                        className="rep-text"
+                      >
+                        Optional Holiday
+                      </h5>
+                    </Button>
+                    <Button
+                      className="reprentation"
+                      style={{
+                        cursor: 'default',
+                        marginRight: "5px", marginTop: '10px',
+                        backgroundColor: "rgba(252, 143, 10,0.2)",
+                      }}
+                    >
+                      <h5
+                        style={{ color: "rgba(252, 143, 10, 1)" }}
+                        className="rep-text"
+                      >
+                        Official Holiday
+                      </h5>
+                    </Button>
+                    <Button
+                      className="reprentation"
+                      style={{
+                        cursor: 'default',
+                        marginRight: "5px", marginTop: '10px',
+                        backgroundColor: "rgba(74, 67, 67,0.2)",
+                      }}
+                    >
+                      <h5
+                        style={{ color: "rgba(74, 67, 67, 1)" }}
+                        className="rep-text"
+                      >
+                        Weekly Off
+                      </h5>
+                    </Button>
+                  </div>
+                  <div className='holiday-button' style={{ display: 'flex' }}>
+                    <div>
+                      <HolidayList isHr={isHr} refreshCalendar={getHoliday} />
+                    </div>
+                    <div className="resp-leaveButton" style={{
+                      display: 'flex',
+                      alignContent: 'center',
+                      alignItems: 'center'
+                    }}>
+                      <div>
+                        <LeaveCreate isHr={isHr} refresh={getConfigurations} />
+                      </div>
+                      <Button className="button-applyleave"
+                        style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '0px' }}
+                        type="default" onClick={() => { setSecondModal(true) }}>
+                        Apply Leave
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <Calendar
+                  style={{
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
+                    borderBottomLeftRadius: "10px",
+                    borderBottomRightRadius: "10px",
+                  }}
+                  value={date}
+                  onChange={setDate}
+                  dateCellRender={dateCellRender}
+                  disabledDate={disabledCalendarDate}
+
+                />
+
+              </div>
+            </Col>
+
+            <Modal className='viewAppraisal'
+              bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+              footer={null}
+              title="Apply Leave"
+              centered
+              visible={secondModal}
+              width={450}
+              closeIcon={
+                <div
+                  onClick={() => {
+                    setSecondModal(false);
+                  }}
+                  style={{ color: "#ffffff" }}
+                >
+                  X
+                </div>
+              }
+            >
+              <Row
+                className="apply-leave"
+                style={{
+                  marginTop: "10px",
+                }}
+              >
+                <Col xl={24} lg={24} md={24} sm={24} xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+
+                  }}
+                >
+                  <Form
+                    {...Leave}
+                    labelCol={{
+                      span: 8,
+                    }}
+                    wrapperCol={{
+                      span: 16,
+                    }}
+                    form={form}
+                    onFinish={onFinish}
+
+                  >
+
+                    <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-around' }}>
+                      <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                        <Form.Item required={false}
+                          labelAlign="left"
+                          style={{
+                            marginBottom: "20px",
+                            color: "white",
+                            minWidth: "70px",
+                          }}
+                          label={
+                            <label style={{ color: "black", fontWeight: "400" }}>
+                              Start Date<span style={{ color: "red" }}> *</span>
+                            </label>
+                          }
+                          name="dateStart"
+                          rules={[
+                            {
+                              required: true,
+                              message: 'Please Select Date',
+                            },
+                          ]}
+                        >
+                          <DatePicker
+                            style={{ width: "100%" }}
+                            format="Do MMM, YYYY"
+                            onChange={(e) => {
+                              setDateStart(e);
+                              onLeaveDateChange();
+                            }}
+                            disabledDate={disabledDate}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                        <Form.Item
+                          labelAlign="left"
+                          name="slotStart"
+                          style={{ marginBottom: "25px", }}
+                          className="div-slot"
+                          label={
+                            <label style={{ color: "black", fontWeight: "400" }}>
+                              Start Slot<span style={{ color: "red" }}> *</span>
+                            </label>
+                          }
+                          initialValue={"Full Day"}
+                        >
+                          <Select
+                            style={{ width: "100%" }}
+                            onChange={(e) => {
+                              setStartSlot(e);
+                              onLeaveDateChange();
+                            }}
+                          >
+                            <Option value="Full Day">Full Day</Option>
+                            <Option value="Half Day">Half Day</Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+
+                    <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                      <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                        <Form.Item required={false}
+                          labelAlign="left"
+                          style={{ marginBottom: "20px", color: "white", }}
+                          label={
+                            <label style={{ color: "black", fontWeight: "400" }}>
+                              End Date<span style={{ color: "red" }}> *</span>
+                            </label>
+                          }
+                          name="dateEnd"
+                          rules={[
+                            {
+                              required: true,
+                              message: 'Please Select Date',
+                            },
+                          ]}
+                        >
+                          <DatePicker
+                            style={{ width: "100%" }}
+                            format="Do MMM, YYYY"
+                            onChange={(e) => {
+                              setDateEnd(e);
+                              onLeaveDateChange(e);
+                            }}
+                            disabledDate={disabledDate}
+                            disabled={disableEnd()}
+                          />
+                        </Form.Item>
+                      </Col>
+
+                      <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                        <Form.Item
+                          labelAlign="left"
+                          name="slotEnd"
+                          style={{ marginBottom: "25px", }}
+                          className="div-slot"
+                          label={
+                            <label style={{ color: "black", fontWeight: "400" }}>
+                              End Slot<span style={{ color: "red" }}> *</span>
+                            </label>
+                          }
+                          initialValue={"Full Day"}
+                        >
+                          <Select
+                            style={{ width: "100%" }}
+                            disabled={disableEndSlot()}
+                            onChange={(e) => {
+                              setEndSlot(e);
+                              onLeaveDateChange();
+                            }}
+                          >
+                            <Option value="Full Day">Full Day</Option>
+                            <Option value="Half Day">Half Day</Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+
+                    <Form.Item required={false}
+                      labelAlign="left"
+                      name="leaveNature"
+                      style={{ marginBottom: "20px" }}
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          Nature of Leave<span style={{ color: "red" }}> *</span>
+                        </label>
+                      }
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Select Nature of Leave',
+                        },
+                      ]}
+                    >
+                      <Select
+                        placeholder="Select an option"
+                        allowClear
+                        disabled={disableNature()}
+                        onChange={onLeaveNatureChange}
+                      >
+                        {leavedays != null ?
+                          (Object.keys(leavedays).map((u) => (
+                            <Option
+                              disabled={disabledLeaveNature(u)}
+                              value={u}
+                            >
+                              {u}
+                            </Option>
+                          )))
+                          : null}
+                        <Option value={"Loss of Pay"}>Loss of Pay</Option>
+                      </Select>
+                    </Form.Item>
+
+                    <Form.Item required={false}
+                      labelAlign="left"
+                      name="reason"
+                      style={{ marginBottom: "20px" }}
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          Reason<span style={{ color: "red" }}> *</span>{" "}
+                        </label>
+                      }
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Enter a Reason"
+                        }
+                      ]}
+                    >
+                      <Input.TextArea
+                        maxLength={60}
+                        onChange={(e) => {
+                          const inputval = e.target.value;
+                          const newVal =
+                            inputval.substring(0, 1).toUpperCase() +
+                            inputval.substring(1);
+                          form.setFieldsValue({ reason: newVal });
+                        }}
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      labelAlign="left"
+                      name="approver"
+                      style={{ marginBottom: "20px" }}
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          Approver<span style={{ color: "red" }}> *</span>
+                        </label>
+                      }
+                      initialValue={repManager}
+                    >
+                      <Input
+                        disabled
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      style={{ paddingTop: "px" }}
+                      wrapperCol={{
+                        offset: 8,
+                        span: 24,
+                      }}
+                    >
+                      <Button type="primary" htmlType="submit" >
+                        Submit
+                      </Button>
+                      <Button
+                        htmlType="button"
+                        type='default'
+                        style={{ marginLeft: "10px" }}
+                        onClick={() => {
+                          form.resetFields();
+                          setDateSelected([]);
+                          setDateStart(null);
+                          setStartSlot(null);
+                          setDateEnd(null);
+                          setEndSlot(null);
+                          setValidleaverequest(false);
+                        }}
+                      >
+                        Reset
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </Col>
+              </Row>
+            </Modal>
+
+            {isMgr ? <Notification data={[...requests]} /> : null}
+
+            {isMgr && !isHr ? (
+              <Row
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignContent: "flex-start",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  padding: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                <Col
+                  span={24}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignContent: "flex-start",
+                    color: "black",
+                    width: "100rem",
+                  }}
+                >
+                  <h3>All Requests</h3>
+                </Col>
+
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                  }}
+                >
+                  <div >
+                    <Table
+                      className="leaveTable"
+                      columns={reqColumns}
+                      dataSource={requests}
+                      pagination={{
+                        position: ["bottomCenter"],
+                      }}
+                      scroll={{ x: 600 }}
+                      size="small"
+
+                    />
+                  </div>
+                </Col>
+              </Row>
+            ) : null}
+            {isHr ? (
+              <Row
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignContent: "flex-start",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  padding: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                <Col
+                  span={24}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignContent: "flex-start",
+                    color: "black",
+                    width: "100rem",
+                  }}
+                >
+                  <h3>All Requests</h3>
+                </Col>
+
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                  }}
+                >
+                  <div className="history-table">
+                    <Table
+                      className="leaveTable"
+                      columns={reqColumns}
+                      dataSource={allRequests}
+                      pagination={{
+                        position: ["bottomCenter"],
+                      }}
+                      scroll={{ x: 600 }}
+                      size="small"
+                    />
+                  </div>
+                </Col>
+              </Row>
+            ) : null}
+            {!isHr ? (
+              <Row
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignContent: "flex-start",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  padding: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                <Col
+                  span={24}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignContent: "flex-start",
+                    color: "black",
+                    width: "100rem",
+                  }}
+                >
+                  <h3>Employee Leave History</h3>
+                </Col>
+
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                  }}
+                >
+                  <div className="history-table">
+                    <Table
+                      className="leaveTable "
+                      columns={columns}
+                      dataSource={leaves}
+                      pagination={{
+                        position: ["bottomCenter"],
+                      }}
+                      scroll={{ x: 600 }}
+                      size="small"
+                    />
+                  </div>
+                </Col>
+              </Row>
+            ) : null}
+
+          </Row>
+
+          <Modal
+            // bodyStyle={{ overflowY: 'scroll' }}
+            // style={{ height: 'calc(100vh - 200px)' }}
+            bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+            className="viewAppraisal"
+            centered
+            width={450}
+            visible={isEditModalOpen}
+            footer={null}
+            destroyOnClose
+            title="Edit Applied Leave"
+            closeIcon={
+              <div
+                onClick={() => {
+                  setDateSelected([]);
+                  setDateStart(null);
+                  setStartSlot(null);
+                  setDateEnd(null);
+                  setEndSlot(null);
+                  setValidleaverequest(false);
+                  setIsEditModalOpen(false);
+                }}
+                style={{ color: "#ffffff" }}
+              >
+                X
+              </div>
+            }
+          >
+            <Row
+              className="apply-leave"
+              style={{
+                marginTop: "10px",
+              }}
+            >
+              <Col xl={24} lg={24} md={24} sm={24} xs={24}
+                style={{
+                  background: "flex",
+                  padding: "10px",
+                  // width: "400px",
+                }}
+              >
+                <Form
+                  {...Leave}
+                  labelCol={{
+                    span: 8,
+                  }}
+                  wrapperCol={{
+                    span: 16,
+                  }}
+                  initialValues={{
+                    remember: true,
+                  }}
+                  form={form1}
+                  onFinish={onFinishEditLeave}
+                >
+
+                  <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-around' }}>
+                    <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                      <Form.Item required={false}
+
+                        labelAlign="left"
+                        style={{
+                          marginBottom: "20px",
+                          color: "white",
+
+                          minWidth: "70px",
+                        }}
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            Start Date<span style={{ color: "red" }}> *</span>
+                          </label>
+                        }
+                        name="dateStart"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Please Select Date',
+                          },
+                        ]}
+                        initialValue={editedLeave.dateCalc == null ? null : moment(editedLeave.dateCalc[0], 'Do MMM, YYYY')}
+                      >
+                        <DatePicker
+                          style={{ width: "100%" }}
+                          format="Do MMM, YYYY"
+                          onChange={(e) => {
+                            setDateStart(e);
+                            onLeaveDateChange();
+                          }}
+                          disabledDate={disabledDate}
+                        />
+                      </Form.Item>
+                    </Col>
+
+                    <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                      <Form.Item
+                        labelAlign="left"
+                        name="slotStart"
+                        style={{ marginBottom: "25px", }}
+                        className="div-slot"
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            Start Slot<span style={{ color: "red" }}> *</span>
+                          </label>
+                        }
+                        initialValue={editedLeave.slotStart}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          onChange={(e) => {
+                            setStartSlot(e);
+                            onLeaveDateChange();
+                          }}
+                        >
+                          <Option value="Full Day">Full Day</Option>
+                          <Option value="Half Day">Half Day</Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+
+                  <Row gutter={[16, 0]} className='row-one-div' style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                    <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                      <Form.Item required={false}
+                        labelAlign="left"
+                        style={{ marginBottom: "20px", color: "white", }}
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            End Date<span style={{ color: "red" }}> *</span>
+                          </label>
+                        }
+                        name="dateEnd"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Please Select Date',
+                          },
+                        ]}
+                        initialValue={editedLeave.dateCalc == null ? null : moment(editedLeave.dateCalc[editedLeave.dateCalc.length - 1], 'Do MMM, YYYY')}
+                      >
+                        <DatePicker
+                          style={{ width: "100%" }}
+                          format="Do MMM, YYYY"
+                          onChange={(e) => {
+                            setDateEnd(e);
+                            onLeaveDateChange(e);
+                          }}
+                          disabledDate={disabledDate}
+                          disabled={disableEnd()}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xl={24} lg={24} md={24} sm={24} xs={24} >
+                      <Form.Item
+                        labelAlign="left"
+                        name="slotEnd"
+                        style={{ marginBottom: "25px", }}
+                        className="div-slot"
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            End Slot<span style={{ color: "red" }}> *</span>
+                          </label>
+                        }
+                        initialValue={editedLeave.slotEnd}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          disabled={disableEndSlot()}
+                          onChange={(e) => {
+                            setEndSlot(e);
+                            onLeaveDateChange();
+                          }}
+                        >
+                          <Option value="Full Day">Full Day</Option>
+                          <Option value="Half Day">Half Day</Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Form.Item required={false}
+                    labelAlign="left"
+                    name="leaveNature"
+                    style={{ marginBottom: "20px" }}
+                    label={
+                      <label style={{ color: "black", fontWeight: "400" }}>
+                        Nature of Leave<span style={{ color: "red" }}> *</span>
+                      </label>
+                    }
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Select Nature of Leave',
+                      },
+                    ]}
+                    initialValue={editedLeave.nature}
+                  >
+                    <Select
+                      placeholder="Select an option"
+                      allowClear
+                      disabled={disableNature()}
+                      onChange={onLeaveNatureChange}
+                    >
+                      {leavedays != null ?
+                        (Object.keys(leavedays).map((u) => (
+                          <Option
+                            disabled={disabledLeaveNature(u)}
+                            value={u}
+                          >
+                            {u}
+                          </Option>
+                        )))
+                        : null}
+                      <Option value={"Loss of Pay"}>Loss of Pay</Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item required={false}
+                    initialValue={editedLeave.reason}
+                    labelAlign="left"
+                    name="reason"
+                    style={{ marginBottom: "20px" }}
+                    label={
+                      <label style={{ color: "black", fontWeight: "400" }}>
+                        Reason<span style={{ color: "red" }}> *</span>{" "}
+                      </label>
+                    }
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Enter a Reason"
+                      }
+                    ]}
+                  >
+                    <Input.TextArea
+                      maxLength={60}
+                      onChange={(e) => {
+                        const inputval = e.target.value;
+                        const newVal =
+                          inputval.substring(0, 1).toUpperCase() +
+                          inputval.substring(1);
+                        form1.setFieldsValue({ reason: newVal });
+                      }}
+                      required
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    labelAlign="left"
+                    name="approver"
+                    style={{ marginBottom: "20px" }}
+                    label={
+                      <label style={{ color: "black", fontWeight: "400" }}>
+                        Approver<span style={{ color: "red" }}> *</span>
+                      </label>
+                    }
+                    initialValue={repManager}
+                  >
+                    <Input
+                      disabled
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    style={{ paddingTop: "px" }}
+                    wrapperCol={{
+                      offset: 8,
+                      span: 24,
+                    }}
+                  >
+                    <Button type="primary" htmlType="submit" >
+                      Submit
+                    </Button>
+                    <Button
+                      htmlType="button"
+                      type='default'
+                      style={{ marginLeft: "10px" }}
+                      onClick={() => {
+                        form1.resetFields();
+                        setDateSelected(editedLeave.dateCalc);
+                        setDateStart(moment(editedLeave.dateCalc, "Do MMM, YYYY"));
+                        setStartSlot(editedLeave.slotStart);
+                        setDateEnd(moment(editedLeave.dateCalc, "Do MMM, YYYY"));
+                        setEndSlot(editedLeave.slotEnd);
+                        setValidleaverequest(true);
+                      }}
+                    >
+                      Reset
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Col>
+            </Row>
+          </Modal>
+        </>)}
 
     </>
   );

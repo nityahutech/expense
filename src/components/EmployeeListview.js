@@ -34,15 +34,16 @@ function EmployeeListview(props) {
 
 
   useEffect(() => {
+    setUserId(props.showRecord.id)
     getCertificate();
     getWorkData()
     getIdData()
-  }, [userid]);
+  }, [props.showRecord.id]);
 
   //-------------------------------------------------certificate
   const getCertificate = async () => {
     let alldata = await DocumentContext.getDocument(
-      userid,
+      props.showRecord.id,
       "certificate"
     );
     console.log('certificate', alldata)
@@ -53,7 +54,7 @@ function EmployeeListview(props) {
   //--------------------------------------------------------work
   const getWorkData = async () => {
     let alldata = await DocumentContext.getDocument(
-      userid,
+      props.showRecord.id,
       "work");
     console.log('work', alldata)
     setWorkDetails(alldata);
@@ -62,8 +63,9 @@ function EmployeeListview(props) {
 
   //--------------------------------------------------------id
   const getIdData = async () => {
+    console.log('dddddddd', userid, props.showRecord.id)
     let alldata = await DocumentContext.getDocument(
-      userid,
+      props.showRecord.id,
       "id");
     console.log('id', alldata)
     setId(alldata);
@@ -393,7 +395,7 @@ function EmployeeListview(props) {
               style={{ height: '250px' }}
             >
               <h2>Higher Education Info</h2>
-              <Col xs={24} sm={24} md={12}>
+              <Col xs={24} sm={24} md={24}>
                 <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Course Name">
                   <span>{showRecord.courseName ? showRecord.courseName : '-'}</span>
                 </Form.Item>
@@ -458,6 +460,7 @@ function EmployeeListview(props) {
           </Card>
         </Col>
         <Modal
+          destroyOnClose
           bodyStyle={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
           className="viewAppraisal"
           centered

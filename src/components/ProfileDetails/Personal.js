@@ -561,7 +561,7 @@ function Personal(props) {
                             >
                               <EditFilled />
                             </Button>
-                            <Divider style={{marginTop:"0px",marginBottom:"15px"}}/>
+                            <Divider style={{borderTop:"1.5px solid #1963A6", marginTop:"0px",marginBottom:"15px"}}/>
                         </div>
                         <Row>
                         {/* <Col span={6} style={{

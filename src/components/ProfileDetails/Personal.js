@@ -23,7 +23,7 @@ import FormItem from "antd/lib/form/FormItem";
 const { TextArea } = Input;
 const { Option } = Select;
 
-function Personal() {
+function Personal(props) {
   const [editContent, showEditContent] = useState(false);
   const [editContactInfo, showEditContactInfo] = useState(false);
   const [dob, setDob] = useState("");
@@ -508,7 +508,7 @@ function Personal() {
                   <Col xs={24} sm={24} md={6} lg={6} xl={6} xxl={6}
                     style={{
                         display: "flex",
-                        alignItems: "center",
+                        alignItems: "start",
                         justifyContent: "center",
                         flexDirection: "column",
                       }}>
@@ -534,6 +534,7 @@ function Personal() {
                           width:"100%",
                           // display: "flex",
                           // alignItems: 'flex-start',
+                          
                           // justifyContent: "flex-start",
                           // flexDirection: "column",
                         }}
@@ -542,7 +543,7 @@ function Personal() {
                           style={{
                             fontWeight:"lighter",
                             fontSize:"27px",
-                            marginTop:"-12px",
+                            // marginTop:"-12px",
                             color:"black"}}
                             >{data ? data.name : "-"}
                             <Button
@@ -977,7 +978,7 @@ function Personal() {
                               message: "Your Marrige Status",
                             },
                           ]}
-                          wrapperCol= {{ }}
+                          wrapperCol= {{span:props.span}}
                           labelCol= {{ span: 6 }} 
                         >
                           <Select

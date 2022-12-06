@@ -108,6 +108,7 @@
 
 .weekDays .ant-table-thead > tr > th {
   font-weight: 600;
+  font-size: 13px;
 }
 
 .Tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
@@ -123,4 +124,9 @@
   /* position: absolute; */
   background: #f9a01f;
   pointer-events: none;
+}
+
+.time .ant-form-item-label > label{
+  font-weight: 600;
+  font-size: 14px;
 }

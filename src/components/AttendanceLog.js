@@ -389,7 +389,7 @@ function AttendanceLog(props) {
       title: "Full Day",
       dataIndex: "fullday",
       key: "fullday",
-      alignItems: "center",
+      align: "center",
       render: (_, data) => {
         return (
           <Radio.Group
@@ -408,7 +408,7 @@ function AttendanceLog(props) {
       title: "Half Day",
       dataIndex: "halfday",
       key: "halfday",
-      alignItems: "center",
+      align: "center",
       render: (_, data) => {
         return (
           <Radio.Group
@@ -427,7 +427,7 @@ function AttendanceLog(props) {
       title: "Dayoff",
       dataIndex: "dayoff",
       key: "dayoff",
-      alignItems: "center",
+      align: "center",
       render: (_, data) => {
         return (
           <Radio.Group
@@ -677,7 +677,8 @@ function AttendanceLog(props) {
                       layout="horizontal"
                     >
                       <Form.Item
-                        label="Start Time::"
+                        className="time"
+                        label="Start Time"
                         rules={[
                           {
                             required: true,
@@ -691,7 +692,8 @@ function AttendanceLog(props) {
                         />
                       </Form.Item>
                       <Form.Item
-                        label="End Time::"
+                        className="time"
+                        label="End Time"
                         rules={[
                           {
                             required: true,
@@ -704,15 +706,21 @@ function AttendanceLog(props) {
                           defaultOpenValue={moment("00:00:00", "HH:mm:ss")}
                         />
                       </Form.Item>
-                      <Form.Item
-                        label="Work Days::"
-                        rules={[
-                          {
-                            required: true,
-                          },
-                        ]}
-                      ></Form.Item>
-                      <Divider style={{ borderTop: "2px solid #EAEAEA" }} />
+                      <div
+                        style={{
+                          fontWeight: "600",
+                          fontSize: "14px",
+                          marginLeft: "41px",
+                        }}
+                      >
+                        Work Days
+                      </div>
+                      <Divider
+                        style={{
+                          borderTop: "2px solid #EAEAEA",
+                          margin: "10px",
+                        }}
+                      />
                       <Table
                         className="weekDays"
                         columns={tableHeaders}
@@ -722,7 +730,7 @@ function AttendanceLog(props) {
                         size="small"
                       />
                       <Form.Item
-                        label="Max Break Duration::"
+                        label="Max Break Duration"
                         labelCol={{
                           span: 7,
                           offset: 2,
@@ -744,7 +752,7 @@ function AttendanceLog(props) {
                         />
                       </Form.Item>
                       <Form.Item
-                        label="Auto Clock Out::"
+                        label="Auto Clock Out"
                         labelCol={{
                           span: 6,
                           offset: 2,
@@ -755,6 +763,8 @@ function AttendanceLog(props) {
                         }}
                       >
                         <Switch
+                          checkedChildren="Enabled"
+                          unCheckedChildren="Disabled"
                           defaultChecked
                           onChange={onChange}
                           // style={{ marginLeft: "13rem" }}

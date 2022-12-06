@@ -23,7 +23,7 @@ import FormItem from "antd/lib/form/FormItem";
 const { TextArea } = Input;
 const { Option } = Select;
 
-function Personal() {
+function Personal(props) {
   const [editContent, showEditContent] = useState(false);
   const [editContactInfo, showEditContactInfo] = useState(false);
   const [dob, setDob] = useState("");
@@ -103,10 +103,23 @@ function Personal() {
       </Select>
     </Form.Item>
   );
-  const layout = {
-    labelCol: { span: 4 },
-    wrapperCol: { span: 12 },
-  };
+  const layoutName = {
+    labelCol: { xs: { span: 24 }, sm: { span: 5 }, md: { span: 4 }, lg: { span: 3 }, xl: { span: 3} },
+    wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
+  }
+  const layoutDOB = {
+    labelCol: { xs: { span: 24 }, sm: { span: 12 }, md: { span: 12 }, lg: { span: 10 }, xl: { span: 8} },
+    wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
+  }
+  const layoutGender = {
+    labelCol: { xs: { span: 24 }, sm: { span: 12 }, md: { span: 12 }, lg: { span: 10 }, xl: { span: 8} },
+    wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
+  }
+  const layoutBlood = {
+    labelCol: { xs: { span: 24 }, sm: { span: 12 }, md: { span: 12 }, lg: { span: 10 }, xl: { span: 8} },
+    wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
+  }
+
   return (
     <>
       <div
@@ -505,10 +518,10 @@ function Personal() {
                 }}
               >
                 <Row gutter={[16, 16]}>
-                  <Col xs={24} sm={24} md={6} lg={6} xl={6} xxl={6}
+                  <Col xs={24} sm={24} md={7} lg={6} xl={6} xxl={6}
                     style={{
                         display: "flex",
-                        alignItems: "center",
+                        alignItems: "start",
                         justifyContent: "center",
                         flexDirection: "column",
                       }}>
@@ -525,7 +538,7 @@ function Personal() {
                       <UploadOutlined /> Upload Photo
                     </Button>
                   </Col>
-                  <Col xs={24} sm={24} md={18} lg={18} xl={18} xxl={18}>
+                  <Col xs={24} sm={24} md={17} lg={18} xl={18} xxl={18}>
                     {editContent === false ? (
                     <>
                       <div
@@ -534,6 +547,7 @@ function Personal() {
                           width:"100%",
                           // display: "flex",
                           // alignItems: 'flex-start',
+                          
                           // justifyContent: "flex-start",
                           // flexDirection: "column",
                         }}
@@ -845,8 +859,7 @@ function Personal() {
                               message: "Please enter Valid Name",
                             },
                           ]}
-                          wrapperCol= {{}}
-                          labelCol= {{ span: 2 }}       
+                          {...layoutName}      
                         >
                           <Input
                             style={{
@@ -883,8 +896,7 @@ function Personal() {
                               message: "Please Choose a Date",
                             },
                           ]}
-                          wrapperCol= {{}}
-                          labelCol= {{ span: 6 }}    
+                          {...layoutDOB}
                         >
                           {/* format={dateFormatList} */}
                           <DatePicker
@@ -915,8 +927,7 @@ function Personal() {
                               message: "Please Choose Gender",
                             },
                           ]}
-                          wrapperCol= {{ span: 24, offset:0 }}
-                          labelCol= {{ span: 6 }} 
+                          {...layoutGender}
                         >
                           <Select
                             placeholder="Select a Gender"
@@ -943,8 +954,7 @@ function Personal() {
                               message: "Please Choose Blood Groop",
                             },
                           ]}
-                          wrapperCol= {{ span: 24, offset:0 }}
-                          labelCol= {{ span: 6 }} 
+                          {...layoutBlood} 
                         >
                           <Select
                             placeholder="Select a Blood Group"
@@ -977,7 +987,7 @@ function Personal() {
                               message: "Your Marrige Status",
                             },
                           ]}
-                          wrapperCol= {{ }}
+                          wrapperCol= {{span:props.span}}
                           labelCol= {{ span: 6 }} 
                         >
                           <Select

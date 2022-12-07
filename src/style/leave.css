@@ -167,6 +167,79 @@
   border: 1px solid rgb(116, 174, 199) !important;
   box-shadow: 0 0 0px #719ece !important;
 }
+
+.sickLeave .ant-card-body{
+padding: 10px;
+border-left: 4px solid #8F8980;
+}
+
+.sickLeave .ant-card-body:hover{
+  border-left: 4px solid #2094FF;
+}
+
+.optionalLeave .ant-card-body:hover{
+  border-left: 4px solid #2094FF;
+}
+
+.lossPay .ant-card-body:hover{
+  border-left: 4px solid #2094FF;
+}
+
+.sickLabel:hover{
+  color: #2094FF;
+}
+
+
+.optionalLeave .ant-card-body{
+  padding: 10px;
+  border-left: 4px solid #8F8980;
+  }
+
+  .lossPay .ant-card-body{
+    padding: 10px;
+    border-left: 4px solid #8F8980;
+    }
+  
+    .sick .ant-card-head-title {
+      font-size: 15px;
+      font-weight: bold;
+      line-height: 19px;
+      text-transform: uppercase;
+    }
+
+    .personalCardDiv:hover .sick {
+      display: block !important;
+    }
+
+    .leavesCount:hover .leaves {
+      display: block !important;
+    }
+    
+
+    .leaves .ant-card-head {
+      border-radius: 10px 10px 0px 0px;
+      background: #1963a6;
+      color: #ffffff;
+    }
+
+    .sickCard .ant-card-head-title{
+      font-size: 16px;
+    font-weight: 600;
+    line-height: 19px;
+    color: #000000;
+    }
+
+
+/* .sickLeave:focus{
+border-left: 4px solid #0093FF;
+} */
+
+
+/* ul.sidecard > li:active{
+  border-left: 4px solid #0093FF ;
+} */
+
+
 @media only screen and (max-width: 750px) {
   .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date {
     display: block !important;

@@ -14,7 +14,7 @@ import {
 import 'antd/dist/antd.css';
 import { Button, Drawer, Modal, } from 'antd';
 import CompanyHolidayContext from '../contexts/CompanyHolidayContext';
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, ContainerOutlined } from "@ant-design/icons";
 import moment from 'moment/moment';
 const { Text, } = Typography;
 const LeaveList = (props) => {
@@ -78,6 +78,7 @@ const LeaveList = (props) => {
 
     }
     const onFinish = (values) => {
+        console.log('value', values)
         let newHoliday = {
             name: values.holidayname,
             date: values.holidaydate.format("Do MMM, YYYY"),

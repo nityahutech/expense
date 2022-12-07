@@ -16,6 +16,7 @@ import {
   Select,
   Switch,
   TimePicker,
+  InputNumber
 } from "antd";
 import "../style/AttendanceLog.css";
 import { SearchOutlined } from "@ant-design/icons";
@@ -23,7 +24,9 @@ import moment from "moment";
 import AttendanceContext from "../contexts/AttendanceContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
 import EmpInfoContext from "../contexts/EmpInfoContext";
+import ConfigureContext from "../contexts/ConfigureContext";
 const dateFormat = "DD-MM-YYYY";
+
 
 const layout = {
   labelCol: {
@@ -44,6 +47,7 @@ function AttendanceLog(props) {
   const [allEmp, setallEmp] = useState([]);
   const isHr = props.roleView == "admin";
   console.log(props, isHr);
+  const page = "attendanceConfig";
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
@@ -58,6 +62,83 @@ function AttendanceLog(props) {
     date: [],
     category: "all",
   });
+  const [configurations, setConfigurations] = useState({});
+  const [starttime, setStarttime] = useState();
+  const [endtime, setEndtime] = useState();
+  const [maxBreakDuration, setMaxBreakDuration] = useState(0);
+  const [inputclock, setInputclock] = useState(true);
+
+
+  const handleFinish = (values,) => {
+    console.log('ddddd', values,)
+    let attendanceConfig = {
+      starttime: starttime,
+      endtime: endtime,
+      inputclock: inputclock,
+      maxBreakDuration: maxBreakDuration,
+      selectedDay: selectedDay
+
+    };
+
+    if (values.starttime != null) {
+      // console.log('ddddd', values.starttime.format("HH:mm"))
+      setStarttime(values.starttime.format("HH:mm"))
+      attendanceConfig.starttime = values.starttime.format("HH:mm")
+    }
+    if (values.endtime != null) {
+      // console.log('ddddd', values.endtime.format("HH:mm"))
+      setEndtime(values.endtime.format("HH:mm"))
+      attendanceConfig.endtime = values.endtime.format("HH:mm")
+    }
+    if (values.maxBreakDuration != null) {
+      // console.log('ddddd', values.maxBreakDuration)
+      setMaxBreakDuration(values.maxBreakDuration)
+      attendanceConfig.maxBreakDuration = values.maxBreakDuration
+    }
+    if (values.inputclock != null) {
+      // console.log('ddddd', values.inputclock)
+      setInputclock(values.inputclock)
+      attendanceConfig.inputclock = values.inputclock
+    }
+
+    if (values.selectedDay != null) {
+      attendanceConfig.selectedDay = values.selectedDay
+    }
+
+    console.log('ddddd', attendanceConfig)
+    if (attendanceConfig.starttime != null && attendanceConfig.endtime != null && (Object.keys(attendanceConfig.selectedDay).length) == 7) {
+      ConfigureContext.createConfiguration(
+        page,
+        { attendanceNature: attendanceConfig })
+        .then((response) => {
+          showNotification(
+            "success",
+            "Success",
+            "Added successfully!"
+          );
+        })
+        .catch((error) => {
+          showNotification("error", "Error", error.message);
+        });
+    }
+    else {
+      console.log('dddd', (Object.keys(attendanceConfig.selectedDay).length))
+    }
+
+  }
+
+  const getAttendanceData = async () => {
+    let data = await ConfigureContext.getConfigurations(page);
+    console.log('dataAttendance', data)
+    setConfigurations(data);
+    setSelectedDay(data?.attendanceNature?.selectedDay)
+  };
+
+  const checkNumbervalue = (event) => {
+    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
   const [filteredEmp, setFilteredEmp] = useState([]);
   const columns = [
     {
@@ -104,6 +185,7 @@ function AttendanceLog(props) {
   useEffect(() => {
     getHolidayList();
     getDateOfJoining();
+    getAttendanceData();
   }, []);
   useEffect(() => {
     form.resetFields();
@@ -370,12 +452,16 @@ function AttendanceLog(props) {
   ];
 
   const handleRadiochange = (value, data) => {
+
     console.log(value);
     console.log(data);
-    setSelectedDay({
+    let tempSelectedDay = {
       ...selectedDay,
       [data.days]: value,
-    });
+    }
+    setSelectedDay(tempSelectedDay);
+    // console.log('ddddd', selectedDay)
+    handleFinish({ selectedDay: tempSelectedDay })
   };
 
   console.log(selectedDay);
@@ -395,10 +481,13 @@ function AttendanceLog(props) {
           <Radio.Group
             onChange={(e) => handleRadiochange(e.target.value, data)}
             value={selectedDay[data.days]}
+          // value={value4}
+
           >
             <Radio
               className="radio"
               value={`fullday_${data.key}_${data.days}`}
+
             />
           </Radio.Group>
         );
@@ -444,6 +533,7 @@ function AttendanceLog(props) {
     },
   ];
   const timeChange = (time, timeString) => {
+    console.log('onchange', 'TimePicker1')
     console.log(time, timeString);
   };
 
@@ -467,6 +557,12 @@ function AttendanceLog(props) {
   const onChange = (checked) => {
     console.log(`switch to ${checked}`);
   };
+
+  const onBreakHrChange = (checked) => {
+    console.log(`switch to ${checked}`);
+  };
+
+
 
   return (
     <>
@@ -514,9 +610,9 @@ function AttendanceLog(props) {
                 tab="Add Report"
                 key="2"
                 className="reportTabs"
-                // onClick={() => {
-                //   setIsModalOpen(true);
-                // }}
+              // onClick={() => {
+              //   setIsModalOpen(true);
+              // }}
               >
                 {/* <Button type="primary" onClick={showModal}>
               Open Modal
@@ -555,6 +651,7 @@ function AttendanceLog(props) {
                     <DatePicker
                       format={"DD-MM-YYYY"}
                       style={{ width: "50%" }}
+
                     />
                   </Form.Item>
                   <Form.Item
@@ -605,7 +702,7 @@ function AttendanceLog(props) {
                   placeholder="Search"
                   prefix={<SearchOutlined />}
                   onChange={searchChange}
-                  // style={{ width: "95%" }}
+                // style={{ width: "95%" }}
                 />
                 <Table
                   //   rowSelection={{
@@ -646,6 +743,7 @@ function AttendanceLog(props) {
                     }}
                     allowClear
                     onChange={onHrDateFilter}
+                    disabledDate={disabledDate}
                   />
                 </div>
                 <Table
@@ -656,6 +754,11 @@ function AttendanceLog(props) {
                   pagination={true}
                 />
               </Tabs.TabPane>
+
+
+              {/* //---------------------------------------------------------- */}
+
+
               <Tabs.TabPane tab="Configure" key="3">
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <Card
@@ -675,8 +778,14 @@ function AttendanceLog(props) {
                         offset: 1,
                       }}
                       layout="horizontal"
+                      initialValues={{
+                        remember: true,
+                      }}
+                      onValuesChange={handleFinish}
                     >
                       <Form.Item
+                        initialValue={moment(configurations?.attendanceNature?.starttime, "hh:mm")}
+                        name="starttime"
                         className="time"
                         label="Start Time"
                         rules={[
@@ -687,11 +796,21 @@ function AttendanceLog(props) {
                         ]}
                       >
                         <TimePicker
-                          onChange={timeChange}
-                          defaultOpenValue={moment("00:00:00", "HH:mm:ss")}
+                          // onChange={timeChange}
+
+                          // onChange={(e) => {
+                          //   console.log('onchange', 'TimePicker')
+                          //   setStarttime(e.target.value);
+
+                          // }}
+                          defaultOpenValue={moment("00:00", "HH:mm")}
+
                         />
                       </Form.Item>
+
                       <Form.Item
+                        initialValue={moment(configurations?.attendanceNature?.endtime, "hh:mm")}
+                        name="endtime"
                         className="time"
                         label="End Time"
                         rules={[
@@ -702,8 +821,13 @@ function AttendanceLog(props) {
                         ]}
                       >
                         <TimePicker
-                          onChange={onChange}
-                          defaultOpenValue={moment("00:00:00", "HH:mm:ss")}
+                          // onChange={onChange}
+                          // onChange={(e) => {
+                          //   console.log('onchange', 'TimePicker2')
+                          //   setEndtime(e.target.value);
+
+                          // }}
+                          defaultOpenValue={moment("00:00", "HH:mm")}
                         />
                       </Form.Item>
                       <div
@@ -730,7 +854,7 @@ function AttendanceLog(props) {
                         size="small"
                       />
                       <Form.Item
-                        label="Max Break Duration"
+                        label="Max Break Duration "
                         labelCol={{
                           span: 7,
                           offset: 2,
@@ -739,19 +863,32 @@ function AttendanceLog(props) {
                           span: 10,
                           offset: 1,
                         }}
-                      >
-                        <Select
-                          options={[
-                            {
-                              value: "1hour",
-                              label: "1 Hour",
-                            },
 
-                            { value: "2hour", label: "2 Hour" },
-                          ]}
-                        />
+                      >
+                        <Form.Item name="maxBreakDuration" initialValue={configurations?.attendanceNature?.maxBreakDuration} noStyle>
+                          <InputNumber min={0} max={5}
+                            onKeyPress={(event) => {
+                              if (checkNumbervalue(event)) {
+                                event.preventDefault();
+                              }
+                            }}
+                            
+                          // onChange{(e) => {
+                          //   console.log('onchange', 'inputNumber', e)
+                          //   setInputnumber(e);
+
+
+                          // }}
+
+                          />
+                        </Form.Item>
+                        <span className="ant-form-text" style={{ marginLeft: 8 }}>
+
+                        </span>
                       </Form.Item>
                       <Form.Item
+                        initialValue={configurations?.attendanceNature?.inputclock}
+                        name="inputclock"
                         label="Auto Clock Out"
                         labelCol={{
                           span: 6,
@@ -765,9 +902,13 @@ function AttendanceLog(props) {
                         <Switch
                           checkedChildren="Enabled"
                           unCheckedChildren="Disabled"
-                          defaultChecked
-                          onChange={onChange}
-                          // style={{ marginLeft: "13rem" }}
+                          defaultChecked={configurations?.attendanceNature?.inputclock}
+                        // onChange={(x, e) => {
+                        //   console.log('onchange', 'enable')
+                        //   setInputclock(e.target.value);
+
+                        // }}
+                        // style={{ marginLeft: "13rem" }}
                         />
                       </Form.Item>
                     </Form>

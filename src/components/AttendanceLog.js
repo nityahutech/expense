@@ -131,6 +131,7 @@ function AttendanceLog(props) {
     let data = await ConfigureContext.getConfigurations(page);
     console.log('dataAttendance', data)
     setConfigurations(data);
+    setSelectedDay(data?.attendanceNature?.selectedDay)
   };
 
   const checkNumbervalue = (event) => {
@@ -783,6 +784,7 @@ function AttendanceLog(props) {
                       onValuesChange={handleFinish}
                     >
                       <Form.Item
+                        initialValue={moment(configurations?.attendanceNature?.starttime, "hh:mm")}
                         name="starttime"
                         className="time"
                         label="Start Time"
@@ -807,6 +809,7 @@ function AttendanceLog(props) {
                       </Form.Item>
 
                       <Form.Item
+                        initialValue={moment(configurations?.attendanceNature?.endtime, "hh:mm")}
                         name="endtime"
                         className="time"
                         label="End Time"
@@ -862,14 +865,14 @@ function AttendanceLog(props) {
                         }}
 
                       >
-                        <Form.Item name="maxBreakDuration" noStyle>
-                          <InputNumber min={0} max={10}
+                        <Form.Item name="maxBreakDuration" initialValue={configurations?.attendanceNature?.maxBreakDuration} noStyle>
+                          <InputNumber min={0} max={5}
                             onKeyPress={(event) => {
                               if (checkNumbervalue(event)) {
                                 event.preventDefault();
                               }
                             }}
-                            initialValue={configurations.maxBreakDuration}
+                            
                           // onChange{(e) => {
                           //   console.log('onchange', 'inputNumber', e)
                           //   setInputnumber(e);
@@ -884,6 +887,7 @@ function AttendanceLog(props) {
                         </span>
                       </Form.Item>
                       <Form.Item
+                        initialValue={configurations?.attendanceNature?.inputclock}
                         name="inputclock"
                         label="Auto Clock Out"
                         labelCol={{
@@ -898,7 +902,7 @@ function AttendanceLog(props) {
                         <Switch
                           checkedChildren="Enabled"
                           unCheckedChildren="Disabled"
-                          defaultChecked
+                          defaultChecked={configurations?.attendanceNature?.inputclock}
                         // onChange={(x, e) => {
                         //   console.log('onchange', 'enable')
                         //   setInputclock(e.target.value);

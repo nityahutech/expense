@@ -62,7 +62,7 @@ function AttendanceLog(props) {
     date: [],
     category: "all",
   });
-
+  const [configurations, setConfigurations] = useState({});
   const [starttime, setStarttime] = useState();
   const [endtime, setEndtime] = useState();
   const [maxBreakDuration, setMaxBreakDuration] = useState(0);
@@ -116,19 +116,23 @@ function AttendanceLog(props) {
             "Success",
             "Added successfully!"
           );
-
-
         })
         .catch((error) => {
           showNotification("error", "Error", error.message);
         });
-
     }
     else {
       console.log('dddd', (Object.keys(attendanceConfig.selectedDay).length))
     }
 
   }
+
+  const getAttendanceData = async () => {
+    let data = await ConfigureContext.getConfigurations(page);
+    console.log('dataAttendance', data)
+    setConfigurations(data);
+  };
+
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
@@ -180,6 +184,7 @@ function AttendanceLog(props) {
   useEffect(() => {
     getHolidayList();
     getDateOfJoining();
+    getAttendanceData();
   }, []);
   useEffect(() => {
     form.resetFields();
@@ -645,6 +650,7 @@ function AttendanceLog(props) {
                     <DatePicker
                       format={"DD-MM-YYYY"}
                       style={{ width: "50%" }}
+
                     />
                   </Form.Item>
                   <Form.Item
@@ -736,6 +742,7 @@ function AttendanceLog(props) {
                     }}
                     allowClear
                     onChange={onHrDateFilter}
+                    disabledDate={disabledDate}
                   />
                 </div>
                 <Table
@@ -770,6 +777,9 @@ function AttendanceLog(props) {
                         offset: 1,
                       }}
                       layout="horizontal"
+                      initialValues={{
+                        remember: true,
+                      }}
                       onValuesChange={handleFinish}
                     >
                       <Form.Item
@@ -792,6 +802,7 @@ function AttendanceLog(props) {
 
                           // }}
                           defaultOpenValue={moment("00:00", "HH:mm")}
+
                         />
                       </Form.Item>
 
@@ -840,7 +851,7 @@ function AttendanceLog(props) {
                         size="small"
                       />
                       <Form.Item
-                        label="Max Break Duration"
+                        label="Max Break Duration "
                         labelCol={{
                           span: 7,
                           offset: 2,
@@ -853,12 +864,13 @@ function AttendanceLog(props) {
                       >
                         <Form.Item name="maxBreakDuration" noStyle>
                           <InputNumber min={0} max={10}
-                          // onKeyPress={(event) => {
-                          //   if (checkNumbervalue(event)) {
-                          //     event.preventDefault();
-                          //   }
-                          // }}
-                          // onChange={(e) => {
+                            onKeyPress={(event) => {
+                              if (checkNumbervalue(event)) {
+                                event.preventDefault();
+                              }
+                            }}
+                            initialValue={configurations.maxBreakDuration}
+                          // onChange{(e) => {
                           //   console.log('onchange', 'inputNumber', e)
                           //   setInputnumber(e);
 
@@ -868,7 +880,7 @@ function AttendanceLog(props) {
                           />
                         </Form.Item>
                         <span className="ant-form-text" style={{ marginLeft: 8 }}>
-                          Hr
+
                         </span>
                       </Form.Item>
                       <Form.Item

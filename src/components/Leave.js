@@ -31,6 +31,7 @@ import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import Notification from "./Notification";
 import HolidayList from "./HolidayList";
+import ApprovalConfig from "./ApprovalConfig";
 import "../style/leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
 import LeaveCreate from "./LeaveCreate";
@@ -3780,7 +3781,7 @@ const Leave = (props) => {
               </div>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Approvals" key="4">
-              Content of Tab Pane 4
+              <ApprovalConfig/>
             </Tabs.TabPane>
           </Tabs>
         </div>

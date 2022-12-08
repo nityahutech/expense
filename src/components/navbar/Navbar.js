@@ -21,7 +21,6 @@ const Navbar = (props) => {
   const [buttonStatus,setButtonStatus]=useState(false);
   const role = sessionStorage.getItem("role");
   const [roleView, setRoleView] = useState(props.roleView || sessionStorage.getItem("role"));
-  console.log(roleView)
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   let temp = sessionStorage.getItem("logo");
   const logo = temp == null ? Logo : temp;
@@ -92,7 +91,6 @@ const Navbar = (props) => {
   );
 
   useEffect(() => {
-    console.log(role);
     setIsRunning(isClockRunning());
   }, []);
 
@@ -156,8 +154,7 @@ const Navbar = (props) => {
       setButtonText("Web Clock in");
     }
   };
- 
-  console.log(buttonStatus,"button");
+  
   const setClockState = async () => {
     let clickedDate = {
       empId: currentUser.uid,

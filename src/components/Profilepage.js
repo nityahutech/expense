@@ -46,9 +46,9 @@ const role = sessionStorage.getItem("role");
               <Tabs.TabPane tab="Work Week" key="7">
                 <WorkWeek />
               </Tabs.TabPane>
-              {/* <Tabs.TabPane tab="Pay Slip" key="8">
+              <Tabs.TabPane tab="Pay Slip" key="8">
                 <PaySlip />
-              </Tabs.TabPane> */}
+              </Tabs.TabPane>
               <Tabs.TabPane tab="Bank Account" key="9">
                 <BankAccount />
               </Tabs.TabPane>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   Row,
@@ -6,6 +6,7 @@ import {
   Input,
   Button,
   DatePicker,
+  message,
   Select,
   Form,
   Divider,
@@ -13,6 +14,7 @@ import {
 import {
   CheckOutlined,
   CloseOutlined,
+  DeleteOutlined,
   EditFilled,
   UploadOutlined,
 } from "@ant-design/icons";
@@ -24,6 +26,10 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 function Personal(props) {
+  const imgRef = React.useRef(null);
+  const [fileName, setFileName] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+  const [isBigFile, setIsBigFile] = useState(false);
   const [editContent, showEditContent] = useState(false);
   const [editContactInfo, showEditContactInfo] = useState(false);
   const [dob, setDob] = useState("");
@@ -47,12 +53,50 @@ function Personal(props) {
       bloodGroup: value.bloodGroup ? value.bloodGroup : null,
       maritalStatus: value.maritalStatus ? value.maritalStatus : null,
       mname: mname,
+      profilePic: imageUrl || null,
     };
-    EmpInfoContext.updateEduDetails(currentUser.uid, record);
-    // setData(record)
-    getData();
+    EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName);
+    const timer = setTimeout(() => {
+      getData();
+    }, 5000);
     showEditContent(false);
+    return () => {
+      clearTimeout(timer);
+    };
   };
+
+  const handleClick = () => {
+    imgRef.current.click();
+  };
+
+  const getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  };
+
+  function checkFileSize(size, fileName) {
+    if (Math.round(size / 1024) <= 200) {
+      setFileName(fileName);
+      setIsBigFile(false);
+    } else {
+      setFileName(null);
+      setIsBigFile(true);
+    }
+  }
+
+  const handleChange = (event) => {
+    if (!event) {
+      return;
+    }
+    const fileUploaded = event.target.files[0];
+    getBase64(fileUploaded, (url) => {
+        // setLoading(false);
+        setImageUrl(url);
+    });
+    checkFileSize(fileUploaded.size, fileUploaded);
+  };
+
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -84,7 +128,10 @@ function Personal(props) {
   }, []);
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+    console.log("storage", data)
     setData(data);
+    setFileName(data.profilePic)
+    setImageUrl(data.profilePic)
     setDob(data?.dob ? data.dob : null);
     setLccs(data?.lccs ? data.lccs : null);
     setScrs(data?.scrs ? data.scrs : null);
@@ -95,14 +142,20 @@ function Personal(props) {
       <Select
         bordered={false}
         style={{
-          width: 70,
+          width: 80,
           background: "#ffffff",
         }}
       >
-        <Option value="91">+91</Option>
+        <Option value="91 ">+91 (India)</Option>
       </Select>
     </Form.Item>
   );
+  
+  function onReset() {
+    setIsBigFile(false);
+    setFileName(null);
+    setImageUrl("")
+  }
   const layoutName = {
     labelCol: { xs: { span: 24 }, sm: { span: 5 }, md: { span: 4 }, lg: { span: 3 }, xl: { span: 3} },
     wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
@@ -120,365 +173,70 @@ function Personal(props) {
     wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
   }
 
-  return (
-    <>
-      <div
-        className="personalCardDiv"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Row
-          className="Row-Card"
+  const imgDiv = () => {
+    if (fileName == "" || fileName == null) {
+      return editContent == false ? (
+        <div 
           style={{
-            width: "75%",
-            margin: "10px",
+            width: "150px",
+            height: "170px",
+            border: "1px solid #05445e",
             display: "flex",
             alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
           }}
         >
-          <Col span={24}>
-            <Form
-              form={form}
-              labelcol={{
-                span: 4,
-              }}
-              wrappercol={{
-                span: 14,
-              }}
-              initialValues={{
-                remember: true,
-              }}
-              autoComplete="off"
-              onFinish={onFinish}
-            >
-              <Card
-                title="PERSONAL INFO"
-                className="personal"
-                hoverable={true}
-                bordered={true}
-                extra={
-                  <>
-                    {editContent === false ? (
-                      <Button
-                        className="personal"
-                        type="text"
-                        style={{
-                          color: "#ffff",
-                          display: "none",
-                          paddingTop: "7px",
-                          paddingRight: "7px",
-                          position: "absolute",
-                          right: 10,
-                          top: 10,
-                        }}
-                        onClick={() => showEditContent(!editContent)}
-                      >
-                        <EditFilled />
-                      </Button>
-                    ) : null}
-                  </>
-                }
-                style={{
-                  width: "100%",
-                  marginTop: 10,
-                  borderRadius: "10px",
-                  cursor: "default",
-                }}
-              >
-                <Row gutter={[16, 42]}>
-                  <Col xs={24} sm={24} md={8}>
-                    <div>
-                      <div
-                        style={{
-                          fontWeight: 600,
-                          lineHeight: "18px",
-                          color: "#07182b",
-                          fontSize: "15px",
-                          fontFamily: "Open Sans,sans-serif",
-                        }}
-                      >
-                        Name
-                      </div>
-                      {editContent === false ? (
-                        <div>{data ? data.name : null}</div>
-                      ) : (
-                        <Form.Item
-                          initialValue={data.name}
-                          name="name"
-                          rules={[
-                            {
-                              required: true,
-                              minLength: 3,
-                              maxLength: 50,
-                              // message: "Please enter First Name",
-                            },
-                            {
-                              pattern: /^[a-zA-Z\s]*$/,
-                              message: "Please enter Valid Name",
-                            },
-                          ]}
-                        >
-                          <Input
-                            style={{
-                              marginTop: "10px",
-                              width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                            }}
-                            bordered={false}
-                            // disabled={true}
-                            initialValue={data.name ? data.name : null}
-                            maxLength={50}
-                            required
-                            placeholder="Enter Your Name"
-                            onChange={(e) => {
-                              const inputval = e.target.value;
-                              const str = e.target.value;
-                              const newVal =
-                                inputval.substring(0, 1).toUpperCase() +
-                                inputval.substring(1);
-                              const caps = str
-                                .split(" ")
-                                .map(capitalize)
-                                .join(" ");
-                              form.setFieldsValue({ name: newVal, name: caps });
-                            }}
-                          />
-                        </Form.Item>
-                      )}
-                    </div>
-                  </Col>
-                  <Col xs={24} sm={24} md={8}>
-                    <div>
-                      <div
-                        style={{
-                          fontWeight: 600,
-                          lineHeight: "18px",
-                          color: "#07182b",
-                          fontSize: "15px",
-                          fontFamily: "Open Sans,sans-serif",
-                        }}
-                      >
-                        Date of Birth
-                      </div>
-                      {editContent === false ? (
-                        <div>{data?.dob ? data.dob : "-"}</div>
-                      ) : (
-                        <Form.Item
-                          initialValue={dob ? moment(dob, "DD-MM-YYYY") : null}
-                          name="dob"
-                          rules={[
-                            {
-                              required: false,
-                              message: "Please Choose a Date",
-                            },
-                          ]}
-                        >
-                          {/* format={dateFormatList} */}
-                          <DatePicker
-                            style={{
-                              marginTop: "10px",
-                              width: "100%",
-                            }}
-                            // format={dateFormatList}
-                            // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
-                            onChange={(e) => {
-                              setDob(e.format("DD-MM-YYYY"));
-                            }}
-                            //  disabledDate={disabledDate}
-                            value={dob}
-                            placeholder="Choose Date"
-                          />
-                        </Form.Item>
-                      )}
-                    </div>
-                  </Col>
-                  <Col xs={24} sm={24} md={8}>
-                    <div>
-                      <div
-                        style={{
-                          fontWeight: 600,
-                          lineHeight: "18px",
-                          color: "#07182b",
-                          fontSize: "15px",
-                          fontFamily: "Open Sans,sans-serif",
-                        }}
-                      >
-                        Gender
-                      </div>
-                      {editContent === false ? (
-                        <div>{data ? data.gender : null}</div>
-                      ) : (
-                        <Form.Item
-                          name="gender"
-                          initialValue={data.gender ? data.gender : "-"}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please Choose Gender",
-                            },
-                          ]}
-                        >
-                          <Select
-                            placeholder="Select a Gender"
-                            style={{
-                              marginTop: "10px",
-                              width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                            }}
-                            bordered={false}
-                          >
-                            <Option value="Male">Male</Option>
-                            <Option value="Female">Female</Option>
-                          </Select>
-                        </Form.Item>
-                      )}
-                    </div>
-                  </Col>
-                  <Col xs={24} sm={24} md={8}>
-                    <div>
-                      <div
-                        style={{
-                          fontWeight: 600,
-                          lineHeight: "18px",
-                          color: "#07182b",
-                          fontSize: "15px",
-                          fontFamily: "Open Sans,sans-serif",
-                        }}
-                      >
-                        Blood Group
-                      </div>
-                      {editContent === false ? (
-                        <div>{data?.bloodGroup ? data.bloodGroup : "-"}</div>
-                      ) : (
-                        <Form.Item
-                          initialValue={data ? data.bloodGroup : null}
-                          name="bloodGroup"
-                          rules={[
-                            {
-                              required: false,
-                              message: "Please Choose Blood Groop",
-                            },
-                          ]}
-                        >
-                          <Select
-                            placeholder="Select a Blood Group"
-                            style={{
-                              marginTop: "10px",
-                              width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                            }}
-                            bordered={false}
-                          >
-                            <Option value="A+">A+</Option>
-                            <Option value="A-">A-</Option>
-                            <Option value="O+">O+</Option>
-                            <Option value="O-">O-</Option>
-                            <Option value="B+">B+</Option>
-                            <Option value="B-">B-</Option>
-                            <Option value="AB+">AB+</Option>
-                            <Option value="AB-">AB-</Option>
-                          </Select>
-                        </Form.Item>
-                      )}
-                    </div>
-                  </Col>
-                  <Col xs={24} sm={24} md={8}>
-                    <div>
-                      <div
-                        style={{
-                          fontWeight: 600,
-                          lineHeight: "18px",
-                          color: "#07182b",
-                          fontSize: "15px",
-                          fontFamily: "Open Sans,sans-serif",
-                        }}
-                      >
-                        Marital Status
-                      </div>
-                      {editContent === false ? (
-                        <div>
-                          {data?.maritalStatus ? data.maritalStatus : "-"}
-                        </div>
-                      ) : (
-                        <Form.Item
-                          initialValue={data ? data.maritalStatus : null}
-                          name="maritalStatus"
-                          rules={[
-                            {
-                              required: false,
-                              message: "Your Marrige Status",
-                            },
-                          ]}
-                        >
-                          <Select
-                            style={{
-                              marginTop: "10px",
-                              width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                            }}
-                            bordered={false}
-                          >
-                            <Option value="Single">Single</Option>
-                            <Option value="Married">Married</Option>
-                          </Select>
-                        </Form.Item>
-                      )}
-                    </div>
-                  </Col>
-                </Row>
-                {editContent === true ? (
-                  <Row
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "3%",
-                    }}
-                  >
-                    <Button
-                      onClick={() => showEditContent(false)}
-                      type="text"
-                      style={{
-                        fontSize: "14px",
-                        // color: "#1963A6",
-                        // marginRight: "10px",
-                        // border: "1px solid #1963A6",
-                        // width: "90px",
-                      }}
-                    >
-                      <CloseOutlined /> CANCEL
-                    </Button>
+          No Image
+        </div>
+      ) : (
+        <Button
+          style={{
+            width: "150px",
+            height: "170px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}
+          onClick={(e) => handleClick(e)}
+        >
+          <input
+            style={{
+              display: "none",
+            }}
+            type="file"
+            id="logo"
+            name="logo"
+            ref={imgRef}
+            onChange={(e) => handleChange(e)}
+          />
+          <UploadOutlined /> Upload Photo
+        </Button>
+      );
+    } else {
+      return (
+        <div className={editContent === true ? "hoverImgCont": null} style={{position: "relative"}}>
+          <img
+            src={imageUrl}
+            style={{
+              width: "150px",
+              height: "170px",
+              border: "1px solid #05445e"
+            }}
+          />
+          {editContent === true ?(
+            <div className="overlay">
+              <DeleteOutlined className="hoverIcon" onClick={onReset}/>
+            </div>
+          ): null}
+        </div>
+      )
+    }
+  }
 
-                    <Col>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        style={{
-                          marginLeft: "10px",
-                          background: "#1963A6",
-                          width: "90px",
-                        }}
-                      >
-                        <CheckOutlined />
-                        SAVE
-                      </Button>
-                    </Col>
-                  </Row>
-                ) : null}
-              </Card>
-            </Form>
-          </Col>
-        </Row>
-      </div>
-
-      {/* ------------------For testing the new layout */}
-
+  return (
+    <>
       <div
         className="personalCardDiv"
         style={{
@@ -525,18 +283,10 @@ function Personal(props) {
                         justifyContent: "center",
                         flexDirection: "column",
                       }}>
-                    <Button
-                      style={{
-                        width: "150px",
-                        height: "170px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <UploadOutlined /> Upload Photo
-                    </Button>
+                      {isBigFile
+                        ? message.error("File size must be less than 200Kb.")
+                        : ""}
+                      {imgDiv()}
                   </Col>
                   <Col xs={24} sm={24} md={17} lg={18} xl={18} xxl={18}>
                     {editContent === false ? (
@@ -574,7 +324,7 @@ function Personal(props) {
                             >
                               <EditFilled />
                             </Button>
-                            <Divider style={{borderTop:"1.5px solid #1963A6", marginTop:"0px",marginBottom:"15px"}}/>
+                            <Divider style={{borderTop:"1.5px solid #05445e", marginTop:"0px",marginBottom:"15px"}}/>
                         </div>
                         <Row>
                         {/* <Col span={6} style={{
@@ -1035,7 +785,7 @@ function Personal(props) {
                         htmlType="submit"
                         style={{
                           marginLeft: "10px",
-                          background: "#1963A6",
+                          background: "#05445e",
                           width: "90px",
                         }}
                       >
@@ -1050,8 +800,6 @@ function Personal(props) {
           </Col>
         </Row>
       </div>
-
-      {/* ------------------For testing the new layout */}
 
       <div
         className="personalCardDiv"
@@ -1340,7 +1088,7 @@ function Personal(props) {
                         htmlType="submit"
                         style={{
                           marginLeft: "10px",
-                          background: "#1963A6",
+                          background: "#05445e",
                           width: "90px",
                         }}
                       >
@@ -1691,7 +1439,7 @@ function Personal(props) {
                         htmlType="submit"
                         style={{
                           marginLeft: "10px",
-                          background: "#1963A6",
+                          background: "#05445e",
                           width: "90px",
                         }}
                       >

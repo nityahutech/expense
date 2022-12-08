@@ -183,7 +183,7 @@ const Admin = () => {
                                   marginTop: "10px",
                                   marginBottom: "10px",
                                   // padding:"5px",
-                                  fontSize: "25px",
+                                  fontSize: "15px",
                                   fontWeight: "lighter",
                                   display: "flex",
                                   alignItems: "center",
@@ -194,18 +194,20 @@ const Admin = () => {
                                   style={{
                                     border: "1px solid #ccc",
                                     borderRadius: "25px",
-                                    backgroundColor: "aqua",
-                                    width: "50px",
-                                    height: "50px",
-                                    margin: "10px",
+                                    borderColor:"#1963a6",
+                                    backgroundColor: "#1963a6",
+                                    width: "35px",
+                                    height: "35px",
+                                    margin: "5px",
                                     display: "flex",
                                     justifyContent: "center",
                                     alignItems: "center",
+                                    color:"#ffff",
                                   }}
                                 >
                                   RS
                                 </div>
-                                <span style={{ marginRight: "10px" }}>
+                                <span style={{ marginRight: "2px" }}>
                                   {data.ceoAdmin ? data.ceoAdmin : null}{" "}
                                 </span>
                               </div>
@@ -372,31 +374,33 @@ const Admin = () => {
                           <div
                             style={{
                               border: "1px solid #ccc",
-                              borderRadius: "50px",
-                              marginTop: "10px",
-                              marginBottom: "10px",
-                              // padding:"5px",
-                              fontSize: "25px",
-                              fontWeight: "lighter",
-                              display: "flex",
-                              alignItems: "center",
+                                  borderRadius: "50px",
+                                  marginTop: "10px",
+                                  marginBottom: "10px",
+                                  // padding:"5px",
+                                  fontSize: "15px",
+                                  fontWeight: "lighter",
+                                  display: "flex",
+                                  alignItems: "center",
                             }}
                           >
                             <div
                               style={{
                                 border: "1px solid #ccc",
-                                borderRadius: "25px",
-                                backgroundColor: "aqua",
-                                width: "50px",
-                                height: "50px",
-                                margin: "10px",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
+                                    borderRadius: "25px",
+                                    borderColor:"#1963a6",
+                                    backgroundColor: "#1963a6",
+                                    width: "35px",
+                                    height: "35px",
+                                    margin: "5px",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    color:"#ffff",
                               }}
                             >
                              YO </div>
-                            <span style={{ marginRight: "10px" }}>
+                            <span style={{ marginRight: "2px" }}>
                             {data.hrAdmin ? data.hrAdmin : null}
                             </span>
                             
@@ -556,32 +560,34 @@ const Admin = () => {
                         <div
                           style={{
                             border: "1px solid #ccc",
-                            borderRadius: "50px",
-                            marginTop: "10px",
-                            marginBottom: "10px",
-                            // padding:"5px",
-                            fontSize: "25px",
-                            fontWeight: "lighter",
-                            display: "flex",
-                            alignItems: "center",
+                                  borderRadius: "50px",
+                                  marginTop: "10px",
+                                  marginBottom: "10px",
+                                  // padding:"5px",
+                                  fontSize: "15px",
+                                  fontWeight: "lighter",
+                                  display: "flex",
+                                  alignItems: "center",
                           }}
                         >
                           <div
                             style={{
                               border: "1px solid #ccc",
                               borderRadius: "25px",
-                              backgroundColor: "aqua",
-                              width: "50px",
-                              height: "50px",
-                              margin: "10px",
+                              borderColor:"#1963a6",
+                                    backgroundColor: "#1963a6",
+                                    width: "35px",
+                                    height: "35px",
+                              margin: "5px",
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
+                              color:"#ffff",
                             }}
                           >
                           LK
                           </div>
-                          <span style={{ marginRight: "10px" }}>{data.financerAdmin ? data.financerAdmin : "-"}</span>
+                          <span style={{ marginRight: "2px" }}>{data.financerAdmin ? data.financerAdmin : "-"}</span>
                           </div>
                         {editFinanceContactInfo === false ? (
                           <Button
@@ -757,27 +763,29 @@ const Admin = () => {
                         <div
                           style={{
                             border: "1px solid #ccc",
-                            borderRadius: "50px",
-                            marginTop: "10px",
-                            marginBottom: "10px",
-                            // padding:"5px",
-                            fontSize: "25px",
-                            fontWeight: "lighter",
-                            display: "flex",
-                            alignItems: "center",
+                                  borderRadius: "50px",
+                                  marginTop: "10px",
+                                  marginBottom: "10px",
+                                  // padding:"5px",
+                                  fontSize: "15px",
+                                  fontWeight: "lighter",
+                                  display: "flex",
+                                  alignItems: "center",
                           }}
                         >
                           <div
                             style={{
                               border: "1px solid #ccc",
-                              borderRadius: "25px",
-                              backgroundColor: "aqua",
-                              width: "50px",
-                              height: "50px",
-                              margin: "10px",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
+                                    borderRadius: "25px",
+                                    borderColor:"#1963a6",
+                                    backgroundColor: "#1963a6",
+                                    width: "35px",
+                                    height: "35px",
+                                    margin: "5px",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    color:"#ffff",
                             }}
                           >GH</div>
                           <span style={{ marginRight: "10px" }}>{data.hrExeAdmin ? data.hrExeAdmin : "-"}</span>

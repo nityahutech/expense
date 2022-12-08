@@ -25,6 +25,7 @@ import {
   EditFilled,
   CloseOutlined,
   CheckOutlined,
+  PlusCircleOutlined,
 } from "@ant-design/icons";
 import LeaveContext from "../contexts/LeaveContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
@@ -94,6 +95,7 @@ const Leave = (props) => {
   const [editPayLossName, setEditPayLossName] = useState(false);
   const [editPayLossLeave, setEditPayLossLeave] = useState(false);
   const [editPayLossProbation, setEditPayLossProbation] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState("");
   const getHoliday = async () => {
     const allData = await CompanyHolidayContext.getAllCompanyHoliday();
@@ -105,6 +107,29 @@ const Leave = (props) => {
     });
     setCompanyholiday(d);
   };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const checkNumbervalue = (event) => {
+    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
+  const checkAlphabets = (event) => {
+    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
   const getListData = (value) => {
     let listData = [];
     let currdate = value.format("Do MMM, YYYY");
@@ -1362,7 +1387,7 @@ const Leave = (props) => {
                           }}
                           className="sickLeave"
                           onClick={() => {
-                            setSickLeave(!sickLeave);
+                            setSickLeave(true);
                             setOptionalLeave(false);
                             setLossPay(false);
                           }}
@@ -1393,7 +1418,7 @@ const Leave = (props) => {
                           className="optionalLeave"
                           onClick={() => {
                             setSickLeave(false);
-                            setOptionalLeave(!optionalLeave);
+                            setOptionalLeave(true);
                             setLossPay(false);
                           }}
                         >
@@ -1424,7 +1449,7 @@ const Leave = (props) => {
                           onClick={() => {
                             setSickLeave(false);
                             setOptionalLeave(false);
-                            setLossPay(!lossPay);
+                            setLossPay(true);
                           }}
                         >
                           <div
@@ -1438,6 +1463,113 @@ const Leave = (props) => {
                             Loss of Pay
                           </div>
                           <div>No Employees</div>
+                        </Card>
+                      </li>
+                      <li>
+                        <Card
+                          hoverable={true}
+                          bordered={true}
+                          style={{
+                            borderRadius: "4px",
+                            // marginBottom: "10px",
+                            height: "40px",
+                            marginTop: "15rem",
+                          }}
+                          className="createButton"
+                          // onClick={() => {
+                          //   setSickLeave(false);
+                          //   setOptionalLeave(false);
+                          //   setLossPay(true);
+                          // }}
+                        >
+                          <Button
+                            className="create"
+                            style={{ border: "none", width: "100px" }}
+                            onClick={showModal}
+                          >
+                            <PlusCircleOutlined />
+                            Create New Rule
+                          </Button>
+                          <Modal
+                            title="Create New Rule"
+                            open={isModalOpen}
+                            onOk={handleOk}
+                            onCancel={handleCancel}
+                          >
+                            <Form
+                              name="basic"
+                              labelCol={{
+                                span: 8,
+                                offset: 4,
+                              }}
+                              wrapperCol={{
+                                span: 16,
+                                offset: 4,
+                              }}
+                              initialValues={{
+                                remember: true,
+                              }}
+                              autoComplete="off"
+                              layout="vertical"
+                            >
+                              <Form.Item
+                                label="Name"
+                                name="name"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please Enter Name",
+                                  },
+                                  {
+                                    message: "Please Enter Valid Name",
+                                    pattern: /^[a-zA-Z\s]*$/,
+                                  },
+                                ]}
+                                onKeyPress={(event) => {
+                                  if (checkAlphabets(event)) {
+                                    event.preventDefault();
+                                  }
+                                }}
+                              >
+                                <Input maxLength={20} />
+                              </Form.Item>
+
+                              <Form.Item
+                                label="Description"
+                                name="description"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please Enter Description",
+                                  },
+                                ]}
+                              >
+                                <TextArea rows={2} />
+                              </Form.Item>
+                              <Form.Item
+                                label="Leave Count"
+                                name="count"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please Enter Leave Count",
+                                  },
+                                  {
+                                    pattern: /^[0-9\b]+$/,
+                                    message: "Please Enter  Number",
+                                  },
+                                ]}
+                                onKeyPress={(event) => {
+                                  console.log(checkNumbervalue(event));
+                                  if (checkNumbervalue(event)) {
+                                    event.preventDefault();
+                                  }
+                                }}
+                              >
+                                <Input maxLength={3} />
+                              </Form.Item>
+                            </Form>
+                          </Modal>
                         </Card>
                       </li>
                     </ul>
@@ -1486,84 +1618,10 @@ const Leave = (props) => {
                                       >
                                         Name
                                       </div>
-                                      {editContent === false ? (
-                                        <div style={{ marginBottom: "13px" }}>
-                                          {data?.name ? data.name : "-"}
-                                        </div>
-                                      ) : (
-                                        <Form.Item
-                                          initialValue={
-                                            data?.name ? data.name : null
-                                          }
-                                          name="name"
-                                          rules={[
-                                            {
-                                              pattern: /^[a-zA-Z\s]*$/,
-                                              message:
-                                                "Please enter Valid Name",
-                                            },
-                                          ]}
-                                        >
-                                          <Input
-                                            style={{
-                                              // marginTop: "10px",
-                                              width: "100%",
-                                              borderBottom: "1px solid #ccc ",
-                                              paddingLeft: "0px",
-                                            }}
-                                            bordered={false}
-                                            // disabled={true}
-                                            initialValue={
-                                              data.name ? data.name : null
-                                            }
-                                            maxLength={50}
-                                            required
-                                            placeholder="Enter Your Name"
-                                            onChange={(e) => {
-                                              const inputval = e.target.value;
-                                              const str = e.target.value;
-                                              const newVal =
-                                                inputval
-                                                  .substring(0, 1)
-                                                  .toUpperCase() +
-                                                inputval.substring(1);
-                                              const caps = str
-                                                .split(" ")
-                                                .map(capitalize)
-                                                .join(" ");
-                                              form.setFieldsValue({
-                                                name: newVal,
-                                                name: caps,
-                                              });
-                                            }}
-                                          />
-                                        </Form.Item>
-                                      )}
+                                      <div style={{ marginBottom: "13px" }}>
+                                        Sick Leave
+                                      </div>
                                     </Col>
-
-                                    {editContent === false ? (
-                                      <Col xs={24} sm={24} md={1}>
-                                        <Button
-                                          className="sick"
-                                          type="text"
-                                          bordered={false}
-                                          style={{
-                                            // color: "#ffff",
-                                            display: "none",
-                                            // paddingTop: "7px",
-                                            // paddingRight: "7px",
-                                            position: "absolute",
-                                            left: "17rem",
-                                            // top: 10,
-                                          }}
-                                          onClick={() =>
-                                            showEditContent(!editContent)
-                                          }
-                                        >
-                                          <EditFilled />
-                                        </Button>
-                                      </Col>
-                                    ) : null}
                                   </Row>
                                 </div>
                               </Col>
@@ -1581,71 +1639,15 @@ const Leave = (props) => {
                                   >
                                     Description
                                   </div>
-                                  {editContent === false ? (
-                                    <div>
-                                      {data?.describe ? data.describe : "-"}
-                                    </div>
-                                  ) : (
-                                    <Form.Item
-                                      name="describe"
-                                      initialValue={
-                                        data?.describe ? data.describe : null
-                                      }
-                                    >
-                                      <TextArea
-                                        rows={2}
-                                        placeholder="Enter Description"
-                                        maxLength={20}
-                                        style={{
-                                          marginTop: "10px",
-                                          width: "100%",
-                                          // borderBottom: "1px solid #ccc ",
-                                          paddingLeft: "0px",
-                                        }}
-                                        TextArea={4}
-                                      />
-                                    </Form.Item>
-                                  )}
+                                  <div>
+                                    These are one-day leaves taken for
+                                    health-related reasons. This can only be
+                                    taken for the current day or the next (1 day
+                                    in advance).
+                                  </div>
                                 </div>
                               </Col>
                             </Row>
-                            {editContent === true ? (
-                              <Row
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "flex-end",
-                                  marginTop: "3%",
-                                }}
-                              >
-                                <Button
-                                  onClick={() => {
-                                    form.resetFields();
-                                    showEditContent(false);
-                                  }}
-                                  type="text"
-                                  style={{ fontSize: 15 }}
-                                >
-                                  <CloseOutlined /> CANCEL
-                                </Button>
-                                <Col>
-                                  <Button
-                                    type="primary"
-                                    htmlType="submit"
-                                    style={{
-                                      marginLeft: "10px",
-                                      background: "#1963A6",
-                                      width: "90px",
-                                    }}
-                                    onClick={() => {
-                                      form.submit();
-                                    }}
-                                  >
-                                    <CheckOutlined />
-                                    SAVE
-                                  </Button>
-                                </Col>
-                              </Row>
-                            ) : null}
                           </div>
                         </Form>
                         <Divider />
@@ -2389,86 +2391,10 @@ const Leave = (props) => {
                                       >
                                         Name
                                       </div>
-                                      {editOptionalName === false ? (
-                                        <div style={{ marginBottom: "13px" }}>
-                                          {data?.name ? data.name : "-"}
-                                        </div>
-                                      ) : (
-                                        <Form.Item
-                                          initialValue={
-                                            data?.name ? data.name : null
-                                          }
-                                          name="name"
-                                          rules={[
-                                            {
-                                              pattern: /^[a-zA-Z\s]*$/,
-                                              message:
-                                                "Please enter Valid Name",
-                                            },
-                                          ]}
-                                        >
-                                          <Input
-                                            style={{
-                                              // marginTop: "10px",
-                                              width: "100%",
-                                              borderBottom: "1px solid #ccc ",
-                                              paddingLeft: "0px",
-                                            }}
-                                            bordered={false}
-                                            // disabled={true}
-                                            initialValue={
-                                              data.name ? data.name : null
-                                            }
-                                            maxLength={50}
-                                            required
-                                            placeholder="Enter Your Name"
-                                            onChange={(e) => {
-                                              const inputval = e.target.value;
-                                              const str = e.target.value;
-                                              const newVal =
-                                                inputval
-                                                  .substring(0, 1)
-                                                  .toUpperCase() +
-                                                inputval.substring(1);
-                                              const caps = str
-                                                .split(" ")
-                                                .map(capitalize)
-                                                .join(" ");
-                                              form.setFieldsValue({
-                                                name: newVal,
-                                                name: caps,
-                                              });
-                                            }}
-                                          />
-                                        </Form.Item>
-                                      )}
+                                      <div style={{ marginBottom: "13px" }}>
+                                        Optional Leave
+                                      </div>
                                     </Col>
-
-                                    {editOptionalName === false ? (
-                                      <Col xs={24} sm={24} md={1}>
-                                        <Button
-                                          className="sick"
-                                          type="text"
-                                          bordered={false}
-                                          style={{
-                                            // color: "#ffff",
-                                            display: "none",
-                                            // paddingTop: "7px",
-                                            // paddingRight: "7px",
-                                            position: "absolute",
-                                            left: "17rem",
-                                            // top: 10,
-                                          }}
-                                          onClick={() =>
-                                            setEditOptionalName(
-                                              !editOptionalName
-                                            )
-                                          }
-                                        >
-                                          <EditFilled />
-                                        </Button>
-                                      </Col>
-                                    ) : null}
                                   </Row>
                                 </div>
                               </Col>
@@ -2486,71 +2412,13 @@ const Leave = (props) => {
                                   >
                                     Description
                                   </div>
-                                  {editOptionalName === false ? (
-                                    <div>
-                                      {data?.describe ? data.describe : "-"}
-                                    </div>
-                                  ) : (
-                                    <Form.Item
-                                      name="describe"
-                                      initialValue={
-                                        data?.describe ? data.describe : null
-                                      }
-                                    >
-                                      <TextArea
-                                        rows={2}
-                                        placeholder="Enter Description"
-                                        maxLength={20}
-                                        style={{
-                                          marginTop: "10px",
-                                          width: "100%",
-                                          // borderBottom: "1px solid #ccc ",
-                                          paddingLeft: "0px",
-                                        }}
-                                        TextArea={4}
-                                      />
-                                    </Form.Item>
-                                  )}
+                                  <div>
+                                    Optional holidays are those that the
+                                    employee can choose to avail.
+                                  </div>
                                 </div>
                               </Col>
                             </Row>
-                            {editOptionalName === true ? (
-                              <Row
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "flex-end",
-                                  marginTop: "3%",
-                                }}
-                              >
-                                <Button
-                                  onClick={() => {
-                                    form.resetFields();
-                                    setEditOptionalName(false);
-                                  }}
-                                  type="text"
-                                  style={{ fontSize: 15 }}
-                                >
-                                  <CloseOutlined /> CANCEL
-                                </Button>
-                                <Col>
-                                  <Button
-                                    type="primary"
-                                    htmlType="submit"
-                                    style={{
-                                      marginLeft: "10px",
-                                      background: "#1963A6",
-                                      width: "90px",
-                                    }}
-                                    onClick={() => {
-                                      form.submit();
-                                    }}
-                                  >
-                                    <CheckOutlined />
-                                    SAVE
-                                  </Button>
-                                </Col>
-                              </Row>
-                            ) : null}
                           </div>
                         </Form>
                         <Divider />
@@ -3302,84 +3170,11 @@ const Leave = (props) => {
                                       >
                                         Name
                                       </div>
-                                      {editPayLossName === false ? (
-                                        <div style={{ marginBottom: "13px" }}>
-                                          {data?.name ? data.name : "-"}
-                                        </div>
-                                      ) : (
-                                        <Form.Item
-                                          initialValue={
-                                            data?.name ? data.name : null
-                                          }
-                                          name="name"
-                                          rules={[
-                                            {
-                                              pattern: /^[a-zA-Z\s]*$/,
-                                              message:
-                                                "Please enter Valid Name",
-                                            },
-                                          ]}
-                                        >
-                                          <Input
-                                            style={{
-                                              // marginTop: "10px",
-                                              width: "100%",
-                                              borderBottom: "1px solid #ccc ",
-                                              paddingLeft: "0px",
-                                            }}
-                                            bordered={false}
-                                            // disabled={true}
-                                            initialValue={
-                                              data.name ? data.name : null
-                                            }
-                                            maxLength={50}
-                                            required
-                                            placeholder="Enter Your Name"
-                                            onChange={(e) => {
-                                              const inputval = e.target.value;
-                                              const str = e.target.value;
-                                              const newVal =
-                                                inputval
-                                                  .substring(0, 1)
-                                                  .toUpperCase() +
-                                                inputval.substring(1);
-                                              const caps = str
-                                                .split(" ")
-                                                .map(capitalize)
-                                                .join(" ");
-                                              form.setFieldsValue({
-                                                name: newVal,
-                                                name: caps,
-                                              });
-                                            }}
-                                          />
-                                        </Form.Item>
-                                      )}
-                                    </Col>
 
-                                    {editPayLossName === false ? (
-                                      <Col xs={24} sm={24} md={1}>
-                                        <Button
-                                          className="sick"
-                                          type="text"
-                                          bordered={false}
-                                          style={{
-                                            // color: "#ffff",
-                                            display: "none",
-                                            // paddingTop: "7px",
-                                            // paddingRight: "7px",
-                                            position: "absolute",
-                                            left: "17rem",
-                                            // top: 10,
-                                          }}
-                                          onClick={() =>
-                                            setEditPayLossName(!editPayLossName)
-                                          }
-                                        >
-                                          <EditFilled />
-                                        </Button>
-                                      </Col>
-                                    ) : null}
+                                      <div style={{ marginBottom: "13px" }}>
+                                        Loss of Pay
+                                      </div>
+                                    </Col>
                                   </Row>
                                 </div>
                               </Col>
@@ -3397,71 +3192,15 @@ const Leave = (props) => {
                                   >
                                     Description
                                   </div>
-                                  {editPayLossName === false ? (
-                                    <div>
-                                      {data?.describe ? data.describe : "-"}
-                                    </div>
-                                  ) : (
-                                    <Form.Item
-                                      name="describe"
-                                      initialValue={
-                                        data?.describe ? data.describe : null
-                                      }
-                                    >
-                                      <TextArea
-                                        rows={2}
-                                        placeholder="Enter Description"
-                                        maxLength={20}
-                                        style={{
-                                          marginTop: "10px",
-                                          width: "100%",
-                                          // borderBottom: "1px solid #ccc ",
-                                          paddingLeft: "0px",
-                                        }}
-                                        TextArea={4}
-                                      />
-                                    </Form.Item>
-                                  )}
+
+                                  <div>
+                                    Employees taking leave under loss of pay
+                                    will not be compensated for the missing days
+                                    in their salary.
+                                  </div>
                                 </div>
                               </Col>
                             </Row>
-                            {editPayLossName === true ? (
-                              <Row
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "flex-end",
-                                  marginTop: "3%",
-                                }}
-                              >
-                                <Button
-                                  onClick={() => {
-                                    form.resetFields();
-                                    setEditPayLossName(false);
-                                  }}
-                                  type="text"
-                                  style={{ fontSize: 15 }}
-                                >
-                                  <CloseOutlined /> CANCEL
-                                </Button>
-                                <Col>
-                                  <Button
-                                    type="primary"
-                                    htmlType="submit"
-                                    style={{
-                                      marginLeft: "10px",
-                                      background: "#1963A6",
-                                      width: "90px",
-                                    }}
-                                    onClick={() => {
-                                      form.submit();
-                                    }}
-                                  >
-                                    <CheckOutlined />
-                                    SAVE
-                                  </Button>
-                                </Col>
-                              </Row>
-                            ) : null}
                           </div>
                         </Form>
                         <Divider />
@@ -3781,7 +3520,7 @@ const Leave = (props) => {
               </div>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Approvals" key="4">
-              <ApprovalConfig/>
+              <ApprovalConfig />
             </Tabs.TabPane>
           </Tabs>
         </div>

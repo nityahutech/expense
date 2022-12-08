@@ -36,8 +36,8 @@ const NewSidebar = (props) => {
           flexDirection: "column",
         }}
         collapsedWidth="0"
-        onBreakpoint={(broken) => {}}
-        onCollapse={(collapsed, type) => {}}
+        onBreakpoint={(broken) => { }}
+        onCollapse={(collapsed, type) => { }}
       >
         <div
           className="sidelayout-div"
@@ -83,17 +83,17 @@ const NewSidebar = (props) => {
               style={{
                 overflowX: "hidden",
                 overflowY: "auto",
-                maxHeight: "70vh",
+                maxHeight: "82vh",
               }}
             >
               <Menu
                 defaultOpenKeys={props.activeSubMenu || []}
                 selectedKeys={props.activeMenu}
                 mode="inline"
-                // style={{
-                //   // paddingBottom: "40px",
-                //   height: "100vh",
-                // }}
+              // style={{
+              //   // paddingBottom: "40px",
+              //   height: "100vh",
+              // }}
               >
                 <Menu.Item
                   className="arrow"
@@ -377,7 +377,7 @@ key="25"
                   }}
                   src={SettingIcon}
                   alt="Setting"
-                  // className="Dash"
+                // className="Dash"
                 />
               </div>
 

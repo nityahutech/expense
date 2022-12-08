@@ -78,7 +78,8 @@ function EmployeeListview(props) {
       <div >
         <Card
           className="card-profile-head"
-          bodyStyle={{ display: "none" }}
+          bodyStyle={{ display: "none", }}
+          style={{ borderRadius: '10px' }}
           title={
             <Row justify="space-between" align="middle" gutter={[24, 0]}>
               <Col span={24} md={12} style={{ display: 'flex', justifyContent: 'space-between', }} className="col-info">
@@ -176,6 +177,7 @@ function EmployeeListview(props) {
             style={{
               width: '100%',
               margin: '10px 10px 10px 0px',
+              borderRadius: '10px'
             }}
           // bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
           >
@@ -252,7 +254,9 @@ function EmployeeListview(props) {
             style={{
               width: '100 %',
               margin: '10px 0px 10px 0px',
-              padding: '0px'
+              padding: '0px',
+              borderRadius: '10px'
+
             }}
           // bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
           >
@@ -326,6 +330,7 @@ function EmployeeListview(props) {
             style={{
               width: '100%',
               margin: '0px 10px 10px 0px',
+              borderRadius: '10px'
             }}
           // bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
           >
@@ -374,7 +379,8 @@ function EmployeeListview(props) {
             style={{
               width: '100 %',
               margin: '0px 0px 10px 0px',
-              padding: '0px'
+              padding: '0px',
+              borderRadius: '10px'
             }}
           // bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
           >
@@ -435,7 +441,8 @@ function EmployeeListview(props) {
             style={{
               width: '100 %',
               margin: '0px 0px 0px 0px',
-              padding: '0px'
+              padding: '0px',
+              borderRadius: '10px'
             }}
           // bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
           >
@@ -506,7 +513,8 @@ function EmployeeListview(props) {
             style={{
               width: '100 %',
               margin: '0px 0px 00px 0px',
-              padding: '0px'
+              padding: '0px',
+              borderRadius: '10px'
             }}
           // bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
           >
@@ -576,7 +584,8 @@ function EmployeeListview(props) {
             style={{
               width: '100 %',
               margin: '0px 0px 00px 0px',
-              padding: '0px'
+              padding: '0px',
+              borderRadius: '10px'
             }}
           // bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
           >

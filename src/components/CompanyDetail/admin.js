@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Typography } from "antd";
 import CompanyProContext from "../../contexts/CompanyProContext";
+import { getUsers } from "../../contexts/CreateContext";
 import "./companystyle.css";
 import {
   Button,
@@ -20,6 +21,10 @@ import {
   CheckOutlined,
   EditFilled,
 } from "@ant-design/icons";
+import { AutoComplete } from 'antd';
+const mockVal = (str, repeat = 1) => ({
+  value: str.repeat(repeat),
+});
 const { Text, Link } = Typography;
 const Admin = () => {
   const [editContactInfo, showEditContactInfo] = useState(false);
@@ -31,6 +36,9 @@ const Admin = () => {
   const [data, setData] = useState([]);
   const compId = sessionStorage.getItem("compId");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [allEmpName, setAllEmpName] = useState([]);
+  const [ceoAdmin, setCeoAdmin] = useState('');
+
   const showModal = () => {
     setIsModalOpen(true);
     form.resetFields();
@@ -43,8 +51,9 @@ const Admin = () => {
     form.resetFields();
   };
   const onFinish = (values) => {
+
     const valuesToservice = {
-      ceoAdmin: values.ceoAdmin,
+      ceoAdmin: ceoAdmin,
     };
     CompanyProContext.updateCompInfo(compId, valuesToservice);
     form.resetFields();
@@ -77,11 +86,40 @@ const Admin = () => {
   };
   useEffect(() => {
     getData();
+    getAllUser()
   }, []);
   const getData = async () => {
     let data = await CompanyProContext.getCompanyProfile(compId);
     setData(data);
   };
+
+
+  const [options, setOptions] = useState([]);
+  const onSearch = (searchText) => {
+    console.log('onSearch', searchText);
+    console.log('onSearch', allEmpName);
+    let matchingName = allEmpName.filter((ex) => { return ex.value.toLowerCase().includes(searchText.toLowerCase()) })
+    console.log('onSearch', matchingName);
+    setOptions(
+      !searchText ? [] : matchingName,
+    );
+  };
+  const onSelect = (data) => {
+    console.log('onSelect', data);
+    setCeoAdmin(data)
+  };
+
+  async function getAllUser() {
+    const allData = await getUsers();
+    let allUsers = allData.docs.map((doc, i) => {
+      return {
+        value: doc.data().fname + ' ' + doc.data().lname
+      };
+    });
+    console.log('allUsers', allUsers)
+    setAllEmpName(allUsers)
+  }
+
 
   return (
     <>
@@ -183,7 +221,7 @@ const Admin = () => {
                                   marginTop: "10px",
                                   marginBottom: "10px",
                                   // padding:"5px",
-                                  fontSize: "15px",
+                                  fontSize: "25px",
                                   fontWeight: "lighter",
                                   display: "flex",
                                   alignItems: "center",
@@ -194,20 +232,18 @@ const Admin = () => {
                                   style={{
                                     border: "1px solid #ccc",
                                     borderRadius: "25px",
-                                    borderColor:"#1963a6",
-                                    backgroundColor: "#1963a6",
-                                    width: "35px",
-                                    height: "35px",
-                                    margin: "5px",
+                                    backgroundColor: "aqua",
+                                    width: "50px",
+                                    height: "50px",
+                                    margin: "10px",
                                     display: "flex",
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    color:"#ffff",
                                   }}
                                 >
-                                  RS
+                                  CE
                                 </div>
-                                <span style={{ marginRight: "2px" }}>
+                                <span style={{ marginRight: "10px" }}>
                                   {data.ceoAdmin ? data.ceoAdmin : null}{" "}
                                 </span>
                               </div>
@@ -234,16 +270,20 @@ const Admin = () => {
                               initialValue={data ? data.ceoAdmin : null}
                               name="ceoAdmin"
                             >
-                              <Input
-                                type="ceoAdmin"
-                                placeholder="Enter CEO Name"
+                              <AutoComplete
+                                options={options}
                                 style={{
-                                  width: "200%",
+                                  width: 200,
                                   padding: "5px",
                                 }}
+                                onSelect={onSelect}
+                                onSearch={onSearch}
                                 size="large"
+
+                                placeholder="Enter CEO Name"
                               />
                             </Form.Item>
+
                           </>
                         )}
                       </div>
@@ -332,25 +372,25 @@ const Admin = () => {
             >
               <Row>
                 <Col span={24}>
-              <p>HR Admin's permissions apply to all employees.</p>
-              <p>This admin can:</p>
-              <div className="div-text" style={{ paddingLeft: "20px" }}>
-                <Text>
-                  View all employee profile information,
-                  <br />
-                  View sensitive employee information (such as PAN Card, IDs and
-                  salary,)
-                  <br />
-                  Edit employee profiles,
-                  <br />
-                  Edit, Upload and Approve Attendance and Leaves,
-                  <br />
-                  Create and remove admins, and edit admin permissions.
-                </Text>
-              </div>
-              </Col>
+                  <p>HR Admin's permissions apply to all employees.</p>
+                  <p>This admin can:</p>
+                  <div className="div-text" style={{ paddingLeft: "20px" }}>
+                    <Text>
+                      View all employee profile information,
+                      <br />
+                      View sensitive employee information (such as PAN Card, IDs and
+                      salary,)
+                      <br />
+                      Edit employee profiles,
+                      <br />
+                      Edit, Upload and Approve Attendance and Leaves,
+                      <br />
+                      Create and remove admins, and edit admin permissions.
+                    </Text>
+                  </div>
+                </Col>
 
-              <Col style={{ display:"inline-block" }} >
+                <Col style={{ display: "inline-block" }} >
                   <div>
                     {editHrContactInfo === false ? (
                       !data.hrAdmin ? (
@@ -374,36 +414,34 @@ const Admin = () => {
                           <div
                             style={{
                               border: "1px solid #ccc",
-                                  borderRadius: "50px",
-                                  marginTop: "10px",
-                                  marginBottom: "10px",
-                                  // padding:"5px",
-                                  fontSize: "15px",
-                                  fontWeight: "lighter",
-                                  display: "flex",
-                                  alignItems: "center",
+                              borderRadius: "50px",
+                              marginTop: "10px",
+                              marginBottom: "10px",
+                              // padding:"5px",
+                              fontSize: "25px",
+                              fontWeight: "lighter",
+                              display: "flex",
+                              alignItems: "center",
                             }}
                           >
                             <div
                               style={{
                                 border: "1px solid #ccc",
-                                    borderRadius: "25px",
-                                    borderColor:"#1963a6",
-                                    backgroundColor: "#1963a6",
-                                    width: "35px",
-                                    height: "35px",
-                                    margin: "5px",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    color:"#ffff",
+                                borderRadius: "25px",
+                                backgroundColor: "aqua",
+                                width: "50px",
+                                height: "50px",
+                                margin: "10px",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
                               }}
                             >
-                             YO </div>
-                            <span style={{ marginRight: "2px" }}>
-                            {data.hrAdmin ? data.hrAdmin : null}
+                              HR </div>
+                            <span style={{ marginRight: "10px" }}>
+                              {data.hrAdmin ? data.hrAdmin : null}
                             </span>
-                            
+
                           </div>
                           {editHrContactInfo === false ? (
                             <Button
@@ -429,55 +467,59 @@ const Admin = () => {
                         initialValue={data ? data.hrAdmin : null}
                         name="hrAdmin"
                       >
-                        <Input
-                          type="ceoAdmin"
-                          placeholder="Enter HR Admin Name"
+                        <AutoComplete
+                          options={options}
                           style={{
-                            width: "200%",
+                            width: 200,
                             padding: "5px",
                           }}
+                          onSelect={onSelect}
+                          onSearch={onSearch}
                           size="large"
+
+                          placeholder="Enter HR Admin Name"
                         />
                       </Form.Item>
+
                     )}
                   </div>
-              </Col>
-              <Col span={24}>
-              {editHrContactInfo === true ? (
-                <Row
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "3%",
-                  }}
-                >
-                  <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
-                    <Button
-                      type="text"
-                      style={{ fontSize: 15 }}
-                      onClick={() => showEditHrContactInfo(false)}
-                    >
-                      <CloseOutlined /> CANCEL
-                    </Button>
-                  </Col>
-                  <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
+                </Col>
+                <Col span={24}>
+                  {editHrContactInfo === true ? (
+                    <Row
                       style={{
-                        fontSize: 15,
-                        marginLeft: "10px",
-                        background: "#1963a6",
-                        border: "1px solid #1963A6",
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "3%",
                       }}
                     >
-                      <CheckOutlined /> SAVE
-                    </Button>
-                  </Col>
-                </Row>
-              ) : null}
-              {editHrContactInfo == false && <div></div>}
-              </Col>
+                      <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
+                        <Button
+                          type="text"
+                          style={{ fontSize: 15 }}
+                          onClick={() => showEditHrContactInfo(false)}
+                        >
+                          <CloseOutlined /> CANCEL
+                        </Button>
+                      </Col>
+                      <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          style={{
+                            fontSize: 15,
+                            marginLeft: "10px",
+                            background: "#1963a6",
+                            border: "1px solid #1963A6",
+                          }}
+                        >
+                          <CheckOutlined /> SAVE
+                        </Button>
+                      </Col>
+                    </Row>
+                  ) : null}
+                  {editHrContactInfo == false && <div></div>}
+                </Col>
               </Row>
             </Card>
           </div>
@@ -524,156 +566,158 @@ const Admin = () => {
               }}
             >
               <Row>
-              <Col span={24}>
-              <p>Finance admin's permissions apply to all employees.</p>
-              <p>This admin can:</p>
-              <div className="div-text" style={{ paddingLeft: "20px" }}>
-                <Text>
-                  View salary and bank details of employee profiles,
-                  <br />
-                  View sensitive employee information (such as PAN Card, IDs and
-                  salary.)
-                  <br />
-                </Text>
-              </div>
-              </Col>
-              
-              <Col style={{display:"inline-block"}}>
-              <div>
-                  {editFinanceContactInfo === false ? (
-                    !data.financerAdmin ? (
-                      <Button
-                        style={{
-                          background: "#1963a6",
-                          border: "1px solid #1963A6",
-                        }}
-                        type="primary"
-                        onClick={() =>
-                          showEditFinanceContactInfo(!editFinanceContactInfo)
-                        }
-                      >
-                        <PlusCircleOutlined />
-                        Add
-                      </Button>
-                    ) : (
-                      <>
-                        <div
+                <Col span={24}>
+                  <p>Finance admin's permissions apply to all employees.</p>
+                  <p>This admin can:</p>
+                  <div className="div-text" style={{ paddingLeft: "20px" }}>
+                    <Text>
+                      View salary and bank details of employee profiles,
+                      <br />
+                      View sensitive employee information (such as PAN Card, IDs and
+                      salary.)
+                      <br />
+                    </Text>
+                  </div>
+                </Col>
+
+                <Col style={{ display: "inline-block" }}>
+                  <div>
+                    {editFinanceContactInfo === false ? (
+                      !data.financerAdmin ? (
+                        <Button
                           style={{
-                            border: "1px solid #ccc",
-                                  borderRadius: "50px",
-                                  marginTop: "10px",
-                                  marginBottom: "10px",
-                                  // padding:"5px",
-                                  fontSize: "15px",
-                                  fontWeight: "lighter",
-                                  display: "flex",
-                                  alignItems: "center",
+                            background: "#1963a6",
+                            border: "1px solid #1963A6",
                           }}
+                          type="primary"
+                          onClick={() =>
+                            showEditFinanceContactInfo(!editFinanceContactInfo)
+                          }
                         >
+                          <PlusCircleOutlined />
+                          Add
+                        </Button>
+                      ) : (
+                        <>
                           <div
                             style={{
                               border: "1px solid #ccc",
-                              borderRadius: "25px",
-                              borderColor:"#1963a6",
-                                    backgroundColor: "#1963a6",
-                                    width: "35px",
-                                    height: "35px",
-                              margin: "5px",
+                              borderRadius: "50px",
+                              marginTop: "10px",
+                              marginBottom: "10px",
+                              // padding:"5px",
+                              fontSize: "25px",
+                              fontWeight: "lighter",
                               display: "flex",
-                              justifyContent: "center",
                               alignItems: "center",
-                              color:"#ffff",
                             }}
                           >
-                          LK
+                            <div
+                              style={{
+                                border: "1px solid #ccc",
+                                borderRadius: "25px",
+                                backgroundColor: "aqua",
+                                width: "50px",
+                                height: "50px",
+                                margin: "10px",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              FA
+                            </div>
+                            <span style={{ marginRight: "10px" }}>{data.financerAdmin ? data.financerAdmin : "-"}</span>
                           </div>
-                          <span style={{ marginRight: "2px" }}>{data.financerAdmin ? data.financerAdmin : "-"}</span>
-                          </div>
-                        {editFinanceContactInfo === false ? (
-                          <Button
-                            type="text"
-                            className="edit"
-                            style={{
-                              background: "#1963a6",
-                              border: "1px solid #1963A6",
-                              color: "#ffff",
-                            }}
-                            onClick={() =>
-                              showEditFinanceContactInfo(
-                                !editFinanceContactInfo
-                              )
-                            }
-                          >
-                            <EditFilled /> Change
-                          </Button>
-                        ) : null}
-                      </>
-                    )
-                  ) : (
-                    <Form.Item
-                      style={{ marginTop: "10px" }}
-                      initialValue={data ? data.financerAdmin : null}
-                      name="financerAdmin"
-                    >
-                      <Input
-                        type="ceoAdmin"
-                        placeholder="Enter Finance Admin Name"
-                        style={{
-                          width: "200%",
-                          padding: "5px",
-                        }}
-                        size="large"
-                      />
-                    </Form.Item>
-                  )}
+                          {editFinanceContactInfo === false ? (
+                            <Button
+                              type="text"
+                              className="edit"
+                              style={{
+                                background: "#1963a6",
+                                border: "1px solid #1963A6",
+                                color: "#ffff",
+                              }}
+                              onClick={() =>
+                                showEditFinanceContactInfo(
+                                  !editFinanceContactInfo
+                                )
+                              }
+                            >
+                              <EditFilled /> Change
+                            </Button>
+                          ) : null}
+                        </>
+                      )
+                    ) : (
+                      <Form.Item
+                        style={{ marginTop: "10px" }}
+                        initialValue={data ? data.financerAdmin : null}
+                        name="financerAdmin"
+                      >
+                        <AutoComplete
+                          options={options}
+                          style={{
+                            width: 200,
+                            padding: "5px",
+                          }}
+                          onSelect={onSelect}
+                          onSearch={onSearch}
+                          size="large"
+
+                          placeholder="Enter Finance Admin Name"
+                        />
+                      </Form.Item>
+
+                    )}
                   </div>
                 </Col>
-              <Col span={24}>
-              {editFinanceContactInfo === true ? (
-                <Row
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "3%",
-                  }}
-                >
-                  <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
-                    <Button
-                      type="text"
-                      style={{ fontSize: 15 }}
-                      onClick={() => showEditFinanceContactInfo(false)}
-                    >
-                      <CloseOutlined /> CANCEL
-                    </Button>
-                  </Col>
-                  <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
+                <Col span={24}>
+                  {editFinanceContactInfo === true ? (
+                    <Row
                       style={{
-                        background: "#1963a6",
-                        border: "1px solid #1963A6",
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "3%",
                       }}
                     >
-                      <CheckOutlined />
-                      SAVE
-                    </Button>
-                  </Col>
-                </Row>
-              ) : null}
-              {
-                editFinanceContactInfo == false && <></>
-                // <Button
-                // style={{ background: "#1963a6",border: "1px solid #1963A6"}}
-                // type="primary"
-                //   onClick={() => showEditFinanceContactInfo(!editFinanceContactInfo)}
-                // >
-                //   <PlusCircleOutlined />
-                //   Add
-                // </Button>
-              }
-              </Col>
-              {/* ----------------------newCode------------------------ */}
+                      <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
+                        <Button
+                          type="text"
+                          style={{ fontSize: 15 }}
+                          onClick={() => showEditFinanceContactInfo(false)}
+                        >
+                          <CloseOutlined /> CANCEL
+                        </Button>
+                      </Col>
+                      <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          style={{
+                            background: "#1963a6",
+                            border: "1px solid #1963A6",
+                          }}
+                        >
+                          <CheckOutlined />
+                          SAVE
+                        </Button>
+                      </Col>
+                    </Row>
+                  ) : null}
+                  {
+                    editFinanceContactInfo == false && <></>
+                    // <Button
+                    // style={{ background: "#1963a6",border: "1px solid #1963A6"}}
+                    // type="primary"
+                    //   onClick={() => showEditFinanceContactInfo(!editFinanceContactInfo)}
+                    // >
+                    //   <PlusCircleOutlined />
+                    //   Add
+                    // </Button>
+                  }
+                </Col>
+                {/* ----------------------newCode------------------------ */}
               </Row>
             </Card>
           </div>
@@ -721,151 +765,153 @@ const Admin = () => {
             >
               <Row>
                 <Col span={24}>
-              <p>HR Executive's permissions apply to all employees.</p>
-              <p>This admin can:</p>
-              <div className="div-text" style={{ paddingLeft: "20px" }}>
-                <Text>
-                  View all employee profile information (Non-payroll),
-                  <br />
-                  View all employee profile information (Non-payroll),
-                  <br />
-                  Add and edit employee profiles,
-                  <br />
-                  Edit, Upload and Approve Attendance and Leaves,
-                  <br />
-                  This Admin will not have any payroll access.
-                  <br />
-                </Text>
-              </div>
-              </Col>
-              
+                  <p>HR Executive's permissions apply to all employees.</p>
+                  <p>This admin can:</p>
+                  <div className="div-text" style={{ paddingLeft: "20px" }}>
+                    <Text>
+                      View all employee profile information (Non-payroll),
+                      <br />
+                      View all employee profile information (Non-payroll),
+                      <br />
+                      Add and edit employee profiles,
+                      <br />
+                      Edit, Upload and Approve Attendance and Leaves,
+                      <br />
+                      This Admin will not have any payroll access.
+                      <br />
+                    </Text>
+                  </div>
+                </Col>
+
                 <Col style={{ display: "inline-block" }}>
                   <div>
-                  {editExecutiveContactInfo === false ? (
-                    !data.hrExeAdmin ? (
-                      <Button
-                        style={{
-                          background: "#1963a6",
-                          border: "1px solid #1963A6",
-                        }}
-                        type="primary"
-                        onClick={() =>
-                          showEditExecutiveContactInfo(
-                            !editExecutiveContactInfo
-                          )
-                        }
-                      >
-                        <PlusCircleOutlined />
-                        Add
-                      </Button>
-                    ) : (
-                      <>
-                        <div
+                    {editExecutiveContactInfo === false ? (
+                      !data.hrExeAdmin ? (
+                        <Button
                           style={{
-                            border: "1px solid #ccc",
-                                  borderRadius: "50px",
-                                  marginTop: "10px",
-                                  marginBottom: "10px",
-                                  // padding:"5px",
-                                  fontSize: "15px",
-                                  fontWeight: "lighter",
-                                  display: "flex",
-                                  alignItems: "center",
+                            background: "#1963a6",
+                            border: "1px solid #1963A6",
                           }}
+                          type="primary"
+                          onClick={() =>
+                            showEditExecutiveContactInfo(
+                              !editExecutiveContactInfo
+                            )
+                          }
                         >
+                          <PlusCircleOutlined />
+                          Add
+                        </Button>
+                      ) : (
+                        <>
                           <div
                             style={{
                               border: "1px solid #ccc",
-                                    borderRadius: "25px",
-                                    borderColor:"#1963a6",
-                                    backgroundColor: "#1963a6",
-                                    width: "35px",
-                                    height: "35px",
-                                    margin: "5px",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    color:"#ffff",
+                              borderRadius: "50px",
+                              marginTop: "10px",
+                              marginBottom: "10px",
+                              // padding:"5px",
+                              fontSize: "25px",
+                              fontWeight: "lighter",
+                              display: "flex",
+                              alignItems: "center",
                             }}
-                          >GH</div>
-                          <span style={{ marginRight: "10px" }}>{data.hrExeAdmin ? data.hrExeAdmin : "-"}</span>
-                        </div>
-                        {editExecutiveContactInfo === false ? (
-                          <Button
-                            type="text"
-                            className="edit"
-                            style={{
-                              background: "#1963a6",
-                              border: "1px solid #1963A6",
-                              color: "#ffff",
-                            }}
-                            onClick={() =>
-                              showEditExecutiveContactInfo(
-                                !editExecutiveContactInfo
-                              )
-                            }
                           >
-                            <EditFilled /> Change
-                          </Button>
-                        ) : null}
-                      </>
-                    )
-                  ) : (
-                    <Form.Item
-                      style={{ marginTop: "10px" }}
-                      initialValue={data ? data.hrExeAdmin : null}
-                      name="hrExeAdmin"
-                    >
-                      <Input
-                        type="ceoAdmin"
-                        placeholder="Enter HR Executive Name"
-                        style={{
-                          width: "100%",
-                          padding: "5px",
-                        }}
-                        size="large"
-                      />
-                    </Form.Item>
-                  )}
+                            <div
+                              style={{
+                                border: "1px solid #ccc",
+                                borderRadius: "25px",
+                                backgroundColor: "aqua",
+                                width: "50px",
+                                height: "50px",
+                                margin: "10px",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >HR</div>
+                            <span style={{ marginRight: "10px" }}>{data.hrExeAdmin ? data.hrExeAdmin : "-"}</span>
+                          </div>
+                          {editExecutiveContactInfo === false ? (
+                            <Button
+                              type="text"
+                              className="edit"
+                              style={{
+                                background: "#1963a6",
+                                border: "1px solid #1963A6",
+                                color: "#ffff",
+                              }}
+                              onClick={() =>
+                                showEditExecutiveContactInfo(
+                                  !editExecutiveContactInfo
+                                )
+                              }
+                            >
+                              <EditFilled /> Change
+                            </Button>
+                          ) : null}
+                        </>
+                      )
+                    ) : (
+                      <Form.Item
+                        style={{ marginTop: "10px" }}
+                        initialValue={data ? data.hrExeAdmin : null}
+                        name="hrExeAdmin"
+                      >
+                        <AutoComplete
+                          options={options}
+                          style={{
+                            width: 200,
+                            padding: "5px",
+                          }}
+                          onSelect={onSelect}
+                          onSearch={onSearch}
+                          size="large"
+
+                          placeholder="Enter HR Executive Name"
+                        />
+
+                      </Form.Item>
+                    )}
                   </div>
                 </Col>
-              <Col span={24}>
-              {editExecutiveContactInfo === true ? (
-                <Row
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "3%",
-                  }}
-                >
-                  <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
-                    <Button
-                      type="text"
-                      style={{ fontSize: 15 }}
-                      onClick={() => showEditExecutiveContactInfo(false)}
-                    >
-                      <CloseOutlined /> CANCEL
-                    </Button>
-                  </Col>
-                  <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
+                <Col span={24}>
+                  {editExecutiveContactInfo === true ? (
+                    <Row
                       style={{
-                        background: "#1963a6",
-                        border: "1px solid #1963A6",
-                        width: "119px",
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "3%",
                       }}
                     >
-                      <CheckOutlined /> SAVE
-                    </Button>
-                  </Col>
-                </Row>
-              ) : null}
-              {editExecutiveContactInfo == false && <></>}
-              </Col>
+                      <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
+                        <Button
+                          type="text"
+                          style={{ fontSize: 15 }}
+                          onClick={() => showEditExecutiveContactInfo(false)}
+                        >
+                          <CloseOutlined /> CANCEL
+                        </Button>
+                      </Col>
+                      <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          style={{
+                            background: "#1963a6",
+                            border: "1px solid #1963A6",
+                            width: "119px",
+                          }}
+                        >
+                          <CheckOutlined /> SAVE
+                        </Button>
+                      </Col>
+                    </Row>
+                  ) : null}
+                  {editExecutiveContactInfo == false && <></>}
+                </Col>
               </Row>
-              
+
             </Card>
           </div>
         </Form>

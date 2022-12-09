@@ -165,11 +165,15 @@ function Personal(props) {
     wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
   }
   const layoutGender = {
-    labelCol: { xs: { span: 24 }, sm: { span: 12 }, md: { span: 12 }, lg: { span: 10 }, xl: { span: 8} },
+    labelCol: { xs: { span: 24 }, sm: { span: 12 }, md: { span: 6 }, lg: { span: 10 }, xl: { span: 10} },
     wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
   }
   const layoutBlood = {
     labelCol: { xs: { span: 24 }, sm: { span: 12 }, md: { span: 12 }, lg: { span: 10 }, xl: { span: 8} },
+    wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
+  }
+  const layoutMaritalStatus = {
+    labelCol: { xs: { span: 24 }, sm: { span: 12 }, md: { span: 12, }, lg: { span: 10, }, xl: { span:10, } },
     wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
   }
 
@@ -726,7 +730,7 @@ function Personal(props) {
                           </Select>
                         </Form.Item>
                       </Col>
-                      <Col xs={24} sm={24} md={12} lg={812} xl={12} xxl={12}>
+                      <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
                         <Form.Item
                           label="Marital Status::"
                           initialValue={data ? data.maritalStatus : null}
@@ -737,8 +741,7 @@ function Personal(props) {
                               message: "Your Marrige Status",
                             },
                           ]}
-                          wrapperCol= {{span:props.span}}
-                          labelCol= {{ span: 6 }} 
+                          {...layoutMaritalStatus} 
                         >
                           <Select
                             style={{

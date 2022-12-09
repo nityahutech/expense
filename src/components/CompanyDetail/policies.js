@@ -11,13 +11,15 @@ import {
   Card,
   message,
   Spin,
+  DatePicker
 } from "antd";
-import { PlusCircleOutlined, DeleteOutlined,CheckOutlined,CloseOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, DeleteOutlined, CheckOutlined, CloseOutlined, EditFilled } from "@ant-design/icons";
 import Iframe from 'react-iframe';
 import FormItem from "antd/es/form/FormItem";
 import { upload } from "@testing-library/user-event/dist/upload";
 import PolicyContext from "../../contexts/PolicyContext";
 import "../../components/CompanyDetail/companystyle.css";
+
 
 const Policies = () => {
   const [policy, setPolicy] = useState([]);
@@ -27,6 +29,7 @@ const Policies = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [file, setFile] = useState("");
   const [loading, setLoading] = useState(false);
+  const dateFormat = "DD-MM-YYYY";
   const showPdfModal = () => {
     setLoading(true)
     setIsModalVisible(true);
@@ -68,6 +71,18 @@ const Policies = () => {
       width: 200,
     },
     {
+      title: "Policy Version",
+      dataIndex: "version",
+      key: "version ",
+      width: 150,
+    },
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: "date ",
+      width: 100,
+    },
+    {
       title: "Uploaded File",
       dataIndex: "upload",
       key: "upload",
@@ -90,13 +105,19 @@ const Policies = () => {
       width: 80,
       render: (_, record) => {
         return (
-          <DeleteOutlined
-            onClick={() => deleteData(record.id, record.fileName)}
-          />
+          <>
+            <DeleteOutlined style={{ color: 'red' }}
+              onClick={() => deleteData(record.id, record.fileName)}
+            />
+            <EditFilled style={{ paddingLeft: '10px', color: 'blue' }}
+              onClick={() => deleteData(record.id, record.fileName)}
+            />
+          </>
         );
       },
     },
   ];
+
 
 
   async function addPolicy(values) {
@@ -141,7 +162,11 @@ const Policies = () => {
 
   useEffect(() => {
     getData();
+
   }, []);
+
+
+
   const getData = async () => {
     setLoading(true);
     let alldata = await PolicyContext.getPolicy();
@@ -242,7 +267,7 @@ const Policies = () => {
                 <Button
                   type="primary"
                   onClick={showModal}
-                  style={{ marginLeft: "10px",background: "#1963a6",border: "1px solid #1963A6", }}
+                  style={{ marginLeft: "10px", background: "#1963a6", border: "1px solid #1963A6", }}
                 >
                   <PlusCircleOutlined />
                   Add
@@ -323,6 +348,48 @@ const Policies = () => {
                       bordered={false}
                       required
                       placeholder="Enter Description"
+                    />
+                  </Form.Item>
+                  <div className="div-discription">Date</div>
+                  <Form.Item
+                    name="date"
+
+                  >
+                    <DatePicker
+                      format={dateFormat}
+                      placeholder="Date of Revise Version"
+                      style={{
+                        width: "100%",
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                        background: "#ffffff",
+                      }}
+                    />
+                  </Form.Item>
+                  <div className="div-discription">Version</div>
+                  <Form.Item
+                    name="version"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Enter version ",
+                      },
+                      {
+                        // pattern: /^[a-zA-Z\s]*$/,
+                        message: " Please Enter version",
+                      },
+                    ]}
+                  >
+                    <Input
+                      style={{
+                        width: "100%",
+                        borderBottom: "1px solid #ccc ",
+                        paddingLeft: "0px",
+                        marginTop: "10px",
+                      }}
+                      bordered={false}
+                      required
+                      placeholder="Enter versions"
                     />
                   </Form.Item>
                   <div className="div-discription">Uplode File</div>

@@ -199,6 +199,14 @@ border-left: 4px solid #8F8980;
     padding: 10px;
     border-left: 4px solid #8F8980;
     }
+
+    .createButton .ant-card-body{
+      padding: 0px;
+    }
+
+    .createButton .ant-card-body{
+      padding: 3px;
+    }
   
     .sick .ant-card-head-title {
       font-size: 15px;

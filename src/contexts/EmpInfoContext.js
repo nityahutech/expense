@@ -1,4 +1,4 @@
-import { db } from "../firebase-config";
+import { db, storage } from "../firebase-config";
 import { disableAccount } from "./EmailContext"
 import {
     setDoc,
@@ -6,6 +6,7 @@ import {
     updateDoc,
     doc,
 } from "firebase/firestore";
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 let compId = sessionStorage.getItem("compId");
 
@@ -17,13 +18,24 @@ class EmpInfoContext {
         return;
     }
 
-    addEduDetails = async (id, newEdu) => {
-        return setDoc(doc(db, compId != "undefined" ? `companyprofile/${compId}/users` : "admins", id), newEdu);
-    };
-
-    updateEduDetails = (id, updateEdu) => {
-        const eduDoc = doc(db, compId != "undefined" ? `companyprofile/${compId}/users` : "admins", id);
-        return updateDoc(eduDoc, updateEdu);
+    updateEduDetails = (id, updateEdu, file) => {
+        if (file) {
+            const storageRef = ref(storage, `/${compId}/${id}/profilePic`);
+            uploadBytesResumable(storageRef, file).then((snapshot) => {
+                getDownloadURL(snapshot.ref).then((url) => {
+                    console.log(url)
+                    updateEdu.profilePic = url;
+                    const eduDoc = doc(db, compId != "undefined" ? `companyprofile/${compId}/users` : "admins", id);
+                    return updateDoc(eduDoc, updateEdu);
+                })
+            });
+        } else {
+            if (updateEdu.profilePic == null) {
+                deleteObject(ref(storage, `/${compId}/${id}/profilePic`))
+            }
+            const eduDoc = doc(db, compId != "undefined" ? `companyprofile/${compId}/users` : "admins", id);
+            return updateDoc(eduDoc, updateEdu);
+        }
     };
 
     getEduDetails = async (id, compid) => {

@@ -10,22 +10,35 @@ import {
   Table,
   Modal,
   notification,
+  Switch,
 } from "antd";
 import ConfigureContext from "../../contexts/ConfigureContext";
 import { DeleteOutlined, EditFilled,CheckOutlined,CloseOutlined } from "@ant-design/icons";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import "./companystyle.css";
 import { getDesigNo } from "../../contexts/CreateContext";
+import FormItem from "antd/es/form/FormItem";
 
 const Designation = () => {
   const page = "addemployeePage";
   const [editContent, showEditContent] = useState(false);
+  const [editGrade, showEditGrade] = useState(false);
   const [data, setData] = useState({});
   const [des, setDes] = useState(null);
   const [old, setOld] = useState(null);
   const [editInfo, setEditInfo] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [form] = Form.useForm();
+
+  const showModal = () => {
+    showEditGrade(true);
+  };
+  const handleOk = () => {
+    showEditGrade(false);
+  };
+  const handleCancel = () => {
+    showEditGrade(false);
+  };
 
   useEffect(() => {
     getData();
@@ -51,7 +64,6 @@ const Designation = () => {
       dataIndex: "designation",
       key: "designatione",
     },
-
     {
       title: "Employees",
       dataIndex: "employees",
@@ -183,6 +195,7 @@ const Designation = () => {
         showNotification("error", "Error", error.message);
       });
   };
+
   return (
     <>
       <div
@@ -214,6 +227,26 @@ const Designation = () => {
                 borderRadius: "10px",
                 cursor:'default'
               }}
+              extra={
+                <>
+                  <Button
+                    onClick={showModal}
+                    className="personal"
+                        type="text"
+                        style={{
+                          color: "#ffff",
+                          display: "none",
+                          paddingTop: "7px",
+                          paddingRight: "7px",
+                          position: "absolute",
+                          right: 10,
+                          top: 10,
+                        }}
+                  >
+                    <EditFilled />
+                  </Button>
+                </>
+              }
             >
               <div className="table-responsive">
                 <Table
@@ -347,6 +380,26 @@ const Designation = () => {
           defaultValue={des}
           onChange={(e) => setDes(e.target.value)}
         />
+      </Modal>
+      <Modal
+        open={editGrade}
+        centered
+        className="editDesignation"
+        title="Edit Grade"
+        onOk={handleOk}
+        onCancel={handleCancel}
+        closable={true}
+      >
+        <Form>
+          <FormItem
+            label="Configuration for Grade::"
+            labelCol={{offset:6}}
+            // wrapperCol={{span:12,offset:10}}
+            style={{marginBottom:"0px"}}
+          >
+            <Switch />
+          </FormItem>
+        </Form>
       </Modal>
     </>
   );

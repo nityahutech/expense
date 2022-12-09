@@ -8,6 +8,7 @@ import Policies from "./CompanyDetail/policies";
 import Admin from "./CompanyDetail/admin";
 import Statutory from "./CompanyDetail/statutory";
 import "../style/Onboarding.css";
+import DepartmentNew from "./CompanyDetail/departmentNew";
 
 function CompanyProfile() {
   return (
@@ -27,6 +28,9 @@ function CompanyProfile() {
           <Tabs.TabPane tab="Department" key="3">
             <Department />
           </Tabs.TabPane>
+          <Tabs.TabPane tab="Organisation" key="3a">
+            <DepartmentNew />
+          </Tabs.TabPane>
           <Tabs.TabPane tab="Designation" key="4">
             <Designation />
           </Tabs.TabPane>
@@ -39,7 +43,7 @@ function CompanyProfile() {
           <Tabs.TabPane tab="Statutory" key="8">
             <Statutory />
           </Tabs.TabPane>
-          
+
         </Tabs>
       </div>
     </>

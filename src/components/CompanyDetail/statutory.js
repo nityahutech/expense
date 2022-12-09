@@ -34,6 +34,7 @@ const Statutory = () => {
   const [editContent, showEditContent] = useState(false);
   const [editCompanyID, showeditCompanyID] = useState(false);
   const [editBai, setEditBAI] = useState(false);
+  const [editBAIInput, setEditBAIInput] = useState(false);
   const [baiList, setBAIList] = useState([]);
   const [form3] = Form.useForm();
   const [editDirectors, showEditDirectors] = useState(false);
@@ -344,7 +345,9 @@ const Statutory = () => {
                         Date of Incorporation
                       </div>
                       {editContent === false ? (
-                        <div>{data?.dateOfIncorp ? data.dateOfIncorp : "-"}</div>
+                        <div>
+                          {data?.dateOfIncorp ? data.dateOfIncorp : "-"}
+                        </div>
                       ) : (
                         <Form.Item
                           initialValue={
@@ -589,66 +592,230 @@ const Statutory = () => {
                   >
                     {/* <Card className="tabcard1" title="Directors" bordered={false}> */}
                     {directorList.map((u, i) => (
+                      // <div>
+                      //   <Row gutter={[20, 8]}>
+                      //     <Col xs={22} sm={15} md={6}>
+                      //       <label className="div-discription">Name</label>
+                      //       <Input
+                      //         style={{
+                      //           width: "100%",
+                      //           borderBottom: "1px solid #ccc ",
+                      //           paddingLeft: "0px",
+                      //           marginTop: "10px",
+                      //         }}
+                      //         bordered={false}
+                      //         value={u?.directorName}
+                      //       />
+                      //     </Col>
+                      //     <Col xs={22} sm={15} md={8}>
+                      //       <label className="div-discription">Email ID</label>
+                      //       <Input
+                      //         style={{
+                      //           width: "100%",
+                      //           borderBottom: "1px solid #ccc ",
+                      //           paddingLeft: "0px",
+                      //           marginTop: "10px",
+                      //         }}
+                      //         bordered={false}
+                      //         value={u?.directoremailid}
+                      //       />
+                      //     </Col>
+                      //     <Col xs={22} sm={15} md={4}>
+                      //       <label className="div-discription">DIN</label>
+                      //       <Input
+                      //         style={{
+                      //           width: "100%",
+                      //           borderBottom: "1px solid #ccc ",
+                      //           paddingLeft: "0px",
+                      //           marginTop: "10px",
+                      //         }}
+                      //         bordered={false}
+                      //         value={u?.directordin}
+                      //       />
+                      //     </Col>
+                      //     <Col xs={22} sm={15} md={5}>
+                      //       <label className="div-discription">
+                      //         Phone Number
+                      //       </label>
+                      //       <Input
+                      //         style={{
+                      //           width: "100%",
+                      //           borderBottom: "1px solid #ccc ",
+                      //           paddingLeft: "0px",
+                      //           marginTop: "10px",
+                      //         }}
+                      //         bordered={false}
+                      //         value={u?.directorphone}
+                      //       />
+                      //     </Col>
+                      //     <Col
+                      //       xs={22}
+                      //       sm={15}
+                      //       md={1}
+                      //       style={{
+                      //         display: "flex",
+                      //         justifyContent: "center",
+                      //         alignItems: "end",
+                      //       }}
+                      //     >
+                      //       <Button
+                      //         style={{
+                      //           width: "10px",
+                      //           border: "none",
+                      //           display: "flex",
+                      //           justifyContent: "center",
+                      //           alignItems: "end",
+                      //         }}
+                      //         onClick={() => {
+                      //           onDeleteDirector(u);
+                      //         }}
+                      //       >
+                      //         <DeleteOutlined />
+                      //       </Button>
+                      //     </Col>
+                      //   </Row>
+                      //   <Divider className="divider" />
+                      // </div>
                       <div>
-                        <Row gutter={[20, 8]}>
-                          <Col xs={22} sm={15} md={6}>
-                            <label className="div-discription">Name</label>
-                            <Input
+                      <Row gutter={[20, 8]}>
+                        <Col xs={22} sm={15} md={6}>
+                          <div className="div-discription">Name</div>
+                          {editBai === false ? (
+                            <div>{u?.directorName ? u.directorName : "-"}</div>
+                          ) : (
+                            <FormItem
+                              name="directorName"
+                              rules={[
+                                {
+                                  pattern: /^[a-zA-Z\s]*$/,
+                                  required: true,
+                                  message: "Please enter bank name",
+                                },
+                              ]}
+                            >
+                              <Input
+                                placeholder="Bank Name"
+                                bordered={false}
+                                maxLength={25}
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                              />
+                            </FormItem>
+                          )}
+                        </Col>
+                        <Col xs={22} sm={15} md={8}>
+                          <div className="div-discription">Email ID</div>
+                          {editBai === false ? (
+                            <div>{u?.directoremailid ? u.directoremailid : "-"}</div>
+                          ) : (
+                            <FormItem
+                              name="directoremailid"
+                              rules={[
+                                {
+                                  pattern: /^[a-zA-Z\s]*$/,
+                                  required: true,
+                                  message: "Please enter city",
+                                },
+                              ]}
+                            >
+                              <Input
+                                placeholder="City"
+                                bordered={false}
+                                maxLength={25}
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                              />
+                            </FormItem>
+                          )}
+                        </Col>
+                        <Col xs={22} sm={15} md={4}>
+                          <div className="div-discription">DIN</div>
+                          {editBai === false ? (
+                            <div>
+                              {u?.directordin ? u.directordin : "-"}
+                            </div>
+                          ) : (
+                            <FormItem
+                              name="directordin"
+                              rules={[
+                                {
+                                  pattern: /^[a-zA-Z\s]*$/,
+                                  required: true,
+                                  message: "Please enter branch name",
+                                },
+                              ]}
+                            >
+                              <Input
+                                placeholder="Branch Name"
+                                bordered={false}
+                                maxLength={25}
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                              />
+                            </FormItem>
+                          )}
+                        </Col>
+                        <Col xs={22} sm={15} md={4}>
+                          <div className="div-discription">Phone Number</div>
+                          {editBai === false ? (
+                            <div>{u?.directorphone ? u.directorphone : "-"}</div>
+                          ) : (
+                            <FormItem
+                              name="directorphone"
+                              rules={[
+                                {
+                                  pattern: /^[0-9\s]*$/,
+                                  required: true,
+                                  message: "Please enter the IFSC code",
+                                },
+                              ]}
+                            >
+                              <Input
+                                maxLength={11}
+                                placeholder="IFSC Code"
+                                bordered={false}
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                              />
+                            </FormItem>
+                          )}
+                        </Col>
+                        <Col xs={22} sm={15} md={1}
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "end",
+                            }}
+                          >
+                            <Button
                               style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                              bordered={false}
-                              value={u?.directorName}
-                            />
-                          </Col>
-                          <Col xs={22} sm={15} md={8}>
-                            <label className="div-discription">Email ID</label>
-                            <Input
-                              style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                              bordered={false}
-                              value={u?.directoremailid}
-                            />
-                          </Col>
-                          <Col xs={22} sm={15} md={4}>
-                            <label className="div-discription">DIN</label>
-                            <Input
-                              style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                              bordered={false}
-                              value={u?.directordin}
-                            />
-                          </Col>
-                          <Col xs={22} sm={15} md={5}>
-                            <label className="div-discription">
-                              Phone Number
-                            </label>
-                            <Input
-                              style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                              bordered={false}
-                              value={u?.directorphone}
-                            />
-                          </Col>
-                          <Col
-                            xs={22}
-                            sm={15}
-                            md={1}
+                                width: "10px",
+                                border: "none",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "end",
+                              }}   
+                            >
+                              <EditFilled />
+                            </Button>
+                        </Col>
+                        <Col xs={22} sm={15} md={1}
                             style={{
                               display: "flex",
                               justifyContent: "center",
@@ -669,9 +836,9 @@ const Statutory = () => {
                             >
                               <DeleteOutlined />
                             </Button>
-                          </Col>
-                        </Row>
-                        <Divider className="divider" />
+                        </Col>
+                      </Row>
+                      <Divider />
                       </div>
                     ))}
                     {editDirectors === false ? (
@@ -869,20 +1036,36 @@ const Statutory = () => {
                           <div>
                             <Row gutter={[20, 8]}>
                               <Col xs={22} sm={15} md={6}>
-                                <label className="div-discription">Name</label>
-                                <Input
-                                  style={{
-                                    width: "100%",
-                                    borderBottom: "1px solid #ccc ",
-                                    paddingLeft: "0px",
-                                    marginTop: "10px",
-                                  }}
-                                  bordered={false}
-                                  value={u?.auditorName}
-                                />
+                                <div className="div-discription">Name</div>
+                                {editBai === false ? (
+                                  <div>{u?.auditorName ? u.auditorName : "-"}</div>
+                                ) : (
+                                  <FormItem
+                                    name="auditorName"
+                                    rules={[
+                                      {
+                                        pattern: /^[a-zA-Z\s]*$/,
+                                        required: true,
+                                        message: "Please enter bank name",
+                                      },
+                                    ]}
+                                  >
+                                    <Input
+                                      placeholder="Bank Name"
+                                      bordered={false}
+                                      maxLength={25}
+                                      style={{
+                                        width: "100%",
+                                        borderBottom: "1px solid #ccc ",
+                                        paddingLeft: "0px",
+                                        marginTop: "10px",
+                                      }}
+                                    />
+                                  </FormItem>
+                                )}
                               </Col>
                               <Col xs={22} sm={15} md={8}>
-                                <label className="div-discription">
+                                {/* <label className="div-discription">
                                   Email ID
                                 </label>
                                 <Input
@@ -894,10 +1077,37 @@ const Statutory = () => {
                                   }}
                                   bordered={false}
                                   value={u?.auditormailid}
-                                />
+                                /> */}
+                                <div className="div-discription">Email ID</div>
+                                {editBai === false ? (
+                                  <div>{u?.auditormailid ? u.auditormailid : "-"}</div>
+                                ) : (
+                                  <FormItem
+                                    name="auditormailid"
+                                    rules={[
+                                      {
+                                        pattern: /^[a-zA-Z\s]*$/,
+                                        required: true,
+                                        message: "Please enter city",
+                                      },
+                                    ]}
+                                  >
+                                    <Input
+                                      placeholder="City"
+                                      bordered={false}
+                                      maxLength={25}
+                                      style={{
+                                        width: "100%",
+                                        borderBottom: "1px solid #ccc ",
+                                        paddingLeft: "0px",
+                                        marginTop: "10px",
+                                      }}
+                                    />
+                                  </FormItem>
+                                )}
                               </Col>
                               <Col xs={22} sm={15} md={4}>
-                                <lable className="div-discription">Type</lable>
+                                {/* <lable className="div-discription">Type</lable>
                                 <Select
                                   value={u.auditortype}
                                   defaultValue="Type"
@@ -918,10 +1128,49 @@ const Statutory = () => {
                                       label: "Statutory",
                                     },
                                   ]}
-                                />
+                                /> */}
+                                <div className="div-discription">Type</div>
+                                  {editBai === false ? (
+                                    <div>
+                                      {u?.auditortype ? u.auditortype : "-"}
+                                    </div>
+                                  ) : (
+                                    <FormItem
+                                      name="auditortype"
+                                      rules={[
+                                        {
+                                          pattern: /^[a-zA-Z\s]*$/,
+                                          required: true,
+                                          message: "Please enter branch name",
+                                        },
+                                      ]}
+                                    >
+                                      <Select
+                                        value={u.auditortype}
+                                        defaultValue="Type"
+                                        style={{
+                                          width: "100%",
+                                          borderBottom: "1px solid #ccc ",
+                                          paddingLeft: "0px",
+                                          marginTop: "5px",
+                                        }}
+                                        bordered={false}
+                                        options={[
+                                          {
+                                            value: "Internal",
+                                            label: "Internal",
+                                          },
+                                          {
+                                            value: "Statutory",
+                                            label: "Statutory",
+                                          },
+                                        ]}
+                                      />
+                                    </FormItem>
+                                  )}
                               </Col>
-                              <Col xs={22} sm={15} md={5}>
-                                <lable className="div-discription">
+                              <Col xs={22} sm={15} md={4}>
+                                {/* <lable className="div-discription">
                                   Phone Number
                                 </lable>
                                 <Input
@@ -933,12 +1182,45 @@ const Statutory = () => {
                                   }}
                                   bordered={false}
                                   value={u?.auditorphone}
-                                />
+                                /> */}
+                                <div className="div-discription">Phone Number</div>
+                                {editBai === false ? (
+                                  <div>{u?.auditorphone ? u.auditorphone : "-"}</div>
+                                ) : (
+                                  <FormItem
+                                    name="auditorphone"
+                                    rules={[
+                                      {
+                                        pattern: /^[0-9\s]*$/,
+                                        required: true,
+                                        message: "Please enter the IFSC code",
+                                      },
+                                    ]}
+                                  >
+                                    
+                                  </FormItem>
+                                )}
                               </Col>
-                              <Col
-                                xs={22}
-                                sm={15}
-                                md={1}
+                              <Col xs={22} sm={15} md={1}
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "end",
+                                }}
+                              >
+                                <Button
+                                  style={{
+                                    width: "10px",
+                                    border: "none",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "end",
+                                  }}
+                                >
+                                  <EditFilled />
+                                </Button>
+                              </Col>
+                              <Col xs={22} sm={15} md={1}
                                 style={{
                                   display: "flex",
                                   justifyContent: "center",
@@ -1183,7 +1465,7 @@ const Statutory = () => {
                       <div>
                         <Row gutter={[20, 8]}>
                           <Col xs={22} sm={15} md={6}>
-                            <label className="div-discription">Name</label>
+                            {/* <label className="div-discription">Name</label>
                             <Input
                               style={{
                                 width: "100%",
@@ -1193,10 +1475,37 @@ const Statutory = () => {
                               }}
                               bordered={false}
                               value={u?.secName}
-                            />
+                            /> */}
+                            <div className="div-discription">Name</div>
+                              {editBai === false ? (
+                                <div>{u?.secName ? u.secName : "-"}</div>
+                              ) : (
+                                <FormItem
+                                  name="secName"
+                                  rules={[
+                                    {
+                                      pattern: /^[a-zA-Z\s]*$/,
+                                      required: true,
+                                      message: "Please enter bank name",
+                                    },
+                                  ]}
+                                >
+                                  <Input
+                                    placeholder="Bank Name"
+                                    bordered={false}
+                                    maxLength={25}
+                                    style={{
+                                      width: "100%",
+                                      borderBottom: "1px solid #ccc ",
+                                      paddingLeft: "0px",
+                                      marginTop: "10px",
+                                    }}
+                                  />
+                                </FormItem>
+                              )}
                           </Col>
                           <Col xs={22} sm={15} md={10}>
-                            <label className="div-discription">Email ID</label>
+                            {/* <label className="div-discription">Email ID</label>
                             <Input
                               style={{
                                 width: "100%",
@@ -1206,10 +1515,38 @@ const Statutory = () => {
                               }}
                               bordered={false}
                               value={u?.secmailid}
-                            />
+                            /> */}
+                            <div className="div-discription">Email ID</div>
+                              {editBai === false ? (
+                                <div>{u?.secmailid ? u.secmailid : "-"}</div>
+                              ) : (
+                                <FormItem
+                                  initialValue={u?.secmailid}
+                                  name="directorName"
+                                  rules={[
+                                    {
+                                      pattern: /^[a-zA-Z\s]*$/,
+                                      required: true,
+                                      message: "Please enter bank name",
+                                    },
+                                  ]}
+                                >
+                                  <Input
+                                    placeholder="Bank Name"
+                                    bordered={false}
+                                    maxLength={25}
+                                    style={{
+                                      width: "100%",
+                                      borderBottom: "1px solid #ccc ",
+                                      paddingLeft: "0px",
+                                      marginTop: "10px",
+                                    }}
+                                  />
+                                </FormItem>
+                              )}
                           </Col>
                           <Col xs={22} sm={15} md={6}>
-                            <label className="div-discription">
+                            {/* <label className="div-discription">
                               Phone Number
                             </label>
                             <Input
@@ -1221,12 +1558,62 @@ const Statutory = () => {
                               }}
                               bordered={false}
                               value={u?.secphone}
-                            />
+                            /> */}
+                            <div className="div-discription">Phone Number</div>
+                            {editContent === false ? (
+                              <div>{u?.secphone ? u.secphone : "-"}</div>
+                            ) : (
+                              <Form.Item
+                                initialValue={u?.secphone}
+                                name="secphone"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please enter Company Name",
+                                    type: "name",
+                                  },
+                                  {
+                                    pattern: /^[0-9\s]*$/,
+                                    message: "Please enter Valid Company Name",
+                                  },
+                                ]}
+                              >
+                                <Input
+                                  type="CompamyName"
+                                  required
+                                  placeholder="Enter Comapany Name"
+                                  bordered={false}
+                                  style={{
+                                    width: "100%",
+                                    borderBottom: "1px solid #ccc ",
+                                    paddingLeft: "0px",
+                                    marginTop: "10px",
+                                  }}
+                                />
+                                {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
+                              </Form.Item>
+                            )}
                           </Col>
-                          <Col
-                            xs={22}
-                            sm={15}
-                            md={2}
+                          <Col xs={22} sm={15} md={1}
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "end",
+                            }}
+                          >
+                            <Button
+                              style={{
+                                width: "10px",
+                                border: "none",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "end",
+                              }}   
+                            >
+                              <EditFilled />
+                            </Button>
+                          </Col>
+                          <Col xs={22} sm={15} md={1}
                             style={{
                               display: "flex",
                               justifyContent: "center",
@@ -1407,7 +1794,7 @@ const Statutory = () => {
         </Row>
       </div>
 
-      <div
+      {/* <div
         className="personalCardDiv"
         style={{
           display: "flex",
@@ -1449,145 +1836,6 @@ const Statutory = () => {
               >
                 {baiList.map((u, i) => (
                   <>
-                    {/* <div>
-                    <Row>
-                      <Col xs={22} sm={15} md={22}>
-                        <Row gutter={[16, 48]}>
-                          <Col xs={22} sm={15} md={24}>
-                            <label>Account Title</label>
-                            <Input
-                              style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                              bordered={false}
-                              value={u.baiaccountitle}
-                            />
-                          </Col>
-                          <Col xs={22} sm={15} md={8}>
-                            <label>Bank Name</label>
-                            <Input
-                              style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                              bordered={false}
-                              value={u.baibankname}
-                            />
-                          </Col>
-                          <Col xs={22} sm={15} md={8}>
-                            <label>City</label>
-                            <Input
-                              style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                              bordered={false}
-                              value={u.baicity}
-                            />
-                          </Col>
-                          <Col xs={22} sm={15} md={8}>
-                            <label>Branch Name</label>
-                            <Input
-                              style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                              bordered={false}
-                              value={u.baibranchname}
-                            />
-                          </Col>
-                          <Col xs={22} sm={15} md={8}>
-                            <label>IFSC Code</label>
-                            <Input
-                              style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                              bordered={false}
-                              value={u.baiifsccode}
-                            />
-                          </Col>
-                          <Col xs={22} sm={15} md={8}>
-                            <lable>Type</lable>
-                            <Select
-                              value={u.baiaccounttype}
-                              defaultValue="Account Type"
-                              style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                              bordered={false}
-                              onChange={handleChange}
-                              options={[
-                                {
-                                  value: "Account Type",
-                                  label: "Account Type",
-                                },
-                                {
-                                  value: "Current Account",
-                                  label: "Current Account",
-                                },
-                                {
-                                  value: "Fixed Deposit",
-                                  label: "Fixed Deposit",
-                                },
-                              ]}
-                            />
-                          </Col>
-                          <Col xs={22} sm={15} md={8}>
-                            <label>Account Number</label>
-                            <Input
-                              style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                              bordered={false}
-                              value={u.baiaccountnumber}
-                            />
-                          </Col>                 
-                        </Row>
-                      </Col>
-                      <Col xs={22} sm={15} md={2}
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
-                          >
-                            <Button
-                              style={{
-                                width: "10px",
-                                border: "none",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "end",
-                              }}
-                              onClick={() => {
-                                onDeleteBank(u);
-                              }}
-                            >
-                              <DeleteOutlined />
-                            </Button>  
-                      </Col>
-                    </Row>
-                    <Divider />
-                  </div> */}
-
                     <Divider />
                     <Row>
                       <Col xs={22} sm={15} md={22}>
@@ -1599,7 +1847,9 @@ const Statutory = () => {
                           <Col span={24}>City : {u?.baicity}</Col>
                           <Col span={24}>Branch Name : {u?.baibranchname}</Col>
                           <Col span={24}>IFSC Code : {u?.baiifsccode}</Col>
-                          <Col span={24}>Account Type : {u?.baiaccounttype}</Col>
+                          <Col span={24}>
+                            Account Type : {u?.baiaccounttype}
+                          </Col>
                           <Col span={24}>
                             Account Number : {u?.baiaccountnumber}
                           </Col>
@@ -1871,7 +2121,579 @@ const Statutory = () => {
             </Card>
           </Col>
         </Row>
+      </div> */}
+
+      {/* --------------------------------- */}
+      <div
+        className="personalCardDiv"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Row
+          className="Row-Card"
+          style={{
+            width: "75%",
+            margin: "10px",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Col span={24}>
+            <Card
+              title=" BANK ACCOUNT INFO"
+              bordered={true}
+              hoverable={true}
+              style={{
+                width: "100%",
+                marginTop: 10,
+                borderRadius: "10px",
+                cursor: "default",
+              }}
+              className="companyCard"
+              // className="card1"
+            >
+              <Form
+                labelcol={{
+                  span: 24,
+                }}
+                wrappercol={{
+                  span: 24,
+                }}
+                initialValues={{
+                  remember: true,
+                }}
+                autoComplete="off"
+                onFinish={addBAI}
+                form={form3}
+                layout="vertical"
+              >
+                {baiList.map((u, i) => (
+                  <>
+                    <div>
+                      <Row gutter={[16, 16]}>
+                        <Col xs={22} sm={15} md={22}>
+                          {editBai === false ? (
+                            <div
+                              style={{
+                                fontSize: "25px",
+                                fontWeight: "lighter",
+                              }}
+                            >
+                              {u.baiaccountitle ? u.baiaccountitle : "-"}
+                            </div>
+                          ) : (
+                            <>
+                              <div className="div-discription">
+                                Account Title
+                              </div>
+                              <FormItem
+                                name="baiaccountitle"
+                                rules={[
+                                  {
+                                    pattern: /^[a-zA-Z-0-9\s]*$/,
+                                    required: true,
+                                    message: "Please enter account title",
+                                  },
+                                ]}
+                              >
+                                <Input
+                                  placeholder="Account Title"
+                                  bordered={false}
+                                  maxLength={25}
+                                  style={{
+                                    width: "100%",
+                                    borderBottom: "1px solid #ccc ",
+                                    paddingLeft: "0px",
+                                    marginTop: "10px",
+                                  }}
+                                />
+                              </FormItem>
+                            </>
+                          )}
+                        </Col>
+                        <Col xs={22} sm={15} md={1}
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "end",
+                          }}
+                        >
+                          <Button
+                            style={{
+                              width: "10px",
+                              border: "none",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "end",
+                            }}
+                          >
+                            <EditFilled />
+                          </Button>
+                          
+                        </Col>
+                        <Col xs={22} sm={15} md={1}
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "end",
+                          }}
+                        >
+                          <Button
+                            style={{
+                              width: "10px",
+                              border: "none",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "end",
+                            }}
+                            onClick={() => {
+                              onDeleteBank(u);
+                            }}
+                          >
+                            <DeleteOutlined />
+                          </Button>
+                        </Col>
+                        <Divider style={{ margin: "0px" }} />
+                        <Col xs={22} sm={15} md={8}>
+                          <div className="div-discription">Bank Name</div>
+                          {editBai === false ? (
+                            <div>{u?.baibankname ? u.baibankname : "-"}</div>
+                          ) : (
+                            <FormItem
+                              name="baibankname"
+                              rules={[
+                                {
+                                  pattern: /^[a-zA-Z\s]*$/,
+                                  required: true,
+                                  message: "Please enter bank name",
+                                },
+                              ]}
+                            >
+                              <Input
+                                placeholder="Bank Name"
+                                bordered={false}
+                                maxLength={25}
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                              />
+                            </FormItem>
+                          )}
+                        </Col>
+                        <Col xs={22} sm={15} md={8}>
+                          <div className="div-discription">City</div>
+                          {editBai === false ? (
+                            <div>{u?.baicity ? u.baicity : "-"}</div>
+                          ) : (
+                            <FormItem
+                              name="baicity"
+                              rules={[
+                                {
+                                  pattern: /^[a-zA-Z\s]*$/,
+                                  required: true,
+                                  message: "Please enter city",
+                                },
+                              ]}
+                            >
+                              <Input
+                                placeholder="City"
+                                bordered={false}
+                                maxLength={25}
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                              />
+                            </FormItem>
+                          )}
+                        </Col>
+                        <Col xs={22} sm={15} md={8}>
+                          <div className="div-discription">Branch Name</div>
+                          {editBai === false ? (
+                            <div>
+                              {u?.baibranchname ? u.baibranchname : "-"}
+                            </div>
+                          ) : (
+                            <FormItem
+                              name="baibranchname"
+                              rules={[
+                                {
+                                  pattern: /^[a-zA-Z\s]*$/,
+                                  required: true,
+                                  message: "Please enter branch name",
+                                },
+                              ]}
+                            >
+                              <Input
+                                placeholder="Branch Name"
+                                bordered={false}
+                                maxLength={25}
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                              />
+                            </FormItem>
+                          )}
+                        </Col>
+                        <Col xs={22} sm={15} md={8}>
+                          <div className="div-discription">IFSC Code</div>
+                          {editBai === false ? (
+                            <div>{u?.baiifsccode ? u.baiifsccode : "-"}</div>
+                          ) : (
+                            <FormItem
+                              name="baiifsccode"
+                              rules={[
+                                {
+                                  pattern: /^[A-Z0-9\s]*$/,
+                                  required: true,
+                                  message: "Please enter the IFSC code",
+                                },
+                              ]}
+                            >
+                              <Input
+                                maxLength={11}
+                                placeholder="IFSC Code"
+                                bordered={false}
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                              />
+                            </FormItem>
+                          )}
+                        </Col>
+                        <Col xs={22} sm={15} md={8}>
+                          <div className="div-discription">Account Type</div>
+                          {editBai === false ? (
+                            <div>
+                              {u?.baiaccounttype ? u.baiaccounttype : "-"}
+                            </div>
+                          ) : (
+                            <FormItem
+                              name="baiaccounttype"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Please select account type",
+                                },
+                              ]}
+                            >
+                              <Select
+                                defaultValue="Account Type"
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                                bordered={false}
+                                options={[
+                                  {
+                                    value: "Account Type",
+                                    label: "Account Type",
+                                  },
+                                  {
+                                    value: "Current Account",
+                                    label: "Current Account",
+                                  },
+                                  {
+                                    value: "Fixed Deposit",
+                                    label: "Fixed Deposit",
+                                  },
+                                  {
+                                    value: "Salary Account",
+                                    label: "Salary Account",
+                                  },
+                                ]}
+                              />
+                            </FormItem>
+                          )}
+                        </Col>
+                        <Col xs={22} sm={15} md={8}>
+                          <div className="div-discription">Account Number</div>
+                          {editBai === false ? (
+                            <div>
+                              {u?.baiaccountnumber ? u.baiaccountnumber : "-"}
+                            </div>
+                          ) : (
+                            <FormItem
+                              name="baiaccountnumber"
+                              rules={[
+                                {
+                                  pattern: /^[0-9\b]+$/,
+                                  required: true,
+                                  message: "Please enter account number",
+                                },
+                              ]}
+                            >
+                              <Input
+                                maxLength={14}
+                                placeholder="Account Number"
+                                bordered={false}
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                  marginTop: "10px",
+                                }}
+                              />
+                            </FormItem>
+                          )}
+                        </Col>
+                      </Row>
+                      <Divider />
+                    </div>
+                  </>
+                ))}
+                {editBai === false ? (
+                  <Button
+                    type="primary"
+                    onClick={() => setEditBAI(!editBai)}
+                    style={{ background: "#1963A6" }}
+                  >
+                    <PlusCircleOutlined />
+                    Add
+                  </Button>
+                ) : (
+                  <div>
+                    <Row gutter={[16, 48]}>
+                      <Col xs={22} sm={15} md={24}>
+                        <FormItem
+                          initialValue={data.baiaccountitle}
+                          label="Account Title"
+                          name="baiaccountitle"
+                          rules={[
+                            {
+                              pattern: /^[a-zA-Z-0-9\s]*$/,
+                              required: true,
+                              message: "Please enter account title",
+                            },
+                          ]}
+                        >
+                          <Input
+                            placeholder="Account Title"
+                            bordered={false}
+                            maxLength={25}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                        </FormItem>
+                      </Col>
+                      <Col xs={22} sm={15} md={8}>
+                        <FormItem
+                          label="Bank Name"
+                          name="baibankname"
+                          rules={[
+                            {
+                              pattern: /^[a-zA-Z\s]*$/,
+                              required: true,
+                              message: "Please enter bank name",
+                            },
+                          ]}
+                        >
+                          <Input
+                            placeholder="Bank Name"
+                            bordered={false}
+                            maxLength={25}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                        </FormItem>
+                      </Col>
+                      <Col xs={22} sm={15} md={8}>
+                        <FormItem
+                          label="City"
+                          name="baicity"
+                          rules={[
+                            {
+                              pattern: /^[a-zA-Z\s]*$/,
+                              required: true,
+                              message: "Please enter city",
+                            },
+                          ]}
+                        >
+                          <Input
+                            placeholder="City"
+                            bordered={false}
+                            maxLength={25}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                        </FormItem>
+                      </Col>
+                      <Col xs={22} sm={15} md={8}>
+                        <FormItem
+                          label="Branch Name"
+                          name="baibranchname"
+                          rules={[
+                            {
+                              pattern: /^[a-zA-Z\s]*$/,
+                              required: true,
+                              message: "Please enter branch name",
+                            },
+                          ]}
+                        >
+                          <Input
+                            placeholder="Branch Name"
+                            bordered={false}
+                            maxLength={25}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                        </FormItem>
+                      </Col>
+                      <Col xs={22} sm={15} md={8}>
+                        <FormItem
+                          label="IFSC Code"
+                          name="baiifsccode"
+                          rules={[
+                            {
+                              pattern: /^[A-Z0-9\s]*$/,
+                              required: true,
+                              message: "Please enter the IFSC code",
+                            },
+                          ]}
+                        >
+                          <Input
+                            maxLength={11}
+                            placeholder="IFSC Code"
+                            bordered={false}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                        </FormItem>
+                      </Col>
+                      <Col xs={22} sm={15} md={8}>
+                        <FormItem
+                          label="Account Type"
+                          name="baiaccounttype"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please select account type",
+                            },
+                          ]}
+                        >
+                          <Select
+                            defaultValue="Account Type"
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                            bordered={false}
+                            options={[
+                              {
+                                value: "Account Type",
+                                label: "Account Type",
+                              },
+                              {
+                                value: "Current Account",
+                                label: "Current Account",
+                              },
+                              {
+                                value: "Fixed Deposit",
+                                label: "Fixed Deposit",
+                              },
+                              {
+                                value: "Salary Account",
+                                label: "Salary Account",
+                              },
+                            ]}
+                          />
+                        </FormItem>
+                      </Col>
+                      <Col xs={22} sm={15} md={8}>
+                        <FormItem
+                          label="Account Number"
+                          name="baiaccountnumber"
+                          rules={[
+                            {
+                              pattern: /^[0-9\b]+$/,
+                              required: true,
+                              message: "Please enter account number",
+                            },
+                          ]}
+                        >
+                          <Input
+                            maxLength={14}
+                            placeholder="Account Number"
+                            bordered={false}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                        </FormItem>
+                      </Col>
+                      <Col xs={22} sm={15} md={24}
+                        style={{ display: "flex", justifyContent: "flex-end" }}
+                      >
+                        <FormItem>
+                          <Button
+                            type="text"
+                            style={{ marginRight: "1rem" }}
+                            onClick={() => setEditBAI(false)}
+                          >
+                            {" "}
+                            <CloseOutlined />
+                            CANCLE
+                          </Button>
+                          <Button
+                            type="primary"
+                            htmlType="submit"
+                            style={{ background: "#1963A6", width: "90px" }}
+                          >
+                            <CheckOutlined />
+                            SAVE
+                          </Button>
+                        </FormItem>
+                      </Col>
+                    </Row>
+                  </div>
+                )}
+              </Form>
+            </Card>
+          </Col>
+        </Row>
       </div>
+      {/* --------------------------------- */}
     </>
   );
 };

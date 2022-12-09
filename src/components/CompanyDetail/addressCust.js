@@ -386,13 +386,13 @@ function AddressCust() {
                     ):(
                       <>
                         <Row span={[16,16]}>
-                          <Col span={24}>{add ? add.addLine1 : null}</Col>
-                          <Col span={24}>{add ? add.addLine2 : null}</Col>
+                          <Col span={24}>{add ? add.addLine1 : null},</Col>
+                          <Col span={24}>{add ? add.addLine2 : null},</Col>
                           <span>
-                          {add ? add.city : null},
-                          {add ? add.state : null},
-                          {add ? add.country : null}-
-                          {add ? add.pincode : null},
+                          {`${add ? add.city : null},
+                          ${add ? add.state : null},
+                          ${add ? add.country : null}-
+                          ${add ? add.pincode : null},`}
                           </span>
                         </Row>
                       </>

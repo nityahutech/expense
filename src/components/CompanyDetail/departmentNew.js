@@ -171,7 +171,7 @@ const DepartmentNew = () => {
       title: `${type} Name`,
       dataIndex: "name",
       key: "name",
-      width: 100,
+      width: 200,
       render: (_, record) => (
         <a
           href="#"
@@ -199,7 +199,7 @@ const DepartmentNew = () => {
       title: `${type} Description`,
       key: "description",
       dataIndex: "description",
-      width: 200,
+      width: 300,
       // responsive: ["md"],
       // render: (_, { status }) => getStatusUi(status),
     },
@@ -207,7 +207,7 @@ const DepartmentNew = () => {
       title: "Action",
       key: "action",
       dataIndex: "action",
-      width: 80,
+      width: 150,
       // align: "center",
       render: (_, record) => {
         return (
@@ -275,7 +275,15 @@ const DepartmentNew = () => {
 
   return (
     <>
-      <div style={{ margin: "13px", background: "#fff" }}>
+
+      <div style={{
+        margin: "10px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: '100%'
+
+      }}>
         <div style={{ background: "#FAFAFA" }}>
           <div
             style={{
@@ -437,6 +445,7 @@ const DepartmentNew = () => {
             }}
           />
         </div>
+
         {/* //---------------------------------add Modal */}
         <Row>
           <Col xs={22} sm={20} md={18}>

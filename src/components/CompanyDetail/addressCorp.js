@@ -274,13 +274,13 @@ function AddressCorp() {
                                 ):(
                                     <>
                                       <Row span={[16,16]}>
-                                        <Col span={24}>{data ? data.corpOffice?.addLine1 : null}</Col>
-                                        <Col span={24}>{data ? data.corpOffice?.addLine2 : null}</Col>
+                                        <Col span={24}>{data ? data.corpOffice?.addLine1 : null},</Col>
+                                        <Col span={24}>{data ? data.corpOffice?.addLine2 : null},</Col>
                                         <span>
-                                            {data ? data.corpOffice?.city : null},
-                                            {data ? data.corpOffice?.state : null},
-                                            {data ? data.corpOffice?.country : null}-
-                                            {data ? data.corpOffice?.pincode : null}
+                                           { `${data ? data.corpOffice?.city : null},
+                                            ${data ? data.corpOffice?.state : null},
+                                            ${data ? data.corpOffice?.country : null}-
+                                            ${data ? data.corpOffice?.pincode : null}`}
                                         </span>
                                       </Row>
                                     </>

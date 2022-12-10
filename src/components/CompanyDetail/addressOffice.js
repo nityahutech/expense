@@ -29,6 +29,7 @@ function AddressOffice() {
     let data = await CompanyProContext.getCompanyProfile(compId);
     setData(data);
   };
+  const addspace = []
 
   return (
     <>
@@ -273,13 +274,13 @@ function AddressOffice() {
                 ):(
                   <>
                     <Row span={[16,16]}>
-                      <Col span={24}>{data ? data.regOffice?.addLine1 : null}</Col>
-                      <Col span={24}>{data ? data.regOffice?.addLine2 : null}</Col>
+                      <Col span={24}>{data ? data.regOffice?.addLine1 : null},</Col>
+                      <Col span={24}>{data ? data.regOffice?.addLine2 : null},</Col>
                       <span>
-                        {data ? data.regOffice?.city : null},
-                        {data ? data.regOffice?.state : null},
-                        {data ? data.regOffice?.country : null}-
-                        {data ? data.regOffice?.pincode : null}
+                     { `${data ? data.regOffice?.city : null}, 
+                      ${data ? data.regOffice?.state : null}, 
+                      ${data ? data.regOffice?.country : null} - 
+                      ${data ? data.regOffice?.pincode : null}`}
                       </span>
                     </Row>
                   </>)}

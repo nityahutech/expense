@@ -368,6 +368,7 @@ function AddEmployee() {
                 >
                   <Option value="Male">Male</Option>
                   <Option value="Female">Female</Option>
+                  <Option value="Other">Other</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -431,6 +432,7 @@ function AddEmployee() {
                 >
                   <Option value="Full-Time">Full-Time</Option>
                   <Option value="Part-Time">Part-Time</Option>
+                  <Option value="Contract-Basis">Contract-Basis</Option>
                   {/* <Option value="pns">Prefer Not To Say</Option> */}
                 </Select>
               </Form.Item>

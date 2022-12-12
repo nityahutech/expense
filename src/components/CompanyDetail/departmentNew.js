@@ -46,7 +46,7 @@ const DepartmentNew = () => {
   }, [type]);
 
   const getData = (dept) => {
-    let d = data || dept
+    let d = dept || data
     console.log(d);
     if (!d) {
       return;
@@ -96,70 +96,77 @@ const DepartmentNew = () => {
       parent: par,
       type: type,
     });
-    localStorage.setItem("Department", JSON.stringify(temp));
+    CompanyProContext.addCompInfo(compId,{departments:{
+      ...values,
+      parent: par,
+      type: type,
+    }});
     form.resetFields();
     setIsModalOpen(false);
-    getData();
+    setData(temp);
+    getData(temp);
   };
 
   const onFinishEdit = (values) => {
-    // let edited = data.map((d) => {
-    //   if (d.parent == editRecord.parent && d.name == editRecord.name) {
-    //     return {
-    //       name: values.editname,
-    //       description: values.editdescription,
-    //       parent: d.parent,
-    //       type: type,
-    //     };
-    //   }
-    //   if (d.parent != null) {
-    //     let par =
-    //       editRecord.parent == null ? editRecord.name : editRecord.parent;
-    //     if (d.parent.startsWith(par)) {
-    //       return {
-    //         ...d,
-    //         parent: d.parent.replace(editRecord.name, values.editname),
-    //       };
-    //     }
-    //   }
-    //   return d;
-    // });
-    // localStorage.setItem("Department", JSON.stringify(edited));
-    // setEditRecord({});
-    // form1.resetFields();
-    // setIsEditModalOpen(false);
-    // getData();
+     let edited = data.map((d) => {
+       if (d.parent == editRecord.parent && d.name == editRecord.name) {
+        return {
+           name: values.editname,
+           description: values.editdescription,
+           parent: d.parent,
+           type: type,
+         };
+       }
+       if (d.parent != null) {
+         let par =
+           editRecord.parent == null ? editRecord.name : editRecord.parent;
+         if (d.parent.startsWith(par)) {
+           return {
+             ...d,
+             parent: d.parent.replace(editRecord.name, values.editname),
+           };
+         }
+       }
+       return d;
+     });
+     CompanyProContext.updateCompInfo(compId,{departments:edited});
+     setEditRecord({});
+     form1.resetFields();
+     setIsEditModalOpen(false);
+     setData(edited);
+     getData(edited);
   };
 
   const deleteData = (record) => {
-    // Modal.confirm({
-    //   title: `Are you sure, you want to delete this ${type}?`,
-    //   okText: "Yes",
-    //   okType: "danger",
-    //   onOk: () => {
-    //     let deleted = data.filter((d) => {
-    //       if (d.parent == record.parent && d.name == record.name) {
-    //         console.log("same");
-    //         return false;
-    //       }
-    //       console.log(d.parent, record.parent);
-    //       if (d.parent != null) {
-    //         let par =
-    //           record.parent == null
-    //             ? record.name
-    //             : `${record.parent}/${record.name}`;
-    //         if (d.parent.startsWith(par)) {
-    //           console.log("same par", par);
-    //           return false;
-    //         }
-    //       }
-    //       console.log("none");
-    //       return true;
-    //     });
-    //     localStorage.setItem("Department", JSON.stringify(deleted));
-    //     getData();
-    //   },
-    // });
+     Modal.confirm({
+       title: `Are you sure, you want to delete this ${type}?`,
+       okText: "Yes",
+       okType: "danger",
+       onOk: () => {
+         let deleted = data.filter((d) => {
+          if (d.parent == record.parent && d.name == record.name) {
+            console.log("same");
+             return false;
+           }
+           console.log(d.parent, record.parent);
+           if (d.parent != null) {
+            let par =
+               record.parent == null
+                 ? record.name
+                : `${record.parent}/${record.name}`;
+             if (d.parent.startsWith(par)) {
+               console.log("same par", par);
+               return false;
+            }
+           }
+           console.log("none");
+          return true;
+         });
+         CompanyProContext.updateCompInfo(compId,{departments:deleted});
+         setData(deleted)
+         getData(deleted);
+       },
+    });
   };
 
   function onReset() {

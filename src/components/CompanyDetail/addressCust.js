@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, Row, Col, Button, Input, Form, Modal } from "antd";
 import CompanyProContext from "../../contexts/CompanyProContext";
 import {
@@ -81,8 +81,6 @@ function AddressCust() {
     showEditAddressContent(array.fill(false));
     setData(data.address);
   };
-
-  console.log(editAddressContent)
 
   return (
     <>
@@ -391,8 +389,8 @@ function AddressCust() {
                           <span>
                           {`${add ? add.city : null},
                           ${add ? add.state : null},
-                          ${add ? add.country : null}-
-                          ${add ? add.pincode : null},`}
+                          ${add ? add.country : null} -
+                          ${add ? add.pincode : null}`}
                           </span>
                         </Row>
                       </>

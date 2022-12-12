@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, Row, Col, Button, Input, Form } from "antd";
 import CompanyProContext from "../../contexts/CompanyProContext";
 import { CloseOutlined, EditFilled ,CheckOutlined } from "@ant-design/icons";
@@ -22,9 +22,11 @@ function AddressCorp() {
         getData();
         showEditCorpAddress(false);
     };
+
     useEffect(() => {
         getData();
     }, []);
+    
     const getData = async () => {
         let data = await CompanyProContext.getCompanyProfile(compId);
         setData(data);
@@ -279,7 +281,7 @@ function AddressCorp() {
                                         <span>
                                            { `${data ? data.corpOffice?.city : null},
                                             ${data ? data.corpOffice?.state : null},
-                                            ${data ? data.corpOffice?.country : null}-
+                                            ${data ? data.corpOffice?.country : null} -
                                             ${data ? data.corpOffice?.pincode : null}`}
                                         </span>
                                       </Row>
@@ -298,7 +300,6 @@ function AddressCorp() {
                                         <Button
                                             type="text"
                                             style={{
-                                                // marginLeft: "10px", 
                                                 fontSize: 15 }}
                                             onClick={() => showEditCorpAddress(false)}
                                         >
@@ -322,16 +323,6 @@ function AddressCorp() {
                                         </Col>
                                     </Row>
                                 ) : null}
-
-                                {/* {editContactInfo == false &&
-                            <Button type="primary" style={{ marginLeft: "10px" }}
-                                onClick={() => showEditContactInfo(!editContactInfo)}
-                            >
-                                <PlusCircleOutlined />
-                                Add
-
-                            </Button>
-                        } */}
                             </Card>
                         </Form>
                     </Col>

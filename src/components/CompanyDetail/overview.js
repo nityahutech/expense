@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Input, Button, DatePicker, Select, Form } from "antd";
+import { Card, Row, Col, Input, Button, Form } from "antd";
 import { CloseOutlined, EditFilled,CheckOutlined } from "@ant-design/icons";
-// import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "./companystyle.css";
 import linkedin from "../../images/linkedin.png";
 import facebook from "../../images/facebook.png";
 import twitter from "../../images/twitter.png";
 import CompanyProContext from "../../contexts/CompanyProContext";
+import { checkAlphabets } from "../../contexts/CreateContext";
 
 function Overview() {
   const [editContactInfo, showEditCompanyInfo] = useState(false);
@@ -45,12 +45,6 @@ function Overview() {
     setData(data);
   };
 
-  const checkAlphabets = (event) => {
-    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
   return (
     <>
       <div
@@ -71,7 +65,6 @@ function Overview() {
           }}>
           <Col span={24}>
             <Form
-              // form={form}
               labelcol={{
                 span: 4,
               }}

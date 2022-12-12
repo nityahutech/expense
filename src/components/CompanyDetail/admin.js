@@ -6,13 +6,8 @@ import "./companystyle.css";
 import {
   Button,
   Col,
-  Space,
-  Modal,
   Form,
-  Input,
-  Popconfirm,
   Row,
-  Divider,
   Card,
 } from "antd";
 import {

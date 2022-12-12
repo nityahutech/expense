@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -7,37 +7,31 @@ import {
   Input,
   Row,
   Col,
-  notification,
   Card,
   message,
   Select,
-  DatePicker
 } from "antd";
 import moment from "moment";
-import { PlusCircleOutlined, DeleteOutlined, CheckOutlined, CloseOutlined, EditFilled } from "@ant-design/icons";
+import { PlusCircleOutlined, DeleteOutlined, EditFilled } from "@ant-design/icons";
 import Iframe from 'react-iframe';
 import FormItem from "antd/es/form/FormItem";
-import { upload } from "@testing-library/user-event/dist/upload";
 import PolicyContext from "../../contexts/PolicyContext";
 import "../../components/CompanyDetail/companystyle.css";
+import { showNotification } from "../../contexts/CreateContext";
 
 const Policies = () => {
   const [policy, setPolicy] = useState([]);
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
-  const imgRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editModal, showEditModal] = useState(false);
   const [file, setFile] = useState("");
   const [loading, setLoading] = useState(false);
-
-
   const [edittitle, setEdittitle] = useState();
   const [editDescription, setEditDescription] = useState();
   const [editFileType, setEditFileType] = useState();
 
-  const dateFormat = "DD-MM-YYYY";
   const showPdfModal = () => {
     setLoading(true)
     setIsModalVisible(true);
@@ -195,12 +189,6 @@ const Policies = () => {
       showNotification("error", "Error", "Upload Failed");
     }
   }
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
-  };
 
   const deleteData = (id, fileName) => {
     Modal.confirm({

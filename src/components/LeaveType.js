@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CheckOutlined, CloseOutlined, EditFilled, PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Card, Checkbox, Col, Divider, Form, Input, Modal, Row, Select } from "antd";
 import TextArea from "antd/lib/input/TextArea";
+import ConfigureContext from "../contexts/ConfigureContext";
 
 const { Option } = Select;
 
@@ -26,13 +27,10 @@ const LeaveType = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState("");
 
-  
-
-  const showModal = () => {
+    const showModal = () => {
     setIsModalOpen(true);
   };
   const handleOk = () => {
-    setIsModalOpen(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -103,6 +101,11 @@ const LeaveType = () => {
   const onCheckbox = (e) => {
     console.log(`checked = ${e.target.checked}`);
   };
+   function addNewRule(values) {
+         ConfigureContext.leaveTypeConfiguration({...values,carryForward:false});
+         setIsModalOpen(false);
+
+  }
 
     return (
         <div>
@@ -227,10 +230,11 @@ const LeaveType = () => {
                   <Modal
                     title="Create New Rule"
                     open={isModalOpen}
-                    onOk={handleOk}
+                    onOk={form.submit()}
                     onCancel={handleCancel}
                   >
                     <Form
+                    form={form}
                       name="basic"
                       labelCol={{
                         span: 8,
@@ -245,6 +249,7 @@ const LeaveType = () => {
                       }}
                       autoComplete="off"
                       layout="vertical"
+                      onFinish={addNewRule}
                     >
                       <Form.Item
                         label="Name"

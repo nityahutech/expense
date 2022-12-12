@@ -9,14 +9,13 @@ import {
   Space,
   Table,
   Modal,
-  notification,
   Switch,
 } from "antd";
 import ConfigureContext from "../../contexts/ConfigureContext";
 import { DeleteOutlined, EditFilled,CheckOutlined,CloseOutlined } from "@ant-design/icons";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import "./companystyle.css";
-import { getDesigNo } from "../../contexts/CreateContext";
+import { getDesigNo, showNotification } from "../../contexts/CreateContext";
 import FormItem from "antd/es/form/FormItem";
 
 const Designation = () => {
@@ -120,13 +119,6 @@ const Designation = () => {
       ),
     },
   ];
-
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
-  };
 
   const onDelete = (record) => {
     Modal.confirm({

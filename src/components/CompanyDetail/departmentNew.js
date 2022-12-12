@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Divider,
-  Card,
   Button,
   Table,
   Row,
@@ -9,7 +8,6 @@ import {
   Modal,
   Form,
   Input,
-  notification
 } from "antd";
 import {
   DeleteOutlined,
@@ -18,7 +16,7 @@ import {
   CheckOutlined,
 } from "@ant-design/icons";
 import "./companystyle.css";
-// import DepartmentContext from "../../contexts/DepartmentContext";
+import { capitalize, showNotification } from "../../contexts/CreateContext";
 
 // ------------------------------------------------------------------------------const part
 const DepartmentNew = () => {
@@ -32,12 +30,7 @@ const DepartmentNew = () => {
   const [dataSource, setDataSource] = useState([]);
   const [editRecord, setEditRecord] = useState([]);
   const [data, setData] = useState([]);
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
-  };
+  
   useEffect(() => {
     getData();
   }, [type]);
@@ -265,13 +258,6 @@ const DepartmentNew = () => {
       },
     },
   ];
-
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  console.log(type, parent);
-
 
   return (
     <>

@@ -21,11 +21,11 @@ import {
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
 import moment from "moment";
-import FormItem from "antd/lib/form/FormItem";
+import { capitalize, getBase64 } from "../../contexts/CreateContext";
 const { TextArea } = Input;
 const { Option } = Select;
 
-function Personal(props) {
+function Personal() {
   const imgRef = React.useRef(null);
   const [fileName, setFileName] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
@@ -69,12 +69,6 @@ function Personal(props) {
     imgRef.current.click();
   };
 
-  const getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  };
-
   function checkFileSize(size, fileName) {
     if (Math.round(size / 1024) <= 200) {
       setFileName(fileName);
@@ -97,9 +91,6 @@ function Personal(props) {
     checkFileSize(fileUploaded.size, fileUploaded);
   };
 
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
   const onContactFinish = (values) => {
     let record = {
       ...values,
@@ -331,81 +322,8 @@ function Personal(props) {
                             <Divider style={{borderTop:"1.5px solid #05445e", marginTop:"0px",marginBottom:"15px"}}/>
                         </div>
                         <Row>
-                        {/* <Col span={6} style={{
-                           display: "flex",
-                           alignItems: 'flex-start',
-                           justifyContent: "flex-start",
-                           flexDirection: "column",
-                        }}>
-                          <span style={{fontWeight:"lighter"}}>Date Of birth:</span>
-                          <span style={{fontWeight:"lighter"}}>Gender:</span>
-                          <span style={{fontWeight:"lighter"}}>Blood Group:</span>
-                          <span style={{fontWeight:"lighter"}}>Marital Status:</span>
-                        </Col> */}
                         <Col span={24}>
                           <Row gutter={[16,16]}>
-                          {/* <Col xs={24} sm={24} md={8}>
-                            <div>
-                              <div
-                                style={{
-                                  fontWeight: 600,
-                                  lineHeight: "18px",
-                                  color: "#07182b",
-                                  fontSize: "15px",
-                                  fontFamily: "Open Sans,sans-serif",
-                                }}
-                              >
-                                Name
-                              </div>
-                              {editContent === false ? (
-                                <div>{data ? data.name : null}</div>
-                              ) : (
-                                <Form.Item
-                                  initialValue={data.name}
-                                  name="name"
-                                  rules={[
-                                    {
-                                      required: true,
-                                      minLength: 3,
-                                      maxLength: 50,
-                                      // message: "Please enter First Name",
-                                    },
-                                    {
-                                      pattern: /^[a-zA-Z\s]*$/,
-                                      message: "Please enter Valid Name",
-                                    },
-                                  ]}
-                                >
-                                  <Input
-                                    style={{
-                                      marginTop: "10px",
-                                      width: "100%",
-                                      borderBottom: "1px solid #ccc ",
-                                      paddingLeft: "0px",
-                                    }}
-                                    bordered={false}
-                                    // disabled={true}
-                                    initialValue={data.name ? data.name : null}
-                                    maxLength={50}
-                                    required
-                                    placeholder="Enter Your Name"
-                                    onChange={(e) => {
-                                      const inputval = e.target.value;
-                                      const str = e.target.value;
-                                      const newVal =
-                                        inputval.substring(0, 1).toUpperCase() +
-                                        inputval.substring(1);
-                                      const caps = str
-                                        .split(" ")
-                                        .map(capitalize)
-                                        .join(" ");
-                                      form.setFieldsValue({ name: newVal, name: caps });
-                                    }}
-                                  />
-                                </Form.Item>
-                              )}
-                            </div>
-                          </Col> */}
                           <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
                             <div>
                               <div

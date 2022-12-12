@@ -15,6 +15,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../firebase-config";
+import { notification } from "antd";
 
 function generateEmpId(compId) {
   let q = query(collection(db, "users"), where("compId", "==", compId))
@@ -26,17 +27,17 @@ function generateEmpId(compId) {
 }
 
 export async function createUser(values, compId) {
+  console.log(values, compId)
   let res = await createUserWithEmailAndPassword(
     createAuth,
     values.mailid,
     "password"
   );
-  let name = values.fname + (values.mname?` ${values.mname} `:" ") + values.lname
-  updateProfile(res.user, { displayName: name });
+  updateProfile(res.user, { displayName: values.name });
   // updatePhoneNumber(res.user, values.phone)
   const valuesToservice = {
     empId: await generateEmpId(compId),
-    name: name,
+    name: values.name,
     fname: values.fname,
     mname: values.mname ? values.mname : "",
     lname: values.lname,
@@ -66,7 +67,7 @@ export async function createUser(values, compId) {
     optionalLeave: 2,
     disabled: false
   };
-  console.log(compId)
+  console.log(compId, valuesToservice)
   setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid});
   setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
     .then((result) => {
@@ -93,3 +94,26 @@ export async function getDesigNo() {
   })
   return res;
 }
+
+export function showNotification(type, msg, desc) {
+  notification[type]({
+    message: msg,
+    description: desc,
+  });
+}
+
+export function checkAlphabets(event) {
+  if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+    return true;
+  }
+};
+
+export function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+};

@@ -1,8 +1,25 @@
 import { useState } from "react";
-import { CheckOutlined, CloseOutlined, EditFilled, PlusCircleOutlined } from "@ant-design/icons";
-import { Button, Card, Checkbox, Col, Divider, Form, Input, Modal, Row, Select } from "antd";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  EditFilled,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
+import {
+  Button,
+  Card,
+  Checkbox,
+  Col,
+  Divider,
+  Form,
+  Input,
+  Modal,
+  Row,
+  Select,
+} from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import ConfigureContext from "../contexts/ConfigureContext";
+import "../style/leave.css";
 
 const { Option } = Select;
 
@@ -10,38 +27,41 @@ const LeaveType = () => {
   const [form] = Form.useForm();
   const [types, setTypes] = useState([
     {
-        name: "Sick Leave",
-        description: "These are one-day leaves taken for health-related reasons. This can only be taken for the current day or the next (1 day in advance).",
-        count: 6,
-        weekendBtwnLeave: false,
-        holidaysBtwnLeave: false,
-        creditable: true,
-        frequency: "Monthly",
-        period: "Start",
-        probation: true,
-        carryForward: false
+      name: "Sick Leave",
+      description:
+        "These are one-day leaves taken for health-related reasons. This can only be taken for the current day or the next (1 day in advance).",
+      count: 6,
+      weekendBtwnLeave: false,
+      holidaysBtwnLeave: false,
+      creditable: true,
+      frequency: "Monthly",
+      period: "Start",
+      probation: true,
+      carryForward: false,
     },
     {
-        name: "Optional Leave",
-        description: "Optional holidays are those that the employee can choose to avail.",
-        count: 2,
-        weekendBtwnLeave: false,
-        holidaysBtwnLeave: false,
-        creditable: true,
-        frequency: "Monthly",
-        period: "Start",
-        probation: true,
-        carryForward: false
+      name: "Optional Leave",
+      description:
+        "Optional holidays are those that the employee can choose to avail.",
+      count: 2,
+      weekendBtwnLeave: false,
+      holidaysBtwnLeave: false,
+      creditable: true,
+      frequency: "Monthly",
+      period: "Start",
+      probation: true,
+      carryForward: false,
     },
     {
-        name: "Loss Of Pay",
-        description: "Employees taking leave under loss of pay will not be compensated for the missing days in their salary.",
-        count: 0,
-        weekendBtwnLeave: false,
-        holidaysBtwnLeave: false,
-        probation: true,
+      name: "Loss Of Pay",
+      description:
+        "Employees taking leave under loss of pay will not be compensated for the missing days in their salary.",
+      count: 0,
+      weekendBtwnLeave: false,
+      holidaysBtwnLeave: false,
+      probation: true,
     },
-]);
+  ]);
   const [activeType, setActiveType] = useState(types[0]);
   const [sickLeave, setSickLeave] = useState(null);
   const [optionalLeave, setOptionalLeave] = useState(null);
@@ -62,7 +82,7 @@ const LeaveType = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState("");
 
-    const showModal = () => {
+  const showModal = () => {
     setIsModalOpen(true);
   };
   const handleCancel = () => {
@@ -74,7 +94,7 @@ const LeaveType = () => {
       return true;
     }
   };
-  
+
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -84,7 +104,7 @@ const LeaveType = () => {
       return true;
     }
   };
-  
+
   const sickLeaveUpdate = (values) => {
     showEditContent(false);
     let sickname = {
@@ -134,325 +154,177 @@ const LeaveType = () => {
   const onCheckbox = (e) => {
     console.log(`checked = ${e.target.checked}`);
   };
-   const addNewRule = (values) => {
-    console.log(values)
-    ConfigureContext.leaveTypeConfiguration({...values,carryForward:false});
+  const addNewRule = (values) => {
+    console.log(values);
+    ConfigureContext.leaveTypeConfiguration({ ...values, carryForward: false });
     setIsModalOpen(false);
-  }
+  };
 
-    return (
-        <div>
-        <Row>
-            <Col xs={24} sm={22} md={6}>
-                <ul className="sidecard" style={{height: "100vh"}}>
-                    { types.map((type) => (
-                        <li 
-                            className="sideCard"
-                            style={activeType.name == type.name ? {borderLeft: "4px solid #2094FF", color: "#2094FF"} : null}
-                            onClick={() => setActiveType(type)}
-                        >
-                                <div
-                                    style={{
-                                    fontSize: "14px",
-                                    fontWeight: "600",
-                                    lineHeight: "18px",
-                                    margin: "10px 0"
-                                    }}
-                                >
-                                    {type.name}
-                                </div>
-                        </li>
-                    ))}
-                <li>
-                    <Button
-                        style={{ width: "170px" }}
-                        onClick={showModal}
-                    >
-                        <PlusCircleOutlined />
-                        Create New Rule
-                    </Button>
-                    <Modal
-                        title="Create New Rule"
-                        open={isModalOpen}
-                        onOk={form.submit()}
-                        onCancel={handleCancel}
-                    >
-                        <Form
-                        form={form}
-                        name="basic"
-                        labelCol={{
-                            span: 8,
-                            offset: 4,
-                        }}
-                        wrapperCol={{
-                            span: 16,
-                            offset: 4,
-                        }}
-                        initialValues={{
-                            remember: true,
-                        }}
-                        autoComplete="off"
-                        layout="vertical"
-                        onFinish={addNewRule}
-                        >
-                        <Form.Item
-                            label="Name"
-                            name="name"
-                            rules={[
-                            {
-                                required: true,
-                                message: "Please Enter Name",
-                            },
-                            {
-                                message: "Please Enter Valid Name",
-                                pattern: /^[a-zA-Z\s]*$/,
-                            },
-                            ]}
-                            onKeyPress={(event) => {
-                            if (checkAlphabets(event)) {
-                                event.preventDefault();
-                            }
-                            }}
-                        >
-                            <Input maxLength={20} />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Description"
-                            name="description"
-                            rules={[
-                            {
-                                required: true,
-                                message: "Please Enter Description",
-                            },
-                            ]}
-                        >
-                            <TextArea rows={2} />
-                        </Form.Item>
-                        <Form.Item
-                            label="Leave Count"
-                            name="count"
-                            rules={[
-                            {
-                                required: true,
-                                message: "Please Enter Leave Count",
-                            },
-                            {
-                                pattern: /^[0-9\b]+$/,
-                                message: "Please Enter  Number",
-                            },
-                            ]}
-                            onKeyPress={(event) => {
-                            console.log(checkNumbervalue(event));
-                            if (checkNumbervalue(event)) {
-                                event.preventDefault();
-                            }
-                            }}
-                        >
-                            <Input maxLength={3} />
-                        </Form.Item>
-                        </Form>
-                    </Modal>
-                </li> 
-                </ul>
-            </Col>
-            <Col xs={24} sm={22} md={18}>
-            
-            <Card
-                className="sickCard"
-                title={activeType.name}
-                bordered={true}
-                style={{
-                  marginLeft: "30px",
-                  cursor: "default",
-                }}
+  return (
+    <div className="wholePage">
+      <Row>
+        <Col xs={24} sm={22} md={6}>
+          <ul className="sidecard">
+            {types.map((type) => (
+              <li
+                className="sideCard"
+                style={
+                  activeType.name == type.name
+                    ? { borderLeft: "4px solid #2094FF", color: "#2094FF" }
+                    : null
+                }
+                onClick={() => setActiveType(type)}
+              >
+                <div
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    lineHeight: "18px",
+                    margin: "10px 0",
+                  }}
+                >
+                  {type.name}
+                </div>
+              </li>
+            ))}
+            <li className="sideCreate">
+              <div>
+                <Button onClick={showModal} style={{ border: "none" }}>
+                  <PlusCircleOutlined />
+                  Create New Rule
+                </Button>
+              </div>
+              <Modal
+                title="Create New Rule"
+                open={isModalOpen}
+                onOk={form.submit()}
+                onCancel={handleCancel}
               >
                 <Form
-                  // form={form}
-                  labelcol={{
-                    span: 4,
+                  form={form}
+                  name="basic"
+                  labelCol={{
+                    span: 8,
+                    offset: 4,
                   }}
-                  wrappercol={{
-                    span: 14,
+                  wrapperCol={{
+                    span: 16,
+                    offset: 4,
                   }}
                   initialValues={{
                     remember: true,
                   }}
                   autoComplete="off"
-                  onFinish={sickLeaveUpdate}
+                  layout="vertical"
+                  onFinish={addNewRule}
                 >
-                  <div className="personalCardDiv">
-                    <Row>
-                      <Col xs={24} sm={24} md={15}>
-                        <div>
-                          <Row>
-                            <Col xs={24} sm={24} md={23}>
-                              <div
-                                style={{
-                                  fontSize: "14px",
-                                  fontWeight: "600",
-                                  lineHeight: "18px",
-                                  color: "#07182B",
-                                  fontFamily: "Open Sans,sans-serif",
-                                  marginBottom: "7px",
-                                }}
-                              >
-                                Name
-                              </div>
-                              <div style={{ marginBottom: "13px" }}>
-                                {activeType.name}
-                              </div>
-                            </Col>
-                          </Row>
-                        </div>
-                      </Col>
-                      <Col xs={24} sm={22} md={18}>
-                        <div>
-                          <div
-                            style={{
-                              fontWeight: 600,
-                              lineHeight: "18px",
-                              color: "#07182b",
-                              fontSize: "15px",
-                              fontFamily: "Open Sans,sans-serif",
-                              marginBottom: "6px",
-                            }}
-                          >
-                            Description
-                          </div>
-                          <div>
-                            {activeType.description}
-                          </div>
-                        </div>
-                      </Col>
-                    </Row>
-                  </div>
+                  <Form.Item
+                    label="Name"
+                    name="name"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Enter Name",
+                      },
+                      {
+                        message: "Please Enter Valid Name",
+                        pattern: /^[a-zA-Z\s]*$/,
+                      },
+                    ]}
+                    onKeyPress={(event) => {
+                      if (checkAlphabets(event)) {
+                        event.preventDefault();
+                      }
+                    }}
+                  >
+                    <Input
+                      maxLength={20}
+                      onChange={(e) => {
+                        const inputval = e.target.value;
+                        const str = e.target.value;
+                        const newVal =
+                          inputval.substring(0, 1).toUpperCase() +
+                          inputval.substring(1);
+                        const caps = str.split(" ").map(capitalize).join(" ");
+                        // setPaidBy(newVal);
+                        form.setFieldsValue({
+                          name: newVal,
+                          name: caps,
+                        });
+                      }}
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Description"
+                    name="description"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Enter Description",
+                      },
+                    ]}
+                  >
+                    <TextArea rows={2} />
+                  </Form.Item>
+                  <Form.Item
+                    label="Leave Count"
+                    name="count"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Enter Leave Count",
+                      },
+                      {
+                        pattern: /^[0-9\b]+$/,
+                        message: "Please Enter  Number",
+                      },
+                    ]}
+                    onKeyPress={(event) => {
+                      console.log(checkNumbervalue(event));
+                      if (checkNumbervalue(event)) {
+                        event.preventDefault();
+                      }
+                    }}
+                  >
+                    <Input maxLength={3} />
+                  </Form.Item>
                 </Form>
-                <Divider />
-                <Form
-                  // form={form}
-                  labelcol={{
-                    span: 4,
-                  }}
-                  wrappercol={{
-                    span: 14,
-                  }}
-                  initialValues={{
-                    remember: true,
-                  }}
-                  autoComplete="off"
-                  onFinish={leavesCountUpdate}
-                >
-                  <div className="leavesCount">
-                    <Row>
-                      <Col xs={24} sm={20} md={7}>
-                        <div
-                          style={{
-                            fontSize: "14px",
-                            fontWeight: "600",
-                            lineHeight: "18px",
-                            color: "#07182B",
-                            fontFamily: "Open Sans,sans-serif",
-                            marginBottom: "13px",
-                          }}
-                        >
-                          Leaves Count
-                        </div>
-                      </Col>
-                      <Col xs={24} sm={20} md={8}>
-                        <div
-                          style={{
-                            fontSize: "14px",
-                            fontWeight: "600",
-                            lineHeight: "18px",
-                            color: "#07182B",
-                            fontFamily: "Open Sans,sans-serif",
-                            marginBottom: "7px",
-                          }}
-                        >
-                          Leaves Allowed in a Year
-                        </div>
-                        {editLeavesCount === false ? (
-                          <div>{activeType.count}</div>
-                        ) : (
-                          <Form.Item
-                            initialValue={activeType.count}
-                            name="year"
-                          >
-                            <Input
-                              style={{
-                                // marginTop: "10px",
-                                width: "200px",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                              }}
-                              bordered={false}
-                              initialValue={activeType.count}
-                            />
-                          </Form.Item>
-                        )}
-                      </Col>
-                      <Col xs={24} sm={20} md={8}>
-                        <div
-                          style={{
-                            fontSize: "14px",
-                            fontWeight: "600",
-                            lineHeight: "18px",
-                            color: "#07182B",
-                            fontFamily: "Open Sans,sans-serif",
-                            marginBottom: "7px",
-                          }}
-                        >
-                          Weekends Between Leave
-                        </div>
-                        {editLeavesCount === false ? (
-                          <div>
-                            {activeType.weekendBtwnLeave}
-                          </div>
-                        ) : (
-                          <Form.Item
-                            initialValue={activeType.weekendBtwnLeave}
-                            name="weekends"
-                          >
-                            <Checkbox onChange={onCheckbox}>
-                              Count as Leave
-                            </Checkbox>
-                          </Form.Item>
-                        )}
-                      </Col>
-                      {editLeavesCount === false ? (
-                        <Col xs={24} sm={24} md={1}>
-                          <Button
-                            className="leaves"
-                            type="text"
-                            bordered={false}
-                            style={{
-                              // color: "#ffff",
-                              display: "none",
-                              // paddingTop: "7px",
-                              // paddingRight: "7px",
-                              // position: "absolute",
-                              // left: "17rem",
-                              // top: 10,
-                            }}
-                            onClick={() =>
-                              setEditLeavesCount(!editLeavesCount)
-                            }
-                          >
-                            <EditFilled />
-                          </Button>
-                        </Col>
-                      ) : null}
-                    </Row>
-                    <Row>
-                      <Col xs={24} sm={24} md={19}>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
+              </Modal>
+            </li>
+          </ul>
+        </Col>
+        <Col xs={24} sm={22} md={18}>
+          <Card
+            className="sickCard"
+            title={activeType.name}
+            bordered={true}
+            style={{
+              marginLeft: "30px",
+              cursor: "default",
+              marginTop: "10px",
+            }}
+          >
+            <Form
+              // form={form}
+              labelcol={{
+                span: 4,
+              }}
+              wrappercol={{
+                span: 14,
+              }}
+              initialValues={{
+                remember: true,
+              }}
+              autoComplete="off"
+              onFinish={sickLeaveUpdate}
+            >
+              <div className="personalCardDiv">
+                <Row>
+                  <Col xs={24} sm={24} md={15}>
+                    <div>
+                      <Row>
+                        <Col xs={24} sm={24} md={23}>
                           <div
                             style={{
                               fontSize: "14px",
@@ -460,73 +332,236 @@ const LeaveType = () => {
                               lineHeight: "18px",
                               color: "#07182B",
                               fontFamily: "Open Sans,sans-serif",
-                              marginTop: "15px",
+                              marginBottom: "7px",
                             }}
                           >
-                            Holidays Between Leave
+                            Name
                           </div>
-                          {editLeavesCount === false ? (
-                            <div
-                              style={{
-                                marginTop: "5px",
-                                marginRight: "4rem",
-                              }}
-                            >
-                              {activeType.holidaysBtwnLeave}
-                            </div>
-                          ) : (
-                            <Form.Item
-                              initialValue={activeType.holidaysBtwnLeave}
-                              name="holidays"
-                            >
-                              <Checkbox onChange={onCheckbox}>
-                                Count as Leave
-                              </Checkbox>
-                            </Form.Item>
-                          )}
-                        </div>
-                      </Col>
-                    </Row>
-                    {editLeavesCount === true ? (
-                      <Row
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          marginTop: "3%",
-                        }}
-                      >
-                        <Button
-                          onClick={() => {
-                            // form.resetFields();
-                            setEditLeavesCount(false);
-                          }}
-                          type="text"
-                          style={{ fontSize: 15 }}
-                        >
-                          <CloseOutlined /> CANCEL
-                        </Button>
-                        <Col>
-                          <Button
-                            type="primary"
-                            htmlType="submit"
-                            style={{
-                              marginLeft: "10px",
-                              background: "#1963A6",
-                              width: "90px",
-                            }}
-                            onClick={() => {
-                            //   form.submit();
-                            }}
-                          >
-                            <CheckOutlined />
-                            SAVE
-                          </Button>
+                          <div style={{ marginBottom: "13px" }}>
+                            {activeType.name}
+                          </div>
                         </Col>
                       </Row>
-                    ) : null}
-                  </div>
-                </Form>
-                {activeType.name != "Loss Of Pay" ? (<>
+                    </div>
+                  </Col>
+                  <Col xs={24} sm={22} md={18}>
+                    <div>
+                      <div
+                        style={{
+                          fontWeight: 600,
+                          lineHeight: "18px",
+                          color: "#07182b",
+                          fontSize: "15px",
+                          fontFamily: "Open Sans,sans-serif",
+                          marginBottom: "6px",
+                        }}
+                      >
+                        Description
+                      </div>
+                      <div>{activeType.description}</div>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+            </Form>
+            <Divider />
+            <Form
+              // form={form}
+              labelcol={{
+                span: 4,
+              }}
+              wrappercol={{
+                span: 14,
+              }}
+              initialValues={{
+                remember: true,
+              }}
+              autoComplete="off"
+              onFinish={leavesCountUpdate}
+            >
+              <div className="leavesCount">
+                <Row>
+                  <Col xs={24} sm={20} md={7}>
+                    <div
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        lineHeight: "18px",
+                        color: "#07182B",
+                        fontFamily: "Open Sans,sans-serif",
+                        marginBottom: "13px",
+                      }}
+                    >
+                      Leaves Count
+                    </div>
+                  </Col>
+                  <Col xs={24} sm={20} md={8}>
+                    <div
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        lineHeight: "18px",
+                        color: "#07182B",
+                        fontFamily: "Open Sans,sans-serif",
+                        marginBottom: "7px",
+                      }}
+                    >
+                      Leaves Allowed in a Year
+                    </div>
+                    {editLeavesCount === false ? (
+                      <div>{activeType.count}</div>
+                    ) : (
+                      <Form.Item initialValue={activeType.count} name="year">
+                        <Input
+                          style={{
+                            // marginTop: "10px",
+                            width: "200px",
+                            borderBottom: "1px solid #ccc ",
+                            paddingLeft: "0px",
+                          }}
+                          bordered={false}
+                          initialValue={activeType.count}
+                        />
+                      </Form.Item>
+                    )}
+                  </Col>
+                  <Col xs={24} sm={20} md={8}>
+                    <div
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        lineHeight: "18px",
+                        color: "#07182B",
+                        fontFamily: "Open Sans,sans-serif",
+                        marginBottom: "7px",
+                      }}
+                    >
+                      Weekends Between Leave
+                    </div>
+                    {editLeavesCount === false ? (
+                      <div>{activeType.weekendBtwnLeave}</div>
+                    ) : (
+                      <Form.Item
+                        initialValue={activeType.weekendBtwnLeave}
+                        name="weekends"
+                      >
+                        <Checkbox onChange={onCheckbox}>
+                          Count as Leave
+                        </Checkbox>
+                      </Form.Item>
+                    )}
+                  </Col>
+                  {editLeavesCount === false ? (
+                    <Col xs={24} sm={24} md={1}>
+                      <Button
+                        className="leaves"
+                        type="text"
+                        bordered={false}
+                        style={{
+                          // color: "#ffff",
+                          display: "none",
+                          // paddingTop: "7px",
+                          // paddingRight: "7px",
+                          // position: "absolute",
+                          // left: "17rem",
+                          // top: 10,
+                        }}
+                        onClick={() => setEditLeavesCount(!editLeavesCount)}
+                      >
+                        <EditFilled />
+                      </Button>
+                    </Col>
+                  ) : null}
+                </Row>
+                <Row>
+                  <Col xs={24} sm={22} md={7}></Col>
+                  <Col xs={24} sm={24} md={8}>
+                    {/* <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
+                    > */}
+                    <div
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        lineHeight: "18px",
+                        color: "#07182B",
+                        fontFamily: "Open Sans,sans-serif",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      Holidays Between Leave
+                    </div>
+                    {editLeavesCount === false ? (
+                      <div
+                        style={
+                          {
+                            // marginTop: "5px",
+                            // marginRight: "4rem",
+                          }
+                        }
+                      >
+                        {activeType.holidaysBtwnLeave}
+                      </div>
+                    ) : (
+                      <Form.Item
+                        initialValue={activeType.holidaysBtwnLeave}
+                        name="holidays"
+                        style={{ marginRight: "0px" }}
+                      >
+                        <Checkbox onChange={onCheckbox}>
+                          Count as Leave
+                        </Checkbox>
+                      </Form.Item>
+                    )}
+                    {/* </div> */}
+                  </Col>
+                  <Col xs={24} sm={22} md={9}></Col>
+                </Row>
+                {editLeavesCount === true ? (
+                  <Row
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "3%",
+                    }}
+                  >
+                    <Button
+                      onClick={() => {
+                        // form.resetFields();
+                        setEditLeavesCount(false);
+                      }}
+                      type="text"
+                      style={{ fontSize: 15 }}
+                    >
+                      <CloseOutlined /> CANCEL
+                    </Button>
+                    <Col>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{
+                          marginLeft: "10px",
+                          background: "#1963A6",
+                          width: "90px",
+                        }}
+                        onClick={() => {
+                          //   form.submit();
+                        }}
+                      >
+                        <CheckOutlined />
+                        SAVE
+                      </Button>
+                    </Col>
+                  </Row>
+                ) : null}
+              </div>
+            </Form>
+            {activeType.name != "Loss Of Pay" ? (
+              <>
                 <Divider />
                 <Form
                   labelcol={{
@@ -573,9 +608,7 @@ const LeaveType = () => {
                               Creditable on Accrual Basis
                             </div>
                             <div style={{ marginBottom: "13px" }}>
-                              {data?.creditable
-                                ? data.creditable
-                                : "Yes"}
+                              {data?.creditable ? data.creditable : "Yes"}
                             </div>
                           </>
                         ) : (
@@ -639,9 +672,7 @@ const LeaveType = () => {
                         </div>
                         {editAccrual === false ? (
                           <div>
-                            {data?.frequency
-                              ? data.frequency
-                              : "Monthly"}
+                            {data?.frequency ? data.frequency : "Monthly"}
                           </div>
                         ) : (
                           <Form.Item
@@ -660,12 +691,8 @@ const LeaveType = () => {
                               bordered={false}
                             >
                               <Option value="Monthly">Monthly</Option>
-                              <Option value="Quarterly">
-                                Quarterly
-                              </Option>
-                              <Option value="Half Yearly">
-                                Half Yearly
-                              </Option>
+                              <Option value="Quarterly">Quarterly</Option>
+                              <Option value="Half Yearly">Half Yearly</Option>
                             </Select>
                           </Form.Item>
                         )}
@@ -684,14 +711,10 @@ const LeaveType = () => {
                           Accrual Period
                         </div>
                         {editAccrual === false ? (
-                          <div>
-                            {data?.period ? data.period : "start"}
-                          </div>
+                          <div>{data?.period ? data.period : "start"}</div>
                         ) : (
                           <Form.Item
-                            initialValue={
-                              data?.period ? data.period : null
-                            }
+                            initialValue={data?.period ? data.period : null}
                             name="period"
                           >
                             <Select
@@ -738,7 +761,7 @@ const LeaveType = () => {
                               width: "90px",
                             }}
                             onClick={() => {
-                            //   form.submit();
+                              //   form.submit();
                             }}
                           >
                             <CheckOutlined />
@@ -749,24 +772,41 @@ const LeaveType = () => {
                     ) : null}
                   </div>
                 </Form>
-                </>) : null}
-                <Divider />
-                <Form
-                  labelcol={{
-                    span: 4,
-                  }}
-                  wrappercol={{
-                    span: 14,
-                  }}
-                  initialValues={{
-                    remember: true,
-                  }}
-                  autoComplete="off"
-                  onFinish={probationUpdate}
-                >
-                  <div className="leavesCount">
-                    <Row>
-                      <Col xs={24} sm={20} md={7}>
+              </>
+            ) : null}
+            <Divider />
+            <Form
+              labelcol={{
+                span: 4,
+              }}
+              wrappercol={{
+                span: 14,
+              }}
+              initialValues={{
+                remember: true,
+              }}
+              autoComplete="off"
+              onFinish={probationUpdate}
+            >
+              <div className="leavesCount">
+                <Row>
+                  <Col xs={24} sm={20} md={7}>
+                    <div
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        lineHeight: "18px",
+                        color: "#07182B",
+                        fontFamily: "Open Sans,sans-serif",
+                        marginBottom: "13px",
+                      }}
+                    >
+                      Applicability
+                    </div>
+                  </Col>
+                  <Col xs={24} sm={20} md={16}>
+                    {editProbation === false ? (
+                      <>
                         <div
                           style={{
                             fontSize: "14px",
@@ -774,116 +814,98 @@ const LeaveType = () => {
                             lineHeight: "18px",
                             color: "#07182B",
                             fontFamily: "Open Sans,sans-serif",
-                            marginBottom: "13px",
+                            marginBottom: "7px",
                           }}
                         >
-                          Applicability
+                          Allowed Under Probation
                         </div>
-                      </Col>
-                      <Col xs={24} sm={20} md={16}>
-                        {editProbation === false ? (
-                          <>
-                            <div
-                              style={{
-                                fontSize: "14px",
-                                fontWeight: "600",
-                                lineHeight: "18px",
-                                color: "#07182B",
-                                fontFamily: "Open Sans,sans-serif",
-                                marginBottom: "7px",
-                              }}
-                            >
-                              Allowed Under Probation
-                            </div>
-                            <div style={{ marginBottom: "13px" }}>
-                              {data?.probation ? data.probation : "Yes"}
-                            </div>
-                          </>
-                        ) : (
-                          <Form.Item
-                            initialValue={
-                              data?.probation ? data.probation : null
-                            }
-                            name="probation"
-                          >
-                            <Checkbox
-                              onChange={onCheckbox}
-                              style={{
-                                fontSize: "14px",
-                                fontWeight: "600",
-                                lineHeight: "18px",
-                                color: "#07182B",
-                                fontFamily: "Open Sans,sans-serif",
-                              }}
-                            >
-                              Allowed Under Probation
-                            </Checkbox>
-                          </Form.Item>
-                        )}
-                      </Col>
-                      {editProbation === false ? (
-                        <Col xs={24} sm={24} md={1}>
-                          <Button
-                            className="leaves"
-                            type="text"
-                            bordered={false}
-                            style={{
-                              // color: "#ffff",
-                              display: "none",
-                              // paddingTop: "7px",
-                              // paddingRight: "7px",
-                              // position: "absolute",
-                              // left: "17rem",
-                              // top: 10,
-                            }}
-                            onClick={() =>
-                              setEditProbation(!editProbation)
-                            }
-                          >
-                            <EditFilled />
-                          </Button>
-                        </Col>
-                      ) : null}
-                    </Row>
-                    {editProbation === true ? (
-                      <Row
+                        <div style={{ marginBottom: "13px" }}>
+                          {data?.probation ? data.probation : "Yes"}
+                        </div>
+                      </>
+                    ) : (
+                      <Form.Item
+                        initialValue={data?.probation ? data.probation : null}
+                        name="probation"
+                      >
+                        <Checkbox
+                          onChange={onCheckbox}
+                          style={{
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            lineHeight: "18px",
+                            color: "#07182B",
+                            fontFamily: "Open Sans,sans-serif",
+                          }}
+                        >
+                          Allowed Under Probation
+                        </Checkbox>
+                      </Form.Item>
+                    )}
+                  </Col>
+                  {editProbation === false ? (
+                    <Col xs={24} sm={24} md={1}>
+                      <Button
+                        className="leaves"
+                        type="text"
+                        bordered={false}
                         style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          marginTop: "3%",
+                          // color: "#ffff",
+                          display: "none",
+                          // paddingTop: "7px",
+                          // paddingRight: "7px",
+                          // position: "absolute",
+                          // left: "17rem",
+                          // top: 10,
+                        }}
+                        onClick={() => setEditProbation(!editProbation)}
+                      >
+                        <EditFilled />
+                      </Button>
+                    </Col>
+                  ) : null}
+                </Row>
+                {editProbation === true ? (
+                  <Row
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "3%",
+                    }}
+                  >
+                    <Button
+                      onClick={() => {
+                        // form.resetFields();
+                        setEditProbation(false);
+                      }}
+                      type="text"
+                      style={{ fontSize: 15 }}
+                    >
+                      <CloseOutlined /> CANCEL
+                    </Button>
+                    <Col>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{
+                          marginLeft: "10px",
+                          background: "#1963A6",
+                          width: "90px",
+                        }}
+                        onClick={() => {
+                          //   form.submit();
                         }}
                       >
-                        <Button
-                          onClick={() => {
-                            // form.resetFields();
-                            setEditProbation(false);
-                          }}
-                          type="text"
-                          style={{ fontSize: 15 }}
-                        >
-                          <CloseOutlined /> CANCEL
-                        </Button>
-                        <Col>
-                          <Button
-                            type="primary"
-                            htmlType="submit"
-                            style={{
-                              marginLeft: "10px",
-                              background: "#1963A6",
-                              width: "90px",
-                            }}
-                            onClick={() => {
-                            //   form.submit();
-                            }}
-                          >
-                            <CheckOutlined />
-                            SAVE
-                          </Button>
-                        </Col>
-                      </Row>
-                    ) : null}
-                  </div>
-                </Form>{activeType.name != "Loss Of Pay" ? (<>
+                        <CheckOutlined />
+                        SAVE
+                      </Button>
+                    </Col>
+                  </Row>
+                ) : null}
+              </div>
+            </Form>
+            {activeType.name != "Loss Of Pay" ? (
+              <>
                 <Divider />
                 <Form
                   labelcol={{
@@ -935,9 +957,7 @@ const LeaveType = () => {
                           </>
                         ) : (
                           <Form.Item
-                            initialValue={
-                              data?.carry ? data.carry : null
-                            }
+                            initialValue={data?.carry ? data.carry : null}
                             name="carry"
                           >
                             <Checkbox
@@ -1005,7 +1025,7 @@ const LeaveType = () => {
                               width: "90px",
                             }}
                             onClick={() => {
-                            //   form.submit();
+                              //   form.submit();
                             }}
                           >
                             <CheckOutlined />
@@ -1015,9 +1035,11 @@ const LeaveType = () => {
                       </Row>
                     ) : null}
                   </div>
-                </Form></>) : null}
-              </Card>
-{/*         
+                </Form>
+              </>
+            ) : null}
+          </Card>
+          {/*         
             {sickLeave ? (
               <Card
                 className="sickCard"
@@ -2958,10 +2980,10 @@ const LeaveType = () => {
                 <Divider />
               </Card>
             ) : null} */}
-          </Col>
-        </Row>
-      </div>
-    )
-}
+        </Col>
+      </Row>
+    </div>
+  );
+};
 
 export default LeaveType;

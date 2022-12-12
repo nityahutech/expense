@@ -119,7 +119,7 @@ const Policies = () => {
             <DeleteOutlined style={{ color: 'red' }}
               onClick={() => deleteData(record.id, record.fileName)}
             />
-            <EditFilled style={{ paddingLeft: '10px', color: 'blue' }}
+            <EditFilled style={{ paddingLeft: '10px', color: '#007acb' }}
               onClick={() => {
                 setEditDescription(record.iddescription)
                 setEdittitle(record.idtitle)

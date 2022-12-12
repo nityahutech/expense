@@ -46,6 +46,11 @@ class ConfigureContext {
         let field = Object.keys(values)[0]
         return updateDoc(newHoliday, {[`${field}`]: arrayRemove(values[`${field}`])});
     };
+
+    leaveTypeConfiguration = (config) => {
+        return setDoc(doc(db, `companyprofile/${compId}/configurations/leavePage/leaveType`, config.name), config);
+    };
+
 }
 
 

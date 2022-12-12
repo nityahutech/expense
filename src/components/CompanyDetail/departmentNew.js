@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Divider,
-  Card,
   Button,
   Table,
   Row,
@@ -9,7 +8,6 @@ import {
   Modal,
   Form,
   Input,
-  notification
 } from "antd";
 import {
   DeleteOutlined,
@@ -18,7 +16,7 @@ import {
   CheckOutlined,
 } from "@ant-design/icons";
 import "./companystyle.css";
-// import DepartmentContext from "../../contexts/DepartmentContext";
+import { capitalize, showNotification } from "../../contexts/CreateContext";
 
 // ------------------------------------------------------------------------------const part
 const DepartmentNew = () => {
@@ -32,12 +30,7 @@ const DepartmentNew = () => {
   const [dataSource, setDataSource] = useState([]);
   const [editRecord, setEditRecord] = useState([]);
   const [data, setData] = useState([]);
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
-  };
+  
   useEffect(() => {
     getData();
   }, [type]);
@@ -171,7 +164,7 @@ const DepartmentNew = () => {
       title: `${type} Name`,
       dataIndex: "name",
       key: "name",
-      width: 100,
+      width: 200,
       render: (_, record) => (
         <a
           href="#"
@@ -199,7 +192,7 @@ const DepartmentNew = () => {
       title: `${type} Description`,
       key: "description",
       dataIndex: "description",
-      width: 200,
+      width: 300,
       // responsive: ["md"],
       // render: (_, { status }) => getStatusUi(status),
     },
@@ -207,7 +200,7 @@ const DepartmentNew = () => {
       title: "Action",
       key: "action",
       dataIndex: "action",
-      width: 80,
+      width: 150,
       // align: "center",
       render: (_, record) => {
         return (
@@ -266,16 +259,17 @@ const DepartmentNew = () => {
     },
   ];
 
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  console.log(type, parent);
-
-
   return (
     <>
-      <div style={{ margin: "13px", background: "#fff" }}>
+
+      <div style={{
+        margin: "10px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: '100%'
+
+      }}>
         <div style={{ background: "#FAFAFA" }}>
           <div
             style={{
@@ -437,6 +431,7 @@ const DepartmentNew = () => {
             }}
           />
         </div>
+
         {/* //---------------------------------add Modal */}
         <Row>
           <Col xs={22} sm={20} md={18}>

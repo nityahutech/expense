@@ -118,157 +118,177 @@ function Overview() {
                   cursor:'default',
                 }}
               >
-                <Row gutter={[48, 8]}>
-                  <Col xs={22} sm={15} md={12}>
-                    <div>
-                      <div className="div-discription">
-                        Registered Company Name
+                <Row gutter={[16,16]}>
+                  <Col xs={24} sm={24} md={7} lg={6} xl={6} xxl={6}>
+                    <div 
+                      style={{
+                        width: "150px",
+                        height: "170px",
+                        border: "1px solid #05445e",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                      }}
+                    >
+                      No Image
+                    </div>
+                  </Col>
+                  <Col xs={24} sm={24} md={17} lg={18} xl={18} xxl={18}>
+                    <Row gutter={[16, 8]}>
+                    <Col xs={22} sm={15} md={12}>
+                      <div>
+                        <div className="div-discription">
+                          Registered Company Name
+                        </div>
+                        {editContactInfo === false ? (
+                          <div>{data.regCompName}</div>
+                        ) : (
+                          <Form.Item
+                            initialValue={data ? data.regCompName : null}
+                            name="regCompName"
+                            onKeyPress={(event) => {
+                              if (checkAlphabets(event)) {
+                                event.preventDefault();
+                              }
+                            }}
+                            rules={[
+                              {
+                                required: true,
+
+                                message: "Please enter Company Name",
+                              },
+                              {
+                                pattern: /^[a-zA-Z\s]*$/,
+                                message: "Please enter Valid Company Name",
+                              },
+                            ]}
+                          >
+                            <Input
+                              maxLength={50}
+                              placeholder="Enter Comapany Name"
+                              bordered={false}
+                              style={{
+                                borderBottom: "1px solid #ccc ",
+                                paddingLeft: "0px",
+                              }}
+                            />
+                          </Form.Item>
+                        )}
                       </div>
-                      {editContactInfo === false ? (
-                        <div>{data.regCompName}</div>
-                      ) : (
-                        <Form.Item
-                          initialValue={data ? data.regCompName : null}
-                          name="regCompName"
-                          onKeyPress={(event) => {
-                            if (checkAlphabets(event)) {
-                              event.preventDefault();
-                            }
-                          }}
-                          rules={[
-                            {
-                              required: true,
+                    </Col>
+                    <Col xs={22} sm={15} md={12}>
+                      <div>
+                        <div className="div-discription">Brand Name</div>
+                        {editContactInfo === false ? (
+                          <div>{data.brandName}</div>
+                        ) : (
+                          <Form.Item
+                            initialValue={data ? data.brandName : null}
+                            name="brandName"
+                            onKeyPress={(event) => {
+                              if (checkAlphabets(event)) {
+                                event.preventDefault();
+                              }
+                            }}
+                            rules={[
+                              {
+                                required: true,
 
-                              message: "Please enter Company Name",
-                            },
-                            {
-                              pattern: /^[a-zA-Z\s]*$/,
-                              message: "Please enter Valid Company Name",
-                            },
-                          ]}
-                        >
-                          <Input
-                            maxLength={50}
-                            placeholder="Enter Comapany Name"
-                            bordered={false}
-                            style={{
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                            }}
-                          />
-                        </Form.Item>
-                      )}
-                    </div>
-                  </Col>
-                  <Col xs={22} sm={15} md={12}>
-                    <div>
-                      <div className="div-discription">Brand Name</div>
-                      {editContactInfo === false ? (
-                        <div>{data.brandName}</div>
-                      ) : (
-                        <Form.Item
-                          initialValue={data ? data.brandName : null}
-                          name="brandName"
-                          onKeyPress={(event) => {
-                            if (checkAlphabets(event)) {
-                              event.preventDefault();
-                            }
-                          }}
-                          rules={[
-                            {
-                              required: true,
+                                message: "Please enter Brand Name",
+                              },
+                              {
+                                pattern: /^[a-zA-Z\s]*$/,
+                                message: "Please enter Valid Brand Name",
+                              },
+                            ]}
+                          >
+                            <Input
+                              maxLength={30}
+                              style={{
+                                paddingLeft: "0px",
+                                borderBottom: "1px solid #ccc ",
+                              }}
+                              placeholder="Enter Brand Name"
+                              bordered={false}
+                            />
+                          </Form.Item>
+                        )}
+                      </div>
+                    </Col>
+                    <Col xs={22} sm={15} md={12}>
+                      <div>
+                        <div className="div-discription">Website</div>
+                        {editContactInfo === false ? (
+                          <a href={`https://${data.website}`} target="_blank">{data.website}</a>
+                        ) : (
+                          <Form.Item
+                            initialValue={data ? data.website : null}
+                            name="website"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please enter Website Name",
+                                type: "Website",
+                              },
+                              {
+                                pattern:
+                                  /^(?:(?:(?:[a-zA-z\-]+)\:\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9\-\.]){1,61}(?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?:\:[0-9]{1,5})?$/,
+                                message: "Please enter Valid Website Name",
+                              },
+                            ]}
+                          >
+                            <Input
+                              style={{
+                                paddingLeft: "0px",
+                                borderBottom: "1px solid #ccc ",
+                              }}
+                              placeholder="Enter Website Name"
+                              bordered={false}
+                            />
+                          </Form.Item>
+                        )}
+                      </div>
+                    </Col>
+                    <Col xs={22} sm={15} md={12}>
+                      <div>
+                        <div className="div-discription">Domain Name</div>
+                        {editContactInfo === false ? (
+                          <div>{data.domain}</div>
+                        ) : (
+                          <Form.Item
+                            initialValue={data ? data.domain : null}
+                            name="domain"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please enter Domain Name",
+                                type: "domain",
+                              },
+                              {
+                                pattern:
+                                  /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/,
 
-                              message: "Please enter Brand Name",
-                            },
-                            {
-                              pattern: /^[a-zA-Z\s]*$/,
-                              message: "Please enter Valid Brand Name",
-                            },
-                          ]}
-                        >
-                          <Input
-                            maxLength={30}
-                            style={{
-                              paddingLeft: "0px",
-                              borderBottom: "1px solid #ccc ",
-                            }}
-                            placeholder="Enter Brand Name"
-                            bordered={false}
-                          />
-                        </Form.Item>
-                      )}
-                    </div>
-                  </Col>
-                  <Col xs={22} sm={15} md={12}>
-                    <div>
-                      <div className="div-discription">Website</div>
-                      {editContactInfo === false ? (
-                        <a href={`https://${data.website}`} target="_blank">{data.website}</a>
-                      ) : (
-                        <Form.Item
-                          initialValue={data ? data.website : null}
-                          name="website"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please enter Website Name",
-                              type: "Website",
-                            },
-                            {
-                              pattern:
-                                /^(?:(?:(?:[a-zA-z\-]+)\:\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9\-\.]){1,61}(?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?:\:[0-9]{1,5})?$/,
-                              message: "Please enter Valid Website Name",
-                            },
-                          ]}
-                        >
-                          <Input
-                            style={{
-                              paddingLeft: "0px",
-                              borderBottom: "1px solid #ccc ",
-                            }}
-                            placeholder="Enter Website Name"
-                            bordered={false}
-                          />
-                        </Form.Item>
-                      )}
-                    </div>
-                  </Col>
-                  <Col xs={22} sm={15} md={12}>
-                    <div>
-                      <div className="div-discription">Domain Name</div>
-                      {editContactInfo === false ? (
-                        <div>{data.domain}</div>
-                      ) : (
-                        <Form.Item
-                          initialValue={data ? data.domain : null}
-                          name="domain"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please enter Domain Name",
-                              type: "domain",
-                            },
-                            {
-                              pattern:
-                                /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/,
-
-                              message: "Please enter Valid Domain Name",
-                            },
-                          ]}
-                        >
-                          <Input
-                            style={{
-                              paddingLeft: "0px",
-                              borderBottom: "1px solid #ccc ",
-                            }}
-                            placeholder="Enter Domain Name"
-                            bordered={false}
-                          />
-                        </Form.Item>
-                      )}
-                    </div>
+                                message: "Please enter Valid Domain Name",
+                              },
+                            ]}
+                          >
+                            <Input
+                              style={{
+                                paddingLeft: "0px",
+                                borderBottom: "1px solid #ccc ",
+                              }}
+                              placeholder="Enter Domain Name"
+                              bordered={false}
+                            />
+                          </Form.Item>
+                        )}
+                      </div>
+                    </Col>
+                    </Row>
                   </Col>
                 </Row>
+                
                 {editContactInfo === true ? (
                   <Row gutter={[16,16]}
                     style={{
@@ -385,18 +405,19 @@ function Overview() {
                     className="iconface"
                     style={{
                       paddingBottom: "10px",
-                      paddingRight: "10px"
+                      paddingRight: "10px",
+                      width:"100%"
                     }}
-                    gutter={[48, 8]}
+                    gutter={[16, 16]}
                   >
-                    <Col xs={22} sm={22} md={22}>
+                    <Col xs={24} sm={24} md={8}>
                       <div
                         className="icon-position"
                         style={{
                           display: "flex",
                           flexDirection: "row",
-                          paddingRight: "10px",
-                          justifyContent: "center",
+                          // paddingRight: "10px",
+                          justifyContent: 'start',
                           alignItems: "center"
                           // paddingLeft:"10px"
                         }}
@@ -423,7 +444,7 @@ function Overview() {
                           <a href={`https://in.linkedin.com/company/${data.linkedin}`} target="_blank" >{data.linkedin}</a>
                         ) : (
                           <Form.Item
-                            style={{ width: "50%" }}
+                            style={{ width: "100%" }}
                             initialValue={data ? data.linkedin : null}
                             name="linkedin"
                             rules={[
@@ -451,26 +472,24 @@ function Overview() {
                         )}
                       </div>
                     </Col>
-                  </Row>
-                  <Row
-                    className="iconface"
-                    style={{
-                      paddingBottom: "10px",
-                    }}
-                    gutter={[48, 8]}
-                  >
-                    <Col xs={22} sm={22} md={22}>
+                    <Col xs={24} sm={24} md={8}>
                       <div
                         className="icon-position"
                         style={{
                           display: "flex",
                           flexDirection: "row",
-                          paddingRight: "10px",
-                          justifyContent: "center",
+                          // paddingRight: "10px",
+                          justifyContent: "start",
                           alignItems: "center"
                         }}
                       >
-                        <div>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center"
+                          }}
+                        >
                           <img
                             src={facebook}
                             alt="downArrow"
@@ -485,7 +504,7 @@ function Overview() {
                           <a href={`https://www.facebook.com/${data.facebook}`} target="_blank" >{data.facebook}</a>
                         ) : (
                           <Form.Item
-                            style={{ width: "50%" }}
+                            style={{ width: "100%" }}
                             initialValue={data ? data.facebook : null}
                             name="facebook"
                             rules={[
@@ -513,23 +532,15 @@ function Overview() {
                         )}
                       </div>
                     </Col>
-                  </Row>
-                  <Row
-                    className="iconface"
-                    style={{
-                      paddingBottom: "10px",
-                    }}
-                    gutter={[48, 8]}
-                  >
-                    <Col xs={22} sm={22} md={22}>
+                    <Col xs={24} sm={24} md={8}>
                       <div
                         className="icon-position"
                         style={{
                           display: "flex",
-                          justifyContent: "center",
+                          justifyContent: "start",
                           alignItems: "center",
                           flexDirection: "row",
-                          paddingRight: "10px",
+                          // paddingRight: "10px",
                         }}
                       >
                         <div>
@@ -547,7 +558,7 @@ function Overview() {
                           <a href={`https://www.twitter.com/${data.twitter}`} target="_blank" >{data.twitter}</a>
                         ) : (
                           <Form.Item
-                            style={{ width: "50%" }}
+                            style={{ width: "100%" }}
                             initialValue={data ? data.twitter : null}
                             name="twitter"
                             rules={[
@@ -576,6 +587,24 @@ function Overview() {
                       </div>
                     </Col>
                   </Row>
+                  {/* <Row
+                    className="iconface"
+                    style={{
+                      paddingBottom: "10px",
+                    }}
+                    gutter={[48, 8]}
+                  >
+                    
+                  </Row>
+                  <Row
+                    className="iconface"
+                    style={{
+                      paddingBottom: "10px",
+                    }}
+                    gutter={[48, 8]}
+                  >
+                    
+                  </Row> */}
                 </div>
                 {editContactIconInfo === true ? (
                   <Row

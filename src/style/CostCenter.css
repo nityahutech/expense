@@ -37,6 +37,9 @@ line-height: 25px;
  .viewAppraisal .ant-btn-primary{
     background: #1963A6;
     color:#ffffff;
-    border-radius: 4px;
-    
+    border-radius: 4px;   
+ }
+
+ .pathSymbol {
+   cursor: pointer;
  }

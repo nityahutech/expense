@@ -175,6 +175,13 @@ background-color: #ffffff;
 margin: 10px 0;
 }
 
+.sideCreate{
+  padding: 5px;
+background-color: #ffffff;
+margin: 10px 0;
+}
+
+
 .sideCard:hover{
   border-left: 4px solid #2094FF;
   color: #2094FF;
@@ -281,5 +288,13 @@ border-left: 4px solid #0093FF;
   .button-applyleave {
     margin-right: 0px !important;
     margin-top: 0px !important;
+  }
+}
+
+@media only screen and (max-width: 767px){
+ 
+
+  .wholePage{
+    background-color: #f8f8f8;
   }
 }

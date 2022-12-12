@@ -168,45 +168,17 @@
   box-shadow: 0 0 0px #719ece !important;
 }
 
-.sickLeave .ant-card-body{
+.sideCard {
 padding: 10px;
 border-left: 4px solid #8F8980;
+background-color: #ffffff;
+margin: 10px 0;
 }
 
-.sickLeave .ant-card-body:hover{
+.sideCard:hover{
   border-left: 4px solid #2094FF;
-}
-
-.optionalLeave .ant-card-body:hover{
-  border-left: 4px solid #2094FF;
-}
-
-.lossPay .ant-card-body:hover{
-  border-left: 4px solid #2094FF;
-}
-
-.sickLabel:hover{
   color: #2094FF;
 }
-
-
-.optionalLeave .ant-card-body{
-  padding: 10px;
-  border-left: 4px solid #8F8980;
-  }
-
-  .lossPay .ant-card-body{
-    padding: 10px;
-    border-left: 4px solid #8F8980;
-    }
-
-    .createButton .ant-card-body{
-      padding: 0px;
-    }
-
-    .createButton .ant-card-body{
-      padding: 3px;
-    }
   
     .sick .ant-card-head-title {
       font-size: 15px;

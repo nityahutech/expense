@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, Row, Col, Button, Input, Form } from "antd";
 import CompanyProContext from "../../contexts/CompanyProContext";
 import { CloseOutlined, EditFilled, CheckOutlined } from "@ant-design/icons";
@@ -22,15 +22,15 @@ function AddressOffice() {
     getData();
     showEditAddress(false);
   };
+
   useEffect(() => {
     getData();
   }, []);
+  
   const getData = async () => {
     let data = await CompanyProContext.getCompanyProfile(compId);
     setData(data);
   };
-  const addspace = []
-
   return (
     <>
       <div

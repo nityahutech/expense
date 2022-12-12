@@ -108,7 +108,7 @@ const Admin = () => {
     const allData = await getUsers();
     let allUsers = allData.docs.map((doc, i) => {
       return {
-        value: doc.data().fname + ' ' + doc.data().lname
+        value: doc.data().fname + ' ' + doc.data().mname + ' ' + doc.data().lname
       };
     });
     console.log('allUsers', allUsers)

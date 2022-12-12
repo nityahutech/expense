@@ -17,6 +17,7 @@ import {
 } from "@ant-design/icons";
 import "./companystyle.css";
 import { capitalize, showNotification } from "../../contexts/CreateContext";
+import CompanyProContext from "../../contexts/CompanyProContext";
 
 // ------------------------------------------------------------------------------const part
 const DepartmentNew = () => {
@@ -29,20 +30,27 @@ const DepartmentNew = () => {
   const order = ["Business Unit", "Division", "Department", "Team"];
   const [dataSource, setDataSource] = useState([]);
   const [editRecord, setEditRecord] = useState([]);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState();
+  const compId = sessionStorage.getItem("compId")
   
+  useEffect(() => {
+    CompanyProContext.getCompanyProfile(compId).then((res) => {
+      console.log(res?.departments)
+      setData(res?.departments)
+      getData(res?.departments);
+    })
+  }, []);
+
   useEffect(() => {
     getData();
   }, [type]);
 
-  const getData = async () => {
-    let data = localStorage.getItem("Department");
-    if (!data) {
-      localStorage.setItem("Department", "[]");
+  const getData = (dept) => {
+    let d = data || dept
+    console.log(d);
+    if (!d) {
       return;
     }
-    console.log(JSON.parse(data));
-    setData(JSON.parse(data));
     let temp = [];
     let place = order.indexOf(type);
     let par =
@@ -54,7 +62,7 @@ const DepartmentNew = () => {
           : "/" +
           parent[`${order[2]}`].name +
           (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
-    JSON.parse(data).map((d) => {
+    d.map((d) => {
       if (d.type == type && d.parent == par) {
         temp.push(d);
       }
@@ -449,7 +457,7 @@ const DepartmentNew = () => {
               width={550}
               visible={ismodalOpen}
               // footer={null}
-              destroyOnClose={true}
+              destroyOnClose
               onCancel={() => {
                 setIsModalOpen(false);
               }}

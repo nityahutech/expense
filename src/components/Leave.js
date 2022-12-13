@@ -1046,6 +1046,7 @@ const Leave = (props) => {
                     borderRadius: "10px",
                     padding: "10px",
                     marginTop: "10px",
+                    marginLeft: "5px",
                   }}
                 >
                   {/* <Col span={6}><RangePicker /></Col> */}
@@ -1055,12 +1056,16 @@ const Leave = (props) => {
                     placeholder="Search"
                     prefix={<SearchOutlined />}
                     onChange={searchChange }
+                    style={{width:"100%"}}
                   />
                   </Col>
-                  {/* <Col span={6}>
+                  <Col span={6}>
+                    <RangePicker />
+                  </Col>
+                  <Col span={6}>
                     <Form.Item
                       label="Nature of Leave::"
-                      style={{ paddingBottom: "0px" }}
+                      style={{marginBottom:"0px"}}
                     >
                       <Select
                         defaultValue="Loss Of Pay"
@@ -1076,26 +1081,7 @@ const Leave = (props) => {
                         ]}
                       />
                     </Form.Item>
-                  </Col> */}
-                  {/* <Col span={6}>
-                    <Form.Item
-                      label="Nature of Leave::"
-                    >
-                      <Select
-                        defaultValue="Loss Of Pay"
-                        options={[
-                          {
-                            value: 'CL',
-                            label: 'CL',
-                          },
-                          {
-                            value: 'EL',
-                            label: 'EL',
-                          },
-                        ]}
-                      />
-                    </Form.Item>
-                  </Col> */}
+                  </Col>
                   </Row>
                 </Col>
 

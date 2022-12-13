@@ -462,6 +462,7 @@ function Editemployee(props) {
               >
                 <Option value="Male">Male</Option>
                 <Option value="Female">Female</Option>
+                <Option value="Other">Other</Option>
                 {/* <Option value="pns">Prefer Not To Say</Option> */}
               </Select>
             </Form.Item>

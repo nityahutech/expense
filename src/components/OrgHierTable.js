@@ -285,7 +285,7 @@ const OrgHierTable = () => {
                     >
                         <div>
                             <span
-                                className="pathSymbol"
+                            className="pathSymbol"
                                 style={
                                     type == "Business Unit"
                                         ? { color: "black" }
@@ -322,7 +322,7 @@ const OrgHierTable = () => {
                                         <>
                                             {" > "}
                                             <span
-                                                className="pathSymbol"
+                                            className="pathSymbol"
                                                 style={
                                                     type == "Department"
                                                         ? { color: "black" }
@@ -341,7 +341,7 @@ const OrgHierTable = () => {
                                                 <>
                                                     {" > "}
                                                     <span
-                                                        className="pathSymbol"
+                                                    className="pathSymbol"
                                                         style={
                                                             type == "Team"
                                                                 ? { color: "black" }

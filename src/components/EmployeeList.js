@@ -41,13 +41,6 @@ function EmployeeList() {
       ellipsis: true,
     },
     {
-      title: "Middle Name",
-      dataIndex: "mname",
-      key: "mname",
-      ellipsis: true,
-      width: 120,
-    },
-    {
       title: "Last Name",
       dataIndex: "lname",
       key: "lname",

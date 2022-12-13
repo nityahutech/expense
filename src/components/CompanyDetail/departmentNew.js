@@ -8,6 +8,7 @@ import {
   Modal,
   Form,
   Input,
+  Card,
 } from "antd";
 import {
   DeleteOutlined,
@@ -276,493 +277,531 @@ const DepartmentNew = () => {
 
   return (
     <>
-
-      <div style={{
+      <div
+      className="education"
+      style={{
         margin: "10px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        width: '100%'
+      }}
+    >
+    <Row
+      className="Row-Card"
+      style={{
+        width: '75%',
+        margin: '10px',
+        display: 'flex',
+        alignItems: 'center'
+      }}
+    >
+      <Col span={24}>
+      <Card
+        title="Company Policies"
+        className="policyCard"
+        bordered={true}
+        hoverable={true}
+        style={{
+          width: '100%',
+          marginTop: 10,
+          borderRadius: "10px",
+          cursor: "default"
+        }}
+      >
+        <div style={{
+          margin: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: '100%'
 
-      }}>
-        <div style={{ background: "#FAFAFA" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+        }}>
+          <div style={{ width:"100%" }}>
             <div
               style={{
-                fontWeight: "600",
-                fontSize: "14px",
-                lineHeight: "19px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              <div>
-                <span
-                  style={
-                    type == "Business Unit"
-                      ? { color: "black" }
-                      : { color: "#007ACB" }
-                  }
+              <div
+                style={{
+                  fontWeight: "600",
+                  fontSize: "14px",
+                  lineHeight: "19px",
+                }}
+              >
+                <div>
+                  <span
+                    className="pathSymbol"
+                    style={
+                      type == "Business Unit"
+                        ? { color: "black" }
+                        : { color: "#007ACB" }
+                    }
+                    onClick={() => {
+                      setType("Business Unit");
+                      setParent(null);
+                    }}
+                  >
+                    Business Unit
+                  </span>
+                  {type == order[0] ? null : (
+                    <>
+                      {" > "}
+                      <span
+                        className="pathSymbol"
+                        style={
+                          type == "Division"
+                            ? { color: "black" }
+                            : { color: "#007ACB" }
+                        }
+                        onClick={() => {
+                          setType("Division");
+                          let temp = parent;
+                          delete temp[`${order[2]}`];
+                          delete temp[`${order[3]}`];
+                          setParent(temp);
+                        }}
+                      >
+                        Division
+                      </span>
+                      {type == order[1] ? null : (
+                        <>
+                          {" > "}
+                          <span
+                            className="pathSymbol"
+                            style={
+                              type == "Department"
+                                ? { color: "black" }
+                                : { color: "#007ACB" }
+                            }
+                            onClick={() => {
+                              setType("Department");
+                              let temp = parent;
+                              delete temp[`${order[3]}`];
+                              setParent(temp);
+                            }}
+                          >
+                            Department
+                          </span>
+                          {type == order[2] ? null : (
+                            <>
+                              {" > "}
+                              <span
+                                className="pathSymbol"
+                                style={
+                                  type == "Team"
+                                    ? { color: "black" }
+                                    : { color: "#007ACB" }
+                                }
+                              >
+                                Team
+                              </span>
+                            </>
+                          )}
+                        </>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+              <div
+                style={{
+                  fontWeight: "600",
+                  fontSize: "14px",
+                  lineHeight: "19px",
+                }}
+              >
+                <Button
+                  type="default"
                   onClick={() => {
-                    setType("Business Unit");
-                    setParent(null);
+                    {
+                      console.log("hi");
+                      setIsModalOpen(true);
+                    }
+                  }}
+                  style={{
+                    margin: "10px 10px 0px 0px",
+                    background: "#1963A6",
+                    color: "#ffffff",
+                    borderRadius: "5px",
                   }}
                 >
-                  Business Unit
-                </span>
-                {type == order[0] ? null : (
-                  <>
-                    {" > "}
-                    <span
-                      style={
-                        type == "Division"
-                          ? { color: "black" }
-                          : { color: "#007ACB" }
-                      }
-                      onClick={() => {
-                        setType("Division");
-                        let temp = parent;
-                        delete temp[`${order[2]}`];
-                        delete temp[`${order[3]}`];
-                        setParent(temp);
-                      }}
-                    >
-                      Division
-                    </span>
-                    {type == order[1] ? null : (
-                      <>
-                        {" > "}
-                        <span
-                          style={
-                            type == "Department"
-                              ? { color: "black" }
-                              : { color: "#007ACB" }
-                          }
-                          onClick={() => {
-                            setType("Department");
-                            let temp = parent;
-                            delete temp[`${order[3]}`];
-                            setParent(temp);
-                          }}
-                        >
-                          Department
-                        </span>
-                        {type == order[2] ? null : (
-                          <>
-                            {" > "}
-                            <span
-                              style={
-                                type == "Team"
-                                  ? { color: "black" }
-                                  : { color: "#007ACB" }
-                              }
-                            >
-                              Team
-                            </span>
-                          </>
-                        )}
-                      </>
-                    )}
-                  </>
-                )}
+                  + Add {type}{" "}
+                </Button>
               </div>
             </div>
-            <div
-              style={{
-                fontWeight: "600",
-                fontSize: "14px",
-                lineHeight: "19px",
-              }}
-            >
-              <Button
-                type="default"
-                onClick={() => {
-                  {
-                    console.log("hi");
-                    setIsModalOpen(true);
-                  }
-                }}
-                style={{
-                  margin: "10px 10px 0px 0px",
-                  background: "#1963A6",
-                  color: "#ffffff",
-                  borderRadius: "5px",
-                }}
+            <Divider />
+
+            {/* {type != order[0] ? (
+              <Row
+                style={{ display: "flex", flexDirection: "column", margin: "20px" }}
               >
-                + Add {type}{" "}
-              </Button>
-            </div>
+                <Row>
+                  <Col style={{ fontWeight: 600 }} span={24}>
+                    {parent[`${type}`]?.name}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={24}> {parent[`${type}`]?.description} </Col>
+                </Row>
+              </Row>
+            ) : null} */}
+
+
+            <Table
+              className="tableTab"
+              columns={columns}
+              dataSource={dataSource}
+              style={{ width:"100%" }}
+              size="middle"
+              expandable={type == order[3] ? ({
+                expandedRowRender: (record) => (
+                  <p
+                    style={{
+                      margin: 0,
+                    }}
+                  >
+                    {type == order[3] ? (
+                      record.name) : null}
+                  </p>
+                ),
+                rowExpandable: (record) => record.name,
+              }) : null}
+              onRow={(record, rowIndex) => {
+                // return {
+                //     onClick: () => {
+                //         let temp = order.indexOf(type) + 1
+                //         if (temp > 3) { return }
+                //         setType(order[temp]);
+                //         console.log(temp, order[temp])
+                //     }, // click row
+                // };
+              }}
+            />
           </div>
-          <Divider />
 
-          {/* {type != order[0] ? (
-            <Row
-              style={{ display: "flex", flexDirection: "column", margin: "20px" }}
-            >
-              <Row>
-                <Col style={{ fontWeight: 600 }} span={24}>
-                  {parent[`${type}`]?.name}
-                </Col>
-              </Row>
-              <Row>
-                <Col span={24}> {parent[`${type}`]?.description} </Col>
-              </Row>
-            </Row>
-          ) : null} */}
-
-
-          <Table
-            className="tableTab"
-            columns={columns}
-            dataSource={dataSource}
-            style={{ background: "#FAFAFA" }}
-            size="middle"
-            expandable={type == order[3] ? ({
-              expandedRowRender: (record) => (
-                <p
+          {/* //---------------------------------add Modal */}
+          <Row>
+            <Col xs={22} sm={20} md={18}>
+              <Modal
+                // bodyStyle={{ overflowY: 'scroll' }}
+                // style={{ height: 'calc(100vh - 200px)' }}
+                bodyStyle={{
+                  overflowY: "auto",
+                  maxHeight: "calc(100vh - 200px)",
+                  marginLeft: "40px",
+                  marginRight: "40px",
+                }}
+                className="viewAppraisal"
+                centered
+                width={550}
+                visible={ismodalOpen}
+                // footer={null}
+                destroyOnClose
+                onCancel={() => {
+                  setIsModalOpen(false);
+                }}
+                cancelText={
+                  <div>
+                    <CloseOutlined style={{ marginRight: "10px" }} />
+                    CANCEL
+                  </div>
+                }
+                onOk={() => {
+                  form.submit();
+                }}
+                okText={
+                  <div>
+                    <CheckOutlined style={{ marginRight: "10px" }} />
+                    SAVE
+                  </div>
+                }
+                title={type}
+                closeIcon={
+                  <div
+                    onClick={() => {
+                      setIsModalOpen(false);
+                    }}
+                    style={{ color: "#ffffff" }}
+                  >
+                    X
+                  </div>
+                }
+              >
+                <Row
+                  className="apply-leave"
                   style={{
-                    margin: 0,
+                    marginTop: "10px",
                   }}
                 >
-                  {type == order[3] ? (
-                    record.name) : null}
-                </p>
-              ),
-              rowExpandable: (record) => record.name,
-            }) : null}
-            onRow={(record, rowIndex) => {
-              // return {
-              //     onClick: () => {
-              //         let temp = order.indexOf(type) + 1
-              //         if (temp > 3) { return }
-              //         setType(order[temp]);
-              //         console.log(temp, order[temp])
-              //     }, // click row
-              // };
-            }}
-          />
+                  <Col
+                    xl={24}
+                    lg={24}
+                    md={24}
+                    sm={24}
+                    xs={24}
+                    style={{
+                      background: "flex",
+                      padding: "10px",
+                      // width: "400px",
+                    }}
+                  >
+                    <Form
+                      labelCol={{
+                        span: 9,
+                      }}
+                      wrapperCol={{
+                        span: 16,
+                      }}
+                      initialValues={{
+                        remember: true,
+                      }}
+                      form={form}
+                      onFinish={onFinish}
+                    >
+                      <Form.Item
+                        labelAlign="left"
+                        name="name"
+                        style={{ marginBottom: "20px" }}
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            {type} Name
+                          </label>
+                        }
+                        rules={[
+                          {
+                            required: true,
+                            message: `Please enter ${type} Name`,
+                          },
+                          {
+                            pattern: /^[0-9a-zA-Z.,-\s]+$/,
+                            message: "Please enter Valid Name",
+                          },
+                        ]}
+                      >
+                        <Input
+                          maxLength={30}
+                          onChange={(e) => {
+                            const inputval = e.target.value;
+                            const str = e.target.value;
+                            const newVal =
+                              inputval.substring(0, 1).toUpperCase() +
+                              inputval.substring(1);
+                            const caps = str.split(" ").map(capitalize).join(" ");
+                            form.setFieldsValue({ name: newVal, name: caps });
+                          }}
+                        />
+                      </Form.Item>
+
+                      <Form.Item
+                        labelAlign="left"
+                        name="description"
+                        style={{ marginBottom: "20px" }}
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            Description:
+                          </label>
+                        }
+                        rules={[
+                          {
+                            required: true,
+                            message: `Please enter ${type} Description`,
+                          },
+                          {
+                            pattern: /^[0-9a-zA-Z.,-\s]+$/,
+                            message: "Please enter Valid Name",
+                          },
+                        ]}
+                      >
+                        <Input.TextArea
+                          maxLength={120}
+                          rows={4}
+                          onChange={(e) => {
+                            const inputval = e.target.value;
+                            const str = e.target.value;
+                            const newVal =
+                              inputval.substring(0, 1).toUpperCase() +
+                              inputval.substring(1);
+                            const caps = str.split(". ").map(capitalize).join(". ");
+                            form.setFieldsValue({
+                              description: newVal,
+                              description: caps,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Form>
+                  </Col>
+                </Row>
+              </Modal>
+            </Col>
+          </Row>
+
+          {/* //---------------------------------edit Modal */}
+          <Row>
+            <Col xs={22} sm={20} md={18}>
+              <Modal
+                bodyStyle={{
+                  overflowY: "auto",
+                  maxHeight: "calc(100vh - 200px)",
+                  marginLeft: "40px",
+                  marginRight: "40px",
+                }}
+                className="viewAppraisal"
+                centered
+                width={550}
+                visible={isEditModalOpen}
+                destroyOnClose
+                onCancel={() => {
+                  setIsEditModalOpen(false);
+                }}
+                cancelText={
+                  <div>
+                    <CloseOutlined style={{ marginRight: "10px" }} />
+                    CANCEL
+                  </div>
+                }
+                onOk={() => {
+                  form1.submit();
+                }}
+                okText={
+                  <div>
+                    <CheckOutlined style={{ marginRight: "10px" }} />
+                    SAVE
+                  </div>
+                }
+                title={<div> Edit {type}</div>}
+                closeIcon={
+                  <div
+                    onClick={() => {
+                      setIsEditModalOpen(false);
+                      form1.resetFields();
+                    }}
+                    style={{ color: "#ffffff" }}
+                  >
+                    X
+                  </div>
+                }
+              >
+                <Row
+                  className="apply-leave"
+                  style={{
+                    marginTop: "10px",
+                  }}
+                >
+                  <Col
+                    xl={24}
+                    lg={24}
+                    md={24}
+                    sm={24}
+                    xs={24}
+                    style={{
+                      background: "flex",
+                      padding: "10px",
+                      // width: "400px",
+                    }}
+                  >
+                    <Form
+                      labelCol={{
+                        span: 8,
+                      }}
+                      wrapperCol={{
+                        span: 16,
+                      }}
+                      initialValues={{
+                        remember: true,
+                      }}
+                      form={form1}
+                      onFinish={onFinishEdit}
+                    >
+                      <Form.Item
+                        labelAlign="left"
+                        name="editname"
+                        style={{ marginBottom: "20px" }}
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            {type} Name
+                          </label>
+                        }
+                        initialValue={editRecord.name}
+                        rules={[
+                          {
+                            required: true,
+                            message: `Please enter ${type} Name`,
+                          },
+                          {
+                            pattern: /^[0-9a-zA-Z.,-\s]+$/,
+                            message: "Please enter Valid Name",
+                          },
+                        ]}
+                      >
+                        <Input
+                          maxLength={30}
+                          onChange={(e) => {
+                            const inputval = e.target.value;
+                            const str = e.target.value;
+                            const newVal =
+                              inputval.substring(0, 1).toUpperCase() +
+                              inputval.substring(1);
+                            const caps = str.split(" ").map(capitalize).join(" ");
+                            form1.setFieldsValue({
+                              editname: newVal,
+                              editname: caps,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+
+                      <Form.Item
+                        labelAlign="left"
+                        name="editdescription"
+                        style={{ marginBottom: "20px" }}
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            Description:
+                          </label>
+                        }
+                        initialValue={editRecord.description}
+                        rules={[
+                          {
+                            required: true,
+                            message: `Please enter ${type} Description`,
+                          },
+                          {
+                            pattern: /^[0-9a-zA-Z.,-\s]+$/,
+                            message: "Please enter Valid Name",
+                          },
+                        ]}
+                      >
+                        <Input.TextArea
+                          maxLength={120}
+                          rows={4}
+                          onChange={(e) => {
+                            const inputval = e.target.value;
+                            const str = e.target.value;
+                            const newVal =
+                              inputval.substring(0, 1).toUpperCase() +
+                              inputval.substring(1);
+                            const caps = str.split(". ").map(capitalize).join(". ");
+                            form1.setFieldsValue({
+                              editdescription: newVal,
+                              editdescription: caps,
+                            });
+                          }}
+                        />
+                      </Form.Item>
+                    </Form>
+                  </Col>
+                </Row>
+              </Modal>
+            </Col>
+          </Row>
         </div>
-
-        {/* //---------------------------------add Modal */}
-        <Row>
-          <Col xs={22} sm={20} md={18}>
-            <Modal
-              // bodyStyle={{ overflowY: 'scroll' }}
-              // style={{ height: 'calc(100vh - 200px)' }}
-              bodyStyle={{
-                overflowY: "auto",
-                maxHeight: "calc(100vh - 200px)",
-                marginLeft: "40px",
-                marginRight: "40px",
-              }}
-              className="viewAppraisal"
-              centered
-              width={550}
-              visible={ismodalOpen}
-              // footer={null}
-              destroyOnClose
-              onCancel={() => {
-                setIsModalOpen(false);
-              }}
-              cancelText={
-                <div>
-                  <CloseOutlined style={{ marginRight: "10px" }} />
-                  CANCEL
-                </div>
-              }
-              onOk={() => {
-                form.submit();
-              }}
-              okText={
-                <div>
-                  <CheckOutlined style={{ marginRight: "10px" }} />
-                  SAVE
-                </div>
-              }
-              title={type}
-              closeIcon={
-                <div
-                  onClick={() => {
-                    setIsModalOpen(false);
-                  }}
-                  style={{ color: "#ffffff" }}
-                >
-                  X
-                </div>
-              }
-            >
-              <Row
-                className="apply-leave"
-                style={{
-                  marginTop: "10px",
-                }}
-              >
-                <Col
-                  xl={24}
-                  lg={24}
-                  md={24}
-                  sm={24}
-                  xs={24}
-                  style={{
-                    background: "flex",
-                    padding: "10px",
-                    // width: "400px",
-                  }}
-                >
-                  <Form
-                    labelCol={{
-                      span: 9,
-                    }}
-                    wrapperCol={{
-                      span: 16,
-                    }}
-                    initialValues={{
-                      remember: true,
-                    }}
-                    form={form}
-                    onFinish={onFinish}
-                  >
-                    <Form.Item
-                      labelAlign="left"
-                      name="name"
-                      style={{ marginBottom: "20px" }}
-                      label={
-                        <label style={{ color: "black", fontWeight: "400" }}>
-                          {type} Name
-                        </label>
-                      }
-                      rules={[
-                        {
-                          required: true,
-                          message: `Please enter ${type} Name`,
-                        },
-                        {
-                          pattern: /^[0-9a-zA-Z.,-\s]+$/,
-                          message: "Please enter Valid Name",
-                        },
-                      ]}
-                    >
-                      <Input
-                        maxLength={30}
-                        onChange={(e) => {
-                          const inputval = e.target.value;
-                          const str = e.target.value;
-                          const newVal =
-                            inputval.substring(0, 1).toUpperCase() +
-                            inputval.substring(1);
-                          const caps = str.split(" ").map(capitalize).join(" ");
-                          form.setFieldsValue({ name: newVal, name: caps });
-                        }}
-                      />
-                    </Form.Item>
-
-                    <Form.Item
-                      labelAlign="left"
-                      name="description"
-                      style={{ marginBottom: "20px" }}
-                      label={
-                        <label style={{ color: "black", fontWeight: "400" }}>
-                          Description:
-                        </label>
-                      }
-                      rules={[
-                        {
-                          required: true,
-                          message: `Please enter ${type} Description`,
-                        },
-                        {
-                          pattern: /^[0-9a-zA-Z.,-\s]+$/,
-                          message: "Please enter Valid Name",
-                        },
-                      ]}
-                    >
-                      <Input.TextArea
-                        maxLength={120}
-                        rows={4}
-                        onChange={(e) => {
-                          const inputval = e.target.value;
-                          const str = e.target.value;
-                          const newVal =
-                            inputval.substring(0, 1).toUpperCase() +
-                            inputval.substring(1);
-                          const caps = str.split(". ").map(capitalize).join(". ");
-                          form.setFieldsValue({
-                            description: newVal,
-                            description: caps,
-                          });
-                        }}
-                      />
-                    </Form.Item>
-                  </Form>
-                </Col>
-              </Row>
-            </Modal>
-          </Col>
-        </Row>
-
-        {/* //---------------------------------edit Modal */}
-        <Row>
-          <Col xs={22} sm={20} md={18}>
-            <Modal
-              bodyStyle={{
-                overflowY: "auto",
-                maxHeight: "calc(100vh - 200px)",
-                marginLeft: "40px",
-                marginRight: "40px",
-              }}
-              className="viewAppraisal"
-              centered
-              width={550}
-              visible={isEditModalOpen}
-              destroyOnClose
-              onCancel={() => {
-                setIsEditModalOpen(false);
-              }}
-              cancelText={
-                <div>
-                  <CloseOutlined style={{ marginRight: "10px" }} />
-                  CANCEL
-                </div>
-              }
-              onOk={() => {
-                form1.submit();
-              }}
-              okText={
-                <div>
-                  <CheckOutlined style={{ marginRight: "10px" }} />
-                  SAVE
-                </div>
-              }
-              title={<div> Edit {type}</div>}
-              closeIcon={
-                <div
-                  onClick={() => {
-                    setIsEditModalOpen(false);
-                    form1.resetFields();
-                  }}
-                  style={{ color: "#ffffff" }}
-                >
-                  X
-                </div>
-              }
-            >
-              <Row
-                className="apply-leave"
-                style={{
-                  marginTop: "10px",
-                }}
-              >
-                <Col
-                  xl={24}
-                  lg={24}
-                  md={24}
-                  sm={24}
-                  xs={24}
-                  style={{
-                    background: "flex",
-                    padding: "10px",
-                    // width: "400px",
-                  }}
-                >
-                  <Form
-                    labelCol={{
-                      span: 8,
-                    }}
-                    wrapperCol={{
-                      span: 16,
-                    }}
-                    initialValues={{
-                      remember: true,
-                    }}
-                    form={form1}
-                    onFinish={onFinishEdit}
-                  >
-                    <Form.Item
-                      labelAlign="left"
-                      name="editname"
-                      style={{ marginBottom: "20px" }}
-                      label={
-                        <label style={{ color: "black", fontWeight: "400" }}>
-                          {type} Name
-                        </label>
-                      }
-                      initialValue={editRecord.name}
-                      rules={[
-                        {
-                          required: true,
-                          message: `Please enter ${type} Name`,
-                        },
-                        {
-                          pattern: /^[0-9a-zA-Z.,-\s]+$/,
-                          message: "Please enter Valid Name",
-                        },
-                      ]}
-                    >
-                      <Input
-                        maxLength={30}
-                        onChange={(e) => {
-                          const inputval = e.target.value;
-                          const str = e.target.value;
-                          const newVal =
-                            inputval.substring(0, 1).toUpperCase() +
-                            inputval.substring(1);
-                          const caps = str.split(" ").map(capitalize).join(" ");
-                          form1.setFieldsValue({
-                            editname: newVal,
-                            editname: caps,
-                          });
-                        }}
-                      />
-                    </Form.Item>
-
-                    <Form.Item
-                      labelAlign="left"
-                      name="editdescription"
-                      style={{ marginBottom: "20px" }}
-                      label={
-                        <label style={{ color: "black", fontWeight: "400" }}>
-                          Description:
-                        </label>
-                      }
-                      initialValue={editRecord.description}
-                      rules={[
-                        {
-                          required: true,
-                          message: `Please enter ${type} Description`,
-                        },
-                        {
-                          pattern: /^[0-9a-zA-Z.,-\s]+$/,
-                          message: "Please enter Valid Name",
-                        },
-                      ]}
-                    >
-                      <Input.TextArea
-                        maxLength={120}
-                        rows={4}
-                        onChange={(e) => {
-                          const inputval = e.target.value;
-                          const str = e.target.value;
-                          const newVal =
-                            inputval.substring(0, 1).toUpperCase() +
-                            inputval.substring(1);
-                          const caps = str.split(". ").map(capitalize).join(". ");
-                          form1.setFieldsValue({
-                            editdescription: newVal,
-                            editdescription: caps,
-                          });
-                        }}
-                      />
-                    </Form.Item>
-                  </Form>
-                </Col>
-              </Row>
-            </Modal>
-          </Col>
-        </Row>
+      </Card>
+      </Col>
+      </Row>
       </div>
     </>
   );

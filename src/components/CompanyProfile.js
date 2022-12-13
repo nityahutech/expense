@@ -50,9 +50,9 @@ function CompanyProfile() {
                 <AddressCust />
               </div>
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Department" key="3">
+            {/* <Tabs.TabPane tab="Department" key="3">
               <Department />
-            </Tabs.TabPane>
+            </Tabs.TabPane> */}
             <Tabs.TabPane tab="Organisation" key="3">
               <DepartmentNew />
             </Tabs.TabPane>

@@ -64,7 +64,12 @@ const Designation = () => {
       key: "designatione",
     },
     {
-      title: "Employees",
+      title: "Grade",
+      dataIndex: "grade",
+      key: "grade",
+    },
+    {
+      title: "No. of Employees",
       dataIndex: "employees",
       key: "employees",
     },

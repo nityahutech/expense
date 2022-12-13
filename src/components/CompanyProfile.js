@@ -1,5 +1,6 @@
 import "antd/dist/antd.css";
 import { Tabs } from "antd";
+import { Sticky, StickyContainer } from 'react-sticky';
 import Overview from "./CompanyDetail/overview";
 import Department from "./CompanyDetail/department";
 import Designation from "./CompanyDetail/designation";
@@ -12,40 +13,63 @@ import AddressOffice from "./CompanyDetail/addressOffice";
 import AddressCorp from "./CompanyDetail/addressCorp";
 import AddressCust from "./CompanyDetail/addressCust";
 
+const data = [
+  {
+    name: "Overview",
+    content: (<Overview/>)
+  },
+]
+
+const renderTabBar = (props, DefaultTabBar) => (
+  <Sticky bottomOffset={500}>
+    {({ style }) => (
+      <DefaultTabBar
+        {...props}
+        className="site-custom-tab-bar"
+        style={{
+          ...style,
+        }}
+      />
+    )}
+  </Sticky>
+);
+
 function CompanyProfile() {
   return (
     <>
       <div className="myProfile">
-        <Tabs defaultActiveKey="1" className="profileTabs">
-          <Tabs.TabPane tab="Overview" key="1">
-            <Overview />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Address" key="2">  
-            <div style={{ marginBottom: '10px' }}>
-              <AddressOffice />
-              <AddressCorp />
-              <AddressCust />
-            </div>
-          </Tabs.TabPane>
-          {/* <Tabs.TabPane tab="Department" key="3">
-            <Department />
-          </Tabs.TabPane> */}
-          <Tabs.TabPane tab="Organisation" key="3">
-            <DepartmentNew />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Designation" key="4">
-            <Designation />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Policies" key="6">
-            <Policies />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Admin" key="7">
-            <Admin />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Statutory" key="8">
-            <Statutory />
-          </Tabs.TabPane>
-        </Tabs>
+        <StickyContainer>
+          <Tabs defaultActiveKey="1" renderTabBar={renderTabBar} className="profileTabs">
+            <Tabs.TabPane tab="Overview" key="1">
+              <Overview />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Address" key="2">  
+              <div style={{ marginBottom: '10px' }}>
+                <AddressOffice />
+                <AddressCorp />
+                <AddressCust />
+              </div>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Department" key="3">
+              <Department />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Organisation" key="3">
+              <DepartmentNew />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Designation" key="4">
+              <Designation />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Policies" key="6">
+              <Policies />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Admin" key="7">
+              <Admin />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Statutory" key="8">
+              <Statutory />
+            </Tabs.TabPane>
+            </Tabs>
+        </StickyContainer>
       </div>
     </>
   );

@@ -21,7 +21,7 @@ import {
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
 import moment from "moment";
-import { capitalize, getBase64 } from "../../contexts/CreateContext";
+import { capitalize, getBase64, getCountryCode } from "../../contexts/CreateContext";
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -33,7 +33,8 @@ function Personal() {
   const [editContent, showEditContent] = useState(false);
   const [editContactInfo, showEditContactInfo] = useState(false);
   const [dob, setDob] = useState("");
-  const [scrs, setScrs] = useState("");
+  const [scrs, setScrs] = useState("");  
+  const [codes, setCodes] = useState("");
   const [lccs, setLccs] = useState("");
   const [editAddressInfo, showEditAddressInfo] = useState(false);
   const [data, setData] = useState([]);
@@ -57,7 +58,7 @@ function Personal() {
     };
     EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName);
     const timer = setTimeout(() => {
-      getData();
+      3();
     }, 5000);
     showEditContent(false);
     return () => {
@@ -115,6 +116,9 @@ function Personal() {
     getData();
   };
   useEffect(() => {
+  getCountryCode().then((res)=>{
+  setCodes(res);
+})
     getData();
   }, []);
   const getData = async () => {
@@ -229,6 +233,7 @@ function Personal() {
       )
     }
   }
+  console.log(codes)
 
   return (
     <>

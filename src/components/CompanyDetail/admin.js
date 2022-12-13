@@ -115,7 +115,12 @@ const Admin = () => {
     setAllEmpName(allUsers)
   }
 
-
+  function getInitials(text) {
+      const myArray = text.split(" ");
+      let initials = myArray[0][0] + myArray[myArray.length-1][0]
+      return initials;
+    }
+ 
   return (
     <>
       <div
@@ -236,7 +241,7 @@ const Admin = () => {
                                     alignItems: "center",
                                   }}
                                 >
-                                  CE
+                                 { data.ceoAdmin ? getInitials(data.ceoAdmin):null}
                                 </div>
                                 <span style={{ marginRight: "10px" }}>
                                   {data.ceoAdmin ? data.ceoAdmin : null}{" "}
@@ -432,7 +437,8 @@ const Admin = () => {
                                 alignItems: "center",
                               }}
                             >
-                              HR </div>
+                              { data.hrAdmin ? getInitials(data.hrAdmin):null} 
+                              </div>
                             <span style={{ marginRight: "10px" }}>
                               {data.hrAdmin ? data.hrAdmin : null}
                             </span>
@@ -620,9 +626,10 @@ const Admin = () => {
                                 alignItems: "center",
                               }}
                             >
-                              FA
+                              {data.financerAdmin?getInitials(data.financerAdmin):null}
                             </div>
-                            <span style={{ marginRight: "10px" }}>{data.financerAdmin ? data.financerAdmin : "-"}</span>
+                            <span style={{ marginRight: "10px" }}>
+                            {data.financerAdmin ? data.financerAdmin : "-"}</span>
                           </div>
                           {editFinanceContactInfo === false ? (
                             <Button
@@ -824,8 +831,11 @@ const Admin = () => {
                                 justifyContent: "center",
                                 alignItems: "center",
                               }}
-                            >HR</div>
-                            <span style={{ marginRight: "10px" }}>{data.hrExeAdmin ? data.hrExeAdmin : "-"}</span>
+                            >
+                              {data.hrExeAdmin?getInitials(data.hrExeAdmin):null}
+                            </div>
+                            <span style={{ marginRight: "10px" }}>
+                              {data.hrExeAdmin ? data.hrExeAdmin : "-"}</span>
                           </div>
                           {editExecutiveContactInfo === false ? (
                             <Button

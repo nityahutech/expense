@@ -12,7 +12,7 @@ import {
   Switch,
 } from "antd";
 import ConfigureContext from "../../contexts/ConfigureContext";
-import { DeleteOutlined, EditFilled,CheckOutlined,CloseOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditFilled, CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import "./companystyle.css";
 import { getDesigNo, showNotification } from "../../contexts/CreateContext";
@@ -23,11 +23,15 @@ const Designation = () => {
   const [editContent, showEditContent] = useState(false);
   const [editGrade, showEditGrade] = useState(false);
   const [data, setData] = useState({});
+  const [grade, setGrade] = useState({});
   const [des, setDes] = useState(null);
+  const [gra, setGra] = useState(null);
   const [old, setOld] = useState(null);
   const [editInfo, setEditInfo] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [form] = Form.useForm();
+  const [showNewColumn, setshowNewColumn] = useState(true)
+
 
   const showModal = () => {
     showEditGrade(true);
@@ -38,6 +42,11 @@ const Designation = () => {
   const handleCancel = () => {
     showEditGrade(false);
   };
+  const checkNumbervalue = (event) => {
+    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
 
   useEffect(() => {
     getData();
@@ -45,23 +54,33 @@ const Designation = () => {
 
   const getData = async () => {
     let data = await ConfigureContext.getConfigurations(page);
-    getDesigNo().then((res) => {
-      setDataSource(
-        data.designations.map((des) => {
-          return {
-            designation: des,
-            employees: res[`${des}`] ? res[`${des}`] : 0,
-          };
-        })
-      );
+    console.log('aaaaaaaaaa', data)
+
+    let designNo = await getDesigNo()
+    console.log('aaaaaaaaaa', designNo)
+    let temp = data.designations.map((des) => {
+      let keys = Object.keys(des)
+      let grade = des[`${keys[0]}`]
+      return {
+        grade: grade,
+        designation: keys[0],
+        employees: designNo[`${keys[0]}`] ? designNo[`${keys[0]}`] : 0,
+      }
+    })
+    temp.sort(function (a, b) {
+      return a.length - b.length;
     });
+    console.log('aaaaaaaaaa2', temp)
+    setDataSource(temp)
+
   };
 
   const columns = [
     {
       title: "Designation",
       dataIndex: "designation",
-      key: "designatione",
+      key: "designation",
+
     },
     {
       title: "Grade",
@@ -69,11 +88,15 @@ const Designation = () => {
       key: "grade",
     },
     {
-      title: "No. of Employees",
+      title: "Employees",
       dataIndex: "employees",
       key: "employees",
     },
     {
+      title: "Action",
+      align: 'center',
+      // dataIndex: "action",
+      // key: "action",
       render: (record) => (
         <Row
           style={{
@@ -97,7 +120,11 @@ const Designation = () => {
               onClick={() => {
                 setEditInfo(true);
                 setDes(record.designation);
-                setOld(record.designation);
+                // setOld(record.designation);
+                setGra(record.grade);
+                // setOld({record.designation: record.grade})
+                setOld({ [`${record.designation}`]: record.grade });
+
               }}
             >
               <EditFilled />
@@ -115,24 +142,27 @@ const Designation = () => {
                 // paddingTop: "7px",
                 // paddingRight: "7px",
               }}
-              onClick={() => onDelete(record.designation)}
+              onClick={() => onDelete(record)}
             >
               <DeleteOutlined />
             </Button>
           </Col>
-        </Row>
+        </Row >
       ),
     },
   ];
 
   const onDelete = (record) => {
     Modal.confirm({
-      title: `Are you sure, you want to delete "${record}" designation?`,
+      title: `Are you sure, you want to delete "${record.designation}" designation?`,
       okText: "Yes",
       okType: "danger",
 
       onOk: () => {
-        ConfigureContext.deleteConfigurations(page, { designations: record })
+        let temp = {}
+        temp[`${record.designation}`] = record.grade
+        // temp['grade'] = record.grade
+        ConfigureContext.deleteConfigurations(page, { designations: temp })
           .then((response) => {
             showNotification(
               "success",
@@ -148,12 +178,15 @@ const Designation = () => {
     });
   };
 
+
   const onEdit = () => {
-    console.log(des);
+    console.log('aaa4', des, gra);
+
     ConfigureContext.updateConfigurations(
       page,
       { designations: old },
-      { designations: des }
+      { designations: { [`${des}`]: gra } },
+
     )
       .then((response) => {
         showNotification(
@@ -171,9 +204,16 @@ const Designation = () => {
       });
   };
 
-  const onFinish = (values) => {
+  const onFinish = (values, extra) => {
+    console.log("Received values of form:", extra, values);
+
     let record = {
-      designations: Object.values(values),
+      designations: Object.keys(values).map((key) => {
+        let field = values[`${key}`]
+        return {
+          [`${field}`]: extra[`${key}`]
+        }
+      }),
     };
     console.log("Received values of form:", record);
     ConfigureContext.addConfigurations(page, record)
@@ -186,12 +226,23 @@ const Designation = () => {
         getData();
         showEditContent(false);
         setData({});
+
         form.resetFields();
       })
       .catch((error) => {
         showNotification("error", "Error", error.message);
       });
   };
+
+  const filterdColumns = columns.filter((col) => col.title !== "Grade");
+
+
+  function handleAddColumn(params) {
+    setshowNewColumn(!showNewColumn)
+  }
+
+
+
 
   return (
     <>
@@ -222,23 +273,23 @@ const Designation = () => {
                 width: "100%",
                 marginTop: 10,
                 borderRadius: "10px",
-                cursor:'default'
+                cursor: 'default'
               }}
               extra={
                 <>
                   <Button
                     onClick={showModal}
                     className="personal"
-                        type="text"
-                        style={{
-                          color: "#ffff",
-                          display: "none",
-                          paddingTop: "7px",
-                          paddingRight: "7px",
-                          position: "absolute",
-                          right: 10,
-                          top: 10,
-                        }}
+                    type="text"
+                    style={{
+                      color: "#ffff",
+                      display: "none",
+                      paddingTop: "7px",
+                      paddingRight: "7px",
+                      position: "absolute",
+                      right: 10,
+                      top: 10,
+                    }}
                   >
                     <EditFilled />
                   </Button>
@@ -247,7 +298,7 @@ const Designation = () => {
             >
               <div className="table-responsive">
                 <Table
-                  columns={columns}
+                  columns={showNewColumn ? filterdColumns : columns}
                   dataSource={dataSource}
                   pagination={false}
                   className="designationTable"
@@ -263,7 +314,7 @@ const Designation = () => {
                           <>
                             <Row style={{ width: "100%" }}>
                               {fields.map(({ key, name, ...restField }) => (
-                                <Col xs={24} sm={24} md={12} lg={8} xl={6}>
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                   <Space key={key} align="baseline">
                                     <Form.Item
                                       {...restField}
@@ -286,10 +337,37 @@ const Designation = () => {
                                         }}
                                       />
                                     </Form.Item>
+                                    <Form.Item
+                                      {...restField}
+                                      name={[name, "second"]}
+                                      onKeyPress={(event) => {
+                                        if (checkNumbervalue(event)) {
+                                          event.preventDefault();
+                                        }
+                                      }}
+                                      rules={[
+                                        {
+                                          required: true,
+                                          message: "Please enter Grade",
+                                        },
+                                      ]}
+                                    >
+                                      <Input
+                                        placeholder="Enter Grade"
+                                        onChange={(e) => {
+                                          let temp = {
+                                            ...grade,
+                                            [`${key}`]: e.target.value,
+                                          };
+                                          setGrade(temp);
+                                        }}
+                                      />
+                                    </Form.Item>
 
                                     <MinusCircleOutlined
                                       onClick={() => {
                                         delete data[`${key}`];
+                                        delete grade[`${key}`];
                                         remove(name);
                                       }}
                                     />
@@ -297,6 +375,7 @@ const Designation = () => {
                                 </Col>
                               ))}
                             </Row>
+
                             <Form.Item>
                               <Button
                                 type="dashed"
@@ -334,7 +413,7 @@ const Designation = () => {
                           }}
                           type="primary"
                           onClick={() => {
-                            onFinish(data);
+                            onFinish(data, grade);
                           }}
                         >
                           <CheckOutlined />Submit
@@ -372,11 +451,43 @@ const Designation = () => {
           setEditInfo(false);
         }}
       >
-        <Input
-          type="text"
-          defaultValue={des}
-          onChange={(e) => setDes(e.target.value)}
-        />
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: "Please enter designation",
+            },
+          ]}
+        >
+          <Input
+            type="text"
+            defaultValue={des}
+            onChange={(e) => setDes(e.target.value)}
+          />
+        </Form.Item>
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: "Please enter Grade",
+            },
+          ]}
+        >
+
+          <Input
+
+            onKeyPress={(event) => {
+              if (checkNumbervalue(event)) {
+                event.preventDefault();
+              }
+            }}
+            type="text"
+
+            defaultValue={gra}
+            onChange={(e) => setGra(e.target.value)}
+          />
+        </Form.Item>
+
       </Modal>
       <Modal
         open={editGrade}
@@ -390,11 +501,11 @@ const Designation = () => {
         <Form>
           <FormItem
             label="Configuration for Grade::"
-            labelCol={{offset:6}}
+            labelCol={{ offset: 6 }}
             // wrapperCol={{span:12,offset:10}}
-            style={{marginBottom:"0px"}}
+            style={{ marginBottom: "0px" }}
           >
-            <Switch />
+            <Switch onChange={handleAddColumn} />
           </FormItem>
         </Form>
       </Modal>

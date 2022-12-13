@@ -440,11 +440,11 @@ function AttendanceLog(props) {
     return !current.isBetween(dateOfJoining, new Date());
   };
 
-  const disabledDatetwo = (current) => {
-    return current.isBefore(dateOfJoining);
-    // ||
-    // current.isAfter(moment(dateOfJoining).add(2, "months"))
-  };
+  // const disabledDatetwo = (current) => {
+  //   return current.isBefore(dateOfJoining);
+  //   // ||
+  //   // current.isAfter(moment(dateOfJoining).add(2, "months"))
+  // };
 
   const workingdays = [
     "Monday",
@@ -719,7 +719,7 @@ function AttendanceLog(props) {
                     }}
                     allowClear
                     onChange={onHrDateFilter}
-                    disabledDate={disabledDatetwo}
+                    disabledDate={disabledDate}
                   />
                 </div>
                 <Table

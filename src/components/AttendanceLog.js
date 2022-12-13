@@ -211,6 +211,7 @@ function AttendanceLog(props) {
     form.resetFields();
     if (!isHr) {
       if (activetab == "1") {
+        
         setSelectemp({ id: currentUser.uid });
         getEmpDetails(currentUser.uid, [
           moment().subtract(30, "days"),
@@ -450,14 +451,19 @@ function AttendanceLog(props) {
     }
   };
 
-  // const disabledDate = (current) => {
-  //   return current.month() != moment().month();
-  // };s
-
   const disabledDate = (current) => {
     return (
-      current.isBefore(dateOfJoining) ||
-      current.isAfter(moment(dateOfJoining).add(2, "months"))
+      current.isBefore(dateOfJoining)
+      // ||
+      // current.isAfter(moment(dateOfJoining).add(2, "months"))
+    );
+  };
+  
+  const disabledDatetwo = (current) => {
+    return (
+      current.isBefore(dateOfJoining)
+      // ||
+      // current.isAfter(moment(dateOfJoining).add(2, "months"))
     );
   };
 
@@ -741,7 +747,7 @@ function AttendanceLog(props) {
                     }}
                     allowClear
                     onChange={onHrDateFilter}
-                    disabledDate={disabledDate}
+                    disabledDate={disabledDatetwo}
                   />
                 </div>
                 <Table

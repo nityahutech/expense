@@ -121,46 +121,68 @@ const ApprovalConfig = () => {
     form.setFieldValue("selectemp", names);
   }, [form, editEmployeeDetails]);
   console.log("numApprovers:: ", numApprovers);
+
   const hasSelected = selectedRowKeys.length > 0;
+
+  const onSearch = (value) => {
+    console.log("search:", value);
+  };
+
   return (
     <>
       <Card
         title={
-          <>
-            <Input
-              className="searchBar"
-              placeholder="Search"
-              prefix={<SearchOutlined />}
-              onChange={(e) => {
-                const search = e.target.value;
-                setValue(search);
-                const filteredData = empData.filter((emp) =>
-                  emp.name.toLowerCase().includes(search.toLowerCase())
-                );
-                setFilterEmployees(filteredData);
-              }}
-            />
-            <Select
-              className="selectOption"
-              defaultValue="Trainee"
-              placeholder="Filter by Name"
-              style={{ marginLeft: "10px" }}
-              options={[
-                {
-                  value: "Trainee",
-                  label: "Trainee",
-                },
-                {
-                  value: "Trainee Software Developer",
-                  label: "Trainee Software Developer",
-                },
-                {
-                  value: "Junior Software Developer",
-                  label: "Junior Software Developer",
-                },
-              ]}
-            />
-          </>
+          <Row gutter={[24, 8]}>
+            <Col xs={24} sm={22} md={5}>
+              <Input
+                className="searchBar"
+                placeholder="Search"
+                prefix={<SearchOutlined />}
+                onChange={(e) => {
+                  const search = e.target.value;
+                  setValue(search);
+                  const filteredData = empData.filter((emp) =>
+                    emp.name.toLowerCase().includes(search.toLowerCase())
+                  );
+                  setFilterEmployees(filteredData);
+                }}
+              />
+            </Col>
+            <Col xs={24} sm={22} md={5}>
+              <Select
+                className="selectOption"
+                // defaultValue="Trainee"
+                placeholder="Filter by Name"
+                style={{ marginLeft: "10px" }}
+                onChange={(e) => {
+                  // const select = u.target.value;
+                  // setValue(select);
+                  const selectedData = empData.filter((emp) =>
+                    emp.designation.includes(e)
+                  );
+                  setFilterEmployees(selectedData);
+                  console.log(selectedData);
+                }}
+                showSearch
+                onSearch={onSearch}
+                options={[
+                  {
+                    value: "Trainee",
+                    label: "Trainee",
+                  },
+                  {
+                    value: "Trainee Software Developer",
+                    label: "Trainee Software Developer",
+                  },
+                  {
+                    value: "Junior Software Developer",
+                    label: "Junior Software Developer",
+                  },
+                ]}
+              />
+            </Col>
+            <Col xs={24} sm={22} md={14}></Col>
+          </Row>
         }
         extra={
           <>
@@ -182,13 +204,22 @@ const ApprovalConfig = () => {
         }
         style={{ borderRadius: "10px" }}
       >
-        <Table
-          rowSelection={rowSelection}
-          columns={columns}
-          dataSource={filterEmployees}
-          pagination={false}
-        />
+        <div
+          className="approvalConfig"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Table
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={filterEmployees}
+            pagination={false}
+          />
+        </div>
       </Card>
+
       <Modal open={isModalOpen} onOk={form.submit()} onCancel={handleCancel}>
         <Form
           form={form}

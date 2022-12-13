@@ -229,6 +229,13 @@ margin: 10px 0;
       width: 220px;
     }
 
+    @media only screen and (max-width: 600px){
+      .approvalConfig{
+    overflow-x: scroll;
+      }
+    }
+    
+
 /* .sickLeave:focus{
 border-left: 4px solid #0093FF;
 } */

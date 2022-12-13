@@ -574,7 +574,7 @@ const Statutory = () => {
                   >
               {activeList.map((rec, i) => (
                 <div>
-                      <Row gutter={[20, 8]}>
+                      <Row gutter={[16, 16]}>
                         <Col xs={22} sm={15} md={6}>
                           <div className="div-discription">Name</div>
                           {editPerson[i] === false ? (
@@ -604,7 +604,7 @@ const Statutory = () => {
                             </FormItem>
                           )}
                         </Col>
-                        <Col xs={22} sm={15} md={8}>
+                        <Col xs={22} sm={15} md={9}>
                           <div className="div-discription">Email ID</div>
                           {editPerson[i] === false ? (
                             <div>{rec?.mailid ? rec.mailid : "-"}</div>
@@ -632,144 +632,152 @@ const Statutory = () => {
                             </FormItem>
                           )}
                         </Col>
-                        {active != "secretary" ?(<Col xs={22} sm={15} md={4}>
-                          <div className="div-discription">{active == "director" ? "DIN" : "Type"}</div>
-                          {editPerson[i] === false ? (
-                            <div>
-                              {active == "director" ? rec?.din ? rec.din : "-" : rec?.type ? rec.type : "-" }
-                            </div>
-                          ) : (
-                            <FormItem
-                              name={active == "director" ? "din" : "type"}
-                              initialValue={active == "director" ? rec.din : rec.type}
-                              rules={[
-                                {
-                                  required: true,
-                                  message: "Please Enter",
-                                },
-                              ]}
-                            >
-                              {active == "director" ? (
+                        {active != "secretary" ?(
+                          <Col xs={22} sm={15} md={4}>
+                            <div className="div-discription">{active == "director" ? "DIN" : "Type"}</div>
+                            {editPerson[i] === false ? (
+                              <div>
+                                {active == "director" ? rec?.din ? rec.din : "-" : rec?.type ? rec.type : "-" }
+                              </div>
+                            ) : (
+                              <FormItem
+                                name={active == "director" ? "din" : "type"}
+                                initialValue={active == "director" ? rec.din : rec.type}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please Enter",
+                                  },
+                                ]}
+                              >
+                                {active == "director" ? (
+                                  <Input
+                                  bordered={false}
+                                  maxLength={25}
+                                  style={{
+                                    width: "100%",
+                                    borderBottom: "1px solid #ccc ",
+                                    paddingLeft: "0px",
+                                    marginTop: "10px",
+                                  }}
+                                />
+                                ) : (
+                                  <Select
+                                          value={rec.type}
+                                          style={{
+                                            width: "100%",
+                                            borderBottom: "1px solid #ccc ",
+                                            paddingLeft: "0px",
+                                            marginTop: "5px",
+                                          }}
+                                          bordered={false}
+                                          options={[
+                                            {
+                                              value: "Internal",
+                                              label: "Internal",
+                                            },
+                                            {
+                                              value: "Statutory",
+                                              label: "Statutory",
+                                            },
+                                          ]}
+                                        />
+                                )}
+                              </FormItem>
+                            )}
+                          </Col>
+                        ) : null}
+                          <Col xs={22} sm={15} md={4}>
+                            <div className="div-discription">Phone Number</div>
+                            {editPerson[i] === false ? (
+                              <div>{rec?.phone ? rec.phone : "-"}</div>
+                            ) : (
+                              <FormItem
+                                name="phone"
+                                initialValue={rec.phone}
+                                rules={[
+                                  {
+                                    pattern: /^[0-9\s]*$/,
+                                    required: true,
+                                    message: "Please Enter Phone No",
+                                  },
+                                ]}
+                              >
                                 <Input
-                                bordered={false}
-                                maxLength={25}
-                                style={{
-                                  width: "100%",
-                                  borderBottom: "1px solid #ccc ",
-                                  paddingLeft: "0px",
-                                  marginTop: "10px",
-                                }}
-                              />
-                              ) : (
-                                <Select
-                                        value={rec.type}
-                                        style={{
-                                          width: "100%",
-                                          borderBottom: "1px solid #ccc ",
-                                          paddingLeft: "0px",
-                                          marginTop: "5px",
-                                        }}
-                                        bordered={false}
-                                        options={[
-                                          {
-                                            value: "Internal",
-                                            label: "Internal",
-                                          },
-                                          {
-                                            value: "Statutory",
-                                            label: "Statutory",
-                                          },
-                                        ]}
-                                      />
-                              )}
-                            </FormItem>
-                          )}
-                        </Col>) : null}
-                        <Col xs={22} sm={15} md={4}>
-                          <div className="div-discription">Phone Number</div>
-                          {editPerson[i] === false ? (
-                            <div>{rec?.phone ? rec.phone : "-"}</div>
-                          ) : (
-                            <FormItem
-                              name="phone"
-                              initialValue={rec.phone}
-                              rules={[
-                                {
-                                  pattern: /^[0-9\s]*$/,
-                                  required: true,
-                                  message: "Please Enter Phone No",
-                                },
-                              ]}
-                            >
-                              <Input
-                                maxLength={11}
-                                bordered={false}
-                                style={{
-                                  width: "100%",
-                                  borderBottom: "1px solid #ccc ",
-                                  paddingLeft: "0px",
-                                  marginTop: "10px",
-                                }}
-                              />
-                            </FormItem>
-                          )}
-                        </Col>
-                        {editPerson[i] == false ?(<Col xs={22} sm={15} md={1}
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "end",
-                            }}
-                          >
-                            <Button
+                                  maxLength={11}
+                                  bordered={false}
+                                  style={{
+                                    width: "100%",
+                                    borderBottom: "1px solid #ccc ",
+                                    paddingLeft: "0px",
+                                    marginTop: "10px",
+                                  }}
+                                />
+                              </FormItem>
+                            )}
+                          </Col>
+                        {editPerson[i] == false ?(
+                          <Col xs={22} sm={15} md={1}
                               style={{
-                                width: "10px",
-                                border: "none",
                                 display: "flex",
                                 justifyContent: "center",
-                                alignItems: "end",
-                              }}   
-                              onClick={() => {
-                                let array = [...editPerson].fill(false);
-                                setEditPerson([...array]);
-                                const timer = setTimeout(() => {
-                                  editForm.resetFields();
-                                  array[i] = true;
-                                  setEditPerson(array);
-                                }, 200)
-                                return () => clearTimeout(timer);
+                                alignItems: "center",
                               }}
                             >
-                              <EditFilled />
-                            </Button>
-                        </Col>) :(
-                        <Col xs={22} sm={15} md={1}
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "end",
-                            }}
-                          >
-                            <Button
+                              <Button
+                                style={{
+                                  width: "10px",
+                                  border: "none",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}   
+                                onClick={() => {
+                                  let array = [...editPerson].fill(false);
+                                  setEditPerson([...array]);
+                                  const timer = setTimeout(() => {
+                                    editForm.resetFields();
+                                    array[i] = true;
+                                    setEditPerson(array);
+                                  }, 200)
+                                  return () => clearTimeout(timer);
+                                }}
+                              >
+                                <EditFilled />
+                              </Button>
+                          </Col>
+                        ) :(
+                          <Col xs={22} sm={15} md={1}
                               style={{
-                                width: "10px",
-                                border: "none",
                                 display: "flex",
                                 justifyContent: "center",
-                                alignItems: "end",
-                              }}
-                              onClick={() => {
-                                onDelete(rec);
+                                alignItems: "center",
                               }}
                             >
-                              <DeleteOutlined />
-                            </Button>
-                        </Col>)}
+                              <Button
+                                style={{
+                                  width: "10px",
+                                  border: "none",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                                onClick={() => {
+                                  onDelete(rec);
+                                }}
+                              >
+                                <DeleteOutlined />
+                              </Button>
+                          </Col>
+                        )}
                       </Row>
                       <Divider />
                       </div>
               ))}
-              { editPerson.includes(true) ? (
+              { editPerson.includes(true) ? (<>
+                      <Button
+                          type="text"
+                      >CANCEL</Button>
                       <Button
                         type="primary"
                         onClick={() => editForm.submit()}
@@ -778,6 +786,7 @@ const Statutory = () => {
                         <PlusCircleOutlined />
                         Save
                       </Button>
+                      </>
               ) : addPerson === false ? (
                       <Button
                         type="primary"
@@ -973,6 +982,7 @@ const Statutory = () => {
           </Col>
         </Row>
       </div>
+
       <div
         className="personalCardDiv"
         style={{
@@ -1304,14 +1314,22 @@ const Statutory = () => {
                     </div>
                 ))}
                 { editBank.includes(true) ? (
-                  <Button
-                    type="primary"
-                    onClick={() => editBankForm.submit()}
-                    style={{ background: "#1963A6" }}
-                  >
-                    <PlusCircleOutlined />
-                    Save
-                  </Button>
+                  <>
+                    <Button
+                      type="text"
+                      onClick={() => onEditBank.submit()}
+                    >
+                      CANCEL
+                    </Button>
+                    <Button
+                      type="primary"
+                      onClick={() => editBankForm.submit()}
+                      style={{ background: "#1963A6" }}
+                    >
+                      <PlusCircleOutlined />
+                      Save
+                    </Button>
+                  </>
                 ) : addBank === false ? (
                       <Button
                         type="primary"

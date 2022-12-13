@@ -26,6 +26,7 @@ import {
   CloseOutlined,
   CheckOutlined,
   PlusCircleOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import LeaveContext from "../contexts/LeaveContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
@@ -74,6 +75,7 @@ const Leave = (props) => {
   const [editedLeave, setEditedLeave] = useState({}); //leave record to be edited
   const [requests, setRequests] = useState([]); //leave requests for managers in array of objects
   const [allRequests, setAllRequests] = useState([]); //leave requests for hr in array of objects
+  const [filterRequest,setFilterRequest] = useState([])
   const [dateSelected, setDateSelected] = useState([]);
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
@@ -290,6 +292,8 @@ const Leave = (props) => {
     getDateFormatted(d);
     getDateSorted(d);
     setLeaves(d);
+    setFilterRequest(d)
+    
     setLoading(false);
     let tempDays = temp ? temp : { ...totaldays };
     let days = await LeaveContext.getLeaveDays(d, tempDays);
@@ -328,6 +332,7 @@ const Leave = (props) => {
     getDateFormatted(req);
     getDateSorted(req);
     setAllRequests(req);
+    // setFilterRequest(req)
   };
   const onDeleteLeave = (record) => {
     Modal.confirm({
@@ -554,6 +559,26 @@ const Leave = (props) => {
       }
     }
   };
+  const searchChange=(e)=>{
+    let search = e.target.value
+    if (search){
+      let result = allRequests.filter((req)=>
+        req.name.toLowerCase().includes(search.toLowerCase())||
+        req.nature.toLowerCase().includes(search.toLowerCase())||
+        req.date.includes(search)
+
+      )
+      const reqestALL = [...result]
+      setFilterRequest(reqestALL)
+      // console.log(reqestALL);
+      console.log(allRequests);
+      console.log(requests);
+      
+    }else{
+      setFilterRequest(allRequests)
+    }
+  }
+
   const onLeaveNatureChange = (value) => {
     if (value == "Optional Leave") {
       if (dateSelected.length == 1) {
@@ -931,7 +956,7 @@ const Leave = (props) => {
             }}
           >
             <Tabs.TabPane tab="Leave Request" key="1">
-              <Row
+              {/* <Row
                 style={{
                   display: "flex",
                   flexDirection: "row",
@@ -981,66 +1006,9 @@ const Leave = (props) => {
                     />
                   </div>
                 </Col>
-              </Row>
-
-              {/* <Row
-                gutter={[16, 16]}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  backgroundColor: "white",
-                  borderRadius: "10px",
-                  padding: "10px",
-                  marginTop: "10px",
-                }}
-              >
-                <Col span={6}><RangePicker /></Col>
-                <Col span={6}>
-                  <Search
-                    placeholder="input search text"
-                    onSearch={onSearch}
-                  />
-                </Col>
-                <Col span={6}>
-                  <Form.Item
-                    label="Nature of Leave::"
-                    style={{ paddingBottom: "0px" }}
-                  >
-                    <Select
-                      defaultValue="Loss Of Pay"
-                      options={[
-                        {
-                          value: 'CL',
-                          label: 'CL',
-                        },
-                        {
-                          value: 'EL',
-                          label: 'EL',
-                        },
-                      ]}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item
-                    label="Nature of Leave::"
-                  >
-                    <Select
-                      defaultValue="Loss Of Pay"
-                      options={[
-                        {
-                          value: 'CL',
-                          label: 'CL',
-                        },
-                        {
-                          value: 'EL',
-                          label: 'EL',
-                        },
-                      ]}
-                    />
-                  </Form.Item>
-                </Col>
               </Row> */}
+
+              
 
               <Row
                 style={{
@@ -1068,6 +1036,69 @@ const Leave = (props) => {
                   <h3>All Requests</h3>
                 </Col>
 
+                <Col span={24}>
+                  <Row
+                  gutter={[16, 16]}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    borderRadius: "10px",
+                    padding: "10px",
+                    marginTop: "10px",
+                  }}
+                >
+                  {/* <Col span={6}><RangePicker /></Col> */}
+                  <Col span={6}>
+                  <Input
+                    className="searchBar"
+                    placeholder="Search"
+                    prefix={<SearchOutlined />}
+                    onChange={searchChange }
+                  />
+                  </Col>
+                  {/* <Col span={6}>
+                    <Form.Item
+                      label="Nature of Leave::"
+                      style={{ paddingBottom: "0px" }}
+                    >
+                      <Select
+                        defaultValue="Loss Of Pay"
+                        options={[
+                          {
+                            value: 'CL',
+                            label: 'CL',
+                          },
+                          {
+                            value: 'EL',
+                            label: 'EL',
+                          },
+                        ]}
+                      />
+                    </Form.Item>
+                  </Col> */}
+                  {/* <Col span={6}>
+                    <Form.Item
+                      label="Nature of Leave::"
+                    >
+                      <Select
+                        defaultValue="Loss Of Pay"
+                        options={[
+                          {
+                            value: 'CL',
+                            label: 'CL',
+                          },
+                          {
+                            value: 'EL',
+                            label: 'EL',
+                          },
+                        ]}
+                      />
+                    </Form.Item>
+                  </Col> */}
+                  </Row>
+                </Col>
+
                 <Col
                   xl={24}
                   lg={24}
@@ -1083,7 +1114,7 @@ const Leave = (props) => {
                     <Table
                       className="leaveTable"
                       columns={reqColumns}
-                      dataSource={allRequests}
+                      dataSource={filterRequest}
                       pagination={{
                         position: ["bottomCenter"],
                       }}
@@ -1093,8 +1124,8 @@ const Leave = (props) => {
                   </div>
                 </Col>
               </Row>
-              {/* 
-              <Row
+              
+              {/* <Row
                 style={{
                   display: "flex",
                   flexDirection: "row",

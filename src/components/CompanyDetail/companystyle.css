@@ -297,3 +297,7 @@ color: #ffffff;
   font-size: 18px;
 line-height: 25px;
 }
+
+.pathSymbol {
+  cursor: pointer;
+}

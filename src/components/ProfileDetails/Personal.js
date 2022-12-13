@@ -121,6 +121,11 @@ function Personal() {
 })
     getData();
   }, []);
+
+  useEffect(() => {
+    setIsBigFile(false);
+  });
+
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     console.log("storage", data);

@@ -12,7 +12,7 @@ import {
   Radio,
   Switch,
   TimePicker,
-  InputNumber
+  InputNumber,
 } from "antd";
 import "../style/AttendanceLog.css";
 import { SearchOutlined } from "@ant-design/icons";
@@ -22,6 +22,21 @@ import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import { showNotification } from "../contexts/CreateContext";
+
+const layout = {
+  labelCol: {
+    span: 8,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+};
+const tailLayout = {
+  wrapperCol: {
+    offset: 8,
+    span: 16,
+  },
+};
 
 function AttendanceLog(props) {
   const [allEmp, setallEmp] = useState([]);
@@ -135,7 +150,6 @@ function AttendanceLog(props) {
     form.resetFields();
     if (!isHr) {
       if (activetab == "1") {
-        
         setSelectemp({ id: currentUser.uid });
         getEmpDetails(currentUser.uid, [
           moment().subtract(30, "days"),
@@ -189,8 +203,8 @@ function AttendanceLog(props) {
     setHolidays(req);
   };
 
-  const getDateOfJoining = async () => {
-    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+  const getDateOfJoining = async (id) => {
+    let data = await EmpInfoContext.getEduDetails(id || currentUser.uid);
     console.log("data", data);
     var doj = moment(data.doj, "DD-MM-YYYY");
     console.log("data", doj);
@@ -376,20 +390,14 @@ function AttendanceLog(props) {
   };
 
   const disabledDate = (current) => {
-    return (
-      current.isBefore(dateOfJoining)
-      // ||
-      // current.isAfter(moment(dateOfJoining).add(2, "months"))
-    );
+    return !current.isBetween(dateOfJoining, new Date());
   };
-  
-  const disabledDatetwo = (current) => {
-    return (
-      current.isBefore(dateOfJoining)
-      // ||
-      // current.isAfter(moment(dateOfJoining).add(2, "months"))
-    );
-  };
+
+  // const disabledDatetwo = (current) => {
+  //   return current.isBefore(dateOfJoining);
+  //   // ||
+  //   // current.isAfter(moment(dateOfJoining).add(2, "months"))
+  // };
 
   const workingdays = [
     {days: "Monday"},
@@ -402,7 +410,6 @@ function AttendanceLog(props) {
   ];
 
   const handleRadiochange = (value, data) => {
-
     console.log(value);
     console.log(data);
     let tempSelectedDay = {
@@ -410,7 +417,7 @@ function AttendanceLog(props) {
       [data.days]: value,
     }
     // console.log('ddddd', selectedDay)
-    handleFinish({ selectedDay: tempSelectedDay })
+    handleFinish({ selectedDay: tempSelectedDay });
   };
 
   console.log(configurations.selectedDay);
@@ -433,11 +440,7 @@ function AttendanceLog(props) {
           // value={value4}
 
           >
-            <Radio
-              className="radio"
-              value={`fullday`}
-
-            />
+            <Radio className="radio" value={`fullday`} />
           </Radio.Group>
         );
       },
@@ -473,10 +476,7 @@ function AttendanceLog(props) {
             onChange={(e) => handleRadiochange(e.target.value, data)}
             value={configurations.selectedDay[data.days]}
           >
-            <Radio
-              className="radio"
-              value={`dayoff`}
-            />
+            <Radio className="radio" value={`dayoff`} />
           </Radio.Group>
         );
       },
@@ -529,9 +529,9 @@ function AttendanceLog(props) {
                 tab="Add Report"
                 key="2"
                 className="reportTabs"
-              // onClick={() => {
-              //   setIsModalOpen(true);
-              // }}
+                // onClick={() => {
+                //   setIsModalOpen(true);
+                // }}
               >
                 {/* <Button type="primary" onClick={showModal}>
               Open Modal
@@ -551,12 +551,7 @@ function AttendanceLog(props) {
               }
             > */}
                 <Form
-                  labelCol={{
-                    span: 8,
-                  }}
-                  wrapperCol={{
-                    span: 16,
-                  }}
+                  {...layout}
                   form={form}
                   name="control-hooks"
                   onFinish={onFinish}
@@ -575,7 +570,6 @@ function AttendanceLog(props) {
                     <DatePicker
                       format={"DD-MM-YYYY"}
                       style={{ width: "50%" }}
-
                     />
                   </Form.Item>
                   <Form.Item
@@ -602,7 +596,7 @@ function AttendanceLog(props) {
                   >
                     <Input className="name" />
                   </Form.Item>
-                  <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                  <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit" className="submit">
                       Submit
                     </Button>
@@ -626,7 +620,7 @@ function AttendanceLog(props) {
                   placeholder="Search"
                   prefix={<SearchOutlined />}
                   onChange={searchChange}
-                // style={{ width: "95%" }}
+                  // style={{ width: "95%" }}
                 />
                 <Table
                   //   rowSelection={{
@@ -636,12 +630,16 @@ function AttendanceLog(props) {
                   className="DailyTable"
                   onRow={(record, rowIndex) => {
                     return {
-                      onClick: (event) => {
+                      onClick: async (event) => {
                         setSelectemp({ ...record });
-                        getEmpDetails(record.id, [
+                        await getEmpDetails(record.id, [
                           moment().subtract(30, "days"),
                           moment(),
                         ]);
+                        await getDateOfJoining(record.id);
+                        // const doj = moment(record.doj, dateFormat);
+                        console.log("record", record);
+                        // setDateOfJoining(doj);
                         setActivetab("2");
                       }, // click row
                     };
@@ -667,7 +665,7 @@ function AttendanceLog(props) {
                     }}
                     allowClear
                     onChange={onHrDateFilter}
-                    disabledDate={disabledDatetwo}
+                    disabledDate={disabledDate}
                   />
                 </div>
                 <Table
@@ -679,9 +677,7 @@ function AttendanceLog(props) {
                 />
               </Tabs.TabPane>
 
-
               {/* //---------------------------------------------------------- */}
-
 
               <Tabs.TabPane tab="Configure" key="3">
                 <div style={{ display: "flex", justifyContent: "center" }}>

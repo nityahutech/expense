@@ -1,15 +1,15 @@
 .ant-layout-sider-zero-width-trigger {
   top: 0;
   right: 10;
-  background-color: #05445e;
+  background-color: #045477;
 }
 
 ul.ant-menu-sub.ant-menu-inline {
-  background: #05445e;
+  background: #045477;
 }
 
 ul.ant-menu {
-  background: #05445e;
+  background: #045477;
 }
 
 .ant-menu-title-content {
@@ -30,11 +30,11 @@ ul.ant-menu {
 
 .dot {
   transform: scale(0.5);
-  background-color: #1963a6;
+  background-color: #045477;
 }
 
 .logos {
-  background-color: #1963a6;
+  background-color: #045477;
 }
 
 .ant-menu-submenu-arrow {
@@ -43,16 +43,16 @@ ul.ant-menu {
 }
 
 .collapse {
-  background-color: #1963a6;
+  background-color: #045477;
   height: 20px;
 }
 
 ul.ant-menu .ant-menu-sub .ant-menu-vertical {
-  background-color: #1963a6;
+  background-color: #045477;
 }
 
 .ant-menu-submenu-popup > .ant-menu {
-  background-color: #1963a6;
+  background-color: #045477;
 }
 
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
@@ -60,7 +60,7 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
 }
 
 .collapse {
-  background-color: #1963a6;
+  background-color: #045477;
   height: 20px;
 }
 
@@ -86,7 +86,7 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
   background-color: #f4f4f4;
 }
 .ant-layout.ant-layout-has-sider {
-  background-color: #1963a6;
+  background-color: #045477;
 }
 
 .leaveletter {
@@ -130,7 +130,7 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
 
 /* Handle */
 .sidelayout-menu::-webkit-scrollbar-thumb {
-  /* background: #05445e; */
+  /* background: #045477; */
   border-radius: 10px;
   width: 100px;
 }

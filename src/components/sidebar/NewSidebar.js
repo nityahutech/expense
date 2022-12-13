@@ -5,7 +5,7 @@ import dot from "../../images/dot.png";
 import dashIcon from "../../images/Dashboard.png";
 import empIcon from "../../images/employees.png";
 import userIcon from "../../images/user.png";
-import logo from "../../images/logo29.1.png";
+import logo from "../../images/Group 1.png";
 import appraisalIcon from "../../images/appraisal.png";
 import Organization from "../../images/Organization.png";
 import CompanyProfile from "../../images/Companyprofile.png";
@@ -31,7 +31,7 @@ const NewSidebar = (props) => {
         className="sidelayoutSider"
         breakpoint="lg"
         style={{
-          backgroundColor: "#05445e",
+          backgroundColor: "#045477",
           display: "flex",
           flexDirection: "column",
         }}
@@ -61,7 +61,7 @@ const NewSidebar = (props) => {
               className="sidebarTittle"
               style={{
                 height: "auto",
-                backgroundColor: "",
+                backgroundColor: "#045477",
                 margin: "0px",
                 padding: "0px",
               }}

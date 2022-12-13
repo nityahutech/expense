@@ -85,8 +85,8 @@ function Personal() {
     }
     const fileUploaded = event.target.files[0];
     getBase64(fileUploaded, (url) => {
-        // setLoading(false);
-        setImageUrl(url);
+      // setLoading(false);
+      setImageUrl(url);
     });
     checkFileSize(fileUploaded.size, fileUploaded);
   };
@@ -119,10 +119,10 @@ function Personal() {
   }, []);
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    console.log("storage", data)
+    console.log("storage", data);
     setData(data);
-    setFileName(data.profilePic)
-    setImageUrl(data.profilePic)
+    setFileName(data.profilePic);
+    setImageUrl(data.profilePic);
     setDob(data?.dob ? data.dob : null);
     setLccs(data?.lccs ? data.lccs : null);
     setScrs(data?.scrs ? data.scrs : null);
@@ -141,37 +141,97 @@ function Personal() {
       </Select>
     </Form.Item>
   );
-  
+
   function onReset() {
     setIsBigFile(false);
     setFileName(null);
-    setImageUrl("")
+    setImageUrl("");
   }
   const layoutName = {
-    labelCol: { xs: { span: 24 }, sm: { span: 5 }, md: { span: 4 }, lg: { span: 3 }, xl: { span: 3} },
-    wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
-  }
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 5 },
+      md: { span: 4 },
+      lg: { span: 3 },
+      xl: { span: 3 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 24 },
+      md: { span: 24 },
+      lg: { span: 24 },
+      xl: { span: 24 },
+    },
+  };
   const layoutDOB = {
-    labelCol: { xs: { span: 24 }, sm: { span: 12 }, md: { span: 12 }, lg: { span: 10 }, xl: { span: 8} },
-    wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
-  }
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 12 },
+      md: { span: 12 },
+      lg: { span: 10 },
+      xl: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 24 },
+      md: { span: 24 },
+      lg: { span: 24 },
+      xl: { span: 24 },
+    },
+  };
   const layoutGender = {
-    labelCol: { xs: { span: 24 }, sm: { span: 12 }, md: { span: 6 }, lg: { span: 10 }, xl: { span: 10} },
-    wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
-  }
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 12 },
+      md: { span: 6 },
+      lg: { span: 10 },
+      xl: { span: 10 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 24 },
+      md: { span: 24 },
+      lg: { span: 24 },
+      xl: { span: 24 },
+    },
+  };
   const layoutBlood = {
-    labelCol: { xs: { span: 24 }, sm: { span: 12 }, md: { span: 12 }, lg: { span: 10 }, xl: { span: 8} },
-    wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
-  }
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 12 },
+      md: { span: 12 },
+      lg: { span: 10 },
+      xl: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 24 },
+      md: { span: 24 },
+      lg: { span: 24 },
+      xl: { span: 24 },
+    },
+  };
   const layoutMaritalStatus = {
-    labelCol: { xs: { span: 24 }, sm: { span: 12 }, md: { span: 12, }, lg: { span: 10, }, xl: { span:10, } },
-    wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 24 }, lg: { span: 24 }, xl: { span: 24} }
-  }
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 12 },
+      md: { span: 12 },
+      lg: { span: 10 },
+      xl: { span: 10 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 24 },
+      md: { span: 24 },
+      lg: { span: 24 },
+      xl: { span: 24 },
+    },
+  };
 
   const imgDiv = () => {
     if (fileName == "" || fileName == null) {
       return editContent == false ? (
-        <div 
+        <div
           style={{
             width: "150px",
             height: "170px",
@@ -211,24 +271,27 @@ function Personal() {
       );
     } else {
       return (
-        <div className={editContent === true ? "hoverImgCont": null} style={{position: "relative"}}>
+        <div
+          className={editContent === true ? "hoverImgCont" : null}
+          style={{ position: "relative" }}
+        >
           <img
             src={imageUrl}
             style={{
               width: "150px",
               height: "170px",
-              border: "1px solid #05445e"
+              border: "1px solid #05445e",
             }}
           />
-          {editContent === true ?(
+          {editContent === true ? (
             <div className="overlay">
-              <DeleteOutlined className="hoverIcon" onClick={onReset}/>
+              <DeleteOutlined className="hoverIcon" onClick={onReset} />
             </div>
-          ): null}
+          ) : null}
         </div>
-      )
+      );
     }
-  }
+  };
 
   return (
     <>
@@ -271,46 +334,55 @@ function Personal() {
                 }}
               >
                 <Row gutter={[16, 16]}>
-                  <Col xs={24} sm={24} md={7} lg={6} xl={6} xxl={6}
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={7}
+                    lg={6}
+                    xl={6}
+                    xxl={6}
                     style={{
-                        display: "flex",
-                        alignItems: "start",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                      }}>
-                      {isBigFile
-                        ? message.error("File size must be less than 200Kb.")
-                        : ""}
-                      {imgDiv()}
+                      display: "flex",
+                      alignItems: "start",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                    }}
+                  >
+                    {isBigFile
+                      ? message.error("File size must be less than 200Kb.")
+                      : ""}
+                    {imgDiv()}
                   </Col>
                   <Col xs={24} sm={24} md={17} lg={18} xl={18} xxl={18}>
                     {editContent === false ? (
-                    <>
-                      <div
-                        style={{
-                          height:"100%",
-                          width:"100%",
-                          // display: "flex",
-                          // alignItems: 'flex-start',
-                          
-                          // justifyContent: "flex-start",
-                          // flexDirection: "column",
-                        }}
-                      >
-                        <div 
+                      <>
+                        <div
                           style={{
-                            fontWeight:"lighter",
-                            fontSize:"27px",
-                            // marginTop:"-12px",
-                            color:"black"}}
-                            >{data ? data.name : "-"}
+                            height: "100%",
+                            width: "100%",
+                            // display: "flex",
+                            // alignItems: 'flex-start',
+
+                            // justifyContent: "flex-start",
+                            // flexDirection: "column",
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontWeight: "lighter",
+                              fontSize: "27px",
+                              // marginTop:"-12px",
+                              color: "black",
+                            }}
+                          >
+                            {data ? data.name : "-"}
                             <Button
                               className="personal"
                               type="text"
                               style={{
                                 color: "black",
                                 display: "none",
-                                paddingLeft:"5px",
+                                paddingLeft: "5px",
                                 position: "absolute",
                                 right: 1,
                                 top: 1,
@@ -319,363 +391,423 @@ function Personal() {
                             >
                               <EditFilled />
                             </Button>
-                            <Divider style={{borderTop:"1.5px solid #05445e", marginTop:"0px",marginBottom:"15px"}}/>
-                        </div>
-                        <Row>
-                        <Col span={24}>
-                          <Row gutter={[16,16]}>
-                          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-                            <div>
-                              <div
-                                style={{
-                                  fontWeight: 600,
-                                  lineHeight: "18px",
-                                  color: "#07182b",
-                                  fontSize: "15px",
-                                  fontFamily: "Open Sans,sans-serif",
-                                }}
-                              >
-                                Date of Birth
-                              </div>
-                              {editContent === false ? (
-                                <div>{data?.dob ? data.dob : "-"}</div>
-                              ) : (
-                                <Form.Item
-                                  initialValue={dob ? moment(dob, "DD-MM-YYYY") : null}
-                                  name="dob"
-                                  rules={[
-                                    {
-                                      required: false,
-                                      message: "Please Choose a Date",
-                                    },
-                                  ]}
+                            <Divider
+                              style={{
+                                borderTop: "1.5px solid #05445e",
+                                marginTop: "0px",
+                                marginBottom: "15px",
+                              }}
+                            />
+                          </div>
+                          <Row>
+                            <Col span={24}>
+                              <Row gutter={[16, 16]}>
+                                <Col
+                                  xs={24}
+                                  sm={24}
+                                  md={12}
+                                  lg={12}
+                                  xl={12}
+                                  xxl={12}
                                 >
-                                  {/* format={dateFormatList} */}
-                                  <DatePicker
-                                    style={{
-                                      marginTop: "10px",
-                                      width: "100%",
-                                    }}
-                                    // format={dateFormatList}
-                                    // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
-                                    onChange={(e) => {
-                                      setDob(e.format("DD-MM-YYYY"));
-                                    }}
-                                    //  disabledDate={disabledDate}
-                                    value={dob}
-                                    placeholder="Choose Date"
-                                  />
-                                </Form.Item>
-                              )}
-                            </div>
-                          </Col>
-                          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-                            <div>
-                              <div
-                                style={{
-                                  fontWeight: 600,
-                                  lineHeight: "18px",
-                                  color: "#07182b",
-                                  fontSize: "15px",
-                                  fontFamily: "Open Sans,sans-serif",
-                                }}
-                              >
-                                Gender
-                              </div>
-                              {editContent === false ? (
-                                <div>{data ? data.gender : null}</div>
-                              ) : (
-                                <Form.Item
-                                  name="gender"
-                                  initialValue={data.gender ? data.gender : "-"}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: "Please Choose Gender",
-                                    },
-                                  ]}
+                                  <div>
+                                    <div
+                                      style={{
+                                        fontWeight: 600,
+                                        lineHeight: "18px",
+                                        color: "#07182b",
+                                        fontSize: "15px",
+                                        fontFamily: "Open Sans,sans-serif",
+                                      }}
+                                    >
+                                      Date of Birth
+                                    </div>
+                                    {editContent === false ? (
+                                      <div>{data?.dob ? data.dob : "-"}</div>
+                                    ) : (
+                                      <Form.Item
+                                        initialValue={
+                                          dob ? moment(dob, "DD-MM-YYYY") : null
+                                        }
+                                        name="dob"
+                                        rules={[
+                                          {
+                                            required: false,
+                                            message: "Please Choose a Date",
+                                          },
+                                        ]}
+                                      >
+                                        {/* format={dateFormatList} */}
+                                        <DatePicker
+                                          style={{
+                                            marginTop: "10px",
+                                            width: "100%",
+                                          }}
+                                          // format={dateFormatList}
+                                          // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
+                                          onChange={(e) => {
+                                            setDob(e.format("DD-MM-YYYY"));
+                                          }}
+                                          //  disabledDate={disabledDate}
+                                          value={dob}
+                                          placeholder="Choose Date"
+                                        />
+                                      </Form.Item>
+                                    )}
+                                  </div>
+                                </Col>
+                                <Col
+                                  xs={24}
+                                  sm={24}
+                                  md={12}
+                                  lg={12}
+                                  xl={12}
+                                  xxl={12}
                                 >
-                                  <Select
-                                    placeholder="Select a Gender"
-                                    style={{
-                                      marginTop: "10px",
-                                      width: "100%",
-                                      borderBottom: "1px solid #ccc ",
-                                      paddingLeft: "0px",
-                                    }}
-                                    bordered={false}
-                                  >
-                                    <Option value="Male">Male</Option>
-                                    <Option value="Female">Female</Option>
-                                  </Select>
-                                </Form.Item>
-                              )}
-                            </div>
-                          </Col>
-                          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-                            <div>
-                              <div
-                                style={{
-                                  fontWeight: 600,
-                                  lineHeight: "18px",
-                                  color: "#07182b",
-                                  fontSize: "15px",
-                                  fontFamily: "Open Sans,sans-serif",
-                                }}
-                              >
-                                Blood Group
-                              </div>
-                              {editContent === false ? (
-                                <div>{data?.bloodGroup ? data.bloodGroup : "-"}</div>
-                              ) : (
-                                <Form.Item
-                                  initialValue={data ? data.bloodGroup : null}
-                                  name="bloodGroup"
-                                  rules={[
-                                    {
-                                      required: false,
-                                      message: "Please Choose Blood Groop",
-                                    },
-                                  ]}
+                                  <div>
+                                    <div
+                                      style={{
+                                        fontWeight: 600,
+                                        lineHeight: "18px",
+                                        color: "#07182b",
+                                        fontSize: "15px",
+                                        fontFamily: "Open Sans,sans-serif",
+                                      }}
+                                    >
+                                      Gender
+                                    </div>
+                                    {editContent === false ? (
+                                      <div>{data ? data.gender : null}</div>
+                                    ) : (
+                                      <Form.Item
+                                        name="gender"
+                                        initialValue={
+                                          data.gender ? data.gender : "-"
+                                        }
+                                        rules={[
+                                          {
+                                            required: true,
+                                            message: "Please Choose Gender",
+                                          },
+                                        ]}
+                                      >
+                                        <Select
+                                          placeholder="Select a Gender"
+                                          style={{
+                                            marginTop: "10px",
+                                            width: "100%",
+                                            borderBottom: "1px solid #ccc ",
+                                            paddingLeft: "0px",
+                                          }}
+                                          bordered={false}
+                                        >
+                                          <Option value="Male">Male</Option>
+                                          <Option value="Female">Female</Option>
+                                        </Select>
+                                      </Form.Item>
+                                    )}
+                                  </div>
+                                </Col>
+                                <Col
+                                  xs={24}
+                                  sm={24}
+                                  md={12}
+                                  lg={12}
+                                  xl={12}
+                                  xxl={12}
                                 >
-                                  <Select
-                                    placeholder="Select a Blood Group"
-                                    style={{
-                                      marginTop: "10px",
-                                      width: "100%",
-                                      borderBottom: "1px solid #ccc ",
-                                      paddingLeft: "0px",
-                                    }}
-                                    bordered={false}
-                                  >
-                                    <Option value="A+">A+</Option>
-                                    <Option value="A-">A-</Option>
-                                    <Option value="O+">O+</Option>
-                                    <Option value="O-">O-</Option>
-                                    <Option value="B+">B+</Option>
-                                    <Option value="B-">B-</Option>
-                                    <Option value="AB+">AB+</Option>
-                                    <Option value="AB-">AB-</Option>
-                                  </Select>
-                                </Form.Item>
-                              )}
-                            </div>
-                          </Col>
-                          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-                            <div>
-                              <div
-                                style={{
-                                  fontWeight: 600,
-                                  lineHeight: "18px",
-                                  color: "#07182b",
-                                  fontSize: "15px",
-                                  fontFamily: "Open Sans,sans-serif",
-                                }}
-                              >
-                                Marital Status
-                              </div>
-                              {editContent === false ? (
-                                <div>
-                                  {data?.maritalStatus ? data.maritalStatus : "-"}
-                                </div>
-                              ) : (
-                                <Form.Item
-                                  initialValue={data ? data.maritalStatus : null}
-                                  name="maritalStatus"
-                                  rules={[
-                                    {
-                                      required: false,
-                                      message: "Your Marrige Status",
-                                    },
-                                  ]}
+                                  <div>
+                                    <div
+                                      style={{
+                                        fontWeight: 600,
+                                        lineHeight: "18px",
+                                        color: "#07182b",
+                                        fontSize: "15px",
+                                        fontFamily: "Open Sans,sans-serif",
+                                      }}
+                                    >
+                                      Blood Group
+                                    </div>
+                                    {editContent === false ? (
+                                      <div>
+                                        {data?.bloodGroup
+                                          ? data.bloodGroup
+                                          : "-"}
+                                      </div>
+                                    ) : (
+                                      <Form.Item
+                                        initialValue={
+                                          data ? data.bloodGroup : null
+                                        }
+                                        name="bloodGroup"
+                                        rules={[
+                                          {
+                                            required: false,
+                                            message:
+                                              "Please Choose Blood Groop",
+                                          },
+                                        ]}
+                                      >
+                                        <Select
+                                          placeholder="Select a Blood Group"
+                                          style={{
+                                            marginTop: "10px",
+                                            width: "100%",
+                                            borderBottom: "1px solid #ccc ",
+                                            paddingLeft: "0px",
+                                          }}
+                                          bordered={false}
+                                        >
+                                          <Option value="A+">A+</Option>
+                                          <Option value="A-">A-</Option>
+                                          <Option value="O+">O+</Option>
+                                          <Option value="O-">O-</Option>
+                                          <Option value="B+">B+</Option>
+                                          <Option value="B-">B-</Option>
+                                          <Option value="AB+">AB+</Option>
+                                          <Option value="AB-">AB-</Option>
+                                        </Select>
+                                      </Form.Item>
+                                    )}
+                                  </div>
+                                </Col>
+                                <Col
+                                  xs={24}
+                                  sm={24}
+                                  md={12}
+                                  lg={12}
+                                  xl={12}
+                                  xxl={12}
                                 >
-                                  <Select
-                                    style={{
-                                      marginTop: "10px",
-                                      width: "100%",
-                                      borderBottom: "1px solid #ccc ",
-                                      paddingLeft: "0px",
-                                    }}
-                                    bordered={false}
-                                  >
-                                    <Option value="Single">Single</Option>
-                                    <Option value="Married">Married</Option>
-                                  </Select>
-                                </Form.Item>
-                              )}
-                            </div>
-                          </Col>
+                                  <div>
+                                    <div
+                                      style={{
+                                        fontWeight: 600,
+                                        lineHeight: "18px",
+                                        color: "#07182b",
+                                        fontSize: "15px",
+                                        fontFamily: "Open Sans,sans-serif",
+                                      }}
+                                    >
+                                      Marital Status
+                                    </div>
+                                    {editContent === false ? (
+                                      <div>
+                                        {data?.maritalStatus
+                                          ? data.maritalStatus
+                                          : "-"}
+                                      </div>
+                                    ) : (
+                                      <Form.Item
+                                        initialValue={
+                                          data ? data.maritalStatus : null
+                                        }
+                                        name="maritalStatus"
+                                        rules={[
+                                          {
+                                            required: false,
+                                            message: "Your Marrige Status",
+                                          },
+                                        ]}
+                                      >
+                                        <Select
+                                          style={{
+                                            marginTop: "10px",
+                                            width: "100%",
+                                            borderBottom: "1px solid #ccc ",
+                                            paddingLeft: "0px",
+                                          }}
+                                          bordered={false}
+                                        >
+                                          <Option value="Single">Single</Option>
+                                          <Option value="Married">
+                                            Married
+                                          </Option>
+                                        </Select>
+                                      </Form.Item>
+                                    )}
+                                  </div>
+                                </Col>
+                              </Row>
+                            </Col>
                           </Row>
-                        </Col>
-                        </Row>
-                      </div>
-                    </>
+                        </div>
+                      </>
                     ) : (
-                    <>
-                    <Row gutter={[16,16]}>
-                      <Col xs={24} sm={24} md={24}>
-                        <Form.Item
-                          label="Name::"
-                          initialValue={data.name}
-                          name="name"
-                          colon
-                          rules={[
-                            {
-                              required: true,
-                              minLength: 3,
-                              maxLength: 50,
-                              // message: "Please enter First Name",
-                            },
-                            {
-                              pattern: /^[a-zA-Z\s]*$/,
-                              message: "Please enter Valid Name",
-                            },
-                          ]}
-                          {...layoutName}      
-                        >
-                          <Input
-                            style={{
-                              width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                            }}
-                            bordered={false}
-                            // disabled={true}
-                            initialValue={data.name ? data.name : null}
-                            maxLength={50}
-                            required
-                            placeholder="Enter Your Name"
-                            onChange={(e) => {
-                              const inputval = e.target.value;
-                              const str = e.target.value;
-                              const newVal =
-                                inputval.substring(0, 1).toUpperCase() +
-                                inputval.substring(1);
-                              const caps = str.split(" ").map(capitalize).join(" ");
-                              form.setFieldsValue({ name: newVal, name: caps });
-                            }}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-                        <Form.Item
-                          label="Date Of Birth::"
-                          colon={true}
-                          initialValue={dob ? moment(dob, "DD-MM-YYYY") : null}
-                          name="dob"
-                          rules={[
-                            {
-                              required: false,
-                              message: "Please Choose a Date",
-                            },
-                          ]}
-                          {...layoutDOB}
-                        >
-                          {/* format={dateFormatList} */}
-                          <DatePicker
-                            style={{
-                              // borderBottom: "1px solid #ccc ",
-                              width: "100%",
-                            }}
-                            // format={dateFormatList}
-                            // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
-                            onChange={(e) => {
-                              setDob(e.format("DD-MM-YYYY"));
-                            }}
-                            //  disabledDate={disabledDate}
-                            value={dob}
-                            placeholder="Choose Date"
-                            // bordered={false}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-                        <Form.Item
-                          label="Gender::"
-                          name="gender"
-                          initialValue={data.gender ? data.gender : "-"}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please Choose Gender",
-                            },
-                          ]}
-                          {...layoutGender}
-                        >
-                          <Select
-                            placeholder="Select a Gender"
-                            style={{
-                              // width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                            }}
-                            bordered={false}
-                          >
-                            <Option value="Male">Male</Option>
-                            <Option value="Female">Female</Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-                        <Form.Item
-                          label="Blood Group::"
-                          initialValue={data ? data.bloodGroup : null}
-                          name="bloodGroup"
-                          rules={[
-                            {
-                              required: false,
-                              message: "Please Choose Blood Groop",
-                            },
-                          ]}
-                          {...layoutBlood} 
-                        >
-                          <Select
-                            placeholder="Select a Blood Group"
-                            style={{
-                              // width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                            }}
-                            bordered={false}
-                          >
-                            <Option value="A+">A+</Option>
-                            <Option value="A-">A-</Option>
-                            <Option value="O+">O+</Option>
-                            <Option value="O-">O-</Option>
-                            <Option value="B+">B+</Option>
-                            <Option value="B-">B-</Option>
-                            <Option value="AB+">AB+</Option>
-                            <Option value="AB-">AB-</Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-                        <Form.Item
-                          label="Marital Status::"
-                          initialValue={data ? data.maritalStatus : null}
-                          name="maritalStatus"
-                          rules={[
-                            {
-                              required: false,
-                              message: "Your Marrige Status",
-                            },
-                          ]}
-                          {...layoutMaritalStatus} 
-                        >
-                          <Select
-                            style={{
-                              width: "100%",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                            }}
-                            bordered={false}
-                          >
-                            <Option value="Single">Single</Option>
-                            <Option value="Married">Married</Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    </>)}
+                      <>
+                        <Row gutter={[16, 16]}>
+                          <Col xs={24} sm={24} md={24}>
+                            <Form.Item
+                              label="Name::"
+                              initialValue={data.name}
+                              name="name"
+                              colon
+                              rules={[
+                                {
+                                  required: true,
+                                  minLength: 3,
+                                  maxLength: 50,
+                                  // message: "Please enter First Name",
+                                },
+                                {
+                                  pattern: /^[a-zA-Z\s]*$/,
+                                  message: "Please enter Valid Name",
+                                },
+                              ]}
+                              {...layoutName}
+                            >
+                              <Input
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                }}
+                                bordered={false}
+                                // disabled={true}
+                                initialValue={data.name ? data.name : null}
+                                maxLength={50}
+                                required
+                                placeholder="Enter Your Name"
+                                onChange={(e) => {
+                                  const inputval = e.target.value;
+                                  const str = e.target.value;
+                                  const newVal =
+                                    inputval.substring(0, 1).toUpperCase() +
+                                    inputval.substring(1);
+                                  const caps = str
+                                    .split(" ")
+                                    .map(capitalize)
+                                    .join(" ");
+                                  form.setFieldsValue({
+                                    name: newVal,
+                                    name: caps,
+                                  });
+                                }}
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                            <Form.Item
+                              label="Date Of Birth::"
+                              colon={true}
+                              initialValue={
+                                dob ? moment(dob, "DD-MM-YYYY") : null
+                              }
+                              name="dob"
+                              rules={[
+                                {
+                                  required: false,
+                                  message: "Please Choose a Date",
+                                },
+                              ]}
+                              {...layoutDOB}
+                            >
+                              {/* format={dateFormatList} */}
+                              <DatePicker
+                                style={{
+                                  // borderBottom: "1px solid #ccc ",
+                                  width: "100%",
+                                }}
+                                // format={dateFormatList}
+                                // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
+                                onChange={(e) => {
+                                  setDob(e.format("DD-MM-YYYY"));
+                                }}
+                                //  disabledDate={disabledDate}
+                                value={dob}
+                                placeholder="Choose Date"
+                                // bordered={false}
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                            <Form.Item
+                              label="Gender::"
+                              name="gender"
+                              initialValue={data.gender ? data.gender : "-"}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Please Choose Gender",
+                                },
+                              ]}
+                              {...layoutGender}
+                            >
+                              <Select
+                                placeholder="Select a Gender"
+                                style={{
+                                  // width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                }}
+                                bordered={false}
+                              >
+                                <Option value="Male">Male</Option>
+                                <Option value="Female">Female</Option>
+                              </Select>
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                            <Form.Item
+                              label="Blood Group::"
+                              initialValue={data ? data.bloodGroup : null}
+                              name="bloodGroup"
+                              rules={[
+                                {
+                                  required: false,
+                                  message: "Please Choose Blood Groop",
+                                },
+                              ]}
+                              {...layoutBlood}
+                            >
+                              <Select
+                                placeholder="Select a Blood Group"
+                                style={{
+                                  // width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                }}
+                                bordered={false}
+                              >
+                                <Option value="A+">A+</Option>
+                                <Option value="A-">A-</Option>
+                                <Option value="O+">O+</Option>
+                                <Option value="O-">O-</Option>
+                                <Option value="B+">B+</Option>
+                                <Option value="B-">B-</Option>
+                                <Option value="AB+">AB+</Option>
+                                <Option value="AB-">AB-</Option>
+                              </Select>
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                            <Form.Item
+                              label="Marital Status::"
+                              initialValue={data ? data.maritalStatus : null}
+                              name="maritalStatus"
+                              rules={[
+                                {
+                                  required: false,
+                                  message: "Your Marrige Status",
+                                },
+                              ]}
+                              {...layoutMaritalStatus}
+                            >
+                              <Select
+                                style={{
+                                  width: "100%",
+                                  borderBottom: "1px solid #ccc ",
+                                  paddingLeft: "0px",
+                                }}
+                                bordered={false}
+                              >
+                                <Option value="Single">Single</Option>
+                                <Option value="Married">Married</Option>
+                              </Select>
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                      </>
+                    )}
                   </Col>
                 </Row>
                 {editContent === true ? (
@@ -706,7 +838,7 @@ function Personal() {
                         htmlType="submit"
                         style={{
                           marginLeft: "10px",
-                          background: "#05445e",
+                          background: "#1963a6",
                           width: "90px",
                         }}
                       >
@@ -1009,7 +1141,7 @@ function Personal() {
                         htmlType="submit"
                         style={{
                           marginLeft: "10px",
-                          background: "#05445e",
+                          background: "#1963a6",
                           width: "90px",
                         }}
                       >
@@ -1360,7 +1492,7 @@ function Personal() {
                         htmlType="submit"
                         style={{
                           marginLeft: "10px",
-                          background: "#05445e",
+                          background: "#1963a6",
                           width: "90px",
                         }}
                       >

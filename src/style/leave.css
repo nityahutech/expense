@@ -217,6 +217,18 @@ margin: 10px 0;
     }
 
 
+    .scrollInput{
+      overflow-y: scroll;
+    }
+
+    .searchBar.ant-input-affix-wrapper{
+      width: 220px;
+    }
+
+    .selectOption.ant-select{
+      width: 220px;
+    }
+
 /* .sickLeave:focus{
 border-left: 4px solid #0093FF;
 } */

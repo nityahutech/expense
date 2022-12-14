@@ -120,7 +120,7 @@ function Personal() {
   useEffect(() => {
   getCountryCode().then((res)=>{
   setCodes(res);
-})
+  })
     getData();
   }, []);
 
@@ -1064,8 +1064,6 @@ function Personal() {
                       )}
                     </div>
                   </Col>
-                </Row>
-                <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
                   <Col xs={24} sm={24} md={12}>
                     <div>
                       <div
@@ -1181,8 +1179,7 @@ function Personal() {
                     >
                       <CloseOutlined /> CANCEL
                     </Button>
-                    <Col>
-                      <Button
+                    <Button
                         type="primary"
                         htmlType="submit"
                         style={{
@@ -1193,8 +1190,7 @@ function Personal() {
                       >
                         <CheckOutlined />
                         SAVE
-                      </Button>
-                    </Col>
+                    </Button>
                   </Row>
                 ) : null}
               </Card>

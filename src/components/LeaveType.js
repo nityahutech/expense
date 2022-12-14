@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   CheckOutlined,
   CloseOutlined,
@@ -20,10 +20,12 @@ import {
 import TextArea from "antd/lib/input/TextArea";
 import ConfigureContext from "../contexts/ConfigureContext";
 import "../style/leave.css";
+import { capitalize, checkAlphabets, checkNumbervalue } from "../contexts/CreateContext";
 
 const { Option } = Select;
 
 const LeaveType = () => {
+  const page = "leaveType"
   const [form] = Form.useForm();
   const [types, setTypes] = useState([
     {
@@ -82,28 +84,29 @@ const LeaveType = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState("");
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  useEffect(() => {
+    getData()
+  })
 
-  const checkNumbervalue = (event) => {
-    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+  const getData = async () => {
+    let data = await ConfigureContext.getConfigurations(page);
+    console.log(data)
+    let place = [0, 0, 0]
+    let temp = Object.keys(data).map((type, i) => {
+      if (type == "Sick Leave") {place[0] = i}
+      if (type == "Optional Leave") {place[1] = i}
+      if (type == "Loss Of Pay") {place[2] = i}
+      return {
+        ...data[`${type}`],
+        name: type
+      }
+    })
+    place.forEach((i) => {
+      let hold = {}
+    })
+    console.log(temp);
+    // setTypes(data)
   }
-
-  const checkAlphabets = (event) => {
-    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
 
   const sickLeaveUpdate = (values) => {
     showEditContent(false);
@@ -142,7 +145,7 @@ const LeaveType = () => {
       carry: values.carry,
     };
   };
-
+ 
   const probationUpdate = (values) => {
     setEditProbation(false);
     let probationName = {
@@ -155,8 +158,8 @@ const LeaveType = () => {
     console.log(`checked = ${e.target.checked}`);
   };
   const addNewRule = (values) => {
-    console.log(values);
-    ConfigureContext.leaveTypeConfiguration({ ...values, carryForward: false });
+    console.log(values, "bro");
+    ConfigureContext.leaveTypeConfiguration(types);
     setIsModalOpen(false);
   };
 
@@ -188,17 +191,15 @@ const LeaveType = () => {
               </li>
             ))}
             <li className="sideCreate">
-              <div>
-                <Button onClick={showModal} style={{ border: "none" }}>
+                <Button onClick={() => { setIsModalOpen(true) }} style={{ width:"100%", border: "none" }}>
                   <PlusCircleOutlined />
                   Create New Rule
                 </Button>
-              </div>
               <Modal
                 title="Create New Rule"
                 open={isModalOpen}
-                onOk={form.submit()}
-                onCancel={handleCancel}
+                onOk={() => form.submit()}
+                onCancel={() => { setIsModalOpen(false) }}
               >
                 <Form
                   form={form}

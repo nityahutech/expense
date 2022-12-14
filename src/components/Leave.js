@@ -75,7 +75,7 @@ const Leave = (props) => {
   const [editedLeave, setEditedLeave] = useState({}); //leave record to be edited
   const [requests, setRequests] = useState([]); //leave requests for managers in array of objects
   const [allRequests, setAllRequests] = useState([]); //leave requests for hr in array of objects
-  const [filterRequest,setFilterRequest] = useState([])
+  const [filterRequest, setFilterRequest] = useState([]);
   const [dateSelected, setDateSelected] = useState([]);
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
@@ -292,8 +292,8 @@ const Leave = (props) => {
     getDateFormatted(d);
     getDateSorted(d);
     setLeaves(d);
-    setFilterRequest(d)
-    
+    setFilterRequest(d);
+
     setLoading(false);
     let tempDays = temp ? temp : { ...totaldays };
     let days = await LeaveContext.getLeaveDays(d, tempDays);
@@ -559,25 +559,24 @@ const Leave = (props) => {
       }
     }
   };
-  const searchChange=(e)=>{
-    let search = e.target.value
-    if (search){
-      let result = allRequests.filter((req)=>
-        req.name.toLowerCase().includes(search.toLowerCase())||
-        req.nature.toLowerCase().includes(search.toLowerCase())||
-        req.date.includes(search)
-
-      )
-      const reqestALL = [...result]
-      setFilterRequest(reqestALL)
+  const searchChange = (e) => {
+    let search = e.target.value;
+    if (search) {
+      let result = allRequests.filter(
+        (req) =>
+          req.name.toLowerCase().includes(search.toLowerCase()) ||
+          req.nature.toLowerCase().includes(search.toLowerCase()) ||
+          req.date.includes(search)
+      );
+      const reqestALL = [...result];
+      setFilterRequest(reqestALL);
       // console.log(reqestALL);
       console.log(allRequests);
       console.log(requests);
-      
-    }else{
-      setFilterRequest(allRequests)
+    } else {
+      setFilterRequest(allRequests);
     }
-  }
+  };
 
   const onLeaveNatureChange = (value) => {
     if (value == "Optional Leave") {
@@ -1008,8 +1007,6 @@ const Leave = (props) => {
                 </Col>
               </Row> */}
 
-              
-
               <Row
                 style={{
                   display: "flex",
@@ -1038,50 +1035,50 @@ const Leave = (props) => {
 
                 <Col span={24}>
                   <Row
-                  gutter={[16, 16]}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    backgroundColor: "white",
-                    borderRadius: "10px",
-                    padding: "10px",
-                    marginTop: "10px",
-                    marginLeft: "5px",
-                  }}
-                >
-                  {/* <Col span={6}><RangePicker /></Col> */}
-                  <Col span={6}>
-                  <Input
-                    className="searchBar"
-                    placeholder="Search"
-                    prefix={<SearchOutlined />}
-                    onChange={searchChange }
-                    style={{width:"100%"}}
-                  />
-                  </Col>
-                  <Col span={6}>
-                    <RangePicker />
-                  </Col>
-                  <Col span={6}>
-                    <Form.Item
-                      label="Nature of Leave::"
-                      style={{marginBottom:"0px"}}
-                    >
-                      <Select
-                        defaultValue="Loss Of Pay"
-                        options={[
-                          {
-                            value: 'CL',
-                            label: 'CL',
-                          },
-                          {
-                            value: 'EL',
-                            label: 'EL',
-                          },
-                        ]}
+                    gutter={[24, 8]}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      backgroundColor: "white",
+                      borderRadius: "10px",
+                      padding: "10px",
+                      marginTop: "10px",
+                      marginLeft: "5px",
+                    }}
+                  >
+                    {/* <Col span={6}><RangePicker /></Col> */}
+                    <Col xs={24} sm={22} md={7}>
+                      <Input
+                        className="searchBar"
+                        placeholder="Search"
+                        prefix={<SearchOutlined />}
+                        onChange={searchChange}
+                        style={{ width: "300px" }}
                       />
-                    </Form.Item>
-                  </Col>
+                    </Col>
+                    <Col xs={24} sm={22} md={10}>
+                      <RangePicker />
+                    </Col>
+                    <Col xs={24} sm={22} md={7}>
+                      <Form.Item
+                        label="Nature of Leave::"
+                        style={{ marginBottom: "0px" }}
+                      >
+                        <Select
+                          defaultValue="Loss Of Pay"
+                          options={[
+                            {
+                              value: "CL",
+                              label: "CL",
+                            },
+                            {
+                              value: "EL",
+                              label: "EL",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
                   </Row>
                 </Col>
 
@@ -1110,7 +1107,7 @@ const Leave = (props) => {
                   </div>
                 </Col>
               </Row>
-              
+
               {/* <Row
                 style={{
                   display: "flex",

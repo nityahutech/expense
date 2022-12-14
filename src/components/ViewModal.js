@@ -5,7 +5,7 @@ import imageavailable from "../images/imageavailable.png";
 
 function ViewModal(props) {
   const modalData = props.modalData;
-  console.log('modalData', modalData)
+  console.log("modalData", modalData);
   return (
     <div>
       <h3 style={{ fontWeight: "600", fontSize: "18px", lineheight: "22px" }}>
@@ -116,25 +116,35 @@ function ViewModal(props) {
               {modalData.accessList.map((user) => (
                 <Col xs={22} sm={15} md={8}>
                   <div>
-                    <span>{user.name} </span>
-                    <span>{user.mailid} </span>
-                    <span>{user.phone} </span>
-                    <span
-                      style={{
-                        borderRadius: "10px",
-                        background: "#C9E5FF",
-                        width: "130px",
-                        display: "flex",
-                        justifyContent: "center",
-                        color: "#000000",
-                        fontWeight: "400",
-                        fontSize: "14px",
+                    <Row>
+                      <Col span={24}>
+                        <span>{user.name} </span>
+                      </Col>
+                      <Col span={24}>
+                        <span>{user.mailid} </span>
+                      </Col>
+                      <Col span={24}>
+                        <span>{user.phone} </span>
+                      </Col>
+                      <Col span={24}>
+                        <span
+                          style={{
+                            borderRadius: "10px",
+                            background: "#C9E5FF",
+                            width: "130px",
+                            display: "flex",
+                            justifyContent: "center",
+                            color: "#000000",
+                            fontWeight: "400",
+                            fontSize: "14px",
 
-                        padding: "3px",
-                      }}
-                    >
-                      {user.userRole}
-                    </span>
+                            padding: "3px",
+                          }}
+                        >
+                          {user.userRole}
+                        </span>
+                      </Col>
+                    </Row>
                   </div>
                 </Col>
               ))}

@@ -203,7 +203,7 @@ function ExpenseList() {
             <>
               {/* <Space size="small"> */}
               <Button
-                style={{ padding: 0, color: "#40a9ff" }}
+                style={{ padding: 0, color: "#1963A6" }}
                 type="link"
                 className="edIt"
                 onClick={() => {

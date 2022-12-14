@@ -29,6 +29,7 @@ const Family = () => {
   }, []);
 
   const onFinish = (values) => {
+    values.profilePic = data.profilePic || null
     EmpInfoContext.updateEduDetails(currentUser.uid, values);
     setData(values);
     showeditfamilymember(false);

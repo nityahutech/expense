@@ -155,10 +155,10 @@ class AttendanceContext {
                 return;
               }
             }
-            let ddd = day.format("ddd")
+            let ddd = day.format("dddd")
             temp[x++] = {
               date: day.format("DD-MM-YYYY"),
-              status: ddd == "Sat" || ddd == "Sun" ? "Weekend": "Absent",
+              status: "Absent",
               empId: id
             }
           })
@@ -192,11 +192,16 @@ class AttendanceContext {
         return res;
     };
 
-    updateLeaves = async (data) => {
+    updateLeaves = async (data, isHoiday, isDayoff) => {
       let list = await this.getLeaveList(data[0].empId);
+      console.log(data, isHoiday, isDayoff)
       data.forEach((emp) => {
         if(emp.status == "Absent") {
-          if (list.includes(moment(emp.date, "DD-MM-YYYY").format("Do MMM, YYYY"))) {
+          if (isDayoff) {
+            emp.status = "Weekend";
+          } else if (isHoiday) {
+            emp.status = "Holiday"
+          } else if (list.includes(moment(emp.date, "DD-MM-YYYY").format("Do MMM, YYYY"))) {
             emp.status = "On Leave";
           }
         }
@@ -204,9 +209,14 @@ class AttendanceContext {
       return data;
     }
 
-    updateWithLeave = async (data, isHoiday) => {
+    updateWithLeave = async (data, isHoiday, isDayoff) => {
+      console.log(data, isHoiday, isDayoff)
       data.forEach((emp) => {
         if(emp.status == "Absent") {
+          if (isDayoff) {
+            emp.status = "Weekend";
+            return;
+          } 
           if (isHoiday) {
             emp.status = "Holiday"
             return;

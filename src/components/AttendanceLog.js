@@ -21,7 +21,8 @@ import AttendanceContext from "../contexts/AttendanceContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import ConfigureContext from "../contexts/ConfigureContext";
-import { showNotification } from "../contexts/CreateContext";
+import { checkNumbervalue, showNotification } from "../contexts/CreateContext";
+import { set } from "react-hook-form";
 
 const layout = {
   labelCol: {
@@ -41,6 +42,7 @@ const tailLayout = {
 function AttendanceLog(props) {
   const [allEmp, setallEmp] = useState([]);
   const isHr = props.roleView == "admin";
+  const [form] = Form.useForm();
   console.log(props, isHr);
   const page = "attendanceConfig";
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
@@ -58,28 +60,23 @@ function AttendanceLog(props) {
     category: "all",
   });
   const [configurations, setConfigurations] = useState({});
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
 
   const handleFinish = (values) => {
-    console.log(values?.starttime, values?.endtime, values?.starttime == null && values?.endtime == null)
-    if (values?.starttime == null && values?.endtime == null) {
-      setConfigurations({
-        ...configurations,
-        starttime: values?.starttime?.format("HH:mm") || configurations.starttime,
-        endtime: values?.endtime?.format("HH:mm") || configurations.endtime,
-      });
-      console.log({
-        ...configurations,
-        starttime: values?.starttime?.format("HH:mm") || configurations.starttime,
-        endtime: values?.endtime?.format("HH:mm") || configurations.endtime,
-      })
+    let temp = Object.keys(values)
+    console.log(values?.starttime, values?.endtime, temp, values?.starttime == null, values?.endtime == null)
+    if ((temp.includes("starttime") || temp.includes("endtime")) && (values?.starttime == null && values?.endtime == null)) {
       return;
     }
     let attendanceConfig = {
       ...configurations,
       ...values,
-      starttime: values?.starttime?.format("HH:mm") || configurations.starttime,
-      endtime: values?.endtime?.format("HH:mm") || configurations.endtime,
+      starttime: values?.starttime?.format("HH:mm") || startTime,
+      endtime: values?.endtime?.format("HH:mm") || endTime,
     };
+    setStartTime(values?.starttime?.format("HH:mm") || startTime)
+    setEndTime(values?.endtime?.format("HH:mm") || endTime)
     console.log(attendanceConfig, attendanceConfig.starttime > attendanceConfig.starttime)
     // if (attendanceConfig.starttime > attendanceConfig.starttime) {
       ConfigureContext.createConfiguration(
@@ -98,16 +95,14 @@ function AttendanceLog(props) {
 
   const getAttendanceData = async () => {
     let data = await ConfigureContext.getConfigurations(page);
-    if (data != null) {
-      setConfigurations(data?.attendanceNature);
-    }
+    console.log("config", data)
+    setConfigurations(data?.attendanceNature);
+    setSelectedDay(data?.attendanceNature?.selectedDay)
+    setStartTime(data?.attendanceNature?.starttime)
+    setEndTime(data?.attendanceNature?.endtime)
+    return data?.attendanceNature?.selectedDay
   };
 
-  const checkNumbervalue = (event) => {
-    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
   const [filteredEmp, setFilteredEmp] = useState([]);
   const columns = [
     {
@@ -142,58 +137,39 @@ function AttendanceLog(props) {
     },
   ];
   useEffect(() => {
+    console.log(isHr)
+    getAttendanceData();
     getHolidayList();
     getDateOfJoining();
-    getAttendanceData();
-  }, []);
+  }, [isHr]);
   useEffect(() => {
     form.resetFields();
-    if (!isHr) {
-      if (activetab == "1") {
-        setSelectemp({ id: currentUser.uid });
-        getEmpDetails(currentUser.uid, [
-          moment().subtract(30, "days"),
-          moment(),
-        ]);
-      }
-    } else {
-      if (activetab == "1") {
-        allEmpDetails();
-      }
+    let temp = {}; 
+    if (holidays.length == 0) {
+      getHolidayList().then((res) => {temp.holidays = res})
+      getAttendanceData().then((res) => {temp.selectedDays = res})
     }
-  }, [activetab]);
-  const [form] = Form.useForm();
-  function getFormateDateString() {
-    return (
-      (new Date().getDate() > 9
-        ? new Date().getDate()
-        : "0" + new Date().getDate()) +
-      "-" +
-      (new Date().getMonth() + 1 > 9
-        ? new Date().getMonth() + 1
-        : "0" + (new Date().getMonth() + 1)) +
-      "-" +
-      new Date().getFullYear()
-    );
-  }
-  function getFormatTimeString() {
-    return (
-      (new Date().getHours() > 9
-        ? new Date().getHours()
-        : "0" + new Date().getHours()) +
-      ":" +
-      (new Date().getMinutes() > 9
-        ? new Date().getMinutes()
-        : "0" + new Date().getMinutes()) +
-      ":" +
-      (new Date().getSeconds() > 9
-        ? new Date().getSeconds()
-        : "0" + new Date().getSeconds())
-    );
-  }
+    const timer = setTimeout(() => {
+      if (!isHr) {
+        if (activetab == "1") {
+          setSelectemp({ id: currentUser.uid });
+          getEmpDetails(currentUser.uid, [
+            moment().subtract(30, "days"),
+            moment()
+          ], temp);
+        }
+      } else {
+        if (activetab == "1") {
+          allEmpDetails(temp);
+        }
+      }
+    }, 800)
+    return () => clearTimeout(timer);
+  }, [activetab, isHr]);
+
   const getHolidayList = async () => {
     let data = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
-    // console.log('data', data)
+    console.log('holidays', data)
     let req = data.docs.map((doc) => {
       if (!doc.data().optionalHoliday) {
         return doc.data().date;
@@ -201,6 +177,7 @@ function AttendanceLog(props) {
       return null;
     });
     setHolidays(req);
+    return req;
   };
 
   const getDateOfJoining = async (id) => {
@@ -268,11 +245,17 @@ function AttendanceLog(props) {
       </div>
     );
   }
-  async function getEmpDetails(id, date) {
+  async function getEmpDetails(id, date, temp) {
     setLoading(true);
-    let data;
+    let data, dayTemp = temp?.selectedDays || selectedDay, holTemp = temp?.holidays || holidays;
+    console.log(dayTemp, holTemp)
     AttendanceContext.getAllAttendance(id, date).then((userdata) => {
-      AttendanceContext.updateLeaves(userdata).then((final) => {
+      let dayoff = Object.keys(dayTemp).filter((day) => dayTemp[`${day}`] == "dayoff")
+      AttendanceContext.updateLeaves(
+        userdata,
+        holTemp.includes(moment().format("Do MMM, YYYY")),
+        dayoff.includes(moment().format("dddd"))
+      ).then((final) => {
         setHolidayStatus(final);
         data = final;
         setEmpMonthly(final);
@@ -285,12 +268,16 @@ function AttendanceLog(props) {
     });
     return data;
   }
-  function allEmpDetails() {
+  function allEmpDetails(temp) {
     setLoading(true);
+    let dayTemp = temp?.selectedDays || selectedDay, holTemp = temp?.holidays || holidays;
     AttendanceContext.getAllUsers().then((userdata) => {
+      console.log(dayTemp, holTemp)
+      let dayoff = Object.keys(dayTemp).filter((day) => dayTemp[`${day}`] == "dayoff")
       AttendanceContext.updateWithLeave(
         userdata,
-        holidays.includes(moment().format("Do MMM, YYYY"))
+        holTemp.includes(moment().format("Do MMM, YYYY")),
+        dayoff.includes(moment().format("dddd"))
       ).then((final) => {
         // setHolidayStatus(final)
         setallEmp(final);
@@ -413,14 +400,14 @@ function AttendanceLog(props) {
     console.log(value);
     console.log(data);
     let tempSelectedDay = {
-      ...configurations.selectedDay,
+      ...selectedDay,
       [data.days]: value,
     }
+    setSelectedDay(tempSelectedDay)
     // console.log('ddddd', selectedDay)
     handleFinish({ selectedDay: tempSelectedDay });
   };
 
-  console.log(configurations.selectedDay);
   const tableHeaders = [
     {
       title: "Days",
@@ -436,7 +423,7 @@ function AttendanceLog(props) {
         return (
           <Radio.Group
             onChange={(e) => handleRadiochange(e.target.value, data)}
-            value={configurations.selectedDay[data.days]}
+            value={selectedDay[data.days]}
           // value={value4}
 
           >
@@ -454,7 +441,7 @@ function AttendanceLog(props) {
         return (
           <Radio.Group
             onChange={(e) => handleRadiochange(e.target.value, data)}
-            value={configurations.selectedDay[data.days]}
+            value={selectedDay[data.days]}
           >
             <Radio
               className="radio"
@@ -474,7 +461,7 @@ function AttendanceLog(props) {
         return (
           <Radio.Group
             onChange={(e) => handleRadiochange(e.target.value, data)}
-            value={configurations.selectedDay[data.days]}
+            value={selectedDay[data.days]}
           >
             <Radio className="radio" value={`dayoff`} />
           </Radio.Group>
@@ -482,6 +469,8 @@ function AttendanceLog(props) {
       },
     },
   ];
+
+  console.log(startTime, endTime)
 
   return (
     <>
@@ -636,7 +625,7 @@ function AttendanceLog(props) {
                           moment().subtract(30, "days"),
                           moment(),
                         ]);
-                        await getDateOfJoining(record.id);
+                        // await getDateOfJoining(record.id);
                         // const doj = moment(record.doj, dateFormat);
                         console.log("record", record);
                         // setDateOfJoining(doj);
@@ -704,7 +693,7 @@ function AttendanceLog(props) {
                       onValuesChange={handleFinish}
                     >
                       <Form.Item
-                        initialValue={moment(configurations.starttime, "HH:mm")}
+                        initialValue={moment(startTime, "HH:mm")}
                         name="starttime"
                         className="time"
                         label="Start Time"
@@ -716,12 +705,24 @@ function AttendanceLog(props) {
                         ]}
                       >
                         <TimePicker
+                          onChange={(e) => {
+                            console.log(e)
+                            setStartTime(e == null ? "" : e.format("HH:mm"))
+                            handleFinish({starttime : e})
+                          }}
+                          disabled={!endTime}
+                          disabledTime={() => ({
+                            disabledHours: () => {
+                              let temp = [...Array(Number(endTime.substring(0, 2))).keys()];
+                              return [...Array(24).keys()].filter((i) => !(temp.includes(i)))
+                            }
+                          })}
                           defaultOpenValue={moment("00:00", "HH:mm")}
                         />
                       </Form.Item>
 
                       <Form.Item
-                        initialValue={moment(configurations.endtime, "HH:mm")}
+                        initialValue={moment(endTime, "HH:mm")}
                         name="endtime"
                         className="time"
                         label="End Time"
@@ -733,8 +734,14 @@ function AttendanceLog(props) {
                         ]}
                       >
                         <TimePicker
+                          onChange={(e) => {
+                            console.log(e)
+                            setEndTime(e == null ? "" : e.format("HH:mm"))
+                            handleFinish({endtime : e})
+                          }}
+                          disabled={!startTime}
                           disabledTime={() => ({
-                            disabledHours: () => [0, 1, 2]
+                            disabledHours: () => [...Array(Number(startTime.substring(0, 2))+1).keys()]
                           })}
                           defaultOpenValue={moment("00:00", "HH:mm")}
                         />

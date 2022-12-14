@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { Card, Row, Col, Input, Button, Form, Select } from "antd";
+import { getCountryCode } from "../../contexts/CreateContext";
+
 import {
   PlusCircleOutlined,
   CheckOutlined,
@@ -15,10 +17,14 @@ const Family = () => {
   const [editEmergency, showeditEmergency] = useState(false);
   const [data, setData] = useState(false);
   const [form] = Form.useForm();
+  const [codes, setCodes] = useState("");
   const [form1] = Form.useForm();
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
   useEffect(() => {
+    getCountryCode().then((res)=>{
+      setCodes(res);
+    })
     getData();
   }, []);
 
@@ -34,6 +40,10 @@ const Family = () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setData(data);
   };
+  const handleOnChange=(value,event)=>{
+    console.log(value,event);
+  }
+
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -49,18 +59,60 @@ const Family = () => {
   };
 
   const prefixSelector = (
-    <Form.Item initialValue={data ? data.prefix : null} name="prefix" noStyle>
+    <Form.Item  name="prefixFather" noStyle>
       <Select
+      showSearch
         bordered={false}
         style={{
           width: 70,
           background: "#ffffff",
         }}
+        onSelect={(value, event) => handleOnChange(value, event)}
       >
-        <Option value="91">+91</Option>
+      { codes?.countries?.map((e) => <Option key={e?.code} value={e?.code} >{e?.code} </Option>
+      )}
+        {/* <Option value="91">+91</Option> */}
       </Select>
     </Form.Item>
   );
+  const prefixSelector2 = (
+    <Form.Item  name="prefixMother" noStyle>
+      <Select
+      showSearch
+        bordered={false}
+        style={{
+          width: 80,
+          background: "#ffffff",
+        }}
+        onSelect={(value, event) => handleOnChange(value, event)}
+      >
+      { codes?.countries?.map((e) => <Option key={e?.code} value={e?.code} >{e?.code} </Option>
+    ) }
+        
+      </Select>
+    </Form.Item>
+  );
+
+  const prefixSelector3 = (
+    <Form.Item  name="prefixOther" noStyle>
+      <Select
+      showSearch
+        bordered={false}
+        style={{
+          width: 80,
+          background: "#ffffff",
+        }}
+        onSelect={(value, event) => handleOnChange(value, event)}
+      >
+      { codes?.countries?.map((e) => <Option key={e?.code} value={e?.code} >{e?.code} </Option>
+    ) }
+        
+      </Select>
+    </Form.Item>
+  );
+  
+  
+
   return (
     <>
       <div
@@ -146,7 +198,7 @@ const Family = () => {
                       </h1>
                       <div>
                         {data?.fatherContact
-                          ? "+" + data.prefix + data.fatherContact
+                          ?`${data.prefixFather} ${data.fatherContact}`
                           : "-"}
                       </div>
                     </div>
@@ -183,7 +235,7 @@ const Family = () => {
                       </h1>
                       <div>
                         {data?.motherContact
-                          ? "+" + data.prefix + data.motherContact
+                          ?`${data.prefixMother} ${data.motherContact}`
                           : "-"}
                       </div>{" "}
                     </div>
@@ -212,6 +264,10 @@ const Family = () => {
                 }}
                 initialValues={{
                   remember: true,
+                  "prefixFather":"+91",
+                   "prefixMother":"+91",
+                   "prefixOther":"+91",
+
                 }}
                 autoComplete="off"
                 onFinish={onFinish}
@@ -441,7 +497,7 @@ const Family = () => {
                           }
                         >
                           <Input
-                            addonBefore={prefixSelector}
+                            addonBefore={prefixSelector2}
                             maxLength={10}
                             placeholder="Enter Contact no."
                             style={{
@@ -597,7 +653,7 @@ const Family = () => {
 
                       <div>
                         {data?.otherContact
-                          ? "+" + data.prefix + data.otherContact
+                          ?`${data.prefixOther} ${data.otherContact}`
                           : "-"}
                       </div>
                     </div>
@@ -625,9 +681,9 @@ const Family = () => {
                 wrappercol={{
                   span: 14,
                 }}
-                initialValues={{
-                  remember: true,
-                }}
+                // initialValues={{
+                //   remember: true,
+                // }}
                 autoComplete="off"
                 onFinish={onFinish}
               >
@@ -806,7 +862,7 @@ const Family = () => {
                           }
                         >
                           <Input
-                            addonBefore={prefixSelector}
+                            addonBefore={prefixSelector3}
                             maxLength={10}
                             placeholder="Enter Contact no."
                             style={{

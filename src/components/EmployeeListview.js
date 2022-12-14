@@ -2,7 +2,6 @@
 import { Col, Divider, Row, Form, Card, Avatar, Typography, Timeline, Modal, } from "antd";
 import React, { useEffect, useState } from "react";
 import DocumentContext from "../contexts/DocumentContext";
-import hutechlogo from "../images/hutechlogo.png";
 import imageavailable from "../images/imageavailable.png";
 import Iframe from "react-iframe";
 import "../style/EmployeeList.css";
@@ -86,7 +85,7 @@ function EmployeeListview(props) {
 
                 <Avatar.Group style={{ display: 'flex', justifyContent: 'space-evenly', width: '100%' }}>
                   <Avatar size={75}
-                    src={hutechlogo}
+                    src={showRecord.profilePic}
                     style={{
                       // display: 'block',
                       // maxWidth: '100%',
@@ -97,7 +96,7 @@ function EmployeeListview(props) {
                       objectFit: 'contain',
                       textAlign: 'center'
                     }}
-
+                    alt={imageavailable}
 
                   // shape="square" 
                   />

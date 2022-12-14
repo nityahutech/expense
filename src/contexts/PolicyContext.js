@@ -23,33 +23,43 @@ class PolicyContext {
     }
 
     createPolicy = (updateCompInfo, file) => {
-        if (file) {
-            const storageRef = ref(storage, `/${compId}/policy/${file.name}`);
-            uploadBytesResumable(storageRef, file).then((snapshot) => {
-                getDownloadURL(snapshot.ref).then((url) => {
-                    updateCompInfo.upload = url;
-                    updateCompInfo.fileName = file.name
-                    addDoc(policyCollectionRef, updateCompInfo)
-                    return Promise.resolve();
-                })
-            });
-        } else {
-            addDoc(policyCollectionRef, updateCompInfo)
-            return Promise.resolve();
-        }
+        const storageRef = ref(storage, `/${compId}/policy/${updateCompInfo.title.replace(" ", "")}_${file.name}_v1`);
+        uploadBytesResumable(storageRef, file).then((snapshot) => {
+            getDownloadURL(snapshot.ref).then((url) => {
+                updateCompInfo.versions[0] = {
+                    ...updateCompInfo.versions[0],
+                    url: url,
+                    file: file.name,
+                }
+                addDoc(policyCollectionRef, updateCompInfo)
+                return Promise.resolve();
+            })
+        });
     };
 
-    // updatePolicy = (id, updateDocument) => {
-    //     const documentDoc = doc(db, "policy", id);
-    //     return updateDoc(documentDoc, updateDocument);
-    // };
+    updatePolicy = (updateCompInfo, file) => {
+        const storageRef = ref(storage, `/${compId}/policy/${updateCompInfo.title.replace(" ", "")}_${file.name}_v${updateCompInfo.versions.length}`);
+        uploadBytesResumable(storageRef, file).then((snapshot) => {
+            getDownloadURL(snapshot.ref).then((url) => {
+                let len = updateCompInfo.versions.length - 1
+                updateCompInfo.versions[len] = {
+                    ...updateCompInfo.versions[len],
+                    url: url,
+                    file: file.name,
+                }
+                console.log(updateCompInfo)
+                updateDoc(doc(db, `companyprofile/${compId}/policy`, updateCompInfo.id), updateCompInfo)
+                return Promise.resolve();
+            })
+        });
+    };
 
-    deletePolicy = (id, file) => {
-        if (file) {
-            const storageRef = ref(storage, `/${compId}/policy/${file}`);
+    deletePolicy = (record) => {
+        record.versions.forEach((rec) => {
+            let storageRef = ref(storage, `/${compId}/policy/${record.title.replace(" ", "")}_${rec.file}_v${rec.version}`);
             deleteObject(storageRef)
-        }
-        const documentDoc = doc(db, `companyprofile/${compId}/policy`, id);
+        })            
+        const documentDoc = doc(db, `companyprofile/${compId}/policy`, record.id);
         return deleteDoc(documentDoc);
     };
 

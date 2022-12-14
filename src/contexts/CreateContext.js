@@ -8,6 +8,7 @@ import {
 import {
   collection,
   getDocs,
+  getDoc,
   setDoc,
   query,
   orderBy,
@@ -108,6 +109,12 @@ export function checkAlphabets(event) {
   }
 };
 
+export function checkNumbervalue(event) {
+  if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
+    return true;
+  }
+};
+
 export function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -116,4 +123,10 @@ export function getBase64(img, callback) {
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result));
   reader.readAsDataURL(img);
+  
 };
+
+ export  async function getCountryCode(){
+  let data =  await getDoc(doc(db, "standardInfo","countryCodes"));
+  return data.data();
+}

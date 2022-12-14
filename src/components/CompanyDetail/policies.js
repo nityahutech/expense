@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -21,67 +21,54 @@ import { showNotification } from "../../contexts/CreateContext";
 
 const Policies = () => {
   const [policy, setPolicy] = useState([]);
+  const [version, setVersion] = useState([1]);
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editModal, showEditModal] = useState(false);
   const [file, setFile] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [edittitle, setEdittitle] = useState();
-  const [editDescription, setEditDescription] = useState();
-  const [editFileType, setEditFileType] = useState();
-
-  const showPdfModal = () => {
-    setLoading(true)
-    setIsModalVisible(true);
-  };
+  const [editOld, setEditOld] = useState({});
 
   const columns = [
     {
       title: "Policy Title",
-      dataIndex: "idtitle",
-      key: "idtitle",
+      dataIndex: "title",
+      key: "title",
       width: 150,
     },
     {
       title: "Policy Description",
-      dataIndex: "iddescription",
-      key: "iddescription ",
+      dataIndex: "description",
+      key: "description ",
       width: 200,
     },
     {
-      title: "Policy Version",
+      title: "Version",
       dataIndex: "version",
       key: "version",
-      width: 150,
-      render: (_, record) => {
+      width: 85,
+      render: (_, record, i) => {
         return (
           <>
             <Select
-              defaultValue="Version-1"
+              defaultValue={record.versions.length}
               style={{
-                width: 120,
+                width: 55,
               }}
-              onChange={handleChange}
-              options={[
-                {
-                  value: 'Version-1',
-                  label: 'Version-1',
-                },
-                {
-                  value: 'Version-2',
-                  label: 'Version-2',
-                },
-
-                {
-                  value: 'Version-3',
-                  label: 'Version-3',
-                },
-              ]}
+              onChange={(e) => {
+                let temp = [...version]
+                console.log(e)
+                temp[i] = e
+                setVersion(temp)
+              }}
+              options={record.versions.map((ver) => {
+                return {
+                  value: ver.version,
+                  label: ver.version
+                }
+              })}
             />
-
-
           </>
         );
       },
@@ -91,20 +78,22 @@ const Policies = () => {
       dataIndex: "date",
       key: "date",
       width: 150,
+      render: ( _, record, i) => {
+        let res = record.versions.filter((ver) => ver.version == version[i])
+        return res[0].date
+      }
     },
     {
       title: "Uploaded File",
-      dataIndex: "upload",
-      key: "upload",
+      dataIndex: "file",
+      key: "file",
       width: 200,
-      render: (data, record) => {
-        return record.fileName ? (
-          <a href={data} target="policyName" onClick={showPdfModal}>
-            {record.fileName}
-            {/* <Button type='primary'>Preview</Button> */}
+      render: (_, record, i) => {
+        let res = record.versions.filter((ver) => ver.version == version[i])
+        return  (
+          <a href={res[0].url} target="policyName" onClick={() => setIsModalVisible(true)}>
+            {res[0].file}
           </a>
-        ) : (
-          <div>-</div>
         )
       },
     },
@@ -117,16 +106,12 @@ const Policies = () => {
         return (
           <>
             <DeleteOutlined style={{ color: 'red' }}
-              onClick={() => deleteData(record.id, record.fileName)}
+              onClick={() => deleteData(record)}
             />
             <EditFilled style={{ paddingLeft: '10px', color: '#007acb' }}
               onClick={() => {
-                setEditDescription(record.iddescription)
-                setEdittitle(record.idtitle)
-                setEditFileType(record.fileName)
+                setEditOld(record)
                 showEditModal(true);
-
-
               }}
 
             />
@@ -135,11 +120,6 @@ const Policies = () => {
       },
     },
   ];
-
-
-  function beforeUpload(file) {
-    console.log(file.type);
-  }
 
   function handleChange(event) {
     let file = event.target.files[0]
@@ -153,51 +133,71 @@ const Policies = () => {
 
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
+      message.error('File must smaller than 2MB!');
       return
     }
     setFile(event.target.files[0]);
   }
 
-  //----------------Edit Modal
-  const EditData = () => {
-    showEditModal(true);
-  };
-
-  const handleEditCancel = () => {
-    showEditModal(false);
-    form.resetFields();
-  };
-
-  async function addPolicy(values) {
+  function addPolicy(values) {
     console.log('values', values)
-    try {
-      let newWorkDoc = {
-        ...values,
-        date: moment().format("DD/MM/YYYY")
-
-      };
-      await PolicyContext.createPolicy(newWorkDoc, file);
-      setIsModalOpen(false);
-      showNotification("success", "Success", "Upload Complete");
+    try{
+    let newWorkDoc = {
+      ...values,
+      versions: [{
+        version: 1,
+        date: moment().format("DD MMM, YYYY")
+      }]
+    };
+    delete newWorkDoc.upload;
+    PolicyContext.createPolicy(newWorkDoc, file)
+    // .then(() => {
       const timer = setTimeout(() => {
+        setIsModalOpen(false);
+        showNotification("success", "Success", "Upload Complete");
         getData();
       }, 3500);
       return () => clearTimeout(timer);
-    } catch {
+    } catch(err) {
       setIsModalOpen(false);
-      showNotification("error", "Error", "Upload Failed");
-    }
+      showNotification("error", "Error", `Upload Failed: ${err.message}`);
+    }    
   }
 
-  const deleteData = (id, fileName) => {
+  function editPolicy(values) {
+    console.log('values', values)
+    try{
+    let newWorkDoc = {
+      ...editOld,
+      description: values.description,
+    };
+    newWorkDoc.versions.push({
+      version: editOld.versions.length + 1,
+      date: moment().format("DD MMM, YYYY")
+    })
+    console.log(newWorkDoc)
+    PolicyContext.updatePolicy(newWorkDoc, file)
+    // .then(() => {
+      const timer = setTimeout(() => {
+        showEditModal(false);
+        showNotification("success", "Success", "Upload Complete");
+        getData();
+      }, 3500);
+      return () => clearTimeout(timer);
+    } catch(err) {
+      showEditModal(false);
+      showNotification("error", "Error", `Upload Failed: ${err.message}`);
+    }    
+  }
+
+  const deleteData = (record) => {
     Modal.confirm({
       title: "Are you sure, you want to delete this record?",
       okText: "Yes",
       okType: "danger",
 
       onOk: () => {
-        PolicyContext.deletePolicy(id, fileName)
+        PolicyContext.deletePolicy(record)
           .then((response) => {
             showNotification("success", "Success", "Successfully deleted");
             getData();
@@ -214,53 +214,20 @@ const Policies = () => {
   }, []);
 
   const getData = async () => {
-    setLoading(true);
     let alldata = await PolicyContext.getPolicy();
-    console.log('alldata', alldata)
-    // setData(alldata);
+    let temp = [...alldata];
+    alldata.forEach((pol,i) => {
+      pol.versions.sort((a, b) => {
+        return b.version - a.version
+      })
+      temp[i] = pol.versions[0].version
+    })
+    setVersion(temp)
+
+    console.log('alldata', alldata, )
     setPolicy(alldata);
-    setLoading(false);
 
   };
-
-  const showModal = () => {
-    setIsModalOpen(true);
-    form.resetFields();
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-    form.resetFields();
-  };
-
-  // if (loading) {
-  //   return (
-  //     <div
-  //       style={{
-  //         height: "70vh",
-  //         width: "100%",
-  //         display: "flex",
-  //         alignItems: "center",
-  //         justifyContent: "center",
-  //       }}
-  //     >
-  //       <Spin
-  //         size="large"
-  //         style={{
-  //           position: "absolute",
-  //           top: "20%",
-  //           left: "50%",
-  //           margin: "-10px",
-  //           zIndex: "100",
-  //           opacity: "0.7",
-  //           backgroundColor: "transparent",
-  //         }}
-  //       />
-  //     </div>
-  //   );
-  // }
 
   return (
     <>
@@ -282,17 +249,6 @@ const Policies = () => {
             alignItems: 'center'
           }}>
           <Col span={24}>
-            <Form
-              style={{ marginLeft: 0 }}
-              action="/action_page.php"
-              form={form}
-              labelCol={{ span: 30 }}
-              wrapperCol={{ span: 30 }}
-              initialValues={{ remember: true }}
-              autoComplete="off"
-              onFinish={addPolicy}
-              layout="vertical"
-            >
               <Card
                 title="Company Policies"
                 className="policyCard"
@@ -314,155 +270,123 @@ const Policies = () => {
                 />
                 <Button
                   type="primary"
-                  onClick={showModal}
+                  onClick={() => {
+                    setIsModalOpen(true);
+                    form.resetFields();
+                  }}
                   style={{ marginLeft: "10px", background: "#1963a6", border: "1px solid #1963A6", }}
                 >
                   <PlusCircleOutlined />
                   Add
                 </Button>
-                {/* //---------------initial modal */}
-                <Modal
-                  bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
-                  className="viewAppraisal"
-                  title="Add Policy"
-                  centered
-                  width={450}
-                  open={isModalOpen}
-                  onOk={() => {
-                    form.submit();
-                    handleOk();
-                  }}
-                  onCancel={handleCancel}
-                  // visible={isModalVisible}
-                  okText="Save"
-                  closeIcon={
-                    <div
-                      className="modal-close"
-                      onClick={() => {
-                        setIsModalVisible(false);
-                      }}
-                      style={{ color: "#ffffff" }}
-                    >
-                      X
-                    </div>
-                  }
+                <Form
+                  style={{ marginLeft: 0 }}
+                  action="/action_page.php"
+                  form={form}
+                  labelCol={{ span: 30 }}
+                  wrapperCol={{ span: 30 }}
+                  initialValues={{ remember: true }}
+                  autoComplete="off"
+                  onFinish={addPolicy}
+                  layout="vertical"
                 >
-                  <div className="div-discription">Title</div>
-                  <Form.Item
-                    name="idtitle"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Enter Policy Name",
-                      },
-                      {
-                        pattern: /^[a-zA-Z\s]*$/,
-                        message: "Please Enter Valid Name ",
-                      },
-                    ]}
+                  <Modal
+                    bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+                    className="viewAppraisal"
+                    title="Add Policy"
+                    centered
+                    width={450}
+                    open={isModalOpen}
+                    onOk={() => form.submit()}
+                    onCancel={() => {
+                      setIsModalOpen(false);
+                      form.resetFields();
+                    }}
+                    okText="Save"
+                    closeIcon={
+                      <div
+                        className="modal-close"
+                        onClick={() => setIsModalVisible(false)}
+                        style={{ color: "#ffffff" }}
+                      >
+                        X
+                      </div>
+                    }
                   >
-                    <Input
-                      style={{
-                        width: "100%",
-                        borderBottom: "1px solid #ccc ",
-                        paddingLeft: "0px",
-                        marginTop: "10px",
-                      }}
-                      bordered={false}
-                      required
-                      placeholder="Enter Policy Name"
-                    />
-                  </Form.Item>
-                  <div className="div-discription">Description</div>
-                  <Form.Item
-                    name="iddescription"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Enter Description ",
-                      },
-                      {
-                        pattern: /^[a-zA-Z\s]*$/,
-                        message: " Please Enter Description",
-                      },
-                    ]}
-                  >
-                    <Input
-                      style={{
-                        width: "100%",
-                        borderBottom: "1px solid #ccc ",
-                        paddingLeft: "0px",
-                        marginTop: "10px",
-                      }}
-                      bordered={false}
-                      required
-                      placeholder="Enter Description"
-                    />
-                  </Form.Item>
-                  {/* <div className="div-discription">Date</div>
-                  <Form.Item
-                    name="date"
-
-                  >
-                    <DatePicker
-                      format={dateFormat}
-                      placeholder="Date of  Version"
-                      style={{
-                        width: "100%",
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                        background: "#ffffff",
-                      }}
-                    />
-                  </Form.Item> */}
-                  {/* <div className="div-discription">Version</div>
-                  <Form.Item
-                    name="version"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Enter version ",
-                      },
-                      {
-                        // pattern: /^[a-zA-Z\s]*$/,
-                        message: " Please Enter version",
-                      },
-                    ]}
-                  >
-                    <Input
-                      style={{
-                        width: "100%",
-                        borderBottom: "1px solid #ccc ",
-                        paddingLeft: "0px",
-                        marginTop: "10px",
-                      }}
-                      bordered={false}
-                      required
-                      placeholder="Enter versions"
-                    />
-                  </Form.Item> */}
-                  <div className="div-discription">Uplode File</div>
-                  <FormItem
-                    name="upload"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please upload file',
-                      },
-                    ]}
-                  >
-                    <div className='idpage'>
+                    <div className="div-discription">Title</div>
+                    <Form.Item
+                      name="title"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Enter Policy Name",
+                        },
+                        {
+                          pattern: /^[a-zA-Z\s]*$/,
+                          message: "Please Enter Valid Name ",
+                        },
+                      ]}
+                    >
                       <Input
-                        type="file"
-                        accept='application/pdf'
-                        id="upload"
-                        name="upload"
-                        onChange={handleChange}
-                        beforeUpload={beforeUpload}
+                        style={{
+                          width: "100%",
+                          borderBottom: "1px solid #ccc ",
+                          paddingLeft: "0px",
+                          marginTop: "10px",
+                        }}
+                        bordered={false}
+                        required
+                        placeholder="Enter Policy Name"
                       />
-                    </div>
-                  </FormItem>
-                </Modal>
+                    </Form.Item>
+                    <div className="div-discription">Description</div>
+                    <Form.Item
+                      name="description"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Enter Description",
+                        },
+                        {
+                          pattern: /^[a-zA-Z\s]*$/,
+                          message: " Please Enter Description",
+                        },
+                      ]}
+                    >
+                      <Input
+                        style={{
+                          width: "100%",
+                          borderBottom: "1px solid #ccc ",
+                          paddingLeft: "0px",
+                          marginTop: "10px",
+                        }}
+                        bordered={false}
+                        required
+                        placeholder="Enter Description"
+                      />
+                    </Form.Item>
+                    <div className="div-discription">Upload File</div>
+                    <FormItem
+                      name="upload"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Please upload file',
+                        },
+                      ]}
+                    >
+                      <div className='idpage'>
+                        <Input
+                          type="file"
+                          accept='application/pdf'
+                          id="upload"
+                          name="upload"
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </FormItem>
+                  </Modal>
+                </Form>
                 {/* //---------------iframeModal */}
                 <Modal
                   bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
@@ -503,157 +427,113 @@ const Policies = () => {
                   </div>
                 </Modal>
                 {/* //---------------edit modal */}
-                <Modal
-                  bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
-                  className="viewAppraisal"
-
-                  title="Edit Policy Detail"
-                  centered
-                  width={450}
-                  open={editModal}
-                  onOk={() => {
-                    form1.submit();
-                    // handleOk();
-                  }}
-                  onCancel={handleEditCancel}
-                  visible={editModal}
-                  okText="Save"
-                  closeIcon={
-                    <div
-                      className="modal-close"
-                      onClick={() => {
-                        showEditModal(false);
-                      }}
-                      style={{ color: "#ffffff" }}
-                    >
-                      X
-                    </div>
-                  }
+                <Form
+                  style={{ marginLeft: 0 }}
+                  action="/action_page.php"
+                  form={form1}
+                  labelCol={{ span: 30 }}
+                  wrapperCol={{ span: 30 }}
+                  initialValues={{ remember: true }}
+                  autoComplete="off"
+                  onFinish={editPolicy}
+                  layout="vertical"
                 >
-                  <div className="div-discription">Title</div>
-                  <Form.Item
-                    initialValue={edittitle}
-                    name="editIdtitle"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Enter Policy Name",
-                      },
-                      {
-                        pattern: /^[a-zA-Z\s]*$/,
-                        message: "Please Enter Valid Name ",
-                      },
-                    ]}
+                  <Modal
+                    bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+                    className="viewAppraisal"
+                    title="Edit Policy Detail"
+                    centered
+                    destroyOnClose
+                    width={450}
+                    open={editModal}
+                    onOk={() => {
+                      form1.submit();
+                      // handleOk();
+                    }}
+                    onCancel={() => {
+                      showEditModal(false);
+                      form.resetFields();
+                    }}
+                    okText="Save"
+                    closeIcon={
+                      <div
+                        className="modal-close"
+                        onClick={() => {
+                          showEditModal(false);
+                        }}
+                        style={{ color: "#ffffff" }}
+                      >
+                        X
+                      </div>
+                    }
                   >
-                    <Input
-                      style={{
-                        width: "100%",
-                        borderBottom: "1px solid #ccc ",
-                        paddingLeft: "0px",
-                        marginTop: "10px",
-                      }}
-                      bordered={false}
-                      required
-                      placeholder="Enter Policy Name"
-                    />
-                  </Form.Item>
-                  <div className="div-discription">Description</div>
-                  <Form.Item
-                    initialValue={editDescription}
-                    name="editIddescription"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Enter Description ",
-                      },
-                      {
-                        pattern: /^[a-zA-Z\s]*$/,
-                        message: " Please Enter Description",
-                      },
-                    ]}
-                  >
-                    <Input
-                      style={{
-                        width: "100%",
-                        borderBottom: "1px solid #ccc ",
-                        paddingLeft: "0px",
-                        marginTop: "10px",
-                      }}
-                      bordered={false}
-                      required
-                      placeholder="Enter Description"
-                    />
-                  </Form.Item>
-                  {/* <div className="div-discription">Date</div>
-                  <Form.Item
-                    format={dateFormat}
-                    // initialValue={moment(editPolicy.date, "DD-MM-YYYY")}
-                    name="editDate"
-
-                  >
-                    <DatePicker
-
-                      placeholder="Date of Revised Version"
-                      style={{
-                        width: "100%",
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                        background: "#ffffff",
-                      }}
-                    />
-                  </Form.Item> */}
-                  {/* <div className="div-discription">Version</div>
-                  <Form.Item
-                    initialValue={editPolicy.version}
-                    name="editVersion"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Enter version ",
-                      },
-                      {
-                        // pattern: /^[a-zA-Z\s]*$/,
-                        message: " Please Enter version",
-                      },
-                    ]}
-                  >
-                    <Input
-                      style={{
-                        width: "100%",
-                        borderBottom: "1px solid #ccc ",
-                        paddingLeft: "0px",
-                        marginTop: "10px",
-                      }}
-                      bordered={false}
-                      required
-                      placeholder="Enter versions"
-                    />
-                  </Form.Item> */}
-                  <div className="div-discription">Uplode File</div>
-                  <FormItem
-                    initialValue={editFileType}
-                    name="editUpload"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please upload file',
-                      },
-                    ]}
-                  >
-                    <div className='idpage'>
+                    <div className="div-discription">Title</div>
+                    <Form.Item
+                      initialValue={editOld?.title}
+                      name="title"
+                    >
                       <Input
-                        type="file"
-                        accept='application/pdf'
-                        id="upload"
-                        name="upload"
-                        onChange={handleChange}
-                        beforeUpload={beforeUpload}
+                        style={{
+                          width: "100%",
+                          borderBottom: "1px solid #ccc ",
+                          paddingLeft: "0px",
+                          marginTop: "10px",
+                          color: "black"
+                        }}
+                        bordered={false}
+                        disabled
                       />
-                    </div>
-                  </FormItem>
-                </Modal>
+                    </Form.Item>
+                    <div className="div-discription">Description</div>
+                    <Form.Item
+                      initialValue={editOld?.description}
+                      name="description"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Enter Description ",
+                        },
+                        {
+                          pattern: /^[a-zA-Z\s]*$/,
+                          message: " Please Enter Description",
+                        },
+                      ]}
+                    >
+                      <Input
+                        style={{
+                          width: "100%",
+                          borderBottom: "1px solid #ccc ",
+                          paddingLeft: "0px",
+                          marginTop: "10px",
+                        }}
+                        bordered={false}
+                        required
+                        placeholder="Enter Description"
+                      />
+                    </Form.Item>
+                    <div className="div-discription">{`Version ${editOld?.versions?.length + 1}`}</div>
+                    <FormItem
+                      name="upload"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Please upload file',
+                        },
+                      ]}
+                    >
+                      <div className='idpage'>
+                        <Input
+                          type="file"
+                          accept='application/pdf'
+                          id="upload"
+                          name="upload"
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </FormItem>
+                  </Modal>
+                </Form>
               </Card>
-            </Form>
           </Col>
         </Row>
       </div>

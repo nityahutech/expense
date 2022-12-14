@@ -28,16 +28,20 @@ const OrgDetails = (props) => {
   const [newCompId, setNewCompId] = useState(props.data.orgcode || null);
 
   useEffect(() => {
-    if(newCompId == null) {
-        setNewCompId(CompanyProContext.getOrgId());
+    if (newCompId == null) {
+      setNewCompId(CompanyProContext.getOrgId());
     }
     setFileName(fileName);
     setIsBigFile(false);
   }, []);
 
+  useEffect(() => {
+    setIsBigFile(false);
+  });
+
   const onFinish = async (values) => {
-    delete values.logo
-    console.log("saved")
+    delete values.logo;
+    console.log("saved");
     localStorage.setItem("OrgDetails", JSON.stringify(values));
     localStorage.setItem("Logo", imageUrl);
     setData(values);
@@ -49,10 +53,9 @@ const OrgDetails = (props) => {
 
   const getBase64 = (img, callback) => {
     const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
+    reader.addEventListener("load", () => callback(reader.result));
     reader.readAsDataURL(img);
   };
-
 
   const handleChange = (event) => {
     if (!event) {
@@ -60,26 +63,26 @@ const OrgDetails = (props) => {
     }
     const fileUploaded = event.target.files[0];
     getBase64(fileUploaded, (url) => {
-        // setLoading(false);
-        setImageUrl(url);
+      // setLoading(false);
+      setImageUrl(url);
     });
     checkFileSize(fileUploaded.size, fileUploaded);
   };
 
-//   const validateOrgId = async (rule, value, callback) => {
-//     try {
-//       let exists = await CompanyProContext.checkOrgIdExists(value);
-//       if (exists) {
-//         setOrgIdExists(true);
-//         throw new Error("this id exists");
-//       }
-//       setOrgIdExists(false);
-//       // return exists;
-//     } catch (err) {
-//       callback(err.message);
-//     }
-//     // CompanyProContext.checkOrgIdExists(value)
-//   };
+  //   const validateOrgId = async (rule, value, callback) => {
+  //     try {
+  //       let exists = await CompanyProContext.checkOrgIdExists(value);
+  //       if (exists) {
+  //         setOrgIdExists(true);
+  //         throw new Error("this id exists");
+  //       }
+  //       setOrgIdExists(false);
+  //       // return exists;
+  //     } catch (err) {
+  //       callback(err.message);
+  //     }
+  //     // CompanyProContext.checkOrgIdExists(value)
+  //   };
 
   function checkFileSize(size, fileName) {
     if (Math.round(size / 1024) <= 200) {
@@ -129,7 +132,7 @@ const OrgDetails = (props) => {
       </Select>
     </Form.Item>
   );
-        console.log(props)
+
   return (
     <div style={{ margin: "13px", background: "#fff" }}>
       <div
@@ -529,15 +532,65 @@ const OrgDetails = (props) => {
             <Form.Item name="logo" className="uploadLogo">
               <div
                 style={{
-                //   border: "dashed #B9B9B9",
-                //   borderWidth: "thin",
-                //   borderRadius: "4px",
+                  border: "dashed #B9B9B9",
+                  borderWidth: "thin",
+                  borderRadius: "4px",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  padding: "10px 0"
                 }}
               >
+                <Col>
+                  <Button
+                    onClick={(e) => handleClick(e)}
+                    style={{
+                      width: "60px",
+                      height: "40px",
+                      margin: "10px",
+                    }}
+                  >
+                    <PlusCircleOutlined
+                      style={{
+                        display: "flex",
+                        flexDirection: "column-reverse",
+                        alignItems: "center",
+                      }}
+                    />
+                    <span
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginRight: "8px",
+                      }}
+                    >
+                      Upload
+                    </span>
+                  </Button>
+                  <Button
+                    onClick={onReset}
+                    style={{
+                      width: "60px",
+                      height: "40px",
+                      margin: "10px",
+                    }}
+                  >
+                    <CloseCircleOutlined
+                      style={{
+                        display: "flex",
+                        flexDirection: "column-reverse",
+                        alignItems: "center",
+                      }}
+                    />
+                    <span
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginRight: "8px",
+                      }}
+                    >
+                      Remove
+                    </span>
+                  </Button>
+                </Col>
                 {isBigFile
                   ? message.error("File size must be less than 200Kb.")
                   : ""}
@@ -553,11 +606,12 @@ const OrgDetails = (props) => {
                 />
                 {fileName ? (
                     <div className="hoverImgCont" style={{position: "relative"}}>
-                  <img 
+                  <img
                     src={imageUrl}
                     style={{
-                        maxWidth: "120px",
-                        height: "auto",
+                      maxWidth: "120px",
+                      height: "auto",
+                      marginRight: "10px",
                     }}
                   />
                   <div className="overlay">

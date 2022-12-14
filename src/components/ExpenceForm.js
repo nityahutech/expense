@@ -122,7 +122,7 @@ const ExpenceForm = () => {
                 style={{
                   width: "120px",
                   cursor: "pointer",
-                  backgroundColor: "rgb(25, 99, 166)",
+                  backgroundColor: "#1963A6",
                   borderRadius: "5px",
                 }}
               >
@@ -192,8 +192,7 @@ const ExpenceForm = () => {
                 />
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={[24, 8]}>
+
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className="Col-1-left">
               <Divider orientation="left" orientationMargin={0}>
                 Paid By<span style={{ color: "red" }}> *</span>
@@ -269,8 +268,7 @@ const ExpenceForm = () => {
                 />
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={[24, 8]}>
+
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className="Col-1-left">
               <Divider orientation="left" orientationMargin={0}>
                 Amount<span style={{ color: "red" }}> *</span>
@@ -338,8 +336,7 @@ const ExpenceForm = () => {
                 />
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={[24, 8]}>
+
             <Col xs={{ span: 24 }} sm={{ span: 12 }} className="Col-1-left">
               <Divider orientation="left" orientationMargin={0}>
                 Mode of Payment<span style={{ color: "red" }}> *</span>
@@ -368,8 +365,7 @@ const ExpenceForm = () => {
                 <Input disabled={true} value={total || 0} placeholder="Total" />
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={24}>
+
             <Col className="gutter-row" span={4}></Col>
             <Col className="gutter-row" span={16}>
               <div className="te" style={{ padding: "0px 0" }}>
@@ -405,8 +401,8 @@ const ExpenceForm = () => {
                   <Form.Item>
                     <Button
                       style={{
-                        border: "1px solid #1565D8",
-                        color: "#1565D8",
+                        border: "1px solid #1963A6",
+                        color: "#1963A6",
                         width: "99px",
                         fontWeight: "600",
                         fontSize: "14px",
@@ -423,7 +419,7 @@ const ExpenceForm = () => {
                     <Button
                       style={{
                         border: "1px solid #1565D8",
-                        background: "#1565D8",
+                        background: "#1963A6",
                         color: "#ffffff",
                         fontWeight: "600",
                         fontSize: "14px",

@@ -52,36 +52,40 @@ class CompanyProContext {
     }
    
     createAdmins = (accessList, id) => {
+        let newList = [];
         const timer = setTimeout(()=>{
             accessList.map(async (user) => {
-                let name = user.name.split(" ");
-                let mname = "";
-                for (let i = 1; i < name.length - 1; i++) {
-                  mname = mname + ((i != 1 ? " " : "") + name[i]);
-                }
+                let name = user.fName + (user.mName?` ${user.mName} `:" ") + user.lName;
                 let newRec = {
                     department: null,
-                    designation: user.userRole,
+                    designation: user.designation,
                     role: "hr",
                     doj: moment(),
                     location: "Registered Office",
                     empType: "Full-Time",
                     gender: "",
                     phone: user.phone,
-                    fname: name[0],
-                    mname: mname,
-                    lname: name[(name.length)-1],
-                    email: user.mailid,
-                    mailid: user.mailid,
+                    name: name,
+                    fname: user.fName,
+                    mname: user.mName,
+                    lname: user.lName,
+                    email: user.email,
+                    mailid: user.email,
                     repManager: "",
                     secManager: "",
                     isLead: true,
                     isManager: true, 
                     isHr: true
                 };
+                newList.push({
+                    name: name,
+                    userRole: user.designation,
+                    phone: user.phone,
+                    mailid: user.email,
+                })
                 await createUser(newRec, id)
             })
-            this.updateCompInfo(id, {accessList: accessList} )
+            this.updateCompInfo(id, {accessList: newList} )
         }, 2000);
         return () => clearTimeout(timer);
     }
@@ -101,7 +105,6 @@ class CompanyProContext {
                     "" : `/${parents[1]}/dept` + (place == 2 ? 
                         "" : `/${parents[2]}/team`
             )));
-            console.log(org.parent, parents, refPath, org.name, place, org.type)
             setDoc(doc(db, refPath, org.name), {
                 description: org.description,
                 workLoc: "Registered Office"
@@ -109,12 +112,14 @@ class CompanyProContext {
         })
         
     }
-   
+    
     createCompInfo = async (id, newInfo, file, accessList) => {
+        console.log(id, newInfo, file, accessList)
         if (file) {
             const storageRef = ref(storage, `/${id}/logo`);
             uploadBytesResumable(storageRef, file).then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((url) => {
+                    console.log(url)
                     newInfo.logo = url;
                     setDoc(doc(db, "companyprofile", id), newInfo);
                     this.createAdmins(accessList, id)
@@ -152,6 +157,7 @@ class CompanyProContext {
     }
     
     updateCompInfo = (id, updateCompInfo, file) => {
+        console.log(id, updateCompInfo, file)
         if (file) {
             const storageRef = ref(storage, `/${id}/logo`);
             uploadBytesResumable(storageRef, file).then((snapshot) => {

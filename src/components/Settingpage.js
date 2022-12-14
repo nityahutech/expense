@@ -202,7 +202,7 @@ const Settingpage = () => {
                   </Col>
                   <Col xs={22} sm={10} md={10} lg={10}>
                     <Button
-                      style={{ background: "rgb(21, 101, 216)" }}
+                      style={{ background: "#1963A6" }}
                       // className="save"
                       htmlType="submit"
                       type="primary"
@@ -284,7 +284,7 @@ const Settingpage = () => {
                   </Col>
                   <Col xs={22} sm={10} md={10} lg={10}>
                     <Button
-                      style={{ background: "rgb(21, 101, 216)" }}
+                      style={{ background: "#1963A6" }}
                       className="newemail"
                       htmlType="submit"
                       type="primary"

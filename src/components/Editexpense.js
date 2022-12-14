@@ -74,16 +74,16 @@ const Editexpense = (props) => {
     props.setIsModalVisible(false);
   }
   const cancelStyle = {
-    border: "1px solid #1565D8",
-    color: "#1565D8",
+    border: "1px solid #1963A6",
+    color: "#1963A6",
     fontWeight: "600",
     fontSize: "14px",
     lineHeight: "17px",
     width: "99px",
   };
   const buttonStyle = {
-    border: "1px solid #1565D8",
-    background: "#1565D8",
+    border: "1px solid #1963A6",
+    background: "#1963A6",
     color: "#ffffff",
     fontWeight: "600",
     fontSize: "14px",
@@ -212,8 +212,7 @@ const Editexpense = (props) => {
             />
           </Form.Item>
         </Col>
-      </Row>
-      <Row>
+
         <Col xs={22} sm={22} md={12}>
           <Form.Item
             style={{ marginBottom: "10px" }}
@@ -268,35 +267,7 @@ const Editexpense = (props) => {
             />
           </Form.Item>
         </Col>
-        {/* <Col xs={22} sm={22} md={12}>
-          <Form.Item
-            style={{ marginBottom: "10px" }}
-            label="Status&nbsp;"
-            name="status"
-            className="Required"
-            rules={[
-              {
-                message: "Please enter the paymeny status",
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              defaultValue={status}
-              style={{
-                width: "100%",
-              }}
-              onChange={(value) => {
-                setStatus(value);
-              }}
-            >
-              <  value="Paid">Paid</>
-              <Option value="Unpaid">Unpaid</Option>
-            </Select>
-          </Form.Item>
-        </Col> */}
-      </Row>
-      <Row>
+
         <Col xs={22} sm={22} md={12}>
           <Form.Item
             style={{ marginBottom: "10px" }}
@@ -357,8 +328,7 @@ const Editexpense = (props) => {
             />
           </Form.Item>
         </Col>
-      </Row>
-      <Row>
+
         <Col xs={22} sm={22} md={12}>
           <Form.Item
             label="Subtotal"
@@ -368,8 +338,7 @@ const Editexpense = (props) => {
             <Input readonly value={subtotal} disabled={true} />
           </Form.Item>
         </Col>
-      </Row>
-      <Row gutter={24}>
+
         <Col xs={22}>
           <Form.Item
             style={{ marginBottom: "10px" }}

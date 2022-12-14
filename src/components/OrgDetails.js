@@ -13,7 +13,7 @@ import {
   Space,
   Select,
 } from "antd";
-import { CloseCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "../style/Onboarding.css";
 import CompanyProContext from "../contexts/CompanyProContext";
 import reload from "../images/reload.png";
@@ -529,65 +529,15 @@ const OrgDetails = (props) => {
             <Form.Item name="logo" className="uploadLogo">
               <div
                 style={{
-                  border: "dashed #B9B9B9",
-                  borderWidth: "thin",
-                  borderRadius: "4px",
+                //   border: "dashed #B9B9B9",
+                //   borderWidth: "thin",
+                //   borderRadius: "4px",
                   display: "flex",
                   alignItems: "center",
+                  justifyContent: "center",
+                  padding: "10px 0"
                 }}
               >
-              <Col>
-                <Button
-                  onClick={(e) => handleClick(e)}
-                  style={{
-                    width: "60px",
-                    height: "40px",
-                    margin: "10px",
-                  }}
-                >
-                  <PlusCircleOutlined
-                    style={{
-                      display: "flex",
-                      flexDirection: "column-reverse",
-                      alignItems: "center",
-                    }}
-                  />
-                  <span
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      marginRight: "8px",
-                    }}
-                  >
-                    Upload
-                  </span>
-                </Button>
-                <Button
-                  onClick={onReset}
-                  style={{
-                    width: "60px",
-                    height: "40px",
-                    margin: "10px",
-                  }}
-                >
-                  <CloseCircleOutlined
-                    style={{
-                      display: "flex",
-                      flexDirection: "column-reverse",
-                      alignItems: "center",
-                    }}
-                  />
-                  <span
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      marginRight: "8px",
-                    }}
-                  >
-                    Remove
-                  </span>
-                </Button>
-                </Col>
                 {isBigFile
                   ? message.error("File size must be less than 200Kb.")
                   : ""}
@@ -602,27 +552,57 @@ const OrgDetails = (props) => {
                   onChange={(e) => handleChange(e)}
                 />
                 {fileName ? (
+                    <div className="hoverImgCont" style={{position: "relative"}}>
                   <img 
                     src={imageUrl}
                     style={{
                         maxWidth: "120px",
                         height: "auto",
-                        marginRight: "10px"
                     }}
                   />
+                  <div className="overlay">
+                  <DeleteOutlined className="hoverIcon" onClick={onReset}/></div>
+                  </div>
                 ) : (
-                  <p
-                    style={{
-                      fontWeight: "400",
-                      fontSize: "13px",
-                      lineHeight: "19px",
-                      marginLeft: "5px",
-                      marginTop: "10px",
-                    }}
-                  >
-                    Upload logo. Use the 200 kb size image. PNG or JPEG file
-                    format accepted
-                  </p>
+                    <>
+                        <Button
+                            onClick={(e) => handleClick(e)}
+                            style={{
+                                width: "60px",
+                                height: "50px",
+                                margin: "10px",
+                            }}
+                        >
+                            <PlusCircleOutlined
+                                style={{
+                                display: "flex",
+                                flexDirection: "column-reverse",
+                                alignItems: "center",
+                                }}
+                            />
+                            <span
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    marginRight: "8px",
+                                }}
+                            >
+                                Upload
+                            </span>
+                        </Button>
+                        <p
+                            style={{
+                            fontWeight: "400",
+                            fontSize: "13px",
+                            lineHeight: "19px",
+                            marginLeft: "5px",
+                            marginTop: "10px",
+                            }}
+                        >
+                            Upload logo. Use the 200 kb size image. PNG or JPEG file
+                            format accepted
+                        </p>
+                    </>
                 )}
               </div>
             </Form.Item>

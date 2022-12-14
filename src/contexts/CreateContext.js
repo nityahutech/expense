@@ -8,6 +8,7 @@ import {
 import {
   collection,
   getDocs,
+  getDoc,
   setDoc,
   query,
   orderBy,
@@ -116,4 +117,10 @@ export function getBase64(img, callback) {
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result));
   reader.readAsDataURL(img);
+  
 };
+
+ export  async function getCountryCode(){
+  let data =  await getDoc(doc(db, "standardInfo","countryCodes"));
+  return data.data();
+}

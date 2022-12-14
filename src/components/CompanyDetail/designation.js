@@ -68,7 +68,7 @@ const Designation = () => {
       }
     })
     temp.sort(function (a, b) {
-      return a.length - b.length;
+      return a.designation.localeCompare(b.designation);
     });
     console.log('aaaaaaaaaa2', temp)
     setDataSource(temp)
@@ -80,6 +80,7 @@ const Designation = () => {
       title: "Designation",
       dataIndex: "designation",
       key: "designation",
+      // sorter: (a, b) => a.designation.localeCompare(b.designation),
 
     },
     {

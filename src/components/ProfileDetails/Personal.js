@@ -54,7 +54,7 @@ function Personal() {
       bloodGroup: value.bloodGroup ? value.bloodGroup : null,
       maritalStatus: value.maritalStatus ? value.maritalStatus : null,
       mname: mname,
-      profilePic: imageUrl || null,
+      profilePic: imageUrl || data.profilePic || null,
     };
     EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName);
     const timer = setTimeout(() => {
@@ -95,6 +95,7 @@ function Personal() {
   const onContactFinish = (values) => {
     let record = {
       ...values,
+      profilePic: data.profilePic || null,
       altPhnNo: values.altPhnNo ? values.altPhnNo : "",
     };
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
@@ -110,6 +111,7 @@ function Personal() {
       permanentAdd: values.permanentAdd ? values.permanentAdd : "",
       scrs: scrs ? scrs : null,
       lccs: lccs ? lccs : null,
+      profilePic: data.profilePic || null,
     };
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
     showEditAddressInfo(false);

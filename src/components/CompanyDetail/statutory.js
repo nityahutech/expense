@@ -25,7 +25,9 @@ import FormItem from "antd/es/form/FormItem";
 import CompanyProContext from "../../contexts/CompanyProContext";
 import "../../components/CompanyDetail/companystyle.css";
 import moment from "moment";
-import { checkAlphabets } from "../../contexts/CreateContext";
+import { checkAlphabets,getCountryCode } from "../../contexts/CreateContext";
+
+
 
 const compId = sessionStorage.getItem("compId");
 
@@ -61,7 +63,7 @@ const Statutory = () => {
       compTan: value.compTan,
       gst: value.gst,
     };
-
+  
     CompanyProContext.updateCompInfo(compId, valuesToservice);
     getData();
     showEditContent(false);
@@ -75,6 +77,9 @@ const Statutory = () => {
   }, [active])
 
   useEffect(() => {
+    getCountryCode().then((res)=>{
+      setCodes(res);
+      })
     getData();
   }, []);
 
@@ -102,6 +107,7 @@ const Statutory = () => {
       name: values.name,
       mailid: values.mailid,
       phone: values.phone,
+      prefix: values.prefix,
     };
     if (active == "director") { record.din = values.din }
     if (active == "auditor") { record.type = values.type }
@@ -115,6 +121,7 @@ const Statutory = () => {
       name: values.name,
       mailid: values.mailid,
       phone: values.phone,
+      prefix: values.prefix,
     };
     if (active == "director") { record.din = values.din }
     if (active == "auditor") { record.type = values.type }
@@ -192,6 +199,32 @@ const Statutory = () => {
       },
     });
   };
+
+  const handleOnChange=(value,event)=>{
+    console.log(value,event);
+  }
+
+  const prefixSelector = (
+    <Form.Item  name="prefix" noStyle>
+      <Select
+      showSearch
+        bordered={false}
+        style={{
+          width: 80,
+          padding: 0,
+          background: "#ffffff",
+        }}
+
+        onSelect={(value, event) => handleOnChange(value, event)}
+
+
+      >
+      { codes?.countries?.map((e) => <Option key={e?.code} value={e?.code} >{e?.code} </Option>
+    ) }
+        
+      </Select>
+    </Form.Item>
+  );
 
   return (
     <>

@@ -167,13 +167,16 @@ const LeaveType = () => {
     <div className="wholePage">
       <Row>
         <Col xs={24} sm={22} md={6}>
-          <ul className="sidecard">
+          <ul className="sidecard" style={{ cursor: "pointer" }}>
             {types.map((type) => (
               <li
                 className="sideCard"
                 style={
                   activeType.name == type.name
-                    ? { borderLeft: "4px solid #2094FF", color: "#2094FF" }
+                    ? {
+                        borderLeft: "4px solid #2094FF",
+                        color: "#2094FF",
+                      }
                     : null
                 }
                 onClick={() => setActiveType(type)}

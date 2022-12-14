@@ -15,6 +15,7 @@ function Education() {
   const [editContent, showEditContent] = useState(false);
   const [dateStart, setDateStart] = useState();
   const [dateEnd, setDateEnd] = useState();
+  const [data, setData] = useState([]);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const onFinish = (value) => {
     let record = {
@@ -27,6 +28,7 @@ function Education() {
       universityName: value.universityName ? value.universityName : null,
       courseStartDate: dateStart ? dateStart : null,
       courseEndDate: dateEnd ? dateEnd : null,
+      profilePic:data.profilePic || null
     };
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
     setData(record);
@@ -34,7 +36,6 @@ function Education() {
   };
 
   const onFinishFailed = (errorInfo) => {};
-  const [data, setData] = useState([]);
 
   useEffect(() => {
     getData();

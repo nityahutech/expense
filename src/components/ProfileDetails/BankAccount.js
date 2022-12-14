@@ -11,6 +11,7 @@ function BankAccount() {
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
   const onFinish = (values) => {
+    values.profilePic = data.profilePic || null
     EmpInfoContext.updateEduDetails(currentUser.uid, values);
     showEditContent(false);
     let temp = {

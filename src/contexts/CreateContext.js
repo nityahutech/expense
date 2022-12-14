@@ -109,6 +109,12 @@ export function checkAlphabets(event) {
   }
 };
 
+export function checkNumbervalue(event) {
+  if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
+    return true;
+  }
+};
+
 export function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }

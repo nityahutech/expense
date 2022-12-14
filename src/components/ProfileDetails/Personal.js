@@ -38,6 +38,7 @@ function Personal() {
   const [lccs, setLccs] = useState("");
   const [editAddressInfo, showEditAddressInfo] = useState(false);
   const [data, setData] = useState([]);
+  console.log(data);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [form] = Form.useForm();
   const onFinish = (value) => {
@@ -139,20 +140,52 @@ function Personal() {
     setScrs(data?.scrs ? data.scrs : null);
   };
 
+  const handleOnChange=(value,event)=>{
+    console.log(value,event);
+  }
+
   const prefixSelector = (
-    <Form.Item initialValue={data ? data.prefix : null} name="prefix" noStyle>
+    <Form.Item  name="prefix" noStyle>
       <Select
+      showSearch
         bordered={false}
         style={{
           width: 80,
           background: "#ffffff",
         }}
+
+        onSelect={(value, event) => handleOnChange(value, event)}
+
+
       >
-        <Option value="91 ">+91 (India)</Option>
+      { codes?.countries?.map((e) => <Option key={e?.code} value={e?.code} >{e?.code} </Option>
+    ) }
+        
       </Select>
     </Form.Item>
   );
 
+  const prefixSelector2 = (
+    <Form.Item  name="prefix2" noStyle>
+      <Select
+      showSearch
+        bordered={false}
+        style={{
+          width: 80,
+          background: "#ffffff",
+        }}
+
+        onSelect={(value, event) => handleOnChange(value, event)}
+
+
+      >
+      { codes?.countries?.map((e) => <Option key={e?.code} value={e?.code} >{e?.code} </Option>
+    ) }
+        
+      </Select>
+    </Form.Item>
+  );
+  
   function onReset() {
     setIsBigFile(false);
     setFileName(null);
@@ -890,9 +923,12 @@ function Personal() {
               }}
               wrappercol={{
                 span: 14,
-              }}
+              }}s
               initialValues={{
                 remember: true,
+                "prefix2":"+91",
+                "prefix":"+91"
+
               }}
               autoComplete="off"
               onFinish={onContactFinish}
@@ -1047,8 +1083,8 @@ function Personal() {
                       {editContactInfo === false ? (
                         <div>
                           {data?.phonenumber
-                            ? "+" + data.prefix + data.phonenumber
-                            : "-"}
+                          ?`${data.prefix} ${data.phonenumber}`
+                          : "-"}
                         </div>
                       ) : (
                         <Form.Item
@@ -1097,7 +1133,7 @@ function Personal() {
                       {editContactInfo === false ? (
                         <div>
                           {data?.altPhnNo
-                            ? "+" + data.prefix + data.altPhnNo
+                            ?  `${data.prefix2} ${data.altPhnNo}` 
                             : "-"}
                         </div>
                       ) : (
@@ -1115,7 +1151,7 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            addonBefore={prefixSelector}
+                            addonBefore={prefixSelector2}
                             style={{
                               marginTop: "10px",
                               width: "100%",

@@ -59,7 +59,7 @@ function Personal() {
     };
     EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName);
     const timer = setTimeout(() => {
-      3();
+      getData();
     }, 5000);
     showEditContent(false);
     return () => {
@@ -100,7 +100,6 @@ function Personal() {
       altPhnNo: values.altPhnNo ? values.altPhnNo : "",
     };
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
-    //  setData(values)
     getData();
     showEditContactInfo(false);
   };

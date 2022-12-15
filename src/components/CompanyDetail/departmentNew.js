@@ -33,7 +33,7 @@ const DepartmentNew = () => {
   const [editRecord, setEditRecord] = useState([]);
   const [data, setData] = useState();
   const compId = sessionStorage.getItem("compId")
-  
+
   useEffect(() => {
     CompanyProContext.getCompanyProfile(compId).then((res) => {
       console.log(res?.departments)
@@ -97,11 +97,13 @@ const DepartmentNew = () => {
       parent: par,
       type: type,
     });
-    CompanyProContext.addCompInfo(compId,{departments:{
-      ...values,
-      parent: par,
-      type: type,
-    }});
+    CompanyProContext.addCompInfo(compId, {
+      departments: {
+        ...values,
+        parent: par,
+        type: type,
+      }
+    });
     form.resetFields();
     setIsModalOpen(false);
     setData(temp);
@@ -109,64 +111,64 @@ const DepartmentNew = () => {
   };
 
   const onFinishEdit = (values) => {
-     let edited = data.map((d) => {
-       if (d.parent == editRecord.parent && d.name == editRecord.name) {
+    let edited = data.map((d) => {
+      if (d.parent == editRecord.parent && d.name == editRecord.name) {
         return {
-           name: values.editname,
-           description: values.editdescription,
-           parent: d.parent,
-           type: type,
-         };
-       }
-       if (d.parent != null) {
-         let par =
-           editRecord.parent == null ? editRecord.name : editRecord.parent;
-         if (d.parent.startsWith(par)) {
-           return {
-             ...d,
-             parent: d.parent.replace(editRecord.name, values.editname),
-           };
-         }
-       }
-       return d;
-     });
-     CompanyProContext.updateCompInfo(compId,{departments:edited});
-     setEditRecord({});
-     form1.resetFields();
-     setIsEditModalOpen(false);
-     setData(edited);
-     getData(edited);
+          name: values.editname,
+          description: values.editdescription,
+          parent: d.parent,
+          type: type,
+        };
+      }
+      if (d.parent != null) {
+        let par =
+          editRecord.parent == null ? editRecord.name : editRecord.parent;
+        if (d.parent.startsWith(par)) {
+          return {
+            ...d,
+            parent: d.parent.replace(editRecord.name, values.editname),
+          };
+        }
+      }
+      return d;
+    });
+    CompanyProContext.updateCompInfo(compId, { departments: edited });
+    setEditRecord({});
+    form1.resetFields();
+    setIsEditModalOpen(false);
+    setData(edited);
+    getData(edited);
   };
 
   const deleteData = (record) => {
-     Modal.confirm({
-       title: `Are you sure, you want to delete this ${type}?`,
-       okText: "Yes",
-       okType: "danger",
-       onOk: () => {
-         let deleted = data.filter((d) => {
+    Modal.confirm({
+      title: `Are you sure, you want to delete this ${type}?`,
+      okText: "Yes",
+      okType: "danger",
+      onOk: () => {
+        let deleted = data.filter((d) => {
           if (d.parent == record.parent && d.name == record.name) {
             console.log("same");
-             return false;
-           }
-           console.log(d.parent, record.parent);
-           if (d.parent != null) {
+            return false;
+          }
+          console.log(d.parent, record.parent);
+          if (d.parent != null) {
             let par =
-               record.parent == null
-                 ? record.name
+              record.parent == null
+                ? record.name
                 : `${record.parent}/${record.name}`;
-             if (d.parent.startsWith(par)) {
-               console.log("same par", par);
-               return false;
+            if (d.parent.startsWith(par)) {
+              console.log("same par", par);
+              return false;
             }
-           }
-           console.log("none");
+          }
+          console.log("none");
           return true;
-         });
-         CompanyProContext.updateCompInfo(compId,{departments:deleted});
-         setData(deleted)
-         getData(deleted);
-       },
+        });
+        CompanyProContext.updateCompInfo(compId, { departments: deleted });
+        setData(deleted)
+        getData(deleted);
+      },
     });
   };
 
@@ -278,163 +280,163 @@ const DepartmentNew = () => {
   return (
     <>
       <div
-      className="education"
-      style={{
-        margin: "10px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-    <Row
-      className="Row-Card"
-      style={{
-        width: '75%',
-        margin: '10px',
-        display: 'flex',
-        alignItems: 'center'
-      }}
-    >
-      <Col span={24}>
-      <Card
-        title="Company Policies"
-        className="policyCard"
-        bordered={true}
-        hoverable={true}
+        className="education"
         style={{
-          width: '100%',
-          marginTop: 10,
-          borderRadius: "10px",
-          cursor: "default"
-        }}
-      >
-        <div style={{
           margin: "10px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          width: '100%'
-
-        }}>
-          <div style={{ width:"100%" }}>
-            <div
+        }}
+      >
+        <Row
+          className="Row-Card"
+          style={{
+            width: '75%',
+            margin: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <Col span={24}>
+            <Card
+              title="Organisation"
+              className="policyCard"
+              bordered={true}
+              hoverable={true}
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                width: '100%',
+                marginTop: 10,
+                borderRadius: "10px",
+                cursor: "default"
               }}
             >
-              <div
-                style={{
-                  fontWeight: "600",
-                  fontSize: "14px",
-                  lineHeight: "19px",
-                }}
-              >
-                <div>
-                  <span
-                    className="pathSymbol"
-                    style={
-                      type == "Business Unit"
-                        ? { color: "black" }
-                        : { color: "#007ACB" }
-                    }
-                    onClick={() => {
-                      setType("Business Unit");
-                      setParent(null);
+              <div style={{
+                margin: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: '100%'
+
+              }}>
+                <div style={{ width: "100%" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                     }}
                   >
-                    Business Unit
-                  </span>
-                  {type == order[0] ? null : (
-                    <>
-                      {" > "}
-                      <span
-                        className="pathSymbol"
-                        style={
-                          type == "Division"
-                            ? { color: "black" }
-                            : { color: "#007ACB" }
-                        }
+                    <div
+                      style={{
+                        fontWeight: "600",
+                        fontSize: "14px",
+                        lineHeight: "19px",
+                      }}
+                    >
+                      <div>
+                        <span
+                          className="pathSymbol"
+                          style={
+                            type == "Business Unit"
+                              ? { color: "black" }
+                              : { color: "#007ACB" }
+                          }
+                          onClick={() => {
+                            setType("Business Unit");
+                            setParent(null);
+                          }}
+                        >
+                          Business Unit
+                        </span>
+                        {type == order[0] ? null : (
+                          <>
+                            {" > "}
+                            <span
+                              className="pathSymbol"
+                              style={
+                                type == "Division"
+                                  ? { color: "black" }
+                                  : { color: "#007ACB" }
+                              }
+                              onClick={() => {
+                                setType("Division");
+                                let temp = parent;
+                                delete temp[`${order[2]}`];
+                                delete temp[`${order[3]}`];
+                                setParent(temp);
+                              }}
+                            >
+                              Division
+                            </span>
+                            {type == order[1] ? null : (
+                              <>
+                                {" > "}
+                                <span
+                                  className="pathSymbol"
+                                  style={
+                                    type == "Department"
+                                      ? { color: "black" }
+                                      : { color: "#007ACB" }
+                                  }
+                                  onClick={() => {
+                                    setType("Department");
+                                    let temp = parent;
+                                    delete temp[`${order[3]}`];
+                                    setParent(temp);
+                                  }}
+                                >
+                                  Department
+                                </span>
+                                {type == order[2] ? null : (
+                                  <>
+                                    {" > "}
+                                    <span
+                                      className="pathSymbol"
+                                      style={
+                                        type == "Team"
+                                          ? { color: "black" }
+                                          : { color: "#007ACB" }
+                                      }
+                                    >
+                                      Team
+                                    </span>
+                                  </>
+                                )}
+                              </>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        fontWeight: "600",
+                        fontSize: "14px",
+                        lineHeight: "19px",
+                      }}
+                    >
+                      <Button
+                        type="default"
                         onClick={() => {
-                          setType("Division");
-                          let temp = parent;
-                          delete temp[`${order[2]}`];
-                          delete temp[`${order[3]}`];
-                          setParent(temp);
+                          {
+                            console.log("hi");
+                            setIsModalOpen(true);
+                          }
+                        }}
+                        style={{
+                          margin: "10px 10px 0px 0px",
+                          background: "#1963A6",
+                          color: "#ffffff",
+                          borderRadius: "5px",
                         }}
                       >
-                        Division
-                      </span>
-                      {type == order[1] ? null : (
-                        <>
-                          {" > "}
-                          <span
-                            className="pathSymbol"
-                            style={
-                              type == "Department"
-                                ? { color: "black" }
-                                : { color: "#007ACB" }
-                            }
-                            onClick={() => {
-                              setType("Department");
-                              let temp = parent;
-                              delete temp[`${order[3]}`];
-                              setParent(temp);
-                            }}
-                          >
-                            Department
-                          </span>
-                          {type == order[2] ? null : (
-                            <>
-                              {" > "}
-                              <span
-                                className="pathSymbol"
-                                style={
-                                  type == "Team"
-                                    ? { color: "black" }
-                                    : { color: "#007ACB" }
-                                }
-                              >
-                                Team
-                              </span>
-                            </>
-                          )}
-                        </>
-                      )}
-                    </>
-                  )}
-                </div>
-              </div>
-              <div
-                style={{
-                  fontWeight: "600",
-                  fontSize: "14px",
-                  lineHeight: "19px",
-                }}
-              >
-                <Button
-                  type="default"
-                  onClick={() => {
-                    {
-                      console.log("hi");
-                      setIsModalOpen(true);
-                    }
-                  }}
-                  style={{
-                    margin: "10px 10px 0px 0px",
-                    background: "#1963A6",
-                    color: "#ffffff",
-                    borderRadius: "5px",
-                  }}
-                >
-                  + Add {type}{" "}
-                </Button>
-              </div>
-            </div>
-            <Divider />
+                        + Add {type}{" "}
+                      </Button>
+                    </div>
+                  </div>
+                  <Divider />
 
-            {/* {type != order[0] ? (
+                  {/* {type != order[0] ? (
               <Row
                 style={{ display: "flex", flexDirection: "column", margin: "20px" }}
               >
@@ -450,358 +452,358 @@ const DepartmentNew = () => {
             ) : null} */}
 
 
-            <Table
-              className="tableTab"
-              columns={columns}
-              dataSource={dataSource}
-              style={{ width:"100%" }}
-              size="middle"
-              expandable={type == order[3] ? ({
-                expandedRowRender: (record) => (
-                  <p
-                    style={{
-                      margin: 0,
+                  <Table
+                    className="tableTab"
+                    columns={columns}
+                    dataSource={dataSource}
+                    style={{ width: "100%" }}
+                    size="middle"
+                    expandable={type == order[3] ? ({
+                      expandedRowRender: (record) => (
+                        <p
+                          style={{
+                            margin: 0,
+                          }}
+                        >
+                          {type == order[3] ? (
+                            record.name) : null}
+                        </p>
+                      ),
+                      rowExpandable: (record) => record.name,
+                    }) : null}
+                    onRow={(record, rowIndex) => {
+                      // return {
+                      //     onClick: () => {
+                      //         let temp = order.indexOf(type) + 1
+                      //         if (temp > 3) { return }
+                      //         setType(order[temp]);
+                      //         console.log(temp, order[temp])
+                      //     }, // click row
+                      // };
                     }}
-                  >
-                    {type == order[3] ? (
-                      record.name) : null}
-                  </p>
-                ),
-                rowExpandable: (record) => record.name,
-              }) : null}
-              onRow={(record, rowIndex) => {
-                // return {
-                //     onClick: () => {
-                //         let temp = order.indexOf(type) + 1
-                //         if (temp > 3) { return }
-                //         setType(order[temp]);
-                //         console.log(temp, order[temp])
-                //     }, // click row
-                // };
-              }}
-            />
-          </div>
+                  />
+                </div>
 
-          {/* //---------------------------------add Modal */}
-          <Row>
-            <Col xs={22} sm={20} md={18}>
-              <Modal
-                // bodyStyle={{ overflowY: 'scroll' }}
-                // style={{ height: 'calc(100vh - 200px)' }}
-                bodyStyle={{
-                  overflowY: "auto",
-                  maxHeight: "calc(100vh - 200px)",
-                  marginLeft: "40px",
-                  marginRight: "40px",
-                }}
-                className="viewAppraisal"
-                centered
-                width={550}
-                visible={ismodalOpen}
-                // footer={null}
-                destroyOnClose
-                onCancel={() => {
-                  setIsModalOpen(false);
-                }}
-                cancelText={
-                  <div>
-                    <CloseOutlined style={{ marginRight: "10px" }} />
-                    CANCEL
-                  </div>
-                }
-                onOk={() => {
-                  form.submit();
-                }}
-                okText={
-                  <div>
-                    <CheckOutlined style={{ marginRight: "10px" }} />
-                    SAVE
-                  </div>
-                }
-                title={type}
-                closeIcon={
-                  <div
-                    onClick={() => {
-                      setIsModalOpen(false);
-                    }}
-                    style={{ color: "#ffffff" }}
-                  >
-                    X
-                  </div>
-                }
-              >
-                <Row
-                  className="apply-leave"
-                  style={{
-                    marginTop: "10px",
-                  }}
-                >
-                  <Col
-                    xl={24}
-                    lg={24}
-                    md={24}
-                    sm={24}
-                    xs={24}
-                    style={{
-                      background: "flex",
-                      padding: "10px",
-                      // width: "400px",
-                    }}
-                  >
-                    <Form
-                      labelCol={{
-                        span: 9,
+                {/* //---------------------------------add Modal */}
+                <Row>
+                  <Col xs={22} sm={20} md={18}>
+                    <Modal
+                      // bodyStyle={{ overflowY: 'scroll' }}
+                      // style={{ height: 'calc(100vh - 200px)' }}
+                      bodyStyle={{
+                        overflowY: "auto",
+                        maxHeight: "calc(100vh - 200px)",
+                        marginLeft: "40px",
+                        marginRight: "40px",
                       }}
-                      wrapperCol={{
-                        span: 16,
+                      className="viewAppraisal"
+                      centered
+                      width={550}
+                      visible={ismodalOpen}
+                      // footer={null}
+                      destroyOnClose
+                      onCancel={() => {
+                        setIsModalOpen(false);
                       }}
-                      initialValues={{
-                        remember: true,
+                      cancelText={
+                        <div>
+                          <CloseOutlined style={{ marginRight: "10px" }} />
+                          CANCEL
+                        </div>
+                      }
+                      onOk={() => {
+                        form.submit();
                       }}
-                      form={form}
-                      onFinish={onFinish}
+                      okText={
+                        <div>
+                          <CheckOutlined style={{ marginRight: "10px" }} />
+                          SAVE
+                        </div>
+                      }
+                      title={type}
+                      closeIcon={
+                        <div
+                          onClick={() => {
+                            setIsModalOpen(false);
+                          }}
+                          style={{ color: "#ffffff" }}
+                        >
+                          X
+                        </div>
+                      }
                     >
-                      <Form.Item
-                        labelAlign="left"
-                        name="name"
-                        style={{ marginBottom: "20px" }}
-                        label={
-                          <label style={{ color: "black", fontWeight: "400" }}>
-                            {type} Name
-                          </label>
-                        }
-                        rules={[
-                          {
-                            required: true,
-                            message: `Please enter ${type} Name`,
-                          },
-                          {
-                            pattern: /^[0-9a-zA-Z.,-\s]+$/,
-                            message: "Please enter Valid Name",
-                          },
-                        ]}
+                      <Row
+                        className="apply-leave"
+                        style={{
+                          marginTop: "10px",
+                        }}
                       >
-                        <Input
-                          maxLength={30}
-                          onChange={(e) => {
-                            const inputval = e.target.value;
-                            const str = e.target.value;
-                            const newVal =
-                              inputval.substring(0, 1).toUpperCase() +
-                              inputval.substring(1);
-                            const caps = str.split(" ").map(capitalize).join(" ");
-                            form.setFieldsValue({ name: newVal, name: caps });
+                        <Col
+                          xl={24}
+                          lg={24}
+                          md={24}
+                          sm={24}
+                          xs={24}
+                          style={{
+                            background: "flex",
+                            padding: "10px",
+                            // width: "400px",
                           }}
-                        />
-                      </Form.Item>
+                        >
+                          <Form
+                            labelCol={{
+                              span: 9,
+                            }}
+                            wrapperCol={{
+                              span: 16,
+                            }}
+                            initialValues={{
+                              remember: true,
+                            }}
+                            form={form}
+                            onFinish={onFinish}
+                          >
+                            <Form.Item
+                              labelAlign="left"
+                              name="name"
+                              style={{ marginBottom: "20px" }}
+                              label={
+                                <label style={{ color: "black", fontWeight: "400" }}>
+                                  {type} Name
+                                </label>
+                              }
+                              rules={[
+                                {
+                                  required: true,
+                                  message: `Please enter ${type} Name`,
+                                },
+                                {
+                                  pattern: /^[0-9a-zA-Z.,-\s]+$/,
+                                  message: "Please enter Valid Name",
+                                },
+                              ]}
+                            >
+                              <Input
+                                maxLength={30}
+                                onChange={(e) => {
+                                  const inputval = e.target.value;
+                                  const str = e.target.value;
+                                  const newVal =
+                                    inputval.substring(0, 1).toUpperCase() +
+                                    inputval.substring(1);
+                                  const caps = str.split(" ").map(capitalize).join(" ");
+                                  form.setFieldsValue({ name: newVal, name: caps });
+                                }}
+                              />
+                            </Form.Item>
 
-                      <Form.Item
-                        labelAlign="left"
-                        name="description"
-                        style={{ marginBottom: "20px" }}
-                        label={
-                          <label style={{ color: "black", fontWeight: "400" }}>
-                            Description:
-                          </label>
-                        }
-                        rules={[
-                          {
-                            required: true,
-                            message: `Please enter ${type} Description`,
-                          },
-                          {
-                            pattern: /^[0-9a-zA-Z.,-\s]+$/,
-                            message: "Please enter Valid Name",
-                          },
-                        ]}
-                      >
-                        <Input.TextArea
-                          maxLength={120}
-                          rows={4}
-                          onChange={(e) => {
-                            const inputval = e.target.value;
-                            const str = e.target.value;
-                            const newVal =
-                              inputval.substring(0, 1).toUpperCase() +
-                              inputval.substring(1);
-                            const caps = str.split(". ").map(capitalize).join(". ");
-                            form.setFieldsValue({
-                              description: newVal,
-                              description: caps,
-                            });
-                          }}
-                        />
-                      </Form.Item>
-                    </Form>
+                            <Form.Item
+                              labelAlign="left"
+                              name="description"
+                              style={{ marginBottom: "20px" }}
+                              label={
+                                <label style={{ color: "black", fontWeight: "400" }}>
+                                  Description:
+                                </label>
+                              }
+                              rules={[
+                                {
+                                  required: true,
+                                  message: `Please enter ${type} Description`,
+                                },
+                                {
+                                  pattern: /^[0-9a-zA-Z.,-\s]+$/,
+                                  message: "Please enter Valid Name",
+                                },
+                              ]}
+                            >
+                              <Input.TextArea
+                                maxLength={120}
+                                rows={4}
+                                onChange={(e) => {
+                                  const inputval = e.target.value;
+                                  const str = e.target.value;
+                                  const newVal =
+                                    inputval.substring(0, 1).toUpperCase() +
+                                    inputval.substring(1);
+                                  const caps = str.split(". ").map(capitalize).join(". ");
+                                  form.setFieldsValue({
+                                    description: newVal,
+                                    description: caps,
+                                  });
+                                }}
+                              />
+                            </Form.Item>
+                          </Form>
+                        </Col>
+                      </Row>
+                    </Modal>
                   </Col>
                 </Row>
-              </Modal>
-            </Col>
-          </Row>
 
-          {/* //---------------------------------edit Modal */}
-          <Row>
-            <Col xs={22} sm={20} md={18}>
-              <Modal
-                bodyStyle={{
-                  overflowY: "auto",
-                  maxHeight: "calc(100vh - 200px)",
-                  marginLeft: "40px",
-                  marginRight: "40px",
-                }}
-                className="viewAppraisal"
-                centered
-                width={550}
-                visible={isEditModalOpen}
-                destroyOnClose
-                onCancel={() => {
-                  setIsEditModalOpen(false);
-                }}
-                cancelText={
-                  <div>
-                    <CloseOutlined style={{ marginRight: "10px" }} />
-                    CANCEL
-                  </div>
-                }
-                onOk={() => {
-                  form1.submit();
-                }}
-                okText={
-                  <div>
-                    <CheckOutlined style={{ marginRight: "10px" }} />
-                    SAVE
-                  </div>
-                }
-                title={<div> Edit {type}</div>}
-                closeIcon={
-                  <div
-                    onClick={() => {
-                      setIsEditModalOpen(false);
-                      form1.resetFields();
-                    }}
-                    style={{ color: "#ffffff" }}
-                  >
-                    X
-                  </div>
-                }
-              >
-                <Row
-                  className="apply-leave"
-                  style={{
-                    marginTop: "10px",
-                  }}
-                >
-                  <Col
-                    xl={24}
-                    lg={24}
-                    md={24}
-                    sm={24}
-                    xs={24}
-                    style={{
-                      background: "flex",
-                      padding: "10px",
-                      // width: "400px",
-                    }}
-                  >
-                    <Form
-                      labelCol={{
-                        span: 8,
+                {/* //---------------------------------edit Modal */}
+                <Row>
+                  <Col xs={22} sm={20} md={18}>
+                    <Modal
+                      bodyStyle={{
+                        overflowY: "auto",
+                        maxHeight: "calc(100vh - 200px)",
+                        marginLeft: "40px",
+                        marginRight: "40px",
                       }}
-                      wrapperCol={{
-                        span: 16,
+                      className="viewAppraisal"
+                      centered
+                      width={550}
+                      visible={isEditModalOpen}
+                      destroyOnClose
+                      onCancel={() => {
+                        setIsEditModalOpen(false);
                       }}
-                      initialValues={{
-                        remember: true,
+                      cancelText={
+                        <div>
+                          <CloseOutlined style={{ marginRight: "10px" }} />
+                          CANCEL
+                        </div>
+                      }
+                      onOk={() => {
+                        form1.submit();
                       }}
-                      form={form1}
-                      onFinish={onFinishEdit}
+                      okText={
+                        <div>
+                          <CheckOutlined style={{ marginRight: "10px" }} />
+                          SAVE
+                        </div>
+                      }
+                      title={<div> Edit {type}</div>}
+                      closeIcon={
+                        <div
+                          onClick={() => {
+                            setIsEditModalOpen(false);
+                            form1.resetFields();
+                          }}
+                          style={{ color: "#ffffff" }}
+                        >
+                          X
+                        </div>
+                      }
                     >
-                      <Form.Item
-                        labelAlign="left"
-                        name="editname"
-                        style={{ marginBottom: "20px" }}
-                        label={
-                          <label style={{ color: "black", fontWeight: "400" }}>
-                            {type} Name
-                          </label>
-                        }
-                        initialValue={editRecord.name}
-                        rules={[
-                          {
-                            required: true,
-                            message: `Please enter ${type} Name`,
-                          },
-                          {
-                            pattern: /^[0-9a-zA-Z.,-\s]+$/,
-                            message: "Please enter Valid Name",
-                          },
-                        ]}
+                      <Row
+                        className="apply-leave"
+                        style={{
+                          marginTop: "10px",
+                        }}
                       >
-                        <Input
-                          maxLength={30}
-                          onChange={(e) => {
-                            const inputval = e.target.value;
-                            const str = e.target.value;
-                            const newVal =
-                              inputval.substring(0, 1).toUpperCase() +
-                              inputval.substring(1);
-                            const caps = str.split(" ").map(capitalize).join(" ");
-                            form1.setFieldsValue({
-                              editname: newVal,
-                              editname: caps,
-                            });
+                        <Col
+                          xl={24}
+                          lg={24}
+                          md={24}
+                          sm={24}
+                          xs={24}
+                          style={{
+                            background: "flex",
+                            padding: "10px",
+                            // width: "400px",
                           }}
-                        />
-                      </Form.Item>
+                        >
+                          <Form
+                            labelCol={{
+                              span: 8,
+                            }}
+                            wrapperCol={{
+                              span: 16,
+                            }}
+                            initialValues={{
+                              remember: true,
+                            }}
+                            form={form1}
+                            onFinish={onFinishEdit}
+                          >
+                            <Form.Item
+                              labelAlign="left"
+                              name="editname"
+                              style={{ marginBottom: "20px" }}
+                              label={
+                                <label style={{ color: "black", fontWeight: "400" }}>
+                                  {type} Name
+                                </label>
+                              }
+                              initialValue={editRecord.name}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: `Please enter ${type} Name`,
+                                },
+                                {
+                                  pattern: /^[0-9a-zA-Z.,-\s]+$/,
+                                  message: "Please enter Valid Name",
+                                },
+                              ]}
+                            >
+                              <Input
+                                maxLength={30}
+                                onChange={(e) => {
+                                  const inputval = e.target.value;
+                                  const str = e.target.value;
+                                  const newVal =
+                                    inputval.substring(0, 1).toUpperCase() +
+                                    inputval.substring(1);
+                                  const caps = str.split(" ").map(capitalize).join(" ");
+                                  form1.setFieldsValue({
+                                    editname: newVal,
+                                    editname: caps,
+                                  });
+                                }}
+                              />
+                            </Form.Item>
 
-                      <Form.Item
-                        labelAlign="left"
-                        name="editdescription"
-                        style={{ marginBottom: "20px" }}
-                        label={
-                          <label style={{ color: "black", fontWeight: "400" }}>
-                            Description:
-                          </label>
-                        }
-                        initialValue={editRecord.description}
-                        rules={[
-                          {
-                            required: true,
-                            message: `Please enter ${type} Description`,
-                          },
-                          {
-                            pattern: /^[0-9a-zA-Z.,-\s]+$/,
-                            message: "Please enter Valid Name",
-                          },
-                        ]}
-                      >
-                        <Input.TextArea
-                          maxLength={120}
-                          rows={4}
-                          onChange={(e) => {
-                            const inputval = e.target.value;
-                            const str = e.target.value;
-                            const newVal =
-                              inputval.substring(0, 1).toUpperCase() +
-                              inputval.substring(1);
-                            const caps = str.split(". ").map(capitalize).join(". ");
-                            form1.setFieldsValue({
-                              editdescription: newVal,
-                              editdescription: caps,
-                            });
-                          }}
-                        />
-                      </Form.Item>
-                    </Form>
+                            <Form.Item
+                              labelAlign="left"
+                              name="editdescription"
+                              style={{ marginBottom: "20px" }}
+                              label={
+                                <label style={{ color: "black", fontWeight: "400" }}>
+                                  Description:
+                                </label>
+                              }
+                              initialValue={editRecord.description}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: `Please enter ${type} Description`,
+                                },
+                                {
+                                  pattern: /^[0-9a-zA-Z.,-\s]+$/,
+                                  message: "Please enter Valid Name",
+                                },
+                              ]}
+                            >
+                              <Input.TextArea
+                                maxLength={120}
+                                rows={4}
+                                onChange={(e) => {
+                                  const inputval = e.target.value;
+                                  const str = e.target.value;
+                                  const newVal =
+                                    inputval.substring(0, 1).toUpperCase() +
+                                    inputval.substring(1);
+                                  const caps = str.split(". ").map(capitalize).join(". ");
+                                  form1.setFieldsValue({
+                                    editdescription: newVal,
+                                    editdescription: caps,
+                                  });
+                                }}
+                              />
+                            </Form.Item>
+                          </Form>
+                        </Col>
+                      </Row>
+                    </Modal>
                   </Col>
                 </Row>
-              </Modal>
-            </Col>
-          </Row>
-        </div>
-      </Card>
-      </Col>
-      </Row>
+              </div>
+            </Card>
+          </Col>
+        </Row>
       </div>
     </>
   );

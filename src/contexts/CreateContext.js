@@ -51,7 +51,7 @@ export async function createUser(values, compId) {
     role: values.role? values.role :
       (values.designation == "Chief Executive Officer(CEO)" ||
       values.designation == "Human Resource(HR)"
-        ? "hr"
+        ? "admin"
         : "emp"),
     empType: values.empType,
     repManager: values.repManager ? values.repManager : "",

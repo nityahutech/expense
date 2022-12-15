@@ -62,10 +62,6 @@ export async function createUser(values, compId) {
     isManager: values.isManager || false,
     isHr: values.isHr || false,
     isLead: values.isLead || false,
-    earnLeave: 12,
-    sickLeave: 6,
-    casualLeave: 6,
-    optionalLeave: 2,
     disabled: false
   };
   console.log(compId, valuesToservice)

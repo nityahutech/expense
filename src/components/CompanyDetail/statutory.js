@@ -25,7 +25,7 @@ import FormItem from "antd/es/form/FormItem";
 import CompanyProContext from "../../contexts/CompanyProContext";
 import "../../components/CompanyDetail/companystyle.css";
 import moment from "moment";
-import { checkAlphabets,getCountryCode } from "../../contexts/CreateContext";
+import { checkAlphabets,getCountryCode, showNotification } from "../../contexts/CreateContext";
 
 const Statutory = () => {
   const compId = sessionStorage.getItem("compId")
@@ -44,13 +44,6 @@ const Statutory = () => {
   const [data, setData] = useState([]);
   const { Option } = Select
   const [codes, setCodes] = useState("");
-
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
-  };
 
   const onFinish = (value) => {
 
@@ -90,26 +83,30 @@ const Statutory = () => {
     setEditPerson(temp.length == 0 ? [false] : [...temp].fill(false))
     setBankList(data.bank);
     setEditBank([...data.bank].fill(false))
+    console.log(data, temp)
   };
 
   function onAdd(values) {
     console.log('dddddd', values)
-
-    let matchingstatury = activeList.filter((item) => item.name === values.name || item.mailid === values.mailid)
-    console.log('dddddddd', matchingstatury)
-    if (matchingstatury.length > 0) {
-      showNotification("error", "error", "Try Again Name or Email Allready present");
-      return
+    let matchingstatury = activeList.filter((item) => item.mailid === values.mailid)
+    let match = matchingstatury.length > 0
+    if (active == "director") {
+      let matchingdin = activeList.filter((item) => item.din === values.din)
+      match = matchingdin.length > 0 ? true : match
     }
-
+    if (match) {
+      showNotification("error", "error", "This Name or Email Allready present");
+      return;
+    }
     const record = {
       name: values.name,
       mailid: values.mailid,
       phone: values.phone,
-      prefix: values.prefix,
+      prefix: values?.prefix || null,
     };
     if (active == "director") { record.din = values.din }
     if (active == "auditor") { record.type = values.type }
+    console.log('dddddddd', { [`${active}`]: record })
     CompanyProContext.addCompInfo(compId, { [`${active}`]: record });
     addForm.resetFields();
     getData();
@@ -120,7 +117,7 @@ const Statutory = () => {
       name: values.name,
       mailid: values.mailid,
       phone: values.phone,
-      prefix: values.prefix,
+      prefix: values?.prefix || null,
     };
     if (active == "director") { record.din = values.din }
     if (active == "auditor") { record.type = values.type }
@@ -129,7 +126,7 @@ const Statutory = () => {
     CompanyProContext.editCompInfo(compId, { [`${active}`]: old }, { [`${active}`]: record });
     editForm.resetFields();
     setEditPerson([...editPerson].fill(false))
-    const timer = setTimeout(() => getData(), 200)
+    const timer = setTimeout(() => getData(), 400)
     return () => clearTimeout(timer)
   }
 
@@ -179,7 +176,7 @@ const Statutory = () => {
     CompanyProContext.editCompInfo(compId, { bank: old }, { bank: record });
     editBankForm.resetFields();
     setEditBank(editBank.fill(false));
-    const timer = setTimeout(() => getData(), 200)
+    const timer = setTimeout(() => getData(), 600)
     return () => clearTimeout(timer)
   }
 
@@ -203,8 +200,9 @@ const Statutory = () => {
     console.log(value,event);
   }
 
-  const prefixSelector = (
-    <Form.Item  name="prefix" noStyle>
+  const prefixSelector = (i) => {
+    return (
+    <Form.Item initialValue={activeList[i]?.prefix} name="prefix" noStyle>
       <Select
       showSearch
         bordered={false}
@@ -224,6 +222,7 @@ const Statutory = () => {
       </Select>
     </Form.Item>
   );
+  }
 
   return (
     <>
@@ -755,7 +754,7 @@ const Statutory = () => {
                                 ]}
                               >
                                 <Input
-                                addonBefore={prefixSelector}
+                                addonBefore={prefixSelector(i)}
                                   maxLength={11}
                                   bordered={false}
                                   style={{

@@ -27,11 +27,8 @@ import "../../components/CompanyDetail/companystyle.css";
 import moment from "moment";
 import { checkAlphabets,getCountryCode } from "../../contexts/CreateContext";
 
-
-
-const compId = sessionStorage.getItem("compId");
-
 const Statutory = () => {
+  const compId = sessionStorage.getItem("compId")
   const [addPerson, setAddPerson] = useState(false);
   const [addBank, setAddBank] = useState(false);
   const [active, setActive] = useState("director");

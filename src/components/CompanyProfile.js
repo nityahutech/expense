@@ -53,7 +53,7 @@ function CompanyProfile() {
             {/* <Tabs.TabPane tab="Department" key="3">
               <Department />
             </Tabs.TabPane> */}
-            <Tabs.TabPane tab="Organisation" key="3">
+            <Tabs.TabPane tab="Organization" key="3">
               <DepartmentNew />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Designation" key="4">

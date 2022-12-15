@@ -25,13 +25,10 @@ import FormItem from "antd/es/form/FormItem";
 import CompanyProContext from "../../contexts/CompanyProContext";
 import "../../components/CompanyDetail/companystyle.css";
 import moment from "moment";
-import { checkAlphabets,getCountryCode } from "../../contexts/CreateContext";
-
-
-
-const compId = sessionStorage.getItem("compId");
+import { checkAlphabets,getCountryCode, showNotification } from "../../contexts/CreateContext";
 
 const Statutory = () => {
+  const compId = sessionStorage.getItem("compId")
   const [addPerson, setAddPerson] = useState(false);
   const [addBank, setAddBank] = useState(false);
   const [active, setActive] = useState("director");
@@ -47,13 +44,6 @@ const Statutory = () => {
   const [data, setData] = useState([]);
   const { Option } = Select
   const [codes, setCodes] = useState("");
-
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
-  };
 
   const onFinish = (value) => {
 
@@ -93,26 +83,30 @@ const Statutory = () => {
     setEditPerson(temp.length == 0 ? [false] : [...temp].fill(false))
     setBankList(data.bank);
     setEditBank([...data.bank].fill(false))
+    console.log(data, temp)
   };
 
   function onAdd(values) {
     console.log('dddddd', values)
-
-    let matchingstatury = activeList.filter((item) => item.name === values.name || item.mailid === values.mailid)
-    console.log('dddddddd', matchingstatury)
-    if (matchingstatury.length > 0) {
-      showNotification("error", "error", "Try Again Name or Email Allready present");
-      return
+    let matchingstatury = activeList.filter((item) => item.mailid === values.mailid)
+    let match = matchingstatury.length > 0
+    if (active == "director") {
+      let matchingdin = activeList.filter((item) => item.din === values.din)
+      match = matchingdin.length > 0 ? true : match
     }
-
+    if (match) {
+      showNotification("error", "error", "This Name or Email Allready present");
+      return;
+    }
     const record = {
       name: values.name,
       mailid: values.mailid,
       phone: values.phone,
-      prefix: values.prefix,
+      prefix: values?.prefix || null,
     };
     if (active == "director") { record.din = values.din }
     if (active == "auditor") { record.type = values.type }
+    console.log('dddddddd', { [`${active}`]: record })
     CompanyProContext.addCompInfo(compId, { [`${active}`]: record });
     addForm.resetFields();
     getData();
@@ -123,7 +117,7 @@ const Statutory = () => {
       name: values.name,
       mailid: values.mailid,
       phone: values.phone,
-      prefix: values.prefix,
+      prefix: values?.prefix || null,
     };
     if (active == "director") { record.din = values.din }
     if (active == "auditor") { record.type = values.type }
@@ -132,7 +126,7 @@ const Statutory = () => {
     CompanyProContext.editCompInfo(compId, { [`${active}`]: old }, { [`${active}`]: record });
     editForm.resetFields();
     setEditPerson([...editPerson].fill(false))
-    const timer = setTimeout(() => getData(), 200)
+    const timer = setTimeout(() => getData(), 400)
     return () => clearTimeout(timer)
   }
 
@@ -182,7 +176,7 @@ const Statutory = () => {
     CompanyProContext.editCompInfo(compId, { bank: old }, { bank: record });
     editBankForm.resetFields();
     setEditBank(editBank.fill(false));
-    const timer = setTimeout(() => getData(), 200)
+    const timer = setTimeout(() => getData(), 600)
     return () => clearTimeout(timer)
   }
 
@@ -206,8 +200,9 @@ const Statutory = () => {
     console.log(value,event);
   }
 
-  const prefixSelector = (
-    <Form.Item  name="prefix" noStyle>
+  const prefixSelector = (i) => {
+    return (
+    <Form.Item initialValue={i?activeList[i]?.prefix:null} name="prefix" noStyle>
       <Select
       showSearch
         bordered={false}
@@ -216,17 +211,16 @@ const Statutory = () => {
           padding: 0,
           background: "#ffffff",
         }}
-
         onSelect={(value, event) => handleOnChange(value, event)}
-
-
       >
-      { codes?.countries?.map((e) => <Option key={e?.code} value={e?.code} >{e?.code} </Option>
-    ) }
-        
+      { codes?.countries?.map((e) => 
+      <Option key={e?.code} value={e?.code} >{e?.code} </Option>) 
+      }
       </Select>
     </Form.Item>
   );
+  }
+  
 
   return (
     <>
@@ -629,7 +623,7 @@ const Statutory = () => {
               {activeList.map((rec, i) => (
                 <div>
                       <Row gutter={[16, 16]}>
-                        <Col xs={22} sm={15} md={6}>
+                        <Col xs={24} sm={15} md={6} lg={6} xl={6} xxl={6}>
                           <div className="div-discription">Name</div>
                           {editPerson[i] === false ? (
                             <div>{rec?.name ? rec.name : "-"}</div>
@@ -658,7 +652,7 @@ const Statutory = () => {
                             </FormItem>
                           )}
                         </Col>
-                        <Col xs={22} sm={15} md={9}>
+                        <Col xs={24} sm={15} md={7} lg={7} xl={7} xxl={7}>
                           <div className="div-discription">Email ID</div>
                           {editPerson[i] === false ? (
                             <div>{rec?.mailid ? rec.mailid : "-"}</div>
@@ -687,7 +681,7 @@ const Statutory = () => {
                           )}
                         </Col>
                         {active != "secretary" ?(
-                          <Col xs={22} sm={15} md={4}>
+                          <Col xs={24} sm={15} md={3} lg={2} xl={2} xxl={3}>
                             <div className="div-discription">{active == "director" ? "DIN" : "Type"}</div>
                             {editPerson[i] === false ? (
                               <div>
@@ -741,7 +735,7 @@ const Statutory = () => {
                             )}
                           </Col>
                         ) : null}
-                          <Col xs={22} sm={15} md={4}>
+                          <Col xs={24} sm={15} md={7} lg={8} xl={8} xxl={7}>
                             <div className="div-discription">Phone Number</div>
                             {editPerson[i] === false ? (
                               <div>{rec?.phone ? `${rec.prefix ? rec.prefix : ""} ${rec.phone}` : "-"}</div>
@@ -758,7 +752,7 @@ const Statutory = () => {
                                 ]}
                               >
                                 <Input
-                                addonBefore={prefixSelector}
+                                  addonBefore={prefixSelector(i)}
                                   maxLength={11}
                                   bordered={false}
                                   style={{
@@ -772,7 +766,7 @@ const Statutory = () => {
                             )}
                           </Col>
                         {editPerson[i] == false ?(
-                          <Col xs={22} sm={15} md={1}
+                          <Col xs={24} sm={15} md={1} 
                               style={{
                                 display: "flex",
                                 justifyContent: "center",
@@ -802,7 +796,7 @@ const Statutory = () => {
                               </Button>
                           </Col>
                         ) :(
-                          <Col xs={22} sm={15} md={1}
+                          <Col xs={24} sm={15} md={1}
                               style={{
                                 display: "flex",
                                 justifyContent: "center",
@@ -973,6 +967,7 @@ const Statutory = () => {
                           ) : null}
                           <Col xs={22} sm={15} md={6}>
                             <FormItem
+                              addonBefore={prefixSelector()}
                               name="phone"
                               label="Phone Number"
                               rules={[
@@ -987,6 +982,7 @@ const Statutory = () => {
                               ]}
                             >
                               <Input
+                                addonBefore={prefixSelector()}
                                 maxLength={10}
                                 style={{
                                   width: "100%",
@@ -1373,7 +1369,8 @@ const Statutory = () => {
                   <>
                     <Button
                       type="text"
-                      onClick={() => onEditBank.submit()}
+                      onClick={() => setEditBank([...editBank].fill(false))}
+
                     >
                       CANCEL
                     </Button>
@@ -1396,8 +1393,7 @@ const Statutory = () => {
                     Add
                   </Button>
                 ) : (
-                  <Row gutter={[16, 48]}>
-                    <Form
+                  <Form
                       labelcol={{
                         span: 24,
                       }}
@@ -1412,7 +1408,8 @@ const Statutory = () => {
                       form={addBankForm}
                       layout="vertical"
                     >
-                      <Col xs={22} sm={15} md={24}>
+                  <Row gutter={[16,16]}>
+                      <Col xs={24} sm={24} md={24}>
                         <FormItem
                           label="Account Title"
                           name="title"
@@ -1437,7 +1434,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <FormItem
                           label="Bank Name"
                           name="bankName"
@@ -1462,7 +1459,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <FormItem
                           label="City"
                           name="city"
@@ -1487,7 +1484,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <FormItem
                           label="Branch Name"
                           name="branch"
@@ -1512,7 +1509,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <FormItem
                           label="IFSC Code"
                           name="ifsc"
@@ -1537,7 +1534,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <FormItem
                           label="Account Type"
                           initialValue="Current Account"
@@ -1575,7 +1572,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <FormItem
                           label="Account Number"
                           name="accountNo"
@@ -1600,7 +1597,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={24}
+                      <Col xs={24} sm={24} md={24}
                         style={{ display: "flex", justifyContent: "flex-end" }}
                       >
                         <FormItem>
@@ -1622,9 +1619,9 @@ const Statutory = () => {
                             SAVE
                           </Button>
                         </FormItem>
-                      </Col>
-                    </Form>
+                      </Col>                 
                   </Row>
+                  </Form>
                 )}
               </Form>
             </Card>

@@ -47,19 +47,7 @@ class ConfigureContext {
         return updateDoc(newHoliday, {[`${field}`]: arrayRemove(values[`${field}`])});
     };
 
-    leaveTypeConfiguration = (config) => {
-        let name = config.name;
-        delete config.name;
-        config ={
-            ...config,
-            weekendBtwnLeave: false,
-            holidaysBtwnLeave: false,
-            creditable: true,
-            frequency: "Monthly",
-            period: "Start",
-            probation: true,
-            carryForward: false,
-        }
+    leaveTypeConfiguration = (name, config) => {
         return updateDoc(doc(db, `companyprofile/${compId}/configurations/`, "leaveType"), {[`${name}`]: config});
     };
 

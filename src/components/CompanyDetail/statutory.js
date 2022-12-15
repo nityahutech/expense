@@ -626,7 +626,7 @@ const Statutory = () => {
               {activeList.map((rec, i) => (
                 <div>
                       <Row gutter={[16, 16]}>
-                        <Col xs={22} sm={15} md={6}>
+                        <Col xs={24} sm={15} md={6} lg={6} xl={6} xxl={6}>
                           <div className="div-discription">Name</div>
                           {editPerson[i] === false ? (
                             <div>{rec?.name ? rec.name : "-"}</div>
@@ -655,7 +655,7 @@ const Statutory = () => {
                             </FormItem>
                           )}
                         </Col>
-                        <Col xs={22} sm={15} md={9}>
+                        <Col xs={24} sm={15} md={7} lg={7} xl={7} xxl={7}>
                           <div className="div-discription">Email ID</div>
                           {editPerson[i] === false ? (
                             <div>{rec?.mailid ? rec.mailid : "-"}</div>
@@ -684,7 +684,7 @@ const Statutory = () => {
                           )}
                         </Col>
                         {active != "secretary" ?(
-                          <Col xs={22} sm={15} md={4}>
+                          <Col xs={24} sm={15} md={3} lg={2} xl={2} xxl={3}>
                             <div className="div-discription">{active == "director" ? "DIN" : "Type"}</div>
                             {editPerson[i] === false ? (
                               <div>
@@ -738,7 +738,7 @@ const Statutory = () => {
                             )}
                           </Col>
                         ) : null}
-                          <Col xs={22} sm={15} md={4}>
+                          <Col xs={24} sm={15} md={7} lg={8} xl={8} xxl={7}>
                             <div className="div-discription">Phone Number</div>
                             {editPerson[i] === false ? (
                               <div>{rec?.phone ? `${rec.prefix ? rec.prefix : ""} ${rec.phone}` : "-"}</div>
@@ -769,7 +769,7 @@ const Statutory = () => {
                             )}
                           </Col>
                         {editPerson[i] == false ?(
-                          <Col xs={22} sm={15} md={1}
+                          <Col xs={24} sm={15} md={1} 
                               style={{
                                 display: "flex",
                                 justifyContent: "center",
@@ -799,7 +799,7 @@ const Statutory = () => {
                               </Button>
                           </Col>
                         ) :(
-                          <Col xs={22} sm={15} md={1}
+                          <Col xs={24} sm={15} md={1}
                               style={{
                                 display: "flex",
                                 justifyContent: "center",

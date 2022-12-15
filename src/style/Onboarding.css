@@ -332,6 +332,41 @@ display: flex;
    margin-top: 10px;
    margin-left: 10px;
 }
+
+
+.hoverImgCont:hover .onboardOverlay {
+   opacity: 0.5;
+ }
+ .onboardOverlay {
+   position: absolute;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   /* width: 170px; */
+   /* height: 100%; */
+   /* width: 100%; */
+   opacity: 0;
+   transition: .3s ease;
+   background-color: black;
+ }
+ 
+ .hoverImgCont:hover .editOverlay {
+   opacity: 0.5;
+ }
+ .editOverlay {
+   position: absolute;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   /* width: 170px; */
+   /* height: 100%; */
+   /* width: 100%; */
+   opacity: 0;
+   transition: .3s ease;
+   background-color: black;
+ }
  
 @media (max-width: 850px) and (max-width: 5750px){
    .ant-steps{

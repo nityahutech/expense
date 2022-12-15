@@ -20,7 +20,7 @@ import {
 import TextArea from "antd/lib/input/TextArea";
 import ConfigureContext from "../contexts/ConfigureContext";
 import "../style/leave.css";
-import { capitalize, checkAlphabets, checkNumbervalue } from "../contexts/CreateContext";
+import { capitalize, checkAlphabets, checkNumbervalue, showNotification } from "../contexts/CreateContext";
 
 const { Option } = Select;
 
@@ -72,25 +72,36 @@ const LeaveType = () => {
     setEditAccrual(false);
     let record = {
       ...activeType,
-      name: values.name,
-      describe: values.describe,
-      year: values.year ? values.weekends : "",
-      weekends: values.weekends ? values.weekends : "",
-      holidays: values.holidays ? values.holidays : "",
-      creditable: values.creditable,
-      frequency: values.frequency,
-      period: values.period,
-      probation: values.probation,
+      ...values
     };
-    getData();
+    delete record.name;
+    let name = activeType.name
+    ConfigureContext.leaveTypeConfiguration(name, record).then((res) => {
+      showNotification("success", "Success", "Updated Successfully!")
+      getData();
+    }).catch((err) => {
+      showNotification("error", "Error", "Update Failed!")
+    })
   };
 
   const onCheckbox = (e) => {
     console.log(`checked = ${e.target.checked}`);
   };
 
-  const addNewRule = (values) => {
-    ConfigureContext.leaveTypeConfiguration(values);
+  const addNewRule = (config) => {
+    let name = config.name;
+    delete config.name;
+    config ={
+        ...config,
+        weekendBtwnLeave: false,
+        holidaysBtwnLeave: false,
+        creditable: true,
+        frequency: "Monthly",
+        period: "Start",
+        probation: true,
+        carryForward: false,
+    }
+    ConfigureContext.leaveTypeConfiguration(name, config);
     form.resetFields();
     getData();
     setIsModalOpen(false);
@@ -349,7 +360,7 @@ const LeaveType = () => {
                     {editLeavesCount === false ? (
                       <div>{activeType.count}</div>
                     ) : (
-                      <Form.Item initialValue={activeType.count} name="year">
+                      <Form.Item initialValue={activeType.count} name="count">
                         <Input
                           style={{
                             // marginTop: "10px",
@@ -377,13 +388,13 @@ const LeaveType = () => {
                       Weekends Between Leave
                     </div>
                     {editLeavesCount === false ? (
-                      <div>{activeType.weekendBtwnLeave}</div>
+                      <div>{activeType?.weekendBtwnLeave ? "Yes" : "No"}</div>
                     ) : (
                       <Form.Item
-                        initialValue={activeType.weekendBtwnLeave}
-                        name="weekends"
+                        initialValue={activeType?.weekendBtwnLeave}
+                        name="weekendBtwnLeave"
                       >
-                        <Checkbox onChange={onCheckbox}>
+                        <Checkbox defaultChecked={activeType?.weekendBtwnLeave} onChange={onCheckbox}>
                           Count as Leave
                         </Checkbox>
                       </Form.Item>
@@ -442,15 +453,15 @@ const LeaveType = () => {
                           }
                         }
                       >
-                        {activeType.holidaysBtwnLeave}
+                        {activeType?.holidaysBtwnLeave ? "Yes" : "No"}
                       </div>
                     ) : (
                       <Form.Item
-                        initialValue={activeType.holidaysBtwnLeave}
-                        name="holidays"
+                        initialValue={activeType?.holidaysBtwnLeave}
+                        name="holidaysBtwnLeave"
                         style={{ marginRight: "0px" }}
                       >
-                        <Checkbox onChange={onCheckbox}>
+                        <Checkbox defaultChecked={activeType?.holidaysBtwnLeave} onChange={onCheckbox}>
                           Count as Leave
                         </Checkbox>
                       </Form.Item>
@@ -469,7 +480,7 @@ const LeaveType = () => {
                   >
                     <Button
                       onClick={() => {
-                        // form.resetFields();
+                        countForm.resetFields();
                         setEditLeavesCount(false);
                       }}
                       type="text"
@@ -487,7 +498,7 @@ const LeaveType = () => {
                           width: "90px",
                         }}
                         onClick={() => {
-                          //   form.submit();
+                          countForm.submit();
                         }}
                       >
                         <CheckOutlined />
@@ -547,7 +558,7 @@ const LeaveType = () => {
                               Creditable on Accrual Basis
                             </div>
                             <div style={{ marginBottom: "13px" }}>
-                              {activeType?.creditable ? activeType.creditable : "Yes"}
+                              {activeType?.creditable ? "Yes" : "No"}
                             </div>
                           </>
                         ) : (
@@ -558,6 +569,7 @@ const LeaveType = () => {
                             name="creditable"
                           >
                             <Checkbox
+                              defaultChecked={activeType?.creditable}
                               onChange={onCheckbox}
                               style={{
                                 fontSize: "14px",
@@ -682,7 +694,7 @@ const LeaveType = () => {
                       >
                         <Button
                           onClick={() => {
-                            // form.resetFields();
+                            accuralForm.resetFields();
                             setEditAccrual(false);
                           }}
                           type="text"
@@ -700,7 +712,7 @@ const LeaveType = () => {
                               width: "90px",
                             }}
                             onClick={() => {
-                              //   form.submit();
+                                accuralForm.submit();
                             }}
                           >
                             <CheckOutlined />
@@ -760,7 +772,7 @@ const LeaveType = () => {
                           Allowed Under Probation
                         </div>
                         <div style={{ marginBottom: "13px" }}>
-                          {activeType?.probation ? activeType.probation : "Yes"}
+                          {activeType?.probation ? "Yes" : "No"}
                         </div>
                       </>
                     ) : (
@@ -769,6 +781,7 @@ const LeaveType = () => {
                         name="probation"
                       >
                         <Checkbox
+                          defaultChecked={activeType?.probation}
                           onChange={onCheckbox}
                           style={{
                             fontSize: "14px",
@@ -815,7 +828,7 @@ const LeaveType = () => {
                   >
                     <Button
                       onClick={() => {
-                        // form.resetFields();
+                        appForm.resetFields();
                         setEditProbation(false);
                       }}
                       type="text"
@@ -833,7 +846,7 @@ const LeaveType = () => {
                           width: "90px",
                         }}
                         onClick={() => {
-                          //   form.submit();
+                          appForm.submit();
                         }}
                       >
                         <CheckOutlined />
@@ -893,15 +906,16 @@ const LeaveType = () => {
                               Carry Forward Enabled
                             </div>
                             <div style={{ marginBottom: "13px" }}>
-                              {activeType?.carry ? activeType.carry : "Yes"}
+                              {activeType?.carryForward ? "Yes" : "No"}
                             </div>
                           </>
                         ) : (
                           <Form.Item
-                            initialValue={activeType?.carry ? activeType.carry : null}
-                            name="carry"
+                            initialValue={activeType?.carryForward ? activeType.carryForward : null}
+                            name="carryForward"
                           >
                             <Checkbox
+                              defaultChecked={activeType?.carryForward}
                               onChange={onCheckbox}
                               style={{
                                 fontSize: "14px",
@@ -948,7 +962,7 @@ const LeaveType = () => {
                       >
                         <Button
                           onClick={() => {
-                            // form.resetFields();
+                            carryForm.resetFields();
                             setEditCarry(false);
                           }}
                           type="text"
@@ -966,7 +980,7 @@ const LeaveType = () => {
                               width: "90px",
                             }}
                             onClick={() => {
-                              //   form.submit();
+                              carryForm.submit();
                             }}
                           >
                             <CheckOutlined />

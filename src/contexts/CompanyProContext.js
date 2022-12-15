@@ -20,9 +20,9 @@ const companyProfileCollectionRef = collection(db, "companyprofile");
 class CompanyProContext {
 
     getCompanyProfile = async (id) => {
-        const profileInfo= doc(db,"companyprofile",id);
-        let rec=await getDoc(profileInfo);
-        let recordData=rec.data();
+        const profileInfo = doc(db, "companyprofile", id);
+        let rec = await getDoc(profileInfo);
+        let recordData = rec.data();
         return recordData;
     };
 

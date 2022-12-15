@@ -118,6 +118,7 @@ const DepartmentNew = () => {
           description: values.editdescription,
           parent: d.parent,
           type: type,
+
         };
       }
       if (d.parent != null) {
@@ -178,6 +179,7 @@ const DepartmentNew = () => {
   }
 
   const columns = [
+    // Table.EXPAND_COLUMN,
     {
       title: `${type} Name`,
       dataIndex: "name",
@@ -458,19 +460,19 @@ const DepartmentNew = () => {
                     dataSource={dataSource}
                     style={{ width: "100%" }}
                     size="middle"
-                    expandable={type == order[3] ? ({
-                      expandedRowRender: (record) => (
-                        <p
-                          style={{
-                            margin: 0,
-                          }}
-                        >
-                          {type == order[3] ? (
-                            record.name) : null}
-                        </p>
-                      ),
-                      rowExpandable: (record) => record.name,
-                    }) : null}
+                    // expandable={type == order[3] ? ({
+                    //   expandedRowRender: (record) => (
+                    //     <p
+                    //       style={{
+                    //         margin: 0,
+                    //       }}
+                    //     >
+                    //       {type == order[3] ? (
+                    //         record.name + ' ' + record.description) : null}
+                    //     </p>
+                    //   ),
+                    //   // rowExpandable: (record,) => record.name,
+                    // }) : null}
                     onRow={(record, rowIndex) => {
                       // return {
                       //     onClick: () => {

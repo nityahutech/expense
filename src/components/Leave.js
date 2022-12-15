@@ -40,7 +40,7 @@ import ConfigureContext from "../contexts/ConfigureContext";
 import LeaveCreate from "./LeaveCreate";
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/lib/input/TextArea";
-
+const dateFormat = "Do MMM, YYYY";
 const Leave = (props) => {
   const page = "leavePage";
   const colors = [
@@ -82,6 +82,14 @@ const Leave = (props) => {
   const [startSlot, setStartSlot] = useState(null);
   const [endSlot, setEndSlot] = useState(null);
   const [validleaverequest, setValidleaverequest] = useState("false");
+  //--------------------------------------------filter----------------------------
+
+  const [filterCriteria, setFilterCriteria] = useState({
+    search: "",
+    date: [],
+    category: "all",
+  });
+
   const getHoliday = async () => {
     const allData = await CompanyHolidayContext.getAllCompanyHoliday();
     let d = allData.docs.map((doc) => {
@@ -432,8 +440,8 @@ const Leave = (props) => {
               status === "Approved"
                 ? "rgba(15, 255, 80, 0.2)"
                 : status === "Pending"
-                ? "rgba(205, 227, 36, 0.25)"
-                : "volcano"
+                  ? "rgba(205, 227, 36, 0.25)"
+                  : "volcano"
             }
             key={status}
           >
@@ -462,13 +470,13 @@ const Leave = (props) => {
               style={
                 record?.status === "Approved"
                   ? {
-                      color: "green",
-                      cursor: "not-allowed",
-                      marginLeft: 10,
-                    }
+                    color: "green",
+                    cursor: "not-allowed",
+                    marginLeft: 10,
+                  }
                   : record?.status === "Pending"
-                  ? { color: "blue", marginLeft: 10 }
-                  : { color: "red", marginLeft: 10 }
+                    ? { color: "blue", marginLeft: 10 }
+                    : { color: "red", marginLeft: 10 }
               }
             />
             <EditOutlined
@@ -488,13 +496,13 @@ const Leave = (props) => {
               style={
                 record?.status === "Approved"
                   ? {
-                      color: "green",
-                      cursor: "not-allowed",
-                      marginLeft: 10,
-                    }
+                    color: "green",
+                    cursor: "not-allowed",
+                    marginLeft: 10,
+                  }
                   : record?.status === "Pending"
-                  ? { color: "blue", marginLeft: 10 }
-                  : { color: "red", marginLeft: 10 }
+                    ? { color: "blue", marginLeft: 10 }
+                    : { color: "red", marginLeft: 10 }
               }
             />
           </>
@@ -625,7 +633,7 @@ const Leave = (props) => {
           }
         }
       }
-    } catch (error) {}
+    } catch (error) { }
     setDateSelected(temp);
   };
   const dateCellRender = (value) => {
@@ -646,18 +654,18 @@ const Leave = (props) => {
         listData[0].type == "On Leave"
           ? "rgba(0, 128, 0,  1)"
           : listData[0].type === "Pending"
-          ? "rgb(166 168 69)"
-          : listData[0].isOptional
-          ? "rgba(0, 119, 137, 0.96)"
-          : "rgba(252, 143, 10, 1)";
+            ? "rgb(166 168 69)"
+            : listData[0].isOptional
+              ? "rgba(0, 119, 137, 0.96)"
+              : "rgba(252, 143, 10, 1)";
       bgColor =
         listData[0].type == "On Leave"
           ? "rgb(15, 255, 80,0.2)"
           : listData[0].type === "Pending"
-          ? "rgb(205 227 36 / 25%)"
-          : listData[0].isOptional
-          ? "rgba(154, 214, 224, 0.96)"
-          : "rgba(252, 143, 10,0.2)";
+            ? "rgb(205 227 36 / 25%)"
+            : listData[0].isOptional
+              ? "rgba(154, 214, 224, 0.96)"
+              : "rgba(252, 143, 10,0.2)";
     }
 
     return (
@@ -758,8 +766,8 @@ const Leave = (props) => {
               status === "Approved"
                 ? "rgba(15, 255, 80, 0.2)"
                 : status === "Pending"
-                ? "rgba(205, 227, 36, 0.25)"
-                : "volcano"
+                  ? "rgba(205, 227, 36, 0.25)"
+                  : "volcano"
             }
             key={status}
           >
@@ -790,8 +798,8 @@ const Leave = (props) => {
                     record?.status === "Approved"
                       ? { color: "green", marginLeft: 10 }
                       : record?.status === "Pending"
-                      ? { color: "blue", marginLeft: 10 }
-                      : { color: "red", marginLeft: 10 }
+                        ? { color: "blue", marginLeft: 10 }
+                        : { color: "red", marginLeft: 10 }
                   }
                 />
               </>
@@ -927,10 +935,10 @@ const Leave = (props) => {
     if (u == "Sick Leave" && dateSelected.length == 1) {
       return dateStart != null || dateStart != undefined
         ? !(
-            dateStart.format("DD-MM-yyyy") == moment().format("DD-MM-yyyy") ||
-            dateStart.format("DD-MM-yyyy") ==
-              moment().add(1, "days").format("DD-MM-yyyy")
-          )
+          dateStart.format("DD-MM-yyyy") == moment().format("DD-MM-yyyy") ||
+          dateStart.format("DD-MM-yyyy") ==
+          moment().add(1, "days").format("DD-MM-yyyy")
+        )
         : false;
     }
     return false;
@@ -940,6 +948,25 @@ const Leave = (props) => {
   const onSearch = (value) => console.log(value);
 
   const { Search } = Input;
+  //-----------------------------------------filter-------------------------
+  const onChange = (date, dateString) => {
+    setFilterCriteria({ ...filterCriteria, date });
+    if (date) {
+      let result = allRequests.filter((ex) => {
+        return (
+          moment(ex.date, dateFormat).isSame(date[0], "day") ||
+          moment(ex.date, dateFormat).isSame(date[1], "day") ||
+          (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
+            moment(ex.date, dateFormat).isSameOrBefore(date[1]))
+        );
+      });
+
+      const modifiedFilterExpense = [...result];
+      setFilterRequest(modifiedFilterExpense);
+    } else {
+      setFilterRequest(allRequests);
+    }
+  };
 
   return (
     <>
@@ -1053,11 +1080,16 @@ const Leave = (props) => {
                         placeholder="Search"
                         prefix={<SearchOutlined />}
                         onChange={searchChange}
-                        style={{ width: "300px" }}
+                        style={{ width: "100%" }}
                       />
                     </Col>
                     <Col xs={24} sm={22} md={10}>
-                      <RangePicker />
+                      <RangePicker
+                        defaultValue={[]}
+                        format={dateFormat}
+                        style={{ width: "95%" }}
+                        onChange={onChange}
+                      />
                     </Col>
                     <Col xs={24} sm={22} md={7}>
                       <Form.Item
@@ -1065,15 +1097,21 @@ const Leave = (props) => {
                         style={{ marginBottom: "0px" }}
                       >
                         <Select
+                          onChange={(e) => {
+                            const filteredLeave = allRequests.filter((leaveNat) =>
+                              leaveNat.nature.includes(e))
+                            setFilterRequest(filteredLeave)
+
+                          }}
                           defaultValue="Loss Of Pay"
                           options={[
                             {
-                              value: "CL",
-                              label: "CL",
+                              value: "Casual Leave",
+                              label: "Casual Leave",
                             },
                             {
-                              value: "EL",
-                              label: "EL",
+                              value: "Earn Leave",
+                              label: "Earn Leave",
                             },
                           ]}
                         />
@@ -1318,99 +1356,99 @@ const Leave = (props) => {
               <div className="leavediv">
                 {leavedays != null
                   ? Object.keys(leavedays).map((user, id) => {
-                      return (
-                        <div
-                          className="Col-2-center"
-                          style={{ background: colors[id], color: "#fff" }}
+                    return (
+                      <div
+                        className="Col-2-center"
+                        style={{ background: colors[id], color: "#fff" }}
+                      >
+                        <p
+                          className="heading"
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "20px",
+                          }}
                         >
-                          <p
-                            className="heading"
-                            style={{
-                              fontWeight: "500",
-                              fontSize: "20px",
-                            }}
-                          >
-                            {user}
-                          </p>
+                          {user}
+                        </p>
 
-                          <div
-                            className="total-leave"
-                            style={{
-                              width: "90%",
-                            }}
-                          >
-                            <div className="leave-status">
-                              <p
-                                className="leave"
-                                Total
-                                style={{
-                                  fontWeight: "500",
-                                  fontSize: "15px",
-                                  margin: "0px",
-                                }}
-                              >
-                                Total
-                              </p>
-                              <p
-                                style={{
-                                  fontWeight: "500",
-                                  fontSize: "15px",
-                                  margin: "0px",
-                                }}
-                              >
-                                {totaldays[user]}
-                              </p>
-                            </div>
+                        <div
+                          className="total-leave"
+                          style={{
+                            width: "90%",
+                          }}
+                        >
+                          <div className="leave-status">
+                            <p
+                              className="leave"
+                              Total
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              Total
+                            </p>
+                            <p
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              {totaldays[user]}
+                            </p>
+                          </div>
 
-                            <div className="leave-status">
-                              <p
-                                className="leave"
-                                Total
-                                style={{
-                                  fontWeight: "500",
-                                  fontSize: "15px",
-                                  margin: "0px",
-                                }}
-                              >
-                                Availed
-                              </p>
-                              <p
-                                style={{
-                                  fontWeight: "500",
-                                  fontSize: "15px",
-                                  margin: "0px",
-                                }}
-                              >
-                                {totaldays[user] - leavedays[user]}
-                              </p>
-                            </div>
+                          <div className="leave-status">
+                            <p
+                              className="leave"
+                              Total
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              Availed
+                            </p>
+                            <p
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              {totaldays[user] - leavedays[user]}
+                            </p>
+                          </div>
 
-                            <div className="leave-status">
-                              <p
-                                className="leave"
-                                Total
-                                style={{
-                                  fontWeight: "500",
-                                  fontSize: "15px",
-                                  margin: "0px",
-                                }}
-                              >
-                                Remaining
-                              </p>
-                              <p
-                                style={{
-                                  fontWeight: "500",
-                                  fontSize: "15px",
-                                  margin: "0px",
-                                }}
-                              >
-                                {leavedays[user]}
-                              </p>
-                            </div>
+                          <div className="leave-status">
+                            <p
+                              className="leave"
+                              Total
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              Remaining
+                            </p>
+                            <p
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              {leavedays[user]}
+                            </p>
                           </div>
                         </div>
-                      );
-                    })
+                      </div>
+                    );
+                  })
                   : null}
               </div>
             </Col>
@@ -1788,13 +1826,13 @@ const Leave = (props) => {
                       >
                         {leavedays != null
                           ? Object.keys(leavedays).map((u) => (
-                              <Option
-                                disabled={disabledLeaveNature(u)}
-                                value={u}
-                              >
-                                {u}
-                              </Option>
-                            ))
+                            <Option
+                              disabled={disabledLeaveNature(u)}
+                              value={u}
+                            >
+                              {u}
+                            </Option>
+                          ))
                           : null}
                         <Option value={"Loss of Pay"}>Loss of Pay</Option>
                       </Select>
@@ -2196,11 +2234,11 @@ const Leave = (props) => {
                           editedLeave.dateCalc == null
                             ? null
                             : moment(
-                                editedLeave.dateCalc[
-                                  editedLeave.dateCalc.length - 1
-                                ],
-                                "Do MMM, YYYY"
-                              )
+                              editedLeave.dateCalc[
+                              editedLeave.dateCalc.length - 1
+                              ],
+                              "Do MMM, YYYY"
+                            )
                         }
                       >
                         <DatePicker
@@ -2268,10 +2306,10 @@ const Leave = (props) => {
                     >
                       {leavedays != null
                         ? Object.keys(leavedays).map((u) => (
-                            <Option disabled={disabledLeaveNature(u)} value={u}>
-                              {u}
-                            </Option>
-                          ))
+                          <Option disabled={disabledLeaveNature(u)} value={u}>
+                            {u}
+                          </Option>
+                        ))
                         : null}
                       <Option value={"Loss of Pay"}>Loss of Pay</Option>
                     </Select>

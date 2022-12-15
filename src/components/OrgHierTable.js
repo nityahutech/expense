@@ -18,6 +18,7 @@ import {
     CheckOutlined,
 } from "@ant-design/icons";
 import "../style/CostCenter.css";
+import { showNotification } from "../contexts/CreateContext";
 
 const OrgHierTable = () => {
     const [ismodalOpen, setIsModalOpen] = useState(false);
@@ -30,12 +31,6 @@ const OrgHierTable = () => {
     const [dataSource, setDataSource] = useState([]);
     const [editRecord, setEditRecord] = useState([]);
     const [data, setData] = useState([]);
-    const showNotification = (type, msg, desc) => {
-        notification[type]({
-            message: msg,
-            description: desc,
-        });
-    };
 
     useEffect(() => {
         getData();
@@ -71,10 +66,10 @@ const OrgHierTable = () => {
 
     const onFinish = (values) => {
         // console.log('values', values)
-        let matchingCostCenter = data.filter((item) => item.name === values.name)
-        console.log('values', matchingCostCenter)
-        if (matchingCostCenter.length > 0) {
-            showNotification("error", "error", "Try Again Name Allready present");
+        let matchingName = dataSource.filter((item) => item.name === values.name)
+        console.log('values', matchingName)
+        if (matchingName.length > 0) {
+            showNotification("error", "error", "This Name already exists!");
             return
         }
 
@@ -101,6 +96,13 @@ const OrgHierTable = () => {
     };
 
     const onFinishEdit = (values) => {
+        let matchingName = dataSource.filter((item) => item.name === values.editname)
+        console.log('values', values, data, matchingName)
+        if (matchingName.length > 0) {
+            showNotification("error", "error", "This Name already exists!");
+            return
+        }
+
         let edited = data.map((d) => {
             if (d.parent == editRecord.parent && d.name == editRecord.name) {
                 return {

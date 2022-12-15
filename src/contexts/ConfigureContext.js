@@ -48,7 +48,19 @@ class ConfigureContext {
     };
 
     leaveTypeConfiguration = (config) => {
-        return setDoc(doc(db, `companyprofile/${compId}/configurations/leavePage/leaveType`, config.name), config);
+        let name = config.name;
+        delete config.name;
+        config ={
+            ...config,
+            weekendBtwnLeave: false,
+            holidaysBtwnLeave: false,
+            creditable: true,
+            frequency: "Monthly",
+            period: "Start",
+            probation: true,
+            carryForward: false,
+        }
+        return updateDoc(doc(db, `companyprofile/${compId}/configurations/`, "leaveType"), {[`${name}`]: config});
     };
 
 }

@@ -40,13 +40,13 @@ class CompanyProContext {
     checkUserExists = async (email) => {
         let q = query(collection(db, "users"), where("mailid", "==", email))
         let req = await getDocs(q);
+        console.log(!req.empty)
         return !req.empty;
     }
     
     getOrgId = async () => {
-        getDocs(companyProfileCollectionRef).then((snapshot) => {
+        return getDocs(companyProfileCollectionRef).then((snapshot) => {
           let res = snapshot.docs.length + 1;
-          console.log("compId" + ("00" + res.toString()).slice(-3));
           return "compId" + ("00" + res.toString()).slice(-3);
         })
     }
@@ -90,28 +90,28 @@ class CompanyProContext {
         return () => clearTimeout(timer);
     }
 
-    createDepts = (id) => {
-        const order = ["Business Unit", "Division", "Department", "Team"]
-        let temp = localStorage.getItem("OrgHier");
-        if (!temp || temp == "[]") {
-            return;
-        }
-        let orgHier = JSON.parse(temp);
-        orgHier.map(org => {
-            let parents = org.parent == null ? [""] : org.parent.split("/")
-            let place = order.indexOf(org.type)
-            let refPath = `companyprofile/${id}/departments` + (org.parent == null ? 
-                "" : `/${parents[0]}/div` + (place == 1 ? 
-                    "" : `/${parents[1]}/dept` + (place == 2 ? 
-                        "" : `/${parents[2]}/team`
-            )));
-            setDoc(doc(db, refPath, org.name), {
-                description: org.description,
-                workLoc: "Registered Office"
-            })
-        })
+    // createDepts = (id) => {
+    //     const order = ["Business Unit", "Division", "Department", "Team"]
+    //     let temp = localStorage.getItem("OrgHier");
+    //     if (!temp || temp == "[]") {
+    //         return;
+    //     }
+    //     let orgHier = JSON.parse(temp);
+    //     orgHier.map(org => {
+    //         let parents = org.parent == null ? [""] : org.parent.split("/")
+    //         let place = order.indexOf(org.type)
+    //         let refPath = `companyprofile/${id}/departments` + (org.parent == null ? 
+    //             "" : `/${parents[0]}/div` + (place == 1 ? 
+    //                 "" : `/${parents[1]}/dept` + (place == 2 ? 
+    //                     "" : `/${parents[2]}/team`
+    //         )));
+    //         setDoc(doc(db, refPath, org.name), {
+    //             description: org.description,
+    //             workLoc: "Registered Office"
+    //         })
+    //     })
         
-    }
+    // }
     
     createCompInfo = async (id, newInfo, file, accessList) => {
         console.log(id, newInfo, file, accessList)
@@ -123,7 +123,7 @@ class CompanyProContext {
                     newInfo.logo = url;
                     setDoc(doc(db, "companyprofile", id), newInfo);
                     this.createAdmins(accessList, id)
-                    this.createDepts(id);
+                    // this.createDepts(id);
                     return Promise.resolve();
                 })
             });
@@ -131,7 +131,7 @@ class CompanyProContext {
             newInfo.logo = null;
             setDoc(doc(db, "companyprofile", id), newInfo);
             this.createAdmins(accessList, id)
-            this.createDepts(id);
+            // this.createDepts(id);
             return Promise.resolve();
         }
     };

@@ -27,8 +27,9 @@ import EditOnboarding from "./EditOnboarding";
 import OrgDetails from "./OrgDetails";
 import CostCenter from "./CostCenter";
 import AccessDetails from "./AccessDetails";
-// import OranizationHierarcy from "./onBoardingComponent/organizationHierarchy";
 import OrgHierTable from "./OrgHierTable";
+import { showNotification } from "../contexts/CreateContext";
+import { useNavigate } from "react-router-dom";
 
 const { Step } = Steps;
 
@@ -43,6 +44,7 @@ function Onboarding() {
   const [isEditOrganization, setIsEditOrganization] = useState(false);
   const [data, setData] = useState({});
   const [fileName, setFileName] = useState("");
+  const navigate = useNavigate();
 
   const saveOrgDetails = (values, imageUrl) => {
     delete values.logo
@@ -57,11 +59,13 @@ function Onboarding() {
     setAllCompany(data);
   };
 
-  const getOrgData = () => {
+  const getOrgData = async () => {
     let data = localStorage.getItem("OrgDetails");
     if (!data) {
-        localStorage.setItem("OrgDetails", "{}");
-        return;
+      let id = {orgcode: await CompanyProContext.getOrgId()}
+      localStorage.setItem("OrgDetails", JSON.stringify(id));
+      setData(id);
+      return;
     }
     console.log(JSON.parse(data));
     setData(JSON.parse(data));
@@ -73,6 +77,8 @@ function Onboarding() {
     let costCenters = temp || temp != "[]" ? JSON.parse(temp) : []
     let temp1 = localStorage.getItem("OrgAccess");
     let accessList = temp1 || temp1 != "[]" ? JSON.parse(temp1) : []
+    let temp2 = localStorage.getItem("OrgHier");
+    let orgHier = temp2 || temp2 != "[]" ? JSON.parse(temp2) : []
     const value = {
       regCompName: data.regCompName,
       regOffice: {
@@ -93,34 +99,33 @@ function Onboarding() {
       director: [],
       auditor: [],
       bank: [],
-      costCenters: costCenters,
+      costCenters: costCenters == null ? [] : costCenters,
+      deparments: orgHier == null ? [] : orgHier,
       status: "Deactivated",
     };
-      // CompanyProContext.createCompInfo(
-      //   data.orgcode,
-      //   value,
-      //   fileName,
-      //   accessList
-      // )
-      //   .then((response) => {
-      //     notification.open({
-      //       message: "Creating Company",
-      //       duration: 2,
-      //       icon: <LoadingOutlined />,
-      //     });
-      //     const timer = setTimeout(() => {
-      //       showNotification("success", "Success", "Onboarding Completed");
-      //       // getData();
-      //       // setAddAccess(false);
-      //       // onReset();
-      //       // setActivetab("1");
-      //     }, 5000);
-      //     return () => clearTimeout(timer);
-      //   })
-      //   .catch((error) => {
-      //     showNotification("error", "Error", error.message);
-      //   });
-      console.log("save commented for now")
+      CompanyProContext.createCompInfo(
+        data.orgcode,
+        value,
+        fileName,
+        accessList
+      )
+        .then((response) => {
+          notification.open({
+            message: "Creating Company",
+            duration: 2,
+            icon: <LoadingOutlined />,
+          });
+          const timer = setTimeout(() => {
+            showNotification("success", "Success", "Onboarding Completed");
+            getData();
+            reset();
+            setActivetab("1");
+          }, 5000);
+          return () => clearTimeout(timer);
+        })
+        .catch((error) => {
+          showNotification("error", "Error", error.message);
+        });
   }
 
   useEffect(() => {
@@ -133,13 +138,6 @@ function Onboarding() {
     getData();
     getOrgData();
   }, []);
-
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
-  };
 
   const changeCompStatus = (id, status) => {
     Modal.confirm({
@@ -199,6 +197,7 @@ function Onboarding() {
   // };
 
   const progressBar = (value) => {
+    if (progress == 0) {form.submit();}
     setProgress(value);
   };
 
@@ -343,21 +342,37 @@ function Onboarding() {
     }
   }
 
+  const reset = () => {
+    Object.keys(data).map((field) => {
+      console.log(field)
+      if (field != "orgcode") {
+        form.setFieldsValue({[`${field}`]: null})
+      }
+    })
+    form.setFieldsValue({addLine1: null})
+    setActivetab("1")
+    setData({});
+    localStorage.removeItem("OrgDetails")
+    localStorage.removeItem("costCenters")
+    localStorage.removeItem("OrgHier")
+    localStorage.removeItem("OrgAccess")
+    localStorage.removeItem("Logo")
+    setFileName(null)
+    return;
+  }
+
   const onReset = () => {
     Modal.confirm({
       title: "Are you sure you want to reset all pages?",
       okText: "Yes",
       okType: "danger",
-
       onOk: () => {
-        localStorage.removeItem("OrgDetails")
-        localStorage.removeItem("costCenters")
-        localStorage.removeItem("OrgHier")
-        localStorage.removeItem("OrgAccess")
+        reset();
+        navigate("/Organization/Onboarding", { replace: false });
       },
     });
   }
-  
+  console.log(fileName)
   return (
     <>
       {/* <div className="main"> */}
@@ -460,7 +475,7 @@ function Onboarding() {
             </div>
           </Card>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Organization Onboarding" key="2">
+        <Tabs.TabPane tab="Organization Onboarding" key="2" destroyInactiveTabPane>
           <Card
             className="stepsCard"
             style={{

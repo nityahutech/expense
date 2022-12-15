@@ -13,39 +13,31 @@ import {
   Space,
   Select,
 } from "antd";
-import { CloseCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "../style/Onboarding.css";
 import CompanyProContext from "../contexts/CompanyProContext";
 import reload from "../images/reload.png";
 const { Option } = Select;
 
 const OrgDetails = (props) => {
+  console.log(props)
   const imgRef = React.useRef(null);
-  const [fileName, setFileName] = useState(props.fileName || "");
+  const [fileName, setFileName] = useState(props.fileName || null);
   const [imageUrl, setImageUrl] = useState(props.fileName || "");
   const [isBigFile, setIsBigFile] = useState(false);
   const [data, setData] = useState(props.data || {});
-  const [newCompId, setNewCompId] = useState(props.data.orgcode || null);
+  const newCompId = props.data.orgcode;
 
   useEffect(() => {
-    if (newCompId == null) {
-      setNewCompId(CompanyProContext.getOrgId());
-    }
-    setFileName(fileName);
+    console.log("reset", props.data || {})
+    setFileName(props.fileName || null);
     setIsBigFile(false);
-  }, []);
+    setData(props.data || {})
+  }, [props.data]);
 
   useEffect(() => {
     setIsBigFile(false);
   });
-
-  const onFinish = async (values) => {
-    delete values.logo;
-    console.log("saved");
-    localStorage.setItem("OrgDetails", JSON.stringify(values));
-    localStorage.setItem("Logo", imageUrl);
-    setData(values);
-  };
 
   const handleClick = () => {
     imgRef.current.click();
@@ -68,21 +60,6 @@ const OrgDetails = (props) => {
     });
     checkFileSize(fileUploaded.size, fileUploaded);
   };
-
-  //   const validateOrgId = async (rule, value, callback) => {
-  //     try {
-  //       let exists = await CompanyProContext.checkOrgIdExists(value);
-  //       if (exists) {
-  //         setOrgIdExists(true);
-  //         throw new Error("this id exists");
-  //       }
-  //       setOrgIdExists(false);
-  //       // return exists;
-  //     } catch (err) {
-  //       callback(err.message);
-  //     }
-  //     // CompanyProContext.checkOrgIdExists(value)
-  //   };
 
   function checkFileSize(size, fileName) {
     if (Math.round(size / 1024) <= 200) {
@@ -132,7 +109,7 @@ const OrgDetails = (props) => {
       </Select>
     </Form.Item>
   );
-  console.log(props);
+
   return (
     <div style={{ margin: "13px", background: "#fff" }}>
       <div
@@ -539,58 +516,6 @@ const OrgDetails = (props) => {
                   alignItems: "center",
                 }}
               >
-                <Col>
-                  <Button
-                    onClick={(e) => handleClick(e)}
-                    style={{
-                      width: "60px",
-                      height: "40px",
-                      margin: "10px",
-                    }}
-                  >
-                    <PlusCircleOutlined
-                      style={{
-                        display: "flex",
-                        flexDirection: "column-reverse",
-                        alignItems: "center",
-                      }}
-                    />
-                    <span
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginRight: "8px",
-                      }}
-                    >
-                      Upload
-                    </span>
-                  </Button>
-                  <Button
-                    onClick={onReset}
-                    style={{
-                      width: "60px",
-                      height: "40px",
-                      margin: "10px",
-                    }}
-                  >
-                    <CloseCircleOutlined
-                      style={{
-                        display: "flex",
-                        flexDirection: "column-reverse",
-                        alignItems: "center",
-                      }}
-                    />
-                    <span
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginRight: "8px",
-                      }}
-                    >
-                      Remove
-                    </span>
-                  </Button>
-                </Col>
                 {isBigFile
                   ? message.error("File size must be less than 200Kb.")
                   : ""}
@@ -605,27 +530,58 @@ const OrgDetails = (props) => {
                   onChange={(e) => handleChange(e)}
                 />
                 {fileName ? (
-                  <img
-                    src={imageUrl}
-                    style={{
-                      maxWidth: "120px",
-                      height: "auto",
-                      marginRight: "10px",
-                    }}
-                  />
+                  <div className="hoverImgCont" style={{margin: "20px auto", position: "relative"}}>
+                    <img
+                      src={imageUrl}
+                      style={{
+                        maxWidth: "120px",
+                        height: "auto",
+                      }}
+                    />
+                    <div className="overlay">
+                      <DeleteOutlined className="hoverIcon" onClick={onReset}/>
+                    </div>
+                  </div>
                 ) : (
-                  <p
-                    style={{
-                      fontWeight: "400",
-                      fontSize: "13px",
-                      lineHeight: "19px",
-                      marginLeft: "5px",
-                      marginTop: "10px",
-                    }}
-                  >
-                    Upload logo. Use the 200 kb size image. PNG or JPEG file
-                    format accepted
-                  </p>
+                    <>
+                        <Button
+                            onClick={(e) => handleClick(e)}
+                            style={{
+                                width: "60px",
+                                height: "50px",
+                                margin: "10px",
+                            }}
+                        >
+                            <PlusCircleOutlined
+                                style={{
+                                display: "flex",
+                                flexDirection: "column-reverse",
+                                alignItems: "center",
+                                }}
+                            />
+                            <span
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    marginRight: "8px",
+                                }}
+                            >
+                                Upload
+                            </span>
+                        </Button>
+                        <p
+                            style={{
+                            fontWeight: "400",
+                            fontSize: "13px",
+                            lineHeight: "19px",
+                            marginLeft: "5px",
+                            marginTop: "10px",
+                            }}
+                        >
+                            Upload logo. Use the 200 kb size image. PNG or JPEG file
+                            format accepted
+                        </p>
+                    </>
                 )}
               </div>
             </Form.Item>

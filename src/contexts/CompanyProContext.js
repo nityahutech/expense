@@ -90,28 +90,65 @@ class CompanyProContext {
         return () => clearTimeout(timer);
     }
 
-    // createDepts = (id) => {
-    //     const order = ["Business Unit", "Division", "Department", "Team"]
-    //     let temp = localStorage.getItem("OrgHier");
-    //     if (!temp || temp == "[]") {
-    //         return;
-    //     }
-    //     let orgHier = JSON.parse(temp);
-    //     orgHier.map(org => {
-    //         let parents = org.parent == null ? [""] : org.parent.split("/")
-    //         let place = order.indexOf(org.type)
-    //         let refPath = `companyprofile/${id}/departments` + (org.parent == null ? 
-    //             "" : `/${parents[0]}/div` + (place == 1 ? 
-    //                 "" : `/${parents[1]}/dept` + (place == 2 ? 
-    //                     "" : `/${parents[2]}/team`
-    //         )));
-    //         setDoc(doc(db, refPath, org.name), {
-    //             description: org.description,
-    //             workLoc: "Registered Office"
-    //         })
-    //     })
-        
-    // }
+    createConfig = (id, des) => {
+        setDoc(doc(db, `companyprofile/${id}/configurations`, "addemployeePage"), {
+            designations: des,
+            enabled: false,
+            field: ["Counsulting Service", "Finance", "Human Resources (HR)"],
+            repManager: [],
+            secManager: [],
+        })
+        setDoc(doc(db, `companyprofile/${id}/configurations`, "attendanceConfig"), {
+            attendanceNature: {
+                endtime: "18:00",
+                inputclock: false,
+                maxBreakDuration: 1,
+                selectedDay: {
+                    Friday: "fullday",
+                    Monday: "fullday",
+                    Saturday: "dayoff",
+                    Sunday: "dayoff",
+                    Thursday: "fullday",
+                    Tuesday: "fullday",
+                    Wednesday: "fullday"
+                },
+                starttime: "09:00"
+            }
+        })
+        setDoc(doc(db, `companyprofile/${id}/configurations`, "leaveType"), {
+            ["Sick Leave"]: {
+                description: "These are one-day leaves taken for health-related reasons. This can only be taken for the current day or the next (1 day in advance).",
+                count: 6,
+                weekendBtwnLeave: false,
+                holidaysBtwnLeave: false,
+                creditable: true,
+                frequency: "Monthly",
+                period: "Start",
+                probation: true,
+                carryForward: false,
+                enabled: true
+            },
+            ["Optional Leave"]: {
+                description: "Optional holidays are those that the employee can choose to avail.",
+                count: 2,
+                weekendBtwnLeave: false,
+                holidaysBtwnLeave: false,
+                creditable: true,
+                frequency: "Monthly",
+                period: "Start",
+                probation: true,
+                carryForward: false,
+                enabled: true
+            },
+            ["Loss Of Pay"]: {
+                description: "Employees taking leave under loss of pay will not be compensated for the missing days in their salary.",
+                count: 0,
+                weekendBtwnLeave: false,
+                holidaysBtwnLeave: false,
+                probation: true,
+            },
+        })
+    }
     
     createCompInfo = async (id, newInfo, file, accessList) => {
         console.log(id, newInfo, file, accessList)
@@ -123,7 +160,7 @@ class CompanyProContext {
                     newInfo.logo = url;
                     setDoc(doc(db, "companyprofile", id), newInfo);
                     this.createAdmins(accessList, id)
-                    // this.createDepts(id);
+                    this.createConfig(id, accessList.map((user) => {return {[`${user.designation}`]: 1}}));
                     return Promise.resolve();
                 })
             });
@@ -131,7 +168,7 @@ class CompanyProContext {
             newInfo.logo = null;
             setDoc(doc(db, "companyprofile", id), newInfo);
             this.createAdmins(accessList, id)
-            // this.createDepts(id);
+            this.createConfig(id, accessList.map((user) => {return {[`${user.designation}`]: 1}}));
             return Promise.resolve();
         }
     };

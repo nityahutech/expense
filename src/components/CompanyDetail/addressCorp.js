@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, Row, Col, Button, Input, Form } from "antd";
 import CompanyProContext from "../../contexts/CompanyProContext";
-import { CloseOutlined, EditFilled ,CheckOutlined } from "@ant-design/icons";
+import { CloseOutlined, EditFilled ,CheckOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "../../components/CompanyDetail/companystyle.css";
 
 function AddressCorp() {
@@ -106,7 +106,7 @@ function AddressCorp() {
                                       <Row gutter={[16,16]}>
                                         <Col span={24}>
                                           <Form.Item
-                                            initialValue={data ? data.corpOffice.addLine1 : null}
+                                            initialValue={data?.corpOffice?.addLine1}
                                             name="address1"
                                             rules={[
                                                 {
@@ -131,7 +131,7 @@ function AddressCorp() {
                                         </Col>
                                         <Col span={24}>
                                           <Form.Item
-                                              initialValue={data ? data.corpOffice.addLine2 : null}
+                                              initialValue={data?.corpOffice?.addLine2}
                                               name="address2"
                                               rules={[
                                                       {
@@ -156,7 +156,7 @@ function AddressCorp() {
                                         <Col xs={24} sm={24} md={6}>
                                          <Form.Item 
                                             style={{ width: '100%' }}
-                                            initialValue={data ? data.corpOffice.city : null}
+                                            initialValue={data?.corpOffice?.city}
                                             name="city"
                                             rules={[
                                                         {
@@ -187,7 +187,7 @@ function AddressCorp() {
                                         <Col xs={24} sm={24} md={6}>
                                          <Form.Item 
                                             style={{ width: '100%' }}
-                                            initialValue={data ? data.corpOffice.state : null}
+                                            initialValue={data?.corpOffice?.state}
                                             name="state"
                                             rules={[
                                                         {
@@ -216,7 +216,7 @@ function AddressCorp() {
                                         </Col>
                                         <Col xs={24} sm={24} md={6}>
                                           <Form.Item
-                                            initialValue={data ? data.corpOffice.country : null}
+                                            initialValue={data?.corpOffice?.country}
                                             name="country"
                                              rules={[
                                                         {
@@ -245,7 +245,7 @@ function AddressCorp() {
                                         </Col>
                                         <Col xs={24} sm={24} md={6}>
                                           <Form.Item
-                                            initialValue={data ? data.corpOffice.pincode : null}
+                                            initialValue={data?.corpOffice?.pincode}
                                             name="pin"
                                             rules={[
                                                         {
@@ -273,7 +273,7 @@ function AddressCorp() {
                                         </Col>
                                       </Row>
                                     </>
-                                ):(
+                                ): Object.keys(data).length == 0 ? (
                                     <>
                                       <Row span={[16,16]}>
                                         <Col span={24}>{data ? data.corpOffice?.addLine1 : null},</Col>
@@ -286,6 +286,15 @@ function AddressCorp() {
                                         </span>
                                       </Row>
                                     </>
+                                ) : (
+                                    <Button
+                                        type="primary"
+                                        style={{ marginLeft: "10px",background: "#1963a6",border: "1px solid #1963A6", }}
+                                        onClick={() => showEditCorpAddress(true)}
+                                    >
+                                        <PlusCircleOutlined />
+                                        Add
+                                    </Button>
                                 )}
 
                                 {editCorpAddress === true ? (

@@ -89,6 +89,7 @@ function Onboarding() {
         country: data.country,
         pincode: data.pincode,
       },
+      corpOffice: {},
       cinNumber: data.cinNumber,
       gst: data.gst,
       domain: data.domain,

@@ -26,48 +26,72 @@ import {
   StopFilled,
   EyeFilled,
   EditFilled,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import "../style/Onboarding.css";
 import imageavailable from "../images/imageavailable.png";
 import reload from "../images/reload.png";
 import CompanyProContext from "../contexts/CompanyProContext";
+import { showNotification } from "../contexts/CreateContext";
 
 function EditOnboarding(props) {
   const [fileName, setFileName] = useState(props.modalData.logo);
   const [fileEdited, setFileEdited] = useState(false);
+  const [imageUrl, setImageUrl] = useState(props.modalData.logo || "");
   const [isBigFile, setIsBigFile] = useState(false);
   const imgRef = React.useRef(null);
   const [form] = Form.useForm();
-  const [form2] = Form.useForm();
   const [modalData, setModalData] = useState(props.modalData);
-  const [accessList, setAccessList] = useState(props.modalData.accessList);
-  const [addAccess, setAddAccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const timer = setTimeout(() => {
     setLoading(false);
   }, 500);
   useEffect(() => {
-    setAccessList(props.modalData.accessList);
     setModalData(props.modalData);
   }, []);
-  const handleClickEdit = (event) => {
+
+  useEffect(() => {
+    setIsBigFile(false);
+  });
+
+  const handleClick = () => {
     imgRef.current.click();
   };
+
+  const getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => callback(reader.result));
+    reader.readAsDataURL(img);
+  };
+
+  const handleChange = (event) => {
+    if (!event) {
+      return;
+    }
+    const fileUploaded = event.target.files[0];
+    getBase64(fileUploaded, (url) => {
+      // setLoading(false);
+      setImageUrl(url);
+    });
+    checkFileSize(fileUploaded.size, fileUploaded);
+  };
+
+  function checkFileSize(size, fileName) {
+    if (Math.round(size / 1024) <= 200) {
+      setFileName(fileName);
+      setIsBigFile(false);
+    } else {
+      setFileName(null);
+      setIsBigFile(true);
+    }
+  }
   function onReset() {
     props.setIsEditOrganization(false);
     form.resetFields();
-    form2.resetFields();
-    modalData = {};
     setModalData(props.modalData);
-    setAccessList(props.modalData.accessList);
   }
   const onFinish = (values) => {
-    if (accessList.length == 0) {
-      showNotification("error", "Error", "There must be at least 1 user!");
-      return;
-    }
     const valuesToservice = {
-      accessList: accessList,
       regCompName: values.regCompName,
       regOffice: {
         addLine1: values.addLine1,
@@ -87,18 +111,13 @@ function EditOnboarding(props) {
       valuesToservice,
       fileEdited ? fileName : null
     )
-      .then((res) => showNotification("success", "Success", "Edit Successful"))
-      .catch((err) => showNotification("error", "Error", err.message));
+      .then(() => showNotification("success", "Success", "Edit Successful"))
+      .catch(() => showNotification("error", "Error", "Failed to edit"));
     onReset();
     props.getData();
     props.setIsEditOrganization(false);
   };
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
-  };
+
   const handleEdit = (event) => {
     if (!event) {
       return;
@@ -136,37 +155,7 @@ function EditOnboarding(props) {
       return true;
     }
   };
-  async function addUseRole(values) {
-    let exists = accessList.filter((user) => values.mailid == user.mailid);
-    if (
-      exists.length > 0 ||
-      (await CompanyProContext.checkUserExists(values.mailid))
-    ) {
-      showNotification("error", "Error", "This user already exists!");
-      form2.resetFields();
-      setAddAccess(false);
-      return;
-    }
-    setAccessList([...accessList, values]);
-    form2.resetFields();
-    setAddAccess(false);
-  }
-  function onDelete(delItem) {
-    const filteredData = accessList.filter(
-      (item) => item.mailid !== delItem.mailid
-    );
-    setAccessList(filteredData);
-  }
-  // function editUseRole(values) {
-  //   setAccessList([...accessList, values]);
-  //   form2.resetFields();
-  //   setAddAccess(false);
-  //   // setAccessList([...accessList, newAccess]);
-  //   // setNewAccess({ userole: "", name: "", emailaddress: "", phone: "" });
-  // }
-  function cancel() {
-    props.setIsEditOrganization(false);
-  }
+
   return (
     <Card
       style={{
@@ -555,305 +544,88 @@ function EditOnboarding(props) {
               </Form.Item>
             </Col>
             <Col xs={22} sm={15} md={8}>
-              <Form.Item name="logo" className="uploadLogo">
-                <div
+            <Form.Item name="logo" className="uploadLogo">
+              <div
+                style={{
+                  border: "dashed #B9B9B9",
+                  borderWidth: "thin",
+                  borderRadius: "4px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                {isBigFile
+                  ? message.error("File size must be less than 200Kb.")
+                  : ""}
+                <input
                   style={{
-                    border: "dashed #B9B9B9",
-                    borderWidth: "thin",
-                    borderRadius: "4px",
-                    display: "flex",
-                    alignItems: "center",
+                    display: "none",
                   }}
-                >
-                  <Button
-                    onClick={handleClickEdit}
-                    style={{
-                      width: " 60px",
-                      height: "60px",
-                      margin: "10px",
-                    }}
-                  >
-                    <PlusCircleOutlined
+                  type="file"
+                  id="logo"
+                  name="logo"
+                  ref={imgRef}
+                  onChange={(e) => handleChange(e)}
+                />
+                {fileName ? (
+                  <div className="hoverImgCont" style={{margin: "20px auto", position: "relative"}}>
+                    <img
+                      src={imageUrl}
                       style={{
-                        display: "flex",
-                        flexDirection: "column-reverse",
-                        alignItems: "center",
+                        maxWidth: "120px",
+                        height: "auto",
                       }}
                     />
-                    <span
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginRight: "8px",
-                      }}
-                    >
-                      Upload
-                    </span>
-                  </Button>
-                  {/* <img src={isBigFile ? "" : fileName.name!=null ? fileName.name : fileName!=null ?fileName:imageavailable} alt="Logo not found" /> */}
-                  {isBigFile
-                    ? message.error("File size must be less than 200Kb.")
-                    : ""}
-                  <input
-                    style={{
-                      height: "72px",
-                      marginTop: "11px",
-                      display: "none",
-                    }}
-                    type="file"
-                    // accept="image/gif, image/jpeg, image/png"
-                    id="logo"
-                    name="logo"
-                    ref={imgRef}
-                    onChange={handleEdit}
-                  />
-                  {fileName ? (
-                    "Logo"
-                  ) : (
-                    <p
-                      style={{
-                        fontWeight: "400",
-                        fontSize: "11px",
-                        lineHeight: "13px",
-                        marginLeft: "10px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      Upload logo. Use the 200 kb size image. PNG or JPEG file
-                      format accepted
-                    </p>
-                  )}
-                </div>
-              </Form.Item>
+                    <div className="overlay">
+                      <DeleteOutlined className="hoverIcon" onClick={() => {setFileName(null);setImageUrl("")}}/>
+                    </div>
+                  </div>
+                ) : (
+                    <>
+                        <Button
+                            onClick={(e) => handleClick(e)}
+                            style={{
+                                width: "60px",
+                                height: "50px",
+                                margin: "10px",
+                            }}
+                        >
+                            <PlusCircleOutlined
+                                style={{
+                                display: "flex",
+                                flexDirection: "column-reverse",
+                                alignItems: "center",
+                                }}
+                            />
+                            <span
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    marginRight: "8px",
+                                }}
+                            >
+                                Upload
+                            </span>
+                        </Button>
+                        <p
+                            style={{
+                            fontWeight: "400",
+                            fontSize: "13px",
+                            lineHeight: "19px",
+                            marginLeft: "5px",
+                            marginTop: "10px",
+                            }}
+                        >
+                            Upload logo. Use the 200 kb size image. PNG or JPEG file
+                            format accepted
+                        </p>
+                    </>
+                )}
+              </div>
+            </Form.Item>
             </Col>
           </Row>
           <Divider />
-          <Card
-            style={{
-              margin: "27px",
-              padding: "10px",
-              background: "#f8f8f8",
-              // height: "auto",
-            }}
-          >
-            <div
-              style={{
-                fontWeight: "600",
-                fontSize: "14px",
-                lineHeight: "17px",
-              }}
-            >
-              Organization Access
-            </div>
-            <Divider />
-            <Form
-              className="form"
-              style={{ margin: "30px" }}
-              form={form2}
-              layout="vertical"
-              labelcol={{
-                span: 4,
-              }}
-              wrappercol={{
-                span: 14,
-              }}
-              initialValues={{
-                remember: true,
-              }}
-              autoComplete="off"
-              onFinish={addUseRole}
-            >
-              {accessList.map((u, i) => (
-                <div style={{ marginTop: "10px" }} className="inputLabel">
-                  <Row gutter={[24, 20]}>
-                    <Col xs={22} sm={15} md={5}>
-                      <div style={{ fontSize: "13px", fontWeight: "600" }}>
-                        User Role
-                      </div>
-                      <div>{u.userRole}</div>
-                    </Col>
-                    <Col xs={22} sm={15} md={6}>
-                      <div style={{ fontSize: "13px", fontWeight: "600" }}>
-                        Name
-                      </div>
-                      <div> {u.name}</div>
-                    </Col>
-                    <Col xs={22} sm={15} md={6}>
-                      <div style={{ fontSize: "13px", fontWeight: "600" }}>
-                        Email
-                      </div>
-                      <div>{u.mailid}</div>
-                    </Col>
-                    <Col xs={22} sm={15} md={7}>
-                      <div style={{ fontSize: "13px", fontWeight: "600" }}>
-                        Mobile
-                      </div>
-                      <div>{u.phone}</div>
-                      <Button
-                        style={{
-                          background: "#f8f8f8",
-                          border: "none",
-                          color: "#095AA4",
-                          float: "right",
-                          bottom: " 35px",
-                          width: "10px",
-                        }}
-                        onClick={() => {
-                          onDelete(u);
-                        }}
-                      >
-                        <CloseCircleOutlined />
-                      </Button>
-                    </Col>
-                  </Row>
-                </div>
-              ))}
-              {addAccess ? (
-                <div>
-                  <Row gutter={[20, 8]} className="addUserForm">
-                    <Col xs={22} sm={15} md={6}>
-                      <Form.Item
-                        name="userRole"
-                        label="User Role"
-                        onKeyPress={(event) => {
-                          if (checkCharacterRole(event)) {
-                            event.preventDefault();
-                          }
-                        }}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter Role",
-                          },
-                          {
-                            pattern: /^[a-zA-Z().-\s]*$/,
-                            message: "Please enter Valid Role",
-                          },
-                        ]}
-                      >
-                        <Input
-                          maxLength={10}
-                          placeholder="User Role"
-                          style={{
-                            border: "1px solid #8692A6",
-                            borderRadius: "4px",
-                          }}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col xs={22} sm={15} md={6}>
-                      <Form.Item
-                        name="name"
-                        label="Name"
-                        onKeyPress={(event) => {
-                          if (checkAlphabets(event)) {
-                            event.preventDefault();
-                          }
-                        }}
-                        rules={[
-                          {
-                            required: true,
-
-                            message: "Please Enter Name",
-                          },
-                          {
-                            pattern: /^[a-zA-Z\s]*$/,
-                            message: "Please Enter Valid Name",
-                          },
-                        ]}
-                      >
-                        <Input
-                          maxLength={30}
-                          placeholder="Name"
-                          style={{
-                            border: "1px solid #8692A6",
-                            borderRadius: "4px",
-                          }}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col xs={22} sm={15} md={6}>
-                      <Form.Item
-                        name="mailid"
-                        label="Email"
-                        rules={[
-                          {
-                            type: "email",
-                            required: true,
-                            message: "Enter Email address",
-                            pattern:
-                              "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
-                          },
-                        ]}
-                      >
-                        <Input
-                          maxLength={30}
-                          placeholder="Email Address"
-                          style={{
-                            border: "1px solid #8692A6",
-                            borderRadius: "4px",
-                          }}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col xs={22} sm={15} md={6}>
-                      <Form.Item
-                        name="phone"
-                        label="Mobile"
-                        onKeyPress={(event) => {
-                          if (checkNumbervalue(event)) {
-                            event.preventDefault();
-                          }
-                        }}
-                        rules={[
-                          {
-                            required: true,
-
-                            message: "Please enter Phone Number",
-                          },
-                          {
-                            pattern: /^[0-9]\d{9}$/,
-                            message: "Please Enter Valid Number",
-                          },
-                        ]}
-                      >
-                        <Input
-                          maxLength={10}
-                          placeholder="Phone Number"
-                          style={{
-                            border: "1px solid #8692A6",
-                            borderRadius: "4px",
-                          }}
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </div>
-              ) : null}
-              <Button
-                style={{
-                  border: "none",
-                  // marginLeft: "49rem",
-                  background: "#1565D8",
-                  color: "#FFFFFF",
-                  fontWeight: "600",
-                  fontSize: "13px",
-                  lineHeight: "14.4px",
-                  float: "right",
-                  top: "1rem",
-                }}
-                // htmlType={addAccess ? "submit" : "button"}
-                onClick={() => {
-                  if (addAccess) {
-                    form2.submit();
-                  }
-                  setAddAccess(!addAccess);
-                }}
-              >
-                <PlusCircleOutlined /> {addAccess ? "Save" : "Add User"}
-              </Button>
-            </Form>
-          </Card>
           <div
             style={{
               display: "flex",

@@ -21,6 +21,7 @@ import {
 import "../style/CostCenter.css";
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/lib/input/TextArea";
+import { showNotification } from "../contexts/CreateContext";
 
 function CostCenter() {
   const [isCostModalOpen, setIsCostModalOpen] = useState(false);
@@ -29,13 +30,6 @@ function CostCenter() {
   const [editForm] = Form.useForm();
   const [costCenters, setCostCenters] = useState([]);
   const [costEditCenter, setEditCostCenter] = useState({});
-
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
-  };
 
   const deleteCost = (record) => {
     Modal.confirm({
@@ -47,9 +41,7 @@ function CostCenter() {
         console.log("key", record);
         const newData = costCenters.filter((item) => item.costcentercode !== record.costcentercode);
         localStorage.setItem("costCenters", JSON.stringify(newData));
-        showNotification("success", "Success", "Successfully deleted");
         setCostCenters(newData);
-
       },
     });
   };
@@ -74,15 +66,11 @@ function CostCenter() {
         costCenters[i] = newCostCenterTemp;
       }
     }
-
     localStorage.setItem("costCenters", JSON.stringify(costCenters));
-
     setCostCenters(getCostCentersFromLocalStr());
     setEditCostCenter({})
     editForm.resetFields();
-    showNotification("success", "Success", "Successfully editted");
     setIsCostEditModalOpen(false);
-
   };
 
   const onFinishForm = (values) => {
@@ -92,7 +80,7 @@ function CostCenter() {
     );
     console.log("values", matchingCostCenter);
     if (matchingCostCenter.length > 0) {
-      showNotification("error", "error", "Try Again cost center allready Present");
+      showNotification("error", "Error", "This Cost Center already exists!");
       return;
     }
 
@@ -103,7 +91,6 @@ function CostCenter() {
     };
     costCenters.push(costCenterTemp);
     localStorage.setItem("costCenters", JSON.stringify(costCenters));
-    showNotification("success", "Success", "Successfully added");
     setCostCenters(getCostCentersFromLocalStr());
     setIsCostModalOpen(false);
     form.resetFields();

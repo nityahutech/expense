@@ -5,7 +5,6 @@ import {
   EditFilled,
   DeleteFilled,
 } from "@ant-design/icons";
-import { stringify } from "@firebase/util";
 import {
   Button,
   Card,
@@ -23,6 +22,7 @@ import {
 import TextArea from "antd/lib/input/TextArea";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import CompanyProContext from "../contexts/CompanyProContext";
 import "../style/Onboarding.css";
 
 const { Option } = Select;
@@ -36,6 +36,12 @@ function AccessDetails() {
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const [value, setValue] = useState(1);
+  const [bu, setBu] = useState(null);
+  const [div, setDiv] = useState(null);
+  const [dept, setDept] = useState(null);
+  const [team, setTeam] = useState(null);
+  const order = ["Business Unit", "Division", "Department", "Team"];
+  const [parent, setParent] = useState(null);
 
   const dateFormat = "DD-MM-YYYY";
 
@@ -50,6 +56,13 @@ function AccessDetails() {
     wrapperCol: {
       span: 14,
     },
+  };
+
+  const validateAccessEmail = async (rule, value, callback) => {
+    let exists = await CompanyProContext.checkUserExists(value);
+    if (exists) {
+      return Promise.reject(new Error("this id exists"));
+    }
   };
 
   const getData = async () => {
@@ -150,6 +163,54 @@ function AccessDetails() {
     // .then((response) => {
     //            })
   }
+
+  const disabledDiv = () => {
+    if (bu == null) {
+      form.resetFields({division: null});
+      form1.resetFields({division: null});
+      return true;
+    }
+    return false;
+  }
+
+  const disabledDept = () => {
+    if (div == null) {
+      form.resetFields({dept: null});
+      form1.resetFields({dept: null});
+      return true;
+    }
+    return false;
+  }
+
+  const disabledTeam = () => {
+    if (dept == null) {
+      form.resetFields({team: null});
+      form1.resetFields({team: null});
+      return true;
+    }
+    return false;
+  }
+
+  const getOptions = async (type) => {
+      let temp = [];
+      let place = order.indexOf(type);
+      let par =
+          place == 0
+              ? null
+              : parent[`${order[1]}`].name +
+              (place == 1
+                  ? ""
+                  : "/" +
+                  parent[`${order[2]}`].name +
+                  (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
+      orgHier.map((d) => {
+          if (d.type == type && d.parent == par) {
+              temp.push(d);
+          }
+      });
+      console.log(temp);
+      return temp;
+  };
 
   return (
     <>
@@ -288,6 +349,37 @@ function AccessDetails() {
                       >
                         <Input
                           placeholder="First Name"
+                          style={{
+                            width: "100%",
+                            border: "1px solid #8692A6",
+                            borderRadius: "4px",
+                            background: "#ffffff",
+                          }}
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        initialValue={user ? user.mName : null}
+                        className="userLabel"
+                        name="mName"
+                        colon={true}
+                        label="Middle Name::"
+                        rules={[
+                          {
+                            pattern: /^[a-zA-Z\s]*$/,
+                            message: "Please Enter Valid Name",
+                          },
+                        ]}
+                        // labelCol={{
+                        //   span: 3,
+                        //   offset: 5,
+                        // }}
+                        // wrapperCol={{
+                        //   span: 9,
+                        //   offset: 1,
+                        // }}
+                      >
+                        <Input
+                          placeholder="Middle Name"
                           style={{
                             width: "100%",
                             border: "1px solid #8692A6",
@@ -467,17 +559,20 @@ function AccessDetails() {
                         //   span: 9,
                         //   offset: 1,
                         // }}
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     message: "Please Enter Email Address",
-                        //     type: "email",
-                        //   },
-                        //   {
-                        //     pattern: /^[a-zA-Z\s]*$/,
-                        //     message: "Please Enter Valid Address",
-                        //   },
-                        // ]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Enter Email Address",
+                            type: "email",
+                          },
+                          {
+                            pattern: /^[a-zA-Z\s]*$/,
+                            message: "Please Enter Valid Address",
+                          },
+                          {
+                            validator: validateAccessEmail
+                          }
+                        ]}
                       >
                         <Input
                           maxLength={50}
@@ -560,6 +655,18 @@ function AccessDetails() {
                         className="userLabel"
                         name="designation"
                         label="Designation::"
+                        onKeyPress={(event) => {
+                          if (checkAlphabet(event)) {
+                            event.preventDefault();
+                          }
+                        }}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Enter Designation",
+                            pattern: /^[a-zA-Z\s]*$/,
+                          },
+                        ]}
                         // labelCol={{
                         //   span: 3,
                         //   offset: 5,
@@ -570,6 +677,7 @@ function AccessDetails() {
                         // }}
                       >
                         <Input
+                          required
                           placeholder="Enter Designation"
                           style={{
                             width: "100%",
@@ -781,6 +889,21 @@ function AccessDetails() {
                               // }}
                             >
                               <span>{user.fName}</span>
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} sm={24} md={24}>
+                            <Form.Item
+                              label="Middle Name::"
+                              // labelCol={{
+                              //   span: 4,
+                              //   offset: 5,
+                              // }}
+                              // wrapperCol={{
+                              //   span: 9,
+                              //   offset: 1,
+                              // }}
+                            >
+                              <span>{user.mName}</span>
                             </Form.Item>
                           </Col>
                           <Col xs={24} sm={24} md={24}>
@@ -1204,6 +1327,57 @@ function AccessDetails() {
                       }}
                     />
                   </Form.Item>
+                  <Form.Item
+                    className="userLabel"
+                    name="mName"
+                    colon={true}
+                    label="Middle Name::"
+                    onKeyPress={(event) => {
+                      if (checkAlphabet(event)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    style={{ width: "100%" }}
+                    rules={[
+                      {
+                        pattern: /^[a-zA-Z\s]*$/,
+                        message: "Please Enter Valid Name",
+                      },
+                    ]}
+
+                    // labelCol={{
+                    //   span: 3,
+                    //   offset: 5,
+                    // }}
+                    // wrapperCol={{
+                    //   span: 9,
+                    //   offset: 1,
+                    // }}
+                  >
+                    <Input
+                      maxLength={20}
+                      placeholder="Middle Name"
+                      style={{
+                        width: "100%",
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                        background: "#ffffff",
+                      }}
+                      onChange={(e) => {
+                        const inputval = e.target.value;
+                        const str = e.target.value;
+                        const newVal =
+                          inputval.substring(0, 1).toUpperCase() +
+                          inputval.substring(1);
+                        const caps = str.split(" ").map(capitalize).join(" ");
+                        // setPaidBy(newVal);
+                        form.setFieldsValue({
+                          mName: newVal,
+                          mName: caps,
+                        });
+                      }}
+                    />
+                  </Form.Item>
 
                   <Form.Item
                     className="userLabel"
@@ -1290,7 +1464,7 @@ function AccessDetails() {
                         message: "Please Enter Phone Number",
                       },
                       {
-                        pattern: /^[6-9]\d{9}$/,
+                        pattern: /^[0-9]\d{9}$/,
                         message: "Please Enter Valid Number",
                       },
                     ]}
@@ -1397,10 +1571,14 @@ function AccessDetails() {
                     rules={[
                       {
                         required: true,
-                        message: "Please Enter Email Address",
+                        message: "Please Enter Valid Email Address",
                         type: "email",
                         pattern: "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
-                      },
+                      },{
+                        validator: validateAccessEmail,
+                        message: "This email address already exists!",
+                      }
+
                     ]}
                     // labelCol={{
                     //   span: 3,
@@ -1495,8 +1673,8 @@ function AccessDetails() {
                     }}
                     rules={[
                       {
-                        required: false,
-                        message: "Please Enter Last Name",
+                        required: true,
+                        message: "Please Enter Designation",
                         pattern: /^[a-zA-Z\s]*$/,
                       },
                     ]}
@@ -1510,6 +1688,7 @@ function AccessDetails() {
                     // }}
                   >
                     <Input
+                      required
                       placeholder="Enter Designation"
                       style={{
                         width: "100%",
@@ -1554,11 +1733,12 @@ function AccessDetails() {
                         borderRadius: "4px",
                         background: "#ffffff",
                       }}
+                      onChange={(e) => setBu(e || null)}
                     >
                       {orgHier.map((org) => {
-                        if (org.type == "Business Unit")
-                          return <Option value={org.name}>{org.name}</Option>;
-                      })}
+                          if (org.type == "Business Unit")
+                            return <Option value={org.name}>{org.name}</Option>;
+                        })}
                     </Select>
                   </Form.Item>
                   <Form.Item
@@ -1575,14 +1755,16 @@ function AccessDetails() {
                     // }}
                   >
                     <Select
+                      disabled={disabledDiv}
                       bordered={false}
                       placeholder="Select Division"
                       style={{
                         width: "100%",
                         border: "1px solid #8692A6",
                         borderRadius: "4px",
-                        background: "#ffffff",
+                        background: disabledDiv ? "rgba(0,0,0,0.1)" : "#ffffff",
                       }}
+                      onChange={(e) => setDiv(e || null)}
                     >
                       {orgHier.map((org) => {
                         if (org.type == "Division")
@@ -1604,14 +1786,16 @@ function AccessDetails() {
                     // }}
                   >
                     <Select
+                      disabled={disabledDept}
                       bordered={false}
                       placeholder="Select Department"
                       style={{
                         width: "100%",
                         border: "1px solid #8692A6",
                         borderRadius: "4px",
-                        background: "#ffffff",
+                        background: disabledDept ? "rgba(0,0,0,0.1)" : "#ffffff",
                       }}
+                      onChange={(e) => setDept(e || null)}
                     >
                       {orgHier.map((org) => {
                         if (org.type == "Department")
@@ -1633,14 +1817,16 @@ function AccessDetails() {
                     // }}
                   >
                     <Select
+                      disabled={disabledTeam}
                       bordered={false}
                       placeholder="Select Team"
                       style={{
                         width: "100%",
                         border: "1px solid #8692A6",
                         borderRadius: "4px",
-                        background: "#ffffff",
+                        background: disabledTeam ? "rgba(0,0,0,0.1)" : "#ffffff",
                       }}
+                      onChange={(e) => setTeam(e || null)}
                     >
                       {orgHier.map((org) => {
                         if (org.type == "Team")

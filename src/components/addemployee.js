@@ -22,7 +22,9 @@ function AddEmployee() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const compId = sessionStorage.getItem("compId");
-  const [configurations, setConfigurations] = useState(null);
+  const [place, setPlace] = useState(null);
+  const [designations, setDesignations] = useState({});
+  const [configurations, setConfigurations] = useState([]);
   const [workLoc, setWorkLoc] = useState(null);
   useEffect(() => {
     getData();
@@ -37,8 +39,15 @@ function AddEmployee() {
     temp.address?.map((rec) => {
       add.push(rec.title);
     });
+    let des = {};
+    data?.designations.map((d) => {
+      console.log(d);
+      des[`${Object.keys(d)[0]}`] = Object.values(d)[0]
+    })
     setWorkLoc(add);
     setConfigurations(data);
+    setDesignations(des);
+    console.log(data)
   };
   const handleListEmployee = () => {
     navigate("/Employee/EmployeeList");
@@ -70,6 +79,7 @@ function AddEmployee() {
         showNotification("error", "Error", "This user already exists!")
       );
   };
+  console.log(designations, place)
   return (
     <>
       <div className="expForm" style={{ margin: "15px", background: "#fff" }}>
@@ -383,25 +393,40 @@ function AddEmployee() {
                   },
                 ]}
               >
+              <Input.Group>
                 <Select
-                  // showSearch
                   bordered={false}
                   placeholder="Select a Designation"
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
+                    width: "75%"
                   }}
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
-                >
-                  {configurations?.designations.map((des) => (
-                    <Option value={des}>{des}</Option>
+                  onChange={(e) => setPlace(e)}
+                > 
+                  {Object.keys(designations)?.map((des, i) => (
+                    <Option value={des}>
+                      {des}
+                    </Option>
                   ))}
                 </Select>
+                <Select
+                  bordered={false}
+                  disabled={place == null}
+                  defaultValue={1}
+                  placeholder="Select a Grade"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                    width: "25%"
+                  }}
+                > 
+                  {  
+                    [...Array(Number(designations?.[`${place}`] || 1)).keys()]?.map((grade) => (
+                    <Option value={grade+1}>{grade+1}</Option>
+                  ))}
+                </Select>
+              </Input.Group>
               </Form.Item>
             </Col>
             <Col xs={22} sm={15} md={8}>
@@ -476,7 +501,7 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                  {configurations?.repManager.map((des) => (
+                  {configurations?.repManager?.map((des) => (
                     <Option value={des}>{des}</Option>
                   ))}
                 </Select>
@@ -536,7 +561,7 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                  {configurations?.secManager.map((des) => (
+                  {configurations?.secManager?.map((des) => (
                     <Option value={des}>{des}</Option>
                   ))}
                 </Select>
@@ -655,7 +680,7 @@ function AddEmployee() {
                   //   option.children.toLowerCase().includes(input.toLowerCase())
                   // }
                 >
-                  {configurations?.field.map((des) => (
+                  {configurations?.field?.map((des) => (
                     <Option value={des}>{des}</Option>
                   ))}
                 </Select>

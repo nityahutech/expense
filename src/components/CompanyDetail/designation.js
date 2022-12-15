@@ -22,6 +22,7 @@ const Designation = () => {
   const page = "addemployeePage";
   const [editContent, showEditContent] = useState(false);
   const [editGrade, showEditGrade] = useState(false);
+  const [all, setAll] = useState({});
   const [data, setData] = useState({});
   const [grade, setGrade] = useState({});
   const [des, setDes] = useState(null);
@@ -30,18 +31,13 @@ const Designation = () => {
   const [editInfo, setEditInfo] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [form] = Form.useForm();
-  const [showNewColumn, setshowNewColumn] = useState(true)
+  const [showNewColumn, setshowNewColumn] = useState(false)
 
 
   const showModal = () => {
     showEditGrade(true);
   };
-  const handleOk = () => {
-    showEditGrade(false);
-  };
-  const handleCancel = () => {
-    showEditGrade(false);
-  };
+
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
@@ -55,7 +51,8 @@ const Designation = () => {
   const getData = async () => {
     let data = await ConfigureContext.getConfigurations(page);
     console.log('aaaaaaaaaa', data)
-
+    setAll(data)
+    setshowNewColumn(data?.enable)
     let designNo = await getDesigNo()
     console.log('aaaaaaaaaa', designNo)
     let temp = data.designations.map((des) => {
@@ -238,8 +235,12 @@ const Designation = () => {
   const filterdColumns = columns.filter((col) => col.title !== "Grade");
 
 
-  function handleAddColumn(params) {
-    setshowNewColumn(!showNewColumn)
+  function handleAddColumn(e) {
+    ConfigureContext.createConfiguration(page, {
+      ...all,
+      enabled: e
+    })
+    setshowNewColumn(e)
   }
 
 
@@ -299,7 +300,7 @@ const Designation = () => {
             >
               <div className="table-responsive">
                 <Table
-                  columns={showNewColumn ? filterdColumns : columns}
+                  columns={!showNewColumn ? filterdColumns : columns}
                   dataSource={dataSource}
                   pagination={false}
                   className="designationTable"
@@ -491,13 +492,15 @@ const Designation = () => {
 
       </Modal>
       <Modal
+        destroyOnClose
         open={editGrade}
         centered
         className="editDesignation"
         title="Edit Grade"
-        onOk={handleOk}
-        onCancel={handleCancel}
-        closable={true}
+        onOk={() => showEditGrade(false)}
+        cancelButtonProps={{ style: { display: 'none' } }}
+        closable={false}
+        // afterClose={() => showEditGrade(false)}
       >
         <Form>
           <FormItem
@@ -505,8 +508,9 @@ const Designation = () => {
             labelCol={{ offset: 6 }}
             // wrapperCol={{span:12,offset:10}}
             style={{ marginBottom: "0px" }}
+            initialValue={showNewColumn}
           >
-            <Switch onChange={handleAddColumn} />
+            <Switch defaultChecked={showNewColumn} checkedChildren="Enabled" unCheckedChildren="Disabled" onChange={(e) => handleAddColumn(e)} />
           </FormItem>
         </Form>
       </Modal>

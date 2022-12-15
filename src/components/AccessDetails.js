@@ -166,50 +166,50 @@ function AccessDetails() {
 
   const disabledDiv = () => {
     if (bu == null) {
-      form.resetFields({division: null});
-      form1.resetFields({division: null});
+      form.resetFields({ division: null });
+      form1.resetFields({ division: null });
       return true;
     }
     return false;
-  }
+  };
 
   const disabledDept = () => {
     if (div == null) {
-      form.resetFields({dept: null});
-      form1.resetFields({dept: null});
+      form.resetFields({ dept: null });
+      form1.resetFields({ dept: null });
       return true;
     }
     return false;
-  }
+  };
 
   const disabledTeam = () => {
     if (dept == null) {
-      form.resetFields({team: null});
-      form1.resetFields({team: null});
+      form.resetFields({ team: null });
+      form1.resetFields({ team: null });
       return true;
     }
     return false;
-  }
+  };
 
   const getOptions = async (type) => {
-      let temp = [];
-      let place = order.indexOf(type);
-      let par =
-          place == 0
-              ? null
-              : parent[`${order[1]}`].name +
-              (place == 1
-                  ? ""
-                  : "/" +
-                  parent[`${order[2]}`].name +
-                  (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
-      orgHier.map((d) => {
-          if (d.type == type && d.parent == par) {
-              temp.push(d);
-          }
-      });
-      console.log(temp);
-      return temp;
+    let temp = [];
+    let place = order.indexOf(type);
+    let par =
+      place == 0
+        ? null
+        : parent[`${order[1]}`].name +
+          (place == 1
+            ? ""
+            : "/" +
+              parent[`${order[2]}`].name +
+              (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
+    orgHier.map((d) => {
+      if (d.type == type && d.parent == par) {
+        temp.push(d);
+      }
+    });
+    console.log(temp);
+    return temp;
   };
 
   return (
@@ -565,13 +565,11 @@ function AccessDetails() {
                             message: "Please Enter Email Address",
                             type: "email",
                           },
+
                           {
-                            pattern: /^[a-zA-Z\s]*$/,
-                            message: "Please Enter Valid Address",
+                            validator: validateAccessEmail,
+                            message: "This email address already exists!",
                           },
-                          {
-                            validator: validateAccessEmail
-                          }
                         ]}
                       >
                         <Input
@@ -1574,11 +1572,11 @@ function AccessDetails() {
                         message: "Please Enter Valid Email Address",
                         type: "email",
                         pattern: "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
-                      },{
+                      },
+                      {
                         validator: validateAccessEmail,
                         message: "This email address already exists!",
-                      }
-
+                      },
                     ]}
                     // labelCol={{
                     //   span: 3,
@@ -1736,9 +1734,9 @@ function AccessDetails() {
                       onChange={(e) => setBu(e || null)}
                     >
                       {orgHier.map((org) => {
-                          if (org.type == "Business Unit")
-                            return <Option value={org.name}>{org.name}</Option>;
-                        })}
+                        if (org.type == "Business Unit")
+                          return <Option value={org.name}>{org.name}</Option>;
+                      })}
                     </Select>
                   </Form.Item>
                   <Form.Item
@@ -1793,7 +1791,9 @@ function AccessDetails() {
                         width: "100%",
                         border: "1px solid #8692A6",
                         borderRadius: "4px",
-                        background: disabledDept ? "rgba(0,0,0,0.1)" : "#ffffff",
+                        background: disabledDept
+                          ? "rgba(0,0,0,0.1)"
+                          : "#ffffff",
                       }}
                       onChange={(e) => setDept(e || null)}
                     >
@@ -1824,7 +1824,9 @@ function AccessDetails() {
                         width: "100%",
                         border: "1px solid #8692A6",
                         borderRadius: "4px",
-                        background: disabledTeam ? "rgba(0,0,0,0.1)" : "#ffffff",
+                        background: disabledTeam
+                          ? "rgba(0,0,0,0.1)"
+                          : "#ffffff",
                       }}
                       onChange={(e) => setTeam(e || null)}
                     >

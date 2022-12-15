@@ -21,7 +21,11 @@ import {
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
 import moment from "moment";
-import { capitalize, getBase64, getCountryCode } from "../../contexts/CreateContext";
+import {
+  capitalize,
+  getBase64,
+  getCountryCode,
+} from "../../contexts/CreateContext";
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -33,7 +37,7 @@ function Personal() {
   const [editContent, showEditContent] = useState(false);
   const [editContactInfo, showEditContactInfo] = useState(false);
   const [dob, setDob] = useState("");
-  const [scrs, setScrs] = useState("");  
+  const [scrs, setScrs] = useState("");
   const [codes, setCodes] = useState("");
   const [lccs, setLccs] = useState("");
   const [editAddressInfo, showEditAddressInfo] = useState(false);
@@ -118,9 +122,9 @@ function Personal() {
     getData();
   };
   useEffect(() => {
-  getCountryCode().then((res)=>{
-  setCodes(res);
-  })
+    getCountryCode().then((res) => {
+      setCodes(res);
+    });
     getData();
   }, []);
 
@@ -139,52 +143,50 @@ function Personal() {
     setScrs(data?.scrs ? data.scrs : null);
   };
 
-  const handleOnChange=(value,event)=>{
-    console.log(value,event);
-  }
+  const handleOnChange = (value, event) => {
+    console.log(value, event);
+  };
 
   const prefixSelector = (
-    <Form.Item  name="prefix" noStyle>
+    <Form.Item name="prefix" noStyle>
       <Select
-      showSearch
+        showSearch
         bordered={false}
         style={{
           width: 80,
           background: "#ffffff",
         }}
-
         onSelect={(value, event) => handleOnChange(value, event)}
-
-
       >
-      { codes?.countries?.map((e) => <Option key={e?.code} value={e?.code} >{e?.code} </Option>
-    ) }
-        
+        {codes?.countries?.map((e) => (
+          <Option key={e?.code} value={e?.code}>
+            {e?.code}{" "}
+          </Option>
+        ))}
       </Select>
     </Form.Item>
   );
 
   const prefixSelector2 = (
-    <Form.Item  name="prefix2" noStyle>
+    <Form.Item name="prefix2" noStyle>
       <Select
-      showSearch
+        showSearch
         bordered={false}
         style={{
           width: 80,
           background: "#ffffff",
         }}
-
         onSelect={(value, event) => handleOnChange(value, event)}
-
-
       >
-      { codes?.countries?.map((e) => <Option key={e?.code} value={e?.code} >{e?.code} </Option>
-    ) }
-        
+        {codes?.countries?.map((e) => (
+          <Option key={e?.code} value={e?.code}>
+            {e?.code}{" "}
+          </Option>
+        ))}
       </Select>
     </Form.Item>
   );
-  
+
   function onReset() {
     setIsBigFile(false);
     setFileName(null);
@@ -316,18 +318,18 @@ function Personal() {
       return (
         <div
           className={editContent === true ? "hoverImgCont" : null}
-          style={{ position: "relative" }}
+          style={{ position: "relative", width: "150px", height: "170px" }}
         >
           <img
             src={imageUrl}
             style={{
               width: "150px",
               height: "170px",
-              border: "1px solid #05445e",
+              // border: "1px solid #05445e",
             }}
           />
           {editContent === true ? (
-            <div className="overlay">
+            <div className="imageOverlay">
               <DeleteOutlined className="hoverIcon" onClick={onReset} />
             </div>
           ) : null}
@@ -922,12 +924,12 @@ function Personal() {
               }}
               wrappercol={{
                 span: 14,
-              }}s
+              }}
+              s
               initialValues={{
                 remember: true,
-                "prefix2":"+91",
-                "prefix":"+91"
-
+                prefix2: "+91",
+                prefix: "+91",
               }}
               autoComplete="off"
               onFinish={onContactFinish}
@@ -984,7 +986,9 @@ function Personal() {
                         Official Email ID
                       </div>
                       {editContactInfo === false ? (
-                        <div>{data?.mailid ? data.mailid : "-"}</div>
+                        <div style={{ marginTop: "7px" }}>
+                          {data?.mailid ? data.mailid : "-"}
+                        </div>
                       ) : (
                         <Form.Item
                           initialValue={data ? data.mailid : null}
@@ -1031,7 +1035,7 @@ function Personal() {
                         Personal Email ID
                       </div>
                       {editContactInfo === false ? (
-                        <div>
+                        <div style={{ marginTop: "7px" }}>
                           {data?.contactEmail ? data.contactEmail : "-"}
                         </div>
                       ) : (
@@ -1078,10 +1082,10 @@ function Personal() {
                         Phone Number
                       </div>
                       {editContactInfo === false ? (
-                        <div>
+                        <div style={{ marginTop: "7px" }}>
                           {data?.phonenumber
-                          ?`${data.prefix} ${data.phonenumber}`
-                          : "-"}
+                            ? `${data.prefix} ${data.phonenumber}`
+                            : "-"}
                         </div>
                       ) : (
                         <Form.Item
@@ -1128,9 +1132,9 @@ function Personal() {
                         Alternate Phone Number
                       </div>
                       {editContactInfo === false ? (
-                        <div>
+                        <div style={{ marginTop: "7px" }}>
                           {data?.altPhnNo
-                            ?  `${data.prefix2} ${data.altPhnNo}` 
+                            ? `${data.prefix2} ${data.altPhnNo}`
                             : "-"}
                         </div>
                       ) : (
@@ -1180,16 +1184,16 @@ function Personal() {
                       <CloseOutlined /> CANCEL
                     </Button>
                     <Button
-                        type="primary"
-                        htmlType="submit"
-                        style={{
-                          marginLeft: "10px",
-                          background: "#1963a6",
-                          width: "90px",
-                        }}
-                      >
-                        <CheckOutlined />
-                        SAVE
+                      type="primary"
+                      htmlType="submit"
+                      style={{
+                        marginLeft: "10px",
+                        background: "#1963a6",
+                        width: "90px",
+                      }}
+                    >
+                      <CheckOutlined />
+                      SAVE
                     </Button>
                   </Row>
                 ) : null}
@@ -1280,7 +1284,9 @@ function Personal() {
                         Current Address
                       </div>
                       {editAddressInfo === false ? (
-                        <div>{data?.currentAdd ? data.currentAdd : "-"}</div>
+                        <div style={{ marginTop: "7px" }}>
+                          {data?.currentAdd ? data.currentAdd : "-"}
+                        </div>
                       ) : (
                         <Form.Item
                           initialValue={data ? data.currentAdd : null}
@@ -1323,7 +1329,7 @@ function Personal() {
                         Permanent Address
                       </div>
                       {editAddressInfo === false ? (
-                        <div>
+                        <div style={{ marginTop: "7px" }}>
                           {data?.permanentAdd ? data.permanentAdd : "-"}
                         </div>
                       ) : (
@@ -1368,7 +1374,9 @@ function Personal() {
                         House Type
                       </div>
                       {editAddressInfo === false ? (
-                        <div>{data?.houseType ? data.houseType : "-"}</div>
+                        <div style={{ marginTop: "7px" }}>
+                          {data?.houseType ? data.houseType : "-"}
+                        </div>
                       ) : (
                         <Form.Item
                           initialValue={data ? data.houseType : null}
@@ -1444,7 +1452,9 @@ function Personal() {
                         Staying at Current Residence Since
                       </div>
                       {editAddressInfo === false ? (
-                        <div>{data?.scrs ? data.scrs : "-"}</div>
+                        <div style={{ marginTop: "7px" }}>
+                          {data?.scrs ? data.scrs : "-"}
+                        </div>
                       ) : (
                         <Form.Item
                           // name="dob"
@@ -1485,7 +1495,9 @@ function Personal() {
                         Living in Current City Since
                       </div>
                       {editAddressInfo === false ? (
-                        <div>{data?.lccs ? data.lccs : "-"}</div>
+                        <div style={{ marginTop: "7px" }}>
+                          {data?.lccs ? data.lccs : "-"}
+                        </div>
                       ) : (
                         <Form.Item
                           initialValue={

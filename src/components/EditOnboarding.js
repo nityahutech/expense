@@ -544,85 +544,97 @@ function EditOnboarding(props) {
               </Form.Item>
             </Col>
             <Col xs={22} sm={15} md={8}>
-            <Form.Item name="logo" className="uploadLogo">
-              <div
-                style={{
-                  border: "dashed #B9B9B9",
-                  borderWidth: "thin",
-                  borderRadius: "4px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                {isBigFile
-                  ? message.error("File size must be less than 200Kb.")
-                  : ""}
-                <input
+              <Form.Item name="logo" className="uploadLogo">
+                <div
                   style={{
-                    display: "none",
+                    border: "dashed #B9B9B9",
+                    borderWidth: "thin",
+                    borderRadius: "4px",
+                    display: "flex",
+                    alignItems: "center",
                   }}
-                  type="file"
-                  id="logo"
-                  name="logo"
-                  ref={imgRef}
-                  onChange={(e) => handleChange(e)}
-                />
-                {fileName ? (
-                  <div className="hoverImgCont" style={{margin: "20px auto", position: "relative"}}>
-                    <img
-                      src={imageUrl}
-                      style={{
-                        maxWidth: "120px",
-                        height: "auto",
-                      }}
-                    />
-                    <div className="overlay">
-                      <DeleteOutlined className="hoverIcon" onClick={() => {setFileName(null);setImageUrl("")}}/>
+                >
+                  {isBigFile
+                    ? message.error("File size must be less than 200Kb.")
+                    : ""}
+                  <input
+                    style={{
+                      display: "none",
+                    }}
+                    type="file"
+                    id="logo"
+                    name="logo"
+                    ref={imgRef}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  {fileName ? (
+                    <div
+                      className="hoverImgCont"
+                      style={{ margin: "10px auto" }}
+                    >
+                      <img
+                        src={imageUrl}
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          maxWidth: "170px",
+                          height: "100px",
+                          padding: "10px",
+                        }}
+                      />
+                      <div className="editOverlay">
+                        <DeleteOutlined
+                          className="hoverIcon"
+                          onClick={() => {
+                            setFileName(null);
+                            setImageUrl("");
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ) : (
+                  ) : (
                     <>
-                        <Button
-                            onClick={(e) => handleClick(e)}
-                            style={{
-                                width: "60px",
-                                height: "50px",
-                                margin: "10px",
-                            }}
+                      <Button
+                        onClick={(e) => handleClick(e)}
+                        style={{
+                          width: "60px",
+                          height: "50px",
+                          margin: "10px",
+                        }}
+                      >
+                        <PlusCircleOutlined
+                          style={{
+                            display: "flex",
+                            flexDirection: "column-reverse",
+                            alignItems: "center",
+                          }}
+                        />
+                        <span
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            marginRight: "8px",
+                          }}
                         >
-                            <PlusCircleOutlined
-                                style={{
-                                display: "flex",
-                                flexDirection: "column-reverse",
-                                alignItems: "center",
-                                }}
-                            />
-                            <span
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    marginRight: "8px",
-                                }}
-                            >
-                                Upload
-                            </span>
-                        </Button>
-                        <p
-                            style={{
-                            fontWeight: "400",
-                            fontSize: "13px",
-                            lineHeight: "19px",
-                            marginLeft: "5px",
-                            marginTop: "10px",
-                            }}
-                        >
-                            Upload logo. Use the 200 kb size image. PNG or JPEG file
-                            format accepted
-                        </p>
+                          Upload
+                        </span>
+                      </Button>
+                      <p
+                        style={{
+                          fontWeight: "400",
+                          fontSize: "13px",
+                          lineHeight: "19px",
+                          marginLeft: "5px",
+                          marginTop: "10px",
+                        }}
+                      >
+                        Upload logo. Use the 200 kb size image. PNG or JPEG file
+                        format accepted
+                      </p>
                     </>
-                )}
-              </div>
-            </Form.Item>
+                  )}
+                </div>
+              </Form.Item>
             </Col>
           </Row>
           <Divider />

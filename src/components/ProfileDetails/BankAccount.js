@@ -11,7 +11,7 @@ function BankAccount() {
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
   const onFinish = (values) => {
-    values.profilePic = data.profilePic || null
+    values.profilePic = data.profilePic || null;
     EmpInfoContext.updateEduDetails(currentUser.uid, values);
     showEditContent(false);
     let temp = {
@@ -138,7 +138,9 @@ function BankAccount() {
                         Bank Name
                       </div>
                       {editContent === false ? (
-                        <div>{data?.bankName ? data.bankName : "-"}</div>
+                        <div style={{ marginTop: "7px" }}>
+                          {data?.bankName ? data.bankName : "-"}
+                        </div>
                       ) : (
                         <Form.Item
                           name="bankName"
@@ -200,7 +202,7 @@ function BankAccount() {
                         Account Number
                       </div>
                       {editContent === false ? (
-                        <div>
+                        <div style={{ marginTop: "7px" }}>
                           {data?.accountNumber ? data.accountNumber : "-"}
                         </div>
                       ) : (
@@ -255,7 +257,9 @@ function BankAccount() {
                         IFSC Code
                       </div>
                       {editContent === false ? (
-                        <div>{data?.ifscCode ? data.ifscCode : "-"}</div>
+                        <div style={{ marginTop: "7px" }}>
+                          {data?.ifscCode ? data.ifscCode : "-"}
+                        </div>
                       ) : (
                         <Form.Item
                           name="ifscCode"

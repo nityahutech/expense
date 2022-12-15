@@ -301,3 +301,37 @@ line-height: 25px;
 .pathSymbol {
   cursor: pointer;
 }
+
+.hoverImgCont {
+}
+
+.hoverImgCont:hover .overlay {
+  opacity: 0.5;
+}
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 200px;
+  /* height: 100%; */
+  /* width: 100%; */
+  opacity: 0;
+  transition: .3s ease;
+  background-color: black;
+}
+
+.hoverIcon {
+  color: rgb(255, 255, 255, 0.5);
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+.hoverIcon:hover {
+  color: rgb(255, 255, 255);
+}

@@ -202,7 +202,7 @@ const Statutory = () => {
 
   const prefixSelector = (i) => {
     return (
-    <Form.Item initialValue={activeList[i]?.prefix} name="prefix" noStyle>
+    <Form.Item initialValue={i?activeList[i]?.prefix:null} name="prefix" noStyle>
       <Select
       showSearch
         bordered={false}
@@ -211,18 +211,16 @@ const Statutory = () => {
           padding: 0,
           background: "#ffffff",
         }}
-
         onSelect={(value, event) => handleOnChange(value, event)}
-
-
       >
-      { codes?.countries?.map((e) => <Option key={e?.code} value={e?.code} >{e?.code} </Option>
-    ) }
-        
+      { codes?.countries?.map((e) => 
+      <Option key={e?.code} value={e?.code} >{e?.code} </Option>) 
+      }
       </Select>
     </Form.Item>
   );
   }
+  
 
   return (
     <>
@@ -754,7 +752,7 @@ const Statutory = () => {
                                 ]}
                               >
                                 <Input
-                                addonBefore={prefixSelector(i)}
+                                  addonBefore={prefixSelector(i)}
                                   maxLength={11}
                                   bordered={false}
                                   style={{
@@ -969,6 +967,7 @@ const Statutory = () => {
                           ) : null}
                           <Col xs={22} sm={15} md={6}>
                             <FormItem
+                              addonBefore={prefixSelector()}
                               name="phone"
                               label="Phone Number"
                               rules={[
@@ -983,6 +982,7 @@ const Statutory = () => {
                               ]}
                             >
                               <Input
+                                addonBefore={prefixSelector()}
                                 maxLength={10}
                                 style={{
                                   width: "100%",
@@ -1369,7 +1369,8 @@ const Statutory = () => {
                   <>
                     <Button
                       type="text"
-                      onClick={() => onEditBank.submit()}
+                      onClick={() => setEditBank([...editBank].fill(false))}
+
                     >
                       CANCEL
                     </Button>
@@ -1392,8 +1393,7 @@ const Statutory = () => {
                     Add
                   </Button>
                 ) : (
-                  <Row gutter={[16, 48]}>
-                    <Form
+                  <Form
                       labelcol={{
                         span: 24,
                       }}
@@ -1408,7 +1408,8 @@ const Statutory = () => {
                       form={addBankForm}
                       layout="vertical"
                     >
-                      <Col xs={22} sm={15} md={24}>
+                  <Row gutter={[16,16]}>
+                      <Col xs={24} sm={24} md={24}>
                         <FormItem
                           label="Account Title"
                           name="title"
@@ -1433,7 +1434,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <FormItem
                           label="Bank Name"
                           name="bankName"
@@ -1458,7 +1459,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <FormItem
                           label="City"
                           name="city"
@@ -1483,7 +1484,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <FormItem
                           label="Branch Name"
                           name="branch"
@@ -1508,7 +1509,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <FormItem
                           label="IFSC Code"
                           name="ifsc"
@@ -1533,7 +1534,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <FormItem
                           label="Account Type"
                           initialValue="Current Account"
@@ -1571,7 +1572,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <FormItem
                           label="Account Number"
                           name="accountNo"
@@ -1596,7 +1597,7 @@ const Statutory = () => {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={22} sm={15} md={24}
+                      <Col xs={24} sm={24} md={24}
                         style={{ display: "flex", justifyContent: "flex-end" }}
                       >
                         <FormItem>
@@ -1618,9 +1619,9 @@ const Statutory = () => {
                             SAVE
                           </Button>
                         </FormItem>
-                      </Col>
-                    </Form>
+                      </Col>                 
                   </Row>
+                  </Form>
                 )}
               </Form>
             </Card>

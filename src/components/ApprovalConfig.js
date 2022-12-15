@@ -132,10 +132,11 @@ const ApprovalConfig = () => {
     <>
       <Card
         title={
-          <Row gutter={[24, 8]}>
-            <Col xs={24} sm={22} md={5}>
+          <Row gutter={[16, 16]}>
+            <Col xs={24} sm={24} md={5} lg={5} xl={5} xxl={5}>
               <Input
                 className="searchBar"
+                style={{marginLeft:"10px"}}
                 placeholder="Search"
                 prefix={<SearchOutlined />}
                 onChange={(e) => {
@@ -148,7 +149,7 @@ const ApprovalConfig = () => {
                 }}
               />
             </Col>
-            <Col xs={24} sm={22} md={5}>
+            <Col xs={24} sm={24} md={5} lg={5} xl={5} xxl={5}>
               <Select
                 className="selectOption"
                 // defaultValue="Trainee"
@@ -181,7 +182,6 @@ const ApprovalConfig = () => {
                 ]}
               />
             </Col>
-            <Col xs={24} sm={22} md={14}></Col>
           </Row>
         }
         extra={

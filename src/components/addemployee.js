@@ -13,7 +13,7 @@ import {
 } from "antd";
 import "../style/Documents.css";
 import { useNavigate } from "react-router-dom";
-import { createUser } from "../contexts/CreateContext";
+import { checkAlphabets, createUser, showNotification } from "../contexts/CreateContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import CompanyProContext from "../contexts/CompanyProContext";
 const { Option } = Select;
@@ -52,28 +52,19 @@ function AddEmployee() {
   const handleListEmployee = () => {
     navigate("/Employee/EmployeeList");
   };
-  const checkAlphabets = (event) => {
-    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
   function onReset() {
     form.resetFields();
   }
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
-  };
   const onFinish = (values) => {
-    createUser(values, "compId001")
+    console.log(values)
+    values.name = values.fName + (values.mName?` ${values.mName} `:" ") + values.lNam
+    createUser(values, compId)
       .then((response) => {
         showNotification("success", "Success", "Employee Created");
-        navigate("/EmployeeListPage/EmployeeList");
+        navigate("/Employee/EmployeeList");
       })
       .catch((error) =>
         showNotification("error", "Error", "This user already exists!")
@@ -393,14 +384,14 @@ function AddEmployee() {
                   },
                 ]}
               >
-              <Input.Group>
+              {/* <Input.Group> */}
                 <Select
                   bordered={false}
                   placeholder="Select a Designation"
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
-                    width: "75%"
+                    // width: "75%"
                   }}
                   onChange={(e) => setPlace(e)}
                 > 
@@ -410,7 +401,7 @@ function AddEmployee() {
                     </Option>
                   ))}
                 </Select>
-                <Select
+                {/* <Select
                   bordered={false}
                   disabled={place == null}
                   defaultValue={1}
@@ -426,7 +417,7 @@ function AddEmployee() {
                     <Option value={grade+1}>{grade+1}</Option>
                   ))}
                 </Select>
-              </Input.Group>
+              </Input.Group> */}
               </Form.Item>
             </Col>
             <Col xs={22} sm={15} md={8}>
@@ -595,7 +586,6 @@ function AddEmployee() {
                 }}
                 rules={[
                   {
-                    required: true,
                     minLength: 3,
                     maxLength: 20,
                     message: "Please enter Lead Name",
@@ -618,7 +608,6 @@ function AddEmployee() {
                     // setPaidBy(newVal);
                     form.setFieldsValue({ lead: newVal, lead: caps });
                   }}
-                  required
                   placeholder="Enter Lead Name"
                   style={{
                     border: "1px solid #8692A6",

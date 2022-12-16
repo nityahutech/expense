@@ -30,7 +30,7 @@ class EmpInfoContext {
                 })
             });
         } else {
-            if (updateEdu.profilePic == null) {
+            if (updateEdu?.profilePic && updateEdu.profilePic == null) {
                 deleteObject(ref(storage, `/${compId}/${id}/profilePic`))
             }
             const eduDoc = doc(db, compId != "undefined" ? `companyprofile/${compId}/users` : "admins", id);

@@ -7,42 +7,55 @@ import {
   Select,
   Modal,
   Form,
-  Option,
   Row,
   Col,
 } from "antd";
 import { EditOutlined, SearchOutlined } from "@ant-design/icons";
 import "../style/leave.css";
+import { getUsers } from "../contexts/CreateContext";
+import ConfigureContext from "../contexts/ConfigureContext";
+import EmpInfoContext from "../contexts/EmpInfoContext";
 
-const { Search } = Input;
-const empData = [
-  {
-    key: 1,
-    empcode: 32,
-    name: "saswat",
-    designation: "Trainee Software Developer",
-    Approvers: 2,
-    listApprovers: "HR",
-  },
-  {
-    key: 2,
-    empcode: 32,
-    name: "Rahul",
-    designation: "Software Developer L1",
-    Approvers: 2,
-    listApprovers: "HR",
-  },
-];
+const { Option } = Select;
 
 const ApprovalConfig = () => {
+  const [empData, setEmpData] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [filterEmployees, setFilterEmployees] = useState(empData);
+  const [filterEmployees, setFilterEmployees] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [value, setValue] = useState("");
+  const [designations, setDesignations] = useState([]);
   const [editEmployeeDetails, setEditEmployeesDetails] = useState([]);
   const [numApprovers, setNumApprovers] = useState(1);
+  const [listApprovers, setListApprovers] = useState([null, null, null]);
   const [size, setSize] = useState("middle");
+
+  useEffect(() => {
+    getData()
+  }, [])
+
+  const getData = async () => {
+    let d = await getUsers();
+    let temp = await ConfigureContext.getConfigurations("addemployeePage");
+    let data = d.docs.map((doc, i) => {
+      return {
+        key: 1 + i,
+        id: doc.id,
+        empcode: doc.data().empId,
+        name: doc.data().name,
+        designation: doc.data().designation,
+        approveNo: doc.data()?.approveNo || 1,
+        approveList: i ==2 ? ["HR", "Reporting Manager", "Project Manager"] : ["HR"],
+        // approveList: doc.data()?.approveList || "HR",
+      }
+    })
+    let des = temp?.designations.map((d) => Object.keys(d)[0])
+    console.log(data, des)
+    setEmpData(data)
+    setFilterEmployees(data)
+    setDesignations(des)
+  }
 
   const onSelectChange = (newSelectedRowKeys, data) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
@@ -75,15 +88,22 @@ const ApprovalConfig = () => {
     },
     {
       title: "No. of Approvers",
-      dataIndex: "Approvers",
-      rowSpan: 2,
-      key: "Approvers",
+      dataIndex: "approveNo",
+      key: "approveNo",
     },
     {
       title: "List of Approvers",
-      dataIndex: "listApprovers",
-      rowSpan: 2,
-      key: "listApprovers",
+      dataIndex: "approveList",
+      key: "approveList",
+      render: (data) => {
+        return (
+          <>
+            {data.map((d) => {
+              return (<div>{d}</div>)
+            })}
+          </>
+        )
+      }
     },
   ];
 
@@ -94,6 +114,7 @@ const ApprovalConfig = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
     setSelectedRowKeys([]);
+    setEditEmployeesDetails([])
     form.resetFields();
   };
 
@@ -102,18 +123,11 @@ const ApprovalConfig = () => {
     setNumApprovers(Number(value));
   };
 
-  const handleFirstDesignation = (value) => {
-    console.log(`selected ${value}`);
-    // setNumApprovers(numApprovers);
-  };
-
-  const handleSecondDesignation = (value) => {
-    console.log(`selected ${value}`);
-  };
-  // console.log(numApprovers);
-
-  const handleThirdDesignation = (value) => {
-    console.log(`selected ${value}`);
+  const handleDesignation = (i, value) => {
+    console.log(`${i} selected ${value}`);
+    let temp = [...listApprovers];
+    temp[i] = value;
+    setListApprovers(temp)
   };
 
   useEffect(() => {
@@ -127,6 +141,18 @@ const ApprovalConfig = () => {
   const onSearch = (value) => {
     console.log("search:", value);
   };
+
+  const changeApprovers = (values) => {
+    console.log(values)
+    values.selectemp.forEach((emp, i) => {
+      let record = {
+        approveNo: values.approversNum,
+        approveList: [...listApprovers].slice(0, values.approversNum)
+      }
+      EmpInfoContext.updateEduDetails(editEmployeeDetails[i].id, record)
+    })
+    // setIsModalOpen(false)
+  }
 
   return (
     <>
@@ -152,8 +178,9 @@ const ApprovalConfig = () => {
             <Col xs={24} sm={24} md={5} lg={5} xl={5} xxl={5}>
               <Select
                 className="selectOption"
+                allowClear
                 // defaultValue="Trainee"
-                placeholder="Filter by Name"
+                placeholder="Designation"
                 style={{ marginLeft: "10px" }}
                 onChange={(e) => {
                   // const select = u.target.value;
@@ -166,21 +193,15 @@ const ApprovalConfig = () => {
                 }}
                 showSearch
                 onSearch={onSearch}
-                options={[
-                  {
-                    value: "Trainee",
-                    label: "Trainee",
-                  },
-                  {
-                    value: "Trainee Software Developer",
-                    label: "Trainee Software Developer",
-                  },
-                  {
-                    value: "Junior Software Developer",
-                    label: "Junior Software Developer",
-                  },
-                ]}
-              />
+              >
+                {designations?.map((des) => {
+                  console.log(des)
+                    return (
+                      <Option value={des}>{des}</Option>
+                    )
+                  })
+                }
+              </Select>
             </Col>
           </Row>
         }
@@ -232,6 +253,7 @@ const ApprovalConfig = () => {
           }}
           autoComplete="off"
           layout="vertical"
+          onFinish={changeApprovers}
         >
           <Form.Item
             initialValue={[]}
@@ -282,7 +304,7 @@ const ApprovalConfig = () => {
             <Row gutter={[24, 8]}>
               <Col xs={24} sm={22} md={8}>
                 <Select
-                  onChange={handleFirstDesignation}
+                  onChange={(e) => handleDesignation(0, e)}
                   options={[
                     {
                       value: "HR",
@@ -308,7 +330,7 @@ const ApprovalConfig = () => {
               <Col xs={24} sm={22} md={8}>
                 <Select
                   disabled={numApprovers === 1}
-                  onChange={handleSecondDesignation}
+                  onChange={(e) => handleDesignation(1, e)}
                   options={[
                     {
                       value: "HR",
@@ -333,7 +355,7 @@ const ApprovalConfig = () => {
               <Col xs={24} sm={22} md={8}>
                 <Select
                   disabled={numApprovers !== 3}
-                  onChange={handleThirdDesignation}
+                  onChange={(e) => handleDesignation(2, e)}
                   options={[
                     {
                       value: "HR",

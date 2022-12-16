@@ -347,8 +347,10 @@ function Onboarding() {
     Object.keys(data).map((field) => {
       console.log(field)
       if (field != "orgcode") {
-        form.setFieldsValue({[`${field}`]: null})
+        CompanyProContext.getOrgId().then((res) => form.setFieldsValue({orgcode: res}))
+        return
       }
+      form.setFieldsValue({[`${field}`]: null})
     })
     form.setFieldsValue({addLine1: null})
     setActivetab("1")

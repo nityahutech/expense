@@ -16,7 +16,7 @@ import AddressCust from "./CompanyDetail/addressCust";
 const data = [
   {
     name: "Overview",
-    content: (<Overview/>)
+    content: (<Overview />)
   },
 ]
 
@@ -37,13 +37,13 @@ const renderTabBar = (props, DefaultTabBar) => (
 function CompanyProfile() {
   return (
     <>
-      <div className="myProfile">
+      <div className="myProfile" style={{ margin: '10px', minHeight: '100vh' }}>
         <StickyContainer>
           <Tabs defaultActiveKey="1" renderTabBar={renderTabBar} className="profileTabs">
             <Tabs.TabPane tab="Overview" key="1">
               <Overview />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Address" key="2">  
+            <Tabs.TabPane tab="Address" key="2">
               <div style={{ marginBottom: '10px' }}>
                 <AddressOffice />
                 <AddressCorp />
@@ -68,7 +68,7 @@ function CompanyProfile() {
             <Tabs.TabPane tab="Statutory" key="8">
               <Statutory />
             </Tabs.TabPane>
-            </Tabs>
+          </Tabs>
         </StickyContainer>
       </div>
     </>

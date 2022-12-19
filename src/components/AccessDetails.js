@@ -65,6 +65,14 @@ function AccessDetails() {
     }
   };
 
+  const disabledDate = (current) => {
+    return current.isAfter(moment().subtract(20, "years"));
+  };
+
+  const disabledJoining = (current) => {
+    return !current.isBetween(moment().subtract(35, "years"), moment());
+  };
+
   const getData = async () => {
     let data = localStorage.getItem("OrgHier");
     setOrgHier(data ? JSON.parse(data) : []);
@@ -80,6 +88,24 @@ function AccessDetails() {
 
   const checkAlphabet = (event) => {
     if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
+  const checkDesignation = (event) => {
+    if (!/^[a-zA-Z-&() ]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
+  const checkAlphabetsName = (event) => {
+    if (!/^[a-zA-Z-]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
+  const checkNoAlphabets = (event) => {
+    if (!/^[0-9-]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
@@ -149,7 +175,7 @@ function AccessDetails() {
   function onDelete(i) {
     Modal.confirm({
       title: "Are you sure, you want to delete this record?",
-      okText: "yes",
+      okText: "Yes",
       okType: "danger",
       onOk: () => {
         let temp = accessList.filter((user, index) => !(index == i));
@@ -328,13 +354,18 @@ function AccessDetails() {
                         name="fName"
                         colon={true}
                         label="First Name::"
+                        onKeyPress={(event) => {
+                          if (checkAlphabetsName(event)) {
+                            event.preventDefault();
+                          }
+                        }}
                         rules={[
                           {
                             required: true,
                             message: "Please Enter First Name",
                           },
                           {
-                            pattern: /^[a-zA-Z\s]*$/,
+                            pattern: /^[a-zA-Z-]*$/,
                             message: "Please Enter Valid Name",
                           },
                         ]}
@@ -348,12 +379,29 @@ function AccessDetails() {
                         // }}
                       >
                         <Input
+                          maxLength={20}
                           placeholder="First Name"
                           style={{
                             width: "100%",
                             border: "1px solid #8692A6",
                             borderRadius: "4px",
                             background: "#ffffff",
+                          }}
+                          onChange={(e) => {
+                            const inputval = e.target.value;
+                            const str = e.target.value;
+                            const newVal =
+                              inputval.substring(0, 1).toUpperCase() +
+                              inputval.substring(1);
+                            const caps = str
+                              .split(" ")
+                              .map(capitalize)
+                              .join(" ");
+                            // setPaidBy(newVal);
+                            form.setFieldsValue({
+                              fName: newVal,
+                              fName: caps,
+                            });
                           }}
                         />
                       </Form.Item>
@@ -363,6 +411,11 @@ function AccessDetails() {
                         name="mName"
                         colon={true}
                         label="Middle Name::"
+                        onKeyPress={(event) => {
+                          if (checkAlphabet(event)) {
+                            event.preventDefault();
+                          }
+                        }}
                         rules={[
                           {
                             pattern: /^[a-zA-Z\s]*$/,
@@ -379,12 +432,29 @@ function AccessDetails() {
                         // }}
                       >
                         <Input
+                          maxLength={20}
                           placeholder="Middle Name"
                           style={{
                             width: "100%",
                             border: "1px solid #8692A6",
                             borderRadius: "4px",
                             background: "#ffffff",
+                          }}
+                          onChange={(e) => {
+                            const inputval = e.target.value;
+                            const str = e.target.value;
+                            const newVal =
+                              inputval.substring(0, 1).toUpperCase() +
+                              inputval.substring(1);
+                            const caps = str
+                              .split(" ")
+                              .map(capitalize)
+                              .join(" ");
+                            // setPaidBy(newVal);
+                            form.setFieldsValue({
+                              mName: newVal,
+                              mName: caps,
+                            });
                           }}
                         />
                       </Form.Item>
@@ -393,13 +463,18 @@ function AccessDetails() {
                         className="userLabel"
                         name="lName"
                         label="Last Name::"
+                        onKeyPress={(event) => {
+                          if (checkAlphabetsName(event)) {
+                            event.preventDefault();
+                          }
+                        }}
                         rules={[
                           {
                             required: true,
                             message: "Please Enter Last Name",
                           },
                           {
-                            pattern: /^[a-zA-Z\s]*$/,
+                            pattern: /^[a-zA-Z-]*$/,
                             message: "Please Enter Valid Name",
                           },
                         ]}
@@ -420,6 +495,19 @@ function AccessDetails() {
                             borderRadius: "4px",
                             background: "#ffffff",
                           }}
+                          onChange={(e) => {
+                            const inputval = e.target.value;
+                            const str = e.target.value;
+                            const newVal =
+                              inputval.substring(0, 1).toUpperCase() +
+                              inputval.substring(1);
+                            const caps = str
+                              .split(" ")
+                              .map(capitalize)
+                              .join(" ");
+                            // setPaidBy(newVal);
+                            form.setFieldsValue({ lName: newVal, lName: caps });
+                          }}
                         />
                       </Form.Item>
                       <Form.Item
@@ -432,6 +520,11 @@ function AccessDetails() {
                         name="dob"
                         value="dob"
                         label="Date of Birth::"
+                        onKeyPress={(event) => {
+                          if (checkNoAlphabets(event)) {
+                            event.preventDefault();
+                          }
+                        }}
                         // labelCol={{
                         //   span: 3,
                         //   offset: 5,
@@ -450,6 +543,7 @@ function AccessDetails() {
                             borderRadius: "4px",
                             background: "#ffffff",
                           }}
+                          disabledDate={disabledDate}
                         />
                       </Form.Item>
                       <Form.Item
@@ -593,6 +687,11 @@ function AccessDetails() {
                         name="doj"
                         value="doj"
                         label="Date of Joining::"
+                        onKeyPress={(event) => {
+                          if (checkNoAlphabets(event)) {
+                            event.preventDefault();
+                          }
+                        }}
                         // labelCol={{
                         //   span: 3,
                         //   offset: 5,
@@ -603,6 +702,8 @@ function AccessDetails() {
                         // }}
                       >
                         <DatePicker
+                          disabledDate={disabledJoining}
+                          format={dateFormat}
                           placeholder="Date of Joining"
                           style={{
                             width: "100%",
@@ -654,7 +755,7 @@ function AccessDetails() {
                         name="designation"
                         label="Designation::"
                         onKeyPress={(event) => {
-                          if (checkAlphabet(event)) {
+                          if (checkDesignation(event)) {
                             event.preventDefault();
                           }
                         }}
@@ -662,7 +763,7 @@ function AccessDetails() {
                           {
                             required: true,
                             message: "Please Enter Designation",
-                            pattern: /^[a-zA-Z\s]*$/,
+                            pattern: /^[a-zA-Z-&()\s]*$/,
                           },
                         ]}
                         // labelCol={{
@@ -682,6 +783,22 @@ function AccessDetails() {
                             border: "1px solid #8692A6",
                             borderRadius: "4px",
                             background: "#ffffff",
+                          }}
+                          onChange={(e) => {
+                            const inputval = e.target.value;
+                            const str = e.target.value;
+                            const newVal =
+                              inputval.substring(0, 1).toUpperCase() +
+                              inputval.substring(1);
+                            const caps = str
+                              .split(" ")
+                              .map(capitalize)
+                              .join(" ");
+                            // setPaidBy(newVal);
+                            form.setFieldsValue({
+                              designation: newVal,
+                              designation: caps,
+                            });
                           }}
                         />
                       </Form.Item>
@@ -813,7 +930,7 @@ function AccessDetails() {
                           })}
                         </Select>
                       </Form.Item>
-                      <Form.Item
+                      {/* <Form.Item
                         initialValue={user ? user.managerSupervisor : null}
                         className="userLabel"
                         name="managerSupervisor"
@@ -836,7 +953,7 @@ function AccessDetails() {
                             background: "#ffffff",
                           }}
                         />
-                      </Form.Item>
+                      </Form.Item> */}
                       <Form.Item
                         initialValue={user ? user.note : null}
                         className="userLabel"
@@ -1114,7 +1231,7 @@ function AccessDetails() {
                             </Form.Item>
                           </Col>
                           <Col xs={24} sm={24} md={24}>
-                            <Form.Item
+                            {/* <Form.Item
                               label="Manager/Supervisor::"
                               // labelCol={{
                               //   span: 4,
@@ -1126,7 +1243,7 @@ function AccessDetails() {
                               // }}
                             >
                               <span>{user.managerSupervisor}</span>
-                            </Form.Item>
+                            </Form.Item> */}
                           </Col>
                           <Col xs={24} sm={24} md={24}>
                             <Form.Item
@@ -1165,7 +1282,7 @@ function AccessDetails() {
                           fontWeight: "400",
                           fontSize: "14px",
                           lineHeight: "17px",
-                          width: "99px",
+                          width: "110px",
                           borderRadius: "4px",
                         }}
                         onClick={() => {
@@ -1275,7 +1392,7 @@ function AccessDetails() {
                     colon={true}
                     label="First Name::"
                     onKeyPress={(event) => {
-                      if (checkAlphabet(event)) {
+                      if (checkAlphabetsName(event)) {
                         event.preventDefault();
                       }
                     }}
@@ -1286,7 +1403,7 @@ function AccessDetails() {
                         message: "Please Enter First Name",
                       },
                       {
-                        pattern: /^[a-zA-Z\s]*$/,
+                        pattern: /^[a-zA-Z-]*$/,
                         message: "Please Enter Valid Name",
                       },
                     ]}
@@ -1382,7 +1499,7 @@ function AccessDetails() {
                     name="lName"
                     label="Last Name::"
                     onKeyPress={(event) => {
-                      if (checkAlphabet(event)) {
+                      if (checkAlphabetsName(event)) {
                         event.preventDefault();
                       }
                     }}
@@ -1392,7 +1509,7 @@ function AccessDetails() {
                         message: "Please Enter Last Name",
                       },
                       {
-                        pattern: /^[a-zA-Z\s]*$/,
+                        pattern: /^[a-zA-Z-]*$/,
                         message: "Please Enter Valid Name",
                       },
                     ]}
@@ -1432,6 +1549,11 @@ function AccessDetails() {
                     name="dob"
                     value="dob"
                     label="Date of Birth::"
+                    onKeyPress={(event) => {
+                      if (checkNoAlphabets(event)) {
+                        event.preventDefault();
+                      }
+                    }}
                     // labelCol={{
                     //   span: 3,
                     //   offset: 5,
@@ -1450,6 +1572,7 @@ function AccessDetails() {
                         borderRadius: "4px",
                         background: "#ffffff",
                       }}
+                      disabledDate={disabledDate}
                     />
                   </Form.Item>
                   <Form.Item
@@ -1552,13 +1675,15 @@ function AccessDetails() {
                     // }}
                   >
                     <Input
+                      className="disabledOffice"
+                      disabled
                       maxLength={20}
                       placeholder="Employee ID"
                       style={{
                         width: "100%",
                         border: "1px solid #8692A6",
                         borderRadius: "4px",
-                        background: "#ffffff",
+                        background: "rgba(0,0,0,0.1)",
                       }}
                     />
                   </Form.Item>
@@ -1604,6 +1729,11 @@ function AccessDetails() {
                     name="doj"
                     value="doj"
                     label="Date of Joining::"
+                    onKeyPress={(event) => {
+                      if (checkNoAlphabets(event)) {
+                        event.preventDefault();
+                      }
+                    }}
                     // labelCol={{
                     //   span: 3,
                     //   offset: 5,
@@ -1614,6 +1744,7 @@ function AccessDetails() {
                     // }}
                   >
                     <DatePicker
+                      disabledDate={disabledJoining}
                       format={dateFormat}
                       placeholder="Date of Joining"
                       style={{
@@ -1665,7 +1796,7 @@ function AccessDetails() {
                     name="designation"
                     label="Designation::"
                     onKeyPress={(event) => {
-                      if (checkAlphabet(event)) {
+                      if (checkDesignation(event)) {
                         event.preventDefault();
                       }
                     }}
@@ -1673,7 +1804,7 @@ function AccessDetails() {
                       {
                         required: true,
                         message: "Please Enter Designation",
-                        pattern: /^[a-zA-Z\s]*$/,
+                        pattern: /^[a-zA-Z-&()\s]*$/,
                       },
                     ]}
                     // labelCol={{
@@ -1836,7 +1967,7 @@ function AccessDetails() {
                       })}
                     </Select>
                   </Form.Item>
-                  <Form.Item
+                  {/* <Form.Item
                     className="userLabel"
                     name="managerSupervisor"
                     label="Manager/Supervisor::"
@@ -1858,7 +1989,7 @@ function AccessDetails() {
                         background: "#ffffff",
                       }}
                     />
-                  </Form.Item>
+                  </Form.Item> */}
                   <Form.Item
                     className="userLabel"
                     name="note"
@@ -1899,7 +2030,7 @@ function AccessDetails() {
                         fontWeight: "400",
                         fontSize: "14px",
                         lineHeight: "17px",
-                        width: "99px",
+                        width: "110px",
                         borderRadius: "4px",
                       }}
                       onClick={onReset}

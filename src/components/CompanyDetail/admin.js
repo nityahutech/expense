@@ -34,6 +34,12 @@ const Admin = () => {
   const [allEmpName, setAllEmpName] = useState([]);
   const [ceoAdmin, setCeoAdmin] = useState('');
 
+  const [ceoAdminImg, setCeoAdminImg] = useState('');
+  const [financeAdminImg, setFinanceAdminImg] = useState('');
+  const [hrAdminImg, setHrAdminImg] = useState('');
+  const [hrExAdminImg, setHrExAdminImg] = useState('');
+
+
   const showModal = () => {
     setIsModalOpen(true);
     form.resetFields();
@@ -80,12 +86,38 @@ const Admin = () => {
     showEditExecutiveContactInfo(false);
   };
   useEffect(() => {
-    getData();
     getAllUser()
   }, []);
-  const getData = async () => {
-    let data = await CompanyProContext.getCompanyProfile(compId);
-    setData(data);
+
+  // useEffect(() => {
+  //   getData();
+
+  // }, [allEmpName]);
+  const getData = async (allUsers) => {
+    let compProfile = await CompanyProContext.getCompanyProfile(compId);
+    console.log('data1', allUsers, compProfile)
+    let ceoImageUrl = null
+    for (let i = 0; i < allUsers.length; i++) {
+      console.log('data2', allUsers[i])
+      let empName = allUsers[i].value
+      if (empName === compProfile.ceoAdmin) {
+        setCeoAdminImg(allUsers[i].profilePic)
+      }
+      else if (empName === compProfile.hrAdmin) {
+
+        setHrAdminImg(allUsers[i].profilePic)
+      }
+      else if (empName === compProfile.financerAdmin) {
+
+        setFinanceAdminImg(allUsers[i].profilePic)
+      }
+      else if (empName === compProfile.hrExeAdmin) {
+        setHrExAdminImg(allUsers[i].profilePic)
+
+      }
+    }
+    setData(compProfile);
+    console.log('data3', ceoImageUrl)
   };
 
 
@@ -106,21 +138,26 @@ const Admin = () => {
 
   async function getAllUser() {
     const allData = await getUsers();
+    console.log('allUsers', allData)
     let allUsers = allData.docs.map((doc, i) => {
       return {
-        value: doc.data().fname + ' ' + doc.data().mname + ' ' + doc.data().lname
+        value: doc.data().fname + ' ' + doc.data().lname,
+        profilePic: doc.data().profilePic,
+
       };
     });
     console.log('allUsers', allUsers)
     setAllEmpName(allUsers)
+    getData(allUsers);
+
   }
 
   function getInitials(text) {
-      const myArray = text.split(" ");
-      let initials = myArray[0][0] + myArray[myArray.length-1][0]
-      return initials;
-    }
- 
+    const myArray = text.split(" ");
+    let initials = myArray[0][0] + myArray[myArray.length - 1][0]
+    return initials;
+  }
+
   return (
     <>
       <div
@@ -229,19 +266,23 @@ const Admin = () => {
                               >
                                 <div
                                   className="initialCircle"
-                                  style={{
-                                    border: "1px solid #ccc",
-                                    borderRadius: "25px",
-                                    backgroundColor: "aqua",
-                                    width: "50px",
-                                    height: "50px",
-                                    margin: "10px",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                  }}
+
                                 >
-                                 { data.ceoAdmin ? getInitials(data.ceoAdmin):null}
+                                  <img
+                                    style={{
+                                      border: "1px solid #ccc",
+                                      borderRadius: "25px",
+                                      backgroundColor: "aqua",
+                                      width: "50px",
+                                      height: "50px",
+                                      margin: "2px",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                    }}
+                                    src={ceoAdminImg}
+                                    alt={data.ceoAdmin ? getInitials(data.ceoAdmin) : null}
+                                  />
                                 </div>
                                 <span style={{ marginRight: "10px" }}>
                                   {data.ceoAdmin ? data.ceoAdmin : null}{" "}
@@ -424,21 +465,21 @@ const Admin = () => {
                               alignItems: "center",
                             }}
                           >
-                            <div
+                            <img
                               style={{
                                 border: "1px solid #ccc",
                                 borderRadius: "25px",
                                 backgroundColor: "aqua",
                                 width: "50px",
                                 height: "50px",
-                                margin: "10px",
+                                margin: "2px",
                                 display: "flex",
                                 justifyContent: "center",
                                 alignItems: "center",
                               }}
-                            >
-                              { data.hrAdmin ? getInitials(data.hrAdmin):null} 
-                              </div>
+                              src={hrAdminImg}
+                              alt={data.hrAdmin ? getInitials(data.hrAdmin) : null}
+                            />
                             <span style={{ marginRight: "10px" }}>
                               {data.hrAdmin ? data.hrAdmin : null}
                             </span>
@@ -613,23 +654,23 @@ const Admin = () => {
                               alignItems: "center",
                             }}
                           >
-                            <div
+                            <img
                               style={{
                                 border: "1px solid #ccc",
                                 borderRadius: "25px",
                                 backgroundColor: "aqua",
                                 width: "50px",
                                 height: "50px",
-                                margin: "10px",
+                                margin: "2px",
                                 display: "flex",
                                 justifyContent: "center",
                                 alignItems: "center",
                               }}
-                            >
-                              {data.financerAdmin?getInitials(data.financerAdmin):null}
-                            </div>
+                              src={financeAdminImg}
+                              alt={data.financerAdmin ? getInitials(data.financerAdmin) : null}
+                            />
                             <span style={{ marginRight: "10px" }}>
-                            {data.financerAdmin ? data.financerAdmin : "-"}</span>
+                              {data.financerAdmin ? data.financerAdmin : "-"}</span>
                           </div>
                           {editFinanceContactInfo === false ? (
                             <Button
@@ -819,21 +860,21 @@ const Admin = () => {
                               alignItems: "center",
                             }}
                           >
-                            <div
+                            <img
                               style={{
                                 border: "1px solid #ccc",
                                 borderRadius: "25px",
                                 backgroundColor: "aqua",
                                 width: "50px",
                                 height: "50px",
-                                margin: "10px",
+                                margin: "2px",
                                 display: "flex",
                                 justifyContent: "center",
                                 alignItems: "center",
                               }}
-                            >
-                              {data.hrExeAdmin?getInitials(data.hrExeAdmin):null}
-                            </div>
+                              src={hrExAdminImg}
+                              alt={data.hrExeAdmin ? getInitials(data.hrExeAdmin) : null}
+                            />
                             <span style={{ marginRight: "10px" }}>
                               {data.hrExeAdmin ? data.hrExeAdmin : "-"}</span>
                           </div>

@@ -13,7 +13,7 @@ import {
 } from "antd";
 import "../style/Documents.css";
 import { useNavigate } from "react-router-dom";
-import { checkAlphabets, createUser, showNotification } from "../contexts/CreateContext";
+import { capitalize, checkAlphabets, createUser, showNotification } from "../contexts/CreateContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import CompanyProContext from "../contexts/CompanyProContext";
 const { Option } = Select;
@@ -52,9 +52,6 @@ function AddEmployee() {
   const handleListEmployee = () => {
     navigate("/Employee/EmployeeList");
   };
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
   function onReset() {
     form.resetFields();
   }

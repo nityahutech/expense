@@ -85,10 +85,17 @@ export async function getUsers() {
 export async function getDesigNo() {
   let data = await getUsers();
   let res = {};
+  let names = {};
   data.docs.map((doc) => {
     let des = doc.data().designation
-    res[`${des}`] = res[`${des}`] ? ++res[`${des}`] : 1 
+    res[`${des}`] = res[`${des}`] ? res[`${des}`] + 1 : 1;
+    if (names[`${des}`]) {
+      names[`${des}`].push(doc.id)
+    } else {
+      names[`${des}`] = [doc.id]
+    }
   })
+  res.names = names;
   return res;
 }
 

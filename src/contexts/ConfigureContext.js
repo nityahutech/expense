@@ -47,8 +47,8 @@ class ConfigureContext {
         return updateDoc(newHoliday, {[`${field}`]: arrayRemove(values[`${field}`])});
     };
 
-    leaveTypeConfiguration = (name, config) => {
-        return updateDoc(doc(db, `companyprofile/${compId}/configurations/`, "leaveType"), {[`${name}`]: config});
+    editConfiguration = (page, config) => {
+        return updateDoc(doc(db, `companyprofile/${compId}/configurations/`, page), config);
     };
 
 }

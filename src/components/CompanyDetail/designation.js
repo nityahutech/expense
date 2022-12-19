@@ -142,11 +142,12 @@ const Designation = () => {
 
   const desExists = async (value) => {
     let list = Object.keys(names)
-    list.pop(list.indexOf(old));
+    delete list[list.indexOf(old)]
     let exists = list.includes(value.split(" ").map(capitalize).join(" "));
     if (exists) {
       setDes(old)
       setExists(true)
+      return;
     }
     setDes(value)
     setExists(false)
@@ -467,7 +468,7 @@ const Designation = () => {
         onCancel={() => {
           setEditInfo(false);
         }}
-      >
+      >{console.log(exists)}
           <Input
             type="text"
             status={exists ? "error" : null}

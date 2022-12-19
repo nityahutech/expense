@@ -194,13 +194,23 @@ function EditOnboarding(props) {
           <Row gutter={[24, 8]}>
             <Col xs={22} sm={15} md={8}>
               <Form.Item
-                name="orgcode"
-                label="Organization Code"
+                name="preCode"
+                label="Prefix Code"
                 initialValue={props.modalData.id}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Enter Code",
+                  },
+                  {
+                    pattern: /^[0-9A-Z_\s]+$/,
+                    message: "Please Enter Valid Code",
+                  },
+                ]}
               >
                 <Input
-                  maxLength={20}
-                  placeholder="Organization Code"
+                  maxLength={10}
+                  placeholder="Prefix Code"
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
@@ -224,7 +234,7 @@ function EditOnboarding(props) {
                     message: "Please enter Organization Name",
                   },
                   {
-                    pattern: /^[a-zA-Z.,-\s]*$/,
+                    pattern: /^[a-zA-Z\s]*$/,
                     message: "Please enter Valid Name",
                   },
                 ]}
@@ -284,7 +294,7 @@ function EditOnboarding(props) {
                 }}
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "Please enter GST Number",
                   },
                   {
@@ -649,8 +659,8 @@ function EditOnboarding(props) {
               <Form.Item>
                 <Button
                   style={{
-                    border: "1px solid #1565D8",
-                    color: "#1565D8",
+                    border: "1px solid #1963a6",
+                    color: "#1963a6",
                     fontWeight: "600",
                     fontSize: "14px",
                     lineHeight: "17px",
@@ -664,8 +674,8 @@ function EditOnboarding(props) {
               <Form.Item>
                 <Button
                   style={{
-                    border: "1px solid #1565D8",
-                    background: "#1565D8",
+                    border: "1px solid #1963a6",
+                    background: "#1963a6",
                     color: "#ffffff",
                     fontWeight: "600",
                     fontSize: "14px",

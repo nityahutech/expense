@@ -2,14 +2,10 @@ import { useEffect } from "react";
 import moment from "moment";
 import { useState } from "react";
 import { Card, Col, Row, Input, DatePicker, Button, Form } from "antd";
-import {
-  PlusCircleOutlined,
-  CloseOutlined,
-  CheckOutlined,
-  EditFilled,
-} from "@ant-design/icons";
+import {PlusCircleOutlined, CloseOutlined, CheckOutlined,EditFilled,} from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
+import "./Education.css"
 
 function Education() {
   const [editContent, showEditContent] = useState(false);
@@ -59,31 +55,25 @@ function Education() {
       return true;
     }
   };
-  const checkSpecial = (event) => {
-    if (!/^[ A-Za-z]*$/.test(event.key) && event.key !== "Backspace") {
+
+  const universityCheck = (event) => {
+    if (!/^[ A-Za-z()&.,-]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
+  const checkSpecial = (event) => {
+    if (!/^[ A-Za-z().,-]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+  const disabledDate = (current) => {
+    return ! current.isBetween(moment().subtract(14, 'years'),moment());
+  }
   const [form] = Form.useForm();
 
   return (
-    <div
-      className="education"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Row
-        className="Row-Card"
-        style={{
-          width: "75%",
-          margin: "10px",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
+    <div className="education">
+      <Row className="Row-Card">
         <Col span={24}>
           <Form
             name="basic"
@@ -102,7 +92,7 @@ function Education() {
           >
             <Card
               title="EDUCATIONAL INFO"
-              className="personal"
+              className="educationCard"
               hoverable={true}
               bordered={true}
               //   actions={[
@@ -112,17 +102,8 @@ function Education() {
                 <>
                   {editContent === false ? (
                     <Button
-                      className="personal"
+                      className="editButton"
                       type="text"
-                      style={{
-                        color: "#ffff",
-                        display: "none",
-                        paddingTop: "7px",
-                        paddingRight: "7px",
-                        position: "absolute",
-                        right: 10,
-                        top: 10,
-                      }}
                       onClick={() => showEditContent(!editContent)}
                     >
                       <EditFilled />
@@ -130,25 +111,11 @@ function Education() {
                   ) : null}
                 </>
               }
-              style={{
-                width: "100%",
-                // marginTop: 10,
-                borderRadius: "10px",
-                cursor: "default",
-              }}
             >
               <Row gutter={[16, 16]}>
-                <Col xs={22} sm={15} md={8}>
+                <Col xs={24} sm={12} md={8}>
                   <div>
-                    <h1
-                      style={{
-                        fontWeight: 600,
-                        lineHeight: "18px",
-                        color: "#07182b",
-                        fontSize: "15px",
-                        fontFamily: "Open Sans,sans-serif",
-                      }}
-                    >
+                    <h1 className="inputHeaders">
                       Qualification Type
                     </h1>
                     {editContent === false ? (
@@ -169,7 +136,7 @@ function Education() {
                             minLength: 3,
                             maxLength: 25,
                             message: "Please Enter Qualification type",
-                            pattern: /^[a-zA-Z.\s]*$/,
+                            pattern: /^[a-zA-Z().,-\s]*$/,
                           },
                         ]}
                         labelCol={{ span: 8 }}
@@ -180,7 +147,7 @@ function Education() {
                       >
                         <Input
                           defaultValue={data ? data.qualificationType : null}
-                          maxLength={25}
+                          maxLength={40}
                           placeholder="Enter Qualification Type"
                           style={{
                             marginTop: "10px",
@@ -194,17 +161,9 @@ function Education() {
                     )}
                   </div>
                 </Col>
-                <Col xs={22} sm={15} md={8}>
+                <Col xs={24} sm={12} md={8}>
                   <div>
-                    <h1
-                      style={{
-                        fontWeight: 600,
-                        lineHeight: "18px",
-                        color: "#07182b",
-                        fontSize: "15px",
-                        fontFamily: "Open Sans,sans-serif",
-                      }}
-                    >
+                    <h1 className="inputHeaders">
                       Course Name
                     </h1>
                     {editContent === false ? (
@@ -223,7 +182,7 @@ function Education() {
                             minLength: 3,
                             maxLength: 25,
                             message: "Please Enter Valid Course Name",
-                            pattern: /^[ A-Za-z.]*$/,
+                            pattern: /^[a-zA-Z().,-\s]*$/,
                           },
                         ]}
                         labelCol={{ span: 8 }}
@@ -233,6 +192,7 @@ function Education() {
                         <Input
                           initialValue={data ? data.courseName : null}
                           placeholder="Enter Course Name"
+                          maxLength={40}
                           style={{
                             marginTop: "10px",
                             width: "100%",
@@ -245,7 +205,7 @@ function Education() {
                     )}
                   </div>
                 </Col>
-                <Col xs={22} sm={15} md={8}>
+                <Col xs={24} sm={12} md={8}>
                   <div>
                     <h1
                       style={{
@@ -308,7 +268,7 @@ function Education() {
                     )}
                   </div>
                 </Col>
-                <Col xs={22} sm={15} md={8}>
+                <Col xs={24} sm={12} md={8}>
                   <div>
                     <h1
                       style={{
@@ -371,7 +331,7 @@ function Education() {
                     )}
                   </div>
                 </Col>
-                <Col xs={22} sm={15} md={8}>
+                <Col xs={24} sm={12} md={8}>
                   <h1
                     style={{
                       fontWeight: 600,
@@ -405,6 +365,7 @@ function Education() {
                     >
                       <DatePicker
                         // defaultValue={moment(dateStart, "DD-MM-YYYY")}
+                        disabledDate={disabledDate}
                         style={{ width: "100%" }}
                         format={"DD-MM-YYYY"}
                         onChange={(e) => {
@@ -415,7 +376,7 @@ function Education() {
                   )}
                   {/* </div> */}
                 </Col>
-                <Col xs={22} sm={15} md={8}>
+                <Col xs={24} sm={12} md={8}>
                   <h1
                     style={{
                       fontWeight: 600,
@@ -448,6 +409,7 @@ function Education() {
                     >
                       <DatePicker
                         // defaultValue={moment(dateEnd, "DD-MM-YYYY")}
+                        disabledDate={disabledDate}
                         style={{ width: "100%" }}
                         format={"DD-MM-YYYY"}
                         onChange={(e) => {
@@ -458,7 +420,7 @@ function Education() {
                   )}
                   {/* </div> */}
                 </Col>
-                <Col xs={22} sm={15} md={8}>
+                <Col xs={24} sm={24} md={8}>
                   <div>
                     <h1
                       style={{
@@ -479,7 +441,7 @@ function Education() {
                       <Form.Item
                         name="universityName"
                         onKeyPress={(event) => {
-                          if (checkAlphabets(event)) {
+                          if (universityCheck(event)) {
                             event.preventDefault();
                           }
                         }}
@@ -489,7 +451,7 @@ function Education() {
                             minLength: 3,
                             maxLength: 25,
                             message: "Please Enter University Name",
-                            pattern: /^[a-zA-Z.\s]*$/,
+                            pattern: /^[a-zA-Z()&.,-\s]*$/,
                           },
                         ]}
                         labelCol={{ span: 8 }}
@@ -510,6 +472,7 @@ function Education() {
                             paddingLeft: "0px",
                           }}
                           bordered={false}
+                          maxLength={40}
                         />
                       </Form.Item>
                     )}
@@ -531,8 +494,7 @@ function Education() {
                   >
                     <CloseOutlined /> CANCEL
                   </Button>
-                  <Col>
-                    <Button
+                  <Button
                       type="primary"
                       htmlType="submit"
                       style={{
@@ -543,8 +505,7 @@ function Education() {
                     >
                       <CheckOutlined />
                       SAVE
-                    </Button>
-                  </Col>
+                  </Button>
                 </Row>
               ) : null}
             </Card>

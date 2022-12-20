@@ -24,7 +24,7 @@ import reload from "../images/reload.png";
 const { Option } = Select;
 
 const OrgDetails = (props) => {
-  console.log(props);
+  // console.log(props);
   const imgRef = React.useRef(null);
   const [fileName, setFileName] = useState(props.fileName || null);
   const [imageUrl, setImageUrl] = useState(props.fileName || "");
@@ -151,11 +151,11 @@ const OrgDetails = (props) => {
               // initialValue={newCompId}
               name="preCode"
               label="Prefix Code"
-              // onKeyPress={(event) => {
-              //   if (checkNumbervalue(event) && checkAlphabetUpper(event)) {
-              //     event.preventDefault();
-              //   }
-              // }}
+              onKeyPress={(event) => {
+                if (checkNumbervalue(event) && checkAlphabetUpper(event)) {
+                  event.preventDefault();
+                }
+              }}
               rules={[
                 {
                   required: true,

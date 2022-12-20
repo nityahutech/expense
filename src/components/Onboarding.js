@@ -47,6 +47,7 @@ function Onboarding() {
   const [isEditOrganization, setIsEditOrganization] = useState(false);
   const [data, setData] = useState({});
   const [fileName, setFileName] = useState("");
+  const [reason, setReason] = useState("");
   const navigate = useNavigate();
 
   const saveOrgDetails = (values, imageUrl) => {
@@ -138,32 +139,32 @@ function Onboarding() {
     getOrgData();
   }, []);
 
-  const Bbb = () => {
-    let reason = "";
-    return (
-      <Form.Item name="comment">
-        <Input
-          placeholder="Enter Comment"
-          onChange={(event) => {
-            reason = event.target.value;
-          }}
-        />
-      </Form.Item>
-    );
-  };
-
   const changeCompStatus = (id, status) => {
+    let reason = "";
     Modal.confirm({
       title: `Are you sure, you want to ${
         status == "Deactivated" ? "activate" : "deactivate"
       } this record?`,
-      content: status == "Deactivated" ? "" : <Bbb />,
+      content:
+        status == "Deactivated" ? (
+          ""
+        ) : (
+          <Input
+            placeholder="Enter Comment"
+            onChange={(event) => {
+              reason = event.target.value;
+              setReason(event.target.value);
+            }}
+          />
+        ),
       okText: "Yes",
       okType: "danger",
 
       onOk: () => {
+        console.log(reason);
         CompanyProContext.updateCompInfo(id, {
           status: status == "Deactivated" ? "Activated" : "Deactivated",
+          reason: reason,
         });
         showNotification(
           "success",
@@ -298,6 +299,8 @@ function Onboarding() {
                   style={{ width: "40px" }}
                   onClick={() => {
                     changeCompStatus(record.id, record.status);
+
+                    // console.log(record.reason);
                   }}
                 >
                   {record.status == "Deactivated" ? (
@@ -373,6 +376,7 @@ function Onboarding() {
   }
 
   const reset = () => {
+    form.resetFields();
     Object.keys(data).map((field) => {
       console.log(field);
       if (field != "orgcode") {
@@ -479,7 +483,7 @@ function Onboarding() {
               </Row>
               <Modal
                 bodyStyle={{
-                  height: 440,
+                  height: 530,
                   overflowY: "scroll",
                   overflowX: "hidden",
                 }}
@@ -523,6 +527,7 @@ function Onboarding() {
             }}
           >
             <Steps
+              progress
               current={progress}
               onChange={progressBar}
               className="stepBars"
@@ -576,12 +581,13 @@ function Onboarding() {
               // height: "55rem",
             }}
           >
+            {console.log(data.preCode)}
             {progress == 1 ? (
               <CostCenter />
             ) : progress == 2 ? (
               <OrgHierTable />
             ) : progress == 3 ? (
-              <AccessDetails />
+              <AccessDetails preCode={data.preCode} />
             ) : (
               <OrgDetails
                 data={data}

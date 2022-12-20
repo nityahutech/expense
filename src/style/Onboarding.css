@@ -301,7 +301,10 @@ display: flex;
    color:rgba(0, 0, 0, 0.54)
  }
 
- 
+ .disabledOffice .ant-input[disabled]{
+color: rgba(0,0,0,0.54);
+ }
+
 .ant-steps{
    display: grid;
    grid-auto-flow: column;
@@ -366,6 +369,10 @@ display: flex;
    opacity: 0;
    transition: .3s ease;
    background-color: black;
+ }
+
+ .stepBars .anticon{
+   display: none;
  }
  
 @media (max-width: 850px) and (max-width: 5750px){

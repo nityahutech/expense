@@ -160,7 +160,7 @@ function EditOnboarding(props) {
     <Card
       style={{
         background: "#fff",
-        marginRight: "30px",
+        // marginRight: "30px",
         // height: "55rem",
       }}
     >
@@ -652,7 +652,7 @@ function EditOnboarding(props) {
             style={{
               display: "flex",
               justifyContent: "end",
-              marginRight: "94px",
+              marginRight: "19px",
             }}
           >
             <Space>

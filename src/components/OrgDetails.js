@@ -29,6 +29,7 @@ const OrgDetails = (props) => {
   const [fileName, setFileName] = useState(props.fileName || null);
   const [imageUrl, setImageUrl] = useState(props.fileName || "");
   const [isBigFile, setIsBigFile] = useState(false);
+  const [form] = Form.useForm();
   const [data, setData] = useState(props.data || {});
   const newCompId = props.data.orgcode;
 
@@ -147,13 +148,29 @@ const OrgDetails = (props) => {
         <Row gutter={[24, 8]}>
           <Col xs={22} sm={15} md={8}>
             <Form.Item
-              initialValue={newCompId}
-              name="orgcode"
-              label="Organization Code"
+              // initialValue={newCompId}
+              name="preCode"
+              label="Prefix Code"
+              // onKeyPress={(event) => {
+              //   if (checkNumbervalue(event) && checkAlphabetUpper(event)) {
+              //     event.preventDefault();
+              //   }
+              // }}
+              rules={[
+                {
+                  required: true,
+                  message: "Please Enter Code",
+                },
+                {
+                  pattern: /^[0-9A-Z_\s]+$/,
+                  message: "Please Enter Valid Code",
+                },
+              ]}
+              initialValue={data?.preCode}
             >
               <Input
-                disabled
-                placeholder="Organization Code"
+                maxLength={10}
+                placeholder="Prefix Code"
                 style={{
                   border: "1px solid #8692A6",
                   borderRadius: "4px",
@@ -173,11 +190,11 @@ const OrgDetails = (props) => {
               rules={[
                 {
                   required: true,
-                  message: "Please enter Organization Name",
+                  message: "Please Enter Organization Name",
                 },
                 {
                   pattern: /^[a-zA-Z\s]*$/,
-                  message: "Please enter Valid Name",
+                  message: "Please Enter Valid Name",
                 },
               ]}
               initialValue={data?.regCompName}
@@ -217,11 +234,11 @@ const OrgDetails = (props) => {
               rules={[
                 {
                   required: true,
-                  message: "Please enter CIN Number",
+                  message: "Please Enter CIN Number",
                 },
                 {
                   pattern: /^[0-9a-zA-Z]+$/,
-                  message: "Please enter Valid Number",
+                  message: "Please Enter Valid Number",
                 },
               ]}
               initialValue={data?.cinNumber}
@@ -249,13 +266,13 @@ const OrgDetails = (props) => {
               }}
               rules={[
                 {
-                  required: true,
-                  message: "Please enter GST Number",
+                  required: false,
+                  message: "Please Enter GST Number",
                 },
                 {
                   pattern:
                     /^[0-9]{2}[A-Z]{3}[ABCFGHLJPTF]{1}[A-Z]{1}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
-                  message: "Please enter Valid Number",
+                  message: "Please Enter Valid Number",
                 },
               ]}
               initialValue={data?.gst}
@@ -309,7 +326,7 @@ const OrgDetails = (props) => {
               rules={[
                 {
                   required: true,
-                  message: "Please enter Phone Number",
+                  message: "Please Enter Phone Number",
                 },
                 {
                   pattern: /^[0-9]\d{9}$/,
@@ -399,7 +416,7 @@ const OrgDetails = (props) => {
                 },
                 {
                   pattern: /^[a-zA-Z\s]*$/,
-                  message: "Please enter Valid Name",
+                  message: "Please Enter Valid Name",
                 },
               ]}
               initialValue={data?.city}
@@ -428,11 +445,11 @@ const OrgDetails = (props) => {
               rules={[
                 {
                   required: true,
-                  message: "Please enter State",
+                  message: "Please Enter State Name",
                 },
                 {
                   pattern: /^[a-zA-Z\s]*$/,
-                  message: "Please enter Valid Name",
+                  message: "Please Enter Valid Name",
                 },
               ]}
               initialValue={data?.state}
@@ -459,11 +476,11 @@ const OrgDetails = (props) => {
               rules={[
                 {
                   required: true,
-                  message: "Please enter Country Name",
+                  message: "Please Enter Country Name",
                 },
                 {
                   pattern: /^[a-zA-Z\s]*$/,
-                  message: "Please enter Valid Name",
+                  message: "Please Enter Valid Name",
                 },
               ]}
               initialValue={data?.country}
@@ -490,7 +507,7 @@ const OrgDetails = (props) => {
               rules={[
                 {
                   required: true,
-                  message: "Please enter Pin Code",
+                  message: "Please Enter Pin Code",
                 },
                 {
                   pattern: /^[0-9\b]+$/,
@@ -517,7 +534,7 @@ const OrgDetails = (props) => {
                   borderWidth: "thin",
                   borderRadius: "4px",
                   display: "flex",
-                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 {isBigFile
@@ -534,12 +551,10 @@ const OrgDetails = (props) => {
                   onChange={(e) => handleChange(e)}
                 />
                 {fileName ? (
-                  <div className="hoverImgCont" style={{ marginLeft: "10px" }}>
+                  <div className="hoverImgCont">
                     <img
                       src={imageUrl}
                       style={{
-                        display: "flex",
-                        justifyContent: "center",
                         maxWidth: "170px",
                         height: "100px",
                         padding: "10px",

@@ -11,6 +11,8 @@ import {
   Card,
   Table,
   Modal,
+  Input,
+  Tooltip,
 } from "antd";
 import {
   LoadingOutlined,
@@ -30,6 +32,7 @@ import AccessDetails from "./AccessDetails";
 import OrgHierTable from "./OrgHierTable";
 import { showNotification } from "../contexts/CreateContext";
 import { useNavigate } from "react-router-dom";
+// import { content } from "html2canvas/dist/types/css/property-descriptors/content";
 
 const { Step } = Steps;
 
@@ -47,12 +50,12 @@ function Onboarding() {
   const navigate = useNavigate();
 
   const saveOrgDetails = (values, imageUrl) => {
-    delete values.logo
-    console.log("saved")
+    delete values.logo;
+    console.log("saved");
     localStorage.setItem("OrgDetails", JSON.stringify(values));
     localStorage.setItem("Logo", imageUrl);
     getOrgData();
-  }
+  };
 
   const getData = async () => {
     let data = await CompanyProContext.getAllCompany();
@@ -62,23 +65,23 @@ function Onboarding() {
   const getOrgData = async () => {
     let data = localStorage.getItem("OrgDetails");
     if (!data) {
-      let id = {orgcode: await CompanyProContext.getOrgId()}
+      let id = { orgcode: await CompanyProContext.getOrgId() };
       localStorage.setItem("OrgDetails", JSON.stringify(id));
       setData(id);
       return;
     }
     console.log(JSON.parse(data));
     setData(JSON.parse(data));
-    setFileName(localStorage.getItem("Logo"))
-  }
+    setFileName(localStorage.getItem("Logo"));
+  };
 
   const createCompany = () => {
     let temp = localStorage.getItem("costCenters");
-    let costCenters = temp || temp != "[]" ? JSON.parse(temp) : []
+    let costCenters = temp || temp != "[]" ? JSON.parse(temp) : [];
     let temp1 = localStorage.getItem("OrgAccess");
-    let accessList = temp1 || temp1 != "[]" ? JSON.parse(temp1) : []
+    let accessList = temp1 || temp1 != "[]" ? JSON.parse(temp1) : [];
     let temp2 = localStorage.getItem("OrgHier");
-    let orgHier = temp2 || temp2 != "[]" ? JSON.parse(temp2) : []
+    let orgHier = temp2 || temp2 != "[]" ? JSON.parse(temp2) : [];
     const value = {
       regCompName: data.regCompName,
       regOffice: {
@@ -93,7 +96,7 @@ function Onboarding() {
       cinNumber: data.cinNumber,
       gst: data.gst,
       domain: data.domain,
-      phone: data.phone, 
+      phone: data.phone,
       accessList: [],
       address: [],
       secretary: [],
@@ -104,30 +107,25 @@ function Onboarding() {
       deparments: orgHier == null ? [] : orgHier,
       status: "Deactivated",
     };
-      CompanyProContext.createCompInfo(
-        data.orgcode,
-        value,
-        fileName,
-        accessList
-      )
-        .then((response) => {
-          notification.open({
-            message: "Creating Company",
-            duration: 2,
-            icon: <LoadingOutlined />,
-          });
-          const timer = setTimeout(() => {
-            showNotification("success", "Success", "Onboarding Completed");
-            getData();
-            reset();
-            setActivetab("1");
-          }, 5000);
-          return () => clearTimeout(timer);
-        })
-        .catch((error) => {
-          showNotification("error", "Error", error.message);
+    CompanyProContext.createCompInfo(data.orgcode, value, fileName, accessList)
+      .then((response) => {
+        notification.open({
+          message: "Creating Company",
+          duration: 2,
+          icon: <LoadingOutlined />,
         });
-  }
+        const timer = setTimeout(() => {
+          showNotification("success", "Success", "Onboarding Completed");
+          getData();
+          reset();
+          setActivetab("1");
+        }, 5000);
+        return () => clearTimeout(timer);
+      })
+      .catch((error) => {
+        showNotification("error", "Error", error.message);
+      });
+  };
 
   useEffect(() => {
     if (!isEditOrganization || !isModalVisible) {
@@ -140,10 +138,26 @@ function Onboarding() {
     getOrgData();
   }, []);
 
+  const Bbb = () => {
+    let reason = "";
+    return (
+      <Form.Item name="comment">
+        <Input
+          placeholder="Enter Comment"
+          onChange={(event) => {
+            reason = event.target.value;
+          }}
+        />
+      </Form.Item>
+    );
+  };
+
   const changeCompStatus = (id, status) => {
     Modal.confirm({
-      title: `Are you sure, you want to ${status == "Deactivated" ? "activate" : "deactivate"
-        } this record?`,
+      title: `Are you sure, you want to ${
+        status == "Deactivated" ? "activate" : "deactivate"
+      } this record?`,
+      content: status == "Deactivated" ? "" : <Bbb />,
       okText: "Yes",
       okType: "danger",
 
@@ -154,7 +168,8 @@ function Onboarding() {
         showNotification(
           "success",
           "Updated",
-          `Organization status ${status == "Deactivated" ? "activated" : "deactivated"
+          `Organization status ${
+            status == "Deactivated" ? "activated" : "deactivated"
           } Successfully`
         );
         getData();
@@ -198,7 +213,9 @@ function Onboarding() {
   // };
 
   const progressBar = (value) => {
-    if (progress == 0) {form.submit();}
+    if (progress == 0) {
+      form.submit();
+    }
     setProgress(value);
   };
 
@@ -240,40 +257,40 @@ function Onboarding() {
           <>
             <Row gutter={[0, 0]}>
               <Col xs={22} sm={15} md={8}>
-                <Button
-                  disabled={record.status == "Deactivated"}
-                  style={{ width: "40px" }}
-                  onClick={() => {
-                    showModal(record);
-                  }}
-                >
-                  <EyeFilled
-                    disabled={record.status == "Deactivated"}
-                    style={
-                      record.status == "Deactivated"
-                        ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
-                        : { color: "#268FEE", marginLeft: "-2px" }
-                    }
-                  />
-                </Button>
+                <Tooltip placement="bottom" title="View" color="#1963A6">
+                  <Button
+                    // disabled={record.status == "Deactivated"}
+                    style={{ width: "40px" }}
+                    onClick={() => {
+                      showModal(record);
+                    }}
+                  >
+                    <EyeFilled
+                      // disabled={record.status == "Deactivated"}
+                      style={{ color: "#268FEE", marginLeft: "-2px" }}
+                    />
+                  </Button>
+                </Tooltip>
               </Col>
               <Col xs={22} sm={15} md={8}>
-                <Button
-                  disabled={record.status == "Deactivated"}
-                  style={{ width: "40px" }}
-                  onClick={() => {
-                    showOnboarding(record);
-                  }}
-                >
-                  <EditFilled
+                <Tooltip placement="bottom" title="Edit" color="#1963A6">
+                  <Button
                     disabled={record.status == "Deactivated"}
-                    style={
-                      record.status == "Deactivated"
-                        ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
-                        : { color: "#268FEE", marginLeft: "-2px" }
-                    }
-                  />
-                </Button>
+                    style={{ width: "40px" }}
+                    onClick={() => {
+                      showOnboarding(record);
+                    }}
+                  >
+                    <EditFilled
+                      disabled={record.status == "Deactivated"}
+                      style={
+                        record.status == "Deactivated"
+                          ? { color: "rgb(154 201 244)", marginLeft: "-2px" }
+                          : { color: "#268FEE", marginLeft: "-2px" }
+                      }
+                    />
+                  </Button>
+                </Tooltip>
               </Col>
               <Col xs={22} sm={15} md={8}>
                 <Button
@@ -284,13 +301,25 @@ function Onboarding() {
                   }}
                 >
                   {record.status == "Deactivated" ? (
-                    <CheckCircleFilled
-                      style={{ color: "#268FEE", marginLeft: "-2px" }}
-                    />
+                    <Tooltip
+                      placement="bottom"
+                      title="Activate"
+                      color="#1963A6"
+                    >
+                      <CheckCircleFilled
+                        style={{ color: "#268FEE", marginLeft: "-2px" }}
+                      />
+                    </Tooltip>
                   ) : (
-                    <StopFilled
-                      style={{ color: "#268FEE", marginLeft: "-2px" }}
-                    />
+                    <Tooltip
+                      placement="bottom"
+                      title="Deactivate"
+                      color="#1963A6"
+                    >
+                      <StopFilled
+                        style={{ color: "#268FEE", marginLeft: "-2px" }}
+                      />
+                    </Tooltip>
                   )}
                 </Button>
               </Col>
@@ -300,7 +329,7 @@ function Onboarding() {
       },
     },
   ];
-  console.log(save)
+  console.log(save);
   function getStatusUi(status) {
     switch (status) {
       case "Activated":
@@ -345,24 +374,26 @@ function Onboarding() {
 
   const reset = () => {
     Object.keys(data).map((field) => {
-      console.log(field)
+      console.log(field);
       if (field != "orgcode") {
-        CompanyProContext.getOrgId().then((res) => form.setFieldsValue({orgcode: res}))
-        return
+        CompanyProContext.getOrgId().then((res) =>
+          form.setFieldsValue({ orgcode: res })
+        );
+        return;
       }
-      form.setFieldsValue({[`${field}`]: null})
-    })
-    form.setFieldsValue({addLine1: null})
-    setActivetab("1")
+      form.setFieldsValue({ [`${field}`]: null });
+    });
+    form.setFieldsValue({ addLine1: null });
+    setActivetab("1");
     setData({});
-    localStorage.removeItem("OrgDetails")
-    localStorage.removeItem("costCenters")
-    localStorage.removeItem("OrgHier")
-    localStorage.removeItem("OrgAccess")
-    localStorage.removeItem("Logo")
-    setFileName(null)
+    localStorage.removeItem("OrgDetails");
+    localStorage.removeItem("costCenters");
+    localStorage.removeItem("OrgHier");
+    localStorage.removeItem("OrgAccess");
+    localStorage.removeItem("Logo");
+    setFileName(null);
     return;
-  }
+  };
 
   const onReset = () => {
     Modal.confirm({
@@ -374,8 +405,8 @@ function Onboarding() {
         navigate("/Organization/Onboarding", { replace: false });
       },
     });
-  }
-  console.log(fileName)
+  };
+  console.log(fileName);
   return (
     <>
       {/* <div className="main"> */}
@@ -478,7 +509,11 @@ function Onboarding() {
             </div>
           </Card>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Organization Onboarding" key="2" destroyInactiveTabPane>
+        <Tabs.TabPane
+          tab="Organization Onboarding"
+          key="2"
+          destroyInactiveTabPane
+        >
           <Card
             className="stepsCard"
             style={{
@@ -499,16 +534,20 @@ function Onboarding() {
             >
               <Step
                 // className="stepOne"
-                title="Organization Details" />
+                title="Organization Details"
+              />
               <Step
                 // className="stepTwo"
-                title="Cost Center" />
+                title="Cost Center"
+              />
               <Step
                 // className="stepThree"
-                title="Organization Hierarchy" />
+                title="Organization Hierarchy"
+              />
               <Step
                 // className="stepFour"
-                title="Access Details" />
+                title="Access Details"
+              />
             </Steps>
           </Card>
 
@@ -544,13 +583,18 @@ function Onboarding() {
             ) : progress == 3 ? (
               <AccessDetails />
             ) : (
-              <OrgDetails data={data} fileName={fileName} changeSave={saveOrgDetails} form={form} />
+              <OrgDetails
+                data={data}
+                fileName={fileName}
+                changeSave={saveOrgDetails}
+                form={form}
+              />
             )}
             <Divider />
-            <div 
+            <div
               style={{
                 display: "flex",
-                justifyContent: "space-between"
+                justifyContent: "space-between",
               }}
             >
               <Button
@@ -566,10 +610,10 @@ function Onboarding() {
               >
                 Reset
               </Button>
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 {progress > 0 ? (
                   <Button
-                    style={{ marginLeft: "10px", }}
+                    style={{ marginLeft: "10px" }}
                     onClick={() => setProgress(progress - 1)}
                   >
                     Previous
@@ -577,10 +621,15 @@ function Onboarding() {
                 ) : null}
                 <Button
                   type="primary"
-                  style={{ marginLeft: "10px", backgroundColor: 'rgb(25, 99, 166)' }}
+                  style={{
+                    marginLeft: "10px",
+                    backgroundColor: "rgb(25, 99, 166)",
+                  }}
                   onClick={async () => {
                     if (progress != 3) {
-                      if (progress == 0) {form.submit()}
+                      if (progress == 0) {
+                        form.submit();
+                      }
                       setProgress(progress + 1);
                     } else {
                       createCompany();

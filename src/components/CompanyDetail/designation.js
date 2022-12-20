@@ -10,66 +10,55 @@ import {
   Table,
   Modal,
   Switch,
+  Typography,
+
 } from "antd";
+import EmpInfoContext from "../../contexts/EmpInfoContext"
 import ConfigureContext from "../../contexts/ConfigureContext";
 import { DeleteOutlined, EditFilled, CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import "./companystyle.css";
-import { getDesigNo, showNotification } from "../../contexts/CreateContext";
-import FormItem from "antd/es/form/FormItem";
+import { capitalize, checkNumbervalue, getDesigNo, showNotification } from "../../contexts/CreateContext";
+
+const { Text } = Typography
 
 const Designation = () => {
   const page = "addemployeePage";
   const [editContent, showEditContent] = useState(false);
   const [editGrade, showEditGrade] = useState(false);
-  const [all, setAll] = useState({});
   const [data, setData] = useState({});
   const [grade, setGrade] = useState({});
   const [des, setDes] = useState(null);
   const [gra, setGra] = useState(null);
   const [old, setOld] = useState(null);
+  const [designations, setDesignations] = useState(null);
   const [editInfo, setEditInfo] = useState(false);
+  const [exists, setExists] = useState(false);
+  const [names, setNames] = useState({});
   const [dataSource, setDataSource] = useState([]);
   const [form] = Form.useForm();
-  const [showNewColumn, setshowNewColumn] = useState(false)
-
-
-  const showModal = () => {
-    showEditGrade(true);
-  };
-
-  const checkNumbervalue = (event) => {
-    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
+  const [showNewColumn, setshowNewColumn] = useState(false);
 
   const getData = async () => {
     let data = await ConfigureContext.getConfigurations(page);
-    console.log('aaaaaaaaaa', data)
-    setAll(data)
-    setshowNewColumn(data?.enable)
+    setDesignations(data.designations)
+    console.log(data)
+    setshowNewColumn(data.enabled)
     let designNo = await getDesigNo()
-    console.log('aaaaaaaaaa', designNo)
-    let temp = data.designations.map((des) => {
-      let keys = Object.keys(des)
-      let grade = des[`${keys[0]}`]
+    let keys = Object.keys(data.designations)
+    let grade = Object.values(data.designations)
+    setNames(designNo.names)
+    let temp = keys.map((d, i) => {
       return {
-        grade: grade,
-        designation: keys[0],
-        employees: designNo[`${keys[0]}`] ? designNo[`${keys[0]}`] : 0,
+        grade: grade[i],
+        designation: d,
+        employees: designNo[`${d}`] ? designNo[`${d}`] : 0,
       }
     })
     temp.sort(function (a, b) {
       return a.designation.localeCompare(b.designation);
     });
-    console.log('aaaaaaaaaa2', temp)
     setDataSource(temp)
-
   };
 
   const columns = [
@@ -77,13 +66,7 @@ const Designation = () => {
       title: "Designation",
       dataIndex: "designation",
       key: "designation",
-      // sorter: (a, b) => a.designation.localeCompare(b.designation),
 
-    },
-    {
-      title: "Grade",
-      dataIndex: "grade",
-      key: "grade",
     },
     {
       title: "Employees",
@@ -91,10 +74,13 @@ const Designation = () => {
       key: "employees",
     },
     {
+      title: "Grade",
+      dataIndex: "grade",
+      key: "grade",
+    },
+    {
       title: "Action",
       align: 'center',
-      // dataIndex: "action",
-      // key: "action",
       render: (record) => (
         <Row
           style={{
@@ -111,18 +97,12 @@ const Designation = () => {
                 display: "none",
                 border: "none",
                 padding: "0",
-                // paddingTop: "7px",
-                // paddingRight: "7px",
-                // marginRight: "10px",
               }}
               onClick={() => {
                 setEditInfo(true);
                 setDes(record.designation);
-                // setOld(record.designation);
                 setGra(record.grade);
-                // setOld({record.designation: record.grade})
-                setOld({ [`${record.designation}`]: record.grade });
-
+                setOld(record.designation);
               }}
             >
               <EditFilled />
@@ -137,30 +117,61 @@ const Designation = () => {
                 display: "none",
                 border: "none",
                 padding: "0",
-                // paddingTop: "7px",
-                // paddingRight: "7px",
               }}
               onClick={() => onDelete(record)}
             >
               <DeleteOutlined />
             </Button>
           </Col>
-        </Row >
+        </Row>
       ),
     },
   ];
 
+  const [filterdColumns, setColumns] = useState(columns)
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  useEffect(() => {
+    console.log(showNewColumn)
+    let temp = [...columns]
+    delete temp[2]
+    setColumns(showNewColumn ? columns : temp)
+  }, [showNewColumn]);
+
+  const desExists = async (value) => {
+    let list = Object.keys(names)
+    delete list[list.indexOf(old)]
+    let exists = list.includes(value.split(" ").map(capitalize).join(" "));
+    if (exists) {
+      setDes(old)
+      setExists(true)
+      return;
+    }
+    setDes(value)
+    setExists(false)
+  };
+
   const onDelete = (record) => {
+    if (record.employees != 0) {
+      showNotification(
+        "error",
+        "Error",
+        "Designation cannot be deleted successfully!"
+      );
+      return;
+    }
     Modal.confirm({
       title: `Are you sure, you want to delete "${record.designation}" designation?`,
       okText: "Yes",
       okType: "danger",
 
       onOk: () => {
-        let temp = {}
-        temp[`${record.designation}`] = record.grade
-        // temp['grade'] = record.grade
-        ConfigureContext.deleteConfigurations(page, { designations: temp })
+        let temp = { ...designations }
+        delete temp[`${record.designation}`]
+        ConfigureContext.editConfiguration(page, { designations: temp })
           .then((response) => {
             showNotification(
               "success",
@@ -176,17 +187,16 @@ const Designation = () => {
     });
   };
 
-
   const onEdit = () => {
-    console.log('aaa4', des, gra);
-
-    ConfigureContext.updateConfigurations(
-      page,
-      { designations: old },
-      { designations: { [`${des}`]: gra } },
-
-    )
+    if (exists) { return; }
+    let temp = { ...designations };
+    delete temp[`${old}`];
+    temp[`${des}`] = gra != null ? gra : 1;
+    ConfigureContext.editConfiguration(page, { designations: temp })
       .then((response) => {
+        names[`${old}`].map((id) => {
+          EmpInfoContext.updateEduDetails(id, { designation: des })
+        })
         showNotification(
           "success",
           "Success",
@@ -203,18 +213,11 @@ const Designation = () => {
   };
 
   const onFinish = (values, extra) => {
-    console.log("Received values of form:", extra, values);
-
-    let record = {
-      designations: Object.keys(values).map((key) => {
-        let field = values[`${key}`]
-        return {
-          [`${field}`]: extra[`${key}`]
-        }
-      }),
-    };
-    console.log("Received values of form:", record);
-    ConfigureContext.addConfigurations(page, record)
+    let temp = { ...designations };
+    Object.values(values).forEach((key, i) => {
+      temp[`${key}`] = extra[`${i}`]
+    })
+    ConfigureContext.editConfiguration(page, { designations: temp })
       .then((response) => {
         showNotification(
           "success",
@@ -232,19 +235,10 @@ const Designation = () => {
       });
   };
 
-  const filterdColumns = columns.filter((col) => col.title !== "Grade");
-
-
   function handleAddColumn(e) {
-    ConfigureContext.createConfiguration(page, {
-      ...all,
-      enabled: e
-    })
+    ConfigureContext.editConfiguration(page, { enabled: e })
     setshowNewColumn(e)
   }
-
-
-
 
   return (
     <>
@@ -280,7 +274,7 @@ const Designation = () => {
               extra={
                 <>
                   <Button
-                    onClick={showModal}
+                    onClick={() => showEditGrade(true)}
                     className="personal"
                     type="text"
                     style={{
@@ -300,10 +294,24 @@ const Designation = () => {
             >
               <div className="table-responsive">
                 <Table
-                  columns={!showNewColumn ? filterdColumns : columns}
+                  columns={filterdColumns}
                   dataSource={dataSource}
                   pagination={false}
                   className="designationTable"
+                  summary={(pageData) => {
+                    let totalEmp = 0;
+                    pageData.forEach(({ employees, }) => {
+                      totalEmp += employees;
+                    });
+                    return (
+                      <Table.Summary.Row>
+                        <Table.Summary.Cell index={0}>Total</Table.Summary.Cell>
+                        <Table.Summary.Cell index={1}>
+                          <Text type="danger">{totalEmp}</Text>
+                        </Table.Summary.Cell>
+                      </Table.Summary.Row>
+                    );
+                  }}
                 />
               </div>
 
@@ -324,8 +332,17 @@ const Designation = () => {
                                       rules={[
                                         {
                                           required: true,
-                                          message: "Please enter designation",
+                                          message: "Please Enter Designation",
                                         },
+                                        {
+                                          validator: (rule, value, callback) => {
+                                            let exists = Object.keys(names).includes(value);
+                                            if (exists) {
+                                              return Promise.reject(new Error("This designations already exists!"));
+                                            }
+                                          },
+                                          message: "This designation already exists!",
+                                        }
                                       ]}
                                     >
                                       <Input
@@ -453,43 +470,44 @@ const Designation = () => {
           setEditInfo(false);
         }}
       >
-        <Form.Item
-          rules={[
-            {
-              required: true,
-              message: "Please enter designation",
-            },
-          ]}
-        >
-          <Input
-            type="text"
-            defaultValue={des}
-            onChange={(e) => setDes(e.target.value)}
-          />
-        </Form.Item>
-        <Form.Item
-          rules={[
-            {
-              required: true,
-              message: "Please enter Grade",
-            },
-          ]}
-        >
-
-          <Input
-
-            onKeyPress={(event) => {
-              if (checkNumbervalue(event)) {
-                event.preventDefault();
+        <Form form={form} >
+          <Form.Item
+            name='editname'
+            initialValue={des}
+            rules={[
+              {
+                required: true,
+                message: "Please Enter Designation",
+              },
+              {
+                validator: (rule, value, callback) => {
+                  let exists = Object.keys(names).includes(value.split(" ").map(capitalize).join(" "));
+                  if (exists) {
+                    return Promise.reject(new Error("This designations already exists!"));
+                  }
+                },
+                message: "This designation already exists!",
               }
-            }}
-            type="text"
+            ]}
 
-            defaultValue={gra}
-            onChange={(e) => setGra(e.target.value)}
-          />
-        </Form.Item>
-
+          >
+            <Input
+              type="text"
+              status={exists ? "error" : null}
+              defaultValue={des}
+              onChange={(e) => desExists(e.target.value)}
+            />
+          </Form.Item>
+          {/* <Span>dddd</Span> */}
+          <Form.Item>
+            <Input
+              style={{ marginTop: "5px", width: "100%" }}
+              type="number"
+              defaultValue={gra}
+              onChange={(e) => setGra(e.target.value)}
+            />
+          </Form.Item>
+        </Form>
       </Modal>
       <Modal
         destroyOnClose
@@ -500,10 +518,10 @@ const Designation = () => {
         onOk={() => showEditGrade(false)}
         cancelButtonProps={{ style: { display: 'none' } }}
         closable={false}
-        // afterClose={() => showEditGrade(false)}
+      // afterClose={() => showEditGrade(false)}
       >
         <Form>
-          <FormItem
+          <Form.Item
             label="Configuration for Grade::"
             labelCol={{ offset: 6 }}
             // wrapperCol={{span:12,offset:10}}
@@ -511,7 +529,7 @@ const Designation = () => {
             initialValue={showNewColumn}
           >
             <Switch defaultChecked={showNewColumn} checkedChildren="Enabled" unCheckedChildren="Disabled" onChange={(e) => handleAddColumn(e)} />
-          </FormItem>
+          </Form.Item>
         </Form>
       </Modal>
     </>

@@ -23,7 +23,7 @@ import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/lib/input/TextArea";
 import { showNotification } from "../contexts/CreateContext";
 
-function CostCenter() {
+function CostCenter(props) {
   const [isCostModalOpen, setIsCostModalOpen] = useState(false);
   const [isCostEditModalOpen, setIsCostEditModalOpen] = useState(false);
   const [form] = Form.useForm();
@@ -33,13 +33,15 @@ function CostCenter() {
 
   const deleteCost = (record) => {
     Modal.confirm({
-      title: "Are you sure, you want to delete cost Center?",
+      title: "Are you sure, You want to delete Cost Center?",
       okText: "Yes",
       okType: "danger",
 
       onOk: () => {
         console.log("key", record);
-        const newData = costCenters.filter((item) => item.costcentercode !== record.costcentercode);
+        const newData = costCenters.filter(
+          (item) => item.costcentercode !== record.costcentercode
+        );
         localStorage.setItem("costCenters", JSON.stringify(newData));
         setCostCenters(newData);
       },
@@ -49,7 +51,6 @@ function CostCenter() {
   const showModal = () => {
     setIsCostModalOpen(true);
   };
-
 
   const onFinishEdit = (values) => {
     console.log("onFinishEdit", values);
@@ -68,10 +69,26 @@ function CostCenter() {
     }
     localStorage.setItem("costCenters", JSON.stringify(costCenters));
     setCostCenters(getCostCentersFromLocalStr());
-    setEditCostCenter({})
+    setEditCostCenter({});
     editForm.resetFields();
     setIsCostEditModalOpen(false);
   };
+
+  const checkAlphabets = (event) => {
+    if (!/^[0-9A-Z_-\s]+$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
+  const checkAlphabetsName = (event) => {
+    if (!/^[a-zA-Z\s]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   const onFinishForm = (values) => {
     console.log("values", values);
@@ -161,11 +178,9 @@ function CostCenter() {
                     borderRadius: "10px",
                   }}
                   onClick={() => {
-
                     setEditCostCenter(record);
                     editForm.resetFields();
                     setIsCostEditModalOpen(true);
-
                   }}
                 >
                   <EditFilled />
@@ -200,7 +215,7 @@ function CostCenter() {
   return (
     <div style={{ margin: "13px", background: "#fff" }}>
       <div style={{ background: "#FAFAFA" }}>
-        <div 
+        <div
           style={{
             display: "flex",
             justifyContent: "space-between",
@@ -254,6 +269,7 @@ function CostCenter() {
         open={isCostModalOpen}
         onCancel={() => {
           setIsCostModalOpen(false);
+          form.resetFields();
         }}
         cancelText={
           <div className="cancel">
@@ -277,6 +293,7 @@ function CostCenter() {
           <div
             onClick={() => {
               setIsCostModalOpen(false);
+              form.resetFields();
             }}
             style={{ color: "#ffff" }}
           >
@@ -303,18 +320,23 @@ function CostCenter() {
                 labelAlign="left"
                 name="costcentercode"
                 label="Cost Center Code"
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Cost Center Code",
+                    message: "Please Enter Cost Center Code",
                   },
                   {
-                    pattern: /^[0-9A-Za-z]+$/,
-                    message: "Please enter Valid Cost Center Code",
+                    pattern: /^[0-9A-Z_-\s]+$/,
+                    message: "Please Enter Valid Cost Center Code",
                   },
                 ]}
               >
-                <Input />
+                <Input maxLength={10} />
               </FormItem>
             </Col>
             <Col xs={24} sm={24} md={24}>
@@ -322,18 +344,35 @@ function CostCenter() {
                 labelAlign="left"
                 name="costName"
                 label="Name"
+                onKeyPress={(event) => {
+                  if (checkAlphabetsName(event)) {
+                    event.preventDefault();
+                  }
+                }}
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Name",
+                    message: "Please Enter Name",
                   },
                   {
-                    pattern: /^[A-Za-z]+$/,
-                    message: "Please enter Valid Name",
+                    pattern: /^[A-Za-z\s]*$/,
+                    message: "Please Enter Valid Name",
                   },
                 ]}
               >
-                <Input />
+                <Input
+                  maxLength={20}
+                  onChange={(e) => {
+                    const inputval = e.target.value;
+                    const str = e.target.value;
+                    const newVal =
+                      inputval.substring(0, 1).toUpperCase() +
+                      inputval.substring(1);
+                    const caps = str.split(" ").map(capitalize).join(" ");
+                    // setPaidBy(newVal);
+                    form.setFieldsValue({ costName: newVal, costName: caps });
+                  }}
+                />
               </FormItem>
             </Col>
             <Col xs={24} sm={24} md={24}>
@@ -346,65 +385,77 @@ function CostCenter() {
                   row={5}
                   maxlength={100}
                   autoSize={{ minRows: 2, maxRows: 6 }}
+                  onChange={(e) => {
+                    const inputval = e.target.value;
+                    const str = e.target.value;
+                    const newVal =
+                      inputval.substring(0).toUpperCase() +
+                      inputval.substring(0);
+                    const caps = str.split(". ").map(capitalize).join(". ");
+                    // setPaidBy(newVal);
+                    form.setFieldsValue({
+                      costDescription: newVal,
+                      costDescription: caps,
+                    });
+                  }}
                 />
               </FormItem>
             </Col>
           </Row>
         </Form>
       </Modal>
-
-      <Modal
-        title="EDIT ORGANIZATION DETAILS"
-        destroyOnClose
-        open={isCostEditModalOpen}
-        onCancel={() => {
-          setEditCostCenter({})
-          editForm.resetFields();
-          setIsCostEditModalOpen(false);
+      <Form
+        labelCol={{
+          span: 8,
         }}
-        cancelText={
-          <div>
-            <CloseOutlined style={{ marginRight: "10px" }} />
-            CANCEL
-          </div>
-        }
-        centered
-        className="costModal"
-        onOk={() => {
-          editForm.submit();
-          setIsCostEditModalOpen(false);
+        wrapperCol={{
+          span: 16,
         }}
-        okText={
-          <div>
-            <CheckOutlined style={{ marginRight: "10px" }} />
-            SAVE
-          </div>
-        }
-        closeIcon={
-          <div
-            onClick={() => {
-              setEditCostCenter({})
-              editForm.resetFields();
-              setIsCostEditModalOpen(false);
-            }}
-            style={{ color: "#ffff" }}
-          >
-            X
-          </div>
-        }
+        initialValues={{
+          remember: true,
+        }}
+        form={editForm}
+        onFinish={onFinishEdit}
       >
-        <Form
-          labelCol={{
-            span: 8,
+        <Modal
+          title="EDIT ORGANIZATION DETAILS"
+          destroyOnClose
+          open={isCostEditModalOpen}
+          onCancel={() => {
+            setEditCostCenter({});
+            editForm.resetFields();
+            setIsCostEditModalOpen(false);
           }}
-          wrapperCol={{
-            span: 16,
+          cancelText={
+            <div>
+              <CloseOutlined style={{ marginRight: "10px" }} />
+              CANCEL
+            </div>
+          }
+          centered
+          className="costModal"
+          onOk={() => {
+            editForm.submit();
+            setIsCostEditModalOpen(false);
           }}
-          initialValues={{
-            remember: true,
-          }}
-          form={editForm}
-          onFinish={onFinishEdit}
+          okText={
+            <div>
+              <CheckOutlined style={{ marginRight: "10px" }} />
+              SAVE
+            </div>
+          }
+          closeIcon={
+            <div
+              onClick={() => {
+                setEditCostCenter({});
+                form.resetFields();
+                setIsCostEditModalOpen(false);
+              }}
+              style={{ color: "#ffff" }}
+            >
+              X
+            </div>
+          }
         >
           <Row gutter={[0, 16]}>
             <Col xs={24} sm={24} md={24}>
@@ -413,18 +464,23 @@ function CostCenter() {
                 name="costcentercode"
                 label="Cost Center Code"
                 initialValue={costEditCenter.costcentercode}
+                onKeyPress={(event) => {
+                  if (checkAlphabets(event)) {
+                    event.preventDefault();
+                  }
+                }}
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Cost Center Code",
+                    message: "Please Enter Cost Center Code",
                   },
                   {
-                    pattern: /^[0-9A-Za-z]+$/,
-                    message: "Please enter Valid Cost Center Code",
+                    pattern: /^[0-9A-Z_-\s]+$/,
+                    message: "Please Enter Valid Cost Center Code",
                   },
                 ]}
               >
-                <Input />
+                <Input maxLength={10} />
               </FormItem>
             </Col>
             <Col xs={24} sm={24} md={24}>
@@ -433,18 +489,35 @@ function CostCenter() {
                 name="costName"
                 label="Name"
                 initialValue={costEditCenter.costName}
+                onKeyPress={(event) => {
+                  if (checkAlphabetsName(event)) {
+                    event.preventDefault();
+                  }
+                }}
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Name",
+                    message: "Please Enter Name",
                   },
                   {
-                    pattern: /^[A-Za-z]+$/,
-                    message: "Please enter Valid Name",
+                    pattern: /^[A-Za-z\s]*$/,
+                    message: "Please Enter Valid Name",
                   },
                 ]}
               >
-                <Input />
+                <Input
+                  maxLength={20}
+                  onChange={(e) => {
+                    const inputval = e.target.value;
+                    const str = e.target.value;
+                    const newVal =
+                      inputval.substring(0, 1).toUpperCase() +
+                      inputval.substring(1);
+                    const caps = str.split(" ").map(capitalize).join(" ");
+                    // setPaidBy(newVal);
+                    form.setFieldsValue({ costName: newVal, costName: caps });
+                  }}
+                />
               </FormItem>
             </Col>
             <Col xs={24} sm={24} md={24}>
@@ -454,12 +527,29 @@ function CostCenter() {
                 label="Description"
                 initialValue={costEditCenter.costDescription}
               >
-                <TextArea />
+                <TextArea
+                  row={5}
+                  maxlength={100}
+                  autoSize={{ minRows: 2, maxRows: 6 }}
+                  onChange={(e) => {
+                    const inputval = e.target.value;
+                    const str = e.target.value;
+                    const newVal =
+                      inputval.substring(0).toUpperCase() +
+                      inputval.substring(0);
+                    const caps = str.split(". ").map(capitalize).join(". ");
+                    // setPaidBy(newVal);
+                    form.setFieldsValue({
+                      costDescription: newVal,
+                      costDescription: caps,
+                    });
+                  }}
+                />
               </FormItem>
             </Col>
           </Row>
-        </Form>
-      </Modal>
+        </Modal>
+      </Form>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Table, Button, Modal, Layout, Row, Col, Input } from "antd";
+import { Table, Button, Modal, Layout, Row, Col, Input, Form, Select } from "antd";
 import { EditFilled, SearchOutlined, DeleteFilled, EyeFilled } from "@ant-design/icons";
 import Editemployee from "./Editemployee";
 import React, { useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import { getUsers } from "../contexts/CreateContext";
 import "../style/EmployeeList.css";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import EmployeeListview from "./EmployeeListview";
+const { Option } = Select;
 
 
 function EmployeeList() {
@@ -20,6 +21,8 @@ function EmployeeList() {
   const [allEmployees, setAllEmployees] = useState([]);
   const [data, setData] = React.useState([]);
   const [disableItem, setDisableItem] = useState(false);
+  const [form] = Form.useForm();
+  const [designations, setDesignations] = useState([]);
   window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 768 ? "" : "left")
   );
@@ -224,6 +227,8 @@ function EmployeeList() {
   async function getData() {
     setLoading(true);
     const allData = await getUsers();
+    console.log(allData, 'dataaaaaa')
+
     let d = allData.docs.map((doc, i) => {
       return {
         ...doc.data(),
@@ -234,11 +239,19 @@ function EmployeeList() {
         disabled: false,
       };
     });
+    console.log(d, 'dataaaaaa')
+
+    let des = d?.map((emp) => emp.designation)
+    const uniqueArray = des.filter((item, index) => des.indexOf(item) === index);
+
+    console.log('ddddd', des)
+
     setData(d);
     setFilterEmployees(d);
     setAllEmployees(d);
     setCertificationDetails(d)
     setLoading(false);
+    setDesignations(uniqueArray)
   }
 
 
@@ -291,6 +304,26 @@ function EmployeeList() {
     setData(filteredData);
     setFilterEmployees(filteredData);
   };
+  const onGenderChange = (value) => {
+    switch (value) {
+      case 'male':
+        form.setFieldsValue({
+          note: 'Hi, man!',
+        });
+        return;
+      case 'female':
+        form.setFieldsValue({
+          note: 'Hi, lady!',
+        });
+        return;
+      case 'other':
+        form.setFieldsValue({
+          note: 'Hi there!',
+        });
+        break;
+      default:
+    }
+  };
   return (
     <Layout>
       <Row className="employeeRow">
@@ -300,6 +333,36 @@ function EmployeeList() {
             prefix={<SearchOutlined />}
             onChange={searchChange}
           />
+        </Col>
+        <Col>
+
+          <Select
+            className="selectOption"
+            allowClear
+
+            placeholder="Select Designation"
+            style={{ marginLeft: "10px", width: '200px' }}
+            onChange={(e) => {
+              const selectedData = data.filter((emp) =>
+                emp.designation.includes(e)
+              );
+              setFilterEmployees(selectedData);
+              console.log(selectedData, 'selectedData');
+            }}
+            showSearch
+          // onSearch={onSearch}
+
+          >
+
+            {designations?.map((des) => {
+              console.log(des)
+              return (
+                <Option value={des}>{des}</Option>
+              )
+            })
+            }
+          </Select>
+
         </Col>
         {/* <Col>
           <Select

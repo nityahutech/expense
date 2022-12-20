@@ -1,0 +1,62 @@
+.education {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Row-Card {
+    width: 75%;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.editButton {
+    color: #ffff;
+    display: none;
+    padding-top: 7px;
+    padding-right: 7px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.editButton .ant-card-head {
+    border-radius: 10px 10px 0px 0px;
+    background: #1963a6;
+    color: #ffffff;
+  }
+
+  .education:hover .editButton {
+    display: block !important;
+  }
+
+  .personalCardDiv:hover .editButton {
+    display: block !important;
+  }
+
+  .educationCard .ant-card-head-title {
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 19px;
+    text-transform: uppercase;
+  }
+
+  .educationCard .ant-card-head {
+    border-radius: 10px 10px 0px 0px;
+    background: #1963a6;
+    color: #ffffff;
+  }
+
+  .educationCard {
+    width: 100%;
+    border-radius: 10px;
+    cursor: default;
+  }
+
+  .inputHeaders {
+    font-weight: 600;
+    line-height: 18px;
+    color: #07182b;
+    font-size: 15px;
+    font-family: Open Sans,sans-serif;
+  }

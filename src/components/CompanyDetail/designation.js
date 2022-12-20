@@ -10,7 +10,8 @@ import {
   Table,
   Modal,
   Switch,
-  Typography
+  Typography,
+
 } from "antd";
 import EmpInfoContext from "../../contexts/EmpInfoContext"
 import ConfigureContext from "../../contexts/ConfigureContext";
@@ -135,7 +136,7 @@ const Designation = () => {
 
   useEffect(() => {
     console.log(showNewColumn)
-    let temp =[...columns]
+    let temp = [...columns]
     delete temp[2]
     setColumns(showNewColumn ? columns : temp)
   }, [showNewColumn]);
@@ -168,7 +169,7 @@ const Designation = () => {
       okType: "danger",
 
       onOk: () => {
-        let temp = {...designations}
+        let temp = { ...designations }
         delete temp[`${record.designation}`]
         ConfigureContext.editConfiguration(page, { designations: temp })
           .then((response) => {
@@ -188,13 +189,13 @@ const Designation = () => {
 
   const onEdit = () => {
     if (exists) { return; }
-    let temp = {...designations};
+    let temp = { ...designations };
     delete temp[`${old}`];
     temp[`${des}`] = gra != null ? gra : 1;
     ConfigureContext.editConfiguration(page, { designations: temp })
       .then((response) => {
         names[`${old}`].map((id) => {
-          EmpInfoContext.updateEduDetails(id, {designation: des})
+          EmpInfoContext.updateEduDetails(id, { designation: des })
         })
         showNotification(
           "success",
@@ -212,11 +213,11 @@ const Designation = () => {
   };
 
   const onFinish = (values, extra) => {
-    let temp = {...designations};
+    let temp = { ...designations };
     Object.values(values).forEach((key, i) => {
-        temp[`${key}`] = extra[`${i}`]
-      })
-    ConfigureContext.editConfiguration(page, {designations: temp})
+      temp[`${key}`] = extra[`${i}`]
+    })
+    ConfigureContext.editConfiguration(page, { designations: temp })
       .then((response) => {
         showNotification(
           "success",
@@ -235,7 +236,7 @@ const Designation = () => {
   };
 
   function handleAddColumn(e) {
-    ConfigureContext.editConfiguration(page, {enabled: e})
+    ConfigureContext.editConfiguration(page, { enabled: e })
     setshowNewColumn(e)
   }
 
@@ -303,12 +304,12 @@ const Designation = () => {
                       totalEmp += employees;
                     });
                     return (
-                        <Table.Summary.Row>
-                          <Table.Summary.Cell index={0}>Total</Table.Summary.Cell>
-                          <Table.Summary.Cell index={1}>
-                            <Text type="danger">{totalEmp}</Text>
-                          </Table.Summary.Cell>
-                        </Table.Summary.Row>
+                      <Table.Summary.Row>
+                        <Table.Summary.Cell index={0}>Total</Table.Summary.Cell>
+                        <Table.Summary.Cell index={1}>
+                          <Text type="danger">{totalEmp}</Text>
+                        </Table.Summary.Cell>
+                      </Table.Summary.Row>
                     );
                   }}
                 />
@@ -468,19 +469,45 @@ const Designation = () => {
         onCancel={() => {
           setEditInfo(false);
         }}
-      >{console.log(exists)}
-          <Input
-            type="text"
-            status={exists ? "error" : null}
-            defaultValue={des}
-            onChange={(e) => desExists(e.target.value)}
-          />
-          <Input
-            style={{marginTop: "5px", width: "100%"}}
-            type="number"
-            defaultValue={gra}
-            onChange={(e) => setGra(e.target.value)}
-          />
+      >
+        <Form form={form} >
+          <Form.Item
+            name='editname'
+            initialValue={des}
+            rules={[
+              {
+                required: true,
+                message: "Please Enter Designation",
+              },
+              {
+                validator: (rule, value, callback) => {
+                  let exists = Object.keys(names).includes(value.split(" ").map(capitalize).join(" "));
+                  if (exists) {
+                    return Promise.reject(new Error("This designations already exists!"));
+                  }
+                },
+                message: "This designation already exists!",
+              }
+            ]}
+
+          >
+            <Input
+              type="text"
+              status={exists ? "error" : null}
+              defaultValue={des}
+              onChange={(e) => desExists(e.target.value)}
+            />
+          </Form.Item>
+          {/* <Span>dddd</Span> */}
+          <Form.Item>
+            <Input
+              style={{ marginTop: "5px", width: "100%" }}
+              type="number"
+              defaultValue={gra}
+              onChange={(e) => setGra(e.target.value)}
+            />
+          </Form.Item>
+        </Form>
       </Modal>
       <Modal
         destroyOnClose
@@ -491,7 +518,7 @@ const Designation = () => {
         onOk={() => showEditGrade(false)}
         cancelButtonProps={{ style: { display: 'none' } }}
         closable={false}
-        // afterClose={() => showEditGrade(false)}
+      // afterClose={() => showEditGrade(false)}
       >
         <Form>
           <Form.Item

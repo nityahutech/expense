@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { Card, Row, Col } from "antd";
+import { Card, Row, Col, Divider } from "antd";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
+// import { color } from "html2canvas/dist/types/css/types/color";
 
 function Work() {
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const [empID, setEmpID] = useState("")
   const [designation, setDesignation] = useState("");
   const [doj, setDoj] = useState("");
   const [department, setDepartment] = useState("");
@@ -20,7 +22,10 @@ function Work() {
     setWorkLocation(data.workLocation ? data.workLocation : null);
     setDepartment(data.department ? data.department : null);
     setEmpType(data.empType ? data.empType : null);
+    setEmpID(data.empId ? data.empId : null);
+    console.log(data.empId)
   };
+  console.log(empID)
   return (
     <>
       <div
@@ -45,7 +50,35 @@ function Work() {
           }}
         >
           <Row gutter={[16, 16]}>
-            <Col xs={22} sm={20} md={12}>
+            <Col xs={24} sm={24} md={24} 
+            style={
+              {display:"flex",
+              flexDirection:"row"
+              }}>
+              <div
+                style={{
+                  fontWeight: 600,
+                  lineHeight: "18px",
+                  color: "#07182b",
+                  fontSize: "18px",
+                  fontFamily: "Open Sans,sans-serif",
+                }}
+              >
+                Employee ID :- 
+              </div>
+              <div
+                style={{
+                  fontWeight: 600,
+                  lineHeight: "18px",
+                  color: "#07182b",
+                  fontSize: "18px",
+                  fontFamily: "Open Sans,sans-serif",
+                  marginLeft:"10px"
+                }}
+              >{empID ? empID : "-"}</div>
+            </Col>
+            <Divider style={{margin:"0px", backgroundColor:"darkcyan"}}/>
+            <Col xs={24} sm={12} md={12}>
               <div
                 style={{
                   fontWeight: 600,
@@ -59,7 +92,7 @@ function Work() {
               </div>
               <div>{designation ? designation : "-"}</div>
             </Col>
-            <Col xs={22} sm={20} md={12}>
+            <Col xs={24} sm={12} md={12}>
               <div
                 style={{
                   fontWeight: 600,
@@ -73,9 +106,7 @@ function Work() {
               </div>
               <div>{doj ? doj : "-"}</div>
             </Col>
-          </Row>
-          <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-            <Col xs={22} sm={20} md={12}>
+            <Col xs={2} sm={12} md={12}>
               <div
                 style={{
                   fontWeight: 600,
@@ -89,7 +120,7 @@ function Work() {
               </div>
               <div>90</div>
             </Col>
-            <Col xs={22} sm={20} md={12}>
+            <Col xs={24} sm={12} md={12}>
               <div
                 style={{
                   fontWeight: 600,
@@ -103,9 +134,7 @@ function Work() {
               </div>
               <div>{empType ? empType : "-"}</div>
             </Col>
-          </Row>
-          <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-            <Col xs={22} sm={20} md={12}>
+            <Col xs={24} sm={12} md={12}>
               <div
                 style={{
                   fontWeight: 600,
@@ -119,7 +148,7 @@ function Work() {
               </div>
               <div>{workLocation ? workLocation : "-"}</div>
             </Col>
-            <Col xs={22} sm={20} md={12}>
+            <Col xs={24} sm={12} md={12}>
               <div
                 style={{
                   fontWeight: 600,

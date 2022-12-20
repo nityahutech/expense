@@ -10,10 +10,10 @@ export const sendEmail = async (mailOptions) => {
 }
 
 export const disableAccount = async (uid, action) => {
-    // try {
-    //     await axios.post("https://auth-api-pink.vercel.app/auth-api/v2", {
-    //         uid, action
-    //     })
-    // } catch (error) {
-    // }
+    try {
+        await axios.post("https://auth-api-pink.vercel.app/auth-api/v2", {
+            uid, action
+        })
+    } catch (error) {
+    }
 }

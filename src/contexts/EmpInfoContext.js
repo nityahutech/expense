@@ -5,6 +5,8 @@ import {
     getDoc,
     updateDoc,
     doc,
+    deleteDoc,
+    arrayRemove,
 } from "firebase/firestore";
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
@@ -38,6 +40,12 @@ class EmpInfoContext {
         }
     };
 
+    deleteExpense = (id) => {
+        const expenseDoc = doc(db, compId != "undefined" ? `companyprofile/${compId}/users` : "admins", id);
+        return deleteDoc(expenseDoc);
+    };
+
+
     getEduDetails = async (id, compid) => {
         let tempId = compid ? compid : compId
         console.log(id, compid, tempId, compId, tempId == "undefined" || !tempId ? "admins" : `companyprofile/${tempId}/users`)
@@ -56,6 +64,12 @@ class EmpInfoContext {
         updateDoc(doc(db,`companyprofile/${compId}/users`, id), { disabled: false })
         return disableAccount(id, false)
     };
+
+    deleteCompInfo = (id, updateEduDetails )=>{
+        const deleteDoc = doc(db, "companyprofile",id);
+        let field  = Object.keys(updateEduDetails)[0]
+        return updateDoc (deleteDoc, {[`${field}`]: arrayRemove(updateEduDetails[`${field}`])})
+    }
 
 }
 

@@ -1126,7 +1126,7 @@ const Statutory = () => {
                           alignItems: "end",
                         }}
                       >{editBank[i] == false ? (
-                        <Button
+                          <Button
                           style={{
                             width: "10px",
                             border: "none",
@@ -1146,7 +1146,9 @@ const Statutory = () => {
                           }}
                         >
                           <EditFilled />
-                        </Button>) : (<Button
+                          </Button>
+                        ) : (
+                          <Button
                           style={{
                             width: "10px",
                             border: "none",
@@ -1162,7 +1164,7 @@ const Statutory = () => {
                         </Button>)}
 
                       </Col>
-                      <Divider style={{ margin: "0px" }} />
+                      <Divider style={{ margin: "0px", backgroundColor:"#1963A6" }} />
                       <Col xs={22} sm={15} md={8}>
                         <div className="div-discription">Bank Name</div>
                         {editBank[i] === false ? (

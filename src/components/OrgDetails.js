@@ -103,6 +103,10 @@ const OrgDetails = (props) => {
     setFileName(null);
   }
 
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select
@@ -144,6 +148,7 @@ const OrgDetails = (props) => {
         }}
         autoComplete="off"
         onFinish={(values) => props.changeSave(values, imageUrl)}
+        onFinishFailed={onFinishFailed}
       >
         <Row gutter={[24, 8]}>
           <Col xs={22} sm={15} md={8}>
@@ -527,7 +532,13 @@ const OrgDetails = (props) => {
             </Form.Item>
           </Col>
           <Col xs={22} sm={15} md={8}>
-            <Form.Item name="logo" className="uploadLogo">
+            <Form.Item
+              name="logo"
+              className="uploadLogo"
+              rules={[
+                { required: true, message: "Please Upload the Company Logo" },
+              ]}
+            >
               <div
                 style={{
                   border: "dashed #B9B9B9",

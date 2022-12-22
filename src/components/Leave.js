@@ -11,10 +11,6 @@ import {
   notification,
   DatePicker,
   Spin,
-  Search,
-  Card,
-  Divider,
-  Checkbox,
 } from "antd";
 import { Button } from "antd";
 import { Form, Input } from "antd";
@@ -22,10 +18,6 @@ import moment from "moment";
 import {
   DeleteOutlined,
   EditOutlined,
-  EditFilled,
-  CloseOutlined,
-  CheckOutlined,
-  PlusCircleOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
 import LeaveContext from "../contexts/LeaveContext";
@@ -38,8 +30,7 @@ import LeaveType from "./LeaveType";
 import "../style/leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
 import LeaveCreate from "./LeaveCreate";
-import FormItem from "antd/es/form/FormItem";
-import TextArea from "antd/lib/input/TextArea";
+import { showNotification } from "../contexts/CreateContext";
 const dateFormat = "Do MMM, YYYY";
 const Leave = (props) => {
   const page = "leavePage";
@@ -300,8 +291,6 @@ const Leave = (props) => {
     getDateFormatted(d);
     getDateSorted(d);
     setLeaves(d);
-    setFilterRequest(d);
-
     setLoading(false);
     let tempDays = temp ? temp : { ...totaldays };
     let days = await LeaveContext.getLeaveDays(d, tempDays);
@@ -340,7 +329,7 @@ const Leave = (props) => {
     getDateFormatted(req);
     getDateSorted(req);
     setAllRequests(req);
-    // setFilterRequest(req)
+    setFilterRequest(req)
   };
   const onDeleteLeave = (record) => {
     Modal.confirm({
@@ -547,12 +536,6 @@ const Leave = (props) => {
       return a - b;
     });
   };
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
-  };
   const validateLeaveRequest = (noOfDays, leavetype) => {
     if (leavetype != null && dateSelected.length - noOfDays > 0) {
       if (leavedays[leavetype] < dateSelected.length - noOfDays) {
@@ -688,6 +671,76 @@ const Leave = (props) => {
       </div>
     );
   };
+  const monthCellRender = (value) => {
+    const listData = [];
+    companyholiday.forEach((hol) => {
+      console.log(hol)
+      if (value.format("MMM") == moment(hol.date, "Do MMM, YYYY").format("MMM")) {
+        listData.push(hol.name)
+      }
+    });
+    console.log(value.format("MMM"), listData)
+    return (
+      <ul>
+        { listData.map((d) => (
+          <li>{d}</li>
+        ))}
+      </ul>
+    )
+    // let textVal = value.format("dddd");
+    // let bgColor =
+    //   textVal == "Sunday" || textVal == "Saturday"
+    //     ? "rgba(74, 67, 67, 0.2)"
+    //     : "rgba(10, 91, 204, 0.2)";
+    // let color =
+    //   textVal == "Sunday" || textVal == "Saturday"
+    //     ? "rgba(74, 67, 67, 1)"
+    //     : "rgb(10, 91, 204)";
+
+    // if (!(listData.length == 0)) {
+    //   textVal = listData[0].type;
+    //   color =
+    //     listData[0].type == "On Leave"
+    //       ? "rgba(0, 128, 0,  1)"
+    //       : listData[0].type === "Pending"
+    //         ? "rgb(166 168 69)"
+    //         : listData[0].isOptional
+    //           ? "rgba(0, 119, 137, 0.96)"
+    //           : "rgba(252, 143, 10, 1)";
+    //   bgColor =
+    //     listData[0].type == "On Leave"
+    //       ? "rgb(15, 255, 80,0.2)"
+    //       : listData[0].type === "Pending"
+    //         ? "rgb(205 227 36 / 25%)"
+    //         : listData[0].isOptional
+    //           ? "rgba(154, 214, 224, 0.96)"
+    //           : "rgba(252, 143, 10,0.2)";
+    // }
+
+    // return (
+    //   <div>
+    //     <div
+    //       className="events"
+    //       style={{
+    //         backgroundColor: bgColor,
+    //         color: color,
+    //         fontSize: "12px",
+    //         paddingLeft: "5px",
+    //         paddingRight: "5px",
+    //         margin: "0px",
+    //         borderRadius: "100px",
+    //         justifyContent: "center",
+    //       }}
+    //     >
+    //       <div className="present"> {textVal} </div>
+    //     </div>
+    //   </div>
+    // );
+  };
+
+
+
+
   const reqColumns = [
     {
       title: "Duration",
@@ -1098,6 +1151,10 @@ const Leave = (props) => {
                       >
                         <Select
                           onChange={(e) => {
+                            if (!e) {
+                              setFilterRequest(allRequests)
+                              return
+                            }
                             const filteredLeave = allRequests.filter((leaveNat) =>
                               leaveNat.nature.includes(e))
                             setFilterRequest(filteredLeave)
@@ -1325,6 +1382,7 @@ const Leave = (props) => {
                     onChange={setDate}
                     dateCellRender={dateCellRender}
                     disabledDate={disabledCalendarDate}
+                    monthCellRender={monthCellRender}
                   />
                 </div>
               </card>
@@ -1603,6 +1661,7 @@ const Leave = (props) => {
                   onChange={setDate}
                   dateCellRender={dateCellRender}
                   disabledDate={disabledCalendarDate}
+                  monthCellRender={monthCellRender}
                 />
               </div>
             </Col>

@@ -58,7 +58,7 @@ function Onboarding() {
     localStorage.setItem("Logo", imageUrl);
     getOrgData();
     setProgress(progress + 1);
-    form.resetFields();
+    setIsStepOneInvalid(false);
   };
   console.log(form);
 
@@ -221,6 +221,7 @@ function Onboarding() {
   const progressBar = (value) => {
     if (progress == 0) {
       form.submit();
+      return;
     }
     setProgress(value);
   };
@@ -411,6 +412,7 @@ function Onboarding() {
       okType: "danger",
       onOk: () => {
         reset();
+
         navigate("/Organization/Onboarding", { replace: false });
       },
     });

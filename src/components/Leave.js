@@ -971,7 +971,7 @@ const Leave = (props) => {
   return (
     <>
       {props.roleView === "admin" ? (
-        <div>
+        <div className="leavePageDiv">
           <Tabs
             defaultActiveKey="1"
             style={{

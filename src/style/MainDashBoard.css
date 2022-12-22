@@ -19,3 +19,7 @@
     flex-direction: column;
     align-items: center; 
 }
+
+.icon-container {
+    min-height: 100vh;
+}

@@ -58,6 +58,7 @@ function Onboarding() {
     localStorage.setItem("Logo", imageUrl);
     getOrgData();
     setProgress(progress + 1);
+    form.resetFields();
   };
   console.log(form);
 
@@ -547,18 +548,9 @@ function Onboarding() {
                 // className="stepOne"
                 title="Organization Details"
               />
-              <Step
-                // className="stepTwo"
-                title="Cost Center"
-              />
-              <Step
-                // className="stepThree"
-                title="Organization Hierarchy"
-              />
-              <Step
-                // className="stepFour"
-                title="Access Details"
-              />
+              <Step title="Cost Center" />
+              <Step title="Organization Hierarchy" />
+              <Step title="Access Details" />
             </Steps>
           </Card>
 

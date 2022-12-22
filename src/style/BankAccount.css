@@ -58,44 +58,6 @@ body {
   background: #1963a6;
   color: #ffffff;
 }
-/* -----------CSS code used for document tag----------- */
-.tabs.ant-tabs {
-  width: 100%;
-}
-/* 
-.document-tap-div .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap {
-  background-color: #1963a6;
-  border-start-end-radius: 10px;
-  border-start-start-radius: 10px;
-  color: #ffffff;
-} */
-
-.document-tap-div .ant-card-body {
-  width:100%;
-  padding: 0px;
-}
-
-.idbutton {
-  margin-top: 10px;
-}
-
-.idselect .ant-modal-body {
-  margin: 0;
-}
-
-.certficationtable .ant-modal-body {
-  margin: 0;
-}
-
-.worktab .ant-modal-body {
-  margin: 0;
-}
-
-.tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: black;
-  font-size: 14px;
-  font-weight: 600;
-}
 
 /* --------------CSS code for IDTag------------ */
 .IDTags .ant-table-thead > tr > th {
@@ -149,20 +111,5 @@ body {
   line-height: 18px;
 }
 
-.hoverImgCont:hover .imageOverlay {
-  opacity: 0.5;
-}
 
-.imageOverlay {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  
-  /* height: 100%; */
-  /* width: 100%; */
-  opacity: 0;
-  transition: .3s ease;
-  background-color: black;
-}
+

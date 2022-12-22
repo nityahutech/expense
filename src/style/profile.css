@@ -6,4 +6,11 @@
   font-weight: 500;
 }
 
+.myProfileTabs .ant-tabs-nav {
+  margin-bottom: 0px;
+  margin-top: 10px;
+}
 
+.myProfile {
+  min-height: 100vh;
+}

@@ -5,7 +5,7 @@ import imageavailable from "../images/imageavailable.png";
 
 function ViewModal(props) {
   const modalData = props.modalData;
-  console.log("modalData", modalData);
+  // console.log("modalData", modalData);
   const logoImg = new Image();
   const [dimensions, setDimensions] = useState({ height: null, width: null });
 
@@ -187,32 +187,36 @@ function ViewModal(props) {
         </div>
       </Row>
 
-      <Divider />
-      <Row gutter={[50, 8]} style={{ marginTop: "17px", padding: "0 0" }}>
-        <Col xs={24} sm={22} md={18}>
-          <div>
-            <span
-              style={{
-                fontWeight: "600",
-                fontSize: "16px",
-                lineheight: "20px",
-              }}
-            >
-              Reason:
-            </span>
-            <span
-              style={{
-                fontSize: "14px",
-                lineHeight: "16px",
-                color: "red",
-                marginLeft: "10px",
-              }}
-            >
-              {modalData.reason}
-            </span>
-          </div>
-        </Col>
-      </Row>
+      {props.modalData.status == "Deactivated" ? (
+        <>
+          <Divider />
+          <Row gutter={[50, 8]} style={{ marginTop: "17px", padding: "0 0" }}>
+            <Col xs={24} sm={22} md={18}>
+              <div>
+                <span
+                  style={{
+                    fontWeight: "600",
+                    fontSize: "16px",
+                    lineheight: "20px",
+                  }}
+                >
+                  Reason:
+                </span>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    lineHeight: "16px",
+                    color: "red",
+                    marginLeft: "10px",
+                  }}
+                >
+                  {modalData.reason}
+                </span>
+              </div>
+            </Col>
+          </Row>
+        </>
+      ) : null}
     </div>
   );
 }

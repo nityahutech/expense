@@ -1,0 +1,109 @@
+.personalCardDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.personalCardDiv:hover .editButtonOne {
+    display: block !important;
+  }
+/* -------------code for the last card */
+.personalCardDivLast {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.personalCardDivLast:hover .editButtonLast {
+    display: block !important;
+  }
+
+  .editButtonLast{
+    color: #ffff;
+    top: 15px;
+    right: 0px;
+    position: absolute;
+    display: none;
+  }
+
+  .personalCardLast .ant-card-head {
+    border-radius: 10px 10px 0px 0px;
+    background: #1963a6;
+    color: #ffffff;
+  } 
+
+  .personalCardLast{
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 10px;
+    cursor: default;
+  }
+/* ------------------------------------ */
+.personalCardOne {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 10px;
+    cursor: default; 
+}
+
+.profileImagediv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Row-Card {
+    width: 75%;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.editButton {
+    color: #ffff;
+    display: none;
+    padding-top: 7px;
+    padding-right: 7px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.editButton .ant-card-head {
+    border-radius: 10px 10px 0px 0px;
+    background: #1963a6;
+    color: #ffffff;
+  }
+
+  .headerTitle {
+    display: flex;
+    justify-content: space-between;
+    font-weight: lighter;
+    font-size: 27px;
+    color: "black";
+    width: 100%;
+  }
+
+  .editButtonOne{
+    color:black;
+    display: none;
+}
+
+.hoverImgCont:hover .imageOverlay {
+  opacity: 0.5;
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  
+  /* height: 100%; */
+  /* width: 100%; */
+  opacity: 0;
+  transition: .3s ease;
+  background-color: black;
+}

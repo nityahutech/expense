@@ -24,7 +24,7 @@ import reload from "../images/reload.png";
 const { Option } = Select;
 
 const OrgDetails = (props) => {
-  console.log(props);
+  // console.log(props);
   const imgRef = React.useRef(null);
   const [fileName, setFileName] = useState(props.fileName || null);
   const [imageUrl, setImageUrl] = useState(props.fileName || "");
@@ -103,6 +103,11 @@ const OrgDetails = (props) => {
     setFileName(null);
   }
 
+  const onFinishFailed = (errorInfo) => {
+    props.setIsStepOneInvalid(true);
+    console.log("Failed:", errorInfo);
+  };
+
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select
@@ -144,6 +149,7 @@ const OrgDetails = (props) => {
         }}
         autoComplete="off"
         onFinish={(values) => props.changeSave(values, imageUrl)}
+        onFinishFailed={onFinishFailed}
       >
         <Row gutter={[24, 8]}>
           <Col xs={22} sm={15} md={8}>
@@ -151,11 +157,11 @@ const OrgDetails = (props) => {
               // initialValue={newCompId}
               name="preCode"
               label="Prefix Code"
-              // onKeyPress={(event) => {
-              //   if (checkNumbervalue(event) && checkAlphabetUpper(event)) {
-              //     event.preventDefault();
-              //   }
-              // }}
+              onKeyPress={(event) => {
+                if (checkNumbervalue(event) && checkAlphabetUpper(event)) {
+                  event.preventDefault();
+                }
+              }}
               rules={[
                 {
                   required: true,
@@ -527,7 +533,13 @@ const OrgDetails = (props) => {
             </Form.Item>
           </Col>
           <Col xs={22} sm={15} md={8}>
-            <Form.Item name="logo" className="uploadLogo">
+            <Form.Item
+              name="logo"
+              className="uploadLogo"
+              rules={[
+                { required: true, message: "Please Upload the Company Logo" },
+              ]}
+            >
               <div
                 style={{
                   border: "dashed #B9B9B9",

@@ -20,6 +20,7 @@ import {
 } from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
+import "./Personal.css";
 import moment from "moment";
 import {
   capitalize,
@@ -147,9 +148,11 @@ function Personal() {
     console.log(value, event);
   };
 
+  
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select
+      allowClear={true}
         showSearch
         bordered={false}
         style={{
@@ -170,6 +173,7 @@ function Personal() {
   const prefixSelector2 = (
     <Form.Item name="prefix2" noStyle>
       <Select
+      allowClear={true}
         showSearch
         bordered={false}
         style={{
@@ -280,7 +284,7 @@ function Personal() {
           style={{
             width: "150px",
             height: "170px",
-            border: "1px solid #05445e",
+            // border: "1px solid #05445e",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -298,12 +302,14 @@ function Personal() {
             alignItems: "center",
             justifyContent: "center",
             flexDirection: "column",
+            // border: "1px solid #05445e",
           }}
           onClick={(e) => handleClick(e)}
         >
           <input
             style={{
               display: "none",
+              // border: "1px solid #05445e",
             }}
             type="file"
             id="logo"
@@ -318,14 +324,19 @@ function Personal() {
       return (
         <div
           className={editContent === true ? "hoverImgCont" : null}
-          style={{ position: "relative", width: "150px", height: "170px" }}
+          style={{ 
+            position: "relative", 
+            width: "150px", 
+            height: "170px",
+            // border: "1px solid #05445e" 
+          }}
         >
           <img
             src={imageUrl}
             style={{
               width: "150px",
               height: "170px",
-              // border: "1px solid #05445e",
+              border: "1px solid #05445e",
             }}
           />
           {editContent === true ? (
@@ -338,24 +349,21 @@ function Personal() {
     }
   };
 
+  const disabledDate = (current) => {
+    return current.isAfter(moment().subtract(14, 'years'));
+  }
+
+  const checkNoAlphabets = (event) => {
+    if (!/^[0-9-/ ]*$/.test(event.key) && event.key !== "Backspace") {
+      return true;
+    }
+  };
+
   return (
     <>
-      <div
-        className="personalCardDiv"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <div className="personalCardDiv">
         <Row
           className="Row-Card"
-          style={{
-            width: "75%",
-            margin: "10px",
-            display: "flex",
-            alignItems: "center",
-          }}
         >
           <Col span={24}>
             <Form
@@ -368,31 +376,12 @@ function Personal() {
               layout="horizontal"
             >
               <Card
-                className="personal"
+                className="personalCardOne"
                 hoverable={true}
                 bordered={true}
-                style={{
-                  width: "100%",
-                  marginTop: 10,
-                  borderRadius: "10px",
-                  cursor: "default",
-                }}
               >
                 <Row gutter={[16, 16]}>
-                  <Col
-                    xs={24}
-                    sm={24}
-                    md={7}
-                    lg={6}
-                    xl={6}
-                    xxl={6}
-                    style={{
-                      display: "flex",
-                      alignItems: "start",
-                      justifyContent: "center",
-                      flexDirection: "column",
-                    }}
-                  >
+                  <Col className="profileImagediv" xs={24} sm={24} md={7} lg={6} xl={6} xxl={6} >
                     {isBigFile
                       ? message.error("File size must be less than 200Kb.")
                       : ""}
@@ -401,49 +390,29 @@ function Personal() {
                   <Col xs={24} sm={24} md={17} lg={18} xl={18} xxl={18}>
                     {editContent === false ? (
                       <>
-                        <div
+                        <div    
                           style={{
                             height: "100%",
                             width: "100%",
-                            // display: "flex",
-                            // alignItems: 'flex-start',
-
-                            // justifyContent: "flex-start",
-                            // flexDirection: "column",
                           }}
                         >
-                          <div
-                            style={{
-                              fontWeight: "lighter",
-                              fontSize: "27px",
-                              // marginTop:"-12px",
-                              color: "black",
-                            }}
-                          >
+                          <div className="headerTitle">
                             {data ? data.name : "-"}
                             <Button
-                              className="personal"
-                              type="text"
-                              style={{
-                                color: "black",
-                                display: "none",
-                                paddingLeft: "5px",
-                                position: "absolute",
-                                right: 1,
-                                top: 1,
-                              }}
-                              onClick={() => showEditContent(!editContent)}
-                            >
-                              <EditFilled />
+                                className="editButtonOne"
+                                type="text"
+                                onClick={() => showEditContent(!editContent)}
+                              >
+                                <EditFilled />
                             </Button>
-                            <Divider
+                          </div>
+                          <Divider
                               style={{
                                 borderTop: "1.5px solid #05445e",
                                 marginTop: "0px",
                                 marginBottom: "15px",
                               }}
                             />
-                          </div>
                           <Row>
                             <Col span={24}>
                               <Row gutter={[16, 16]}>
@@ -484,6 +453,7 @@ function Personal() {
                                       >
                                         {/* format={dateFormatList} */}
                                         <DatePicker
+                                        format="DD-MM-YYYY"
                                           style={{
                                             marginTop: "10px",
                                             width: "100%",
@@ -493,7 +463,7 @@ function Personal() {
                                           onChange={(e) => {
                                             setDob(e.format("DD-MM-YYYY"));
                                           }}
-                                          //  disabledDate={disabledDate}
+                                           disabledDate={(e) => disabledDate(e)}
                                           value={dob}
                                           placeholder="Choose Date"
                                         />
@@ -734,6 +704,7 @@ function Personal() {
                             <Form.Item
                               label="Date Of Birth::"
                               colon={true}
+                              
                               initialValue={
                                 dob ? moment(dob, "DD-MM-YYYY") : null
                               }
@@ -745,6 +716,11 @@ function Personal() {
                                 },
                               ]}
                               {...layoutDOB}
+                              onKeyPress={(event) => {
+                                if (checkNoAlphabets(event)) {
+                                  event.preventDefault();
+                                }
+                              }}
                             >
                               {/* format={dateFormatList} */}
                               <DatePicker
@@ -757,10 +733,11 @@ function Personal() {
                                 onChange={(e) => {
                                   setDob(e.format("DD-MM-YYYY"));
                                 }}
-                                //  disabledDate={disabledDate}
+                                 disabledDate={disabledDate}
                                 value={dob}
                                 placeholder="Choose Date"
                                 // bordered={false}
+                                format={'DD-MM-YYYY'}
                               />
                             </Form.Item>
                           </Col>
@@ -785,9 +762,11 @@ function Personal() {
                                   paddingLeft: "0px",
                                 }}
                                 bordered={false}
+                                allowClear={true}
                               >
                                 <Option value="Male">Male</Option>
                                 <Option value="Female">Female</Option>
+                                <Option value="Others">Others</Option>
                               </Select>
                             </Form.Item>
                           </Col>
@@ -796,6 +775,7 @@ function Personal() {
                               label="Blood Group::"
                               initialValue={data ? data.bloodGroup : null}
                               name="bloodGroup"
+                              
                               rules={[
                                 {
                                   required: false,
@@ -812,6 +792,7 @@ function Personal() {
                                   paddingLeft: "0px",
                                 }}
                                 bordered={false}
+                                allowClear={true}
                               >
                                 <Option value="A+">A+</Option>
                                 <Option value="A-">A-</Option>
@@ -835,6 +816,7 @@ function Personal() {
                                   message: "Your Marrige Status",
                                 },
                               ]}
+                              
                               {...layoutMaritalStatus}
                             >
                               <Select
@@ -844,6 +826,7 @@ function Personal() {
                                   paddingLeft: "0px",
                                 }}
                                 bordered={false}
+                                allowClear={true}
                               >
                                 <Option value="Single">Single</Option>
                                 <Option value="Married">Married</Option>
@@ -876,9 +859,7 @@ function Personal() {
                     >
                       <CloseOutlined /> CANCEL
                     </Button>
-
-                    <Col>
-                      <Button
+                    <Button
                         type="primary"
                         htmlType="submit"
                         style={{
@@ -889,8 +870,7 @@ function Personal() {
                       >
                         <CheckOutlined />
                         SAVE
-                      </Button>
-                    </Col>
+                    </Button>
                   </Row>
                 ) : null}
               </Card>
@@ -899,23 +879,8 @@ function Personal() {
         </Row>
       </div>
 
-      <div
-        className="personalCardDiv"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Row
-          className="Row-Card"
-          style={{
-            width: "75%",
-            margin: "10px",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
+      <div className="personalCardDiv">
+        <Row className="Row-Card">
           <Col span={24}>
             <Form
               // form={form}
@@ -1005,6 +970,7 @@ function Personal() {
                           ]}
                         >
                           <Input
+                          maxLength={50}
                             style={{
                               marginTop: "10px",
                               width: "100%",
@@ -1054,6 +1020,7 @@ function Personal() {
                           ]}
                         >
                           <Input
+                          maxLength={50}
                             style={{
                               marginTop: "10px",
                               width: "100%",
@@ -1203,22 +1170,9 @@ function Personal() {
         </Row>
       </div>
 
-      <div
-        className="personalCardDiv"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <div className="personalCardDivLast">
         <Row
           className="Row-Card"
-          style={{
-            width: "75%",
-            margin: "10px",
-            display: "flex",
-            alignItems: "center",
-          }}
         >
           <Col span={24}>
             <Form
@@ -1237,24 +1191,15 @@ function Personal() {
             >
               <Card
                 title="ADDRESS"
-                className="personal"
+                className="personalCardLast"
                 hoverable={true}
                 bordered={true}
                 extra={
                   <>
                     {editAddressInfo === false ? (
                       <Button
-                        className="personal"
+                        className="editButtonLast"
                         type="text"
-                        style={{
-                          color: "#ffff",
-                          display: "none",
-                          paddingTop: "7px",
-                          paddingRight: "7px",
-                          position: "absolute",
-                          right: 10,
-                          top: 10,
-                        }}
                         onClick={() => showEditAddressInfo(!editAddressInfo)}
                       >
                         <EditFilled />
@@ -1305,11 +1250,12 @@ function Personal() {
                           ]}
                         >
                           <TextArea
+                          maxLength={150}
                             style={{ marginTop: "10px" }}
                             // value={value}
                             // onChange={e => setValue(e.target.value)}
                             placeholder="Enter Address in Details"
-                            autoSize={{ minRows: 3, maxRows: 5 }}
+                            autoSize={{ minRows: 3, maxRows: 7 }}
                           />
                         </Form.Item>
                       )}
@@ -1350,11 +1296,12 @@ function Personal() {
                           ]}
                         >
                           <TextArea
+                          maxLength={150}
                             style={{ marginTop: "10px" }}
                             // value={value}
                             // onChange={e => setValue(e.target.value)}
                             placeholder="Enter Address in Details"
-                            autoSize={{ minRows: 3, maxRows: 5 }}
+                            autoSize={{ minRows: 3, maxRows: 7 }}
                           />
                         </Form.Item>
                       )}
@@ -1402,7 +1349,9 @@ function Personal() {
                           //defaultValue = {data?data.fname+" "+data.lname:null}
                       /> */}
                           <Select
-                            placeholder="Select Your HouseType"
+                            defaultValue=""
+                            placeholder="Please Select House Type"
+                            allowClear={true}
                             style={{
                               marginTop: "10px",
                               width: "100%",
@@ -1540,8 +1489,7 @@ function Personal() {
                       <CloseOutlined />
                       CANCEL
                     </Button>
-                    <Col>
-                      <Button
+                    <Button
                         type="primary"
                         htmlType="submit"
                         style={{
@@ -1552,8 +1500,7 @@ function Personal() {
                       >
                         <CheckOutlined />
                         SAVE
-                      </Button>
-                    </Col>
+                    </Button>
                   </Row>
                 ) : null}
               </Card>

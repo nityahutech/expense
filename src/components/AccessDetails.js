@@ -27,7 +27,8 @@ import "../style/Onboarding.css";
 
 const { Option } = Select;
 
-function AccessDetails() {
+function AccessDetails(props) {
+  // console.log(props);
   const [addAccess, setAddAccess] = useState(false);
   const [accessList, setAccessList] = useState([]);
   const [orgHier, setOrgHier] = useState([]);
@@ -133,6 +134,7 @@ function AccessDetails() {
         ...values,
         dob: values.dob?._isValid ? values.dob.format(dateFormat) : null,
         doj: values.doj?._isValid ? values.doj.format(dateFormat) : null,
+        empId: values.empId?._isValid ? values.empId : null,
       },
     ];
     console.log(temp);
@@ -238,6 +240,11 @@ function AccessDetails() {
     return temp;
   };
 
+  const generateEmpCode = () => {
+    // console.log(props.preCode);
+    let res = accessList.length + 1;
+    return props.preCode + ("00" + res.toString()).slice(-3);
+  };
   return (
     <>
       {accessList != 0
@@ -1646,6 +1653,7 @@ function AccessDetails() {
                   style={{ background: "#FAFAFA" }}
                 >
                   <Form.Item
+                    initialValue={generateEmpCode()}
                     className="userLabel"
                     name="empId"
                     label="Employee ID::"
@@ -2075,6 +2083,7 @@ function AccessDetails() {
                 onClick={() => {
                   if (addAccess) {
                     form.submit();
+                    return;
                   }
                   setAddAccess(!addAccess);
                 }}

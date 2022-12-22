@@ -398,123 +398,127 @@ function ExpenseList() {
   return (
     <Layout>
       <Content>
-        <Row
-          className="row"
-          gutter={[0, 8]}
-          style={{ marginBottom: "0rem", marginTop: "1.5rem" }}
-        >
-          <Col xs={22} sm={10} md={8} lg={6}>
-            <Input
-              placeholder="Search"
-              prefix={<SearchOutlined />}
-              onChange={searchChange}
-              style={{ width: "95%" }}
-            />
-          </Col>
-          <Col xs={22} sm={10} md={8} lg={6}>
-            <RangePicker
-              defaultValue={[]}
-              format={dateFormat}
-              style={{ width: "95%" }}
-              onChange={onChange}
-            />
-          </Col>
-          <Col
-            xs={22}
-            sm={10}
-            md={8}
-            lg={6}
-            style={{
-              fontWeight: "bold",
-              textAlign: "center",
-              fontSize: "1.1rem",
-            }}
+        <div className="expenseListDiv">
+          <Row
+            className="row"
+            gutter={[0, 8]}
+            style={{ marginBottom: "0rem", marginTop: "1.5rem" }}
           >
-            Total: {total}
-          </Col>
-          {/* <Col xs={22} sm={10} md={6}>
-            <Select
-              showSearch
-              defaultValue="Choose Expense Name"
-              optionFilterProp="children"
-              onChange={onSelect}
-              style={{ cursor: "pointer", width: "95%" }}
-              // onSearch={onSearch}
-              filterOption={(input, option) =>
-                option.children.toLowerCase().includes(input.toLowerCase())
-              }
-              className="category"
-            >
-              <Option value="food">Food</Option>
-              <Option value="water">Water</Option>
-              <Option value="all">All Category</Option>
-            </Select>
-          </Col> */}
-          {/* <Col flex={"1"}>
-            <Space wrap>
-              {
-                <Select
-                  showSearch
-                  defaultValue="Choose Status"
-                  optionFilterProp="children"
-                  onChange={onChoose}
-                  style={{ cursor: "pointer" }}
-                  // onSearch={onSearch}
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().includes(input.toLowerCase())
-                  }
-                >
-                  <Option value="paid">Paid</Option>
-                  <Option value="unpaid">Unpaid</Option>
-                  <Option value="all">All Status</Option>
-                </Select>
-              }
-            </Space>
-          </Col> */}
-          <Col>
-            <Button
-              // className="addExpense"
-              type="primary"
-              // onClick={handleAddNewExpense}
-              onClick={handlePrint}
+            <Col xs={22} sm={10} md={8} lg={6}>
+              <Input
+                placeholder="Search"
+                prefix={<SearchOutlined />}
+                onChange={searchChange}
+                style={{ width: "95%" }}
+              />
+            </Col>
+            <Col xs={22} sm={10} md={8} lg={6}>
+              <RangePicker
+                defaultValue={[]}
+                format={dateFormat}
+                style={{ width: "95%" }}
+                onChange={onChange}
+              />
+            </Col>
+            <Col
+              xs={22}
+              sm={10}
+              md={8}
+              lg={6}
               style={{
-                width: "95%",
-                borderRadius: "5px",
-                background: "#1963A6",
+                fontWeight: "bold",
+                textAlign: "center",
+                fontSize: "1.1rem",
               }}
             >
-              Print
-            </Button>
-          </Col>
+              Total: {total}
+            </Col>
+            {/* <Col xs={22} sm={10} md={6}>
+              <Select
+                showSearch
+                defaultValue="Choose Expense Name"
+                optionFilterProp="children"
+                onChange={onSelect}
+                style={{ cursor: "pointer", width: "95%" }}
+                // onSearch={onSearch}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().includes(input.toLowerCase())
+                }
+                className="category"
+              >
+                <Option value="food">Food</Option>
+                <Option value="water">Water</Option>
+                <Option value="all">All Category</Option>
+              </Select>
+            </Col> */}
+            {/* <Col flex={"1"}>
+              <Space wrap>
+                {
+                  <Select
+                    showSearch
+                    defaultValue="Choose Status"
+                    optionFilterProp="children"
+                    onChange={onChoose}
+                    style={{ cursor: "pointer" }}
+                    // onSearch={onSearch}
+                    filterOption={(input, option) =>
+                      option.children.toLowerCase().includes(input.toLowerCase())
+                    }
+                  >
+                    <Option value="paid">Paid</Option>
+                    <Option value="unpaid">Unpaid</Option>
+                    <Option value="all">All Status</Option>
+                  </Select>
+                }
+              </Space>
+            </Col> */}
+            <Col>
+              <Button
+                // className="addExpense"
+                type="primary"
+                // onClick={handleAddNewExpense}
+                onClick={handlePrint}
+                style={{
+                  width: "95%",
+                  borderRadius: "5px",
+                  background: "#1963A6",
+                }}
+              >
+                Print
+              </Button>
+            </Col>
 
-          <Col xs={22} sm={10} md={6} lg={4}>
-            <Button
-              className="addExpense"
-              type="primary"
-              onClick={handleAddNewExpense}
-              style={{
-                width: "95%",
-                borderRadius: "5px",
-                background: "#1963A6",
-              }}
-            >
-              + Add New Expenses
-            </Button>
-          </Col>
-        </Row>
-        <div style={{ padding: "10px 0px" }}></div>
-        <Table
-          loading={loading}
-          columns={columns}
-          dataSource={filterExpenses}
-          //    rowSelection={rowSelection}
-          pagination={{
-            position: ["bottomCenter"],
-          }}
-          className="expenseTable"
-          scroll={{ x: 1300 }}
-          //   onChange={onSort}
-        />
+            <Col xs={22} sm={10} md={6} lg={4}>
+              <Button
+                className="addExpense"
+                type="primary"
+                onClick={handleAddNewExpense}
+                style={{
+                  width: "95%",
+                  borderRadius: "5px",
+                  background: "#1963A6",
+                }}
+              >
+                + Add New Expenses
+              </Button>
+            </Col>
+          </Row>
+       
+        <div className="expenseTable">
+          <Table
+            className="expenseTable"
+            loading={loading}
+            columns={columns}
+            dataSource={filterExpenses}
+            //    rowSelection={rowSelection}
+            pagination={{
+              position: ["bottomCenter"],
+            }}  
+            scroll={{ x: 1300 }}
+            //   onChange={onSort}
+          />
+          </div>
+        </div>
       </Content>
       {/* <Editexpense record={editedRecord} /> */}
       <Modal

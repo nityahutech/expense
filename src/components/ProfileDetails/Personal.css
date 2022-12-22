@@ -21,10 +21,10 @@
 
   .editButtonLast{
     color: #ffff;
-    display: none;
-    padding-top: 0px; 
-    padding-right: 0px;
+    top: 15px;
+    right: 0px;
     position: absolute;
+    display: none;
   }
 
   .personalCardLast .ant-card-head {
@@ -54,14 +54,6 @@
     flex-direction: column;
 }
 
-.editButtonOne{
-    color:black;
-    display: none;
-    padding-left: 5px;
-    position: absolute;
-
-}
-
 .Row-Card {
     width: 75%;
     margin: 10px;
@@ -83,3 +75,35 @@
     background: #1963a6;
     color: #ffffff;
   }
+
+  .headerTitle {
+    display: flex;
+    justify-content: space-between;
+    font-weight: lighter;
+    font-size: 27px;
+    color: "black";
+    width: 100%;
+  }
+
+  .editButtonOne{
+    color:black;
+    display: none;
+}
+
+.hoverImgCont:hover .imageOverlay {
+  opacity: 0.5;
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  
+  /* height: 100%; */
+  /* width: 100%; */
+  opacity: 0;
+  transition: .3s ease;
+  background-color: black;
+}

@@ -284,7 +284,7 @@ function Personal() {
           style={{
             width: "150px",
             height: "170px",
-            border: "1px solid #05445e",
+            // border: "1px solid #05445e",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -302,12 +302,14 @@ function Personal() {
             alignItems: "center",
             justifyContent: "center",
             flexDirection: "column",
+            // border: "1px solid #05445e",
           }}
           onClick={(e) => handleClick(e)}
         >
           <input
             style={{
               display: "none",
+              // border: "1px solid #05445e",
             }}
             type="file"
             id="logo"
@@ -322,14 +324,19 @@ function Personal() {
       return (
         <div
           className={editContent === true ? "hoverImgCont" : null}
-          style={{ position: "relative", width: "150px", height: "170px" }}
+          style={{ 
+            position: "relative", 
+            width: "150px", 
+            height: "170px",
+            // border: "1px solid #05445e" 
+          }}
         >
           <img
             src={imageUrl}
             style={{
               width: "150px",
               height: "170px",
-              // border: "1px solid #05445e",
+              border: "1px solid #05445e",
             }}
           />
           {editContent === true ? (
@@ -387,30 +394,17 @@ function Personal() {
                           style={{
                             height: "100%",
                             width: "100%",
-                            // display: "flex",
-                            // alignItems: 'flex-start',
-
-                            // justifyContent: "flex-start",
-                            // flexDirection: "column",
                           }}
                         >
-                          <div
-                            style={{
-                              fontWeight: "lighter",
-                              fontSize: "27px",
-                              // marginTop:"-12px",
-                              color: "black",
-                            }}
-                          >
+                          <div className="headerTitle">
                             {data ? data.name : "-"}
                             <Button
-                              className="editButtonOne"
-                              type="text"
-                              onClick={() => showEditContent(!editContent)}
-                            >
-                              <EditFilled />
+                                className="editButtonOne"
+                                type="text"
+                                onClick={() => showEditContent(!editContent)}
+                              >
+                                <EditFilled />
                             </Button>
-                            
                           </div>
                           <Divider
                               style={{

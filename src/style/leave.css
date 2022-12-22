@@ -229,6 +229,10 @@ margin: 10px 0;
       /* width: 220px; */
     }
 
+    .leavePageDiv {
+      min-height: 100vh
+    }
+
     @media only screen and (max-width: 600px){
       .approvalConfig{
     overflow-x: scroll;

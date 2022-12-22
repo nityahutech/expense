@@ -194,25 +194,26 @@ display: flex;
     margin-left: 51px;
  }
 
+ .stepOneError .ant-steps-item-icon {
+   background: #ff0000 !important;
+   border-color: #ff0000;
+ }
+
  .stepOne .ant-steps-item-tail::after {
     margin-top: 25px;
     margin-left: 50px;
  }
 
- /* .stepOne .ant-steps-item-icon {
-   background: #F9A01F;
-   border-color: #F9A01F;
-}  */
-
 .ant-steps-item-process .ant-steps-item-container  .ant-steps-item-icon {
-   background: #F9A01F !important ;
-   border-color: #F9A01F !important;
+   background: #F9A01F ;
+   border-color: #F9A01F;
 }
 
 .ant-steps-item-finish .ant-steps-item-icon {
    background-color: #1890ff;
    border-color: #1890ff;
 }
+
 .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
    color: #ffff;
 }
@@ -374,7 +375,7 @@ color: rgba(0,0,0,0.54);
  .stepBars .anticon{
    display: none;
  }
- 
+
 @media (max-width: 850px) and (max-width: 5750px){
    .ant-steps{
       display: grid;

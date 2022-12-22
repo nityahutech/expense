@@ -104,6 +104,7 @@ const OrgDetails = (props) => {
   }
 
   const onFinishFailed = (errorInfo) => {
+    props.setIsStepOneInvalid(true);
     console.log("Failed:", errorInfo);
   };
 

@@ -48,6 +48,7 @@ function Onboarding() {
   const [data, setData] = useState({});
   const [fileName, setFileName] = useState("");
   const [reason, setReason] = useState("");
+  const [isStepOneInvalid, setIsStepOneInvalid] = useState(false);
   const navigate = useNavigate();
 
   const saveOrgDetails = (values, imageUrl) => {
@@ -413,6 +414,7 @@ function Onboarding() {
       },
     });
   };
+
   console.log(fileName);
   return (
     <>
@@ -541,6 +543,7 @@ function Onboarding() {
               // }}
             >
               <Step
+                className={isStepOneInvalid ? "stepOneError" : ""}
                 // className="stepOne"
                 title="Organization Details"
               />
@@ -597,6 +600,7 @@ function Onboarding() {
                 fileName={fileName}
                 changeSave={saveOrgDetails}
                 form={form}
+                setIsStepOneInvalid={setIsStepOneInvalid}
               />
             )}
             <Divider />
@@ -641,6 +645,7 @@ function Onboarding() {
                         form.submit();
                         return;
                       }
+                      setIsStepOneInvalid(false);
                       setProgress(progress + 1);
                     } else {
                       createCompany();

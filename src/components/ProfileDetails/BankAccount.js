@@ -1,18 +1,38 @@
 import { useState, useEffect } from "react";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
-import { Card, Row, Col, Input, Button, Form, Select, Divider, Modal } from "antd";
-import { EditFilled, CloseOutlined, CheckOutlined, DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import {
+  Card,
+  Row,
+  Col,
+  Input,
+  Button,
+  Form,
+  Select,
+  Divider,
+  Modal,
+} from "antd";
+import {
+  EditFilled,
+  CloseOutlined,
+  CheckOutlined,
+  DeleteOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 import "../../style/BankAccount.css";
 import FormItem from "antd/es/form/FormItem";
 import CompanyProContext from "../../contexts/CompanyProContext";
-import { capitalize, checkAlphabets, checkNumbervalue } from "../../contexts/CreateContext";
-import { arrayUnion } from "firebase/firestore";
+import {
+  capitalize,
+  checkAlphabets,
+  checkNumbervalue,
+} from "../../contexts/CreateContext";
+import { arrayUnion, deleteDoc } from "firebase/firestore";
 function BankAccount() {
   const [form] = Form.useForm();
   const [editBankForm] = Form.useForm();
   const [addBankForm] = Form.useForm();
   const [editContent, showEditContent] = useState(false);
-  const compId = sessionStorage.getItem("compId")
+  const compId = sessionStorage.getItem("compId");
   const [data, setData] = useState("");
   const [editBank, setEditBank] = useState([false]);
   const [bankList, setBankList] = useState([]);
@@ -41,7 +61,7 @@ function BankAccount() {
     console.log(data);
     setData(data);
     setBankList(data?.bank || []);
-    setEditBank([...data?.bank].fill(false))
+    setEditBank([...data?.bank].fill(false));
   };
 
   function onEditBank(values) {
@@ -54,27 +74,47 @@ function BankAccount() {
       branch: values.branch,
       accountNo: values.accountNo,
     };
-    let old = bankList[editBank.indexOf(true)]
-    CompanyProContext.editCompInfo(compId, { bank: old }, { bank: record });
-    editBankForm.resetFields();
+    let temp = [...bankList];
+    let i = editBank.indexOf(true);
+    temp[i] = record;
+
+    console.log(currentUser.uid, { bank: temp });
+
+    EmpInfoContext.updateEduDetails(currentUser.uid, { bank: temp }).then(
+      (res) => {
+        getData();
+      }
+    );
+    // let old = bankList[editBank.indexOf(true)];
+    // EmpInfoContext.editBankInfo(
+    //   currentUser.uid,
+    //   { bank: old },
+    //   { bank: record }
+    // );
+    // editBankForm.resetFields();
     setEditBank(editBank.fill(false));
-    const timer = setTimeout(() => getData(), 600)
-    return () => clearTimeout(timer)
+    // const timer = setTimeout(() => getData(), 600);
+    // return () => clearTimeout(timer);
   }
 
   const onDeleteBank = (record) => {
-    console.log("hey",record)
+    console.log("hey", record);
     Modal.confirm({
       title: "Are you sure, you want to delete Bank Account?",
       okText: "Yes",
       okType: "danger",
 
       onOk: () => {
-      EmpInfoContext.deleteCompInfo(compId,{bank: record})
-        .then((response)=>{
-          getData();
-        })
-        .catch((error)=>{ })
+        let temp = [...bankList];
+        // delete temp[record];
+        temp.splice(record, 1);
+        console.log(currentUser.uid, { bank: temp });
+
+        EmpInfoContext.updateEduDetails(currentUser.uid, { bank: temp }).then(
+          (res) => {
+            getData();
+          }
+        );
       },
     });
   };
@@ -89,9 +129,9 @@ function BankAccount() {
       branch: values.branch,
       accountNo: values.accountNo,
     };
-    let record = [...bankList, rec]
-    console.log(values)
-    EmpInfoContext.updateEduDetails(currentUser.uid, { bank: record});
+    let record = [...bankList, rec];
+    console.log(values);
+    EmpInfoContext.updateEduDetails(currentUser.uid, { bank: record });
     // CompanyProContext.addCompInfo(compId, { bank: record });
     addBankForm.resetFields();
     getData();
@@ -471,51 +511,10 @@ function BankAccount() {
                           </FormItem>
                         )}
                       </Col>
-                      <Col xs={22} sm={15} md={1}
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "end",
-                        }}
-                      >{editBank[i] == false ? (
-                        <Button
-                          style={{
-                            width: "10px",
-                            border: "none",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "end",
-                          }}
-                          onClick={() => {
-                            let array = [...editBank].fill(false);
-                            setEditBank([...array]);
-                            const timer = setTimeout(() => {
-                              editBankForm.resetFields();
-                              array[i] = true;
-                              setEditBank(array);
-                            }, 200)
-                            return () => clearTimeout(timer);
-                          }}
-                        >
-                          <EditFilled />
-                        </Button>) : (<Button
-                          style={{
-                            width: "10px",
-                            border: "none",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "end",
-                          }}
-                          onClick={() => {
-                            onDeleteBank(u);
-                          }}
-                        >
-                          <DeleteOutlined />
-                        </Button>)}
-
-                      </Col>
-                      <Divider style={{ margin: "0px" }} />
-                      <Col xs={22} sm={15} md={8}>
+                    </Row>
+                    <Row gutter={[8, 16]}>
+                      <Divider />
+                      <Col xs={22} sm={15} md={9}>
                         <div className="div-discription">Bank Name</div>
                         {editBank[i] === false ? (
                           <div>{u?.bankName ? u.bankName : "-"}</div>
@@ -536,7 +535,7 @@ function BankAccount() {
                               bordered={false}
                               maxLength={25}
                               style={{
-                                width: "100%",
+                                width: "80%",
                                 borderBottom: "1px solid #ccc ",
                                 paddingLeft: "0px",
                                 marginTop: "10px",
@@ -545,7 +544,7 @@ function BankAccount() {
                           </FormItem>
                         )}
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={22} sm={15} md={9}>
                         <div className="div-discription">City</div>
                         {editBank[i] === false ? (
                           <div>{u?.city ? u.city : "-"}</div>
@@ -566,7 +565,7 @@ function BankAccount() {
                               bordered={false}
                               maxLength={25}
                               style={{
-                                width: "100%",
+                                width: "80%",
                                 borderBottom: "1px solid #ccc ",
                                 paddingLeft: "0px",
                                 marginTop: "10px",
@@ -575,12 +574,10 @@ function BankAccount() {
                           </FormItem>
                         )}
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={22} sm={15} md={5}>
                         <div className="div-discription">Branch Name</div>
                         {editBank[i] === false ? (
-                          <div>
-                            {u?.branch ? u.branch : "-"}
-                          </div>
+                          <div>{u?.branch ? u.branch : "-"}</div>
                         ) : (
                           <FormItem
                             name="branch"
@@ -607,7 +604,56 @@ function BankAccount() {
                           </FormItem>
                         )}
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col
+                        xs={22}
+                        sm={15}
+                        md={1}
+                        // style={{
+                        //   display: "flex",
+                        //   justifyContent: "center",
+                        //   alignItems: "end",
+                        // }}
+                      >
+                        {editBank[i] == false ? (
+                          <Button
+                            style={{
+                              width: "10px",
+                              border: "none",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "end",
+                            }}
+                            onClick={() => {
+                              let array = [...editBank].fill(false);
+                              setEditBank([...array]);
+                              const timer = setTimeout(() => {
+                                editBankForm.resetFields();
+                                array[i] = true;
+                                setEditBank(array);
+                              }, 200);
+                              return () => clearTimeout(timer);
+                            }}
+                          >
+                            <EditFilled />
+                          </Button>
+                        ) : (
+                          <Button
+                            style={{
+                              width: "10px",
+                              border: "none",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "end",
+                            }}
+                            onClick={() => {
+                              onDeleteBank(i);
+                            }}
+                          >
+                            <DeleteOutlined />
+                          </Button>
+                        )}
+                      </Col>
+                      <Col xs={22} sm={15} md={9}>
                         <div className="div-discription">IFSC Code</div>
                         {editBank[i] === false ? (
                           <div>{u?.ifsc ? u.ifsc : "-"}</div>
@@ -628,7 +674,7 @@ function BankAccount() {
                               placeholder="IFSC Code"
                               bordered={false}
                               style={{
-                                width: "100%",
+                                width: "80%",
                                 borderBottom: "1px solid #ccc ",
                                 paddingLeft: "0px",
                                 marginTop: "10px",
@@ -637,12 +683,10 @@ function BankAccount() {
                           </FormItem>
                         )}
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={22} sm={15} md={9}>
                         <div className="div-discription">Account Type</div>
                         {editBank[i] === false ? (
-                          <div>
-                            {u?.accountType ? u.accountType : "-"}
-                          </div>
+                          <div>{u?.accountType ? u.accountType : "-"}</div>
                         ) : (
                           <FormItem
                             name="accountType"
@@ -657,7 +701,7 @@ function BankAccount() {
                             <Select
                               defaultValue="Current Type"
                               style={{
-                                width: "100%",
+                                width: "80%",
                                 borderBottom: "1px solid #ccc ",
                                 paddingLeft: "0px",
                                 marginTop: "10px",
@@ -681,11 +725,20 @@ function BankAccount() {
                           </FormItem>
                         )}
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={22} sm={15} md={6}>
                         <div className="div-discription">Account Number</div>
                         {editBank[i] === false ? (
                           <div>
-                            {u?.accountNo ? u.accountNo : "-"}
+                            {u?.accountNo
+                              ? [
+                                  ...new Array(u?.accountNo?.length - 4)?.fill(
+                                    "X"
+                                  ),
+                                  u?.accountNo?.slice(-4),
+                                ]
+                                  ?.toString()
+                                  ?.replaceAll(",", "")
+                              : "-"}
                           </div>
                         ) : (
                           <FormItem
@@ -704,7 +757,7 @@ function BankAccount() {
                               placeholder="Account Number"
                               bordered={false}
                               style={{
-                                width: "100%",
+                                width: "85%",
                                 borderBottom: "1px solid #ccc ",
                                 paddingLeft: "0px",
                                 marginTop: "10px",
@@ -722,7 +775,6 @@ function BankAccount() {
                     <Button
                       type="text"
                       onClick={() => setEditBank([...editBank].fill(false))}
-
                     >
                       CANCEL
                     </Button>
@@ -746,21 +798,21 @@ function BankAccount() {
                   </Button>
                 ) : (
                   <Form
-                      labelcol={{
-                        span: 24,
-                      }}
-                      wrappercol={{
-                        span: 24,
-                      }}
-                      initialValues={{
-                        remember: true,
-                      }}
-                      autoComplete="off"
-                      onFinish={onAddBank}
-                      form={addBankForm}
-                      layout="vertical"
-                    >
-                  <Row gutter={[16,16]}>
+                    labelcol={{
+                      span: 24,
+                    }}
+                    wrappercol={{
+                      span: 24,
+                    }}
+                    initialValues={{
+                      remember: true,
+                    }}
+                    autoComplete="off"
+                    onFinish={onAddBank}
+                    form={addBankForm}
+                    layout="vertical"
+                  >
+                    <Row gutter={[16, 16]}>
                       <Col xs={24} sm={24} md={24}>
                         <FormItem
                           label="Account Title"
@@ -949,7 +1001,10 @@ function BankAccount() {
                           />
                         </FormItem>
                       </Col>
-                      <Col xs={24} sm={24} md={24}
+                      <Col
+                        xs={24}
+                        sm={24}
+                        md={24}
                         style={{ display: "flex", justifyContent: "flex-end" }}
                       >
                         <FormItem>
@@ -964,15 +1019,19 @@ function BankAccount() {
                           </Button>
                           <Button
                             type="primary"
-                            onClick={() => { console.log("add"); addBankForm.submit(); setAddBank(false) }}
+                            onClick={() => {
+                              console.log("add");
+                              addBankForm.submit();
+                              setAddBank(false);
+                            }}
                             style={{ background: "#1963A6", width: "90px" }}
                           >
                             <CheckOutlined />
                             SAVE
                           </Button>
                         </FormItem>
-                      </Col>                 
-                  </Row>
+                      </Col>
+                    </Row>
                   </Form>
                 )}
               </Form>

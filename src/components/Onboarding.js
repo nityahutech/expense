@@ -48,6 +48,7 @@ function Onboarding() {
   const [data, setData] = useState({});
   const [fileName, setFileName] = useState("");
   const [reason, setReason] = useState("");
+  const [isStepOneInvalid, setIsStepOneInvalid] = useState(false);
   const navigate = useNavigate();
 
   const saveOrgDetails = (values, imageUrl) => {
@@ -56,7 +57,10 @@ function Onboarding() {
     localStorage.setItem("OrgDetails", JSON.stringify(values));
     localStorage.setItem("Logo", imageUrl);
     getOrgData();
+    setProgress(progress + 1);
+    setIsStepOneInvalid(false);
   };
+  console.log(form);
 
   const getData = async () => {
     let data = await CompanyProContext.getAllCompany();
@@ -76,7 +80,8 @@ function Onboarding() {
     setFileName(localStorage.getItem("Logo"));
   };
 
-  const createCompany = () => {
+  const createCompany = async () => {
+    let orgcode = await CompanyProContext.getOrgId();
     let temp = localStorage.getItem("costCenters");
     let costCenters = temp || temp != "[]" ? JSON.parse(temp) : [];
     let temp1 = localStorage.getItem("OrgAccess");
@@ -95,7 +100,7 @@ function Onboarding() {
       },
       corpOffice: {},
       cinNumber: data.cinNumber,
-      gst: data.gst,
+      gst: data.gst || null,
       domain: data.domain,
       phone: data.phone,
       accessList: [],
@@ -108,7 +113,7 @@ function Onboarding() {
       deparments: orgHier == null ? [] : orgHier,
       status: "Deactivated",
     };
-    CompanyProContext.createCompInfo(data.orgcode, value, fileName, accessList)
+    CompanyProContext.createCompInfo(orgcode, value, fileName, accessList)
       .then((response) => {
         notification.open({
           message: "Creating Company",
@@ -216,6 +221,7 @@ function Onboarding() {
   const progressBar = (value) => {
     if (progress == 0) {
       form.submit();
+      return;
     }
     setProgress(value);
   };
@@ -410,6 +416,7 @@ function Onboarding() {
       },
     });
   };
+
   console.log(fileName);
   return (
     <>
@@ -538,21 +545,13 @@ function Onboarding() {
               // }}
             >
               <Step
+                className={isStepOneInvalid ? "stepOneError" : ""}
                 // className="stepOne"
                 title="Organization Details"
               />
-              <Step
-                // className="stepTwo"
-                title="Cost Center"
-              />
-              <Step
-                // className="stepThree"
-                title="Organization Hierarchy"
-              />
-              <Step
-                // className="stepFour"
-                title="Access Details"
-              />
+              <Step title="Cost Center" />
+              <Step title="Organization Hierarchy" />
+              <Step title="Access Details" />
             </Steps>
           </Card>
 
@@ -594,6 +593,7 @@ function Onboarding() {
                 fileName={fileName}
                 changeSave={saveOrgDetails}
                 form={form}
+                setIsStepOneInvalid={setIsStepOneInvalid}
               />
             )}
             <Divider />
@@ -631,11 +631,14 @@ function Onboarding() {
                     marginLeft: "10px",
                     backgroundColor: "rgb(25, 99, 166)",
                   }}
+                  // htmlType="submit"
                   onClick={async () => {
                     if (progress != 3) {
                       if (progress == 0) {
                         form.submit();
+                        return;
                       }
+                      setIsStepOneInvalid(false);
                       setProgress(progress + 1);
                     } else {
                       createCompany();

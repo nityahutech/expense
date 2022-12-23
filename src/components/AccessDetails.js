@@ -2083,6 +2083,7 @@ function AccessDetails(props) {
                 onClick={() => {
                   if (addAccess) {
                     form.submit();
+                    return;
                   }
                   setAddAccess(!addAccess);
                 }}

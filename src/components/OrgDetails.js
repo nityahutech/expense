@@ -107,6 +107,7 @@ const OrgDetails = (props) => {
     setFileName(null);
   }
 
+<<<<<<< HEAD
   const handleOnChange = (value, event) => {
     console.log(value, event);
   };
@@ -117,6 +118,13 @@ const OrgDetails = (props) => {
     });
   }, []);
 
+=======
+  const onFinishFailed = (errorInfo) => {
+    props.setIsStepOneInvalid(true);
+    console.log("Failed:", errorInfo);
+  };
+
+>>>>>>> 41cbb06da6681c3521c6f1e13d281786db7f3b3d
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select
@@ -167,6 +175,7 @@ const OrgDetails = (props) => {
         }}
         autoComplete="off"
         onFinish={(values) => props.changeSave(values, imageUrl)}
+        onFinishFailed={onFinishFailed}
       >
         <Row gutter={[24, 8]}>
           <Col xs={22} sm={15} md={8}>
@@ -550,7 +559,13 @@ const OrgDetails = (props) => {
             </Form.Item>
           </Col>
           <Col xs={22} sm={15} md={8}>
-            <Form.Item name="logo" className="uploadLogo">
+            <Form.Item
+              name="logo"
+              className="uploadLogo"
+              rules={[
+                { required: true, message: "Please Upload the Company Logo" },
+              ]}
+            >
               <div
                 style={{
                   border: "dashed #B9B9B9",

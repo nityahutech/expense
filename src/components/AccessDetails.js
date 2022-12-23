@@ -28,7 +28,6 @@ import "../style/Onboarding.css";
 const { Option } = Select;
 
 function AccessDetails(props) {
-  // console.log(props);
   const [addAccess, setAddAccess] = useState(false);
   const [accessList, setAccessList] = useState([]);
   const [orgHier, setOrgHier] = useState([]);
@@ -80,11 +79,18 @@ function AccessDetails(props) {
     let temp = localStorage.getItem("OrgAccess");
     if (!temp) {
       localStorage.setItem("OrgAccess", "[]");
+      props.setIsStepFourInvalid(true);
       return;
     }
-    setAccessList(JSON.parse(temp));
-    let array = [...temp];
+    let t = JSON.parse(temp)
+    console.log(t, typeof(t))
+    setAccessList(t);
+    if (t.length == 0) {
+      console.log(true);props.setIsStepFourInvalid(true) }
+    else { console.log(false);props.setIsStepFourInvalid(false) }
+    let array = [...t]
     setEditAccess(array.fill(false));
+    console.log("len", array, t, t.length)
   };
 
   const checkAlphabet = (event) => {
@@ -184,12 +190,9 @@ function AccessDetails(props) {
         localStorage.setItem("OrgAccess", JSON.stringify(temp));
         showNotification("success", "Success", "Successfully deleted");
         setAccessList(temp);
+        getData();
       },
     });
-
-    // CompanyProContext.deleteCompInfo(delItem.id)
-    // .then((response) => {
-    //            })
   }
 
   const disabledDiv = () => {

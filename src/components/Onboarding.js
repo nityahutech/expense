@@ -43,14 +43,16 @@ function Onboarding() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditOrganization, setIsEditOrganization] = useState(false);
   const [data, setData] = useState({});
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState(null);
   const [isStepOneInvalid, setIsStepOneInvalid] = useState(false);
+  const [isStepFourInvalid, setIsStepFourInvalid] = useState(false);
   const navigate = useNavigate();
 
   const saveOrgDetails = (values, imageUrl) => {
     delete values.logo;
     localStorage.setItem("OrgDetails", JSON.stringify(values));
     localStorage.setItem("Logo", imageUrl);
+    setFileName(imageUrl)
     getOrgData();
     setProgress(progress + 1);
     setIsStepOneInvalid(false);
@@ -64,9 +66,7 @@ function Onboarding() {
   const getOrgData = async () => {
     let data = localStorage.getItem("OrgDetails");
     if (!data) {
-      let id = { orgcode: await CompanyProContext.getOrgId() };
-      localStorage.setItem("OrgDetails", JSON.stringify(id));
-      setData(id);
+      localStorage.setItem("OrgDetails", []);
       return;
     }
     console.log(JSON.parse(data));
@@ -75,6 +75,10 @@ function Onboarding() {
   };
 
   const createCompany = async () => {
+    if (isStepFourInvalid) {
+      showNotification("error", "Error", "Please save at least 1 admin user!");
+      return;
+    }
     let orgcode = await CompanyProContext.getOrgId();
     let temp = localStorage.getItem("costCenters");
     let costCenters = temp || temp != "[]" ? JSON.parse(temp) : [];
@@ -106,12 +110,14 @@ function Onboarding() {
       costCenters: costCenters == null ? [] : costCenters,
       deparments: orgHier == null ? [] : orgHier,
       status: "Deactivated",
+      reason: "First Activation Incomplete"
     };
+    console.log(orgcode, value, fileName, accessList)
     CompanyProContext.createCompInfo(orgcode, value, fileName, accessList)
       .then((response) => {
         notification.open({
           message: "Creating Company",
-          duration: 2,
+          duration: 3,
           icon: <LoadingOutlined />,
         });
         const timer = setTimeout(() => {
@@ -174,27 +180,6 @@ function Onboarding() {
         getData();
       },
     });
-    // status == "Deactivated"
-    //   ? Modal.confirm({
-    //       title: "Are you sure, you want to deactivate this record",
-    //       okText: "yes",
-    //       okType: "danger",
-
-    //       onOk: () => {
-    //         CompanyProContext.updateCompInfo(id, {
-    //           status: status == "Deactivated" ? "Activated" : "Deactivated",
-    //         });
-    //         showNotification(
-    //           "success",
-    //           "Updated",
-    //           `Organization status ${
-    //             status == "Deactivated" ? "activated" : "deactivated"
-    //           } Successfully`
-    //         );
-    //         getData();
-    //       },
-    //     })
-    //   : null;
   };
   const showModal = (record) => {
     setModalData(record);
@@ -204,12 +189,6 @@ function Onboarding() {
     setModalData(record);
     setIsEditOrganization(true);
   };
-  // const cancelOnboarding = () => {
-  //   setIsEditOrganization(false);
-  // };
-  // const handleCancel = () => {
-  //   setIsModalVisible(false);
-  // };
 
   const progressBar = (value) => {
     if (progress == 0) {
@@ -232,18 +211,11 @@ function Onboarding() {
       key: "regCompName",
       width: 200,
     },
-    // {
-    //   title: "Address",
-    //   dataIndex: "regOffice",
-    //   key: "address",
-    //   width: 250,
-    // },
     {
       title: "Status",
       key: "status",
       dataIndex: "status",
       width: 140,
-      // responsive: ["md"],
       render: (_, { status }) => getStatusUi(status),
     },
     {
@@ -259,14 +231,12 @@ function Onboarding() {
               <Col xs={22} sm={15} md={8}>
                 <Tooltip placement="bottom" title="View" color="#1963A6">
                   <Button
-                    // disabled={record.status == "Deactivated"}
                     style={{ width: "40px" }}
                     onClick={() => {
                       showModal(record);
                     }}
                   >
                     <EyeFilled
-                      // disabled={record.status == "Deactivated"}
                       style={{ color: "#268FEE", marginLeft: "-2px" }}
                     />
                   </Button>
@@ -294,12 +264,9 @@ function Onboarding() {
               </Col>
               <Col xs={22} sm={15} md={8}>
                 <Button
-                  // disabled={record.status == "Deactivated"}
                   style={{ width: "40px" }}
                   onClick={() => {
                     changeCompStatus(record.id, record.status);
-
-                    // console.log(record.reason);
                   }}
                 >
                   {record.status == "Deactivated" ? (
@@ -356,36 +323,16 @@ function Onboarding() {
             {status}
           </div>
         );
-      // case "Reactivate":
-      //   return (
-      //     <div style={{ display: "flex", flexDirection: "row" }}>
-      //       <div>
-      //         <img
-      //           src={reload}
-      //           style={{ color: "#1fca1f", marginRight: "6px" }}
-      //         />
-      //       </div>
-      //       {status}
-      //     </div>
-      //   );
       default:
         return null;
     }
   }
 
   const reset = () => {
-    form.resetFields();
-    Object.keys(data).map((field) => {
+    Object.keys({...data}).map((field) => {
       console.log(field);
-      if (field != "orgcode") {
-        CompanyProContext.getOrgId().then((res) =>
-          form.setFieldsValue({ orgcode: res })
-        );
-        return;
-      }
       form.setFieldsValue({ [`${field}`]: null });
     });
-    form.setFieldsValue({ addLine1: null });
     setActivetab("1");
     setData({});
     localStorage.removeItem("OrgDetails");
@@ -394,6 +341,8 @@ function Onboarding() {
     localStorage.removeItem("OrgAccess");
     localStorage.removeItem("Logo");
     setFileName(null);
+    setIsStepFourInvalid(false);
+    setIsStepOneInvalid(false);
     return;
   };
 
@@ -408,11 +357,9 @@ function Onboarding() {
       },
     });
   };
-
-  console.log(fileName);
+console.log(fileName)
   return (
     <>
-      {/* <div className="main"> */}
       <Tabs
         defaultActiveKey={activetab}
         className="mainTabs"
@@ -426,8 +373,6 @@ function Onboarding() {
             style={{
               background: "#fff",
               margin: "0px 15px 20px 15px",
-
-              // height: "55rem",
             }}
           >
             <div style={{ background: "#fff" }}>
@@ -530,40 +475,19 @@ function Onboarding() {
               current={progress}
               onChange={progressBar}
               className="stepBars"
-              // style={{
-              //   display: "grid",
-              //   gridAutoFlow: "column",
-              //   gridAutoColumns: "1fr",
-              // }}
             >
               <Step
                 className={isStepOneInvalid ? "stepOneError" : ""}
-                // className="stepOne"
                 title="Organization Details"
               />
               <Step title="Cost Center" />
               <Step title="Organization Hierarchy" />
-              <Step title="Access Details" />
+              <Step
+                className={isStepFourInvalid ? "stepOneError" : ""}
+                title="Access Details"
+              />
             </Steps>
           </Card>
-
-          {/* old code delete if you want to  */}
-          {/* <Card
-            style={{
-              background: "#fff",
-              margin: "0px 15px 20px 15px",
-
-              // height: "55rem",
-            }}
-          >
-            <Steps current={progress} onChange={progressBar}>
-              <Step title="Organization Details" />
-              <Step title="Cost Center" />
-              <Step title="Organization Hierarchy" />
-              <Step title="Access Details" />
-            </Steps>
-          </Card> */}
-          {/* old code delete if you want to  */}
           <Card
             style={{
               background: "#fff",
@@ -572,13 +496,12 @@ function Onboarding() {
               // height: "55rem",
             }}
           >
-            {console.log(data.preCode)}
             {progress == 1 ? (
               <CostCenter />
             ) : progress == 2 ? (
               <OrgHierTable />
             ) : progress == 3 ? (
-              <AccessDetails preCode={data.preCode} />
+              <AccessDetails preCode={data.preCode} setIsStepFourInvalid={setIsStepFourInvalid}/>
             ) : (
               <OrgDetails
                 data={data}

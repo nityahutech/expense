@@ -18,6 +18,9 @@ import {
   DeleteOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
+import {
+  getCountryCode,
+} from "../../contexts/CreateContext";
 import "../style/Onboarding.css";
 import CompanyProContext from "../contexts/CompanyProContext";
 import reload from "../images/reload.png";
@@ -29,6 +32,7 @@ const OrgDetails = (props) => {
   const [fileName, setFileName] = useState(props.fileName || null);
   const [imageUrl, setImageUrl] = useState(props.fileName || "");
   const [isBigFile, setIsBigFile] = useState(false);
+  const [codes, setCodes] = useState("");
   const [form] = Form.useForm();
   const [data, setData] = useState(props.data || {});
   const newCompId = props.data.orgcode;
@@ -103,14 +107,33 @@ const OrgDetails = (props) => {
     setFileName(null);
   }
 
+  const handleOnChange = (value, event) => {
+    console.log(value, event);
+  };
+
+  useEffect(() => {
+    getCountryCode().then((res) => {
+      setCodes(res);
+    });
+  }, []);
+
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select
+      allowClear={true}
+        showSearch
+        bordered={false}
         style={{
-          width: 70,
+          width: 80,
+          background: "#ffffff",
         }}
+        onSelect={(value, event) => handleOnChange(value, event)}
       >
-        <Option value="91">+91</Option>
+        {codes?.countries?.map((e) => (
+          <Option key={e?.code} value={e?.code}>
+            {e?.code}{" "}
+          </Option>
+        ))}
       </Select>
     </Form.Item>
   );
@@ -333,7 +356,7 @@ const OrgDetails = (props) => {
                   message: "Please Enter Valid Number",
                 },
               ]}
-              initialValue={data?.phone}
+              initialValue={data?.phone ? `${data.prefix} ${data.phone}`:"-"}
             >
               <Input
                 addonBefore={prefixSelector}

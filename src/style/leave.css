@@ -37,10 +37,6 @@
   margin-bottom: 0;
 }
 
-.ant-picker-calendar-mode-switch {
-  display: none;
-}
-
 .events {
   margin: 0;
   padding: 0;
@@ -219,14 +215,6 @@ margin: 10px 0;
 
     .scrollInput{
       overflow-y: scroll;
-    }
-
-    .searchBar.ant-input-affix-wrapper{
-      /* width: 220px; */
-    }
-
-    .selectOption.ant-select{
-      /* width: 220px; */
     }
 
     .leavePageDiv {

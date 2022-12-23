@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { capitalize, checkAlphabets, createUser, showNotification } from "../contexts/CreateContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import CompanyProContext from "../contexts/CompanyProContext";
+import { useCSVReader } from 'react-papaparse';
 const { Option } = Select;
 function AddEmployee() {
   const page = "addemployeePage";
@@ -23,9 +24,36 @@ function AddEmployee() {
   const navigate = useNavigate();
   const compId = sessionStorage.getItem("compId");
   const [place, setPlace] = useState(null);
-  const [designations, setDesignations] = useState({});
+  const [designations, setDesignations] = useState([]);
   const [configurations, setConfigurations] = useState([]);
   const [workLoc, setWorkLoc] = useState(null);
+
+  const { CSVReader } = useCSVReader();
+  const styles = {
+    csvReader: {
+      display: 'flex',
+      flexDirection: 'row',
+      marginBottom: 10,
+    },
+    browseFile: {
+      width: '20%',
+    },
+    acceptedFile: {
+      border: '1px solid #ccc',
+      height: 45,
+      lineHeight: 2.5,
+      paddingLeft: 10,
+      width: '80%',
+    },
+    remove: {
+      borderRadius: 0,
+      padding: '0 20px',
+    },
+    progressBarBackgroundColor: {
+      backgroundColor: 'red',
+    },
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -39,14 +67,9 @@ function AddEmployee() {
     temp.address?.map((rec) => {
       add.push(rec.title);
     });
-    let des = {};
-    data?.designations.map((d) => {
-      console.log(d);
-      des[`${Object.keys(d)[0]}`] = Object.values(d)[0]
-    })
     setWorkLoc(add);
     setConfigurations(data);
-    setDesignations(des);
+    setDesignations(Object.keys(data.designations));
     console.log(data)
   };
   const handleListEmployee = () => {
@@ -111,6 +134,7 @@ function AddEmployee() {
                 justifyContent: "flex-start",
               }}
             >
+
               <Button
                 className="listExpense"
                 type="primary"
@@ -125,6 +149,44 @@ function AddEmployee() {
                 Employee List
               </Button>
             </Col>
+            <Col
+              // style={{
+              //   background: "",
+              //   height: "50px",
+              //   display: "flex",
+              //   justifyContent: "flex-start",
+              // }}
+              >
+            <CSVReader
+      onUploadAccepted={(results) => {
+        console.log('---------------------------');
+        console.log(results);
+        console.log('---------------------------');
+      }}
+    >
+      {({
+        getRootProps,
+        acceptedFile,
+        ProgressBar,
+        getRemoveFileProps,
+      }) => (
+        <>
+          <div style={styles.csvReader}>
+            <button type='button' {...getRootProps()} style={styles.browseFile}>
+              Browse file
+            </button>
+            <div style={styles.acceptedFile}>
+              {acceptedFile && acceptedFile.name}
+            </div>
+            <button {...getRemoveFileProps()} style={styles.remove}>
+              Remove
+            </button>
+          </div>
+          <ProgressBar style={styles.progressBarBackgroundColor} />
+        </>
+      )}
+    </CSVReader>
+    </Col>
           </Row>
           <Row gutter={[24, 8]}>
             <Col xs={22} sm={15} md={8}>
@@ -139,7 +201,6 @@ function AddEmployee() {
                 rules={[
                   {
                     required: true,
-
                     message: "Please enter First Name",
                   },
                   {
@@ -392,7 +453,7 @@ function AddEmployee() {
                   }}
                   onChange={(e) => setPlace(e)}
                 > 
-                  {Object.keys(designations)?.map((des, i) => (
+                  {designations?.map((des) => (
                     <Option value={des}>
                       {des}
                     </Option>

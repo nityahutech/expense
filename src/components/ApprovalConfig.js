@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   Table,
@@ -12,24 +12,22 @@ import {
 } from "antd";
 import { EditOutlined, SearchOutlined } from "@ant-design/icons";
 import "../style/leave.css";
-import { getUsers } from "../contexts/CreateContext";
+import { getUsers, showNotification } from "../contexts/CreateContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 
 const { Option } = Select;
 
 const ApprovalConfig = () => {
+  const [form] = Form.useForm();
   const [empData, setEmpData] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [filterEmployees, setFilterEmployees] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [form] = Form.useForm();
-  const [value, setValue] = useState("");
   const [designations, setDesignations] = useState([]);
   const [editEmployeeDetails, setEditEmployeesDetails] = useState([]);
   const [numApprovers, setNumApprovers] = useState(1);
   const [listApprovers, setListApprovers] = useState([null, null, null]);
-  const [size, setSize] = useState("middle");
 
   useEffect(() => {
     getData()
@@ -46,25 +44,22 @@ const ApprovalConfig = () => {
         name: doc.data().name,
         designation: doc.data().designation,
         approveNo: doc.data()?.approveNo || 1,
-        approveList: i ==2 ? ["HR", "Reporting Manager", "Project Manager"] : ["HR"],
-        // approveList: doc.data()?.approveList || "HR",
+        approveList: doc.data()?.approveList || ["HR"],
       }
     })
-    let des = temp?.designations.map((d) => Object.keys(d)[0])
-    console.log(data, des)
+    let des = Object.keys(temp.designations)
     setEmpData(data)
     setFilterEmployees(data)
     setDesignations(des)
   }
 
   const onSelectChange = (newSelectedRowKeys, data) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
-    console.log("data:: ", data);
     setSelectedRowKeys(newSelectedRowKeys);
     setEditEmployeesDetails(data);
+    let names = data.map((detail) => detail.name)
+    form.setFieldValue("selectemp", names)
   };
 
-  console.log(editEmployeeDetails);
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
@@ -107,10 +102,6 @@ const ApprovalConfig = () => {
     },
   ];
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
   const handleCancel = () => {
     setIsModalOpen(false);
     setSelectedRowKeys([]);
@@ -119,39 +110,50 @@ const ApprovalConfig = () => {
   };
 
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
     setNumApprovers(Number(value));
   };
 
   const handleDesignation = (i, value) => {
-    console.log(`${i} selected ${value}`);
     let temp = [...listApprovers];
     temp[i] = value;
     setListApprovers(temp)
   };
 
-  useEffect(() => {
-    const names = editEmployeeDetails.map((detail) => detail.name);
-    form.setFieldValue("selectemp", names);
-  }, [form, editEmployeeDetails]);
-  console.log("numApprovers:: ", numApprovers);
+  const approveOptions = [
+    {
+      value: "HR",
+      label: "HR",
+    },
+    {
+      value: "Team Lead",
+      label: "Team Lead",
+    },
 
-  const hasSelected = selectedRowKeys.length > 0;
-
-  const onSearch = (value) => {
-    console.log("search:", value);
-  };
+    {
+      value: "Project Manager",
+      label: "Project Manager",
+    },
+    {
+      value: "Reporting Manager",
+      label: "Reporting Manager",
+    },
+  ]
 
   const changeApprovers = (values) => {
-    console.log(values)
-    values.selectemp.forEach((emp, i) => {
+    editEmployeeDetails.forEach((emp, i) => {
       let record = {
         approveNo: values.approversNum,
         approveList: [...listApprovers].slice(0, values.approversNum)
       }
-      EmpInfoContext.updateEduDetails(editEmployeeDetails[i].id, record)
+      let id = filterEmployees.find(x => x.name == emp).id
+      EmpInfoContext.updateEduDetails(id, record).then((res) => {
+        showNotification("success", "Success", `${emp}'s approvers updated successfully!`)
+      })
     })
-    // setIsModalOpen(false)
+    form.resetFields();
+    setEditEmployeesDetails([])
+    getData();
+    setIsModalOpen(false);
   }
 
   return (
@@ -167,7 +169,10 @@ const ApprovalConfig = () => {
                 prefix={<SearchOutlined />}
                 onChange={(e) => {
                   const search = e.target.value;
-                  setValue(search);
+                  if (!search) {
+                    setFilterEmployees(empData);
+                    return
+                  }
                   const filteredData = empData.filter((emp) =>
                     emp.name.toLowerCase().includes(search.toLowerCase())
                   );
@@ -179,23 +184,21 @@ const ApprovalConfig = () => {
               <Select
                 className="selectOption"
                 allowClear
-                // defaultValue="Trainee"
                 placeholder="Designation"
                 style={{ marginLeft: "10px" }}
                 onChange={(e) => {
-                  // const select = u.target.value;
-                  // setValue(select);
+                  if (!e) {
+                    setFilterEmployees(empData);
+                    return
+                  }
                   const selectedData = empData.filter((emp) =>
                     emp.designation.includes(e)
                   );
                   setFilterEmployees(selectedData);
-                  console.log(selectedData);
                 }}
                 showSearch
-                onSearch={onSearch}
               >
                 {designations?.map((des) => {
-                  console.log(des)
                     return (
                       <Option value={des}>{des}</Option>
                     )
@@ -209,13 +212,8 @@ const ApprovalConfig = () => {
           <>
             <div style={{ display: "flex" }}>
               <Button
-                onClick={() => {
-                  showModal();
-
-                  console.log(selectedRowKeys);
-                }}
-                // type="primary"
-                disabled={!hasSelected}
+                onClick={() => setIsModalOpen(true)}
+                disabled={!(selectedRowKeys.length > 0)}
                 style={{ marginLeft: "10px", border: "none" }}
               >
                 <EditOutlined />
@@ -241,7 +239,7 @@ const ApprovalConfig = () => {
         </div>
       </Card>
 
-      <Modal open={isModalOpen} onOk={form.submit()} onCancel={handleCancel}>
+      <Modal open={isModalOpen} destroyOnClose onOk={() => form.submit()} onCancel={handleCancel}>
         <Form
           form={form}
           name="basic"
@@ -256,16 +254,13 @@ const ApprovalConfig = () => {
           onFinish={changeApprovers}
         >
           <Form.Item
-            initialValue={[]}
             label="Selected Employees"
             name="selectemp"
           >
             <Select
               mode="multiple"
-              size={size}
               placeholder="Please select"
-              // defaultValue={selectedNames}
-              // onChange={handleChange}
+              onChange={(e) => setEditEmployeesDetails(e)}
               style={{
                 width: "100%",
               }}
@@ -297,7 +292,6 @@ const ApprovalConfig = () => {
             />
           </Form.Item>
           <Form.Item
-            // initialValue={listApprovers}
             label="Approvers"
             name="approvers"
           >
@@ -305,25 +299,7 @@ const ApprovalConfig = () => {
               <Col xs={24} sm={22} md={8}>
                 <Select
                   onChange={(e) => handleDesignation(0, e)}
-                  options={[
-                    {
-                      value: "HR",
-                      label: "HR",
-                    },
-                    {
-                      value: "Team Lead",
-                      label: "Team Lead",
-                    },
-
-                    {
-                      value: "Project Manager",
-                      label: "Project Manager",
-                    },
-                    {
-                      value: "Reporting Manager",
-                      label: "Reporting Manager",
-                    },
-                  ]}
+                  options={approveOptions}
                 />
               </Col>
 
@@ -331,50 +307,14 @@ const ApprovalConfig = () => {
                 <Select
                   disabled={numApprovers === 1}
                   onChange={(e) => handleDesignation(1, e)}
-                  options={[
-                    {
-                      value: "HR",
-                      label: "HR",
-                    },
-                    {
-                      value: "Team Lead",
-                      label: "Team Lead",
-                    },
-
-                    {
-                      value: "Project Manager",
-                      label: "Project Manager",
-                    },
-                    {
-                      value: "Reporting Manager",
-                      label: "Reporting Manager",
-                    },
-                  ]}
+                  options={approveOptions}
                 />
               </Col>
               <Col xs={24} sm={22} md={8}>
                 <Select
                   disabled={numApprovers !== 3}
                   onChange={(e) => handleDesignation(2, e)}
-                  options={[
-                    {
-                      value: "HR",
-                      label: "HR",
-                    },
-                    {
-                      value: "Team Lead",
-                      label: "Team Lead",
-                    },
-
-                    {
-                      value: "Project Manager",
-                      label: "Project Manager",
-                    },
-                    {
-                      value: "Reporting Manager",
-                      label: "Reporting Manager",
-                    },
-                  ]}
+                  options={approveOptions}
                 />
               </Col>
             </Row>

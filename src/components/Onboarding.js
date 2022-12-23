@@ -23,7 +23,6 @@ import {
 } from "@ant-design/icons";
 import "../style/Onboarding.css";
 import CompanyProContext from "../contexts/CompanyProContext";
-import reload from "../images/reload.png";
 import ViewModal from "./ViewModal";
 import EditOnboarding from "./EditOnboarding";
 import OrgDetails from "./OrgDetails";
@@ -32,7 +31,6 @@ import AccessDetails from "./AccessDetails";
 import OrgHierTable from "./OrgHierTable";
 import { showNotification } from "../contexts/CreateContext";
 import { useNavigate } from "react-router-dom";
-// import { content } from "html2canvas/dist/types/css/property-descriptors/content";
 
 const { Step } = Steps;
 
@@ -43,24 +41,20 @@ function Onboarding() {
   const [progress, setProgress] = useState(0);
   const [activetab, setActivetab] = useState("1");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [save, setSave] = useState(false);
   const [isEditOrganization, setIsEditOrganization] = useState(false);
   const [data, setData] = useState({});
   const [fileName, setFileName] = useState("");
-  const [reason, setReason] = useState("");
   const [isStepOneInvalid, setIsStepOneInvalid] = useState(false);
   const navigate = useNavigate();
 
   const saveOrgDetails = (values, imageUrl) => {
     delete values.logo;
-    console.log("saved");
     localStorage.setItem("OrgDetails", JSON.stringify(values));
     localStorage.setItem("Logo", imageUrl);
     getOrgData();
     setProgress(progress + 1);
     setIsStepOneInvalid(false);
   };
-  console.log(form);
 
   const getData = async () => {
     let data = await CompanyProContext.getAllCompany();
@@ -158,7 +152,6 @@ function Onboarding() {
             placeholder="Enter Comment"
             onChange={(event) => {
               reason = event.target.value;
-              setReason(event.target.value);
             }}
           />
         ),
@@ -338,7 +331,6 @@ function Onboarding() {
       },
     },
   ];
-  console.log(save);
   function getStatusUi(status) {
     switch (status) {
       case "Activated":

@@ -18,9 +18,9 @@ import {
   DeleteOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
-import {
-  getCountryCode,
-} from "../../contexts/CreateContext";
+// import {
+//   getCountryCode,
+// } from "../../contexts/CreateContext";
 import "../style/Onboarding.css";
 import CompanyProContext from "../contexts/CompanyProContext";
 import reload from "../images/reload.png";
@@ -107,24 +107,21 @@ const OrgDetails = (props) => {
     setFileName(null);
   }
 
-<<<<<<< HEAD
   const handleOnChange = (value, event) => {
     console.log(value, event);
   };
 
-  useEffect(() => {
-    getCountryCode().then((res) => {
-      setCodes(res);
-    });
-  }, []);
+  // useEffect(() => {
+  //   getCountryCode().then((res) => {
+  //     setCodes(res);
+  //   });
+  // }, []);
 
-=======
   const onFinishFailed = (errorInfo) => {
     props.setIsStepOneInvalid(true);
     console.log("Failed:", errorInfo);
   };
 
->>>>>>> 41cbb06da6681c3521c6f1e13d281786db7f3b3d
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select

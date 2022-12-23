@@ -1,30 +1,22 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Form,
-  Tabs,
   Input,
   Col,
   Row,
   Divider,
   message,
-  Upload,
   Button,
-  notification,
-  Space,
   Select,
 } from "antd";
 import {
-  CloseCircleOutlined,
   DeleteOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import "../style/Onboarding.css";
-import CompanyProContext from "../contexts/CompanyProContext";
-import reload from "../images/reload.png";
 const { Option } = Select;
 
 const OrgDetails = (props) => {
-  // console.log(props);
   const imgRef = React.useRef(null);
   const [fileName, setFileName] = useState(props.fileName || null);
   const [imageUrl, setImageUrl] = useState(props.fileName || "");
@@ -34,7 +26,6 @@ const OrgDetails = (props) => {
   const newCompId = props.data.orgcode;
 
   useEffect(() => {
-    console.log("reset", props.data || {});
     setFileName(props.fileName || null);
     setIsBigFile(false);
     setData(props.data || {});
@@ -119,7 +110,7 @@ const OrgDetails = (props) => {
       </Select>
     </Form.Item>
   );
-
+console.log(fileName, JSON.stringify(fileName), imageUrl)
   return (
     <div style={{ margin: "13px", background: "#fff" }}>
       <div
@@ -148,7 +139,7 @@ const OrgDetails = (props) => {
           remember: true,
         }}
         autoComplete="off"
-        onFinish={(values) => props.changeSave(values, imageUrl)}
+        onFinish={(values) => props.changeSave(values, fileName)}
         onFinishFailed={onFinishFailed}
       >
         <Row gutter={[24, 8]}>

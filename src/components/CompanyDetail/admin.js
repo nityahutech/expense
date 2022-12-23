@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Typography } from "antd";
+import { MinusCircleOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import CompanyProContext from "../../contexts/CompanyProContext";
 import { getUsers } from "../../contexts/CreateContext";
 import "./companystyle.css";
@@ -9,6 +10,9 @@ import {
   Form,
   Row,
   Card,
+  Input,
+  Space,
+  notification
 } from "antd";
 import {
   PlusCircleOutlined,
@@ -30,94 +34,121 @@ const Admin = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const compId = sessionStorage.getItem("compId");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [allEmpName, setAllEmpName] = useState([]);
   const [ceoAdmin, setCeoAdmin] = useState('');
 
   const [ceoAdminImg, setCeoAdminImg] = useState('');
-  const [financeAdminImg, setFinanceAdminImg] = useState('');
+  const [financeAdmins, setFinanceAdmins] = useState([]);
   const [hrAdminImg, setHrAdminImg] = useState('');
-  const [hrExAdminImg, setHrExAdminImg] = useState('');
+  const [hrExAdmins, setHrExAdmins] = useState([]);
 
-
-  const showModal = () => {
-    setIsModalOpen(true);
-    form.resetFields();
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-    form.resetFields();
-  };
+  //------------------------------------------------------ceo
   const onFinish = (values) => {
-
     const valuesToservice = {
       ceoAdmin: ceoAdmin,
     };
-    CompanyProContext.updateCompInfo(compId, valuesToservice);
+    CompanyProContext.updateCompInfo(compId, valuesToservice).then((res) => {
+      showNotification("success", "Success", "CEO Added ")
+      getData();
+    })
+
     form.resetFields();
-    getData();
+    getData(allEmpName);
     showEditContactInfo(false);
   };
+  //------------------------------------------------------hrAdmin
   const onHRFinish = (values) => {
+    console.log('valueshr', values)
+
+
     const value = {
       hrAdmin: values.hrAdmin,
-    };
-    CompanyProContext.updateCompInfo(compId, value);
-    getData();
+
+    }
+    CompanyProContext.updateCompInfo(compId, value).then((res) => {
+      showNotification("success", "Success", "Hr Admin Added ")
+      getData();
+    })
+    getData(allEmpName);
     showEditHrContactInfo(false);
+
   };
+  //------------------------------------------------------financerAdmin
   const onFinanceFinish = (values) => {
+    console.log('valuesFin', values)
+    let finPower = []
+
+    for (let i = 0; i < values.users.length && i < 3; i++) {
+      finPower.push(values.users[i].financerAdmin)
+    }
     const value = {
-      financerAdmin: values.financerAdmin,
+      financerAdmin: finPower,
     };
-    CompanyProContext.updateCompInfo(compId, value);
-    getData();
+    console.log('valuesFin1', value)
+    CompanyProContext.updateCompInfo(compId, value).then((res) => {
+      showNotification("success", "Success", "Finnance Admin Added ")
+      getData();
+    })
+    getData(allEmpName);
     showEditFinanceContactInfo(false);
   };
+  //------------------------------------------------------hrExeAdmin
   const onHRExeFinish = (values) => {
+    console.log('valuesHrEx', values)
+
+    let hrExPower = []
+
+    for (let i = 0; i < values.hrExeUser.length && i < 3; i++) {
+      hrExPower.push(values.hrExeUser[i].hrExeAdmin)
+    }
     const value = {
-      hrExeAdmin: values.hrExeAdmin,
+      hrExeAdmin: hrExPower,
     };
-    CompanyProContext.updateCompInfo(compId, value);
-    getData();
+    console.log('valueshr', value)
+    CompanyProContext.updateCompInfo(compId, value).then((res) => {
+      showNotification("success", "Success", "Hr Executive Added ")
+      getData();
+    })
+
+    getData(allEmpName);
     showEditExecutiveContactInfo(false);
   };
+
   useEffect(() => {
     getAllUser()
   }, []);
 
-  // useEffect(() => {
-  //   getData();
-
-  // }, [allEmpName]);
   const getData = async (allUsers) => {
     let compProfile = await CompanyProContext.getCompanyProfile(compId);
-    console.log('data1', allUsers, compProfile)
     let ceoImageUrl = null
-    for (let i = 0; i < allUsers.length; i++) {
+    const filteredArray = allUsers.filter(element => compProfile.financerAdmin.includes(element.value));
+    console.log('financerAdmin', filteredArray)
+    setFinanceAdmins(filteredArray)
+
+    const filteredArrayHrExe = allUsers.filter(element => compProfile.hrExeAdmin.includes(element.value));
+    console.log('hrExeAdmin', filteredArrayHrExe)
+    setHrExAdmins(filteredArrayHrExe)
+
+    for (let i = 0; i < allUsers?.length; i++) {
       console.log('data2', allUsers[i])
       let empName = allUsers[i].value
       if (empName === compProfile.ceoAdmin) {
         setCeoAdminImg(allUsers[i].profilePic)
       }
       else if (empName === compProfile.hrAdmin) {
-
         setHrAdminImg(allUsers[i].profilePic)
-      }
-      else if (empName === compProfile.financerAdmin) {
-
-        setFinanceAdminImg(allUsers[i].profilePic)
-      }
-      else if (empName === compProfile.hrExeAdmin) {
-        setHrExAdminImg(allUsers[i].profilePic)
-
       }
     }
     setData(compProfile);
     console.log('data3', ceoImageUrl)
+  };
+
+  const showNotification = (type, msg, desc) => {
+    notification[type]({
+      message: msg,
+      description: desc,
+    });
   };
 
 
@@ -152,10 +183,41 @@ const Admin = () => {
 
   }
 
+
+
   function getInitials(text) {
     const myArray = text.split(" ");
     let initials = myArray[0][0] + myArray[myArray.length - 1][0]
     return initials;
+  }
+  /************* style **************************/
+  const imageStyle = {
+    border: "1px solid #ccc",
+    borderRadius: "25px",
+    backgroundColor: "aqua",
+    width: "50px",
+    height: "50px",
+    margin: "2px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  }
+
+  const divStyle = {
+
+    border: "1px solid #ccc",
+    borderRadius: "50px",
+    marginTop: "10px",
+    marginBottom: "10px",
+    // padding:"5px",
+    fontSize: "25px",
+    fontWeight: "lighter",
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    marginRight: '10px'
+
+
   }
 
   return (
@@ -245,49 +307,26 @@ const Admin = () => {
                                   showEditContactInfo(!editContactInfo);
                                 }}
                               >
-                                <PlusCircleOutlined />
-                                Add
+                                <EditFilled /> Change
                               </Button>
                             </>
                           ) : (
                             <>
                               <div
-                                style={{
-                                  border: "1px solid #ccc",
-                                  borderRadius: "50px",
-                                  marginTop: "10px",
-                                  marginBottom: "10px",
-                                  // padding:"5px",
-                                  fontSize: "25px",
-                                  fontWeight: "lighter",
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <div
-                                  className="initialCircle"
-
-                                >
-                                  <img
-                                    style={{
-                                      border: "1px solid #ccc",
-                                      borderRadius: "25px",
-                                      backgroundColor: "aqua",
-                                      width: "50px",
-                                      height: "50px",
-                                      margin: "2px",
-                                      display: "flex",
-                                      justifyContent: "center",
-                                      alignItems: "center",
-                                    }}
+                                style={divStyle}
+                              > {
+                                  ceoAdminImg ? <img
+                                    style={imageStyle}
                                     src={ceoAdminImg}
-                                    alt={data.ceoAdmin ? getInitials(data.ceoAdmin) : null}
-                                  />
-                                </div>
+                                    alt={getInitials(data.ceoAdmin)}
+
+                                  /> : <div style={imageStyle}>{getInitials(data.ceoAdmin)}</div>
+                                }
+
                                 <span style={{ marginRight: "10px" }}>
-                                  {data.ceoAdmin ? data.ceoAdmin : null}{" "}
-                                </span>
+                                  {data.ceoAdmin ? data.ceoAdmin : "-"}</span>
                               </div>
+
                               {editContactInfo == false ? (
                                 <Button
                                   style={{
@@ -440,55 +479,46 @@ const Admin = () => {
                             style={{
                               background: "#1963a6",
                               border: "1px solid #1963A6",
+                              color: "#ffff",
                             }}
-                            type="primary"
                             onClick={() => {
                               showEditHrContactInfo(!editHrContactInfo);
                             }}
                           >
-                            <PlusCircleOutlined />
-                            Add
+                            <EditFilled /> Change
                           </Button>
+
                         </>
                       ) : (
                         <>
-                          <div
-                            style={{
-                              border: "1px solid #ccc",
-                              borderRadius: "50px",
-                              marginTop: "10px",
-                              marginBottom: "10px",
-                              // padding:"5px",
-                              fontSize: "25px",
-                              fontWeight: "lighter",
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
-                            <img
-                              style={{
-                                border: "1px solid #ccc",
-                                borderRadius: "25px",
-                                backgroundColor: "aqua",
-                                width: "50px",
-                                height: "50px",
-                                margin: "2px",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                              src={hrAdminImg}
-                              alt={data.hrAdmin ? getInitials(data.hrAdmin) : null}
-                            />
-                            <span style={{ marginRight: "10px" }}>
-                              {data.hrAdmin ? data.hrAdmin : null}
-                            </span>
+                          <div style={{ display: 'flex' }}>
+                            <Row style={{ display: 'flex' }}>
+                              <Col
+                                style={divStyle}
+                              >
+                                {
+                                  hrAdminImg ? <img
+                                    style={imageStyle}
+                                    src={hrAdminImg}
+                                    alt={getInitials(data.hrAdmin)}
 
+                                  />
+                                    :
+                                    <div style={imageStyle}>
+                                      {getInitials(data.hrAdmin)}
+
+                                    </div>
+                                }
+
+                                <span style={{ marginRight: "10px" }}>
+                                  {data.hrAdmin ? data.hrAdmin : "-"}
+                                </span>
+                              </Col>
+
+                            </Row>
                           </div>
-                          {editHrContactInfo === false ? (
+                          {editHrContactInfo == false ? (
                             <Button
-                              type="text"
-                              className="edit"
                               style={{
                                 background: "#1963a6",
                                 border: "1px solid #1963A6",
@@ -504,24 +534,30 @@ const Admin = () => {
                         </>
                       )
                     ) : (
-                      <Form.Item
-                        style={{ marginTop: "10px" }}
-                        initialValue={data ? data.hrAdmin : null}
-                        name="hrAdmin"
-                      >
-                        <AutoComplete
-                          options={options}
-                          style={{
-                            width: 200,
-                            padding: "5px",
-                          }}
-                          onSelect={onSelect}
-                          onSearch={onSearch}
-                          size="large"
+                      <>
 
-                          placeholder="Enter HR Admin Name"
-                        />
-                      </Form.Item>
+                        <Form.Item
+                          style={{ marginTop: "10px" }}
+                          initialValue={data ? data.hrAdmin : null}
+                          name="hrAdmin"
+                        >
+                          <AutoComplete
+                            options={options}
+                            style={{
+                              width: 200,
+                              padding: "5px",
+                            }}
+                            onSelect={onSelect}
+                            onSearch={onSearch}
+                            size="large"
+
+                            placeholder="Enter HR Admin Name"
+                          />
+                        </Form.Item>
+
+
+
+                      </>
 
                     )}
                   </div>
@@ -535,6 +571,7 @@ const Admin = () => {
                         marginTop: "3%",
                       }}
                     >
+
                       <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                         <Button
                           type="text"
@@ -590,7 +627,12 @@ const Admin = () => {
           }}
           initialValues={{
             remember: true,
+            // fields: data?.financerAdmin,
+            fields: [{ financerAdmin: 'fff' }, { financerAdmin: 'eeee' }],
           }}
+          fields={[
+
+          ]}
           autoComplete="off"
           onFinish={onFinanceFinish}
         >
@@ -641,37 +683,29 @@ const Admin = () => {
                         </Button>
                       ) : (
                         <>
-                          <div
-                            style={{
-                              border: "1px solid #ccc",
-                              borderRadius: "50px",
-                              marginTop: "10px",
-                              marginBottom: "10px",
-                              // padding:"5px",
-                              fontSize: "25px",
-                              fontWeight: "lighter",
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
-                            <img
-                              style={{
-                                border: "1px solid #ccc",
-                                borderRadius: "25px",
-                                backgroundColor: "aqua",
-                                width: "50px",
-                                height: "50px",
-                                margin: "2px",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                              src={financeAdminImg}
-                              alt={data.financerAdmin ? getInitials(data.financerAdmin) : null}
-                            />
-                            <span style={{ marginRight: "10px" }}>
-                              {data.financerAdmin ? data.financerAdmin : "-"}</span>
+                          <div style={{ display: 'flex' }}>
+                            <Row style={{ display: 'flex' }}>
+
+                              {financeAdmins?.map((person) => (
+                                <div
+                                  style={divStyle}
+                                > {
+                                    person.profilePic ? <img
+                                      style={imageStyle}
+                                      src={person.profilePic}
+                                      alt={getInitials(person.value)}
+
+                                    /> : <div style={imageStyle}>{getInitials(person.value)}</div>
+                                  }
+
+                                  <span style={{ marginRight: "10px" }}>
+                                    {person.value ? person.value : "-"}</span>
+                                </div>
+                              ))}
+                            </Row>
+
                           </div>
+
                           {editFinanceContactInfo === false ? (
                             <Button
                               type="text"
@@ -693,26 +727,57 @@ const Admin = () => {
                         </>
                       )
                     ) : (
-                      <Form.Item
-                        style={{ marginTop: "10px" }}
-                        initialValue={data ? data.financerAdmin : null}
-                        name="financerAdmin"
-                      >
-                        <AutoComplete
-                          options={options}
-                          style={{
-                            width: 200,
-                            padding: "5px",
-                          }}
-                          onSelect={onSelect}
-                          onSearch={onSearch}
-                          size="large"
+                      <>
 
-                          placeholder="Enter Finance Admin Name"
-                        />
-                      </Form.Item>
+
+                        <Form.List name="users">
+                          {(fields, { add, remove }) => (
+                            <>
+                              {fields.slice(0, 3).map(({ key, name, ...restField }) => (
+                                <Space
+                                  key={key}
+                                  style={{
+                                    display: 'flex',
+                                    marginBottom: 8,
+                                  }}
+                                  align="baseline"
+                                >
+                                  <Form.Item
+                                    style={{ marginTop: "10px" }}
+                                    initialValue={data?.financerAdmin[key]}
+                                    // {...restField}
+                                    name={[name, 'financerAdmin']}
+                                  >
+                                    <AutoComplete
+                                      options={options}
+                                      style={{
+                                        width: 200,
+                                        padding: "5px",
+                                      }}
+                                      onSelect={onSelect}
+                                      onSearch={onSearch}
+                                      size="large"
+
+                                      placeholder="Enter Finance Admin Name"
+                                    />
+                                  </Form.Item>
+
+                                  <MinusCircleOutlined onClick={() => remove(name)} />
+                                </Space>
+                              ))}
+                              <Form.Item>
+                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                  Add field
+                                </Button>
+                              </Form.Item>
+                            </>
+                          )}
+                        </Form.List>
+
+                      </>
 
                     )}
+
                   </div>
                 </Col>
                 <Col span={24}>
@@ -750,14 +815,7 @@ const Admin = () => {
                   ) : null}
                   {
                     editFinanceContactInfo == false && <></>
-                    // <Button
-                    // style={{ background: "#1963a6",border: "1px solid #1963A6"}}
-                    // type="primary"
-                    //   onClick={() => showEditFinanceContactInfo(!editFinanceContactInfo)}
-                    // >
-                    //   <PlusCircleOutlined />
-                    //   Add
-                    // </Button>
+
                   }
                 </Col>
                 {/* ----------------------newCode------------------------ */}
@@ -765,7 +823,7 @@ const Admin = () => {
             </Card>
           </div>
         </Form>
-      </div>
+      </div >
 
       <div
         className="personalCardDiv"
@@ -847,36 +905,27 @@ const Admin = () => {
                         </Button>
                       ) : (
                         <>
-                          <div
-                            style={{
-                              border: "1px solid #ccc",
-                              borderRadius: "50px",
-                              marginTop: "10px",
-                              marginBottom: "10px",
-                              // padding:"5px",
-                              fontSize: "25px",
-                              fontWeight: "lighter",
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
-                            <img
-                              style={{
-                                border: "1px solid #ccc",
-                                borderRadius: "25px",
-                                backgroundColor: "aqua",
-                                width: "50px",
-                                height: "50px",
-                                margin: "2px",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                              src={hrExAdminImg}
-                              alt={data.hrExeAdmin ? getInitials(data.hrExeAdmin) : null}
-                            />
-                            <span style={{ marginRight: "10px" }}>
-                              {data.hrExeAdmin ? data.hrExeAdmin : "-"}</span>
+                          <div style={{ display: 'flex' }}>
+                            <Row style={{ display: 'flex' }}>
+
+                              {hrExAdmins?.map((personHrExe) => (
+                                <div
+                                  style={divStyle}
+                                > {
+                                    personHrExe.profilePic ? <img
+                                      style={imageStyle}
+                                      src={personHrExe.profilePic}
+                                      alt={getInitials(personHrExe.value)}
+
+                                    /> : <div style={imageStyle}>{getInitials(personHrExe.value)}</div>
+                                  }
+
+                                  <span style={{ marginRight: "10px" }}>
+                                    {personHrExe.value ? personHrExe.value : "-"}</span>
+                                </div>
+                              ))}
+                            </Row>
+
                           </div>
                           {editExecutiveContactInfo === false ? (
                             <Button
@@ -899,25 +948,71 @@ const Admin = () => {
                         </>
                       )
                     ) : (
-                      <Form.Item
-                        style={{ marginTop: "10px" }}
-                        initialValue={data ? data.hrExeAdmin : null}
-                        name="hrExeAdmin"
-                      >
-                        <AutoComplete
-                          options={options}
-                          style={{
-                            width: 200,
-                            padding: "5px",
-                          }}
-                          onSelect={onSelect}
-                          onSearch={onSearch}
-                          size="large"
+                      <>
 
-                          placeholder="Enter HR Executive Name"
-                        />
 
-                      </Form.Item>
+                        <Form.List name="hrExeUser">
+                          {(fields, { add, remove }) => (
+                            <>
+                              {fields.slice(0, 3).map(({ key, name, }) => (
+                                <Space
+                                  key={key}
+                                  style={{
+                                    display: 'flex',
+                                    marginBottom: 8,
+                                  }}
+                                  align="baseline"
+                                >
+                                  <Form.Item
+                                    style={{ marginTop: "10px" }}
+                                    initialValue={data?.hrExeAdmin[key]}
+                                    // {...restField}
+                                    name={[name, 'hrExeAdmin']}
+                                  // rules={[
+                                  //   {
+                                  //     required: true,
+                                  //     message: "Please Enter Designation",
+                                  //   },
+                                  //   {
+                                  //     validator: (rule, value, callback) => {
+                                  //       let exists = Object.keys(name).includes(value);
+                                  //       if (exists) {
+                                  //         return Promise.reject(new Error("This designations already exists!"));
+                                  //       }
+                                  //     },
+                                  //     message: "This designation already exists!",
+                                  //   }
+                                  // ]}
+
+                                  >
+                                    <AutoComplete
+                                      options={options}
+                                      style={{
+                                        width: 200,
+                                        padding: "5px",
+                                      }}
+                                      onSelect={onSelect}
+                                      onSearch={onSearch}
+                                      size="large"
+
+                                      placeholder="Enter HR Admin Name"
+                                    />
+
+                                  </Form.Item>
+
+                                  <MinusCircleOutlined onClick={() => remove(name)} />
+                                </Space>
+                              ))}
+                              <Form.Item>
+                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                  Add field
+                                </Button>
+                              </Form.Item>
+                            </>
+                          )}
+                        </Form.List>
+
+                      </>
                     )}
                   </div>
                 </Col>

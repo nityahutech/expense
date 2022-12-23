@@ -217,14 +217,6 @@ margin: 10px 0;
       overflow-y: scroll;
     }
 
-    .searchBar.ant-input-affix-wrapper{
-      /* width: 220px; */
-    }
-
-    .selectOption.ant-select{
-      /* width: 220px; */
-    }
-
     .leavePageDiv {
       min-height: 100vh
     }

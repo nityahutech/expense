@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import {
   Col,
@@ -12,11 +11,9 @@ import {
   notification,
   Checkbox,
 } from "antd";
-// import { useNavigate } from 'react-router-dom';
 import moment from "moment";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import "../style/CertificationID.css";
-import { getDatasetAtEvent } from "react-chartjs-2";
 import ConfigureContext from "../contexts/ConfigureContext";
 import CompanyProContext from "../contexts/CompanyProContext";
 
@@ -29,6 +26,7 @@ const showNotification = (type, msg, desc) => {
 };
 const dateFormat = "DD-MM-YYYY";
 function Editemployee(props) {
+  console.log(props)
   const [fname, setFname] = useState("");
   const [mname, setMname] = useState("");
   const [lname, setLname] = useState("");
@@ -49,7 +47,8 @@ function Editemployee(props) {
   const [optionalLeave, setOptionalLeave] = useState("");
   const [casualLeave, setCasualLeave] = useState("");
   const page = "addemployeePage";
-  const [compId, setCompId] = useState(sessionStorage.getItem("compId"));
+  const compId = sessionStorage.getItem("compId");
+  const designations = props.des;
   const [configurations, setConfigurations] = useState(null);
   const [workLoc, setWorkLoc] = useState(null);
   async function submitEdit() {
@@ -85,7 +84,6 @@ function Editemployee(props) {
       };
       EmpInfoContext.updateEduDetails(props.record.id, record);
       props.setIsModalVisible(false);
-      // props.reloadData();
       showNotification("success", "Success", "Record updated successfully");
       return;
     } catch (error) {
@@ -104,8 +102,11 @@ function Editemployee(props) {
       add.push(rec.title);
     });
     setWorkLoc(add);
+    console.log(data)
+    console.log(props.des)
     setConfigurations(data);
   };
+
   useEffect(() => {
     getData();
     const fnameVal = props.record ? props.record.fname : "";
@@ -486,7 +487,7 @@ function Editemployee(props) {
                 style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
                 placeholder="Select a Designation"
               >
-                {configurations?.designations.map((des) => (
+                {designations.map((des) => (
                   <Option value={des}>{des}</Option>
                 ))}
               </Select>

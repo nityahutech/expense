@@ -404,7 +404,6 @@ function Onboarding() {
       okType: "danger",
       onOk: () => {
         reset();
-
         navigate("/Organization/Onboarding", { replace: false });
       },
     });

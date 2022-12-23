@@ -511,15 +511,108 @@ function BankAccount() {
                           </FormItem>
                         )}
                       </Col>
+                    </Row>
+                    <Row gutter={[8, 16]}>
+                      <Divider />
+                      <Col xs={22} sm={15} md={9}>
+                        <div className="div-discription">Bank Name</div>
+                        {editBank[i] === false ? (
+                          <div>{u?.bankName ? u.bankName : "-"}</div>
+                        ) : (
+                          <FormItem
+                            name="bankName"
+                            initialValue={u.bankName}
+                            rules={[
+                              {
+                                pattern: /^[a-zA-Z\s]*$/,
+                                required: true,
+                                message: "Please Enter Bank Name",
+                              },
+                            ]}
+                          >
+                            <Input
+                              placeholder="Bank Name"
+                              bordered={false}
+                              maxLength={25}
+                              style={{
+                                width: "80%",
+                                borderBottom: "1px solid #ccc ",
+                                paddingLeft: "0px",
+                                marginTop: "10px",
+                              }}
+                            />
+                          </FormItem>
+                        )}
+                      </Col>
+                      <Col xs={22} sm={15} md={9}>
+                        <div className="div-discription">City</div>
+                        {editBank[i] === false ? (
+                          <div>{u?.city ? u.city : "-"}</div>
+                        ) : (
+                          <FormItem
+                            name="city"
+                            initialValue={u.city}
+                            rules={[
+                              {
+                                pattern: /^[a-zA-Z\s]*$/,
+                                required: true,
+                                message: "Please Enter City",
+                              },
+                            ]}
+                          >
+                            <Input
+                              placeholder="City"
+                              bordered={false}
+                              maxLength={25}
+                              style={{
+                                width: "80%",
+                                borderBottom: "1px solid #ccc ",
+                                paddingLeft: "0px",
+                                marginTop: "10px",
+                              }}
+                            />
+                          </FormItem>
+                        )}
+                      </Col>
+                      <Col xs={22} sm={15} md={5}>
+                        <div className="div-discription">Branch Name</div>
+                        {editBank[i] === false ? (
+                          <div>{u?.branch ? u.branch : "-"}</div>
+                        ) : (
+                          <FormItem
+                            name="branch"
+                            initialValue={u.branch}
+                            rules={[
+                              {
+                                pattern: /^[a-zA-Z\s]*$/,
+                                required: true,
+                                message: "Please Enter Branch Name",
+                              },
+                            ]}
+                          >
+                            <Input
+                              placeholder="Branch Name"
+                              bordered={false}
+                              maxLength={25}
+                              style={{
+                                width: "100%",
+                                borderBottom: "1px solid #ccc ",
+                                paddingLeft: "0px",
+                                marginTop: "10px",
+                              }}
+                            />
+                          </FormItem>
+                        )}
+                      </Col>
                       <Col
                         xs={22}
                         sm={15}
                         md={1}
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "end",
-                        }}
+                        // style={{
+                        //   display: "flex",
+                        //   justifyContent: "center",
+                        //   alignItems: "end",
+                        // }}
                       >
                         {editBank[i] == false ? (
                           <Button
@@ -560,98 +653,7 @@ function BankAccount() {
                           </Button>
                         )}
                       </Col>
-                      <Divider style={{ margin: "0px" }} />
-                      <Col xs={22} sm={15} md={8}>
-                        <div className="div-discription">Bank Name</div>
-                        {editBank[i] === false ? (
-                          <div>{u?.bankName ? u.bankName : "-"}</div>
-                        ) : (
-                          <FormItem
-                            name="bankName"
-                            initialValue={u.bankName}
-                            rules={[
-                              {
-                                pattern: /^[a-zA-Z\s]*$/,
-                                required: true,
-                                message: "Please Enter Bank Name",
-                              },
-                            ]}
-                          >
-                            <Input
-                              placeholder="Bank Name"
-                              bordered={false}
-                              maxLength={25}
-                              style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                            />
-                          </FormItem>
-                        )}
-                      </Col>
-                      <Col xs={22} sm={15} md={8}>
-                        <div className="div-discription">City</div>
-                        {editBank[i] === false ? (
-                          <div>{u?.city ? u.city : "-"}</div>
-                        ) : (
-                          <FormItem
-                            name="city"
-                            initialValue={u.city}
-                            rules={[
-                              {
-                                pattern: /^[a-zA-Z\s]*$/,
-                                required: true,
-                                message: "Please Enter City",
-                              },
-                            ]}
-                          >
-                            <Input
-                              placeholder="City"
-                              bordered={false}
-                              maxLength={25}
-                              style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                            />
-                          </FormItem>
-                        )}
-                      </Col>
-                      <Col xs={22} sm={15} md={8}>
-                        <div className="div-discription">Branch Name</div>
-                        {editBank[i] === false ? (
-                          <div>{u?.branch ? u.branch : "-"}</div>
-                        ) : (
-                          <FormItem
-                            name="branch"
-                            initialValue={u.branch}
-                            rules={[
-                              {
-                                pattern: /^[a-zA-Z\s]*$/,
-                                required: true,
-                                message: "Please Enter Branch Name",
-                              },
-                            ]}
-                          >
-                            <Input
-                              placeholder="Branch Name"
-                              bordered={false}
-                              maxLength={25}
-                              style={{
-                                width: "100%",
-                                borderBottom: "1px solid #ccc ",
-                                paddingLeft: "0px",
-                                marginTop: "10px",
-                              }}
-                            />
-                          </FormItem>
-                        )}
-                      </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={22} sm={15} md={9}>
                         <div className="div-discription">IFSC Code</div>
                         {editBank[i] === false ? (
                           <div>{u?.ifsc ? u.ifsc : "-"}</div>
@@ -672,7 +674,7 @@ function BankAccount() {
                               placeholder="IFSC Code"
                               bordered={false}
                               style={{
-                                width: "100%",
+                                width: "80%",
                                 borderBottom: "1px solid #ccc ",
                                 paddingLeft: "0px",
                                 marginTop: "10px",
@@ -681,7 +683,7 @@ function BankAccount() {
                           </FormItem>
                         )}
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={22} sm={15} md={9}>
                         <div className="div-discription">Account Type</div>
                         {editBank[i] === false ? (
                           <div>{u?.accountType ? u.accountType : "-"}</div>
@@ -699,7 +701,7 @@ function BankAccount() {
                             <Select
                               defaultValue="Current Type"
                               style={{
-                                width: "100%",
+                                width: "80%",
                                 borderBottom: "1px solid #ccc ",
                                 paddingLeft: "0px",
                                 marginTop: "10px",
@@ -723,10 +725,21 @@ function BankAccount() {
                           </FormItem>
                         )}
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={22} sm={15} md={6}>
                         <div className="div-discription">Account Number</div>
                         {editBank[i] === false ? (
-                          <div>{u?.accountNo ? u.accountNo : "-"}</div>
+                          <div>
+                            {u?.accountNo
+                              ? [
+                                  ...new Array(u?.accountNo?.length - 4)?.fill(
+                                    "X"
+                                  ),
+                                  u?.accountNo?.slice(-4),
+                                ]
+                                  ?.toString()
+                                  ?.replaceAll(",", "")
+                              : "-"}
+                          </div>
                         ) : (
                           <FormItem
                             name="accountNo"
@@ -744,7 +757,7 @@ function BankAccount() {
                               placeholder="Account Number"
                               bordered={false}
                               style={{
-                                width: "100%",
+                                width: "85%",
                                 borderBottom: "1px solid #ccc ",
                                 paddingLeft: "0px",
                                 marginTop: "10px",

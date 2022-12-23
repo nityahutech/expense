@@ -76,7 +76,7 @@ const LeaveType = () => {
     };
     delete record.name;
     let name = activeType.name
-    ConfigureContext.leaveTypeConfiguration(name, record).then((res) => {
+    ConfigureContext.editConfiguration(page, {[`${name}`]: record}).then((res) => {
       showNotification("success", "Success", "Updated Successfully!")
       getData();
     }).catch((err) => {
@@ -101,7 +101,7 @@ const LeaveType = () => {
         probation: true,
         carryForward: false,
     }
-    ConfigureContext.leaveTypeConfiguration(name, config);
+    ConfigureContext.editConfiguration(page, {[`${name}`]: config});
     form.resetFields();
     getData();
     setIsModalOpen(false);

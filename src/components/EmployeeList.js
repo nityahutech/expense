@@ -1,8 +1,8 @@
 import { Table, Button, Modal, Layout, Row, Col, Input, Form, Select } from "antd";
 import { EditFilled, SearchOutlined, DeleteFilled, EyeFilled } from "@ant-design/icons";
 import Editemployee from "./Editemployee";
-import React, { useEffect, useState } from "react";
-import { getUsers } from "../contexts/CreateContext";
+import { useEffect, useState } from "react";
+import { getUsers, showNotification } from "../contexts/CreateContext";
 import "../style/EmployeeList.css";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import EmployeeListview from "./EmployeeListview";
@@ -19,9 +19,8 @@ function EmployeeList() {
   const [size, setSize] = useState(window.innerWidth <= 768 ? "" : "left");
   const [filterEmployees, setFilterEmployees] = useState([]);
   const [allEmployees, setAllEmployees] = useState([]);
-  const [data, setData] = React.useState([]);
-  const [disableItem, setDisableItem] = useState(false);
-  const [form] = Form.useForm();
+  const [data, setData] = useState([]);
+  const [disableItems, setDisableItems] = useState([]);
   const [designations, setDesignations] = useState([]);
   window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 768 ? "" : "left")
@@ -64,99 +63,6 @@ function EmployeeList() {
       align: "center",
       width: 100,
     },
-    // {
-    //   title: "Designation",
-    //   dataIndex: "designation",
-    //   key: "designation",
-    //   // align: "center",
-    //   width: 190,
-    // },
-    // {
-    //   title: "Gender",
-    //   dataIndex: "gender",
-    //   key: "gender",
-    //   width: 120,
-    // },
-    // {
-    //   title: "Personal Email",
-    //   dataIndex: "contactEmail",
-    //   key: "contactEmail",
-    //   width: 200,
-    //   ellipsis: true,
-    // },
-    // {
-    //   title: "Contact No.",
-    //   dataIndex: "phonenumber",
-    //   key: "phonenumber",
-    //   align: "center",
-    //   width: 150,
-    // },
-    // {
-    //   title: "Reporting Manager",
-    //   dataIndex: "repManager",
-    //   key: "repManager",
-    //   width: 200,
-    // },
-    // {
-    //   title: "Secondary Manager",
-    //   dataIndex: "repManager",
-    //   key: "secManager",
-    //   width: 200,
-    // },
-    // {
-    //   title: "Lead",
-    //   dataIndex: "lead",
-    //   key: "lead",
-    //   width: 160,
-    // },
-    // {
-    //   title: "Department",
-    //   dataIndex: "department",
-    //   key: "department",
-    //   width: 200,
-    // },
-    // {
-    //   title: "Manager",
-    //   dataIndex: "isManager",
-    //   key: "isManager",
-    //   width: 100,
-    // },
-    // {
-    //   title: "Is Lead",
-    //   dataIndex: "isLead",
-    //   key: "isLead",
-    //   width: 100,
-    // },
-    // {
-    //   title: "Work Location",
-    //   dataIndex: "location",
-    //   key: "location",
-    //   width: 150,
-    // },
-    // {
-    //   title: "Earn Leave",
-    //   dataIndex: "earnLeave",
-    //   key: "earnLeave",
-    //   width: 60,
-    // },
-    // {
-    //   title: "Sick Leave",
-    //   dataIndex: "sickLeave",
-    //   key: "sickLeave",
-    //   width: 60,
-    // },
-    // {
-    //   title: "Casual Leave",
-    //   dataIndex: "casualLeave",
-    //   key: "casualLeave",
-    //   width: 60,
-    // },
-    // {
-    //   title: "Optional Leave",
-    //   dataIndex: "optionalLeave",
-    //   key: "optionalLeave",
-    //   width: 75,
-    // },
     {
       title: "Action",
       dataIndex: "action",
@@ -227,8 +133,6 @@ function EmployeeList() {
   async function getData() {
     setLoading(true);
     const allData = await getUsers();
-    console.log(allData, 'dataaaaaa')
-
     let d = allData.docs.map((doc, i) => {
       return {
         ...doc.data(),
@@ -236,15 +140,15 @@ function EmployeeList() {
         isLead: doc.data().isLead ? "true" : "false",
         id: doc.id,
         sn: i + 1,
-        disabled: false,
+        disabled: doc.data().disabled ? true : false,
       };
     });
     console.log(d, 'dataaaaaa')
 
-    let des = d?.map((emp) => emp.designation)
+    let des = d.map((emp) => emp.designation)
     const uniqueArray = des.filter((item, index) => des.indexOf(item) === index);
-
-    console.log('ddddd', des)
+    let disabled = d.filter(emp => emp.disabled)
+    console.log('ddddd', disabled)
 
     setData(d);
     setFilterEmployees(d);
@@ -286,44 +190,22 @@ function EmployeeList() {
   //   }
   // };
   const onDelete = (idx, e) => {
-    e.preventDefault();
-    EmpInfoContext.disablePerson(data[idx].id);
-    // EmpInfoContext.enablePerson(data[idx].id)
-    const filteredData = data.map((doc, i) => {
-      let disabled = false;
-      if (idx == i) {
-        disabled = true;
-      }
-      return {
-        ...doc,
+      e.preventDefault();
+    Modal.confirm({
+      title: `Are you sure, you want to deactivate ${data[idx].name}?`,
+      okText: "Yes",
+      okType: "danger",
 
-        sn: i + 1,
-        disabled: disabled,
-      };
-    });
-    setData(filteredData);
-    setFilterEmployees(filteredData);
+      onOk: () => {
+        EmpInfoContext.disablePerson(data[idx].id).then((res) => {
+          showNotification("success", "Success", `Successfully deactivated ${data[idx].name}`)
+          getData();
+        })
+
+      }
+    })
   };
-  const onGenderChange = (value) => {
-    switch (value) {
-      case 'male':
-        form.setFieldsValue({
-          note: 'Hi, man!',
-        });
-        return;
-      case 'female':
-        form.setFieldsValue({
-          note: 'Hi, lady!',
-        });
-        return;
-      case 'other':
-        form.setFieldsValue({
-          note: 'Hi there!',
-        });
-        break;
-      default:
-    }
-  };
+  
   return (
     <Layout>
       <Row className="employeeRow">
@@ -350,12 +232,10 @@ function EmployeeList() {
               console.log(selectedData, 'selectedData');
             }}
             showSearch
-          // onSearch={onSearch}
 
           >
 
             {designations?.map((des) => {
-              console.log(des)
               return (
                 <Option value={des}>{des}</Option>
               )
@@ -431,6 +311,7 @@ function EmployeeList() {
           className="Edit"
           record={editedRecord}
           setIsModalVisible={setIsModalVisible}
+          des={designations}
         />
       </Modal>
 

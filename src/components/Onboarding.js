@@ -43,18 +43,21 @@ function Onboarding() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditOrganization, setIsEditOrganization] = useState(false);
   const [data, setData] = useState({});
+  const [next, setNext] = useState(1);
   const [fileName, setFileName] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   const [isStepOneInvalid, setIsStepOneInvalid] = useState(false);
   const [isStepFourInvalid, setIsStepFourInvalid] = useState(false);
   const navigate = useNavigate();
 
-  const saveOrgDetails = (values, imageUrl) => {
+  const saveOrgDetails = (values, filename, imageurl) => {
     delete values.logo;
     localStorage.setItem("OrgDetails", JSON.stringify(values));
     localStorage.setItem("Logo", imageUrl);
-    setFileName(imageUrl)
+    setFileName(filename)
+    setImageUrl(imageurl)
     getOrgData();
-    setProgress(progress + 1);
+    setProgress(next);
     setIsStepOneInvalid(false);
   };
 
@@ -71,7 +74,6 @@ function Onboarding() {
     }
     console.log(JSON.parse(data));
     setData(JSON.parse(data));
-    setFileName(localStorage.getItem("Logo"));
   };
 
   const createCompany = async () => {
@@ -193,6 +195,7 @@ function Onboarding() {
   const progressBar = (value) => {
     if (progress == 0) {
       form.submit();
+      setNext(value)
       return;
     }
     setProgress(value);
@@ -501,11 +504,12 @@ console.log(fileName)
             ) : progress == 2 ? (
               <OrgHierTable />
             ) : progress == 3 ? (
-              <AccessDetails preCode={data.preCode} setIsStepFourInvalid={setIsStepFourInvalid}/>
+              <AccessDetails preCode={data.preCode} setIsStepFourInvalid={setIsStepFourInvalid} domain={data.domain} />
             ) : (
               <OrgDetails
                 data={data}
                 fileName={fileName}
+                imageUrl={imageUrl}
                 changeSave={saveOrgDetails}
                 form={form}
                 setIsStepOneInvalid={setIsStepOneInvalid}

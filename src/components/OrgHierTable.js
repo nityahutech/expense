@@ -18,7 +18,7 @@ import {
   CheckOutlined,
 } from "@ant-design/icons";
 import "../style/CostCenter.css";
-import { showNotification } from "../contexts/CreateContext";
+import { capitalize } from "../contexts/CreateContext";
 
 const OrgHierTable = () => {
   const [ismodalOpen, setIsModalOpen] = useState(false);
@@ -42,7 +42,6 @@ const OrgHierTable = () => {
       localStorage.setItem("OrgHier", "[]");
       return;
     }
-    console.log(JSON.parse(data));
     setData(JSON.parse(data));
     let temp = [];
     let place = order.indexOf(type);
@@ -60,19 +59,10 @@ const OrgHierTable = () => {
         temp.push(d);
       }
     });
-    console.log(temp);
     setDataSource(temp);
   };
 
   const onFinish = (values) => {
-    // console.log('values', values)
-    let matchingName = dataSource.filter((item) => item.name === values.name);
-    console.log("values", matchingName);
-    if (matchingName.length > 0) {
-      showNotification("error", "error", "This Name already exists!");
-      return;
-    }
-
     let temp = data;
     let place = order.indexOf(type);
     let par =
@@ -96,15 +86,6 @@ const OrgHierTable = () => {
   };
 
   const onFinishEdit = (values) => {
-    let matchingName = dataSource.filter(
-      (item) => item.name === values.editname
-    );
-    console.log("values", values, data, matchingName);
-    if (matchingName.length > 0) {
-      showNotification("error", "error", "This Name already exists!");
-      return;
-    }
-
     let edited = data.map((d) => {
       if (d.parent == editRecord.parent && d.name == editRecord.name) {
         return {
@@ -141,21 +122,17 @@ const OrgHierTable = () => {
       onOk: () => {
         let deleted = data.filter((d) => {
           if (d.parent == record.parent && d.name == record.name) {
-            console.log("same");
             return false;
           }
-          console.log(d.parent, record.parent);
           if (d.parent != null) {
             let par =
               record.parent == null
                 ? record.name
                 : `${record.parent}/${record.name}`;
             if (d.parent.startsWith(par)) {
-              console.log("same par", par);
               return false;
             }
           }
-          console.log("none");
           return true;
         });
         localStorage.setItem("OrgHier", JSON.stringify(deleted));
@@ -179,7 +156,6 @@ const OrgHierTable = () => {
               return;
             }
             setType(order[temp]);
-            console.log(temp, order[temp], record);
             let d = parent == null ? {} : parent;
             d[`${order[temp]}`] = {
               name: record.name,
@@ -263,12 +239,6 @@ const OrgHierTable = () => {
       },
     },
   ];
-
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  console.log(type, parent);
 
   return (
     <div style={{ margin: "13px", background: "#fff" }}>
@@ -371,12 +341,7 @@ const OrgHierTable = () => {
           >
             <Button
               type="default"
-              onClick={() => {
-                {
-                  console.log("hi");
-                  setIsModalOpen(true);
-                }
-              }}
+              onClick={() => setIsModalOpen(true)}
               style={{
                 margin: "10px 10px 0px 0px",
                 background: "#1963A6",
@@ -519,6 +484,15 @@ const OrgHierTable = () => {
                         pattern: /^[0-9a-zA-Z.,-/&()\s]+$/,
                         message: "Please Enter Valid Name",
                       },
+                      {
+                        validator: (_, value) => {
+                          let matchingName = dataSource.filter((item) => item.name === value);
+                          if (matchingName.length > 0) {
+                            return Promise.reject(new Error("This name already exists!"));
+                          }
+                          return Promise.resolve();
+                        }
+                      }
                     ]}
                   >
                     <Input
@@ -675,6 +649,17 @@ const OrgHierTable = () => {
                         pattern: /^[0-9a-zA-Z.,-/&()\s]+$/,
                         message: "Please Enter Valid Name",
                       },
+                      {
+                        validator: (_, value) => {
+                          let matchingName = dataSource.filter(
+                            (item) => item.name === value
+                          );
+                          if (matchingName.length > 0) {
+                            return Promise.reject(new Error("This name already exists!"));
+                          }
+                          return Promise.resolve();
+                        }
+                      }
                     ]}
                   >
                     <Input

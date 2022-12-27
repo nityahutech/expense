@@ -30,8 +30,10 @@ function AddEmployee() {
   const compId = sessionStorage.getItem("compId");
   const [place, setPlace] = useState(null);
   const [designations, setDesignations] = useState([]);
+  const [dept, setDept] = useState([]);
   const [configurations, setConfigurations] = useState([]);
   const [workLoc, setWorkLoc] = useState(null);
+  const [allEmp, setAllEmp] = useState(null);
 
   const { CSVReader } = useCSVReader();
   const styles = {
@@ -72,6 +74,7 @@ function AddEmployee() {
     temp.address?.map((rec) => {
       add.push(rec.title);
     });
+    setDept(temp.departments);
     setWorkLoc(add);
     setConfigurations(data);
     setDesignations(Object.keys(data.designations));
@@ -96,6 +99,11 @@ function AddEmployee() {
         showNotification("error", "Error", "This user already exists!")
       );
   };
+
+  const handleBulkOnboard = () => {
+    console.log(allEmp);
+  };
+
   console.log(designations, place);
   return (
     <>
@@ -710,38 +718,6 @@ function AddEmployee() {
             </Col>
             <Col xs={22} sm={15} md={8}>
               <Form.Item
-                name="department"
-                label="Department"
-                rules={[
-                  {
-                    required: false,
-                    message: "Choose Department",
-                  },
-                ]}
-              >
-                <Select
-                  bordered={false}
-                  // showSearch
-                  placeholder="Select a Field"
-                  style={{
-                    border: "1px solid #8692A6",
-                    borderRadius: "4px",
-                  }}
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
-                >
-                  {configurations?.field?.map((des) => (
-                    <Option value={des}>{des}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col xs={22} sm={15} md={8}>
-              <Form.Item
                 name="location"
                 label="Work Loaction"
                 // onKeyPress={(event) => {
@@ -798,8 +774,145 @@ function AddEmployee() {
                 /> */}
               </Form.Item>
             </Col>
+            <Col xs={22} sm={15} md={8}>
+              <Form.Item
+                name="bu"
+                label="Business Unit"
+                rules={[
+                  {
+                    required: false,
+                    message: "Choose Business Unit",
+                  },
+                ]}
+              >
+                <Select
+                  bordered={false}
+                  // showSearch
+                  placeholder="Select a Business Unit"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                  // optionFilterProp="children"
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                  {dept?.map((des) => {
+                    return des.type == "Business Unit" ? (
+                      <Option value={des.name}>{des.name}</Option>
+                    ) : null;
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
           </Row>
-
+          <Row gutter={[24, 8]}>
+            <Col xs={22} sm={15} md={8}>
+              <Form.Item
+                name="div"
+                label="Division"
+                rules={[
+                  {
+                    required: false,
+                    message: "Choose Division",
+                  },
+                ]}
+              >
+                <Select
+                  bordered={false}
+                  // showSearch
+                  placeholder="Select a Division"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                  // optionFilterProp="children"
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                  {dept?.map((des) => {
+                    return des.type == "Division" ? (
+                      <Option value={des.name}>{des.name}</Option>
+                    ) : null;
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col xs={22} sm={15} md={8}>
+              <Form.Item
+                name="dept"
+                label="Department"
+                rules={[
+                  {
+                    required: false,
+                    message: "Choose Department",
+                  },
+                ]}
+              >
+                <Select
+                  bordered={false}
+                  // showSearch
+                  placeholder="Select a Department"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                  // optionFilterProp="children"
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                  {dept?.map((des) => {
+                    return des.type == "Department" ? (
+                      <Option value={des.name}>{des.name}</Option>
+                    ) : null;
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col xs={22} sm={15} md={8}>
+              <Form.Item
+                name="team"
+                label="Team"
+                rules={[
+                  {
+                    required: false,
+                    message: "Choose Team",
+                  },
+                ]}
+              >
+                <Select
+                  bordered={false}
+                  // showSearch
+                  placeholder="Select a Team"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                  // optionFilterProp="children"
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                  {dept?.map((des) => {
+                    return des.type == "Team" ? (
+                      <Option value={des.name}>{des.name}</Option>
+                    ) : null;
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
           <Row gutter={[24, 16]}>
             <Col classsname="gutter-row" span={9}></Col>
             <Col classsname="gutter-row">

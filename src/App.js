@@ -55,7 +55,8 @@ function App() {
           <Route path="/Attendance" element={<Attendance />} />
           <Route path="/Leave" element={<Leave />} />
           <Route path="/Employee/AddEmployee" element={page(<Addemployee />,["sub2"],["8"])} />
-          <Route path="/Employee/EmployeeList" element={page(<EmployeeList />,["sub2"],["9"])} />
+          <Route path="/Employee/EmployeeList" element={page(<EmployeeList />,["sub2"],["9"])} /> 
+          {/* page giving the error */}
           <Route path="/Employee/Payroll" element={page(<Payslip2 />,["sub2"],["25"])} />
           <Route path="/Expense/AddExpense" element={page(<ExpenseFrm />,["sub1"],["2"])} />
           <Route path="/Expense/ExpenseList" element={page(<ExpenseList />,["sub1"],["3"])} />

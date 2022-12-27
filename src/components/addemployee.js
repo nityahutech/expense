@@ -13,10 +13,15 @@ import {
 } from "antd";
 import "../style/Documents.css";
 import { useNavigate } from "react-router-dom";
-import { capitalize, checkAlphabets, createUser, showNotification } from "../contexts/CreateContext";
+import {
+  capitalize,
+  checkAlphabets,
+  createUser,
+  showNotification,
+} from "../contexts/CreateContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import CompanyProContext from "../contexts/CompanyProContext";
-import { useCSVReader } from 'react-papaparse';
+import { useCSVReader } from "react-papaparse";
 const { Option } = Select;
 function AddEmployee() {
   const page = "addemployeePage";
@@ -33,26 +38,26 @@ function AddEmployee() {
   const { CSVReader } = useCSVReader();
   const styles = {
     csvReader: {
-      display: 'flex',
-      flexDirection: 'row',
+      display: "flex",
+      flexDirection: "row",
       marginBottom: 10,
     },
     browseFile: {
-      width: '20%',
+      width: "20%",
     },
     acceptedFile: {
-      border: '1px solid #ccc',
+      border: "1px solid #ccc",
       height: 45,
       lineHeight: 2.5,
       paddingLeft: 10,
-      width: '80%',
+      width: "80%",
     },
     remove: {
       borderRadius: 0,
-      padding: '0 20px',
+      padding: "0 20px",
     },
     progressBarBackgroundColor: {
-      backgroundColor: 'red',
+      backgroundColor: "red",
     },
   };
 
@@ -69,11 +74,11 @@ function AddEmployee() {
     temp.address?.map((rec) => {
       add.push(rec.title);
     });
-    setDept(temp.departments)
+    setDept(temp.departments);
     setWorkLoc(add);
     setConfigurations(data);
     setDesignations(Object.keys(data.designations));
-    console.log(data)
+    console.log(data);
   };
   const handleListEmployee = () => {
     navigate("/Employee/EmployeeList");
@@ -82,8 +87,9 @@ function AddEmployee() {
     form.resetFields();
   }
   const onFinish = (values) => {
-    console.log(values)
-    values.name = values.fName + (values.mName?` ${values.mName} `:" ") + values.lNam
+    console.log(values);
+    values.name =
+      values.fName + (values.mName ? ` ${values.mName} ` : " ") + values.lNam;
     createUser(values, compId)
       .then((response) => {
         showNotification("success", "Success", "Employee Created");
@@ -94,11 +100,11 @@ function AddEmployee() {
       );
   };
 
-const handleBulkOnboard = () => {
-  console.log(allEmp)
-}
+  const handleBulkOnboard = () => {
+    console.log(allEmp);
+  };
 
-  console.log(designations, place)
+  console.log(designations, place);
   return (
     <>
       <div className="expForm" style={{ margin: "15px", background: "#fff" }}>
@@ -142,7 +148,6 @@ const handleBulkOnboard = () => {
                 justifyContent: "flex-start",
               }}
             >
-
               <Button
                 className="listExpense"
                 type="primary"
@@ -157,59 +162,48 @@ const handleBulkOnboard = () => {
                 Employee List
               </Button>
             </Col>
-            {/* <Col
-              // style={{
-              //   background: "",
-              //   height: "50px",
-              //   display: "flex",
-              //   justifyContent: "flex-start",
-              // }}
-              >
-            <CSVReader
-      onUploadAccepted={(results) => {
-        console.log('---------------------------');
-        console.log(results);
-        setAllEmp(results.data.slice(0, 10))
-        console.log('---------------------------');
-      }}
-    >
-      {({
-        getRootProps,
-        acceptedFile,
-        ProgressBar,
-        getRemoveFileProps,
-      }) => (
-        <>
-          <div style={styles.csvReader}>
-            <button type='button' {...getRootProps()} style={styles.browseFile}>
-              Browse file
-            </button>
-            <div style={styles.acceptedFile}>
-              {acceptedFile && acceptedFile.name}
-            </div>
-            <button {...getRemoveFileProps()} style={styles.remove}>
-              Remove
-            </button>
-          </div>
-          <ProgressBar style={styles.progressBarBackgroundColor} />
-        </>
-      )}
-    </CSVReader>
-    </Col>
-    <Col>
-        <Button
-                type="primary"
-                onClick={handleBulkOnboard}
-                style={{
-                  // width: "120px",
-                  cursor: "pointer",
-                  backgroundColor: "#1963A6",
-                  borderRadius: "5px",
+            <Col
+            // style={{
+            //   background: "",
+            //   height: "50px",
+            //   display: "flex",
+            //   justifyContent: "flex-start",
+            // }}
+            >
+              <CSVReader
+                onUploadAccepted={(results) => {
+                  console.log("---------------------------");
+                  console.log(results);
+                  console.log("---------------------------");
                 }}
-        >
-          Onboard All Employees
-        </Button>
-    </Col> */}
+              >
+                {({
+                  getRootProps,
+                  acceptedFile,
+                  ProgressBar,
+                  getRemoveFileProps,
+                }) => (
+                  <>
+                    <div style={styles.csvReader}>
+                      <button
+                        type="button"
+                        {...getRootProps()}
+                        style={styles.browseFile}
+                      >
+                        Browse file
+                      </button>
+                      <div style={styles.acceptedFile}>
+                        {acceptedFile && acceptedFile.name}
+                      </div>
+                      <button {...getRemoveFileProps()} style={styles.remove}>
+                        Remove
+                      </button>
+                    </div>
+                    <ProgressBar style={styles.progressBarBackgroundColor} />
+                  </>
+                )}
+              </CSVReader>
+            </Col>
           </Row>
           <Row gutter={[24, 8]}>
             <Col xs={22} sm={15} md={8}>
@@ -465,7 +459,7 @@ const handleBulkOnboard = () => {
                   },
                 ]}
               >
-              {/* <Input.Group> */}
+                {/* <Input.Group> */}
                 <Select
                   bordered={false}
                   placeholder="Select a Designation"
@@ -475,11 +469,9 @@ const handleBulkOnboard = () => {
                     // width: "75%"
                   }}
                   onChange={(e) => setPlace(e)}
-                > 
+                >
                   {designations?.map((des) => (
-                    <Option value={des}>
-                      {des}
-                    </Option>
+                    <Option value={des}>{des}</Option>
                   ))}
                 </Select>
                 {/* <Select
@@ -811,7 +803,7 @@ const handleBulkOnboard = () => {
                   {dept?.map((des) => {
                     return des.type == "Business Unit" ? (
                       <Option value={des.name}>{des.name}</Option>
-                    ) : null
+                    ) : null;
                   })}
                 </Select>
               </Form.Item>
@@ -847,7 +839,7 @@ const handleBulkOnboard = () => {
                   {dept?.map((des) => {
                     return des.type == "Division" ? (
                       <Option value={des.name}>{des.name}</Option>
-                    ) : null
+                    ) : null;
                   })}
                 </Select>
               </Form.Item>
@@ -881,7 +873,7 @@ const handleBulkOnboard = () => {
                   {dept?.map((des) => {
                     return des.type == "Department" ? (
                       <Option value={des.name}>{des.name}</Option>
-                    ) : null
+                    ) : null;
                   })}
                 </Select>
               </Form.Item>
@@ -915,7 +907,7 @@ const handleBulkOnboard = () => {
                   {dept?.map((des) => {
                     return des.type == "Team" ? (
                       <Option value={des.name}>{des.name}</Option>
-                    ) : null
+                    ) : null;
                   })}
                 </Select>
               </Form.Item>

@@ -13,6 +13,9 @@ import {
   DeleteOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
+// import {
+//   getCountryCode,
+// } from "../../contexts/CreateContext";
 import "../style/Onboarding.css";
 import { getBase64 } from "../contexts/CreateContext";
 const { Option } = Select;
@@ -22,6 +25,7 @@ const OrgDetails = (props) => {
   const [fileName, setFileName] = useState(props.fileName || null);
   const [imageUrl, setImageUrl] = useState(props.imageUrl || "");
   const [isBigFile, setIsBigFile] = useState(false);
+  const [codes, setCodes] = useState("");
   const [form] = Form.useForm();
   const [data, setData] = useState(props.data || {});
   const newCompId = props.data.orgcode;
@@ -100,6 +104,16 @@ const OrgDetails = (props) => {
     setImageUrl("");
   }
 
+  const handleOnChange = (value, event) => {
+    console.log(value, event);
+  };
+
+  // useEffect(() => {
+  //   getCountryCode().then((res) => {
+  //     setCodes(res);
+  //   });
+  // }, []);
+
   const onFinishFailed = (errorInfo) => {
     props.setIsStepOneInvalid(true);
     console.log("Failed:", errorInfo);
@@ -108,11 +122,20 @@ const OrgDetails = (props) => {
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select
+      allowClear={true}
+        showSearch
+        bordered={false}
         style={{
-          width: 70,
+          width: 80,
+          background: "#ffffff",
         }}
+        onSelect={(value, event) => handleOnChange(value, event)}
       >
-        <Option value="91">+91</Option>
+        {codes?.countries?.map((e) => (
+          <Option key={e?.code} value={e?.code}>
+            {e?.code}{" "}
+          </Option>
+        ))}
       </Select>
     </Form.Item>
   );
@@ -336,7 +359,7 @@ console.log(fileName, JSON.stringify(fileName), imageUrl)
                   message: "Please Enter Valid Number",
                 },
               ]}
-              initialValue={data?.phone}
+              initialValue={data?.phone ? `${data.prefix} ${data.phone}`:"-"}
             >
               <Input
                 addonBefore={prefixSelector}

@@ -27,3 +27,7 @@
     font-weight: 600;
     font-size: 13px;
 }
+
+.selectDisable .ant-select-disabled .ant-select-selection{
+    background-color:red;
+}

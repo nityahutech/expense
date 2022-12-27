@@ -1,20 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  Form,
-  Input,
-  Col,
-  Row,
-  Divider,
-  message,
-  Button,
-  Select,
-} from "antd";
-import {
-  DeleteOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
+import { Form, Input, Col, Row, Divider, message, Button, Select } from "antd";
+import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "../style/Onboarding.css";
-import { getBase64 } from "../contexts/CreateContext";
+import { getBase64, getCountryCode } from "../contexts/CreateContext";
 const { Option } = Select;
 
 const OrgDetails = (props) => {
@@ -22,13 +10,17 @@ const OrgDetails = (props) => {
   const [fileName, setFileName] = useState(props.fileName || null);
   const [imageUrl, setImageUrl] = useState(props.imageUrl || "");
   const [isBigFile, setIsBigFile] = useState(false);
+  const [codes, setCodes] = useState("");
   const [form] = Form.useForm();
   const [data, setData] = useState(props.data || {});
   const newCompId = props.data.orgcode;
 
   useEffect(() => {
+    getCountryCode().then((res) => {
+      setCodes(res);
+    });
     setFileName(props.fileName || null);
-    setImageUrl(props.imageUrl || '');
+    setImageUrl(props.imageUrl || "");
     setIsBigFile(false);
     setData(props.data || {});
   }, [props.data]);
@@ -38,8 +30,12 @@ const OrgDetails = (props) => {
   });
 
   const handleClick = () => {
-    console.log("handleClick")
+    console.log("handleClick");
     imgRef.current.click();
+  };
+
+  const handleOnChange = (value, event) => {
+    console.log(value, event);
   };
 
   // const getBase64 = (img, callback) => {
@@ -49,7 +45,7 @@ const OrgDetails = (props) => {
   // };
 
   const handleChange = (event) => {
-    console.log("handleChange")
+    console.log("handleChange");
 
     if (!event) {
       return;
@@ -108,15 +104,24 @@ const OrgDetails = (props) => {
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select
+        allowClear={true}
+        showSearch
+        bordered={false}
         style={{
-          width: 70,
+          width: 80,
+          background: "#ffffff",
         }}
+        onSelect={(value, event) => handleOnChange(value, event)}
       >
-        <Option value="91">+91</Option>
+        {codes?.countries?.map((e) => (
+          <Option key={e?.code} value={e?.code}>
+            {e?.code}{" "}
+          </Option>
+        ))}
       </Select>
     </Form.Item>
   );
-console.log(fileName, JSON.stringify(fileName), imageUrl)
+  console.log(fileName, JSON.stringify(fileName), imageUrl);
   return (
     <div style={{ margin: "13px", background: "#fff" }}>
       <div

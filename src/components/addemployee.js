@@ -13,10 +13,15 @@ import {
 } from "antd";
 import "../style/Documents.css";
 import { useNavigate } from "react-router-dom";
-import { capitalize, checkAlphabets, createUser, showNotification } from "../contexts/CreateContext";
+import {
+  capitalize,
+  checkAlphabets,
+  createUser,
+  showNotification,
+} from "../contexts/CreateContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import CompanyProContext from "../contexts/CompanyProContext";
-import { useCSVReader } from 'react-papaparse';
+import { useCSVReader } from "react-papaparse";
 const { Option } = Select;
 function AddEmployee() {
   const page = "addemployeePage";
@@ -31,26 +36,26 @@ function AddEmployee() {
   const { CSVReader } = useCSVReader();
   const styles = {
     csvReader: {
-      display: 'flex',
-      flexDirection: 'row',
+      display: "flex",
+      flexDirection: "row",
       marginBottom: 10,
     },
     browseFile: {
-      width: '20%',
+      width: "20%",
     },
     acceptedFile: {
-      border: '1px solid #ccc',
+      border: "1px solid #ccc",
       height: 45,
       lineHeight: 2.5,
       paddingLeft: 10,
-      width: '80%',
+      width: "80%",
     },
     remove: {
       borderRadius: 0,
-      padding: '0 20px',
+      padding: "0 20px",
     },
     progressBarBackgroundColor: {
-      backgroundColor: 'red',
+      backgroundColor: "red",
     },
   };
 
@@ -70,7 +75,7 @@ function AddEmployee() {
     setWorkLoc(add);
     setConfigurations(data);
     setDesignations(Object.keys(data.designations));
-    console.log(data)
+    console.log(data);
   };
   const handleListEmployee = () => {
     navigate("/Employee/EmployeeList");
@@ -79,8 +84,9 @@ function AddEmployee() {
     form.resetFields();
   }
   const onFinish = (values) => {
-    console.log(values)
-    values.name = values.fName + (values.mName?` ${values.mName} `:" ") + values.lNam
+    console.log(values);
+    values.name =
+      values.fName + (values.mName ? ` ${values.mName} ` : " ") + values.lNam;
     createUser(values, compId)
       .then((response) => {
         showNotification("success", "Success", "Employee Created");
@@ -90,7 +96,7 @@ function AddEmployee() {
         showNotification("error", "Error", "This user already exists!")
       );
   };
-  console.log(designations, place)
+  console.log(designations, place);
   return (
     <>
       <div className="expForm" style={{ margin: "15px", background: "#fff" }}>
@@ -134,7 +140,6 @@ function AddEmployee() {
                 justifyContent: "flex-start",
               }}
             >
-
               <Button
                 className="listExpense"
                 type="primary"
@@ -150,43 +155,47 @@ function AddEmployee() {
               </Button>
             </Col>
             <Col
-              // style={{
-              //   background: "",
-              //   height: "50px",
-              //   display: "flex",
-              //   justifyContent: "flex-start",
-              // }}
+            // style={{
+            //   background: "",
+            //   height: "50px",
+            //   display: "flex",
+            //   justifyContent: "flex-start",
+            // }}
+            >
+              <CSVReader
+                onUploadAccepted={(results) => {
+                  console.log("---------------------------");
+                  console.log(results);
+                  console.log("---------------------------");
+                }}
               >
-            <CSVReader
-      onUploadAccepted={(results) => {
-        console.log('---------------------------');
-        console.log(results);
-        console.log('---------------------------');
-      }}
-    >
-      {({
-        getRootProps,
-        acceptedFile,
-        ProgressBar,
-        getRemoveFileProps,
-      }) => (
-        <>
-          <div style={styles.csvReader}>
-            <button type='button' {...getRootProps()} style={styles.browseFile}>
-              Browse file
-            </button>
-            <div style={styles.acceptedFile}>
-              {acceptedFile && acceptedFile.name}
-            </div>
-            <button {...getRemoveFileProps()} style={styles.remove}>
-              Remove
-            </button>
-          </div>
-          <ProgressBar style={styles.progressBarBackgroundColor} />
-        </>
-      )}
-    </CSVReader>
-    </Col>
+                {({
+                  getRootProps,
+                  acceptedFile,
+                  ProgressBar,
+                  getRemoveFileProps,
+                }) => (
+                  <>
+                    <div style={styles.csvReader}>
+                      <button
+                        type="button"
+                        {...getRootProps()}
+                        style={styles.browseFile}
+                      >
+                        Browse file
+                      </button>
+                      <div style={styles.acceptedFile}>
+                        {acceptedFile && acceptedFile.name}
+                      </div>
+                      <button {...getRemoveFileProps()} style={styles.remove}>
+                        Remove
+                      </button>
+                    </div>
+                    <ProgressBar style={styles.progressBarBackgroundColor} />
+                  </>
+                )}
+              </CSVReader>
+            </Col>
           </Row>
           <Row gutter={[24, 8]}>
             <Col xs={22} sm={15} md={8}>
@@ -442,7 +451,7 @@ function AddEmployee() {
                   },
                 ]}
               >
-              {/* <Input.Group> */}
+                {/* <Input.Group> */}
                 <Select
                   bordered={false}
                   placeholder="Select a Designation"
@@ -452,11 +461,9 @@ function AddEmployee() {
                     // width: "75%"
                   }}
                   onChange={(e) => setPlace(e)}
-                > 
+                >
                   {designations?.map((des) => (
-                    <Option value={des}>
-                      {des}
-                    </Option>
+                    <Option value={des}>{des}</Option>
                   ))}
                 </Select>
                 {/* <Select

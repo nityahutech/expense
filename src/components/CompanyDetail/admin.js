@@ -37,11 +37,15 @@ const Admin = () => {
 
   const [allEmpName, setAllEmpName] = useState([]);
   const [ceoAdmin, setCeoAdmin] = useState('');
-
   const [ceoAdminImg, setCeoAdminImg] = useState('');
+
   const [financeAdmins, setFinanceAdmins] = useState([]);
+
   const [hrAdminImg, setHrAdminImg] = useState('');
   const [hrExAdmins, setHrExAdmins] = useState([]);
+
+  const [curHrExe, setCurHrExe] = useState([]);
+
 
   //------------------------------------------------------ceo
   const onFinish = (values) => {
@@ -121,12 +125,15 @@ const Admin = () => {
 
   const getData = async (allUsers) => {
     let compProfile = await CompanyProContext.getCompanyProfile(compId);
+    setData(compProfile);
+    setCurHrExe(compProfile.hrExeAdmin)
     let ceoImageUrl = null
-    const filteredArray = allUsers.filter(element => compProfile.financerAdmin.includes(element.value));
+    console.log('aaaaaaaaa', compProfile)
+    const filteredArray = allUsers.filter(element => compProfile.financerAdmin?.includes(element.value));
     console.log('financerAdmin', filteredArray)
     setFinanceAdmins(filteredArray)
 
-    const filteredArrayHrExe = allUsers.filter(element => compProfile.hrExeAdmin.includes(element.value));
+    const filteredArrayHrExe = allUsers.filter(element => compProfile.hrExeAdmin?.includes(element.value));
     console.log('hrExeAdmin', filteredArrayHrExe)
     setHrExAdmins(filteredArrayHrExe)
 
@@ -140,7 +147,7 @@ const Admin = () => {
         setHrAdminImg(allUsers[i].profilePic)
       }
     }
-    setData(compProfile);
+
     console.log('data3', ceoImageUrl)
   };
 
@@ -182,8 +189,6 @@ const Admin = () => {
     getData(allUsers);
 
   }
-
-
 
   function getInitials(text) {
     const myArray = text.split(" ");
@@ -627,8 +632,7 @@ const Admin = () => {
           }}
           initialValues={{
             remember: true,
-            // fields: data?.financerAdmin,
-            fields: [{ financerAdmin: 'fff' }, { financerAdmin: 'eeee' }],
+
           }}
           fields={[
 
@@ -744,7 +748,7 @@ const Admin = () => {
                                 >
                                   <Form.Item
                                     style={{ marginTop: "10px" }}
-                                    initialValue={data?.financerAdmin[key]}
+                                    initialValue={data.financerAdmin != null ? data.financerAdmin[key] : ''}
                                     // {...restField}
                                     name={[name, 'financerAdmin']}
                                   >
@@ -965,7 +969,7 @@ const Admin = () => {
                                 >
                                   <Form.Item
                                     style={{ marginTop: "10px" }}
-                                    initialValue={data?.hrExeAdmin[key]}
+                                    initialValue={data.hrExeAdmin != null ? data.hrExeAdmin[key] : ''}
                                     // {...restField}
                                     name={[name, 'hrExeAdmin']}
                                   // rules={[
@@ -975,9 +979,15 @@ const Admin = () => {
                                   //   },
                                   //   {
                                   //     validator: (rule, value, callback) => {
-                                  //       let exists = Object.keys(name).includes(value);
+                                  //       console.log('lllllll', value, curHrExe)
+                                  //       let exists = curHrExe?.includes(value);
                                   //       if (exists) {
                                   //         return Promise.reject(new Error("This designations already exists!"));
+                                  //       }
+                                  //       else {
+                                  //         curHrExe.push(value)
+                                  //         const uniqueArray = [...new Set(curHrExe)]
+                                  //         setCurHrExe(uniqueArray)
                                   //       }
                                   //     },
                                   //     message: "This designation already exists!",

@@ -96,6 +96,16 @@ const OrgDetails = (props) => {
     setImageUrl("");
   }
 
+  const handleOnChange = (value, event) => {
+    console.log(value, event);
+  };
+
+  // useEffect(() => {
+  //   getCountryCode().then((res) => {
+  //     setCodes(res);
+  //   });
+  // }, []);
+
   const onFinishFailed = (errorInfo) => {
     props.setIsStepOneInvalid(true);
     console.log("Failed:", errorInfo);
@@ -108,16 +118,10 @@ const OrgDetails = (props) => {
         showSearch
         bordered={false}
         style={{
-          width: 80,
-          background: "#ffffff",
+          width: 70,
         }}
-        onSelect={(value, event) => handleOnChange(value, event)}
       >
-        {codes?.countries?.map((e) => (
-          <Option key={e?.code} value={e?.code}>
-            {e?.code}{" "}
-          </Option>
-        ))}
+        <Option value="91">+91</Option>
       </Select>
     </Form.Item>
   );
@@ -341,7 +345,7 @@ const OrgDetails = (props) => {
                   message: "Please Enter Valid Number",
                 },
               ]}
-              initialValue={data?.phone}
+              initialValue={data?.phone ? `${data.prefix} ${data.phone}` : "-"}
             >
               <Input
                 addonBefore={prefixSelector}

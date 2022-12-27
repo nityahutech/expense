@@ -5,6 +5,7 @@ import dot from "../../images/dot.png";
 import dashIcon from "../../images/Dashboard.png";
 import empIcon from "../../images/employees.png";
 import userIcon from "../../images/user.png";
+import assetMag from "../../images/newSBLogo/AssetManagement.png"
 import logo from "../../images/Group 1.png";
 import appraisalIcon from "../../images/appraisal.png";
 import Organization from "../../images/Organization.png";
@@ -316,6 +317,14 @@ key="25"
                   <NavLink to="/Profile" />
                 </Menu.Item>
 
+                <Menu.Item
+                  icon={<img src={assetMag} alt="asset" class="Dash"/>}
+                  key="22"
+                >
+                  <p className="sideFont">Asset Management</p>
+                  <NavLink to="/assetManagement/assetMagHome"/>
+                </Menu.Item>
+
                 {/* <Menu.Item
 
               // style={{
@@ -336,6 +345,7 @@ key="25"
               </Menu>
             </div>
           </div>
+          {/* --------------------setting---------------- */}
           <div
             className="sidelayout-setting"
             style={

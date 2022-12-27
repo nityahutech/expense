@@ -9,7 +9,7 @@ import ExpenseListpage from "./pages/ExpenseList/ExpenseListpage";
 import Attendance from "./pages/Attendance/Attendance";
 import AppraisalHr from "./components/quarterApp/appraisalHomePage";
 import Payslip2 from "./components/ProfileDetails/HrPaySlip";
-
+import AssetMag from"./components/assetManagement/assetMagHome";
 import Profile from "./components/Profilepage";
 import Onboarding from "./components/Onboarding";
 import CompanyProfile from "./components/CompanyProfile";
@@ -64,6 +64,7 @@ function App() {
           <Route path="/Settings" element={page(<Settingpage />)  } />
           <Route path="/Appraisal/AppraisalPageHr" element={page(<AppraisalHr />,["sub4"],["20"])} />
           <Route path="/Appraisal/HalfYearGoalPage" element={page(<HalfYearGoalHome />,["sub4"],["20a"])} />
+          <Route path="/assetManagement/assetMagHome" element={page(<AssetMag />,["22"])} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

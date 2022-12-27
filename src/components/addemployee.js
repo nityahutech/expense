@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { capitalize, checkAlphabets, createUser, showNotification } from "../contexts/CreateContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import CompanyProContext from "../contexts/CompanyProContext";
+import { useCSVReader } from 'react-papaparse';
 const { Option } = Select;
 function AddEmployee() {
   const page = "addemployeePage";
@@ -23,9 +24,38 @@ function AddEmployee() {
   const navigate = useNavigate();
   const compId = sessionStorage.getItem("compId");
   const [place, setPlace] = useState(null);
-  const [designations, setDesignations] = useState({});
+  const [designations, setDesignations] = useState([]);
+  const [dept, setDept] = useState([]);
   const [configurations, setConfigurations] = useState([]);
   const [workLoc, setWorkLoc] = useState(null);
+  const [allEmp, setAllEmp] = useState(null);
+
+  const { CSVReader } = useCSVReader();
+  const styles = {
+    csvReader: {
+      display: 'flex',
+      flexDirection: 'row',
+      marginBottom: 10,
+    },
+    browseFile: {
+      width: '20%',
+    },
+    acceptedFile: {
+      border: '1px solid #ccc',
+      height: 45,
+      lineHeight: 2.5,
+      paddingLeft: 10,
+      width: '80%',
+    },
+    remove: {
+      borderRadius: 0,
+      padding: '0 20px',
+    },
+    progressBarBackgroundColor: {
+      backgroundColor: 'red',
+    },
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -39,14 +69,10 @@ function AddEmployee() {
     temp.address?.map((rec) => {
       add.push(rec.title);
     });
-    let des = {};
-    data?.designations.map((d) => {
-      console.log(d);
-      des[`${Object.keys(d)[0]}`] = Object.values(d)[0]
-    })
+    setDept(temp.departments)
     setWorkLoc(add);
     setConfigurations(data);
-    setDesignations(des);
+    setDesignations(Object.keys(data.designations));
     console.log(data)
   };
   const handleListEmployee = () => {
@@ -67,6 +93,11 @@ function AddEmployee() {
         showNotification("error", "Error", "This user already exists!")
       );
   };
+
+const handleBulkOnboard = () => {
+  console.log(allEmp)
+}
+
   console.log(designations, place)
   return (
     <>
@@ -111,6 +142,7 @@ function AddEmployee() {
                 justifyContent: "flex-start",
               }}
             >
+
               <Button
                 className="listExpense"
                 type="primary"
@@ -125,6 +157,59 @@ function AddEmployee() {
                 Employee List
               </Button>
             </Col>
+            {/* <Col
+              // style={{
+              //   background: "",
+              //   height: "50px",
+              //   display: "flex",
+              //   justifyContent: "flex-start",
+              // }}
+              >
+            <CSVReader
+      onUploadAccepted={(results) => {
+        console.log('---------------------------');
+        console.log(results);
+        setAllEmp(results.data.slice(0, 10))
+        console.log('---------------------------');
+      }}
+    >
+      {({
+        getRootProps,
+        acceptedFile,
+        ProgressBar,
+        getRemoveFileProps,
+      }) => (
+        <>
+          <div style={styles.csvReader}>
+            <button type='button' {...getRootProps()} style={styles.browseFile}>
+              Browse file
+            </button>
+            <div style={styles.acceptedFile}>
+              {acceptedFile && acceptedFile.name}
+            </div>
+            <button {...getRemoveFileProps()} style={styles.remove}>
+              Remove
+            </button>
+          </div>
+          <ProgressBar style={styles.progressBarBackgroundColor} />
+        </>
+      )}
+    </CSVReader>
+    </Col>
+    <Col>
+        <Button
+                type="primary"
+                onClick={handleBulkOnboard}
+                style={{
+                  // width: "120px",
+                  cursor: "pointer",
+                  backgroundColor: "#1963A6",
+                  borderRadius: "5px",
+                }}
+        >
+          Onboard All Employees
+        </Button>
+    </Col> */}
           </Row>
           <Row gutter={[24, 8]}>
             <Col xs={22} sm={15} md={8}>
@@ -139,7 +224,6 @@ function AddEmployee() {
                 rules={[
                   {
                     required: true,
-
                     message: "Please enter First Name",
                   },
                   {
@@ -392,7 +476,7 @@ function AddEmployee() {
                   }}
                   onChange={(e) => setPlace(e)}
                 > 
-                  {Object.keys(designations)?.map((des, i) => (
+                  {designations?.map((des) => (
                     <Option value={des}>
                       {des}
                     </Option>
@@ -642,38 +726,6 @@ function AddEmployee() {
             </Col>
             <Col xs={22} sm={15} md={8}>
               <Form.Item
-                name="department"
-                label="Department"
-                rules={[
-                  {
-                    required: false,
-                    message: "Choose Department",
-                  },
-                ]}
-              >
-                <Select
-                  bordered={false}
-                  // showSearch
-                  placeholder="Select a Field"
-                  style={{
-                    border: "1px solid #8692A6",
-                    borderRadius: "4px",
-                  }}
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
-                >
-                  {configurations?.field?.map((des) => (
-                    <Option value={des}>{des}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col xs={22} sm={15} md={8}>
-              <Form.Item
                 name="location"
                 label="Work Loaction"
                 // onKeyPress={(event) => {
@@ -730,8 +782,145 @@ function AddEmployee() {
                 /> */}
               </Form.Item>
             </Col>
+            <Col xs={22} sm={15} md={8}>
+              <Form.Item
+                name="bu"
+                label="Business Unit"
+                rules={[
+                  {
+                    required: false,
+                    message: "Choose Business Unit",
+                  },
+                ]}
+              >
+                <Select
+                  bordered={false}
+                  // showSearch
+                  placeholder="Select a Business Unit"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                  // optionFilterProp="children"
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                  {dept?.map((des) => {
+                    return des.type == "Business Unit" ? (
+                      <Option value={des.name}>{des.name}</Option>
+                    ) : null
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
           </Row>
-
+          <Row gutter={[24, 8]}>
+            <Col xs={22} sm={15} md={8}>
+              <Form.Item
+                name="div"
+                label="Division"
+                rules={[
+                  {
+                    required: false,
+                    message: "Choose Division",
+                  },
+                ]}
+              >
+                <Select
+                  bordered={false}
+                  // showSearch
+                  placeholder="Select a Division"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                  // optionFilterProp="children"
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                  {dept?.map((des) => {
+                    return des.type == "Division" ? (
+                      <Option value={des.name}>{des.name}</Option>
+                    ) : null
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col xs={22} sm={15} md={8}>
+              <Form.Item
+                name="dept"
+                label="Department"
+                rules={[
+                  {
+                    required: false,
+                    message: "Choose Department",
+                  },
+                ]}
+              >
+                <Select
+                  bordered={false}
+                  // showSearch
+                  placeholder="Select a Department"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                  // optionFilterProp="children"
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                  {dept?.map((des) => {
+                    return des.type == "Department" ? (
+                      <Option value={des.name}>{des.name}</Option>
+                    ) : null
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col xs={22} sm={15} md={8}>
+              <Form.Item
+                name="team"
+                label="Team"
+                rules={[
+                  {
+                    required: false,
+                    message: "Choose Team",
+                  },
+                ]}
+              >
+                <Select
+                  bordered={false}
+                  // showSearch
+                  placeholder="Select a Team"
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                  // optionFilterProp="children"
+                  //   onChange={onChange}
+                  //   onSearch={onSearch}
+                  // filterOption={(input, option) =>
+                  //   option.children.toLowerCase().includes(input.toLowerCase())
+                  // }
+                >
+                  {dept?.map((des) => {
+                    return des.type == "Team" ? (
+                      <Option value={des.name}>{des.name}</Option>
+                    ) : null
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
           <Row gutter={[24, 16]}>
             <Col classsname="gutter-row" span={9}></Col>
             <Col classsname="gutter-row">

@@ -126,10 +126,15 @@ export function getBase64(img, callback) {
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result));
   reader.readAsDataURL(img);
-  
 };
 
- export  async function getCountryCode(){
+export  async function getCountryCode(){
   let data =  await getDoc(doc(db, "standardInfo","countryCodes"));
   return data.data();
+}
+
+export function checkUpperCase(event) {
+  if (!/^[A-Z]*$/.test(event.key) && event.key !== "Backspace") {
+    return true;
+  }
 }

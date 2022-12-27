@@ -23,12 +23,12 @@ import TextArea from "antd/lib/input/TextArea";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import CompanyProContext from "../contexts/CompanyProContext";
+import { capitalize, checkNumbervalue, checkUpperCase } from "../contexts/CreateContext";
 import "../style/Onboarding.css";
 
 const { Option } = Select;
 
 function AccessDetails(props) {
-  // console.log(props);
   const [addAccess, setAddAccess] = useState(false);
   const [accessList, setAccessList] = useState([]);
   const [orgHier, setOrgHier] = useState([]);
@@ -59,13 +59,6 @@ function AccessDetails(props) {
     },
   };
 
-  const validateAccessEmail = async (rule, value, callback) => {
-    let exists = await CompanyProContext.checkUserExists(value);
-    if (exists) {
-      return Promise.reject(new Error("this id exists"));
-    }
-  };
-
   const disabledDate = (current) => {
     return current.isAfter(moment().subtract(20, "years"));
   };
@@ -80,10 +73,14 @@ function AccessDetails(props) {
     let temp = localStorage.getItem("OrgAccess");
     if (!temp) {
       localStorage.setItem("OrgAccess", "[]");
+      props.setIsStepFourInvalid(true);
       return;
     }
-    setAccessList(JSON.parse(temp));
-    let array = [...temp];
+    let t = JSON.parse(temp)
+    setAccessList(t);
+    if (t.length == 0) { props.setIsStepFourInvalid(true) }
+    else { props.setIsStepFourInvalid(false) }
+    let array = [...t]
     setEditAccess(array.fill(false));
   };
 
@@ -111,22 +108,6 @@ function AccessDetails(props) {
     }
   };
 
-  const checkNumbervalue = (event) => {
-    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
-  const checkUpperCase = (event) => {
-    if (!/^[A-Z]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
   function addUseRole(values) {
     let temp = [
       ...accessList,
@@ -137,7 +118,6 @@ function AccessDetails(props) {
         empId: values.empId?._isValid ? values.empId : null,
       },
     ];
-    console.log(temp);
     localStorage.setItem("OrgAccess", JSON.stringify(temp));
     getData();
     form.resetFields();
@@ -145,14 +125,12 @@ function AccessDetails(props) {
   }
 
   function editUseRole(values) {
-    console.log(values, editIndex);
     let temp = [...accessList];
     temp[editIndex] = {
       ...values,
       dob: values.dob?._isValid ? values.dob.format(dateFormat) : null,
       doj: values.doj?._isValid ? values.doj.format(dateFormat) : null,
     };
-    console.log("edited accessList::: ", temp);
     localStorage.setItem("OrgAccess", JSON.stringify(temp));
     getData();
     let array = editAccess;
@@ -184,12 +162,9 @@ function AccessDetails(props) {
         localStorage.setItem("OrgAccess", JSON.stringify(temp));
         showNotification("success", "Success", "Successfully deleted");
         setAccessList(temp);
+        getData();
       },
     });
-
-    // CompanyProContext.deleteCompInfo(delItem.id)
-    // .then((response) => {
-    //            })
   }
 
   const disabledDiv = () => {
@@ -236,13 +211,12 @@ function AccessDetails(props) {
         temp.push(d);
       }
     });
-    console.log(temp);
     return temp;
   };
 
   const generateEmpCode = () => {
-    // console.log(props.preCode);
     let res = accessList.length + 1;
+    console.log(props.preCode + ("00" + res.toString()).slice(-3))
     return props.preCode + ("00" + res.toString()).slice(-3);
   };
   return (
@@ -327,7 +301,6 @@ function AccessDetails(props) {
                 </>
               }
             >
-              {/* {console.log(i)} */}
               <Form
                 colon={true}
                 name="basic"
@@ -661,17 +634,32 @@ function AccessDetails(props) {
                         //   offset: 1,
                         // }}
                         rules={[
-                          {
-                            required: true,
-                            message: "Please Enter Email Address",
-                            type: "email",
-                          },
-
-                          {
-                            validator: validateAccessEmail,
-                            message: "This email address already exists!",
-                          },
-                        ]}
+                      {
+                        required: true,
+                        message: "Please Enter Valid Email Address",
+                        type: "email",
+                        pattern: "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
+                      },
+                      {
+                        validator: async (_, value) => {
+                          let exists = await CompanyProContext.checkUserExists(value);
+                          if (exists) {
+                            return Promise.reject(new Error("This email address already exists!"));
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                      {
+                        validator: (_, value) => {
+                          let domain = value.substring(value.indexOf("@") + 1);
+                          let valid = domain == props.domain;
+                          if (!valid) {
+                            return Promise.reject(new Error("Please Enter Official Email Address"));
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                    ]}
                       >
                         <Input
                           maxLength={50}
@@ -1296,6 +1284,7 @@ function AccessDetails(props) {
                           let array = [...editAccess];
                           array[i] = false;
                           setEditAccess(array);
+                          onReset();
                         }}
                       >
                         <CloseOutlined />
@@ -1368,18 +1357,6 @@ function AccessDetails(props) {
                 }}
                 name="basic"
                 form={form}
-                // labelCol={
-                //   {
-                //     // span: 2,
-                //     // offset: 5,
-                //   }
-                // }
-                // wrapperCol={
-                //   {
-                //     // span: 6,
-                //     // offset: 1,
-                //   }
-                // }
                 initialValues={{
                   remember: true,
                 }}
@@ -1658,10 +1635,6 @@ function AccessDetails(props) {
                     name="empId"
                     label="Employee ID::"
                     onKeyPress={(event) => {
-                      console.log(
-                        checkNumbervalue(event),
-                        checkUpperCase(event)
-                      );
                       if (checkNumbervalue(event) && checkUpperCase(event)) {
                         event.preventDefault();
                       }
@@ -1707,8 +1680,23 @@ function AccessDetails(props) {
                         pattern: "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
                       },
                       {
-                        validator: validateAccessEmail,
-                        message: "This email address already exists!",
+                        validator: async (_, value) => {
+                          let exists = await CompanyProContext.checkUserExists(value);
+                          if (exists) {
+                            return Promise.reject(new Error("This email address already exists!"));
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                      {
+                        validator: (_, value) => {
+                          let domain = value.substring(value.indexOf("@") + 1);
+                          let valid = domain == props.domain;
+                          if (!valid) {
+                            return Promise.reject(new Error("Please Enter Official Email Address"));
+                          }
+                          return Promise.resolve();
+                        },
                       },
                     ]}
                     // labelCol={{
@@ -2060,9 +2048,7 @@ function AccessDetails(props) {
                         borderRadius: "4px",
                         marginLeft: "17%",
                       }}
-                      onClick={() => {
-                        form.submit();
-                      }}
+                      onClick={() => form.submit()}
                     >
                       <CheckOutlined />
                       SAVE

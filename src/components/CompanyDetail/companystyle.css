@@ -54,6 +54,15 @@
   font-family: "Open Sans", sans-serif;
 }
 
+.div-Phone{
+  font-weight: 600;
+  line-height: 18px;
+  color: #07182b;
+  font-size: 14px;
+  font-family: "Open Sans", sans-serif;
+  margin-left: 4rem;
+}
+
 .modal-close-x:hover {
   transform: rotate(180deg);
   transform-origin: center;

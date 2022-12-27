@@ -96,10 +96,6 @@ const OrgDetails = (props) => {
     setImageUrl("");
   }
 
-  const handleOnChange = (value, event) => {
-    console.log(value, event);
-  };
-
   // useEffect(() => {
   //   getCountryCode().then((res) => {
   //     setCodes(res);

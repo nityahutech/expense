@@ -19,11 +19,12 @@ import {
   createUser,
   showNotification,
 } from "../contexts/CreateContext";
+import { getCountryCode } from "../contexts/CreateContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import CompanyProContext from "../contexts/CompanyProContext";
 import { useCSVReader } from "react-papaparse";
 const { Option } = Select;
-function AddEmployee() {
+function AddEmployee(props) {
   const page = "addemployeePage";
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -31,9 +32,51 @@ function AddEmployee() {
   const [place, setPlace] = useState(null);
   const [designations, setDesignations] = useState([]);
   const [dept, setDept] = useState([]);
+  const [codes, setCodes] = useState("");
   const [configurations, setConfigurations] = useState([]);
   const [workLoc, setWorkLoc] = useState(null);
   const [allEmp, setAllEmp] = useState(null);
+  const [data, setData] = useState();
+  const [parent, setParent] = useState(null);
+  const [dataSource, setDataSource] = useState([]);
+  const [selectInput, setSelectInput] = useState({
+    div: true,
+    depart: true,
+    team: true,
+  });
+  const [domain, setDomain] = useState("");
+  const order = ["Business Unit", "Division", "Department", "Team"];
+  const [type, setType] = useState("Business Unit");
+
+  const selectBusiness = (e) => {
+    setSelectInput({ ...selectInput, div: false });
+    setSelectInput(e.target.value);
+  };
+
+  const selectDivision = (e) => {
+    setSelectInput({ ...selectInput, depart: false });
+    setSelectInput(e.target.value);
+  };
+
+  const selectDepartment = (e) => {
+    setSelectInput({ ...selectInput, team: false });
+    setSelectInput(e.target.value);
+  };
+
+  const selectedInput = (record) => {
+    let temp = order.indexOf(type) + 1;
+    if (temp > 3) {
+      return;
+    }
+    setType(order[temp]);
+    console.log(temp, order[temp], record);
+    let d = parent == null ? {} : parent;
+    d[`${order[temp]}`] = {
+      name: record.name,
+      description: record.description,
+    };
+    setParent(order[temp] == order[0] ? null : d);
+  };
 
   const { CSVReader } = useCSVReader();
   const styles = {
@@ -62,8 +105,46 @@ function AddEmployee() {
   };
 
   useEffect(() => {
+    CompanyProContext.getCompanyProfile(compId).then((res) => {
+      setData(res?.departments);
+      getSelectData(res?.departments);
+    });
+    getCountryCode().then((res) => {
+      setCodes(res);
+    });
     getData();
   }, []);
+
+  useEffect(() => {
+    getSelectData();
+  }, [type]);
+
+  const getSelectData = (dept) => {
+    let d = dept || data;
+    console.log(d);
+    if (!d) {
+      return;
+    }
+    let temp = [];
+    let place = order.indexOf(type);
+    let par =
+      place == 0
+        ? null
+        : parent[`${order[1]}`].name +
+          (place == 1
+            ? ""
+            : "/" +
+              parent[`${order[2]}`].name +
+              (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
+    d.map((d) => {
+      if (d.type == type && d.parent == par) {
+        temp.push(d);
+      }
+    });
+    console.log(temp);
+    setDataSource(temp);
+  };
+
   const getData = async () => {
     let temp = await CompanyProContext.getCompanyProfile(compId);
     let data = await ConfigureContext.getConfigurations(page);
@@ -75,6 +156,7 @@ function AddEmployee() {
       add.push(rec.title);
     });
     setDept(temp.departments);
+    setDomain(temp.domain);
     setWorkLoc(add);
     setConfigurations(data);
     setDesignations(Object.keys(data.designations));
@@ -98,11 +180,63 @@ function AddEmployee() {
       .catch((error) =>
         showNotification("error", "Error", "This user already exists!")
       );
+    let temp = data;
+    let place = order.indexOf(type);
+    let par =
+      place == 0
+        ? null
+        : parent[`${order[1]}`].name +
+          (place == 1
+            ? ""
+            : "/" +
+              parent[`${order[2]}`].name +
+              (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
+    temp.push({
+      ...values,
+      parent: par,
+      type: type,
+    });
+    CompanyProContext.addCompInfo(compId, {
+      departments: {
+        ...values,
+        parent: par,
+        type: type,
+      },
+    });
+    form.resetFields();
+    // setIsModalOpen(false);
+    setData(temp);
+    getSelectData(temp);
   };
 
   const handleBulkOnboard = () => {
     console.log(allEmp);
   };
+
+  const handleOnChange = (value, event) => {
+    console.log(value, event);
+  };
+
+  const prefixSelector = (
+    <Form.Item name="prefix" noStyle>
+      <Select
+        allowClear={true}
+        showSearch
+        bordered={false}
+        style={{
+          width: 80,
+          background: "#ffffff",
+        }}
+        onSelect={(value, event) => handleOnChange(value, event)}
+      >
+        {codes?.countries?.map((e) => (
+          <Option key={e?.code} value={e?.code}>
+            {e?.code}{" "}
+          </Option>
+        ))}
+      </Select>
+    </Form.Item>
+  );
 
   console.log(designations, place);
   return (
@@ -346,6 +480,32 @@ function AddEmployee() {
                   {
                     message: "Please enter Valid Email",
                   },
+                  {
+                    validator: async (_, value) => {
+                      let exists = await CompanyProContext.checkUserExists(
+                        value
+                      );
+                      if (exists) {
+                        return Promise.reject(
+                          new Error("This email address already exists!")
+                        );
+                      }
+                      return Promise.resolve();
+                    },
+                  },
+                  {
+                    validator: (_, value) => {
+                      let emailDomain = value.substring(value.indexOf("@") + 1);
+                      let valid = domain == emailDomain;
+                      console.log(domain);
+                      if (!valid) {
+                        return Promise.reject(
+                          new Error("Please Enter Official Email Address")
+                        );
+                      }
+                      return Promise.resolve();
+                    },
+                  },
                 ]}
               >
                 <Input
@@ -404,6 +564,7 @@ function AddEmployee() {
                 ]}
               >
                 <Input
+                  addonBefore={prefixSelector}
                   maxLength={10}
                   required
                   //   onChange={(e) => {
@@ -774,6 +935,7 @@ function AddEmployee() {
                 /> */}
               </Form.Item>
             </Col>
+
             <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="bu"
@@ -787,6 +949,10 @@ function AddEmployee() {
               >
                 <Select
                   bordered={false}
+                  onSelect={(e) => {
+                    selectBusiness(e);
+                    selectedInput(e);
+                  }}
                   // showSearch
                   placeholder="Select a Business Unit"
                   style={{
@@ -822,9 +988,12 @@ function AddEmployee() {
                 ]}
               >
                 <Select
+                  className="selectDisable"
+                  onSelect={selectDivision}
                   bordered={false}
                   // showSearch
                   placeholder="Select a Division"
+                  disabled={selectInput.div}
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
@@ -844,6 +1013,7 @@ function AddEmployee() {
                 </Select>
               </Form.Item>
             </Col>
+
             <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="dept"
@@ -856,6 +1026,8 @@ function AddEmployee() {
                 ]}
               >
                 <Select
+                  onSelect={selectDepartment}
+                  disabled={selectInput.depart}
                   bordered={false}
                   // showSearch
                   placeholder="Select a Department"
@@ -890,6 +1062,7 @@ function AddEmployee() {
                 ]}
               >
                 <Select
+                  disabled={selectInput.team}
                   bordered={false}
                   // showSearch
                   placeholder="Select a Team"

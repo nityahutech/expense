@@ -114,10 +114,16 @@ const OrgDetails = (props) => {
         showSearch
         bordered={false}
         style={{
-          width: 70,
+          width: 80,
+          background: "#ffffff",
         }}
+        onSelect={(value, event) => handleOnChange(value, event)}
       >
-        <Option value="91">+91</Option>
+        {codes?.countries?.map((e) => (
+          <Option key={e?.code} value={e?.code}>
+            {e?.code}{" "}
+          </Option>
+        ))}
       </Select>
     </Form.Item>
   );

@@ -946,14 +946,6 @@ const Leave = (props) => {
       }
       return true;
     }
-    if (dateEnd == null || dateEnd == 0) {
-      if (isEditModalOpen) {
-        form1.setFieldsValue({ leaveNature: null });
-      } else {
-        form.setFieldsValue({ leaveNature: null });
-      }
-      return true;
-    }
     return false;
   };
   const disableEndSlot = () => {

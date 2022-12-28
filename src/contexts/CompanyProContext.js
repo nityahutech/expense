@@ -56,7 +56,10 @@ class CompanyProContext {
         let name =
           user.fName + (user.mName ? ` ${user.mName} ` : " ") + user.lName;
         let newRec = {
-          department: null,
+          businessUnit: user.businessUnit || "Default",
+          division: user.division || "Default",
+          department: user.dept || "Default",
+          team: user.team || "Default",
           designation: user.designation,
           role: "hr",
           doj: moment(),
@@ -93,9 +96,9 @@ class CompanyProContext {
     setDoc(doc(db, `companyprofile/${id}/configurations`, "addemployeePage"), {
       designations: des,
       enabled: false,
-      field: ["Counsulting Service", "Finance", "Human Resources (HR)"],
       repManager: [],
       secManager: [],
+      lead: []
     });
     setDoc(doc(db, `companyprofile/${id}/configurations`, "attendanceConfig"), {
       attendanceNature: {

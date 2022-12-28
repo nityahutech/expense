@@ -1,5 +1,6 @@
 import Navbar from "./components/navbar/Navbar";
 import NewSidebar from "./components/sidebar/NewSidebar";
+import "./style/home.css";
 
 const FormatPage = (props) => {
     let accessToken = sessionStorage.getItem("accessToken");

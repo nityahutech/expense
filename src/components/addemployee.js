@@ -31,7 +31,7 @@ function AddEmployee(props) {
   const compId = sessionStorage.getItem("compId");
   const [place, setPlace] = useState(null);
   const [designations, setDesignations] = useState([]);
-  const [dept, setDept] = useState([]);
+  const [orgHier, setOrgHier] = useState([]);
   const [codes, setCodes] = useState("");
   const [configurations, setConfigurations] = useState([]);
   const [workLoc, setWorkLoc] = useState(null);
@@ -45,8 +45,11 @@ function AddEmployee(props) {
     team: true,
   });
   const [domain, setDomain] = useState("");
+  const [bu, setBu] = useState(null);
+  const [div, setDiv] = useState(null);
+  const [dept, setDept] = useState(null);
+  const [team, setTeam] = useState(null);
   const order = ["Business Unit", "Division", "Department", "Team"];
-  const [type, setType] = useState("Business Unit");
 
   const selectBusiness = (e) => {
     setSelectInput({ ...selectInput, div: false });
@@ -61,21 +64,6 @@ function AddEmployee(props) {
   const selectDepartment = (e) => {
     setSelectInput({ ...selectInput, team: false });
     setSelectInput(e.target.value);
-  };
-
-  const selectedInput = (record) => {
-    let temp = order.indexOf(type) + 1;
-    if (temp > 3) {
-      return;
-    }
-    setType(order[temp]);
-    console.log(temp, order[temp], record);
-    let d = parent == null ? {} : parent;
-    d[`${order[temp]}`] = {
-      name: record.name,
-      description: record.description,
-    };
-    setParent(order[temp] == order[0] ? null : d);
   };
 
   const { CSVReader } = useCSVReader();
@@ -105,49 +93,59 @@ function AddEmployee(props) {
   };
 
   useEffect(() => {
-    CompanyProContext.getCompanyProfile(compId).then((res) => {
-      setData(res?.departments);
-      getSelectData(res?.departments);
-    });
-    getCountryCode().then((res) => {
-      setCodes(res);
-    });
     getData();
   }, []);
-
-  useEffect(() => {
-    getSelectData();
-  }, [type]);
-
-  const getSelectData = (dept) => {
-    let d = dept || data;
-    console.log(d);
-    if (!d) {
-      return;
+  
+  const disabledDiv = () => {
+    if (bu == null) {
+      form.setFieldsValue({ div: null });
+      return true;
     }
+    return false;
+  };
+
+  const disabledDept = () => {
+    console.log(div)
+    if (div == null) {
+      form.setFieldsValue({ dept: null });
+      return true;
+    }
+    return false;
+  };
+
+  const disabledTeam = () => {
+    if (dept == null) {
+      form.setFieldsValue({ team: null });
+      return true;
+    }
+    return false;
+  };
+
+  const getOptions = (type) => {
     let temp = [];
     let place = order.indexOf(type);
+    console.log(bu, div, dept, team)
     let par =
       place == 0
-        ? null
-        : parent[`${order[1]}`].name +
-          (place == 1
-            ? ""
-            : "/" +
-              parent[`${order[2]}`].name +
-              (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
-    d.map((d) => {
+        ? null : bu + (place == 1
+          ? "" : "/" + div + (place == 2 
+            ? "" : "/" + dept));
+    orgHier.map((d) => {
       if (d.type == type && d.parent == par) {
-        temp.push(d);
+        temp.push(<Option value={d.name}>{d.name}</Option>);
       }
     });
-    console.log(temp);
-    setDataSource(temp);
+
+    console.log(temp)
+    return temp.length == 0 ? [(<Option value={"Default"}>Default</Option>)] : temp;
   };
 
   const getData = async () => {
     let temp = await CompanyProContext.getCompanyProfile(compId);
     let data = await ConfigureContext.getConfigurations(page);
+    getCountryCode().then((res) => {
+      setCodes(res);
+    });
     let add = ["Registered Office"];
     if (temp.corpOffice) {
       add.push("Corporate Office");
@@ -155,7 +153,7 @@ function AddEmployee(props) {
     temp.address?.map((rec) => {
       add.push(rec.title);
     });
-    setDept(temp.departments);
+    setOrgHier(temp.departments);
     setDomain(temp.domain);
     setWorkLoc(add);
     setConfigurations(data);
@@ -180,33 +178,6 @@ function AddEmployee(props) {
       .catch((error) =>
         showNotification("error", "Error", "This user already exists!")
       );
-    let temp = data;
-    let place = order.indexOf(type);
-    let par =
-      place == 0
-        ? null
-        : parent[`${order[1]}`].name +
-          (place == 1
-            ? ""
-            : "/" +
-              parent[`${order[2]}`].name +
-              (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
-    temp.push({
-      ...values,
-      parent: par,
-      type: type,
-    });
-    CompanyProContext.addCompInfo(compId, {
-      departments: {
-        ...values,
-        parent: par,
-        type: type,
-      },
-    });
-    form.resetFields();
-    // setIsModalOpen(false);
-    setData(temp);
-    getSelectData(temp);
   };
 
   const handleBulkOnboard = () => {
@@ -942,35 +913,27 @@ function AddEmployee(props) {
                 label="Business Unit"
                 rules={[
                   {
-                    required: false,
+                    required: true,
                     message: "Choose Business Unit",
                   },
                 ]}
               >
                 <Select
-                  bordered={false}
-                  onSelect={(e) => {
-                    selectBusiness(e);
-                    selectedInput(e);
-                  }}
-                  // showSearch
-                  placeholder="Select a Business Unit"
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
                   }}
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
+                  bordered={false}
+                  placeholder="Select Business Unit"
+                  allowClear
+                  onChange={(e) => {
+                    setBu(e || null);
+                    setDiv(null);
+                    setDept(null);
+                    setTeam(null)
+                  }}
                 >
-                  {dept?.map((des) => {
-                    return des.type == "Business Unit" ? (
-                      <Option value={des.name}>{des.name}</Option>
-                    ) : null;
-                  })}
+                  {getOptions("Business Unit")}
                 </Select>
               </Form.Item>
             </Col>
@@ -982,34 +945,30 @@ function AddEmployee(props) {
                 label="Division"
                 rules={[
                   {
-                    required: false,
+                    required: true,
                     message: "Choose Division",
                   },
                 ]}
               >
                 <Select
-                  className="selectDisable"
-                  onSelect={selectDivision}
-                  bordered={false}
-                  // showSearch
-                  placeholder="Select a Division"
-                  disabled={selectInput.div}
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
+                    background: disabledDiv()
+                      ? "rgba(0,0,0,0.1)"
+                      : "#ffffff",
                   }}
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
+                  disabled={disabledDiv()}
+                  bordered={false}
+                  placeholder="Select Division"
+                  allowClear
+                  onChange={(e) => {
+                    setDiv(e || null);
+                    setDept(null);
+                    setTeam(null)
+                  }}
                 >
-                  {dept?.map((des) => {
-                    return des.type == "Division" ? (
-                      <Option value={des.name}>{des.name}</Option>
-                    ) : null;
-                  })}
+                  {getOptions("Division")}
                 </Select>
               </Form.Item>
             </Col>
@@ -1020,33 +979,29 @@ function AddEmployee(props) {
                 label="Department"
                 rules={[
                   {
-                    required: false,
+                    required: true,
                     message: "Choose Department",
                   },
                 ]}
               >
                 <Select
-                  onSelect={selectDepartment}
-                  disabled={selectInput.depart}
-                  bordered={false}
-                  // showSearch
-                  placeholder="Select a Department"
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
+                    background: disabledDept()
+                      ? "rgba(0,0,0,0.1)"
+                      : "#ffffff",
                   }}
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
+                  disabled={disabledDept()}
+                  bordered={false}
+                  placeholder="Select Department"
+                  allowClear
+                  onChange={(e) => {
+                    setDept(e || null);
+                    setTeam(null)
+                  }}
                 >
-                  {dept?.map((des) => {
-                    return des.type == "Department" ? (
-                      <Option value={des.name}>{des.name}</Option>
-                    ) : null;
-                  })}
+                  {getOptions("Department")}
                 </Select>
               </Form.Item>
             </Col>
@@ -1056,32 +1011,26 @@ function AddEmployee(props) {
                 label="Team"
                 rules={[
                   {
-                    required: false,
+                    required: true,
                     message: "Choose Team",
                   },
                 ]}
               >
                 <Select
-                  disabled={selectInput.team}
                   bordered={false}
-                  // showSearch
-                  placeholder="Select a Team"
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
+                    background: disabledTeam()
+                      ? "rgba(0,0,0,0.1)"
+                      : "#ffffff",
                   }}
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
+                  disabled={disabledTeam()}
+                  placeholder="Select Team"
+                  allowClear
+                  onChange={(e) => setTeam(e || null)}
                 >
-                  {dept?.map((des) => {
-                    return des.type == "Team" ? (
-                      <Option value={des.name}>{des.name}</Option>
-                    ) : null;
-                  })}
+                  {getOptions("Team")}
                 </Select>
               </Form.Item>
             </Col>

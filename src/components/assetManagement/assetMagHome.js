@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs } from 'antd';
-import LaptopAllot from './laptopAllot';
+import LaptopAllot from './LaptopAllot';
 import Requestpage from "./RepairReq";
 import UpgradeReq from './UpgradeReq';
 import "./AssetManag.css"
@@ -8,7 +8,7 @@ import "./AssetManag.css"
 function assetMagHome() {
   return (
     <div className='primarydiv'>
-        <Tabs defaultActiveKey='1' className='tabs'>
+        <Tabs defaultActiveKey='1'>
             <Tabs.TabPane tab="Laptop Allortment" key="1">
                 <LaptopAllot />
             </Tabs.TabPane>

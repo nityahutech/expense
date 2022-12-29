@@ -69,6 +69,10 @@ const ExpenseBreadCrumb = () => {
         <Breadcrumb.Item>
           <strong>Settings</strong>
         </Breadcrumb.Item>
+        ) : window.location.pathname === "/assetManagement/assetMagHome" ? (
+          <Breadcrumb.Item>
+            <strong>Asset Management</strong>
+          </Breadcrumb.Item>
       ) : (
         ""
       )}

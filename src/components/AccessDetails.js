@@ -21,7 +21,7 @@ import {
 } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CompanyProContext from "../contexts/CompanyProContext";
 import { capitalize, checkNumbervalue, checkUpperCase } from "../contexts/CreateContext";
 import "../style/Onboarding.css";
@@ -33,7 +33,6 @@ function AccessDetails(props) {
   const [accessList, setAccessList] = useState([]);
   const [orgHier, setOrgHier] = useState([]);
   const [editAccess, setEditAccess] = useState([false]);
-  const [editIndex, setEditIndex] = useState([false]);
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const [value, setValue] = useState(1);
@@ -42,7 +41,6 @@ function AccessDetails(props) {
   const [dept, setDept] = useState(null);
   const [team, setTeam] = useState(null);
   const order = ["Business Unit", "Division", "Department", "Team"];
-  const [parent, setParent] = useState(null);
 
   const dateFormat = "DD-MM-YYYY";
 
@@ -69,7 +67,14 @@ function AccessDetails(props) {
 
   const getData = async () => {
     let data = localStorage.getItem("OrgHier");
-    setOrgHier(data ? JSON.parse(data) : []);
+    setOrgHier(data ? JSON.parse(data) : Array(4).map((unit, i) => {
+      return {
+        name: "Default",
+        description: "Default",
+        parent: i == 0 ? null : Array(i).fill("Default").join("/") ,
+        type: order[i]
+      }
+    }))
     let temp = localStorage.getItem("OrgAccess");
     if (!temp) {
       localStorage.setItem("OrgAccess", "[]");
@@ -126,6 +131,7 @@ function AccessDetails(props) {
 
   function editUseRole(values) {
     let temp = [...accessList];
+    let editIndex = editAccess.indexOf(true)
     temp[editIndex] = {
       ...values,
       dob: values.dob?._isValid ? values.dob.format(dateFormat) : null,
@@ -133,9 +139,7 @@ function AccessDetails(props) {
     };
     localStorage.setItem("OrgAccess", JSON.stringify(temp));
     getData();
-    let array = editAccess;
-    array[editIndex] = false;
-    setEditAccess(array);
+    setEditAccess([...editAccess].fill(false));
     form1.resetFields();
   }
 
@@ -143,6 +147,10 @@ function AccessDetails(props) {
     form.resetFields();
     form1.resetFields();
     setAddAccess(false);
+    setBu(null);
+    setDiv(null);
+    setDept(null);
+    setTeam(null);
   }
 
   const showNotification = (type, msg, desc) => {
@@ -169,17 +177,18 @@ function AccessDetails(props) {
 
   const disabledDiv = () => {
     if (bu == null) {
-      form.resetFields({ division: null });
-      form1.resetFields({ division: null });
+      form.setFieldsValue({ division: null });
+      form1.setFieldsValue({ division: null });
       return true;
     }
     return false;
   };
 
   const disabledDept = () => {
+    console.log(div)
     if (div == null) {
-      form.resetFields({ dept: null });
-      form1.resetFields({ dept: null });
+      form.setFieldsValue({ dept: null });
+      form1.setFieldsValue({ dept: null });
       return true;
     }
     return false;
@@ -187,31 +196,30 @@ function AccessDetails(props) {
 
   const disabledTeam = () => {
     if (dept == null) {
-      form.resetFields({ team: null });
-      form1.resetFields({ team: null });
+      form.setFieldsValue({ team: null });
+      form1.setFieldsValue({ team: null });
       return true;
     }
     return false;
   };
 
-  const getOptions = async (type) => {
+  const getOptions = (type) => {
     let temp = [];
     let place = order.indexOf(type);
+    console.log(bu, div, dept, team)
     let par =
       place == 0
-        ? null
-        : parent[`${order[1]}`].name +
-          (place == 1
-            ? ""
-            : "/" +
-              parent[`${order[2]}`].name +
-              (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
+        ? null : bu + (place == 1
+          ? "" : "/" + div + (place == 2 
+            ? "" : "/" + dept));
     orgHier.map((d) => {
       if (d.type == type && d.parent == par) {
-        temp.push(d);
+        temp.push(<Option value={d.name}>{d.name}</Option>);
       }
     });
-    return temp;
+
+    console.log(temp)
+    return temp.length == 0 ? [(<Option value={"Default"}>Default</Option>)] : temp;
   };
 
   const generateEmpCode = () => {
@@ -219,6 +227,7 @@ function AccessDetails(props) {
     console.log(props.preCode + ("00" + res.toString()).slice(-3))
     return props.preCode + ("00" + res.toString()).slice(-3);
   };
+  console.log(editAccess)
   return (
     <>
       {accessList != 0
@@ -262,9 +271,13 @@ function AccessDetails(props) {
                           width: "34px",
                         }}
                         onClick={() => {
-                          let array = [...editAccess];
-                          array[i] = true;
-                          setEditAccess(array);
+                          let temp = [...editAccess].fill(false)
+                          temp[i] = true
+                          setEditAccess(temp);
+                          setBu(accessList[i].businessUnit || null)
+                          setDiv(accessList[i].division || null)
+                          setDept(accessList[i].dept || null)
+                          setTeam(accessList[i].team || null)
                         }}
                       >
                         <EditFilled
@@ -812,6 +825,13 @@ function AccessDetails(props) {
                         // }}
                       >
                         <Select
+                          allowClear
+                          onChange={(e) => {
+                            setBu(e || null);
+                            setDiv(null);
+                            setDept(null);
+                            setTeam(null)
+                          }}
                           bordered={false}
                           placeholder="Select Business Unit"
                           style={{
@@ -821,12 +841,7 @@ function AccessDetails(props) {
                             background: "#ffffff",
                           }}
                         >
-                          {orgHier.map((org) => {
-                            if (org.type == "Business Unit")
-                              return (
-                                <Option value={org.name}>{org.name}</Option>
-                              );
-                          })}
+                          {getOptions("Business Unit")}
                         </Select>
                       </Form.Item>
                       <Form.Item
@@ -844,25 +859,27 @@ function AccessDetails(props) {
                         // }}
                       >
                         <Select
+                          disabled={disabledDiv()}
                           bordered={false}
                           placeholder="Select Division"
                           style={{
                             width: "100%",
                             border: "1px solid #8692A6",
                             borderRadius: "4px",
-                            background: "#ffffff",
+                            background: disabledDiv() ? "rgba(0,0,0,0.1)" : "#ffffff",
+                          }}
+                          allowClear
+                          onChange={(e) => {
+                            setDiv(e || null);
+                            setDept(null);
+                            setTeam(null)
                           }}
                         >
-                          {orgHier.map((org) => {
-                            if (org.type == "Division")
-                              return (
-                                <Option value={org.name}>{org.name}</Option>
-                              );
-                          })}
+                          {getOptions("Division")}
                         </Select>
                       </Form.Item>
                       <Form.Item
-                        initialValue={user ? user.department : null}
+                        initialValue={user ? user.dept : null}
                         className="userLabel"
                         name="department"
                         label="Department::"
@@ -876,21 +893,24 @@ function AccessDetails(props) {
                         // }}
                       >
                         <Select
+                          disabled={disabledDept()}
                           bordered={false}
                           placeholder="Select Department"
                           style={{
                             width: "100%",
                             border: "1px solid #8692A6",
                             borderRadius: "4px",
-                            background: "#ffffff",
+                            background: disabledDept()
+                              ? "rgba(0,0,0,0.1)"
+                              : "#ffffff",
+                          }}
+                          allowClear
+                          onChange={(e) => {
+                            setDept(e || null);
+                            setTeam(null)
                           }}
                         >
-                          {orgHier.map((org) => {
-                            if (org.type == "Department")
-                              return (
-                                <Option value={org.name}>{org.name}</Option>
-                              );
-                          })}
+                          {getOptions("Department")}
                         </Select>
                       </Form.Item>
                       <Form.Item
@@ -908,21 +928,21 @@ function AccessDetails(props) {
                         // }}
                       >
                         <Select
+                          disabled={disabledTeam()}
                           bordered={false}
                           placeholder="Select Team"
                           style={{
                             width: "100%",
                             border: "1px solid #8692A6",
                             borderRadius: "4px",
-                            background: "#ffffff",
+                            background: disabledTeam()
+                              ? "rgba(0,0,0,0.1)"
+                              : "#ffffff",
                           }}
+                          allowClear
+                          onChange={(e) => setTeam(e || null)}
                         >
-                          {orgHier.map((org) => {
-                            if (org.type == "Team")
-                              return (
-                                <Option value={org.name}>{org.name}</Option>
-                              );
-                          })}
+                          {getOptions("Team")}
                         </Select>
                       </Form.Item>
                       {/* <Form.Item
@@ -1207,7 +1227,7 @@ function AccessDetails(props) {
                               //   offset: 1,
                               // }}
                             >
-                              <span>{user.department}</span>
+                              <span>{user.dept}</span>
                             </Form.Item>
                           </Col>
                           <Col xs={24} sm={24} md={24}>
@@ -1281,9 +1301,7 @@ function AccessDetails(props) {
                           borderRadius: "4px",
                         }}
                         onClick={() => {
-                          let array = [...editAccess];
-                          array[i] = false;
-                          setEditAccess(array);
+                          setEditAccess([...editAccess].fill(false));
                           onReset();
                         }}
                       >
@@ -1307,7 +1325,6 @@ function AccessDetails(props) {
                         }}
                         onClick={() => {
                           form1.submit();
-                          setEditIndex(i);
                         }}
                       >
                         <CheckOutlined />
@@ -1858,18 +1875,25 @@ function AccessDetails(props) {
                         borderRadius: "4px",
                         background: "#ffffff",
                       }}
-                      onChange={(e) => setBu(e || null)}
+                      allowClear
+                      onChange={(e) => {
+                        setBu(e || null);
+                        setDiv(null);
+                        setDept(null);
+                        setTeam(null)
+                      }}
                     >
-                      {orgHier.map((org) => {
-                        if (org.type == "Business Unit")
-                          return <Option value={org.name}>{org.name}</Option>;
-                      })}
+                      {getOptions("Business Unit")}
                     </Select>
                   </Form.Item>
                   <Form.Item
                     className="userLabel"
                     name="division"
                     label="Division::"
+                    // initialValue={() => {
+                    //   let temp = getOptions("Division")
+                    //   temp.length == 1
+                    // }}
                     // labelCol={{
                     //   span: 3,
                     //   offset: 5,
@@ -1880,26 +1904,28 @@ function AccessDetails(props) {
                     // }}
                   >
                     <Select
-                      disabled={disabledDiv}
+                      disabled={disabledDiv()}
                       bordered={false}
                       placeholder="Select Division"
                       style={{
                         width: "100%",
                         border: "1px solid #8692A6",
                         borderRadius: "4px",
-                        background: disabledDiv ? "rgba(0,0,0,0.1)" : "#ffffff",
+                        background: disabledDiv() ? "rgba(0,0,0,0.1)" : "#ffffff",
                       }}
-                      onChange={(e) => setDiv(e || null)}
+                      allowClear
+                      onChange={(e) => {
+                        setDiv(e || null);
+                        setDept(null);
+                        setTeam(null)
+                      }}
                     >
-                      {orgHier.map((org) => {
-                        if (org.type == "Division")
-                          return <Option value={org.name}>{org.name}</Option>;
-                      })}
+                      {getOptions("Division")}
                     </Select>
                   </Form.Item>
                   <Form.Item
                     className="userLabel"
-                    name="department"
+                    name="dept"
                     label="Department::"
                     // labelCol={{
                     //   span: 3,
@@ -1911,23 +1937,24 @@ function AccessDetails(props) {
                     // }}
                   >
                     <Select
-                      disabled={disabledDept}
+                      disabled={disabledDept()}
                       bordered={false}
                       placeholder="Select Department"
                       style={{
                         width: "100%",
                         border: "1px solid #8692A6",
                         borderRadius: "4px",
-                        background: disabledDept
+                        background: disabledDept()
                           ? "rgba(0,0,0,0.1)"
                           : "#ffffff",
                       }}
-                      onChange={(e) => setDept(e || null)}
+                      allowClear
+                      onChange={(e) => {
+                        setDept(e || null);
+                        setTeam(null)
+                      }}
                     >
-                      {orgHier.map((org) => {
-                        if (org.type == "Department")
-                          return <Option value={org.name}>{org.name}</Option>;
-                      })}
+                      {getOptions("Department")}
                     </Select>
                   </Form.Item>
                   <Form.Item
@@ -1944,23 +1971,21 @@ function AccessDetails(props) {
                     // }}
                   >
                     <Select
-                      disabled={disabledTeam}
+                      disabled={disabledTeam()}
                       bordered={false}
                       placeholder="Select Team"
                       style={{
                         width: "100%",
                         border: "1px solid #8692A6",
                         borderRadius: "4px",
-                        background: disabledTeam
+                        background: disabledTeam()
                           ? "rgba(0,0,0,0.1)"
                           : "#ffffff",
                       }}
+                      allowClear
                       onChange={(e) => setTeam(e || null)}
                     >
-                      {orgHier.map((org) => {
-                        if (org.type == "Team")
-                          return <Option value={org.name}>{org.name}</Option>;
-                      })}
+                      {getOptions("Team")}
                     </Select>
                   </Form.Item>
                   {/* <Form.Item
@@ -2071,7 +2096,12 @@ function AccessDetails(props) {
                     form.submit();
                     return;
                   }
-                  setAddAccess(!addAccess);
+                  setAddAccess(true);
+                  setEditAccess([...editAccess].fill(false))
+                  setBu(null);
+                  setDiv(null);
+                  setDept(null);
+                  setTeam(null);
                 }}
               >
                 <PlusCircleOutlined /> Add

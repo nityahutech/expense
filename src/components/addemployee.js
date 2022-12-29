@@ -19,21 +19,52 @@ import {
   createUser,
   showNotification,
 } from "../contexts/CreateContext";
+import { getCountryCode } from "../contexts/CreateContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import CompanyProContext from "../contexts/CompanyProContext";
 import { useCSVReader } from "react-papaparse";
 const { Option } = Select;
-function AddEmployee() {
+function AddEmployee(props) {
   const page = "addemployeePage";
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const compId = sessionStorage.getItem("compId");
   const [place, setPlace] = useState(null);
   const [designations, setDesignations] = useState([]);
-  const [dept, setDept] = useState([]);
+  const [orgHier, setOrgHier] = useState([]);
+  const [codes, setCodes] = useState("");
   const [configurations, setConfigurations] = useState([]);
   const [workLoc, setWorkLoc] = useState(null);
   const [allEmp, setAllEmp] = useState(null);
+  const [data, setData] = useState();
+  const [parent, setParent] = useState(null);
+  const [dataSource, setDataSource] = useState([]);
+  const [selectInput, setSelectInput] = useState({
+    div: true,
+    depart: true,
+    team: true,
+  });
+  const [domain, setDomain] = useState("");
+  const [bu, setBu] = useState(null);
+  const [div, setDiv] = useState(null);
+  const [dept, setDept] = useState(null);
+  const [team, setTeam] = useState(null);
+  const order = ["Business Unit", "Division", "Department", "Team"];
+
+  const selectBusiness = (e) => {
+    setSelectInput({ ...selectInput, div: false });
+    setSelectInput(e.target.value);
+  };
+
+  const selectDivision = (e) => {
+    setSelectInput({ ...selectInput, depart: false });
+    setSelectInput(e.target.value);
+  };
+
+  const selectDepartment = (e) => {
+    setSelectInput({ ...selectInput, team: false });
+    setSelectInput(e.target.value);
+  };
 
   const { CSVReader } = useCSVReader();
   const styles = {
@@ -64,9 +95,57 @@ function AddEmployee() {
   useEffect(() => {
     getData();
   }, []);
+  
+  const disabledDiv = () => {
+    if (bu == null) {
+      form.setFieldsValue({ div: null });
+      return true;
+    }
+    return false;
+  };
+
+  const disabledDept = () => {
+    console.log(div)
+    if (div == null) {
+      form.setFieldsValue({ dept: null });
+      return true;
+    }
+    return false;
+  };
+
+  const disabledTeam = () => {
+    if (dept == null) {
+      form.setFieldsValue({ team: null });
+      return true;
+    }
+    return false;
+  };
+
+  const getOptions = (type) => {
+    let temp = [];
+    let place = order.indexOf(type);
+    console.log(bu, div, dept, team)
+    let par =
+      place == 0
+        ? null : bu + (place == 1
+          ? "" : "/" + div + (place == 2 
+            ? "" : "/" + dept));
+    orgHier.map((d) => {
+      if (d.type == type && d.parent == par) {
+        temp.push(<Option value={d.name}>{d.name}</Option>);
+      }
+    });
+
+    console.log(temp)
+    return temp.length == 0 ? [(<Option value={"Default"}>Default</Option>)] : temp;
+  };
+
   const getData = async () => {
     let temp = await CompanyProContext.getCompanyProfile(compId);
     let data = await ConfigureContext.getConfigurations(page);
+    getCountryCode().then((res) => {
+      setCodes(res);
+    });
     let add = ["Registered Office"];
     if (temp.corpOffice) {
       add.push("Corporate Office");
@@ -74,7 +153,8 @@ function AddEmployee() {
     temp.address?.map((rec) => {
       add.push(rec.title);
     });
-    setDept(temp.departments);
+    setOrgHier(temp.departments);
+    setDomain(temp.domain);
     setWorkLoc(add);
     setConfigurations(data);
     setDesignations(Object.keys(data.designations));
@@ -103,6 +183,31 @@ function AddEmployee() {
   const handleBulkOnboard = () => {
     console.log(allEmp);
   };
+
+  const handleOnChange = (value, event) => {
+    console.log(value, event);
+  };
+
+  const prefixSelector = (
+    <Form.Item name="prefix" noStyle>
+      <Select
+        allowClear={true}
+        showSearch
+        bordered={false}
+        style={{
+          width: 80,
+          background: "#ffffff",
+        }}
+        onSelect={(value, event) => handleOnChange(value, event)}
+      >
+        {codes?.countries?.map((e) => (
+          <Option key={e?.code} value={e?.code}>
+            {e?.code}{" "}
+          </Option>
+        ))}
+      </Select>
+    </Form.Item>
+  );
 
   console.log(designations, place);
   return (
@@ -346,6 +451,32 @@ function AddEmployee() {
                   {
                     message: "Please enter Valid Email",
                   },
+                  {
+                    validator: async (_, value) => {
+                      let exists = await CompanyProContext.checkUserExists(
+                        value
+                      );
+                      if (exists) {
+                        return Promise.reject(
+                          new Error("This email address already exists!")
+                        );
+                      }
+                      return Promise.resolve();
+                    },
+                  },
+                  {
+                    validator: (_, value) => {
+                      let emailDomain = value.substring(value.indexOf("@") + 1);
+                      let valid = domain == emailDomain;
+                      console.log(domain);
+                      if (!valid) {
+                        return Promise.reject(
+                          new Error("Please Enter Official Email Address")
+                        );
+                      }
+                      return Promise.resolve();
+                    },
+                  },
                 ]}
               >
                 <Input
@@ -404,6 +535,7 @@ function AddEmployee() {
                 ]}
               >
                 <Input
+                  addonBefore={prefixSelector}
                   maxLength={10}
                   required
                   //   onChange={(e) => {
@@ -774,37 +906,34 @@ function AddEmployee() {
                 /> */}
               </Form.Item>
             </Col>
+
             <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="bu"
                 label="Business Unit"
                 rules={[
                   {
-                    required: false,
+                    required: true,
                     message: "Choose Business Unit",
                   },
                 ]}
               >
                 <Select
-                  bordered={false}
-                  // showSearch
-                  placeholder="Select a Business Unit"
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
                   }}
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
+                  bordered={false}
+                  placeholder="Select Business Unit"
+                  allowClear
+                  onChange={(e) => {
+                    setBu(e || null);
+                    setDiv(null);
+                    setDept(null);
+                    setTeam(null)
+                  }}
                 >
-                  {dept?.map((des) => {
-                    return des.type == "Business Unit" ? (
-                      <Option value={des.name}>{des.name}</Option>
-                    ) : null;
-                  })}
+                  {getOptions("Business Unit")}
                 </Select>
               </Form.Item>
             </Col>
@@ -816,65 +945,63 @@ function AddEmployee() {
                 label="Division"
                 rules={[
                   {
-                    required: false,
+                    required: true,
                     message: "Choose Division",
                   },
                 ]}
               >
                 <Select
-                  bordered={false}
-                  // showSearch
-                  placeholder="Select a Division"
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
+                    background: disabledDiv()
+                      ? "rgba(0,0,0,0.1)"
+                      : "#ffffff",
                   }}
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
+                  disabled={disabledDiv()}
+                  bordered={false}
+                  placeholder="Select Division"
+                  allowClear
+                  onChange={(e) => {
+                    setDiv(e || null);
+                    setDept(null);
+                    setTeam(null)
+                  }}
                 >
-                  {dept?.map((des) => {
-                    return des.type == "Division" ? (
-                      <Option value={des.name}>{des.name}</Option>
-                    ) : null;
-                  })}
+                  {getOptions("Division")}
                 </Select>
               </Form.Item>
             </Col>
+
             <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="dept"
                 label="Department"
                 rules={[
                   {
-                    required: false,
+                    required: true,
                     message: "Choose Department",
                   },
                 ]}
               >
                 <Select
-                  bordered={false}
-                  // showSearch
-                  placeholder="Select a Department"
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
+                    background: disabledDept()
+                      ? "rgba(0,0,0,0.1)"
+                      : "#ffffff",
                   }}
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
+                  disabled={disabledDept()}
+                  bordered={false}
+                  placeholder="Select Department"
+                  allowClear
+                  onChange={(e) => {
+                    setDept(e || null);
+                    setTeam(null)
+                  }}
                 >
-                  {dept?.map((des) => {
-                    return des.type == "Department" ? (
-                      <Option value={des.name}>{des.name}</Option>
-                    ) : null;
-                  })}
+                  {getOptions("Department")}
                 </Select>
               </Form.Item>
             </Col>
@@ -884,31 +1011,26 @@ function AddEmployee() {
                 label="Team"
                 rules={[
                   {
-                    required: false,
+                    required: true,
                     message: "Choose Team",
                   },
                 ]}
               >
                 <Select
                   bordered={false}
-                  // showSearch
-                  placeholder="Select a Team"
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
+                    background: disabledTeam()
+                      ? "rgba(0,0,0,0.1)"
+                      : "#ffffff",
                   }}
-                  // optionFilterProp="children"
-                  //   onChange={onChange}
-                  //   onSearch={onSearch}
-                  // filterOption={(input, option) =>
-                  //   option.children.toLowerCase().includes(input.toLowerCase())
-                  // }
+                  disabled={disabledTeam()}
+                  placeholder="Select Team"
+                  allowClear
+                  onChange={(e) => setTeam(e || null)}
                 >
-                  {dept?.map((des) => {
-                    return des.type == "Team" ? (
-                      <Option value={des.name}>{des.name}</Option>
-                    ) : null;
-                  })}
+                  {getOptions("Team")}
                 </Select>
               </Form.Item>
             </Col>

@@ -7,8 +7,8 @@ import "./AssetManag.css"
 
 function assetMagHome() {
   return (
-    <div className='primarydiv'>
-        <Tabs defaultActiveKey='1'>
+    <div className='primarydiva'>
+        <Tabs defaultActiveKey='1' className='tabs'>
             <Tabs.TabPane tab="Laptop Allortment" key="1">
                 <LaptopAllot />
             </Tabs.TabPane>

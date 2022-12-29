@@ -41,7 +41,7 @@ export function AuthProvider({ children }) {
       const timer = setTimeout(() => {
         sessionStorage.clear();
         localStorage.setItem("login", null)
-      }, 1500);
+      }, 2500);
       return () => clearTimeout(timer);
     }
     getDoc(doc(db, 'users', user.uid)).then((res) => {

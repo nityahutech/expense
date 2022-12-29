@@ -5,7 +5,7 @@ import dot from "../../images/dot.png";
 import dashIcon from "../../images/Dashboard.png";
 import empIcon from "../../images/employees.png";
 import userIcon from "../../images/user.png";
-import assetMag from "../../images/newSBLogo/AssetManagement.png"
+import assetMag from "../../images/newSBLogo/AssetManagement.png";
 import logo from "../../images/Group 1.png";
 import appraisalIcon from "../../images/appraisal.png";
 import Organization from "../../images/Organization.png";
@@ -37,8 +37,8 @@ const NewSidebar = (props) => {
           flexDirection: "column",
         }}
         collapsedWidth="0"
-        onBreakpoint={(broken) => { }}
-        onCollapse={(collapsed, type) => { }}
+        onBreakpoint={(broken) => {}}
+        onCollapse={(collapsed, type) => {}}
       >
         <div
           className="sidelayout-div"
@@ -91,10 +91,10 @@ const NewSidebar = (props) => {
                 defaultOpenKeys={props.activeSubMenu || []}
                 selectedKeys={props.activeMenu}
                 mode="inline"
-              // style={{
-              //   // paddingBottom: "40px",
-              //   height: "100vh",
-              // }}
+                // style={{
+                //   // paddingBottom: "40px",
+                //   height: "100vh",
+                // }}
               >
                 <Menu.Item
                   className="arrow"
@@ -237,84 +237,89 @@ const NewSidebar = (props) => {
                 ) : null}
 
                 {role != "super" ? (
-                  <Menu.SubMenu
-                    className="arrow-div"
-                    style={{
-                      width: "100%",
-                      fontSize: "13px",
-                      fontWeight: "600",
-                      color: "#ffffff",
-                    }}
-                    icon={
-                      <img
-                        src={appraisalIcon}
-                        alt="appraisal"
-                        className="Dash"
-                      />
-                    }
-                    key="sub4"
-                    title="Appraisal"
-                    mode="inline"
-                  >
-                    <Menu.Item
-                      className="arrow"
-                      icon={<img src={dot} alt="profile" className="dot" />}
-                      key="20"
+                  <>
+                    <Menu.SubMenu
+                      className="arrow-div"
+                      style={{
+                        width: "100%",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#ffffff",
+                      }}
+                      icon={
+                        <img
+                          src={appraisalIcon}
+                          alt="appraisal"
+                          className="Dash"
+                        />
+                      }
+                      key="sub4"
+                      title="Appraisal"
+                      mode="inline"
                     >
-                      <p className="sideFont">Quarter Appraisal</p>
-                      <NavLink to="/Appraisal/AppraisalPageHr" />
-                    </Menu.Item>
+                      <Menu.Item
+                        className="arrow"
+                        icon={<img src={dot} alt="profile" className="dot" />}
+                        key="20"
+                      >
+                        <p className="sideFont">Quarter Appraisal</p>
+                        <NavLink to="/Appraisal/AppraisalPageHr" />
+                      </Menu.Item>
+                      <Menu.Item
+                        className="arrow"
+                        icon={<img src={dot} alt="profile" className="dot" />}
+                        key="20a"
+                      >
+                        <p className="sideFont">Half Year Goal</p>
+                        <NavLink to="/Appraisal/HalfYearGoalPage" />
+                      </Menu.Item>
+                    </Menu.SubMenu>
                     <Menu.Item
-                      className="arrow"
-                      icon={<img src={dot} alt="profile" className="dot" />}
-                      key="20a"
+                      icon={<img src={assetMag} alt="asset" class="Dash" />}
+                      key="22"
                     >
-                      <p className="sideFont">Half Year Goal</p>
-                      <NavLink to="/Appraisal/HalfYearGoalPage" />
+                      <p className="sideFont">Assets</p>
+                      <NavLink to="/Assets" />
                     </Menu.Item>
-                  </Menu.SubMenu>
+                  </>
                 ) : null}
                 {role == "admin" || isHr ? (
-                  <Menu.SubMenu
-                    className="arrow-div"
-                    style={{
-                      width: "100%",
-                      fontSize: "13px",
-                      fontWeight: "600",
-                      color: "#ffffff",
-                    }}
-                    icon={
-                      <img src={expenseIcon} alt="profile" className="Dash" />
-                    }
-                    key="sub1"
-                    title="Expense"
-                    mode="inline"
-                  >
-                    <Menu.Item
-                      className="arrow"
-                      icon={<img src={dot} alt="profile" className="dot" />}
-                      key="2"
+                  <>
+                    <Menu.SubMenu
+                      className="arrow-div"
+                      style={{
+                        width: "100%",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#ffffff",
+                      }}
+                      icon={
+                        <img src={expenseIcon} alt="profile" className="Dash" />
+                      }
+                      key="sub1"
+                      title="Expense"
+                      mode="inline"
                     >
-                      <p className="sideFont">Add Expense</p>
-                      <NavLink to="/Expense/AddExpense" />
-                    </Menu.Item>
-                    <Menu.Item
-                      className="arrow"
-                      icon={<img src={dot} alt="profile" className="dot" />}
-                      key="3"
-                    >
-                      <p className="sideFont">Expense List</p>
-                      <NavLink to="/Expense/ExpenseList" />
-                    </Menu.Item>
-                  </Menu.SubMenu>
+                      <Menu.Item
+                        className="arrow"
+                        icon={<img src={dot} alt="profile" className="dot" />}
+                        key="2"
+                      >
+                        <p className="sideFont">Add Expense</p>
+                        <NavLink to="/Expense/AddExpense" />
+                      </Menu.Item>
+                      <Menu.Item
+                        className="arrow"
+                        icon={<img src={dot} alt="profile" className="dot" />}
+                        key="3"
+                      >
+                        <p className="sideFont">Expense List</p>
+                        <NavLink to="/Expense/ExpenseList" />
+                      </Menu.Item>
+                    </Menu.SubMenu>
+                  </>
                 ) : null}
-                <Menu.Item
-                  icon={<img src={assetMag} alt="asset" class="Dash"/>}
-                  key="22"
-                >
-                  <p className="sideFont">Assets</p>
-                  <NavLink to="/Assets"/>
-                </Menu.Item>
+
                 <Menu.Item
                   icon={<img src={userIcon} alt="profile" className="Dash" />}
                   key="21"
@@ -367,7 +372,7 @@ const NewSidebar = (props) => {
                   }}
                   src={SettingIcon}
                   alt="Setting"
-                // className="Dash"
+                  // className="Dash"
                 />
               </div>
 

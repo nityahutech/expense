@@ -108,7 +108,7 @@ const OrgDetails = (props) => {
   };
 
   const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
+    <Form.Item initialValue={data.prefix} name="prefix" noStyle>
       <Select
         allowClear={true}
         showSearch
@@ -347,7 +347,7 @@ const OrgDetails = (props) => {
                   message: "Please Enter Valid Number",
                 },
               ]}
-              initialValue={data?.phone ? `${data.prefix} ${data.phone}` : "-"}
+              initialValue={data?.phone ? data.phone : "-"}
             >
               <Input
                 addonBefore={prefixSelector}

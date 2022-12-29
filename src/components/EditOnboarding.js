@@ -12,6 +12,7 @@ import {
   Button,
   Space,
   Card,
+  Select,
   Table,
   Tag,
   Modal,
@@ -31,8 +32,11 @@ import {
 import "../style/Onboarding.css";
 import imageavailable from "../images/imageavailable.png";
 import reload from "../images/reload.png";
+import { getCountryCode } from "../contexts/CreateContext";
 import CompanyProContext from "../contexts/CompanyProContext";
 import { showNotification } from "../contexts/CreateContext";
+
+const { Option } = Select;
 
 function EditOnboarding(props) {
   const [fileName, setFileName] = useState(props.modalData.logo);
@@ -43,10 +47,15 @@ function EditOnboarding(props) {
   const [form] = Form.useForm();
   const [modalData, setModalData] = useState(props.modalData);
   const [loading, setLoading] = useState(false);
+  const [codes, setCodes] = useState("");
+
   const timer = setTimeout(() => {
     setLoading(false);
   }, 500);
   useEffect(() => {
+    getCountryCode().then((res) => {
+      setCodes(res);
+    });
     setModalData(props.modalData);
   }, []);
 
@@ -156,6 +165,31 @@ function EditOnboarding(props) {
     }
   };
 
+  const handleOnChange = (value, event) => {
+    console.log(value, event);
+  };
+
+  const prefixSelector = (
+    <Form.Item initialValue={modalData.prefix} name="prefix" noStyle>
+      <Select
+        allowClear={true}
+        showSearch
+        bordered={false}
+        style={{
+          width: 80,
+          background: "#ffffff",
+        }}
+        onSelect={(value, event) => handleOnChange(value, event)}
+      >
+        {codes?.countries?.map((e) => (
+          <Option key={e?.code} value={e?.code}>
+            {e?.code}{" "}
+          </Option>
+        ))}
+      </Select>
+    </Form.Item>
+  );
+
   return (
     <Card
       style={{
@@ -197,16 +231,16 @@ function EditOnboarding(props) {
                 name="preCode"
                 label="Prefix Code"
                 initialValue={props.modalData.id}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Enter Code",
-                  },
-                  {
-                    pattern: /^[0-9A-Z_\s]+$/,
-                    message: "Please Enter Valid Code",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: false,
+                //     message: "Please Enter Code",
+                //   },
+                //   {
+                //     pattern: /^[0-9A-Z_\s]+$/,
+                //     message: "Please Enter Valid Code",
+                //   },
+                // ]}
               >
                 <Input
                   maxLength={10}
@@ -361,9 +395,10 @@ function EditOnboarding(props) {
                     message: "Please Enter Valid Number",
                   },
                 ]}
-                initialValue={props.modalData.phone}
+                initialValue={props?.modalData?.phone}
               >
                 <Input
+                  addonBefore={prefixSelector}
                   maxLength={10}
                   placeholder="Phone"
                   style={{

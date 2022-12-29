@@ -21,9 +21,14 @@ import {
 } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getCountryCode } from "../contexts/CreateContext";
 import CompanyProContext from "../contexts/CompanyProContext";
-import { capitalize, checkNumbervalue, checkUpperCase } from "../contexts/CreateContext";
+import {
+  capitalize,
+  checkNumbervalue,
+  checkUpperCase,
+} from "../contexts/CreateContext";
 import "../style/Onboarding.css";
 
 const { Option } = Select;
@@ -41,10 +46,15 @@ function AccessDetails(props) {
   const [dept, setDept] = useState(null);
   const [team, setTeam] = useState(null);
   const order = ["Business Unit", "Division", "Department", "Team"];
+  const [parent, setParent] = useState(null);
+  const [codes, setCodes] = useState("");
 
   const dateFormat = "DD-MM-YYYY";
 
   useEffect(() => {
+    getCountryCode().then((res) => {
+      setCodes(res);
+    });
     getData();
   }, []);
 
@@ -67,25 +77,32 @@ function AccessDetails(props) {
 
   const getData = async () => {
     let data = localStorage.getItem("OrgHier");
-    setOrgHier(data ? JSON.parse(data) : Array(4).map((unit, i) => {
-      return {
-        name: "Default",
-        description: "Default",
-        parent: i == 0 ? null : Array(i).fill("Default").join("/") ,
-        type: order[i]
-      }
-    }))
+    setOrgHier(
+      data
+        ? JSON.parse(data)
+        : Array(4).map((unit, i) => {
+            return {
+              name: "Default",
+              description: "Default",
+              parent: i == 0 ? null : Array(i).fill("Default").join("/"),
+              type: order[i],
+            };
+          })
+    );
     let temp = localStorage.getItem("OrgAccess");
     if (!temp) {
       localStorage.setItem("OrgAccess", "[]");
       props.setIsStepFourInvalid(true);
       return;
     }
-    let t = JSON.parse(temp)
+    let t = JSON.parse(temp);
     setAccessList(t);
-    if (t.length == 0) { props.setIsStepFourInvalid(true) }
-    else { props.setIsStepFourInvalid(false) }
-    let array = [...t]
+    if (t.length == 0) {
+      props.setIsStepFourInvalid(true);
+    } else {
+      props.setIsStepFourInvalid(false);
+    }
+    let array = [...t];
     setEditAccess(array.fill(false));
   };
 
@@ -113,6 +130,31 @@ function AccessDetails(props) {
     }
   };
 
+  const handleOnChange = (value, event) => {
+    console.log(value, event);
+  };
+
+  const prefixSelector = (
+    <Form.Item name="prefix" noStyle>
+      <Select
+        allowClear={true}
+        showSearch
+        bordered={false}
+        style={{
+          width: 80,
+          background: "#ffffff",
+        }}
+        onSelect={(value, event) => handleOnChange(value, event)}
+      >
+        {codes?.countries?.map((e) => (
+          <Option key={e?.code} value={e?.code}>
+            {e?.code}{" "}
+          </Option>
+        ))}
+      </Select>
+    </Form.Item>
+  );
+
   function addUseRole(values) {
     let temp = [
       ...accessList,
@@ -131,7 +173,7 @@ function AccessDetails(props) {
 
   function editUseRole(values) {
     let temp = [...accessList];
-    let editIndex = editAccess.indexOf(true)
+    let editIndex = editAccess.indexOf(true);
     temp[editIndex] = {
       ...values,
       dob: values.dob?._isValid ? values.dob.format(dateFormat) : null,
@@ -185,7 +227,7 @@ function AccessDetails(props) {
   };
 
   const disabledDept = () => {
-    console.log(div)
+    console.log(div);
     if (div == null) {
       form.setFieldsValue({ dept: null });
       form1.setFieldsValue({ dept: null });
@@ -206,28 +248,29 @@ function AccessDetails(props) {
   const getOptions = (type) => {
     let temp = [];
     let place = order.indexOf(type);
-    console.log(bu, div, dept, team)
+    console.log(bu, div, dept, team);
     let par =
       place == 0
-        ? null : bu + (place == 1
-          ? "" : "/" + div + (place == 2 
-            ? "" : "/" + dept));
+        ? null
+        : bu + (place == 1 ? "" : "/" + div + (place == 2 ? "" : "/" + dept));
     orgHier.map((d) => {
       if (d.type == type && d.parent == par) {
         temp.push(<Option value={d.name}>{d.name}</Option>);
       }
     });
 
-    console.log(temp)
-    return temp.length == 0 ? [(<Option value={"Default"}>Default</Option>)] : temp;
+    console.log(temp);
+    return temp.length == 0
+      ? [<Option value={"Default"}>Default</Option>]
+      : temp;
   };
 
   const generateEmpCode = () => {
     let res = accessList.length + 1;
-    console.log(props.preCode + ("00" + res.toString()).slice(-3))
+    console.log(props.preCode + ("00" + res.toString()).slice(-3));
     return props.preCode + ("00" + res.toString()).slice(-3);
   };
-  console.log(editAccess)
+  console.log(editAccess);
   return (
     <>
       {accessList != 0
@@ -271,13 +314,13 @@ function AccessDetails(props) {
                           width: "34px",
                         }}
                         onClick={() => {
-                          let temp = [...editAccess].fill(false)
-                          temp[i] = true
+                          let temp = [...editAccess].fill(false);
+                          temp[i] = true;
                           setEditAccess(temp);
-                          setBu(accessList[i].businessUnit || null)
-                          setDiv(accessList[i].division || null)
-                          setDept(accessList[i].dept || null)
-                          setTeam(accessList[i].team || null)
+                          setBu(accessList[i].businessUnit || null);
+                          setDiv(accessList[i].division || null);
+                          setDept(accessList[i].dept || null);
+                          setTeam(accessList[i].team || null);
                         }}
                       >
                         <EditFilled
@@ -564,6 +607,32 @@ function AccessDetails(props) {
                         // ]}
                       >
                         <Input
+                          addonBefore={
+                            <Form.Item
+                              initialValue={user.prefix}
+                              name="prefix"
+                              noStyle
+                            >
+                              <Select
+                                allowClear={true}
+                                showSearch
+                                bordered={false}
+                                style={{
+                                  width: 80,
+                                  background: "#ffffff",
+                                }}
+                                onSelect={(value, event) =>
+                                  handleOnChange(value, event)
+                                }
+                              >
+                                {codes?.countries?.map((e) => (
+                                  <Option key={e?.code} value={e?.code}>
+                                    {e?.code}{" "}
+                                  </Option>
+                                ))}
+                              </Select>
+                            </Form.Item>
+                          }
                           placeholder="Phone Number"
                           style={{
                             width: "100%",
@@ -647,32 +716,44 @@ function AccessDetails(props) {
                         //   offset: 1,
                         // }}
                         rules={[
-                      {
-                        required: true,
-                        message: "Please Enter Valid Email Address",
-                        type: "email",
-                        pattern: "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
-                      },
-                      {
-                        validator: async (_, value) => {
-                          let exists = await CompanyProContext.checkUserExists(value);
-                          if (exists) {
-                            return Promise.reject(new Error("This email address already exists!"));
-                          }
-                          return Promise.resolve();
-                        },
-                      },
-                      {
-                        validator: (_, value) => {
-                          let domain = value.substring(value.indexOf("@") + 1);
-                          let valid = domain == props.domain;
-                          if (!valid) {
-                            return Promise.reject(new Error("Please Enter Official Email Address"));
-                          }
-                          return Promise.resolve();
-                        },
-                      },
-                    ]}
+                          {
+                            required: true,
+                            message: "Please Enter Valid Email Address",
+                            type: "email",
+                            pattern:
+                              "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i;",
+                          },
+                          {
+                            validator: async (_, value) => {
+                              let exists =
+                                await CompanyProContext.checkUserExists(value);
+                              if (exists) {
+                                return Promise.reject(
+                                  new Error(
+                                    "This email address already exists!"
+                                  )
+                                );
+                              }
+                              return Promise.resolve();
+                            },
+                          },
+                          {
+                            validator: (_, value) => {
+                              let domain = value.substring(
+                                value.indexOf("@") + 1
+                              );
+                              let valid = domain == props.domain;
+                              if (!valid) {
+                                return Promise.reject(
+                                  new Error(
+                                    "Please Enter Official Email Address"
+                                  )
+                                );
+                              }
+                              return Promise.resolve();
+                            },
+                          },
+                        ]}
                       >
                         <Input
                           maxLength={50}
@@ -830,7 +911,7 @@ function AccessDetails(props) {
                             setBu(e || null);
                             setDiv(null);
                             setDept(null);
-                            setTeam(null)
+                            setTeam(null);
                           }}
                           bordered={false}
                           placeholder="Select Business Unit"
@@ -866,13 +947,15 @@ function AccessDetails(props) {
                             width: "100%",
                             border: "1px solid #8692A6",
                             borderRadius: "4px",
-                            background: disabledDiv() ? "rgba(0,0,0,0.1)" : "#ffffff",
+                            background: disabledDiv()
+                              ? "rgba(0,0,0,0.1)"
+                              : "#ffffff",
                           }}
                           allowClear
                           onChange={(e) => {
                             setDiv(e || null);
                             setDept(null);
-                            setTeam(null)
+                            setTeam(null);
                           }}
                         >
                           {getOptions("Division")}
@@ -907,7 +990,7 @@ function AccessDetails(props) {
                           allowClear
                           onChange={(e) => {
                             setDept(e || null);
-                            setTeam(null)
+                            setTeam(null);
                           }}
                         >
                           {getOptions("Department")}
@@ -1080,7 +1163,10 @@ function AccessDetails(props) {
                               //   offset: 1,
                               // }}
                             >
-                              <span>{user.phone}</span>
+                              <span>
+                                {(user.prefix ? user.prefix + " " : "") +
+                                  user.phone}
+                              </span>
                             </Form.Item>
                           </Col>
 
@@ -1600,6 +1686,7 @@ function AccessDetails(props) {
                     // }}
                   >
                     <Input
+                      addonBefore={prefixSelector}
                       required
                       maxLength={10}
                       placeholder="Phone Number"
@@ -1698,9 +1785,13 @@ function AccessDetails(props) {
                       },
                       {
                         validator: async (_, value) => {
-                          let exists = await CompanyProContext.checkUserExists(value);
+                          let exists = await CompanyProContext.checkUserExists(
+                            value
+                          );
                           if (exists) {
-                            return Promise.reject(new Error("This email address already exists!"));
+                            return Promise.reject(
+                              new Error("This email address already exists!")
+                            );
                           }
                           return Promise.resolve();
                         },
@@ -1710,7 +1801,9 @@ function AccessDetails(props) {
                           let domain = value.substring(value.indexOf("@") + 1);
                           let valid = domain == props.domain;
                           if (!valid) {
-                            return Promise.reject(new Error("Please Enter Official Email Address"));
+                            return Promise.reject(
+                              new Error("Please Enter Official Email Address")
+                            );
                           }
                           return Promise.resolve();
                         },
@@ -1880,7 +1973,7 @@ function AccessDetails(props) {
                         setBu(e || null);
                         setDiv(null);
                         setDept(null);
-                        setTeam(null)
+                        setTeam(null);
                       }}
                     >
                       {getOptions("Business Unit")}
@@ -1911,13 +2004,15 @@ function AccessDetails(props) {
                         width: "100%",
                         border: "1px solid #8692A6",
                         borderRadius: "4px",
-                        background: disabledDiv() ? "rgba(0,0,0,0.1)" : "#ffffff",
+                        background: disabledDiv()
+                          ? "rgba(0,0,0,0.1)"
+                          : "#ffffff",
                       }}
                       allowClear
                       onChange={(e) => {
                         setDiv(e || null);
                         setDept(null);
-                        setTeam(null)
+                        setTeam(null);
                       }}
                     >
                       {getOptions("Division")}
@@ -1951,7 +2046,7 @@ function AccessDetails(props) {
                       allowClear
                       onChange={(e) => {
                         setDept(e || null);
-                        setTeam(null)
+                        setTeam(null);
                       }}
                     >
                       {getOptions("Department")}
@@ -2097,7 +2192,7 @@ function AccessDetails(props) {
                     return;
                   }
                   setAddAccess(true);
-                  setEditAccess([...editAccess].fill(false))
+                  setEditAccess([...editAccess].fill(false));
                   setBu(null);
                   setDiv(null);
                   setDept(null);

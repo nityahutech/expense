@@ -1,5 +1,20 @@
-import { Table, Button, Modal, Layout, Row, Col, Input, Form, Select } from "antd";
-import { EditFilled, SearchOutlined, DeleteFilled, EyeFilled } from "@ant-design/icons";
+import {
+  Table,
+  Button,
+  Modal,
+  Layout,
+  Row,
+  Col,
+  Input,
+  Form,
+  Select,
+} from "antd";
+import {
+  EditFilled,
+  SearchOutlined,
+  DeleteFilled,
+  EyeFilled,
+} from "@ant-design/icons";
 import Editemployee from "./Editemployee";
 import { useEffect, useState } from "react";
 import { getUsers, showNotification } from "../contexts/CreateContext";
@@ -7,7 +22,6 @@ import "../style/EmployeeList.css";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import EmployeeListview from "./EmployeeListview";
 const { Option } = Select;
-
 
 function EmployeeList() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -69,20 +83,22 @@ function EmployeeList() {
       key: "action",
       fixed: "right",
       align: "center",
-      width: 120,
+      width: 80,
       render: (_, record) => {
         return (
           record.disabled === false && (
             <>
-              <div className="employee-button" style={{ display: 'flex', flexDirection: 'row' }}>
+              <div
+                className="employee-button"
+                style={{ display: "flex", flexDirection: "row" }}
+              >
                 <Button
                   type="link"
                   className="show"
                   // style={{ width: "40px" }}
                   onClick={() => {
-                    setIsProfileModal(true)
+                    setIsProfileModal(true);
                     showViewModal(record);
-
                   }}
                 >
                   {<EyeFilled />}
@@ -121,11 +137,10 @@ function EmployeeList() {
     setIsModalVisible(true);
   };
   const showViewModal = (record) => {
-    setshowRecord(record)
-    setCertificationDetails(record)
+    setshowRecord(record);
+    setCertificationDetails(record);
     // setIsModalVisible(true);
   };
-
 
   const handleEditEmployee = (record) => {
     setEditedRecord(record);
@@ -143,21 +158,22 @@ function EmployeeList() {
         disabled: doc.data().disabled ? true : false,
       };
     });
-    console.log(d, 'dataaaaaa')
+    console.log(d, "dataaaaaa");
 
-    let des = d.map((emp) => emp.designation)
-    const uniqueArray = des.filter((item, index) => des.indexOf(item) === index);
-    let disabled = d.filter(emp => emp.disabled)
-    console.log('ddddd', disabled)
+    let des = d.map((emp) => emp.designation);
+    const uniqueArray = des.filter(
+      (item, index) => des.indexOf(item) === index
+    );
+    let disabled = d.filter((emp) => emp.disabled);
+    console.log("ddddd", disabled);
 
     setData(d);
     setFilterEmployees(d);
     setAllEmployees(d);
-    setCertificationDetails(d)
+    setCertificationDetails(d);
     setLoading(false);
-    setDesignations(uniqueArray)
+    setDesignations(uniqueArray);
   }
-
 
   const searchChange = (e) => {
     let search = e.target.value;
@@ -190,7 +206,7 @@ function EmployeeList() {
   //   }
   // };
   const onDelete = (idx, e) => {
-      e.preventDefault();
+    e.preventDefault();
     Modal.confirm({
       title: `Are you sure, you want to deactivate ${data[idx].name}?`,
       okText: "Yes",
@@ -198,14 +214,17 @@ function EmployeeList() {
 
       onOk: () => {
         EmpInfoContext.disablePerson(data[idx].id).then((res) => {
-          showNotification("success", "Success", `Successfully deactivated ${data[idx].name}`)
+          showNotification(
+            "success",
+            "Success",
+            `Successfully deactivated ${data[idx].name}`
+          );
           getData();
-        })
-
-      }
-    })
+        });
+      },
+    });
   };
-  
+
   return (
     <Layout>
       <Row className="employeeRow">
@@ -217,32 +236,24 @@ function EmployeeList() {
           />
         </Col>
         <Col>
-
           <Select
             className="selectOption"
             allowClear
-
             placeholder="Select Designation"
-            style={{ marginLeft: "10px", width: '200px' }}
+            style={{ marginLeft: "10px", width: "200px" }}
             onChange={(e) => {
               const selectedData = data.filter((emp) =>
                 emp.designation.includes(e)
               );
               setFilterEmployees(selectedData);
-              console.log(selectedData, 'selectedData');
+              console.log(selectedData, "selectedData");
             }}
             showSearch
-
           >
-
             {designations?.map((des) => {
-              return (
-                <Option value={des}>{des}</Option>
-              )
-            })
-            }
+              return <Option value={des}>{des}</Option>;
+            })}
           </Select>
-
         </Col>
         {/* <Col>
           <Select
@@ -268,19 +279,18 @@ function EmployeeList() {
         size="small"
         reloadData={getData}
         rowClassName={(record) => record.disabled && "disabled-row"}
-      // onRow={(record, rowIndex) => {
-      //   return {
-      //     onClick: (event) => {
-      //       setSelectemp({ ...record });
-      //       getEmpDetails(record.id, [
-      //         moment().subtract(30, "days"),
-      //         moment(),
-      //       ]);
-      //       setActivetab("2");
-      //     }, // click row
-      //   };
-      // }}
-
+        // onRow={(record, rowIndex) => {
+        //   return {
+        //     onClick: (event) => {
+        //       setSelectemp({ ...record });
+        //       getEmpDetails(record.id, [
+        //         moment().subtract(30, "days"),
+        //         moment(),
+        //       ]);
+        //       setActivetab("2");
+        //     }, // click row
+        //   };
+        // }}
       />
       <Modal
         className="editEmployee"
@@ -305,7 +315,7 @@ function EmployeeList() {
             X
           </div>
         }
-      // onCancel={handleCancel}
+        // onCancel={handleCancel}
       >
         <Editemployee
           className="Edit"
@@ -321,8 +331,8 @@ function EmployeeList() {
           height: 440,
           overflowY: "scroll",
           overflowX: "hidden",
-          backgroundColor: '#d0d0d0',
-          marginLeft: '0px'
+          backgroundColor: "#d0d0d0",
+          marginLeft: "0px",
         }}
         width={850}
         centered
@@ -340,8 +350,6 @@ function EmployeeList() {
             X
           </div>
         }
-
-
       >
         <EmployeeListview
           className="Edit"
@@ -349,9 +357,6 @@ function EmployeeList() {
           setIsProfileModal={setIsProfileModal}
           getData={getData}
           certificationDetails={certificationDetails}
-
-
-
         />
       </Modal>
     </Layout>

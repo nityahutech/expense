@@ -54,8 +54,8 @@ function Onboarding() {
     delete values.logo;
     localStorage.setItem("OrgDetails", JSON.stringify(values));
     localStorage.setItem("Logo", imageUrl);
-    setFileName(filename)
-    setImageUrl(imageurl)
+    setFileName(filename);
+    setImageUrl(imageurl);
     getOrgData();
     setProgress(next);
     setIsStepOneInvalid(false);
@@ -102,6 +102,7 @@ function Onboarding() {
       cinNumber: data.cinNumber,
       gst: data.gst || null,
       domain: data.domain,
+      prefix: data.prefix || "",
       phone: data.phone,
       accessList: [],
       address: [],
@@ -112,9 +113,9 @@ function Onboarding() {
       costCenters: costCenters == null ? [] : costCenters,
       deparments: orgHier == null ? [] : orgHier,
       status: "Deactivated",
-      reason: "First Activation Incomplete"
+      reason: "First Activation Incomplete",
     };
-    console.log(orgcode, value, fileName, accessList)
+    console.log(orgcode, value, fileName, accessList);
     CompanyProContext.createCompInfo(orgcode, value, fileName, accessList)
       .then((response) => {
         notification.open({
@@ -195,7 +196,7 @@ function Onboarding() {
   const progressBar = (value) => {
     if (progress == 0) {
       form.submit();
-      setNext(value)
+      setNext(value);
       return;
     }
     setProgress(value);
@@ -332,7 +333,7 @@ function Onboarding() {
   }
 
   const reset = () => {
-    Object.keys({...data}).map((field) => {
+    Object.keys({ ...data }).map((field) => {
       console.log(field);
       form.setFieldsValue({ [`${field}`]: null });
     });
@@ -360,7 +361,7 @@ function Onboarding() {
       },
     });
   };
-console.log(fileName)
+  console.log(fileName);
   return (
     <>
       <Tabs
@@ -504,7 +505,11 @@ console.log(fileName)
             ) : progress == 2 ? (
               <OrgHierTable />
             ) : progress == 3 ? (
-              <AccessDetails preCode={data.preCode} setIsStepFourInvalid={setIsStepFourInvalid} domain={data.domain} />
+              <AccessDetails
+                preCode={data.preCode}
+                setIsStepFourInvalid={setIsStepFourInvalid}
+                domain={data.domain}
+              />
             ) : (
               <OrgDetails
                 data={data}
@@ -554,7 +559,7 @@ console.log(fileName)
                   onClick={async () => {
                     if (progress != 3) {
                       if (progress == 0) {
-                        setNext(1)
+                        setNext(1);
                         form.submit();
                         return;
                       }

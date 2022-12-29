@@ -5,26 +5,12 @@ import { EditFilled, PlusOutlined } from "@ant-design/icons";
 import FormItem from 'antd/es/form/FormItem';
 import TextArea from 'antd/lib/input/TextArea';
 import RepairRequestTable from './RepairRequestTable';
+// import LaptopAllot from './LaptopAllot';
 const { Option } = Select;
 
 function LaptopAllot() {
   const [form] = Form.useForm();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const onFinish = (values) => {
-    console.log(values, 'values')
-
-  }
   const handleSubmit1 = (values) => {
     // do something with the form values for option1
     console.log(values, 'values')
@@ -70,21 +56,11 @@ function LaptopAllot() {
         <Card
           title="New Alloctment / Repair / Upgrade Form"
           className='laptopcard'
-          extra={<>
-            <Button
-              className="edit"
-              type="text"
-              onClick={showModal}
-            >
-              <EditFilled />
-            </Button>
-          </>}
           bordered={true}
           hoverable={true}
         >
           <Form
             className="addEmp"
-            // style={{ margin: "30px" }}
             form={form}
             layout="vertical"
             labelcol={{
@@ -97,21 +73,23 @@ function LaptopAllot() {
               remember: true,
             }}
             autoComplete="off"
-          // onFinish={onFinish}
-
           >
             <Row gutter={[32, 0]}>
-              <Form form={form} >
-                <Form.Item label="Select an option" name="option">
-                  <Select placeholder="Select an option" onChange={handleOptionChange}>
-                    <Option value="option1">LAPTOP ALLOTMENT</Option>
-                    <Option value="option2">REPAIR REQUEST</Option>
-                    <Option value="option3">UPDATE REQUEST</Option>
-                  </Select>
-                </Form.Item>
-
-                {selectedOption === 'option1' && (
-                  <Row gutter={[32, 0]}>
+                <Col span={24}>
+                  <Form.Item label="Select an option" name="option">
+                    <Select
+                      placeholder="Select an option" 
+                      onChange={handleOptionChange}
+                    >
+                      <Option value="option1">LAPTOP ALLOTMENT</Option>
+                      <Option value="option2">REPAIR REQUEST</Option>
+                      <Option value="option3">UPDATE REQUEST</Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+{/* ----------------------laptopAllortment */}
+                {selectedOption === 'option1' && (<>
+                  {/* <Row gutter={[32, 0]}> */}
                     <Col span={12}>
                       <FormItem
                         name='lapname'
@@ -136,7 +114,6 @@ function LaptopAllot() {
                         <Input style={divStyle} />
                       </FormItem>
                     </Col>
-
                     <Col span={12}>
                       <Form.Item
                         name="doIssue"
@@ -178,7 +155,7 @@ function LaptopAllot() {
 
                       </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={24}>
                       <FormItem
                         name="photo"
                         label="Upload photos if (Physical Damage)"
@@ -243,10 +220,12 @@ function LaptopAllot() {
                       </Col>
 
                     </Row>
-                  </Row>
+                  {/* </Row> */}
+                  {/* <LaptopAllot /> */}
+                  </>
                 )}
-                {selectedOption === 'option2' && (
-                  <Row gutter={[32, 0]}>
+                {selectedOption === 'option2' && (<>
+                   {/* <Row gutter={[32, 0]}> */}
                     <Col span={12}>
                       <FormItem
                         name='lapname'
@@ -271,7 +250,6 @@ function LaptopAllot() {
                         <Input style={divStyle} />
                       </FormItem>
                     </Col>
-
                     <Col span={12}>
                       <Form.Item
                         name="doIssue"
@@ -313,7 +291,7 @@ function LaptopAllot() {
 
                       </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={24}>
                       <FormItem
                         name="photo"
                         label="Upload photos if (Physical Damage)"
@@ -378,13 +356,12 @@ function LaptopAllot() {
                       </Col>
 
                     </Row>
-                  </Row>
+                  {/* </Row> */}
+                  </>
                 )}
-
                 {/* //-------------------UPGRADE REQUEST------------- */}
-
-                {selectedOption === 'option3' && (
-                  <Row gutter={[32, 0]}>
+                {selectedOption === 'option3' && (<>
+                  {/* <Row gutter={[32, 0]}> */}
                     <Col span={12}>
                       <FormItem
                         name='lapname'
@@ -409,7 +386,6 @@ function LaptopAllot() {
                         <Input style={divStyle} />
                       </FormItem>
                     </Col>
-
                     <Col span={12}>
                       <Form.Item
                         name="doIssue"
@@ -451,7 +427,6 @@ function LaptopAllot() {
 
                       </Form.Item>
                     </Col>
-
                     <Row gutter={[24, 16]}>
                       <Col classsname="gutter-row" span={9}></Col>
                       <Col classsname="gutter-row">
@@ -505,30 +480,17 @@ function LaptopAllot() {
                       </Col>
 
                     </Row>
-                  </Row>
-
+                  {/* </Row> */}
+                  </>
                 )}
-              </Form>
 
 
             </Row>
 
           </Form>
         </Card>
-
-        {/* <Modal
-          title="Repair Request"
-          open={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
-        >
-
-        </Modal> */}
       </div>
-
-
-
-      <div> <RepairRequestTable />;</div>
+      <div> <RepairRequestTable /></div>
     </>
   )
 }

@@ -1,0 +1,11 @@
+.laptopDiv {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.laptopcard {
+    width: 75%;
+    border-radius: 10px;
+    cursor: default;
+}

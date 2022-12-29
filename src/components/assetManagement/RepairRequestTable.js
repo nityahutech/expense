@@ -16,6 +16,7 @@ import {
 } from "antd";
 import moment from "moment";
 import { PlusCircleOutlined, DeleteOutlined, EditFilled } from "@ant-design/icons"
+import "../../components/assetManagement/RepairRequest.css"
 
 const dataSource = [
     {
@@ -115,35 +116,12 @@ const columns = [
 const RepairRequestTable = () => {
     return (
         <>
-            <div
-                className="education"
-                style={{
-                    margin: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
-            >
-                <Row
-                    className="Row-Card"
-                    style={{
-                        width: '75%',
-                        // margin: '10px',
-                        display: 'flex',
-                        alignItems: 'center'
-                    }}>
-                    <Col span={24}>
+            <div className='laptopDiv'>
                         <Card
                             title="Laptop Request/Repair Request /Upgrade Request"
-                            className="policyCard"
+                            className="laptopcard"
                             bordered={true}
                             hoverable={true}
-                            style={{
-                                width: '100%',
-                                marginTop: 10,
-                                borderRadius: "10px",
-                                cursor: "default"
-                            }}
                         >
                             <Table
                                 columns={columns}
@@ -152,11 +130,7 @@ const RepairRequestTable = () => {
                                 scroll={{ x: 1500 }}
                                 className="policies"
                             />
-
-
                         </Card>
-                    </Col>
-                </Row>
             </div>
         </>
     )

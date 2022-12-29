@@ -558,6 +558,7 @@ function Onboarding() {
                   onClick={async () => {
                     if (progress != 3) {
                       if (progress == 0) {
+                        setNext(1)
                         form.submit();
                         return;
                       }

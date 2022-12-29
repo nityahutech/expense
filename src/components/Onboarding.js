@@ -102,7 +102,8 @@ function Onboarding() {
       cinNumber: data.cinNumber,
       gst: data.gst || null,
       domain: data.domain,
-      phone: (data.prefix ? data.prefix + " " : "") + data.phone,
+      prefix: data.prefix || "",
+      phone: data.phone,
       accessList: [],
       address: [],
       secretary: [],
@@ -558,7 +559,7 @@ function Onboarding() {
                   onClick={async () => {
                     if (progress != 3) {
                       if (progress == 0) {
-                        setNext(1)
+                        setNext(1);
                         form.submit();
                         return;
                       }

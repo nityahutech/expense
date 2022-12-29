@@ -115,8 +115,9 @@ function EditOnboarding(props) {
       domain: values.domain,
       phone: values.phone,
     };
+    console.log(values);
     CompanyProContext.updateCompInfo(
-      values.orgcode,
+      values.preCode,
       valuesToservice,
       fileEdited ? fileName : null
     )

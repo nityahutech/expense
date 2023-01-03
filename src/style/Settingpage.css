@@ -8,55 +8,32 @@
     .settingsTab .ant-form-item-explain-error {
         font-size: 10px !important;
     }
-    .settingsTab .ant-tabs-nav-list {
-        padding: 24px 0px 24px 24px;
-    }
-    .tabPanel {
-        padding: 24px 24px 24px 0px;
-    }
-    .settingsCard {
-        
-    border-radius: 10px;
-    padding-left: 55px;
-    margin-left: 23px
-    }
-    /* .cupsw{
-        width: 108px;
-    }
-    .copsw{
-        width: 120px;
-    } */
-    .new input[type='text'], input[type='password']{
-        width:18rem
-    }
-    .confirm input[type='text'], input[type='password']{
-        width:18rem
-    }
-
     .settingsTab .ant-tabs-nav .ant-tabs-nav-list{
-        margin: 10px;
+        margin-left: 15px;
+        margin-top: 10px;
     }
-
     .settingsTab .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
         color: #000000;
         font-weight: 600;
         font-size: 16px;
-        line-height: 22px;
-        
+        line-height: 22px; 
      }
 
      .settingsTab .ant-tabs-tab:hover{
         color: #000000;
-        
      }
      .settingsTab .ant-tabs-ink-bar {
         /* position: absolute; */
         background: #F9A01F;
         pointer-events: none;
-    
+     }
+     .settingsTab {
+        min-height: 100vh;
      }
 
-     .updatepsw .ant-card-head{
+
+    /* -------------------update-card--------------------- */
+    .updatepsw .ant-card-head{
         background: #1963A6;
     color: #ffffff;
     border-radius: 10px 10px 0px 0px;
@@ -68,5 +45,46 @@
     text-transform: uppercase;
     font-size: 15px;
      }
+    .updatepsw {
+        width: 75%;
+        cursor: default;
+        border-radius: 10px;
+    }
+    .updatepsform {
+        width: 100%;
+    }
+    .update-form{
+        display: flex;
+        justify-content: center;
+    }
+    .update-card {
+        display: flex;
+        justify-content: center;
+    }
+
+    .settingsCard {
+        
+    border-radius: 10px;
+    padding-left: 55px;
+    margin-left: 23px
+    }
+    /* --------------------input-password------------------ */
+    .new input[type='text'], input[type='password']{
+        width:18rem
+    }
+    .confirm input[type='text'], input[type='password']{
+        width:18rem
+    }
+
+    /* ---------------------save-button------------------- */
+    .save-button-col {
+        display: flex;
+        justify-content: center;
+    }
+
+
+    
+
+     
     
     

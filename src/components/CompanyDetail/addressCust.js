@@ -401,10 +401,8 @@ function AddressCust() {
                         style={{
                           display: "flex",
                           justifyContent: "flex-end",
-                          marginTop: "3%",
                         }}
                       >
-                        <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                         <Button
                           type="text"
                           style={{ fontSize: 15 }}
@@ -416,9 +414,7 @@ function AddressCust() {
                         >
                           <CloseOutlined /> CANCEL
                         </Button>
-                        </Col>
-                        <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
-                          <Button
+                        <Button
                             type="primary"
                             htmlType="submit"
                             style={{ fontSize: 15,
@@ -428,8 +424,7 @@ function AddressCust() {
                               color:"#ffff" }}
                           >
                            <CheckOutlined /> SAVE
-                          </Button>
-                        </Col>
+                        </Button>
                       </Row>
                     ) : null}
 
@@ -708,7 +703,7 @@ function AddressCust() {
                         </Form.Item>
                       </Col>
                     </Row>
-                    <Row style={{ display: "flex",justifyContent: "flex-end",marginTop: "3%",}}
+                    <Row style={{ display: "flex",justifyContent: "flex-end"}}
                     >
                       <Button
                         type="text"
@@ -717,15 +712,13 @@ function AddressCust() {
                       >
                         <CloseOutlined /> CANCEL
                       </Button>
-                      <Col>
-                        <Button
+                      <Button
                           type="primary"
                           htmlType="submit"
-                          style={{ marginLeft: "10px",background: "#1963a6",border: "1px solid #1963A6", }}
+                          style={{background: "#1963a6",border: "1px solid #1963A6", }}
                         >
                           <CheckOutlined />SAVE
-                        </Button>
-                      </Col>
+                      </Button>
                     </Row>
                   </>
                 ) : (

@@ -305,7 +305,6 @@ function AddressCorp() {
                                             marginTop: "3%",
                                         }}
                                     >
-                                        <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                                         <Button
                                             type="text"
                                             style={{
@@ -314,9 +313,7 @@ function AddressCorp() {
                                         >
                                             <CloseOutlined /> CANCEL
                                         </Button>
-                                        </Col>
-                                        <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
-                                            <Button
+                                        <Button
                                                 // type="primary"
                                                 htmlType="submit"
                                                 style={{ 
@@ -328,8 +325,7 @@ function AddressCorp() {
                                                 }}
                                             >
                                                <CheckOutlined /> SAVE
-                                            </Button>
-                                        </Col>
+                                        </Button>
                                     </Row>
                                 ) : null}
                             </Card>

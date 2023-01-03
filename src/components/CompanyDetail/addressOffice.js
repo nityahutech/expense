@@ -292,7 +292,6 @@ function AddressOffice() {
                       marginTop: "3%",
                     }}
                   >
-                    <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                     <Button
                       type="text"
                       style={{ fontSize: 15 }}
@@ -300,9 +299,7 @@ function AddressOffice() {
                     >
                       <CloseOutlined /> CANCEL
                     </Button>
-                    </Col>
-                    <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
-                      <Button
+                    <Button
                         // type="primary"
                         htmlType="submit"
                         style={{ marginLeft: "10px",backgroundColor:"#1963A6",
@@ -310,7 +307,6 @@ function AddressOffice() {
                       >
                        <CheckOutlined />SAVE
                       </Button>
-                    </Col>
                   </Row>
                 ) : null}
               </Card>

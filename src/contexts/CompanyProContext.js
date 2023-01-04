@@ -61,7 +61,7 @@ class CompanyProContext {
           department: user.dept || "Default",
           team: user.team || "Default",
           designation: user.designation,
-          role: "hr",
+          role: "admin",
           doj: moment(),
           location: "Registered Office",
           empType: "Full-Time",
@@ -165,14 +165,13 @@ class CompanyProContext {
         getDownloadURL(snapshot.ref).then((url) => {
           console.log(url);
           newInfo.logo = url;
+          let des = {}
+          accessList.map((user) => {
+            des[`${user.designation}`] = 1;
+          })
           setDoc(doc(db, "companyprofile", id), newInfo);
           this.createAdmins(accessList, id);
-          this.createConfig(
-            id,
-            accessList.map((user) => {
-              return { [`${user.designation}`]: 1 };
-            })
-          );
+          this.createConfig(id, des);
           return Promise.resolve();
         });
       });

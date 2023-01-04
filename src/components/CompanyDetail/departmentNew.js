@@ -55,7 +55,7 @@ const DepartmentNew = () => {
     let place = order.indexOf(type);
     let par =
       place == 0
-        ? "null"
+        ? null
         : parent[`${order[1]}`].name +
         (place == 1
           ? ""

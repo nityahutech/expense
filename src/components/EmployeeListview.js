@@ -17,8 +17,6 @@ function EmployeeListview(props) {
   const [certificationDetails, setCertificationDetails] = useState([]);
   const [workDetails, setWorkDetails] = useState([]);
   const [id, setId] = useState([]);
-  console.log('showRecord', showRecord)
-  console.log('certificationDetails', certificationDetails)
   const { Title, Text } = Typography;
 
   const showEduPdfModal = () => {
@@ -45,7 +43,6 @@ function EmployeeListview(props) {
       props.showRecord.id,
       "certificate"
     );
-    console.log('certificate', alldata)
     setCertificationDetails(alldata);
 
 
@@ -55,18 +52,15 @@ function EmployeeListview(props) {
     let alldata = await DocumentContext.getDocument(
       props.showRecord.id,
       "work");
-    console.log('work', alldata)
     setWorkDetails(alldata);
 
   };
 
   //--------------------------------------------------------id
   const getIdData = async () => {
-    console.log('dddddddd', userid, props.showRecord.id)
     let alldata = await DocumentContext.getDocument(
       props.showRecord.id,
       "id");
-    console.log('id', alldata)
     setId(alldata);
 
   };

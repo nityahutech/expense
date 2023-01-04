@@ -67,7 +67,6 @@ const Statutory = () => {
   useEffect(() => {
     let temp = data[`${active}`] || [];
     setActiveList(temp);
-    console.log("ddddddddd", temp);
     setEditPerson(temp.length == 0 ? [false] : [...temp].fill(false));
   }, [active]);
 
@@ -91,11 +90,9 @@ const Statutory = () => {
     setEditPerson(temp.length == 0 ? [false] : [...temp].fill(false));
     setBankList(data.bank);
     setEditBank([...data.bank].fill(false));
-    console.log(data, temp);
   };
 
   function onAdd(values) {
-    console.log("dddddd", values);
     let matchingstatury = activeList.filter(
       (item) => item.mailid === values.mailid
     );
@@ -120,7 +117,6 @@ const Statutory = () => {
     if (active == "auditor") {
       record.type = values.type;
     }
-    console.log("dddddddd", { [`${active}`]: record });
     CompanyProContext.addCompInfo(compId, { [`${active}`]: record });
     addForm.resetFields();
     getData();
@@ -140,12 +136,6 @@ const Statutory = () => {
       record.type = values.type;
     }
     let old = activeList[editPerson.indexOf(true)];
-    console.log(
-      active,
-      editPerson.indexOf(true),
-      { [`${active}`]: old },
-      { [`${active}`]: record }
-    );
     CompanyProContext.editCompInfo(
       compId,
       { [`${active}`]: old },
@@ -183,7 +173,6 @@ const Statutory = () => {
       branch: values.branch,
       accountNo: values.accountNo,
     };
-    console.log(values);
     CompanyProContext.addCompInfo(compId, { bank: record });
     addBankForm.resetFields();
     getData();
@@ -224,9 +213,9 @@ const Statutory = () => {
     });
   };
 
-  const handleOnChange = (value, event) => {
-    console.log(value, event);
-  };
+  // const handleOnChange = (value, event) => {
+  //   console.log(value, event);
+  // };
 
   const prefixSelector = (i) => {
     return (
@@ -243,7 +232,7 @@ const Statutory = () => {
             padding: 0,
             background: "#ffffff",
           }}
-          onSelect={(value, event) => handleOnChange(value, event)}
+          // onSelect={(value, event) => handleOnChange(value, event)}
         >
           {codes?.countries?.map((e) => (
             <Option key={e?.code} value={e?.code}>
@@ -411,7 +400,7 @@ const Statutory = () => {
                       ) : (
                         <Form.Item
                           initialValue={
-                            data
+                            data.dateOfIncorp
                               ? moment(data.dateOfIncorp, "Do MMM, YYYY")
                               : null
                           }
@@ -439,7 +428,7 @@ const Statutory = () => {
                           <DatePicker
                             format="Do MMM, YYYY"
                             required
-                            placeholder="Enter D.O.I"
+                            placeholder="Select Date"
                             bordered={true}
                             style={{
                               width: "100%",
@@ -448,8 +437,6 @@ const Statutory = () => {
                               marginTop: "10px",
                             }}
                           />
-
-                          {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                         </Form.Item>
                       )}
                     </div>
@@ -1701,7 +1688,6 @@ const Statutory = () => {
                           <Button
                             type="primary"
                             onClick={() => {
-                              console.log("add");
                               addBankForm.submit();
                               setAddBank(false);
                             }}

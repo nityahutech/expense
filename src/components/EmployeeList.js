@@ -159,15 +159,10 @@ function EmployeeList() {
         disabled: doc.data().disabled ? true : false,
       };
     });
-    console.log(d, "dataaaaaa");
 
     ConfigureContext.getConfigurations("addemployeePage").then((res) => {
       setDesignations(Object.keys(res.designations))
-      console.log(Object.keys(res.designations))
     })
-    let disabled = d.filter((emp) => emp.disabled);
-    console.log("ddddd", disabled);
-
     setData(d);
     setFilterEmployees(d);
     setAllEmployees(d);
@@ -246,7 +241,6 @@ function EmployeeList() {
                 emp.designation.includes(e)
               );
               setFilterEmployees(selectedData.length == 0 ? allEmployees : selectedData);
-              console.log(selectedData.length == 0 ? allEmployees : selectedData);
             }}
             showSearch
           >

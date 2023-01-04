@@ -12,13 +12,6 @@ import AddressOffice from "./CompanyDetail/addressOffice";
 import AddressCorp from "./CompanyDetail/addressCorp";
 import AddressCust from "./CompanyDetail/addressCust";
 
-const data = [
-  {
-    name: "Overview",
-    content: (<Overview />)
-  },
-]
-
 const renderTabBar = (props, DefaultTabBar) => (
   <Sticky bottomOffset={500}>
     {({ style }) => (
@@ -49,9 +42,6 @@ function CompanyProfile() {
                 <AddressCust />
               </div>
             </Tabs.TabPane>
-            {/* <Tabs.TabPane tab="Department" key="3">
-              <Department />
-            </Tabs.TabPane> */}
             <Tabs.TabPane tab="Organization" key="3">
               <DepartmentNew />
             </Tabs.TabPane>
@@ -61,9 +51,9 @@ function CompanyProfile() {
             <Tabs.TabPane tab="Policies" key="6">
               <Policies />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Admin" key="7">
+            {/* <Tabs.TabPane tab="Admin" key="7">
               <Admin />
-            </Tabs.TabPane>
+            </Tabs.TabPane> */}
             <Tabs.TabPane tab="Statutory" key="8">
               <Statutory />
             </Tabs.TabPane>

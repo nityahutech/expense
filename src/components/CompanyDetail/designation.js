@@ -42,7 +42,6 @@ const Designation = () => {
   const getData = async () => {
     let data = await ConfigureContext.getConfigurations(page);
     setDesignations(data.designations)
-    console.log(data)
     setshowNewColumn(data.enabled)
     let designNo = await getDesigNo()
     let keys = Object.keys(data.designations)
@@ -135,7 +134,6 @@ const Designation = () => {
   }, []);
 
   useEffect(() => {
-    console.log(showNewColumn)
     let temp = [...columns]
     delete temp[2]
     setColumns(showNewColumn ? columns : temp)
@@ -218,7 +216,6 @@ const Designation = () => {
       let i = values[`${key}`]
       temp[`${i}`] = Number(extra[`${key}`]) || 1
     })
-    console.log(values, extra, { designations: temp })
     ConfigureContext.editConfiguration(page, { designations: temp })
       .then((response) => {
         showNotification(

@@ -47,7 +47,6 @@ class PolicyContext {
                     url: url,
                     file: file.name,
                 }
-                console.log(updateCompInfo)
                 updateDoc(doc(db, `companyprofile/${compId}/policy`, updateCompInfo.id), updateCompInfo)
                 return Promise.resolve();
             })

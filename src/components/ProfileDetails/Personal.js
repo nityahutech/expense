@@ -43,7 +43,6 @@ function Personal() {
   const [lccs, setLccs] = useState("");
   const [editAddressInfo, showEditAddressInfo] = useState(false);
   const [data, setData] = useState([]);
-  console.log(data);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [form] = Form.useForm();
   const onFinish = (value) => {
@@ -60,8 +59,9 @@ function Personal() {
       bloodGroup: value.bloodGroup ? value.bloodGroup : null,
       maritalStatus: value.maritalStatus ? value.maritalStatus : null,
       mname: mname,
-      profilePic: imageUrl || data.profilePic || null,
+      profilePic: imageUrl || null,
     };
+    console.log(imageUrl, record, fileName)
     EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName);
     const timer = setTimeout(() => {
       getData();
@@ -135,7 +135,6 @@ function Personal() {
 
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    console.log("storage", data);
     setData(data);
     setFileName(data.profilePic);
     setImageUrl(data.profilePic);

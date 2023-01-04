@@ -4,6 +4,7 @@ import {
   signOut,
   updatePhoneNumber,
   updateProfile,
+  deleteUser
 } from "@firebase/auth";
 import {
   collection,
@@ -46,6 +47,7 @@ export async function createUser(values, compId) {
     contactEmail: values.email,
     doj: values.doj.format("DD-MM-YYYY"),
     phonenumber: values.phone,
+    prefix: values.prefix,
     gender: values.gender,
     designation: values.designation,
     role: values.role? values.role :
@@ -74,6 +76,10 @@ export async function createUser(values, compId) {
     .catch((error) => {
       return false;
     });
+}
+
+export async function deleteErrorUser() {
+
 }
 
 export async function getUsers() {

@@ -2,7 +2,6 @@ import "antd/dist/antd.css";
 import { Tabs } from "antd";
 import { Sticky, StickyContainer } from 'react-sticky';
 import Overview from "./CompanyDetail/overview";
-import Department from "./CompanyDetail/department";
 import Designation from "./CompanyDetail/designation";
 import Policies from "./CompanyDetail/policies";
 import Admin from "./CompanyDetail/admin";

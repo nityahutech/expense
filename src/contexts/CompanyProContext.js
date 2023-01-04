@@ -66,6 +66,7 @@ class CompanyProContext {
           location: "Registered Office",
           empType: "Full-Time",
           gender: "",
+          prefix: user.prefix,
           phone: user.phone,
           name: name,
           fname: user.fName,
@@ -84,6 +85,7 @@ class CompanyProContext {
           userRole: user.designation,
           phone: user.phone,
           mailid: user.email,
+          prefix: user.prefix,
         });
         await createUser(newRec, id);
       });

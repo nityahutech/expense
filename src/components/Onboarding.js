@@ -83,11 +83,19 @@ function Onboarding() {
     }
     let orgcode = await CompanyProContext.getOrgId();
     let temp = localStorage.getItem("costCenters");
-    let costCenters = temp || temp != "[]" ? JSON.parse(temp) : [];
+    let costCenters = temp == "[]" ? [] : JSON.parse(temp);
     let temp1 = localStorage.getItem("OrgAccess");
-    let accessList = temp1 || temp1 != "[]" ? JSON.parse(temp1) : [];
+    let accessList = temp1 == "[]" ? [] : JSON.parse(temp1);
     let temp2 = localStorage.getItem("OrgHier");
-    let orgHier = temp2 || temp2 != "[]" ? JSON.parse(temp2) : [];
+    let orgHier = temp2 != "[]" ? JSON.parse(temp2) : [{
+      name: "Default", description: "Default", type: "Business Unit", parent: null 
+    },{
+      name: "Default", description: "Default", type: "Division", parent: "Default" 
+    },{
+      name: "Default", description: "Default", type: "Department", parent: "Default/Default" 
+    },{
+      name: "Default", description: "Default", type: "Team", parent: "Default/Default/Default" 
+    },]
     const value = {
       regCompName: data.regCompName,
       regOffice: {
@@ -98,6 +106,7 @@ function Onboarding() {
         country: data.country,
         pincode: data.pincode,
       },
+      precode: data.preCode,
       corpOffice: {},
       cinNumber: data.cinNumber,
       gst: data.gst || null,
@@ -110,8 +119,8 @@ function Onboarding() {
       director: [],
       auditor: [],
       bank: [],
-      costCenters: costCenters == null ? [] : costCenters,
-      deparments: orgHier == null ? [] : orgHier,
+      costCenters: costCenters,
+      departments: orgHier,
       status: "Deactivated",
       reason: "First Activation Incomplete",
     };
@@ -424,7 +433,6 @@ function Onboarding() {
                     <ViewModal
                       modalData={modalData}
                       setIsModalVisible={setIsModalVisible}
-                      getData={getData}
                     />
                   </Modal>
                 </Col>

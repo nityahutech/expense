@@ -165,7 +165,7 @@ class AttendanceContext {
         return temp.reverse();
     };
 
-    getAllUsers = async() => {
+    getAllUsers = async(date) => {
         const q = query(usersCollectionRef, orderBy("empId", "asc"));
         let userdata = await getDocs(q);
         let res = userdata.docs.map((doc) => {
@@ -178,7 +178,7 @@ class AttendanceContext {
             report: ""
           };
         });
-        let stats = await this.getStatus();
+        let stats = await this.getStatus(date);
         res.forEach((emp) => {
           for (let i = 0; i < stats.length; i++) {
             if (emp.id == stats[i].id) {
@@ -213,14 +213,14 @@ class AttendanceContext {
       console.log(data, isHoiday, isDayoff)
       data.forEach((emp) => {
         if(emp.status == "Absent") {
-          if (isDayoff) {
-            emp.status = "Weekend";
-            return;
-          } 
           if (isHoiday) {
             emp.status = "Holiday"
             return;
           }
+          if (isDayoff) {
+            emp.status = "Weekend";
+            return;
+          } 
           this.getLeaveStatus(emp.empId).then((leave) => {
             if (leave) {
               emp.status = "On Leave";
@@ -237,8 +237,8 @@ class AttendanceContext {
         return getDocs(q);
     };
 
-    getStatus = async () => {
-        const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")));
+    getStatus = async (date) => {
+        const q = query(attendCollectionRef, where("date","==",date));
         let stats = await getDocs(q);
         let res = stats.docs.map((doc) => {
           return {

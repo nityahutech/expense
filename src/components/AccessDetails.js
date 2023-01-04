@@ -46,7 +46,6 @@ function AccessDetails(props) {
   const [dept, setDept] = useState(null);
   const [team, setTeam] = useState(null);
   const order = ["Business Unit", "Division", "Department", "Team"];
-  const [parent, setParent] = useState(null);
   const [codes, setCodes] = useState("");
 
   const dateFormat = "DD-MM-YYYY";

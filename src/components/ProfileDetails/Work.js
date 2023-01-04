@@ -23,9 +23,8 @@ function Work() {
     setDepartment(data.department ? data.department : null);
     setEmpType(data.empType ? data.empType : null);
     setEmpID(data.empId ? data.empId : null);
-    console.log(data.empId)
   };
-  console.log(empID)
+
   return (
     <>
       <div

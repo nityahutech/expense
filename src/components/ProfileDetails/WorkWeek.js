@@ -2,9 +2,6 @@ import { useState, useEffect } from "react";
 import { Card, Table, Row, Col } from "antd";
 import "../../style/WorkWeek.css";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
-import Green from "../../images/green.png";
-import Red from "../../images/red.png";
-import Orange from "../../images/orange.png";
 
 const data = [
   {

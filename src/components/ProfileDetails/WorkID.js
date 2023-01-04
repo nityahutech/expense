@@ -14,11 +14,8 @@ import {
 import Iframe from "react-iframe";
 import {
   PlusCircleOutlined,
-  UploadOutlined,
   DeleteOutlined,
-  CloseCircleOutlined,
 } from "@ant-design/icons";
-import moment from "moment";
 import FormItem from "antd/es/form/FormItem";
 import "../../style/CertificationID.css";
 import DocumentContext from "../../contexts/DocumentContext";
@@ -45,7 +42,6 @@ function WorkID() {
   }
 
   async function addNewWork(values) {
-    console.log("addnewWork", values);
     let durationInMonths = values.endDate.diff(values.startDate, "months");
     try {
       let newWorkDoc = {

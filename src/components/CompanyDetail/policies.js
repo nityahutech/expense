@@ -58,7 +58,6 @@ const Policies = () => {
               }}
               onChange={(e) => {
                 let temp = [...version]
-                console.log(e)
                 temp[i] = e
                 setVersion(temp)
               }}
@@ -123,7 +122,6 @@ const Policies = () => {
 
   function handleChange(event) {
     let file = event.target.files[0]
-    console.log('handleupload', file)
     setFile(null);
     const isPdf = file.type === 'application/pdf';
     if (!isPdf) {
@@ -140,7 +138,6 @@ const Policies = () => {
   }
 
   function addPolicy(values) {
-    console.log('values', values)
     try{
     let newWorkDoc = {
       ...values,
@@ -165,7 +162,6 @@ const Policies = () => {
   }
 
   function editPolicy(values) {
-    console.log('values', values)
     try{
     let newWorkDoc = {
       ...editOld,
@@ -175,9 +171,7 @@ const Policies = () => {
       version: editOld.versions.length + 1,
       date: moment().format("DD MMM, YYYY")
     })
-    console.log(newWorkDoc)
     PolicyContext.updatePolicy(newWorkDoc, file)
-    // .then(() => {
       const timer = setTimeout(() => {
         showEditModal(false);
         showNotification("success", "Success", "Upload Complete");
@@ -223,8 +217,6 @@ const Policies = () => {
       temp[i] = pol.versions[0].version
     })
     setVersion(temp)
-
-    console.log('alldata', alldata, )
     setPolicy(alldata);
 
   };

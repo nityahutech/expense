@@ -38,7 +38,6 @@ function CostCenter(props) {
       okType: "danger",
 
       onOk: () => {
-        console.log("key", record);
         const newData = costCenters.filter(
           (item) => item.costcentercode !== record.costcentercode
         );
@@ -53,15 +52,12 @@ function CostCenter(props) {
   };
 
   const onFinishEdit = (values) => {
-    console.log("onFinishEdit", values);
-
     let newCostCenterTemp = {
       costName: values.costName,
       costcentercode: values.costcentercode,
       costDescription: values.costDescription,
     };
     let originalCostCenterCode = costEditCenter.costcentercode;
-    console.log("onFinishEdit", originalCostCenterCode);
     for (let i = 0; i < costCenters.length; i++) {
       if (costCenters[i].costcentercode === originalCostCenterCode) {
         costCenters[i] = newCostCenterTemp;
@@ -91,11 +87,9 @@ function CostCenter(props) {
   }
 
   const onFinishForm = (values) => {
-    console.log("values", values);
     let matchingCostCenter = costCenters.filter(
       (item) => item.costcentercode === values.costcentercode
     );
-    console.log("values", matchingCostCenter);
     if (matchingCostCenter.length > 0) {
       showNotification("error", "Error", "This Cost Center already exists!");
       return;
@@ -124,7 +118,6 @@ function CostCenter(props) {
 
   useEffect(() => {
     let costfromDataStore = getCostCentersFromLocalStr();
-    console.log("costfromDataStore", costfromDataStore);
     setCostCenters(costfromDataStore);
   }, []);
 

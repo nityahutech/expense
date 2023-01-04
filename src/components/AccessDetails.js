@@ -129,10 +129,6 @@ function AccessDetails(props) {
     }
   };
 
-  const handleOnChange = (value, event) => {
-    console.log(value, event);
-  };
-
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select
@@ -143,7 +139,6 @@ function AccessDetails(props) {
           width: 80,
           background: "#ffffff",
         }}
-        onSelect={(value, event) => handleOnChange(value, event)}
       >
         {codes?.countries?.map((e) => (
           <Option key={e?.code} value={e?.code}>
@@ -226,7 +221,6 @@ function AccessDetails(props) {
   };
 
   const disabledDept = () => {
-    console.log(div);
     if (div == null) {
       form.setFieldsValue({ dept: null });
       form1.setFieldsValue({ dept: null });
@@ -247,7 +241,6 @@ function AccessDetails(props) {
   const getOptions = (type) => {
     let temp = [];
     let place = order.indexOf(type);
-    console.log(bu, div, dept, team);
     let par =
       place == 0
         ? null
@@ -258,7 +251,6 @@ function AccessDetails(props) {
       }
     });
 
-    console.log(temp);
     return temp.length == 0
       ? [<Option value={"Default"}>Default</Option>]
       : temp;
@@ -266,11 +258,9 @@ function AccessDetails(props) {
 
   const generateEmpCode = () => {
     let res = accessList.length + 1;
-    console.log(props.preCode + ("00" + res.toString()).slice(-3));
     return props.preCode + ("00" + res.toString()).slice(-3);
   };
-  console.log(orgHier)
-  console.log(editAccess);
+
   return (
     <>
       {accessList != 0
@@ -621,9 +611,9 @@ function AccessDetails(props) {
                                   width: 80,
                                   background: "#ffffff",
                                 }}
-                                onSelect={(value, event) =>
-                                  handleOnChange(value, event)
-                                }
+                                // onSelect={(value, event) =>
+                                //   handleOnChange(value, event)
+                                // }
                               >
                                 {codes?.countries?.map((e) => (
                                   <Option key={e?.code} value={e?.code}>
@@ -896,10 +886,12 @@ function AccessDetails(props) {
                         className="userLabel"
                         name="businessUnit"
                         label="Business Unit::"
-                        rules={[{
-                          required: true,
-                          message: "Please Select a Business Unit"
-                        }]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select a Business Unit",
+                          },
+                        ]}
                         // labelCol={{
                         //   span: 3,
                         //   offset: 5,
@@ -934,10 +926,12 @@ function AccessDetails(props) {
                         className="userLabel"
                         name="division"
                         label="Division::"
-                        rules={[{
-                          required: true,
-                          message: "Please Select a Division"
-                        }]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select a Division",
+                          },
+                        ]}
                         // labelCol={{
                         //   span: 3,
                         //   offset: 5,
@@ -974,10 +968,12 @@ function AccessDetails(props) {
                         className="userLabel"
                         name="department"
                         label="Department::"
-                        rules={[{
-                          required: true,
-                          message: "Please Select a Department"
-                        }]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select a Department",
+                          },
+                        ]}
                         // labelCol={{
                         //   span: 3,
                         //   offset: 5,
@@ -1013,10 +1009,12 @@ function AccessDetails(props) {
                         className="userLabel"
                         name="team"
                         label="Team::"
-                        rules={[{
-                          required: true,
-                          message: "Please Select a Team"
-                        }]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select a Team",
+                          },
+                        ]}
                         // labelCol={{
                         //   span: 3,
                         //   offset: 5,
@@ -1966,10 +1964,12 @@ function AccessDetails(props) {
                     className="userLabel"
                     name="businessUnit"
                     label="Business Unit::"
-                        rules={[{
-                          required: true,
-                          message: "Please Select a Business Unit"
-                        }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Select a Business Unit",
+                      },
+                    ]}
                     // labelCol={{
                     //   span: 3,
                     //   offset: 5,
@@ -2003,10 +2003,12 @@ function AccessDetails(props) {
                     className="userLabel"
                     name="division"
                     label="Division::"
-                        rules={[{
-                          required: true,
-                          message: "Please Select a Division"
-                        }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Select a Division",
+                      },
+                    ]}
                     // initialValue={() => {
                     //   let temp = getOptions("Division")
                     //   temp.length == 1
@@ -2046,10 +2048,12 @@ function AccessDetails(props) {
                     className="userLabel"
                     name="dept"
                     label="Department::"
-                        rules={[{
-                          required: true,
-                          message: "Please Select a Department"
-                        }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Select a Department",
+                      },
+                    ]}
                     // labelCol={{
                     //   span: 3,
                     //   offset: 5,
@@ -2084,10 +2088,12 @@ function AccessDetails(props) {
                     className="userLabel"
                     name="team"
                     label="Team::"
-                        rules={[{
-                          required: true,
-                          message: "Please Select a Team"
-                        }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Select a Team",
+                      },
+                    ]}
                     // labelCol={{
                     //   span: 3,
                     //   offset: 5,

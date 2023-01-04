@@ -5,7 +5,6 @@ import imageavailable from "../images/imageavailable.png";
 
 function ViewModal(props) {
   const modalData = props.modalData;
-  // console.log("modalData", modalData);
   const logoImg = new Image();
   const [dimensions, setDimensions] = useState({ height: null, width: null });
 

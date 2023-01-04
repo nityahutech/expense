@@ -72,7 +72,6 @@ function Onboarding() {
       localStorage.setItem("OrgDetails", []);
       return;
     }
-    console.log(JSON.parse(data));
     setData(JSON.parse(data));
   };
 
@@ -115,37 +114,56 @@ function Onboarding() {
       auditor: [],
       bank: [],
       costCenters: costCenters == null ? [] : costCenters,
-      departments: orgHier == null ? [{
-        name: "Default", description: "Default", type: "Business Unit", parent: null 
-      },{
-        name: "Default", description: "Default", type: "Division", parent: "Default" 
-      },{
-        name: "Default", description: "Default", type: "Department", parent: "Default/Default" 
-      },{
-        name: "Default", description: "Default", type: "Team", parent: "Default/Default/Default" 
-      },] : orgHier,
+      departments:
+        orgHier == null
+          ? [
+              {
+                name: "Default",
+                description: "Default",
+                type: "Business Unit",
+                parent: null,
+              },
+              {
+                name: "Default",
+                description: "Default",
+                type: "Division",
+                parent: "Default",
+              },
+              {
+                name: "Default",
+                description: "Default",
+                type: "Department",
+                parent: "Default/Default",
+              },
+              {
+                name: "Default",
+                description: "Default",
+                type: "Team",
+                parent: "Default/Default/Default",
+              },
+            ]
+          : orgHier,
       status: "Deactivated",
       reason: "First Activation Incomplete",
     };
-    console.log(orgcode, value, fileName, accessList);
-    // CompanyProContext.createCompInfo(orgcode, value, fileName, accessList)
-    //   .then((response) => {
-    //     notification.open({
-    //       message: "Creating Company",
-    //       duration: 3,
-    //       icon: <LoadingOutlined />,
-    //     });
-    //     const timer = setTimeout(() => {
-    //       showNotification("success", "Success", "Onboarding Completed");
-    //       getData();
-    //       reset();
-    //       setActivetab("1");
-    //     }, 5000);
-    //     return () => clearTimeout(timer);
-    //   })
-    //   .catch((error) => {
-    //     showNotification("error", "Error", error.message);
-    //   });
+    CompanyProContext.createCompInfo(orgcode, value, fileName, accessList)
+      .then((response) => {
+        notification.open({
+          message: "Creating Company",
+          duration: 3,
+          icon: <LoadingOutlined />,
+        });
+        const timer = setTimeout(() => {
+          showNotification("success", "Success", "Onboarding Completed");
+          getData();
+          reset();
+          setActivetab("1");
+        }, 5000);
+        return () => clearTimeout(timer);
+      })
+      .catch((error) => {
+        showNotification("error", "Error", error.message);
+      });
   };
 
   useEffect(() => {
@@ -180,7 +198,6 @@ function Onboarding() {
       okType: "danger",
 
       onOk: () => {
-        console.log(reason);
         CompanyProContext.updateCompInfo(id, {
           status: status == "Deactivated" ? "Activated" : "Deactivated",
           reason: reason,
@@ -346,12 +363,11 @@ function Onboarding() {
 
   const reset = () => {
     Object.keys({ ...data }).map((field) => {
-      console.log(field);
       form.setFieldsValue({ [`${field}`]: null });
     });
     setActivetab("1");
     setData({});
-    setProgress(0)
+    setProgress(0);
     localStorage.removeItem("OrgDetails");
     localStorage.removeItem("costCenters");
     localStorage.removeItem("OrgHier");
@@ -374,7 +390,6 @@ function Onboarding() {
       },
     });
   };
-  console.log(fileName);
   return (
     <>
       <Tabs

@@ -30,7 +30,6 @@ const OrgDetails = (props) => {
   });
 
   const handleClick = () => {
-    console.log("handleClick");
     imgRef.current.click();
   };
 
@@ -45,8 +44,6 @@ const OrgDetails = (props) => {
   // };
 
   const handleChange = (event) => {
-    console.log("handleChange");
-
     if (!event) {
       return;
     }
@@ -104,7 +101,6 @@ const OrgDetails = (props) => {
 
   const onFinishFailed = (errorInfo) => {
     props.setIsStepOneInvalid(true);
-    console.log("Failed:", errorInfo);
   };
 
   const prefixSelector = (
@@ -127,7 +123,6 @@ const OrgDetails = (props) => {
       </Select>
     </Form.Item>
   );
-  console.log(fileName, JSON.stringify(fileName), imageUrl);
   return (
     <div style={{ margin: "13px", background: "#fff" }}>
       <div

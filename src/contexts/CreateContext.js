@@ -18,12 +18,15 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase-config";
 import { notification } from "antd";
+import CompanyProContext from "./CompanyProContext";
 
-function generateEmpId(compId) {
+async function generateEmpId(compId) {
+  let data = await CompanyProContext.getCompanyProfile(compId);
+  console.log(data.precode)
   let q = query(collection(db, "users"), where("compId", "==", compId))
   let len = getDocs(q).then((snapshot) => {
     let res = snapshot.docs.length + 1;
-    return "HTS" + ("00" + res.toString()).slice(-3);
+    return data.precode + ("00" + res.toString()).slice(-3);
   });
   return len;
 }
@@ -51,15 +54,17 @@ export async function createUser(values, compId) {
     gender: values.gender,
     designation: values.designation,
     role: values.role? values.role :
-      (values.designation == "Chief Executive Officer(CEO)" ||
-      values.designation == "Human Resource(HR)"
+      (values.designation.includes("Admin")
         ? "admin"
         : "emp"),
     empType: values.empType,
     repManager: values.repManager ? values.repManager : "",
     secManager: values.secManager ? values.secManager : "",
     lead: values.lead ? values.lead : "",
-    department: values.department ? values.department : "",
+    businessUnit: values.bu,
+    department: values.dept,
+    division: values.div,
+    team: values.team,
     location: values.location,
     isManager: values.isManager || false,
     isHr: values.isHr || false,

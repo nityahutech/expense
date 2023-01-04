@@ -214,9 +214,11 @@ const Designation = () => {
 
   const onFinish = (values, extra) => {
     let temp = { ...designations };
-    Object.values(values).forEach((key, i) => {
-      temp[`${key}`] = extra[`${i}`]
+    Object.keys(values).forEach((key) => {
+      let i = values[`${key}`]
+      temp[`${i}`] = Number(extra[`${key}`]) || 1
     })
+    console.log(values, extra, { designations: temp })
     ConfigureContext.editConfiguration(page, { designations: temp })
       .then((response) => {
         showNotification(
@@ -356,6 +358,7 @@ const Designation = () => {
                                         }}
                                       />
                                     </Form.Item>
+                                    { showNewColumn ? (
                                     <Form.Item
                                       {...restField}
                                       name={[name, "second"]}
@@ -382,7 +385,7 @@ const Designation = () => {
                                         }}
                                       />
                                     </Form.Item>
-
+                                    ) : null}
                                     <MinusCircleOutlined
                                       onClick={() => {
                                         delete data[`${key}`];

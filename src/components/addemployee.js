@@ -10,6 +10,7 @@ import {
   Select,
   notification,
   Space,
+  AutoComplete,
 } from "antd";
 import "../style/Documents.css";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +18,7 @@ import {
   capitalize,
   checkAlphabets,
   createUser,
+  getUsers,
   showNotification,
 } from "../contexts/CreateContext";
 import { getCountryCode } from "../contexts/CreateContext";
@@ -36,6 +38,7 @@ function AddEmployee(props) {
   const [configurations, setConfigurations] = useState([]);
   const [workLoc, setWorkLoc] = useState(null);
   const [allEmp, setAllEmp] = useState(null);
+  const [allEmpName, setAllEmpName] = useState(null);
   const [data, setData] = useState();
   const [parent, setParent] = useState(null);
   const [dataSource, setDataSource] = useState([]);
@@ -50,22 +53,30 @@ function AddEmployee(props) {
   const [dept, setDept] = useState(null);
   const [team, setTeam] = useState(null);
   const order = ["Business Unit", "Division", "Department", "Team"];
+  const [options, setOptions] = useState([]);
 
-  const selectBusiness = (e) => {
-    setSelectInput({ ...selectInput, div: false });
-    setSelectInput(e.target.value);
+  const onSearch = (searchText) => {
+    console.log('onSearch', searchText);
+    console.log('onSearch', allEmpName);
+    let matchingName = allEmpName.filter((ex) => { return ex.value.toLowerCase().includes(searchText.toLowerCase()) })
+    console.log('onSearch', matchingName);
+    setOptions(
+      !searchText ? [] : matchingName,
+    );
   };
 
-  const selectDivision = (e) => {
-    setSelectInput({ ...selectInput, depart: false });
-    setSelectInput(e.target.value);
-  };
+  const getAllUser = async () => {
+    const allData = await getUsers();
+    let allUsers = allData.docs.map((doc, i) => {
+      return {
+        value: doc.data().fname + ' ' + doc.data().lname,
+      };
+    });
+    console.log('allUsers', allUsers)
+    setAllEmpName(allUsers)
+    getData(allUsers);
 
-  const selectDepartment = (e) => {
-    setSelectInput({ ...selectInput, team: false });
-    setSelectInput(e.target.value);
-  };
-
+  }
   const { CSVReader } = useCSVReader();
   const styles = {
     csvReader: {
@@ -94,6 +105,7 @@ function AddEmployee(props) {
 
   useEffect(() => {
     getData();
+    getAllUser();
   }, []);
   
   const disabledDiv = () => {
@@ -147,7 +159,8 @@ function AddEmployee(props) {
       setCodes(res);
     });
     let add = ["Registered Office"];
-    if (temp.corpOffice) {
+    console.log(Object.keys(temp.corpOffice))
+    if (Object.keys(temp.corpOffice) != 0) {
       add.push("Corporate Office");
     }
     temp.address?.map((rec) => {
@@ -169,7 +182,7 @@ function AddEmployee(props) {
   const onFinish = (values) => {
     console.log(values);
     values.name =
-      values.fName + (values.mName ? ` ${values.mName} ` : " ") + values.lNam;
+      values.fname + (values.mname ? ` ${values.mname} ` : " ") + values.lname;
     createUser(values, compId)
       .then((response) => {
         showNotification("success", "Success", "Employee Created");
@@ -195,7 +208,7 @@ function AddEmployee(props) {
         showSearch
         bordered={false}
         style={{
-          width: 80,
+          width: 70,
           background: "#ffffff",
         }}
         onSelect={(value, event) => handleOnChange(value, event)}
@@ -209,7 +222,6 @@ function AddEmployee(props) {
     </Form.Item>
   );
 
-  console.log(designations, place);
   return (
     <>
       <div className="expForm" style={{ margin: "15px", background: "#fff" }}>
@@ -275,7 +287,7 @@ function AddEmployee(props) {
             //   justifyContent: "flex-start",
             // }}
             >
-              <CSVReader
+              {/* <CSVReader
                 onUploadAccepted={(results) => {
                   console.log("---------------------------");
                   console.log(results);
@@ -307,7 +319,7 @@ function AddEmployee(props) {
                     <ProgressBar style={styles.progressBarBackgroundColor} />
                   </>
                 )}
-              </CSVReader>
+              </CSVReader> */}
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
@@ -468,7 +480,6 @@ function AddEmployee(props) {
                     validator: (_, value) => {
                       let emailDomain = value.substring(value.indexOf("@") + 1);
                       let valid = domain == emailDomain;
-                      console.log(domain);
                       if (!valid) {
                         return Promise.reject(
                           new Error("Please Enter Official Email Address")
@@ -682,13 +693,20 @@ function AddEmployee(props) {
                   },
                 ]}
               >
-                <Select
+                <AutoComplete
                   bordered={false}
-                  // showSearch
-                  placeholder="Select a Manager"
+                  options={options}
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
+                  }}
+                  onSearch={onSearch}
+                  placeholder="Enter Reporting Manager Name"
+                />
+                {/* <Select
+                  // showSearch
+                  placeholder="Select a Manager"
+                  style={{
                   }}
                   // optionFilterProp="children"
                   //   onChange={onChange}
@@ -700,7 +718,7 @@ function AddEmployee(props) {
                   {configurations?.repManager?.map((des) => (
                     <Option value={des}>{des}</Option>
                   ))}
-                </Select>
+                </Select> */}
                 {/* <Input
                   maxLength={20}
                   onChange={(e) => {
@@ -742,7 +760,17 @@ function AddEmployee(props) {
                   },
                 ]}
               >
-                <Select
+                <AutoComplete
+                  bordered={false}
+                  options={options}
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                  onSearch={onSearch}
+                  placeholder="Enter Secondary Manager Name"
+                />
+                {/* <Select
                   bordered={false}
                   // showSearch
                   placeholder="Select a Manager"
@@ -760,7 +788,7 @@ function AddEmployee(props) {
                   {configurations?.secManager?.map((des) => (
                     <Option value={des}>{des}</Option>
                   ))}
-                </Select>
+                </Select> */}
                 {/* <Input
                   maxLength={20}
                   onChange={(e) => {
@@ -801,7 +829,17 @@ function AddEmployee(props) {
                   },
                 ]}
               >
-                <Input
+                <AutoComplete
+                  bordered={false}
+                  options={options}
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                  onSearch={onSearch}
+                  placeholder="Enter Lead Name"
+                />
+                {/* <Input
                   maxLength={20}
                   onChange={(e) => {
                     const inputval = e.target.value;
@@ -818,7 +856,7 @@ function AddEmployee(props) {
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
                   }}
-                />
+                /> */}
               </Form.Item>
             </Col>
           </Row>

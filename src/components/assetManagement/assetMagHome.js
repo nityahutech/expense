@@ -12,7 +12,7 @@ function assetMagHome() {
 
   return (
     <div className="primarydiva">
-      <Tabs defaultActiveKey="1">
+      <Tabs defaultActiveKey="1" className="assetTabs">
         {role == "admin" || isHr ? (
           <>
             <Tabs.TabPane tab="All Request" key="1">

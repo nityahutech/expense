@@ -11,12 +11,15 @@ import {
   Card,
   Select,
 } from "antd";
-import {
-  PlusCircleOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import "../style/Onboarding.css";
-import { showNotification, checkAlphabets, checkNumbervalue, checkUpperCase, getCountryCode } from "../contexts/CreateContext";
+import {
+  showNotification,
+  checkAlphabets,
+  checkNumbervalue,
+  checkUpperCase,
+  getCountryCode,
+} from "../contexts/CreateContext";
 import CompanyProContext from "../contexts/CompanyProContext";
 
 const { Option } = Select;
@@ -93,9 +96,8 @@ function EditOnboarding(props) {
       gst: values.gst,
       domain: values.domain,
       phone: values.phone,
-      prefix: values.prefix
+      prefix: values.prefix,
     };
-    console.log(values);
     CompanyProContext.updateCompInfo(
       values.orgCode,
       valuesToservice,
@@ -106,7 +108,7 @@ function EditOnboarding(props) {
     onReset();
     props.setIsEditOrganization(false);
   };
-  
+
   function checkFileSize(size, fileName) {
     if (Math.round(size / 1024) <= 200) {
       setFileName(fileName);

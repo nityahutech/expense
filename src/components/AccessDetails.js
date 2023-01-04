@@ -46,7 +46,6 @@ function AccessDetails(props) {
   const [dept, setDept] = useState(null);
   const [team, setTeam] = useState(null);
   const order = ["Business Unit", "Division", "Department", "Team"];
-  const [parent, setParent] = useState(null);
   const [codes, setCodes] = useState("");
 
   const dateFormat = "DD-MM-YYYY";
@@ -270,6 +269,7 @@ function AccessDetails(props) {
     console.log(props.preCode + ("00" + res.toString()).slice(-3));
     return props.preCode + ("00" + res.toString()).slice(-3);
   };
+  console.log(orgHier)
   console.log(editAccess);
   return (
     <>

@@ -72,7 +72,6 @@ function Onboarding() {
       localStorage.setItem("OrgDetails", []);
       return;
     }
-    console.log(JSON.parse(data));
     setData(JSON.parse(data));
   };
 
@@ -82,20 +81,15 @@ function Onboarding() {
       return;
     }
     let orgcode = await CompanyProContext.getOrgId();
+    let temp1 = localStorage.getItem("OrgAccess");
+    let accessList = JSON.parse(temp1);
     let temp = localStorage.getItem("costCenters");
     let costCenters = temp == "[]" ? [] : JSON.parse(temp);
-    let temp1 = localStorage.getItem("OrgAccess");
-    let accessList = temp1 == "[]" ? [] : JSON.parse(temp1);
     let temp2 = localStorage.getItem("OrgHier");
-    let orgHier = temp2 != "[]" ? JSON.parse(temp2) : [{
-      name: "Default", description: "Default", type: "Business Unit", parent: null 
-    },{
-      name: "Default", description: "Default", type: "Division", parent: "Default" 
-    },{
-      name: "Default", description: "Default", type: "Department", parent: "Default/Default" 
-    },{
-      name: "Default", description: "Default", type: "Team", parent: "Default/Default/Default" 
-    },]
+    let orgHier = temp2 == "[]" ? null : JSON.parse(temp2);
+    // if (orgHier != null) {
+
+    // }
     const value = {
       regCompName: data.regCompName,
       regOffice: {
@@ -119,12 +113,39 @@ function Onboarding() {
       director: [],
       auditor: [],
       bank: [],
-      costCenters: costCenters,
-      departments: orgHier,
+      costCenters: costCenters == null ? [] : costCenters,
+      departments:
+        orgHier == null
+          ? [
+              {
+                name: "Default",
+                description: "Default",
+                type: "Business Unit",
+                parent: null,
+              },
+              {
+                name: "Default",
+                description: "Default",
+                type: "Division",
+                parent: "Default",
+              },
+              {
+                name: "Default",
+                description: "Default",
+                type: "Department",
+                parent: "Default/Default",
+              },
+              {
+                name: "Default",
+                description: "Default",
+                type: "Team",
+                parent: "Default/Default/Default",
+              },
+            ]
+          : orgHier,
       status: "Deactivated",
       reason: "First Activation Incomplete",
     };
-    console.log(orgcode, value, fileName, accessList);
     CompanyProContext.createCompInfo(orgcode, value, fileName, accessList)
       .then((response) => {
         notification.open({
@@ -177,7 +198,6 @@ function Onboarding() {
       okType: "danger",
 
       onOk: () => {
-        console.log(reason);
         CompanyProContext.updateCompInfo(id, {
           status: status == "Deactivated" ? "Activated" : "Deactivated",
           reason: reason,
@@ -343,11 +363,11 @@ function Onboarding() {
 
   const reset = () => {
     Object.keys({ ...data }).map((field) => {
-      console.log(field);
       form.setFieldsValue({ [`${field}`]: null });
     });
     setActivetab("1");
     setData({});
+    setProgress(0);
     localStorage.removeItem("OrgDetails");
     localStorage.removeItem("costCenters");
     localStorage.removeItem("OrgHier");
@@ -370,7 +390,6 @@ function Onboarding() {
       },
     });
   };
-  console.log(fileName);
   return (
     <>
       <Tabs

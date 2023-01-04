@@ -46,7 +46,6 @@ class DepartmentContext {
                 })
             }
         });
-        console.log(temp)
         return temp;
     };
     

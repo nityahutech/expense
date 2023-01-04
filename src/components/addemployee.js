@@ -56,10 +56,7 @@ function AddEmployee(props) {
   const [options, setOptions] = useState([]);
 
   const onSearch = (searchText) => {
-    console.log('onSearch', searchText);
-    console.log('onSearch', allEmpName);
     let matchingName = allEmpName.filter((ex) => { return ex.value.toLowerCase().includes(searchText.toLowerCase()) })
-    console.log('onSearch', matchingName);
     setOptions(
       !searchText ? [] : matchingName,
     );
@@ -72,7 +69,6 @@ function AddEmployee(props) {
         value: doc.data().fname + ' ' + doc.data().lname,
       };
     });
-    console.log('allUsers', allUsers)
     setAllEmpName(allUsers)
     getData(allUsers);
 
@@ -117,7 +113,6 @@ function AddEmployee(props) {
   };
 
   const disabledDept = () => {
-    console.log(div)
     if (div == null) {
       form.setFieldsValue({ dept: null });
       return true;
@@ -136,7 +131,6 @@ function AddEmployee(props) {
   const getOptions = (type) => {
     let temp = [];
     let place = order.indexOf(type);
-    console.log(bu, div, dept, team)
     let par =
       place == 0
         ? null : bu + (place == 1
@@ -147,8 +141,6 @@ function AddEmployee(props) {
         temp.push(<Option value={d.name}>{d.name}</Option>);
       }
     });
-
-    console.log(temp)
     return temp.length == 0 ? [(<Option value={"Default"}>Default</Option>)] : temp;
   };
 
@@ -159,7 +151,6 @@ function AddEmployee(props) {
       setCodes(res);
     });
     let add = ["Registered Office"];
-    console.log(Object.keys(temp.corpOffice))
     if (Object.keys(temp.corpOffice) != 0) {
       add.push("Corporate Office");
     }
@@ -171,7 +162,6 @@ function AddEmployee(props) {
     setWorkLoc(add);
     setConfigurations(data);
     setDesignations(Object.keys(data.designations));
-    console.log(data);
   };
   const handleListEmployee = () => {
     navigate("/Employee/EmployeeList");
@@ -180,7 +170,6 @@ function AddEmployee(props) {
     form.resetFields();
   }
   const onFinish = (values) => {
-    console.log(values);
     values.name =
       values.fname + (values.mname ? ` ${values.mname} ` : " ") + values.lname;
     createUser(values, compId)
@@ -194,11 +183,7 @@ function AddEmployee(props) {
   };
 
   const handleBulkOnboard = () => {
-    console.log(allEmp);
-  };
-
-  const handleOnChange = (value, event) => {
-    console.log(value, event);
+    // console.log(allEmp);
   };
 
   const prefixSelector = (
@@ -211,7 +196,7 @@ function AddEmployee(props) {
           width: 70,
           background: "#ffffff",
         }}
-        onSelect={(value, event) => handleOnChange(value, event)}
+        // onSelect={(value, event) => handleOnChange(value, event)}
       >
         {codes?.countries?.map((e) => (
           <Option key={e?.code} value={e?.code}>

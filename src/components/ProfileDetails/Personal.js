@@ -61,7 +61,6 @@ function Personal() {
       mname: mname,
       profilePic: imageUrl || null,
     };
-    console.log(imageUrl, record, fileName)
     EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName);
     const timer = setTimeout(() => {
       getData();
@@ -143,9 +142,9 @@ function Personal() {
     setScrs(data?.scrs ? data.scrs : null);
   };
 
-  const handleOnChange = (value, event) => {
-    console.log(value, event);
-  };
+  // const handleOnChange = (value, event) => {
+  //   console.log(value, event);
+  // };
 
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
@@ -157,7 +156,7 @@ function Personal() {
           width: 80,
           background: "#ffffff",
         }}
-        onSelect={(value, event) => handleOnChange(value, event)}
+        // onSelect={(value, event) => handleOnChange(value, event)}
       >
         {codes?.countries?.map((e) => (
           <Option key={e?.code} value={e?.code}>
@@ -178,7 +177,7 @@ function Personal() {
           width: 80,
           background: "#ffffff",
         }}
-        onSelect={(value, event) => handleOnChange(value, event)}
+        // onSelect={(value, event) => handleOnChange(value, event)}
       >
         {codes?.countries?.map((e) => (
           <Option key={e?.code} value={e?.code}>

@@ -103,7 +103,6 @@ class LeaveContext {
         return updateDoc(leaveDoc, { status: "Rejected", comment: comment })
     }
     getLeaveDays = (records, leavedays) => {
-        console.log(records, leavedays)
         records.forEach((rec) => {
             if (rec.status == "Approved") {
                 leavedays[rec.nature] -= rec.len;

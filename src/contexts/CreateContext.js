@@ -22,7 +22,6 @@ import CompanyProContext from "./CompanyProContext";
 
 async function generateEmpId(compId) {
   let data = await CompanyProContext.getCompanyProfile(compId);
-  console.log(data.precode)
   let q = query(collection(db, "users"), where("compId", "==", compId))
   let len = getDocs(q).then((snapshot) => {
     let res = snapshot.docs.length + 1;
@@ -32,7 +31,6 @@ async function generateEmpId(compId) {
 }
 
 export async function createUser(values, compId) {
-  console.log(values, compId)
   let res = await createUserWithEmailAndPassword(
     createAuth,
     values.mailid,
@@ -71,7 +69,6 @@ export async function createUser(values, compId) {
     isLead: values.isLead || false,
     disabled: false
   };
-  console.log(compId, valuesToservice)
   setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid});
   setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
     .then((result) => {

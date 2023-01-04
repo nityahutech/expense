@@ -41,9 +41,9 @@ const Family = () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setData(data);
   };
-  const handleOnChange=(value,event)=>{
-    console.log(value,event);
-  }
+  // const handleOnChange=(value,event)=>{
+  //   console.log(value,event);
+  // }
 
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -68,7 +68,7 @@ const Family = () => {
           width: 70,
           background: "#ffffff",
         }}
-        onSelect={(value, event) => handleOnChange(value, event)}
+        // onSelect={(value, event) => handleOnChange(value, event)}
       >
       { codes?.countries?.map((e) => <Option key={e?.code} value={e?.code} >{e?.code} </Option>
       )}
@@ -85,7 +85,7 @@ const Family = () => {
           width: 80,
           background: "#ffffff",
         }}
-        onSelect={(value, event) => handleOnChange(value, event)}
+        // onSelect={(value, event) => handleOnChange(value, event)}
       >
       { codes?.countries?.map((e) => <Option key={e?.code} value={e?.code} >{e?.code} </Option>
     ) }
@@ -103,7 +103,7 @@ const Family = () => {
           width: 80,
           background: "#ffffff",
         }}
-        onSelect={(value, event) => handleOnChange(value, event)}
+        // onSelect={(value, event) => handleOnChange(value, event)}
       >
       { codes?.countries?.map((e) => <Option key={e?.code} value={e?.code} >{e?.code} </Option>
     ) }

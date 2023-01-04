@@ -21,7 +21,6 @@ import {
 } from "firebase/firestore";
 
 let compId = sessionStorage.getItem("compId");
-console.log(compId)
 
 let attendCollectionRef = collection(db, `companyprofile/${compId}/attendance`);
 let usersCollectionRef = collection(db, `companyprofile/${compId}/users`);
@@ -194,7 +193,6 @@ class AttendanceContext {
 
     updateLeaves = async (data, isHoiday, isDayoff) => {
       let list = await this.getLeaveList(data[0].empId);
-      console.log(data, isHoiday, isDayoff)
       data.forEach((emp) => {
         if(emp.status == "Absent") {
           if (isDayoff) {
@@ -210,7 +208,6 @@ class AttendanceContext {
     }
 
     updateWithLeave = async (data, isHoiday, isDayoff) => {
-      console.log(data, isHoiday, isDayoff)
       data.forEach((emp) => {
         if(emp.status == "Absent") {
           if (isHoiday) {

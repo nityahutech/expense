@@ -26,7 +26,6 @@ const showNotification = (type, msg, desc) => {
 };
 const dateFormat = "DD-MM-YYYY";
 function Editemployee(props) {
-  console.log(props)
   const [fname, setFname] = useState("");
   const [mname, setMname] = useState("");
   const [lname, setLname] = useState("");
@@ -37,21 +36,19 @@ function Editemployee(props) {
   const [phonenumber, setPhonenumber] = useState("");
   const [repManager, setRepManager] = useState("");
   const [secManager, setSecManager] = useState("");
-  const [department, setDepartment] = useState("");
+  const [team, setTeam] = useState("");
   const [lead, setLead] = useState("");
   const [location, setLocation] = useState("");
   const [isManager, setIsMgr] = useState("");
   const [isLead, setIsLd] = useState("");
-  const [earnLeave, setEarnLeave] = useState("");
-  const [sickLeave, setSickLeave] = useState("");
-  const [optionalLeave, setOptionalLeave] = useState("");
-  const [casualLeave, setCasualLeave] = useState("");
   const page = "addemployeePage";
   const compId = sessionStorage.getItem("compId");
   const designations = props.des;
   const [configurations, setConfigurations] = useState(null);
+  const [teams, setTeams] = useState([]);
   const [workLoc, setWorkLoc] = useState(null);
   async function submitEdit() {
+    let par = team?.split("_")[1]?.split("/")
     try {
       const editedRecord = {
         fname,
@@ -64,15 +61,10 @@ function Editemployee(props) {
         phonenumber,
         repManager,
         secManager,
-        department,
         lead,
         location,
         isManager,
         isLead,
-        earnLeave,
-        sickLeave,
-        casualLeave,
-        optionalLeave,
       };
       let name =
         editedRecord.fname +
@@ -82,6 +74,15 @@ function Editemployee(props) {
         ...editedRecord,
         name: name,
       };
+      if (par) {
+        record = {
+          ...record,
+          businessUnit: par[0],
+          division: par[1],
+          department: par[2],
+          team: team.split("_")[0]
+        }
+      }
       EmpInfoContext.updateEduDetails(props.record.id, record);
       props.setIsModalVisible(false);
       showNotification("success", "Success", "Record updated successfully");
@@ -101,9 +102,9 @@ function Editemployee(props) {
     temp.address?.map((rec) => {
       add.push(rec.title);
     });
+    let allTeams = temp.departments.filter((t) => t.type == "Team");
+    setTeams(allTeams)
     setWorkLoc(add);
-    console.log(data)
-    console.log(props.des)
     setConfigurations(data);
   };
 
@@ -119,15 +120,11 @@ function Editemployee(props) {
     const phonenumberVal = props.record ? props.record.phonenumber : "";
     const repManagerVal = props.record ? props.record.repManager : "";
     const secManagerVal = props.record ? props.record.secManager : "";
-    const setDepartmentVal = props.record ? props.record.department : "";
+    const setTeamVal = props.record ? props.record.team : "";
     const leadVal = props.record ? props.record.lead : "";
     const locationVal = props.record ? props.record.location : "";
     const isLeadVal = props.record ? props.record.isLead : "";
     const isMgrVal = props.record ? props.record.isManager : "";
-    const earnLeaveVal = props.record ? props.record.earnLeave : "";
-    const sickLeaveVal = props.record ? props.record.sickLeave : "";
-    const casualLeaveVal = props.record ? props.record.casualLeave : "";
-    const optionalLeaveVal = props.record ? props.record.optionalLeave : "";
     setFname(fnameVal);
     setMname(mnameVal);
     setLname(lnameVal);
@@ -138,15 +135,11 @@ function Editemployee(props) {
     setPhonenumber(phonenumberVal);
     setRepManager(repManagerVal);
     setSecManager(secManagerVal);
-    setDepartment(setDepartmentVal);
+    setTeam(setTeamVal);
     setLead(leadVal);
     setLocation(locationVal);
     setIsMgr(isMgrVal);
     setIsLd(isLeadVal);
-    setEarnLeave(earnLeaveVal);
-    setSickLeave(sickLeaveVal);
-    setCasualLeave(casualLeaveVal);
-    setOptionalLeave(optionalLeaveVal);
   }, [props]);
   function cancel() {
     props.setIsModalVisible(false);
@@ -235,8 +228,8 @@ function Editemployee(props) {
             value: secManager,
           },
           {
-            name: ["department"],
-            value: department,
+            name: ["team"],
+            value: team,
           },
           {
             name: ["lead"],
@@ -253,22 +246,6 @@ function Editemployee(props) {
           {
             name: ["isManager"],
             value: isManager,
-          },
-          {
-            name: ["earnLeave"],
-            value: earnLeave,
-          },
-          {
-            name: ["sickLeave"],
-            value: sickLeave,
-          },
-          {
-            name: ["casualLeave"],
-            value: casualLeave,
-          },
-          {
-            name: ["optionalLeave"],
-            value: optionalLeave,
           },
         ]}
       >
@@ -551,23 +528,23 @@ function Editemployee(props) {
         <Row gutter={[34, 8]}>
           <Col xs={22} sm={15} md={8}>
             <Form.Item
-              name="department"
-              label="Department"
+              name="team"
+              label="Team"
               rules={[
                 {
                   required: false,
-                  message: "Choose Your Department",
+                  message: "Choose Team",
                 },
               ]}
             >
               <Select
                 bordered={false}
-                placeholder="Select a Field"
+                placeholder="Select a Team"
                 style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
-                onChange={(e) => setDepartment(e)}
+                onChange={(e) => setTeam(e)}
               >
-                {configurations?.field.map((des) => (
-                  <Option value={des}>{des}</Option>
+                {teams.map((t) => (
+                  <Option value={`${t.name}_${t.parent}`}>{`${t.name} (${t.parent})`}</Option>
                 ))}
               </Select>
             </Form.Item>
@@ -727,7 +704,7 @@ function Editemployee(props) {
             </Form.Item>
           </Col>
           <Col xs={22} sm={15} md={8}>
-            <Form.Item
+            {/* <Form.Item
               name="earnLeave"
               label="Earn Leave&nbsp;"
               onKeyPress={(event) => {
@@ -751,90 +728,7 @@ function Editemployee(props) {
                   setEarnLeave(newVal);
                 }}
               ></Input>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[34, 8]}>
-          <Col xs={22} sm={15} md={8}>
-            <Form.Item
-              name="sickLeave"
-              label="Sick Leave&nbsp;"
-              onKeyPress={(event) => {
-                if (checkNumbervalue(event)) {
-                  event.preventDefault();
-                }
-              }}
-              rules={[
-                {
-                  required: true,
-                  maxLength: 2,
-                  message: "Please enter Sick Leave",
-                },
-              ]}
-            >
-              <Input
-                maxLength={2}
-                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
-                onChange={(e) => {
-                  const newVal = e.target.value;
-                  setSickLeave(newVal);
-                }}
-              ></Input>
-            </Form.Item>
-          </Col>
-          <Col xs={22} sm={15} md={8}>
-            <Form.Item
-              name="casualLeave"
-              label="Casual Leave&nbsp;"
-              onKeyPress={(event) => {
-                if (checkNumbervalue(event)) {
-                  event.preventDefault();
-                }
-              }}
-              rules={[
-                {
-                  required: true,
-                  maxLength: 2,
-                  message: "Please enter Casual Leave",
-                },
-              ]}
-            >
-              <Input
-                maxLength={2}
-                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
-                onChange={(e) => {
-                  const newVal = e.target.value;
-                  setCasualLeave(newVal);
-                }}
-              ></Input>
-            </Form.Item>
-          </Col>
-          <Col xs={22} sm={15} md={8}>
-            <Form.Item
-              name="optionalLeave"
-              label="Optional Leave&nbsp;"
-              onKeyPress={(event) => {
-                if (checkNumbervalue(event)) {
-                  event.preventDefault();
-                }
-              }}
-              rules={[
-                {
-                  required: true,
-                  maxLength: 2,
-                  message: "Please enter Optional Leave",
-                },
-              ]}
-            >
-              <Input
-                maxLength={2}
-                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
-                onChange={(e) => {
-                  const newVal = e.target.value;
-                  setOptionalLeave(newVal);
-                }}
-              ></Input>
-            </Form.Item>
+            </Form.Item> */}
           </Col>
         </Row>
 

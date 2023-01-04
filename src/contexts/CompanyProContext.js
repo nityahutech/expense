@@ -158,12 +158,10 @@ class CompanyProContext {
   };
 
   createCompInfo = async (id, newInfo, file, accessList) => {
-    console.log(id, newInfo, file, accessList);
     if (file) {
       const storageRef = ref(storage, `/${id}/logo`);
       uploadBytesResumable(storageRef, file).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
-          console.log(url);
           newInfo.logo = url;
           let des = {}
           accessList.map((user) => {
@@ -218,7 +216,6 @@ class CompanyProContext {
   };
 
   updateCompInfo = (id, updateCompInfo, file) => {
-    console.log(id, updateCompInfo, file);
     if (file) {
       const storageRef = ref(storage, `/${id}/logo`);
       uploadBytesResumable(storageRef, file).then((snapshot) => {

@@ -37,7 +37,6 @@ function IDTags() {
   };
   function handleChange(event) {
     let file = event.target.files[0];
-    console.log("handleupload", file);
     setFile(null);
     const isPdf = file.type === "application/pdf";
     if (!isPdf) {
@@ -61,7 +60,7 @@ function IDTags() {
     form.resetFields();
   };
   function beforeUpload(file) {
-    console.log(file.type);
+    // console.log(file.type);
   }
   async function addNewDetail(values) {
     if (file == null) {

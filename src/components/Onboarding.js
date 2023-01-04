@@ -146,25 +146,24 @@ function Onboarding() {
       status: "Deactivated",
       reason: "First Activation Incomplete",
     };
-    console.log(orgcode, value, fileName, accessList);
-    // CompanyProContext.createCompInfo(orgcode, value, fileName, accessList)
-    //   .then((response) => {
-    //     notification.open({
-    //       message: "Creating Company",
-    //       duration: 3,
-    //       icon: <LoadingOutlined />,
-    //     });
-    //     const timer = setTimeout(() => {
-    //       showNotification("success", "Success", "Onboarding Completed");
-    //       getData();
-    //       reset();
-    //       setActivetab("1");
-    //     }, 5000);
-    //     return () => clearTimeout(timer);
-    //   })
-    //   .catch((error) => {
-    //     showNotification("error", "Error", error.message);
-    //   });
+    CompanyProContext.createCompInfo(orgcode, value, fileName, accessList)
+      .then((response) => {
+        notification.open({
+          message: "Creating Company",
+          duration: 3,
+          icon: <LoadingOutlined />,
+        });
+        const timer = setTimeout(() => {
+          showNotification("success", "Success", "Onboarding Completed");
+          getData();
+          reset();
+          setActivetab("1");
+        }, 5000);
+        return () => clearTimeout(timer);
+      })
+      .catch((error) => {
+        showNotification("error", "Error", error.message);
+      });
   };
 
   useEffect(() => {

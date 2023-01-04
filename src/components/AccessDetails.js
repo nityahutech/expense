@@ -129,10 +129,6 @@ function AccessDetails(props) {
     }
   };
 
-  const handleOnChange = (value, event) => {
-    console.log(value, event);
-  };
-
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select
@@ -143,7 +139,6 @@ function AccessDetails(props) {
           width: 80,
           background: "#ffffff",
         }}
-        onSelect={(value, event) => handleOnChange(value, event)}
       >
         {codes?.countries?.map((e) => (
           <Option key={e?.code} value={e?.code}>
@@ -616,9 +611,9 @@ function AccessDetails(props) {
                                   width: 80,
                                   background: "#ffffff",
                                 }}
-                                onSelect={(value, event) =>
-                                  handleOnChange(value, event)
-                                }
+                                // onSelect={(value, event) =>
+                                //   handleOnChange(value, event)
+                                // }
                               >
                                 {codes?.countries?.map((e) => (
                                   <Option key={e?.code} value={e?.code}>

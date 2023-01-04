@@ -24,7 +24,7 @@ class EmpInfoContext {
 
     updateEduDetails = (id, updateEdu, file) => {
         if (file) {
-            const storageRef = ref(storage, `/${compId}/${id}/profilePic`);
+            const storageRef = ref(storage, `/${compId != "undefined" ? compId : "admins"}/${id}/profilePic`);
             uploadBytesResumable(storageRef, file).then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((url) => {
                     updateEdu.profilePic = url;
@@ -34,7 +34,7 @@ class EmpInfoContext {
             });
         } else {
             if (updateEdu?.profilePic && updateEdu.profilePic == null) {
-                deleteObject(ref(storage, `/${compId}/${id}/profilePic`));
+                deleteObject(ref(storage, `/${compId != "undefined" ? compId : "admins"}/${id}/profilePic`));
             }
             const eduDoc = doc(db, compId != "undefined" ? `companyprofile/${compId}/users` : "admins", id);
             return updateDoc(eduDoc, updateEdu);

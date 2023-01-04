@@ -273,7 +273,7 @@ function AddressCorp() {
                                         </Col>
                                       </Row>
                                     </>
-                                ): Object.keys(data).length != 0 ? (
+                                ): Object.keys(data.corpOffice).length != 0 ? (
                                     <>
                                       <Row span={[16,16]}>
                                         <Col span={24}>{data ? data.corpOffice?.addLine1 : null},</Col>

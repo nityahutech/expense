@@ -162,7 +162,7 @@ function AccessDetails(props) {
         ...values,
         dob: values.dob?._isValid ? values.dob.format(dateFormat) : null,
         doj: values.doj?._isValid ? values.doj.format(dateFormat) : null,
-        empId: values.empId?._isValid ? values.empId : null,
+        empId: values.empId,
       },
     ];
     localStorage.setItem("OrgAccess", JSON.stringify(temp));
@@ -896,6 +896,10 @@ function AccessDetails(props) {
                         className="userLabel"
                         name="businessUnit"
                         label="Business Unit::"
+                        rules={[{
+                          required: true,
+                          message: "Please Select a Business Unit"
+                        }]}
                         // labelCol={{
                         //   span: 3,
                         //   offset: 5,
@@ -930,6 +934,10 @@ function AccessDetails(props) {
                         className="userLabel"
                         name="division"
                         label="Division::"
+                        rules={[{
+                          required: true,
+                          message: "Please Select a Division"
+                        }]}
                         // labelCol={{
                         //   span: 3,
                         //   offset: 5,
@@ -966,6 +974,10 @@ function AccessDetails(props) {
                         className="userLabel"
                         name="department"
                         label="Department::"
+                        rules={[{
+                          required: true,
+                          message: "Please Select a Department"
+                        }]}
                         // labelCol={{
                         //   span: 3,
                         //   offset: 5,
@@ -1001,6 +1013,10 @@ function AccessDetails(props) {
                         className="userLabel"
                         name="team"
                         label="Team::"
+                        rules={[{
+                          required: true,
+                          message: "Please Select a Team"
+                        }]}
                         // labelCol={{
                         //   span: 3,
                         //   offset: 5,
@@ -1950,6 +1966,10 @@ function AccessDetails(props) {
                     className="userLabel"
                     name="businessUnit"
                     label="Business Unit::"
+                        rules={[{
+                          required: true,
+                          message: "Please Select a Business Unit"
+                        }]}
                     // labelCol={{
                     //   span: 3,
                     //   offset: 5,
@@ -1983,6 +2003,10 @@ function AccessDetails(props) {
                     className="userLabel"
                     name="division"
                     label="Division::"
+                        rules={[{
+                          required: true,
+                          message: "Please Select a Division"
+                        }]}
                     // initialValue={() => {
                     //   let temp = getOptions("Division")
                     //   temp.length == 1
@@ -2022,6 +2046,10 @@ function AccessDetails(props) {
                     className="userLabel"
                     name="dept"
                     label="Department::"
+                        rules={[{
+                          required: true,
+                          message: "Please Select a Department"
+                        }]}
                     // labelCol={{
                     //   span: 3,
                     //   offset: 5,
@@ -2056,6 +2084,10 @@ function AccessDetails(props) {
                     className="userLabel"
                     name="team"
                     label="Team::"
+                        rules={[{
+                          required: true,
+                          message: "Please Select a Team"
+                        }]}
                     // labelCol={{
                     //   span: 3,
                     //   offset: 5,

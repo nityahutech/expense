@@ -53,6 +53,7 @@ function AttendanceLog(props) {
   const [holidays, setHolidays] = useState([]);
   const [dateOfJoining, setDateOfJoining] = useState(null);
   const [month, setMonth] = useState();
+  const [selDate, setSelDate] = useState();
   const [selectedDay, setSelectedDay] = useState({});
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
@@ -268,16 +269,18 @@ function AttendanceLog(props) {
     });
     return data;
   }
-  function allEmpDetails(temp) {
+  function allEmpDetails(temp, selDate) {
     setLoading(true);
+    let date = selDate || moment();
     let dayTemp = temp?.selectedDays || selectedDay, holTemp = temp?.holidays || holidays;
-    AttendanceContext.getAllUsers().then((userdata) => {
+    console.log(temp, selDate, dayTemp, holTemp, date, holTemp.includes(date.format("Do MMM, YYYY")))
+    AttendanceContext.getAllUsers(date.format("DD-MM-YYYY")).then((userdata) => {
       console.log(dayTemp, holTemp)
       let dayoff = Object.keys(dayTemp).filter((day) => dayTemp[`${day}`] == "dayoff")
       AttendanceContext.updateWithLeave(
         userdata,
-        holTemp.includes(moment().format("Do MMM, YYYY")),
-        dayoff.includes(moment().format("dddd"))
+        holTemp.includes(date.format("Do MMM, YYYY")),
+        dayoff.includes(date.format("dddd"))
       ).then((final) => {
         // setHolidayStatus(final)
         setallEmp(final);
@@ -611,6 +614,23 @@ function AttendanceLog(props) {
                   onChange={searchChange}
                   // style={{ width: "95%" }}
                 />
+                <DatePicker
+                defaultValue={selDate}
+                  className="Range Daily"
+                  bordered={true}
+                  format="DD-MM-YYYY"
+                    style={{
+                      background: "#1963A6",
+                      cursor: "pointer",
+                      marginLeft: "15rem",
+                      width: "10%",
+                    }}
+                    allowClear
+                    onChange={(e) => {
+                      setSelDate(e);
+                      allEmpDetails("_", e);
+                    }}
+                />
                 <Table
                   //   rowSelection={{
                   //     type: selectionType,
@@ -643,7 +663,7 @@ function AttendanceLog(props) {
                   <DatePicker
                     picker="month"
                     placeholder="Select Month"
-                    className="Range "
+                    className="Range"
                     value={month}
                     defaultValue={month ? month : null}
                     format={"MM-YYYY"}

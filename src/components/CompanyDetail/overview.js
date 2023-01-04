@@ -65,8 +65,9 @@ function Overview() {
     setLoading(true);
     let data = await CompanyProContext.getCompanyProfile(compId);
     setData(data);
-    setFileName(data.profilePic);
-    setImageUrl(data.profilePic);
+    console.log(data)
+    setFileName(data.logo);
+    setImageUrl(data.logo);
     setLoading(false);
   };
 

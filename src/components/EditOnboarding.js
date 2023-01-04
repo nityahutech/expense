@@ -1,40 +1,23 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Form,
-  Tabs,
   Input,
   Col,
   Row,
   Divider,
   message,
-  Upload,
-  Spin,
   Button,
   Space,
   Card,
   Select,
-  Table,
-  Tag,
-  Modal,
-  notification,
 } from "antd";
 import {
   PlusCircleOutlined,
-  PlusOutlined,
-  CloseCircleOutlined,
-  CheckCircleFilled,
-  ClockCircleFilled,
-  StopFilled,
-  EyeFilled,
-  EditFilled,
   DeleteOutlined,
 } from "@ant-design/icons";
 import "../style/Onboarding.css";
-import imageavailable from "../images/imageavailable.png";
-import reload from "../images/reload.png";
-import { getCountryCode } from "../contexts/CreateContext";
+import { showNotification, checkAlphabets, checkNumbervalue, checkUpperCase, getCountryCode } from "../contexts/CreateContext";
 import CompanyProContext from "../contexts/CompanyProContext";
-import { showNotification } from "../contexts/CreateContext";
 
 const { Option } = Select;
 
@@ -43,15 +26,11 @@ function EditOnboarding(props) {
   const [fileEdited, setFileEdited] = useState(false);
   const [imageUrl, setImageUrl] = useState(props.modalData.logo || "");
   const [isBigFile, setIsBigFile] = useState(false);
-  const imgRef = React.useRef(null);
+  const imgRef = useRef(null);
   const [form] = Form.useForm();
   const [modalData, setModalData] = useState(props.modalData);
-  const [loading, setLoading] = useState(false);
   const [codes, setCodes] = useState("");
 
-  const timer = setTimeout(() => {
-    setLoading(false);
-  }, 500);
   useEffect(() => {
     getCountryCode().then((res) => {
       setCodes(res);
@@ -79,7 +58,6 @@ function EditOnboarding(props) {
     }
     const fileUploaded = event.target.files[0];
     getBase64(fileUploaded, (url) => {
-      // setLoading(false);
       setImageUrl(url);
     });
     checkFileSize(fileUploaded.size, fileUploaded);
@@ -94,6 +72,7 @@ function EditOnboarding(props) {
       setIsBigFile(true);
     }
   }
+
   function onReset() {
     props.setIsEditOrganization(false);
     form.resetFields();
@@ -114,27 +93,20 @@ function EditOnboarding(props) {
       gst: values.gst,
       domain: values.domain,
       phone: values.phone,
+      prefix: values.prefix
     };
     console.log(values);
     CompanyProContext.updateCompInfo(
-      values.preCode,
+      values.orgCode,
       valuesToservice,
       fileEdited ? fileName : null
     )
       .then(() => showNotification("success", "Success", "Edit Successful"))
       .catch(() => showNotification("error", "Error", "Failed to edit"));
     onReset();
-    props.getData();
     props.setIsEditOrganization(false);
   };
-
-  const handleEdit = (event) => {
-    if (!event) {
-      return;
-    }
-    const fileUploaded = event.target.files[0];
-    checkFileSize(fileUploaded.size, fileUploaded);
-  };
+  
   function checkFileSize(size, fileName) {
     if (Math.round(size / 1024) <= 200) {
       setFileName(fileName);
@@ -145,26 +117,6 @@ function EditOnboarding(props) {
       setIsBigFile(true);
     }
   }
-  const checkNumbervalue = (event) => {
-    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-  const checkAlphabets = (event) => {
-    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-  const checkCharacterRole = (event) => {
-    if (!/^[a-zA-Z ().-]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-  const checkAlphabetUpper = (event) => {
-    if (!/^[A-Z]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
 
   const handleOnChange = (value, event) => {
     console.log(value, event);
@@ -229,23 +181,11 @@ function EditOnboarding(props) {
           <Row gutter={[24, 8]}>
             <Col xs={22} sm={15} md={8}>
               <Form.Item
-                name="preCode"
-                label="Prefix Code"
+                name="orgCode"
+                label="Organization Code"
                 initialValue={props.modalData.id}
-                // rules={[
-                //   {
-                //     required: false,
-                //     message: "Please Enter Code",
-                //   },
-                //   {
-                //     pattern: /^[0-9A-Z_\s]+$/,
-                //     message: "Please Enter Valid Code",
-                //   },
-                // ]}
               >
                 <Input
-                  maxLength={10}
-                  placeholder="Prefix Code"
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
@@ -323,7 +263,7 @@ function EditOnboarding(props) {
                 name="gst"
                 label="GST Number"
                 onKeyPress={(event) => {
-                  if (checkNumbervalue(event) && checkAlphabetUpper(event)) {
+                  if (checkNumbervalue(event) && checkUpperCase(event)) {
                     event.preventDefault();
                   }
                 }}

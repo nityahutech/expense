@@ -48,7 +48,6 @@ const DepartmentNew = () => {
 
   const getData = (dept) => {
     let d = dept || data
-    console.log(d);
     if (!d) {
       return;
     }
@@ -56,13 +55,14 @@ const DepartmentNew = () => {
     let place = order.indexOf(type);
     let par =
       place == 0
-        ? null
+        ? "null"
         : parent[`${order[1]}`].name +
         (place == 1
           ? ""
           : "/" +
           parent[`${order[2]}`].name +
           (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
+    console.log(place, par);
     d.map((d) => {
       if (d.type == type && d.parent == par) {
         temp.push(d);

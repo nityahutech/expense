@@ -21,6 +21,7 @@ import { getUsers, showNotification } from "../contexts/CreateContext";
 import "../style/EmployeeList.css";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import EmployeeListview from "./EmployeeListview";
+import ConfigureContext from "../contexts/ConfigureContext";
 const { Option } = Select;
 
 function EmployeeList() {
@@ -160,10 +161,10 @@ function EmployeeList() {
     });
     console.log(d, "dataaaaaa");
 
-    let des = d.map((emp) => emp.designation);
-    const uniqueArray = des.filter(
-      (item, index) => des.indexOf(item) === index
-    );
+    ConfigureContext.getConfigurations("addemployeePage").then((res) => {
+      setDesignations(Object.keys(res.designations))
+      console.log(Object.keys(res.designations))
+    })
     let disabled = d.filter((emp) => emp.disabled);
     console.log("ddddd", disabled);
 
@@ -172,7 +173,6 @@ function EmployeeList() {
     setAllEmployees(d);
     setCertificationDetails(d);
     setLoading(false);
-    setDesignations(uniqueArray);
   }
 
   const searchChange = (e) => {
@@ -245,8 +245,8 @@ function EmployeeList() {
               const selectedData = data.filter((emp) =>
                 emp.designation.includes(e)
               );
-              setFilterEmployees(selectedData);
-              console.log(selectedData, "selectedData");
+              setFilterEmployees(selectedData.length == 0 ? allEmployees : selectedData);
+              console.log(selectedData.length == 0 ? allEmployees : selectedData);
             }}
             showSearch
           >

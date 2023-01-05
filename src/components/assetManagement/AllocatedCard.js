@@ -1,90 +1,19 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, } from 'react'
 import {
     Card, Button, Row, Col,
-    Descriptions, message, Input, Space, Form, Carousel, DatePicker, Select,
+    Input, Form, DatePicker, Select,
 
 } from 'antd';
 import hutechlogo from "../../images/hutechlogo.png";
 import laptop from "../../images/laptop.jpg";
-import { EditFilled, CloseOutlined, CheckOutlined, UploadOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditFilled, CloseOutlined, CheckOutlined, } from "@ant-design/icons";
 import {
     capitalize,
 } from "../../contexts/CreateContext";
 import UploadImage from './UploadImage';
 const { Option } = Select;
 
-const resetButton = {
-    border: "1px solid #1565D8",
-    color: "#1565D8",
-    fontWeight: "600",
-    fontSize: "14px",
-    lineHeight: "17px",
-    width: "99px",
-    marginTop: "10px",
-    cursor: "pointer",
-
-}
-const submitButton = {
-    border: "1px solid #1565D8",
-    background: "#1565D8",
-    color: "#ffffff",
-    fontWeight: "600",
-    fontSize: "14px",
-    lineHeight: "17px",
-    width: "99px",
-    marginTop: "10px",
-    cursor: "pointer",
-    marginLeft: "17px",
-}
-
-
-
-const modal = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'fixed',
-    top: '0',
-    left: '0',
-    width: ' 100%',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex: '100'
-
-}
-
-const modalContent = {
-    backgroundColor: 'white',
-    border: '1px solid black',
-    width: '80%',
-    height: '80%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    borderRadius: '10px',
-    padding: '10px'
-
-
-}
-
-const modalContent2 = {
-    backgroundColor: 'white',
-    border: '1px solid black',
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    borderRadius: '10px',
-
-
-
-}
-
-
-
 const AllocatedCard = () => {
-    const [file, setFile] = useState("");
     const [form] = Form.useForm();
     const [editContactInfo, showEditCompanyInfo] = useState(false);
     const [data, setData] = useState([]);

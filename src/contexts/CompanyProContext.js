@@ -62,11 +62,12 @@ class CompanyProContext {
           team: user.team || "Default",
           designation: user.designation,
           role: "admin",
-          doj: moment(),
-          location: "Registered Office",
+          doj: user.doj,
+          dob: user.dob,
+          workLocation: "Registered Office",
           empType: "Full-Time",
-          gender: "",
-          prefix: user.prefix,
+          gender: user.gender || "",
+          prefix: user.prefix || "",
           phone: user.phone,
           name: name,
           fname: user.fName,
@@ -79,13 +80,15 @@ class CompanyProContext {
           isLead: true,
           isManager: true,
           isHr: true,
+          empId: user.empId,
+          remark: user.note || ""
         };
         newList.push({
           name: name,
           userRole: user.designation,
           phone: user.phone,
           mailid: user.email,
-          prefix: user.prefix,
+          prefix: user.prefix || "",
         });
         await createUser(newRec, id);
       });
@@ -173,17 +176,6 @@ class CompanyProContext {
           return Promise.resolve();
         });
       });
-    } else {
-      newInfo.logo = null;
-      setDoc(doc(db, "companyprofile", id), newInfo);
-      this.createAdmins(accessList, id);
-      this.createConfig(
-        id,
-        accessList.map((user) => {
-          return { [`${user.designation}`]: 1 };
-        })
-      );
-      return Promise.resolve();
     }
   };
 

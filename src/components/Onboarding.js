@@ -146,6 +146,7 @@ function Onboarding() {
       status: "Deactivated",
       reason: "First Activation Incomplete",
     };
+    // console.log(orgcode, value, fileName, accessList)
     CompanyProContext.createCompInfo(orgcode, value, fileName, accessList)
       .then((response) => {
         notification.open({

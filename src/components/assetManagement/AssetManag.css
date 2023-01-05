@@ -1,0 +1,31 @@
+.assetTabs .ant-form-item-feedback-icon-error {
+    display: none;
+}
+.assetTabs .ant-tabs-tab.ant-tabs-tab-active{
+    font-weight: bold;
+}
+.assetTabs .ant-form-item-explain-error {
+    font-size: 10px !important;
+}
+.assetTabs .ant-tabs-nav .ant-tabs-nav-list{
+    margin-left: 15px;
+    margin-top: 10px;
+}
+.assetTabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #000000;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px; 
+ }
+
+ .assetTabs .ant-tabs-tab:hover{
+    color: #000000;
+ }
+ .assetTabs .ant-tabs-ink-bar {
+    /* position: absolute; */
+    background: #F9A01F;
+    pointer-events: none;
+ }
+ .assetTabs {
+    min-height: 100vh;
+ }

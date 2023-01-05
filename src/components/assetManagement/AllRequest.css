@@ -1,0 +1,17 @@
+.assetTable.ant-table-wrapper {
+    background: #fff;
+    padding: 7px;
+    margin: 6px 6px;
+    border-radius: 5px;
+  }
+  .assetTable table thead tr th,
+  .expenseTable table tbody tr td {
+    padding: 5px 10px;
+  }
+  .assetTable .ant-table-thead > tr > th {
+    background: #1963a6;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+  }

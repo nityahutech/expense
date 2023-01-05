@@ -14,6 +14,9 @@ const getBase64 = (file) =>
 const UploadImage = () => {
     const [previewVisible, setPreviewVisible] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
+    const [fileList, setFileList] = useState([]);
+
+    const handleChange = ({ fileList }) => setFileList(fileList);
 
 
     const handleCancel = () => setPreviewVisible(false);
@@ -28,10 +31,10 @@ const UploadImage = () => {
     };
     return (
         <>
-            <Upload onPreview={handlePreview} listType="picture-card">
-
-                <PlusOutlined Click to upload />
-
+            <Upload fileList={fileList} onPreview={handlePreview} onChange={handleChange} listType="picture-card">
+                {fileList.length >= 2 ? null : (
+                    <PlusOutlined />
+                )}
             </Upload>
 
             <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>

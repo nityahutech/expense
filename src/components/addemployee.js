@@ -39,14 +39,6 @@ function AddEmployee(props) {
   const [workLoc, setWorkLoc] = useState(null);
   const [allEmp, setAllEmp] = useState(null);
   const [allEmpName, setAllEmpName] = useState(null);
-  const [data, setData] = useState();
-  const [parent, setParent] = useState(null);
-  const [dataSource, setDataSource] = useState([]);
-  const [selectInput, setSelectInput] = useState({
-    div: true,
-    depart: true,
-    team: true,
-  });
   const [domain, setDomain] = useState("");
   const [bu, setBu] = useState(null);
   const [div, setDiv] = useState(null);
@@ -106,7 +98,7 @@ function AddEmployee(props) {
   
   const disabledDiv = () => {
     if (bu == null) {
-      form.setFieldsValue({ div: null });
+      form.setFieldsValue({ division: null });
       return true;
     }
     return false;
@@ -114,7 +106,7 @@ function AddEmployee(props) {
 
   const disabledDept = () => {
     if (div == null) {
-      form.setFieldsValue({ dept: null });
+      form.setFieldsValue({ department: null });
       return true;
     }
     return false;
@@ -172,14 +164,16 @@ function AddEmployee(props) {
   const onFinish = (values) => {
     values.name =
       values.fname + (values.mname ? ` ${values.mname} ` : " ") + values.lname;
+      values.doj = values.doj.format("DD-MM-YYYY") || null
     createUser(values, compId)
       .then((response) => {
         showNotification("success", "Success", "Employee Created");
         navigate("/Employee/EmployeeList");
       })
-      .catch((error) =>
+      .catch((error) =>{
+        console.log(error.message)
         showNotification("error", "Error", "This user already exists!")
-      );
+      });
   };
 
   const handleBulkOnboard = () => {
@@ -873,7 +867,7 @@ function AddEmployee(props) {
             </Col>
             <Col xs={22} sm={15} md={8}>
               <Form.Item
-                name="location"
+                name="workLocation"
                 label="Work Loaction"
                 // onKeyPress={(event) => {
                 //   if (checkAlphabets(event)) {
@@ -932,7 +926,7 @@ function AddEmployee(props) {
 
             <Col xs={22} sm={15} md={8}>
               <Form.Item
-                name="bu"
+                name="businessUnit"
                 label="Business Unit"
                 rules={[
                   {
@@ -964,7 +958,7 @@ function AddEmployee(props) {
           <Row gutter={[24, 8]}>
             <Col xs={22} sm={15} md={8}>
               <Form.Item
-                name="div"
+                name="division"
                 label="Division"
                 rules={[
                   {
@@ -998,7 +992,7 @@ function AddEmployee(props) {
 
             <Col xs={22} sm={15} md={8}>
               <Form.Item
-                name="dept"
+                name="department"
                 label="Department"
                 rules={[
                   {

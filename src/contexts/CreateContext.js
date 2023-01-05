@@ -15,6 +15,7 @@ import {
   orderBy,
   doc,
   where,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebase-config";
 import { notification } from "antd";
@@ -36,48 +37,60 @@ export async function createUser(values, compId) {
     values.mailid,
     "password"
   );
-  updateProfile(res.user, { displayName: values.name });
-  // updatePhoneNumber(res.user, values.phone)
-  const valuesToservice = {
-    empId: await generateEmpId(compId),
-    name: values.name,
-    fname: values.fname,
-    mname: values.mname ? values.mname : "",
-    lname: values.lname,
-    mailid: values.mailid,
-    contactEmail: values.email,
-    doj: values.doj.format("DD-MM-YYYY"),
-    phonenumber: values.phone,
-    prefix: values.prefix,
-    gender: values.gender,
-    designation: values.designation,
-    role: values.role? values.role :
-      (values.designation.includes("Admin")
-        ? "admin"
-        : "emp"),
-    empType: values.empType,
-    repManager: values.repManager ? values.repManager : "",
-    secManager: values.secManager ? values.secManager : "",
-    lead: values.lead ? values.lead : "",
-    businessUnit: values.bu,
-    department: values.dept,
-    division: values.div,
-    team: values.team,
-    location: values.location,
-    isManager: values.isManager || false,
-    isHr: values.isHr || false,
-    isLead: values.isLead || false,
-    disabled: false
-  };
-  setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid});
-  setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
-    .then((result) => {
-      signOut(createAuth);
-      return result;
-    })
-    .catch((error) => {
-      return false;
-    });
+  try {
+    // console.log(values, compId)
+    updateProfile(res.user, { displayName: values.name });
+    // updatePhoneNumber(res.user, values.phone)
+    const valuesToservice = {
+      empId: values.empId || await generateEmpId(compId),
+      name: values.name,
+      fname: values.fname,
+      mname: values.mname || "",
+      lname: values.lname,
+      mailid: values.mailid,
+      contactEmail: values.email,
+      doj: values.doj || null,
+      dob: values.doj || null,
+      phonenumber: values.phone,
+      prefix: values.prefix || "",
+      gender: values.gender,
+      designation: values.designation,
+      role: values.role? values.role :
+        (values.designation.includes("Admin")
+          ? "admin"
+          : "emp"),
+      empType: values.empType,
+      repManager: values.repManager ? values.repManager : "",
+      secManager: values.secManager ? values.secManager : "",
+      lead: values.lead ? values.lead : "",
+      businessUnit: values.businessUnit,
+      department: values.department,
+      division: values.division,
+      team: values.team,
+      workLocation: values.workLocation,
+      isManager: values.isManager || false,
+      isHr: values.isHr || false,
+      isLead: values.isLead || false,
+      disabled: false,
+      remark: values.remark || "",
+    };
+    // console.log(valuesToservice)
+    await setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid});
+    await setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
+  } catch(error) {
+    deleteDoc(doc(db, `users`, res.user.uid))
+    deleteUser(res.user)
+    console.log(error.message)
+    showNotification("error", "Error", `Incorrect fields for ${values.mailid}`)
+    return false;
+    
+  }
+    // .then((result) => {
+    //   signOut(createAuth);
+    //   return result;
+    // })
+    // .catch((error) => {
+    // });
 }
 
 export async function deleteErrorUser() {

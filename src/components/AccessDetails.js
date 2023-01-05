@@ -156,7 +156,7 @@ function AccessDetails(props) {
         ...values,
         dob: values.dob?._isValid ? values.dob.format(dateFormat) : null,
         doj: values.doj?._isValid ? values.doj.format(dateFormat) : null,
-        empId: values.empId,
+        empId: generateEmpCode(),
       },
     ];
     localStorage.setItem("OrgAccess", JSON.stringify(temp));
@@ -222,8 +222,8 @@ function AccessDetails(props) {
 
   const disabledDept = () => {
     if (div == null) {
-      form.setFieldsValue({ dept: null });
-      form1.setFieldsValue({ dept: null });
+      form.setFieldsValue({ department: null });
+      form1.setFieldsValue({ department: null });
       return true;
     }
     return false;
@@ -309,7 +309,7 @@ function AccessDetails(props) {
                           setEditAccess(temp);
                           setBu(accessList[i].businessUnit || null);
                           setDiv(accessList[i].division || null);
-                          setDept(accessList[i].dept || null);
+                          setDept(accessList[i].department || null);
                           setTeam(accessList[i].team || null);
                         }}
                       >
@@ -683,12 +683,13 @@ function AccessDetails(props) {
                         // }}
                       >
                         <Input
-                          placeholder="Employee ID"
+                          className="disabledOffice"
+                          disabled
                           style={{
                             width: "100%",
                             border: "1px solid #8692A6",
                             borderRadius: "4px",
-                            background: "#ffffff",
+                            background: "rgba(0,0,0,0.1)",
                           }}
                         />
                       </Form.Item>
@@ -964,7 +965,7 @@ function AccessDetails(props) {
                         </Select>
                       </Form.Item>
                       <Form.Item
-                        initialValue={user ? user.dept : null}
+                        initialValue={user ? user.department : null}
                         className="userLabel"
                         name="department"
                         label="Department::"
@@ -1327,7 +1328,7 @@ function AccessDetails(props) {
                               //   offset: 1,
                               // }}
                             >
-                              <span>{user.dept}</span>
+                              <span>{user.department}</span>
                             </Form.Item>
                           </Col>
                           <Col xs={24} sm={24} md={24}>
@@ -1752,18 +1753,6 @@ function AccessDetails(props) {
                     className="userLabel"
                     name="empId"
                     label="Employee ID::"
-                    onKeyPress={(event) => {
-                      if (checkNumbervalue(event) && checkUpperCase(event)) {
-                        event.preventDefault();
-                      }
-                    }}
-                    rules={[
-                      {
-                        required: false,
-                        pattern: /^[0-9A-Z]+$/,
-                        message: "Please Enter Employee ID",
-                      },
-                    ]}
                     // labelCol={{
                     //   span: 3,
                     //   offset: 5,
@@ -1776,8 +1765,6 @@ function AccessDetails(props) {
                     <Input
                       className="disabledOffice"
                       disabled
-                      maxLength={20}
-                      placeholder="Employee ID"
                       style={{
                         width: "100%",
                         border: "1px solid #8692A6",
@@ -2046,7 +2033,7 @@ function AccessDetails(props) {
                   </Form.Item>
                   <Form.Item
                     className="userLabel"
-                    name="dept"
+                    name="department"
                     label="Department::"
                     rules={[
                       {

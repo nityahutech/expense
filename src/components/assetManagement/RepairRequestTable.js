@@ -9,9 +9,7 @@ import {
     Form,
     Row,
     Col,
-    Space,
     Input
-
 
 } from "antd";
 import { DeleteFilled, EyeFilled, EditFilled, CheckOutlined, CloseOutlined } from "@ant-design/icons";
@@ -35,7 +33,7 @@ const dataSource = [
         date: '29/12/2022',
         serNum: 'ADFG555',
         reason: 'Black Screen',
-        status: 'Pending',
+        status: 'Approved',
         repairUpgarde: 'Upgrade',
 
     },
@@ -193,7 +191,6 @@ const RepairRequestTable = () => {
                     </Tag>
                 ),
         },
-
         {
             title: "Action",
             dataIndex: "operation",
@@ -210,7 +207,7 @@ const RepairRequestTable = () => {
                     >
 
 
-                        {status == "Repair" ? (
+                        {status === "Repair" ? (
                             <Button
                                 type="link"
                                 className="show"

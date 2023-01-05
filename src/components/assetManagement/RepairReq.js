@@ -1,18 +1,15 @@
 import { React, useState } from 'react'
 import "./RepairReq.css"
 import {
-  Card, Button, Row, Col, Form, Input, Modal, Select, Space, DatePicker, Upload, message, List,
-  Descriptions, Switch,
-  Avatar,
+  Card, Button, Row, Col, Form, Input,  Space, DatePicker,  message, 
+  Switch,
+ 
 } from 'antd';
-import { EditFilled, PlusOutlined } from "@ant-design/icons";
+
 import FormItem from 'antd/es/form/FormItem';
 import TextArea from 'antd/lib/input/TextArea';
 import RepairRequestTable from './RepairRequestTable';
-// import LaptopAllot from './LaptopAllot';
 import AllocatedCard from './AllocatedCard';
-
-const { Option } = Select;
 
 function LaptopAllot() {
   const [form] = Form.useForm();
@@ -28,14 +25,12 @@ function LaptopAllot() {
     console.log(values, 'values')
     form.resetFields();
 
-
   }
 
   const divStyle = {
     border: "1px solid #8692A6",
     borderRadius: "4px",
     width: '100%',
-
   }
 
   const resetButton = {
@@ -80,21 +75,6 @@ function LaptopAllot() {
     }
     setFile(event.target.files[0]);
   }
-
-
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </div>
-  );
-
 
 
   return (
@@ -342,10 +322,7 @@ function LaptopAllot() {
                 </Col>
               </>
               )}
-
-
             </Row>
-
           </Form>
         </Card>
       </div>

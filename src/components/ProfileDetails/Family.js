@@ -324,20 +324,10 @@ const Family = () => {
                         >
                           <Input
                             onChange={(e) => {
-                              const inputval = e.target.value;
-                              const str = e.target.value;
-                              const newVal =
-                                inputval.substring(0, 1).toUpperCase() +
-                                inputval.substring(1);
-                              const caps = str
-                                .split(" ")
-                                .map(capitalize)
-                                .join(" ");
-                              form.setFieldsValue({
-                                father: newVal,
-                                father: caps,
-                              });
-                            }}
+                                  const str = e.target.value;
+                                  const caps = str.split(" ").map(capitalize).join(" ");
+                                  form.setFieldsValue({ father: caps });
+                                }}
                             maxLength={40}
                             placeholder="Enter Father's Name"
                             style={{
@@ -436,21 +426,11 @@ const Family = () => {
                           initialValue={data.mother ? data.mother : ""}
                         >
                           <Input
-                            onChange={(e) => {
-                              const inputval = e.target.value;
-                              const str = e.target.value;
-                              const newVal =
-                                inputval.substring(0, 1).toUpperCase() +
-                                inputval.substring(1);
-                              const caps = str
-                                .split(" ")
-                                .map(capitalize)
-                                .join(" ");
-                              form.setFieldsValue({
-                                mother: newVal,
-                                mother: caps,
-                              });
-                            }}
+                          onChange={(e) => {
+                                  const str = e.target.value;
+                                  const caps = str.split(" ").map(capitalize).join(" ");
+                                  form.setFieldsValue({ mother: caps });
+                                }}
                             maxLength={40}
                             placeholder="Enter Mother's Name"
                             style={{
@@ -735,21 +715,14 @@ const Family = () => {
                           initialValue={data.other ? data.other : ""}
                         >
                           <Input
-                            onChange={(e) => {
-                              const inputval = e.target.value;
-                              const str = e.target.value;
-                              const newVal =
-                                inputval.substring(0, 1).toUpperCase() +
-                                inputval.substring(1);
-                              const caps = str
-                                .split(" ")
-                                .map(capitalize)
-                                .join(" ");
-                              form1.setFieldsValue({
-                                other: newVal,
-                                other: caps,
-                              });
-                            }}
+                          onChange={(e) => {
+                            const str = e.target.value;
+                            const caps = str
+                              .split(" ")
+                              .map(capitalize)
+                              .join(" ");
+                            form1.setFieldsValue({other: caps,});
+                          }}
                             placeholder="Enter Other Name"
                             maxLength={40}
                             style={{
@@ -801,19 +774,12 @@ const Family = () => {
                         >
                           <Input
                             onChange={(e) => {
-                              const inputval = e.target.value;
                               const str = e.target.value;
-                              const newVal =
-                                inputval.substring(0, 1).toUpperCase() +
-                                inputval.substring(1);
                               const caps = str
                                 .split(" ")
                                 .map(capitalize)
                                 .join(" ");
-                              form1.setFieldsValue({
-                                relation: newVal,
-                                relation: caps,
-                              });
+                              form1.setFieldsValue({relation: caps,});
                             }}
                             placeholder="Enter the Relation"
                             maxLength={40}

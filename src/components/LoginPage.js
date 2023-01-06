@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Button, Checkbox, Form, Input, Alert, Col } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import "../App.css";
+// import "../App.css";
+import "../style/LoginPage.css"
 import loginBg from "../images/login-img.png"
 import loginLogo from "../images/Logo77.png"
 
@@ -158,6 +159,7 @@ function LoginPage() {
                     </Button>
                   </div>
                 </Form.Item>
+                <div className="errormsg">
                 {error && (
                   <Alert
                     type="error"
@@ -165,6 +167,7 @@ function LoginPage() {
                     style={{ width: "18rem" }}
                   />
                 )}
+                </div>
 
                 {/* <div className="signup-msg">
                   Don't Have an account?{" "}

@@ -6,6 +6,7 @@ import {PlusCircleOutlined, CloseOutlined, CheckOutlined,EditFilled,} from "@ant
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
 import "./Education.css"
+import { capitalize } from "../../contexts/CreateContext";
 
 function Education() {
   const [editContent, showEditContent] = useState(false);
@@ -243,11 +244,7 @@ function Education() {
                       >
                         <Input
                           onInput={(e) => {
-                            const inputval = e.target.value;
                             const str = e.target.value;
-                            const newVal =
-                              inputval.substring(0, 1).toUpperCase() +
-                              inputval.substring(1);
                             const caps = str
                               .split(" ")
                               .map(capitalize)
@@ -306,11 +303,7 @@ function Education() {
                       >
                         <Input
                           onInput={(e) => {
-                            const inputval = e.target.value;
                             const str = e.target.value;
-                            const newVal =
-                              inputval.substring(0, 1).toUpperCase() +
-                              inputval.substring(1);
                             const caps = str
                               .split(" ")
                               .map(capitalize)

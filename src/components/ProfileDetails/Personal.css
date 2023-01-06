@@ -107,3 +107,23 @@
   transition: .3s ease;
   background-color: black;
 }
+
+.noImage {
+  width: 150px;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: lightgray;
+  border-radius: 10px;
+}
+
+.imgDel {
+  width: 150px;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}

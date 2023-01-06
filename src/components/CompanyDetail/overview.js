@@ -8,6 +8,7 @@ import {
   CheckOutlined,
 } from "@ant-design/icons";
 import "./companystyle.css";
+import "./Overview.css"
 import linkedin from "../../images/linkedin.png";
 import facebook from "../../images/facebook.png";
 import twitter from "../../images/twitter.png";

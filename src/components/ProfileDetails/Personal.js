@@ -277,33 +277,14 @@ function Personal() {
   const imgDiv = () => {
     if (fileName == "" || fileName == null) {
       return editContent == false ? (
-        <div
-          style={{
-            width: "150px",
-            height: "170px",
-            // border: "1px solid #05445e",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-          }}
-        >
-          No Image
-        </div>
+        <div className="noImage">No Image</div>
       ) : (
         <Button
-          style={{
-            width: "150px",
-            height: "170px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            // border: "1px solid #05445e",
-          }}
+          className="imgDel"
           onClick={(e) => handleClick(e)}
         >
           <input
+            className="imgInp"
             style={{
               display: "none",
               // border: "1px solid #05445e",
@@ -685,21 +666,27 @@ function Personal() {
                                 maxLength={50}
                                 required
                                 placeholder="Enter Your Name"
+                                
                                 onChange={(e) => {
-                                  const inputval = e.target.value;
                                   const str = e.target.value;
-                                  const newVal =
-                                    inputval.substring(0, 1).toUpperCase() +
-                                    inputval.substring(1);
-                                  const caps = str
-                                    .split(" ")
-                                    .map(capitalize)
-                                    .join(" ");
-                                  form.setFieldsValue({
-                                    name: newVal,
-                                    name: caps,
-                                  });
+                                  const caps = str.split(" ").map(capitalize).join(" ");
+                                  form.setFieldsValue({ name: caps });
                                 }}
+                                // onChange={(e) => {
+                                //   const inputval = e.target.value;
+                                //   const str = e.target.value;
+                                //   const newVal =
+                                //     inputval.substring(0, 1).toUpperCase() +
+                                //     inputval.substring(1);
+                                //   const caps = str
+                                //     .split(" ")
+                                //     .map(capitalize)
+                                //     .join(" ");
+                                //   form.setFieldsValue({
+                                //     name: newVal,
+                                //     name: caps,
+                                //   });
+                                // }}
                               />
                             </Form.Item>
                           </Col>

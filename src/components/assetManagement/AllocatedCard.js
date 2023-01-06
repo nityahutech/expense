@@ -83,8 +83,8 @@ const AllocatedCard = () => {
 
                                 {editAsset === true ? 
                                 (<>
-                                    <Row gutter={[0, 0]}>
-                                        <Col xs={22} sm={15} md={8}>
+                                    <Row gutter={[32, 0]}>
+                                        <Col xs={24} sm={24} md={8} lg={8} xl={7} xxl={5}>
                                             <div>
                                                 <div
                                                     className="div-discription"
@@ -137,7 +137,7 @@ const AllocatedCard = () => {
                                                 )}
                                             </div>
                                         </Col>
-                                        <Col xs={22} sm={15} md={8}>
+                                        <Col xs={24} sm={24} md={8} lg={8} xl={7} xxl={5}>
                                             <div>
                                                 <div className="div-discription">Model </div>
                                                 {editAsset === false ? (
@@ -187,7 +187,7 @@ const AllocatedCard = () => {
                                                 )}
                                             </div>
                                         </Col>
-                                        <Col xs={22} sm={15} md={8}>
+                                        <Col xs={24} sm={24} md={8} lg={8} xl={7} xxl={5}>
                                             <div>
                                                 <div className="div-discription">Serial Number</div>
                                                 {editAsset === false ? (
@@ -234,11 +234,11 @@ const AllocatedCard = () => {
                                                 )}
                                             </div>
                                         </Col>
-                                        <Col xs={22} sm={15} md={8}>
+                                        <Col xs={24} sm={24} md={8} lg={8} xl={7} xxl={5}>
                                             <div>
                                                 <div className="div-discription">Charger</div>
                                                 {editAsset === false ? (
-                                                    <div style={{ marginTop: "7px" }}>{data.domain ? data.domain : '-'}</div>
+                                                    <div >{data.domain ? data.domain : '-'}</div>
                                                 ) : (
                                                     <Form.Item
                                                         name="charger"
@@ -255,7 +255,6 @@ const AllocatedCard = () => {
                                                         <Select
                                                             placeholder="Select a Yes or No"
                                                             style={{
-                                                                marginTop: "10px",
                                                                 width: '220px',
                                                                 borderBottom: "1px solid #ccc ",
                                                                 paddingLeft: "0px",
@@ -269,7 +268,7 @@ const AllocatedCard = () => {
                                                 )}
                                             </div>
                                         </Col>
-                                        <Col xs={22} sm={15} md={8}>
+                                        <Col xs={24} sm={24} md={8} lg={8} xl={7} xxl={5}>
                                             <div>
                                                 <div className="div-discription">Date of Issue</div>
                                                 {editAsset === false ? (
@@ -307,7 +306,7 @@ const AllocatedCard = () => {
                                                 )}
                                             </div>
                                         </Col>
-                                        <Col xs={22} sm={15} md={8}>
+                                        <Col xs={24} sm={24} md={8} lg={8} xl={7} xxl={5}>
                                             <div>
                                                 <div className="div-discription">Laptop Bag</div>
                                                 {editAsset === false ? (
@@ -342,7 +341,7 @@ const AllocatedCard = () => {
                                                 )}
                                             </div>
                                         </Col>
-                                        <Col xs={22} sm={15} md={8}>
+                                        <Col span={24}>
 
                                             {editAsset === true ? (
                                                 <div>
@@ -373,7 +372,7 @@ const AllocatedCard = () => {
                                     >
                                         <PlusCircleOutlined />
                                         Add
-                                    </Button>  
+                                  </Button>  
                                 </>)}
 
                                 

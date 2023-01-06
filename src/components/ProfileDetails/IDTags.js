@@ -263,7 +263,10 @@ function IDTags() {
                   },
                 ]}
               >
-                <Input placeholder="Enter ID Name" required />
+                <Input 
+                  placeholder="Enter ID Name" 
+                  required 
+                />
               </FormItem>
               <FormItem
                 name="iddescription"

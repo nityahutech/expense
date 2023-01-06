@@ -1,20 +1,26 @@
-import { React, useState } from 'react'
+import { React, useState, useEffect } from 'react'
 import "./RepairReq.css"
 import {
-  Card, Button, Row, Col, Form, Input,  Space, DatePicker,  message, 
+  Card, Button, Row, Col, Form, Input, Space, DatePicker, message,
   Switch,
- 
+
 } from 'antd';
 
 import FormItem from 'antd/es/form/FormItem';
 import TextArea from 'antd/lib/input/TextArea';
 import RepairRequestTable from './RepairRequestTable';
 import AllocatedCard from './AllocatedCard';
+import AssetContext from '../../contexts/AssetContext';
+
 
 function LaptopAllot() {
   const [form] = Form.useForm();
   const [file, setFile] = useState("");
   const [selectedOption, setSelectedOption] = useState('repair');
+  const [alltmentData, setAlloctmentData] = useState([])
+  console.log(alltmentData, 'jjjjjjjjjjj')
+  const compId = sessionStorage.getItem("compId");
+  const currentUser = JSON.parse(sessionStorage.getItem('user'))
 
   const onReset = () => {
     setSelectedOption(false)
@@ -24,8 +30,20 @@ function LaptopAllot() {
   const onFinish = (values) => {
     console.log(values, 'values')
     form.resetFields();
+  }
+
+  useEffect(() => {
+    getAllotmentData()
+  }, [])
+
+  const getAllotmentData = async () => {
+    let allData = await AssetContext.getEmpAllot(currentUser.uid);
+    console.log(allData, 'allllll')
+    setAlloctmentData(allData)
+
 
   }
+
 
   const divStyle = {
     border: "1px solid #8692A6",
@@ -77,6 +95,7 @@ function LaptopAllot() {
   }
 
 
+
   return (
     <>
       <div> <AllocatedCard /></div>
@@ -120,6 +139,7 @@ function LaptopAllot() {
                   <FormItem
                     name='lapname'
                     label="Laptop Name"
+                    initialValue={alltmentData.lapname}
                   >
                     <Input style={divStyle} span={6} />
                   </FormItem>

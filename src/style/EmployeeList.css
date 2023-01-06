@@ -65,15 +65,15 @@
 }
 
 .empList {
-  width: 25%;
-  position: relative;
+  width: 15%;
+  /* position: relative; */
   bottom: 3.7rem;
   float: right;
   margin-right: 24px;
 }
 
 .empTable {
-  position: relative;
+  /* position: relative; */
   bottom: 30px;
 }
 
@@ -121,9 +121,9 @@
   }
 }
 
-@media (max-width: 750px) {
+/* @media (max-width: 750px) {
   .empList {
-    /* float: left; */
+
     margin-top: 45px;
   }
-}
+} */

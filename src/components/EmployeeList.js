@@ -23,6 +23,8 @@ import "../style/EmployeeList.css";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import EmployeeListview from "./EmployeeListview";
 import ConfigureContext from "../contexts/ConfigureContext";
+import { SELECTION_ALL } from "antd/lib/table/hooks/useSelection";
+import EmpFieldDownload from "./EmpFieldDownload";
 const { Option } = Select;
 
 function EmployeeList() {
@@ -40,6 +42,8 @@ function EmployeeList() {
   const [designations, setDesignations] = useState([]);
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
+  const [showDownLoadModal, setShowDownLoadModal] = useState(false)
+
   window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 768 ? "" : "left")
   );
@@ -178,6 +182,8 @@ function EmployeeList() {
     setLoading(false);
   }
 
+
+
   const searchChange = (e) => {
     let search = e.target.value;
     // setFilterCriteria({ ...filterCriteria, search: search });
@@ -196,18 +202,7 @@ function EmployeeList() {
       setFilterEmployees(allEmployees);
     }
   };
-  // const searchByGender = (e) => {
-  //   let value = e.target.value;
-  //   // setFilterCriteria({ ...filterCriteria, search: search });
-  //   if (value) {
-  //     let result = data.filter((ex) => ex.gender == value);
-  //     console.log({ result });
-  //     const modifiedFilterExpense = [...result];
-  //     setFilterEmployees(modifiedFilterExpense);
-  //   } else {
-  //     setFilterEmployees(allEmployees);
-  //   }
-  // };
+
   const onDelete = (idx, e) => {
     e.preventDefault();
     Modal.confirm({
@@ -228,6 +223,16 @@ function EmployeeList() {
     });
   };
 
+  const downLoadMOdal = () => {
+    console.log('ddddd')
+    setShowDownLoadModal(true)
+  }
+  const closeCreateEmpModal = () => {
+    setShowDownLoadModal(!showDownLoadModal);
+    console.log('ddddd')
+
+  };
+
   return (
     <>
       <div className="hrtab" style={{ minHeight: '100vh' }}>
@@ -241,30 +246,41 @@ function EmployeeList() {
           }}>
 
           <Tabs.TabPane tab="Employee List" key="1">
-            <Input
-              className="empList"
-              placeholder="Search"
-              prefix={<SearchOutlined />}
-              onChange={searchChange}
-            />
-            <Select
-
-              className="empList"
-              allowClear
-              placeholder="Select Designation"
-              style={{ marginLeft: "10px", width: "200px" }}
-              onChange={(e) => {
-                const selectedData = data.filter((emp) =>
-                  emp.designation.includes(e)
-                );
-                setFilterEmployees(selectedData.length == 0 ? allEmployees : selectedData);
-              }}
-              showSearch
-            >
-              {designations?.map((des) => {
-                return <Option value={des}>{des}</Option>;
-              })}
-            </Select>
+            <div style={{ width: '100%', padding: '10px', backgroundColor: 'white', marginBottom: '15px' }}>
+              <Row gutter={[16, 16]}>
+                <Col xs={24} xm={24} md={8} lg={4}>
+                  <Button style={{ width: '100%' }} type="default" onClick={downLoadMOdal}>DownLoad Information</Button>
+                </Col>
+                <Col xs={24} xm={24} md={8} lg={4}>
+                  <Input
+                    // className="empList"
+                    placeholder="Search"
+                    prefix={<SearchOutlined />}
+                    onChange={searchChange}
+                  />
+                </Col>
+                <Col xs={24} xm={24} md={8} lg={4}>
+                  <Select
+                    style={{ width: '100%' }}
+                    // className="empList"
+                    allowClear
+                    placeholder="Select Designation"
+                    // style={{ marginLeft: "10px", width: "200px" }}
+                    onChange={(e) => {
+                      const selectedData = data.filter((emp) =>
+                        emp.designation.includes(e)
+                      );
+                      setFilterEmployees(selectedData.length == 0 ? allEmployees : selectedData);
+                    }}
+                    showSearch
+                  >
+                    {designations?.map((des) => {
+                      return <Option value={des}>{des}</Option>;
+                    })}
+                  </Select>
+                </Col>
+              </Row>
+            </div>
             <Table
               loading={loading}
               columns={columns}
@@ -281,11 +297,11 @@ function EmployeeList() {
             <Modal
               className="editEmployee"
               bodyStyle={{
-                height: 440,
-                overflowY: "scroll",
+                height: 550,
+                // overflowY: "scroll",
                 overflowX: "hidden",
               }}
-              width={850}
+              width={1000}
               centered
               title="Employee Details"
               open={isModalVisible}
@@ -323,6 +339,37 @@ function EmployeeList() {
           </Tabs.TabPane>
 
         </Tabs>
+
+        <Modal
+          className="editEmployee"
+          bodyStyle={{
+            height: 400,
+            // overflowY: "scroll",
+            overflowX: "hidden",
+          }}
+          width={500}
+          centered
+          title="Select  Field"
+          open={showDownLoadModal}
+          visible={showDownLoadModal}
+          footer={null}
+          // afterClose={getData}
+          closeIcon={
+            <div
+              onClick={() => {
+                closeCreateEmpModal(false);
+
+              }}
+              style={{ color: "#ffffff" }}
+            >
+              X
+            </div>
+          }
+        >
+          <EmpFieldDownload closeCreateEmpModal={closeCreateEmpModal} />
+
+        </Modal>
+
       </div>
     </>
   );

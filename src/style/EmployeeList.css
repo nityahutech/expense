@@ -57,6 +57,38 @@
   line-height: 25px;
 }
 
+.profilestyle .ant-form-item-label > label {
+  font-weight: 600;
+  font-size: 15px;
+  /* margin-bottom: "5px"; */
+  font-family: "Open Sans";
+}
+
+.empList {
+  width: 25%;
+  position: relative;
+  bottom: 3.7rem;
+  float: right;
+  margin-right: 24px;
+}
+
+.empTable {
+  position: relative;
+  bottom: 30px;
+}
+
+.empTable .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.empTable .ant-table table {
+  cursor: pointer;
+}
+
 /* //-------------employeeListviews */
 @media (max-width: 600px) {
   .wrap-one {
@@ -82,5 +114,16 @@
   }
   .ant-card .header-solid {
     margin-bottom: "0px";
+  }
+  .ant-avatar-group .card-profile-photo {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 750px) {
+  .empList {
+    /* float: left; */
+    margin-top: 45px;
   }
 }

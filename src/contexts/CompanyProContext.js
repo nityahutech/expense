@@ -81,7 +81,7 @@ class CompanyProContext {
           isManager: true,
           isHr: true,
           empId: user.empId,
-          remark: user.note || ""
+          remark: user.note || "",
         };
         newList.push({
           name: name,
@@ -103,7 +103,7 @@ class CompanyProContext {
       enabled: false,
       repManager: [],
       secManager: [],
-      lead: []
+      lead: [],
     });
     setDoc(doc(db, `companyprofile/${id}/configurations`, "attendanceConfig"), {
       attendanceNature: {
@@ -166,10 +166,10 @@ class CompanyProContext {
       uploadBytesResumable(storageRef, file).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
           newInfo.logo = url;
-          let des = {}
+          let des = {};
           accessList.map((user) => {
             des[`${user.designation}`] = 1;
-          })
+          });
           setDoc(doc(db, "companyprofile", id), newInfo);
           this.createAdmins(accessList, id);
           this.createConfig(id, des);

@@ -80,15 +80,15 @@ function AttendanceLog(props) {
     setEndTime(values?.endtime?.format("HH:mm") || endTime)
     console.log(attendanceConfig, attendanceConfig.starttime > attendanceConfig.starttime)
     // if (attendanceConfig.starttime > attendanceConfig.starttime) {
-      ConfigureContext.createConfiguration(
-        page,
-        { attendanceNature: attendanceConfig })
-        .then((response) => {
-          getAttendanceData();
-        })
-        .catch((error) => {
-          showNotification("error", "Error", error.message);
-        });
+    ConfigureContext.createConfiguration(
+      page,
+      { attendanceNature: attendanceConfig })
+      .then((response) => {
+        getAttendanceData();
+      })
+      .catch((error) => {
+        showNotification("error", "Error", error.message);
+      });
     // } else {
     //   showNotification("error", "Error", "Start Time cannot be after End Time!")
     // }
@@ -145,10 +145,10 @@ function AttendanceLog(props) {
   }, [isHr]);
   useEffect(() => {
     form.resetFields();
-    let temp = {}; 
+    let temp = {};
     if (holidays.length == 0) {
-      getHolidayList().then((res) => {temp.holidays = res})
-      getAttendanceData().then((res) => {temp.selectedDays = res})
+      getHolidayList().then((res) => { temp.holidays = res })
+      getAttendanceData().then((res) => { temp.selectedDays = res })
     }
     const timer = setTimeout(() => {
       if (!isHr) {
@@ -390,13 +390,13 @@ function AttendanceLog(props) {
   // };
 
   const workingdays = [
-    {days: "Monday"},
-    {days: "Tuesday"},
-    {days: "Wednesday"},
-    {days: "Thursday"},
-    {days: "Friday"},
-    {days: "Saturday"},
-    {days: "Sunday"}
+    { days: "Monday" },
+    { days: "Tuesday" },
+    { days: "Wednesday" },
+    { days: "Thursday" },
+    { days: "Friday" },
+    { days: "Saturday" },
+    { days: "Sunday" }
   ];
 
   const handleRadiochange = (value, data) => {
@@ -521,9 +521,9 @@ function AttendanceLog(props) {
                 tab="Add Report"
                 key="2"
                 className="reportTabs"
-                // onClick={() => {
-                //   setIsModalOpen(true);
-                // }}
+              // onClick={() => {
+              //   setIsModalOpen(true);
+              // }}
               >
                 {/* <Button type="primary" onClick={showModal}>
               Open Modal
@@ -612,24 +612,24 @@ function AttendanceLog(props) {
                   placeholder="Search"
                   prefix={<SearchOutlined />}
                   onChange={searchChange}
-                  // style={{ width: "95%" }}
+                // style={{ width: "95%" }}
                 />
                 <DatePicker
-                defaultValue={selDate}
+                  defaultValue={selDate}
                   className="Range Daily"
                   bordered={true}
                   format="DD-MM-YYYY"
-                    style={{
-                      background: "#1963A6",
-                      cursor: "pointer",
-                      marginLeft: "15rem",
-                      width: "10%",
-                    }}
-                    allowClear
-                    onChange={(e) => {
-                      setSelDate(e);
-                      allEmpDetails("_", e);
-                    }}
+                  style={{
+                    background: "#1963A6",
+                    cursor: "pointer",
+                    marginLeft: "15rem",
+                    width: "10%",
+                  }}
+                  allowClear
+                  onChange={(e) => {
+                    setSelDate(e);
+                    allEmpDetails("_", e);
+                  }}
                 />
                 <Table
                   //   rowSelection={{
@@ -728,7 +728,7 @@ function AttendanceLog(props) {
                           onChange={(e) => {
                             console.log(e)
                             setStartTime(e == null ? "" : e.format("HH:mm"))
-                            handleFinish({starttime : e})
+                            handleFinish({ starttime: e })
                           }}
                           disabled={!endTime}
                           disabledTime={() => ({
@@ -757,11 +757,11 @@ function AttendanceLog(props) {
                           onChange={(e) => {
                             console.log(e)
                             setEndTime(e == null ? "" : e.format("HH:mm"))
-                            handleFinish({endtime : e})
+                            handleFinish({ endtime: e })
                           }}
                           disabled={!startTime}
                           disabledTime={() => ({
-                            disabledHours: () => [...Array(Number(startTime.substring(0, 2))+1).keys()]
+                            disabledHours: () => [...Array(Number(startTime.substring(0, 2)) + 1).keys()]
                           })}
                           defaultOpenValue={moment("00:00", "HH:mm")}
                         />
@@ -801,7 +801,7 @@ function AttendanceLog(props) {
                           offset: 1,
                         }}
                         initialValue={configurations.maxBreakDuration}
-                        // noStyle
+                      // noStyle
                       >
                         <InputNumber min={0} max={5}
                           onKeyPress={(event) => {

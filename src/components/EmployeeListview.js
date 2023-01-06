@@ -6,6 +6,20 @@ import imageavailable from "../images/imageavailable.png";
 import Iframe from "react-iframe";
 import "../style/EmployeeList.css";
 
+const styleFont = {
+  marginBottom: '0px', fontSize: '15px', fontFamily: 'Open Sans',
+
+}
+
+const styleFont1 = {
+  marginBottom: '0px', fontSize: '25px', fontFamily: 'Open Sans',
+
+}
+
+const styleFont3 = {
+  marginBottom: '5px', fontSize: '25px', fontFamily: 'Open Sans',
+
+}
 
 
 function EmployeeListview(props) {
@@ -77,29 +91,25 @@ function EmployeeListview(props) {
             <Row justify="space-between" align="middle" gutter={[24, 0]}>
               <Col span={24} md={12} style={{ display: 'flex', justifyContent: 'space-between', }} className="col-info">
 
-                <Avatar.Group style={{ display: 'flex', justifyContent: 'space-evenly', width: '100%' }}>
+                <Avatar.Group className="card-profile-photo" style={{ display: 'flex', justifyContent: 'space-evenly', width: '100%' }}>
                   <Avatar size={75}
                     src={showRecord.profilePic}
                     style={{
-                      // display: 'block',
-                      // maxWidth: '100%',
-                      // maxHeight: '100%',
-
-                      borderRadius: '50%',
+                      // borderRadius: '50%',
                       border: '1px solid black',
                       objectFit: 'contain',
                       textAlign: 'center'
                     }}
                     alt={imageavailable}
 
-                  // shape="square" 
+                  // shape="square"
                   />
 
                   <div className="avatar-info">
-                    <h4 className="font-semibold m-0">{showRecord.fname ? showRecord.fname : '-'}</h4>
-                    <h5 style={{ marginTop: '-10px' }}>{showRecord.designation ? showRecord.designation : '-'}</h5>
-                    <h4>Employee ID : {showRecord.empId ? showRecord.empId : '-'}</h4>
-                    <h5 style={{ marginTop: '-10px' }}>Date of Joining :{showRecord.doj ? showRecord.doj : '-'}</h5>
+                    <h4 style={styleFont1}>{showRecord.fname ? showRecord.fname : '-'}</h4>
+                    <h5 style={styleFont}>{showRecord.designation ? showRecord.designation : '-'}</h5>
+                    <h4 style={styleFont1}>Employee ID : {showRecord.empId ? showRecord.empId : '-'}</h4>
+                    <h5 style={styleFont}>Date of Joining : {showRecord.doj ? showRecord.doj : '-'}</h5>
                   </div>
 
                 </Avatar.Group>
@@ -113,7 +123,7 @@ function EmployeeListview(props) {
                   layout="horizontal"
                   name="wrap"
                   labelCol={{
-                    flex: '110px',
+                    flex: '150px',
                   }}
                   labelAlign="left"
                   labelWrap
@@ -123,33 +133,33 @@ function EmployeeListview(props) {
                   colon={false}
                 >
                   <Col xs={24} sm={24} md={24}>
-                    <Form.Item style={{ marginBottom: '0px' }} label="Full Name">
-                      <span>{showRecord.fname + ' ' + showRecord.mname + ' ' + showRecord.lname}</span>
+                    <Form.Item className='profilestyle' style={styleFont} label="Full Name">
+                      <span >{showRecord.fname + ' ' + showRecord.mname + ' ' + showRecord.lname}</span>
                     </Form.Item>
                   </Col>
 
                   <Col xs={24} sm={24} md={24}>
-                    <Form.Item style={{ marginBottom: '0px' }} label="Gender">
+                    <Form.Item className='profilestyle' style={styleFont} label="Gender">
                       <span>{showRecord.gender ? showRecord.gender : '-'}</span>
                     </Form.Item>
                   </Col>
                   <Col xs={24} sm={24} md={24}>
-                    <Form.Item style={{ marginBottom: '0px' }} label="Phone">
+                    <Form.Item className='profilestyle' style={styleFont} label="Phone">
                       <span>{showRecord.phonenumber ? showRecord.phonenumber : '-'}</span>
                     </Form.Item>
                   </Col>
                   <Col xs={24} sm={24} md={24}>
-                    <Form.Item style={{ marginBottom: '0px' }} label="Email Id">
+                    <Form.Item className='profilestyle' style={styleFont} label="Email Id">
                       <span>{showRecord.mailid ? showRecord.mailid : '-'}</span>
                     </Form.Item>
                   </Col>
                   <Col xs={24} sm={24} md={24}>
-                    <Form.Item style={{ marginBottom: '0px' }} label="Work Location">
+                    <Form.Item className='profilestyle' style={styleFont} label="Work Location">
                       <span>{showRecord.location ? showRecord.location : '-'}</span>
                     </Form.Item>
                   </Col>
                   <Col xs={24} sm={24} md={24}>
-                    <Form.Item style={{ marginBottom: '0px' }} label="Reports to">
+                    <Form.Item className='profilestyle' style={styleFont} label="Reports to">
                       <span>{showRecord.repManager ? showRecord.repManager : '-'}</span>
                     </Form.Item>
                   </Col>
@@ -180,7 +190,7 @@ function EmployeeListview(props) {
               name="wrap"
               className="wrap-one"
               labelCol={{
-                flex: '180px',
+                flex: '220px',
               }}
               labelAlign="left"
               labelWrap
@@ -190,49 +200,49 @@ function EmployeeListview(props) {
               colon={false}
               style={{ height: '320px' }}
             >
-              <h2>Personal Informations</h2>
+              <h2 style={styleFont3}>Personal Informations</h2>
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Blood Group">
+                <Form.Item className='profilestyle' style={styleFont} label="Blood Group">
                   <span>{showRecord.bloodGroup ? showRecord.bloodGroup : '-'}</span>
                 </Form.Item>
               </Col>
               <Col className="form-item" xs={24} sm={24} md={24}>
-                <Form.Item style={{ marginBottom: '0px' }} label="Marital Status">
+                <Form.Item className='profilestyle' style={styleFont} label="Marital Status">
                   <span>{showRecord.maritalStatus ? showRecord.maritalStatus : '-'}</span>
                 </Form.Item>
               </Col>
               <Col className="form-item" xs={24} sm={24} md={24}>
-                <Form.Item style={{ marginBottom: '0px' }} label="Personal Email ID">
+                <Form.Item className='profilestyle' style={styleFont} label="Personal Email ID">
                   <span>{showRecord.contactEmail ? showRecord.contactEmail : '-'}</span>
                 </Form.Item>
               </Col>
               <Col className="form-item" xs={24} sm={24} md={24}>
-                <Form.Item style={{ marginBottom: '0px' }} label="Alt Phone No.">
+                <Form.Item className='profilestyle' style={styleFont} label="Alt Phone No.">
                   <span>{showRecord.altPhnNo ? showRecord.altPhnNo : '-'}</span>
                 </Form.Item>
               </Col>
               <Col className="form-item" xs={24} sm={24} md={24}>
-                <Form.Item style={{ marginBottom: '0px' }} label="Current Address">
+                <Form.Item className='profilestyle' style={styleFont} label="Current Address">
                   <span>{showRecord.currentAdd ? showRecord.currentAdd : '-'}</span>
                 </Form.Item>
               </Col>
               <Col className="form-item" xs={24} sm={24} md={24}>
-                <Form.Item style={{ marginBottom: '0px' }} label="Permanent Address">
+                <Form.Item className='profilestyle' style={styleFont} label="Permanent Address">
                   <span>{showRecord.permanentAdd ? showRecord.permanentAdd : '-'}</span>
                 </Form.Item>
               </Col>
               <Col className="form-item" xs={24} sm={24} md={24}>
-                <Form.Item style={{ marginBottom: '0px' }} label="House Type">
+                <Form.Item className='profilestyle' style={styleFont} label="House Type">
                   <span>{showRecord.houseType ? showRecord.houseType : '-'}</span>
                 </Form.Item>
               </Col>
               <Col className="form-item" xs={24} sm={24} md={24}>
-                <Form.Item style={{ marginBottom: '0px' }} label=" Current Residence Since">
+                <Form.Item className='profilestyle' style={styleFont} label=" Current Residence Since">
                   <span>{showRecord.scrs ? showRecord.scrs : '-'}</span>
                 </Form.Item>
               </Col>
               <Col className="form-item" xs={24} sm={24} md={24}>
-                <Form.Item style={{ marginBottom: '0px' }} label=" Current City Since">
+                <Form.Item className='profilestyle' style={styleFont} label=" Current City Since">
                   <span>{showRecord.lccs ? showRecord.lccs : '-'}</span>
                 </Form.Item>
               </Col>
@@ -259,7 +269,7 @@ function EmployeeListview(props) {
               name="wrap"
               className="wrap-one"
               labelCol={{
-                flex: '180px',
+                flex: '220px',
               }}
               labelAlign="left"
               labelWrap
@@ -269,43 +279,43 @@ function EmployeeListview(props) {
               colon={false}
               style={{ height: '320px' }}
             >
-              <h2>Family Members</h2>
+              <h2 style={styleFont3}>Family Members</h2>
               <Col xs={24} sm={24} md={24}>
 
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Father Name">
+                <Form.Item className='profilestyle' style={styleFont} label="Father Name">
                   <span>{showRecord.father ? showRecord.father : '-'}</span>
                 </Form.Item>
               </Col>
 
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Contact no.">
+                <Form.Item className='profilestyle' style={styleFont} label="Contact no.">
                   <span>{showRecord.fatherContact ? showRecord.fatherContact : '-'}</span>
                 </Form.Item>
               </Col>
               <Divider style={{ margin: '10px' }} />
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Mother Name">
+                <Form.Item className='profilestyle' style={styleFont} label="Mother Name">
                   <span>{showRecord.mother ? showRecord.mother : '-'}</span>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Contact no.">
+                <Form.Item className='profilestyle' style={styleFont} label="Contact no.">
                   <span>{showRecord.motherContact ? showRecord.motherContact : '-'}</span>
                 </Form.Item>
               </Col>
               <Divider style={{ margin: '10px' }} />
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Other">
+                <Form.Item className='profilestyle' style={styleFont} label="Other">
                   <span>{showRecord.other ? showRecord.other : '-'}</span>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Relation">
+                <Form.Item className='profilestyle' style={styleFont} label="Relation">
                   <span>{showRecord.otherContact ? showRecord.otherContact : '-'}</span>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Contact no.">
+                <Form.Item className='profilestyle' style={styleFont} label="Contact no.">
                   <span>{showRecord.phonenumber ? showRecord.phonenumber : '-'}</span>
                 </Form.Item>
               </Col>
@@ -333,7 +343,7 @@ function EmployeeListview(props) {
               name="wrap"
               className="wrap-one"
               labelCol={{
-                flex: '180px',
+                flex: '220px',
               }}
               labelAlign="left"
               labelWrap
@@ -343,19 +353,19 @@ function EmployeeListview(props) {
               colon={false}
               style={{ height: '250px' }}
             >
-              <h2>Bank information</h2>
+              <h2 style={styleFont3}>Bank information</h2>
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Bank name">
+                <Form.Item className='profilestyle' style={styleFont} label="Bank name">
                   <span>{showRecord.bankName ? showRecord.bankName : '-'}</span>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Bank account No.">
+                <Form.Item className='profilestyle' style={styleFont} label="Bank account No.">
                   <span>{showRecord.accountNumber ? showRecord.accountNumber : '-'}</span>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="IFSC Code">
+                <Form.Item className='profilestyle' style={styleFont} label="IFSC Code">
                   <span>{showRecord.ifscCode ? showRecord.ifscCode : '-'}</span>
                 </Form.Item>
               </Col>
@@ -383,7 +393,7 @@ function EmployeeListview(props) {
               name="wrap"
               className="wrap-one"
               labelCol={{
-                flex: '180px',
+                flex: '220px',
               }}
               labelAlign="left"
               labelWrap
@@ -393,29 +403,29 @@ function EmployeeListview(props) {
               colon={false}
               style={{ height: '250px' }}
             >
-              <h2>Higher Education Info</h2>
+              <h2 style={styleFont3}>Higher Education Info</h2>
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Course Name">
+                <Form.Item className='profilestyle' style={styleFont} label="Course Name">
                   <span>{showRecord.courseName ? showRecord.courseName : '-'}</span>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Course Type">
+                <Form.Item className='profilestyle' style={styleFont} label="Course Type">
                   <span>{showRecord.courseType ? showRecord.courseType : '-'}</span>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Stream">
+                <Form.Item className='profilestyle' style={styleFont} label="Stream">
                   <span>{showRecord.stream ? showRecord.stream : '-'}</span>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Course Start Date">
+                <Form.Item className='profilestyle' style={styleFont} label="Course Start Date">
                   <span>{showRecord.courseStartDate ? showRecord.courseStartDate : '-'}</span>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={24}>
-                <Form.Item className="form-item" style={{ marginBottom: '0px' }} label="Course End Date">
+                <Form.Item className='profilestyle' style={styleFont} label="Course End Date">
                   <span>{showRecord.courseEndDate ? showRecord.courseEndDate : '-'}</span>
                 </Form.Item>
               </Col>
@@ -440,7 +450,7 @@ function EmployeeListview(props) {
           // bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
           >
             <div className="timeline-box">
-              <h2>Experience Certificate</h2>
+              <h2 style={styleFont3}>Experience Certificate</h2>
               <Timeline
                 className="timelinelist"
               >
@@ -512,7 +522,7 @@ function EmployeeListview(props) {
           // bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
           >
             <div className="timeline-box">
-              <h2>Education Certificate</h2>
+              <h2 style={styleFont3}>Education Certificate</h2>
               <Timeline
                 className="timelinelist"
               >
@@ -583,7 +593,7 @@ function EmployeeListview(props) {
           // bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
           >
             <div className="timeline-box">
-              <h2>ID</h2>
+              <h2 style={styleFont3}>ID</h2>
               <Timeline
                 className="timelinelist"
               >

@@ -41,6 +41,7 @@ function LaptopAllot() {
       repairDes: values.repairDes,
       empId: currentUser.uid,
       type: "Repair",
+      status: 'Pending'
     };
     AssetContext.addRepairRequest(allUpgradeData)
       .then((response) => {
@@ -67,15 +68,10 @@ function LaptopAllot() {
 
   const getRepairData = async () => {
     let repairData = await AssetContext.getRepairData(currentUser.uid, 'Repair')
-    console.log(repairData, 'repairData1')
+    console.log(repairData, 'qqqqq')
     setRepairLaptopData(repairData)
   }
 
-  const handleDropdownChange = (value) => {
-    setSelectedOption(value === "repair" ? "upgrade" : "repair");
-    // setSelectedOption(value);
-    form.resetFields();
-  }
 
 
   const divStyle = {
@@ -390,7 +386,7 @@ function LaptopAllot() {
           </Form>
         </Card>
       </div>
-      <div> <RepairRequestTable /></div>
+      <div> <RepairRequestTable repairLaotopData={repairLaotopData} /></div>
 
     </>
   )

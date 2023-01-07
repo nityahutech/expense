@@ -1,0 +1,33 @@
+.personalCardDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Row-Card {
+    width: 75%;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.overview {
+    width: 100%;
+    margin-top: 10;
+    border-radius: 10px;
+    cursor: default;
+}
+
+.laptopInp {
+    border-bottom: 1px solid #ccc;
+    padding-left: 0px;
+}
+
+.laptopDate {
+    width: 100%;
+}
+
+.buttonRow {
+    display: flex;
+    justify-content: flex-end;
+}

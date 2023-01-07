@@ -6,6 +6,8 @@ import {
   getDocs,
   query,
   where,
+  setDoc,
+  doc
 } from "firebase/firestore";
 import { async } from "@firebase/util";
 
@@ -16,10 +18,40 @@ const companyAssetCollectionRef = collection(
   `companyprofile/${compId}/assets`
 );
 
+
+// const companyRepairCollectionRef = collection(
+//   db, `companyprofile/${compId}/assets`, "repairs"
+// );
+
 class AssetContext {
   addAsset = async (assetData) => {
     return addDoc(companyAssetCollectionRef, assetData);
   };
+
+  addRepairRequest = async (repairRequestData) => {
+    // addDoc(collection(db, compId != "undefined" ? `companyprofile/${compId}/assets/repair` : "admins/assets/repair"), repairRequestData)
+    // return addDoc(companyRepairCollectionRef, repairRequestData);
+    setDoc(doc(db, `companyprofile/${compId}/assets`, "repairs"), {
+      lapname: repairRequestData.lapname,
+      modalName: repairRequestData.modalName,
+      serialNum: repairRequestData.serialNum,
+      dateOfRepair: repairRequestData.dateOfRepair,
+      repairDes: repairRequestData.repairDes,
+      empId: repairRequestData.empId,
+    });
+  };
+
+  getRepairData = async () => {
+    const q = await getDocs(db, `companyprofile/${compId}/assets`, "repairs");
+    let rec = q.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      };
+    });
+  };
+
+  //---------------------------------------------------------------
 
   getAllAsset = async () => {
     const q = await getDocs(companyAssetCollectionRef);
@@ -31,11 +63,13 @@ class AssetContext {
     });
   };
 
+
   getEmpAllot = async (id) => {
     const q = query(
       companyAssetCollectionRef,
       where("empId", "==", id),
-      where("type", "==", "Allotment")
+      where("type", "==", "Allotment"),
+      // where("type", "==", "Repair")
     );
     const empAllot = await getDocs(q);
     let rec = empAllot.docs.map((doc) => {

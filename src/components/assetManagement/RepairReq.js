@@ -2,7 +2,7 @@ import { React, useState, useEffect } from 'react'
 import "./RepairReq.css"
 import {
   Card, Button, Row, Col, Form, Input, Space, DatePicker, message,
-  Switch,
+  Switch, Select
 
 } from 'antd';
 
@@ -11,16 +11,19 @@ import TextArea from 'antd/lib/input/TextArea';
 import RepairRequestTable from './RepairRequestTable';
 import AllocatedCard from './AllocatedCard';
 import AssetContext from '../../contexts/AssetContext';
+import { capitalize, showNotification } from "../../contexts/CreateContext";
 
 
 function LaptopAllot() {
   const [form] = Form.useForm();
   const [file, setFile] = useState("");
-  const [selectedOption, setSelectedOption] = useState('repair');
+  const [selectedOption, setSelectedOption] = useState('');
   const [alltmentData, setAlloctmentData] = useState([])
+  const [repairLaotopData, setRepairLaptopData] = useState([])
   console.log(alltmentData, 'jjjjjjjjjjj')
   const compId = sessionStorage.getItem("compId");
   const currentUser = JSON.parse(sessionStorage.getItem('user'))
+  const { Option } = Select;
 
   const onReset = () => {
     setSelectedOption(false)
@@ -30,18 +33,48 @@ function LaptopAllot() {
   const onFinish = (values) => {
     console.log(values, 'values')
     form.resetFields();
+    const allUpgradeData = {
+      lapname: values.lapname,
+      modalName: values.modalName,
+      serialNum: values.serialNum,
+      dateOfRepair: values.dateOfRepair.format("DD-MM-YYYY"),
+      repairDes: values.repairDes,
+      empId: currentUser.uid,
+      type: "Repair",
+    };
+    AssetContext.addRepairRequest(allUpgradeData)
+      .then((response) => {
+
+        showNotification("success", "Success", "Repair Request Added");
+      })
+      .catch((error) => { console.log('fffff', error) });
+
+    console.log(allUpgradeData);
   }
+
 
   useEffect(() => {
     getAllotmentData()
+    getRepairData()
   }, [])
 
   const getAllotmentData = async () => {
-    let allData = await AssetContext.getEmpAllot(currentUser.uid);
-    console.log(allData, 'allllll')
+    let allData = await AssetContext.getEmpAllot(currentUser.uid,);
+    console.log(allData, 'dddddddd')
     setAlloctmentData(allData)
 
+  }
 
+  const getRepairData = async () => {
+    let repairData = await AssetContext.getRepairData(currentUser.uid, 'Repair')
+    console.log(repairData, 'repairData1')
+    setRepairLaptopData(repairData)
+  }
+
+  const handleDropdownChange = (value) => {
+    setSelectedOption(value === "repair" ? "upgrade" : "repair");
+    // setSelectedOption(value);
+    form.resetFields();
   }
 
 
@@ -127,7 +160,12 @@ function LaptopAllot() {
             <Row gutter={[32, 0]}>
               <Col span={24}>
                 <Form.Item label="Select a Form" name="option">
-                  <Switch checkedChildren="Upgrade Form" unCheckedChildren="Repair Form" checked={selectedOption === 'upgrade'} onChange={() => setSelectedOption(selectedOption === 'repair' ? 'upgrade' : 'repair')} />
+                  {/* <Switch checkedChildren="Upgrade Form" unCheckedChildren="Repair Form" checked={selectedOption === 'upgrade'} onChange={() => setSelectedOption(selectedOption === 'repair' ? 'upgrade' : 'repair')} /> */}
+                  <Select placeholder="Select an option" style={{ width: '40%' }} onChange={(selectedOption) => setSelectedOption(selectedOption)}>
+                    <Option value="upgrade">Upgrade Form</Option>
+                    <Option value="repair">Repair Form</Option>
+                    {/* <Select.Option value="option3">Option 3</Select.Option> */}
+                  </Select>
                 </Form.Item>
               </Col>
               {/* ----------------------laptopAllortment */}
@@ -139,30 +177,33 @@ function LaptopAllot() {
                   <FormItem
                     name='lapname'
                     label="Laptop Name"
-                    initialValue={alltmentData.lapname}
+                    initialValue={alltmentData[0]?.lapname}
+
                   >
-                    <Input style={divStyle} span={6} />
+                    <Input disabled style={divStyle} span={6} />
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <FormItem
-                    name='model'
+                    name='modalName'
                     label="Model"
+                    initialValue={alltmentData[0]?.modalName}
                   >
-                    <Input style={divStyle} />
+                    <Input disabled style={divStyle} />
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <FormItem
-                    name='serNum'
+                    name='serialNum'
                     label="Serial Number"
+                    initialValue={alltmentData[0]?.serialNum}
                   >
-                    <Input style={divStyle} />
+                    <Input disabled style={divStyle} />
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    name="dorepair"
+                    name="dateOfRepair"
                     label="Date Of Repairing Request"
                     placeholder="Choose Date"
                     rules={[
@@ -183,7 +224,7 @@ function LaptopAllot() {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="reasonreapir"
+                    name="repairDes"
                     label="Reason"
 
                     rules={[
@@ -253,29 +294,32 @@ function LaptopAllot() {
                   <FormItem
                     name='lapname'
                     label="Laptop Name"
+                    initialValue={alltmentData[0]?.lapname}
                   >
-                    <Input style={divStyle} span={6} />
+                    <Input disabled style={divStyle} span={6} />
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <FormItem
-                    name='model'
+                    name='modalName'
                     label="Model"
+                    initialValue={alltmentData[0]?.modalName}
                   >
-                    <Input style={divStyle} />
+                    <Input disabled style={divStyle} />
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <FormItem
-                    name='serNum'
+                    name='serialNum'
                     label="Serial Number"
+                    initialValue={alltmentData[0]?.serialNum}
                   >
-                    <Input style={divStyle} />
+                    <Input disabled style={divStyle} />
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    name="doUpgrade"
+                    name="dateOfUpgrade"
                     label="Date Of Upgrade Request"
                     placeholder="Choose Date"
                     rules={[
@@ -296,7 +340,7 @@ function LaptopAllot() {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="reasonupgrade"
+                    name="desUpgrade"
                     label="Reason"
 
                     rules={[

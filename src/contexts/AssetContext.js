@@ -31,24 +31,34 @@ class AssetContext {
   addRepairRequest = async (repairRequestData) => {
     // addDoc(collection(db, compId != "undefined" ? `companyprofile/${compId}/assets/repair` : "admins/assets/repair"), repairRequestData)
     // return addDoc(companyRepairCollectionRef, repairRequestData);
-    setDoc(doc(db, `companyprofile/${compId}/assets`, "repairs"), {
-      lapname: repairRequestData.lapname,
-      modalName: repairRequestData.modalName,
-      serialNum: repairRequestData.serialNum,
-      dateOfRepair: repairRequestData.dateOfRepair,
-      repairDes: repairRequestData.repairDes,
-      empId: repairRequestData.empId,
-    });
+    // setDoc(doc(db, `companyprofile/${compId}/assets`, "repairs"), {
+    //   lapname: repairRequestData.lapname,
+    //   modalName: repairRequestData.modalName,
+    //   serialNum: repairRequestData.serialNum,
+    //   dateOfRepair: repairRequestData.dateOfRepair,
+    //   repairDes: repairRequestData.repairDes,
+    //   empId: repairRequestData.empId,
+    // });
+
+    return addDoc(companyAssetCollectionRef, repairRequestData);
   };
 
-  getRepairData = async () => {
-    const q = await getDocs(db, `companyprofile/${compId}/assets`, "repairs");
-    let rec = q.docs.map((doc) => {
+  getRepairData = async (id) => {
+    const q = query(
+      companyAssetCollectionRef,
+      where("empId", "==", id),
+      where("type", "==", "Repair"),
+      // where("type", "==", "Repair")
+    );
+    console.log('qqqqq', q)
+    const empRepair = await getDocs(q);
+    let rec = empRepair.docs.map((doc) => {
       return {
         ...doc.data(),
         id: doc.id,
       };
     });
+    return rec
   };
 
   //---------------------------------------------------------------

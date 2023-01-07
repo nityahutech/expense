@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
     Button,
     Modal,
@@ -17,6 +17,7 @@ import "../../components/assetManagement/RepairRequest.css"
 import FormItem from 'antd/es/form/FormItem';
 import TextArea from 'antd/lib/input/TextArea';
 import './RepairRequestTable.css'
+import AssetContext from '../../contexts/AssetContext';
 
 const dataSource = [
     {
@@ -103,14 +104,16 @@ const modalContent2 = {
 
 }
 
-const RepairRequestTable = () => {
+const RepairRequestTable = (props) => {
+    console.log('ddddd', props)
+    const [repairTable, setRepairTable] = useState([])
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [form] = Form.useForm()
     const iframeRef = useRef(null);
     const [file, setFile] = useState("");
     const [status, setStatus] = useState('Repair');
-    const [statusUpgrade, setStatusUpgrade] = useState('Upgrade');
+    const currentUser = JSON.parse(sessionStorage.getItem('user'))
 
 
     const showModal = () => {
@@ -129,6 +132,19 @@ const RepairRequestTable = () => {
         console.log(values, 'values')
         form.resetFields();
     }
+
+    useEffect(() => {
+        getRepairData()
+
+    }, [repairTable])
+
+
+    const getRepairData = async () => {
+        let repairData = await AssetContext.getRepairData(currentUser.uid, 'Repair')
+        console.log(repairData, 'qqqqq')
+        setRepairTable(repairData)
+    }
+
 
     function handleChange(event) {
         let file = event.target.files[0]
@@ -152,27 +168,31 @@ const RepairRequestTable = () => {
 
         {
             title: "Date ",
-            dataIndex: "date",
-            key: "date",
+            dataIndex: "dateOfRepair",
+            key: "dateOfRepair",
             width: 200,
+            align: 'left',
         },
         {
             title: "Request Type",
-            dataIndex: "repairUpgarde",
-            key: "repairUpgarde",
+            dataIndex: "type",
+            key: "type",
             width: 200,
+            align: 'left',
 
         },
         {
             title: "Reason",
-            dataIndex: "reason",
-            key: "reason",
+            dataIndex: "repairDes",
+            key: "repairDes",
             width: 200,
+            align: 'left',
         },
         {
             title: "Status",
             key: "Status",
             width: 200,
+            align: 'left',
             render: (_, { status }) =>
                 status !== "" && (
                     <Tag
@@ -263,7 +283,7 @@ const RepairRequestTable = () => {
                     <Table
                         columns={columns}
                         pagination={false}
-                        dataSource={dataSource}
+                        dataSource={repairTable}
                         scroll={{ x: 800 }}
                         className="policies"
 

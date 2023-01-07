@@ -13,6 +13,7 @@ import UploadImage from "./UploadImage";
 import AssetContext from "../../contexts/AssetContext";
 import moment from "moment";
 import "../assetManagement/AllRequest.css";
+import "../assetManagement/AllocatedCard.css"
 const { Option } = Select;
 
 const AllocatedCard = () => {
@@ -65,23 +66,8 @@ const AllocatedCard = () => {
 
   return (
     <>
-      <div
-        className="personalCardDiv"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Row
-          className="Row-Card"
-          style={{
-            width: "75%",
-            margin: "10px",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
+      <div className="personalCardDiv">
+        <Row className="Row-Card">
           <Col span={24}>
             <Form
               layout="vertical"
@@ -104,17 +90,11 @@ const AllocatedCard = () => {
                 hoverable={true}
                 bordered={true}
                 // loading={loading}
-                style={{
-                  width: "100%",
-                  marginTop: 10,
-                  borderRadius: "10px",
-                  cursor: "default",
-                }}
               >
                 {editAsset === true ? (
                   <>
-                    <Row gutter={[0, 0]}>
-                      <Col xs={22} sm={15} md={8}>
+                    <Row span={24} gutter={[16, 16]}>
+                      <Col xs={24} sm={12} md={8}>
                         <Form.Item
                           label="Laptop Name"
                           initialValue={data?.lapname}
@@ -150,15 +130,11 @@ const AllocatedCard = () => {
                             maxLength={50}
                             placeholder="Enter Laptop Name"
                             bordered={false}
-                            style={{
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                              width: "220px",
-                            }}
+                            className="laptopInp"
                           />
                         </Form.Item>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <Form.Item
                           label="Modal Name"
                           initialValue={data?.modalName}
@@ -182,11 +158,7 @@ const AllocatedCard = () => {
                         >
                           <Input
                             maxLength={30}
-                            style={{
-                              paddingLeft: "0px",
-                              borderBottom: "1px solid #ccc ",
-                              width: "220px",
-                            }}
+                            className="laptopInp"
                             onChange={(e) => {
                               const inputval = e.target.value;
                               const str = e.target.value;
@@ -208,7 +180,7 @@ const AllocatedCard = () => {
                           />
                         </Form.Item>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <Form.Item
                           label="Serial Number"
                           initialValue={data?.serialNum}
@@ -228,11 +200,7 @@ const AllocatedCard = () => {
                           <Input
                             type="text"
                             maxLength={60}
-                            style={{
-                              paddingLeft: "0px",
-                              borderBottom: "1px solid #ccc ",
-                              width: "220px",
-                            }}
+                            className="laptopInp"
                             onChange={(e) => {
                               const inputval = e.target.value;
                               const str = e.target.value;
@@ -254,7 +222,7 @@ const AllocatedCard = () => {
                           />
                         </Form.Item>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <Form.Item
                           label="Charger"
                           name="charger"
@@ -268,12 +236,7 @@ const AllocatedCard = () => {
                         >
                           <Select
                             placeholder="Select a Yes or No"
-                            style={{
-                              marginTop: "10px",
-                              width: "220px",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                            }}
+                            className="laptopInp"
                             bordered={false}
                           >
                             <Option value="Yes">Yes</Option>
@@ -281,7 +244,7 @@ const AllocatedCard = () => {
                           </Select>
                         </Form.Item>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <Form.Item
                           label="Date of Issue"
                           initialValue={
@@ -298,10 +261,7 @@ const AllocatedCard = () => {
                           {/* format={dateFormatList} */}
                           <DatePicker
                             format="DD-MM-YYYY"
-                            style={{
-                              marginTop: "10px",
-                              width: "220px",
-                            }}
+                            className="laptopDate"
                             // format={dateFormatList}
                             // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
                             onChange={(e) => {
@@ -313,7 +273,7 @@ const AllocatedCard = () => {
                           />
                         </Form.Item>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col xs={24} sm={12} md={8}>
                         <Form.Item
                           label="Laptop Bag"
                           name="lapBag"
@@ -327,12 +287,7 @@ const AllocatedCard = () => {
                         >
                           <Select
                             placeholder="Select a Yes or No"
-                            style={{
-                              marginTop: "10px",
-                              width: "220px",
-                              borderBottom: "1px solid #ccc ",
-                              paddingLeft: "0px",
-                            }}
+                            className="laptopInp"
                             bordered={false}
                           >
                             <Option value="Yes">Yes</Option>
@@ -340,7 +295,7 @@ const AllocatedCard = () => {
                           </Select>
                         </Form.Item>
                       </Col>
-                      <Col xs={22} sm={15} md={8}>
+                      <Col span={24}>
                         <Form.Item
                           label="Upload Photo"
                           // initialValue={
@@ -361,38 +316,38 @@ const AllocatedCard = () => {
                   </>
                 ) : Object.keys([data]).length != 0 ? (
                   <>
-                    <Row span={24}>
-                      <Col span={8}>
+                    <Row span={24} gutter={[16,16]}>
+                      <Col xs={24} sm={12} md={8}>
                         {addButton === false ? (
                           <div className="lapAllot">Laptop Name </div>
                         ) : null}
                         {data ? data?.lapname : null}
                       </Col>
-                      <Col span={8}>
+                      <Col xs={24} sm={12} md={8}>
                         {addButton === false ? (
                           <div className="lapAllot">Modal Name </div>
                         ) : null}
                         {data ? data?.modalName : null}
                       </Col>
-                      <Col span={8}>
+                      <Col xs={24} sm={12} md={8}>
                         {addButton === false ? (
                           <div className="lapAllot">Serial Number </div>
                         ) : null}
                         {data ? data?.serialNum : null}
                       </Col>
-                      <Col span={8}>
+                      <Col xs={24} sm={12} md={8}>
                         {addButton === false ? (
                           <div className="lapAllot">Charger </div>
                         ) : null}
                         {data ? data?.charger : null}
                       </Col>
-                      <Col span={8}>
+                      <Col xs={24} sm={12} md={8}>
                         {addButton === false ? (
                           <div className="lapAllot">Date of Issue </div>
                         ) : null}
                         {data ? data?.DoI : null}
                       </Col>
-                      <Col span={8}>
+                      <Col xs={24} sm={12} md={8}>
                         {addButton === false ? (
                           <div className="lapAllot">Laptop Bag </div>
                         ) : null}
@@ -422,14 +377,7 @@ const AllocatedCard = () => {
                 ) : null}
 
                 {editAsset === true ? (
-                  <Row
-                    gutter={[16, 16]}
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "3%",
-                    }}
-                  >
+                  <Row gutter={[16, 16]} className="buttonRow">
                     <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
                       <Button
                         type="text"

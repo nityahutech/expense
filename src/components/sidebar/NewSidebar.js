@@ -21,11 +21,13 @@ import { NavLink, Link } from "react-router-dom";
 const { Sider } = Layout;
 
 const NewSidebar = (props) => {
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
+  const [collapsePoint, setCollapsePoint] = useState(false);
   const role = sessionStorage.getItem("role");
   const isHr =
     role == "super" ? false : sessionStorage.getItem("isHr") == "true";
 
+  const setCollapsibleStatus = () => collapsePoint && setCollapsed(true);
   return (
     <Layout className="sidelayout">
       <Sider
@@ -37,8 +39,14 @@ const NewSidebar = (props) => {
           flexDirection: "column",
         }}
         collapsedWidth="0"
-        onBreakpoint={(broken) => {}}
-        onCollapse={(collapsed, type) => {}}
+        onBreakpoint={(broken) => {
+          setCollapsed(broken);
+          setCollapsePoint(broken);
+        }}
+        onCollapse={(collapsed, type) => {
+          setCollapsed(collapsed);
+        }}
+        collapsed={collapsed}
       >
         <div
           className="sidelayout-div"
@@ -91,6 +99,9 @@ const NewSidebar = (props) => {
                 defaultOpenKeys={props.activeSubMenu || []}
                 selectedKeys={props.activeMenu}
                 mode="inline"
+                onClick={() => {
+                  setCollapsibleStatus();
+                }}
                 // style={{
                 //   // paddingBottom: "40px",
                 //   height: "100vh",

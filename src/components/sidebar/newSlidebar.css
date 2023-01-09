@@ -139,3 +139,12 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
 .sidelayout-menu::-webkit-scrollbar-thumb:hover {
   background: #189ab4;
 }
+
+.ant-tooltip-placement-right .ant-tooltip-arrow{
+  display: none;
+} 
+
+
+.ant-tooltip-inner{
+  display: none;
+}

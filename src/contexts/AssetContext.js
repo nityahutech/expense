@@ -7,7 +7,8 @@ import {
   query,
   where,
   setDoc,
-  doc
+  orderBy,
+  doc,
 } from "firebase/firestore";
 import { async } from "@firebase/util";
 
@@ -17,7 +18,6 @@ const companyAssetCollectionRef = collection(
   db,
   `companyprofile/${compId}/assets`
 );
-
 
 // const companyRepairCollectionRef = collection(
 //   db, `companyprofile/${compId}/assets`, "repairs"
@@ -29,17 +29,6 @@ class AssetContext {
   };
 
   addRepairRequest = async (repairRequestData) => {
-    // addDoc(collection(db, compId != "undefined" ? `companyprofile/${compId}/assets/repair` : "admins/assets/repair"), repairRequestData)
-    // return addDoc(companyRepairCollectionRef, repairRequestData);
-    // setDoc(doc(db, `companyprofile/${compId}/assets`, "repairs"), {
-    //   lapname: repairRequestData.lapname,
-    //   modalName: repairRequestData.modalName,
-    //   serialNum: repairRequestData.serialNum,
-    //   dateOfRepair: repairRequestData.dateOfRepair,
-    //   repairDes: repairRequestData.repairDes,
-    //   empId: repairRequestData.empId,
-    // });
-
     return addDoc(companyAssetCollectionRef, repairRequestData);
   };
 
@@ -47,10 +36,10 @@ class AssetContext {
     const q = query(
       companyAssetCollectionRef,
       where("empId", "==", id),
-      where("type", "==", "Repair"),
+      where("type", "in", ["Repair", "Upgrade"])
       // where("type", "==", "Repair")
     );
-    console.log('qqqqq', q)
+
     const empRepair = await getDocs(q);
     let rec = empRepair.docs.map((doc) => {
       return {
@@ -58,7 +47,7 @@ class AssetContext {
         id: doc.id,
       };
     });
-    return rec
+    return rec;
   };
 
   //---------------------------------------------------------------
@@ -73,12 +62,11 @@ class AssetContext {
     });
   };
 
-
   getEmpAllot = async (id) => {
     const q = query(
       companyAssetCollectionRef,
       where("empId", "==", id),
-      where("type", "==", "Allotment"),
+      where("type", "==", "Allotment")
       // where("type", "==", "Repair")
     );
     const empAllot = await getDocs(q);

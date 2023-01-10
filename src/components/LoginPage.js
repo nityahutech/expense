@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button, Checkbox, Form, Input, Alert, Col } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-// import "../App.css";
 import "../style/LoginPage.css"
 import loginBg from "../images/login-img.png"
 import loginLogo from "../images/Logo77.png"
@@ -31,7 +30,7 @@ function LoginPage() {
         navigate("DashBoard", { replace: true });
       }, 3000);
     } catch {
-      setError("Failed to log in");
+      setError("Login Failed!");
       setTimeout(() => {
         setError("");
       }, 3000);
@@ -44,9 +43,9 @@ function LoginPage() {
     try {
       setLoading(true);
       await resetPassword(loginEmail);
-      setError("Reset email sent");
+      setError("Reset Email Sent");
     } catch {
-      setError("Failed to send reset email");
+      setError("Reset Email Failed To Send!");
       setTimeout(() => {
         setError("");
       }, 3000);
@@ -58,7 +57,6 @@ function LoginPage() {
       <div className="main-div">
 
         <div className="img-div">
-          {/* <img src={process.env.PUBLIC_URL + "/hutechHr/images/login-img.png"} alt="" /> */}
           <img src={loginBg} alt=""  />
         </div>
 
@@ -66,7 +64,6 @@ function LoginPage() {
           <div className="xyz">
             <div className="form-div">
               <div className="exepnse-logo">
-                {/* <img src={process.env.PUBLIC_URL + "ExepnseLogo.png"} alt="" /> */}
                 <img src={loginLogo} alt="" style={{width:"260px"}}/>
               </div>
               <Form
@@ -123,29 +120,15 @@ function LoginPage() {
                   <Form.Item
                     name="remember"
                     valuePropName="checked"
-                    wrapperCol={
-                      {
-                        // offset: 8,
-                        // span: 16,
-                      }
-                    }
                   >
                     <Checkbox 
-                      // className="chkbox-color"
                       style={{color:"#1963A6"}} 
                     >Remember me
                     </Checkbox>
                   </Form.Item>
                   <div className="forgotpwd" onClick={handleReset} style={{marginLeft: '3.5rem', marginTop:'5px', color:"#1963A6"}}>Forgot Password</div>
                 </div>
-                <Form.Item
-                  wrapperCol={
-                    {
-                      // offset: 8,
-                      // span: 16,
-                    }
-                  }
-                >
+                <Form.Item>
                   <div className="login-btn">
                     {" "}
                     <Button
@@ -168,13 +151,6 @@ function LoginPage() {
                   />
                 )}
                 </div>
-
-                {/* <div className="signup-msg">
-                  Don't Have an account?{" "}
-                  <a href="/SignupPage" style={{ color: "#1963A6", cursor: "pointer" }}>
-                    SignUp
-                  </a>
-                </div> */}
                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                   <p className="loginFooter">
                     © 2022 Hutech HR. All rights reserved. Terms of Service

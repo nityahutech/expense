@@ -17,7 +17,7 @@ import "../assetManagement/AllRequest.css";
 import "../assetManagement/AllocatedCard.css"
 const { Option } = Select;
 
-const AllocatedCard = () => {
+const AllocatedCard = (props) => {
   const imgRef = React.useRef(null);
   const [form] = Form.useForm();
   const [imageUrl, setImageUrl] = useState("");
@@ -38,7 +38,7 @@ const AllocatedCard = () => {
 
     const allAssetData = {
       lapname: values.lapname,
-      modalName: values.modalName,
+      modelName: values.modelName,
       serialNum: values.serialNum,
       charger: values.charger,
       DoI: values.DoI.format("DD-MM-YYYY"),
@@ -52,8 +52,8 @@ const AllocatedCard = () => {
       .then((response) => {
         getEmpAllAsset();
         setEditAsset(false);
-
         showNotification("success", "Success", "New Laptop Alloctment added");
+        props.refresh();
       })
       .catch((error) => { 'error' });
 
@@ -232,9 +232,9 @@ const AllocatedCard = () => {
                       </Col>
                       <Col xs={24} sm={12} md={8}>
                         <Form.Item
-                          label="Modal Name"
-                          initialValue={data?.modalName}
-                          name="modalName"
+                          label="Model Name"
+                          initialValue={data?.modelName}
+                          name="modelName"
                           // onKeyPress={(event) => {
                           //   if (checkAlphabets(event)) {
                           //     event.preventDefault();
@@ -267,8 +267,8 @@ const AllocatedCard = () => {
                                 .join(" ");
                               // setPaidBy(newVal);
                               form.setFieldsValue({
-                                modalName: newVal,
-                                modalName: caps,
+                                modelName: newVal,
+                                modelName: caps,
                               });
                             }}
                             placeholder="Enter Model Name"
@@ -437,7 +437,7 @@ const AllocatedCard = () => {
                         {addButton === false ? (
                           <div className="lapAllot">Modal Name </div>
                         ) : null}
-                        {data ? data?.modalName : null}
+                        {data ? data?.modelName : null}
                       </Col>
                       <Col xs={24} sm={12} md={8}>
                         {addButton === false ? (

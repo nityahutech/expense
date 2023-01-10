@@ -140,11 +140,14 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
   background: #189ab4;
 }
 
-.ant-tooltip-placement-right .ant-tooltip-arrow{
+/* .ant-tooltip-placement-right .ant-tooltip-arrow{
   display: none;
 } 
 
 
 .ant-tooltip-inner{
+  display: none;
+} */
+.ant-tooltip-placement-right .navLink{
   display: none;
 }

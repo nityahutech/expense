@@ -41,7 +41,7 @@ function LaptopAllot() {
     form.resetFields();
     const allUpgradeData = {
       lapname: values.lapname,
-      modalName: values.modalName,
+      modelName: values.modelName,
       serialNum: values.serialNum,
       dateOfRepair: values.dateOfRepair.format("DD-MM-YYYY"),
       repairDes: values.repairDes,
@@ -186,9 +186,9 @@ function LaptopAllot() {
                   </Col>
                   <Col span={12}>
                     <FormItem
-                      name="modalName"
+                      name="modelName"
                       label="Model"
-                      initialValue={alltmentData[0]?.modalName}
+                      initialValue={alltmentData[0]?.modelName}
                     >
                       <Input disabled style={divStyle} />
                     </FormItem>
@@ -248,23 +248,25 @@ function LaptopAllot() {
                       />
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
-                    <FormItem
-                      name="photoreapir"
-                      label="Upload photos if (Physical Damage)"
-                    >
-                      <div className="idpage">
-                        <Input
-                          type="file"
-                          accept="application/pdf"
-                          id="upload"
-                          name="upload"
-                          onChange={handleChange}
-                          style={{ borderRadius: "5px" }}
-                        />
-                      </div>
-                    </FormItem>
-                  </Col>
+                  {selectedOption === "Repair" ? (
+                    <Col span={12}>
+                      <FormItem
+                        name="photoreapir"
+                        label="Upload photos if (Physical Damage)"
+                      >
+                        <div className="idpage">
+                          <Input
+                            type="file"
+                            accept="application/pdf"
+                            id="upload"
+                            name="upload"
+                            onChange={handleChange}
+                            style={{ borderRadius: "5px" }}
+                          />
+                        </div>
+                      </FormItem>
+                    </Col>
+                  ) : null}
                   <Col
                     span={24}
                     classsname="gutter-row"

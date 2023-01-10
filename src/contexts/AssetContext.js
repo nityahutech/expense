@@ -10,6 +10,7 @@ import {
   orderBy,
   doc,
 } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL, } from "firebase/storage";
 import { async } from "@firebase/util";
 
 const compId = sessionStorage.getItem("compId");
@@ -24,13 +25,33 @@ const companyAssetCollectionRef = collection(
 // );
 
 class AssetContext {
-  addAsset = async (assetData) => {
-    return addDoc(companyAssetCollectionRef, assetData);
+  // addAsset = async (assetData) => {
+  //   return addDoc(companyAssetCollectionRef, assetData);
+  // };
+
+  addAsset = (newLaptop, file) => {
+    if (file) {
+      const storageRef = ref(storage, `/${compId != "undefined" ? compId : "admins"}/${newLaptop.empId}/files/${file.name}`);
+      uploadBytesResumable(storageRef, file).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => {
+          newLaptop.upload = url;
+          newLaptop.fileName = file.name
+          addDoc(collection(db, compId != "undefined" ? `companyprofile/${compId}/assets` : "admins/assets"), newLaptop)
+          return Promise.resolve();
+        })
+      });
+    } else {
+      newLaptop.upload = null;
+      addDoc(companyAssetCollectionRef, newLaptop)
+      return Promise.resolve();
+    }
   };
+
 
   addRepairRequest = async (repairRequestData) => {
     return addDoc(companyAssetCollectionRef, repairRequestData);
   };
+
 
   getRepairData = async (id) => {
     const q = query(

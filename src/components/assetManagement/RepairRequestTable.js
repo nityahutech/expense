@@ -102,9 +102,11 @@ const modalContent2 = {
   borderRadius: "10px",
 };
 
-const RepairRequestTable = ({ repairLaotopData }) => {
-  console.log("RepairRequestTable props::: ", repairLaotopData);
+const RepairRequestTable = () => {
+  console.log("RepairRequestTable props::,");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [repairLaptopData, setRepairLaptopData] = useState([]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const iframeRef = useRef(null);
@@ -122,6 +124,15 @@ const RepairRequestTable = ({ repairLaotopData }) => {
   function closeModal() {
     setIsModalOpen(false);
   }
+
+  useEffect(() => {
+    getRepairData();
+  }, []);
+
+  const getRepairData = async () => {
+    let repairData = await AssetContext.getRepairData(currentUser.uid);
+    setRepairLaptopData(repairData);
+  };
 
   const onFinish = (values) => {
     console.log(values, "values");
@@ -250,7 +261,7 @@ const RepairRequestTable = ({ repairLaotopData }) => {
           <Table
             columns={columns}
             pagination={false}
-            dataSource={repairLaotopData}
+            dataSource={repairLaptopData}
             scroll={{ x: 800 }}
             className="policies"
           />

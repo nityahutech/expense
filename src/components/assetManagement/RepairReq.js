@@ -25,9 +25,8 @@ function LaptopAllot() {
   const [form] = Form.useForm();
   const [file, setFile] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
-  const [alltmentData, setAlloctmentData] = useState([]);
-  const [repairLaotopData, setRepairLaptopData] = useState([]);
-  console.log(alltmentData, "jjjjjjjjjjj");
+  const [allotmentData, setAllotmentData] = useState([]);
+  console.log(allotmentData, "jjjjjjjjjjj");
   const compId = sessionStorage.getItem("compId");
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const { Option } = Select;
@@ -51,8 +50,8 @@ function LaptopAllot() {
     };
     AssetContext.addRepairRequest(allUpgradeData)
       .then(async (response) => {
-        await getRepairData();
         showNotification("success", "Success", "Repair Request Added");
+        getAllotmentData();
       })
       .catch((error) => {
         console.log("error:", error);
@@ -63,17 +62,12 @@ function LaptopAllot() {
 
   useEffect(() => {
     getAllotmentData();
-    getRepairData();
   }, []);
 
   const getAllotmentData = async () => {
     let allData = await AssetContext.getEmpAllot(currentUser.uid);
-    setAlloctmentData(allData);
-  };
-
-  const getRepairData = async () => {
-    let repairData = await AssetContext.getRepairData(currentUser.uid);
-    setRepairLaptopData(repairData);
+    setAllotmentData(allData);
+    console.log(allData, "ektadewangan");
   };
 
   const divStyle = {
@@ -127,7 +121,7 @@ function LaptopAllot() {
     <>
       <div>
         {" "}
-        <AllocatedCard />
+        <AllocatedCard refresh={getAllotmentData} />
       </div>
 
       <div className="laptopDiv">
@@ -179,7 +173,7 @@ function LaptopAllot() {
                     <FormItem
                       name="lapname"
                       label="Laptop Name"
-                      initialValue={alltmentData[0]?.lapname}
+                      initialValue={allotmentData[0]?.lapname}
                     >
                       <Input disabled style={divStyle} span={6} />
                     </FormItem>
@@ -188,7 +182,7 @@ function LaptopAllot() {
                     <FormItem
                       name="modelName"
                       label="Model"
-                      initialValue={alltmentData[0]?.modelName}
+                      initialValue={allotmentData[0]?.modelName}
                     >
                       <Input disabled style={divStyle} />
                     </FormItem>
@@ -197,7 +191,7 @@ function LaptopAllot() {
                     <FormItem
                       name="serialNum"
                       label="Serial Number"
-                      initialValue={alltmentData[0]?.serialNum}
+                      initialValue={allotmentData[0]?.serialNum}
                     >
                       <Input disabled style={divStyle} />
                     </FormItem>
@@ -298,10 +292,10 @@ function LaptopAllot() {
           </Form>
         </Card>
       </div>
-      <div>
+      {/* <div>
         {" "}
-        <RepairRequestTable repairLaotopData={repairLaotopData} />
-      </div>
+        <RepairRequestTable repairLaptopData={repairLaptopData} />
+      </div> */}
     </>
   );
 }

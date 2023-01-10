@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Row, Col, Input, Form, DatePicker, Select } from "antd";
+import { Card, Button, Row, Col, Input, Form, DatePicker, Select, message, } from "antd";
 import hutechlogo from "../../images/hutechlogo.png";
 import laptop from "../../images/laptop.jpg";
 import {
-  EditFilled,
+  UploadOutlined,
   CloseOutlined,
   CheckOutlined,
   PlusCircleOutlined,
+  DeleteOutlined
 } from "@ant-design/icons";
-import { capitalize, showNotification } from "../../contexts/CreateContext";
+import { capitalize, showNotification, getBase64 } from "../../contexts/CreateContext";
 import UploadImage from "./UploadImage";
 import AssetContext from "../../contexts/AssetContext";
 import moment from "moment";
@@ -16,37 +17,47 @@ import "../assetManagement/AllRequest.css";
 import "../assetManagement/AllocatedCard.css"
 const { Option } = Select;
 
-const AllocatedCard = () => {
+const AllocatedCard = (props) => {
+  const imgRef = React.useRef(null);
   const [form] = Form.useForm();
+  const [imageUrl, setImageUrl] = useState("");
   const [editAsset, setEditAsset] = useState(false);
   const [data, setData] = useState([]);
   const [dob, setDob] = useState("");
   const [addButton, setAddButton] = useState(true);
+  const [fileList, setFileList] = useState([]);
+  const [isBigFile, setIsBigFile] = useState(false);
+  const [fileName, setFileName] = useState(null);
+  const [editContent, showEditContent] = useState(false);
+
   const compId = sessionStorage.getItem("compId");
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
   const onFinish = (values) => {
-    console.log(values);
+    console.log('ffffffffffff', values, fileList);
+
     const allAssetData = {
       lapname: values.lapname,
-      modalName: values.modalName,
+      modelName: values.modelName,
       serialNum: values.serialNum,
       charger: values.charger,
       DoI: values.DoI.format("DD-MM-YYYY"),
       lapBag: values.lapBag,
       empId: currentUser.uid,
+      // photo: values.photo,
       type: "Allotment",
+      photo: imageUrl || null,
     };
-    AssetContext.addAsset(allAssetData)
+    AssetContext.addAsset(allAssetData, fileName, currentUser.uid)
       .then((response) => {
         getEmpAllAsset();
         setEditAsset(false);
-
-        showNotification("success", "Success", "Expense Added");
+        showNotification("success", "Success", "New Laptop Alloctment added");
+        props.refresh();
       })
-      .catch((error) => {});
+      .catch((error) => { 'error' });
 
-    console.log(allAssetData);
+    console.log('ffffffffffff', allAssetData);
   };
 
   useEffect(() => {
@@ -61,6 +72,91 @@ const AllocatedCard = () => {
     }
     console.log(assetData);
   };
+
+  const imgDiv = () => {
+    if (fileName == "" || fileName == null) {
+      return editContent == true ? (
+        <div className="noImage">No Image</div>
+      ) : (
+        <Button
+          className="imgDel"
+          onClick={(e) => handleClick(e)}
+        >
+          <input
+            className="imgInp"
+            style={{
+              display: "none",
+              // border: "1px solid #05445e",
+            }}
+            type="file"
+            id="logo"
+            name="logo"
+            ref={imgRef}
+            onChange={(e) => handleChange(e)}
+          />
+          <UploadOutlined /> Upload Photo
+        </Button>
+      );
+    } else {
+      return (
+        <div
+          className={editContent === false ? "hoverImgCont" : null}
+          style={{
+            position: "relative",
+            width: "150px",
+            height: "170px",
+            // border: "1px solid #05445e"
+          }}
+        >
+          <img
+            src={imageUrl}
+            style={{
+              width: "150px",
+              height: "170px",
+              border: "1px solid #05445e",
+            }}
+          />
+          {editContent === false ? (
+            <div className="imageOverlay">
+              <DeleteOutlined className="hoverIcon" onClick={onReset} />
+            </div>
+          ) : null}
+        </div>
+      );
+    }
+  };
+
+  const handleClick = () => {
+    imgRef.current.click();
+  };
+
+  function checkFileSize(size, fileName) {
+    if (Math.round(size / 1024) <= 200) {
+      setFileName(fileName);
+      setIsBigFile(false);
+    } else {
+      setFileName(null);
+      setIsBigFile(true);
+    }
+  }
+
+  const handleChange = (event) => {
+    if (!event) {
+      return;
+    }
+    const fileUploaded = event.target.files[0];
+    getBase64(fileUploaded, (url) => {
+      // setLoading(false);
+      setImageUrl(url);
+    });
+    checkFileSize(fileUploaded.size, fileUploaded);
+  };
+
+  function onReset() {
+    setIsBigFile(false);
+    setFileName(null);
+    setImageUrl("");
+  }
 
   const images = [{ hutechlogo }, { laptop }, { laptop }];
 
@@ -89,7 +185,7 @@ const AllocatedCard = () => {
                 className="overview"
                 hoverable={true}
                 bordered={true}
-                // loading={loading}
+              // loading={loading}
               >
                 {editAsset === true ? (
                   <>
@@ -136,9 +232,9 @@ const AllocatedCard = () => {
                       </Col>
                       <Col xs={24} sm={12} md={8}>
                         <Form.Item
-                          label="Modal Name"
-                          initialValue={data?.modalName}
-                          name="modalName"
+                          label="Model Name"
+                          initialValue={data?.modelName}
+                          name="modelName"
                           // onKeyPress={(event) => {
                           //   if (checkAlphabets(event)) {
                           //     event.preventDefault();
@@ -171,8 +267,8 @@ const AllocatedCard = () => {
                                 .join(" ");
                               // setPaidBy(newVal);
                               form.setFieldsValue({
-                                modalName: newVal,
-                                modalName: caps,
+                                modelName: newVal,
+                                modelName: caps,
                               });
                             }}
                             placeholder="Enter Model Name"
@@ -296,7 +392,7 @@ const AllocatedCard = () => {
                         </Form.Item>
                       </Col>
                       <Col span={24}>
-                        <Form.Item
+                        {/* <Form.Item
                           label="Upload Photo"
                           // initialValue={
                           //     dob ? moment(dob, "DD-MM-YYYY") : null
@@ -309,14 +405,28 @@ const AllocatedCard = () => {
                             },
                           ]}
                         >
-                          <UploadImage />
-                        </Form.Item>
+                          <UploadImage fileList={setFileList} />
+                        </Form.Item> */}
+                        <Col
+                          className="profileImagediv"
+                          xs={24}
+                          sm={24}
+                          md={7}
+                          lg={6}
+                          xl={6}
+                          xxl={6}
+                        >
+                          {isBigFile
+                            ? message.error("File size must be less than 200Kb.")
+                            : ""}
+                          {imgDiv()}
+                        </Col>
                       </Col>
                     </Row>
                   </>
                 ) : Object.keys([data]).length != 0 ? (
                   <>
-                    <Row span={24} gutter={[16,16]}>
+                    <Row span={24} gutter={[16, 16]}>
                       <Col xs={24} sm={12} md={8}>
                         {addButton === false ? (
                           <div className="lapAllot">Laptop Name </div>
@@ -327,7 +437,7 @@ const AllocatedCard = () => {
                         {addButton === false ? (
                           <div className="lapAllot">Modal Name </div>
                         ) : null}
-                        {data ? data?.modalName : null}
+                        {data ? data?.modelName : null}
                       </Col>
                       <Col xs={24} sm={12} md={8}>
                         {addButton === false ? (
@@ -356,25 +466,26 @@ const AllocatedCard = () => {
                     </Row>
                   </>
                 ) : null}
-                {addButton === true ? (
-                  <>
-                    <Button
-                      type="primary"
-                      style={{
-                        marginLeft: "10px",
-                        background: "#1963a6",
-                        border: "1px solid #1963A6",
-                      }}
-                      onClick={() => {
-                        setEditAsset(true);
-                        setAddButton(false);
-                      }}
-                    >
-                      <PlusCircleOutlined />
-                      Add
-                    </Button>
-                  </>
-                ) : null}
+
+                <>
+                  <Button
+                    type="primary"
+                    style={{
+                      // marginLeft: "10px",
+                      background: "#1963a6",
+                      border: "1px solid #1963A6",
+                      marginTop: '20px'
+                    }}
+                    onClick={() => {
+                      setEditAsset(true);
+                      setAddButton(false);
+                    }}
+                  >
+                    <PlusCircleOutlined />
+                    Add
+                  </Button>
+                </>
+
 
                 {editAsset === true ? (
                   <Row gutter={[16, 16]} className="buttonRow">

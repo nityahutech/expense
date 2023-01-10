@@ -1,10 +1,9 @@
 import LoginPage from "./components/LoginPage";
 import ExpenseFrm from "./components/ExpenceForm";
-import Leave from "./pages/leave/Leave";
+import Leave from "./components/Leave";
 import EmployeeList from "./components/EmployeeList";
 import AddEmployee from "./components/addemployee";
 import ExpenseList from "./components/Expenselist";
-import Attendance from "./pages/Attendance/Attendance";
 import AppraisalHr from "./components/quarterApp/appraisalHomePage";
 import Payslip2 from "./components/ProfileDetails/HrPaySlip";
 import AssetMag from "./components/assetManagement/assetMagHome";
@@ -18,8 +17,20 @@ import "./App.css";
 import FormatPage from "./FormatPage";
 import MainDashBoard from "./components/MainDashBoard";
 import Settingpage from "./components/Settingpage";
+import { useEffect, useState } from "react";
+import AttendanceLog from "./components/AttendanceLog";
 
 function App() {
+  const [roleView, setRoleView] = useState(sessionStorage.getItem("roleView"));
+
+  const switchRole = (role) => {
+    setRoleView(role)
+  }
+
+  useEffect(() => {
+    console.log(roleView)
+  }, [roleView])
+
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -51,8 +62,24 @@ function App() {
               <FormatPage main={<CompanyProfile />} activeMenu={["32"]} />
             }
           />
-          <Route path="/Attendance" element={<Attendance />} />
-          <Route path="/Leave" element={<Leave />} />
+          <Route path="/Attendance" element={
+              <FormatPage
+                main={<AttendanceLog roleView={roleView}/>}
+                activeMenu={["6"]}
+                roleView={roleView}
+                switchRole={switchRole}
+              />
+            }
+          />
+          <Route path="/Leave" element={
+              <FormatPage
+                main={<Leave roleView={roleView}/>}
+                activeMenu={["7"]}
+                roleView={roleView}
+                switchRole={switchRole}
+              />
+            }
+          />
           <Route
             path="/Employee/AddEmployee"
             element={
@@ -141,9 +168,11 @@ function App() {
             path="/Assets"
             element={
               <FormatPage
-                main={<AssetMag />}
+                main={<AssetMag roleView={roleView}/>}
                 activeSubMenu={["sub4"]}
                 activeMenu={["22"]}
+                roleView={roleView}
+                switchRole={switchRole}
               />
             }
           />

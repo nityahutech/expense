@@ -121,7 +121,7 @@ function LaptopAllot() {
     <>
       <div>
         {" "}
-        <AllocatedCard />
+        <AllocatedCard refresh={getAllotmentData} />
       </div>
 
       <div className="laptopDiv">

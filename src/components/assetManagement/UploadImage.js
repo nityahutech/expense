@@ -11,12 +11,13 @@ const getBase64 = (file) =>
         reader.onerror = (error) => reject(error);
     });
 
-const UploadImage = () => {
+const UploadImage = (props) => {
     const [previewVisible, setPreviewVisible] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
-    const [fileList, setFileList] = useState([]);
+    // const [fileList, setFileList] = useState([]);
 
-    const handleChange = ({ fileList }) => setFileList(fileList);
+
+    const handleChange = ({ fileList }) => props.fileList(fileList);
 
 
     const handleCancel = () => setPreviewVisible(false);
@@ -31,8 +32,8 @@ const UploadImage = () => {
     };
     return (
         <>
-            <Upload fileList={fileList} onPreview={handlePreview} onChange={handleChange} listType="picture-card">
-                {fileList.length >= 2 ? null : (
+            <Upload onPreview={handlePreview} onChange={handleChange} listType="picture-card">
+                {props.fileList.length >= 2 ? null : (
                     <PlusOutlined />
                 )}
             </Upload>

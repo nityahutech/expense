@@ -224,7 +224,7 @@ const NewSidebar = (props) => {
                       key="6"
                     >
                       <p className="sideFont">Attendance</p>
-                      <NavLink to="/Attendance" />
+                      <NavLink className="navLink" to="/Attendance" />
                     </Menu.Item>
                     <Menu.Item
                       icon={

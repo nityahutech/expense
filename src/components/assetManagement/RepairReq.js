@@ -20,8 +20,9 @@ import RepairRequestTable from "./RepairRequestTable";
 import AllocatedCard from "./AllocatedCard";
 import AssetContext from "../../contexts/AssetContext";
 import { capitalize, showNotification } from "../../contexts/CreateContext";
+import moment from "moment";
 
-function LaptopAllot() {
+function LaptopAllot(props) {
   const [form] = Form.useForm();
   const [file, setFile] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
@@ -42,7 +43,7 @@ function LaptopAllot() {
       lapname: values.lapname,
       modelName: values.modelName,
       serialNum: values.serialNum,
-      dateOfRepair: values.dateOfRepair.format("DD-MM-YYYY"),
+      dateOfRepair: moment().format("DD-MM-YYYY"),
       repairDes: values.repairDes,
       empId: currentUser.uid,
       type: values.option,
@@ -51,7 +52,9 @@ function LaptopAllot() {
     AssetContext.addRepairRequest(allUpgradeData)
       .then(async (response) => {
         showNotification("success", "Success", "Repair Request Added");
+        props.getData();
         getAllotmentData();
+        setSelectedOption(false);
       })
       .catch((error) => {
         console.log("error:", error);
@@ -171,6 +174,7 @@ function LaptopAllot() {
                 <>
                   <Col span={12}>
                     <FormItem
+                      style={{ display: "none" }}
                       name="lapname"
                       label="Laptop Name"
                       initialValue={allotmentData[0]?.lapname}
@@ -180,6 +184,7 @@ function LaptopAllot() {
                   </Col>
                   <Col span={12}>
                     <FormItem
+                      style={{ display: "none" }}
                       name="modelName"
                       label="Model"
                       initialValue={allotmentData[0]?.modelName}
@@ -189,6 +194,7 @@ function LaptopAllot() {
                   </Col>
                   <Col span={12}>
                     <FormItem
+                      style={{ display: "none" }}
                       name="serialNum"
                       label="Serial Number"
                       initialValue={allotmentData[0]?.serialNum}
@@ -204,17 +210,10 @@ function LaptopAllot() {
                           ? "Date Of Repairing Request"
                           : "Date of upgrading request"
                       }
-                      placeholder="Choose Date"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please Choose a Date",
-                        },
-                      ]}
                     >
                       <DatePicker
                         format={"DD-MM-YYYY"}
-                        placeholder="Choose Date"
+                        defaultValue={moment()}
                         style={divStyle}
                       />
                     </Form.Item>

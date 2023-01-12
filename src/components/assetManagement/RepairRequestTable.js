@@ -23,25 +23,7 @@ import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/lib/input/TextArea";
 import "./RepairRequestTable.css";
 import AssetContext from "../../contexts/AssetContext";
-
-const dataSource = [
-  {
-    key: "1",
-    date: "29/12/2022",
-    serNum: "ADFG555",
-    reason: "Black Screen",
-    status: "Pending",
-    repairUpgarde: "Repair",
-  },
-  {
-    key: "1",
-    date: "29/12/2022",
-    serNum: "ADFG555",
-    reason: "Black Screen",
-    status: "Approved",
-    repairUpgarde: "Upgrade",
-  },
-];
+import ViewRequestType from "./ViewRequestType";
 
 const divStyle = {
   border: "1px solid #8692A6",
@@ -102,11 +84,12 @@ const modalContent2 = {
   borderRadius: "10px",
 };
 
-const RepairRequestTable = () => {
-  console.log("RepairRequestTable props::,");
+const RepairRequestTable = (props) => {
+  // console.log("RepairRequestTable props::,");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [repairLaptopData, setRepairLaptopData] = useState([]);
-
+  const [repairLaptopData, setRepairLaptopData] = useState(props.data);
+  // console.log(repairLaptopData);
+  const [modalData, setModalData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const iframeRef = useRef(null);
@@ -117,8 +100,9 @@ const RepairRequestTable = () => {
     setIsEditModalOpen(true);
   };
 
-  function openModal() {
+  function openModal(data) {
     setIsModalOpen(true);
+    setModalData(data);
   }
 
   function closeModal() {
@@ -126,13 +110,14 @@ const RepairRequestTable = () => {
   }
 
   useEffect(() => {
-    getRepairData();
-  }, []);
+    setRepairLaptopData(props.data);
+    // console.log(getRepairData);
+  }, [props.data]);
 
-  const getRepairData = async () => {
-    let repairData = await AssetContext.getRepairData(currentUser.uid);
-    setRepairLaptopData(repairData);
-  };
+  // const getRepairData = async () => {
+  //   let repairData = await AssetContext.getRepairData(currentUser.uid);
+  //   setRepairLaptopData(repairData);
+  // };
 
   const onFinish = (values) => {
     console.log(values, "values");
@@ -214,18 +199,18 @@ const RepairRequestTable = () => {
             className="employee-button"
             style={{ display: "flex", flexDirection: "row" }}
           >
-            {record.type === "Repair" ? (
-              <Button
-                type="link"
-                className="show"
-                onClick={() => {
-                  openModal(record);
-                }}
-              >
-                {<EyeFilled />}
-              </Button>
-            ) : null}
             <Button
+              type="link"
+              className="show"
+              onClick={() => {
+                openModal(record);
+              }}
+            >
+              {<EyeFilled />}
+            </Button>
+
+            <Button
+              disabled={record.status == "Approved"}
               style={{ padding: 0, color: "rgb(64, 169, 255)" }}
               type="link"
               className="show"
@@ -233,14 +218,24 @@ const RepairRequestTable = () => {
                 showModal(record);
               }}
             >
-              {<EditFilled onClick={() => {}} />}
+              {
+                <EditFilled
+                  onClick={() => {}}
+                  disabled={record.status == "Approved"}
+                />
+              }
             </Button>
 
-            <Button type="link" className="deleTe">
+            <Button
+              disabled={record.status == "Approved"}
+              type="link"
+              className="deleTe"
+            >
               <DeleteFilled
                 onClick={() => {
                   onDeleteUpdateRepair(record);
                 }}
+                disabled={record.status == "Approved"}
               />
             </Button>
           </div>
@@ -363,28 +358,26 @@ const RepairRequestTable = () => {
           </Row>
         </Form>
       </Modal>
-      {isModalOpen && (
-        <div className="modal" style={modal}>
-          <div style={modalContent}>
-            {/* <Button onClick={handleNextClick}>Next</Button> */}
-            <iframe
-              style={modalContent2}
-              className="modal-content"
-              ref={iframeRef}
-              src=""
-            >
-              {" "}
-            </iframe>
-            <Button
-              style={{ margin: "10px" }}
-              type="primary"
-              onClick={closeModal}
-            >
-              Close Modal
-            </Button>
+      <Modal
+        centered
+        open={isModalOpen}
+        footer={null}
+        title="REQUEST DETAILS"
+        closeIcon={
+          <div
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+          >
+            X
           </div>
-        </div>
-      )}
+        }
+      >
+        <ViewRequestType
+          setIsModalOpen={setIsModalOpen}
+          modalData={modalData}
+        />
+      </Modal>
     </>
   );
 };

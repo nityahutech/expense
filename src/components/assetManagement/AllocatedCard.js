@@ -15,6 +15,7 @@ import AssetContext from "../../contexts/AssetContext";
 import moment from "moment";
 import "../assetManagement/AllRequest.css";
 import "../assetManagement/AllocatedCard.css"
+import FormItem from "antd/es/form/FormItem";
 const { Option } = Select;
 
 const AllocatedCard = (props) => {
@@ -44,21 +45,24 @@ const AllocatedCard = (props) => {
       DoI: values.DoI.format("DD-MM-YYYY"),
       lapBag: values.lapBag,
       empId: currentUser.uid,
-      // photo: values.photo,
       type: "Allotment",
-      photo: imageUrl || null,
+      photo: imageUrl,
     };
-    AssetContext.addAsset(allAssetData, fileName, currentUser.uid)
-      .then((response) => {
-        getEmpAllAsset();
-        setEditAsset(false);
-        showNotification("success", "Success", "New Laptop Alloctment added");
-        props.refresh();
-      })
-      .catch((error) => { 'error' });
+    try {
+      AssetContext.addAsset(allAssetData, fileName, currentUser.uid)
+        .then((response) => {
+          showNotification("success", "Success", "New Laptop Alloctment added");
+          getEmpAllAsset();
+          setEditAsset(false);
 
-    console.log('ffffffffffff', allAssetData);
-  };
+          props.refresh();
+        })
+        .catch((error) => { 'error' })
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     getEmpAllAsset();
@@ -67,6 +71,8 @@ const AllocatedCard = (props) => {
   const getEmpAllAsset = async () => {
     let assetData = await AssetContext.getEmpAllot(currentUser.uid);
     setData(assetData[0]);
+    setFileName(assetData[0].upload);
+    setImageUrl(assetData[0].upload);
     if (assetData.length > 0) {
       setAddButton(false);
     }
@@ -74,6 +80,7 @@ const AllocatedCard = (props) => {
   };
 
   const imgDiv = () => {
+    console.log(fileName, imageUrl)
     if (fileName == "" || fileName == null) {
       return editContent == true ? (
         <div className="noImage">No Image</div>
@@ -94,7 +101,9 @@ const AllocatedCard = (props) => {
             ref={imgRef}
             onChange={(e) => handleChange(e)}
           />
+
           <UploadOutlined /> Upload Photo
+
         </Button>
       );
     } else {
@@ -227,6 +236,7 @@ const AllocatedCard = (props) => {
                             placeholder="Enter Laptop Name"
                             bordered={false}
                             className="laptopInp"
+
                           />
                         </Form.Item>
                       </Col>
@@ -391,99 +401,99 @@ const AllocatedCard = (props) => {
                           </Select>
                         </Form.Item>
                       </Col>
-                      <Col span={24}>
-                        {/* <Form.Item
-                          label="Upload Photo"
-                          // initialValue={
-                          //     dob ? moment(dob, "DD-MM-YYYY") : null
-                          // }
-                          name="photo"
-                          rules={[
-                            {
-                              required: false,
-                              message: "Please Choose a Date",
-                            },
-                          ]}
-                        >
-                          <UploadImage fileList={setFileList} />
-                        </Form.Item> */}
-                        <Col
-                          className="profileImagediv"
-                          xs={24}
-                          sm={24}
-                          md={7}
-                          lg={6}
-                          xl={6}
-                          xxl={6}
-                        >
+
+
+                      <Col span={24}
+                        className="profileImagediv"
+                        xs={24}
+                        sm={24}
+                        md={7}
+                        lg={6}
+                        xl={6}
+                        xxl={6}
+                      >
+                        <FormItem>
                           {isBigFile
                             ? message.error("File size must be less than 200Kb.")
                             : ""}
                           {imgDiv()}
-                        </Col>
+                        </FormItem>
                       </Col>
+
                     </Row>
                   </>
                 ) : Object.keys([data]).length != 0 ? (
                   <>
                     <Row span={24} gutter={[16, 16]}>
                       <Col xs={24} sm={12} md={8}>
-                        {addButton === false ? (
+                        {addButton === true ? (
                           <div className="lapAllot">Laptop Name </div>
                         ) : null}
                         {data ? data?.lapname : null}
                       </Col>
                       <Col xs={24} sm={12} md={8}>
-                        {addButton === false ? (
+                        {addButton === true ? (
                           <div className="lapAllot">Modal Name </div>
                         ) : null}
                         {data ? data?.modelName : null}
                       </Col>
                       <Col xs={24} sm={12} md={8}>
-                        {addButton === false ? (
+                        {addButton === true ? (
                           <div className="lapAllot">Serial Number </div>
                         ) : null}
                         {data ? data?.serialNum : null}
                       </Col>
                       <Col xs={24} sm={12} md={8}>
-                        {addButton === false ? (
+                        {addButton === true ? (
                           <div className="lapAllot">Charger </div>
                         ) : null}
                         {data ? data?.charger : null}
                       </Col>
                       <Col xs={24} sm={12} md={8}>
-                        {addButton === false ? (
+                        {addButton === true ? (
                           <div className="lapAllot">Date of Issue </div>
                         ) : null}
                         {data ? data?.DoI : null}
                       </Col>
                       <Col xs={24} sm={12} md={8}>
-                        {addButton === false ? (
+                        {addButton === true ? (
                           <div className="lapAllot">Laptop Bag </div>
                         ) : null}
                         {data ? data?.lapBag : null}
                       </Col>
+                      <Col xs={24} sm={12} md={8}>
+                        {addButton === true ? (
+                          <div className="noImage">No Image</div>
+                        ) : null}
+                      </Col>
+
+
                     </Row>
                   </>
                 ) : null}
 
                 <>
-                  <Button
-                    type="primary"
-                    style={{
-                      // marginLeft: "10px",
-                      background: "#1963a6",
-                      border: "1px solid #1963A6",
-                      marginTop: '20px'
-                    }}
-                    onClick={() => {
-                      setEditAsset(true);
-                      setAddButton(false);
-                    }}
-                  >
-                    <PlusCircleOutlined />
-                    Add
-                  </Button>
+                  {editAsset === false ? (
+                    <Button
+                      type="primary"
+                      style={{
+                        // marginLeft: "10px",
+                        background: "#1963a6",
+                        border: "1px solid #1963A6",
+                        marginTop: '20px'
+                      }}
+                      onClick={() => {
+                        setEditAsset(true);
+                        setAddButton(false);
+                      }}
+                    >
+                      <PlusCircleOutlined />
+                      Add
+                    </Button>
+
+                  ) : null}
+
+
                 </>
 
 

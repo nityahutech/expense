@@ -1,15 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs } from "antd";
 import AllRequest from "./AllRequest";
 import Requestpage from "./RepairReq";
 import InvoiceReimbursement from "./InvoiceReimbursement";
 import "./AssetManag.css";
+import AssetContext from "../../contexts/AssetContext";
 import RepairRequestTable from "./RepairRequestTable";
 
-function assetMagHome(props) {
+function AssetMagHome(props) {
+  const [repairLaptopData, setRepairLaptopData] = useState([]);
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const role = sessionStorage.getItem("role");
   const isHr =
     role == "super" ? false : sessionStorage.getItem("isHr") == "true";
+
+  useEffect(() => {
+    getRepairData();
+    // console.log(getRepairData);
+  }, []);
+
+  const getRepairData = async () => {
+    let repairData = await AssetContext.getRepairData(currentUser.uid);
+    console.log("values", repairData);
+    setRepairLaptopData(repairData);
+  };
 
   return (
     <div className="primarydiva">
@@ -28,12 +42,12 @@ function assetMagHome(props) {
           <>
             <Tabs.TabPane tab="All Request" key="1">
               <RepairRequestTable
+                data={repairLaptopData}
                 roleView={props.roleView}
-                repairLaptopData={props.repairLaptopData}
               />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Request Form" key="2">
-              <Requestpage roleView={props.roleView} />
+              <Requestpage roleView={props.roleView} getData={getRepairData} />
             </Tabs.TabPane>
           </>
         )}
@@ -42,4 +56,4 @@ function assetMagHome(props) {
   );
 }
 
-export default assetMagHome;
+export default AssetMagHome;

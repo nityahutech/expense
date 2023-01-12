@@ -19,7 +19,7 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
-import "../../style/BankAccount.css";
+// import "../../style/BankAccount.css";
 import "./Personal.css";
 import moment from "moment";
 import {
@@ -220,7 +220,7 @@ function Personal() {
     wrapperCol: {
       xs: { span: 24 },
       sm: { span: 24 },
-      md: { span: 24 },
+      md: { span: 12 },
       lg: { span: 24 },
       xl: { span: 24 },
     },
@@ -229,14 +229,14 @@ function Personal() {
     labelCol: {
       xs: { span: 24 },
       sm: { span: 12 },
-      md: { span: 6 },
+      md: { span: 12 },
       lg: { span: 10 },
       xl: { span: 10 },
     },
     wrapperCol: {
       xs: { span: 24 },
       sm: { span: 24 },
-      md: { span: 24 },
+      md: { span: 12 },
       lg: { span: 24 },
       xl: { span: 24 },
     },
@@ -252,28 +252,27 @@ function Personal() {
     wrapperCol: {
       xs: { span: 24 },
       sm: { span: 24 },
-      md: { span: 24 },
-      lg: { span: 24 },
-      xl: { span: 24 },
+      md: { span: 12 },
+      lg: { span: 12 },
+      xl: { span: 12 },
     },
   };
   const layoutMaritalStatus = {
     labelCol: {
       xs: { span: 24 },
       sm: { span: 12 },
-      md: { span: 12 },
+      md: { span: 14 },
       lg: { span: 10 },
       xl: { span: 10 },
     },
     wrapperCol: {
       xs: { span: 24 },
       sm: { span: 24 },
-      md: { span: 24 },
+      md: { span: 12 },
       lg: { span: 24 },
       xl: { span: 24 },
     },
   };
-
   const imgDiv = () => {
     if (fileName == "" || fileName == null) {
       return editContent == false ? (

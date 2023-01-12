@@ -273,7 +273,6 @@ function Personal() {
       xl: { span: 24 },
     },
   };
-
   const imgDiv = () => {
     if (fileName == "" || fileName == null) {
       return editContent == false ? (

@@ -36,8 +36,11 @@ class AssetContext {
         getDownloadURL(snapshot.ref).then((url) => {
           newLaptop.upload = url;
           newLaptop.fileName = file.name
-          addDoc(collection(db, compId != "undefined" ? `companyprofile/${compId}/assets` : "admins/assets"), newLaptop)
-          return Promise.resolve();
+
+          addDoc(collection(db, compId != "undefined" ? `companyprofile/${compId}/assets` : "admins/assets"), newLaptop).then((response) => {
+            return Promise.resolve();
+          })
+
         })
       });
     } else {

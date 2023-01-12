@@ -40,9 +40,9 @@ function LaptopAllot(props) {
   const onFinish = (values) => {
     form.resetFields();
     const allUpgradeData = {
-      lapname: values.lapname,
-      modelName: values.modelName,
-      serialNum: values.serialNum,
+      // lapname: values.lapname,
+      // modelName: values.modelName,
+      // serialNum: values.serialNum,
       dateOfRepair: moment().format("DD-MM-YYYY"),
       repairDes: values.repairDes,
       empId: currentUser.uid,
@@ -80,8 +80,8 @@ function LaptopAllot(props) {
   };
 
   const resetButton = {
-    border: "1px solid #1565D8",
-    color: "#1565D8",
+    border: "1px solid #1963a6",
+    color: "#1963a6",
     fontWeight: "600",
     fontSize: "14px",
     lineHeight: "17px",
@@ -90,8 +90,8 @@ function LaptopAllot(props) {
     cursor: "pointer",
   };
   const submitButton = {
-    border: "1px solid #1565D8",
-    background: "#1565D8",
+    border: "1px solid #1963a6",
+    background: "#1963a6",
     color: "#ffffff",
     fontWeight: "600",
     fontSize: "14px",
@@ -156,7 +156,7 @@ function LaptopAllot(props) {
                   {/* <Switch checkedChildren="Upgrade Form" unCheckedChildren="Repair Form" checked={selectedOption === 'upgrade'} onChange={() => setSelectedOption(selectedOption === 'repair' ? 'upgrade' : 'repair')} /> */}
                   <Select
                     placeholder="Select an option"
-                    style={{ width: "40%" }}
+                    style={{ width: "39%" }}
                     onChange={(selectedOption) =>
                       setSelectedOption(selectedOption)
                     }
@@ -172,37 +172,7 @@ function LaptopAllot(props) {
               {(selectedOption === "Repair" ||
                 selectedOption === "Upgrade") && (
                 <>
-                  <Col span={12}>
-                    <FormItem
-                      style={{ display: "none" }}
-                      name="lapname"
-                      label="Laptop Name"
-                      initialValue={allotmentData[0]?.lapname}
-                    >
-                      <Input disabled style={divStyle} span={6} />
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem
-                      style={{ display: "none" }}
-                      name="modelName"
-                      label="Model"
-                      initialValue={allotmentData[0]?.modelName}
-                    >
-                      <Input disabled style={divStyle} />
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem
-                      style={{ display: "none" }}
-                      name="serialNum"
-                      label="Serial Number"
-                      initialValue={allotmentData[0]?.serialNum}
-                    >
-                      <Input disabled style={divStyle} />
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
+                  <Col span={10}>
                     <Form.Item
                       name="dateOfRepair"
                       label={

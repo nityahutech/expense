@@ -39,10 +39,12 @@ class AssetContext {
           newLaptop.empId
         }/files/${file.name}`
       );
+
       uploadBytesResumable(storageRef, file).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
           newLaptop.upload = url;
           newLaptop.fileName = file.name;
+
           addDoc(
             collection(
               db,

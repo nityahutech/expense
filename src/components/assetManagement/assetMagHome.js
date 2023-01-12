@@ -43,6 +43,7 @@ function AssetMagHome(props) {
             <Tabs.TabPane tab="All Request" key="1">
               <RepairRequestTable
                 data={repairLaptopData}
+                getData={getRepairData}
                 roleView={props.roleView}
               />
             </Tabs.TabPane>

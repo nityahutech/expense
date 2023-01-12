@@ -6,10 +6,12 @@ import {
   Card,
   message,
   Tag,
-  Form,
   Row,
   Col,
   Input,
+  Form,
+  Space,
+  Tooltip,
 } from "antd";
 import {
   DeleteFilled,
@@ -19,33 +21,17 @@ import {
   CloseOutlined,
 } from "@ant-design/icons";
 import "../../components/assetManagement/RepairRequest.css";
-import FormItem from "antd/es/form/FormItem";
-import TextArea from "antd/lib/input/TextArea";
 import "./RepairRequestTable.css";
 import AssetContext from "../../contexts/AssetContext";
 import ViewRequestType from "./ViewRequestType";
+import { showNotification } from "../../contexts/CreateContext";
+
+const { TextArea } = Input;
 
 const divStyle = {
   border: "1px solid #8692A6",
   borderRadius: "4px",
   width: "100%",
-};
-
-const onDeleteUpdateRepair = (record) => {
-  Modal.confirm({
-    title: "Are you sure, you want to delete Laptop Update/Repair Record?",
-    okText: "Yes",
-    okType: "danger",
-    // onOk: () => {
-    //     CompanyHolidayContext.deleteHoliday(newHoliday.id, "compId001")
-    //         .then(response => {
-    //             props.refreshCalendar();
-    //             getData();
-    //         })
-    //         .catch(error => {
-    //         })
-    // },
-  });
 };
 
 const modal = {
@@ -92,12 +78,16 @@ const RepairRequestTable = (props) => {
   const [modalData, setModalData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
+  const [form1] = Form.useForm();
   const iframeRef = useRef(null);
   const [file, setFile] = useState("");
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
-  const showModal = () => {
+  const showModal = (data) => {
     setIsEditModalOpen(true);
+    form1.resetFields();
+    setModalData(data);
+    // setRepairLaptopData(repairLaptopData);
   };
 
   function openModal(data) {
@@ -119,10 +109,48 @@ const RepairRequestTable = (props) => {
   //   setRepairLaptopData(repairData);
   // };
 
+  const onDeleteUpdateRepair = (record) => {
+    Modal.confirm({
+      title: "Are you sure, you want to delete Laptop Update/Repair Record?",
+      okText: "Yes",
+      okType: "danger",
+      onOk: () => {
+        AssetContext.deleteRepairData(record.id)
+          .then((response) => {
+            props.getData();
+          })
+          .catch((error) => {});
+      },
+    });
+  };
+
   const onFinish = (values) => {
     console.log(values, "values");
-    form.resetFields();
+    console.log(modalData);
+    // form1.resetFields();
+    const updateData = {
+      repairDes: values.repairDes,
+    };
+
+    AssetContext.updateRepairData(modalData.id, updateData)
+      .then(() => {
+        showNotification("success", "Success", "Edit Successful");
+        props.getData();
+      })
+      .catch(() => {
+        showNotification("error", "Error", "Failed to edit");
+      });
+
+    setIsEditModalOpen(false);
+
+    // setModalData();
   };
+
+  function onReset() {
+    setIsEditModalOpen(false);
+    form1.resetFields();
+    setModalData();
+  }
 
   function handleChange(event) {
     let file = event.target.files[0];
@@ -192,52 +220,103 @@ const RepairRequestTable = (props) => {
       dataIndex: "operation",
       key: "operation",
       width: 100,
-      align: "left",
+      align: "center",
       render: (_, record) => (
         <>
           <div
             className="employee-button"
             style={{ display: "flex", flexDirection: "row" }}
           >
-            <Button
-              type="link"
-              className="show"
-              onClick={() => {
-                openModal(record);
-              }}
-            >
-              {<EyeFilled />}
-            </Button>
-
-            <Button
-              disabled={record.status == "Approved"}
-              style={{ padding: 0, color: "rgb(64, 169, 255)" }}
-              type="link"
-              className="show"
-              onClick={() => {
-                showModal(record);
-              }}
-            >
-              {
-                <EditFilled
-                  onClick={() => {}}
+            <Tooltip placement="bottom" title="View" color="#1963A6">
+              <Button
+                type="link"
+                className="show"
+                onClick={() => {
+                  openModal(record);
+                }}
+              >
+                {<EyeFilled style={{ color: "#1890ff" }} />}
+              </Button>
+            </Tooltip>
+            {record.status == "Approved" ? (
+              <Button
+                disabled={record.status == "Approved"}
+                style={{ padding: 0, color: "rgb(64, 169, 255)" }}
+                type="link"
+                className="show"
+                onClick={() => {
+                  showModal(record);
+                }}
+              >
+                {
+                  <EditFilled
+                    style={
+                      record.status == "Approved"
+                        ? { color: "lightgray" }
+                        : null
+                    }
+                    disabled={record.status == "Approved"}
+                  />
+                }
+              </Button>
+            ) : (
+              <Tooltip placement="bottom" title="Edit" color="#1963A6">
+                <Button
+                  disabled={record.status == "Approved"}
+                  style={{ padding: 0, color: "rgb(64, 169, 255)" }}
+                  type="link"
+                  className="show"
+                  onClick={() => {
+                    showModal(record);
+                  }}
+                >
+                  {
+                    <EditFilled
+                      style={
+                        record.status == "Approved"
+                          ? { color: "lightgray" }
+                          : null
+                      }
+                      disabled={record.status == "Approved"}
+                    />
+                  }
+                </Button>
+              </Tooltip>
+            )}
+            {record.status == "Approved" ? (
+              <Button
+                disabled={record.status == "Approved"}
+                type="link"
+                className="deleTe"
+              >
+                <DeleteFilled
+                  style={
+                    record.status == "Approved" ? { color: "lightgray" } : null
+                  }
                   disabled={record.status == "Approved"}
                 />
-              }
-            </Button>
-
-            <Button
-              disabled={record.status == "Approved"}
-              type="link"
-              className="deleTe"
-            >
-              <DeleteFilled
-                onClick={() => {
-                  onDeleteUpdateRepair(record);
-                }}
-                disabled={record.status == "Approved"}
-              />
-            </Button>
+              </Button>
+            ) : (
+              <Tooltip placement="bottom" title="Delete" color="#1963A6">
+                <Button
+                  disabled={record.status == "Approved"}
+                  type="link"
+                  className="deleTe"
+                >
+                  <DeleteFilled
+                    onClick={() => {
+                      onDeleteUpdateRepair(record);
+                    }}
+                    style={
+                      record.status == "Approved"
+                        ? { color: "lightgray" }
+                        : null
+                    }
+                    disabled={record.status == "Approved"}
+                  />
+                </Button>
+              </Tooltip>
+            )}
           </div>
         </>
       ),
@@ -263,34 +342,20 @@ const RepairRequestTable = (props) => {
         </Card>
       </div>
       <Modal
-        title="Edit Repair / Update Request"
+        title="Edit"
         open={isEditModalOpen}
         onCancel={() => {
           setIsEditModalOpen(false);
-          form.resetFields();
         }}
-        cancelText={
-          <div className="cancel">
-            <CloseOutlined style={{ marginRight: "10px" }} />
-            CANCEL
-          </div>
-        }
         centered
+        destroyOnClose
         className="updateModal"
-        onOk={() => {
-          form.submit();
-        }}
-        okText={
-          <div className="save">
-            <CheckOutlined style={{ marginRight: "10px" }} />
-            SAVE
-          </div>
-        }
+        footer={null}
         closeIcon={
           <div
             onClick={() => {
               setIsEditModalOpen(false);
-              form.resetFields();
+              form1.resetFields();
             }}
             style={{ color: "#ffff" }}
           >
@@ -300,7 +365,7 @@ const RepairRequestTable = (props) => {
       >
         <Form
           className="addEmp"
-          form={form}
+          form={form1}
           layout="vertical"
           labelcol={{
             span: 4,
@@ -317,7 +382,8 @@ const RepairRequestTable = (props) => {
           <Row gutter={[32, 0]}>
             <Col span={24}>
               <Form.Item
-                name="reasonreapir"
+                initialValue={modalData?.repairDes}
+                name="repairDes"
                 label="Reason"
                 rules={[
                   {
@@ -330,7 +396,7 @@ const RepairRequestTable = (props) => {
                 ]}
               >
                 <TextArea
-                  Rows={4}
+                  rows={4}
                   maxLength={100}
                   autoSize={{ minRows: 4, maxRows: 4 }}
                   placeholder="Max 100 Words"
@@ -338,8 +404,8 @@ const RepairRequestTable = (props) => {
                 />
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <FormItem
+            <Col span={24}>
+              <Form.Item
                 name="photoreapir"
                 label="Upload photos if (Physical Damage)"
               >
@@ -353,12 +419,54 @@ const RepairRequestTable = (props) => {
                     style={{ borderRadius: "5px" }}
                   />
                 </div>
-              </FormItem>
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row-reverse",
+                  marginRight: "4px",
+                  marginTop: "15px",
+                }}
+              >
+                <Space>
+                  <Button
+                    style={{
+                      border: "1px solid #1963a6",
+                      color: "#1963a6",
+                      fontWeight: "600",
+                      fontSize: "14px",
+                      lineHeight: "17px",
+                      width: "99px",
+                    }}
+                    onClick={onReset}
+                  >
+                    CANCEL
+                  </Button>
+
+                  <Button
+                    style={{
+                      border: "1px solid #1963a6",
+                      background: "#1963a6",
+                      color: "#ffffff",
+                      fontWeight: "600",
+                      fontSize: "14px",
+                      lineHeight: "17px",
+                      width: "99px",
+                    }}
+                    htmlType="submit"
+                  >
+                    SAVE
+                  </Button>
+                </Space>
+              </div>
             </Col>
           </Row>
         </Form>
       </Modal>
       <Modal
+        destroyOnClose
         centered
         open={isModalOpen}
         footer={null}
@@ -368,10 +476,12 @@ const RepairRequestTable = (props) => {
             onClick={() => {
               setIsModalOpen(false);
             }}
+            style={{ color: "#ffff" }}
           >
             X
           </div>
         }
+        className="updateModal"
       >
         <ViewRequestType
           setIsModalOpen={setIsModalOpen}

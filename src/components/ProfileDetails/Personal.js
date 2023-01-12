@@ -254,7 +254,7 @@ function Personal() {
       sm: { span: 24 },
       md: { span: 12 },
       lg: { span: 12 },
-      xl: { span: 12 },
+      xl: { span: 16 },
     },
   };
   const layoutMaritalStatus = {

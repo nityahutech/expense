@@ -9,8 +9,10 @@ import {
   setDoc,
   orderBy,
   doc,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL, } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { async } from "@firebase/util";
 
 const compId = sessionStorage.getItem("compId");
@@ -31,27 +33,38 @@ class AssetContext {
 
   addAsset = (newLaptop, file) => {
     if (file) {
-      const storageRef = ref(storage, `/${compId != "undefined" ? compId : "admins"}/${newLaptop.empId}/files/${file.name}`);
+      const storageRef = ref(
+        storage,
+        `/${compId != "undefined" ? compId : "admins"}/${
+          newLaptop.empId
+        }/files/${file.name}`
+      );
       uploadBytesResumable(storageRef, file).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
           newLaptop.upload = url;
-          newLaptop.fileName = file.name
-          addDoc(collection(db, compId != "undefined" ? `companyprofile/${compId}/assets` : "admins/assets"), newLaptop)
+          newLaptop.fileName = file.name;
+          addDoc(
+            collection(
+              db,
+              compId != "undefined"
+                ? `companyprofile/${compId}/assets`
+                : "admins/assets"
+            ),
+            newLaptop
+          );
           return Promise.resolve();
-        })
+        });
       });
     } else {
       newLaptop.upload = null;
-      addDoc(companyAssetCollectionRef, newLaptop)
+      addDoc(companyAssetCollectionRef, newLaptop);
       return Promise.resolve();
     }
   };
 
-
   addRepairRequest = async (repairRequestData) => {
     return addDoc(companyAssetCollectionRef, repairRequestData);
   };
-
 
   getRepairData = async (id) => {
     const q = query(
@@ -69,6 +82,16 @@ class AssetContext {
       };
     });
     return rec;
+  };
+
+  updateRepairData = (id, updateRepair) => {
+    updateDoc(doc(companyAssetCollectionRef, id), updateRepair);
+    return Promise.resolve();
+  };
+
+  deleteRepairData = (id) => {
+    const deleteData = doc(companyAssetCollectionRef, id);
+    return deleteDoc(deleteData);
   };
 
   //---------------------------------------------------------------

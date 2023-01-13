@@ -9,6 +9,8 @@ import RepairRequestTable from "./RepairRequestTable";
 
 function AssetMagHome(props) {
   const [repairLaptopData, setRepairLaptopData] = useState([]);
+  const [laptopAllot, setLaptopAllot] = useState(props.refresh);
+  console.log(props.refresh);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const role = sessionStorage.getItem("role");
   const isHr =
@@ -16,22 +18,35 @@ function AssetMagHome(props) {
 
   useEffect(() => {
     getRepairData();
+    // setLaptopAllot(props.refresh);
     // console.log(getRepairData);
-  }, []);
+  }, [props.roleView]);
 
   const getRepairData = async () => {
-    let repairData = await AssetContext.getRepairData(currentUser.uid);
+    const typeValues =
+      props.roleView == "admin"
+        ? ["Repair", "Upgrade", "Allotment"]
+        : ["Repair", "Upgrade"];
+    let repairData = await AssetContext.getRepairData(
+      currentUser.uid,
+      typeValues
+    );
     console.log("values", repairData);
     setRepairLaptopData(repairData);
   };
-
+  console.log("props.roleView::: ", props.roleView);
   return (
     <div className="primarydiva">
       <Tabs defaultActiveKey="1" className="assetTabs">
         {props.roleView == "admin" ? (
           <>
             <Tabs.TabPane tab="Laptop Request" key="1">
-              <AllRequest roleView={props.roleView} />
+              <AllRequest
+                roleView={props.roleView}
+                getData={getRepairData}
+                data={repairLaptopData}
+                allot={laptopAllot}
+              />
             </Tabs.TabPane>
 
             <Tabs.TabPane tab="Invoice Reimbursement" key="2">

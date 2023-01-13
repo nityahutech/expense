@@ -40,9 +40,9 @@ function LaptopAllot(props) {
   const onFinish = (values) => {
     form.resetFields();
     const allUpgradeData = {
-      // lapname: values.lapname,
-      // modelName: values.modelName,
-      // serialNum: values.serialNum,
+      lapname: values.lapname,
+      modelName: values.modelName,
+      serialNum: values.serialNum,
       dateOfRepair: moment().format("DD-MM-YYYY"),
       repairDes: values.repairDes,
       empId: currentUser.uid,
@@ -68,9 +68,11 @@ function LaptopAllot(props) {
   }, []);
 
   const getAllotmentData = async () => {
-    let allData = await AssetContext.getEmpAllot(currentUser.uid);
+    let allData = await AssetContext.getRepairData(currentUser.uid, [
+      "Allotment",
+    ]);
     setAllotmentData(allData);
-    console.log(allData, "ektadewangan");
+    console.log(setAllotmentData, "ektadewangan");
   };
 
   const divStyle = {
@@ -119,12 +121,13 @@ function LaptopAllot(props) {
     }
     setFile(event.target.files[0]);
   }
+  console.log(allotmentData);
 
   return (
     <>
       <div>
         {" "}
-        <AllocatedCard refresh={getAllotmentData} />
+        <AllocatedCard refresh={allotmentData} />;
       </div>
 
       <div className="laptopDiv">
@@ -188,6 +191,37 @@ function LaptopAllot(props) {
                       />
                     </Form.Item>
                   </Col>
+                  <Col span={12}>
+                    <FormItem
+                      style={{ display: "none" }}
+                      name="lapname"
+                      label="Laptop Name"
+                      initialValue={allotmentData[0]?.lapname}
+                    >
+                      <Input disabled style={divStyle} span={6} />
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem
+                      style={{ display: "none" }}
+                      name="modelName"
+                      label="Model"
+                      initialValue={allotmentData[0]?.modelName}
+                    >
+                      <Input disabled style={divStyle} />
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem
+                      style={{ display: "none" }}
+                      name="serialNum"
+                      label="Serial Number"
+                      initialValue={allotmentData[0]?.serialNum}
+                    >
+                      <Input disabled style={divStyle} />
+                    </FormItem>
+                  </Col>
+
                   <Col span={24}>
                     <Form.Item
                       name="repairDes"

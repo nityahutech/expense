@@ -38,29 +38,33 @@ function LaptopAllot(props) {
   };
 
   const onFinish = (values) => {
+    console.log('ffffff', values)
     form.resetFields();
     const allUpgradeData = {
-      // lapname: values.lapname,
-      // modelName: values.modelName,
-      // serialNum: values.serialNum,
+      lapname: values.lapname,
+      modelName: values.modelName,
+      serialNum: values.serialNum,
       dateOfRepair: moment().format("DD-MM-YYYY"),
       repairDes: values.repairDes,
       empId: currentUser.uid,
       type: values.option,
       status: "Pending",
+      // ...values
     };
-    AssetContext.addRepairRequest(allUpgradeData)
-      .then(async (response) => {
-        showNotification("success", "Success", "Repair Request Added");
-        props.getData();
-        getAllotmentData();
-        setSelectedOption(false);
-      })
-      .catch((error) => {
-        console.log("error:", error);
-      });
 
-    console.log(allUpgradeData);
+    console.log('ffffff', allUpgradeData)
+    try {
+      AssetContext.addRepairRequest(allUpgradeData, file)
+
+      showNotification("success", "Success", "Repair Request Added");
+      props.getData();
+      getAllotmentData();
+      setSelectedOption(false);
+    }
+    catch (error) {
+      console.log(error);
+      showNotification("error", "Error", "Error In alloctment");
+    }
   };
 
   useEffect(() => {
@@ -68,9 +72,11 @@ function LaptopAllot(props) {
   }, []);
 
   const getAllotmentData = async () => {
-    let allData = await AssetContext.getEmpAllot(currentUser.uid);
+    let allData = await AssetContext.getRepairData(currentUser.uid, [
+      "Allotment",
+    ]);
     setAllotmentData(allData);
-    console.log(allData, "ektadewangan");
+    console.log(setAllotmentData, "ektadewangan");
   };
 
   const divStyle = {
@@ -102,29 +108,39 @@ function LaptopAllot(props) {
     marginLeft: "17px",
   };
 
-  function handleChange(event) {
-    let file = event.target.files[0];
-    console.log("handleupload", file);
-    setFile(null);
-    const isPdf = file.type === "application/pdf";
-    if (!isPdf) {
-      message.error("You can only upload Pdf file!");
-      return;
-    }
+  // function handleChange(event) {
+  //   let file = event.target.files[0];
+  //   console.log("handleupload", file);
+  //   setFile(null);
+  //   const isPdf = file.type === "application/pdf";
+  //   if (!isPdf) {
+  //     message.error("You can only upload Pdf file!");
+  //     return;
+  //   }
 
+  //   const isLt2M = file.size / 1024 / 1024 < 2;
+  //   if (!isLt2M) {
+  //     message.error("File must smaller than 2MB!");
+  //     return;
+  //   }
+  //   setFile(event.target.files[0]);
+  // }
+
+  function handleChange(event) {
     const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error("File must smaller than 2MB!");
-      return;
-    }
+    // if (!isLt2M) {
+    //   message.error('File must smaller than 2MB!');
+    //   return
+    // }
     setFile(event.target.files[0]);
   }
+
 
   return (
     <>
       <div>
         {" "}
-        <AllocatedCard refresh={getAllotmentData} />
+        <AllocatedCard refresh={allotmentData} />;
       </div>
 
       <div className="laptopDiv">
@@ -171,92 +187,123 @@ function LaptopAllot(props) {
 
               {(selectedOption === "Repair" ||
                 selectedOption === "Upgrade") && (
-                <>
-                  <Col span={10}>
-                    <Form.Item
-                      name="dateOfRepair"
-                      label={
-                        selectedOption === "Repair"
-                          ? "Date Of Repairing Request"
-                          : "Date of upgrading request"
-                      }
-                    >
-                      <DatePicker
-                        format={"DD-MM-YYYY"}
-                        defaultValue={moment()}
-                        style={divStyle}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col span={24}>
-                    <Form.Item
-                      name="repairDes"
-                      label="Reason"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter Reason",
-                        },
-                        {
-                          message: "Please enter Valid Reason",
-                        },
-                      ]}
-                    >
-                      <TextArea
-                        Rows={4}
-                        maxLength={100}
-                        autoSize={{ minRows: 4, maxRows: 4 }}
-                        placeholder="Max 100 Words"
-                        style={divStyle}
-                      />
-                    </Form.Item>
-                  </Col>
-                  {selectedOption === "Repair" ? (
+                  <>
+                    <Col span={10}>
+                      <Form.Item
+                        name="dateOfRepair"
+                        label={
+                          selectedOption === "Repair"
+                            ? "Date Of Repairing Request"
+                            : "Date of upgrading request"
+                        }
+                      >
+                        <DatePicker
+                          format={"DD-MM-YYYY"}
+                          defaultValue={moment()}
+                          style={divStyle}
+                        />
+                      </Form.Item>
+                    </Col>
                     <Col span={12}>
                       <FormItem
-                        name="photoreapir"
-                        label="Upload photos if (Physical Damage)"
+                        style={{ display: "none" }}
+                        name="lapname"
+                        label="Laptop Name"
+                        initialValue={allotmentData[0]?.lapname}
                       >
-                        <div className="idpage">
-                          <Input
-                            type="file"
-                            accept="application/pdf"
-                            id="upload"
-                            name="upload"
-                            onChange={handleChange}
-                            style={{ borderRadius: "5px" }}
-                          />
-                        </div>
+                        <Input disabled style={divStyle} span={6} />
                       </FormItem>
                     </Col>
-                  ) : null}
-                  <Col
-                    span={24}
-                    classsname="gutter-row"
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <Space>
-                      <Form.Item>
-                        <Button style={resetButton} onClick={onReset}>
-                          Reset
-                        </Button>
+                    <Col span={12}>
+                      <FormItem
+                        style={{ display: "none" }}
+                        name="modelName"
+                        label="Model"
+                        initialValue={allotmentData[0]?.modelName}
+                      >
+                        <Input disabled style={divStyle} />
+                      </FormItem>
+                    </Col>
+                    <Col span={12}>
+                      <FormItem
+                        style={{ display: "none" }}
+                        name="serialNum"
+                        label="Serial Number"
+                        initialValue={allotmentData[0]?.serialNum}
+                      >
+                        <Input disabled style={divStyle} />
+                      </FormItem>
+                    </Col>
+
+                    <Col span={24}>
+                      <Form.Item
+                        name="repairDes"
+                        label="Reason"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter Reason",
+                          },
+                          {
+                            message: "Please enter Valid Reason",
+                          },
+                        ]}
+                      >
+                        <TextArea
+                          Rows={4}
+                          maxLength={100}
+                          autoSize={{ minRows: 4, maxRows: 4 }}
+                          placeholder="Max 100 Words"
+                          style={divStyle}
+                        />
                       </Form.Item>
-                      <Form.Item>
-                        <Button
-                          style={submitButton}
-                          htmlType="submit"
-                          // onClick={() => form.submit(handleSubmit3)}
+                    </Col>
+                    {selectedOption === "Repair" ? (
+                      <Col span={12}>
+                        <FormItem
+                          name="upload"
+                          label="Upload photos if (Physical Damage)"
                         >
-                          Submit
-                        </Button>
-                      </Form.Item>
-                    </Space>
-                  </Col>
-                </>
-              )}
+                          <div className="idpage">
+                            <Input
+                              type="file"
+                              accept="application/pdf"
+                              id="upload"
+                              name="upload"
+                              onChange={handleChange}
+                              style={{ borderRadius: "5px" }}
+                            />
+                          </div>
+                        </FormItem>
+                      </Col>
+                    ) : null}
+                    <Col
+                      span={24}
+                      classsname="gutter-row"
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      <Space>
+                        <Form.Item>
+                          <Button style={resetButton} onClick={onReset}>
+                            Reset
+                          </Button>
+                        </Form.Item>
+                        <Form.Item>
+                          <Button
+                            style={submitButton}
+                            htmlType="submit"
+                          // onClick={() => form.submit(handleSubmit3)}
+                          >
+                            Submit
+                          </Button>
+                        </Form.Item>
+                      </Space>
+                    </Col>
+                  </>
+                )}
             </Row>
           </Form>
         </Card>

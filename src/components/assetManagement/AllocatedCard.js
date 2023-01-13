@@ -60,7 +60,7 @@ const AllocatedCard = (props) => {
       modelName: values.modelName,
       serialNum: values.serialNum,
       charger: values.charger,
-      DoI: values.DoI.format("DD-MM-YYYY"),
+      dateOfRepair: values.dateOfRepair.format("DD-MM-YYYY"),
       lapBag: values.lapBag,
       empId: currentUser.uid,
       type: "Allotment",
@@ -83,11 +83,12 @@ const AllocatedCard = (props) => {
 
   useEffect(() => {
     getEmpAllAsset();
-    console.log(getEmpAllAsset);
   }, []);
 
   const getEmpAllAsset = async () => {
-    let assetData = await AssetContext.getEmpAllot(currentUser.uid);
+    let assetData = await AssetContext.getRepairData(currentUser.uid, [
+      "Allotment",
+    ]);
     console.log(assetData);
     setLoading(true);
     setData(assetData[0]);
@@ -373,9 +374,11 @@ const AllocatedCard = (props) => {
                           <Form.Item
                             label="Date of Issue"
                             initialValue={
-                              data?.DoI ? moment(data?.DoI, "DD-MM-YYYY") : null
+                              data?.dateOfRepair
+                                ? moment(data?.dateOfRepair, "DD-MM-YYYY")
+                                : null
                             }
-                            name="DoI"
+                            name="dateOfRepair"
                             rules={[
                               {
                                 required: true,
@@ -481,7 +484,7 @@ const AllocatedCard = (props) => {
                           {addButton === false ? (
                             <div className="lapAllot">Date of Issue </div>
                           ) : null}
-                          {data ? data?.DoI : null}
+                          {data ? data?.dateOfRepair : null}
                         </Col>
                         <Col xs={24} sm={12} md={8}>
                           {addButton === false ? (

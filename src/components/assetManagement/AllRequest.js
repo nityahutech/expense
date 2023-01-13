@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./AllRequest.css";
 import { Table, Button, Tag, Card } from "antd";
 import {
@@ -9,19 +9,36 @@ import {
   CloseOutlined,
 } from "@ant-design/icons";
 
+import AssetContext from "../../contexts/AssetContext";
+
 function AllRequest(props) {
+  console.log(props, "ektaaaaaaaaaaa");
+  const [repairAllotReq, setRepairAllotReq] = useState(props.data || []);
+  console.log(props.data);
+  useEffect(() => {
+    setRepairAllotReq(props.data);
+  }, [props.data]);
+
+  const setStatus = async (record, status) => {
+    const updatedRepairRecord = repairAllotReq.map((allotRecord) => {
+      if (allotRecord.id === record.id) {
+        allotRecord.status = status;
+        record.status = status;
+      }
+
+      return allotRecord;
+    });
+    await AssetContext.updateRepairData(record.id, record);
+    setRepairAllotReq(updatedRepairRecord);
+  };
+
   const columns2 = [
     // showed in the admin flow
-    {
-      title: "Sl.No. ",
-      dataIndex: "slno",
-      key: "sl.no.",
-      width: 200,
-    },
+
     {
       title: "Employee Code",
-      dataIndex: "employeecode",
-      key: "employeecode",
+      dataIndex: "empId",
+      key: "empId",
       width: 200,
     },
     {
@@ -32,14 +49,14 @@ function AllRequest(props) {
     },
     {
       title: "Date",
-      dataIndex: "date",
-      key: "date",
+      dataIndex: "dateOfRepair",
+      key: "dateOfRepair",
       width: 200,
     },
     {
       title: "Request Type",
-      dataIndex: "requestype",
-      key: "requesttype",
+      dataIndex: "type",
+      key: "type",
       width: 200,
     },
     {
@@ -91,13 +108,19 @@ function AllRequest(props) {
               style={{ padding: 0, color: "rgb(64, 169, 255)" }}
               type="link"
               className="show"
-              // onClick={() => {
-              //     showModal(record);
-              // }}
+              onClick={() => {
+                setStatus(record, "Approved");
+              }}
             >
               <CheckOutlined />
             </Button>
-            <Button type="link" className="deleTe">
+            <Button
+              type="link"
+              className="deleTe"
+              onClick={() => {
+                setStatus(record, "Reject");
+              }}
+            >
               <CloseOutlined />
             </Button>
           </div>
@@ -106,31 +129,31 @@ function AllRequest(props) {
     },
   ];
 
-  const dataSource2 = [
-    {
-      key: "1",
-      slno: "1",
-      employeecode: "HTS001",
-      name: "Saswat",
-      date: "22/01/2023",
-      requestype: "Repair",
-    },
-    {
-      key: "2",
-      slno: "2",
-      employeecode: "HTS001",
-      name: "Saswat",
-      date: "22/01/2023",
-      requestype: "Upgrade",
-    },
-  ];
+  //   const dataSource2 = [
+  //     {
+  //       key: "1",
+  //       slno: "1",
+  //       employeecode: "HTS001",
+  //       name: "Saswat",
+  //       date: "22/01/2023",
+  //       requestype: "Repair",
+  //     },
+  //     {
+  //       key: "2",
+  //       slno: "2",
+  //       employeecode: "HTS001",
+  //       name: "Saswat",
+  //       date: "22/01/2023",
+  //       requestype: "Upgrade",
+  //     },
+  //   ];
 
   return (
     <div>
       <Card>
         <Table
           columns={columns2}
-          dataSource={dataSource2}
+          dataSource={repairAllotReq}
           className="assetTable"
         />
       </Card>

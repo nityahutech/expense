@@ -71,7 +71,7 @@ const modalContent2 = {
 };
 
 const RepairRequestTable = (props) => {
-  // console.log("RepairRequestTable props::,");
+  console.log("RepairRequestTable props::,", props);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [repairLaptopData, setRepairLaptopData] = useState(props.data);
   // console.log(repairLaptopData);
@@ -104,11 +104,6 @@ const RepairRequestTable = (props) => {
     // console.log(getRepairData);
   }, [props.data]);
 
-  // const getRepairData = async () => {
-  //   let repairData = await AssetContext.getRepairData(currentUser.uid);
-  //   setRepairLaptopData(repairData);
-  // };
-
   const onDeleteUpdateRepair = (record) => {
     Modal.confirm({
       title: "Are you sure, you want to delete Laptop Update/Repair Record?",
@@ -119,7 +114,7 @@ const RepairRequestTable = (props) => {
           .then((response) => {
             props.getData();
           })
-          .catch((error) => {});
+          .catch((error) => { });
       },
     });
   };
@@ -206,8 +201,8 @@ const RepairRequestTable = (props) => {
               status === "Approved"
                 ? "rgba(15, 255, 80, 0.2)"
                 : status === "Pending"
-                ? "rgba(205, 227, 36, 0.25)"
-                : "volcano"
+                  ? "rgba(205, 227, 36, 0.25)"
+                  : "volcano"
             }
             key={status}
           >

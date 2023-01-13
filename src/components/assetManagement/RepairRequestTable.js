@@ -104,11 +104,6 @@ const RepairRequestTable = (props) => {
     // console.log(getRepairData);
   }, [props.data]);
 
-  // const getRepairData = async () => {
-  //   let repairData = await AssetContext.getRepairData(currentUser.uid);
-  //   setRepairLaptopData(repairData);
-  // };
-
   const onDeleteUpdateRepair = (record) => {
     Modal.confirm({
       title: "Are you sure, you want to delete Laptop Update/Repair Record?",

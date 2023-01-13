@@ -68,12 +68,11 @@ class AssetContext {
     return addDoc(companyAssetCollectionRef, repairRequestData);
   };
 
-  getRepairData = async (id) => {
+  getRepairData = async (id, typeValues) => {
     const q = query(
       companyAssetCollectionRef,
       where("empId", "==", id),
-      where("type", "in", ["Repair", "Upgrade"])
-      // where("type", "==", "Repair")
+      where("type", "in", typeValues)
     );
 
     const empRepair = await getDocs(q);
@@ -106,24 +105,6 @@ class AssetContext {
         id: doc.id,
       };
     });
-  };
-
-  getEmpAllot = async (id) => {
-    const q = query(
-      companyAssetCollectionRef,
-      where("empId", "==", id),
-      where("type", "==", "Allotment")
-      // where("type", "==", "Repair")
-    );
-    const empAllot = await getDocs(q);
-    let rec = empAllot.docs.map((doc) => {
-      return {
-        ...doc.data(),
-        id: doc.id,
-      };
-    });
-
-    return rec;
   };
 }
 

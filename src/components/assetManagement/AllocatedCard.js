@@ -258,9 +258,8 @@ const AllocatedCard = (props) => {
                           >
                             <Input
                               maxLength={50}
+                              className="inputFields"
                               placeholder="Enter Laptop Name"
-                              bordered={false}
-                              className="laptopInp"
                             />
                           </Form.Item>
                         </Col>
@@ -288,7 +287,7 @@ const AllocatedCard = (props) => {
                           >
                             <Input
                               maxLength={30}
-                              className="laptopInp"
+                              className="inputFields"
                               onChange={(e) => {
                                 const inputval = e.target.value;
                                 const str = e.target.value;
@@ -306,7 +305,6 @@ const AllocatedCard = (props) => {
                                 });
                               }}
                               placeholder="Enter Model Name"
-                              bordered={false}
                             />
                           </Form.Item>
                         </Col>
@@ -328,8 +326,8 @@ const AllocatedCard = (props) => {
                           >
                             <Input
                               type="text"
+                              className="inputFields"
                               maxLength={60}
-                              className="laptopInp"
                               onChange={(e) => {
                                 const inputval = e.target.value;
                                 const str = e.target.value;
@@ -347,7 +345,6 @@ const AllocatedCard = (props) => {
                                 });
                               }}
                               placeholder="Enter Serial Number"
-                              bordered={false}
                             />
                           </Form.Item>
                         </Col>
@@ -364,9 +361,8 @@ const AllocatedCard = (props) => {
                             ]}
                           >
                             <Select
-                              placeholder="Select a Yes or No"
-                              className="laptopInp"
-                              bordered={false}
+                              placeholder="Select"
+                              className="selectFields"
                             >
                               <Option value="Yes">Yes</Option>
                               <Option value="No">No</Option>
@@ -390,7 +386,7 @@ const AllocatedCard = (props) => {
                             {/* format={dateFormatList} */}
                             <DatePicker
                               format="DD-MM-YYYY"
-                              className="laptopDate"
+                              className="dateFields"
                               // format={dateFormatList}
                               // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
                               onChange={(e) => {
@@ -415,9 +411,8 @@ const AllocatedCard = (props) => {
                             ]}
                           >
                             <Select
-                              placeholder="Select a Yes or No"
-                              className="laptopInp"
-                              bordered={false}
+                              placeholder="Select"
+                              className="selectFields"
                             >
                               <Option value="Yes">Yes</Option>
                               <Option value="No">No</Option>
@@ -427,7 +422,6 @@ const AllocatedCard = (props) => {
 
                         <Col
                           span={24}
-                          className="profileImagediv"
                           xs={24}
                           sm={24}
                           md={7}
@@ -436,6 +430,7 @@ const AllocatedCard = (props) => {
                           xxl={6}
                         >
                           <FormItem
+                            label="Upload Image"
                             name="upload"
                             // rules={[
                             //   {
@@ -456,6 +451,7 @@ const AllocatedCard = (props) => {
                     </>
                   ) : Object.keys([data]).length != 0 ? (
                     <>
+                    {/* ---------------data storage state */}
                       <Row span={24} gutter={[16, 16]}>
                         <Col xs={24} sm={12} md={8}>
                           {addButton === false ? (

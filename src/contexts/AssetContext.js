@@ -35,8 +35,7 @@ class AssetContext {
     if (file) {
       const storageRef = ref(
         storage,
-        `/${compId != "undefined" ? compId : "admins"}/${
-          newLaptop.empId
+        `/${compId != "undefined" ? compId : "admins"}/${newLaptop.empId
         }/files/${file.name}`
       );
 
@@ -64,8 +63,45 @@ class AssetContext {
     }
   };
 
-  addRepairRequest = async (repairRequestData) => {
-    return addDoc(companyAssetCollectionRef, repairRequestData);
+  // addRepairRequest = async (repairRequestData) => {
+  //   return addDoc(companyAssetCollectionRef, repairRequestData);
+  // };
+
+  //-------------------Repair Request------------------------------------
+
+
+
+  addRepairRequest = (repairRequestData, file) => {
+    if (file) {
+      console.log('ffff', repairRequestData, file)
+      const storageRef = ref(
+        storage,
+        `/${compId != "undefined" ? compId : "admins"}/${repairRequestData.empId
+        }/files/${file.name}`
+      );
+      console.log('ffff', storageRef)
+      uploadBytesResumable(storageRef, file).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => {
+          repairRequestData.upload = url;
+          repairRequestData.file = file.name;
+          addDoc(
+            collection(
+              db,
+              compId != "undefined"
+                ? `companyprofile/${compId}/assets`
+                : "admins/assets"
+            ),
+            repairRequestData
+          );
+          return Promise.resolve();
+        });
+      });
+    } else {
+      repairRequestData.upload = null;
+      addDoc(companyAssetCollectionRef, repairRequestData);
+      return Promise.resolve();
+
+    };
   };
 
   getRepairData = async (id, typeValues) => {
@@ -84,6 +120,8 @@ class AssetContext {
     });
     return rec;
   };
+
+  //----------------------Update------------------
 
   updateRepairData = (id, updateRepair) => {
     updateDoc(doc(companyAssetCollectionRef, id), updateRepair);

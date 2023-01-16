@@ -63,34 +63,34 @@ function AllRequest(props) {
       dataIndex: "empCode",
       key: "empCode",
       width: 150,
-      align: "center",
+      align: "left",
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
       width: 200,
-      align: "center",
+      align: "left",
     },
     {
       title: "Date",
       dataIndex: "dateOfRepair",
       key: "dateOfRepair",
       width: 150,
-      align: "center",
+      align: "left",
     },
     {
       title: "Request Type",
       dataIndex: "type",
       key: "type",
       width: 200,
-      align: "center",
+      align: "left",
     },
     {
       title: "Status",
       key: "Status",
       width: 150,
-      align: "center",
+      align: "left",
       render: (_, { status }) =>
         status !== "" && (
           <Tag
@@ -98,6 +98,8 @@ function AllRequest(props) {
               width: "84px",
               color: "#000000",
               borderRadius: "10px",
+              display:"flex",
+              justifyContent:"center",
               padding: "2px",
             }}
             className="statusTag"
@@ -124,7 +126,7 @@ function AllRequest(props) {
         <>
           <div
             className="employee-button"
-            style={{ display: "flex", flexDirection: "row" }}
+            style={{ display: "flex", flexDirection: "row", justifyContent:"center" }}
           >
             <Button
               onClick={() => openModal(record)}

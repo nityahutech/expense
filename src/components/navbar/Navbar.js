@@ -244,7 +244,8 @@ const Navbar = (props) => {
             defaultChecked = {roleView == "admin"}
             style={{
               marginRight: "10px",
-              fontWeight: "bold"
+              fontWeight: "bold",
+              width:"90px"
             }}
             onChange={()=>{
               setRoleView(roleView == "admin" ? "emp" : "admin")

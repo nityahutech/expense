@@ -36,18 +36,21 @@ const Policies = () => {
       dataIndex: "title",
       key: "title",
       width: 150,
+      align: "left",
     },
     {
       title: "Policy Description",
       dataIndex: "description",
       key: "description ",
       width: 200,
+      align: "left",
     },
     {
       title: "Version",
       dataIndex: "version",
       key: "version",
       width: 85,
+      align: "left",
       render: (_, record, i) => {
         return (
           <>
@@ -77,6 +80,7 @@ const Policies = () => {
       dataIndex: "date",
       key: "date",
       width: 150,
+      align: "left",
       render: ( _, record, i) => {
         let res = record.versions.filter((ver) => ver.version == version[i])
         return res[0].date
@@ -87,6 +91,7 @@ const Policies = () => {
       dataIndex: "file",
       key: "file",
       width: 200,
+      align: "left",
       render: (_, record, i) => {
         let res = record.versions.filter((ver) => ver.version == version[i])
         return  (
@@ -99,7 +104,7 @@ const Policies = () => {
     {
       title: "Action",
       key: "action",
-      fixed: 'right',
+      fixed: 'center',
       width: 80,
       render: (_, record) => {
         return (

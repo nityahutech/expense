@@ -54,6 +54,7 @@ function EmployeeList() {
       key: "empId",
       fixed: "left",
       width: 100,
+      align: "left",
     },
     {
       title: "First Name",
@@ -63,6 +64,7 @@ function EmployeeList() {
       width: 120,
       fixed: size,
       ellipsis: true,
+      align: "left",
     },
     {
       title: "Last Name",
@@ -70,6 +72,7 @@ function EmployeeList() {
       key: "lname",
       width: 120,
       ellipsis: true,
+      align: "left",
     },
     {
       title: "Email",
@@ -77,6 +80,7 @@ function EmployeeList() {
       key: "mailid",
       width: 120,
       ellipsis: true,
+      align: "left",
     },
     {
       title: "Date of Join",
@@ -84,6 +88,7 @@ function EmployeeList() {
       key: "doj",
       align: "center",
       width: 100,
+      align: "left",
     },
     {
       title: "Action",
@@ -98,7 +103,7 @@ function EmployeeList() {
             <>
               <div
                 className="employee-button"
-                style={{ display: "flex", flexDirection: "row" }}
+                style={{ display: "flex", flexDirection: "row",justifyContent:"center" }}
               >
                 <Button
                   type="link"

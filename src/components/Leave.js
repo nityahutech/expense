@@ -353,152 +353,6 @@ const Leave = (props) => {
       },
     });
   };
-
-  const columns = [
-    {
-      title: "Duration",
-      dataIndex: "date",
-      width: 240,
-      align: "left",
-      sorter: (c, d) => {
-        let a = moment(c.dateCalc[0], "Do MMM, YYYY");
-        let b = moment(d.dateCalc[0], "Do MMM, YYYY");
-        return a - b;
-      },
-      sortDirections: ["ascend", "descend"],
-    },
-    {
-      title: "Nature of Leave",
-      dataIndex: "nature",
-      width: 150,
-      align: "left",
-      sorter: (a, b) => {
-        return a.nature !== b.nature ? (a.nature < b.nature ? -1 : 1) : 0;
-      },
-      sortDirections: ["ascend", "descend"],
-    },
-    // {
-    //     title: 'Slot',
-    //     dataIndex: 'slot',
-    //     width: 100,
-    //     align: "left",
-    //     sorter: (a, b) => {
-    //         return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
-    //     },
-    //     sortDirections: ["ascend", "descend"],
-
-    // },
-    {
-      title: "No. Of Days",
-      dataIndex: "len",
-      width: 150,
-      align: "left",
-      sorter: (a, b) => {
-        return a.len !== b.len ? (a.len < b.len ? -1 : 1) : 0;
-      },
-      sortDirections: ["ascend", "descend"],
-    },
-    {
-      title: "Reason",
-      dataIndex: "reason",
-      width: 150,
-    },
-    {
-      title: "Approver",
-      dataIndex: "approver",
-      align: "left",
-      width: 150,
-    },
-    {
-      title: "Status",
-      className: "row5",
-      key: "status",
-      dataIndex: "status",
-      align: "left",
-      width: 100,
-      sorter: (a, b) => {
-        return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
-      },
-      sortDirections: ["ascend", "descend"],
-      render: (_, { status }) =>
-        status !== "" && (
-          <Tag
-            style={{ width: "70px", color: "black" }}
-            className="statusTag"
-            color={
-              status === "Approved"
-                ? "rgba(15, 255, 80, 0.2)"
-                : status === "Pending"
-                  ? "rgba(205, 227, 36, 0.25)"
-                  : "volcano"
-            }
-            key={status}
-          >
-            {status}
-          </Tag>
-        ),
-    },
-    {
-      title: "Comment",
-      dataIndex: "comment",
-      width: 150,
-    },
-    {
-      key: "5",
-      title: "Actions",
-      fixed: "right",
-      width: 80,
-      render: (record) => {
-        return (
-          <>
-            <DeleteOutlined
-              disabled={record?.status === "Approved"}
-              onClick={() => {
-                if (record?.status !== "Approved") onDeleteLeave(record);
-              }}
-              style={
-                record?.status === "Approved"
-                  ? {
-                    color: "green",
-                    cursor: "not-allowed",
-                    marginLeft: 10,
-                  }
-                  : record?.status === "Pending"
-                    ? { color: "blue", marginLeft: 10 }
-                    : { color: "red", marginLeft: 10 }
-              }
-            />
-            <EditOutlined
-              disabled={record?.status === "Approved"}
-              onClick={() => {
-                if (record?.status !== "Approved") {
-                  setEditedLeave(record);
-                  setIsEditModalOpen(true);
-                  setDateSelected(record.dateCalc);
-                  setDateStart(moment(record.dateCalc, "Do MMM, YYYY"));
-                  setStartSlot(record.slotStart);
-                  setDateEnd(moment(record.dateCalc, "Do MMM, YYYY"));
-                  setEndSlot(record.slotEnd);
-                  setValidleaverequest(true);
-                }
-              }}
-              style={
-                record?.status === "Approved"
-                  ? {
-                    color: "green",
-                    cursor: "not-allowed",
-                    marginLeft: 10,
-                  }
-                  : record?.status === "Pending"
-                    ? { color: "blue", marginLeft: 10 }
-                    : { color: "red", marginLeft: 10 }
-              }
-            />
-          </>
-        );
-      },
-    },
-  ];
   useEffect(() => {
     setLoading(true);
     getConfigurations();
@@ -738,9 +592,6 @@ const Leave = (props) => {
     // );
   };
 
-
-
-
   const reqColumns = [
     {
       title: "Duration",
@@ -857,6 +708,151 @@ const Leave = (props) => {
                 />
               </>
             }
+          </>
+        );
+      },
+    },
+  ];
+  const columns = [
+    {
+      title: "Duration",
+      dataIndex: "date",
+      width: 240,
+      align: "left",
+      sorter: (c, d) => {
+        let a = moment(c.dateCalc[0], "Do MMM, YYYY");
+        let b = moment(d.dateCalc[0], "Do MMM, YYYY");
+        return a - b;
+      },
+      sortDirections: ["ascend", "descend"],
+    },
+    {
+      title: "Nature of Leave",
+      dataIndex: "nature",
+      width: 150,
+      align: "left",
+      sorter: (a, b) => {
+        return a.nature !== b.nature ? (a.nature < b.nature ? -1 : 1) : 0;
+      },
+      sortDirections: ["ascend", "descend"],
+    },
+    // {
+    //     title: 'Slot',
+    //     dataIndex: 'slot',
+    //     width: 100,
+    //     align: "left",
+    //     sorter: (a, b) => {
+    //         return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+    //     },
+    //     sortDirections: ["ascend", "descend"],
+
+    // },
+    {
+      title: "No. Of Days",
+      dataIndex: "len",
+      width: 150,
+      align: "left",
+      sorter: (a, b) => {
+        return a.len !== b.len ? (a.len < b.len ? -1 : 1) : 0;
+      },
+      sortDirections: ["ascend", "descend"],
+    },
+    {
+      title: "Reason",
+      dataIndex: "reason",
+      width: 150,
+    },
+    {
+      title: "Approver",
+      dataIndex: "approver",
+      align: "left",
+      width: 150,
+    },
+    {
+      title: "Status",
+      className: "row5",
+      key: "status",
+      dataIndex: "status",
+      align: "left",
+      width: 100,
+      sorter: (a, b) => {
+        return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
+      },
+      sortDirections: ["ascend", "descend"],
+      render: (_, { status }) =>
+        status !== "" && (
+          <Tag
+            style={{ width: "70px", color: "black" }}
+            className="statusTag"
+            color={
+              status === "Approved"
+                ? "rgba(15, 255, 80, 0.2)"
+                : status === "Pending"
+                  ? "rgba(205, 227, 36, 0.25)"
+                  : "volcano"
+            }
+            key={status}
+          >
+            {status}
+          </Tag>
+        ),
+    },
+    {
+      title: "Comment",
+      dataIndex: "comment",
+      width: 150,
+    },
+    {
+      key: "5",
+      title: "Actions",
+      fixed: "right",
+      width: 80,
+      render: (record) => {
+        return (
+          <>
+            <DeleteOutlined
+              disabled={record?.status === "Approved"}
+              onClick={() => {
+                if (record?.status !== "Approved") onDeleteLeave(record);
+              }}
+              style={
+                record?.status === "Approved"
+                  ? {
+                    color: "green",
+                    cursor: "not-allowed",
+                    marginLeft: 10,
+                  }
+                  : record?.status === "Pending"
+                    ? { color: "blue", marginLeft: 10 }
+                    : { color: "red", marginLeft: 10 }
+              }
+            />
+            <EditOutlined
+              disabled={record?.status === "Approved"}
+              onClick={() => {
+                if (record?.status !== "Approved") {
+                  setEditedLeave(record);
+                  setIsEditModalOpen(true);
+                  setDateSelected(record.dateCalc);
+                  setDateStart(moment(record.dateCalc, "Do MMM, YYYY"));
+                  setStartSlot(record.slotStart);
+                  setDateEnd(moment(record.dateCalc, "Do MMM, YYYY"));
+                  setEndSlot(record.slotEnd);
+                  setValidleaverequest(true);
+                }
+              }}
+              style={
+                record?.status === "Approved"
+                  ? {
+                    color: "green",
+                    cursor: "not-allowed",
+                    marginLeft: 10,
+                  }
+                  : record?.status === "Pending"
+                    ? { color: "blue", marginLeft: 10 }
+                    : { color: "red", marginLeft: 10 }
+              }
+            />
           </>
         );
       },

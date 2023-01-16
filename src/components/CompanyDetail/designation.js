@@ -65,17 +65,19 @@ const Designation = () => {
       title: "Designation",
       dataIndex: "designation",
       key: "designation",
-
+      align:"left"
     },
     {
       title: "Employees",
       dataIndex: "employees",
       key: "employees",
+      align:"left"
     },
     {
       title: "Grade",
       dataIndex: "grade",
       key: "grade",
+      align:"left"
     },
     {
       title: "Action",
@@ -83,11 +85,17 @@ const Designation = () => {
       render: (record) => (
         <Row
           style={{
-            width: "100px",
+            width: "100%",
             textAlign: "-webkit-right",
+           
           }}
         >
-          <Col span={12}>
+          <Col span={12} 
+          style={{
+             display:"flex",
+             justifyContent:"center",
+          }}
+          >
             <Button
               className="editbutton"
               type="text"
@@ -107,7 +115,12 @@ const Designation = () => {
               <EditFilled />
             </Button>
           </Col>
-          <Col span={12}>
+          <Col span={12}
+            style={{
+              display:"flex",
+              justifyContent:"center",
+           }}
+          >
             <Button
               className="editbutton"
               type="text"

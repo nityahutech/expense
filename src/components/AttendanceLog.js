@@ -111,23 +111,27 @@ function AttendanceLog(props) {
       dataIndex: "empId",
       className: "code",
       key: "empId",
+      align: "left",
       render: (text) => <a>{text}</a>,
     },
     {
       title: "Employee Name",
       dataIndex: "name",
       key: "nFname",
+      align: "left",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      align: "left",
     },
     {
       title: "Project Name",
       dataIndex: "project",
       key: "project",
       ellipsis: true,
+      align: "left",
     },
     {
       title: "Report",
@@ -135,6 +139,7 @@ function AttendanceLog(props) {
       dataIndex: "report",
       ellipsis: true,
       fixed: "right",
+      align: "left",
     },
   ];
   useEffect(() => {

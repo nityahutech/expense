@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./AllRequest.css";
-import { Table, Button, Tag, Card } from "antd";
+import { Table, Button, Tag, Card, Modal } from "antd";
 import {
-  EditFilled,
-  DeleteFilled,
   EyeFilled,
-  CheckOutlined,
-  CloseOutlined,
+  CheckCircleFilled,
+  CloseCircleFilled,
 } from "@ant-design/icons";
-
+import ViewRequestType from "./ViewRequestType";
 import AssetContext from "../../contexts/AssetContext";
 
 function AllRequest(props) {
   console.log(props, "ektaaaaaaaaaaa");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalData, setModalData] = useState({});
   const [repairAllotReq, setRepairAllotReq] = useState(props.data || []);
   console.log(props.data);
   useEffect(() => {
@@ -32,48 +32,81 @@ function AllRequest(props) {
     setRepairAllotReq(updatedRepairRecord);
   };
 
+  function openModal(data) {
+    setIsModalOpen(true);
+    setModalData(data);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
+  var filteredPending = [];
+  var filteredApprove = [];
+
+  repairAllotReq.forEach((record) => {
+    if (record.status == "Pending") {
+      filteredPending.push(record);
+    } else {
+      filteredApprove.push(record);
+    }
+  });
+  console.log(filteredPending);
+  console.log(filteredApprove);
+  console.log(repairAllotReq);
+
   const columns2 = [
     // showed in the admin flow
 
     {
       title: "Employee Code",
-      dataIndex: "empId",
-      key: "empId",
-      width: 200,
+      dataIndex: "empCode",
+      key: "empCode",
+      width: 150,
+      align: "center",
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
       width: 200,
+      align: "center",
     },
     {
       title: "Date",
       dataIndex: "dateOfRepair",
       key: "dateOfRepair",
-      width: 200,
+      width: 150,
+      align: "center",
     },
     {
       title: "Request Type",
       dataIndex: "type",
       key: "type",
       width: 200,
+      align: "center",
     },
     {
       title: "Status",
       key: "Status",
-      width: 200,
+      width: 150,
+      align: "center",
       render: (_, { status }) =>
         status !== "" && (
           <Tag
-            style={{ width: "70px", color: "black" }}
+            style={{
+              width: "84px",
+              color: "#000000",
+              borderRadius: "10px",
+              padding: "2px",
+            }}
             className="statusTag"
             color={
               status === "Approved"
-                ? "rgba(15, 255, 80, 0.2)"
-                : status === "Pending"
-                ? "rgba(205, 227, 36, 0.25)"
-                : "volcano"
+                ? "rgb(8 231 68 / 75%)"
+                : status === "Reject"
+                ? "#f44336"
+                : "rgb(244 209 105)"
             }
             key={status}
           >
@@ -85,43 +118,53 @@ function AllRequest(props) {
       title: "Action",
       dataIndex: "operation",
       key: "operation",
-      width: 100,
-      align: "left",
+      width: 120,
+      align: "center",
       render: (_, record) => (
         <>
           <div
             className="employee-button"
             style={{ display: "flex", flexDirection: "row" }}
           >
-            {/* {record.status === "Repair" ? ( */}
             <Button
+              onClick={() => openModal(record)}
               type="link"
               className="show"
-              // onClick={() => {
-              //     openModal(record);
-              // }}
+              style={
+                record.status == "Approved" || "Reject"
+                  ? { marginLeft: "2rem", color: "#000000" }
+                  : { marginLeft: "1rem", color: "#000000" }
+              }
             >
               {<EyeFilled />}
             </Button>
-            {/* ) : null} */}
+
             <Button
-              style={{ padding: 0, color: "rgb(64, 169, 255)" }}
+              style={
+                record.status == "Pending"
+                  ? {
+                      padding: 0,
+                      color: "rgb(39 151 44 / 74%)",
+                    }
+                  : { display: "none" }
+              }
               type="link"
               className="show"
               onClick={() => {
                 setStatus(record, "Approved");
               }}
             >
-              <CheckOutlined />
+              <CheckCircleFilled />
             </Button>
             <Button
+              style={record.status == "Pending" ? null : { display: "none" }}
               type="link"
               className="deleTe"
               onClick={() => {
                 setStatus(record, "Reject");
               }}
             >
-              <CloseOutlined />
+              <CloseCircleFilled />
             </Button>
           </div>
         </>
@@ -129,33 +172,44 @@ function AllRequest(props) {
     },
   ];
 
-  //   const dataSource2 = [
-  //     {
-  //       key: "1",
-  //       slno: "1",
-  //       employeecode: "HTS001",
-  //       name: "Saswat",
-  //       date: "22/01/2023",
-  //       requestype: "Repair",
-  //     },
-  //     {
-  //       key: "2",
-  //       slno: "2",
-  //       employeecode: "HTS001",
-  //       name: "Saswat",
-  //       date: "22/01/2023",
-  //       requestype: "Upgrade",
-  //     },
-  //   ];
-
   return (
     <div>
       <Card>
         <Table
+          size="small"
           columns={columns2}
-          dataSource={repairAllotReq}
+          dataSource={filteredApprove}
           className="assetTable"
         />
+        <Table
+          size="small"
+          columns={columns2}
+          dataSource={filteredPending}
+          className="assetTable"
+        />
+        <Modal
+          destroyOnClose
+          centered
+          open={isModalOpen}
+          footer={null}
+          title="REQUEST DETAILS"
+          closeIcon={
+            <div
+              onClick={() => {
+                setIsModalOpen(false);
+              }}
+              style={{ color: "#ffff" }}
+            >
+              X
+            </div>
+          }
+          className="updateModal"
+        >
+          <ViewRequestType
+            setIsModalOpen={setIsModalOpen}
+            modalData={modalData}
+          />
+        </Modal>
       </Card>
     </div>
   );

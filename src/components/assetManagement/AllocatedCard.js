@@ -63,16 +63,19 @@ const AllocatedCard = (props) => {
       dateOfRepair: values.dateOfRepair.format("DD-MM-YYYY"),
       lapBag: values.lapBag,
       empId: currentUser.uid,
+      empCode: props.user.empId,
+      name: props.user.name,
+      status: "Pending",
       type: "Allotment",
       // photo: imageUrl || null,
     };
     try {
       AssetContext.addAsset(allAssetData, fileName, currentUser.uid);
       showNotification("success", "Success", "New Laptop Alloctment added");
-      // const timer = setTimeout(() => {
-      //   getEmpAllAsset();
-      // }, 1000);
-      getEmpAllAsset();
+      const timer = setTimeout(() => {
+        getEmpAllAsset();
+      }, 1000);
+      // getEmpAllAsset();
       setEditAsset(false);
       // props.refresh();
     } catch (error) {

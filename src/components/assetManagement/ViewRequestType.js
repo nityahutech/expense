@@ -39,7 +39,14 @@ function ViewRequestType(props) {
           <div style={{ width: "54%", border: "1px solid black", borderRadius: "10px" }}>
             <Col
               span={12}>
-              <Form.Item label="Upload Image::">{laptopData?.file}</Form.Item >
+              <Form.Item label="Upload Image::">    <img
+                src={laptopData?.upload}
+                style={{
+                  width: "150px",
+                  height: "170px",
+                  border: "1px solid #05445e",
+                }}
+              /></Form.Item >
             </Col>
           </div>
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "antd/dist/antd.css";
-import { Dropdown, Menu, Space, Switch } from "antd";
+import { Dropdown, Menu, Space, Switch, Badge, Avatar } from "antd";
+import { BellOutlined } from "@ant-design/icons";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
 import { Link } from "react-router-dom";
@@ -11,6 +12,7 @@ import settingsIcon from "../../images/abstractuserflat4.png";
 import logoutIcon from "../../images/logoutsvgrepocom.png";
 import Logo from "../../images/logo22 ss.png";
 import dropdown from "../../images/dropdown.png";
+import Item from "antd/lib/list/Item";
 // ---------------------------------------------------------------------
 
 const Navbar = (props) => {
@@ -88,6 +90,48 @@ const Navbar = (props) => {
         },
       ]}
     />
+  );
+  
+  const notificationMenu = (
+    <Menu
+      className="notificationMenuDp"
+      items={[
+        {
+          key: "1",
+          label: (
+            <Link
+              // to="/Settings"
+              style={{ 
+                color: "#171832", 
+                fontWeight: "normal",
+              }}
+              // rel="noopener noreferrer"
+            >
+              Requests
+            </Link>
+          ),
+          icon: (<></>),
+        },
+        {
+          key: "2",
+          label: (
+            <Link
+              // to="/"
+              // onClick={logout}
+              style={{ color: "#171832", fontWeight: "normal" }}
+              // rel="noopener noreferrer"
+            >
+              Leaves
+            </Link>
+          ),
+          icon: (<></>),
+        },
+      ]}
+    >
+      {/* <Menu.Item style={{background: "red"}}>
+        Request
+      </Menu.Item> */}
+    </Menu>
   );
 
   useEffect(() => {
@@ -191,21 +235,8 @@ const Navbar = (props) => {
 
   return (
     <div className="navbar" style={{ background: "white" }}>
-      <div className="wrapper">
-        <div
-          style={{
-            cursor: "pointer",
-            fontSize: "16px",
-            marginRight: "20px",
-            borderRadius: "5px",
-            border: "1px solid white",
-            color: "white",
-            fontWeight: "400",
-            width: "auto",
-          }}
-          className="stopwatch"
-        >
-        </div>
+      <div className="wrapper"> 
+      {/* ------------------Switch */}
         {role == "admin" ? (
           <Switch 
             checkedChildren="Admin"
@@ -213,7 +244,8 @@ const Navbar = (props) => {
             defaultChecked = {roleView == "admin"}
             style={{
               marginRight: "10px",
-              fontWeight: "bold"
+              fontWeight: "bold",
+              width:"90px"
             }}
             onChange={()=>{
               setRoleView(roleView == "admin" ? "emp" : "admin")
@@ -222,6 +254,8 @@ const Navbar = (props) => {
             }
           />
         ) : null}
+
+        {/* --------------Button */}
        {roleView == "emp" ? (
           <button
             style={buttonStyle}
@@ -237,19 +271,23 @@ const Navbar = (props) => {
           </button>
         ) : null}
 
+        {/* --------------Notification */}
+        <Dropdown overlay={notificationMenu} className="notificationBell">
+          <Badge count={5} offset={[-10,5]} size="small">
+            <Avatar size={40} icon={<BellOutlined className="notificationBell"/>} className="notificationAvatar" />
+          </Badge>
+        </Dropdown>
+
+        {/* --------------profile Logo */}
         <div>
           <img
             src={logo}
-            style={{
-              maxWidth: "100px",
-              maxHeight: "50px",
-              padding: "10px",
-              height: "auto",
-            }}
             alt={"logo not found"}
+            className="profileLogo"
           />
         </div>
 
+        {/* ------------down arrow */}
         <Dropdown overlay={menu}>
           <Space>
             <img
@@ -260,7 +298,8 @@ const Navbar = (props) => {
           </Space>
         </Dropdown>
       </div>
-
+      
+      {/* ---------------------breadcrun */}
       <div className="tittle">
         <ExpenseBreadCrumb />
       </div>

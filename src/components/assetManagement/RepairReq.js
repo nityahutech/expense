@@ -20,14 +20,16 @@ import RepairRequestTable from "./RepairRequestTable";
 import AllocatedCard from "./AllocatedCard";
 import AssetContext from "../../contexts/AssetContext";
 import { capitalize, showNotification } from "../../contexts/CreateContext";
+import moment from "moment";
+import EmpInfoContext from "../../contexts/EmpInfoContext";
 
-function LaptopAllot() {
+function LaptopAllot(props) {
   const [form] = Form.useForm();
   const [file, setFile] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
-  const [alltmentData, setAlloctmentData] = useState([]);
-  const [repairLaotopData, setRepairLaptopData] = useState([]);
-  console.log(alltmentData, "jjjjjjjjjjj");
+  const [user, setUser] = useState({});
+  const [allotmentData, setAllotmentData] = useState([]);
+  console.log(allotmentData, "jjjjjjjjjjj");
   const compId = sessionStorage.getItem("compId");
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const { Option } = Select;
@@ -38,42 +40,48 @@ function LaptopAllot() {
   };
 
   const onFinish = (values) => {
+    console.log("ffffff", values);
     form.resetFields();
     const allUpgradeData = {
       lapname: values.lapname,
       modelName: values.modelName,
       serialNum: values.serialNum,
-      dateOfRepair: values.dateOfRepair.format("DD-MM-YYYY"),
+      dateOfRepair: moment().format("DD-MM-YYYY"),
       repairDes: values.repairDes,
       empId: currentUser.uid,
+      empCode: user.empId,
+      name: user.name,
       type: values.option,
       status: "Pending",
+      // ...values
     };
-    AssetContext.addRepairRequest(allUpgradeData)
-      .then(async (response) => {
-        await getRepairData();
-        showNotification("success", "Success", "Repair Request Added");
-      })
-      .catch((error) => {
-        console.log("error:", error);
-      });
 
-    console.log(allUpgradeData);
+    console.log("ffffff", allUpgradeData);
+    try {
+      AssetContext.addRepairRequest(allUpgradeData, file);
+
+      showNotification("success", "Success", "Repair Request Added");
+      props.getData();
+      getAllotmentData();
+      setSelectedOption(false);
+    } catch (error) {
+      console.log(error);
+      showNotification("error", "Error", "Error In alloctment");
+    }
   };
 
   useEffect(() => {
     getAllotmentData();
-    getRepairData();
   }, []);
 
   const getAllotmentData = async () => {
-    let allData = await AssetContext.getEmpAllot(currentUser.uid);
-    setAlloctmentData(allData);
-  };
-
-  const getRepairData = async () => {
-    let repairData = await AssetContext.getRepairData(currentUser.uid);
-    setRepairLaptopData(repairData);
+    let allData = await AssetContext.getRepairData(currentUser.uid, [
+      "Allotment",
+    ]);
+    let userData = await EmpInfoContext.getEduDetails(currentUser.uid);
+    setUser(userData);
+    setAllotmentData(allData);
+    console.log(setAllotmentData, "ektadewangan");
   };
 
   const divStyle = {
@@ -83,8 +91,8 @@ function LaptopAllot() {
   };
 
   const resetButton = {
-    border: "1px solid #1565D8",
-    color: "#1565D8",
+    border: "1px solid #1963a6",
+    color: "#1963a6",
     fontWeight: "600",
     fontSize: "14px",
     lineHeight: "17px",
@@ -93,8 +101,8 @@ function LaptopAllot() {
     cursor: "pointer",
   };
   const submitButton = {
-    border: "1px solid #1565D8",
-    background: "#1565D8",
+    border: "1px solid #1963a6",
+    background: "#1963a6",
     color: "#ffffff",
     fontWeight: "600",
     fontSize: "14px",
@@ -105,21 +113,30 @@ function LaptopAllot() {
     marginLeft: "17px",
   };
 
-  function handleChange(event) {
-    let file = event.target.files[0];
-    console.log("handleupload", file);
-    setFile(null);
-    const isPdf = file.type === "application/pdf";
-    if (!isPdf) {
-      message.error("You can only upload Pdf file!");
-      return;
-    }
+  // function handleChange(event) {
+  //   let file = event.target.files[0];
+  //   console.log("handleupload", file);
+  //   setFile(null);
+  //   const isPdf = file.type === "application/pdf";
+  //   if (!isPdf) {
+  //     message.error("You can only upload Pdf file!");
+  //     return;
+  //   }
 
+  //   const isLt2M = file.size / 1024 / 1024 < 2;
+  //   if (!isLt2M) {
+  //     message.error("File must smaller than 2MB!");
+  //     return;
+  //   }
+  //   setFile(event.target.files[0]);
+  // }
+
+  function handleChange(event) {
     const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error("File must smaller than 2MB!");
-      return;
-    }
+    // if (!isLt2M) {
+    //   message.error('File must smaller than 2MB!');
+    //   return
+    // }
     setFile(event.target.files[0]);
   }
 
@@ -127,7 +144,7 @@ function LaptopAllot() {
     <>
       <div>
         {" "}
-        <AllocatedCard />
+        <AllocatedCard refresh={allotmentData} user={user} />;
       </div>
 
       <div className="laptopDiv">
@@ -159,7 +176,7 @@ function LaptopAllot() {
                   {/* <Switch checkedChildren="Upgrade Form" unCheckedChildren="Repair Form" checked={selectedOption === 'upgrade'} onChange={() => setSelectedOption(selectedOption === 'repair' ? 'upgrade' : 'repair')} /> */}
                   <Select
                     placeholder="Select an option"
-                    style={{ width: "40%" }}
+                    style={{ width: "39%" }}
                     onChange={(selectedOption) =>
                       setSelectedOption(selectedOption)
                     }
@@ -175,34 +192,7 @@ function LaptopAllot() {
               {(selectedOption === "Repair" ||
                 selectedOption === "Upgrade") && (
                 <>
-                  <Col span={12}>
-                    <FormItem
-                      name="lapname"
-                      label="Laptop Name"
-                      initialValue={alltmentData[0]?.lapname}
-                    >
-                      <Input disabled style={divStyle} span={6} />
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem
-                      name="modelName"
-                      label="Model"
-                      initialValue={alltmentData[0]?.modelName}
-                    >
-                      <Input disabled style={divStyle} />
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem
-                      name="serialNum"
-                      label="Serial Number"
-                      initialValue={alltmentData[0]?.serialNum}
-                    >
-                      <Input disabled style={divStyle} />
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
+                  <Col span={10}>
                     <Form.Item
                       name="dateOfRepair"
                       label={
@@ -210,21 +200,45 @@ function LaptopAllot() {
                           ? "Date Of Repairing Request"
                           : "Date of upgrading request"
                       }
-                      placeholder="Choose Date"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please Choose a Date",
-                        },
-                      ]}
                     >
                       <DatePicker
                         format={"DD-MM-YYYY"}
-                        placeholder="Choose Date"
+                        defaultValue={moment()}
                         style={divStyle}
                       />
                     </Form.Item>
                   </Col>
+                  <Col span={12}>
+                    <FormItem
+                      style={{ display: "none" }}
+                      name="lapname"
+                      label="Laptop Name"
+                      initialValue={allotmentData[0]?.lapname}
+                    >
+                      <Input disabled style={divStyle} span={6} />
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem
+                      style={{ display: "none" }}
+                      name="modelName"
+                      label="Model"
+                      initialValue={allotmentData[0]?.modelName}
+                    >
+                      <Input disabled style={divStyle} />
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem
+                      style={{ display: "none" }}
+                      name="serialNum"
+                      label="Serial Number"
+                      initialValue={allotmentData[0]?.serialNum}
+                    >
+                      <Input disabled style={divStyle} />
+                    </FormItem>
+                  </Col>
+
                   <Col span={24}>
                     <Form.Item
                       name="repairDes"
@@ -251,7 +265,7 @@ function LaptopAllot() {
                   {selectedOption === "Repair" ? (
                     <Col span={12}>
                       <FormItem
-                        name="photoreapir"
+                        name="upload"
                         label="Upload photos if (Physical Damage)"
                       >
                         <div className="idpage">
@@ -298,10 +312,10 @@ function LaptopAllot() {
           </Form>
         </Card>
       </div>
-      <div>
+      {/* <div>
         {" "}
-        <RepairRequestTable repairLaotopData={repairLaotopData} />
-      </div>
+        <RepairRequestTable repairLaptopData={repairLaptopData} />
+      </div> */}
     </>
   );
 }

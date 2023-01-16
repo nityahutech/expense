@@ -111,23 +111,27 @@ function AttendanceLog(props) {
       dataIndex: "empId",
       className: "code",
       key: "empId",
+      align: "left",
       render: (text) => <a>{text}</a>,
     },
     {
       title: "Employee Name",
       dataIndex: "name",
       key: "nFname",
+      align: "left",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      align: "left",
     },
     {
       title: "Project Name",
       dataIndex: "project",
       key: "project",
       ellipsis: true,
+      align: "left",
     },
     {
       title: "Report",
@@ -135,6 +139,7 @@ function AttendanceLog(props) {
       dataIndex: "report",
       ellipsis: true,
       fixed: "right",
+      align: "left",
     },
   ];
   useEffect(() => {
@@ -303,36 +308,42 @@ function AttendanceLog(props) {
       dataIndex: "date",
       key: "date",
       width: 80,
+      align:"left",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
       width: 80,
+      align:"left",
     },
     {
       title: "In Time",
       dataIndex: "clockIn",
       key: "clockIn",
       width: 80,
+      align:"left",
     },
     {
       title: "Out Time",
       key: "clockOut",
       dataIndex: "clockOut",
       width: 80,
+      align:"left",
     },
     {
       title: "Work Duration",
       key: "duration",
       dataIndex: "duration",
       width: 100,
+      align:"left",
     },
     {
       title: "Break Time",
       key: "break",
       dataIndex: "break",
       width: 80,
+      align:"left",
     },
     {
       title: "Project Name",
@@ -340,6 +351,7 @@ function AttendanceLog(props) {
       key: "project",
       ellipsis: true,
       width: 80,
+      align:"left",
     },
     {
       title: "Report",
@@ -348,6 +360,7 @@ function AttendanceLog(props) {
       width: 100,
       ellipsis: true,
       fixed: "right",
+      align:"left",
     },
   ];
   async function onHrDateFilter(value) {

@@ -18,13 +18,21 @@
     cursor: default;
 }
 
-.laptopInp {
-    border-bottom: 1px solid #ccc;
-    padding-left: 0px;
+.inputFields {
+    padding-left: 10px;
+    border-radius: 4px;
+    border: 1px solid #8692A6;
 }
 
-.laptopDate {
+.dateFields {
     width: 100%;
+    border-radius: 4px;
+    border: 1px solid #8692A6;
+}
+
+.selectFields {
+    border-radius: 4px;
+    border: 1px solid #8692A6;
 }
 
 .buttonRow {

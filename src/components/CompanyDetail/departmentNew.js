@@ -16,7 +16,7 @@ import {
   CloseOutlined,
   CheckOutlined,
 } from "@ant-design/icons";
-import "./companystyle.css";
+import "./departmentNew.css"
 import { capitalize, showNotification } from "../../contexts/CreateContext";
 import CompanyProContext from "../../contexts/CompanyProContext";
 
@@ -223,6 +223,7 @@ const DepartmentNew = () => {
       dataIndex: "name",
       key: "name",
       width: 200,
+      align: "left",
       render: (_, record) => (
         <a
           href="#"
@@ -251,6 +252,7 @@ const DepartmentNew = () => {
       key: "description",
       dataIndex: "description",
       width: 300,
+      align: "left",
       // responsive: ["md"],
       // render: (_, { status }) => getStatusUi(status),
     },
@@ -259,7 +261,7 @@ const DepartmentNew = () => {
       key: "action",
       dataIndex: "action",
       width: 150,
-      // align: "center",
+      align: "left",
       render: (_, record) => {
         return (
           <>
@@ -319,36 +321,14 @@ const DepartmentNew = () => {
 
   return (
     <>
-      <div
-        className="education"
-        style={{
-          margin: "10px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Row
-          className="Row-Card"
-          style={{
-            width: '75%',
-            margin: '10px',
-            display: 'flex',
-            alignItems: 'center'
-          }}
-        >
+      <div className="education">
+        <Row className="Row-Card">
           <Col span={24}>
             <Card
               title="Organisation"
-              className="policyCard"
+              className="organisationCard"
               bordered={true}
               hoverable={true}
-              style={{
-                width: '100%',
-                marginTop: 10,
-                borderRadius: "10px",
-                cursor: "default"
-              }}
             >
               <div style={{
                 margin: "10px",
@@ -496,7 +476,6 @@ const DepartmentNew = () => {
                     className="tableTab"
                     columns={columns}
                     dataSource={dataSource}
-                    style={{ width: "100%" }}
                     size="middle"
                     // expandable={type == order[3] ? ({
                     //   expandedRowRender: (record) => (
@@ -858,6 +837,7 @@ const DepartmentNew = () => {
                     </Modal>
                   </Col>
                 </Row>
+
               </div>
             </Card>
           </Col>

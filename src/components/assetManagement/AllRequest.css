@@ -20,3 +20,11 @@
     font-weight: 700;
     font-size: 13px;
   }
+
+  .assetTable .ant-table-thead{
+    height: 50px;
+  }
+ .checkButton .ant-btn .anticon{
+font-size: 15px;
+stroke-width: 100px;
+ }

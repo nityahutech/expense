@@ -74,13 +74,6 @@ const DepartmentNew = () => {
 
   const onFinish = (values) => {
     // console.log('values', values)
-    let matchingCostCenter = data.filter((item) => item.name === values.name)
-    console.log('values', matchingCostCenter)
-    if (matchingCostCenter.length > 0) {
-      showNotification("error", "error", "Try Again Name Allready present");
-      return
-    }
-
     let temp = data;
     let place = order.indexOf(type);
     let par =
@@ -104,6 +97,47 @@ const DepartmentNew = () => {
         type: type,
       }
     });
+    if (type == order[0]) {
+      temp.push(
+        {
+          ...values,
+          parent: values.name,
+          type: order[1]
+        },
+        {
+          ...values,
+          parent: `${values.name}/${values.name}`,
+          type: order[2]
+        },
+        {
+          ...values,
+          parent: `${values.name}/${values.name}/${values.name}`,
+          type: order[3]
+        },
+      )
+      CompanyProContext.addCompInfo(compId, {
+        departments: {
+          ...values,
+          parent: values.name,
+          type: order[1]
+        }
+      });
+      CompanyProContext.addCompInfo(compId, {
+        departments: {
+          ...values,
+          parent: `${values.name}/${values.name}`,
+          type: order[2]
+        }
+      });
+      CompanyProContext.addCompInfo(compId, {
+        departments: {
+          ...values,
+          parent: `${values.name}/${values.name}/${values.name}`,
+          type: order[3]
+        }
+      });
+    }
+    console.log(temp)
     form.resetFields();
     setIsModalOpen(false);
     setData(temp);
@@ -142,6 +176,10 @@ const DepartmentNew = () => {
   };
 
   const deleteData = (record) => {
+    let ppl = CompanyProContext.getAllUsersByOrg(compId, record.name, record.parent, type);
+    if (ppl.length != 0) {
+      showNotification("error", "Error", "")
+    }
     Modal.confirm({
       title: `Are you sure, you want to delete this ${type}?`,
       okText: "Yes",
@@ -583,6 +621,15 @@ const DepartmentNew = () => {
                                   pattern: /^[0-9a-zA-Z.,-\s]+$/,
                                   message: "Please enter Valid Name",
                                 },
+                                {
+                                  validator: (_, value) => {
+                                    let matchingName = dataSource.filter((item) => item.name === value);
+                                    if (matchingName.length > 0) {
+                                      return Promise.reject(new Error("This name already exists!"));
+                                    }
+                                    return Promise.resolve();
+                                  }
+                                }
                               ]}
                             >
                               <Input
@@ -739,6 +786,15 @@ const DepartmentNew = () => {
                                   pattern: /^[0-9a-zA-Z.,-\s]+$/,
                                   message: "Please enter Valid Name",
                                 },
+                                {
+                                  validator: (_, value) => {
+                                    let matchingName = dataSource.filter((item) => item.name == editRecord.name ? false : item.name === value);
+                                    if (matchingName.length > 0) {
+                                      return Promise.reject(new Error("This name already exists!"));
+                                    }
+                                    return Promise.resolve();
+                                  }
+                                }
                               ]}
                             >
                               <Input

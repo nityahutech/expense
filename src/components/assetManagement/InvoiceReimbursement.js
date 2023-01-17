@@ -6,6 +6,7 @@ import {
   Button,
   Input,
   Form,
+  Table,
   DatePicker,
   TextArea,
   Space,
@@ -23,16 +24,17 @@ import FormItem from "antd/es/form/FormItem";
 
 function InvoiceReimbursement() {
   const [editContent, showEditContent] = useState(false);
+  
   const [invoiceList, setInvoiceList] = useState(true);
   const [form] = Form.useForm();
   const { TextArea } = Input;
 
-
+ 
 
   return (
   <div className="invoiceCardDiv">
     <Card
-      className="invoiceCard"
+      className="invoiceCard1"
       bordered="true"
       title="Invoice Reimbersement"
     >
@@ -60,15 +62,16 @@ function InvoiceReimbursement() {
                     {editContent ? (
                       <>
                         <Form.List name="users">
-                          {(fields, { add, remove }) => (
+                          {(editContent, { add, remove }) => (
                             <>
                               <Row gutter={[16,16]} style={{ width: "100%" }}>
-                                {fields.map(({ key, name, ...restField }) => (<>
+                                {editContent.map(({ key, name, ...restField }) => (<>
                                   <Divider orientation="left" orientationMargin="0">
-                                    Expenditure No.1
+                                    Expenditure No.{key+1}
                                   </Divider>
                                     <Col span={4}>
                                       <FormItem
+                                      name="payment"
                                         label="Payment Date"
                                       >
                                         <DatePicker />
@@ -76,6 +79,7 @@ function InvoiceReimbursement() {
                                     </Col>
                                     <Col span={6}>
                                       <FormItem
+                                      name="amount"
                                         label="Amount"
                                       >
                                         <Input />
@@ -83,6 +87,7 @@ function InvoiceReimbursement() {
                                     </Col>
                                     <Col span={6}>
                                       <FormItem
+                                      name="description"
                                         label="Description"
                                       >
                                         <TextArea 
@@ -92,39 +97,32 @@ function InvoiceReimbursement() {
                                     </Col>
                                     <Col span={6}>
                                       <FormItem
-                                        label="Upload"
+                                        name="upload"
+                                        label="Upload the bill"
                                       >
-                                        <div
-                                          style={{
-                                            border: "dashed #B9B9B9",
-                                            borderWidth: "thin",
-                                            borderRadius: "4px",
-                                            display: "flex",
-                                            justifyContent: "center",
-                                          }}
-                                        >
-                                          <Input 
-                                            bordered={false}
+                                        <div className="idpage">
+                                          <Input
+                                            type="file"
+                                            accept="application/pdf"
+                                            id="upload"
+                                            name="upload"
+                                            // onChange={handleChange}
+                                            style={{ borderRadius: "5px" }}
                                           />
                                         </div>
                                       </FormItem>
                                     </Col>
                                     <Col span={2}>
-                                    <FormItem
-                                        label="Action"
-                                      >
-                                      
-                                    <Row gutter={[8,8]}>
-                                    <Col span={12}>
-                                    <CheckOutlined />
-                                    </Col>
-                                    <Col span={12}>
-                                    <CloseOutlined />
-                                    </Col>
-                                    </Row>
-                                    </FormItem>
-                                    </Col>
-                                    
+                                      <FormItem label="Action">                                      
+                                        <Row gutter={[8,8]}>                                    
+                                          <Col span={24}>
+                                            <Button onClick={()=>{form.resetFields()}}>
+                                              <CloseOutlined />
+                                            </Button>
+                                        </Col>
+                                        </Row>
+                                      </FormItem>
+                                    </Col>                                    
                                     </>))}
                               </Row>
                               
@@ -187,6 +185,11 @@ function InvoiceReimbursement() {
           </Col>
         </Row>
       </Form>
+    </Card>
+    <Card 
+    title="Request Table"
+    className="invoiceCard2">
+      <Table/>
     </Card>
   </div>
 )}

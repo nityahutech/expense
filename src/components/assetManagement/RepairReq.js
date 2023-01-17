@@ -29,7 +29,6 @@ function LaptopAllot(props) {
   const [selectedOption, setSelectedOption] = useState("");
   const [user, setUser] = useState({});
   const [allotmentData, setAllotmentData] = useState([]);
-  console.log(allotmentData, "jjjjjjjjjjj");
   const compId = sessionStorage.getItem("compId");
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const { Option } = Select;

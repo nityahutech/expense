@@ -67,11 +67,11 @@ function AccessDetails(props) {
   };
 
   const disabledDate = (current) => {
-    return current.isAfter(moment().subtract(20, "years"));
+    return current.isAfter(moment().subtract(14, "years"));
   };
 
   const disabledJoining = (current) => {
-    return !current.isBetween(moment().subtract(35, "years"), moment());
+    return !current.isBetween(moment().subtract(50, "years"), moment());
   };
 
   const getData = async () => {
@@ -156,7 +156,7 @@ function AccessDetails(props) {
         ...values,
         dob: values.dob?._isValid ? values.dob.format(dateFormat) : null,
         doj: values.doj?._isValid ? values.doj.format(dateFormat) : null,
-        empId: generateEmpCode(),
+        empId: values.empId,
       },
     ];
     localStorage.setItem("OrgAccess", JSON.stringify(temp));
@@ -258,7 +258,7 @@ function AccessDetails(props) {
 
   const generateEmpCode = () => {
     let res = accessList.length + 1;
-    return props.preCode + ("00" + res.toString()).slice(-3);
+    return props.preCode + ("000000" + res.toString()).slice(-6);
   };
 
   return (
@@ -683,13 +683,11 @@ function AccessDetails(props) {
                         // }}
                       >
                         <Input
-                          className="disabledOffice"
-                          disabled
                           style={{
                             width: "100%",
                             border: "1px solid #8692A6",
                             borderRadius: "4px",
-                            background: "rgba(0,0,0,0.1)",
+                            background: "#ffffff",
                           }}
                         />
                       </Form.Item>
@@ -1763,13 +1761,11 @@ function AccessDetails(props) {
                     // }}
                   >
                     <Input
-                      className="disabledOffice"
-                      disabled
                       style={{
                         width: "100%",
                         border: "1px solid #8692A6",
                         borderRadius: "4px",
-                        background: "rgba(0,0,0,0.1)",
+                        background: "#ffffff",
                       }}
                     />
                   </Form.Item>

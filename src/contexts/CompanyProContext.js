@@ -222,6 +222,30 @@ class CompanyProContext {
       return Promise.resolve();
     }
   };
+
+  getAllUsersByOrg = async (compId, name, parent, type) => {
+    let path = parent == null ? null : parent.split("/")
+    let q;
+    switch (type) {
+      case "Business Unit" : q = query(collection(db, `companyprofile/${compId}/users`), where("businessUnit", "==", name));
+        break;
+      case "Division" : q = query(collection(db, `companyprofile/${compId}/users`), where("businessUnit", "==", parent), where("division", "==", name));
+        break;
+      case "Department" : q = query(collection(db, `companyprofile/${compId}/users`), where("businessUnit", "==", path[0]), where("division", "==", path[1]), where("department", "==", name));
+        break;
+      case "Team" : q = query(collection(db, `companyprofile/${compId}/users`), where("businessUnit", "==", path[0]), where("division", "==", path[1]), where("department", "==", path[2]), where("team", "==", name));
+        break;
+    }
+    let d = await getDocs(q);
+    let data = d.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id
+      }
+    })
+    return data;
+  }
+
 }
 
 // let record = { status: "", reason: "" };

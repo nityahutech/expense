@@ -19,6 +19,7 @@ import {
 import "./departmentNew.css"
 import { capitalize, showNotification } from "../../contexts/CreateContext";
 import CompanyProContext from "../../contexts/CompanyProContext";
+import EmpInfoContext from "../../contexts/EmpInfoContext";
 
 // ------------------------------------------------------------------------------const part
 const DepartmentNew = () => {
@@ -73,7 +74,6 @@ const DepartmentNew = () => {
   };
 
   const onFinish = (values) => {
-    // console.log('values', values)
     let temp = data;
     let place = order.indexOf(type);
     let par =
@@ -85,57 +85,110 @@ const DepartmentNew = () => {
           : "/" +
           parent[`${order[2]}`].name +
           (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
-    temp.push({
-      ...values,
-      parent: par,
-      type: type,
-    });
-    CompanyProContext.addCompInfo(compId, {
-      departments: {
-        ...values,
-        parent: par,
-        type: type,
-      }
-    });
-    if (type == order[0]) {
-      temp.push(
-        {
-          ...values,
-          parent: values.name,
-          type: order[1]
-        },
-        {
-          ...values,
-          parent: `${values.name}/${values.name}`,
-          type: order[2]
-        },
-        {
-          ...values,
-          parent: `${values.name}/${values.name}/${values.name}`,
-          type: order[3]
-        },
-      )
-      CompanyProContext.addCompInfo(compId, {
-        departments: {
-          ...values,
-          parent: values.name,
-          type: order[1]
-        }
-      });
-      CompanyProContext.addCompInfo(compId, {
-        departments: {
-          ...values,
-          parent: `${values.name}/${values.name}`,
-          type: order[2]
-        }
-      });
-      CompanyProContext.addCompInfo(compId, {
-        departments: {
-          ...values,
-          parent: `${values.name}/${values.name}/${values.name}`,
-          type: order[3]
-        }
-      });
+    // temp.push({
+    //   ...values,
+    //   parent: par,
+    //   type: type,
+    // });
+    // CompanyProContext.addCompInfo(compId, {
+    //   departments: {
+    //     ...values,
+    //     parent: par,
+    //     type: type,
+    //   }
+    // });
+    // if (type == order[0]) {
+    //   temp.push(
+    //     {
+    //       ...values,
+    //       parent: values.name,
+    //       type: order[1]
+    //     },
+    //     {
+    //       ...values,
+    //       parent: `${values.name}/${values.name}`,
+    //       type: order[2]
+    //     },
+    //     {
+    //       ...values,
+    //       parent: `${values.name}/${values.name}/${values.name}`,
+    //       type: order[3]
+    //     },
+    //   )
+    //   CompanyProContext.addCompInfo(compId, {
+    //     departments: {
+    //       ...values,
+    //       parent: values.name,
+    //       type: order[1]
+    //     }
+    //   });
+    //   CompanyProContext.addCompInfo(compId, {
+    //     departments: {
+    //       ...values,
+    //       parent: `${values.name}/${values.name}`,
+    //       type: order[2]
+    //     }
+    //   });
+    //   CompanyProContext.addCompInfo(compId, {
+    //     departments: {
+    //       ...values,
+    //       parent: `${values.name}/${values.name}/${values.name}`,
+    //       type: order[3]
+    //     }
+    //   });
+    // }
+    switch (type) {
+      case order[0]:  temp.push({
+                        ...values,
+                        parent: null,
+                        type: order[0],
+                      });
+                      CompanyProContext.addCompInfo(compId, {
+                        departments: {
+                          ...values,
+                          parent: null,
+                          type: order[0]
+                        }
+                      });
+                      par = values.name;
+      case order[1]:  temp.push({
+                        ...values,
+                        parent: par,
+                        type: order[1]
+                      });
+                      CompanyProContext.addCompInfo(compId, {
+                        departments: {
+                          ...values,
+                          parent: par,
+                          type: order[1]
+                        }
+                      });
+                      par = par + `/${values.name}`;
+      case order[2]:  temp.push({
+                        ...values,
+                        parent: par,
+                        type: order[2]
+                      });
+                      CompanyProContext.addCompInfo(compId, {
+                        departments: {
+                          ...values,
+                          parent: par,
+                          type: order[2]
+                        }
+                      });
+                      par = par + `/${values.name}`;
+      case order[3]:  temp.push({
+                        ...values,
+                        parent: par,
+                        type: order[3]
+                      });
+                      CompanyProContext.addCompInfo(compId, {
+                        departments: {
+                          ...values,
+                          parent: par,
+                          type: order[3]
+                        }
+                      });
     }
     console.log(temp)
     form.resetFields();
@@ -144,9 +197,11 @@ const DepartmentNew = () => {
     getData(temp);
   };
 
-  const onFinishEdit = (values) => {
+  const onFinishEdit = async (values) => {
+    let ppl = await CompanyProContext.getAllUsersByOrg(compId, editRecord.name, editRecord.parent, type);
     let edited = data.map((d) => {
       if (d.parent == editRecord.parent && d.name == editRecord.name) {
+        console.log(d);
         return {
           name: values.editname,
           description: values.editdescription,
@@ -157,7 +212,7 @@ const DepartmentNew = () => {
       }
       if (d.parent != null) {
         let par =
-          editRecord.parent == null ? editRecord.name : editRecord.parent;
+          editRecord.parent == null ? editRecord.name : `${editRecord.parent}/${editRecord.name}`;
         if (d.parent.startsWith(par)) {
           return {
             ...d,
@@ -167,7 +222,12 @@ const DepartmentNew = () => {
       }
       return d;
     });
+    console.log(ppl, edited)
     CompanyProContext.updateCompInfo(compId, { departments: edited });
+    ppl.forEach((emp) => {
+      console.log({[`${type == "Business Unit" ? "businessUnit" : type.toLowerCase()}`] : values.editname});
+      EmpInfoContext.updateEduDetails(emp.id, {[`${type == "Business Unit" ? "businessUnit" : type.toLowerCase()}`] : values.editname})
+    })
     setEditRecord({});
     form1.resetFields();
     setIsEditModalOpen(false);
@@ -175,10 +235,12 @@ const DepartmentNew = () => {
     getData(edited);
   };
 
-  const deleteData = (record) => {
-    let ppl = CompanyProContext.getAllUsersByOrg(compId, record.name, record.parent, type);
+  const deleteData = async (record) => {
+    let ppl = await CompanyProContext.getAllUsersByOrg(compId, record.name, record.parent, type);
+    console.log(ppl);
     if (ppl.length != 0) {
-      showNotification("error", "Error", "")
+      showNotification("error", "Error", `This ${type} is not empty!`);
+      return;
     }
     Modal.confirm({
       title: `Are you sure, you want to delete this ${type}?`,

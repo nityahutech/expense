@@ -19,38 +19,15 @@ import {
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import "../../style/BankAccount.css";
-import FormItem from "antd/es/form/FormItem";
-import CompanyProContext from "../../contexts/CompanyProContext";
-import {
-  capitalize,
-  checkAlphabets,
-  checkNumbervalue,
-} from "../../contexts/CreateContext";
-import { arrayUnion, deleteDoc } from "firebase/firestore";
+import { capitalize, checkNumbervalue } from "../../contexts/CreateContext";
+
 function BankAccount() {
-  const [form] = Form.useForm();
   const [editBankForm] = Form.useForm();
   const [addBankForm] = Form.useForm();
-  const [editContent, showEditContent] = useState(false);
-  const compId = sessionStorage.getItem("compId");
-  const [data, setData] = useState("");
   const [editBank, setEditBank] = useState([false]);
   const [bankList, setBankList] = useState([]);
   const [addBank, setAddBank] = useState(false);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
-
-  const onFinish = (values) => {
-    values.profilePic = data.profilePic || null;
-    EmpInfoContext.updateEduDetails(currentUser.uid, values);
-    showEditContent(false);
-    let temp = {
-      ...data,
-      bankName: values.bankName,
-      accountNumber: values.accountNumber,
-      ifscCode: values.ifscCode,
-    };
-    setData(temp);
-  };
 
   useEffect(() => {
     getData();
@@ -58,9 +35,8 @@ function BankAccount() {
 
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    let temp = data?.bank || []
-    setData(data);
-    setBankList(temp);
+    let temp = [...data?.bank] || [];
+    setBankList([...temp]);
     setEditBank(temp.fill(false));
   };
 
@@ -73,6 +49,7 @@ function BankAccount() {
       city: values.city,
       branch: values.branch,
       accountNo: values.accountNo,
+      upiId: values.upiId,
     };
     let temp = [...bankList];
     let i = editBank.indexOf(true);
@@ -112,10 +89,10 @@ function BankAccount() {
       city: values.city,
       branch: values.branch,
       accountNo: values.accountNo,
+      upiId: values.upiId,
     };
     let record = [...bankList, rec];
     EmpInfoContext.updateEduDetails(currentUser.uid, { bank: record });
-    // CompanyProContext.addCompInfo(compId, { bank: record });
     addBankForm.resetFields();
     getData();
     setEditBank(editBank.fill(false));
@@ -182,7 +159,7 @@ function BankAccount() {
                             {u.title ? u.title : "-"}
                           </div>
                         ) : (
-                          <FormItem
+                          <Form.Item
                             initialValue={u.title}
                             name="title"
                             rules={[
@@ -203,8 +180,13 @@ function BankAccount() {
                                 paddingLeft: "0px",
                                 marginTop: "10px",
                               }}
+                              onChange={(e) => {
+                                const str = e.target.value;
+                                const caps = str.split(" ").map(capitalize).join(" ");
+                                editBankForm.setFieldsValue({ title: caps });
+                              }}
                             />
-                          </FormItem>
+                          </Form.Item>
                         )}
                       </Col>
                     </Row>
@@ -215,7 +197,7 @@ function BankAccount() {
                         {editBank[i] === false ? (
                           <div>{u?.bankName ? u.bankName : "-"}</div>
                         ) : (
-                          <FormItem
+                          <Form.Item
                             name="bankName"
                             initialValue={u.bankName}
                             rules={[
@@ -237,7 +219,7 @@ function BankAccount() {
                                 marginTop: "10px",
                               }}
                             />
-                          </FormItem>
+                          </Form.Item>
                         )}
                       </Col>
                       <Col xs={22} sm={15} md={9}>
@@ -245,7 +227,7 @@ function BankAccount() {
                         {editBank[i] === false ? (
                           <div>{u?.city ? u.city : "-"}</div>
                         ) : (
-                          <FormItem
+                          <Form.Item
                             name="city"
                             initialValue={u.city}
                             rules={[
@@ -267,7 +249,7 @@ function BankAccount() {
                                 marginTop: "10px",
                               }}
                             />
-                          </FormItem>
+                          </Form.Item>
                         )}
                       </Col>
                       <Col xs={22} sm={15} md={5}>
@@ -275,7 +257,7 @@ function BankAccount() {
                         {editBank[i] === false ? (
                           <div>{u?.branch ? u.branch : "-"}</div>
                         ) : (
-                          <FormItem
+                          <Form.Item
                             name="branch"
                             initialValue={u.branch}
                             rules={[
@@ -297,7 +279,7 @@ function BankAccount() {
                                 marginTop: "10px",
                               }}
                             />
-                          </FormItem>
+                          </Form.Item>
                         )}
                       </Col>
                       <Col
@@ -354,7 +336,7 @@ function BankAccount() {
                         {editBank[i] === false ? (
                           <div>{u?.ifsc ? u.ifsc : "-"}</div>
                         ) : (
-                          <FormItem
+                          <Form.Item
                             name="ifsc"
                             initialValue={u.ifsc}
                             rules={[
@@ -376,7 +358,7 @@ function BankAccount() {
                                 marginTop: "10px",
                               }}
                             />
-                          </FormItem>
+                          </Form.Item>
                         )}
                       </Col>
                       <Col xs={22} sm={15} md={9}>
@@ -384,7 +366,7 @@ function BankAccount() {
                         {editBank[i] === false ? (
                           <div>{u?.accountType ? u.accountType : "-"}</div>
                         ) : (
-                          <FormItem
+                          <Form.Item
                             name="accountType"
                             initialValue={u.accountType}
                             rules={[
@@ -418,7 +400,7 @@ function BankAccount() {
                                 },
                               ]}
                             />
-                          </FormItem>
+                          </Form.Item>
                         )}
                       </Col>
                       <Col xs={22} sm={15} md={6}>
@@ -437,8 +419,13 @@ function BankAccount() {
                               : "-"}
                           </div>
                         ) : (
-                          <FormItem
+                          <Form.Item
                             name="accountNo"
+                            onKeyPress={(event) => {
+                              if (checkNumbervalue(event)) {
+                                event.preventDefault();
+                              }
+                            }}
                             initialValue={u.accountNo}
                             rules={[
                               {
@@ -459,7 +446,37 @@ function BankAccount() {
                                 marginTop: "10px",
                               }}
                             />
-                          </FormItem>
+                          </Form.Item>
+                        )}
+                      </Col>
+                      <Col xs={22} sm={15} md={6}>
+                        <div className="div-discription">UPI ID</div>
+                        {editBank[i] === false ? (
+                          <div>{u?.upiId ? u.upiId : "-"}</div>
+                        ) : (
+                          <Form.Item
+                            name="upiId"
+                            initialValue={u.upiId}
+                            rules={[
+                              {
+                                pattern:  /^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]/,
+                                required: false,
+                                message: "Please Valid UPI ID",
+                              },
+                            ]}
+                          >
+                            <Input
+                              maxLength={50}
+                              placeholder="UPI ID"
+                              bordered={false}
+                              style={{
+                                width: "100%",
+                                borderBottom: "1px solid #ccc ",
+                                paddingLeft: "0px",
+                                marginTop: "10px",
+                              }}
+                            />
+                          </Form.Item>
                         )}
                       </Col>
                     </Row>
@@ -510,7 +527,7 @@ function BankAccount() {
                   >
                     <Row gutter={[16, 16]}>
                       <Col xs={24} sm={24} md={24}>
-                        <FormItem
+                        <Form.Item
                           label="Account Title"
                           name="title"
                           rules={[
@@ -531,11 +548,16 @@ function BankAccount() {
                               paddingLeft: "0px",
                               marginTop: "10px",
                             }}
+                            onChange={(e) => {
+                              const str = e.target.value;
+                              const caps = str.split(" ").map(capitalize).join(" ");
+                              addBankForm.setFieldsValue({ title: caps });
+                            }}
                           />
-                        </FormItem>
+                        </Form.Item>
                       </Col>
                       <Col xs={24} sm={12} md={8}>
-                        <FormItem
+                        <Form.Item
                           label="Bank Name"
                           name="bankName"
                           rules={[
@@ -557,10 +579,10 @@ function BankAccount() {
                               marginTop: "10px",
                             }}
                           />
-                        </FormItem>
+                        </Form.Item>
                       </Col>
                       <Col xs={24} sm={12} md={8}>
-                        <FormItem
+                        <Form.Item
                           label="City"
                           name="city"
                           rules={[
@@ -582,10 +604,10 @@ function BankAccount() {
                               marginTop: "10px",
                             }}
                           />
-                        </FormItem>
+                        </Form.Item>
                       </Col>
                       <Col xs={24} sm={12} md={8}>
-                        <FormItem
+                        <Form.Item
                           label="Branch Name"
                           name="branch"
                           rules={[
@@ -607,10 +629,10 @@ function BankAccount() {
                               marginTop: "10px",
                             }}
                           />
-                        </FormItem>
+                        </Form.Item>
                       </Col>
                       <Col xs={24} sm={12} md={8}>
-                        <FormItem
+                        <Form.Item
                           label="IFSC Code"
                           name="ifsc"
                           rules={[
@@ -632,10 +654,10 @@ function BankAccount() {
                               marginTop: "10px",
                             }}
                           />
-                        </FormItem>
+                        </Form.Item>
                       </Col>
                       <Col xs={24} sm={12} md={8}>
-                        <FormItem
+                        <Form.Item
                           label="Account Type"
                           initialValue="Current Account"
                           name="accountType"
@@ -670,11 +692,16 @@ function BankAccount() {
                               },
                             ]}
                           />
-                        </FormItem>
+                        </Form.Item>
                       </Col>
                       <Col xs={24} sm={12} md={8}>
-                        <FormItem
+                        <Form.Item
                           label="Account Number"
+                          onKeyPress={(event) => {
+                            if (checkNumbervalue(event)) {
+                              event.preventDefault();
+                            }
+                          }}
                           name="accountNo"
                           rules={[
                             {
@@ -695,7 +722,32 @@ function BankAccount() {
                               marginTop: "10px",
                             }}
                           />
-                        </FormItem>
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} sm={12} md={8}>
+                        <Form.Item
+                          label="UPI ID"
+                          name="upiId"
+                          rules={[
+                            {
+                              pattern:  /^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]/,
+                              required: false,
+                              message: "Please Valid UPI ID",
+                            },
+                          ]}
+                        >
+                          <Input
+                            maxLength={50}
+                            placeholder="UPI ID"
+                            bordered={false}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                        </Form.Item>
                       </Col>
                       <Col
                         xs={24}
@@ -703,7 +755,7 @@ function BankAccount() {
                         md={24}
                         style={{ display: "flex", justifyContent: "flex-end" }}
                       >
-                        <FormItem>
+                        <Form.Item>
                           <Button
                             type="text"
                             style={{ marginRight: "1rem" }}
@@ -724,7 +776,7 @@ function BankAccount() {
                             <CheckOutlined />
                             SAVE
                           </Button>
-                        </FormItem>
+                        </Form.Item>
                       </Col>
                     </Row>
                   </Form>

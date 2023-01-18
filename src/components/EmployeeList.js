@@ -2,11 +2,9 @@ import {
   Table,
   Button,
   Modal,
-  Layout,
   Row,
   Col,
   Input,
-  Form,
   Select,
   Tabs
 } from "antd";
@@ -16,6 +14,7 @@ import {
   DeleteFilled,
   EyeFilled,
 } from "@ant-design/icons";
+import Papa from 'papaparse';
 import Editemployee from "./Editemployee";
 import { useEffect, useState } from "react";
 import { getUsers, showNotification } from "../contexts/CreateContext";
@@ -23,26 +22,23 @@ import "../style/EmployeeList.css";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import EmployeeListview from "./EmployeeListview";
 import ConfigureContext from "../contexts/ConfigureContext";
-import { SELECTION_ALL } from "antd/lib/table/hooks/useSelection";
 import EmpFieldDownload from "./EmpFieldDownload";
+
 const { Option } = Select;
 
 function EmployeeList() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [certificationDetails, setCertificationDetails] = useState([]);
-  const [isProfileModal, setIsProfileModal] = useState(false);
   const [editedRecord, setEditedRecord] = useState(null);
   const [showRecord, setshowRecord] = useState([]);
   const [loading, setLoading] = useState(false);
   const [size, setSize] = useState(window.innerWidth <= 768 ? "" : "left");
   const [filterEmployees, setFilterEmployees] = useState([]);
-  const [allEmployees, setAllEmployees] = useState([]);
   const [data, setData] = useState([]);
-  const [disableItems, setDisableItems] = useState([]);
   const [designations, setDesignations] = useState([]);
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
-  const [showDownLoadModal, setShowDownLoadModal] = useState(false)
+  const [showDownloadModal, setShowDownloadModal] = useState(false)
 
   window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 768 ? "" : "left")
@@ -110,7 +106,6 @@ function EmployeeList() {
                   className="show"
                   // style={{ width: "40px" }}
                   onClick={() => {
-                    setIsProfileModal(true);
                     showViewModal(record);
                     setActivetab("2");
                   }}
@@ -151,29 +146,28 @@ function EmployeeList() {
   useEffect(() => {
     getData();
   }, []);
+
   const showModal = (record) => {
     setIsModalVisible(true);
   };
+
   const showViewModal = (record) => {
     setshowRecord(record);
     setCertificationDetails(record);
-    // setIsModalVisible(true);
   };
 
   const handleEditEmployee = (record) => {
     setEditedRecord(record);
   };
+
   async function getData() {
     setLoading(true);
     const allData = await getUsers();
     let d = allData.docs.map((doc, i) => {
       return {
         ...doc.data(),
-        isManager: doc.data().isManager ? "true" : "false",
-        isLead: doc.data().isLead ? "true" : "false",
         id: doc.id,
         sn: i + 1,
-        disabled: doc.data().disabled ? true : false,
       };
     });
 
@@ -182,12 +176,9 @@ function EmployeeList() {
     })
     setData(d);
     setFilterEmployees(d);
-    setAllEmployees(d);
     setCertificationDetails(d);
     setLoading(false);
   }
-
-
 
   const searchChange = (e) => {
     let search = e.target.value;
@@ -199,12 +190,13 @@ function EmployeeList() {
           ex.lname.toLowerCase().includes(search.toLowerCase()) ||
           ex?.mname?.toLowerCase()?.includes(search?.toLowerCase()) ||
           ex?.designation?.toLowerCase()?.includes(search?.toLowerCase()) ||
+          ex?.empId?.toLowerCase()?.includes(search?.toLowerCase()) ||
           ex.gender?.toLowerCase() == search
       );
       const modifiedFilterExpense = [...result];
       setFilterEmployees(modifiedFilterExpense);
     } else {
-      setFilterEmployees(allEmployees);
+      setFilterEmployees(data);
     }
   };
 
@@ -228,14 +220,154 @@ function EmployeeList() {
     });
   };
 
-  const downLoadMOdal = () => {
-    console.log('ddddd')
-    setShowDownLoadModal(true)
-  }
-  const closeCreateEmpModal = () => {
-    setShowDownLoadModal(!showDownLoadModal);
-    console.log('ddddd')
-
+  const downloadCSV = (downloadFields) => {
+    if (downloadFields == []) { return; }
+    let csvData = data.map((emp) => [
+      emp.empId,
+      emp.name,
+      emp.mailid,
+      emp.phonenumber,
+    ]);
+    console.log(data)
+    let fields = ["Employee ID", "Name", "Official Email ID", "Phone Number"];
+    if (downloadFields.includes("Basic Information")) {
+      data.forEach((emp, i) => {
+        csvData[i] = [
+          ...csvData[i],
+          emp.contactEmail,
+          emp.gender,
+          emp.dob,
+          emp.altPhnNo,
+          emp.currentAdd,
+          emp.houseType,
+          emp.permanentAdd,
+          emp.scrs,
+          emp.lccs,
+          emp.maritalStatus,
+          emp.bloodGroup,
+          emp.profilePic
+        ]
+      })
+      fields.push("Contact Email ID", "Gender", "Date of Birth", "Alternate Phone Number", "Current Address", "House Type", "Permanent Address", "Staying at Current Residence Since", "living in Current City Since", "Marital Status", "Blood Group", "Profile Picture")
+    }
+    if (downloadFields.includes("Work Information")) {
+      data.forEach((emp, i) => {
+        csvData[i] = [
+          ...csvData[i],
+          emp.designation,
+          emp.doj,
+          emp.empType,
+          emp.workLocation,
+          emp.businessUnit,
+          emp.division,
+          emp.department,
+          emp.team,
+          emp.repManager,
+          emp.secManager,
+          emp.lead,
+        ]
+      })
+      fields.push("Designation", "Date of Joining", "Employee Type", "Work Location", "Business Unit", "Division", "Department", "Team", "Reporting Manager", "Secondary Manager", "Lead");
+    }
+    if (downloadFields.includes("Family Information")) {
+      data.forEach((emp, i) => {
+        csvData[i] = [
+          ...csvData[i],
+          emp.father,
+          emp.fatherContact,
+          emp.mother,
+          emp.motherContact,
+          emp.other,
+          emp.relation,
+          emp.otherContact,
+        ]
+      })
+      fields.push("Father", "Father Contact", "Mother", "Mother Contact", "Other", "Relation", "Other Contact");
+    }
+    if (downloadFields.includes("Education Information")) {
+      data.forEach((emp, i) => {
+        csvData[i] = [
+          ...csvData[i],
+          emp.qualificationType,
+          emp.courseName,
+          emp.courseType,
+          emp.stream,
+          emp.courseStartDate,
+          emp.courseEndDate,
+          emp.universityName,
+        ]
+      })
+      fields.push("Qualification Type", "Course Name", "Course Type", "Stream", "Course Start Date", "Course End Date", "University Name");
+    }
+    if (downloadFields.includes("Bank Information")) {
+      data.forEach((emp, i) => {
+        let banks = emp.bank?.filter((bankAcc) => bankAcc.accountType == "Salary Account");
+        let acc = emp.bank?.indexOf(banks[0]) || 0
+        if (!emp.bank || banks.length == 0) {
+          csvData[i] = [
+            ...csvData[i],
+            emp.bank,
+            emp.bank,
+            emp.bank,
+            emp.bank,
+            emp.bank,
+            emp.upiId,
+          ]
+          return;
+        }
+        console.log(emp, acc)
+        csvData[i] = [
+          ...csvData[i],
+          emp.bank[acc].bankName,
+          emp.bank[acc].city,
+          emp.bank[acc].branch,
+          emp.bank[acc].ifsc,
+          emp.bank[acc].accountNo,
+          emp.upiId,
+        ]
+      })
+      fields.push("Bank Name", "City", "Branch", "IFSC Code", "Account Number", "UPI ID");
+    }
+    if (downloadFields.includes("Certificate")) {
+      data.forEach((emp, i) => {
+        csvData[i] = [
+          ...csvData[i],
+          emp.qualificationType,
+          emp.courseName,
+          emp.courseType,
+          emp.stream,
+          emp.courseStartDate,
+          emp.courseEndDate,
+          emp.universityName,
+        ]
+      })
+      fields.push("Qualification Type", "Course Name", "Course Type", "Stream", "Course Start Date", "Course End Date", "University Name");
+    }
+    if (downloadFields.includes("Identification Document")) {
+      data.forEach((emp, i) => {
+        csvData[i] = [
+          ...csvData[i],
+          emp.qualificationType,
+          emp.courseName,
+          emp.courseType,
+          emp.stream,
+          emp.courseStartDate,
+          emp.courseEndDate,
+          emp.universityName,
+        ]
+      })
+      fields.push("Qualification Type", "Course Name", "Course Type", "Stream", "Course Start Date", "Course End Date", "University Name");
+    }
+    const csv = Papa.unparse([fields, ...csvData]);
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'empInformation.csv');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   return (
@@ -254,7 +386,7 @@ function EmployeeList() {
             <div style={{ width: '100%', padding: '10px', backgroundColor: 'white', marginBottom: '15px' }}>
               <Row gutter={[16, 16]}>
                 <Col xs={24} xm={24} md={8} lg={4}>
-                  <Button style={{ width: '100%' }} type="default" onClick={downLoadMOdal}>DownLoad Information</Button>
+                  <Button style={{ width: '100%' }} type="default" onClick={() => setShowDownloadModal(true)}>Download</Button>
                 </Col>
                 <Col xs={24} xm={24} md={8} lg={4}>
                   <Input
@@ -275,7 +407,7 @@ function EmployeeList() {
                       const selectedData = data.filter((emp) =>
                         emp.designation.includes(e)
                       );
-                      setFilterEmployees(selectedData.length == 0 ? allEmployees : selectedData);
+                      setFilterEmployees(selectedData.length == 0 ? data : selectedData);
                     }}
                     showSearch
                   >
@@ -337,7 +469,6 @@ function EmployeeList() {
             <EmployeeListview
               className="Edit"
               showRecord={showRecord}
-              setIsProfileModal={setIsProfileModal}
               getData={getData}
               certificationDetails={certificationDetails}
             />
@@ -355,23 +486,20 @@ function EmployeeList() {
           width={500}
           centered
           title="Select  Field"
-          open={showDownLoadModal}
-          visible={showDownLoadModal}
+          open={showDownloadModal}
+          visible={showDownloadModal}
           footer={null}
           // afterClose={getData}
           closeIcon={
             <div
-              onClick={() => {
-                closeCreateEmpModal(false);
-
-              }}
+              onClick={() => setShowDownloadModal(false)}
               style={{ color: "#ffffff" }}
             >
               X
             </div>
           }
         >
-          <EmpFieldDownload closeCreateEmpModal={closeCreateEmpModal} />
+          <EmpFieldDownload setShowDownloadModal={setShowDownloadModal} downloadCSV={downloadCSV} />
 
         </Modal>
 

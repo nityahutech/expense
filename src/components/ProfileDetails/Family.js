@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { Card, Row, Col, Input, Button, Form, Select } from "antd";
-import { getCountryCode } from "../../contexts/CreateContext";
+import { capitalize, checkAlphabets, checkNumbervalue, getCountryCode } from "../../contexts/CreateContext";
 
 import {
   PlusCircleOutlined,
@@ -40,23 +40,6 @@ const Family = () => {
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setData(data);
-  };
-  // const handleOnChange=(value,event)=>{
-  //   console.log(value,event);
-  // }
-
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-  const checkNumbervalue = (event) => {
-    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-  const checkAlphabets = (event) => {
-    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
   };
 
   const prefixSelector = (
@@ -324,10 +307,10 @@ const Family = () => {
                         >
                           <Input
                             onChange={(e) => {
-                                  const str = e.target.value;
-                                  const caps = str.split(" ").map(capitalize).join(" ");
-                                  form.setFieldsValue({ father: caps });
-                                }}
+                              const str = e.target.value;
+                              const caps = str.split(" ").map(capitalize).join(" ");
+                              form.setFieldsValue({ father: caps });
+                            }}
                             maxLength={40}
                             placeholder="Enter Father's Name"
                             style={{
@@ -717,11 +700,8 @@ const Family = () => {
                           <Input
                           onChange={(e) => {
                             const str = e.target.value;
-                            const caps = str
-                              .split(" ")
-                              .map(capitalize)
-                              .join(" ");
-                            form1.setFieldsValue({other: caps,});
+                            const caps = str.split(" ").map(capitalize).join(" ");
+                            form1.setFieldsValue({other: caps});
                           }}
                             placeholder="Enter Other Name"
                             maxLength={40}
@@ -775,11 +755,8 @@ const Family = () => {
                           <Input
                             onChange={(e) => {
                               const str = e.target.value;
-                              const caps = str
-                                .split(" ")
-                                .map(capitalize)
-                                .join(" ");
-                              form1.setFieldsValue({relation: caps,});
+                              const caps = str.split(" ").map(capitalize).join(" ");
+                              form1.setFieldsValue({relation: caps});
                             }}
                             placeholder="Enter the Relation"
                             maxLength={40}

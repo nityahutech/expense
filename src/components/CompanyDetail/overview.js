@@ -400,7 +400,6 @@ function Overview() {
                             ]}
                           >
                             <Input
-                              type="email"
                               maxLength={60}
                               style={{
                                 paddingLeft: "0px",
@@ -438,7 +437,6 @@ function Overview() {
                             ]}
                           >
                             <Input
-                              type="email"
                               maxLength={60}
                               style={{
                                 paddingLeft: "0px",

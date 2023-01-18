@@ -12,7 +12,6 @@ import settingsIcon from "../../images/abstractuserflat4.png";
 import logoutIcon from "../../images/logoutsvgrepocom.png";
 import Logo from "../../images/logo22 ss.png";
 import dropdown from "../../images/dropdown.png";
-import Item from "antd/lib/list/Item";
 // ---------------------------------------------------------------------
 
 const Navbar = (props) => {

@@ -4,6 +4,10 @@ import {
     getDoc,
     updateDoc,
     doc,
+    collection,
+    getDocs,
+    query,
+    where
 } from "firebase/firestore";
 import {
     deleteObject,
@@ -48,13 +52,15 @@ class EmpInfoContext {
     };
     
     disablePerson = (id) => {
-        // updateDoc(doc(db, `companyprofile/${compId}/users`, id), { disabled: true });
+        updateDoc(doc(db, `companyprofile/${compId}/users`, id), { disabled: true });
         return disableAccount(id, true);
     };
 
-    enablePerson = (id) => {
-        updateDoc(doc(db,`companyprofile/${compId}/users`, id), { disabled: false });
-        return disableAccount(id, false);
+    idExists = async (id) => {
+        let q = query(collection(db,`companyprofile/${compId}/users`), where("empId", "==", id));
+        let d = await getDocs(q);
+        console.log(d.docs.length)
+        return d.docs.length > 0;
     };
 
 }

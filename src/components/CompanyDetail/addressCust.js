@@ -9,6 +9,7 @@ import {
   CheckOutlined,
 } from "@ant-design/icons";
 import "../../components/CompanyDetail/companystyle.css";
+import { capitalize } from "../../contexts/CreateContext";
 
 function AddressCust() {
   const [editAddressContent, showEditAddressContent] = useState([false]);
@@ -205,6 +206,16 @@ function AddressCust() {
                                   width: '100%',
                                   borderBottom: '1px solid #ccc ',
                                   paddingLeft: '0px',
+                              }}
+                              onChange={(e) => {
+                                const inputval = e.target.value;
+                                const str = e.target.value;
+                                const newVal =
+                                  inputval.substring(0, 1).toUpperCase() +
+                                  inputval.substring(1);
+                                const caps = str.split(" ").map(capitalize).join(" ");
+                                // setPaidBy(newVal);
+                                form.setFieldsValue({ addresstitle: newVal, addresstitle: caps });
                               }}
                               bordered={false} 
                                 required
@@ -534,7 +545,11 @@ function AddressCust() {
                                 paddingLeft: "0px",
                                 marginTop: "10px",
                               }}
-                            
+                              onChange={(e) => {
+                                const str = e.target.value;
+                                const caps = str.split(" ").map(capitalize).join(" ");
+                                form.setFieldsValue({ addresstitle: caps });
+                              }}
                               bordered={false}
                               required
                               placeholder="Address Title"

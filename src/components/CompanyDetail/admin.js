@@ -34,7 +34,7 @@ const Admin = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const compId = sessionStorage.getItem("compId");
-
+ 
   const [allEmpName, setAllEmpName] = useState([]);
   const [ceoAdmin, setCeoAdmin] = useState('');
   const [ceoAdminImg, setCeoAdminImg] = useState('');

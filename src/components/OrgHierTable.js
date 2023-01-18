@@ -651,9 +651,7 @@ const OrgHierTable = () => {
                       },
                       {
                         validator: (_, value) => {
-                          let matchingName = dataSource.filter(
-                            (item) => item.name === value
-                          );
+                          let matchingName = dataSource.filter((item) => item.name == editRecord.name ? false : item.name === value);
                           if (matchingName.length > 0) {
                             return Promise.reject(new Error("This name already exists!"));
                           }

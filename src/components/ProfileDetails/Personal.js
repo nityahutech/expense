@@ -24,6 +24,7 @@ import "./Personal.css";
 import moment from "moment";
 import {
   capitalize,
+  checkNumbervalue,
   getBase64,
   getCountryCode,
 } from "../../contexts/CreateContext";
@@ -377,6 +378,7 @@ function Personal() {
                           style={{
                             height: "100%",
                             width: "100%",
+                            marginRight: "10px"
                           }}
                         >
                           <div className="headerTitle">
@@ -660,32 +662,15 @@ function Personal() {
                                   borderBottom: "1px solid #ccc ",
                                 }}
                                 bordered={false}
-                                // disabled={true}
                                 initialValue={data.name ? data.name : null}
                                 maxLength={50}
                                 required
                                 placeholder="Enter Your Name"
-                                
                                 onChange={(e) => {
                                   const str = e.target.value;
                                   const caps = str.split(" ").map(capitalize).join(" ");
                                   form.setFieldsValue({ name: caps });
                                 }}
-                                // onChange={(e) => {
-                                //   const inputval = e.target.value;
-                                //   const str = e.target.value;
-                                //   const newVal =
-                                //     inputval.substring(0, 1).toUpperCase() +
-                                //     inputval.substring(1);
-                                //   const caps = str
-                                //     .split(" ")
-                                //     .map(capitalize)
-                                //     .join(" ");
-                                //   form.setFieldsValue({
-                                //     name: newVal,
-                                //     name: caps,
-                                //   });
-                                // }}
                               />
                             </Form.Item>
                           </Col>
@@ -1045,6 +1030,11 @@ function Personal() {
                           initialValue={data ? data.phonenumber : null}
                           className="numder-inputs"
                           name="phonenumber"
+                          onKeyPress={(event) => {
+                            if (checkNumbervalue(event)) {
+                              event.preventDefault();
+                            }
+                          }}
                           rules={[
                             {
                               required: true,
@@ -1095,6 +1085,11 @@ function Personal() {
                           initialValue={data ? data.altPhnNo : null}
                           className="numder-inputs"
                           name="altPhnNo"
+                          onKeyPress={(event) => {
+                            if (checkNumbervalue(event)) {
+                              event.preventDefault();
+                            }
+                          }}
                           rules={[
                             {
                               required: false,

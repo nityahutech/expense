@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form, Input, Col, Row, Divider, message, Button, Select } from "antd";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "../style/Onboarding.css";
-import { getBase64, getCountryCode } from "../contexts/CreateContext";
+import { capitalize, checkAlphabets, checkNumbervalue, checkUpperCase, getBase64, getCountryCode } from "../contexts/CreateContext";
 const { Option } = Select;
 
 const OrgDetails = (props) => {
@@ -37,19 +37,12 @@ const OrgDetails = (props) => {
     console.log(value, event);
   };
 
-  // const getBase64 = (img, callback) => {
-  //   const reader = new FileReader();
-  //   reader.addEventListener("load", () => callback(reader.result));
-  //   reader.readAsDataURL(img);
-  // };
-
   const handleChange = (event) => {
     if (!event) {
       return;
     }
     const fileUploaded = event.target.files[0];
     getBase64(fileUploaded, (url) => {
-      // setLoading(false);
       setImageUrl(url);
     });
     checkFileSize(fileUploaded.size, fileUploaded);
@@ -65,39 +58,11 @@ const OrgDetails = (props) => {
     }
   }
 
-  const checkNumbervalue = (event) => {
-    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
-  const checkAlphabets = (event) => {
-    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
-  const checkAlphabetUpper = (event) => {
-    if (!/^[A-Z]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
   function onReset() {
     setIsBigFile(false);
     setFileName(null);
     setImageUrl("");
   }
-
-  // useEffect(() => {
-  //   getCountryCode().then((res) => {
-  //     setCodes(res);
-  //   });
-  // }, []);
 
   const onFinishFailed = (errorInfo) => {
     props.setIsStepOneInvalid(true);
@@ -157,11 +122,10 @@ const OrgDetails = (props) => {
         <Row gutter={[24, 8]}>
           <Col xs={22} sm={15} md={8}>
             <Form.Item
-              // initialValue={newCompId}
               name="preCode"
               label="Prefix Code"
               onKeyPress={(event) => {
-                if (checkNumbervalue(event) && checkAlphabetUpper(event)) {
+                if (checkUpperCase(event)) {
                   event.preventDefault();
                 }
               }}
@@ -178,7 +142,7 @@ const OrgDetails = (props) => {
               initialValue={data?.preCode}
             >
               <Input
-                maxLength={10}
+                maxLength={6}
                 placeholder="Prefix Code"
                 style={{
                   border: "1px solid #8692A6",
@@ -216,17 +180,9 @@ const OrgDetails = (props) => {
                   borderRadius: "4px",
                 }}
                 onChange={(e) => {
-                  const inputval = e.target.value;
                   const str = e.target.value;
-                  const newVal =
-                    inputval.substring(0, 1).toUpperCase() +
-                    inputval.substring(1);
                   const caps = str.split(" ").map(capitalize).join(" ");
-                  // setPaidBy(newVal);
-                  props.form.setFieldsValue({
-                    regCompName: newVal,
-                    regCompName: caps,
-                  });
+                  props.form.setFieldsValue({ regCompName: caps });
                 }}
               />
             </Form.Item>
@@ -269,7 +225,7 @@ const OrgDetails = (props) => {
               name="gst"
               label="GST Number"
               onKeyPress={(event) => {
-                if (checkNumbervalue(event) && checkAlphabetUpper(event)) {
+                if (checkNumbervalue(event) && checkUpperCase(event)) {
                   event.preventDefault();
                 }
               }}

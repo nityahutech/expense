@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Typography } from "antd";
-import { MinusCircleOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import CompanyProContext from "../../contexts/CompanyProContext";
 import { getUsers } from "../../contexts/CreateContext";
 import "./companystyle.css";
@@ -10,7 +10,6 @@ import {
   Form,
   Row,
   Card,
-  Input,
   Space,
   notification
 } from "antd";
@@ -21,10 +20,8 @@ import {
   EditFilled,
 } from "@ant-design/icons";
 import { AutoComplete } from 'antd';
-const mockVal = (str, repeat = 1) => ({
-  value: str.repeat(repeat),
-});
-const { Text, Link } = Typography;
+
+const { Text } = Typography;
 const Admin = () => {
   const [editContactInfo, showEditContactInfo] = useState(false);
   const [editHrContactInfo, showEditHrContactInfo] = useState(false);
@@ -304,6 +301,7 @@ const Admin = () => {
                             <>
                               <Button
                                 style={{
+                                  marginTop: "10px",
                                   background: "#1963a6",
                                   border: "1px solid #1963A6",
                                   color: "#ffff",
@@ -335,6 +333,7 @@ const Admin = () => {
                               {editContactInfo == false ? (
                                 <Button
                                   style={{
+                                    marginTop: "10px",
                                     background: "#1963a6",
                                     border: "1px solid #1963A6",
                                     color: "#ffff",
@@ -482,6 +481,7 @@ const Admin = () => {
                         <>
                           <Button
                             style={{
+                              marginTop: "10px",
                               background: "#1963a6",
                               border: "1px solid #1963A6",
                               color: "#ffff",
@@ -525,6 +525,7 @@ const Admin = () => {
                           {editHrContactInfo == false ? (
                             <Button
                               style={{
+                                marginTop: "10px",
                                 background: "#1963a6",
                                 border: "1px solid #1963A6",
                                 color: "#ffff",
@@ -674,6 +675,7 @@ const Admin = () => {
                       !data.financerAdmin ? (
                         <Button
                           style={{
+                            marginTop: "10px",
                             background: "#1963a6",
                             border: "1px solid #1963A6",
                           }}
@@ -715,6 +717,7 @@ const Admin = () => {
                               type="text"
                               className="edit"
                               style={{
+                                marginTop: "10px",
                                 background: "#1963a6",
                                 border: "1px solid #1963A6",
                                 color: "#ffff",
@@ -894,6 +897,7 @@ const Admin = () => {
                       !data.hrExeAdmin ? (
                         <Button
                           style={{
+                            marginTop: "10px",
                             background: "#1963a6",
                             border: "1px solid #1963A6",
                           }}
@@ -936,6 +940,7 @@ const Admin = () => {
                               type="text"
                               className="edit"
                               style={{
+                                marginTop: "10px",
                                 background: "#1963a6",
                                 border: "1px solid #1963A6",
                                 color: "#ffff",

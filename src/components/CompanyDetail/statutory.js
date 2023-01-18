@@ -212,11 +212,7 @@ const Statutory = () => {
       },
     });
   };
-
-  // const handleOnChange = (value, event) => {
-  //   console.log(value, event);
-  // };
-
+  
   const prefixSelector = (i) => {
     return (
       <Form.Item
@@ -1434,6 +1430,36 @@ const Statutory = () => {
                           </FormItem>
                         )}
                       </Col>
+                      <Col xs={22} sm={15} md={6}>
+                        <div className="div-discription">UPI ID</div>
+                        {editBank[i] === false ? (
+                          <div>{u?.upiId ? u.upiId : "-"}</div>
+                        ) : (
+                          <Form.Item
+                            name="upiId"
+                            initialValue={u.upiId}
+                            rules={[
+                              {
+                                pattern:  /^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]/,
+                                required: false,
+                                message: "Please Valid UPI ID",
+                              },
+                            ]}
+                          >
+                            <Input
+                              maxLength={50}
+                              placeholder="UPI ID"
+                              bordered={false}
+                              style={{
+                                width: "100%",
+                                borderBottom: "1px solid #ccc ",
+                                paddingLeft: "0px",
+                                marginTop: "10px",
+                              }}
+                            />
+                          </Form.Item>
+                        )}
+                      </Col>
                     </Row>
                     <Divider />
                   </div>
@@ -1668,6 +1694,31 @@ const Statutory = () => {
                             }}
                           />
                         </FormItem>
+                      </Col>
+                      <Col xs={24} sm={12} md={8}>
+                        <Form.Item
+                          label="UPI ID"
+                          name="upiId"
+                          rules={[
+                            {
+                              pattern:  /^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]/,
+                              required: false,
+                              message: "Please Valid UPI ID",
+                            },
+                          ]}
+                        >
+                          <Input
+                            maxLength={50}
+                            placeholder="UPI ID"
+                            bordered={false}
+                            style={{
+                              width: "100%",
+                              borderBottom: "1px solid #ccc ",
+                              paddingLeft: "0px",
+                              marginTop: "10px",
+                            }}
+                          />
+                        </Form.Item>
                       </Col>
                       <Col
                         xs={24}

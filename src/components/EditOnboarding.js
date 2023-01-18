@@ -21,6 +21,7 @@ import {
   getCountryCode,
 } from "../contexts/CreateContext";
 import CompanyProContext from "../contexts/CompanyProContext";
+import PrefixSelector from "./PrefixSelector";
 
 const { Option } = Select;
 
@@ -119,31 +120,6 @@ function EditOnboarding(props) {
       setIsBigFile(true);
     }
   }
-
-  const handleOnChange = (value, event) => {
-    console.log(value, event);
-  };
-
-  const prefixSelector = (
-    <Form.Item initialValue={modalData.prefix} name="prefix" noStyle>
-      <Select
-        allowClear={true}
-        showSearch
-        bordered={false}
-        style={{
-          width: 80,
-          background: "#ffffff",
-        }}
-        onSelect={(value, event) => handleOnChange(value, event)}
-      >
-        {codes?.countries?.map((e) => (
-          <Option key={e?.code} value={e?.code}>
-            {e?.code}{" "}
-          </Option>
-        ))}
-      </Select>
-    </Form.Item>
-  );
 
   return (
     <Card
@@ -341,7 +317,7 @@ function EditOnboarding(props) {
                 initialValue={props?.modalData?.phone}
               >
                 <Input
-                  addonBefore={prefixSelector}
+                  addonBefore={(<PrefixSelector name={"prefix"} initial={modalData.prefix} />)}
                   maxLength={10}
                   placeholder="Phone"
                   style={{

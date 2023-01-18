@@ -25,10 +25,11 @@ import ConfigureContext from "../contexts/ConfigureContext";
 import CompanyProContext from "../contexts/CompanyProContext";
 import { useCSVReader } from "react-papaparse";
 import Papa from 'papaparse';
+import EmpInfoContext from "../contexts/EmpInfoContext";
 
 const { Option } = Select;
 
-function AddEmployee(props) {
+function AddEmployee() {
   const page = "addemployeePage";
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -190,7 +191,7 @@ function AddEmployee(props) {
   };
 
   const handleBulkOnboard = () => {
-    let temp = allEmp.slice(10, 20);
+    let temp = [...allEmp];
     let headers = temp.shift();
     let model = temp.shift();
     let firstName = headers.indexOf("First Name");
@@ -216,9 +217,8 @@ function AddEmployee(props) {
     let role = headers.indexOf("Role");
     let note = headers.indexOf("Note");
     temp.forEach((emp => {
-      console.log("emp", emp);
       let temp = {
-        empId: preCode + emp[id],
+        empId: emp[id],
         fname: emp[firstName],
         mname: emp[middleName],
         lname: emp[lastName],
@@ -253,12 +253,12 @@ function AddEmployee(props) {
   };
 
   const validateCSV = async (data, headers, model) => {
-    console.log(data, headers, model);
     let errors = [["Email Id", "Field", "Error"]];
     let emps = allEmpName.map((ex) => { return ex.value })
     let firstName = headers.indexOf("First Name");
     let middleName = headers.indexOf("Middle Name");
     let lastName = headers.indexOf("Last Name");
+    let id = headers.indexOf("Employee ID");
     let officialEmail = headers.indexOf("Offical Email Id");
     let contactEmail = headers.indexOf("Personal Email Id");
     let dob = headers.indexOf("Date of Birth");
@@ -275,11 +275,12 @@ function AddEmployee(props) {
     let div = headers.indexOf(order[1]);
     let dept = headers.indexOf(order[2]);
     data.forEach(async (emp, i) => {
-      emp[firstName] = emp[firstName].trim().split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
-      emp[middleName] = emp[middleName] ? emp[middleName].trim().split(" ").map(x => capitalize(x.toLowerCase())).join(" ") : null;
-      emp[lastName] = emp[lastName].trim().split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
-      emp[gender] = capitalize(emp[gender].trim().toLowerCase());
-      emp[empType] = emp[empType].trim().split("-").map(x => capitalize(x.toLowerCase())).join("-");
+      emp.forEach((field, i) => {emp[i] = field.trim()})
+      emp[firstName] = emp[firstName].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
+      emp[middleName] = emp[middleName] ? emp[middleName].split(" ").map(x => capitalize(x.toLowerCase())).join(" ") : null;
+      emp[lastName] = emp[lastName].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
+      emp[gender] = capitalize(emp[gender].toLowerCase());
+      emp[empType] = emp[empType].split("-").map(x => capitalize(x.toLowerCase())).join("-");
       // emp[phone] = emp[phone].contains("+");
       // try {
       order.forEach((type, place) => {
@@ -292,6 +293,8 @@ function AddEmployee(props) {
         let orgValid = orgHier.filter((d) => d.name == value && d.type == type && d.parent == par);
         if (orgValid.length == 0) { errors.push([emp[officialEmail], type, `${value} does not exist!`]); }
       })
+      let idExists = await EmpInfoContext.idExists(emp[id]);
+      if (idExists) { errors.push([emp[officialEmail], "Employee ID", "This employee code already exists!"]); }
       let valid = /^[a-zA-Z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(emp[officialEmail]);
       if (!valid) { errors.push([emp[officialEmail], "Offical Email Id", "Invalid email address!"]); }
       let emailDomain = emp[officialEmail].substring(emp[officialEmail].indexOf("@") + 1);
@@ -435,11 +438,11 @@ function AddEmployee(props) {
               <CSVReader
                 onUploadAccepted={(results) => {
                   setEnableBulk(true)
-                  let temp = results.data.slice(0, 20);
+                  let temp = [...results.data];
                   let headers = temp.shift();
                   let model = temp.shift();
                   validateCSV(temp, headers, model);
-                  setAllEmp(results.data.slice(0, 10))
+                  setAllEmp([...results.data])
                 }}
               >
                 {({

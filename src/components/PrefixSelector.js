@@ -1,6 +1,6 @@
 
 import { Form, Select } from "antd";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase-config";
 const { Option } = Select;

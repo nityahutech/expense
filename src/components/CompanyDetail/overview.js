@@ -22,7 +22,6 @@ function Overview() {
   const [data, setData] = useState([]);
   const compId = sessionStorage.getItem("compId");
   const [loading, setLoading] = useState(true);
-  //---------------image----------------------------
   const [isBigFile, setIsBigFile] = useState(false);
   const [fileName, setFileName] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
@@ -32,12 +31,14 @@ function Overview() {
     const valuesToservice = {
       regCompName: values.regCompName,
       brandName: values.brandName,
-      website: values.website,
+      website: values.website || "",
       domain: values.domain,
       profilePic: imageUrl || data.profilePic || null,
     };
     CompanyProContext.updateCompInfo(compId, valuesToservice, fileName);
-    getData();
+    const timer = setTimeout(() => {
+      getData();
+    }, [2000])
     showEditCompanyInfo(false);
   };
 
@@ -62,11 +63,9 @@ function Overview() {
   });
 
   const getData = async () => {
-
     setLoading(true);
     let data = await CompanyProContext.getCompanyProfile(compId);
     setData(data);
-    setFileName(data.logo);
     setImageUrl(data.logo);
     setLoading(false);
   };
@@ -106,7 +105,7 @@ function Overview() {
   }
 
   const imgDiv = () => {
-    if (fileName == "" || fileName == null) {
+    if (imageUrl == "" || imageUrl == null) {
       return editContactInfo == false ? (
         <div
           style={{
@@ -154,6 +153,9 @@ function Overview() {
           className={editContactInfo === true ? "hoverImgCont" : null}
           style={
             {
+              display: "flex",
+              justifyContent: "center",
+              marginRight: "15px"
               // border: "1px solid #d0d0d0",
               // Width: "auto",
               // height: "auto",
@@ -165,8 +167,6 @@ function Overview() {
           <img
             src={imageUrl}
             style={{
-              display: "flex",
-              justifyContent: "center",
               maxWidth: "170px",
               height: "100px",
               padding: "10px",

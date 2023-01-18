@@ -35,9 +35,9 @@ function BankAccount() {
 
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    let temp = [...data?.bank] || [];
+    let temp = data?.bank || [];
     setBankList([...temp]);
-    setEditBank(temp.fill(false));
+    setEditBank([...temp].fill(false));
   };
 
   function onEditBank(values) {

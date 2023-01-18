@@ -37,7 +37,6 @@ const DepartmentNew = () => {
 
   useEffect(() => {
     CompanyProContext.getCompanyProfile(compId).then((res) => {
-      console.log(res?.departments)
       setData(res?.departments)
       getData(res?.departments);
     })
@@ -63,13 +62,11 @@ const DepartmentNew = () => {
           : "/" +
           parent[`${order[2]}`].name +
           (place == 2 ? "" : "/" + parent[`${order[3]}`].name));
-    console.log(place, par);
     d.map((d) => {
       if (d.type == type && d.parent == par) {
         temp.push(d);
       }
     });
-    console.log(temp);
     setDataSource(temp);
   };
 
@@ -190,7 +187,6 @@ const DepartmentNew = () => {
                         }
                       });
     }
-    console.log(temp)
     form.resetFields();
     setIsModalOpen(false);
     setData(temp);
@@ -201,7 +197,6 @@ const DepartmentNew = () => {
     let ppl = await CompanyProContext.getAllUsersByOrg(compId, editRecord.name, editRecord.parent, type);
     let edited = data.map((d) => {
       if (d.parent == editRecord.parent && d.name == editRecord.name) {
-        console.log(d);
         return {
           name: values.editname,
           description: values.editdescription,
@@ -222,10 +217,8 @@ const DepartmentNew = () => {
       }
       return d;
     });
-    console.log(ppl, edited)
     CompanyProContext.updateCompInfo(compId, { departments: edited });
     ppl.forEach((emp) => {
-      console.log({[`${type == "Business Unit" ? "businessUnit" : type.toLowerCase()}`] : values.editname});
       EmpInfoContext.updateEduDetails(emp.id, {[`${type == "Business Unit" ? "businessUnit" : type.toLowerCase()}`] : values.editname})
     })
     setEditRecord({});
@@ -237,7 +230,6 @@ const DepartmentNew = () => {
 
   const deleteData = async (record) => {
     let ppl = await CompanyProContext.getAllUsersByOrg(compId, record.name, record.parent, type);
-    console.log(ppl);
     if (ppl.length != 0) {
       showNotification("error", "Error", `This ${type} is not empty!`);
       return;
@@ -249,21 +241,17 @@ const DepartmentNew = () => {
       onOk: () => {
         let deleted = data.filter((d) => {
           if (d.parent == record.parent && d.name == record.name) {
-            console.log("same");
             return false;
           }
-          console.log(d.parent, record.parent);
           if (d.parent != null) {
             let par =
               record.parent == null
                 ? record.name
                 : `${record.parent}/${record.name}`;
             if (d.parent.startsWith(par)) {
-              console.log("same par", par);
               return false;
             }
           }
-          console.log("none");
           return true;
         });
         CompanyProContext.updateCompInfo(compId, { departments: deleted });
@@ -295,7 +283,6 @@ const DepartmentNew = () => {
               return;
             }
             setType(order[temp]);
-            console.log(temp, order[temp], record);
             let d = parent == null ? {} : parent;
             d[`${order[temp]}`] = {
               name: record.name,
@@ -499,12 +486,7 @@ const DepartmentNew = () => {
                     >
                       <Button
                         type="default"
-                        onClick={() => {
-                          {
-                            console.log("hi");
-                            setIsModalOpen(true);
-                          }
-                        }}
+                        onClick={() => setIsModalOpen(true)}
                         style={{
                           margin: "10px 10px 0px 0px",
                           background: "#1963A6",

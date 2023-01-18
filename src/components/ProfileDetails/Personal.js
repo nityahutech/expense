@@ -368,36 +368,7 @@ function Personal() {
                                     >
                                       Date of Birth
                                     </div>
-                                    {editContent === false ? (
                                       <div>{data?.dob ? data.dob : "-"}</div>
-                                    ) : (
-                                      <Form.Item
-                                        initialValue={
-                                          dob ? moment(dob, "DD-MM-YYYY") : null
-                                        }
-                                        name="dob"
-                                        rules={[
-                                          {
-                                            required: false,
-                                            message: "Please Choose a Date",
-                                          },
-                                        ]}
-                                      >
-                                        <DatePicker
-                                          format="DD-MM-YYYY"
-                                          style={{
-                                            marginTop: "10px",
-                                            width: "100%",
-                                          }}
-                                          onChange={(e) => {
-                                            setDob(e.format("DD-MM-YYYY"));
-                                          }}
-                                          disabledDate={(e) => disabledDate(e)}
-                                          value={dob}
-                                          placeholder="Choose Date"
-                                        />
-                                      </Form.Item>
-                                    )}
                                   </div>
                                 </Col>
                                 <Col
@@ -420,36 +391,7 @@ function Personal() {
                                     >
                                       Gender
                                     </div>
-                                    {editContent === false ? (
                                       <div>{data ? data.gender : null}</div>
-                                    ) : (
-                                      <Form.Item
-                                        name="gender"
-                                        initialValue={
-                                          data.gender ? data.gender : "-"
-                                        }
-                                        rules={[
-                                          {
-                                            required: true,
-                                            message: "Please Choose Gender",
-                                          },
-                                        ]}
-                                      >
-                                        <Select
-                                          placeholder="Select a Gender"
-                                          style={{
-                                            marginTop: "10px",
-                                            width: "100%",
-                                            borderBottom: "1px solid #ccc ",
-                                            paddingLeft: "0px",
-                                          }}
-                                          bordered={false}
-                                        >
-                                          <Option value="Male">Male</Option>
-                                          <Option value="Female">Female</Option>
-                                        </Select>
-                                      </Form.Item>
-                                    )}
                                   </div>
                                 </Col>
                                 <Col
@@ -472,47 +414,9 @@ function Personal() {
                                     >
                                       Blood Group
                                     </div>
-                                    {editContent === false ? (
                                       <div>
-                                        {data?.bloodGroup
-                                          ? data.bloodGroup
-                                          : "-"}
+                                        {data?.bloodGroup ? data.bloodGroup : "-"}
                                       </div>
-                                    ) : (
-                                      <Form.Item
-                                        initialValue={
-                                          data ? data.bloodGroup : null
-                                        }
-                                        name="bloodGroup"
-                                        rules={[
-                                          {
-                                            required: false,
-                                            message:
-                                              "Please Choose Blood Groop",
-                                          },
-                                        ]}
-                                      >
-                                        <Select
-                                          placeholder="Select a Blood Group"
-                                          style={{
-                                            marginTop: "10px",
-                                            width: "100%",
-                                            borderBottom: "1px solid #ccc ",
-                                            paddingLeft: "0px",
-                                          }}
-                                          bordered={false}
-                                        >
-                                          <Option value="A+">A+</Option>
-                                          <Option value="A-">A-</Option>
-                                          <Option value="O+">O+</Option>
-                                          <Option value="O-">O-</Option>
-                                          <Option value="B+">B+</Option>
-                                          <Option value="B-">B-</Option>
-                                          <Option value="AB+">AB+</Option>
-                                          <Option value="AB-">AB-</Option>
-                                        </Select>
-                                      </Form.Item>
-                                    )}
                                   </div>
                                 </Col>
                                 <Col
@@ -535,41 +439,9 @@ function Personal() {
                                     >
                                       Marital Status
                                     </div>
-                                    {editContent === false ? (
                                       <div>
-                                        {data?.maritalStatus
-                                          ? data.maritalStatus
-                                          : "-"}
+                                        {data?.maritalStatus ? data.maritalStatus : "-"}
                                       </div>
-                                    ) : (
-                                      <Form.Item
-                                        initialValue={
-                                          data ? data.maritalStatus : null
-                                        }
-                                        name="maritalStatus"
-                                        rules={[
-                                          {
-                                            required: false,
-                                            message: "Your Marrige Status",
-                                          },
-                                        ]}
-                                      >
-                                        <Select
-                                          style={{
-                                            marginTop: "10px",
-                                            width: "100%",
-                                            borderBottom: "1px solid #ccc ",
-                                            paddingLeft: "0px",
-                                          }}
-                                          bordered={false}
-                                        >
-                                          <Option value="Single">Single</Option>
-                                          <Option value="Married">
-                                            Married
-                                          </Option>
-                                        </Select>
-                                      </Form.Item>
-                                    )}
                                   </div>
                                 </Col>
                               </Row>
@@ -629,7 +501,6 @@ function Personal() {
                               rules={[
                                 {
                                   required: false,
-                                  maxLength: 10,
                                   message: "Please Choose a Date",
                                 },
                               ]}
@@ -756,7 +627,11 @@ function Personal() {
                     }}
                   >
                     <Button
-                      onClick={() => showEditContent(false)}
+                      onClick={() => {
+                        showEditContent(false);                    
+                        setFileName(null);
+                        setImageUrl(data.profilePic);
+                      }}
                       type="text"
                       style={{
                         fontSize: "14px",

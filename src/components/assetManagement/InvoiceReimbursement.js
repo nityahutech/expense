@@ -1,4 +1,4 @@
-import {React,useState } from "react";
+import { React, useState } from "react";
 import {
   Card,
   Row,
@@ -10,26 +10,43 @@ import {
   DatePicker,
   TextArea,
   Space,
-  Divider,} from "antd";
-import { 
-  MinusCircleOutlined, 
-  PlusOutlined, 
-  CheckOutlined, 
-  CloseOutlined } from "@ant-design/icons";
-import "./invoice.css"
+  Divider,
+} from "antd";
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  CheckOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
+import "./invoice.css";
 import FormItem from "antd/es/form/FormItem";
+import moment from "moment";
+import AssetContext from "../../contexts/AssetContext";
+import { showNotification } from "../../contexts/CreateContext";
 
-
-
-
-function InvoiceReimbursement() {
+function InvoiceReimbursement(props) {
   const [editContent, showEditContent] = useState(false);
-  const [invoiceShow, setInvoiceShow] = useState(false)
+const [invoiceShow, setInvoiceShow] = useState(false)
   const [invoiceList, setInvoiceList] = useState([]);
   const [form] = Form.useForm();
   const { TextArea } = Input;
 
- 
+  const onFinish = (values) => {
+    const allInvoiceData = {
+      title: values.title,
+      totalAmt: values.totalAmt,
+      invoice: moment().format("DD-MM-YYYY"),
+      payment: values.payment.format("DD-MM-YYYY"),
+      amount: values.amount,
+      description: values.description,
+    };
+    try {
+      AssetContext.addInvoice(allInvoiceData);
+      showNotification("success", "Success", "Invoice Request Added");
+    } catch (error) {
+      showNotification("error", "Error", "Error In Invoice");
+    }
+  };
 
   return (
   <div className="invoiceCardDiv">
@@ -158,7 +175,7 @@ function InvoiceReimbursement() {
                                     </Col>                                    
                                     </>))}
                               </Row>
-                              
+
                               <Form.Item>
                                 <Button
                                   type="dashed"
@@ -183,7 +200,8 @@ function InvoiceReimbursement() {
                               form.resetFields();
                             }}
                           >
-                            <CloseOutlined />Cancel
+                            <CloseOutlined />
+                            Cancel
                           </Button>
                           <Button
                             style={{
@@ -196,7 +214,8 @@ function InvoiceReimbursement() {
                             }}
                             type="primary"
                           >
-                            <CheckOutlined />Submit
+                            <CheckOutlined />
+                            Submit
                           </Button>
                         </Form.Item>
 
@@ -333,16 +352,15 @@ function InvoiceReimbursement() {
               </Form> */}
 
             </Row>
-          </Col>
-        </Row>
-      </Form>
-    </Card>
-    <Card 
-    title="Request Table"
-    className="invoiceCard2">
-      <Table/>
-    </Card>
-  </div>
-)}
+          </Form>
+        </Card>
+      ) : null}
+
+      <Card title="Request Table" className="invoiceCard2">
+        <Table />
+      </Card>
+    </div>
+  );
+}
 
 export default InvoiceReimbursement;

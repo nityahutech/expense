@@ -114,7 +114,7 @@ const RepairRequestTable = (props) => {
           .then((response) => {
             props.getData();
           })
-          .catch((error) => { });
+          .catch((error) => {});
       },
     });
   };
@@ -195,14 +195,21 @@ const RepairRequestTable = (props) => {
       render: (_, { status }) =>
         status !== "" && (
           <Tag
-            style={{ width: "70px", color: "black" }}
+            style={{
+              width: "84px",
+              color: "#000000",
+              borderRadius: "10px",
+              display: "flex",
+              justifyContent: "center",
+              padding: "2px",
+            }}
             className="statusTag"
             color={
               status === "Approved"
-                ? "rgba(15, 255, 80, 0.2)"
+                ? "rgb(8 231 68 / 75%)"
                 : status === "Pending"
-                  ? "rgba(205, 227, 36, 0.25)"
-                  : "volcano"
+                ? "rgb(244 209 105)"
+                : "#f44336"
             }
             key={status}
           >
@@ -230,12 +237,14 @@ const RepairRequestTable = (props) => {
                   openModal(record);
                 }}
               >
-                {<EyeFilled style={{ color: "#1890ff" }} />}
+                {<EyeFilled style={{ color: "#000000" }} />}
               </Button>
             </Tooltip>
-            {record.status == "Approved" ? (
+            {record.status == "Approved" || record.status == "Reject" ? (
               <Button
-                disabled={record.status == "Approved"}
+                disabled={
+                  record.status == "Approved" || record.status == "Reject"
+                }
                 style={{ padding: 0, color: "rgb(64, 169, 255)" }}
                 type="link"
                 className="show"
@@ -246,11 +255,13 @@ const RepairRequestTable = (props) => {
                 {
                   <EditFilled
                     style={
-                      record.status == "Approved"
+                      record.status == "Approved" || record.status == "Reject"
                         ? { color: "lightgray" }
                         : null
                     }
-                    disabled={record.status == "Approved"}
+                    disabled={
+                      record.status == "Approved" || record.status == "Reject"
+                    }
                   />
                 }
               </Button>
@@ -278,17 +289,23 @@ const RepairRequestTable = (props) => {
                 </Button>
               </Tooltip>
             )}
-            {record.status == "Approved" ? (
+            {record.status == "Approved" || record.status == "Reject" ? (
               <Button
-                disabled={record.status == "Approved"}
+                disabled={
+                  record.status == "Approved" || record.status == "Reject"
+                }
                 type="link"
                 className="deleTe"
               >
                 <DeleteFilled
                   style={
-                    record.status == "Approved" ? { color: "lightgray" } : null
+                    record.status == "Approved" || record.status == "Reject"
+                      ? { color: "lightgray" }
+                      : null
                   }
-                  disabled={record.status == "Approved"}
+                  disabled={
+                    record.status == "Approved" || record.status == "Reject"
+                  }
                 />
               </Button>
             ) : (
@@ -332,7 +349,7 @@ const RepairRequestTable = (props) => {
             pagination={false}
             dataSource={repairLaptopData}
             scroll={{ x: 800 }}
-            className="policies"
+            className="reqTable"
           />
         </Card>
       </div>

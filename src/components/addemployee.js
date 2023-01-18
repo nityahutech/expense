@@ -217,7 +217,6 @@ function AddEmployee() {
     let role = headers.indexOf("Role");
     let note = headers.indexOf("Note");
     temp.forEach((emp => {
-      console.log("emp", emp);
       let temp = {
         empId: emp[id],
         fname: emp[firstName],
@@ -254,7 +253,6 @@ function AddEmployee() {
   };
 
   const validateCSV = async (data, headers, model) => {
-    console.log(data, headers, model);
     let errors = [["Email Id", "Field", "Error"]];
     let emps = allEmpName.map((ex) => { return ex.value })
     let firstName = headers.indexOf("First Name");

@@ -26,11 +26,7 @@ function App() {
   const switchRole = (role) => {
     setRoleView(role)
   }
-
-  useEffect(() => {
-    console.log(roleView)
-  }, [roleView])
-
+  
   return (
     <AuthProvider>
       <BrowserRouter>

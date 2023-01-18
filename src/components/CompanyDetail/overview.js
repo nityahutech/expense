@@ -65,7 +65,6 @@ function Overview() {
   const getData = async () => {
     setLoading(true);
     let data = await CompanyProContext.getCompanyProfile(compId);
-    console.log(data)
     setData(data);
     setImageUrl(data.logo);
     setLoading(false);

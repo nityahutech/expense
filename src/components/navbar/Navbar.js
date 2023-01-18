@@ -12,7 +12,6 @@ import settingsIcon from "../../images/abstractuserflat4.png";
 import logoutIcon from "../../images/logoutsvgrepocom.png";
 import Logo from "../../images/logo22 ss.png";
 import dropdown from "../../images/dropdown.png";
-// ---------------------------------------------------------------------
 
 const Navbar = (props) => {
   const [startTime, setStartTime] = useState();
@@ -235,7 +234,6 @@ const Navbar = (props) => {
   return (
     <div className="navbar" style={{ background: "white" }}>
       <div className="wrapper"> 
-      {/* ------------------Switch */}
         {role == "admin" ? (
           <Switch 
             checkedChildren="Admin"
@@ -253,8 +251,6 @@ const Navbar = (props) => {
             }
           />
         ) : null}
-
-        {/* --------------Button */}
        {roleView == "emp" ? (
           <button
             style={buttonStyle}
@@ -269,15 +265,11 @@ const Navbar = (props) => {
               : ""}
           </button>
         ) : null}
-
-        {/* --------------Notification */}
-        <Dropdown overlay={notificationMenu} className="notificationBell">
+        {/* <Dropdown overlay={notificationMenu} className="notificationBell">
           <Badge count={5} offset={[-10,5]} size="small">
             <Avatar size={40} icon={<BellOutlined className="notificationBell"/>} className="notificationAvatar" />
           </Badge>
-        </Dropdown>
-
-        {/* --------------profile Logo */}
+        </Dropdown> */}
         <div>
           <img
             src={logo}
@@ -285,8 +277,6 @@ const Navbar = (props) => {
             className="profileLogo"
           />
         </div>
-
-        {/* ------------down arrow */}
         <Dropdown overlay={menu}>
           <Space>
             <img
@@ -297,8 +287,6 @@ const Navbar = (props) => {
           </Space>
         </Dropdown>
       </div>
-      
-      {/* ---------------------breadcrun */}
       <div className="tittle">
         <ExpenseBreadCrumb />
       </div>

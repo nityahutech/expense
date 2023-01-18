@@ -208,7 +208,6 @@ class CompanyProContext {
   };
 
   updateCompInfo = (id, updateCompInfo, file) => {
-    console.log(file)
     if (file) {
       const storageRef = ref(storage, `/${id}/logo`);
       uploadBytesResumable(storageRef, file).then((snapshot) => {

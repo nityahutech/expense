@@ -228,7 +228,6 @@ function EmployeeList() {
       emp.mailid,
       emp.phonenumber,
     ]);
-    console.log(data)
     let fields = ["Employee ID", "Name", "Official Email ID", "Phone Number"];
     if (downloadFields.includes("Basic Information")) {
       data.forEach((emp, i) => {
@@ -315,7 +314,6 @@ function EmployeeList() {
           ]
           return;
         }
-        console.log(emp, acc)
         csvData[i] = [
           ...csvData[i],
           emp.bank[acc].bankName,

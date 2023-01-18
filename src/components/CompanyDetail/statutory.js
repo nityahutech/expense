@@ -212,11 +212,7 @@ const Statutory = () => {
       },
     });
   };
-
-  // const handleOnChange = (value, event) => {
-  //   console.log(value, event);
-  // };
-
+  
   const prefixSelector = (i) => {
     return (
       <Form.Item

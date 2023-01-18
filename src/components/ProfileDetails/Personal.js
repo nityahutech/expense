@@ -63,7 +63,6 @@ function Personal() {
       mname: mname,
       profilePic: imageUrl || null,
     };
-    console.log(record, fileName)
     EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName);
     const timer = setTimeout(() => {
       getData();

@@ -8,6 +8,8 @@ import {
 } from "@ant-design/icons";
 import ViewRequestType from "./ViewRequestType";
 import AssetContext from "../../contexts/AssetContext";
+import Checkmark from "../../images/checkmark.png";
+import CheckReject from "../../images/rejected.png";
 
 function AllRequest(props) {
   console.log(props, "ektaaaaaaaaaaa");
@@ -83,13 +85,13 @@ function AllRequest(props) {
       title: "Request Type",
       dataIndex: "type",
       key: "type",
-      width: 200,
+      width: 150,
       align: "left",
     },
     {
       title: "Status",
       key: "Status",
-      width: 150,
+      width: 120,
       align: "left",
       render: (_, { status }) =>
         status !== "" && (
@@ -98,8 +100,8 @@ function AllRequest(props) {
               width: "84px",
               color: "#000000",
               borderRadius: "10px",
-              display:"flex",
-              justifyContent:"center",
+              display: "flex",
+              justifyContent: "center",
               padding: "2px",
             }}
             className="statusTag"
@@ -120,13 +122,17 @@ function AllRequest(props) {
       title: "Action",
       dataIndex: "operation",
       key: "operation",
-      width: 120,
+      width: 170,
       align: "center",
       render: (_, record) => (
         <>
           <div
             className="employee-button"
-            style={{ display: "flex", flexDirection: "row", justifyContent:"center" }}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
           >
             <Button
               onClick={() => openModal(record)}
@@ -156,7 +162,7 @@ function AllRequest(props) {
                 setStatus(record, "Approved");
               }}
             >
-              <CheckCircleFilled />
+              <img src={Checkmark} />
             </Button>
             <Button
               style={record.status == "Pending" ? null : { display: "none" }}
@@ -166,7 +172,7 @@ function AllRequest(props) {
                 setStatus(record, "Reject");
               }}
             >
-              <CloseCircleFilled />
+              <img src={CheckReject} width={20} />
             </Button>
           </div>
         </>
@@ -180,13 +186,13 @@ function AllRequest(props) {
         <Table
           size="small"
           columns={columns2}
-          dataSource={filteredApprove}
+          dataSource={filteredPending}
           className="assetTable"
         />
         <Table
           size="small"
           columns={columns2}
-          dataSource={filteredPending}
+          dataSource={filteredApprove}
           className="assetTable"
         />
         <Modal

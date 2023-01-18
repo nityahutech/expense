@@ -35,7 +35,8 @@ class AssetContext {
     if (file) {
       const storageRef = ref(
         storage,
-        `/${compId != "undefined" ? compId : "admins"}/${newLaptop.empId
+        `/${compId != "undefined" ? compId : "admins"}/${
+          newLaptop.empId
         }/files/${file.name}`
       );
 
@@ -69,17 +70,16 @@ class AssetContext {
 
   //-------------------Repair Request------------------------------------
 
-
-
   addRepairRequest = (repairRequestData, file) => {
     if (file) {
-      console.log('ffff', repairRequestData, file)
+      console.log("ffff", repairRequestData, file);
       const storageRef = ref(
         storage,
-        `/${compId != "undefined" ? compId : "admins"}/${repairRequestData.empId
+        `/${compId != "undefined" ? compId : "admins"}/${
+          repairRequestData.empId
         }/files/${file.name}`
       );
-      console.log('ffff', storageRef)
+      console.log("ffff", storageRef);
       uploadBytesResumable(storageRef, file).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
           repairRequestData.upload = url;
@@ -100,8 +100,7 @@ class AssetContext {
       repairRequestData.upload = null;
       addDoc(companyAssetCollectionRef, repairRequestData);
       return Promise.resolve();
-
-    };
+    }
   };
 
   getRepairData = async (id, typeValues) => {
@@ -119,6 +118,10 @@ class AssetContext {
       };
     });
     return rec;
+  };
+
+  addInvoice = (invoiceData) => {
+    return addDoc(companyAssetCollectionRef, invoiceData);
   };
 
   //----------------------Update------------------

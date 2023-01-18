@@ -1,4 +1,4 @@
-import {React,useState } from "react";
+import { React, useState } from "react";
 import {
   Card,
   Row,
@@ -10,122 +10,155 @@ import {
   DatePicker,
   TextArea,
   Space,
-  Divider,} from "antd";
-import { 
-  MinusCircleOutlined, 
-  PlusOutlined, 
-  CheckOutlined, 
-  CloseOutlined } from "@ant-design/icons";
-import "./invoice.css"
+  Divider,
+} from "antd";
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  CheckOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
+import "./invoice.css";
 import FormItem from "antd/es/form/FormItem";
+import moment from "moment";
+import AssetContext from "../../contexts/AssetContext";
+import { showNotification } from "../../contexts/CreateContext";
 
-
-
-
-function InvoiceReimbursement() {
+function InvoiceReimbursement(props) {
   const [editContent, showEditContent] = useState(false);
-  
+
   const [invoiceList, setInvoiceList] = useState(true);
   const [form] = Form.useForm();
   const { TextArea } = Input;
 
- 
+  const onFinish = (values) => {
+    const allInvoiceData = {
+      title: values.title,
+      totalAmt: values.totalAmt,
+      invoice: moment().format("DD-MM-YYYY"),
+      payment: values.payment.format("DD-MM-YYYY"),
+      amount: values.amount,
+      description: values.description,
+    };
+    try {
+      AssetContext.addInvoice(allInvoiceData);
+      showNotification("success", "Success", "Invoice Request Added");
+    } catch (error) {
+      showNotification("error", "Error", "Error In Invoice");
+    }
+  };
 
   return (
-  <div className="invoiceCardDiv">
-    <Card
-      className="invoiceCard1"
-      bordered="true"
-      title="Invoice Reimbersement"
-    >
-      <Form
-        layout="vertical"
-      >
-        <Row span={24} gutter={[16,16]}>
-          <Col span={12}>
-            <FormItem
-              label="Invoice Reimbersement Title"
-            >
-              <Input />
-            </FormItem>
-          </Col>
-          <Col span={12}>
-            <FormItem
-              label="Total Amount"
-            >
-              <Input />
-            </FormItem>
-          </Col>
-          <Col span={24}>
-            <Row gutter={[16, 16]}  >
-                  <Form form={form} style={{ width: "100%" }} autoComplete="off">
+    <div className="invoiceCardDiv">
+      {props.roleView == "emp" ? (
+        <Card
+          className="invoiceCard1"
+          bordered="true"
+          title="Invoice Reimbersement"
+        >
+          <Form layout="vertical" onFinish={onFinish}>
+            <Row span={24} gutter={[40, 16]}>
+              <Col span={8}>
+                <Form.Item name="title" label="Invoice Reimbersement Title">
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item name="totalAmt" label="Total Amount">
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item name="invoice" label="Invoice Date">
+                  <DatePicker format={"DD-MM-YYYY"} defaultValue={moment()} />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Row gutter={[16, 16]}>
+                  <Form
+                    form={form}
+                    style={{ width: "100%" }}
+                    autoComplete="off"
+                  >
                     {editContent ? (
                       <>
                         <Form.List name="users">
                           {(editContent, { add, remove }) => (
                             <>
-                              <Row gutter={[16,16]} style={{ width: "100%" }}>
-                                {editContent.map(({ key, name, ...restField }) => (<>
-                                  <Divider orientation="left" orientationMargin="0">
-                                    Expenditure No.{key+1}
-                                  </Divider>
-                                    <Col span={4}>
-                                      <FormItem
-                                      name="payment"
-                                        label="Payment Date"
+                              <Row gutter={[16, 16]} style={{ width: "100%" }}>
+                                {editContent.map(
+                                  ({ key, name, ...restField }) => (
+                                    <>
+                                      <Divider
+                                        orientation="left"
+                                        orientationMargin="0"
                                       >
-                                        <DatePicker />
-                                      </FormItem>
-                                    </Col>
-                                    <Col span={6}>
-                                      <FormItem
-                                      name="amount"
-                                        label="Amount"
-                                      >
-                                        <Input />
-                                      </FormItem>
-                                    </Col>
-                                    <Col span={6}>
-                                      <FormItem
-                                      name="description"
-                                        label="Description"
-                                      >
-                                        <TextArea 
-                                        autoSize={{ minRows: 2, maxRows: 6 }}
-                                        rows={2} />
-                                      </FormItem>
-                                    </Col>
-                                    <Col span={6}>
-                                      <FormItem
-                                        name="upload"
-                                        label="Upload the bill"
-                                      >
-                                        <div className="idpage">
-                                          <Input
-                                            type="file"
-                                            accept="application/pdf"
-                                            id="upload"
-                                            name="upload"
-                                            // onChange={handleChange}
-                                            style={{ borderRadius: "5px" }}
+                                        Expenditure No.{key + 1}
+                                      </Divider>
+                                      <Col span={4}>
+                                        <Form.Item
+                                          name="payment"
+                                          label="Payment Date"
+                                        >
+                                          <DatePicker />
+                                        </Form.Item>
+                                      </Col>
+                                      <Col span={6}>
+                                        <Form.Item name="amount" label="Amount">
+                                          <Input />
+                                        </Form.Item>
+                                      </Col>
+                                      <Col span={6}>
+                                        <Form.Item
+                                          name="description"
+                                          label="Description"
+                                        >
+                                          <TextArea
+                                            autoSize={{
+                                              minRows: 2,
+                                              maxRows: 6,
+                                            }}
+                                            rows={2}
                                           />
-                                        </div>
-                                      </FormItem>
-                                    </Col>
-                                    <Col span={2}>
-                                      <FormItem label="Action">                                      
-                                        <Row gutter={[8,8]}>                                    
-                                          <Col span={24}>
-                                            <Button onClick={()=>{form.resetFields()}}>
-                                              <CloseOutlined />
-                                            </Button>
-                                        </Col>
-                                        </Row>
-                                      </FormItem>
-                                    </Col>                                    
-                                    </>))}
+                                        </Form.Item>
+                                      </Col>
+                                      <Col span={6}>
+                                        <Form.Item
+                                          name="upload"
+                                          label="Upload the bill"
+                                        >
+                                          <div className="idpage">
+                                            <Input
+                                              type="file"
+                                              accept="application/pdf"
+                                              id="upload"
+                                              name="upload"
+                                              // onChange={handleChange}
+                                              style={{ borderRadius: "5px" }}
+                                            />
+                                          </div>
+                                        </Form.Item>
+                                      </Col>
+                                      <Col span={2}>
+                                        <Form.Item label="Action">
+                                          <Row gutter={[8, 8]}>
+                                            <Col span={24}>
+                                              <Button
+                                                onClick={() => {
+                                                  form.resetFields();
+                                                }}
+                                              >
+                                                <CloseOutlined />
+                                              </Button>
+                                            </Col>
+                                          </Row>
+                                        </Form.Item>
+                                      </Col>
+                                    </>
+                                  )
+                                )}
                               </Row>
-                              
+
                               <Form.Item>
                                 <Button
                                   type="dashed"
@@ -149,7 +182,8 @@ function InvoiceReimbursement() {
                               form.resetFields();
                             }}
                           >
-                            <CloseOutlined />Cancel
+                            <CloseOutlined />
+                            Cancel
                           </Button>
                           <Button
                             style={{
@@ -162,7 +196,8 @@ function InvoiceReimbursement() {
                             }}
                             type="primary"
                           >
-                            <CheckOutlined />Submit
+                            <CheckOutlined />
+                            Submit
                           </Button>
                         </Form.Item>
                       </>
@@ -181,17 +216,18 @@ function InvoiceReimbursement() {
                       </Form.Item>
                     )}
                   </Form>
+                </Row>
+              </Col>
             </Row>
-          </Col>
-        </Row>
-      </Form>
-    </Card>
-    <Card 
-    title="Request Table"
-    className="invoiceCard2">
-      <Table/>
-    </Card>
-  </div>
-)}
+          </Form>
+        </Card>
+      ) : null}
+
+      <Card title="Request Table" className="invoiceCard2">
+        <Table />
+      </Card>
+    </div>
+  );
+}
 
 export default InvoiceReimbursement;

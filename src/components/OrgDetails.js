@@ -3,6 +3,7 @@ import { Form, Input, Col, Row, Divider, message, Button, Select } from "antd";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "../style/Onboarding.css";
 import { capitalize, checkAlphabets, checkNumbervalue, checkUpperCase, getBase64, getCountryCode } from "../contexts/CreateContext";
+import PrefixSelector from "./PrefixSelector";
 const { Option } = Select;
 
 const OrgDetails = (props) => {
@@ -10,15 +11,9 @@ const OrgDetails = (props) => {
   const [fileName, setFileName] = useState(props.fileName || null);
   const [imageUrl, setImageUrl] = useState(props.imageUrl || "");
   const [isBigFile, setIsBigFile] = useState(false);
-  const [codes, setCodes] = useState("");
-  const [form] = Form.useForm();
   const [data, setData] = useState(props.data || {});
-  const newCompId = props.data.orgcode;
 
   useEffect(() => {
-    getCountryCode().then((res) => {
-      setCodes(res);
-    });
     setFileName(props.fileName || null);
     setImageUrl(props.imageUrl || "");
     setIsBigFile(false);
@@ -31,10 +26,6 @@ const OrgDetails = (props) => {
 
   const handleClick = () => {
     imgRef.current.click();
-  };
-
-  const handleOnChange = (value, event) => {
-    console.log(value, event);
   };
 
   const handleChange = (event) => {
@@ -68,26 +59,6 @@ const OrgDetails = (props) => {
     props.setIsStepOneInvalid(true);
   };
 
-  const prefixSelector = (
-    <Form.Item initialValue={data.prefix} name="prefix" noStyle>
-      <Select
-        allowClear={true}
-        showSearch
-        bordered={false}
-        style={{
-          width: 80,
-          background: "#ffffff",
-        }}
-        onSelect={(value, event) => handleOnChange(value, event)}
-      >
-        {codes?.countries?.map((e) => (
-          <Option key={e?.code} value={e?.code}>
-            {e?.code}{" "}
-          </Option>
-        ))}
-      </Select>
-    </Form.Item>
-  );
   return (
     <div style={{ margin: "13px", background: "#fff" }}>
       <div
@@ -301,7 +272,7 @@ const OrgDetails = (props) => {
               initialValue={data?.phone ? data.phone : "-"}
             >
               <Input
-                addonBefore={prefixSelector}
+                addonBefore={(<PrefixSelector name={"prefix"} initial={data.prefix} />)}
                 maxLength={10}
                 placeholder="Phone"
                 style={{

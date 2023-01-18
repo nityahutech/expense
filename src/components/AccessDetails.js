@@ -22,7 +22,7 @@ import {
 import TextArea from "antd/lib/input/TextArea";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { getCountryCode } from "../contexts/CreateContext";
+import { checkAlphabets, checkAlphabetsName, checkNoAlphabets, getCountryCode, showNotification } from "../contexts/CreateContext";
 import CompanyProContext from "../contexts/CompanyProContext";
 import {
   capitalize,
@@ -105,26 +105,8 @@ function AccessDetails(props) {
     setEditAccess(array.fill(false));
   };
 
-  const checkAlphabet = (event) => {
-    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
   const checkDesignation = (event) => {
     if (!/^[a-zA-Z-&() ]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
-  const checkAlphabetsName = (event) => {
-    if (!/^[a-zA-Z-]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
-  const checkNoAlphabets = (event) => {
-    if (!/^[0-9-]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
@@ -188,13 +170,6 @@ function AccessDetails(props) {
     setDept(null);
     setTeam(null);
   }
-
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
-  };
 
   function onDelete(i) {
     Modal.confirm({
@@ -438,7 +413,7 @@ function AccessDetails(props) {
                         colon={true}
                         label="Middle Name::"
                         onKeyPress={(event) => {
-                          if (checkAlphabet(event)) {
+                          if (checkAlphabets(event)) {
                             event.preventDefault();
                           }
                         }}
@@ -551,14 +526,6 @@ function AccessDetails(props) {
                             event.preventDefault();
                           }
                         }}
-                        // labelCol={{
-                        //   span: 3,
-                        //   offset: 5,
-                        // }}
-                        // wrapperCol={{
-                        //   span: 9,
-                        //   offset: 1,
-                        // }}
                       >
                         <DatePicker
                           format={dateFormat}
@@ -1548,7 +1515,7 @@ function AccessDetails(props) {
                     colon={true}
                     label="Middle Name::"
                     onKeyPress={(event) => {
-                      if (checkAlphabet(event)) {
+                      if (checkAlphabets(event)) {
                         event.preventDefault();
                       }
                     }}

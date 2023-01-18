@@ -149,7 +149,7 @@ export function getBase64(img, callback) {
   reader.readAsDataURL(img);
 };
 
-export  async function getCountryCode(){
+export async function getCountryCode(){
   let data =  await getDoc(doc(db, "standardInfo","countryCodes"));
   return data.data();
 }
@@ -159,3 +159,16 @@ export function checkUpperCase(event) {
     return true;
   }
 }
+
+export function checkNoAlphabets(event) {
+  if (!/^[0-9-]*$/.test(event.key) && event.key !== "Backspace") {
+    return true;
+  }
+};
+
+export function checkAlphabetsName(event) {
+  if (!/^[a-zA-Z- ]*$/.test(event.key) && event.key !== "Backspace") {
+    return true;
+  }
+};
+

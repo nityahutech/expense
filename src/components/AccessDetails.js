@@ -13,23 +13,17 @@ import {
   Form,
   Input,
   Modal,
-  notification,
   Radio,
   Row,
   Select,
-  Space,
 } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { getCountryCode } from "../contexts/CreateContext";
+import { capitalize, checkAlphabets, checkAlphabetsName, checkNoAlphabets, showNotification } from "../contexts/CreateContext";
 import CompanyProContext from "../contexts/CompanyProContext";
-import {
-  capitalize,
-  checkNumbervalue,
-  checkUpperCase,
-} from "../contexts/CreateContext";
 import "../style/Onboarding.css";
+import PrefixSelector from "./PrefixSelector";
 
 const { Option } = Select;
 
@@ -44,16 +38,11 @@ function AccessDetails(props) {
   const [bu, setBu] = useState(null);
   const [div, setDiv] = useState(null);
   const [dept, setDept] = useState(null);
-  const [team, setTeam] = useState(null);
   const order = ["Business Unit", "Division", "Department", "Team"];
-  const [codes, setCodes] = useState("");
 
   const dateFormat = "DD-MM-YYYY";
 
   useEffect(() => {
-    getCountryCode().then((res) => {
-      setCodes(res);
-    });
     getData();
   }, []);
 
@@ -105,49 +94,11 @@ function AccessDetails(props) {
     setEditAccess(array.fill(false));
   };
 
-  const checkAlphabet = (event) => {
-    if (!/^[a-zA-Z ]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
   const checkDesignation = (event) => {
     if (!/^[a-zA-Z-&() ]*$/.test(event.key) && event.key !== "Backspace") {
       return true;
     }
   };
-
-  const checkAlphabetsName = (event) => {
-    if (!/^[a-zA-Z-]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
-  const checkNoAlphabets = (event) => {
-    if (!/^[0-9-]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select
-        allowClear={true}
-        showSearch
-        bordered={false}
-        style={{
-          width: 80,
-          background: "#ffffff",
-        }}
-      >
-        {codes?.countries?.map((e) => (
-          <Option key={e?.code} value={e?.code}>
-            {e?.code}{" "}
-          </Option>
-        ))}
-      </Select>
-    </Form.Item>
-  );
 
   function addUseRole(values) {
     let temp = [
@@ -186,15 +137,7 @@ function AccessDetails(props) {
     setBu(null);
     setDiv(null);
     setDept(null);
-    setTeam(null);
   }
-
-  const showNotification = (type, msg, desc) => {
-    notification[type]({
-      message: msg,
-      description: desc,
-    });
-  };
 
   function onDelete(i) {
     Modal.confirm({
@@ -310,7 +253,6 @@ function AccessDetails(props) {
                           setBu(accessList[i].businessUnit || null);
                           setDiv(accessList[i].division || null);
                           setDept(accessList[i].department || null);
-                          setTeam(accessList[i].team || null);
                         }}
                       >
                         <EditFilled
@@ -438,7 +380,7 @@ function AccessDetails(props) {
                         colon={true}
                         label="Middle Name::"
                         onKeyPress={(event) => {
-                          if (checkAlphabet(event)) {
+                          if (checkAlphabets(event)) {
                             event.preventDefault();
                           }
                         }}
@@ -551,14 +493,6 @@ function AccessDetails(props) {
                             event.preventDefault();
                           }
                         }}
-                        // labelCol={{
-                        //   span: 3,
-                        //   offset: 5,
-                        // }}
-                        // wrapperCol={{
-                        //   span: 9,
-                        //   offset: 1,
-                        // }}
                       >
                         <DatePicker
                           format={dateFormat}
@@ -577,52 +511,9 @@ function AccessDetails(props) {
                         className="userLabel"
                         name="phone"
                         label="Phone Number::"
-                        // labelCol={{
-                        //   span: 3,
-                        //   offset: 5,
-                        // }}
-                        // wrapperCol={{
-                        //   span: 9,
-                        //   offset: 1,
-                        // }}
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     message: "Please Enter Phone Number",
-                        //   },
-                        //   {
-                        //     pattern: /^[a-zA-Z\s]*$/,
-                        //     message: "Please Enter Valid Number",
-                        //   },
-                        // ]}
                       >
                         <Input
-                          addonBefore={
-                            <Form.Item
-                              initialValue={user.prefix}
-                              name="prefix"
-                              noStyle
-                            >
-                              <Select
-                                allowClear={true}
-                                showSearch
-                                bordered={false}
-                                style={{
-                                  width: 80,
-                                  background: "#ffffff",
-                                }}
-                                // onSelect={(value, event) =>
-                                //   handleOnChange(value, event)
-                                // }
-                              >
-                                {codes?.countries?.map((e) => (
-                                  <Option key={e?.code} value={e?.code}>
-                                    {e?.code}{" "}
-                                  </Option>
-                                ))}
-                              </Select>
-                            </Form.Item>
-                          }
+                          addonBefore={(<PrefixSelector name={"prefix"} initial={user.prefix} />)}
                           placeholder="Phone Number"
                           style={{
                             width: "100%",
@@ -906,7 +797,6 @@ function AccessDetails(props) {
                             setBu(e || null);
                             setDiv(null);
                             setDept(null);
-                            setTeam(null);
                           }}
                           bordered={false}
                           placeholder="Select Business Unit"
@@ -956,7 +846,6 @@ function AccessDetails(props) {
                           onChange={(e) => {
                             setDiv(e || null);
                             setDept(null);
-                            setTeam(null);
                           }}
                         >
                           {getOptions("Division")}
@@ -997,7 +886,6 @@ function AccessDetails(props) {
                           allowClear
                           onChange={(e) => {
                             setDept(e || null);
-                            setTeam(null);
                           }}
                         >
                           {getOptions("Department")}
@@ -1036,7 +924,6 @@ function AccessDetails(props) {
                               : "#ffffff",
                           }}
                           allowClear
-                          onChange={(e) => setTeam(e || null)}
                         >
                           {getOptions("Team")}
                         </Select>
@@ -1548,7 +1435,7 @@ function AccessDetails(props) {
                     colon={true}
                     label="Middle Name::"
                     onKeyPress={(event) => {
-                      if (checkAlphabet(event)) {
+                      if (checkAlphabets(event)) {
                         event.preventDefault();
                       }
                     }}
@@ -1699,7 +1586,7 @@ function AccessDetails(props) {
                     // }}
                   >
                     <Input
-                      addonBefore={prefixSelector}
+                      addonBefore={(<PrefixSelector name={"prefix"} />)}
                       required
                       maxLength={10}
                       placeholder="Phone Number"
@@ -1976,7 +1863,6 @@ function AccessDetails(props) {
                         setBu(e || null);
                         setDiv(null);
                         setDept(null);
-                        setTeam(null);
                       }}
                     >
                       {getOptions("Business Unit")}
@@ -2021,7 +1907,6 @@ function AccessDetails(props) {
                       onChange={(e) => {
                         setDiv(e || null);
                         setDept(null);
-                        setTeam(null);
                       }}
                     >
                       {getOptions("Division")}
@@ -2061,7 +1946,6 @@ function AccessDetails(props) {
                       allowClear
                       onChange={(e) => {
                         setDept(e || null);
-                        setTeam(null);
                       }}
                     >
                       {getOptions("Department")}
@@ -2099,7 +1983,6 @@ function AccessDetails(props) {
                           : "#ffffff",
                       }}
                       allowClear
-                      onChange={(e) => setTeam(e || null)}
                     >
                       {getOptions("Team")}
                     </Select>
@@ -2217,7 +2100,6 @@ function AccessDetails(props) {
                   setBu(null);
                   setDiv(null);
                   setDept(null);
-                  setTeam(null);
                 }}
               >
                 <PlusCircleOutlined /> Add

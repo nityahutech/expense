@@ -19,15 +19,16 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
-// import "../../style/BankAccount.css";
 import "./Personal.css";
 import moment from "moment";
 import {
   capitalize,
+  checkAlphabetsName,
+  checkNoAlphabets,
   checkNumbervalue,
   getBase64,
-  getCountryCode,
 } from "../../contexts/CreateContext";
+import PrefixSelector from "../PrefixSelector";
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -40,12 +41,12 @@ function Personal() {
   const [editContactInfo, showEditContactInfo] = useState(false);
   const [dob, setDob] = useState("");
   const [scrs, setScrs] = useState("");
-  const [codes, setCodes] = useState("");
   const [lccs, setLccs] = useState("");
   const [editAddressInfo, showEditAddressInfo] = useState(false);
   const [data, setData] = useState([]);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [form] = Form.useForm();
+
   const onFinish = (value) => {
     let nameArray = value.name.split(" ");
     let mname = "";
@@ -62,14 +63,12 @@ function Personal() {
       mname: mname,
       profilePic: imageUrl || null,
     };
+    console.log(record, fileName)
     EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName);
     const timer = setTimeout(() => {
       getData();
-    }, 5000);
+    }, 2000);
     showEditContent(false);
-    return () => {
-      clearTimeout(timer);
-    };
   };
 
   const handleClick = () => {
@@ -92,7 +91,6 @@ function Personal() {
     }
     const fileUploaded = event.target.files[0];
     getBase64(fileUploaded, (url) => {
-      // setLoading(false);
       setImageUrl(url);
     });
     checkFileSize(fileUploaded.size, fileUploaded);
@@ -108,7 +106,7 @@ function Personal() {
     getData();
     showEditContactInfo(false);
   };
-  // const [addressdata, setAddressData] = useState([]);
+
   const onEditAddressFinish = (values) => {
     let record = {
       currentAdd: values.currentAdd ? values.currentAdd : "",
@@ -122,10 +120,8 @@ function Personal() {
     showEditAddressInfo(false);
     getData();
   };
+
   useEffect(() => {
-    getCountryCode().then((res) => {
-      setCodes(res);
-    });
     getData();
   }, []);
 
@@ -136,64 +132,18 @@ function Personal() {
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     setData(data);
-    setFileName(data.profilePic);
     setImageUrl(data.profilePic);
     setDob(data?.dob ? data.dob : null);
     setLccs(data?.lccs ? data.lccs : null);
     setScrs(data?.scrs ? data.scrs : null);
   };
 
-  // const handleOnChange = (value, event) => {
-  //   console.log(value, event);
-  // };
-
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select
-        allowClear={true}
-        showSearch
-        bordered={false}
-        style={{
-          width: 80,
-          background: "#ffffff",
-        }}
-        // onSelect={(value, event) => handleOnChange(value, event)}
-      >
-        {codes?.countries?.map((e) => (
-          <Option key={e?.code} value={e?.code}>
-            {e?.code}{" "}
-          </Option>
-        ))}
-      </Select>
-    </Form.Item>
-  );
-
-  const prefixSelector2 = (
-    <Form.Item name="prefix2" noStyle>
-      <Select
-        allowClear={true}
-        showSearch
-        bordered={false}
-        style={{
-          width: 80,
-          background: "#ffffff",
-        }}
-        // onSelect={(value, event) => handleOnChange(value, event)}
-      >
-        {codes?.countries?.map((e) => (
-          <Option key={e?.code} value={e?.code}>
-            {e?.code}{" "}
-          </Option>
-        ))}
-      </Select>
-    </Form.Item>
-  );
-
   function onReset() {
     setIsBigFile(false);
     setFileName(null);
     setImageUrl("");
   }
+
   const layoutName = {
     labelCol: {
       xs: { span: 24 },
@@ -210,6 +160,7 @@ function Personal() {
       xl: { span: 24 },
     },
   };
+
   const layoutDOB = {
     labelCol: {
       xs: { span: 24 },
@@ -226,6 +177,7 @@ function Personal() {
       xl: { span: 24 },
     },
   };
+
   const layoutGender = {
     labelCol: {
       xs: { span: 24 },
@@ -242,6 +194,7 @@ function Personal() {
       xl: { span: 24 },
     },
   };
+
   const layoutBlood = {
     labelCol: {
       xs: { span: 24 },
@@ -258,6 +211,7 @@ function Personal() {
       xl: { span: 16 },
     },
   };
+
   const layoutMaritalStatus = {
     labelCol: {
       xs: { span: 24 },
@@ -274,8 +228,9 @@ function Personal() {
       xl: { span: 24 },
     },
   };
+
   const imgDiv = () => {
-    if (fileName == "" || fileName == null) {
+    if (imageUrl == "" || imageUrl == null) {
       return editContent == false ? (
         <div className="noImage">No Image</div>
       ) : (
@@ -287,7 +242,6 @@ function Personal() {
             className="imgInp"
             style={{
               display: "none",
-              // border: "1px solid #05445e",
             }}
             type="file"
             id="logo"
@@ -306,7 +260,6 @@ function Personal() {
             position: "relative",
             width: "150px",
             height: "170px",
-            // border: "1px solid #05445e"
           }}
         >
           <img
@@ -329,12 +282,6 @@ function Personal() {
 
   const disabledDate = (current) => {
     return current.isAfter(moment().subtract(14, "years"));
-  };
-
-  const checkNoAlphabets = (event) => {
-    if (!/^[0-9-/ ]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
   };
 
   return (
@@ -421,39 +368,7 @@ function Personal() {
                                     >
                                       Date of Birth
                                     </div>
-                                    {editContent === false ? (
-                                      <div>{data?.dob ? data.dob : "-"}</div>
-                                    ) : (
-                                      <Form.Item
-                                        initialValue={
-                                          dob ? moment(dob, "DD-MM-YYYY") : null
-                                        }
-                                        name="dob"
-                                        rules={[
-                                          {
-                                            required: false,
-                                            message: "Please Choose a Date",
-                                          },
-                                        ]}
-                                      >
-                                        {/* format={dateFormatList} */}
-                                        <DatePicker
-                                          format="DD-MM-YYYY"
-                                          style={{
-                                            marginTop: "10px",
-                                            width: "100%",
-                                          }}
-                                          // format={dateFormatList}
-                                          // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
-                                          onChange={(e) => {
-                                            setDob(e.format("DD-MM-YYYY"));
-                                          }}
-                                          disabledDate={(e) => disabledDate(e)}
-                                          value={dob}
-                                          placeholder="Choose Date"
-                                        />
-                                      </Form.Item>
-                                    )}
+                                    <div>{data?.dob ? data.dob : "-"}</div>
                                   </div>
                                 </Col>
                                 <Col
@@ -476,36 +391,7 @@ function Personal() {
                                     >
                                       Gender
                                     </div>
-                                    {editContent === false ? (
-                                      <div>{data ? data.gender : null}</div>
-                                    ) : (
-                                      <Form.Item
-                                        name="gender"
-                                        initialValue={
-                                          data.gender ? data.gender : "-"
-                                        }
-                                        rules={[
-                                          {
-                                            required: true,
-                                            message: "Please Choose Gender",
-                                          },
-                                        ]}
-                                      >
-                                        <Select
-                                          placeholder="Select a Gender"
-                                          style={{
-                                            marginTop: "10px",
-                                            width: "100%",
-                                            borderBottom: "1px solid #ccc ",
-                                            paddingLeft: "0px",
-                                          }}
-                                          bordered={false}
-                                        >
-                                          <Option value="Male">Male</Option>
-                                          <Option value="Female">Female</Option>
-                                        </Select>
-                                      </Form.Item>
-                                    )}
+                                    <div>{data ? data.gender : null}</div>
                                   </div>
                                 </Col>
                                 <Col
@@ -528,47 +414,9 @@ function Personal() {
                                     >
                                       Blood Group
                                     </div>
-                                    {editContent === false ? (
-                                      <div>
-                                        {data?.bloodGroup
-                                          ? data.bloodGroup
-                                          : "-"}
-                                      </div>
-                                    ) : (
-                                      <Form.Item
-                                        initialValue={
-                                          data ? data.bloodGroup : null
-                                        }
-                                        name="bloodGroup"
-                                        rules={[
-                                          {
-                                            required: false,
-                                            message:
-                                              "Please Choose Blood Groop",
-                                          },
-                                        ]}
-                                      >
-                                        <Select
-                                          placeholder="Select a Blood Group"
-                                          style={{
-                                            marginTop: "10px",
-                                            width: "100%",
-                                            borderBottom: "1px solid #ccc ",
-                                            paddingLeft: "0px",
-                                          }}
-                                          bordered={false}
-                                        >
-                                          <Option value="A+">A+</Option>
-                                          <Option value="A-">A-</Option>
-                                          <Option value="O+">O+</Option>
-                                          <Option value="O-">O-</Option>
-                                          <Option value="B+">B+</Option>
-                                          <Option value="B-">B-</Option>
-                                          <Option value="AB+">AB+</Option>
-                                          <Option value="AB-">AB-</Option>
-                                        </Select>
-                                      </Form.Item>
-                                    )}
+                                    <div>
+                                      {data?.bloodGroup ? data.bloodGroup : "-"}
+                                    </div>
                                   </div>
                                 </Col>
                                 <Col
@@ -591,41 +439,9 @@ function Personal() {
                                     >
                                       Marital Status
                                     </div>
-                                    {editContent === false ? (
-                                      <div>
-                                        {data?.maritalStatus
-                                          ? data.maritalStatus
-                                          : "-"}
-                                      </div>
-                                    ) : (
-                                      <Form.Item
-                                        initialValue={
-                                          data ? data.maritalStatus : null
-                                        }
-                                        name="maritalStatus"
-                                        rules={[
-                                          {
-                                            required: false,
-                                            message: "Your Marrige Status",
-                                          },
-                                        ]}
-                                      >
-                                        <Select
-                                          style={{
-                                            marginTop: "10px",
-                                            width: "100%",
-                                            borderBottom: "1px solid #ccc ",
-                                            paddingLeft: "0px",
-                                          }}
-                                          bordered={false}
-                                        >
-                                          <Option value="Single">Single</Option>
-                                          <Option value="Married">
-                                            Married
-                                          </Option>
-                                        </Select>
-                                      </Form.Item>
-                                    )}
+                                    <div>
+                                      {data?.maritalStatus ? data.maritalStatus : "-"}
+                                    </div>
                                   </div>
                                 </Col>
                               </Row>
@@ -642,16 +458,16 @@ function Personal() {
                               initialValue={data.name}
                               name="name"
                               colon
+                              onKeyPress={(event) => {
+                                if (checkAlphabetsName(event)) {
+                                  event.preventDefault();
+                                }
+                              }}
                               rules={[
                                 {
                                   required: true,
                                   minLength: 3,
                                   maxLength: 50,
-                                  // message: "Please enter First Name",
-                                },
-                                {
-                                  pattern: /^[a-zA-Z\s]*$/,
-                                  message: "Please enter Valid Name",
                                 },
                               ]}
                               {...layoutName}
@@ -695,21 +511,16 @@ function Personal() {
                                 }
                               }}
                             >
-                              {/* format={dateFormatList} */}
                               <DatePicker
                                 style={{
-                                  // borderBottom: "1px solid #ccc ",
                                   width: "100%",
                                 }}
-                                // format={dateFormatList}
-                                // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
                                 onChange={(e) => {
                                   setDob(e.format("DD-MM-YYYY"));
                                 }}
                                 disabledDate={disabledDate}
                                 value={dob}
                                 placeholder="Choose Date"
-                                // bordered={false}
                                 format={"DD-MM-YYYY"}
                               />
                             </Form.Item>
@@ -730,7 +541,6 @@ function Personal() {
                               <Select
                                 placeholder="Select a Gender"
                                 style={{
-                                  // width: "100%",
                                   borderBottom: "1px solid #ccc ",
                                   paddingLeft: "0px",
                                 }}
@@ -759,7 +569,6 @@ function Personal() {
                               <Select
                                 placeholder="Select a Blood Group"
                                 style={{
-                                  // width: "100%",
                                   borderBottom: "1px solid #ccc ",
                                   paddingLeft: "0px",
                                 }}
@@ -818,14 +627,14 @@ function Personal() {
                     }}
                   >
                     <Button
-                      onClick={() => showEditContent(false)}
+                      onClick={() => {
+                        showEditContent(false);
+                        setFileName(null);
+                        setImageUrl(data.profilePic);
+                      }}
                       type="text"
                       style={{
                         fontSize: "14px",
-                        // color: "#1963A6",
-                        // marginRight: "10px",
-                        // border: "1px solid #1963A6",
-                        // width: "90px",
                       }}
                     >
                       <CloseOutlined /> CANCEL
@@ -854,7 +663,6 @@ function Personal() {
         <Row className="Row-Card">
           <Col span={24}>
             <Form
-              // form={form}
               labelcol={{
                 span: 4,
               }}
@@ -864,8 +672,6 @@ function Personal() {
               s
               initialValues={{
                 remember: true,
-                prefix2: "+91",
-                prefix: "+91",
               }}
               autoComplete="off"
               onFinish={onContactFinish}
@@ -875,9 +681,6 @@ function Personal() {
                 className="personal"
                 bordered={true}
                 hoverable={true}
-                //   actions={[
-                //   <EditOutlined key="edit" />,
-                // ]}
                 extra={
                   <>
                     {editContactInfo === false ? (
@@ -953,7 +756,6 @@ function Personal() {
                             required
                             placeholder="Enter Email Address"
                           />
-                          {/* defaultValue = {data?data.fname+" "+data.lname:null} */}
                         </Form.Item>
                       )}
                     </div>
@@ -982,11 +784,11 @@ function Personal() {
                           rules={[
                             {
                               required: true,
-                              message: "Please enter Email Id",
-                              type: "email",
+                              message: "Please Enter Email Id",
                             },
                             {
-                              message: "Please enter Valid Email",
+                              type: "email",
+                              message: "Please Enter Valid Email Id",
                             },
                           ]}
                         >
@@ -1045,7 +847,7 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            addonBefore={prefixSelector}
+                            addonBefore={(<PrefixSelector name="prefix" initial={data.prefix} />)}
                             style={{
                               marginTop: "10px",
                               width: "100%",
@@ -1100,7 +902,7 @@ function Personal() {
                           ]}
                         >
                           <Input
-                            addonBefore={prefixSelector2}
+                            addonBefore={(<PrefixSelector name="prefix2" initial={data.prefix2} />)}
                             style={{
                               marginTop: "10px",
                               width: "100%",
@@ -1218,8 +1020,8 @@ function Personal() {
                           rules={[
                             {
                               // required: true,
-                              minLength: 3,
-                              maxLength: 100,
+                              // minLength: 3,
+                              // maxLength: 100,
                               // message: "Please enter First Name",
                             },
                             {
@@ -1229,12 +1031,13 @@ function Personal() {
                           ]}
                         >
                           <TextArea
-                            maxLength={150}
+                            maxLength={80}
                             style={{ marginTop: "10px" }}
                             // value={value}
                             // onChange={e => setValue(e.target.value)}
                             placeholder="Enter Address in Details"
-                            autoSize={{ minRows: 3, maxRows: 7 }}
+                            rows={4}
+
                           />
                         </Form.Item>
                       )}
@@ -1264,8 +1067,8 @@ function Personal() {
                           rules={[
                             {
                               // required: true,
-                              minLength: 3,
-                              maxLength: 100,
+                              // minLength: 3,
+                              // maxLength: 100,
                               // message: "Please enter First Name",
                             },
                             {
@@ -1275,12 +1078,12 @@ function Personal() {
                           ]}
                         >
                           <TextArea
-                            maxLength={150}
+                            maxLength={80}
                             style={{ marginTop: "10px" }}
                             // value={value}
                             // onChange={e => setValue(e.target.value)}
                             placeholder="Enter Address in Details"
-                            autoSize={{ minRows: 3, maxRows: 7 }}
+                            rows={4}
                           />
                         </Form.Item>
                       )}

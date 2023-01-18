@@ -1,7 +1,6 @@
 import { db, storage } from "../firebase-config";
 import { disableAccount } from "./EmailContext";
 import {
-    setDoc,
     getDoc,
     updateDoc,
     doc,

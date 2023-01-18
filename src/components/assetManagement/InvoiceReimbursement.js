@@ -26,8 +26,8 @@ import { showNotification } from "../../contexts/CreateContext";
 
 function InvoiceReimbursement(props) {
   const [editContent, showEditContent] = useState(false);
-
-  const [invoiceList, setInvoiceList] = useState(true);
+const [invoiceShow, setInvoiceShow] = useState(false)
+  const [invoiceList, setInvoiceList] = useState([]);
   const [form] = Form.useForm();
   const { TextArea } = Input;
 
@@ -49,121 +49,138 @@ function InvoiceReimbursement(props) {
   };
 
   return (
-    <div className="invoiceCardDiv">
-      {props.roleView == "emp" ? (
-        <Card
-          className="invoiceCard1"
-          bordered="true"
-          title="Invoice Reimbersement"
-        >
-          <Form layout="vertical" onFinish={onFinish}>
-            <Row span={24} gutter={[40, 16]}>
-              <Col span={8}>
-                <Form.Item name="title" label="Invoice Reimbersement Title">
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item name="totalAmt" label="Total Amount">
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item name="invoice" label="Invoice Date">
-                  <DatePicker format={"DD-MM-YYYY"} defaultValue={moment()} />
-                </Form.Item>
-              </Col>
-              <Col span={24}>
-                <Row gutter={[16, 16]}>
-                  <Form
-                    form={form}
-                    style={{ width: "100%" }}
-                    autoComplete="off"
-                  >
+  <div className="invoiceCardDiv">
+    <Card
+      className="invoiceCard1"
+      bordered="true"
+      title="Invoice Reimbersement"
+    >
+      <Form
+        layout="vertical"
+      >
+        <Row span={24} gutter={[16,16]}>
+          <Col span={12}>
+            <FormItem
+              label="Invoice Reimbersement Title"
+            >
+              <Input />
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem
+              label="Total Amount"
+            >
+              <Input />
+            </FormItem>
+          </Col>
+          <Col span={24}>
+            <Row gutter={[16, 16]}  >
+              <Form 
+                form={form} 
+                style={{ width: "100%" }} 
+                autoComplete="off"
+              >
                     {editContent ? (
                       <>
                         <Form.List name="users">
-                          {(editContent, { add, remove }) => (
+                          {(editContent, { add }) => (
                             <>
-                              <Row gutter={[16, 16]} style={{ width: "100%" }}>
-                                {editContent.map(
-                                  ({ key, name, ...restField }) => (
-                                    <>
-                                      <Divider
-                                        orientation="left"
-                                        orientationMargin="0"
+                              <Row gutter={[16,16]} style={{ width: "100%" }}>
+                                {editContent.map((field, i) => (<>
+                                  <Divider orientation="left" orientationMargin="0">
+                                    Expenditure No.{i+1}
+                                  </Divider>
+                                    <Col span={4}>
+                                      <FormItem
+                                      
+                                      {...field}
+                                      name={`payment${i}`}
+                                        label="Payment Date"
                                       >
-                                        Expenditure No.{key + 1}
-                                      </Divider>
-                                      <Col span={4}>
-                                        <Form.Item
-                                          name="payment"
-                                          label="Payment Date"
-                                        >
-                                          <DatePicker />
-                                        </Form.Item>
-                                      </Col>
-                                      <Col span={6}>
-                                        <Form.Item name="amount" label="Amount">
-                                          <Input />
-                                        </Form.Item>
-                                      </Col>
-                                      <Col span={6}>
-                                        <Form.Item
-                                          name="description"
-                                          label="Description"
-                                        >
-                                          <TextArea
-                                            autoSize={{
-                                              minRows: 2,
-                                              maxRows: 6,
+                                        <DatePicker 
+                                          onChange={(e) => {
+                                            let temp = [...editContent];
+                                            temp[i].date = e.target.value;
+                                            showEditContent(temp)
+                                          }}/>
+                                      </FormItem>
+                                    </Col>
+                                    <Col span={6}>
+                                      <FormItem
+                                      
+                                       {...field}
+                                      name={`amount${i}`}
+                                        label="Amount"
+                                      >
+                                        <Input 
+                                          onChange={(e) => {
+                                            let temp = [...editContent];
+                                            temp[i].date = e.target.value;
+                                            showEditContent(temp)
+                                          }}
+                                        />
+                                      </FormItem>
+                                    </Col>
+                                    <Col span={6}>
+                                      <FormItem
+                                       {...field}
+                                      name={`description${i}`}
+                                        label="Description"
+                                      >
+                                        <TextArea 
+                                        autoSize={{ minRows: 2, maxRows: 6 }}
+                                        rows={2} 
+                                        onChange={(e) => {
+                                          let temp = [...editContent];
+                                          temp[i].date = e.target.value;
+                                          showEditContent(temp)
+                                        }}
+                                        />
+                                      </FormItem>
+                                    </Col>
+                                    <Col span={6}>
+                                      <FormItem
+                                       {...field}
+                                        name={`upload${i}`}
+                                        label="Upload the bill"
+                                      >
+                                        <div className="idpage">
+                                          <Input
+                                            type="file"
+                                            accept="application/pdf"
+                                            id="upload"
+                                            name="upload"
+                                            // onChange={handleChange}
+                                            style={{ borderRadius: "5px" }}
+                                            onChange={(e) => {
+                                              let temp = [...editContent];
+                                              temp[i].date = e.target.value;
+                                              showEditContent(temp)
                                             }}
-                                            rows={2}
                                           />
-                                        </Form.Item>
-                                      </Col>
-                                      <Col span={6}>
-                                        <Form.Item
-                                          name="upload"
-                                          label="Upload the bill"
-                                        >
-                                          <div className="idpage">
-                                            <Input
-                                              type="file"
-                                              accept="application/pdf"
-                                              id="upload"
-                                              name="upload"
-                                              // onChange={handleChange}
-                                              style={{ borderRadius: "5px" }}
-                                            />
-                                          </div>
-                                        </Form.Item>
-                                      </Col>
-                                      <Col span={2}>
-                                        <Form.Item label="Action">
-                                          <Row gutter={[8, 8]}>
-                                            <Col span={24}>
-                                              <Button
-                                                onClick={() => {
-                                                  form.resetFields();
-                                                }}
-                                              >
-                                                <CloseOutlined />
-                                              </Button>
-                                            </Col>
-                                          </Row>
-                                        </Form.Item>
-                                      </Col>
-                                    </>
-                                  )
-                                )}
+                                        </div>
+                                      </FormItem>
+                                    </Col>
+                                    <Col span={2} 
+                                    style={{display:'flex',justifyContent:'center',alignItems:"center"}}>
+                                      <FormItem >                                      
+                                        <Row gutter={[8,8]}>                                    
+                                          <Col span={24}>
+                                            <Button type="text" >
+                                              <CloseOutlined />
+                                            </Button>
+                                        </Col>
+                                        </Row>
+                                      </FormItem>
+                                    </Col>                                    
+                                    </>))}
                               </Row>
 
                               <Form.Item>
                                 <Button
                                   type="dashed"
                                   style={{ width: "150px" }}
-                                  onClick={() => add()}
+                                  onClick={(i) => add(i)}
                                   block
                                   icon={<PlusOutlined />}
                                 >
@@ -173,7 +190,8 @@ function InvoiceReimbursement(props) {
                             </>
                           )}
                         </Form.List>
-                        <Form.Item>
+
+                        <Form.Item style={{display:"flex",justifyContent:"end"}}>
                           <Button
                             type="text"
                             style={{ marginRight: "10px" }}
@@ -200,6 +218,7 @@ function InvoiceReimbursement(props) {
                             Submit
                           </Button>
                         </Form.Item>
+
                       </>
                     ) : (
                       <Form.Item>
@@ -215,9 +234,123 @@ function InvoiceReimbursement(props) {
                         </Button>
                       </Form.Item>
                     )}
-                  </Form>
-                </Row>
-              </Col>
+              </Form>
+
+
+              {/* <Form>
+                {invoiceShow ? (<>
+                  <Row gutter={[16,16]} style={{ width: "100%" }}>
+                    {console.log(invoiceList)}
+                    {invoiceList?.map((invoiceData, i)=>((<>
+                      <Divider orientation="left" orientationMargin="0">
+                        Expenditure No. {i+1}
+                      </Divider>
+                      <Col span={4}>
+                                      <FormItem
+                                      initialValue={invoiceList[i].date || null}
+                                      name={`payment${i}`}
+                                        label="Payment Date"
+                                      >
+                                        <DatePicker 
+                                            onChange={(e) => {
+                                              let temp = [...invoiceList];
+                                              temp[i].date = e.target.value;
+                                              setInvoiceList(temp)
+                                            }}/>
+                                      </FormItem>
+                      </Col>
+                      <Col span={6}>
+                                      <FormItem
+                                      initialValue={invoiceList[i].amount || null}
+                                      name={`amount${i}`}
+                                        label="Amount"
+                                      >
+                                        <Input 
+                                            onChange={(e) => {
+                                              let temp = [...invoiceList];
+                                              temp[i].amount = e.target.value;
+                                              setInvoiceList(temp)
+                                            }}/>
+                                      </FormItem>
+                      </Col>
+                      <Col span={6}>
+                                      <FormItem
+                                      initialValue={invoiceList[i].description || null}
+                                      name={`description${i}`}
+                                        label="Description"
+                                      >
+                                        <TextArea 
+                                            onChange={(e) => {
+                                              let temp = [...invoiceList];
+                                              temp[i].description = e.target.value;
+                                              setInvoiceList(temp)
+                                            }}
+                                        autoSize={{ minRows: 2, maxRows: 6 }}
+                                        rows={2} />
+                                      </FormItem>
+                      </Col>
+                      <Col span={6}>
+                                      <FormItem
+                                        name={`upload${i}`}
+                                        label="Upload the bill"
+                                      >
+                                        <div className="idpage">
+                                          <Input
+                                            type="file"
+                                            accept="application/pdf"
+                                            id="upload"
+                                            name="upload"
+                                            style={{ borderRadius: "5px" }}
+                                          />
+                                        </div>
+                                      </FormItem>
+                      </Col>
+                      <Col span={2}>
+                        <FormItem >                                                                      
+                          <Col span={24}>
+                            <Button 
+                              onClick={() => {
+                                setInvoiceList([])
+                                let temp = [...invoiceList]
+                                temp.splice(i, i)
+                                console.log(i, temp)
+                                setInvoiceList(temp)
+                              }}
+                            >
+                              <CloseOutlined />
+                            </Button>
+                          </Col>
+                        </FormItem>
+                      </Col>  
+                      </>)))}                                  
+                  </Row>
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      style={{ width: "150px" }}
+                      onClick={() => setInvoiceList([...invoiceList, []])}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                        Add Expenditure
+                    </Button>
+                  </Form.Item>
+                </>):(<>
+                  <Form.Item>
+                        <Button
+                          style={{
+                            background: "#1963a6",
+                            marginLeft: "7%",
+                          }}
+                          type="primary"
+                          onClick={() => setInvoiceShow(true)}
+                        >
+                          Add Expenses
+                        </Button>
+                  </Form.Item>
+                </>)}
+              </Form> */}
+
             </Row>
           </Form>
         </Card>

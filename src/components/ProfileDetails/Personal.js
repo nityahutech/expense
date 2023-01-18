@@ -368,7 +368,7 @@ function Personal() {
                                     >
                                       Date of Birth
                                     </div>
-                                      <div>{data?.dob ? data.dob : "-"}</div>
+                                    <div>{data?.dob ? data.dob : "-"}</div>
                                   </div>
                                 </Col>
                                 <Col
@@ -391,7 +391,7 @@ function Personal() {
                                     >
                                       Gender
                                     </div>
-                                      <div>{data ? data.gender : null}</div>
+                                    <div>{data ? data.gender : null}</div>
                                   </div>
                                 </Col>
                                 <Col
@@ -414,9 +414,9 @@ function Personal() {
                                     >
                                       Blood Group
                                     </div>
-                                      <div>
-                                        {data?.bloodGroup ? data.bloodGroup : "-"}
-                                      </div>
+                                    <div>
+                                      {data?.bloodGroup ? data.bloodGroup : "-"}
+                                    </div>
                                   </div>
                                 </Col>
                                 <Col
@@ -439,9 +439,9 @@ function Personal() {
                                     >
                                       Marital Status
                                     </div>
-                                      <div>
-                                        {data?.maritalStatus ? data.maritalStatus : "-"}
-                                      </div>
+                                    <div>
+                                      {data?.maritalStatus ? data.maritalStatus : "-"}
+                                    </div>
                                   </div>
                                 </Col>
                               </Row>
@@ -628,7 +628,7 @@ function Personal() {
                   >
                     <Button
                       onClick={() => {
-                        showEditContent(false);                    
+                        showEditContent(false);
                         setFileName(null);
                         setImageUrl(data.profilePic);
                       }}
@@ -1020,8 +1020,8 @@ function Personal() {
                           rules={[
                             {
                               // required: true,
-                              minLength: 3,
-                              maxLength: 100,
+                              // minLength: 3,
+                              // maxLength: 100,
                               // message: "Please enter First Name",
                             },
                             {
@@ -1031,12 +1031,13 @@ function Personal() {
                           ]}
                         >
                           <TextArea
-                            maxLength={150}
+                            maxLength={80}
                             style={{ marginTop: "10px" }}
                             // value={value}
                             // onChange={e => setValue(e.target.value)}
                             placeholder="Enter Address in Details"
-                            autoSize={{ minRows: 3, maxRows: 7 }}
+                            rows={4}
+
                           />
                         </Form.Item>
                       )}
@@ -1066,8 +1067,8 @@ function Personal() {
                           rules={[
                             {
                               // required: true,
-                              minLength: 3,
-                              maxLength: 100,
+                              // minLength: 3,
+                              // maxLength: 100,
                               // message: "Please enter First Name",
                             },
                             {
@@ -1077,12 +1078,12 @@ function Personal() {
                           ]}
                         >
                           <TextArea
-                            maxLength={150}
+                            maxLength={80}
                             style={{ marginTop: "10px" }}
                             // value={value}
                             // onChange={e => setValue(e.target.value)}
                             placeholder="Enter Address in Details"
-                            autoSize={{ minRows: 3, maxRows: 7 }}
+                            rows={4}
                           />
                         </Form.Item>
                       )}

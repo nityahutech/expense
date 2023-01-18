@@ -36,7 +36,7 @@ const HalfYearGoalTable = (props) => {
         {
             title: "Employee Id",
             dataIndex: "empId",
-            // fixed: "left",
+            fixed: "left",
             width: 100,
         },
         {

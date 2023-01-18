@@ -198,7 +198,7 @@ function EmployeeListview(props) {
                 flex: 1,
               }}
               colon={false}
-              style={{ height: '320px' }}
+              style={{ height: '420px' }}
             >
               <h2 style={styleFont3}>Personal Informations</h2>
               <Col xs={24} sm={24} md={24}>
@@ -221,16 +221,18 @@ function EmployeeListview(props) {
                   <span>{showRecord.altPhnNo ? showRecord.altPhnNo : '-'}</span>
                 </Form.Item>
               </Col>
-              <Col className="form-item" xs={24} sm={24} md={24}>
+              <Divider style={{ margin: '0px' }} />
+              <Col style={{ height: '80px' }} className="form-item" xs={24} sm={24} md={24}>
                 <Form.Item className='profilestyle' style={styleFont} label="Current Address">
-                  <span>{showRecord.currentAdd ? showRecord.currentAdd : '-'}</span>
+                  <span >{showRecord.currentAdd ? showRecord.currentAdd : '-'}</span>
                 </Form.Item>
               </Col>
-              <Col className="form-item" xs={24} sm={24} md={24}>
+              <Col style={{ height: '80px' }} className="form-item" xs={24} sm={24} md={24}>
                 <Form.Item className='profilestyle' style={styleFont} label="Permanent Address">
                   <span>{showRecord.permanentAdd ? showRecord.permanentAdd : '-'}</span>
                 </Form.Item>
               </Col>
+              <Divider style={{ margin: '0px' }} />
               <Col className="form-item" xs={24} sm={24} md={24}>
                 <Form.Item className='profilestyle' style={styleFont} label="House Type">
                   <span>{showRecord.houseType ? showRecord.houseType : '-'}</span>
@@ -277,7 +279,7 @@ function EmployeeListview(props) {
                 flex: 1,
               }}
               colon={false}
-              style={{ height: '320px' }}
+              style={{ height: '420px' }}
             >
               <h2 style={styleFont3}>Family Members</h2>
               <Col xs={24} sm={24} md={24}>
@@ -292,7 +294,7 @@ function EmployeeListview(props) {
                   <span>{showRecord.fatherContact ? showRecord.fatherContact : '-'}</span>
                 </Form.Item>
               </Col>
-              <Divider style={{ margin: '10px' }} />
+              <Divider style={{ marginTop: '30px' }} />
               <Col xs={24} sm={24} md={24}>
                 <Form.Item className='profilestyle' style={styleFont} label="Mother Name">
                   <span>{showRecord.mother ? showRecord.mother : '-'}</span>
@@ -303,7 +305,7 @@ function EmployeeListview(props) {
                   <span>{showRecord.motherContact ? showRecord.motherContact : '-'}</span>
                 </Form.Item>
               </Col>
-              <Divider style={{ margin: '10px' }} />
+              <Divider style={{ marginTop: '30px' }} />
               <Col xs={24} sm={24} md={24}>
                 <Form.Item className='profilestyle' style={styleFont} label="Other">
                   <span>{showRecord.other ? showRecord.other : '-'}</span>

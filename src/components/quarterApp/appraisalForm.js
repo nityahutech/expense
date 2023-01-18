@@ -22,13 +22,14 @@ const fixedColumns = [
     {
         title: "Assessment Area",
         dataIndex: "name",
-
+        align: 'left',
         width: 140,
         fixed: "left",
     },
     {
         title: "Rating Guidance",
-        dataIndex: "description"
+        dataIndex: "description",
+        align: 'left'
     }
 ];
 const fixedData = [
@@ -36,11 +37,13 @@ const fixedData = [
         key: '1',
         name: 'Far Exceeds (Role Model)',
         description: 'Performance far exceeds job requirements (i.e., consistently far exceeds performance objectives)',
+
     },
     {
         key: '2',
         name: 'Exceeds (Exceeds Expectations)',
-        description: 'Consistently meets job requirements and exceeds in most areas (i.e., achieves performance objectives and exceeds on most)'
+        description: 'Consistently meets job requirements and exceeds in most areas (i.e., achieves performance objectives and exceeds on most)',
+
     },
     {
         key: '3',

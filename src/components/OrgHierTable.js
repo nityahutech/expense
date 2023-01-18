@@ -147,6 +147,7 @@ const OrgHierTable = () => {
       dataIndex: "name",
       key: "name",
       width: 100,
+      align: "left",
       render: (_, record) => (
         <a
           href="#"
@@ -174,15 +175,13 @@ const OrgHierTable = () => {
       key: "description",
       dataIndex: "description",
       width: 200,
-      // responsive: ["md"],
-      // render: (_, { status }) => getStatusUi(status),
+      align: "left"
     },
     {
       title: "Action",
       key: "action",
       dataIndex: "action",
       width: 80,
-      // align: "center",
       render: (_, record) => {
         return (
           <>

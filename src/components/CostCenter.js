@@ -122,29 +122,26 @@ function CostCenter(props) {
   }, []);
 
   const columns = [
-    // {
-    //   title: "Sl.no.",
-    //   dataIndex: "slno",
-    //   key: "slno",
-    //   width: 80,
-    // },
     {
       title: "Cost Center Code",
       dataIndex: "costcentercode",
       key: "costcentercode",
       width: 150,
+      align: "left"
     },
     {
       title: "Name",
       key: "costName",
       dataIndex: "costName",
       width: 140,
+      align: "left"
     },
     {
       title: "Description",
       key: "costDescription",
       dataIndex: "costDescription",
       width: 140,
+      align: "left"
     },
     {
       title: "Action",
@@ -354,7 +351,7 @@ function CostCenter(props) {
                 ]}
               >
                 <Input
-                  maxLength={20}
+                  maxLength={30}
                   onChange={(e) => {
                     const inputval = e.target.value;
                     const str = e.target.value;
@@ -499,7 +496,7 @@ function CostCenter(props) {
                 ]}
               >
                 <Input
-                  maxLength={20}
+                  maxLength={30}
                   onChange={(e) => {
                     const inputval = e.target.value;
                     const str = e.target.value;

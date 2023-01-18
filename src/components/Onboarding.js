@@ -238,12 +238,14 @@ function Onboarding() {
       dataIndex: "id",
       key: "id",
       width: 120,
+      align: "left"
     },
     {
       title: "Name",
       dataIndex: "regCompName",
       key: "regCompName",
       width: 200,
+      align: "left"
     },
     {
       title: "Status",

@@ -63,22 +63,22 @@ function App() {
             }
           />
           <Route path="/Attendance" element={
-              <FormatPage
-                main={<AttendanceLog roleView={roleView}/>}
-                activeMenu={["6"]}
-                roleView={roleView}
-                switchRole={switchRole}
-              />
-            }
+            <FormatPage
+              main={<AttendanceLog roleView={roleView} />}
+              activeMenu={["6"]}
+              roleView={roleView}
+              switchRole={switchRole}
+            />
+          }
           />
           <Route path="/Leave" element={
-              <FormatPage
-                main={<Leave roleView={roleView}/>}
-                activeMenu={["7"]}
-                roleView={roleView}
-                switchRole={switchRole}
-              />
-            }
+            <FormatPage
+              main={<Leave roleView={roleView} />}
+              activeMenu={["7"]}
+              roleView={roleView}
+              switchRole={switchRole}
+            />
+          }
           />
           <Route
             path="/Employee/AddEmployee"
@@ -151,6 +151,7 @@ function App() {
                 main={<AppraisalHr />}
                 activeSubMenu={["sub4"]}
                 activeMenu={["20"]}
+                switchRole={switchRole}
               />
             }
           />
@@ -161,6 +162,7 @@ function App() {
                 main={<HalfYearGoalHome />}
                 activeSubMenu={["sub4"]}
                 activeMenu={["20a"]}
+                switchRole={switchRole}
               />
             }
           />
@@ -168,7 +170,7 @@ function App() {
             path="/Assets"
             element={
               <FormatPage
-                main={<AssetMag roleView={roleView}/>}
+                main={<AssetMag roleView={roleView} />}
                 activeSubMenu={["sub4"]}
                 activeMenu={["22"]}
                 roleView={roleView}

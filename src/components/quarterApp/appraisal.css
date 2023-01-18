@@ -32,14 +32,6 @@
   line-height: 18px;
 }
 
-/* .rowClassName1 {
-  background-color: rgb(161, 172, 173);
-  border-radius: 10px;
-  border-color: rgb(52, 60, 174);
-  border-width: 3px;
-  border-style: solid;
-} */
-
 .rowClassName1 td:first-child {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
@@ -49,6 +41,43 @@
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
 }
+
+/* //-------------------------------------------- */
+.appraisal-tab  .ant-tabs-nav{
+  margin: 0px;
+}
+.appraisal-tab .ant-form-item-feedback-icon-error {
+  display: none;
+}
+.appraisal-tab .ant-tabs-tab.ant-tabs-tab-active{
+  font-weight: bold;
+}
+.appraisal-tab .ant-form-item-explain-error {
+  font-size: 10px !important;
+}
+.appraisal-tab .ant-tabs-nav .ant-tabs-nav-list{
+  margin-left: 15px;
+  margin-top: 10px;
+}
+.appraisal-tab .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+  color: #000000;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px; 
+}
+
+.appraisal-tab .ant-tabs-tab:hover{
+  color: #000000;
+}
+.appraisal-tab .ant-tabs-ink-bar {
+  /* position: absolute; */
+  background: #F9A01F;
+  pointer-events: none;
+}
+.appraisal-tab {
+  min-height: 100vh;
+}
+
 
 @page {
   size: A4;

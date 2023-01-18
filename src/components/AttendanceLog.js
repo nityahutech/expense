@@ -1,25 +1,29 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Tabs,
-  Layout,
   Table,
   Button,
-  Modal,
   Form,
   Input,
   DatePicker,
   Spin,
-  Pagination,
+  Card,
+  Divider,
+  Radio,
+  Switch,
+  TimePicker,
+  InputNumber,
 } from "antd";
 import "../style/AttendanceLog.css";
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { useAuth } from "../contexts/AuthContext";
 import AttendanceContext from "../contexts/AttendanceContext";
-import ProfileContext from "../contexts/ProfileContext";
-import { scryRenderedComponentsWithType } from "react-dom/test-utils";
-const { RangePicker } = DatePicker;
-const { Content } = Layout;
+import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
+import EmpInfoContext from "../contexts/EmpInfoContext";
+import ConfigureContext from "../contexts/ConfigureContext";
+import { checkNumbervalue, showNotification } from "../contexts/CreateContext";
+import { set } from "react-hook-form";
+
 const layout = {
   labelCol: {
     span: 8,
@@ -34,151 +38,193 @@ const tailLayout = {
     span: 16,
   },
 };
-const dateFormat = "DD-MM-YYYY";
-function AttendanceLog({ empDetails }) {
-  const [monthlydata, setMonthlydata] = useState([]);
+
+function AttendanceLog(props) {
   const [allEmp, setallEmp] = useState([]);
-  const [role, setRole] = useState(empDetails);
+  const isHr = props.roleView == "admin";
+  const [form] = Form.useForm();
+  console.log(props, isHr);
+  const page = "attendanceConfig";
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
-  console.log(activetab);
-  const { currentUser } = useAuth();
-  const [key, setKey] = useState("1");
   const [loading, setLoading] = useState(false);
   const [empMonthly, setEmpMonthly] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [holidays, setHolidays] = useState([]);
+  const [dateOfJoining, setDateOfJoining] = useState(null);
+  const [month, setMonth] = useState();
+  const [selDate, setSelDate] = useState();
+  const [selectedDay, setSelectedDay] = useState({});
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
     date: [],
     category: "all",
   });
-  const [filteredEmp, setFilteredEmp] = useState([]);
+  const [configurations, setConfigurations] = useState({});
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
 
+  const handleFinish = (values) => {
+    let temp = Object.keys(values)
+    console.log(values?.starttime, values?.endtime, temp, values?.starttime == null, values?.endtime == null)
+    if ((temp.includes("starttime") || temp.includes("endtime")) && (values?.starttime == null && values?.endtime == null)) {
+      return;
+    }
+    let attendanceConfig = {
+      ...configurations,
+      ...values,
+      starttime: values?.starttime?.format("HH:mm") || startTime,
+      endtime: values?.endtime?.format("HH:mm") || endTime,
+    };
+    setStartTime(values?.starttime?.format("HH:mm") || startTime)
+    setEndTime(values?.endtime?.format("HH:mm") || endTime)
+    console.log(attendanceConfig, attendanceConfig.starttime > attendanceConfig.starttime)
+    // if (attendanceConfig.starttime > attendanceConfig.starttime) {
+    ConfigureContext.createConfiguration(
+      page,
+      { attendanceNature: attendanceConfig })
+      .then((response) => {
+        getAttendanceData();
+      })
+      .catch((error) => {
+        showNotification("error", "Error", error.message);
+      });
+    // } else {
+    //   showNotification("error", "Error", "Start Time cannot be after End Time!")
+    // }
+  }
+
+  const getAttendanceData = async () => {
+    let data = await ConfigureContext.getConfigurations(page);
+    console.log("config", data)
+    setConfigurations(data?.attendanceNature);
+    setSelectedDay(data?.attendanceNature?.selectedDay)
+    setStartTime(data?.attendanceNature?.starttime)
+    setEndTime(data?.attendanceNature?.endtime)
+    return data?.attendanceNature?.selectedDay
+  };
+
+  const [filteredEmp, setFilteredEmp] = useState([]);
   const columns = [
     {
       title: "Employee Code",
       dataIndex: "empId",
       className: "code",
       key: "empId",
-
+      align: "left",
       render: (text) => <a>{text}</a>,
     },
     {
       title: "Employee Name",
       dataIndex: "name",
       key: "nFname",
+      align: "left",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      align: "left",
     },
-
     {
       title: "Project Name",
       dataIndex: "project",
       key: "project",
+      ellipsis: true,
+      align: "left",
     },
     {
       title: "Report",
       key: "report",
       dataIndex: "report",
       ellipsis: true,
+      fixed: "right",
+      align: "left",
     },
-    // {
-    //   title: "Action",
-    //   key: "action",
-    // },
   ];
-
   useEffect(() => {
-    console.log(activetab);
+    console.log(isHr)
+    getAttendanceData();
+    getHolidayList();
+    getDateOfJoining();
+  }, [isHr]);
+  useEffect(() => {
     form.resetFields();
-    if (empDetails.userType === "emp") {
-      setTimeout(() => {
-        console.log(currentUser.uid);
-        setSelectemp({ id: currentUser.uid });
-        // setActivetab("1");
+    let temp = {};
+    if (holidays.length == 0) {
+      getHolidayList().then((res) => { temp.holidays = res })
+      getAttendanceData().then((res) => { temp.selectedDays = res })
+    }
+    const timer = setTimeout(() => {
+      if (!isHr) {
+        if (activetab == "1") {
+          setSelectemp({ id: currentUser.uid });
+          getEmpDetails(currentUser.uid, [
+            moment().subtract(30, "days"),
+            moment()
+          ], temp);
+        }
+      } else {
+        if (activetab == "1") {
+          allEmpDetails(temp);
+        }
+      }
+    }, 800)
+    return () => clearTimeout(timer);
+  }, [activetab, isHr]);
+
+  const getHolidayList = async () => {
+    let data = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
+    console.log('holidays', data)
+    let req = data.docs.map((doc) => {
+      if (!doc.data().optionalHoliday) {
+        return doc.data().date;
+      }
+      return null;
+    });
+    setHolidays(req);
+    return req;
+  };
+
+  const getDateOfJoining = async (id) => {
+    let data = await EmpInfoContext.getEduDetails(id || currentUser.uid);
+    console.log("data", data);
+    var doj = moment(data.doj, "DD-MM-YYYY");
+    console.log("data", doj);
+    setDateOfJoining(doj);
+  };
+
+  const setHolidayStatus = (data) => {
+    data.forEach((rec) => {
+      if (
+        holidays.includes(
+          moment(rec.date, "DD-MM-YYYY").format("Do MMM, YYYY")
+        ) &&
+        rec.status != "Present"
+      ) {
+        rec.status = "Holiday";
+      }
+    });
+    return data;
+  };
+  const onFinish = (values) => {
+    const newData = {
+      report: values?.project_details || "-",
+      project: values?.project_name || "-",
+    };
+    AttendanceContext.updateAttendance(currentUser.uid, values.date, newData)
+      .then((response) => {
         getEmpDetails(currentUser.uid, [
           moment().subtract(30, "days"),
           moment(),
         ]);
-      }, 500);
-      // getEmpMonthly();
-    } else {
-      if (activetab == "1") {
-        allEmpDetails();
-      }
-    }
-  }, [activetab]);
-
-  const [form] = Form.useForm();
-
-  function getFormateDateString() {
-    return (
-      (new Date().getDate() > 9
-        ? new Date().getDate()
-        : "0" + new Date().getDate()) +
-      "-" +
-      (new Date().getMonth() + 1 > 9
-        ? new Date().getMonth() + 1
-        : "0" + (new Date().getMonth() + 1)) +
-      "-" +
-      new Date().getFullYear()
-    );
-  }
-  function getFormatTimeString() {
-    return (
-      (new Date().getHours() > 9
-        ? new Date().getHours()
-        : "0" + new Date().getHours()) +
-      ":" +
-      (new Date().getMinutes() > 9
-        ? new Date().getMinutes()
-        : "0" + new Date().getMinutes()) +
-      ":" +
-      (new Date().getSeconds() > 9
-        ? new Date().getSeconds()
-        : "0" + new Date().getSeconds())
-    );
-  }
-
-  const onFinish = async (values) => {
-    console.log(values);
-    const newData = {
-      // code: "898",
-      // date: getFormateDateString(),
-      // status: "-_",
-      // time1: getFormatTimeString(),
-      // time2: "18:15:23",
-      // work: "-",
-      report: values?.project_details || "-",
-      project: values?.project_name || "-",
-    };
-    console.log(currentUser.uid, { monthlydata });
-    await AttendanceContext.updateAttendance(
-      currentUser.uid,
-      values.date,
-      newData
-    );
-    // let newAlldata = [newData, ...empMonthly];
-    // console.log(newAlldata);
-    // localStorage.setItem("newReport", JSON.stringify(newAlldata));
+        showNotification("success", "Success", "Record updated successfuly");
+      })
+      .catch((error) => {
+        showNotification("error", "Error", "No records exist for this day");
+      });
     setActivetab("1");
-    //create new report obj with required data + ""
-    //create newMonthlyAll=new+old monthly
-    //set local with newMonthlyAll
-    //set state for monthly with newMonthlyAll
   };
-  // useEffect(() => {
-  //   getEmpDetails(selectemp.id);
-  //   // getEmpMonthly();
-  // }, [activetab]);
-
-  // useEffect(() => {
-
-  // }, [loading])
-
   if (loading) {
     return (
       <div
@@ -205,237 +251,121 @@ function AttendanceLog({ empDetails }) {
       </div>
     );
   }
-
-  async function getEmpDetails(id, date) {
-    // setLoading(true);
-    console.log(id);
-    let data = await AttendanceContext.getAllAttendance(id, date);
-
-    console.log(data);
-    setEmpMonthly(data);
-    setLoading(false);
+  async function getEmpDetails(id, date, temp) {
+    setLoading(true);
+    let data, dayTemp = temp?.selectedDays || selectedDay, holTemp = temp?.holidays || holidays;
+    console.log(dayTemp, holTemp)
+    AttendanceContext.getAllAttendance(id, date).then((userdata) => {
+      let dayoff = Object.keys(dayTemp).filter((day) => dayTemp[`${day}`] == "dayoff")
+      AttendanceContext.updateLeaves(
+        userdata,
+        holTemp.includes(moment().format("Do MMM, YYYY")),
+        dayoff.includes(moment().format("dddd"))
+      ).then((final) => {
+        setHolidayStatus(final);
+        data = final;
+        setEmpMonthly(final);
+        const timer = setTimeout(() => {
+          setLoading(false);
+        }, 750);
+        return () => clearTimeout(timer);
+      });
+      // getWithLeave(userdata);
+    });
     return data;
   }
-  // function getEmpMonthly() {
-  //   console.log(JSON.parse(localStorage.getItem("newReport")));
-  //   let userlocal = JSON.parse(localStorage.getItem("newReport")) || [];
-  //   let newEmp = [];
-  //   userlocal.map((emp, i) => {
-  //     newEmp.push({
-  //       key: i,
-
-  //       code: emp.code,
-  //       date: emp.date,
-  //       empname: "Nitya-" + (i + 1),
-  //       status: emp.status,
-  //       time1: emp.time1,
-  //       time2: emp.time2,
-  //       work: emp.work,
-  //       report: emp.report,
-  //       project: emp.project,
-  //     });
-  //   });
-  //   console.log({ newEmp });
-  //   setEmpMonthly(newEmp);
-  //   // setallEmp(newEmp);
-  // }
-
-  function allEmpDetails() {
+  function allEmpDetails(temp, selDate) {
     setLoading(true);
-    // console.log(JSON.parse(localStorage.getItem("newReport")));
-    AttendanceContext.getAllUsers().then((userdata) => {
-      console.log(JSON.stringify(userdata));
-      getWithLeave(userdata);
+    let date = selDate || moment();
+    let dayTemp = temp?.selectedDays || selectedDay, holTemp = temp?.holidays || holidays;
+    console.log(temp, selDate, dayTemp, holTemp, date, holTemp.includes(date.format("Do MMM, YYYY")))
+    AttendanceContext.getAllUsers(date.format("DD-MM-YYYY")).then((userdata) => {
+      console.log(dayTemp, holTemp)
+      let dayoff = Object.keys(dayTemp).filter((day) => dayTemp[`${day}`] == "dayoff")
+      AttendanceContext.updateWithLeave(
+        userdata,
+        holTemp.includes(date.format("Do MMM, YYYY")),
+        dayoff.includes(date.format("dddd"))
+      ).then((final) => {
+        // setHolidayStatus(final)
+        setallEmp(final);
+        setFilteredEmp(final);
+        setEmpMonthly(final);
+        const timer = setTimeout(() => {
+          setLoading(false);
+        }, 750);
+        return () => clearTimeout(timer);
+      });
+      // getWithLeave(userdata);
     });
-    // setLoading(false);
   }
-
-  function getWithLeave(userdata) {
-    // setLoading(true);
-    AttendanceContext.updateWithLeave(userdata).then((final) => {
-      console.log(
-        "test1",
-        final ? JSON.parse(JSON.stringify(final)) : undefined
-      );
-      setallEmp(final);
-      setFilteredEmp(final);
-      setEmpMonthly(final);
-      setLoading(false);
-    });
-  }
-  // stats.map((rec) => {
-  //   console.log("mooooooooooooooooooooooooooooo");
-  // if (emp.id == rec.id) {
-  //   emp.status = "Present";
-  //   emp.project = rec.project;
-  //   emp.report = rec.report;
-  //   return;
-  // }
-  // })
-  //   else {
-  //     console.log("AAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHH");
-  //     AttendanceContext.getLeaveStatus(emp.id).then((leave) => {
-  //     if (leave) {
-  //       emp.status = "On Leave";
-  //     }
-  //   })
-  // }
-
-  // let newEmp = [];
-  // userlocal.map((emp, i) => {
-  //   newEmp.push({
-  //     key: i,
-  //     code: emp.code + i,
-  //     date: emp.date,
-  //     status: emp.status,
-  //     time1: emp.time1,
-  //     time2: emp.time2,
-  //     empname: "Nitya-" + (i + 1),
-  //     project: emp.project,
-  //     report: emp.report,
-  //   });
-  // });
-  // console.log({ newEmp });
-
   const onReset = () => {
     form.resetFields();
   };
-  console.log(empDetails);
-  // useEffect(() => {
-  //   setFilteredEmp(filteredEmp);
-  // }, [activetab]);
-
-  // useEffect(() => {
-  //   setFilteredEmp(filteredEmp);
-  // }, [activetab]);
-
-  //   const rowSelection = {
-  //     onChange: (selectedRowKeys, selectedRows) => {
-  //       setSelectemp(selectedRows[0].code);
-  //       setActivetab("3");
-  //     },
-  //     getCheckboxProps: (record) => ({
-  //       disabled: record.name === "Disabled User",
-  //       // Column configuration not to be checked
-  //       name: record.name,
-  //     }),
-  //     type: "radio",
-  //   };
-  //   const [selectionType, setSelectionType] = useState("");
-  // const data = [
-  //   {
-  //     key: "1",
-  //     code: "HTS001",
-
-  //     name: "Nitya",
-  //     project: "Expenses",
-  //     report: "xfddsfdvbgfgfbvbvbdffgfdgjfhjjkjfjfdgkj",
-  //   },
-  //   {
-  //     key: "2",
-  //     code: "HTS002",
-
-  //     name: "Jatin",
-  //     project: "Expenses",
-  //     report: "xfddsfdvbgfgfbvbvb",
-  //   },
-  //   {
-  //     key: "3",
-  //     code: "HTS003",
-
-  //     name: "Saswat",
-  //     project: "Expenses",
-  //     report: "xfddsfdvbgfgfbvbvb",
-  //   },
-  // ];
   const columns1 = [
-    // {
-    //   title: "Employee Code",
-    //   dataIndex: "code",
-    //   key: "code",
-    //   render: (text) => <a>{text}</a>,
-    // },
     {
       title: "Date",
       dataIndex: "date",
       key: "date",
+      width: 80,
+      align:"left",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      width: 80,
+      align:"left",
     },
     {
       title: "In Time",
       dataIndex: "clockIn",
       key: "clockIn",
+      width: 80,
+      align:"left",
     },
     {
       title: "Out Time",
       key: "clockOut",
       dataIndex: "clockOut",
+      width: 80,
+      align:"left",
     },
     {
       title: "Work Duration",
       key: "duration",
       dataIndex: "duration",
+      width: 100,
+      align:"left",
     },
     {
       title: "Break Time",
       key: "break",
       dataIndex: "break",
+      width: 80,
+      align:"left",
     },
     {
       title: "Project Name",
       dataIndex: "project",
       key: "project",
+      ellipsis: true,
+      width: 80,
+      align:"left",
     },
     {
       title: "Report",
       key: "report",
       dataIndex: "report",
-    },
-    // {
-    //   title: "Action",
-    //   key: "action",
-    // },
-  ];
-  const data1 = [
-    {
-      key: "1",
-      code: "8u",
-      date: "12/09/2022",
-      status: "P",
-      time1: "",
-      time2: "",
-      work: "",
-      report: "dfdjdgjhgjhgjhfhfdj",
-    },
-    {
-      key: "2",
-      code: "8u",
-      date: "12/09/2022",
-      status: "P",
-      time1: "",
-      time2: "",
-      work: "",
-      report: "dfdjdgjhgjhgjhfhfdj",
-    },
-    {
-      key: "3",
-      code: "8u",
-      date: "12/09/2022",
-      status: "P",
-      time1: "",
-      time2: "",
-      work: "",
-      report: "dfdjdgjhgjhgjhfhfdj",
+      width: 100,
+      ellipsis: true,
+      fixed: "right",
+      align:"left",
     },
   ];
-
   async function onHrDateFilter(value) {
+    setMonth(value);
     if (value == null) {
-      console.log("empMonthly");
       const modifiedFilterExpense = await getEmpDetails(selectemp.id, [
         moment().subtract(30, "days"),
         moment(),
@@ -445,18 +375,7 @@ function AttendanceLog({ empDetails }) {
       const begin = value.clone().startOf("month");
       const end = value.clone().endOf("month");
       let date = [begin, end];
-      // let result = empMonthly.filter((ex) => {
-      //   return (
-      //     moment(ex.date, dateFormat).isSame(date[0], "day") ||
-      //     moment(ex.date, dateFormat).isSame(date[1], "day") ||
-      //     (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
-      //       moment(ex.date, dateFormat).isSameOrBefore(date[1]))
-      //   );
-      // });
-
       const modifiedFilterExpense = await getEmpDetails(selectemp.id, date);
-
-      console.log(modifiedFilterExpense.reverse());
       setEmpMonthly(modifiedFilterExpense);
     }
   }
@@ -467,23 +386,108 @@ function AttendanceLog({ empDetails }) {
       let result = allEmp.filter((ex) =>
         ex.name.toLowerCase().includes(search.toLowerCase())
       );
-      console.log({ result });
       setFilteredEmp(result);
     } else {
       setFilteredEmp(allEmp);
     }
   };
 
-  console.log("test", filteredEmp[1]);
-  console.log("test", JSON.stringify(filteredEmp[1]));
-  console.log(
-    "test",
-    filteredEmp[1] ? JSON.parse(JSON.stringify(filteredEmp[1])) : "empty"
-  );
-  console.log(filteredEmp);
-  // console.log("test",filteredEmp);
-  // console.log("test",filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):"empty");
-  // setFilteredEmp(filteredEmp?JSON.parse(JSON.stringify(filteredEmp)):undefined)
+  const disabledDate = (current) => {
+    return !current.isBetween(dateOfJoining, new Date());
+  };
+
+  // const disabledDatetwo = (current) => {
+  //   return current.isBefore(dateOfJoining);
+  //   // ||
+  //   // current.isAfter(moment(dateOfJoining).add(2, "months"))
+  // };
+
+  const workingdays = [
+    { days: "Monday" },
+    { days: "Tuesday" },
+    { days: "Wednesday" },
+    { days: "Thursday" },
+    { days: "Friday" },
+    { days: "Saturday" },
+    { days: "Sunday" }
+  ];
+
+  const handleRadiochange = (value, data) => {
+    console.log(value);
+    console.log(data);
+    let tempSelectedDay = {
+      ...selectedDay,
+      [data.days]: value,
+    }
+    setSelectedDay(tempSelectedDay)
+    // console.log('ddddd', selectedDay)
+    handleFinish({ selectedDay: tempSelectedDay });
+  };
+
+  const tableHeaders = [
+    {
+      title: "Days",
+      dataIndex: "days",
+      key: "days",
+    },
+    {
+      title: "Full Day",
+      dataIndex: "fullday",
+      key: "fullday",
+      align: "center",
+      render: (_, data) => {
+        return (
+          <Radio.Group
+            onChange={(e) => handleRadiochange(e.target.value, data)}
+            value={selectedDay[data.days]}
+          // value={value4}
+
+          >
+            <Radio className="radio" value={`fullday`} />
+          </Radio.Group>
+        );
+      },
+    },
+    {
+      title: "Half Day",
+      dataIndex: "halfday",
+      key: "halfday",
+      align: "center",
+      render: (_, data) => {
+        return (
+          <Radio.Group
+            onChange={(e) => handleRadiochange(e.target.value, data)}
+            value={selectedDay[data.days]}
+          >
+            <Radio
+              className="radio"
+              // value={`halfday_${data.key}_${data.days}`}
+              value={`halfday`}
+            />
+          </Radio.Group>
+        );
+      },
+    },
+    {
+      title: "Dayoff",
+      dataIndex: "dayoff",
+      key: "dayoff",
+      align: "center",
+      render: (_, data) => {
+        return (
+          <Radio.Group
+            onChange={(e) => handleRadiochange(e.target.value, data)}
+            value={selectedDay[data.days]}
+          >
+            <Radio className="radio" value={`dayoff`} />
+          </Radio.Group>
+        );
+      },
+    },
+  ];
+
+  console.log(startTime, endTime)
+
   return (
     <>
       <div className="hrtab">
@@ -496,38 +500,43 @@ function AttendanceLog({ empDetails }) {
             setSelectemp({ id: "" });
           }}
         >
-          {role.userType === "emp" ? (
+          {!isHr ? (
             <>
               <Tabs.TabPane tab="Monthly Log" key="1">
-                <DatePicker
-                  picker="month"
-                  placeholder="Select Month"
-                  className="Range"
-                  bordered={true}
-                  // defaultValue={[]}
-                  format="MM-YYYY"
-                  style={{
-                    background: "#1890ff",
-                    cursor: "pointer",
-                    marginLeft: "12rem",
-                  }}
-                  allowClear
-                  onChange={onHrDateFilter}
-                />
+                <div className="monthColor">
+                  <DatePicker
+                    picker="month"
+                    placeholder="Select Month"
+                    className="Range"
+                    bordered={true}
+                    value={month}
+                    defaultValue={month ? month : null}
+                    format="MM-YYYY"
+                    style={{
+                      background: "#1963A6",
+                      cursor: "pointer",
+                      marginLeft: "15rem",
+                    }}
+                    allowClear
+                    onChange={onHrDateFilter}
+                    disabledDate={disabledDate}
+                  />
+                </div>
                 <Table
                   loading={loading}
                   className="monthly"
                   columns={columns1}
                   dataSource={empMonthly || []}
+                  scroll={{ x: 600 }}
                 />
               </Tabs.TabPane>
               <Tabs.TabPane
                 tab="Add Report"
                 key="2"
                 className="reportTabs"
-                // onClick={() => {
-                //   setIsModalOpen(true);
-                // }}
+              // onClick={() => {
+              //   setIsModalOpen(true);
+              // }}
               >
                 {/* <Button type="primary" onClick={showModal}>
               Open Modal
@@ -616,7 +625,24 @@ function AttendanceLog({ empDetails }) {
                   placeholder="Search"
                   prefix={<SearchOutlined />}
                   onChange={searchChange}
-                  // style={{ width: "95%" }}
+                // style={{ width: "95%" }}
+                />
+                <DatePicker
+                  defaultValue={selDate}
+                  className="Range Daily"
+                  bordered={true}
+                  format="DD-MM-YYYY"
+                  style={{
+                    background: "#1963A6",
+                    cursor: "pointer",
+                    marginLeft: "15rem",
+                    width: "10%",
+                  }}
+                  allowClear
+                  onChange={(e) => {
+                    setSelDate(e);
+                    allEmpDetails("_", e);
+                  }}
                 />
                 <Table
                   //   rowSelection={{
@@ -626,13 +652,16 @@ function AttendanceLog({ empDetails }) {
                   className="DailyTable"
                   onRow={(record, rowIndex) => {
                     return {
-                      onClick: (event) => {
-                        console.log(record);
+                      onClick: async (event) => {
                         setSelectemp({ ...record });
-                        getEmpDetails(record.id, [
+                        await getEmpDetails(record.id, [
                           moment().subtract(30, "days"),
                           moment(),
                         ]);
+                        // await getDateOfJoining(record.id);
+                        // const doj = moment(record.doj, dateFormat);
+                        console.log("record", record);
+                        // setDateOfJoining(doj);
                         setActivetab("2");
                       }, // click row
                     };
@@ -643,21 +672,24 @@ function AttendanceLog({ empDetails }) {
                 />
               </Tabs.TabPane>
               <Tabs.TabPane disabled={!selectemp.id} tab="Monthly Log" key="2">
-                <DatePicker
-                  picker="month"
-                  placeholder="Select Month"
-                  className="Range"
-                  // defaultValue={[]}
-                  format={"MM-YYYY"}
-                  style={{
-                    background: "#1890ff",
-                    cursor: "pointer",
-                    marginLeft: "12rem",
-                  }}
-                  allowClear
-                  onChange={onHrDateFilter}
-                />
-
+                <div className="monthColor">
+                  <DatePicker
+                    picker="month"
+                    placeholder="Select Month"
+                    className="Range"
+                    value={month}
+                    defaultValue={month ? month : null}
+                    format={"MM-YYYY"}
+                    style={{
+                      background: "#1963A6",
+                      cursor: "pointer",
+                      marginLeft: "12rem",
+                    }}
+                    allowClear
+                    onChange={onHrDateFilter}
+                    disabledDate={disabledDate}
+                  />
+                </div>
                 <Table
                   loading={loading}
                   className="monthly"
@@ -665,8 +697,156 @@ function AttendanceLog({ empDetails }) {
                   dataSource={empMonthly}
                   pagination={true}
                 />
+              </Tabs.TabPane>
 
-                {console.log(empMonthly || [])}
+              {/* //---------------------------------------------------------- */}
+
+              <Tabs.TabPane tab="Configure" key="3">
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <Card
+                    style={{
+                      width: "80%",
+                      borderRadius: "5px",
+                      marginBottom: "25px",
+                    }}
+                  >
+                    <Form
+                      labelCol={{
+                        span: 4,
+                        offset: 2,
+                      }}
+                      wrapperCol={{
+                        span: 14,
+                        offset: 1,
+                      }}
+                      layout="horizontal"
+                      initialValues={{
+                        remember: true,
+                      }}
+                      onValuesChange={handleFinish}
+                    >
+                      <Form.Item
+                        initialValue={moment(startTime, "HH:mm")}
+                        name="starttime"
+                        className="time"
+                        label="Start Time"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Enter Start Date",
+                          },
+                        ]}
+                      >
+                        <TimePicker
+                          onChange={(e) => {
+                            console.log(e)
+                            setStartTime(e == null ? "" : e.format("HH:mm"))
+                            handleFinish({ starttime: e })
+                          }}
+                          disabled={!endTime}
+                          disabledTime={() => ({
+                            disabledHours: () => {
+                              let temp = [...Array(Number(endTime.substring(0, 2))).keys()];
+                              return [...Array(24).keys()].filter((i) => !(temp.includes(i)))
+                            }
+                          })}
+                          defaultOpenValue={moment("00:00", "HH:mm")}
+                        />
+                      </Form.Item>
+
+                      <Form.Item
+                        initialValue={moment(endTime, "HH:mm")}
+                        name="endtime"
+                        className="time"
+                        label="End Time"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Enter End Date",
+                          },
+                        ]}
+                      >
+                        <TimePicker
+                          onChange={(e) => {
+                            console.log(e)
+                            setEndTime(e == null ? "" : e.format("HH:mm"))
+                            handleFinish({ endtime: e })
+                          }}
+                          disabled={!startTime}
+                          disabledTime={() => ({
+                            disabledHours: () => [...Array(Number(startTime.substring(0, 2)) + 1).keys()]
+                          })}
+                          defaultOpenValue={moment("00:00", "HH:mm")}
+                        />
+                      </Form.Item>
+                      <div
+                        style={{
+                          fontWeight: "600",
+                          fontSize: "14px",
+                          marginLeft: "41px",
+                        }}
+                      >
+                        Work Days
+                      </div>
+                      <Divider
+                        style={{
+                          borderTop: "2px solid #EAEAEA",
+                          margin: "10px",
+                        }}
+                      />
+                      <Table
+                        className="weekDays"
+                        columns={tableHeaders}
+                        dataSource={workingdays || []}
+                        bordered={false}
+                        pagination={false}
+                        size="small"
+                      />
+                      <Form.Item
+                        label="Max Break Duration"
+                        name="maxBreakDuration"
+                        labelCol={{
+                          span: 7,
+                          offset: 2,
+                        }}
+                        wrapperCol={{
+                          span: 10,
+                          offset: 1,
+                        }}
+                        initialValue={configurations.maxBreakDuration}
+                      // noStyle
+                      >
+                        <InputNumber min={0} max={5}
+                          onKeyPress={(event) => {
+                            if (checkNumbervalue(event)) {
+                              event.preventDefault();
+                            }
+                          }}
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        initialValue={configurations.inputclock}
+
+                        name="inputclock"
+                        label="Auto Clock Out"
+                        labelCol={{
+                          span: 6,
+                          offset: 2,
+                        }}
+                        wrapperCol={{
+                          span: 10,
+                          offset: 2,
+                        }}
+                      >
+                        <Switch
+                          checkedChildren="Enabled"
+                          unCheckedChildren="Disabled"
+                          defaultChecked={configurations.inputclock}
+                        />
+                      </Form.Item>
+                    </Form>
+                  </Card>
+                </div>
               </Tabs.TabPane>
             </>
           )}

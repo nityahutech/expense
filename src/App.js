@@ -1,76 +1,183 @@
-import React from "react";
 import LoginPage from "./components/LoginPage";
-import "./App.css";
-import SignupPage from "./components/SignupPage";
-import DashBoard from "./pages/dashBoard/DashBoard";
-import ExpenseFrm from "./pages/expenseFrm/AddExpense";
-import NewSider from "./components/sidebar/NewSidebar";
-import Profile from "./pages/profile/Profile";
-import Setting from "./pages/setting/Setting";
-import Leave from "./pages/leave/Leave";
-import EmployeeListPage from "./pages/Employeelist/EmployeeListPage";
-import Addemployee from "./pages/addemployee/Addemployee";
-import ExpenseListpage from "./pages/ExpenseList/ExpenseListpage";
+import ExpenseFrm from "./components/ExpenceForm";
+import Leave from "./components/Leave";
+import EmployeeList from "./components/EmployeeList";
+import AddEmployee from "./components/addemployee";
+import ExpenseList from "./components/Expenselist";
+import AppraisalHr from "./components/quarterApp/appraisalHomePage";
+import Payslip2 from "./components/ProfileDetails/HrPaySlip";
+import AssetMag from "./components/assetManagement/assetMagHome";
+import Profile from "./components/Profilepage";
+import Onboarding from "./components/Onboarding";
+import CompanyProfile from "./components/CompanyProfile";
+import HalfYearGoalHome from "./components/halfYearGoal/halfYearGoalHome";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Tabledash from "./components/Tabledash";
 import { AuthProvider } from "./contexts/AuthContext";
-import Attendance from "./pages/Attendance/Attendance";
-import Notification from "./components/Notification";
-import DocumentsPage from "./pages/DocumentsPage";
-import PersonalPage from "./pages/PersonalPage";
-import WorkPage from "./pages/WorkPage";
-import TeamPage from "./pages/TeamPage";
-import EducationPage from "./pages/EducationPage";
-import FamilyPage from "./pages/FamilyPage";
-import WorkWeekPage from "./pages/WorkWeekPage";
-import PaySlipPage from "./pages/PaySlipPage";
-import BankAccountpages from "./pages/BankAccountpages";
-import Appraisal from "./pages/AppraisalPage";
-import AppraisalHr from "./pages/AppraisalPageHr";
-import Payslip2 from "./pages/Payslip2";
+import "./App.css";
+import FormatPage from "./FormatPage";
+import MainDashBoard from "./components/MainDashBoard";
+import Settingpage from "./components/Settingpage";
+import { useEffect, useState } from "react";
+import AttendanceLog from "./components/AttendanceLog";
 
 function App() {
+  const [roleView, setRoleView] = useState(sessionStorage.getItem("roleView"));
+
+  const switchRole = (role) => {
+    setRoleView(role)
+  }
+  
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/SignupPage" element={<SignupPage />} />
-          {/* <Route path="/Home" element={<DashBoard />} /> */}
-          <Route path="/DashBoard" element={<DashBoard />} />
-          <Route path="/Expense/AddExpense" element={<ExpenseFrm />} />
-          <Route path="/Expense/ExpenseList" element={<ExpenseListpage />} />
-          <Route path="/Attendance/AttendanceLog" element={<Attendance />} />
           <Route
-            path="/EmployeeListPage/EmployeeList"
-            element={<EmployeeListPage />}
+            path="/DashBoard"
+            element={
+              <FormatPage
+                main={<MainDashBoard />}
+                activeSubMenu={["sub5"]}
+                activeMenu={["30"]}
+              />
+            }
           />
-          <Route path="/DocumentsPage/Document" element={<DocumentsPage />} />
-          <Route path="/PersonalPage/Personal" element={<PersonalPage />} />
-          <Route path="/WorkPage/Work" element={<WorkPage />} />
-          <Route path="/TeamPage/Team" element={<TeamPage />} />
-          <Route path="/EducationPage/Education" element={<EducationPage />} />
-          <Route path="/FamilyPage/Family" element={<FamilyPage />} />
-          <Route path="/WorkWeekPage/WorkWeek" element={<WorkWeekPage />} />
-          <Route path="/PaySlipPage/PaySlip" element={<PaySlipPage />} />
-          <Route path="/Payslip2/HrPaySlip" element={<Payslip2 />} />
           <Route
-            path="/BankAccountpages/BankAccount"
-            element={<BankAccountpages />}
+            path="/Organization/Onboarding"
+            element={
+              <FormatPage
+                main={<Onboarding />}
+                activeSubMenu={["sub5"]}
+                activeMenu={["31"]}
+              />
+            }
           />
-          <Route path="/Addemployee/AddEmployee" element={<Addemployee />} />
-          <Route path="/New" element={<NewSider />} />
-          <Route path="/Profile" element={<Profile />} />
-          <Route path="/Setting" element={<Setting />} />
-          <Route path="/Employee/Leave" element={<Leave />} />
-          <Route path="/Notification" element={<Notification />} />
-          <Route path="/Appraisal/AppraisalPage" element={<Appraisal />} />
-          <Route path="/Appraisal/AppraisalPageHr" element={<AppraisalHr />} />
+          <Route
+            path="/CompanyProfile"
+            element={
+              <FormatPage main={<CompanyProfile />} activeMenu={["32"]} />
+            }
+          />
+          <Route path="/Attendance" element={
+            <FormatPage
+              main={<AttendanceLog roleView={roleView} />}
+              activeMenu={["6"]}
+              roleView={roleView}
+              switchRole={switchRole}
+            />
+          }
+          />
+          <Route path="/Leave" element={
+            <FormatPage
+              main={<Leave roleView={roleView} />}
+              activeMenu={["7"]}
+              roleView={roleView}
+              switchRole={switchRole}
+            />
+          }
+          />
+          <Route
+            path="/Employee/AddEmployee"
+            element={
+              <FormatPage
+                main={<AddEmployee />}
+                activeSubMenu={["sub2"]}
+                activeMenu={["8"]}
+              />
+            }
+          />
+          <Route
+            path="/Employee/EmployeeList"
+            element={
+              <FormatPage
+                main={<EmployeeList />}
+                activeSubMenu={["sub2"]}
+                activeMenu={["9"]}
+              />
+            }
+          />
+          <Route
+            path="/Employee/Payroll"
+            element={
+              <FormatPage
+                main={<Payslip2 />}
+                activeSubMenu={["sub2"]}
+                activeMenu={["25"]}
+              />
+            }
+          />
+          <Route
+            path="/Expense/AddExpense"
+            element={
+              <FormatPage
+                main={<ExpenseFrm />}
+                activeSubMenu={["sub1"]}
+                activeMenu={["2"]}
+              />
+            }
+          />
+          <Route
+            path="/Expense/ExpenseList"
+            element={
+              <FormatPage
+                main={<ExpenseList />}
+                activeSubMenu={["sub1"]}
+                activeMenu={["3"]}
+              />
+            }
+          />
+          <Route
+            path="/Profile"
+            element={
+              <FormatPage
+                main={<Profile />}
+                activeSubMenu={["21"]}
+                activeMenu={["21"]}
+              />
+            }
+          />
+          <Route
+            path="/Settings"
+            element={<FormatPage main={<Settingpage />} activeMenu={["22"]} />}
+          />
+          <Route
+            path="/Appraisal/AppraisalPageHr"
+            element={
+              <FormatPage
+                main={<AppraisalHr />}
+                activeSubMenu={["sub4"]}
+                activeMenu={["20"]}
+                switchRole={switchRole}
+              />
+            }
+          />
+          <Route
+            path="/Appraisal/HalfYearGoalPage"
+            element={
+              <FormatPage
+                main={<HalfYearGoalHome />}
+                activeSubMenu={["sub4"]}
+                activeMenu={["20a"]}
+                switchRole={switchRole}
+              />
+            }
+          />
+          <Route
+            path="/Assets"
+            element={
+              <FormatPage
+                main={<AssetMag roleView={roleView} />}
+                activeSubMenu={["sub4"]}
+                activeMenu={["22"]}
+                roleView={roleView}
+                switchRole={switchRole}
+              />
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
   );
-  //return <ExpenseList />;
 }
 
 export default App;

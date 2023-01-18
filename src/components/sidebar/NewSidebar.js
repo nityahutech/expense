@@ -1,358 +1,411 @@
-import React, { useEffect, useState } from "react";
-import { Layout, Menu } from "antd";
-
+import React, { useState } from "react";
+import { Divider, Layout, Menu } from "antd";
+import expenseIcon from "../../images/Expense.png";
+import dot from "../../images/dot.png";
+import dashIcon from "../../images/Dashboard.png";
+import empIcon from "../../images/employees.png";
+import userIcon from "../../images/user.png";
+import assetMag from "../../images/newSBLogo/AssetManagement.png";
+import logo from "../../images/Group 1.png";
+import appraisalIcon from "../../images/appraisal.png";
+import Organization from "../../images/Organization.png";
+import CompanyProfile from "../../images/Companyprofile.png";
+import SettingIcon from "../../images/gear.png";
+import homePage from "../../images/homeIcon.png";
+import LeaveIcon from "../../images/smallLeaveLogo.png";
+import SmallAttd from "../../images/samllattlogo.png";
 import "./newSlidebar.css";
-import { useNavigate, NavLink } from "react-router-dom";
-import { SettingOutlined, ProfileOutlined } from "@ant-design/icons";
+import SmallerLogo from "../../images/smallerLogo.png";
+import { NavLink, Link } from "react-router-dom";
 
 const { Sider } = Layout;
 
-function getItem(label, key, icon, children = null, type = null) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  };
-}
-
 const NewSidebar = (props) => {
-  const [isHr, setIsHr] = useState(sessionStorage.getItem("role") === "hr" ? true : false);
+  const [collapsed, setCollapsed] = useState(false);
+  const [collapsePoint, setCollapsePoint] = useState(false);
+  const role = sessionStorage.getItem("role");
+  const isHr =
+    role == "super" ? false : sessionStorage.getItem("isHr") == "true";
 
-  console.log(props.openkey);
-  const history = useNavigate();
-
-  // useEffect(() => {
-  //   let role = sessionStorage.getItem("role");
-  //   setRole(role)
-  //   setIsHr(role === "hr")
-  // })
-  // const onClick = (e) => {
-  //     let pathkey = e.key
-  //     switch (pathkey) {
-  //         case "5":
-  //             window.location.href="/ExpenseFrm"
-  //             history("/Expense/AddExpense")
-  //             break;
-  //         case "6":
-  //             window.location.href = "/Home"
-  //             history("/Expenfse/ExpenseList")
-  //             break;
-  //         case "1":
-  //             window.location.href = "/DashBoard"
-  //             history("/DashBoard")
-  //             break;
-  //     }
-  //     console.log('click ', e.key);
-  // };
-
+  const setCollapsibleStatus = () => collapsePoint && setCollapsed(true);
   return (
     <Layout className="sidelayout">
       <Sider
+        className="sidelayoutSider"
         breakpoint="lg"
-        style={{ backgroundColor: "#05445E" }}
+        style={{
+          backgroundColor: "#045477",
+          display: "flex",
+          flexDirection: "column",
+        }}
         collapsedWidth="0"
         onBreakpoint={(broken) => {
-          console.log(broken);
+          setCollapsed(broken);
+          setCollapsePoint(broken);
         }}
         onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
+          setCollapsed(collapsed);
         }}
+        collapsed={collapsed}
       >
-        <Menu
-          defaultOpenKeys={props.activeSubMenu || []}
-          selectedKeys={props.activeMenu}
-          // openKeys={props.openkey}
-          // selectedKeys={props.selectedkey}
-          onSelect={function ({ item, key, keyPath, selectedKeys, domEvent }) {
-            console.log(item, key, keyPath, selectedKeys, domEvent);
-          }}
-          mode="inline"
+        <div
+          className="sidelayout-div"
           style={{
-            padding: "0px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
             height: "100vh",
           }}
         >
-          <div className="sidebarTittle">
-            <img
-              style={{
-                background: "#05445E",
-                height: "30px",
-              }}
-              src="/logo/logo_1.png"
-              alt="hello"
-            />
-          </div>
-          <Menu.Item
-            icon={
-              <img src="/logo/Dashboard.png" alt="profile" className="Dash" />
-            }
-            key="1"
-          >
-            Dashboard
-            <NavLink to="/DashBoard" />
-          </Menu.Item>
-
-          <Menu.SubMenu style={{
-
-            width: '100%'
-          }}
-            icon={
-              <img
-                style={{ color: "white" }}
-                src="/logo/employees.png"
-                alt="profile"
-                className="Dash"
-              />
-            }
-            key="sub2"
-            title="Employee"
-            mode="inline"
-          >
-            <Menu.Item className='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="6"
-            >
-              Attendance Log
-              <NavLink to="/Attendance/AttendanceLog" />
-            </Menu.Item>
-            <Menu.Item className='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="7"
-            >
-              Leave
-              <NavLink to="/Employee/Leave" />
-            </Menu.Item>
-            { isHr ? <>
-            <Menu.Item className ='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="8"
-            >
-              Add Employee
-              <NavLink to="/Addemployee/AddEmployee" />
-            </Menu.Item>
-            <Menu.Item className ='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="9"
-            >
-              Employee List
-              <NavLink to="/EmployeeListPage/EmployeeList" />
-            </Menu.Item>
-            <Menu.Item
-              className="arrow"
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="25"
-            >
-              Hr PaySlip
-              <NavLink to="/Payslip2/HrPaySlip" />
-            </Menu.Item>
-            </>
-              :
-              null
-            }
-          </Menu.SubMenu>
-           
-            {/* PREVIOUS PROFILE TABS COMMENTED */}
-            {/* ---------------------------------------------------- */}
-
-          {/* <Menu.SubMenu  style={{
-            
-            width:'100%'
-             }}
-            icon={
-              <img
-                style={{ color: "" }}
-                src="/logo/user.png"
-                alt="profile"
-                className="Dash"
-              />
-            }
-            key="sub3"
-            title="Profile"
-            mode="inline"
-          >
-            <Menu.Item className='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="10"
-            >
-              Personal
-              <NavLink to="/PersonalPage/Personal" />
-            </Menu.Item>
-            <Menu.Item className='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="11"
-            >
-              Work
-              <NavLink to="/WorkPage/work" />
-            </Menu.Item>
-
-            <Menu.Item className='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="12"
-            >
-              Team
-              <NavLink to="/TeamPage/Team" />
-            </Menu.Item>
-            <Menu.Item className='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="13"
-            >
-              Education
-              <NavLink to="/EducationPage/Education" />
-            </Menu.Item>
-            <Menu.Item
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="14"
-            >
-              Family
-              <NavLink to="/FamilyPage/Family" />
-            </Menu.Item>
-            <Menu.Item className='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="15"
-            >
-              Documents
-              <NavLink to="/DocumentsPage/Document" />
-            </Menu.Item>
-            <Menu.Item className='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="16"
-            >
-              Work week
-              <NavLink to="/WorkWeekPage/WorkWeek" />
-            </Menu.Item>
-            <Menu.Item className='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="17"
-            >
-              Pay Slip
-              <NavLink to="/PaySlipPage/PaySlip" />
-            </Menu.Item>
-            {isHr ?
-              <Menu.Item
-                className="arrow"
-                icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-                key="21"
-              >
-                Hr PaySlip
-                <NavLink to="/Payslip2/HrPaySlip" />
-              </Menu.Item>
-              : null
-            }
-            <Menu.Item className='arrow'
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="18"
-            >
-              Bank Account
-              <NavLink to="/BankAccountpages/BankAccount" />
-            </Menu.Item>
-          </Menu.SubMenu> */}
-          <Menu.Item
-            icon={
-              <img src="/logo/user.png" alt="profile" className="Dash" />
-            }
-            key="21"
-          >
-            My Profile
-            <NavLink to="/Profile" />
-          </Menu.Item>
-
-          {/* <Menu.Item
-            icon={
-              <img
-                style={{ color: "" }}
-                src="/logo/user.png"
-                alt="profile"
-                className="Dash"
-              />
-            }
-            key="4"
-          >
-            Profile
-            <NavLink to="/Profile" />
-          </Menu.Item> */}
-          {/* <Menu.SubMenu
-            className="arrow-div"
+          <div
+            className="sidelayout-div-img"
             style={{
-              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              height: "100vh",
             }}
-            icon={
-              <img src="/logo/appraisal.png" alt="appraisal" className="Dash" />
-            }
-            key="sub4"
-            title="Appraisal"
-            mode="inline"
-          > */}
-          {/* <Menu.Item className='arrow'
-
-              icon={<img src="/logo/dot.png" alt="appraisal" className="dot" />}
-              key="19"
-            >
-              Employees
-              <NavLink to="/Appraisal/AppraisalPage" />
-            </Menu.Item> */}
-
-          {/* <Menu.Item
-              className="arrow"
-              icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-              key="20"
-            >
-              Appraisal Form
-              <NavLink to="/Appraisal/AppraisalPageHr" />
-            </Menu.Item>
-          </Menu.SubMenu> */}
-          {/* <Menu.Item className ='arrow'
-            icon={
-              <img
-                style={{ color: "" }}
-                src="/logo/settings.png"
-                alt="profile"
-                className="Dash"
-              />
-            }
-            key="5"
           >
-            Settings
-            <NavLink to="/Setting" />
-          </Menu.Item> */}
-          {isHr ?
-            <><Menu.SubMenu className="arrow-div" style={{
-
-              width: '100%'
-            }}
-              icon={
-                <img src="/logo/Expense.png" alt="profile" className="Dash" />
-              }
-              key="sub1"
-              title="Expense"
-              mode="inline"
+            <div
+              className="sidebarTittle"
+              style={{
+                height: "auto",
+                backgroundColor: "#045477",
+                margin: "0px",
+                padding: "0px",
+              }}
             >
-              <Menu.Item className='arrow'
-                //  style={{
-                //     background: "#05445E",
-
-                //   }}
-                icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-                key="2"
+              <img
+                style={{
+                  height: "auto",
+                  width: "180px",
+                  padding: "5px",
+                  marginLeft: "10px",
+                  marginTop: "5px",
+                }}
+                src={logo}
+                alt="hello"
+              />
+            </div>
+            <div
+              className="sidelayout-menu"
+              style={{
+                overflowX: "hidden",
+                overflowY: "auto",
+                maxHeight: "82vh",
+              }}
+            >
+              <Menu
+                defaultOpenKeys={props.activeSubMenu || []}
+                selectedKeys={props.activeMenu}
+                mode="inline"
+                onClick={() => {
+                  setCollapsibleStatus();
+                }}
+                // style={{
+                //   // paddingBottom: "40px",
+                //   height: "100vh",
+                // }}
               >
-                Add Expense
-                <NavLink to="/Expense/AddExpense" />
-              </Menu.Item>
-              <Menu.Item className='arrow'
-                icon={<img src="/logo/dot.png" alt="profile" className="dot" />}
-                key="3"
-              >
-                Expense List
-                <NavLink to="/Expense/ExpenseList" />
-              </Menu.Item>
-            </Menu.SubMenu>
-            </>
-            : null
-          }
+                <Menu.Item
+                  className="arrow"
+                  icon={<img src={homePage} width="16px" alt="home" />}
+                  key="30"
+                >
+                  <p className="sideFont">Home</p>
+                  <NavLink to="/DashBoard" />
+                </Menu.Item>
+                {role == "super" ? (
+                  <Menu.SubMenu
+                    style={{
+                      width: "100%",
+                      fontSize: "13px",
+                      fontWeight: "600",
+                      color: "#ffffff",
+                    }}
+                    icon={
+                      <img
+                        style={{ color: "white" }}
+                        src={Organization}
+                        alt="organization"
+                        className="Dash"
+                      />
+                    }
+                    key="sub5"
+                    title="Organization"
+                    mode="inline"
+                  >
+                    <Menu.Item
+                      icon={<img src={dot} alt="onboarding" className="dot" />}
+                      key="31"
+                    >
+                      <p className="sideFont">Onboarding</p>
+                      <NavLink to="/Organization/Onboarding" />
+                    </Menu.Item>
+                  </Menu.SubMenu>
+                ) : null}
+                {role == "admin" || isHr ? (
+                  <>
+                    <Menu.Item
+                      icon={
+                        <img
+                          style={{ color: "white" }}
+                          src={CompanyProfile}
+                          alt="profile"
+                          className="Dash"
+                        />
+                      }
+                      key="32"
+                    >
+                      <p className="sideFont">Company Profile</p>
+                      <NavLink to="/CompanyProfile" />
+                    </Menu.Item>
 
+                    <Menu.SubMenu
+                      style={{
+                        width: "100%",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#ffffff",
+                      }}
+                      icon={
+                        <img
+                          style={{ color: "white" }}
+                          src={empIcon}
+                          alt="profile"
+                          className="Dash"
+                        />
+                      }
+                      key="sub2"
+                      title="Employees"
+                      mode="inline"
+                    >
+                      <Menu.Item
+                        className="arrow"
+                        icon={<img src={dot} alt="profile" className="dot" />}
+                        key="8"
+                      >
+                        <p className="sideFont">Add Employee</p>
+                        <NavLink to="/Employee/AddEmployee" />
+                      </Menu.Item>
+                      <Menu.Item
+                        className="arrow"
+                        icon={<img src={dot} alt="profile" className="dot" />}
+                        key="9"
+                      >
+                        <p className="sideFont">View Employees</p>
+                        <NavLink to="/Employee/EmployeeList" />
+                      </Menu.Item>
+                      <Menu.Item
+                        className="arrow"
+                        icon={<img src={dot} alt="profile" className="dot" />}
+                        key="25"
+                      >
+                        <p className="sideFont">Payroll Manager</p>
+                        <NavLink to="/Employee/Payroll" />
+                      </Menu.Item>
+                    </Menu.SubMenu>
+                  </>
+                ) : null}
+                {role != "super" ? (
+                  <>
+                    <Menu.Item
+                      className="arrow"
+                      icon={
+                        <img
+                          src={SmallAttd}
+                          alt="profile"
+                          style={{
+                            width: "21px",
+                            marginLeft: "-5px",
+                          }}
+                        />
+                      }
+                      key="6"
+                    >
+                      <p className="sideFont">Attendance</p>
+                      <NavLink className="navLink" to="/Attendance" />
+                    </Menu.Item>
+                    <Menu.Item
+                      icon={
+                        <img
+                          src={LeaveIcon}
+                          alt="profile"
+                          className="dot"
+                          style={{
+                            width: "32px",
+                            marginLeft: "-9px",
+                            background: "none",
+                          }}
+                        />
+                      }
+                      key="7"
+                    >
+                      <p className="sideFont leaveletter">Leave</p>
+                      <NavLink to="/Leave" />
+                    </Menu.Item>
+                  </>
+                ) : null}
 
-        </Menu>
+                {role != "super" ? (
+                  <>
+                    <Menu.SubMenu
+                      className="arrow-div"
+                      style={{
+                        width: "100%",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#ffffff",
+                      }}
+                      icon={
+                        <img
+                          src={appraisalIcon}
+                          alt="appraisal"
+                          className="Dash"
+                        />
+                      }
+                      key="sub4"
+                      title="Appraisal"
+                      mode="inline"
+                    >
+                      <Menu.Item
+                        className="arrow"
+                        icon={<img src={dot} alt="profile" className="dot" />}
+                        key="20"
+                      >
+                        <p className="sideFont">Quarter Appraisal</p>
+                        <NavLink to="/Appraisal/AppraisalPageHr" />
+                      </Menu.Item>
+                      <Menu.Item
+                        className="arrow"
+                        icon={<img src={dot} alt="profile" className="dot" />}
+                        key="20a"
+                      >
+                        <p className="sideFont">Half Year Goal</p>
+                        <NavLink to="/Appraisal/HalfYearGoalPage" />
+                      </Menu.Item>
+                    </Menu.SubMenu>
+                    <Menu.Item
+                      icon={<img src={assetMag} alt="asset" class="Dash" />}
+                      key="22"
+                    >
+                      <p className="sideFont">Assets</p>
+                      <NavLink to="/Assets" />
+                    </Menu.Item>
+                  </>
+                ) : null}
+                {role == "admin" || isHr ? (
+                  <>
+                    <Menu.SubMenu
+                      className="arrow-div"
+                      style={{
+                        width: "100%",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#ffffff",
+                      }}
+                      icon={
+                        <img src={expenseIcon} alt="profile" className="Dash" />
+                      }
+                      key="sub1"
+                      title="Expense"
+                      mode="inline"
+                    >
+                      <Menu.Item
+                        className="arrow"
+                        icon={<img src={dot} alt="profile" className="dot" />}
+                        key="2"
+                      >
+                        <p className="sideFont">Add Expense</p>
+                        <NavLink to="/Expense/AddExpense" />
+                      </Menu.Item>
+                      <Menu.Item
+                        className="arrow"
+                        icon={<img src={dot} alt="profile" className="dot" />}
+                        key="3"
+                      >
+                        <p className="sideFont">Expense List</p>
+                        <NavLink to="/Expense/ExpenseList" />
+                      </Menu.Item>
+                    </Menu.SubMenu>
+                  </>
+                ) : null}
+
+                <Menu.Item
+                  icon={<img src={userIcon} alt="profile" className="Dash" />}
+                  key="21"
+                >
+                  <p className="sideFont">My Profile</p>
+                  <NavLink to="/Profile" />
+                </Menu.Item>
+              </Menu>
+            </div>
+          </div>
+          {/* --------------------setting---------------- */}
+          <div
+            className="sidelayout-setting"
+            style={
+              {
+                // padding: '20px',
+                // borderTop: '1px solid #6e6eff',
+                // alignItems: 'center',
+                // width: '80%',
+                // height: '80px',
+                // display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'
+              }
+            }
+          >
+            <div>
+              <Divider
+                style={{
+                  margin: "0px",
+                  borderWidth: 1,
+                  // borderColor: 'rgb(5 70 179)',
+                  borderColor: "#ffffff",
+                }}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                marginBottom: "20px",
+                marginLeft: "24px",
+                marginTop: "10px",
+              }}
+            >
+              <div>
+                <img
+                  style={{
+                    height: "16px",
+                  }}
+                  src={SettingIcon}
+                  alt="Setting"
+                  // className="Dash"
+                />
+              </div>
+
+              <div>
+                <Link
+                  to="/Settings"
+                  className="sideFont"
+                  style={{
+                    fontWeight: "normal",
+                    paddingLeft: "10px",
+                    fontSize: "13px",
+                    fontWeight: 600,
+                    color: "#ffffff",
+                  }}
+                  rel="noopener noreferrer"
+                >
+                  Settings
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </Sider>
     </Layout>
   );

@@ -1,22 +1,33 @@
 .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content {
-  height: 30px;
+  height: 50px;
   overflow: hidden;
   font-size: 5px;
 }
 
-.apply-leave {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-content: flex-start;
-  background-color: white;
-  border-radius: 10px;
+.viewAppraisal .ant-modal-body {
+  margin-left: 10px;
   padding: 10px;
-  width: 50%;
+}
+
+.viewAppraisal .ant-modal-content {
+  border-radius: 10px;
+  /* width: 820px; */
+}
+
+.viewAppraisal .ant-modal-header {
+  border-radius: 10px 10px 0px 0px;
+  background: #043661;
+  color: #ffffff;
+}
+.viewAppraisal .ant-modal-title {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 25px;
 }
 
 .reprentation {
-  width: 105px;
+  width: 110px;
   border-radius: 15px;
   /* opacity: 0.5; */
   border: none;
@@ -24,10 +35,6 @@
 
 .rep-text {
   margin-bottom: 0;
-}
-
-.ant-picker-calendar-mode-switch {
-  display: none;
 }
 
 .events {
@@ -53,10 +60,10 @@
   font-size: 28px;
 }
 
-.ant-picker-cell-in-view:hover {
+/* .ant-picker-cell-in-view:hover {
   transform: scale(1.8);
   z-index: 1000;
-}
+} */
 
 .Col-2-center {
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2);
@@ -112,6 +119,22 @@
   justify-content: space-between;
 }
 
+.leaveTable .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.leaveTable:hover .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+
 @media only screen and (max-width: 600px) {
   .leavediv {
     flex-direction: column;
@@ -134,18 +157,87 @@
   padding-right: 18px;
 }
 
-.rmdp-input {
-  /* color: rgba(0, 0, 0, 0.25);
-  background-color: #f5f5f5;
-  border-color: #d9d9d9;
-  box-shadow: none; */
-}
 .rmdp-input:focus {
   /* box-shadow: none !important; */
   outline: none !important;
   border: 1px solid rgb(116, 174, 199) !important;
   box-shadow: 0 0 0px #719ece !important;
 }
+
+.sideCard {
+padding: 10px;
+border-left: 4px solid #8F8980;
+background-color: #ffffff;
+margin: 10px 0;
+}
+
+.sideCreate{
+  padding: 5px;
+background-color: #ffffff;
+margin: 10px 0;
+}
+
+
+.sideCard:hover{
+  border-left: 4px solid #2094FF;
+  color: #2094FF;
+}
+  
+    .sick .ant-card-head-title {
+      font-size: 15px;
+      font-weight: bold;
+      line-height: 19px;
+      text-transform: uppercase;
+    }
+
+    .personalCardDiv:hover .sick {
+      display: block !important;
+    }
+
+    .leavesCount:hover .leaves {
+      display: block !important;
+    }
+    
+
+    .leaves .ant-card-head {
+      border-radius: 10px 10px 0px 0px;
+      background: #1963a6;
+      color: #ffffff;
+    }
+
+    .sickCard .ant-card-head-title{
+      font-size: 16px;
+    font-weight: 600;
+    line-height: 19px;
+    color: #000000;
+    }
+
+
+    .scrollInput{
+      overflow-y: scroll;
+    }
+
+    .leavePageDiv {
+      min-height: 100vh
+    }
+
+    @media only screen and (max-width: 600px){
+      .approvalConfig{
+    overflow-x: scroll;
+      }
+    }
+    
+
+/* .sickLeave:focus{
+border-left: 4px solid #0093FF;
+} */
+
+
+/* ul.sidecard > li:active{
+  border-left: 4px solid #0093FF ;
+} */
+
+
 @media only screen and (max-width: 750px) {
   .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date {
     display: block !important;
@@ -163,5 +255,57 @@
   }
   .apply-leave {
     width: 100%;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .badge-div {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .rep-div {
+    justify-content: flex-start !important;
+  }
+  .holiday-button {
+    justify-content: center !important;
+  }
+}
+@media only screen and (max-width: 700px) {
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-calendar-date-content {
+    height: 30px;
+    overflow: hidden;
+    font-size: 5px;
+  }
+  .events {
+    font-size: 6px !important;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .rep-div {
+    display: none !important;
+  }
+  .holiday-button {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .button-applyleave {
+    margin-right: 0px !important;
+    margin-top: 0px !important;
+  }
+  .button-applyleave {
+    margin-right: 0px !important;
+    margin-top: 0px !important;
+  }
+}
+
+@media only screen and (max-width: 767px){
+ 
+
+  .wholePage{
+    background-color: #f8f8f8;
   }
 }

@@ -1,1298 +1,2451 @@
-import React, { useEffect, useState, } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-    Col,
-    Row,
-    Select,
-    Radio,
-    Badge,
-    Table,
-    Calendar,
-    Modal,
-    Divider,
-    Tag,
-    notification,
-    Spin,
-
-} from 'antd';
-import { Button } from 'antd';
-import { Form, Input, } from 'antd';
-import { Space } from "antd";
+  Col,
+  Row,
+  Select,
+  Table,
+  Calendar,
+  Modal,
+  Tag,
+  Tabs,
+  notification,
+  DatePicker,
+  Spin,
+} from "antd";
+import { Button } from "antd";
+import { Form, Input } from "antd";
 import moment from "moment";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import LeaveContext from '../contexts/LeaveContext';
-import CompanyHolidayContext from '../contexts/CompanyHolidayContext';
-import EmployeeContext from '../contexts/EmployeeContext';
-import { useAuth } from '../contexts/AuthContext'
+import {
+  DeleteOutlined,
+  EditOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import LeaveContext from "../contexts/LeaveContext";
+import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
+import EmpInfoContext from "../contexts/EmpInfoContext";
 import Notification from "./Notification";
 import HolidayList from "./HolidayList";
+import ApprovalConfig from "./ApprovalConfig";
+import LeaveType from "./LeaveType";
 import "../style/leave.css";
-import DatePicker, { DateObject } from "react-multi-date-picker";
-import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import useItems from 'antd/lib/menu/hooks/useItems';
+import ConfigureContext from "../contexts/ConfigureContext";
+import LeaveCreate from "./LeaveCreate";
+import { showNotification } from "../contexts/CreateContext";
+const dateFormat = "Do MMM, YYYY";
+const Leave = (props) => {
+  const page = "leavePage";
+  const colors = [
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#fc03c2",
+    "#b103fc",
+    "#03d7fc",
+  ];
 
-let leaveStyle = {
-    Present: { height: "8px", width: "0.6rem", borderRadius: '6px', backgroundColor: "green" },
-    Absent: { height: "8px", width: "0.6rem", borderRadius: '6px', backgroundColor: "red" },
-    Leave: { height: "8px", width: "0.6rem", borderRadius: '6px', backgroundColor: "blue" },
-    "Officialy Holiday": { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "yellow" },
-    "Week Off": { height: "5px", width: "0.6rem", borderRadius: '6px', backgroundColor: "grey" },
-}
+  const isHr = props.roleView == "admin";
+  console.log(props, isHr);
+  const { Option } = Select;
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const [form] = Form.useForm();
+  const [form1] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  // const isHr = JSON.parse(sessionStorage.getItem("isHr"));
+  const isMgr = JSON.parse(sessionStorage.getItem("isMgr"));
+  const [leavedays, setLeaveDays] = useState(null); //leave nature & total in obj
+  const [totaldays, setTotalDays] = useState(null); //leave nature & taken in obj
+  const [date, setDate] = useState(moment()); //date for calendar
+  const [companyholiday, setCompanyholiday] = useState([]); //holidays in array of objects
+  const [leaves, setLeaves] = useState([]); //all leaves in array of obects
+  const [duration, setDuration] = useState([]); //all days of applied leaves in array
+  const [durStatus, setDurStatus] = useState([]); //corresponding status of duration in array
+  const [repManager, setRepManager] = useState(); //name of currentUser's reporting manager
+  const [secondModal, setSecondModal] = useState(false); //boolean to open apply leave modal
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); //boolean to open edit leave modal
+  const [editedLeave, setEditedLeave] = useState({}); //leave record to be edited
+  const [requests, setRequests] = useState([]); //leave requests for managers in array of objects
+  const [allRequests, setAllRequests] = useState([]); //leave requests for hr in array of objects
+  const [filterRequest, setFilterRequest] = useState([]);
+  const [dateSelected, setDateSelected] = useState([]);
+  const [dateStart, setDateStart] = useState(null);
+  const [dateEnd, setDateEnd] = useState(null);
+  const [startSlot, setStartSlot] = useState(null);
+  const [endSlot, setEndSlot] = useState(null);
+  const [validleaverequest, setValidleaverequest] = useState("false");
+  //--------------------------------------------filter----------------------------
 
-const userrole = ''
-const Leave = () => {
-    const [dateSelected, setDateSelected] = useState([]);
-    const [form] = Form.useForm();
-    const [loading, setLoading] = useState(false);
-    const [leaves, setLeaves] = useState([]);
-    const [history, setHistory] = useState([]);
-    const [requests, setRequests] = useState([]);
-    const [pendingRequests, setPendingRequests] = useState([]);
-    const [allRequests, setAllRequests] = useState([]);
-    const [dataSource, setDataSource] = useState([]);
-    const [duration, setDuration] = useState([]);
-    const [noOfDays, setNoOfDays] = useState([]);
-    console.log(sessionStorage.getItem("role"));
-    const [isHr, setIsHr] = useState(sessionStorage.getItem("role") === "hr" ? true : false);
-    const [isMgr, setIsMgr] = useState(false);
-    const [role, setRole] = useState(null);
-    const { currentUser } = useAuth();
-    const format = "Do MMM, YYYY"
-    const [leavedays, setLeaveDays] = useState({
-        'Earn Leave': 0,
-        'Sick Leave': 0,
-        'Casual Leave': 0,
-        'Optional Leave': 0
-    })
-    const [totaldays, setTotalDays] = useState({
-        'Earn Leave': 0,
-        'Sick Leave': 0,
-        'Casual Leave': 0,
-        'Optional Leave': 0
-    })
-    // const [userDetails, setUserDetails] = useState(sessionStorage.getItem("user")?JSON.parse(sessionStorage.getItem("user")):null)
-    // const [users, setUsers] = useState([])
-    const [leavetype, setLeavetype] = useState()
-    const [validleaverequest, setValidleaverequest] = useState('false')
-    const [leaveslot, setLeaveslot] = useState(null)
-    const [companyholiday, setCompanyholiday] = useState([])
-    const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-    const [employeeRecord, setEmployeeRecord] = useState();
-    const [repManager, setRepManager] = useState();
+  const [filterCriteria, setFilterCriteria] = useState({
+    search: "",
+    date: [],
+    category: "all",
+  });
 
+  const getHoliday = async () => {
+    const allData = await CompanyHolidayContext.getAllCompanyHoliday();
+    let d = allData.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      };
+    });
+    setCompanyholiday(d);
+  };
 
-    function addNewHoliday(holiday) {
-        getHoliday()
-    }
-
-    const getHoliday = async () => {
-
-        const allData = await CompanyHolidayContext.getAllCompanyHoliday();
-        console.log('allCompanyHoliday', allData)
-        allData.docs.map((doc) => {
-            // console.log('allCompanyHoliday2', doc)
-            let d = allData.docs.map((doc) => {
-
-                return {
-                    ...doc.data(),
-                    Date: moment(doc.data()["Date"].seconds * 1000).format(format),
-                    id: doc.id,
-                };
-            });
-            setCompanyholiday(d)
-            // console.log('allCompanyHoliday3', d)
-
-
-        });
-
-    }
-
-    const getListData = (value) => {
-        let listData;
-        let currdate = value.format((format));
-        let companyHolidayRecord = companyholiday.filter(record => record.Date == currdate);
-        // console.log('calendervvvvv', currdate);
-        // console.log('calendervvvvv2', companyHolidayRecord.length);
-
-        if (companyHolidayRecord.length > 0) {
-            console.log(companyHolidayRecord[0]);
-            listData = [
-                {
-                    type: companyHolidayRecord[0].Name,
-                    isOptional: companyHolidayRecord[0]?.optionalHoliday
-                    //add type          
-                }
-            ]
-        }
-        if (currentDateInAppliedLeave(value)) {
-            console.log('getListData', value);
-            listData = [
-                {
-                    type: 'leave',
-                    isOptional: false
-                    //add type          
-                }
-            ]
-        }
-
-        return listData || [];
-    };
-
-    const getMonthData = (value) => {
-        if (value.month() === 8) {
-            return 1394;
-        }
-    };
-
-    const onFinish = values => {
-        console.log("Success:", values);
-        // console.log("Success1:", dateSelected[0].toString());
-        console.log("Success2:", dateSelected);
-
-        // if (validleaverequest == 'false') {
-        //     showNotification("error", "Error", "Leave requested is more than available Leave");
-        //     return;
-        // }
-
-        console.log("Success3:", values.leaveNature);
-        if (values.leaveNature === "Optional Leave" || dateSelected.length == 1) {
-
-            let optionalHolidays = companyholiday.filter((item) => {
-                if (item.optionalHoliday == true) {
-                    return true
-                }
-                else {
-                    return false
-                }
-            })
-            console.log("Success3:", optionalHolidays);
-            console.log("Success4:", dateSelected[0].format(format));
-            let matchOptionalHoliday = optionalHolidays.filter((item) => {
-                if (item.Date == dateSelected[0].format(format)) {
-                    return true
-                }
-                else {
-                    return false
-                }
-            })
-            if (matchOptionalHoliday.length > 0 && values.leaveNature != "Optional Leave") {
-
-
-                showNotification("error", "Error", "Optional Leave Can only be apply on Optional Holiday");
-                return
-            }
-
-        }
-
-        console.log("Success5:", leaves);
-
-        let array = []
-        dateSelected.map((date, index) => (
-            array.push(date.format(format))
-        ))
-        console.log('Success6', array)
-        let matchingdates = leaves.filter((item) => {
-            for (let i = 0; i < array.length; i++) {
-                if (item.orgDate.includes(array[i])) {
-                    return true
-                }
-            }
-            return false
-
-
-        })
-        console.log("Success7:", matchingdates);
-        if (matchingdates.length > 0) {
-            showNotification("error", "Error", "Allready apply Leave on one of the day");
-            return
-        }
-        let newLeave = {
-            empId: employeeRecord.empId,
-            approver: values.approver,
-            date: array,
-            name: currentUser.displayName,
-            nature: values.leaveNature,
-            slot: values.slot,
-            reason: values.reason,
-            email: employeeRecord.mailid,
-            status: 'Pending'
-        }
-
-        console.log("Success8:", newLeave);
-
-        // let matchingLeaveList = newLeave.filter(item => item.date == newLeave.date)
-        // if (matchingLeaveList.length > 0) {
-        //     //errormodal
-        //     console.log('Leave allready Exist')
-        // }
-        LeaveContext.createLeave(newLeave)
-            .then(response => {
-                getData();
-                showNotification("success", "Success", "Leave apply successfuly");
-
-            })
-            .catch(error => {
-                console.log(error.message);
-
-            })
-        form.resetFields();
-    };
-
-
-    const getData = async () => {
-        setLoading(true);
-        let empRecord = await EmployeeContext.getEmployee(currentUser.uid)
-        setRepManager(empRecord.repManager)
-        setEmployeeRecord(empRecord)
-        console.log('empRecord', empRecord)
-        setIsMgr(empRecord.isManager)
-        let data = await LeaveContext.getAllById(empRecord.empId)
-        // console.log("data", JSON.stringify(data.docs), currentUser.uid);
-
-        let d = data.docs.map((doc) => {
-            console.log("123", { ...doc.data() })
-            return {
-                ...doc.data(),
-                id: doc.id,
-
-            };
-        });
-        console.log("employeeleave", d);
-        setLeaves(d);
-        getDateFormatted(d)
-        let temp = {
-            'Earn Leave': empRecord.earnLeave?empRecord.earnLeave:12,
-            'Sick Leave': empRecord.sickLeave?empRecord.sickLeave:6,
-            'Casual Leave': empRecord.casualLeave?empRecord.casualLeave:6,
-            'Optional Leave': empRecord.optionalLeave?empRecord.optionalLeave:2
-        }
-        setTotalDays({
-            'Earn Leave': empRecord.earnLeave?empRecord.earnLeave:12,
-            'Sick Leave': empRecord.sickLeave?empRecord.sickLeave:6,
-            'Casual Leave': empRecord.casualLeave?empRecord.casualLeave:6,
-            'Optional Leave': empRecord.optionalLeave?empRecord.optionalLeave:2
-        })
-        let days = await LeaveContext.getLeaveDays(d, temp)
-        setLeaveDays(days)
-            // .then(response => {
-                console.log(days)
-            //     let UsersLeaves = [
-            //         {
-            //             id: 1,
-            //             leavetype: "Earn Leave",
-            //             leave: response["Earn Leave"],
-            //             totalLeave: response["Total Earn Leave"],
-
-            //         },
-            //         {
-            //             id: 2,
-            //             leavetype: "Sick Leave",
-            //             leave: response["Sick Leave"],
-            //             totalLeave: response["Total Sick Leave"],
-
-            //         },
-            //         {
-            //             id: 3,
-            //             leavetype: "Casual Leave",
-            //             leave: response["Casual Leave"],
-            //             totalLeave: response["Total Casual Leave"],
-
-
-            //         },
-            //         {
-            //             id: 4,
-            //             leavetype: "Optional Leave",
-            //             leave: response["Optional Leave"],
-            //             totalLeave: response["Total Optional Leave"],
-
-            //         },
-            //     ];
-            //     setUsers(UsersLeaves)
-            // })
-            // .catch(error => {
-            //     console.log(error.message);
-            // })
-        console.log(role)
-        setHistory(d)
-        setLoading(false);
-
-
-    }
-
-    const getRequestData = async () => {
-
-        let reqData = await LeaveContext.getAllByApprover(currentUser.displayName)
-        let req = reqData.docs.map((doc) => {
-            return {
-                ...doc.data(),
-                id: doc.id
-            };
-        });
-        // setIsMgr(req?true:false)
-        let temp = []
-        req.forEach(dur => {
-        console.log(dur)
-        if (dur.status == "Pending") {
-                temp.push(dur)
-            }
-        });
-        console.log(temp)
-        setRequests(req);
-        setPendingRequests(temp)
-        // console.log(isMgr, req)
-    }
-
-    const getAllRequests = async () => {
-
-        let reqData = await LeaveContext.getLeaves()
-        let req = reqData.docs.map((doc) => {
-            return {
-                ...doc.data(),
-                id: doc.id
-            };
-        });
-        // setIsMgr(req?true:false)
-        // req.forEach(dur => {
-        //     dur.dateCalc = [dur.date[0], dur.date[1]]
-        //     dur.date = dur.date[0] + " to " + dur.date[1]
-        // });
-        setAllRequests(req);
-        // console.log(isMgr, req)
-    }
-
-    const onDeleteLeave = (record) => {
-        Modal.confirm({
-            title: "Are you sure, you want to delete  Leave record?",
-            okText: "Yes",
-            okType: "danger",
-
-            onOk: () => {
-                LeaveContext.deleteLeave(record.id)
-                    .then(response => {
-                        console.log(response);
-                        getData();
-                    })
-                    .catch(error => {
-                        console.log(error.message);
-
-                    })
-            },
-        });
-    };
-
-    // const matchDate = (current) => {
-    //     //cannot select existing leave
-    //     let matchingLeaveList = users.filter(item => item.Date == current.format('Do MMM, YYYY'))
-    //     return matchingLeaveList.length > 0;
-    // };
-
-    const onReset = () => {
-        form.resetFields()
-        setLeavetype(null)
-        setValidleaverequest('false')
-        setLeaveslot(null)
-    }
-    const { Option } = Select;
-
-    const columns = [
+  const getListData = (value) => {
+    let listData = [];
+    let currdate = value.format("Do MMM, YYYY");
+    let companyHolidayRecord = companyholiday.filter(
+      (record) => record.date == currdate
+    );
+    if (companyHolidayRecord.length > 0) {
+      listData = [
         {
-            title: 'Duration',
-            dataIndex: 'date',
-            width: 240,
-            align: "left",
-            sorter: (a, b) => {
-                return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
-            },
-            sortDirections: ["ascend", "descend"],
-
-
-
+          type: companyHolidayRecord[0].name,
+          isOptional: companyHolidayRecord[0]?.optionalHoliday,
         },
-        // {
-        //     title: 'Employee Name',
-        //     dataIndex: 'name',
-        //     width: 150,
-
-        // },
-        {
-            title: 'Nature of Leave',
-            dataIndex: 'nature',
-            width: 150,
-            align: "left",
-            sorter: (a, b) => {
-                return a.nature !== b.nature ? (a.nature < b.nature ? -1 : 1) : 0;
-            },
-            sortDirections: ["ascend", "descend"],
-
-        },
-        {
-            title: 'Slot',
-            dataIndex: 'slot',
-            width: 100,
-            align: "left",
-            sorter: (a, b) => {
-                return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
-            },
-            sortDirections: ["ascend", "descend"],
-
-
-        },
-        {
-            title: 'Reason',
-            dataIndex: 'reason',
-            width: 150,
-        },
-        {
-            title: 'Approver',
-            dataIndex: 'approver',
-            align: "left",
-            width: 150,
-        },
-
-        {
-            title: "Status",
-            className: "row5",
-            key: "status",
-            dataIndex: "status",
-            align: "left",
-            width: 100,
-            // responsive: ["md"],
-            sorter: (a, b) => {
-                return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
-            },
-            sortDirections: ["ascend", "descend"],
-            render: (_, { status }) =>
-                status !== "" && (
-                    <Tag style={{ width: '70px' }}
-                        className="statusTag"
-                        color={status === "Approved" ? "green" : status === "Pending" ? 'blue' : "volcano"}
-                        key={status}
-                    >
-                        {status}
-                    </Tag>
-                ),
-        },
-        {
-            title: 'Comment',
-            dataIndex: 'comment',
-            width: 150,
-        },
-        {
-            key: "5",
-            title: "Actions",
-            fixed: 'right',
-            width: 80,
-            render: (record) => {
-                return (
-                    <>
-                        {
-                            <>
-                                <DeleteOutlined
-
-                                    disabled={record?.status === 'Approved'}
-                                    onClick={() => {
-                                        if (record?.status !== 'Approved')
-                                            onDeleteLeave(record);
-                                    }}
-                                    style={
-                                        record?.status === 'Approved'
-                                            ? { color: "green", cursor: "not-allowed", marginLeft: 10 }
-                                            : record?.status === 'Pending'
-                                                ? { color: "blue", marginLeft: 10 }
-                                                : { color: "red", marginLeft: 10 }}
-                                />
-                            </>
-
-                        }
-                    </>
-                );
-            },
-        }
-
-    ];
-    useEffect(() => {
-        getRequestData();
-        if (isHr) getAllRequests();
-        // let role = sessionStorage.getItem("role");
-        // setRole(role)
-        // setIsHr(role === "hr")
-        getData();
-        getHoliday();
-        console.log(isMgr, allRequests, pendingRequests)
-    }, []);
-
-    useEffect(() => {
-        getRequestData();
-        if (isHr) getAllRequests();
-    }, [loading]);
-
-    const getDateFormatted = ((data) => {
-        data.forEach(dur => {
-            let len = dur.date.length
-            dur.dateCalc = [dur.date[0], dur.date[len - 1]]
-            dur.date = dur.date[0] + " to " + dur.date[len - 1]
-            dur.orgDate = dur.date
-        })
-        setHistory(data)
-    })
-
-    // const { RangePicker } = DatePicker;
-
-    const showNotification = (type, msg, desc) => {
-        notification[type]({
-            message: msg,
-            description: desc,
-        });
-    };
-
-    const validateLeaveRequest = (noOfDays, leavetype) => {
-        console.log('validate leave evoke', noOfDays);
-        console.log('validate leave evoke', leavetype);
-
-        if (leavetype != null && dateSelected.length > 0) {
-
-            // let leaveRecord = Object.keys(leavedays).filter(record => record.leavetype == leavetype);
-            console.log('validate leave evoke', leavedays[leavetype]);
-            if (leavedays[leavetype] < noOfDays) {
-                setValidleaverequest('false')
-                showNotification("error", "Error", "Leave requested is more than available Leave");
-
-            }
-            else {
-                console.log('validate setting leave to true', noOfDays);
-
-                setValidleaverequest('true')
-            }
-        }
-        console.log('validate ', validleaverequest);
+      ];
     }
-
-    const onLeaveNatureChange = (value) => {
-        console.log('fffff', value);
-        setLeavetype(value)
-        let noOfDays = dateSelected.length
-        if (dateSelected.length == 1 && leaveslot != 'Full Day') {
-            noOfDays = 0.5
-        }
-        validateLeaveRequest(noOfDays, value)
-    };
-
-    const onLeaveSlotChange = (e) => {
-        console.log('fffff', e.target.value);
-        setLeaveslot(e.target.value);
-        let noOfDays = dateSelected.length
-        if (dateSelected.length == 1 && leaveslot != 'Full Day') {
-            noOfDays = 0.5
-        }
-        // let dur = noOfDays
-        // if (dur === 1 && e.target.value != null) {
-        //     dur = 0.5;
-        // }
-        validateLeaveRequest(noOfDays, leavetype)
-    };
-
-    const onLeaveDateChange = (dates, dateStrings) => {
-        console.log(dates, dateStrings);
-        console.log("dateStrings: ", leaveslot);
-        if (dates) {
-            let fromDate = dates[0];
-            let toDate = dates[1];
-            let noOfDays = toDate.diff(fromDate, 'days') + 1;
-            if (noOfDays === 1 && leaveslot != null) {
-                noOfDays = 0.5;
-            }
-            console.log("dateStrings: ", dateStrings);
-            console.log("dateStrings: ", noOfDays);
-
-            setDuration(dateStrings);
-            setNoOfDays(noOfDays)
-            validateLeaveRequest(noOfDays, leavetype)
-        } else {
-            console.log("Clear");
-        }
-    };
-    const [date, setDate] = useState(moment());
-    const monthCellRender = (value) => {
-        const num = getMonthData(value);
-        return num ? (
-            <div className="notes-month">
-                <section>{num}</section>
-                <span>Backlog number</span>
-            </div>
-        ) : null;
-    };
-
-    const handleOk = () => {
-        console.log('hiii')
-
-
-    };
-
-    const dateCellRender = (value) => {
-        // console.log('renseValue', value)
-        const listData = getListData(value);
-        return (
-            <div className="events" style={{}} >
-                {listData.map((item) => (
-                    <div
-                        style={
-                            item.type === 'leave' ? { color: 'rgba(10, 91, 204,  1)', fontSize: '8px', backgroundColor: "rgba(10, 91, 204,0.2)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
-                                : item.isOptional ?
-                                    { color: "rgba(0, 119, 137, 0.96)", fontSize: '8px', backgroundColor: "rgba(154, 214, 224, 0.96)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
-                                    : { color: "rgba(252, 143, 10, 1)", fontSize: '8px', backgroundColor: "rgba(252, 143, 10,0.2)", paddingLeft: '5px', paddingRight: '5px', margin: '0px', borderRadius: '5px', justifyContent: 'center' }
-
-                        }
-
-
-
-                    >
-                        {/* style={{ color: "rgba(204, 204, 10, 1)",fontSize:'8px'}} */}
-
-                        <div className='present' > {item.type}  </div>
-                    </div>
-                ))}
-            </div>
+    let temp = duration.indexOf(currdate);
+    if (temp != -1) {
+      if (durStatus[temp] != "Rejected") {
+        listData = [
+          {
+            type: durStatus[temp] == "Approved" ? "On Leave" : "Pending",
+            status: durStatus[temp],
+          },
+        ];
+      }
+    }
+    return listData;
+  };
+  const onFinishEditLeave = (values) => {
+    if (
+      editedLeave.dateCalc === dateSelected &&
+      editedLeave.nature === values.leaveNature &&
+      editedLeave.reason === values.reason &&
+      editedLeave.slotEnd === values.slotEnd &&
+      editedLeave.slotStart === values.slotStart
+    ) {
+      setIsEditModalOpen(false);
+      return;
+    }
+    if (values.leaveNature === "Optional Leave") {
+      let optionalHolidays = companyholiday.filter((item) => {
+        return item.optionalHoliday;
+      });
+      let matchOptionalHoliday = optionalHolidays.filter((item) => {
+        return item.date == dateSelected[0];
+      });
+      if (
+        matchOptionalHoliday.length > 0 &&
+        values.leaveNature != "Optional Leave"
+      ) {
+        showNotification(
+          "error",
+          "Error",
+          "Optional Leave Can only be apply on Optional Holiday"
         );
-
+        return;
+      }
+    }
+    let tempdur = duration.filter(
+      (dates) => !editedLeave.dateCalc.includes(dates)
+    );
+    let matchingdates = dateSelected.filter((item) => tempdur.includes(item));
+    if (matchingdates.length > 0) {
+      showNotification(
+        "error",
+        "Error",
+        "Leave already applied on one of the days"
+      );
+      return;
+    }
+    let newLeave = {
+      empId: currentUser.uid,
+      approver: values.approver,
+      date: dateSelected,
+      name: currentUser.displayName,
+      nature: values.leaveNature,
+      slotStart: values.slotStart,
+      slotEnd: dateSelected.length == 1 ? values.slotStart : values.slotEnd,
+      reason: values.reason,
+      status: "Pending",
     };
-
-    const reqColumns = [
-        {
-            title: 'Duration',
-            dataIndex: 'date',
-            width: 240,
-            align: "left",
-            sorter: (a, b) => {
-                return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
-            },
-            sortDirections: ["ascend", "descend"],
-
-
-        },
-        {
-            title: 'Employee Name',
-            dataIndex: 'name',
-            width: 150,
-            sorter: (a, b) => {
-                return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
-            },
-            sortDirections: ["ascend", "descend"],
-
-
-        },
-        {
-            title: 'Nature of Leave',
-            dataIndex: 'nature',
-            width: 150,
-
-        },
-        {
-            title: 'Slot',
-            dataIndex: 'slot',
-            width: 150,
-            sorter: (a, b) => {
-                return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
-            },
-            sortDirections: ["ascend", "descend"],
-        },
-        {
-            title: 'Reason',
-            dataIndex: 'reason',
-            width: 150,
-        },
-        {
-            title: 'Approver',
-            dataIndex: 'approver',
-            width: 150,
-        },
-        {
-            title: "Status",
-            className: "row5",
-            key: "status",
-            dataIndex: "status",
-            align: "left",
-            width: 100,
-            // responsive: ["md"],
-            sorter: (a, b) => {
-                return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
-            },
-            sortDirections: ["ascend", "descend"],
-            render: (_, { status }) =>
-                status !== "" && (
-                    <Tag style={{ width: '70px' }}
-                        className="statusTag"
-                        color={status === "Approved" ? "green" : status === "Pending" ? 'blue' : "volcano"}
-                        key={status}
-                    >
-                        {status}
-                    </Tag>
-                ),
-        },
-        {
-            title: 'Comment',
-            dataIndex: 'comment',
-            width: 150,
-        },
-        {
-            key: "5",
-            title: "Actions",
-            fixed: 'right',
-            width: 80,
-            render: (record) => {
-                return (
-                    <>
-                        {
-                            <>
-                                <DeleteOutlined
-
-                                    // disabled={record?.status === 'Approved'}
-                                    onClick={() => {
-                                        onDeleteLeave(record);
-                                    }}
-                                    style={
-                                        record?.status === 'Approved'
-                                            ? { color: "green", marginLeft: 10 }
-                                            : record?.status === 'Pending'
-                                                ? { color: "blue", marginLeft: 10 }
-                                                : { color: "red", marginLeft: 10 }}
-                                />
-                            </>
-
-                        }
-                    </>
-                );
-            },
-        }
-
-    ];
-    function disabledDate(current) {
-
-        // let matchingHolidayList = companyholiday.filter(item => {
-        //     return item.Date == current.format('Do MMM, YYYY') && item.optionalHoliday == false
-
-        // })
-
-        return moment(current).day() === 0 || (current).day() === 6
-
-    };
-
-    function currentDateInAppliedLeave(current) {
-        let currentDate = moment(current.format('Do MMM, YYYY'), 'Do MMM, YYYY')
-        let matchingdates = history.filter((item) => {
-
-            let startDate = moment(item.dateCalc[0], 'Do MMM, YYYY')
-            let endDate = moment(item.dateCalc[1], 'Do MMM, YYYY')
-            // console.log('filter', currentDate, startDate, endDate)
-
-            if (moment(currentDate).isSameOrAfter(startDate)
-                && moment(currentDate).isSameOrBefore(endDate)) {
-
-                return true
-            }
-            else {
-                return false
-            }
+    if (validleaverequest) {
+      LeaveContext.updateLeaves(editedLeave.id, newLeave)
+        .then((response) => {
+          getData();
+          showNotification("success", "Success", "Leave edited successfully");
         })
-
-        return matchingdates.length > 0
-
-
+        .catch((error) => {
+          showNotification(
+            "error",
+            "Error",
+            "Unable to process leave request!"
+          );
+        });
+      setDateSelected([]);
+      setDateStart(null);
+      setStartSlot(null);
+      setDateEnd(null);
+      setEndSlot(null);
+      setValidleaverequest(false);
+      setIsEditModalOpen(false);
+    } else {
+      showNotification("error", "Error", "Unable to process leave request!");
     }
-
-    if (loading) {
-        return (
-            <div style={{ height: '70vh', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                < Spin size="large" style={{
-                    position: 'absolute',
-                    top: '20%',
-                    left: '50%',
-                    margin: '-10px',
-                    zIndex: '100',
-                    opacity: '0.7',
-                    backgroundColor: 'transparent'
-                }} />
-            </div>)
+  };
+  const onFinish = (values) => {
+    if (values.leaveNature === "Optional Leave") {
+      let optionalHolidays = companyholiday.filter((item) => {
+        return item.optionalHoliday;
+      });
+      let matchOptionalHoliday = optionalHolidays.filter((item) => {
+        return item.date == dateSelected[0];
+      });
+      if (
+        matchOptionalHoliday.length > 0 &&
+        values.leaveNature != "Optional Leave"
+      ) {
+        showNotification(
+          "error",
+          "Error",
+          "Optional Leave Can only be apply on Optional Holiday"
+        );
+        return;
+      }
     }
+    let matchingdates = dateSelected.filter((item) => duration.includes(item));
+    if (matchingdates.length > 0) {
+      showNotification(
+        "error",
+        "Error",
+        "Leave already applied on one of the days"
+      );
+      return;
+    }
+    let newLeave = {
+      empId: currentUser.uid,
+      approver: values.approver,
+      date: dateSelected,
+      name: currentUser.displayName,
+      nature: values.leaveNature,
+      slotStart: values.slotStart,
+      slotEnd: dateSelected.length == 1 ? values.slotStart : values.slotEnd,
+      reason: values.reason,
+      status: "Pending",
+    };
+    if (validleaverequest) {
+      LeaveContext.createLeave(newLeave)
+        .then((response) => {
+          getData();
+          showNotification("success", "Success", "Leave apply successfully");
+        })
+        .catch((error) => {
+          showNotification(
+            "error",
+            "Error",
+            "Unable to process leave request!"
+          );
+        });
+      form.resetFields();
+      setDateSelected([]);
+      setDateStart(null);
+      setStartSlot(null);
+      setDateEnd(null);
+      setEndSlot(null);
+      setValidleaverequest(false);
+      setSecondModal(false);
+    } else {
+      showNotification("error", "Error", "Unable to process leave request!");
+    }
+  };
 
+  const getConfigurations = async () => {
+    let data = await ConfigureContext.getConfigurations(page);
+    if (Object.keys(data).length == 0) {
+      return;
+    }
+    let sorted = Object.keys(data?.leaveNature).sort((k1, k2) =>
+      k1 < k2 ? -1 : k1 > k2 ? 1 : 0
+    );
+    let temp = {};
+    sorted.map((nat) => {
+      temp[`${nat}`] = data.leaveNature[`${nat}`];
+    });
+    setTotalDays(temp);
+    getData({ ...temp });
+  };
+  const getData = async (temp) => {
+    setLoading(true);
+    let empRecord = await EmpInfoContext.getEduDetails(currentUser.uid);
+    setRepManager(empRecord?.repManager);
+    let data = await LeaveContext.getAllById(currentUser.uid);
+    let d = data.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      };
+    });
+    getDateFormatted(d);
+    getDateSorted(d);
+    setLeaves(d);
+    setLoading(false);
+    let tempDays = temp ? temp : { ...totaldays };
+    let days = await LeaveContext.getLeaveDays(d, tempDays);
+    setLeaveDays(days);
+    let array = [];
+    let stats = [];
+    d.forEach((rec) => {
+      array.push(rec.dateCalc);
+      for (let i = 0; i < rec.dateCalc.length; i++) {
+        stats.push(rec.status);
+      }
+    });
+    setDuration([].concat.apply([], array));
+    setDurStatus(stats);
+  };
+  const getRequestData = async () => {
+    let reqData = await LeaveContext.getAllByApprover(currentUser.displayName);
+    let req = reqData.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      };
+    });
+    getDateFormatted(req);
+    getDateSorted(req);
+    setRequests(req);
+  };
+  const getAllRequests = async () => {
+    let reqData = await LeaveContext.getLeaves();
+    let req = reqData.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      };
+    });
+    getDateFormatted(req);
+    getDateSorted(req);
+    setAllRequests(req);
+    setFilterRequest(req)
+  };
+  const onDeleteLeave = (record) => {
+    Modal.confirm({
+      title: "Are you sure, you want to delete Leave record?",
+      okText: "Yes",
+      okType: "danger",
 
+      onOk: () => {
+        LeaveContext.deleteLeave(record.id)
+          .then((response) => {
+            showNotification(
+              "success",
+              "Success",
+              "Leave deleted successfully!"
+            );
+            getData();
+          })
+          .catch((error) => {
+            showNotification("error", "Error", error.message);
+          });
+      },
+    });
+  };
+  useEffect(() => {
+    setLoading(true);
+    getConfigurations();
+    getHoliday();
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 750);
+    if (isHr) getAllRequests();
+    if (isMgr) getRequestData();
+    return () => clearTimeout(timer);
+  }, []);
 
+  useEffect(() => {
+    if (isHr) getAllRequests();
+    if (isMgr) getRequestData();
+  }, [loading]);
+  const getDateFormatted = (data) => {
+    data.forEach((dur) => {
+      let len = dur.date.length;
+      dur.len =
+        len -
+        (dur.slotStart == "Full Day" ? 0 : 0.5) -
+        (dur.date.length == 1 ? 0 : dur.slotEnd == "Full Day" ? 0 : 0.5);
+      dur.dateCalc = dur.date;
+      dur.date =
+        dur.date.length == 1
+          ? dur.date[0]
+          : dur.date[0] + " to " + dur.date[dur.date.length - 1];
+    });
+  };
+  const getDateSorted = (data) => {
+    data.sort(function (c, d) {
+      let a = moment(c.dateCalc[0], "Do MMM, YYYY");
+      let b = moment(d.dateCalc[0], "Do MMM, YYYY");
+      return a - b;
+    });
+  };
+  const validateLeaveRequest = (noOfDays, leavetype) => {
+    if (leavetype != null && dateSelected.length - noOfDays > 0) {
+      if (leavedays[leavetype] < dateSelected.length - noOfDays) {
+        showNotification(
+          "error",
+          "Error",
+          "Leave requested is more than available leave"
+        );
+        setValidleaverequest(false);
+      } else {
+        setValidleaverequest(true);
+      }
+    }
+  };
+  const searchChange = (e) => {
+    let search = e.target.value;
+    if (search) {
+      let result = allRequests.filter(
+        (req) =>
+          req.name.toLowerCase().includes(search.toLowerCase()) ||
+          req.nature.toLowerCase().includes(search.toLowerCase()) ||
+          req.date.includes(search)
+      );
+      const reqestALL = [...result];
+      setFilterRequest(reqestALL);
+      // console.log(reqestALL);
+      console.log(allRequests);
+      console.log(requests);
+    } else {
+      setFilterRequest(allRequests);
+    }
+  };
+
+  const onLeaveNatureChange = (value) => {
+    if (value == "Optional Leave") {
+      if (dateSelected.length == 1) {
+        validateLeaveRequest(1, value);
+      } else {
+        setValidleaverequest(false);
+        showNotification(
+          "error",
+          "Error",
+          "Optional Leave can only be for 1 full day!"
+        );
+      }
+    }
+    let noOfDays = 0;
+    if (endSlot != "Full Day") {
+      noOfDays = 0.5;
+    }
+    if (startSlot != "Full Day") {
+      noOfDays += 0.5;
+    }
+    validateLeaveRequest(noOfDays, value);
+  };
+  const onLeaveDateChange = (e) => {
+    let tempDateEnd = dateEnd;
+    if (e != undefined) {
+      tempDateEnd = e;
+    }
+    let holidayList = companyholiday.map((hol) => {
+      return !hol.optionalHoliday ? hol.date : null;
+    });
+    let temp = [];
+    try {
+      for (
+        let i = dateStart.clone();
+        i.isSameOrBefore(tempDateEnd);
+        i = i.clone().add(1, "days")
+      ) {
+        let day = i.format("dddd");
+        if (!(day == "Saturday" || day == "Sunday")) {
+          if (
+            !holidayList.includes(i.format("Do MMM, YYYY")) &&
+            !duration.includes(i.format("Do MMM, YYYY"))
+          ) {
+            temp.push(i.format("Do MMM, YYYY"));
+          }
+        }
+      }
+    } catch (error) { }
+    setDateSelected(temp);
+  };
+  const dateCellRender = (value) => {
+    const listData = getListData(value);
+    let textVal = value.format("dddd");
+    let bgColor =
+      textVal == "Sunday" || textVal == "Saturday"
+        ? "rgba(74, 67, 67, 0.2)"
+        : "rgba(10, 91, 204, 0.2)";
+    let color =
+      textVal == "Sunday" || textVal == "Saturday"
+        ? "rgba(74, 67, 67, 1)"
+        : "rgb(10, 91, 204)";
+
+    if (!(listData.length == 0)) {
+      textVal = listData[0].type;
+      color =
+        listData[0].type == "On Leave"
+          ? "rgba(0, 128, 0,  1)"
+          : listData[0].type === "Pending"
+            ? "rgb(166 168 69)"
+            : listData[0].isOptional
+              ? "rgba(0, 119, 137, 0.96)"
+              : "rgba(252, 143, 10, 1)";
+      bgColor =
+        listData[0].type == "On Leave"
+          ? "rgb(15, 255, 80,0.2)"
+          : listData[0].type === "Pending"
+            ? "rgb(205 227 36 / 25%)"
+            : listData[0].isOptional
+              ? "rgba(154, 214, 224, 0.96)"
+              : "rgba(252, 143, 10,0.2)";
+    }
 
     return (
-        <>
-            <Row
-                style={{
-                    display: 'none',
-                    padding: 24,
-                    background: '#fff',
-                    minHeight: 150,
-                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: '#e9eaea',
-                }}
-                gutter={[16, 0]}>
-                <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-
-
-                    <div className='leavediv'
-
-                    >
-                        {Object.keys(leavedays).map((user, id) => {
-                            return (
-                                <div
-                                    className='Col-2-center' style={{ background: colors[id], color: "#fff" }}
-
-                                >
-                                    <p className='heading' style={{
-                                        fontWeight: '500', fontSize: '20px'
-                                    }}>{user}</p>
-
-                                    <div className='total-leave' style={{
-                                        width: '90%'
-                                    }}>
-                                        <div className='leave-status'>
-                                            <p className='leave' Total style={{
-                                                fontWeight: '500', fontSize: '15px', margin: '0px',
-                                            }}>Total :- </p>
-                                            <p style={{
-                                                fontWeight: '500', fontSize: '15px', margin: '0px'
-                                            }}>{totaldays[user]}</p>
-                                        </div>
-
-                                        <div className='leave-status'>
-                                            <p className='leave' Total style={{
-                                                fontWeight: '500', fontSize: '15px', margin: '0px'
-                                            }}>Taken :- </p>
-                                            <p style={{
-                                                fontWeight: '500', fontSize: '15px', margin: '0px'
-                                            }}>{totaldays[user]-leavedays[user]}</p>
-                                        </div>
-
-                                        <div className='leave-status'>
-                                            <p className='leave' Total style={{
-                                                fontWeight: '500', fontSize: '15px', margin: '0px'
-                                            }}>Remaining :- </p>
-                                            <p style={{
-                                                fontWeight: '500', fontSize: '15px', margin: '0px'
-                                            }}>{leavedays[user]}</p>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                </Col>
-                {/* </Col> */}
-
-                <Col xl={12} lg={12} md={12} sm={24} xs={24} span={2} style={{
-                    marginTop: '10px'
-
-                }}
-                >
-                    {/* <HolidayList isHr={isHr} /> */}
-                    <HolidayList isHr={isHr} refershCalendar={addNewHoliday} />
-                    <div className='calender-div' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <div className='badge-div' style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', justifyContent: 'center', paddingTop: '0px', }}>
-                            {/* <Typography.Title level={4} >Calendar</Typography.Title> */}
-                            <div className='rep-div' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                                {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 10, 10,0.2)" }} ><h5 style={{ color: "rgba(204, 10, 10, 1)" }} className='rep-text'>Absent</h5></button> */}
-                                {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(204, 94, 10,0.2)" }}><h5 style={{ color: "rgba(204, 94, 10, 1)" }} className='rep-text'>Half Day</h5></button> */}
-                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 91, 204,0.2)" }}><h5 style={{ color: "rgba(10, 91, 204,  1)" }} className='rep-text'>Leave</h5></button>
-                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(154, 214, 224, 0.96)" }}><h5 style={{ color: "rgba(0, 119, 137, 0.96)", }} className='rep-text'>Optional Holiday</h5></button>
-                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(252, 143, 10,0.2)" }}><h5 style={{ color: "rgba(252, 143, 10, 1)" }} className='rep-text'>Official Holiday</h5></button>
-                                <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(74, 67, 67,0.2)" }}><h5 style={{ color: "rgba(74, 67, 67, 1)" }} className='rep-text'>Weekly Off</h5></button>
-                            </div>
-                            <div className='rep-div2' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '0px' }}>
-                                {/* <button className='reprentation' style={{ marginRight: '5px', backgroundColor: "rgba(10, 204, 107,0.2)" }}><h5 style={{ color: "rgba(10, 204, 107, 1)" }} className='rep-text'>Present</h5></button> */}
-                            </div>
-
-                        </div>
-                        {/* style={holiday.optionalHoliday === false ? {
-                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(204, 204, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
-                                } : {
-                                    borderRadius: '5px', marginBottom: '10px', paddingLeft: '10px', justifyContent: 'space-evenly', backgroundColor: 'rgba(252, 143, 10,0.2)', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
-                                }} */}
-
-
-                        <Calendar
-
-
-                            style={{ paddingLeft: '10px', paddingRight: '10px', borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px' }}
-                            value={date}
-                            onChange={setDate}
-                            dateCellRender={dateCellRender}
-                            monthCellRender={monthCellRender}
-                            disabledDate={disabledDate}
-                        />
-                    </div>
-                </Col>
-
-
-
-
-                <Row className='apply-leave'
-                    style={{
-                        marginTop: '10px'
-
-                    }}
-
-                >
-                    <Col span={12} style={{
-                        display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black'
-                    }}><h3 className='apply-leave'>Apply Leave</h3></Col>
-
-                    <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
-                        background: 'flex', padding: '10px', width: '400px'
-                    }} >
-                        {/* <Form.Item labelAlign="left"
-                                style={{ marginBottom: "20px", }}
-                                label={<label style={{ color: "black", fontWeight: '400' }}>Employee Name<span style={{ color: 'red' }}> *</span></label>}
-                                name="employeename"
-
-                            >
-                                <Input maxLength={20}
-                                    onChange={(e) => {
-                                        const inputval = e.target.value;
-                                        const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                                        form.setFieldsValue({ employeename: newVal });
-
-                                    }}
-                                    placeholder="Employee Name" />
-                            </Form.Item> */}
-
-                        {/* <Form.Item labelAlign="left"
-                                style={{ marginBottom: "20px", color: 'white', }}
-                                label={<label style={{ color: "black", fontWeight: '400' }}>Duration<span style={{ color: 'red' }}> *</span></label>}
-                                name="durationid"
-                                initialValue={'abc'}
-
-                            > */}
-                        {/* <Space direction="vertical" size={12} style={{ width: '100%' }}> */}
-                        <div class="field required" style={{ backgroundColor: '', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingBottom: '8px' }}>
-                            <div className='date-pick-label' style={{ backgroundColor: '', width: '27%', textAlign: 'left' }}>
-                                <label for="id_username" style={{ fontWeight: '400', width: '100%' }}>Duration<span style={{ color: 'red' }}> *</span></label>
-                            </div>
-                            <div className='date-picker' style={{ backgroundColor: '', width: '80%' }}>
-                                <DatePicker style={{ width: '92%', backgroundColor: '', marginBottom: '20px', marginLeft: '', height: '32px', borderRadius: '0px', border: '1px solid #d9d9d9', paddingLeft: '10px' }}
-                                    // label='Duration'
-                                    value={dateSelected}
-                                    onChange={setDateSelected}
-                                    type='input'
-                                    // range
-                                    multiple
-                                    sort
-                                    minDate={new Date()}
-                                    format={format}
-                                    plugins={[<DatePanel />]}
-
-                                    // placeholder='Pick select Leave Date'
-
-                                    mapDays={({ date }) => {
-                                        let props = {}
-                                        let isWeekend = [0, 6].includes(date.weekDay.index)
-                                        let matchingHolidayList = companyholiday.filter(item => {
-                                            return item.Date == date.toString()
-
-                                        })
-                                        let leavedates = leaves.filter((item) => {
-                                            if (item.orgDate.includes(date.toString())) {
-                                                return true
-                                            }
-                                            else {
-                                                return false
-                                            }
-
-                                        })
-                                        console.log('matchingHolidayList', matchingHolidayList)
-                                        if (isWeekend) return {
-                                            disabled: true,
-                                            style: { color: "#ccc" },
-
-                                        }
-                                        if (matchingHolidayList.length > 0 && matchingHolidayList[0].optionalHoliday == false) return {
-
-                                            disabled: true,
-                                            style: { color: "rgb(252, 143, 1)", backgroundColor: 'rgba(252, 143, 10, 0.2)', },
-
-                                        }
-                                        if (matchingHolidayList.length > 0 && matchingHolidayList[0].optionalHoliday == true) return {
-
-                                            disabled: true,
-                                            style: { color: "rgba(0, 119, 137, 1)", backgroundColor: "rgba(0, 119, 137, 0.2)" },
-
-                                        }
-
-                                        if (leavedates.length > 0) return {
-
-                                            disabled: true,
-                                            style: { color: "rgba(10, 91, 204, 1)", backgroundColor: "rgb(10, 91, 204, 0.2)" },
-
-                                        }
-
-
-                                        return props
-                                    }}
-                                />
-                            </div>
-                        </div>
-                        {/* <RangePicker
-
-                                        ranges={{
-                                            Today: [moment(), moment()],
-                                            "This Month": [moment().startOf("month"), moment().endOf("month")]
-                                        }}
-                                        // showTime
-                                        format="Do MMM, YYYY"
-                                        onChange={onLeaveDateChange}
-                                        disabledDate={disabledDate}
-
-                                    // dateRender={(current) => {
-                                    //     const style = {};
-
-                                    //     if (moment(current).day() === 0) {
-                                    //       style.border = "1px solid #1890ff";
-                                    //       style.borderRadius = '50%';
-                                    //       style.color = "red";
-                                    //       style.backgroundColor = "grey";
-                                    //     }
-
-                                    //     return (
-                                    //       <div className="ant-picker-cell" style={style}>
-                                    //         {current.date()}
-                                    //       </div>
-                                    //     );
-                                    //   }}
-                                    /> */}
-
-                        {/* </Space> */}
-                        {/* </Form.Item> */}
-
-                        <Form
-                            {...Leave}
-                            labelCol={{
-                                span: 6,
-
-                            }}
-                            wrapperCol={{
-                                span: 16,
-                            }}
-                            form={form}
-                            onFinish={onFinish}
-
-                        // initialValues={{
-                        //     remember: true,
-                        //     // approver: employeeRecord.repManager
-
-
-
-                        // }}
-                        >
-
-
-                            <Form.Item labelAlign="left"
-                                name="leaveNature"
-                                style={{ marginBottom: "25px", }}
-                                label={<label style={{ color: "black", fontWeight: '400' }}>Nature of Leave<span style={{ color: 'red' }}> *</span></label>}
-
-                            >
-                                <Select required
-                                    placeholder="Select a option "
-                                    allowClear
-                                    onChange={onLeaveNatureChange}
-                                >
-                                    {
-                                        Object.keys(leavedays).map(u => (
-                                            <Option disabled={leavedays[u] <= 0} value={u}>{u}
-                                            </Option>
-                                        ))
-                                    }
-                                </Select>
-                            </Form.Item>
-
-                            <Form.Item labelAlign="left"
-                                name="slot"
-                                style={{ marginBottom: "25px", }}
-                                // label="Slot&nbsp;"
-                                className='div-slot'
-                                label={<label style={{ color: "black", fontWeight: '400' }}> Slot<span style={{ color: 'red' }}> *</span></label>}
-                                rules={[{ message: "Please select an option!" }]}
-                                initialValue={"Full Day"}
-
-                            >
-
-                                <Radio.Group defaultValue="Full Day"
-                                    onChange={onLeaveSlotChange}
-
-
-                                >
-                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Morning">Morning</Radio>
-                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Evening" >Evening</Radio>
-                                    <Radio style={{ color: "black", fontWeight: '400' }} value="Full Day" >Full Day</Radio>
-
-                                </Radio.Group>
-                            </Form.Item>
-
-                            <Form.Item labelAlign="left"
-                                name="reason"
-                                style={{ marginBottom: "25px", }}
-                                label={<label style={{ color: "black", fontWeight: '400' }}>Reason<span style={{ color: 'red' }}> *</span> </label>}
-                            >
-                                <Input.TextArea maxLength={20}
-                                    onChange={(e) => {
-
-                                        const inputval = e.target.value;
-                                        const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                                        form.setFieldsValue({ reason: newVal });
-
-                                    }}
-                                    required />
-                            </Form.Item>
-
-                            <Form.Item labelAlign="left"
-                                name="approver"
-                                style={{ marginBottom: "25px", }}
-                                label={<label style={{ color: "black", fontWeight: '400' }}>Approver<span style={{ color: 'red' }}> *</span></label>}
-                                initialValue={repManager}
-
-
-
-                            >
-                                <Input maxLength={20}
-                                    onChange={(e) => {
-
-                                        const inputval = e.target.value;
-                                        const newVal = inputval.substring(0, 1).toUpperCase() + inputval.substring(1);
-                                        form.setFieldsValue({ approver: newVal });
-
-                                    }}
-                                    // rules={[{ required: true }]}
-                                    // placeholder="Reporting Manager" 
-                                    disabled
-                                />
-                            </Form.Item>
-
-                            <Form.Item style={{ paddingTop: "15px", }}
-                                wrapperCol={{
-                                    offset: 8,
-                                    span: 24,
-                                }}
-                            >
-
-                                <Button type="primary" htmlType="submit" onClick={handleOk} > Submit </Button>
-                                <Button htmlType="button" style={{ marginLeft: "10px", }}
-                                    onClick={onReset}>
-                                    Reset
-                                </Button>
-                            </Form.Item>
-
-                        </Form>
-
-                    </Col>
-                </Row>
-
-                {
-                    isMgr
-                        ? <Notification data={pendingRequests} />
-                        : null
-                }
-
-                {
-                    isMgr && !isHr ?
-                    <Row style={{
-                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
-                    borderRadius: '10px', padding: '10px', marginTop: '10px'
-                }}
-                >
-                    <Col span={24} style={{
-                        display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black', width: '100rem'
-                    }}><h3>All Requests</h3></Col>
-
-                    <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
-                        background: 'flex', padding: '10px',
-                    }} >
-
-                        <div className='history-table' >
-                            <Table columns={reqColumns}
-                                dataSource={requests}
-                                pagination={{
-                                    position: ["bottomCenter"],
-                                }}
-                                scroll={{ x: 600 }}
-
-
-                                size="small" />
-                        </div>
-
-                    </Col>
-
-                </Row> :
-                null
-                }
-
-                {
-                    isHr ?
-                    <Row style={{
-                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
-                    borderRadius: '10px', padding: '10px', marginTop: '10px'
-                }}
-                >
-                    <Col span={24} style={{
-                        display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black', width: '100rem'
-                    }}><h3>All Requests</h3></Col>
-
-                    <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
-                        background: 'flex', padding: '10px',
-                    }} >
-
-                        <div className='history-table' >
-                            <Table columns={reqColumns}
-                                dataSource={allRequests}
-                                pagination={{
-                                    position: ["bottomCenter"],
-                                }}
-                                scroll={{ x: 600 }}
-
-
-                                size="small" />
-                        </div>
-
-                    </Col>
-
-                </Row> :
-                null
-                }
-
-
-                <Row style={{
-                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
-                    borderRadius: '10px', padding: '10px', marginTop: '10px'
-                }}
-                >
-                    <Col span={24} style={{
-                        display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black', width: '100rem'
-                    }}><h3>Employee Leave History</h3></Col>
-
-                    <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
-                        background: 'flex', padding: '10px',
-                    }} >
-
-                        <div className='history-table' >
-                            <Table columns={columns}
-                                dataSource={history}
-                                pagination={{
-                                    position: ["bottomCenter"],
-                                }}
-                                scroll={{ x: 600 }}
-
-
-                                size="small" />
-                        </div>
-
-                    </Col>
-
-                </Row>
-            </Row>
-        </>
-
+      <div>
+        <div
+          className="events"
+          style={{
+            backgroundColor: bgColor,
+            color: color,
+            fontSize: "12px",
+            paddingLeft: "5px",
+            paddingRight: "5px",
+            margin: "0px",
+            borderRadius: "100px",
+            justifyContent: "center",
+          }}
+        >
+          <div className="present"> {textVal} </div>
+        </div>
+      </div>
+    );
+  };
+  const monthCellRender = (value) => {
+    const listData = [];
+    companyholiday.forEach((hol) => {
+      console.log(hol)
+      if (value.format("MMM") == moment(hol.date, "Do MMM, YYYY").format("MMM")) {
+        listData.push(hol.name)
+      }
+    });
+    console.log(value.format("MMM"), listData)
+    return (
+      <ul>
+        { listData.map((d) => (
+          <li>{d}</li>
+        ))}
+      </ul>
     )
-}
+    // let textVal = value.format("dddd");
+    // let bgColor =
+    //   textVal == "Sunday" || textVal == "Saturday"
+    //     ? "rgba(74, 67, 67, 0.2)"
+    //     : "rgba(10, 91, 204, 0.2)";
+    // let color =
+    //   textVal == "Sunday" || textVal == "Saturday"
+    //     ? "rgba(74, 67, 67, 1)"
+    //     : "rgb(10, 91, 204)";
 
-export default Leave
+    // if (!(listData.length == 0)) {
+    //   textVal = listData[0].type;
+    //   color =
+    //     listData[0].type == "On Leave"
+    //       ? "rgba(0, 128, 0,  1)"
+    //       : listData[0].type === "Pending"
+    //         ? "rgb(166 168 69)"
+    //         : listData[0].isOptional
+    //           ? "rgba(0, 119, 137, 0.96)"
+    //           : "rgba(252, 143, 10, 1)";
+    //   bgColor =
+    //     listData[0].type == "On Leave"
+    //       ? "rgb(15, 255, 80,0.2)"
+    //       : listData[0].type === "Pending"
+    //         ? "rgb(205 227 36 / 25%)"
+    //         : listData[0].isOptional
+    //           ? "rgba(154, 214, 224, 0.96)"
+    //           : "rgba(252, 143, 10,0.2)";
+    // }
+
+    // return (
+    //   <div>
+    //     <div
+    //       className="events"
+    //       style={{
+    //         backgroundColor: bgColor,
+    //         color: color,
+    //         fontSize: "12px",
+    //         paddingLeft: "5px",
+    //         paddingRight: "5px",
+    //         margin: "0px",
+    //         borderRadius: "100px",
+    //         justifyContent: "center",
+    //       }}
+    //     >
+    //       <div className="present"> {textVal} </div>
+    //     </div>
+    //   </div>
+    // );
+  };
+
+  const reqColumns = [
+    {
+      title: "Duration",
+      dataIndex: "date",
+      width: 240,
+      align: "left",
+      sorter: (c, d) => {
+        let a = moment(c.dateCalc[0], "Do MMM, YYYY");
+        let b = moment(d.dateCalc[0], "Do MMM, YYYY");
+        return a - b;
+      },
+      sortDirections: ["ascend", "descend"],
+    },
+    {
+      title: "Employee Name",
+      dataIndex: "name",
+      width: 150,
+      sorter: (a, b) => {
+        return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
+      },
+      sortDirections: ["ascend", "descend"],
+    },
+    {
+      title: "Nature of Leave",
+      dataIndex: "nature",
+      width: 150,
+    },
+    // {
+    //     title: 'Slot',
+    //     dataIndex: 'slot',
+    //     width: 100,
+    //     align: "left",
+    //     sorter: (a, b) => {
+    //         return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+    //     },
+    //     sortDirections: ["ascend", "descend"],
+
+    // },
+    {
+      title: "No. Of Days",
+      dataIndex: "len",
+      width: 150,
+      align: "left",
+      sorter: (a, b) => {
+        return a.len !== b.len ? (a.len < b.len ? -1 : 1) : 0;
+      },
+      sortDirections: ["ascend", "descend"],
+    },
+    {
+      title: "Reason",
+      dataIndex: "reason",
+      width: 150,
+    },
+    {
+      title: "Approver",
+      dataIndex: "approver",
+      width: 150,
+    },
+    {
+      title: "Status",
+      className: "row5",
+      key: "status",
+      dataIndex: "status",
+      align: "left",
+      width: 100,
+      sorter: (a, b) => {
+        return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
+      },
+      sortDirections: ["ascend", "descend"],
+      render: (_, { status }) =>
+        status !== "" && (
+          <Tag
+            style={{ width: "70px", color: "black" }}
+            className="statusTag"
+            color={
+              status === "Approved"
+                ? "rgba(15, 255, 80, 0.2)"
+                : status === "Pending"
+                  ? "rgba(205, 227, 36, 0.25)"
+                  : "volcano"
+            }
+            key={status}
+          >
+            {status}
+          </Tag>
+        ),
+    },
+    {
+      title: "Comment",
+      dataIndex: "comment",
+      width: 150,
+    },
+    {
+      key: "5",
+      title: "Actions",
+      fixed: "right",
+      width: 80,
+      render: (record) => {
+        return (
+          <>
+            {
+              <>
+                <DeleteOutlined
+                  onClick={() => {
+                    onDeleteLeave(record);
+                  }}
+                  style={
+                    record?.status === "Approved"
+                      ? { color: "green", marginLeft: 10 }
+                      : record?.status === "Pending"
+                        ? { color: "blue", marginLeft: 10 }
+                        : { color: "red", marginLeft: 10 }
+                  }
+                />
+              </>
+            }
+          </>
+        );
+      },
+    },
+  ];
+  const columns = [
+    {
+      title: "Duration",
+      dataIndex: "date",
+      width: 240,
+      align: "left",
+      sorter: (c, d) => {
+        let a = moment(c.dateCalc[0], "Do MMM, YYYY");
+        let b = moment(d.dateCalc[0], "Do MMM, YYYY");
+        return a - b;
+      },
+      sortDirections: ["ascend", "descend"],
+    },
+    {
+      title: "Nature of Leave",
+      dataIndex: "nature",
+      width: 150,
+      align: "left",
+      sorter: (a, b) => {
+        return a.nature !== b.nature ? (a.nature < b.nature ? -1 : 1) : 0;
+      },
+      sortDirections: ["ascend", "descend"],
+    },
+    // {
+    //     title: 'Slot',
+    //     dataIndex: 'slot',
+    //     width: 100,
+    //     align: "left",
+    //     sorter: (a, b) => {
+    //         return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+    //     },
+    //     sortDirections: ["ascend", "descend"],
+
+    // },
+    {
+      title: "No. Of Days",
+      dataIndex: "len",
+      width: 150,
+      align: "left",
+      sorter: (a, b) => {
+        return a.len !== b.len ? (a.len < b.len ? -1 : 1) : 0;
+      },
+      sortDirections: ["ascend", "descend"],
+    },
+    {
+      title: "Reason",
+      dataIndex: "reason",
+      width: 150,
+    },
+    {
+      title: "Approver",
+      dataIndex: "approver",
+      align: "left",
+      width: 150,
+    },
+    {
+      title: "Status",
+      className: "row5",
+      key: "status",
+      dataIndex: "status",
+      align: "left",
+      width: 100,
+      sorter: (a, b) => {
+        return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
+      },
+      sortDirections: ["ascend", "descend"],
+      render: (_, { status }) =>
+        status !== "" && (
+          <Tag
+            style={{ width: "70px", color: "black" }}
+            className="statusTag"
+            color={
+              status === "Approved"
+                ? "rgba(15, 255, 80, 0.2)"
+                : status === "Pending"
+                  ? "rgba(205, 227, 36, 0.25)"
+                  : "volcano"
+            }
+            key={status}
+          >
+            {status}
+          </Tag>
+        ),
+    },
+    {
+      title: "Comment",
+      dataIndex: "comment",
+      width: 150,
+    },
+    {
+      key: "5",
+      title: "Actions",
+      fixed: "right",
+      width: 80,
+      render: (record) => {
+        return (
+          <>
+            <DeleteOutlined
+              disabled={record?.status === "Approved"}
+              onClick={() => {
+                if (record?.status !== "Approved") onDeleteLeave(record);
+              }}
+              style={
+                record?.status === "Approved"
+                  ? {
+                    color: "green",
+                    cursor: "not-allowed",
+                    marginLeft: 10,
+                  }
+                  : record?.status === "Pending"
+                    ? { color: "blue", marginLeft: 10 }
+                    : { color: "red", marginLeft: 10 }
+              }
+            />
+            <EditOutlined
+              disabled={record?.status === "Approved"}
+              onClick={() => {
+                if (record?.status !== "Approved") {
+                  setEditedLeave(record);
+                  setIsEditModalOpen(true);
+                  setDateSelected(record.dateCalc);
+                  setDateStart(moment(record.dateCalc, "Do MMM, YYYY"));
+                  setStartSlot(record.slotStart);
+                  setDateEnd(moment(record.dateCalc, "Do MMM, YYYY"));
+                  setEndSlot(record.slotEnd);
+                  setValidleaverequest(true);
+                }
+              }}
+              style={
+                record?.status === "Approved"
+                  ? {
+                    color: "green",
+                    cursor: "not-allowed",
+                    marginLeft: 10,
+                  }
+                  : record?.status === "Pending"
+                    ? { color: "blue", marginLeft: 10 }
+                    : { color: "red", marginLeft: 10 }
+              }
+            />
+          </>
+        );
+      },
+    },
+  ];
+  function disabledDate(current) {
+    if (
+      moment(current).day() === 0 ||
+      current.day() === 6 ||
+      moment(current).isBefore(moment().startOf("day"))
+    ) {
+      return true;
+    }
+    if (
+      dateStart != null && dateStart != 0
+        ? moment(current).isBefore(dateStart.startOf("day"))
+        : false
+    ) {
+      return true;
+    }
+    let tempdur = [...duration];
+    if (isEditModalOpen) {
+      tempdur = duration.filter(
+        (dates) => !editedLeave.dateCalc.includes(dates)
+      );
+    }
+    if (tempdur.includes(moment(current).format("Do MMM, YYYY"))) {
+      return true;
+    }
+    let matchOptionalHoliday = companyholiday.filter((item) => {
+      return item.optionalHoliday
+        ? false
+        : item.date == moment(current).format("Do MMM, YYYY");
+    });
+    if (matchOptionalHoliday.length != 0) {
+      return true;
+    }
+    return false;
+  }
+  const disabledCalendarDate = (current) => {
+    return moment(current).day() === 0 || current.day() === 6;
+  };
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          height: "70vh",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Spin
+          size="large"
+          style={{
+            position: "absolute",
+            top: "20%",
+            left: "50%",
+            margin: "-10px",
+            zIndex: "100",
+            opacity: "0.7",
+            backgroundColor: "transparent",
+          }}
+        />
+      </div>
+    );
+  }
+  const disableEnd = () => {
+    if (dateStart == null || dateStart == 0) {
+      if (isEditModalOpen) {
+        form1.setFieldsValue({ dateEnd: null });
+      } else {
+        form.setFieldsValue({ dateEnd: null });
+      }
+      return true;
+    }
+    return false;
+  };
+  const disableNature = () => {
+    if (dateStart == null || dateStart == 0) {
+      if (isEditModalOpen) {
+        form1.setFieldsValue({ leaveNature: null });
+      } else {
+        form.setFieldsValue({ leaveNature: null });
+      }
+      return true;
+    }
+    return false;
+  };
+  const disableEndSlot = () => {
+    if (dateStart == null || dateStart == 0) {
+      return true;
+    }
+    if (
+      dateEnd != null && dateEnd != 0
+        ? dateStart.format("DDMMYYYY") == dateEnd.format("DDMMYYYY")
+        : false
+    ) {
+      return true;
+    }
+    return false;
+  };
+  const disabledLeaveNature = (u) => {
+    if (leavedays[u] <= 0) {
+      return true;
+    }
+    if (
+      (u == "Optional Leave" || u == "Sick Leave") &&
+      dateSelected.length > 1
+    ) {
+      return true;
+    }
+    if (u == "Optional Leave" && dateSelected.length == 1) {
+      let holidayMatch = companyholiday.filter((hol) =>
+        hol.optionalHoliday ? hol.date == dateSelected[0] : false
+      );
+      return !(holidayMatch.length > 0);
+    }
+    if (u == "Sick Leave" && dateSelected.length == 1) {
+      return dateStart != null || dateStart != undefined
+        ? !(
+          dateStart.format("DD-MM-yyyy") == moment().format("DD-MM-yyyy") ||
+          dateStart.format("DD-MM-yyyy") ==
+          moment().add(1, "days").format("DD-MM-yyyy")
+        )
+        : false;
+    }
+    return false;
+  };
+  const { RangePicker } = DatePicker;
+
+  const onSearch = (value) => console.log(value);
+
+  const { Search } = Input;
+  //-----------------------------------------filter-------------------------
+  const onChange = (date, dateString) => {
+    setFilterCriteria({ ...filterCriteria, date });
+    if (date) {
+      let result = allRequests.filter((ex) => {
+        return (
+          moment(ex.date, dateFormat).isSame(date[0], "day") ||
+          moment(ex.date, dateFormat).isSame(date[1], "day") ||
+          (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
+            moment(ex.date, dateFormat).isSameOrBefore(date[1]))
+        );
+      });
+
+      const modifiedFilterExpense = [...result];
+      setFilterRequest(modifiedFilterExpense);
+    } else {
+      setFilterRequest(allRequests);
+    }
+  };
+
+  return (
+    <>
+      {props.roleView === "admin" ? (
+        <div className="leavePageDiv">
+          <Tabs
+            defaultActiveKey="1"
+            style={{
+              display: "none",
+              padding: 24,
+              display: "flex",
+              width: "100%",
+            }}
+          >
+            <Tabs.TabPane tab="Leave Request" key="1">
+              {/* <Row
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignContent: "flex-start",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  padding: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                <Col
+                  span={24}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignContent: "flex-start",
+                    color: "black",
+                    width: "100rem",
+                  }}
+                >
+                  <h3>All Requests</h3>
+                </Col>
+
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                  }}
+                >
+                  <div>
+                    <Table
+                      className="leaveTable"
+                      columns={reqColumns}
+                      dataSource={requests}
+                      pagination={{
+                        position: ["bottomCenter"],
+                      }}
+                      scroll={{ x: 600 }}
+                      size="small"
+                    />
+                  </div>
+                </Col>
+              </Row> */}
+
+              <Row
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignContent: "flex-start",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  padding: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                <Col
+                  span={24}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignContent: "flex-start",
+                    color: "black",
+                    width: "100rem",
+                  }}
+                >
+                  <h3>All Requests</h3>
+                </Col>
+
+                <Col span={24}>
+                  <Row
+                    gutter={[24, 8]}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      backgroundColor: "white",
+                      borderRadius: "10px",
+                      padding: "10px",
+                      marginTop: "10px",
+                      marginLeft: "5px",
+                    }}
+                  >
+                    {/* <Col span={6}><RangePicker /></Col> */}
+                    <Col xs={24} sm={22} md={7}>
+                      <Input
+                        className="searchBar"
+                        placeholder="Search"
+                        prefix={<SearchOutlined />}
+                        onChange={searchChange}
+                        style={{ width: "100%" }}
+                      />
+                    </Col>
+                    <Col xs={24} sm={22} md={10}>
+                      <RangePicker
+                        defaultValue={[]}
+                        format={dateFormat}
+                        style={{ width: "95%" }}
+                        onChange={onChange}
+                      />
+                    </Col>
+                    <Col xs={24} sm={22} md={7}>
+                      <Form.Item
+                        label="Nature of Leave::"
+                        style={{ marginBottom: "0px" }}
+                      >
+                        <Select
+                          onChange={(e) => {
+                            if (!e) {
+                              setFilterRequest(allRequests)
+                              return
+                            }
+                            const filteredLeave = allRequests.filter((leaveNat) =>
+                              leaveNat.nature.includes(e))
+                            setFilterRequest(filteredLeave)
+
+                          }}
+                          defaultValue="Loss Of Pay"
+                          options={[
+                            {
+                              value: "Casual Leave",
+                              label: "Casual Leave",
+                            },
+                            {
+                              value: "Earn Leave",
+                              label: "Earn Leave",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Col>
+
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                  }}
+                >
+                  <div className="history-table">
+                    <Table
+                      className="leaveTable"
+                      columns={reqColumns}
+                      dataSource={filterRequest}
+                      pagination={{
+                        position: ["bottomCenter"],
+                      }}
+                      scroll={{ x: 600 }}
+                      size="small"
+                    />
+                  </div>
+                </Col>
+              </Row>
+
+              {/* <Row
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignContent: "flex-start",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  padding: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                <Col
+                  span={24}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignContent: "flex-start",
+                    color: "black",
+                    width: "100rem",
+                  }}
+                >
+                  <h3>Employee Leave History</h3>
+                </Col>
+
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                  }}
+                >
+                  <div className="history-table">
+                    <Table
+                      className="leaveTable "
+                      columns={columns}
+                      dataSource={leaves}
+                      pagination={{
+                        position: ["bottomCenter"],
+                      }}
+                      scroll={{ x: 600 }}
+                      size="small"
+                    />
+                  </div>
+                </Col>
+              </Row> */}
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Holidays" key="2">
+              <card>
+                <div
+                  className="calender-div"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    className="badge-div"
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      backgroundColor: "white",
+                      justifyContent: "space-between",
+                      paddingTop: "0px",
+                      borderTopLeftRadius: "10px",
+                      borderTopRightRadius: "10px",
+                    }}
+                  >
+                    <div
+                      className="rep-div"
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {/* <Button
+                        className="reprentation"
+                        style={{
+                          cursor: 'default',
+                          marginLeft: '10px',
+                          marginRight: "5px", marginTop: '10px',
+                          backgroundColor: "rgba(15, 255, 80, 0.2)",
+                        }}
+                      >
+                        <h5
+                          style={{ color: "rgb(0, 128, 0)" }}
+                          className="rep-text"
+                        >
+                          Leave
+                        </h5>
+                      </Button> */}
+                      <Button
+                        className="reprentation"
+                        style={{
+                          cursor: "default",
+                          marginRight: "5px",
+                          marginTop: "10px",
+                          backgroundColor: "rgba(154, 214, 224, 0.96)",
+                        }}
+                      >
+                        <h5
+                          style={{ color: "rgba(0, 119, 137, 0.96)" }}
+                          className="rep-text"
+                        >
+                          Optional Holiday
+                        </h5>
+                      </Button>
+                      <Button
+                        className="reprentation"
+                        style={{
+                          cursor: "default",
+                          marginRight: "5px",
+                          marginTop: "10px",
+                          backgroundColor: "rgba(252, 143, 10,0.2)",
+                        }}
+                      >
+                        <h5
+                          style={{ color: "rgba(252, 143, 10, 1)" }}
+                          className="rep-text"
+                        >
+                          Official Holiday
+                        </h5>
+                      </Button>
+                      <Button
+                        className="reprentation"
+                        style={{
+                          cursor: "default",
+                          marginRight: "5px",
+                          marginTop: "10px",
+                          backgroundColor: "rgba(74, 67, 67,0.2)",
+                        }}
+                      >
+                        <h5
+                          style={{ color: "rgba(74, 67, 67, 1)" }}
+                          className="rep-text"
+                        >
+                          Weekly Off
+                        </h5>
+                      </Button>
+                    </div>
+                    <div className="holiday-button" style={{ display: "flex" }}>
+                      <div>
+                        <HolidayList isHr={isHr} refreshCalendar={getHoliday} />
+                      </div>
+                      {/* <div className="resp-leaveButton" style={{
+                        display: 'flex',
+                        alignContent: 'center',
+                        alignItems: 'center'
+                      }}>
+                        <div>
+                          <LeaveCreate isHr={isHr} refresh={getConfigurations} />
+                        </div>
+                        <Button className="button-applyleave"
+                          style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '0px' }}
+                          type="default" onClick={() => { setSecondModal(true) }}>
+                          Apply Leave
+                        </Button>
+                      </div> */}
+                    </div>
+                  </div>
+
+                  <Calendar
+                    style={{
+                      paddingLeft: "10px",
+                      paddingRight: "10px",
+                      borderBottomLeftRadius: "10px",
+                      borderBottomRightRadius: "10px",
+                    }}
+                    value={date}
+                    onChange={setDate}
+                    dateCellRender={dateCellRender}
+                    disabledDate={disabledCalendarDate}
+                    monthCellRender={monthCellRender}
+                  />
+                </div>
+              </card>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Leave Type" key="3">
+              <LeaveType />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Approvals" key="4">
+              <ApprovalConfig />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+      ) : (
+        <>
+          <Row
+            style={{
+              display: "none",
+              padding: 24,
+              background: "#fff",
+              minHeight: 150,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              backgroundColor: "#e9eaea",
+            }}
+            gutter={[16, 0]}
+          >
+            <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+              <div className="leavediv">
+                {leavedays != null
+                  ? Object.keys(leavedays).map((user, id) => {
+                    return (
+                      <div
+                        className="Col-2-center"
+                        style={{ background: colors[id], color: "#fff" }}
+                      >
+                        <p
+                          className="heading"
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "20px",
+                          }}
+                        >
+                          {user}
+                        </p>
+
+                        <div
+                          className="total-leave"
+                          style={{
+                            width: "90%",
+                          }}
+                        >
+                          <div className="leave-status">
+                            <p
+                              className="leave"
+                              Total
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              Total
+                            </p>
+                            <p
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              {totaldays[user]}
+                            </p>
+                          </div>
+
+                          <div className="leave-status">
+                            <p
+                              className="leave"
+                              Total
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              Availed
+                            </p>
+                            <p
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              {totaldays[user] - leavedays[user]}
+                            </p>
+                          </div>
+
+                          <div className="leave-status">
+                            <p
+                              className="leave"
+                              Total
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              Remaining
+                            </p>
+                            <p
+                              style={{
+                                fontWeight: "500",
+                                fontSize: "15px",
+                                margin: "0px",
+                              }}
+                            >
+                              {leavedays[user]}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                  : null}
+              </div>
+            </Col>
+
+            <Col
+              xl={24}
+              lg={24}
+              md={24}
+              sm={24}
+              xs={24}
+              span={2}
+              style={{
+                marginTop: "10px",
+              }}
+            >
+              <div
+                className="calender-div"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  className="badge-div"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    backgroundColor: "white",
+                    justifyContent: "space-between",
+                    paddingTop: "0px",
+                    borderTopLeftRadius: "10px",
+                    borderTopRightRadius: "10px",
+                  }}
+                >
+                  <div
+                    className="rep-div"
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Button
+                      className="reprentation"
+                      style={{
+                        cursor: "default",
+                        marginLeft: "10px",
+                        marginRight: "5px",
+                        marginTop: "10px",
+                        backgroundColor: "rgba(15, 255, 80, 0.2)",
+                      }}
+                    >
+                      <h5
+                        style={{ color: "rgb(0, 128, 0)" }}
+                        className="rep-text"
+                      >
+                        Leave
+                      </h5>
+                    </Button>
+                    <Button
+                      className="reprentation"
+                      style={{
+                        cursor: "default",
+                        marginRight: "5px",
+                        marginTop: "10px",
+                        backgroundColor: "rgba(154, 214, 224, 0.96)",
+                      }}
+                    >
+                      <h5
+                        style={{ color: "rgba(0, 119, 137, 0.96)" }}
+                        className="rep-text"
+                      >
+                        Optional Holiday
+                      </h5>
+                    </Button>
+                    <Button
+                      className="reprentation"
+                      style={{
+                        cursor: "default",
+                        marginRight: "5px",
+                        marginTop: "10px",
+                        backgroundColor: "rgba(252, 143, 10,0.2)",
+                      }}
+                    >
+                      <h5
+                        style={{ color: "rgba(252, 143, 10, 1)" }}
+                        className="rep-text"
+                      >
+                        Official Holiday
+                      </h5>
+                    </Button>
+                    <Button
+                      className="reprentation"
+                      style={{
+                        cursor: "default",
+                        marginRight: "5px",
+                        marginTop: "10px",
+                        backgroundColor: "rgba(74, 67, 67,0.2)",
+                      }}
+                    >
+                      <h5
+                        style={{ color: "rgba(74, 67, 67, 1)" }}
+                        className="rep-text"
+                      >
+                        Weekly Off
+                      </h5>
+                    </Button>
+                  </div>
+                  <div className="holiday-button" style={{ display: "flex" }}>
+                    <div>
+                      <HolidayList isHr={isHr} refreshCalendar={getHoliday} />
+                    </div>
+                    <div
+                      className="resp-leaveButton"
+                      style={{
+                        display: "flex",
+                        alignContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div>
+                        <LeaveCreate isHr={isHr} refresh={getConfigurations} />
+                      </div>
+                      <Button
+                        className="button-applyleave"
+                        style={{
+                          borderRadius: "15px",
+                          width: "105px",
+                          marginRight: "10px",
+                          marginTop: "0px",
+                        }}
+                        type="default"
+                        onClick={() => {
+                          setSecondModal(true);
+                        }}
+                      >
+                        Apply Leave
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <Calendar
+                  style={{
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
+                    borderBottomLeftRadius: "10px",
+                    borderBottomRightRadius: "10px",
+                  }}
+                  value={date}
+                  onChange={setDate}
+                  dateCellRender={dateCellRender}
+                  disabledDate={disabledCalendarDate}
+                  monthCellRender={monthCellRender}
+                />
+              </div>
+            </Col>
+
+            <Modal
+              className="viewAppraisal"
+              bodyStyle={{
+                overflowY: "auto",
+                maxHeight: "calc(100vh - 200px)",
+              }}
+              footer={null}
+              title="Apply Leave"
+              centered
+              visible={secondModal}
+              width={450}
+              closeIcon={
+                <div
+                  onClick={() => {
+                    setSecondModal(false);
+                  }}
+                  style={{ color: "#ffffff" }}
+                >
+                  X
+                </div>
+              }
+            >
+              <Row
+                className="apply-leave"
+                style={{
+                  marginTop: "10px",
+                }}
+              >
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                  }}
+                >
+                  <Form
+                    {...Leave}
+                    labelCol={{
+                      span: 8,
+                    }}
+                    wrapperCol={{
+                      span: 16,
+                    }}
+                    form={form}
+                    onFinish={onFinish}
+                  >
+                    <Row
+                      gutter={[16, 0]}
+                      className="row-one-div"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-around",
+                      }}
+                    >
+                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                        <Form.Item
+                          required={false}
+                          labelAlign="left"
+                          style={{
+                            marginBottom: "20px",
+                            color: "white",
+                            minWidth: "70px",
+                          }}
+                          label={
+                            <label
+                              style={{ color: "black", fontWeight: "400" }}
+                            >
+                              Start Date<span style={{ color: "red" }}> *</span>
+                            </label>
+                          }
+                          name="dateStart"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please Select Date",
+                            },
+                          ]}
+                        >
+                          <DatePicker
+                            style={{ width: "100%" }}
+                            format="Do MMM, YYYY"
+                            onChange={(e) => {
+                              setDateStart(e);
+                              onLeaveDateChange();
+                            }}
+                            disabledDate={disabledDate}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                        <Form.Item
+                          labelAlign="left"
+                          name="slotStart"
+                          style={{ marginBottom: "25px" }}
+                          className="div-slot"
+                          label={
+                            <label
+                              style={{ color: "black", fontWeight: "400" }}
+                            >
+                              Start Slot<span style={{ color: "red" }}> *</span>
+                            </label>
+                          }
+                          initialValue={"Full Day"}
+                        >
+                          <Select
+                            style={{ width: "100%" }}
+                            onChange={(e) => {
+                              setStartSlot(e);
+                              onLeaveDateChange();
+                            }}
+                          >
+                            <Option value="Full Day">Full Day</Option>
+                            <Option value="Half Day">Half Day</Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+
+                    <Row
+                      gutter={[16, 0]}
+                      className="row-one-div"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-evenly",
+                      }}
+                    >
+                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                        <Form.Item
+                          required={false}
+                          labelAlign="left"
+                          style={{ marginBottom: "20px", color: "white" }}
+                          label={
+                            <label
+                              style={{ color: "black", fontWeight: "400" }}
+                            >
+                              End Date<span style={{ color: "red" }}> *</span>
+                            </label>
+                          }
+                          name="dateEnd"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please Select Date",
+                            },
+                          ]}
+                        >
+                          <DatePicker
+                            style={{ width: "100%" }}
+                            format="Do MMM, YYYY"
+                            onChange={(e) => {
+                              setDateEnd(e);
+                              onLeaveDateChange(e);
+                            }}
+                            disabledDate={disabledDate}
+                            disabled={disableEnd()}
+                          />
+                        </Form.Item>
+                      </Col>
+
+                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                        <Form.Item
+                          labelAlign="left"
+                          name="slotEnd"
+                          style={{ marginBottom: "25px" }}
+                          className="div-slot"
+                          label={
+                            <label
+                              style={{ color: "black", fontWeight: "400" }}
+                            >
+                              End Slot<span style={{ color: "red" }}> *</span>
+                            </label>
+                          }
+                          initialValue={"Full Day"}
+                        >
+                          <Select
+                            style={{ width: "100%" }}
+                            disabled={disableEndSlot()}
+                            onChange={(e) => {
+                              setEndSlot(e);
+                              onLeaveDateChange();
+                            }}
+                          >
+                            <Option value="Full Day">Full Day</Option>
+                            <Option value="Half Day">Half Day</Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+
+                    <Form.Item
+                      required={false}
+                      labelAlign="left"
+                      name="leaveNature"
+                      style={{ marginBottom: "20px" }}
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          Nature of Leave
+                          <span style={{ color: "red" }}> *</span>
+                        </label>
+                      }
+                      rules={[
+                        {
+                          required: true,
+                          message: "Select Nature of Leave",
+                        },
+                      ]}
+                    >
+                      <Select
+                        placeholder="Select an option"
+                        allowClear
+                        disabled={disableNature()}
+                        onChange={onLeaveNatureChange}
+                      >
+                        {leavedays != null
+                          ? Object.keys(leavedays).map((u) => (
+                            <Option
+                              disabled={disabledLeaveNature(u)}
+                              value={u}
+                            >
+                              {u}
+                            </Option>
+                          ))
+                          : null}
+                        <Option value={"Loss of Pay"}>Loss of Pay</Option>
+                      </Select>
+                    </Form.Item>
+
+                    <Form.Item
+                      required={false}
+                      labelAlign="left"
+                      name="reason"
+                      style={{ marginBottom: "20px" }}
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          Reason<span style={{ color: "red" }}> *</span>{" "}
+                        </label>
+                      }
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Enter a Reason",
+                        },
+                      ]}
+                    >
+                      <Input.TextArea
+                        maxLength={60}
+                        onChange={(e) => {
+                          const inputval = e.target.value;
+                          const newVal =
+                            inputval.substring(0, 1).toUpperCase() +
+                            inputval.substring(1);
+                          form.setFieldsValue({ reason: newVal });
+                        }}
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      labelAlign="left"
+                      name="approver"
+                      style={{ marginBottom: "20px" }}
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          Approver<span style={{ color: "red" }}> *</span>
+                        </label>
+                      }
+                      initialValue={repManager}
+                    >
+                      <Input disabled />
+                    </Form.Item>
+
+                    <Form.Item
+                      style={{ paddingTop: "px" }}
+                      wrapperCol={{
+                        offset: 8,
+                        span: 24,
+                      }}
+                    >
+                      <Button type="primary" htmlType="submit">
+                        Submit
+                      </Button>
+                      <Button
+                        htmlType="button"
+                        type="default"
+                        style={{ marginLeft: "10px" }}
+                        onClick={() => {
+                          form.resetFields();
+                          setDateSelected([]);
+                          setDateStart(null);
+                          setStartSlot(null);
+                          setDateEnd(null);
+                          setEndSlot(null);
+                          setValidleaverequest(false);
+                        }}
+                      >
+                        Reset
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </Col>
+              </Row>
+            </Modal>
+
+            {isMgr ? <Notification data={[...requests]} /> : null}
+
+            {isMgr && !isHr ? (
+              <Row
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignContent: "flex-start",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  padding: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                <Col
+                  span={24}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignContent: "flex-start",
+                    color: "black",
+                    width: "100rem",
+                  }}
+                >
+                  <h3>All Requests</h3>
+                </Col>
+
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                  }}
+                >
+                  <div>
+                    <Table
+                      className="leaveTable"
+                      columns={reqColumns}
+                      dataSource={requests}
+                      pagination={{
+                        position: ["bottomCenter"],
+                      }}
+                      scroll={{ x: 600 }}
+                      size="small"
+                    />
+                  </div>
+                </Col>
+              </Row>
+            ) : null}
+            {isHr ? (
+              <Row
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignContent: "flex-start",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  padding: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                <Col
+                  span={24}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignContent: "flex-start",
+                    color: "black",
+                    width: "100rem",
+                  }}
+                >
+                  <h3>All Requests</h3>
+                </Col>
+
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                  }}
+                >
+                  <div className="history-table">
+                    <Table
+                      className="leaveTable"
+                      columns={reqColumns}
+                      dataSource={allRequests}
+                      pagination={{
+                        position: ["bottomCenter"],
+                      }}
+                      scroll={{ x: 600 }}
+                      size="small"
+                    />
+                  </div>
+                </Col>
+              </Row>
+            ) : null}
+            {!isHr ? (
+              <Row
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignContent: "flex-start",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  padding: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                <Col
+                  span={24}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignContent: "flex-start",
+                    color: "black",
+                    width: "100rem",
+                  }}
+                >
+                  <h3>Employee Leave History</h3>
+                </Col>
+
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                  }}
+                >
+                  <div className="history-table">
+                    <Table
+                      className="leaveTable "
+                      columns={columns}
+                      dataSource={leaves}
+                      pagination={{
+                        position: ["bottomCenter"],
+                      }}
+                      scroll={{ x: 600 }}
+                      size="small"
+                    />
+                  </div>
+                </Col>
+              </Row>
+            ) : null}
+          </Row>
+
+          <Modal
+            // bodyStyle={{ overflowY: 'scroll' }}
+            // style={{ height: 'calc(100vh - 200px)' }}
+            bodyStyle={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
+            className="viewAppraisal"
+            centered
+            width={450}
+            visible={isEditModalOpen}
+            footer={null}
+            destroyOnClose
+            title="Edit Applied Leave"
+            closeIcon={
+              <div
+                onClick={() => {
+                  setDateSelected([]);
+                  setDateStart(null);
+                  setStartSlot(null);
+                  setDateEnd(null);
+                  setEndSlot(null);
+                  setValidleaverequest(false);
+                  setIsEditModalOpen(false);
+                }}
+                style={{ color: "#ffffff" }}
+              >
+                X
+              </div>
+            }
+          >
+            <Row
+              className="apply-leave"
+              style={{
+                marginTop: "10px",
+              }}
+            >
+              <Col
+                xl={24}
+                lg={24}
+                md={24}
+                sm={24}
+                xs={24}
+                style={{
+                  background: "flex",
+                  padding: "10px",
+                  // width: "400px",
+                }}
+              >
+                <Form
+                  {...Leave}
+                  labelCol={{
+                    span: 8,
+                  }}
+                  wrapperCol={{
+                    span: 16,
+                  }}
+                  initialValues={{
+                    remember: true,
+                  }}
+                  form={form1}
+                  onFinish={onFinishEditLeave}
+                >
+                  <Row
+                    gutter={[16, 0]}
+                    className="row-one-div"
+                    style={{ display: "flex", justifyContent: "space-around" }}
+                  >
+                    <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                      <Form.Item
+                        required={false}
+                        labelAlign="left"
+                        style={{
+                          marginBottom: "20px",
+                          color: "white",
+
+                          minWidth: "70px",
+                        }}
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            Start Date<span style={{ color: "red" }}> *</span>
+                          </label>
+                        }
+                        name="dateStart"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select Date",
+                          },
+                        ]}
+                        initialValue={
+                          editedLeave.dateCalc == null
+                            ? null
+                            : moment(editedLeave.dateCalc[0], "Do MMM, YYYY")
+                        }
+                      >
+                        <DatePicker
+                          style={{ width: "100%" }}
+                          format="Do MMM, YYYY"
+                          onChange={(e) => {
+                            setDateStart(e);
+                            onLeaveDateChange();
+                          }}
+                          disabledDate={disabledDate}
+                        />
+                      </Form.Item>
+                    </Col>
+
+                    <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                      <Form.Item
+                        labelAlign="left"
+                        name="slotStart"
+                        style={{ marginBottom: "25px" }}
+                        className="div-slot"
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            Start Slot<span style={{ color: "red" }}> *</span>
+                          </label>
+                        }
+                        initialValue={editedLeave.slotStart}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          onChange={(e) => {
+                            setStartSlot(e);
+                            onLeaveDateChange();
+                          }}
+                        >
+                          <Option value="Full Day">Full Day</Option>
+                          <Option value="Half Day">Half Day</Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+
+                  <Row
+                    gutter={[16, 0]}
+                    className="row-one-div"
+                    style={{ display: "flex", justifyContent: "space-evenly" }}
+                  >
+                    <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                      <Form.Item
+                        required={false}
+                        labelAlign="left"
+                        style={{ marginBottom: "20px", color: "white" }}
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            End Date<span style={{ color: "red" }}> *</span>
+                          </label>
+                        }
+                        name="dateEnd"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select Date",
+                          },
+                        ]}
+                        initialValue={
+                          editedLeave.dateCalc == null
+                            ? null
+                            : moment(
+                              editedLeave.dateCalc[
+                              editedLeave.dateCalc.length - 1
+                              ],
+                              "Do MMM, YYYY"
+                            )
+                        }
+                      >
+                        <DatePicker
+                          style={{ width: "100%" }}
+                          format="Do MMM, YYYY"
+                          onChange={(e) => {
+                            setDateEnd(e);
+                            onLeaveDateChange(e);
+                          }}
+                          disabledDate={disabledDate}
+                          disabled={disableEnd()}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                      <Form.Item
+                        labelAlign="left"
+                        name="slotEnd"
+                        style={{ marginBottom: "25px" }}
+                        className="div-slot"
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            End Slot<span style={{ color: "red" }}> *</span>
+                          </label>
+                        }
+                        initialValue={editedLeave.slotEnd}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          disabled={disableEndSlot()}
+                          onChange={(e) => {
+                            setEndSlot(e);
+                            onLeaveDateChange();
+                          }}
+                        >
+                          <Option value="Full Day">Full Day</Option>
+                          <Option value="Half Day">Half Day</Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Form.Item
+                    required={false}
+                    labelAlign="left"
+                    name="leaveNature"
+                    style={{ marginBottom: "20px" }}
+                    label={
+                      <label style={{ color: "black", fontWeight: "400" }}>
+                        Nature of Leave<span style={{ color: "red" }}> *</span>
+                      </label>
+                    }
+                    rules={[
+                      {
+                        required: true,
+                        message: "Select Nature of Leave",
+                      },
+                    ]}
+                    initialValue={editedLeave.nature}
+                  >
+                    <Select
+                      placeholder="Select an option"
+                      allowClear
+                      disabled={disableNature()}
+                      onChange={onLeaveNatureChange}
+                    >
+                      {leavedays != null
+                        ? Object.keys(leavedays).map((u) => (
+                          <Option disabled={disabledLeaveNature(u)} value={u}>
+                            {u}
+                          </Option>
+                        ))
+                        : null}
+                      <Option value={"Loss of Pay"}>Loss of Pay</Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item
+                    required={false}
+                    initialValue={editedLeave.reason}
+                    labelAlign="left"
+                    name="reason"
+                    style={{ marginBottom: "20px" }}
+                    label={
+                      <label style={{ color: "black", fontWeight: "400" }}>
+                        Reason<span style={{ color: "red" }}> *</span>{" "}
+                      </label>
+                    }
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Enter a Reason",
+                      },
+                    ]}
+                  >
+                    <Input.TextArea
+                      maxLength={60}
+                      onChange={(e) => {
+                        const inputval = e.target.value;
+                        const newVal =
+                          inputval.substring(0, 1).toUpperCase() +
+                          inputval.substring(1);
+                        form1.setFieldsValue({ reason: newVal });
+                      }}
+                      required
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    labelAlign="left"
+                    name="approver"
+                    style={{ marginBottom: "20px" }}
+                    label={
+                      <label style={{ color: "black", fontWeight: "400" }}>
+                        Approver<span style={{ color: "red" }}> *</span>
+                      </label>
+                    }
+                    initialValue={repManager}
+                  >
+                    <Input disabled />
+                  </Form.Item>
+
+                  <Form.Item
+                    style={{ paddingTop: "px" }}
+                    wrapperCol={{
+                      offset: 8,
+                      span: 24,
+                    }}
+                  >
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                    <Button
+                      htmlType="button"
+                      type="default"
+                      style={{ marginLeft: "10px" }}
+                      onClick={() => {
+                        form1.resetFields();
+                        setDateSelected(editedLeave.dateCalc);
+                        setDateStart(
+                          moment(editedLeave.dateCalc, "Do MMM, YYYY")
+                        );
+                        setStartSlot(editedLeave.slotStart);
+                        setDateEnd(
+                          moment(editedLeave.dateCalc, "Do MMM, YYYY")
+                        );
+                        setEndSlot(editedLeave.slotEnd);
+                        setValidleaverequest(true);
+                      }}
+                    >
+                      Reset
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Col>
+            </Row>
+          </Modal>
+        </>
+      )}
+    </>
+  );
+};
+
+export default Leave;

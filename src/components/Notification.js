@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from 'react';
+import React, { useState } from 'react';
 import {
     Col,
     Row,
@@ -6,167 +6,109 @@ import {
     Modal,
     Input
 } from 'antd';
-
-import { useAuth } from '../contexts/AuthContext'
 import LeaveContext from '../contexts/LeaveContext'
+import moment from "moment";
 import "../style/leave.css";
-
-let dummy = [{
-    date: "OKOKO",
-    name: "OKOKO",
-    nature: "OKOKO",
-    slot: "OKOKO",
-    reason: "OKOKO",
-    approver: "jhbd"
-}]
-const Notification = ({ data }) => {
-    const { currentUser, role } = useAuth();
-    const [dataSource, setDataSource] = useState(data);
-    // const [approve, setApprove] = useState([]);
-    // const [reject, setReject] = useState([]);
-    // const [text, setText] = useState("");
-    // const [value, setValue] = useState();
+import checkedIcon from "../images/checkmark.png"
+import rejectIcon from "../images/rejected.png"
+const Notification = (props) => {
+    const dataSource = props.data.filter(data => data.status == "Pending")
     let value = '';
-
     const Bbb = () => {
-        // useEffect(() => {
-        //     if (onChange) {
-        //         onChange(value);
-        //     }
-        // }, [value]);
         return (
             <Input
                 placeholder="Enter Comment"
-                onChange={(event) => {value=event.target.value}}
+                onChange={(event) => { value = event.target.value }}
             />
         );
     };
-
-    useEffect(() => {
-        setDataSource(data)
-        console.log(data)
-    }, [data])
-    // console.log("data", data);
-
-    const onChange = (val) => {
-        // setText(val);
-    };
-
-    // const getData = async () => {
-    //     let data = await LeaveContext.getAllById(currentUser.uid)
-    //     // console.log("data", JSON.stringify(data.docs), currentUser.uid);
-
-    //     let d = data.docs.map((doc) => {
-    //         console.log("123", { ...doc.data() })
-    //         return {
-    //             ...doc.data(),
-    //             id: doc.id,
-    //             status: doc?.data()?.status || "Pending",
-    //         };
-    //     });
-    //     console.log("data", d);
-    //     setApprove(d);
-
-    // }
-    // ${JSON.stringify(record)}
-
     const onApproveLeave = (record) => {
-        console.log(record)
         Modal.confirm({
             title: `Are you sure, you want to approve Leave of ${record?.name || ''}!`,
-            content: <Bbb />,
             okText: "Yes",
             okType: "primary",
             onOk: () => {
-                console.log(value);
-                LeaveContext.approveLeave(record.id, value)
+                LeaveContext.approveLeave(record.id, record.name)
                     .then(response => {
-                        console.log(response);
-                        // getData();
                     })
                     .catch(error => {
-                        console.log(error.message);
-
                     })
             },
         });
     };
 
     const onRejectedLeave = (record) => {
-        console.log(record)
         Modal.confirm({
             title: `Are you sure, you want to reject Leave of ${record?.name || ''}!`,
             content: <Bbb />,
             okText: "Yes",
             okType: "danger",
             onOk: () => {
-                console.log(value);
-                LeaveContext.rejectLeave(record.id, value)
+                LeaveContext.rejectLeave(record.id, record.name, value)
                     .then(response => {
-                        console.log(response);
                         // getData();
                     })
                     .catch(error => {
-                        console.log(error.message);
-
                     })
             },
         });
     };
-
-
     const columns = [
         {
             title: 'Duration',
             dataIndex: 'date',
             width: 240,
             align: "left",
-            sorter: (a, b) => {
-                return a.date !== b.date ? (a.date < b.date ? -1 : 1) : 0;
+            sorter: (c, d) => {
+              let a = moment(c.dateCalc[0], "Do MMM, YYYY");
+              let b = moment(d.dateCalc[0], "Do MMM, YYYY");
+              return a - b;
             },
             sortDirections: ["ascend", "descend"],
-
-
         },
         {
             title: 'Employee Name',
             dataIndex: 'name',
+            align: "left",
             width: 150,
             sorter: (a, b) => {
                 return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
             },
             sortDirections: ["ascend", "descend"],
-
-
         },
         {
             title: 'Nature of Leave',
             dataIndex: 'nature',
+            align: "left",
             width: 150,
 
         },
+        // {
+        //     title: 'Slot',
+        //     dataIndex: 'slot',
+        //     width: 100,
+        //     align: "left",
+        //     sorter: (a, b) => {
+        //         return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+        //     },
+        //     sortDirections: ["ascend", "descend"],
+        // },
         {
-            title: 'Slot',
-            dataIndex: 'slot',
+            title: 'No. Of Days',
+            dataIndex: 'len',
             width: 150,
+            align: "left",
             sorter: (a, b) => {
-                return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
+                return a.len !== b.len ? (a.len < b.len ? -1 : 1) : 0;
             },
             sortDirections: ["ascend", "descend"],
         },
         {
             title: 'Reason',
             dataIndex: 'reason',
+            align: "left",
             width: 150,
         },
-        // {
-        //     title: 'Approver',
-        //     dataIndex: 'approver',
-        //     width: 150,
-        // },
-
-
-
         {
             key: "5",
             title: "Actions",
@@ -176,13 +118,11 @@ const Notification = ({ data }) => {
                 return (
                     <>
                         {
-
                             <>{
-
                             }
                                 <img
                                     style={{ color: "white", width: '20px', marginRight: 10 }}
-                                    src="../logo/checkmark.png"
+                                    src={checkedIcon}
                                     alt="profile"
                                     className="Dash"
                                     onClick={() => {
@@ -190,16 +130,14 @@ const Notification = ({ data }) => {
 
                                     }}
                                 />
-
                                 <img
                                     style={{ color: "white", width: '20px', marginRight: 10 }}
-                                    src="../logo/rejected.png"
+                                    src={rejectIcon}
                                     alt="profile"
                                     className="Dash"
                                     onClick={() => {
                                         onRejectedLeave(record);
                                     }}
-
                                 />
                             </>
                         }
@@ -209,14 +147,6 @@ const Notification = ({ data }) => {
         }
 
     ];
-
-    const rowClassNameFun = (e) => {
-        const { empId, name } = e
-
-        console.log(name, empId, "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG")
-    }
-    console.log(value)
-
     return (
         <Row style={{
             display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
@@ -231,19 +161,14 @@ const Notification = ({ data }) => {
                 background: 'flex', padding: '10px',
             }} >
 
-                {/* {JSON.stringify(dataSource[0])} */}
                 <div>
                     <Table columns={columns}
                         dataSource={dataSource}
-                        // rowClassName = {(e) => rowClassNameFun(e)}
-                        //  rowClassName={record => dataSource.filter((item) => item.nature === record.nature) ? "disabled-row" :"pankaj"}
-                        // rowClassName={record => !record.enabled && "disabled-row"}
+                        className='leaveTable'
                         pagination={{
                             position: ["bottomCenter"],
                         }}
                         scroll={{ x: 600 }}
-                        // style={{ overflowX: 'auto' }}
-
                         size="small" />
                 </div>
             </Col>

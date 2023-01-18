@@ -1,28 +1,68 @@
-import { db } from "../firebase-config";
-
+import { db, storage } from "../firebase-config";
+import { disableAccount } from "./EmailContext";
 import {
-    setDoc,
     getDoc,
     updateDoc,
     doc,
+    collection,
+    getDocs,
+    query,
+    where
 } from "firebase/firestore";
+import {
+    deleteObject,
+    getDownloadURL,
+    ref,
+    uploadBytesResumable,
+} from "firebase/storage";
+
+let compId = sessionStorage.getItem("compId");
 
 class EmpInfoContext {
 
-    addEduDetails = async (id, newEdu) => {
-        return setDoc(doc(db, "users", id), newEdu);
+    getCompId = () => {
+        compId = sessionStorage.getItem("compId");
+        return;
     };
 
-    updateEduDetails = (id, updateEdu) => {
-        const eduDoc = doc(db, "users", id);
-        return updateDoc(eduDoc, updateEdu);
+    updateEduDetails = (id, updateEdu, file) => {
+        if (file) {
+            const storageRef = ref(storage, `/${compId != "undefined" ? compId : "admins"}/${id}/profilePic`);
+            uploadBytesResumable(storageRef, file).then((snapshot) => {
+                getDownloadURL(snapshot.ref).then((url) => {
+                    updateEdu.profilePic = url;
+                    const eduDoc = doc(db, compId != "undefined" ? `companyprofile/${compId}/users` : "admins", id);
+                    return updateDoc(eduDoc, updateEdu);
+                });
+            });
+        } else {
+            if (updateEdu?.profilePic && updateEdu.profilePic == null) {
+                deleteObject(ref(storage, `/${compId != "undefined" ? compId : "admins"}/${id}/profilePic`));
+            }
+            const eduDoc = doc(db, compId != "undefined" ? `companyprofile/${compId}/users` : "admins", id);
+            return updateDoc(eduDoc, updateEdu);
+        }
     };
 
-    getEduDetails = async (id) => { 
-        const eduDoc = doc(db, "users", id);
+    getEduDetails = async (id, compid) => {
+        let tempId = compid ? compid : compId;
+        const eduDoc = doc(db, tempId == "undefined" || !tempId ? "admins" : `companyprofile/${tempId}/users`, id);
         let rec = await getDoc(eduDoc);
         return rec.data();
     };
+    
+    disablePerson = (id) => {
+        updateDoc(doc(db, `companyprofile/${compId}/users`, id), { disabled: true });
+        return disableAccount(id, true);
+    };
+
+    idExists = async (id) => {
+        let q = query(collection(db,`companyprofile/${compId}/users`), where("empId", "==", id));
+        let d = await getDocs(q);
+        console.log(d.docs.length)
+        return d.docs.length > 0;
+    };
+
 }
 
 export default new EmpInfoContext();

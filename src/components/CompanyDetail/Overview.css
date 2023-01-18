@@ -1,0 +1,49 @@
+.hoverImgCont {
+    display: flex;
+    justify-content: center;
+}
+
+.hoverImgCont:hover .overlay {
+  opacity: 0.5;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 200px;
+    /* height: 100%; */
+    /* width: 100%; */
+    opacity: 0;
+    transition: .3s ease;
+    background-color: black;
+  }
+
+  .personalCardDiv:hover .edit {
+    display: block !important;
+  }
+
+  .personalCardDiv .ant-card-head-title {
+    font-weight: bold;
+    line-height: 19px;
+    text-transform: uppercase;
+    font-size: 17px;
+  }
+
+  .social .ant-card-head{
+    border-radius: 10px 10px 0px 0px;
+    background: #1963A6;
+    color: #ffffff;
+  }
+  
+  .personalCardDiv:hover .edit {
+    display: block !important;
+  }
+
+  .image-Div {
+    display: flex;
+    justify-content: center;
+  }
+  

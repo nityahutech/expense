@@ -1,6 +1,16 @@
-.myProfile .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap, .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   font-weight: 500;
+.myProfile .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap,
+.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+
+.myProfileTabs .ant-tabs-nav {
+  margin-bottom: 0px;
+  margin-top: 10px;
+}
+
+.myProfile {
+  min-height: 100vh;
 }

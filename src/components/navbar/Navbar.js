@@ -1,67 +1,48 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "antd/dist/antd.css";
-import { Dropdown, Menu, Space, Button } from "antd";
-// import dropDownimg from "../../../public/logo/dropdown.svg"
-import dropDownimg from "../../assets/dropdown.png";
-import logoutsvgrepocom from "../../assets/logoutsvgrepocom.png";
-import abstractuserflat4 from "../../assets/abstractuserflat4.png";
+import { Dropdown, Menu, Space, Switch, Badge, Avatar } from "antd";
+import { BellOutlined } from "@ant-design/icons";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
-import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
-import { set } from "react-hook-form";
+import settingsIcon from "../../images/abstractuserflat4.png";
+import logoutIcon from "../../images/logoutsvgrepocom.png";
+import Logo from "../../images/logo22 ss.png";
+import dropdown from "../../images/dropdown.png";
 
-// ---------------------------------------------------------------------
-
-const Navbar = () => {
-  const [size, setSize] = useState("large");
+const Navbar = (props) => {
   const [startTime, setStartTime] = useState();
   const [isRunning, setIsRunning] = useState(false);
-  const [activePage, setActivePage] = useState("/DashBoard");
-  let loc = useLocation();
-  const { logout, currentUser } = useAuth();
-  const [clockinfo, setClockInfo] = useState()
+  const { logout } = useAuth();
+  const [clockinfo, setClockInfo] = useState();
+  const [buttonStatus,setButtonStatus]=useState(false);
+  const role = sessionStorage.getItem("role");
+  const [roleView, setRoleView] = useState(props.roleView || sessionStorage.getItem("role"));
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  let temp = sessionStorage.getItem("logo");
+  const logo = temp == null ? Logo : temp;
 
   const isClockRunning = async () => {
     let res = await AttendanceContext.getStartTime(currentUser.uid);
-    console.log(res)
     if (res == null || res.clockOut != null) {
-      console.log("heyyyyyyyy")
-      setIsRunning(false)
+      setIsRunning(false);
       return false;
-    }
-    else {
-      setIsRunning(true)
-      let offset = moment().subtract(res.clockIn)
-      let offsettime = res.break?offset.subtract(res.break): offset;
-      console.log(offsettime.toDate());
-      const offsetTime = moment(offsettime, "HH:mm:ss").diff(moment().startOf('day'), 'seconds')
-      console.log(offsetTime)
-      setStartTime(res.clockIn)
-      setClockInfo(offsetTime)
-      console.log(clockinfo)
+    } else {
+      setIsRunning(true);
+      let offset = moment().subtract(res.clockIn);
+      let offsettime = res.break ? offset.subtract(res.break) : offset;
+      const offsetTime = moment(offsettime, "HH:mm:ss").diff(
+        moment().startOf("day"),
+        "seconds"
+      );
+      setStartTime(res.clockIn);
+      setClockInfo(offsetTime);
       return true;
     }
-  }
-  // const offset = isClockRunning().then((num) => {
-  //   console.log(stopwatchOffset)
-  // });
-
-
-
-
-  // const runClock = async () => {
-  //   let cond = await isClockRunning();
-  //   if(cond) {
-  //     console.log(true, clockinfo)
-  //     return;
-  //   }
-  //     console.log(false, clockinfo)
-  //     return;
-  // }
+  };
 
   const menu = (
     <Menu
@@ -70,7 +51,7 @@ const Navbar = () => {
           key: "1",
           label: (
             <Link
-              to="/Setting"
+              to="/Settings"
               style={{ color: "#171832", fontWeight: "normal" }}
               rel="noopener noreferrer"
             >
@@ -79,7 +60,7 @@ const Navbar = () => {
           ),
           icon: (
             <img
-              src={abstractuserflat4}
+              src={settingsIcon}
               alt="downArrow"
               className="avatarimg"
             />
@@ -98,192 +79,214 @@ const Navbar = () => {
             </Link>
           ),
           icon: (
-            <img src={logoutsvgrepocom} alt="downArrow" className="avatarimg" />
+            <img
+              src={logoutIcon}
+              alt="downArrow"
+              className="avatarimg"
+            />
           ),
         },
       ]}
     />
   );
+  
+  const notificationMenu = (
+    <Menu
+      className="notificationMenuDp"
+      items={[
+        {
+          key: "1",
+          label: (
+            <Link
+              // to="/Settings"
+              style={{ 
+                color: "#171832", 
+                fontWeight: "normal",
+              }}
+              // rel="noopener noreferrer"
+            >
+              Requests
+            </Link>
+          ),
+          icon: (<></>),
+        },
+        {
+          key: "2",
+          label: (
+            <Link
+              // to="/"
+              // onClick={logout}
+              style={{ color: "#171832", fontWeight: "normal" }}
+              // rel="noopener noreferrer"
+            >
+              Leaves
+            </Link>
+          ),
+          icon: (<></>),
+        },
+      ]}
+    >
+      {/* <Menu.Item style={{background: "red"}}>
+        Request
+      </Menu.Item> */}
+    </Menu>
+  );
 
   useEffect(() => {
-    console.log("First");
     setIsRunning(isClockRunning());
-  }, [])
+  }, []);
 
   useEffect(() => {
-    console.log("BREHHHHHHHHHHHHS", isRunning);
-    isClockRunning()
+    isClockRunning();
     const timer = setInterval(() => {
-      // console.log(isRunning, clockinfo);
       if (isRunning) {
-        setClockInfo(clockinfo => clockinfo + 1)
+        setClockInfo((clockinfo) => clockinfo + 1);
       }
-    }, 1000)
+    }, 1000);
     return () => {
       clearInterval(timer);
     };
-  }, [isRunning])
+  }, [isRunning]);
 
-  // useEffect(() => {
-  //   console.log("BREHHHHHHHHHHHHS");
-  //   isClockRunning()
-  //   const timer = setInterval(() => {
-  //     console.log(isRunning);
-  //     if (isRunning) {
-  //       setClockInfo(clockinfo => clockinfo + 1)
-  //     }
-  //   }, 1000)
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, [isRunning]);
+  const buttonStyle = !isRunning
+    ? {
+        padding: "1px",
+        background: "#FF002A",
+        color: "white",
+        display: "inline-block",
+        width: "150px",
+        borderRadius: "5px",
+        border: "1px solid white",
+      }
+    : {
+        padding: "1px",
+        background: "#3ab8eb",
+        color: "white",
+        display: "inline-block",
+        width: "150px",
+        borderRadius: "5px",
+        border: "1px solid white",
+      };
 
-
-  const buttonStyle = !isRunning ? {
-    padding: "1px",
-    background: "#FF002A",
-    color: "white",
-    display: "inline-block",
-    width: "200px",
-    borderRadius: "5px",
-    border: "1px solid white",
-  } : {
-    padding: "1px",
-    background: "skyblue",
-    color: "white",
-    display: "inline-block",
-    width: "200px",
-    borderRadius: "5px",
-    border: "1px solid white",
-  };
-
-  const [buttonText, setButtonText] = useState(!isRunning ? "Web Clock In" : "");
+  const [buttonText, setButtonText] = useState(
+    !isRunning ? "Web Clock In" : ""
+  );
   let clockTime = isRunning ? clockinfo : "";
 
   const onMouseEnter = (event) => {
+    
     event.target.style.background = "#DB0000";
+    setButtonStatus(false);
     if (isRunning) {
-      setButtonText("Web Clock Out ");
+      setButtonText(" ");
+    }
+    if(buttonStatus){
+      setButtonText("Web clock out");
     }
   };
 
   const onMouseLeave = (event) => {
+    
     if (isRunning) {
       event.target.style.background = "skyblue";
-      setButtonText("");
-    }
-    else {
-      setButtonText("Web Clock In ");
+      setButtonText(" ");
+      setButtonStatus(true);
+    } else {
       event.target.style.background = "#FF002A";
+      setButtonText("Web Clock in");
     }
   };
-
+  
   const setClockState = async () => {
-    // setClockIn(true);
     let clickedDate = {
       empId: currentUser.uid,
       name: currentUser.displayName,
       date: moment().format("DD-MM-YYYY"),
       clockIn: moment().format("HH:mm:ss"),
-      clockOut: null
-    }
-    console.log(clickedDate)
-    await AttendanceContext.addClockData(clickedDate)
-    setIsRunning(true)
+      clockOut: null,
+    };
+    await AttendanceContext.addClockData(clickedDate);
+    setIsRunning(true);
   };
 
   const stopClockState = async () => {
-    // setClockIn(false);
     let clickedDate = {
       clockOut: moment().format("HH:mm:ss"),
-      duration: moment.utc(clockTime * 1000).format('HH:mm:ss')
-    }
-    // AttendanceContext.updateClockData(clickedDate, currentUser.uid)
-    // console.log(rec.data())
-    console.log(isRunning);
+      duration: moment.utc(clockTime * 1000).format("HH:mm:ss"),
+    };
     await AttendanceContext.updateClockData(currentUser.uid, clickedDate);
-    setIsRunning(false)
-    setClockInfo(0)
+    setIsRunning(false);
+    setClockInfo(0);
     setStartTime("");
     setButtonText("Web Clock In ");
   };
 
   const handleClock = () => {
-    console.log(isRunning)
+    
+    
     if (isRunning) {
       stopClockState();
-      console.log(isRunning);
-      console.log(startTime);
-    }
-    else {
+    } else {
       setClockState();
     }
-  }
+  };
 
-  // console.log(startTime, clockinfo)
   return (
     <div className="navbar" style={{ background: "white" }}>
-      <div className="wrapper">
-        {/* --------------------------------stopwatch */}
-        <div
-          style={{
-            cursor: "pointer",
-            fontSize: "16px",
-            // marginTop:'9px',
-            marginRight: "20px",
-            // padding: "5px",
-            borderRadius: "5px",
-            border: "1px solid white",
-            // backgroundColor: "#33e9f2",
-            color: "white",
-            fontWeight: "400",
-            width: "auto",
-          }}
-          className="stopwatch"
-        >
-          {/* {`${ctime.hrs}:${ctime.min}:${ctime.sec}`} */}
-
+      <div className="wrapper"> 
+        {role == "admin" ? (
+          <Switch 
+            checkedChildren="Admin"
+            unCheckedChildren="User"
+            defaultChecked = {roleView == "admin"}
+            style={{
+              marginRight: "10px",
+              fontWeight: "bold",
+              width:"90px"
+            }}
+            onChange={()=>{
+              setRoleView(roleView == "admin" ? "emp" : "admin")
+              props.switchRole(roleView == "admin" ? "emp" : "admin")
+              sessionStorage.setItem("roleView", roleView == "admin" ? "emp" : "admin")}
+            }
+          />
+        ) : null}
+       {roleView == "emp" ? (
+          <button
+            style={buttonStyle}
+            onClick={handleClock}
+            onMouseLeave={onMouseLeave}
+            onMouseEnter={onMouseEnter}
+            className="clockButton"
+          >
+            {buttonText ? buttonText : ""} {!buttonStatus ? <br/> : null}
+            {clockinfo && isRunning
+              ? moment.utc(clockTime * 1000).format("HH:mm:ss")
+              : ""}
+          </button>
+        ) : null}
+        {/* <Dropdown overlay={notificationMenu} className="notificationBell">
+          <Badge count={5} offset={[-10,5]} size="small">
+            <Avatar size={40} icon={<BellOutlined className="notificationBell"/>} className="notificationAvatar" />
+          </Badge>
+        </Dropdown> */}
+        <div>
+          <img
+            src={logo}
+            alt={"logo not found"}
+            className="profileLogo"
+          />
         </div>
-        <button
-          style={buttonStyle}
-          onClick={handleClock}
-          onMouseLeave={onMouseLeave}
-          onMouseEnter={onMouseEnter}
-        >
-          {buttonText? buttonText: ""} <br />
-          {clockinfo && isRunning ? moment.utc(clockTime * 1000).format('HH:mm:ss'): ""}
-        </button>
-        <div className="image">
-          <div className="item">
-            <img
-              src="/logo/logo.png"
-              alt="imagh"
-              className="avatar"
-              style={{ cursor: "pointer" }}
-            />
-          </div>
-        </div>
-
         <Dropdown overlay={menu}>
           <Space>
-            <h1
-              style={{
-                cursor: "pointer",
-                fontSize: "16px",
-                marginTop: "10px"
-              }}
-            >
-              {"  "}Hutech{""}
-            </h1>
             <img
-              src={dropDownimg}
+              src={dropdown}
               alt="downArrow"
-              style={{ cursor: "pointer", width: '15px' }}
+              style={{ cursor: "pointer", width: "15px" }}
             />
           </Space>
         </Dropdown>
       </div>
-
       <div className="tittle">
         <ExpenseBreadCrumb />
       </div>

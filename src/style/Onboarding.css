@@ -1,0 +1,429 @@
+.upload .ant-upload.ant-upload-select-picture-card{
+    width: 60px;
+    height: 60px;
+    
+}
+.form .ant-form{
+    margin: 30px 40px 30px 10px;
+    
+}
+.access .ant-form{
+    margin: 30px 40px 30px 10px;
+    
+}
+.details .ant-form-item-label > label{
+    font-weight: 600;
+    font-size: 13px;
+}
+.organization .ant-form-item-label > label{
+    font-weight: 600;
+    font-size: 13px;
+}
+.inputLabel .ant-form label{
+    font-weight: 600;
+    font-size: 13px;
+}
+.editInput .ant-form label{
+    font-weight: 600;
+    font-size: 13px;
+}
+.addUserForm .ant-form-item-label > label{
+    font-weight: 600;
+    font-size: 13px;
+    
+}
+.editUserForm .ant-form-item-label > label{
+    font-weight: 600;
+    font-size: 13px;
+    
+}
+.inputLabel .ant-input{
+    border: 1px solid #8692A6;
+    border-radius: 4px;
+
+}
+.editInput .ant-input{
+    border: 1px solid #8692A6;
+    border-radius: 4px;
+
+}
+.mainTabs .ant-tabs-nav .ant-tabs-nav-list{
+    margin: 13px;
+}
+.home{
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.tableTab .ant-table-thead>tr>th{
+    background:#1963A6;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    
+ }
+ .viewModal .ant-modal-content{
+    border-radius: 10px;
+    
+ }
+
+ .viewModal .ant-modal-header{
+    border-radius: 10px 10px 0px 0px;
+    background: #043661;
+    color: #ffffff;
+ }
+ .viewModal .ant-modal-title{
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 18px;
+line-height: 25px;
+ }
+ .editModal .ant-modal-content{
+    border-radius: 10px;
+    
+ }
+
+ .editModal .ant-modal-header{
+    border-radius: 10px 10px 0px 0px;
+    background: #043661;
+    color: #ffffff;
+ }
+ .editModal .ant-modal-title{
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 18px;
+line-height: 25px;
+ }
+
+ .mainTabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #000000;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    
+ }
+ .mainTabs .ant-tabs-tab:hover{
+    color: #000000;
+    
+ }
+ .mainTabs .ant-tabs-ink-bar {
+    /* position: absolute; */
+    background: #F9A01F;
+    pointer-events: none;
+
+ }
+ 
+ .profileTabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #000000;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    
+ }
+ .profileTabs .ant-tabs-tab:hover{
+    color: #000000;
+    
+ }
+ .profileTabs .ant-tabs-ink-bar {
+    /* position: absolute; */
+    background: #F9A01F;
+    pointer-events: none;
+
+ }
+
+ .userLabel .ant-form-item-label > label{
+    font-weight: 400;
+font-size: 13px;
+line-height: 18px;
+color: #212529;
+ }
+ .radio .ant-radio-wrapper{
+    font-size: "13px";
+    font-weight: "400";
+    line-height: "18px";
+    color: "#212529";
+ }
+
+.userLabel .ant-form-item-label{
+display: flex;
+ justify-content: right; }
+
+
+ /* .userDetails .ant-form-item-label{
+    display: flex;
+    justify-content: right;
+ } */
+ .userMap .ant-form-item-label{
+    display: flex;
+    justify-content: right;
+    
+ }
+ .userMap .ant-form-item-label > label {
+    color: #000000;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+ }
+
+ .userMap .ant-form-item{
+    margin-bottom: 3px;
+ }
+
+ .userMap span{
+    color: rgba(0, 0, 0, 0.54);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+ }
+
+ .text textarea.ant-input{
+    width: 330px;
+    max-width: none;
+ }
+
+ /* ---------step one------------- */
+
+ .stepOne .ant-steps-item-container {
+    outline: none;
+    display: grid;
+    /* margin-bottom: 30px; */
+ }
+
+ .stepOne .ant-steps-item-icon {
+    margin-left: 51px;
+ }
+
+ .stepOneError .ant-steps-item-icon {
+   background: #ff0000 !important;
+   border-color: #ff0000 !important;
+ }
+
+ .stepOne .ant-steps-item-tail::after {
+    margin-top: 25px;
+    margin-left: 50px;
+ }
+
+.ant-steps-item-process .ant-steps-item-container  .ant-steps-item-icon {
+   background: #F9A01F ;
+   border-color: #F9A01F;
+}
+
+.stepBars .ant-steps-item-finish .ant-steps-item-icon {
+   background-color: #1890ff ;
+   border-color: #1890ff ;
+}
+
+
+.ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+   color: #ffff;
+}
+ /* ----------step two------------- */
+ .stepTwo .ant-steps-item-container {
+    outline: none;
+    display: grid;
+    /* margin-top: 30px; */
+    margin-left: 25px;
+ }
+
+ .stepTwo .ant-steps-item-icon {
+    margin-left: 25px;
+ }
+
+ .stepTwo .ant-steps-item-tail::after {
+    margin-top: 50px;
+    margin-left: 50px;
+ }
+ 
+ /* .stepTwo .ant-steps-item-icon {
+   background: #F9A01F;
+   border-color: #F9A01F;
+}  */
+
+ /* ----------step three--------- */
+ .stepThree .ant-steps-item-container {
+    outline: none;
+    display: grid;
+    /* margin-top: 50px; */
+    margin-left: -10px
+ }
+
+ .stepThree .ant-steps-item-icon {
+    margin-left: 61px;
+ }
+
+ .stepThree .ant-steps-item-tail::after {
+    margin-top: 75px;
+    margin-left: 50px;
+ }
+
+ /* .stepThree .ant-steps-item-icon {
+   background: #F9A01F;
+   border-color: #F9A01F;
+}  */
+
+ /* --------------step four-------- */
+ .stepFour .ant-steps-item-container {
+    outline: none;
+    display: grid;
+    /* margin-top: 75px; */
+    margin-left: 16px;
+    
+ }
+
+ .stepFour .ant-steps-item-icon {
+    margin-left: 35px;
+ }
+
+ /* .stepFour .ant-steps-item-icon {
+   background: #F9A01F;
+   border-color: #F9A01F;
+}  */
+
+ /* -----------invertical part */
+ /* .ant-steps .ant-steps-vertical .stepBars  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+ } */
+
+ .ant-steps-item-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   /* max-width: 200px;
+   min-width: 185px; */
+ }
+
+ .ant-steps-item-title::after {
+   top: 0px;
+ }
+
+ .disabledOffice .ant-select-selection-item {
+   color:rgba(0, 0, 0, 0.54)
+ }
+
+ .disabledOffice .ant-input[disabled]{
+color: rgba(0,0,0,0.54);
+ }
+
+.ant-steps{
+   display: grid;
+   grid-auto-flow: column;
+   grid-auto-columns: 1fr;
+}
+
+.mainAccess .ant-card-head-title{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: rgba(0,0,0,0.85)
+}
+.accessCard .ant-card-head-title{
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    color:#444444;
+}
+
+.accessCardMap .ant-card-head-title{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 18px;
+    color:#444444;
+}
+
+.uploadButton .ant-upload.ant-upload-select-picture-card{
+   margin-top: 10px;
+   margin-left: 10px;
+}
+
+
+.hoverImgCont:hover .onboardOverlay {
+   opacity: 0.5;
+ }
+ .onboardOverlay {
+   position: absolute;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   /* width: 170px; */
+   /* height: 100%; */
+   /* width: 100%; */
+   opacity: 0;
+   transition: .3s ease;
+   background-color: black;
+ }
+ 
+ .hoverImgCont:hover .editOverlay {
+   opacity: 0.5;
+ }
+ .editOverlay {
+   position: absolute;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   /* width: 170px; */
+   /* height: 100%; */
+   /* width: 100%; */
+   opacity: 0;
+   transition: .3s ease;
+   background-color: black;
+ }
+
+ .stepBars .anticon{
+   display: none;
+ }
+
+@media (max-width: 850px) and (max-width: 5750px){
+   .ant-steps{
+      display: grid;
+      grid-auto-flow: row;
+      grid-auto-rows: 1fr;
+      flex-direction: column;
+   }
+
+   .ant-steps-item-container {
+      height: 80px;
+   }
+   
+   .ant-steps-item-title::after {
+      display: none;
+   }
+
+   .ant-steps-item-tail::after {
+      display: block;
+   }
+
+}
+ 
+@media (min-width:330px) and (max-width:574px) {
+   .userLabel .ant-form-item-label{
+      display: flex;
+       justify-content: left; }
+
+       .userMap .ant-form-item-label{
+         display: flex;
+         justify-content: right;
+         
+      }  
+}
+
+ /* .stepThree .ant-steps-item-tail::after {
+    margin-top: 50px;
+    margin-left: 50px;
+ } */
+
+ /* <Upload
+                    className="uploadButton"
+                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    listType="picture-card"
+                    fileList={fileList}
+                    onPreview={handlePreview}
+                    onChange={imageChange}
+                  >
+                    {fileList.length >= 1 ? null : uploadButton}
+                  </Upload>
+  */

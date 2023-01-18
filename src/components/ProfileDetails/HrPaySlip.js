@@ -1,5 +1,4 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { useState } from "react";
 import {
   Carousel,
   Form,
@@ -18,9 +17,6 @@ import {
   EditOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-
-import { useState } from "react";
-
 import "../../style/HrPaySlip.css";
 
 const styleDefaults = {
@@ -102,32 +98,28 @@ const data1 = [
     calc: "Balancing Amount of CTC",
   },
 ];
+
 function HrPaySlip() {
+  const role = sessionStorage.getItem("role");
+  const currentUser = JSON.parse(sessionStorage.getItem("user"))
   //   const [dotPosition, setDotPosition] = useState("top");
   const [componentSize, setComponentSize] = useState("default");
   const [selectionType, setSelectionType] = useState("checkbox");
   const [showComponent, setShowComponent] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState([]);
   const [form] = Form.useForm();
-
   const [rows, setRows] = useState(data1);
   const [componentValues, setComponentValues] = useState({});
-
   const carouselRef = React.createRef();
-
   const handleInputChange = (key, e) => {
     const data = {
       ...componentValues,
       [key]: e.target.value,
     };
-    console.log("data:: ", data);
     setComponentValues(data);
   };
 
-  console.log("componentValues:: ", componentValues);
-
   const handleChange = (value) => {
-    console.log(componentValues);
     let temp = [...selectedComponent];
     temp.push(value);
     setSelectedComponent(temp);
@@ -167,7 +159,6 @@ function HrPaySlip() {
   };
 
   const onChange = (value) => {
-    console.log("changed", value);
   };
 
   const columns = [
@@ -262,19 +253,17 @@ function HrPaySlip() {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
+      // console.log(
+      //   `selectedRowKeys: ${selectedRowKeys}`,
+      //   "selectedRows: ",
+      //   selectedRows
+      // );
     },
     getCheckboxProps: (record) => ({
       disabled: record.name === "Disabled User",
-      // Column configuration not to be checked
       name: record.name,
     }),
   };
-  //   console.log(Carousel);
 
   const onReset = () => {
     form.resetFields();
@@ -525,7 +514,6 @@ function HrPaySlip() {
                 form={form}
                 onClick={(e) => {
                   onReset();
-                  console.log(componentValues);
                   carouselRef.current.next();
                 }}
               >

@@ -1,47 +1,20 @@
 import { useEffect, useState } from "react";
-import { Col, Divider, Row } from "antd";
+import { Col, Row, Space } from "antd";
 import moment from "moment";
-import { UploadOutlined } from "@ant-design/icons";
 import ExpenseContext from "../contexts/ExpenseContext";
-import {
-  Cascader,
-  Input,
-  Select,
-  // handleChange,
-  //   Option,
-  Radio,
-  Space,
-  notification,
-  Button,
-  DatePicker,
-  Form,
-  Upload,
-} from "antd";
+import { Input, notification, Button, DatePicker, Form } from "antd";
 import "../style/Editexpense.css";
-import { Content } from "antd/lib/layout/layout";
-const { Option } = Select;
-const handleChange = (value) => {
-};
+
 const showNotification = (type, msg, desc) => {
   notification[type]({
     message: msg,
     description: desc,
   });
 };
-// const paystatus = [
-//   {
-//     value: "Paid",
-//     label: "Paid",
-//   },
-//   {
-//     value: "Unpaid",
-//     label: "Unpaid",
-//   },
-// ];
 const dateFormat = "DD-MM-YYYY";
 const { TextArea } = Input;
+
 const Editexpense = (props) => {
-  // const [showAlert, setShowAlert] = useState(false);
   const [amount, setAmount] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [subtotal, setsubtotal] = useState(0);
@@ -51,9 +24,7 @@ const Editexpense = (props) => {
   const [paidname, setpaidname] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  function calculatesubtotal() {
-    setsubtotal(amount * quantity);
-  }
+
   async function submitEdit() {
     try {
       const editedRecord = {
@@ -103,13 +74,21 @@ const Editexpense = (props) => {
     props.setIsModalVisible(false);
   }
   const cancelStyle = {
-    float: "right",
+    border: "1px solid #1963A6",
+    color: "#1963A6",
+    fontWeight: "600",
+    fontSize: "14px",
+    lineHeight: "17px",
+    width: "99px",
   };
   const buttonStyle = {
-    marginRight: "5px",
-    color: "white",
-    backgroundColor: "#1890ff",
-    float: "right",
+    border: "1px solid #1963A6",
+    background: "#1963A6",
+    color: "#ffffff",
+    fontWeight: "600",
+    fontSize: "14px",
+    lineHeight: "17px",
+    width: "99px",
   };
   const checkNumbervalue = (event) => {
     if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
@@ -165,7 +144,6 @@ const Editexpense = (props) => {
       ]}
       layout="vertical"
     >
-      {/* ------------------------------Paid By------- */}
       <Row>
         <Col xs={22} sm={22} md={12}>
           <Form.Item
@@ -234,8 +212,7 @@ const Editexpense = (props) => {
             />
           </Form.Item>
         </Col>
-      </Row>
-      <Row>
+
         <Col xs={22} sm={22} md={12}>
           <Form.Item
             style={{ marginBottom: "10px" }}
@@ -290,39 +267,7 @@ const Editexpense = (props) => {
             />
           </Form.Item>
         </Col>
-        {/* <Col xs={22} sm={22} md={12}>
-          <Form.Item
-            style={{ marginBottom: "10px" }}
-            label="Status&nbsp;"
-            name="status"
-            className="Required"
-            rules={[
-              {
-                message: "Please enter the paymeny status",
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              defaultValue={status}
-              style={{
-                width: "100%",
-              }}
-              onChange={(value) => {
-                setStatus(value);
-              }}
-            >
-              <  value="Paid">Paid</>
-              <Option value="Unpaid">Unpaid</Option>
-            </Select>
-          </Form.Item>
-        </Col> */}
-      </Row>
 
-      {/* ----------------------------------Datepicker------- */}
-
-      {/* --------------------------------------Amount------- */}
-      <Row>
         <Col xs={22} sm={22} md={12}>
           <Form.Item
             style={{ marginBottom: "10px" }}
@@ -383,10 +328,7 @@ const Editexpense = (props) => {
             />
           </Form.Item>
         </Col>
-      </Row>
-      {/* --------------------------------------Quantity------- */}
-      {/* --------------------------------------Sub-subtotal------- */}
-      <Row>
+
         <Col xs={22} sm={22} md={12}>
           <Form.Item
             label="Subtotal"
@@ -396,8 +338,7 @@ const Editexpense = (props) => {
             <Input readonly value={subtotal} disabled={true} />
           </Form.Item>
         </Col>
-      </Row>
-      <Row gutter={24}>
+
         <Col xs={22}>
           <Form.Item
             style={{ marginBottom: "10px" }}
@@ -418,15 +359,28 @@ const Editexpense = (props) => {
           </Form.Item>
         </Col>
       </Row>
-      {/* -----------------------Text-area--------------- */}
-      <br />
-      <Button style={cancelStyle} onClick={cancel}>
-        Cancel
-      </Button>
-      <Button style={buttonStyle} onClick={submitEdit}>
-        Submit
-      </Button>
-      <br />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginRight: "80px",
+          marginTop: "15px",
+        }}
+      >
+        <Space>
+          <Form.Item>
+            <Button style={cancelStyle} onClick={cancel}>
+              Cancel
+            </Button>
+          </Form.Item>
+          <Form.Item>
+            <Button style={buttonStyle} onClick={submitEdit}>
+              Submit
+            </Button>
+          </Form.Item>
+        </Space>
+      </div>
+
       {/* <Form.Item style={{ marginBottom: "0" }}>
         <Upload
           multiple

@@ -1,0 +1,145 @@
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.appraisal-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: space-between;
+}
+
+.card-app {
+  width: 250px;
+  height: 120px;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+.edIt:hover {
+  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+}
+
+.float-label {
+  position: relative;
+}
+
+.label {
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 12px;
+  top: 11px;
+  transition: 0.2s ease all;
+}
+
+.as-placeholder {
+  color: gray;
+}
+
+.as-label {
+  top: -8px;
+  font-size: 12px !important;
+  background: white;
+  padding: 0 4px;
+  margin-left: -4px;
+}
+/* 
+input[type="text"][disabled] {
+  background-color: white !important;
+  border: none !important;
+  color: #000 !important;
+}
+
+.ant-input[disabled] {
+  background-color: white !important;
+  border: none !important;
+  color: #000 !important;
+} */
+
+/* .active {
+  background-color: green !important;
+  color: white !important;
+} */
+
+.viewAppraisalModal .ant-modal-content {
+  border-radius: 10px;
+  /* width:820px; */
+}
+
+.viewAppraisalModal .ant-modal-header {
+  border-radius: 10px 10px 0px 0px;
+  background: #043661;
+  color: #ffffff;
+}
+.viewAppraisalModal .ant-modal-title {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 25px;
+}
+
+@media only screen and (max-width: 600px) {
+  .appraisal-div {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card-app {
+    height: 250px;
+  }
+}
+
+@media print {
+  .noprint {
+    visibility: hidden;
+  }
+}
+
+@media print {
+  .page-header {
+    display: flex !important;
+    page-break-before: auto !important;
+    margin-top: 30px !important;
+  }
+}
+
+@media print {
+  .page-break-lead {
+    display: block !important;
+    page-break-before: auto !important;
+    margin-top: 80px !important;
+  }
+}
+
+@media print {
+  .page-break-mgr {
+    display: block !important;
+    page-break-before: auto !important;
+    margin-top: 80px !important;
+  }
+}
+
+@media print {
+  .page-break4 {
+    display: block !important;
+    page-break-before: auto !important;
+    margin-top: 150px !important;
+  }
+}
+
+@media print {
+  .page-time {
+    display: block !important;
+  }
+}
+
+/* @media print {
+  .textArea-ant  {
+    border: none;
+
+  }
+} */

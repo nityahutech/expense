@@ -62,9 +62,7 @@ tr[data-row-key*="subTotal"] {
 .ant-table-column-has-sorters {
   text-align: left;
 }
-.expenseTable .ant-table-thead th.ant-table-column-has-sorters {
-  text-align: left;
-}
+
 .edIt.ant-btn-link {
   color: #6e7475;
 }
@@ -126,10 +124,29 @@ tr[data-row-key*="subTotal"] {
   text-align: center;
   width: 74px;
 } */
+/* -------------expenseTable css----------------- */
+.expenseTable .ant-table-thead th.ant-table-column-has-sorters {
+  text-align: left;
+}
 .expenseTable table thead tr th,
 .expenseTable table tbody tr td {
   padding: 10px 16px;
 }
+.expenseTable{
+  margin-top: 10px;
+}
+.expenseTable .edIt {
+  height: 22px;
+}
+.expenseTable .ant-table-thead>tr>th{
+  background:#1963A6;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+
 .row2.ant-table-cell {
   width: 172px;
 }
@@ -152,9 +169,7 @@ tr[data-row-key*="subTotal"] {
 width: 90px;
 } */
 
-.expenseTable .edIt {
-  height: 22px;
-}
+
 /* @media screen and (max-width: 600px){
  
 } */
@@ -173,14 +188,41 @@ width: 90px;
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #189ab4;
+  background: #05445e;
   border-radius: 10px;
+  width: 100px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #189ab4;
 }
+
+
+
+.expesneRegister .ant-modal-content{
+  border-radius: 10px;
+  
+}
+
+.expesneRegister .ant-modal-header{
+  border-radius: 10px 10px 0px 0px;
+  background: #043661;
+  color: #ffffff;
+}
+.expesneRegister .ant-modal-title{
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
+line-height: 25px;
+}
+
+.expenseListDiv {
+  min-height: 100vh;
+}
+
+
+
 @media (max-width: 990px) {
   .addExpense.ant-btn-primary {
     background: #189ab4;

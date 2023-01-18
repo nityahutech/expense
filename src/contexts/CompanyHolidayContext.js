@@ -1,6 +1,4 @@
 import { db } from "../firebase-config";
-
-
 import {
     collection,
     getDocs,
@@ -9,18 +7,21 @@ import {
     query,
     orderBy,
     deleteDoc,
-
-
-  
 } from "firebase/firestore";
 
-
-const companyholidayCollectionRef = collection(db, "companyholiday");
+let compId = sessionStorage.getItem("compId");
+let companyholidayCollectionRef = collection(db, `companyprofile/${compId}/companyholiday`);
 
 class CompanyHolidayContext {
+
+    getCompId = () => {
+        compId = sessionStorage.getItem("compId");
+        companyholidayCollectionRef = collection(db, `companyprofile/${compId}/companyholiday`);
+        return;
+    }
+
     getAllCompanyHoliday = () => {
-        const q = query(companyholidayCollectionRef, orderBy("Date", "asc"));
-        // console.log(q);
+        const q = query(companyholidayCollectionRef, orderBy("date", "asc"));
         return getDocs(q);
     };
     
@@ -29,7 +30,7 @@ class CompanyHolidayContext {
     };
 
     deleteHoliday = (id) => {
-        const newHoliday = doc(db, "companyholiday", id);
+        const newHoliday = doc(db, `companyprofile/${compId}/companyholiday`, id);
         return deleteDoc(newHoliday);
     };
 }

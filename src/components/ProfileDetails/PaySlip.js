@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button, Card, Table } from "antd";
 import { DatePicker, Space } from "antd";
 import "../../style/Payslip.css";
+import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { DeleteOutlined } from "@ant-design/icons";
-import moment from "moment";
 import { createPdfFromHtml } from "./downloadLogic";
+import hutechLogo from "../../images/hutechlogo.png";
 
 function PaySlip() {
   const [month, setMonth] = useState(null);
+  const [editContent, showEditContent] = useState(false);
   // const [year, setYear] = useState(null);
   const [paySlip, setPaySlip] = useState(false);
+  const [data, setData] = useState([]);
+  const [pfNum, setPfNum] = useState("");
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [printContent, setPrintContent] = useState(null);
   useEffect(() => {
-    console.log("inside useEffect: ", { month });
     if (month) {
       // alert("ok");
       setPaySlip(true);
@@ -21,8 +25,37 @@ function PaySlip() {
       setPaySlip(false);
     }
   }, [month]);
+  const getData = async () => {
+    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+    setData(data);
+  };
 
-  console.log({ month });
+  const onFinish = (value) => {
+    let nameArray = value.name.split(" ");
+    let mname = "";
+    for (let i = 1; i < nameArray.length - 1; i++) {
+      mname = mname + ((i != 1 ? " " : "") + nameArray[i]);
+    }
+    let record = {
+      ...value,
+      lname: nameArray[nameArray.length - 1],
+      fname: nameArray[0],
+      pfNum: pfNum ? pfNum : null,
+      panNum: value.panNum ? value.panNum : null,
+      tDays: value.tdays ? value.tdays : null,
+      tPaid: value.tPaid ? value.tPaid : null,
+      mname: mname
+    };
+    EmpInfoContext.addEduDetails(currentUser.uid, record);
+    getData();
+    showEditContent(false);
+  };
+  const onPayFinish=(values)=>{
+  EmpInfoContext.updateEduDetails(currentUser.uid);
+    // setData(record)
+    getData();
+    showEditContent(false);
+  };
 
   return (
     <>
@@ -54,6 +87,7 @@ function PaySlip() {
             >
               <DatePicker
                 picker="month"
+                className="picker"
                 placeholder="Select MM & YY"
                 bordered={true}
                 format="MM-YYYY"
@@ -131,7 +165,7 @@ function SlipHtml() {
             </div>
             <div>
               <img
-                src="/hutech-logo.png"
+                src={hutechLogo}
                 style={{
                   marginRight: "34px",
                   marginTop: "5px",
@@ -219,7 +253,6 @@ function SlipHtml() {
                 </tr>
               </table>
             </div>
-
             <div className="splitRight">
               <table>
                 <tr>
@@ -311,7 +344,6 @@ function SlipHtml() {
                     </th>
                   </tr>
                 </thead>
-
                 <tr>
                   <td
                     style={{

@@ -1,9 +1,10 @@
-import React from "react";
-import { useState } from "react";
-import { Button, Checkbox, Form, Input, Alert, Row, Col, Divider } from "antd";
+import { useState, useEffect } from "react";
+import { Button, Checkbox, Form, Input, Alert, Col } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import "../App.css";
+import "../style/LoginPage.css"
+import loginBg from "../images/login-img.png"
+import loginLogo from "../images/Logo77.png"
 
 function LoginPage() {
   const [loginEmail, setLoginEmail] = useState("");
@@ -11,62 +12,59 @@ function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login, resetPassword } = useAuth()
-
+  const { login, resetPassword, logout } = useAuth()
+  useEffect(() => {
+    logout();
+  }, [])
   const win = window.sessionStorage;
-
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(loginEmail, loginPassword);
     win.clear();
     try {
       setError("");
       setLoading(true);
-
       let res = await login(loginEmail, loginPassword);
-      console.log(res.user);
       sessionStorage.setItem("accessToken", res.user.accessToken);
       sessionStorage.setItem("user", JSON.stringify(res.user));
-      navigate("DashBoard", { replace: true });
+      const timer = setTimeout(() => {
+        navigate("DashBoard", { replace: true });
+      }, 3000);
     } catch {
-      setError("Failed to log in");
+      setError("Login Failed!");
       setTimeout(() => {
         setError("");
       }, 3000);
     }
-
     setLoading(false);
   }
-
   async function handleReset(e) {
     e.preventDefault();
-    console.log(loginEmail, loginPassword);
     win.clear();
     try {
       setLoading(true);
       await resetPassword(loginEmail);
-      setError("Reset email sent");
+      setError("Reset Email Sent");
     } catch {
-      setError("Failed to send reset email");
+      setError("Reset Email Failed To Send!");
       setTimeout(() => {
         setError("");
       }, 3000);
     }
-
     setLoading(false);
   }
-  
-  return (
+    return (
     <>
       <div className="main-div">
+
         <div className="img-div">
-          <img src={process.env.PUBLIC_URL + "login-img.png"} alt="" />
+          <img src={loginBg} alt=""  />
         </div>
+
         <div className="login-div">
           <div className="xyz">
             <div className="form-div">
               <div className="exepnse-logo">
-                <img src={process.env.PUBLIC_URL + "ExepnseLogo.png"} alt="" />
+                <img src={loginLogo} alt="" style={{width:"260px"}}/>
               </div>
               <Form
                 name="basic"
@@ -85,13 +83,9 @@ function LoginPage() {
                 <div className="msg">Let's Access to our dashboard</div>
 
                 <div className="email-div">
-                <Divider orientation="left" orientationMargin={0}>
                 Email address<span style={{ color: "red" }}> *</span>
-              </Divider>
                 </div>
                 <div className="emailInput-div">
-                  {/* <Row>
-                <Col xl={24} lg={24} sm={24} md={24} xs={24}> */}
                   <Form.Item
                     name="email"
                     rules={[
@@ -103,13 +97,9 @@ function LoginPage() {
                   >
                     <Input onChange={(e) => setLoginEmail(e.target.value)} />
                   </Form.Item>
-                  {/* </Col>
-                  </Row> */}
                 </div>
                 <div className="email-div">
-                <Divider orientation="left" orientationMargin={0}>
                 Password<span style={{ color: "red" }}> *</span>
-              </Divider>
                 </div>
                 <div className="pwdInput-div">
                   <Form.Item
@@ -126,37 +116,25 @@ function LoginPage() {
                     />
                   </Form.Item>
                 </div>
-
                 <div style={{ display: "flex" }}>
                   <Form.Item
                     name="remember"
                     valuePropName="checked"
-                    wrapperCol={
-                      {
-                        // offset: 8,
-                        // span: 16,
-                      }
-                    }
                   >
-                    <Checkbox className="chkbox-color">Remember me</Checkbox>
+                    <Checkbox 
+                      style={{color:"#1963A6"}} 
+                    >Remember me
+                    </Checkbox>
                   </Form.Item>
-                  <div className="forgotpwd" onClick={handleReset} style={{marginLeft: '3.5rem', marginTop:'5px'}}>Forgot Password</div>
+                  <div className="forgotpwd" onClick={handleReset} style={{marginLeft: '3.5rem', marginTop:'5px', color:"#1963A6"}}>Forgot Password</div>
                 </div>
-
-                <Form.Item
-                  wrapperCol={
-                    {
-                      // offset: 8,
-                      // span: 16,
-                    }
-                  }
-                >
+                <Form.Item>
                   <div className="login-btn">
                     {" "}
                     <Button
                       type="submit"
                       htmlType="submit"
-                      style={{ backgroundColor: "#189AB4", color: "white" }}
+                      style={{ backgroundColor: "#1963A6", color: "white" }}
                       onClick={handleSubmit}
                       disabled={loading}
                     >
@@ -164,6 +142,7 @@ function LoginPage() {
                     </Button>
                   </div>
                 </Form.Item>
+                <div className="errormsg">
                 {error && (
                   <Alert
                     type="error"
@@ -171,22 +150,17 @@ function LoginPage() {
                     style={{ width: "18rem" }}
                   />
                 )}
-
-                {/* <div className="signup-msg">
-                  Don't Have an account?{" "}
-                  <a href="/SignupPage" style={{ color: "#0FAEAA", cursor: "pointer" }}>
-                    SignUp
-                  </a>
-                </div> */}
+                </div>
                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                   <p className="loginFooter">
-                    © 2022 Expense. All rights reserved. Terms of Service
+                    © 2022 Hutech HR. All rights reserved. Terms of Service
                   </p>
                 </Col>
               </Form>
             </div>
           </div>
         </div>
+        
       </div>
     </>
   );

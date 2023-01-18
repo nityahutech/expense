@@ -1,88 +1,104 @@
-.ant-picker-input>input::placeholder {
-    color:white;
+.date .ant-picker-input > input::placeholder {
+  color: white;
 }
-.ant-picker .ant-picker-input span.ant-picker-suffix,
-.ant-picker.ant-picker-range span.ant-picker-suffix{
-    color: white;
-}
-
-.mainBorder{
-    box-sizing: border-box;
-    border: 1px solid black;
-    margin-top: 18px;
-    padding-left: 19px;
-    
-    
-}
-.splitLeft,.splitRight,.splitThird,.splitSecond,.splitFourth,.splitFifth{
-    border: 1px solid black;
-    width: 48%;
-}
-.firstSplit,.secondSplit,.thirdSplit{
-    display: flex;
+.date .ant-picker .ant-picker-input span.ant-picker-suffix,
+.date .ant-picker.ant-picker-range span.ant-picker-suffix {
+  color: white;
 }
 
+.mainBorder {
+  box-sizing: border-box;
+  border: 1px solid black;
+  margin-top: 18px;
+  padding-left: 19px;
+}
+.splitLeft,
+.splitRight,
+.splitThird,
+.splitSecond,
+.splitFourth,
+.splitFifth {
+  border: 1px solid black;
+  width: 48%;
+}
 
+.splitLeft2 {
+  border: 1px solid black;
+  width: 96%;
+}
 
+.splitthird {
+  border: 1px solid black;
+  width: 36%;
+}
 
-.head1{
-   
-    
-    border-bottom: 1px solid black;
- } 
-.head2{
-    border-bottom: 1px solid black;
- }  
- td,th{
-    padding-left: 10px;
- }
- .netPay{
-    font-weight: 500;
-    padding: 15px 0px 15px 0px;
- 
- }
- .card{
+.splitforth {
+  border: 1px solid black;
+  width: 20%;
+}
+
+.firstSplit,
+.secondSplit,
+.thridSplit {
+  display: flex;
+}
+
+.head1 {
+  border-bottom: 1px solid black;
+}
+.head2 {
+  border-bottom: 1px solid black;
+}
+td,
+th {
+  padding-left: 10px;
+}
+.netPay {
+  font-weight: 500;
+  padding: 15px 0px 15px 0px;
+}
+.card {
+  overflow-x: scroll;
+}
+.card.ant-card-bordered {
+  margin-bottom: 25px;
+}
+
+@media only screen and (max-width: 920px) {
+  .card {
     overflow-x: scroll;
- }
- .card.ant-card-bordered{
-    margin-bottom: 25px;
- }
-
-
-
-    
-
-
-@media only screen and (max-width: 920px){
-    .card{
-        overflow-x: scroll;
-    }
-    }
+  }
+}
 
 .sheet {
-    margin-left: 13px;
-    overflow: hidden;
-    position: relative;
-    box-sizing: border-box;
-    page-break-after: always;
-  }
-  
-  
-  /** Paper sizes **/
-  
-  #payslip.A4               .sheet { width: 210mm; height: 190mm }
-  #payslip.A4.landscape     .sheet { width: 297mm; height: 209mm }
-  
-  /** Padding area **/
-  .sheet.padding-10mm { padding: 10mm }
-  .sheet.padding-15mm { padding: 15mm }
-  .sheet.padding-20mm { padding: 20mm }
-  .sheet.padding-25mm { padding: 25mm }
+  margin-left: 13px;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  page-break-after: always;
+}
 
-  
+/** Paper sizes **/
 
+#payslip.A4 .sheet {
+  width: 210mm;
+  height: 190mm;
+}
+#payslip.A4.landscape .sheet {
+  width: 297mm;
+  height: 209mm;
+}
 
- 
-
-    
-    
+/** Padding area **/
+.sheet.padding-10mm {
+  padding: 10mm;
+}
+.sheet.padding-15mm {
+  padding: 15mm;
+}
+.sheet.padding-20mm {
+  padding: 20mm;
+}
+.sheet.padding-25mm {
+  padding: 25mm;
+}

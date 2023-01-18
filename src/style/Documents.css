@@ -16,3 +16,18 @@
 .worktab .ant-modal-body {
     margin: 0;
 }
+
+.tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #000;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.details .ant-form-item-label > label{
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.selectDisable .ant-select-disabled .ant-select-selection{
+    background-color:red;
+}

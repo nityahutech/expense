@@ -1,6 +1,8 @@
-import React from "react";
-import { Card, Table } from "antd";
+import { useState, useEffect } from "react";
+import { Card, Table, Row, Col } from "antd";
 import "../../style/WorkWeek.css";
+import EmpInfoContext from "../../contexts/EmpInfoContext";
+
 const data = [
   {
     key: "1",
@@ -59,6 +61,18 @@ const data = [
   },
 ];
 function WorkWeek() {
+  const [doj, setDoj] = useState();
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+    setDoj(data.doj ? data.doj : null);
+  };
+
   const sharedOnCell = (_, index) => {
     if (index === 5) {
       return {
@@ -89,8 +103,7 @@ function WorkWeek() {
                 background: "#1fcb1f",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -112,8 +125,7 @@ function WorkWeek() {
                 background: "#1fcb1f",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -135,8 +147,7 @@ function WorkWeek() {
                 background: "#1fcb1f",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -158,8 +169,7 @@ function WorkWeek() {
                 background: "#1fcb1f",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -181,8 +191,7 @@ function WorkWeek() {
                 background: "#1fcb1f",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -204,8 +213,7 @@ function WorkWeek() {
                 background: "#da2828",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -227,8 +235,7 @@ function WorkWeek() {
                 background: "#da2828",
                 width: "15px",
                 height: "15px",
-                position: "relative",
-                left: "24px",
+                marginLeft: "24px",
               }}
             >
               {" "}
@@ -245,103 +252,127 @@ function WorkWeek() {
         className="week"
         style={{
           display: "flex",
-          alignItems: "center",
+          // alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <Card className="workWeek">
-          <div style={{ background: "#fff" }}>
-            {" "}
-            <>
-              <div style={{ marginLeft: "22px", background: "#fff" }}>
-                <div className="header" style={{ marginLeft: "10px" }}>
-                  <h1>Saturday Sunday Off</h1>
-                  <h4>Description</h4>
-                  <p>
-                    This is a five days Work Week rule with Weekly Off set as
-                    Saturday and Sunday.
-                  </p>
-                  <h4>Effective Date</h4>
-                  <p> 09 Sep,2022</p>
-                  <hr style={{ marginRight: "21.7rem" }} />
-                </div>
-                <h4 style={{ marginLeft: "10px" }}>Rule Settings1</h4>
-                <div style={{ position: "relative", bottom: "30px" }}>
-                  {" "}
-                  <input
+        <Row>
+          {/* <Col xs={24} sm={24} md={6}></Col> */}
+          <Col xs={24} sm={24} md={24}>
+            <Card className="workWeek" style={{ display: "flex" }}>
+              <div style={{ background: "#fff" }}>
+                <>
+                  <div style={{ marginLeft: "2px", background: "#fff" }}>
+                    <div className="header" style={{ marginLeft: "10px" }}>
+                      <h1>Saturday Sunday Off</h1>
+                      <h4>Description</h4>
+                      <p>
+                        This is a five days Work Week rule with Weekly Off set
+                        as Saturday and Sunday.
+                      </p>
+                      <h4>Effective Date</h4>
+                      <p> {doj}</p>
+                      {/* <hr style={{ marginRight: "21.7rem" }} /> */}
+                    </div>
+                    <h4 style={{ marginLeft: "10px" }}>Rule Settings1</h4>
+                    <div
+                      style={{
+                        float: "right",
+                        display: "flex",
+                        alignItems: "baseline",
+                        marginRight: "17px",
+                      }}
+                    >
+                      {/* <input
                     checked="true"
                     type="checkbox"
                     style={{
-                      position: "relative",
-                      left: "38rem",
-                      top: "42px",
                       background: "blue",
                       cursor: "not-allowed",
                     }}
                   />
-                  <p
-                    style={{ position: "relative", left: "39rem", top: "18px" }}
-                  >
-                    Half Day
-                  </p>
-                </div>
+                  <p>Half Day</p> */}
+                    </div>
 
-                <div style={{ position: "relative", bottom: "27px" }}>
-                  <Table
-                    className="Table"
-                    columns={columns}
-                    dataSource={data}
-                    pagination={false}
-                    size="small"
-                    bordered
-                    style={{ width: "700px" }}
-                  />
-                </div>
-                <ul style={{ position: "relative", bottom: "30px" }}>
-                  <li className="box">
-                    <div
-                      style={{
-                        background: "#1fcb1f",
-                        width: "15px",
-                        height: "15px",
-                        position: "relative",
-                        right: "20px",
-                        top: "18px",
-                      }}
-                    ></div>
-                    Working Day
-                  </li>
-                  <li className="box">
-                    <div
-                      style={{
-                        background: "#da2828",
-                        width: "15px",
-                        height: "15px",
-                        position: "relative",
-                        right: "20px",
-                        top: "18px",
-                      }}
-                    ></div>
-                    Weekly Off
-                  </li>
-                  <li className="box">
-                    <div
-                      style={{
-                        background: "#ffc107",
-                        width: "15px",
-                        height: "15px",
-                        position: "relative",
-                        right: "20px",
-                        top: "18px",
-                      }}
-                    ></div>
-                    Half Day
-                  </li>
-                </ul>
+                    <div style={{ display: "flex" }}>
+                      <Table
+                        className="Table"
+                        columns={columns}
+                        dataSource={data}
+                        pagination={false}
+                        size="small"
+                        bordered
+                      />
+                    </div>
+
+                    <Row gutter={[8, 8]} style={{ marginLeft: "7px" }}>
+                      <Col
+                        xs={24}
+                        sm={24}
+                        md={6}
+                        style={{
+                          display: "flex",
+                          justifyContent: "start",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            backgroundColor: "green",
+                            width: "15px",
+                            height: "15px",
+                            marginRight: "5px",
+                          }}
+                        ></div>
+                        Working Day
+                      </Col>
+                      <Col
+                        xs={24}
+                        sm={24}
+                        md={6}
+                        style={{
+                          display: "flex",
+                          justifyContent: "start",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            backgroundColor: "red",
+                            width: "15px",
+                            height: "15px",
+                            marginRight: "5px",
+                          }}
+                        ></div>
+                        Weekly Off
+                      </Col>
+                      <Col
+                        xs={24}
+                        sm={24}
+                        md={6}
+                        style={{
+                          display: "flex",
+                          justifyContent: "start",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            backgroundColor: "yellow",
+                            width: "15px",
+                            height: "15px",
+                            marginRight: "5px",
+                          }}
+                        ></div>
+                        Half Day
+                      </Col>
+                    </Row>
+                  </div>
+                </>
               </div>
-            </>
-          </div>
-        </Card>
+            </Card>
+          </Col>
+        </Row>
       </div>
     </>
   );

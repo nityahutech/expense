@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+.main-div{
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  flex-direction: row;
+  gap: 120px;
+  background-color: white;
+}
+.img-div{
+  /* height: 100vh; */
+  background-color: #fbfafa;
+}
+.img-div img{
+  width: 100%;
+  height: 100vh;
+  background-color: #fbfafa;
+  margin-left: 50px;
+}
+.login-div{
+  width: 50%;
+  overflow: auto;
+  min-height: 100%;
+  /* height: 100%; */
+  height: auto;
+}
+.xyz{
+  margin-top: 30px;    
+}
+.wlc-div{
+  font-family: sans-serif;
+  font-weight: 600;
+}
+.msg{
+  color: #c2c0c0;
+  font-size: smaller;
+  font-family: sans-serif;
+}
+.form-div .ant-form{
+  margin-top: 4rem;
+}
+.emailInput-div input[type='text'], input[type='password'], input[type='number'], textarea {
+  -webkit-appearance: none;
+  width: 18rem;
+}
+.email-div{
+  /* font-family: sans-serif; */
+  font-weight: 600;
+  font-size: small;
+  margin-top: 2rem;
+
+}
+
+.pwdInput-div .ant-input-affix-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 18rem;
+  min-width: 0;
+  padding: 4px 11px;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  line-height: 1.5715;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  transition: all 0.3s;
+  display: inline-flex;
+}
+
+.forgotpwd{
+  color: #0FAEAA;
+ }
+
+.login-btn .ant-btn {
+  outline: 0;
+  color: #fff;
+  border-color: #189AB4;
+  background: #189AB4;
+  width: 18rem;
+}
+.login-btn .ant-btn:hover {
+  background: #189AB4;
+  color: #fff;
+  border-color: #189AB4;
+}
+.chkbox-color .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #189AB4;
+  border-color: #189AB4;
+}
+.signup-msg{
+  margin-left: 3rem;
+  font-family: sans-serif;
+}
+.loginFooter{
+  font-family: sans-serif;
+  font-size: 12px;
+  margin-top: 2rem;
+  color: #c2c0c0;
+}
+
+/* for signup page */
+
+.signupEmail-div{
+  font-weight: 600;
+  font-size: small;
+}
+.signupForm-div .ant-form{
+  margin-top: 2rem;
+}
+.signupFooter{
+  font-family: sans-serif;
+  font-size: 12px;
+  /* margin-top: 2rem; */
+  color: #c2c0c0;
+}
+.register-btn .ant-btn {
+  outline: 0;
+  color: #fff;
+  border-color: #189AB4;
+  background: #189AB4;
+  width: 18rem;
+}
+.register-btn .ant-btn:hover {
+  background: #189AB4;
+  color: #fff;
+  border-color: #189AB4;
+}
+.register-btn .ant-form-item{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+  font-feature-settings: 'tnum', "tnum";
+  /* margin-bottom: 10px; */
+  vertical-align: top;
+}
+.errormsg {
+    min-height: 50px;
+}
+
+/* -----------mobile--------------- */
+
+@media (max-width: 768px){
+  
+
+  .main-div{
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .img-div img{
+    display: none;
+  }
+  .xyz{
+    margin-top: 50px;
+  }
+
+  .login-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    /* margin-top: 2rem; */
+    width: auto;
+    background-color: white;
+  }
+
+  .forgotpwd{
+    position: static;
+  }
+
+}
+
+@media (min-width: 1300px){
+  .login-div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+}

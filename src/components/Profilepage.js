@@ -1,19 +1,7 @@
-import React, { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import "../style/profile.css";
-import { Card, Col, Row, Tabs } from "antd";
-import {
-  EnvironmentOutlined,
-  CalendarOutlined,
-  HomeOutlined,
-} from "@ant-design/icons";
-import { Upload } from "antd";
+import { Tabs } from "antd";
 import "../style/profilepage.css";
-import { Button, Modal } from "antd";
-import { Form, Input, Radio, notification } from "antd";
-import { useAuth } from "../contexts/AuthContext";
-import ProfileContext from "../contexts/ProfileContext";
-
 import Personal from "./ProfileDetails/Personal";
 import Work from "./ProfileDetails/Work";
 import Team from "./ProfileDetails/Team";
@@ -24,40 +12,48 @@ import WorkWeek from "./ProfileDetails/WorkWeek";
 import PaySlip from "./ProfileDetails/PaySlip";
 import BankAccount from "./ProfileDetails/BankAccount";
 
-const { Meta } = Card;
 
 const Profile = () => {
+const role = sessionStorage.getItem("role");
   return (
     <>
-      <div className="myProfile" style={{}}>
-        <Tabs defaultActiveKey="1" className="tabs">
+      <div className="myProfile">
+        <Tabs defaultActiveKey="1" className="myProfileTabs">
           <Tabs.TabPane tab="Personal" key="1">
-            <Personal></Personal>
+            <Personal />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Work" key="2">
-            <Work></Work>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Team" key="3">
-            <Team></Team>
-          </Tabs.TabPane>
+          {role != "super" ? (
+            <>
+              <Tabs.TabPane tab="Work" key="2">
+                <Work />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Team" key="3">
+                <Team />
+              </Tabs.TabPane>
+            </>
+          ) : null}
           <Tabs.TabPane tab="Education" key="4">
-            <Education></Education>
+            <Education />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Family" key="5">
-            <Family></Family>
+            <Family />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Documents" key="6">
-            <Document></Document>
+            <Document />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Work Week" key="7">
-            <WorkWeek></WorkWeek>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Pay Slip" key="8">
-            <PaySlip></PaySlip>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Bank Account" key="9">
-            <BankAccount></BankAccount>
-          </Tabs.TabPane>
+          {role != "super" ? (
+            <>
+              <Tabs.TabPane tab="Work Week" key="7">
+                <WorkWeek />
+              </Tabs.TabPane>
+              {/* <Tabs.TabPane tab="Pay Slip" key="8">
+                <PaySlip />
+              </Tabs.TabPane> */}
+              <Tabs.TabPane tab="Bank Account" key="9">
+                <BankAccount />
+              </Tabs.TabPane>
+            </>
+          ) : null}
         </Tabs>
       </div>
     </>

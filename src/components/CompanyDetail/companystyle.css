@@ -1,0 +1,329 @@
+/* Input[type="regCompName"],
+[type="brandName"],
+[type="WebsiteName"],
+[type="DomainName"],
+[type="twitter"],
+[type="linkedin"],
+[type="facebook"],
+[type="AddressName"],
+[type="AddressName2"],
+[type="City"],
+[type="State"],
+[type="Country"],
+[type="Pin"] {
+  border: 0 !important;
+  border-bottom: 1px solid #ccc !important;
+  outline: 0 !important;
+} */
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* .personalCardDiv {
+  position: relative !important;
+  display: inline-block !important;
+} */
+
+.users {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(160px, 1fr));
+}
+ /* .ant-table-tbody>tr.ant-table-row.personalCardDiv:hover .editbutton  {
+  display: inline !important; 
+} */
+
+.ant-table-tbody>tr.ant-table-row:hover>td .editbutton{
+  display: block !important;
+}
+
+/* .personalCardDiv:hover .editbutton {
+  display: block !important;
+} */
+
+.personalCardDiv:hover .edit {
+  display: block !important;
+}
+
+.div-discription {
+  font-weight: 600;
+  line-height: 18px;
+  color: #07182b;
+  font-size: 14px;
+  font-family: "Open Sans", sans-serif;
+}
+
+.div-Phone{
+  font-weight: 600;
+  line-height: 18px;
+  color: #07182b;
+  font-size: 14px;
+  font-family: "Open Sans", sans-serif;
+  margin-left: 4rem;
+}
+
+.modal-close-x:hover {
+  transform: rotate(180deg);
+  transform-origin: center;
+  transition: 0.7s;
+}
+
+.modal-close-x {
+  top: 10;
+  right: 10px;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.divider .ant-divider-horizontal {
+  border-top: 1px solid red;
+}
+
+/* ----------------------------------Address id */
+.regcard .ant-card-head-title {
+  font-weight: bold;
+  line-height: 19px;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+
+.corpcard .ant-card-head-title {
+  font-weight: bold;
+  line-height: 19px;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+
+.customaddrcard .ant-card-head-title {
+  font-weight: bold;
+  line-height: 19px;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+
+.policyCard .ant-card-head-title {
+  font-weight: bold;
+  line-height: 19px;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+
+.overview .ant-card-head-title {
+  font-weight: bold;
+  line-height: 19px;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+
+.overview .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.personalCardDiv .ant-card-head-title {
+  font-weight: bold;
+  line-height: 19px;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+
+.companyCard .ant-card-head-title {
+  font-weight: bold;
+  line-height: 19px;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+
+.baiCard .ant-card-head-title {
+  font-weight: bold;
+  line-height: 19px;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+
+.tagsCard .ant-card-head-title {
+  font-weight: bold;
+  line-height: 19px;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+.social .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.regcard .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.corpcard .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.customaddrcard .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.policyCard .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.policies .ant-table-thead>tr>th{
+  
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.companyCard .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.tagsCard .ant-card-head{
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.baiCard .ant-card-head{
+  background: #1963A6;
+  color: #ffffff;
+  border-radius: 10px 10px 0px 0px;
+}
+
+.ceoCard .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.hrCard .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.financeCard .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.hreCard .ant-card-head{
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+
+.viewModalPO .ant-modal-content{
+  border-radius: 10px;
+  
+}
+
+.viewModalPO .ant-modal-header{
+  border-radius: 10px 10px 0px 0px;
+  background: #043661;
+  color: #ffff}
+  
+.designationTable .ant-table-thead > tr > th {
+  
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.departTable .ant-table-thead > tr > th {
+  
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.editDesignation .ant-modal-content{
+  border-radius: 10px;
+  
+}
+
+.editDesignation .ant-modal-header{
+  border-radius: 10px 10px 0px 0px;
+  background: #043661;
+  color: #ffffff;
+}
+.editDesignation .ant-modal-title{
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
+line-height: 25px;
+}
+.editDesignation .ant-modal-close{
+color: #ffffff;
+}
+.editDesignation .ant-btn-primary{
+  background:rgb(21, 101, 216) ;
+}
+
+.subInput .ant-input{
+  border: 1px solid #8692A6;
+    border-radius: 4px;
+}
+.subInput .ant-form label{
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.addSub .ant-form-item-label > label{
+  font-weight: 600;
+  font-size: 13px;
+  
+}
+
+.addDepart .ant-modal-content{
+  border-radius: 10px;
+  
+}
+
+.addDepart .ant-modal-header{
+  border-radius: 10px 10px 0px 0px;
+  background: #043661;
+  color: #ffffff;
+}
+.addDepart .ant-modal-title{
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
+line-height: 25px;
+}
+
+.pathSymbol {
+  cursor: pointer;
+}
+
+
+
+
+.hoverIcon {
+  color: rgb(255, 255, 255, 0.5);
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+.hoverIcon:hover {
+  color: rgb(255, 255, 255);
+}

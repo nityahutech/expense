@@ -61,7 +61,7 @@ function LoginPage() {
         </div>
 
         <div className="login-div">
-          <div className="xyz">
+
             <div className="form-div">
               <div className="exepnse-logo">
                 <img src={loginLogo} alt="" style={{width:"260px"}}/>
@@ -120,13 +120,19 @@ function LoginPage() {
                   <Form.Item
                     name="remember"
                     valuePropName="checked"
+                    style={{width:"100%"}}
                   >
                     <Checkbox 
-                      style={{color:"#1963A6"}} 
+                      // style={{color:"#1963A6",width:"100%"}} 
                     >Remember me
                     </Checkbox>
                   </Form.Item>
-                  <div className="forgotpwd" onClick={handleReset} style={{marginLeft: '3.5rem', marginTop:'5px', color:"#1963A6"}}>Forgot Password</div>
+                  <div 
+                    // className="forgotpwd" 
+                    onClick={handleReset} 
+                  >
+                    Forgot Password
+                  </div>
                 </div>
                 <Form.Item>
                   <div className="login-btn">
@@ -158,7 +164,7 @@ function LoginPage() {
                 </Col>
               </Form>
             </div>
-          </div>
+
         </div>
         
       </div>

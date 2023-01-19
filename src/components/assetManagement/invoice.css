@@ -57,3 +57,27 @@
 .invoiceForm {
   width: 100%;
 }
+
+.addButton{
+  margin-left: 10px;
+  border-radius: 5px;
+  
+}
+
+.addField{
+  margin-left: 10px;
+  border-radius: 5px;
+}
+.addField.ant-btn.ant-btn-block{
+  background: #1963A6;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.addButton.ant-btn.ant-btn-block{
+  width: 220px;
+  height: 40px;
+  background: #1963A6;
+    color: #ffffff;
+    font-size: 16px;
+}

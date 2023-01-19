@@ -55,7 +55,7 @@ function InvoiceReimbursement(props) {
         bordered="true"
         title="Invoice Reimbersement"
       >
-        <Form layout="vertical">
+        <Form layout="vertical" className="invoiceForm">
           <Row span={24} gutter={[16, 16]}>
             <Col span={12}>
               <FormItem label="Invoice Reimbersement Title">
@@ -78,53 +78,68 @@ function InvoiceReimbursement(props) {
                     {(fields, { add, remove }) => {
                       return (
                         <div>
-                          {fields.map((field) => (
+                          {fields.map((field,i) => (
                             <>
                               <Space
                                 key={field.key}
                                 style={{ display: "flex", marginBottom: 8 }}
                                 align="start"
                               >
-                                <Form.Item
-                                  {...field}
-                                  name={[field.name, "payment"]}
-                                  fieldKey={[field.fieldKey, "payment"]}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: "Missing Payment Date",
-                                    },
-                                  ]}
-                                >
-                                  <DatePicker />
-                                </Form.Item>
-                                <Form.Item
-                                  {...field}
-                                  name={[field.name, "amount"]}
-                                  fieldKey={[field.fieldKey, "amount"]}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: "Missing Amount",
-                                    },
-                                  ]}
-                                >
-                                  <Input placeholder="Enter Amount" />
-                                </Form.Item>
-                                <Form.Item
-                                  {...field}
-                                  name={[field.name, "description"]}
-                                  fieldKey={[field.fieldKey, "description"]}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: "Missing Description",
-                                    },
-                                  ]}
-                                >
-                                  <Input placeholder="Enter Description" />
-                                </Form.Item>
+                                <Row gutter={[16.16]}>
+                                <Divider orientation="left" orientationMargin="0">
+                                    Expenditure No.{i+1}
+                                </Divider>
+                                <Col span={4}>
+                                  <Form.Item
+                                    label="Date of Payment"
+                                    {...field}
+                                    name={[field.name, "payment"]}
+                                    fieldKey={[field.fieldKey, "payment"]}
+                                    rules={[
+                                      {
+                                        required: true,
+                                        message: "Missing Payment Date",
+                                      },
+                                    ]}
+                                  >
+                                    <DatePicker />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                  <Form.Item
+                                    label="Amount"
+                                    {...field}
+                                    name={[field.name, "amount"]}
+                                    fieldKey={[field.fieldKey, "amount"]}
+                                    rules={[
+                                      {
+                                        required: true,
+                                        message: "Missing Amount",
+                                      },
+                                    ]}
+                                  >
+                                    <Input placeholder="Enter Amount" />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                  <Form.Item
+                                    label="Description"
+                                    {...field}
+                                    name={[field.name, "description"]}
+                                    fieldKey={[field.fieldKey, "description"]}
+                                    rules={[
+                                      {
+                                        required: true,
+                                        message: "Missing Description",
+                                      },
+                                    ]}
+                                  >
+                                    <Input placeholder="Enter Description" />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={6}>
                                 <FormItem
+                                  label="Upload"
                                   {...field}
                                   name={[field.name, "upload"]}
                                   fieldKey={[field.fieldKey, "upload"]}
@@ -151,12 +166,15 @@ function InvoiceReimbursement(props) {
                                     />
                                   </div>
                                 </FormItem>
-
+                                </Col>
+                                <Col span={2} className="actionButton">
                                 <MinusCircleOutlined
                                   onClick={() => {
                                     remove(field.name);
                                   }}
                                 />
+                                </Col>
+                                </Row>
                               </Space>
                             </>
                           ))}
@@ -211,9 +229,11 @@ function InvoiceReimbursement(props) {
           </Row>
         </Form>
       </Card>
+
       <Card title="Request Table" className="invoiceCard2">
         <Table />
       </Card>
+
     </div>
   );
 }

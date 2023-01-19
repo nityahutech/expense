@@ -12,6 +12,7 @@
 }
 .img-div{
   /* height: 100vh; */
+  /* width: 100%; */
   background-color: #fbfafa;
 }
 .img-div img{
@@ -68,8 +69,12 @@
 
 .forgotpwd{
   color: #1963A6;
-  margin-top: 5px;
-  margin-left: 3.5rem;
+  margin-top: 1vh;
+ }
+
+ .checkBox{
+  display: flex;
+
  }
 
 .login-btn .ant-btn {
@@ -158,42 +163,3 @@
   background-color: white;
 }
 
-/* -----------mobile--------------- */
-
-@media (max-width: 940px){
-  
-
-  .main-div{
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-  .img-div img{
-    display: none;
-  }
-  
-
-  .login-div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-    /* margin-top: 2rem; */
-    width: auto;
-    background-color: white;
-  }
-
-  .forgotpwd{
-    position: static;
-  }
-
-}
-
-@media (min-width: 1300px){
-  .login-div{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-}

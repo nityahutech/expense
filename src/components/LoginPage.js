@@ -91,11 +91,11 @@ function LoginPage() {
                     rules={[
                       {
                         required: true,
-                        message: "Enter your Email!",
+                        message: "Enter Email",
                       },
                     ]}
                   >
-                    <Input onChange={(e) => setLoginEmail(e.target.value)} />
+                    <Input onChange={(e) => setLoginEmail(e.target.value.trim())} />
                   </Form.Item>
                 </div>
                 <div className="email-div">
@@ -107,7 +107,7 @@ function LoginPage() {
                     rules={[
                       {
                         required: true,
-                        message: "Enter your password!",
+                        message: "Enter Password",
                       },
                     ]}
                   >

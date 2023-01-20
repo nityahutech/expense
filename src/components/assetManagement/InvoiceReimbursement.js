@@ -12,14 +12,16 @@ import {
   Space,
   Divider,
   Tooltip,
-  Tag
+  Tag,
+  Modal
 } from "antd";
 import {
   MinusCircleOutlined,
   PlusOutlined,
   CheckOutlined,
   CloseOutlined,
-  EyeFilled
+  EyeFilled,
+  EditFilled
 } from "@ant-design/icons";
 import "./invoice.css";
 import FormItem from "antd/es/form/FormItem";
@@ -30,11 +32,14 @@ import { showNotification,checkAlphabets, createUser } from "../../contexts/Crea
 import { useEffect } from "react";
 import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
+import ViewInvoiceDetails from "./ViewInvoiceDetails";
 
 function InvoiceReimbursement(props) {
   const [AddExpense, setAddExpense] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [invoiceDetails, setInvoiceDetails] = useState([])
+  const [invoiceData,setInvoiceData] =useState({})
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState({});
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -49,7 +54,7 @@ function InvoiceReimbursement(props) {
       invoiceName: values.invoiceName,
       totalAmt: values.totalAmt,
       invoiceDate: moment().format("DD-MM-YYYY"),
-      status : "Pending",
+      status : "Approved",
       empId: currentUser.uid,
       empCode: user.empId,
       name: user.name,
@@ -76,10 +81,14 @@ function InvoiceReimbursement(props) {
     getAllInvoiceData()
   },[props.roleView])
 
+  useEffect(()=>{
+    setInvoiceDetails()
+  },[])
+
   const getAllInvoiceData = async ()=>{
     let invoiceData = await InvoiceContext.getInvoice(createUser.uid);
     let userData = await EmpInfoContext.getEduDetails(currentUser.uid);
-setUser(userData)
+   setUser(userData)
    setInvoiceDetails(invoiceData);
    
 
@@ -278,17 +287,74 @@ setUser(userData)
               <Button
                 type="link"
                 className="show"
+                onClick={()=>{
+                  openModal(record)
+                }}
                 
               >
                 {<EyeFilled style={{ color: "#000000" }} />}
               </Button>
             </Tooltip>
+            {record.status == "Approved" || record.status == "Reject" ? (
+              <Button
+                disabled={
+                  record.status == "Approved" || record.status == "Reject"
+                }
+                style={{ padding: 0, color: "rgb(64, 169, 255)" }}
+                type="link"
+                className="show"
+                // onClick={() => {
+                //   showModal(record);
+                // }}
+              >
+                {
+                  <EditFilled
+                    style={
+                      record.status == "Approved" || record.status == "Reject"
+                        ? { color: "lightgray" }
+                        : null
+                    }
+                    disabled={
+                      record.status == "Approved" || record.status == "Reject"
+                    }
+                  />
+                }
+              </Button>
+            ) : (
+              <Tooltip placement="bottom" title="Edit" color="#1963A6">
+                <Button
+                  disabled={record.status == "Approved"}
+                  style={{ padding: 0, color: "rgb(64, 169, 255)" }}
+                  type="link"
+                  className="show"
+                  // onClick={() => {
+                  //   showModal(record);
+                  // }}
+                >
+                  {
+                    <EditFilled
+                      style={
+                        record.status == "Approved"
+                          ? { color: "lightgray" }
+                          : null
+                      }
+                      disabled={record.status == "Approved"}
+                    />
+                  }
+                </Button>
+              </Tooltip>
+            )}
            
           </div>
         </>
       ),
     },
   ];
+
+  function openModal(data) {
+    setIsModalOpen(true);
+    setInvoiceData(data);
+  }
 
   return (
     <div className="invoiceCardDiv">
@@ -333,19 +399,11 @@ setUser(userData)
                   <Input disabled={true} value={totalAmount || 0} />
                 </FormItem>
               </Col>
-              {/* <Col span={6}>
-                <FormItem label="Invoice Date" name="invoiceDate">
-                  <DatePicker format={"DD-MM-YYYY"} defaultValue={moment()} />
-                </FormItem>
-              </Col> */}
+             
               {AddExpense ? (
                 <Col span={24}>
                   <Row gutter={[16, 16]}>
-                    {/* <Form
-                      name="dynamic_form_nest_item"
-                      autoComplete="off"
-                      form={form}
-                    > */}
+                    
                     <Form.List name="users">
                       {(fields, { add, remove }) => {
                         return (
@@ -551,6 +609,26 @@ setUser(userData)
             columns={columns} 
             dataSource={invoiceDetails} />
         </Card>
+        <Modal destroyOnClose
+        centered
+        open={isModalOpen}
+        footer={null}
+        title="INVOICE DETAILS"
+        closeIcon={
+          <div
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+            style={{ color: "#ffff" }}
+          >
+            X
+          </div>
+        }
+        className="updateModal"
+        >
+          <ViewInvoiceDetails setIsModalOpen={setIsModalOpen} invoiceData={invoiceData}/>
+
+        </Modal>
       </>):(<>
         <Table 
           className="invoiceTable"

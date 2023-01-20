@@ -182,7 +182,6 @@ function AllRequest(props) {
 
   return (
     <div>
-      <Card>
         <Table
           size="small"
           columns={columns2}
@@ -218,7 +217,6 @@ function AllRequest(props) {
             modalData={modalData}
           />
         </Modal>
-      </Card>
     </div>
   );
 }

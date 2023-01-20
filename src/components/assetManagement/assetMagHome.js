@@ -49,7 +49,7 @@ function AssetMagHome(props) {
               />
             </Tabs.TabPane>
 
-            <Tabs.TabPane tab="Invoice Reimbursement" key="2">
+            <Tabs.TabPane tab="Invoice Reimbursement Request" key="2">
               <InvoiceReimbursement roleView={props.roleView} />
             </Tabs.TabPane>
           </>

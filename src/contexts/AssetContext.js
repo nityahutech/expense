@@ -120,10 +120,6 @@ class AssetContext {
     return rec;
   };
 
-  addInvoice = (invoiceData) => {
-    return addDoc(companyAssetCollectionRef, invoiceData);
-  };
-
   //----------------------Update------------------
 
   updateRepairData = (id, updateRepair) => {

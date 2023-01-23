@@ -58,7 +58,7 @@ function InvoiceReimbursement(props) {
       invoiceName: values.invoiceName,
       totalAmt: values.totalAmt,
       invoiceDate: moment().format("DD-MM-YYYY"),
-      status: "Approved",
+      status: "Pending",
       empId: currentUser.uid,
       empCode: user.empId,
       name: user.name,
@@ -639,19 +639,22 @@ function InvoiceReimbursement(props) {
             open={isEditModalOpen}
             footer={null}
             title="INVOICE DETAILS"
+            width={750}
             closeIcon={
               <div
                 onClick={() => {
                   setIsEditModalOpen(false);
                 }}
-                style={{ color: "#ffff" }}
+                style={{ color: "#ffff", }}
               >
                 X
               </div>
             }
             className="updateModal"
           >
-            <EditInvoiceDetails setIsEditModalOpen={setIsEditModalOpen} />
+            <EditInvoiceDetails 
+            invoiceData={invoiceData}
+            setIsEditModalOpen={setIsEditModalOpen} />
           </Modal>
         </>
       ) : (

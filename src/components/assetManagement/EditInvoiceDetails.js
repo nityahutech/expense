@@ -33,7 +33,9 @@ import InvoiceContext from "../../contexts/InvoiceContext";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 
 function EditInvoiceDetails(props) {
+  const [AddExpense, setAddExpense] = useState(false);
   const { TextArea } = Input;
+  const editInvoiceName = props.invoiceData
   const editInvoiceData = props.invoiceData.payments.map((data) => {
     return {
       ...data,
@@ -41,11 +43,37 @@ function EditInvoiceDetails(props) {
     };
   });
   console.log(editInvoiceData);
+  console.log(editInvoiceName)
 
   return (
     <>
       <Form layout="vertical" className="invoiceForm">
         <Row gutter={[44, 8]}>
+        <Col span={24}>
+                        <Form.Item
+                        initialValue={editInvoiceName.invoiceName}
+                          maxLength={25}
+                          label="Invoice Reimbursement Title"
+                          name="invoiceName"
+                          onKeyPress={(event) => {
+                            if (checkAlphabets(event)) {
+                              event.preventDefault();
+                            }
+                          }}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please Enter Invoice",
+                            },
+                            {
+                              pattern: /^[a-zA-Z\s]*$/,
+                              message: "Please Enter Valid Title",
+                            },
+                          ]}
+                        >
+                          <Input />
+                        </Form.Item>
+        </Col>
           <Form.List name="users" initialValue={[...editInvoiceData]}>
             {(fields, { add, remove }) => {
               return (
@@ -56,7 +84,6 @@ function EditInvoiceDetails(props) {
                         Expenditure No.{key + 1}
                       </Divider>
                       {console.log(edit, editInvoiceData)}
-
                       <Col span={12}>
                         <Form.Item
                           {...edit}
@@ -103,7 +130,7 @@ function EditInvoiceDetails(props) {
                           />
                         </Form.Item>
                       </Col>
-                      <Col span={12}>
+                      <Col span={24}>
                         <Form.Item
                           {...edit}
                           //   initialValue={edit?.description}
@@ -117,7 +144,7 @@ function EditInvoiceDetails(props) {
                           ]}
                         >
                           <TextArea
-                            autoSize={{ minRows: 5, maxRows: 6 }}
+                            autoSize={{ minRows: 3, maxRows: 6 }}
                             placeholder="Enter Description"
                             maxLength={150}
                             style={{ borderRadius: "5px" }}
@@ -141,7 +168,26 @@ function EditInvoiceDetails(props) {
                           </div>
                         </Form.Item> */}
                       </Col>
-                      <Col span={24} className="formButton">
+                      
+                    </>
+                  ))}
+                  <Col span={24}>
+                                <Button
+                                  className="addField"
+                                  onClick={() => {
+                                    add();
+                                  }}
+                                  block
+                                >
+                                  <PlusOutlined /> Add field
+                                </Button>
+                              </Col>
+                </>
+              );
+            }}
+          </Form.List>
+          <Divider/>
+          <Col span={24} className="formButton">
                         <Button type="text" style={{ marginRight: "10px" }}>
                           <CloseOutlined />
                           Cancel
@@ -161,13 +207,7 @@ function EditInvoiceDetails(props) {
                           <CheckOutlined />
                           Submit
                         </Button>
-                      </Col>
-                    </>
-                  ))}
-                </>
-              );
-            }}
-          </Form.List>
+          </Col>
         </Row>
       </Form>
     </>

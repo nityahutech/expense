@@ -352,7 +352,7 @@ function InvoiceReimbursement(props) {
 
   const showModal = (data) => {
     setIsEditModalOpen(true);
-
+    setInvoiceData(data);
     // setRepairLaptopData(repairLaptopData);
   };
 
@@ -645,16 +645,18 @@ function InvoiceReimbursement(props) {
                 onClick={() => {
                   setIsEditModalOpen(false);
                 }}
-                style={{ color: "#ffff", }}
+                style={{ color: "#ffff" }}
               >
                 X
               </div>
             }
             className="updateModal"
           >
-            <EditInvoiceDetails 
-            invoiceData={invoiceData}
-            setIsEditModalOpen={setIsEditModalOpen} />
+            {console.log(invoiceData)}
+            <EditInvoiceDetails
+              invoiceData={invoiceData}
+              setIsEditModalOpen={setIsEditModalOpen}
+            />
           </Modal>
         </>
       ) : (

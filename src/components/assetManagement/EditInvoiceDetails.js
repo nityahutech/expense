@@ -35,7 +35,7 @@ import EmpInfoContext from "../../contexts/EmpInfoContext";
 function EditInvoiceDetails(props) {
   const [AddExpense, setAddExpense] = useState(false);
   const { TextArea } = Input;
-  const editInvoiceName = props.invoiceData
+  const editInvoiceName = props.invoiceData;
   const editInvoiceData = props.invoiceData.payments.map((data) => {
     return {
       ...data,
@@ -43,37 +43,37 @@ function EditInvoiceDetails(props) {
     };
   });
   console.log(editInvoiceData);
-  console.log(editInvoiceName)
+  console.log(editInvoiceName);
 
   return (
     <>
       <Form layout="vertical" className="invoiceForm">
         <Row gutter={[44, 8]}>
-        <Col span={24}>
-                        <Form.Item
-                        initialValue={editInvoiceName.invoiceName}
-                          maxLength={25}
-                          label="Invoice Reimbursement Title"
-                          name="invoiceName"
-                          onKeyPress={(event) => {
-                            if (checkAlphabets(event)) {
-                              event.preventDefault();
-                            }
-                          }}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please Enter Invoice",
-                            },
-                            {
-                              pattern: /^[a-zA-Z\s]*$/,
-                              message: "Please Enter Valid Title",
-                            },
-                          ]}
-                        >
-                          <Input />
-                        </Form.Item>
-        </Col>
+          <Col span={24}>
+            <Form.Item
+              initialValue={editInvoiceName.invoiceName}
+              maxLength={25}
+              label="Invoice Reimbursement Title"
+              name="invoiceName"
+              onKeyPress={(event) => {
+                if (checkAlphabets(event)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[
+                {
+                  required: true,
+                  message: "Please Enter Invoice",
+                },
+                {
+                  pattern: /^[a-zA-Z\s]*$/,
+                  message: "Please Enter Valid Title",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
           <Form.List name="users" initialValue={[...editInvoiceData]}>
             {(fields, { add, remove }) => {
               return (
@@ -168,45 +168,50 @@ function EditInvoiceDetails(props) {
                           </div>
                         </Form.Item> */}
                       </Col>
-                      
                     </>
                   ))}
                   <Col span={24}>
-                                <Button
-                                  className="addField"
-                                  onClick={() => {
-                                    add();
-                                  }}
-                                  block
-                                >
-                                  <PlusOutlined /> Add field
-                                </Button>
-                              </Col>
+                    <Button
+                      className="addField"
+                      onClick={() => {
+                        add();
+                      }}
+                      block
+                    >
+                      <PlusOutlined /> Add field
+                    </Button>
+                  </Col>
                 </>
               );
             }}
           </Form.List>
-          <Divider/>
+          <Divider />
           <Col span={24} className="formButton">
-                        <Button type="text" style={{ marginRight: "10px" }}>
-                          <CloseOutlined />
-                          Cancel
-                        </Button>
-                        <Button
-                          htmlType="submit"
-                          style={{
-                            border: "1px solid #1963A6",
-                            background: "#1963A6",
-                            color: "#ffffff",
-                            fontSize: "15",
-                            lineHeight: "17px",
-                            // width: "119px",
-                          }}
-                          type="primary"
-                        >
-                          <CheckOutlined />
-                          Submit
-                        </Button>
+            <Button
+              type="text"
+              style={{ marginRight: "10px" }}
+              onClick={() => {
+                props.setIsEditModalOpen(false);
+              }}
+            >
+              <CloseOutlined />
+              Cancel
+            </Button>
+            <Button
+              htmlType="submit"
+              style={{
+                border: "1px solid #1963A6",
+                background: "#1963A6",
+                color: "#ffffff",
+                fontSize: "15",
+                lineHeight: "17px",
+                // width: "119px",
+              }}
+              type="primary"
+            >
+              <CheckOutlined />
+              Submit
+            </Button>
           </Col>
         </Row>
       </Form>

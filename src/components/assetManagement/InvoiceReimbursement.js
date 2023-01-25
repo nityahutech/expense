@@ -41,6 +41,7 @@ import EditInvoiceDetails from "./EditInvoiceDetails";
 
 function InvoiceReimbursement(props) {
   const [AddExpense, setAddExpense] = useState(false);
+  const [file, setFile] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [invoiceDetails, setInvoiceDetails] = useState([]);
@@ -67,15 +68,20 @@ function InvoiceReimbursement(props) {
         return {
           ...pay,
           paymentDate: pay.paymentDate.format("DD-MM-YYYY"),
-          upload: pay.upload || null,
+          upload: pay.upload,
         };
       }),
     };
-    console.log(allInvoiceData, "pujaaaaaaaa");
+    console.log(allInvoiceData, file, "pujaaaaaaaa");
     try {
-      InvoiceContext.addInvoice(allInvoiceData);
+      InvoiceContext.addInvoice(allInvoiceData, file);
       showNotification("success", "Success", "Invoice Request Added");
-      getAllInvoiceData();
+      setTimeout(() => {
+        getAllInvoiceData();
+        setFile([]);
+        setAddExpense(false);
+        form.resetFields();
+      }, 4000);
     } catch (error) {
       showNotification("error", "Error", "Error In Invoice");
     }
@@ -85,9 +91,9 @@ function InvoiceReimbursement(props) {
     getAllInvoiceData();
   }, [props.roleView]);
 
-  useEffect(() => {
-    setInvoiceDetails();
-  }, []);
+  // useEffect(() => {
+  //   setInvoiceDetails();
+  // }, []);
 
   const getAllInvoiceData = async () => {
     let invoiceData = await InvoiceContext.getInvoice(createUser.uid);
@@ -345,6 +351,18 @@ function InvoiceReimbursement(props) {
     },
   ];
 
+  function handleChange(event, i) {
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    // if (!isLt2M) {
+    //   message.error('File must smaller than 2MB!');
+    //   return
+    // }
+    let temp = [...file];
+    temp[i] = event.target.files[0];
+    setFile(temp);
+    console.log(temp);
+  }
+
   function openModal(data) {
     setIsModalOpen(true);
     setInvoiceData(data);
@@ -503,10 +521,10 @@ function InvoiceReimbursement(props) {
                                       </Col>
                                       <Col span={6}>
                                         <FormItem
-                                          label="Upload"
+                                          label="Upload Image"
                                           {...field}
                                           name={[field.name, "upload"]}
-                                          fieldKey={[field.fieldKey, "upload"]}
+                                          // fieldKey={[field.fieldKey, "upload"]}
                                           // rules={[
                                           //   {
                                           //     required: true,
@@ -520,13 +538,10 @@ function InvoiceReimbursement(props) {
                                               accept="application/pdf"
                                               id="upload"
                                               name="upload"
-                                              // onChange={handleChange}
+                                              onChange={(e) =>
+                                                handleChange(e, i)
+                                              }
                                               style={{ borderRadius: "5px" }}
-                                              // onChange={(e) => {
-                                              //   let temp = [...editContent];
-                                              //   temp[].date = e.target.value;
-                                              //   showEditContent(temp);
-                                              // }}
                                             />
                                           </div>
                                         </FormItem>
@@ -535,6 +550,11 @@ function InvoiceReimbursement(props) {
                                         <MinusCircleOutlined
                                           onClick={() => {
                                             remove(field.name);
+                                            let temp = [...file];
+                                            // delete temp[i];
+                                            temp.splice(i, 1);
+                                            console.log(temp);
+                                            setFile(temp);
                                           }}
                                         />
                                       </Col>
@@ -564,6 +584,7 @@ function InvoiceReimbursement(props) {
                           onClick={() => {
                             setAddExpense(false);
                             form.resetFields();
+                            setFile([]);
                           }}
                         >
                           <CloseOutlined />

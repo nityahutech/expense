@@ -3,7 +3,7 @@ import { Col, Form, Row, Input, Divider } from "antd";
 
 function ViewInvoiceDetails(props) {
   const viewInvoiceData = props.invoiceData;
-
+  console.log(viewInvoiceData);
   return (
     <>
       <Form>
@@ -35,7 +35,18 @@ function ViewInvoiceDetails(props) {
                 }}
               >
                 <div>
-                  <Form.Item label="Upload Image::"></Form.Item>
+                  <Form.Item label="Upload Image::">
+                    <img
+                      src={invoice?.upload}
+                      style={{
+                        width: "100%",
+                        height: "170px",
+                        border: "1px solid #05445e",
+                        borderRadius: "5px",
+                        marginTop: "10px",
+                      }}
+                    />
+                  </Form.Item>
                 </div>
               </Col>
             </>

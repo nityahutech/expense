@@ -1,5 +1,12 @@
 import { db, storage } from "../firebase-config";
-import { addDoc, collection, getDocs, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const compId = sessionStorage.getItem("compId");
@@ -11,14 +18,31 @@ const companyInvoiceCollectionRef = collection(
 
 class InvoiceContext {
   addInvoice = async (invoiceData, files) => {
-    await addDoc(companyInvoiceCollectionRef, invoiceData);
+    let payments = [...invoiceData.payments];
+    invoiceData.payments = [];
+    let data = await addDoc(companyInvoiceCollectionRef, invoiceData);
+    console.log(data.id, payments, invoiceData);
     files.map((file, i) => {
       const storageRef = ref(storage, `/files/${file.name}`);
+      console.log(file);
       uploadBytesResumable(storageRef, file).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
-          invoiceData.payments[i].upload = url;
-          invoiceData.payments[i].fileName = file.name;
           console.log(i, url);
+          // invoiceData.payments[i].upload = url;
+          // invoiceData.payments[i].fileName = file.name;
+
+          updateDoc(doc(db, `companyprofile/${compId}/invoices`, data.id), {
+            payments: arrayUnion({
+              ...payments[i],
+              upload: url,
+              fileName: file.name,
+            }),
+          });
+          console.log({
+            ...payments[i],
+            upload: url,
+            fileName: file.name,
+          });
 
           // return Promise.resolve();
         });

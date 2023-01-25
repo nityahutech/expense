@@ -81,7 +81,7 @@ function InvoiceReimbursement(props) {
         setFile([]);
         setAddExpense(false);
         form.resetFields();
-      }, 4000);
+      }, 5000);
     } catch (error) {
       showNotification("error", "Error", "Error In Invoice");
     }

@@ -3,15 +3,16 @@
     background: #fff;
 }
 .addEmp{
-    padding: 15px;
+    padding: 5% 10% 2% 10%;
 }
-.buttonRow{
+.buttonRowEmp{
     margin-bottom: 1.5rem;
-    width: 50%;
-    /* display: flex;
-    flex-direction: row;
-    align-items: start;
-    justify-content: space-around; */
+    display: flex;
+    justify-content: flex-start;
+    
+}
+.bulkButton{
+    text-overflow: ellipsis;
 }
 .listEmployee{
     border: 1px solid #1963A6;
@@ -20,13 +21,13 @@
     font-weight: 600;
     font-size: 14px;
     line-height: 17px;
-    width: 100%;
+    width: 150px;
     cursor: pointer;
 }
 .bulkEmployee{
-    width: 100%;
+    width: 200px;
     cursor: pointer;
-    background-color: #1963A6;
+    background-color: #1963A6 !important;
     border-radius: 5px;
     border: 1px solid #1963A6;
 }
@@ -46,3 +47,8 @@
     line-height: 25px;
   }
   
+  /* @media only screen and (max-width: 725px) and (min-width: 250px) {
+    .addEmp{
+        padding: 70px 130px 15px 130px;
+    }
+  } */

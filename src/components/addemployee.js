@@ -364,7 +364,9 @@ function AddEmployee() {
   }
 
   const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
+    <Form.Item name="prefix" 
+    noStyle
+    >
       <Select
         allowClear={true}
         showSearch
@@ -372,6 +374,7 @@ function AddEmployee() {
         style={{
           width: 70,
           background: "#ffffff",
+          border:"1px solid grey"
         }}
         // onSelect={(value, event) => handleOnChange(value, event)}
       >
@@ -404,13 +407,17 @@ function AddEmployee() {
           onFinish={onFinish}
         >
           <Row
-            className="buttonRow"
+            className="buttonRowEmp"
             gutter={[16, 16]}
           >
             <Col
               xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              md={{span:12}}
+              sm={{ span: 24 }}
+              md={{span:6}}
+              lg={{span:6}}
+              xl={{span:4}}
+              xxl={{span:6}}
+
             >
               <Button
                 className="listEmployee"
@@ -422,15 +429,15 @@ function AddEmployee() {
             </Col>
             <Col
                 xs={{ span: 24 }}
-                sm={{ span: 12 }}
-                md={{span:12}}
+                sm={{ span: 24 }}
+                md={{span:6}}
             >
             <Button 
               className="bulkEmployee"
               type="primary" 
               onClick={showBulkModal}
             >
-              Bulk Employee Onboarding
+              <div className="bulkButton">Bulk Employee Onboarding</div>
             </Button>
             </Col>
             {/* <Col

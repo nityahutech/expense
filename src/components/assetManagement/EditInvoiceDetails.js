@@ -20,6 +20,7 @@ import {
   PlusOutlined,
   CheckOutlined,
   CloseOutlined,
+  UploadOutlined,
   EyeFilled,
   EditFilled,
 } from "@ant-design/icons";
@@ -34,16 +35,18 @@ import EmpInfoContext from "../../contexts/EmpInfoContext";
 
 function EditInvoiceDetails(props) {
   const [AddExpense, setAddExpense] = useState(false);
+  const [file, setFile] = useState([]);
   const { TextArea } = Input;
   const editInvoiceName = props.invoiceData;
-  const editInvoiceData = props.invoiceData.payments.map((data) => {
+  const [editInvoiceData, setEditInvoicsData] = useState(props.invoiceData.payments.map((data) => {
     return {
       ...data,
       paymentDate: moment(data?.paymentDate, "DD-MM-YYYY"),
     };
-  });
+  }))
   console.log(editInvoiceData);
   console.log(editInvoiceName);
+  const [uploadPhoto, showEditCompanyInfo] = useState(false);
 
   return (
     <>
@@ -78,7 +81,7 @@ function EditInvoiceDetails(props) {
             {(fields, { add, remove }) => {
               return (
                 <>
-                  {fields.map(({ key, name, ...edit }) => (
+                  {fields.map(({ key,i, name, ...edit }) => (
                     <>
                       <Divider orientation="left" orientationMargin="10px">
                         Expenditure No.{key + 1}
@@ -130,7 +133,7 @@ function EditInvoiceDetails(props) {
                           />
                         </Form.Item>
                       </Col>
-                      <Col span={24}>
+                      <Col span={12}>
                         <Form.Item
                           {...edit}
                           //   initialValue={edit?.description}
@@ -151,14 +154,16 @@ function EditInvoiceDetails(props) {
                           />
                         </Form.Item>
                       </Col>
-                      <Col span={12}>
+                      <Col span={10}>
                         {/* <Form.Item
-                            // initialValue={edit?.upload}
+                        {...edit}
+                          // initialValue={edit?.upload}
                           label="Upload"
-                          name="upload"
+                          name={[name, "Upload"]}
                         >
                           <div className="idpage">
                             <Input
+                            
                               type="file"
                               accept="application/pdf"
                               id="upload"
@@ -167,7 +172,69 @@ function EditInvoiceDetails(props) {
                             />
                           </div>
                         </Form.Item> */}
+                        <Form.Item
+                          label="Upload"
+                        >
+                        {uploadPhoto == false ? (
+                            <div
+                              style={{
+                                width: "150px",
+                                height: "100px",
+                                // border: "1px solid #05445e",
+                                border:"1px solid #d9d9d9",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexDirection: "column",
+                                padding: "10px",
+                              }}
+                            >
+                              No Image
+                            </div>
+                          ) : (
+                            <Button
+                              style={{
+                                width: "150px",
+                                height: "100px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexDirection: "column",
+                                padding: "10px",
+                              }}
+                              // onClick={(e) => handleClick(e)}
+                            >
+                              <input
+                                style={{
+                                  display: "none",
+                                }}
+                                type="file"
+                                id="logo"
+                                name="logo"
+                                // ref={imgRef}
+                                // onChange={(e) => handleChange(e)}
+                              />
+                              <UploadOutlined /> Upload Photo
+                            </Button>
+                          )}
+                          </Form.Item>
                       </Col>
+                      <Col span={2} className="actionButton">
+                          <MinusCircleOutlined
+                                          onClick={() => {
+                                            remove(name);
+                                            // let temp = [...edit];
+                                            // delete temp[i];
+                                            // temp
+                                            // console.log(temp);
+                                            // setFile(temp);
+                                            let paymentTemp = [...editInvoiceData]
+                                            console.log(paymentTemp);
+                                            paymentTemp.splice(i, 1);
+                                            setEditInvoicsData(paymentTemp);
+                                          }}
+                           />
+                       </Col>
                     </>
                   ))}
                   <Col span={24}>

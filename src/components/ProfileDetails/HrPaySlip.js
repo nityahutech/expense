@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
   Carousel,
   Form,
-  Switch,
+  Modal,
   Select,
   Button,
   Table,
@@ -40,19 +40,11 @@ const data = [
   },
 ];
 
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+const emp = [
+  "Jatin",
+  "Saswat",
+  "Pardeep",
+
 ];
 
 const Dropdown = [
@@ -100,6 +92,8 @@ const data1 = [
 ];
 
 function HrPaySlip() {
+  const [form1] = Form.useForm();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const role = sessionStorage.getItem("role");
   const currentUser = JSON.parse(sessionStorage.getItem("user"))
   //   const [dotPosition, setDotPosition] = useState("top");
@@ -118,6 +112,12 @@ function HrPaySlip() {
     };
     setComponentValues(data);
   };
+
+  const onFinishEditPayroll = (values) => {
+    console.log(values)
+    setIsEditModalOpen(false);
+
+  }
 
   const handleChange = (value) => {
     let temp = [...selectedComponent];
@@ -154,12 +154,6 @@ function HrPaySlip() {
     );
   }
 
-  const onFormLayoutChange = ({ size }) => {
-    setComponentSize(size);
-  };
-
-  const onChange = (value) => {
-  };
 
   const columns = [
     {
@@ -168,6 +162,7 @@ function HrPaySlip() {
       key: "id",
       fixed: "left",
       width: 110,
+      align: 'left',
       render: (text) => <a>{text}</a>,
     },
     {
@@ -175,30 +170,35 @@ function HrPaySlip() {
       dataIndex: "empname",
       key: "empname",
       fixed: "left",
-      width: 200,
+      align: 'left',
+      width: 150,
     },
     {
       title: "Structure",
       dataIndex: "structure",
       key: "structure",
+      align: 'left',
       width: 150,
     },
     {
       title: "Units",
       dataIndex: "unit",
       key: "unit",
+      align: 'left',
       width: 150,
     },
     {
       title: "CTC/Wage Range",
       dataIndex: "ctc",
       key: "ctc",
+      align: 'left',
       width: 210,
     },
     {
       title: "Overtime (Rate/hour)",
       dataIndex: "overtime",
       key: "overtime",
+      align: 'left',
       width: 130,
     },
     {
@@ -207,6 +207,7 @@ function HrPaySlip() {
       key: "action",
       width: 120,
       fixed: "right",
+      align: 'left',
       render: (_, record) => {
         return (
           <>
@@ -214,10 +215,10 @@ function HrPaySlip() {
               style={{ padding: 0 }}
               type="link"
               className="edIt"
-              //   onClick={() => {
-              //     handleEditEmployee(record);
-              //     showModal(record);
-              //   }}
+              onClick={() => {
+                // handleEditEmployee(record);
+                setIsEditModalOpen(record);
+              }}
             >
               {<EditOutlined />}
             </Button>
@@ -233,6 +234,7 @@ function HrPaySlip() {
       title: "Salary Component",
       dataIndex: "salary",
       key: "salary",
+      align: 'left',
 
       render: (text) => <a>{text}</a>,
     },
@@ -240,6 +242,7 @@ function HrPaySlip() {
       title: "Calculation (Annual)",
       dataIndex: "calc",
       key: "calc",
+      align: 'left',
       render: (d, record) => {
         return Dropdown.includes(record.key) ? (
           <Input onChange={(e) => handleInputChange(record.key, e)}></Input>
@@ -269,6 +272,11 @@ function HrPaySlip() {
     form.resetFields();
   };
 
+  const onFinish = (values) => {
+    console.log('value', values)
+
+  }
+
   return (
     <div>
       <Carousel
@@ -289,130 +297,334 @@ function HrPaySlip() {
           <div className="Payroll">
             <h1>Payroll Setting</h1>
             <Form
+              form={form}
               labelCol={{
-                span: 8,
+                span: 14,
               }}
               wrapperCol={{
-                span: 5,
+                span: 24,
               }}
-              layout="horizontal"
+              layout="vertical"
               initialValues={{
-                size: componentSize,
+                remember: true,
               }}
-              onValuesChange={onFormLayoutChange}
-              size={componentSize}
+              autoComplete="off"
+              onFinish={onFinish}
             >
-              <Form.Item
-                label="When do you want to use Hutech’s Payroll from?"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Select Month ",
-                  },
-                ]}
-              >
-                <Select className="SelectLabel">
-                  <Select.Option value="Select Month">
-                    Select Month
-                  </Select.Option>
-                  {months.map((m) => (
-                    <Select.Option value={m}>{m}</Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item label="Pay Scale">
-                <div style={{ marginLeft: "37px" }}>
-                  <span>From</span>
-                  <select style={{ marginLeft: "10px", border: "none" }}>
-                    {[...Array(31).keys()].map((d) =>
-                      d > 0 ? <option value={d}>{d}</option> : null
-                    )}
-                  </select>
-                  <span style={{ marginLeft: "10px" }}>To</span>
-                  <span style={{ marginLeft: "10px" }}>31</span>
-                </div>
-              </Form.Item>
-              <Form.Item
-                label="Does your company have PF?"
-                valuePropName="checked"
-              >
-                <Switch
-                  className="SelectLabel"
-                  checkedChildren="Yes"
-                  unCheckedChildren="No"
-                  defaultChecked
-                />
-              </Form.Item>
-              <Form.Item
-                label="Employee Contribution"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Select Required Field ",
-                  },
-                ]}
-              >
-                <Select className="SelectLabel">
-                  <Select.Option value="Select Type">Select Type</Select.Option>
-                  <Select.Option value="Basic*12%">Basic*12%</Select.Option>
-                  <Select.Option value="(Basic + Special Allowance)* 12%">
-                    (Basic + Special Allowance)* 12%
-                  </Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item
-                label="PF Ceiling at Rs. 15000"
-                valuePropName="checked"
-              >
-                <Switch
-                  className="SelectLabel"
-                  checkedChildren="Yes"
-                  unCheckedChildren="No"
-                  defaultChecked
-                />
-              </Form.Item>
-              <Form.Item
-                label="Does your company have ESI?"
-                valuePropName="checked"
-              >
-                <Switch
-                  className="SelectLabel"
-                  checkedChildren="Yes"
-                  unCheckedChildren="No"
-                  defaultChecked
-                />
-              </Form.Item>
-              <Form.Item
-                label="Do you deduct Professional Tax?"
-                valuePropName="checked"
-              >
-                <Switch
-                  className="SelectLabel"
-                  checkedChildren="Yes"
-                  unCheckedChildren="No"
-                  defaultChecked
-                />
-              </Form.Item>
-              <div>
-                <Button
-                  style={{
-                    background: "#1890ff",
-                    color: "white",
-                    float: "right",
-                    bottom: "35px",
-                    right: "6rem",
-                    width: "100px",
-                    marginBottom: "20px",
-                    borderRadius: "5px",
-                  }}
-                  htmlType="submit"
-                  onClick={() => {
-                    carouselRef.current.next();
-                  }}
-                >
-                  Next
-                </Button>
-              </div>
+              <Row gutter={[48, 0]} type="flex" align="center" style={{ border: '2px solid grey', padding: '10px', borderRadius: '10px' }}>
+                <Col xs={24} sm={12} md={12} lg={12}  >
+                  <Form.Item
+                    label="Select Staff"
+                    name='selectStaff'
+                    rules={[
+                      {
+                        // required: true,
+                        message: "Please Select Staff ",
+                      },
+                    ]}
+                  >
+                    <Select className="l"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                      bordered={false}
+                    >
+                      <Select.Option value="Select Staff">
+                        Select Employee
+                      </Select.Option>
+                      {emp.map((m) => (
+                        <Select.Option value={m}>{m}</Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={12} md={12} lg={12}>
+                  <Form.Item
+                    name="netSalary"
+                    label="Net Salary"
+
+                  >
+                    <Input
+                      maxLength={20}
+
+                      // required
+                      placeholder="Enter Net Salary"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <h2> Earnings</h2>
+              <Row gutter={[48, 0]} style={{ border: '2px solid grey', padding: '10px', borderRadius: '10px' }} >
+                <Col xs={24} sm={12} md={8} lg={8}  >
+                  <Form.Item
+                    name="basic"
+                    label="Basic"
+
+                  >
+                    <Input
+                      maxLength={20}
+
+                      // required
+                      placeholder="Enter Basic Salary"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={8}>
+                  <Form.Item
+                    name="da"
+                    label="DA(40%)"
+
+                  >
+                    <Input
+                      maxLength={20}
+                      placeholder=""
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={8}  >
+                  <Form.Item
+                    name="hra"
+                    label="HRA(15%)"
+
+                  >
+                    <Input
+                      maxLength={20}
+                      placeholder=""
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={8}>
+                  <Form.Item
+                    name="conveyance"
+                    label="Conveyance"
+
+                  >
+                    <Input
+                      maxLength={20}
+                      // required
+                      placeholder="Enter Conveyance"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={8}  >
+                  <Form.Item
+                    name="allowance"
+                    label="Allowance"
+
+                  >
+                    <Input
+                      maxLength={20}
+
+                      // required
+                      placeholder="Enter Allowance"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={8}>
+                  <Form.Item
+                    name="medicalAllowance"
+                    label="Medical Allowance"
+
+                  >
+                    <Input
+                      maxLength={20}
+
+                      // required
+                      placeholder="Enter Medical Allowance"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <h2> Deductions</h2>
+              <Row gutter={[48, 0]} style={{ border: '2px solid grey', padding: '10px', borderRadius: '10px' }} >
+                <Col xs={24} sm={12} md={8} lg={8}  >
+                  <Form.Item
+                    name="tds"
+                    label="TDS"
+
+                  >
+                    <Input
+                      maxLength={20}
+
+                      // required
+                      placeholder="Enter TDS"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={8}>
+                  <Form.Item
+                    name="esi"
+                    label="ESI"
+
+                  >
+                    <Input
+                      maxLength={20}
+
+                      // required
+                      placeholder="Enter ESI"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={8}  >
+                  <Form.Item
+                    name="pf"
+                    label="PF"
+
+                  >
+                    <Input
+                      maxLength={20}
+
+                      // required
+                      placeholder="Enter PF"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={8} >
+                  <Form.Item
+                    name="leave"
+                    label="Leave"
+
+                  >
+                    <Input
+                      maxLength={20}
+
+                      // required
+                      placeholder="Enter Leave"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={8}   >
+                  <Form.Item
+                    name="profTax"
+                    label="Prof. Tax"
+
+                  >
+                    <Input
+                      maxLength={20}
+
+                      // required
+                      placeholder="Enter Prof. Tax"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={8} >
+                  <Form.Item
+                    name="labourWelfare"
+                    label="Labour Welfare"
+
+                  >
+                    <Input
+                      maxLength={20}
+                      // required
+                      placeholder="Enter Labour Welfare"
+                      style={{
+                        border: "1px solid #8692A6",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={24}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "end",
+                      marginRight: "94px",
+                    }}
+                  >
+                    <Form.Item>
+                      <Button
+                        style={{
+                          border: "1px solid #1565D8",
+                          color: "#1565D8",
+                          fontWeight: "600",
+                          fontSize: "14px",
+                          lineHeight: "17px",
+                          width: "99px",
+                          marginTop: "25px",
+                          cursor: "pointer",
+                        }}
+                        onClick={onReset}
+                      >
+                        Reset
+                      </Button>
+                    </Form.Item>
+                    <Form.Item>
+                      <Button
+                        style={{
+                          border: "1px solid #1565D8",
+                          background: "#1565D8",
+                          color: "#ffffff",
+                          fontWeight: "600",
+                          fontSize: "14px",
+                          lineHeight: "17px",
+                          width: "99px",
+                          marginTop: "25px",
+                          cursor: "pointer",
+                          marginLeft: "17px",
+                        }}
+                        htmlType="submit"
+                        onClick={() => {
+                          carouselRef.current.next();
+                        }}
+                      >
+                        Next
+                      </Button>
+                    </Form.Item>
+
+                  </div>
+                </Col>
+              </Row>
+
             </Form>
           </div>
         </div>
@@ -428,7 +640,7 @@ function HrPaySlip() {
                     placeholder="Search"
                     prefix={<SearchOutlined />}
                     style={{ marginLeft: "12px" }}
-                    //   onChange={searchChange}
+                  //   onChange={searchChange}
                   />
                 </Col>
               </Row>
@@ -459,6 +671,7 @@ function HrPaySlip() {
                   bottom: "12px",
                 }}
                 onClick={() => {
+                  onReset();
                   carouselRef.current.next();
                 }}
               >
@@ -483,6 +696,112 @@ function HrPaySlip() {
                 pagination={false}
               />
             </div>
+            <Modal
+              bodyStyle={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
+              className="viewAppraisal"
+              centered
+              width={500}
+              visible={isEditModalOpen}
+              footer={null}
+              destroyOnClose
+              title="Edit Pay Roll"
+              closeIcon={
+                <div
+                  onClick={() => {
+                    setIsEditModalOpen(false)
+
+                  }}
+                  style={{ color: "#ffffff" }}
+                >
+                  X
+                </div>
+              }
+            >
+              <Row
+                className="apply-leave"
+                style={{
+                  marginTop: "10px",
+                }}
+              >
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                    // width: "400px",
+                  }}
+                >
+                  <Form
+
+                    labelCol={{
+                      span: 8,
+                    }}
+                    wrapperCol={{
+                      span: 16,
+                    }}
+                    initialValues={{
+                      remember: true,
+                    }}
+                    form={form1}
+                    onFinish={onFinishEditPayroll}
+                  >
+                    <Form.Item
+                      labelAlign="left"
+                      name="range"
+                      style={{ marginBottom: "20px" }}
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          CTC/Wage Range<span style={{ color: "red" }}> *</span>
+                        </label>
+                      }
+
+                    >
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                      labelAlign="left"
+                      name="overtime"
+                      style={{ marginBottom: "20px" }}
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          Overtime (Rate/hour)<span style={{ color: "red" }}> *</span>
+                        </label>
+                      }
+
+                    >
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                      style={{ paddingTop: "px" }}
+                      wrapperCol={{
+                        offset: 8,
+                        span: 24,
+                      }}
+                    >
+                      <Button type="primary" htmlType="submit">
+                        Submit
+                      </Button>
+                      <Button
+                        htmlType="button"
+                        type="default"
+                        style={{ marginLeft: "10px" }}
+                        onClick={() => {
+                          form1.resetFields();
+                        }}
+                      >
+                        Reset
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </Col>
+              </Row>
+            </Modal>
             <div>
               {showComponent ? (
                 <Component1 />
@@ -525,8 +844,8 @@ function HrPaySlip() {
         {/* <div>
           <h3 style={{ ...styleDefaults }}>Payroll Setup Wizard</h3>
         </div> */}
-      </Carousel>
-    </div>
+      </Carousel >
+    </div >
   );
 }
 

@@ -148,9 +148,10 @@ function App() {
             path="/Appraisal/AppraisalPageHr"
             element={
               <FormatPage
-                main={<AppraisalHr />}
+                main={<AppraisalHr roleView={roleView} />}
                 activeSubMenu={["sub4"]}
                 activeMenu={["20"]}
+                roleView={roleView}
                 switchRole={switchRole}
               />
             }
@@ -159,10 +160,11 @@ function App() {
             path="/Appraisal/HalfYearGoalPage"
             element={
               <FormatPage
-                main={<HalfYearGoalHome />}
+                main={<HalfYearGoalHome roleView={roleView} />}
                 activeSubMenu={["sub4"]}
                 activeMenu={["20a"]}
                 switchRole={switchRole}
+                roleView={roleView}
               />
             }
           />

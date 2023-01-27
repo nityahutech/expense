@@ -64,8 +64,9 @@ function Personal() {
       profilePic: imageUrl || null,
     };
     EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName);
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       getData();
+      console.log("timer")
     }, 2000);
     showEditContent(false);
   };
@@ -100,6 +101,8 @@ function Personal() {
       ...values,
       profilePic: data.profilePic || null,
       altPhnNo: values.altPhnNo ? values.altPhnNo : "",
+      prefix: values.prefix ? values.prefix : "",
+      prefix2: values.prefix2 ? values.prefix2 : "",
     };
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
     getData();
@@ -268,6 +271,7 @@ function Personal() {
               height: "170px",
               border: "1px solid #05445e",
             }}
+            alt=""
           />
           {editContent === true ? (
             <div className="imageOverlay">
@@ -281,6 +285,14 @@ function Personal() {
 
   const disabledDate = (current) => {
     return current.isAfter(moment().subtract(14, "years"));
+  };
+
+  const disabledScrs = (current) => {
+    return current.isAfter(moment());
+  };
+
+  const disabledLccs = (current) => {
+    return current.isAfter(moment());
   };
 
   return (
@@ -512,7 +524,12 @@ function Personal() {
                             >
                               <DatePicker
                                 style={{
-                                  width: "100%",
+                                  backgroundColor: "#ffffff",
+                                  width: "90%",
+                                  border: "none",
+                                  borderBottom: "1px solid #ccc",
+                                  borderRadius: 0,
+                                  padding: "5px 10px",
                                 }}
                                 onChange={(e) => {
                                   setDob(e.format("DD-MM-YYYY"));
@@ -956,7 +973,6 @@ function Personal() {
         <Row className="Row-Card">
           <Col span={24}>
             <Form
-              // form={form}
               labelcol={{
                 span: 4,
               }}
@@ -1136,12 +1152,11 @@ function Personal() {
                             style={{
                               marginTop: "10px",
                               width: "100%",
-                              borderBottom: "1px solid #ccc ",
+                              borderBottom: "1px solid #ccc",
                               padding: "2px",
                             }}
                             bordered={false}
                           >
-                            <Option value="House Type">House Type</Option>
                             <Option value="Owned by Self/Spouse">
                               Owned by Self/Spouse
                             </Option>
@@ -1187,25 +1202,31 @@ function Personal() {
                         </div>
                       ) : (
                         <Form.Item
-                          // name="dob"
                           initialValue={
                             scrs ? moment(scrs, "DD-MM-YYYY") : null
                           }
                           name="scrs"
-                          rules={[
-                            {
-                              required: false,
-                              message: "Please Choose a Date",
-                            },
-                          ]}
+                          onKeyPress={(event) => {
+                            if (checkNoAlphabets(event)) {
+                              event.preventDefault();
+                            }
+                          }}
                         >
                           <DatePicker
-                            // format={dateFormatList}
-                            // defaultValue= {scrs?moment(scrs, "DD-MM-YYYY"):null}
+                            format={"DD-MM-YYYY"}
+                            disabledDate={disabledScrs}
                             onChange={(e) => {
-                              setScrs(e.format("DD-MM-YYYY"));
+                              setScrs(e?.format("DD-MM-YYYY") || "");
                             }}
-                            style={{ width: "100%", marginTop: "10px" }}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              marginTop: "10px",
+                              width: "100%",
+                              border: "none",
+                              borderBottom: "1px solid #ccc",
+                              borderRadius: 0,
+                              padding: "5px 15px",
+                            }}
                           />
                         </Form.Item>
                       )}
@@ -1242,12 +1263,20 @@ function Personal() {
                           ]}
                         >
                           <DatePicker
-                            // format={dateFormatList}
-                            // defaultValue= {lccs?moment(lccs, "DD-MM-YYYY"):null}
+                            format={"DD-MM-YYYY"}
+                            disabledDate={disabledLccs}
                             onChange={(e) => {
-                              setLccs(e.format("DD-MM-YYYY"));
+                              setLccs(e?.format("DD-MM-YYYY") || "");
                             }}
-                            style={{ width: "100%", marginTop: "10px" }}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              marginTop: "10px",
+                              width: "100%",
+                              border: "none",
+                              borderBottom: "1px solid #ccc",
+                              borderRadius: 0,
+                              padding: "5px 15px",
+                            }}
                           />
                         </Form.Item>
                       )}

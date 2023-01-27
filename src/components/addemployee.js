@@ -8,9 +8,11 @@ import {
   DatePicker,
   Select,
   Space,
+  Modal,
   AutoComplete,
 } from "antd";
 import "../style/Documents.css";
+import "../style/addEmployee.css"
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import {
@@ -52,6 +54,18 @@ function AddEmployee() {
   const order = ["Business Unit", "Division", "Department", "Team"];
   const [options, setOptions] = useState([]);
   const [enableBulk, setEnableBulk] = useState(false);
+  const [bulkModal, openBulkModal] = useState(false);
+
+
+  const showBulkModal = () => {
+    openBulkModal(true);
+  };
+  const handleBulkModal = () => {
+    openBulkModal(false);
+  };
+  const handleCancel = () => {
+    openBulkModal(false);
+  };
 
   const onSearch = (searchText) => {
     let matchingName = allEmpName.filter((ex) => { return ex.value.toLowerCase().includes(searchText.toLowerCase()) })
@@ -350,7 +364,9 @@ function AddEmployee() {
   }
 
   const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
+    <Form.Item name="prefix" 
+    noStyle
+    >
       <Select
         allowClear={true}
         showSearch
@@ -358,6 +374,7 @@ function AddEmployee() {
         style={{
           width: 70,
           background: "#ffffff",
+          border:"1px solid grey"
         }}
         // onSelect={(value, event) => handleOnChange(value, event)}
       >
@@ -372,10 +389,9 @@ function AddEmployee() {
 
   return (
     <>
-      <div className="expForm" style={{ margin: "15px", background: "#fff" }}>
+      <div className="addEmpFormDiv" >
         <Form
           className="addEmp"
-          style={{ margin: "30px" }}
           form={form}
           layout="vertical"
           labelcol={{
@@ -391,43 +407,40 @@ function AddEmployee() {
           onFinish={onFinish}
         >
           <Row
-            className="rowform"
-            gutter={[0, 8]}
-            style={{
-              marginBottom: "1.5rem",
-              marginTop: "1.5rem",
-              display: "flex",
-              flexDirection: "column",
-              alignitems: "center",
-              justifyContent: "space-around",
-            }}
+            className="buttonRowEmp"
+            gutter={[16, 16]}
           >
             <Col
               xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-center"
-              style={{
-                background: "",
-                height: "50px",
-                display: "flex",
-                justifyContent: "flex-start",
-              }}
+              sm={{ span: 24 }}
+              md={{span:6}}
+              lg={{span:6}}
+              xl={{span:4}}
+              xxl={{span:6}}
+
             >
               <Button
-                className="listExpense"
-                type="primary"
+                className="listEmployee"
+                type="default"
                 onClick={handleListEmployee}
-                style={{
-                  width: "120px",
-                  cursor: "pointer",
-                  backgroundColor: "#1963A6",
-                  borderRadius: "5px",
-                }}
               >
                 Employee List
               </Button>
             </Col>
             <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{span:6}}
+            >
+            <Button 
+              className="bulkEmployee"
+              type="primary" 
+              onClick={showBulkModal}
+            >
+              <div className="bulkButton">Bulk Employee Onboarding</div>
+            </Button>
+            </Col>
+            {/* <Col
             // style={{
             //   background: "",
             //   height: "50px",
@@ -473,8 +486,8 @@ function AddEmployee() {
                   </>
                 )}
               </CSVReader>
-            </Col>
-            <Col
+            </Col> */}
+            {/* <Col
               xs={{ span: 24 }}
               sm={{ span: 12 }}
               className="Col-1-center"
@@ -499,7 +512,7 @@ function AddEmployee() {
               >
                 Bulk Onboard Emloyees
               </Button>
-            </Col>
+            </Col> */}
           </Row>
           <Row gutter={[24, 8]}>
             <Col xs={22} sm={15} md={8}>
@@ -935,7 +948,6 @@ function AddEmployee() {
                 </Select>
               </Form.Item>
             </Col>
-
             <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="businessUnit"
@@ -1001,7 +1013,6 @@ function AddEmployee() {
                 </Select>
               </Form.Item>
             </Col>
-
             <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="department"
@@ -1065,21 +1076,19 @@ function AddEmployee() {
             </Col>
           </Row>
           <Row gutter={[24, 16]}>
-            <Col classsname="gutter-row" span={9}></Col>
-            <Col classsname="gutter-row">
+            <Col span={24} classsname="gutter-row">
               <div
                 style={{
                   display: "flex",
-                  justifyContent: "end",
-                  marginRight: "94px",
+                  justifyContent: "center",
                 }}
               >
                 <Space>
                   <Form.Item>
                     <Button
                       style={{
-                        border: "1px solid #1565D8",
-                        color: "#1565D8",
+                        border: "1px solid #1963A6",
+                        color: "#1963A6",
                         fontWeight: "600",
                         fontSize: "14px",
                         lineHeight: "17px",
@@ -1095,8 +1104,8 @@ function AddEmployee() {
                   <Form.Item>
                     <Button
                       style={{
-                        border: "1px solid #1565D8",
-                        background: "#1565D8",
+                        border: "1px solid #1963A6",
+                        background: "#1963A6",
                         color: "#ffffff",
                         fontWeight: "600",
                         fontSize: "14px",
@@ -1118,6 +1127,113 @@ function AddEmployee() {
           </Row>
         </Form>
       </div>
+      <Modal
+       title="Basic Modal" 
+       open={bulkModal} 
+       onOk={handleBulkModal} 
+       onCancel={handleCancel}
+       footer={false}
+       className="bulkOnboardingModal"
+       closeIcon={
+        <div
+            onClick={() => {
+              openBulkModal(false);
+            }}
+            style={{ color: "#ffffff" }}
+        >
+            X
+        </div>
+    }
+      >
+          <Row
+            className="rowform"
+            gutter={[0, 8]}
+            style={{
+              marginBottom: "1.5rem",
+              marginTop: "1.5rem",
+              display: "flex",
+              flexDirection: "column",
+              alignitems: "center",
+              justifyContent: "space-around",
+            }}
+          >
+            <Col
+            // style={{
+            //   background: "",
+            //   height: "50px",
+            //   display: "flex",
+            //   justifyContent: "flex-start",
+            // }}
+            >
+              <CSVReader
+                onUploadAccepted={(results) => {
+                  setEnableBulk(true)
+                  let temp = [...results.data];
+                  let headers = temp.shift();
+                  let model = temp.shift();
+                  validateCSV(temp, headers, model);
+                  setAllEmp([...results.data])
+                }}
+              >
+                {({
+                  getRootProps,
+                  acceptedFile,
+                  ProgressBar,
+                  getRemoveFileProps,
+                }) => (
+                  <>
+                    <div style={styles.csvReader}>
+                      <button
+                        type="button"
+                        {...getRootProps()}
+                        style={styles.browseFile}
+                      >
+                        Browse file
+                      </button>
+                      <div style={styles.acceptedFile}>
+                        {acceptedFile && acceptedFile.name}
+                        {!acceptedFile && setEnableBulk(false)}
+                        {!acceptedFile && setErrorFile(null)}
+                      </div>
+                      <button {...getRemoveFileProps()} style={styles.remove}>
+                        Remove
+                      </button>
+                    </div>
+                    <ProgressBar style={styles.progressBarBackgroundColor} />
+                  </>
+                )}
+              </CSVReader>
+            </Col>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 12 }}
+              md={{ span: 24 }}
+              className="Col-1-center"
+              style={{
+                background: "",
+                height: "50px",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            > 
+              {errorFile}
+              <Button
+                className="listExpense"
+                disabled={!enableBulk}
+                type="primary"
+                onClick={handleBulkOnboard}
+                style={{
+                  cursor: "pointer",
+                  backgroundColor: "#1963A6",
+                  borderRadius: "5px",
+                  color:'#ffff'
+                }}
+              >
+                Bulk Onboard Emloyees
+              </Button>
+            </Col>
+          </Row>
+      </Modal>
     </>
   );
 }

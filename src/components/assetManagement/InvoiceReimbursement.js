@@ -41,6 +41,7 @@ import EditInvoiceDetails from "./EditInvoiceDetails";
 import { async } from "@firebase/util";
 
 function InvoiceReimbursement(props) {
+  console.log(props);
   const [AddExpense, setAddExpense] = useState(false);
   const [file, setFile] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);

@@ -53,9 +53,6 @@ function AllRequest(props) {
       filteredApprove.push(record);
     }
   });
-  console.log(filteredPending);
-  console.log(filteredApprove);
-  console.log(repairAllotReq);
 
   const columns2 = [
     // showed in the admin flow
@@ -182,41 +179,41 @@ function AllRequest(props) {
 
   return (
     <div>
-        <Table
-          size="small"
-          columns={columns2}
-          dataSource={filteredPending}
-          className="assetTable"
+      <Table
+        size="small"
+        columns={columns2}
+        dataSource={filteredPending}
+        className="assetTable"
+      />
+      <Table
+        size="small"
+        columns={columns2}
+        dataSource={filteredApprove}
+        className="assetTable"
+      />
+      <Modal
+        destroyOnClose
+        centered
+        open={isModalOpen}
+        footer={null}
+        title="REQUEST DETAILS"
+        closeIcon={
+          <div
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+            style={{ color: "#ffff" }}
+          >
+            X
+          </div>
+        }
+        className="updateModal"
+      >
+        <ViewRequestType
+          setIsModalOpen={setIsModalOpen}
+          modalData={modalData}
         />
-        <Table
-          size="small"
-          columns={columns2}
-          dataSource={filteredApprove}
-          className="assetTable"
-        />
-        <Modal
-          destroyOnClose
-          centered
-          open={isModalOpen}
-          footer={null}
-          title="REQUEST DETAILS"
-          closeIcon={
-            <div
-              onClick={() => {
-                setIsModalOpen(false);
-              }}
-              style={{ color: "#ffff" }}
-            >
-              X
-            </div>
-          }
-          className="updateModal"
-        >
-          <ViewRequestType
-            setIsModalOpen={setIsModalOpen}
-            modalData={modalData}
-          />
-        </Modal>
+      </Modal>
     </div>
   );
 }

@@ -84,7 +84,7 @@ function LoginPage() {
                     <div className="msg">Let's Access to our dashboard</div>
 
                     <div className="email-div">
-                    Email address<span style={{ color: "red" }}> *</span>
+                      Email address<span style={{ color: "red" }}> *</span>
                     </div>
                     <div className="emailInput-div">
                       <Form.Item
@@ -92,11 +92,11 @@ function LoginPage() {
                         rules={[
                           {
                             required: true,
-                            message: "Enter your Email!",
+                            message: "Enter Email",
                           },
                         ]}
                       >
-                        <Input onChange={(e) => setLoginEmail(e.target.value)} />
+                        <Input onChange={(e) => setLoginEmail(e.target.value.trim())} />
                       </Form.Item>
                     </div>
                     <div className="email-div">
@@ -108,7 +108,7 @@ function LoginPage() {
                         rules={[
                           {
                             required: true,
-                            message: "Enter your password!",
+                            message: "Enter Password",
                           },
                         ]}
                       >

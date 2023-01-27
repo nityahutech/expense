@@ -294,23 +294,23 @@ const NewSidebar = (props) => {
                     </Menu.Item>
                   </>
                 ) : null}
-                {role == "admin" || isHr ? (
-                  <>
-                    <Menu.SubMenu
-                      className="arrow-div"
-                      style={{
-                        width: "100%",
-                        fontSize: "13px",
-                        fontWeight: "600",
-                        color: "#ffffff",
-                      }}
-                      icon={
-                        <img src={expenseIcon} alt="profile" className="Dash" />
-                      }
-                      key="sub1"
-                      title="Expense"
-                      mode="inline"
-                    >
+                <Menu.SubMenu
+                  className="arrow-div"
+                  style={{
+                    width: "100%",
+                    fontSize: "13px",
+                    fontWeight: "600",
+                    color: "#ffffff",
+                  }}
+                  icon={
+                    <img src={expenseIcon} alt="profile" className="Dash" />
+                  }
+                  key="sub1"
+                  title="Expense"
+                  mode="inline"
+                >
+                  {role == "admin" || isHr ? (
+                    <>
                       <Menu.Item
                         className="arrow"
                         icon={<img src={dot} alt="profile" className="dot" />}
@@ -327,9 +327,17 @@ const NewSidebar = (props) => {
                         <p className="sideFont">Expense List</p>
                         <NavLink to="/Expense/ExpenseList" />
                       </Menu.Item>
-                    </Menu.SubMenu>
-                  </>
-                ) : null}
+                    </>
+                  ) : null}
+                  <Menu.Item
+                    className="arrow"
+                    icon={<img src={dot} alt="profile" className="dot" />}
+                    key="23"
+                  >
+                    <p className="sideFont">Invoice Reimbursement</p>
+                    <NavLink to="/Expense/InvoiceReimbursement" />
+                  </Menu.Item>
+                </Menu.SubMenu>
 
                 <Menu.Item
                   icon={<img src={userIcon} alt="profile" className="Dash" />}

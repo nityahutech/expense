@@ -19,14 +19,16 @@ import MainDashBoard from "./components/MainDashBoard";
 import Settingpage from "./components/Settingpage";
 import { useEffect, useState } from "react";
 import AttendanceLog from "./components/AttendanceLog";
+import InvoiceReimbursement from "./components/assetManagement/InvoiceReimbursement";
+import InvoiceMagHome from "./components/assetManagement/InvoiceMagHome";
 
 function App() {
   const [roleView, setRoleView] = useState(sessionStorage.getItem("roleView"));
 
   const switchRole = (role) => {
-    setRoleView(role)
-  }
-  
+    setRoleView(role);
+  };
+
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -58,23 +60,27 @@ function App() {
               <FormatPage main={<CompanyProfile />} activeMenu={["32"]} />
             }
           />
-          <Route path="/Attendance" element={
-            <FormatPage
-              main={<AttendanceLog roleView={roleView} />}
-              activeMenu={["6"]}
-              roleView={roleView}
-              switchRole={switchRole}
-            />
-          }
+          <Route
+            path="/Attendance"
+            element={
+              <FormatPage
+                main={<AttendanceLog roleView={roleView} />}
+                activeMenu={["6"]}
+                roleView={roleView}
+                switchRole={switchRole}
+              />
+            }
           />
-          <Route path="/Leave" element={
-            <FormatPage
-              main={<Leave roleView={roleView} />}
-              activeMenu={["7"]}
-              roleView={roleView}
-              switchRole={switchRole}
-            />
-          }
+          <Route
+            path="/Leave"
+            element={
+              <FormatPage
+                main={<Leave roleView={roleView} />}
+                activeMenu={["7"]}
+                roleView={roleView}
+                switchRole={switchRole}
+              />
+            }
           />
           <Route
             path="/Employee/AddEmployee"
@@ -123,6 +129,18 @@ function App() {
                 main={<ExpenseList />}
                 activeSubMenu={["sub1"]}
                 activeMenu={["3"]}
+              />
+            }
+          />
+          <Route
+            path="/Expense/InvoiceReimbursement"
+            element={
+              <FormatPage
+                main={<InvoiceMagHome roleView={roleView} />}
+                roleView={roleView}
+                activeSubMenu={["sub1"]}
+                activeMenu={["23"]}
+                switchRole={switchRole}
               />
             }
           />

@@ -60,6 +60,11 @@ class InvoiceContext {
     // }, 4000);
   };
 
+  updateInvoiceData = (id, updateInvoice) => {
+    updateDoc(doc(db, `companyprofile/${compId}/invoices`, id), updateInvoice);
+    return Promise.resolve();
+  };
+
   getInvoice = async () => {
     const getInvoiceData = await getDocs(companyInvoiceCollectionRef);
     let rec = getInvoiceData.docs.map((doc) => {

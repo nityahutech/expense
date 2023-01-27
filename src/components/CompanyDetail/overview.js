@@ -8,7 +8,7 @@ import {
   CheckOutlined,
 } from "@ant-design/icons";
 import "./companystyle.css";
-import "./Overview.css"
+import "./Overview.css";
 import linkedin from "../../images/linkedin.png";
 import facebook from "../../images/facebook.png";
 import twitter from "../../images/twitter.png";
@@ -38,7 +38,7 @@ function Overview() {
     CompanyProContext.updateCompInfo(compId, valuesToservice, fileName);
     const timer = setTimeout(() => {
       getData();
-    }, [2000])
+    }, [2000]);
     showEditCompanyInfo(false);
   };
 
@@ -54,7 +54,6 @@ function Overview() {
   };
 
   useEffect(() => {
-
     getData();
   }, []);
 
@@ -151,18 +150,16 @@ function Overview() {
       return (
         <div
           className={editContactInfo === true ? "hoverImgCont" : null}
-          style={
-            {
-              display: "flex",
-              justifyContent: "center",
-              marginRight: "15px"
-              // border: "1px solid #d0d0d0",
-              // Width: "auto",
-              // height: "auto",
-              // borderRadius: "6px",
-              // display: "inline-block",
-            }
-          }
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginRight: "15px",
+            // border: "1px solid #d0d0d0",
+            // Width: "auto",
+            // height: "auto",
+            // borderRadius: "6px",
+            // display: "inline-block",
+          }}
         >
           <img
             src={imageUrl}
@@ -188,7 +185,6 @@ function Overview() {
 
   return (
     <>
-
       <div
         className="personalCardDiv"
         style={{
@@ -221,9 +217,10 @@ function Overview() {
               autoComplete="off"
               onFinish={onFinish}
             >
-              {loading ? <Skeleton active /> :
+              {loading ? (
+                <Skeleton active />
+              ) : (
                 <Card
-
                   title=" OVERVIEW"
                   className="overview"
                   hoverable={true}
@@ -269,13 +266,11 @@ function Overview() {
                     </Col>
                     <Col xs={22} sm={15} md={10}>
                       <div>
-                        <div
-                          className="div-discription"
-                        >
+                        <div className="div-discription">
                           Registered Company Name
                         </div>
                         {editContactInfo === false ? (
-                          <div style={{ marginTop: "7px", }}>
+                          <div style={{ marginTop: "7px" }}>
                             {data.regCompName}
                           </div>
                         ) : (
@@ -294,9 +289,15 @@ function Overview() {
                               const newVal =
                                 inputval.substring(0, 1).toUpperCase() +
                                 inputval.substring(1);
-                              const caps = str.split(" ").map(capitalize).join(" ");
+                              const caps = str
+                                .split(" ")
+                                .map(capitalize)
+                                .join(" ");
                               // setPaidBy(newVal);
-                              form.setFieldsValue({ regCompName: newVal, regCompName: caps });
+                              form.setFieldsValue({
+                                regCompName: newVal,
+                                regCompName: caps,
+                              });
                             }}
                             rules={[
                               {
@@ -316,7 +317,7 @@ function Overview() {
                               style={{
                                 borderBottom: "1px solid #ccc ",
                                 paddingLeft: "0px",
-                                width: '220px'
+                                width: "220px",
                               }}
                             />
                           </Form.Item>
@@ -327,7 +328,9 @@ function Overview() {
                       <div>
                         <div className="div-discription">Brand Name</div>
                         {editContactInfo === false ? (
-                          <div style={{ marginTop: "7px" }}>{data.brandName}</div>
+                          <div style={{ marginTop: "7px" }}>
+                            {data.brandName}
+                          </div>
                         ) : (
                           <Form.Item
                             initialValue={data ? data.brandName : null}
@@ -361,9 +364,15 @@ function Overview() {
                                 const newVal =
                                   inputval.substring(0, 1).toUpperCase() +
                                   inputval.substring(1);
-                                const caps = str.split(" ").map(capitalize).join(" ");
+                                const caps = str
+                                  .split(" ")
+                                  .map(capitalize)
+                                  .join(" ");
                                 // setPaidBy(newVal);
-                                form.setFieldsValue({ brandName: newVal, brandName: caps });
+                                form.setFieldsValue({
+                                  brandName: newVal,
+                                  brandName: caps,
+                                });
                               }}
                               placeholder="Enter Brand Name"
                               bordered={false}
@@ -404,7 +413,7 @@ function Overview() {
                               style={{
                                 paddingLeft: "0px",
                                 borderBottom: "1px solid #ccc ",
-                                width: '220px'
+                                width: "220px",
                               }}
                               placeholder="Enter Website Name"
                               bordered={false}
@@ -486,7 +495,7 @@ function Overview() {
                     </Row>
                   ) : null}
                 </Card>
-              }
+              )}
             </Form>
           </Col>
         </Row>
@@ -525,7 +534,9 @@ function Overview() {
               autoComplete="off"
               onFinish={onSocialFinish}
             >
-              {loading ? <Skeleton active /> :
+              {loading ? (
+                <Skeleton active />
+              ) : (
                 <Card
                   title=" SOCIAL PROFILE"
                   className="social"
@@ -827,7 +838,7 @@ function Overview() {
                     </Row>
                   ) : null}
                 </Card>
-              }
+              )}
             </Form>
           </Col>
         </Row>

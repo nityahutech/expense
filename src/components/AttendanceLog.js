@@ -43,7 +43,7 @@ function AttendanceLog(props) {
   const [allEmp, setallEmp] = useState([]);
   const isHr = props.roleView == "admin";
   const [form] = Form.useForm();
-  console.log(props, isHr);
+  console.log(props, 'props');
   const page = "attendanceConfig";
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [selectemp, setSelectemp] = useState({ id: "" });
@@ -308,42 +308,42 @@ function AttendanceLog(props) {
       dataIndex: "date",
       key: "date",
       width: 80,
-      align:"left",
+      align: "left",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
       width: 80,
-      align:"left",
+      align: "left",
     },
     {
       title: "In Time",
       dataIndex: "clockIn",
       key: "clockIn",
       width: 80,
-      align:"left",
+      align: "left",
     },
     {
       title: "Out Time",
       key: "clockOut",
       dataIndex: "clockOut",
       width: 80,
-      align:"left",
+      align: "left",
     },
     {
       title: "Work Duration",
       key: "duration",
       dataIndex: "duration",
       width: 100,
-      align:"left",
+      align: "left",
     },
     {
       title: "Break Time",
       key: "break",
       dataIndex: "break",
       width: 80,
-      align:"left",
+      align: "left",
     },
     {
       title: "Project Name",
@@ -351,7 +351,7 @@ function AttendanceLog(props) {
       key: "project",
       ellipsis: true,
       width: 80,
-      align:"left",
+      align: "left",
     },
     {
       title: "Report",
@@ -360,7 +360,7 @@ function AttendanceLog(props) {
       width: 100,
       ellipsis: true,
       fixed: "right",
-      align:"left",
+      align: "left",
     },
   ];
   async function onHrDateFilter(value) {

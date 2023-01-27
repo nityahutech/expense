@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useRef } from "react";
 import {
   Card,
   Row,
@@ -20,37 +20,88 @@ import {
   PlusOutlined,
   CheckOutlined,
   CloseOutlined,
-  UploadOutlined,
-  EyeFilled,
-  EditFilled,
+  DeleteOutlined,
+  PlusCircleOutlined,
 } from "@ant-design/icons";
 import {
   showNotification,
   checkAlphabets,
   createUser,
+  getBase64,
 } from "../../contexts/CreateContext";
 import moment from "moment";
 import InvoiceContext from "../../contexts/InvoiceContext";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 
 function EditInvoiceDetails(props) {
-  const [AddExpense, setAddExpense] = useState(false);
-  const [file, setFile] = useState([]);
+  const imgRef = useRef(null);
+  const [fileName, setFileName] = useState(
+    props.invoiceData.payments.map((img) => img.upload)
+  );
   const { TextArea } = Input;
   const editInvoiceName = props.invoiceData;
-  const [editInvoiceData, setEditInvoicsData] = useState(props.invoiceData.payments.map((data) => {
-    return {
-      ...data,
-      paymentDate: moment(data?.paymentDate, "DD-MM-YYYY"),
-    };
-  }))
+  const [imageUrl, setImageUrl] = useState(
+    props.invoiceData.payments.map((img) => img.upload) || ""
+  );
+  const [editInvoiceData, setEditInvoicsData] = useState(
+    props.invoiceData.payments.map((data) => {
+      console.log(data);
+      return {
+        ...data,
+        paymentDate: moment(data?.paymentDate, "DD-MM-YYYY"),
+      };
+    })
+  );
   console.log(editInvoiceData);
   console.log(editInvoiceName);
-  const [uploadPhoto, showEditCompanyInfo] = useState(false);
+
+  const handleChange = (event) => {
+    if (!event) {
+      return;
+    }
+    const fileUploaded = event.target.files[0];
+    getBase64(fileUploaded, (url) => {
+      setImageUrl(url);
+    });
+  };
+
+  const handleClick = () => {
+    imgRef.current.click();
+  };
+
+  const onFinish = (values) => {
+    console.log(values, "ektaaaaaaaaa");
+    let temp = 0;
+    const editInvoice = {
+      invoiceName: values.invoiceName,
+      payments: values.users.map((pay) => {
+        temp = Number(temp) + Number(pay.amount);
+
+        console.log(pay);
+        return {
+          ...pay,
+          paymentDate: pay.paymentDate.format("DD-MM-YYYY"),
+          upload: pay.upload,
+        };
+      }),
+    };
+    editInvoice.totalAmt = temp;
+    console.log(props.invoiceData);
+    console.log(editInvoice, "ektaaaaaaaaa");
+    InvoiceContext.updateInvoiceData(props.invoiceData.id, editInvoice)
+      .then(() => {
+        showNotification("success", "Success", "Edit Successful");
+        props.getData();
+      })
+      .catch(() => {
+        showNotification("error", "Error", "Failed to edit");
+      });
+    props.setIsEditModalOpen(false);
+  };
 
   return (
     <>
-      <Form layout="vertical" className="invoiceForm">
+      <Form layout="vertical" className="invoiceForm" onFinish={onFinish}>
         <Row gutter={[44, 8]}>
           <Col span={24}>
             <Form.Item
@@ -81,7 +132,7 @@ function EditInvoiceDetails(props) {
             {(fields, { add, remove }) => {
               return (
                 <>
-                  {fields.map(({ key,i, name, ...edit }) => (
+                  {fields.map(({ key, i, name, ...edit }) => (
                     <>
                       <Divider orientation="left" orientationMargin="10px">
                         Expenditure No.{key + 1}
@@ -155,86 +206,104 @@ function EditInvoiceDetails(props) {
                         </Form.Item>
                       </Col>
                       <Col span={10}>
-                        {/* <Form.Item
-                        {...edit}
-                          // initialValue={edit?.upload}
-                          label="Upload"
-                          name={[name, "Upload"]}
-                        >
-                          <div className="idpage">
-                            <Input
-                            
+                        <Form.Item label="Upload" name={[name, "upload"]}>
+                          <div
+                            style={{
+                              border: "dashed #B9B9B9",
+                              borderWidth: "thin",
+                              borderRadius: "4px",
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                          >
+                            <input
+                              style={{
+                                display: "none",
+                              }}
                               type="file"
-                              accept="application/pdf"
-                              id="upload"
-                              name="upload"
-                              style={{ borderRadius: "5px" }}
+                              id="logo"
+                              name="logo"
+                              ref={imgRef}
+                              onChange={(e) => handleChange(e)}
                             />
+                            {fileName[key] ? (
+                              <div
+                                className="hoverImgCont"
+                                style={{ margin: "10px auto" }}
+                              >
+                                <img
+                                  src={imageUrl[key]}
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    maxWidth: "170px",
+                                    height: "100px",
+                                    padding: "10px",
+                                  }}
+                                />
+                                {console.log(fileName)}
+                                <div className="editOverlay">
+                                  <DeleteOutlined
+                                    className="hoverIcon"
+                                    onClick={() => {
+                                      let temp = [...fileName];
+                                      temp[key] = null;
+                                      setFileName(temp);
+                                      let pic = [...imageUrl];
+                                      pic[key] = "";
+                                      setImageUrl(pic);
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              <>
+                                <Button
+                                  onClick={(e) => handleClick(e)}
+                                  style={{
+                                    width: "60px",
+                                    height: "50px",
+                                    margin: "10px",
+                                  }}
+                                >
+                                  <PlusCircleOutlined
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column-reverse",
+                                      alignItems: "center",
+                                    }}
+                                  />
+                                  <span
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      marginRight: "8px",
+                                    }}
+                                  >
+                                    Upload
+                                  </span>
+                                </Button>
+                              </>
+                            )}
                           </div>
-                        </Form.Item> */}
-                        <Form.Item
-                          label="Upload"
-                        >
-                        {uploadPhoto == false ? (
-                            <div
-                              style={{
-                                width: "150px",
-                                height: "100px",
-                                // border: "1px solid #05445e",
-                                border:"1px solid #d9d9d9",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                flexDirection: "column",
-                                padding: "10px",
-                              }}
-                            >
-                              No Image
-                            </div>
-                          ) : (
-                            <Button
-                              style={{
-                                width: "150px",
-                                height: "100px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                flexDirection: "column",
-                                padding: "10px",
-                              }}
-                              // onClick={(e) => handleClick(e)}
-                            >
-                              <input
-                                style={{
-                                  display: "none",
-                                }}
-                                type="file"
-                                id="logo"
-                                name="logo"
-                                // ref={imgRef}
-                                // onChange={(e) => handleChange(e)}
-                              />
-                              <UploadOutlined /> Upload Photo
-                            </Button>
-                          )}
-                          </Form.Item>
+                        </Form.Item>
                       </Col>
                       <Col span={2} className="actionButton">
-                          <MinusCircleOutlined
-                                          onClick={() => {
-                                            remove(name);
-                                            // let temp = [...edit];
-                                            // delete temp[i];
-                                            // temp
-                                            // console.log(temp);
-                                            // setFile(temp);
-                                            let paymentTemp = [...editInvoiceData]
-                                            console.log(paymentTemp);
-                                            paymentTemp.splice(i, 1);
-                                            setEditInvoicsData(paymentTemp);
-                                          }}
-                           />
-                       </Col>
+                        <MinusCircleOutlined
+                          onClick={() => {
+                            remove(name);
+                            // let temp = [...edit];
+                            // delete temp[i];
+                            // temp
+                            // console.log(temp);
+                            // setFile(temp);
+                            let paymentTemp = [...editInvoiceData];
+                            console.log(paymentTemp);
+                            paymentTemp.splice(i, 1);
+                            setEditInvoicsData(paymentTemp);
+                          }}
+                        />
+                      </Col>
                     </>
                   ))}
                   <Col span={24}>

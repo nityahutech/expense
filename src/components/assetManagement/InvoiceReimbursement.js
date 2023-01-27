@@ -38,6 +38,7 @@ import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
 import ViewInvoiceDetails from "./ViewInvoiceDetails";
 import EditInvoiceDetails from "./EditInvoiceDetails";
+import { async } from "@firebase/util";
 
 function InvoiceReimbursement(props) {
   const [AddExpense, setAddExpense] = useState(false);
@@ -102,12 +103,24 @@ function InvoiceReimbursement(props) {
     setInvoiceDetails(invoiceData);
   };
 
+  const setStatus = async (record, status) => {
+    const updateInvoiceReocrd = invoiceDetails.map((allotInvoice) => {
+      if (allotInvoice.id == record.id) {
+        allotInvoice.status = status;
+        record.status = status;
+      }
+      return allotInvoice;
+    });
+    await InvoiceContext.updateInvoiceData(record.id, record);
+    setInvoiceDetails(updateInvoiceReocrd);
+  };
+
   const invoiceColumns = [
     {
       title: "Employee Code",
       dataIndex: "empCode",
       key: "empCode",
-      width: 150,
+      width: 200,
       align: "left",
     },
     {
@@ -136,7 +149,7 @@ function InvoiceReimbursement(props) {
       title: "Total Amount",
       dataIndex: "totalAmt",
       key: "totalAmt",
-      width: 200,
+      width: 150,
       align: "left",
     },
     {
@@ -174,8 +187,8 @@ function InvoiceReimbursement(props) {
       title: "Action",
       dataIndex: "operation",
       key: "operation",
-      width: 100,
-      align: "center",
+      width: 200,
+      align: "left",
       render: (_, record) => (
         <>
           <div
@@ -183,7 +196,13 @@ function InvoiceReimbursement(props) {
             style={{ display: "flex", flexDirection: "row" }}
           >
             <Tooltip placement="bottom" title="View" color="#1963A6">
-              <Button type="link" className="show">
+              <Button
+                type="link"
+                className="show"
+                onClick={() => {
+                  openModal(record);
+                }}
+              >
                 {<EyeFilled style={{ color: "#000000" }} />}
               </Button>
             </Tooltip>
@@ -198,9 +217,9 @@ function InvoiceReimbursement(props) {
               }
               type="link"
               className="show"
-              // onClick={() => {
-              //   setStatus(record, "Approved");
-              // }}
+              onClick={() => {
+                setStatus(record, "Approved");
+              }}
             >
               <img src={Checkmark} />
             </Button>
@@ -208,9 +227,9 @@ function InvoiceReimbursement(props) {
               style={record.status == "Pending" ? null : { display: "none" }}
               type="link"
               className="deleTe"
-              // onClick={() => {
-              //   setStatus(record, "Reject");
-              // }}
+              onClick={() => {
+                setStatus(record, "Reject");
+              }}
             >
               <img src={CheckReject} width={20} />
             </Button>
@@ -373,6 +392,17 @@ function InvoiceReimbursement(props) {
     setInvoiceData(data);
     // setRepairLaptopData(repairLaptopData);
   };
+
+  var filteredPending = [];
+  var filteredApprove = [];
+
+  invoiceDetails.forEach((record) => {
+    if (record.status == "Pending") {
+      filteredPending.push(record);
+    } else {
+      filteredApprove.push(record);
+    }
+  });
 
   return (
     <div className="invoiceCardDiv">
@@ -675,6 +705,7 @@ function InvoiceReimbursement(props) {
           >
             {console.log(invoiceData)}
             <EditInvoiceDetails
+              getData={getAllInvoiceData}
               invoiceData={invoiceData}
               setIsEditModalOpen={setIsEditModalOpen}
             />
@@ -685,8 +716,36 @@ function InvoiceReimbursement(props) {
           <Table
             className="invoiceTable"
             columns={invoiceColumns}
-            dataSource={invoiceDetails}
+            dataSource={filteredPending}
           />
+          <Table
+            className="invoiceTable"
+            columns={invoiceColumns}
+            dataSource={filteredApprove}
+          />
+          <Modal
+            destroyOnClose
+            centered
+            open={isModalOpen}
+            footer={null}
+            title="INVOICE DETAILS"
+            closeIcon={
+              <div
+                onClick={() => {
+                  setIsModalOpen(false);
+                }}
+                style={{ color: "#ffff" }}
+              >
+                X
+              </div>
+            }
+            className="updateModal"
+          >
+            <ViewInvoiceDetails
+              setIsModalOpen={setIsModalOpen}
+              invoiceData={invoiceData}
+            />
+          </Modal>
         </>
       )}
     </div>

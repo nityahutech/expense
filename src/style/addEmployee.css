@@ -1,0 +1,48 @@
+.addEmpFormDiv{
+    margin: 15px;
+    background: #fff;
+}
+.addEmp{
+    padding: 15px;
+}
+.buttonRow{
+    margin-bottom: 1.5rem;
+    width: 50%;
+    /* display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: space-around; */
+}
+.listEmployee{
+    border: 1px solid #1963A6;
+    border-radius: 5px;
+    color: #1963A6;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    width: 100%;
+    cursor: pointer;
+}
+.bulkEmployee{
+    width: 100%;
+    cursor: pointer;
+    background-color: #1963A6;
+    border-radius: 5px;
+    border: 1px solid #1963A6;
+}
+.bulkOnboardingModal .ant-modal-content {
+    border-radius: 10px;
+  }
+  
+  .bulkOnboardingModal .ant-modal-header {
+    border-radius: 10px 10px 0px 0px;
+    background: #043661;
+    color: #ffffff;
+  }
+  .bulkOnboardingModal .ant-modal-title {
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+  }
+  

@@ -654,63 +654,6 @@ function InvoiceReimbursement(props) {
               </Row>
             </Form>
           </Card>
-
-          <Card title="Request Table" className="invoiceCard2">
-            <Table
-              className="invoiceTable"
-              columns={columns}
-              dataSource={invoiceDetails}
-            />
-          </Card>
-          <Modal
-            destroyOnClose
-            centered
-            open={isModalOpen}
-            footer={null}
-            title="INVOICE DETAILS"
-            closeIcon={
-              <div
-                onClick={() => {
-                  setIsModalOpen(false);
-                }}
-                style={{ color: "#ffff" }}
-              >
-                X
-              </div>
-            }
-            className="updateModal"
-          >
-            <ViewInvoiceDetails
-              setIsModalOpen={setIsModalOpen}
-              invoiceData={invoiceData}
-            />
-          </Modal>
-          <Modal
-            destroyOnClose
-            centered
-            open={isEditModalOpen}
-            footer={null}
-            title="INVOICE DETAILS"
-            width={750}
-            closeIcon={
-              <div
-                onClick={() => {
-                  setIsEditModalOpen(false);
-                }}
-                style={{ color: "#ffff" }}
-              >
-                X
-              </div>
-            }
-            className="updateModal"
-          >
-            {console.log(invoiceData)}
-            <EditInvoiceDetails
-              getData={getAllInvoiceData}
-              invoiceData={invoiceData}
-              setIsEditModalOpen={setIsEditModalOpen}
-            />
-          </Modal>
         </>
       ) : (
         <>

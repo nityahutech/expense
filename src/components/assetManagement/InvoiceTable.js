@@ -4,18 +4,13 @@ import { EyeFilled, EditFilled } from "@ant-design/icons";
 import "./invoice.css";
 import ViewInvoiceDetails from "./ViewInvoiceDetails";
 import EditInvoiceDetails from "./EditInvoiceDetails";
-import InvoiceContext from "../../contexts/InvoiceContext";
-import EmpInfoContext from "../../contexts/EmpInfoContext";
-import { createUser } from "../../contexts/CreateContext";
 
-function InvoiceTable() {
-  const [invoiceDetails, setInvoiceDetails] = useState([]);
+function InvoiceTable(props) {
   const [invoiceData, setInvoiceData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [user, setUser] = useState({});
+
   const [file, setFile] = useState([]);
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
   function openModal(data) {
     setIsModalOpen(true);
@@ -159,24 +154,13 @@ function InvoiceTable() {
     },
   ];
 
-  const getAllInvoiceData = async () => {
-    let invoiceData = await InvoiceContext.getInvoice(createUser.uid);
-    let userData = await EmpInfoContext.getEduDetails(currentUser.uid);
-    setUser(userData);
-    setInvoiceDetails(invoiceData);
-  };
-
-  useEffect(() => {
-    getAllInvoiceData();
-  }, []);
-
   return (
     <div className="invoiceDiv">
       <Card title="Request Table" className="invoiceTable">
         <Table
           className="invoiceTable"
           columns={columns}
-          dataSource={invoiceDetails}
+          dataSource={props.invoiceDetails}
         />
       </Card>
       <Modal
@@ -223,7 +207,7 @@ function InvoiceTable() {
       >
         {console.log(invoiceData)}
         <EditInvoiceDetails
-          getData={getAllInvoiceData}
+          getData={props.getAllInvoiceData}
           invoiceData={invoiceData}
           setIsEditModalOpen={setIsEditModalOpen}
         />

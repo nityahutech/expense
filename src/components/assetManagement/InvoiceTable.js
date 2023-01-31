@@ -153,14 +153,14 @@ function InvoiceTable(props) {
       ),
     },
   ];
-
+  
   return (
     <div className="invoiceDiv">
       <Card title="Request Table" className="invoiceTable">
         <Table
           className="invoiceTable"
           columns={columns}
-          dataSource={props.invoiceDetails}
+          dataSource={[...props.invoiceDetails]}
         />
       </Card>
       <Modal
@@ -207,7 +207,7 @@ function InvoiceTable(props) {
       >
         {console.log(invoiceData)}
         <EditInvoiceDetails
-          getData={props.getAllInvoiceData}
+          getData={[...props.invoiceDetails]}
           invoiceData={invoiceData}
           setIsEditModalOpen={setIsEditModalOpen}
         />

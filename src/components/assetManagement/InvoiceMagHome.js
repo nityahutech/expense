@@ -31,12 +31,14 @@ function InvoiceMagHome(props) {
             <InvoiceTable
               roleView={props.roleView}
               invoiceDetails={invoiceDetails}
-              getData={getAllInvoiceData}
             />
           </Tabs.TabPane>
         ) : null}
         <Tabs.TabPane tab="Invoice Reimbursement Request" key="2">
-          <InvoiceReimbursement roleView={props.roleView} />
+          <InvoiceReimbursement roleView={props.roleView}
+              getData={getAllInvoiceData}
+              invoiceDetails={invoiceDetails}
+              user={user} />
         </Tabs.TabPane>
       </Tabs>
     </div>

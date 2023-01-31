@@ -46,7 +46,7 @@ function InvoiceReimbursement(props) {
   const [file, setFile] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
-  const [invoiceDetails, setInvoiceDetails] = useState([]);
+  const [invoiceDetails, setInvoiceDetails] = useState(props.invoiceDetails);
   const [invoiceData, setInvoiceData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState({});
@@ -55,7 +55,7 @@ function InvoiceReimbursement(props) {
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const role = sessionStorage.getItem("role");
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log(values, "ektaaaaaaaa");
     const allInvoiceData = {
       invoiceName: values.invoiceName,
@@ -76,10 +76,10 @@ function InvoiceReimbursement(props) {
     };
     console.log(allInvoiceData, file, "pujaaaaaaaa");
     try {
-      InvoiceContext.addInvoice(allInvoiceData, file);
+      await InvoiceContext.addInvoice(allInvoiceData, file);
       showNotification("success", "Success", "Invoice Request Added");
       setTimeout(() => {
-        getAllInvoiceData();
+        props.getData();
         setFile([]);
         setAddExpense(false);
         form.resetFields();
@@ -90,19 +90,14 @@ function InvoiceReimbursement(props) {
   };
 
   useEffect(() => {
-    getAllInvoiceData();
+    props.getData();
   }, [props.roleView]);
 
-  // useEffect(() => {
-  //   setInvoiceDetails();
-  // }, []);
+  useEffect(() => {
+    setInvoiceDetails(props.invoiceDetails);
+    setUser(props.user);
+  }, [props.invoiceDetails]);
 
-  const getAllInvoiceData = async () => {
-    let invoiceData = await InvoiceContext.getInvoice(createUser.uid);
-    let userData = await EmpInfoContext.getEduDetails(currentUser.uid);
-    setUser(userData);
-    setInvoiceDetails(invoiceData);
-  };
 
   const setStatus = async (record, status) => {
     const updateInvoiceReocrd = invoiceDetails.map((allotInvoice) => {

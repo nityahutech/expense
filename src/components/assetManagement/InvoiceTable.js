@@ -6,6 +6,7 @@ import ViewInvoiceDetails from "./ViewInvoiceDetails";
 import EditInvoiceDetails from "./EditInvoiceDetails";
 
 function InvoiceTable(props) {
+  const [empInvoiceTable, setEmpInvoiceTable] = useState(props.invoiceDetails);
   const [invoiceData, setInvoiceData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -20,6 +21,7 @@ function InvoiceTable(props) {
   const showModal = (data) => {
     setIsEditModalOpen(true);
     setInvoiceData(data);
+
     // setRepairLaptopData(repairLaptopData);
   };
 
@@ -153,14 +155,14 @@ function InvoiceTable(props) {
       ),
     },
   ];
-  
+
   return (
     <div className="invoiceDiv">
       <Card title="Request Table" className="invoiceTable">
         <Table
           className="invoiceTable"
           columns={columns}
-          dataSource={[...props.invoiceDetails]}
+          dataSource={empInvoiceTable}
         />
       </Card>
       <Modal
@@ -207,7 +209,7 @@ function InvoiceTable(props) {
       >
         {console.log(invoiceData)}
         <EditInvoiceDetails
-          getData={[...props.invoiceDetails]}
+          getData={empInvoiceTable}
           invoiceData={invoiceData}
           setIsEditModalOpen={setIsEditModalOpen}
         />

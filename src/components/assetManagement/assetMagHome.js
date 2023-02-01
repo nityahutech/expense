@@ -48,10 +48,6 @@ function AssetMagHome(props) {
                 allot={laptopAllot}
               />
             </Tabs.TabPane>
-
-            <Tabs.TabPane tab="Invoice Reimbursement Request" key="2">
-              <InvoiceReimbursement roleView={props.roleView} />
-            </Tabs.TabPane>
           </>
         ) : (
           <>
@@ -64,9 +60,6 @@ function AssetMagHome(props) {
             </Tabs.TabPane>
             <Tabs.TabPane tab="Request Form" key="2">
               <Requestpage roleView={props.roleView} getData={getRepairData} />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Invoice Reimbursement" key="3">
-              <InvoiceReimbursement roleView={props.roleView} />
             </Tabs.TabPane>
           </>
         )}

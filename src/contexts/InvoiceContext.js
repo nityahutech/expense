@@ -9,14 +9,24 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-const compId = sessionStorage.getItem("compId");
+let compId = sessionStorage.getItem("compId");
 
-const companyInvoiceCollectionRef = collection(
+let companyInvoiceCollectionRef = collection(
   db,
   `companyprofile/${compId}/invoices`
 );
 
 class InvoiceContext {
+
+  getCompId = () => {
+      compId = sessionStorage.getItem("compId");
+      companyInvoiceCollectionRef = collection(
+        db,
+        `companyprofile/${compId}/invoices`
+      );
+      return;
+  };
+  
   addInvoice = async (invoiceData, files) => {
     let payments = [...invoiceData.payments];
     invoiceData.payments = [];
@@ -73,6 +83,7 @@ class InvoiceContext {
         id: doc.id,
       };
     });
+    console.log(compId, companyInvoiceCollectionRef, rec);
     return rec;
   };
 }

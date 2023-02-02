@@ -17,16 +17,15 @@ let companyInvoiceCollectionRef = collection(
 );
 
 class InvoiceContext {
-
   getCompId = () => {
-      compId = sessionStorage.getItem("compId");
-      companyInvoiceCollectionRef = collection(
-        db,
-        `companyprofile/${compId}/invoices`
-      );
-      return;
+    compId = sessionStorage.getItem("compId");
+    companyInvoiceCollectionRef = collection(
+      db,
+      `companyprofile/${compId}/invoices`
+    );
+    return;
   };
-  
+
   addInvoice = async (invoiceData, files) => {
     let payments = [...invoiceData.payments];
     invoiceData.payments = [];
@@ -71,8 +70,10 @@ class InvoiceContext {
   };
 
   updateInvoiceData = (id, updateInvoice) => {
-    updateDoc(doc(db, `companyprofile/${compId}/invoices`, id), updateInvoice);
-    return Promise.resolve();
+    return updateDoc(
+      doc(db, `companyprofile/${compId}/invoices`, id),
+      updateInvoice
+    );
   };
 
   getInvoice = async () => {

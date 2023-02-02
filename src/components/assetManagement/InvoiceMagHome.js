@@ -26,20 +26,24 @@ function InvoiceMagHome(props) {
   return (
     <div className="primarydiva">
       <Tabs defaultActiveKey="1" className="assetTabs">
+        <Tabs.TabPane tab="Invoice Reimbursement Table" key="1">
+          <InvoiceTable
+            roleView={props.roleView}
+            getData={getAllInvoiceData}
+            invoiceDetails={invoiceDetails}
+            user={user}
+          />
+        </Tabs.TabPane>
         {props.roleView == "emp" ? (
-          <Tabs.TabPane tab="Invoice Reimbursement Table" key="1">
-            <InvoiceTable
+          <Tabs.TabPane tab="Invoice Reimbursement Request" key="2">
+            <InvoiceReimbursement
               roleView={props.roleView}
+              getData={getAllInvoiceData}
               invoiceDetails={invoiceDetails}
+              user={user}
             />
           </Tabs.TabPane>
         ) : null}
-        <Tabs.TabPane tab="Invoice Reimbursement Request" key="2">
-          <InvoiceReimbursement roleView={props.roleView}
-              getData={getAllInvoiceData}
-              invoiceDetails={invoiceDetails}
-              user={user} />
-        </Tabs.TabPane>
       </Tabs>
     </div>
   );

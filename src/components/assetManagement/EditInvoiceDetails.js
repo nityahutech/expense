@@ -54,6 +54,7 @@ function EditInvoiceDetails(props) {
   );
   console.log(editInvoiceData);
   console.log(editInvoiceName);
+  console.log(props);
 
   const handleChange = (event) => {
     if (!event) {
@@ -89,11 +90,12 @@ function EditInvoiceDetails(props) {
     console.log(props.invoiceData);
     console.log(editInvoice, "ektaaaaaaaaa");
     InvoiceContext.updateInvoiceData(props.invoiceData.id, editInvoice)
-      .then(() => {
+      .then((res) => {
         showNotification("success", "Success", "Edit Successful");
         props.getData();
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         showNotification("error", "Error", "Failed to edit");
       });
     props.setIsEditModalOpen(false);

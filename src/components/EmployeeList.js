@@ -1,20 +1,13 @@
-import {
-  Table,
-  Button,
-  Modal,
-  Row,
-  Col,
-  Input,
-  Select,
-  Tabs
-} from "antd";
+import { Table, Button, Modal, Row, Col, Input, Select, Tabs, Tooltip } from "antd";
 import {
   EditFilled,
   SearchOutlined,
   DeleteFilled,
   EyeFilled,
+  AlipayCircleOutlined,
 } from "@ant-design/icons";
-import Papa from 'papaparse';
+
+import Papa from "papaparse";
 import Editemployee from "./Editemployee";
 import { useEffect, useState } from "react";
 import { getUsers, showNotification } from "../contexts/CreateContext";
@@ -23,6 +16,7 @@ import EmpInfoContext from "../contexts/EmpInfoContext";
 import EmployeeListview from "./EmployeeListview";
 import ConfigureContext from "../contexts/ConfigureContext";
 import EmpFieldDownload from "./EmpFieldDownload";
+import PaySlip from "./ProfileDetails/PaySlip";
 
 const { Option } = Select;
 
@@ -38,7 +32,7 @@ function EmployeeList() {
   const [designations, setDesignations] = useState([]);
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
-  const [showDownloadModal, setShowDownloadModal] = useState(false)
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
 
   window.addEventListener("resize", () =>
     setSize(window.innerWidth <= 768 ? "" : "left")
@@ -92,50 +86,74 @@ function EmployeeList() {
       key: "action",
       fixed: "right",
       align: "center",
-      width: 80,
+      width: 120,
       render: (_, record) => {
         return (
           record.disabled === false && (
             <>
               <div
                 className="employee-button"
-                style={{ display: "flex", flexDirection: "row",justifyContent:"center" }}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
               >
-                <Button
-                  type="link"
-                  className="show"
-                  // style={{ width: "40px" }}
-                  onClick={() => {
-                    showViewModal(record);
-                    setActivetab("2");
-                  }}
-                  onChange={(tabKey) => {
-                    setActivetab(tabKey);
-                    setSelectemp({ id: "" });
-                  }}
-                >
-                  {<EyeFilled />}
-                </Button>
-                <Button
-                  style={{ padding: 0, color: "rgb(64, 169, 255)" }}
-                  type="link"
-                  className="edIt"
-                  onClick={() => {
-                    handleEditEmployee(record);
-                    showModal(record);
-                  }}
-                >
-                  {<EditFilled />}
-                </Button>
-                <Button
-                  type="link"
-                  className="deleTe"
-                  onClick={(e) => {
-                    onDelete(record.sn - 1, e);
-                  }}
-                >
-                  <DeleteFilled />
-                </Button>
+                <Tooltip placement="bottom" title='View Profile'>
+                  <Button
+                    type="link"
+                    className="show"
+                    // style={{ width: "40px" }}
+                    onClick={() => {
+                      // showViewModal(record);
+                      setSelectemp({ id: record.id }); // set selectemp.id to the employee's id
+                      setActivetab("2");
+                    }}
+                  // onChange={(tabKey) => {
+                  //   setActivetab(tabKey);
+                  //   setSelectemp({ id: "" });
+                  // }}
+                  >
+                    {<EyeFilled />}
+                  </Button>
+                </Tooltip>
+                <Tooltip placement="bottom" title='Edit Profile'>
+                  <Button
+                    style={{ padding: 0, color: "rgb(64, 169, 255)" }}
+                    type="link"
+                    className="edIt"
+                    onClick={() => {
+                      handleEditEmployee(record);
+                      showModal(record);
+                    }}
+                  >
+                    {<EditFilled />}
+                  </Button>
+                </Tooltip>
+                <Tooltip placement="bottom" title='Delete Profile'>
+                  <Button
+                    type="link"
+                    className="deleTe"
+                    onClick={(e) => {
+                      onDelete(record.sn - 1, e);
+                    }}
+                  >
+                    <DeleteFilled />
+                  </Button>
+                </Tooltip>
+                <Tooltip placement="bottom" title='Salary'>
+                  <Button
+                    type="link"
+                    style={{ padding: "0px" }}
+                    onClick={(e) => {
+                      setSelectemp({ id: record.id }); // set selectemp.id to the employee's id
+                      setActivetab("3");
+                    }}
+                  >
+                    {/* {<img src={PayIcon} />} */}
+                    <AlipayCircleOutlined style={{ color: "green" }} />
+                  </Button>
+                </Tooltip>
               </div>
             </>
           )
@@ -172,8 +190,8 @@ function EmployeeList() {
     });
 
     ConfigureContext.getConfigurations("addemployeePage").then((res) => {
-      setDesignations(Object.keys(res.designations))
-    })
+      setDesignations(Object.keys(res.designations));
+    });
     setData(d);
     setFilterEmployees(d);
     setCertificationDetails(d);
@@ -221,7 +239,9 @@ function EmployeeList() {
   };
 
   const downloadCSV = (downloadFields) => {
-    if (downloadFields == []) { return; }
+    if (downloadFields == []) {
+      return;
+    }
     let csvData = data.map((emp) => [
       emp.empId,
       emp.name,
@@ -244,10 +264,23 @@ function EmployeeList() {
           emp.lccs,
           emp.maritalStatus,
           emp.bloodGroup,
-          emp.profilePic
-        ]
-      })
-      fields.push("Contact Email ID", "Gender", "Date of Birth", "Alternate Phone Number", "Current Address", "House Type", "Permanent Address", "Staying at Current Residence Since", "living in Current City Since", "Marital Status", "Blood Group", "Profile Picture")
+          emp.profilePic,
+        ];
+      });
+      fields.push(
+        "Contact Email ID",
+        "Gender",
+        "Date of Birth",
+        "Alternate Phone Number",
+        "Current Address",
+        "House Type",
+        "Permanent Address",
+        "Staying at Current Residence Since",
+        "living in Current City Since",
+        "Marital Status",
+        "Blood Group",
+        "Profile Picture"
+      );
     }
     if (downloadFields.includes("Work Information")) {
       data.forEach((emp, i) => {
@@ -264,9 +297,21 @@ function EmployeeList() {
           emp.repManager,
           emp.secManager,
           emp.lead,
-        ]
-      })
-      fields.push("Designation", "Date of Joining", "Employee Type", "Work Location", "Business Unit", "Division", "Department", "Team", "Reporting Manager", "Secondary Manager", "Lead");
+        ];
+      });
+      fields.push(
+        "Designation",
+        "Date of Joining",
+        "Employee Type",
+        "Work Location",
+        "Business Unit",
+        "Division",
+        "Department",
+        "Team",
+        "Reporting Manager",
+        "Secondary Manager",
+        "Lead"
+      );
     }
     if (downloadFields.includes("Family Information")) {
       data.forEach((emp, i) => {
@@ -279,9 +324,17 @@ function EmployeeList() {
           emp.other,
           emp.relation,
           emp.otherContact,
-        ]
-      })
-      fields.push("Father", "Father Contact", "Mother", "Mother Contact", "Other", "Relation", "Other Contact");
+        ];
+      });
+      fields.push(
+        "Father",
+        "Father Contact",
+        "Mother",
+        "Mother Contact",
+        "Other",
+        "Relation",
+        "Other Contact"
+      );
     }
     if (downloadFields.includes("Education Information")) {
       data.forEach((emp, i) => {
@@ -294,14 +347,24 @@ function EmployeeList() {
           emp.courseStartDate,
           emp.courseEndDate,
           emp.universityName,
-        ]
-      })
-      fields.push("Qualification Type", "Course Name", "Course Type", "Stream", "Course Start Date", "Course End Date", "University Name");
+        ];
+      });
+      fields.push(
+        "Qualification Type",
+        "Course Name",
+        "Course Type",
+        "Stream",
+        "Course Start Date",
+        "Course End Date",
+        "University Name"
+      );
     }
     if (downloadFields.includes("Bank Information")) {
       data.forEach((emp, i) => {
-        let banks = emp.bank?.filter((bankAcc) => bankAcc.accountType == "Salary Account");
-        let acc = emp.bank?.indexOf(banks[0]) || 0
+        let banks = emp.bank?.filter(
+          (bankAcc) => bankAcc.accountType == "Salary Account"
+        );
+        let acc = emp.bank?.indexOf(banks[0]) || 0;
         if (!emp.bank || banks.length == 0) {
           csvData[i] = [
             ...csvData[i],
@@ -311,7 +374,7 @@ function EmployeeList() {
             emp.bank,
             emp.bank,
             emp.upiId,
-          ]
+          ];
           return;
         }
         csvData[i] = [
@@ -322,9 +385,16 @@ function EmployeeList() {
           emp.bank[acc].ifsc,
           emp.bank[acc].accountNo,
           emp.upiId,
-        ]
-      })
-      fields.push("Bank Name", "City", "Branch", "IFSC Code", "Account Number", "UPI ID");
+        ];
+      });
+      fields.push(
+        "Bank Name",
+        "City",
+        "Branch",
+        "IFSC Code",
+        "Account Number",
+        "UPI ID"
+      );
     }
     if (downloadFields.includes("Certificate")) {
       data.forEach((emp, i) => {
@@ -337,9 +407,17 @@ function EmployeeList() {
           emp.courseStartDate,
           emp.courseEndDate,
           emp.universityName,
-        ]
-      })
-      fields.push("Qualification Type", "Course Name", "Course Type", "Stream", "Course Start Date", "Course End Date", "University Name");
+        ];
+      });
+      fields.push(
+        "Qualification Type",
+        "Course Name",
+        "Course Type",
+        "Stream",
+        "Course Start Date",
+        "Course End Date",
+        "University Name"
+      );
     }
     if (downloadFields.includes("Identification Document")) {
       data.forEach((emp, i) => {
@@ -352,17 +430,25 @@ function EmployeeList() {
           emp.courseStartDate,
           emp.courseEndDate,
           emp.universityName,
-        ]
-      })
-      fields.push("Qualification Type", "Course Name", "Course Type", "Stream", "Course Start Date", "Course End Date", "University Name");
+        ];
+      });
+      fields.push(
+        "Qualification Type",
+        "Course Name",
+        "Course Type",
+        "Stream",
+        "Course Start Date",
+        "Course End Date",
+        "University Name"
+      );
     }
     const csv = Papa.unparse([fields, ...csvData]);
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', 'empInformation.csv');
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.setAttribute("hidden", "");
+    a.setAttribute("href", url);
+    a.setAttribute("download", "empInformation.csv");
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -370,21 +456,36 @@ function EmployeeList() {
 
   return (
     <>
-      <div className="hrtab" style={{ minHeight: '100vh' }}>
+      <div className="hrtab" style={{ minHeight: "100vh" }}>
         <Tabs
           defaultActiveKey={activetab}
           activeKey={activetab}
           className="Tabs"
           onChange={(tabKey) => {
             setActivetab(tabKey);
-            setSelectemp({ id: "" });
-          }}>
-
+            if (tabKey == 1) {
+              setSelectemp({ id: "" });
+            }
+          }}
+        >
           <Tabs.TabPane tab="Employee List" key="1">
-            <div style={{ width: '100%', padding: '10px', backgroundColor: 'white', marginBottom: '15px' }}>
+            <div
+              style={{
+                width: "100%",
+                padding: "10px",
+                backgroundColor: "white",
+                marginBottom: "15px",
+              }}
+            >
               <Row gutter={[16, 16]}>
                 <Col xs={24} xm={24} md={8} lg={4}>
-                  <Button style={{ width: '100%' }} type="default" onClick={() => setShowDownloadModal(true)}>Download</Button>
+                  <Button
+                    style={{ width: "100%" }}
+                    type="default"
+                    onClick={() => setShowDownloadModal(true)}
+                  >
+                    Download
+                  </Button>
                 </Col>
                 <Col xs={24} xm={24} md={8} lg={4}>
                   <Input
@@ -396,7 +497,7 @@ function EmployeeList() {
                 </Col>
                 <Col xs={24} xm={24} md={8} lg={4}>
                   <Select
-                    style={{ width: '100%' }}
+                    style={{ width: "100%" }}
                     // className="empList"
                     allowClear
                     placeholder="Select Designation"
@@ -405,7 +506,9 @@ function EmployeeList() {
                       const selectedData = data.filter((emp) =>
                         emp.designation.includes(e)
                       );
-                      setFilterEmployees(selectedData.length == 0 ? data : selectedData);
+                      setFilterEmployees(
+                        selectedData.length == 0 ? data : selectedData
+                      );
                     }}
                     showSearch
                   >
@@ -427,7 +530,7 @@ function EmployeeList() {
               className="empTable"
               size="small"
               reloadData={getData}
-              rowClassName={(record) => record.disabled && "disabled-row"}
+            // rowClassName={(record) => record.disabled && "disabled-row"}
             />
             <Modal
               className="editEmployee"
@@ -462,7 +565,7 @@ function EmployeeList() {
               />
             </Modal>
           </Tabs.TabPane>
-
+          {console.log(selectemp)}
           <Tabs.TabPane tab="Employee Pofile" disabled={!selectemp.id} key="2">
             <EmployeeListview
               className="Edit"
@@ -471,7 +574,18 @@ function EmployeeList() {
               certificationDetails={certificationDetails}
             />
           </Tabs.TabPane>
-
+          <Tabs.TabPane
+            tab="Employee Pay Slip"
+            disabled={!selectemp.id}
+            key="3"
+          >
+            <PaySlip
+              className="Edit"
+            // showRecord={showRecord}
+            // getData={getData}
+            // certificationDetails={certificationDetails}
+            />
+          </Tabs.TabPane>
         </Tabs>
 
         <Modal
@@ -497,10 +611,11 @@ function EmployeeList() {
             </div>
           }
         >
-          <EmpFieldDownload setShowDownloadModal={setShowDownloadModal} downloadCSV={downloadCSV} />
-
+          <EmpFieldDownload
+            setShowDownloadModal={setShowDownloadModal}
+            downloadCSV={downloadCSV}
+          />
         </Modal>
-
       </div>
     </>
   );

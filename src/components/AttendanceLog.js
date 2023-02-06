@@ -43,7 +43,7 @@ function AttendanceLog(props) {
   const [allEmp, setallEmp] = useState([]);
   const isHr = props.roleView == "admin";
   const [form] = Form.useForm();
-  console.log(props, 'props');
+  console.log(props, "props");
   const page = "attendanceConfig";
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [selectemp, setSelectemp] = useState({ id: "" });
@@ -65,9 +65,19 @@ function AttendanceLog(props) {
   const [endTime, setEndTime] = useState("");
 
   const handleFinish = (values) => {
-    let temp = Object.keys(values)
-    console.log(values?.starttime, values?.endtime, temp, values?.starttime == null, values?.endtime == null)
-    if ((temp.includes("starttime") || temp.includes("endtime")) && (values?.starttime == null && values?.endtime == null)) {
+    let temp = Object.keys(values);
+    console.log(
+      values?.starttime,
+      values?.endtime,
+      temp,
+      values?.starttime == null,
+      values?.endtime == null
+    );
+    if (
+      (temp.includes("starttime") || temp.includes("endtime")) &&
+      values?.starttime == null &&
+      values?.endtime == null
+    ) {
       return;
     }
     let attendanceConfig = {
@@ -76,13 +86,16 @@ function AttendanceLog(props) {
       starttime: values?.starttime?.format("HH:mm") || startTime,
       endtime: values?.endtime?.format("HH:mm") || endTime,
     };
-    setStartTime(values?.starttime?.format("HH:mm") || startTime)
-    setEndTime(values?.endtime?.format("HH:mm") || endTime)
-    console.log(attendanceConfig, attendanceConfig.starttime > attendanceConfig.starttime)
+    setStartTime(values?.starttime?.format("HH:mm") || startTime);
+    setEndTime(values?.endtime?.format("HH:mm") || endTime);
+    console.log(
+      attendanceConfig,
+      attendanceConfig.starttime > attendanceConfig.starttime
+    );
     // if (attendanceConfig.starttime > attendanceConfig.starttime) {
-    ConfigureContext.createConfiguration(
-      page,
-      { attendanceNature: attendanceConfig })
+    ConfigureContext.createConfiguration(page, {
+      attendanceNature: attendanceConfig,
+    })
       .then((response) => {
         getAttendanceData();
       })
@@ -92,16 +105,16 @@ function AttendanceLog(props) {
     // } else {
     //   showNotification("error", "Error", "Start Time cannot be after End Time!")
     // }
-  }
+  };
 
   const getAttendanceData = async () => {
     let data = await ConfigureContext.getConfigurations(page);
-    console.log("config", data)
+    console.log("config", data);
     setConfigurations(data?.attendanceNature);
-    setSelectedDay(data?.attendanceNature?.selectedDay)
-    setStartTime(data?.attendanceNature?.starttime)
-    setEndTime(data?.attendanceNature?.endtime)
-    return data?.attendanceNature?.selectedDay
+    setSelectedDay(data?.attendanceNature?.selectedDay);
+    setStartTime(data?.attendanceNature?.starttime);
+    setEndTime(data?.attendanceNature?.endtime);
+    return data?.attendanceNature?.selectedDay;
   };
 
   const [filteredEmp, setFilteredEmp] = useState([]);
@@ -143,7 +156,7 @@ function AttendanceLog(props) {
     },
   ];
   useEffect(() => {
-    console.log(isHr)
+    console.log(isHr);
     getAttendanceData();
     getHolidayList();
     getDateOfJoining();
@@ -152,30 +165,35 @@ function AttendanceLog(props) {
     form.resetFields();
     let temp = {};
     if (holidays.length == 0) {
-      getHolidayList().then((res) => { temp.holidays = res })
-      getAttendanceData().then((res) => { temp.selectedDays = res })
+      getHolidayList().then((res) => {
+        temp.holidays = res;
+      });
+      getAttendanceData().then((res) => {
+        temp.selectedDays = res;
+      });
     }
     const timer = setTimeout(() => {
       if (!isHr) {
         if (activetab == "1") {
           setSelectemp({ id: currentUser.uid });
-          getEmpDetails(currentUser.uid, [
-            moment().subtract(30, "days"),
-            moment()
-          ], temp);
+          getEmpDetails(
+            currentUser.uid,
+            [moment().subtract(30, "days"), moment()],
+            temp
+          );
         }
       } else {
         if (activetab == "1") {
           allEmpDetails(temp);
         }
       }
-    }, 800)
+    }, 800);
     return () => clearTimeout(timer);
   }, [activetab, isHr]);
 
   const getHolidayList = async () => {
     let data = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
-    console.log('holidays', data)
+    console.log("holidays", data);
     let req = data.docs.map((doc) => {
       if (!doc.data().optionalHoliday) {
         return doc.data().date;
@@ -253,10 +271,14 @@ function AttendanceLog(props) {
   }
   async function getEmpDetails(id, date, temp) {
     setLoading(true);
-    let data, dayTemp = temp?.selectedDays || selectedDay, holTemp = temp?.holidays || holidays;
-    console.log(dayTemp, holTemp)
+    let data,
+      dayTemp = temp?.selectedDays || selectedDay,
+      holTemp = temp?.holidays || holidays;
+    console.log(dayTemp, holTemp);
     AttendanceContext.getAllAttendance(id, date).then((userdata) => {
-      let dayoff = Object.keys(dayTemp).filter((day) => dayTemp[`${day}`] == "dayoff")
+      let dayoff = Object.keys(dayTemp).filter(
+        (day) => dayTemp[`${day}`] == "dayoff"
+      );
       AttendanceContext.updateLeaves(
         userdata,
         holTemp.includes(moment().format("Do MMM, YYYY")),
@@ -277,27 +299,39 @@ function AttendanceLog(props) {
   function allEmpDetails(temp, selDate) {
     setLoading(true);
     let date = selDate || moment();
-    let dayTemp = temp?.selectedDays || selectedDay, holTemp = temp?.holidays || holidays;
-    console.log(temp, selDate, dayTemp, holTemp, date, holTemp.includes(date.format("Do MMM, YYYY")))
-    AttendanceContext.getAllUsers(date.format("DD-MM-YYYY")).then((userdata) => {
-      console.log(dayTemp, holTemp)
-      let dayoff = Object.keys(dayTemp).filter((day) => dayTemp[`${day}`] == "dayoff")
-      AttendanceContext.updateWithLeave(
-        userdata,
-        holTemp.includes(date.format("Do MMM, YYYY")),
-        dayoff.includes(date.format("dddd"))
-      ).then((final) => {
-        // setHolidayStatus(final)
-        setallEmp(final);
-        setFilteredEmp(final);
-        setEmpMonthly(final);
-        const timer = setTimeout(() => {
-          setLoading(false);
-        }, 750);
-        return () => clearTimeout(timer);
-      });
-      // getWithLeave(userdata);
-    });
+    let dayTemp = temp?.selectedDays || selectedDay,
+      holTemp = temp?.holidays || holidays;
+    console.log(
+      temp,
+      selDate,
+      dayTemp,
+      holTemp,
+      date,
+      holTemp.includes(date.format("Do MMM, YYYY"))
+    );
+    AttendanceContext.getAllUsers(date.format("DD-MM-YYYY")).then(
+      (userdata) => {
+        console.log(dayTemp, holTemp);
+        let dayoff = Object.keys(dayTemp).filter(
+          (day) => dayTemp[`${day}`] == "dayoff"
+        );
+        AttendanceContext.updateWithLeave(
+          userdata,
+          holTemp.includes(date.format("Do MMM, YYYY")),
+          dayoff.includes(date.format("dddd"))
+        ).then((final) => {
+          // setHolidayStatus(final)
+          setallEmp(final);
+          setFilteredEmp(final);
+          setEmpMonthly(final);
+          const timer = setTimeout(() => {
+            setLoading(false);
+          }, 750);
+          return () => clearTimeout(timer);
+        });
+        // getWithLeave(userdata);
+      }
+    );
   }
   const onReset = () => {
     form.resetFields();
@@ -409,7 +443,7 @@ function AttendanceLog(props) {
     { days: "Thursday" },
     { days: "Friday" },
     { days: "Saturday" },
-    { days: "Sunday" }
+    { days: "Sunday" },
   ];
 
   const handleRadiochange = (value, data) => {
@@ -418,8 +452,8 @@ function AttendanceLog(props) {
     let tempSelectedDay = {
       ...selectedDay,
       [data.days]: value,
-    }
-    setSelectedDay(tempSelectedDay)
+    };
+    setSelectedDay(tempSelectedDay);
     // console.log('ddddd', selectedDay)
     handleFinish({ selectedDay: tempSelectedDay });
   };
@@ -440,8 +474,7 @@ function AttendanceLog(props) {
           <Radio.Group
             onChange={(e) => handleRadiochange(e.target.value, data)}
             value={selectedDay[data.days]}
-          // value={value4}
-
+            // value={value4}
           >
             <Radio className="radio" value={`fullday`} />
           </Radio.Group>
@@ -486,7 +519,7 @@ function AttendanceLog(props) {
     },
   ];
 
-  console.log(startTime, endTime)
+  console.log(startTime, endTime);
 
   return (
     <>
@@ -534,9 +567,9 @@ function AttendanceLog(props) {
                 tab="Add Report"
                 key="2"
                 className="reportTabs"
-              // onClick={() => {
-              //   setIsModalOpen(true);
-              // }}
+                // onClick={() => {
+                //   setIsModalOpen(true);
+                // }}
               >
                 {/* <Button type="primary" onClick={showModal}>
               Open Modal
@@ -573,6 +606,7 @@ function AttendanceLog(props) {
                     className="pname"
                   >
                     <DatePicker
+                      disabledDate={(current) => current.isAfter(moment())}
                       format={"DD-MM-YYYY"}
                       style={{ width: "50%" }}
                     />
@@ -625,7 +659,7 @@ function AttendanceLog(props) {
                   placeholder="Search"
                   prefix={<SearchOutlined />}
                   onChange={searchChange}
-                // style={{ width: "95%" }}
+                  // style={{ width: "95%" }}
                 />
                 <DatePicker
                   defaultValue={selDate}
@@ -739,16 +773,22 @@ function AttendanceLog(props) {
                       >
                         <TimePicker
                           onChange={(e) => {
-                            console.log(e)
-                            setStartTime(e == null ? "" : e.format("HH:mm"))
-                            handleFinish({ starttime: e })
+                            console.log(e);
+                            setStartTime(e == null ? "" : e.format("HH:mm"));
+                            handleFinish({ starttime: e });
                           }}
                           disabled={!endTime}
                           disabledTime={() => ({
                             disabledHours: () => {
-                              let temp = [...Array(Number(endTime.substring(0, 2))).keys()];
-                              return [...Array(24).keys()].filter((i) => !(temp.includes(i)))
-                            }
+                              let temp = [
+                                ...Array(
+                                  Number(endTime.substring(0, 2))
+                                ).keys(),
+                              ];
+                              return [...Array(24).keys()].filter(
+                                (i) => !temp.includes(i)
+                              );
+                            },
                           })}
                           defaultOpenValue={moment("00:00", "HH:mm")}
                         />
@@ -768,13 +808,17 @@ function AttendanceLog(props) {
                       >
                         <TimePicker
                           onChange={(e) => {
-                            console.log(e)
-                            setEndTime(e == null ? "" : e.format("HH:mm"))
-                            handleFinish({ endtime: e })
+                            console.log(e);
+                            setEndTime(e == null ? "" : e.format("HH:mm"));
+                            handleFinish({ endtime: e });
                           }}
                           disabled={!startTime}
                           disabledTime={() => ({
-                            disabledHours: () => [...Array(Number(startTime.substring(0, 2)) + 1).keys()]
+                            disabledHours: () => [
+                              ...Array(
+                                Number(startTime.substring(0, 2)) + 1
+                              ).keys(),
+                            ],
                           })}
                           defaultOpenValue={moment("00:00", "HH:mm")}
                         />
@@ -814,9 +858,11 @@ function AttendanceLog(props) {
                           offset: 1,
                         }}
                         initialValue={configurations.maxBreakDuration}
-                      // noStyle
+                        // noStyle
                       >
-                        <InputNumber min={0} max={5}
+                        <InputNumber
+                          min={0}
+                          max={5}
                           onKeyPress={(event) => {
                             if (checkNumbervalue(event)) {
                               event.preventDefault();
@@ -826,7 +872,6 @@ function AttendanceLog(props) {
                       </Form.Item>
                       <Form.Item
                         initialValue={configurations.inputclock}
-
                         name="inputclock"
                         label="Auto Clock Out"
                         labelCol={{

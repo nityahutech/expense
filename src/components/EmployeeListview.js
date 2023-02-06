@@ -23,6 +23,7 @@ const styleFont3 = {
 
 
 function EmployeeListview(props) {
+  console.log(props);
   const showRecord = props.showRecord;
   const [userid, setUserId] = useState(showRecord.id);
   const [isEduModalVisible, setisEduModalVisible] = useState(false);

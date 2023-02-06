@@ -59,7 +59,6 @@ class EmpInfoContext {
     idExists = async (id) => {
         let q = query(collection(db,`companyprofile/${compId}/users`), where("empId", "==", id));
         let d = await getDocs(q);
-        console.log(d.docs.length)
         return d.docs.length > 0;
     };
 

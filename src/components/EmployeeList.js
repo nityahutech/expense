@@ -22,7 +22,6 @@ const { Option } = Select;
 
 function EmployeeList() {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [certificationDetails, setCertificationDetails] = useState([]);
   const [editedRecord, setEditedRecord] = useState(null);
   const [showRecord, setshowRecord] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -106,13 +105,10 @@ function EmployeeList() {
                     // style={{ width: "40px" }}
                     onClick={() => {
                       // showViewModal(record);
+                      setshowRecord(record)
                       setSelectemp({ id: record.id }); // set selectemp.id to the employee's id
                       setActivetab("2");
                     }}
-                  // onChange={(tabKey) => {
-                  //   setActivetab(tabKey);
-                  //   setSelectemp({ id: "" });
-                  // }}
                   >
                     {<EyeFilled />}
                   </Button>
@@ -169,11 +165,6 @@ function EmployeeList() {
     setIsModalVisible(true);
   };
 
-  const showViewModal = (record) => {
-    setshowRecord(record);
-    setCertificationDetails(record);
-  };
-
   const handleEditEmployee = (record) => {
     setEditedRecord(record);
   };
@@ -194,7 +185,6 @@ function EmployeeList() {
     });
     setData(d);
     setFilterEmployees(d);
-    setCertificationDetails(d);
     setLoading(false);
   }
 
@@ -565,13 +555,12 @@ function EmployeeList() {
               />
             </Modal>
           </Tabs.TabPane>
-          {console.log(selectemp)}
+          {console.log(selectemp,showRecord)}
           <Tabs.TabPane tab="Employee Pofile" disabled={!selectemp.id} key="2">
             <EmployeeListview
               className="Edit"
               showRecord={showRecord}
               getData={getData}
-              certificationDetails={certificationDetails}
             />
           </Tabs.TabPane>
           <Tabs.TabPane

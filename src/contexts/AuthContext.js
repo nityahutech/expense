@@ -32,12 +32,15 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState()
   const [loading, setLoading] = useState(true)
   const [role, setRole] = useState();
+  const [roleView, setRoleView] = useState();
   const [compId, setCompId] = useState();
   const [isMgr, setIsMgr] = useState();
   const [isHr, setIsHr] = useState();
   const [isLead, setIsLead] = useState();
+  const [logo, setLogo] = useState();
 
   function getUserData(user) {
+    console.log("auth called");
     if (user==null) {
       const timer = setTimeout(() => {
         sessionStorage.clear();
@@ -51,6 +54,7 @@ export function AuthProvider({ children }) {
       sessionStorage.setItem("roleView", rec?.role)
       sessionStorage.setItem("compId", rec?.compId)
       localStorage.setItem("login",  moment().format("hh:mm:ss DD-MM-YYYY"))
+      setRoleView(rec?.role)
       setCompId(rec?.compId)
       setRole(rec?.role)
       EmpInfoContext.getCompId();
@@ -66,6 +70,7 @@ export function AuthProvider({ children }) {
       if (rec?.role == "super") { return; }
       CompanyProContext.getCompanyProfile(rec?.compId).then((rec) => {
         sessionStorage.setItem("logo", rec?.logo)
+        setLogo(rec?.logo)
       })
       EmpInfoContext.getEduDetails(user.uid, rec?.compId).then((rec) => {
         sessionStorage.setItem("isMgr", rec?.isManager);
@@ -121,9 +126,11 @@ export function AuthProvider({ children }) {
     compId,
     currentUser,
     role,
+    roleView,
     isMgr,
     isHr,
     isLead,
+    logo,
     login,
     logout,
     resetPassword,

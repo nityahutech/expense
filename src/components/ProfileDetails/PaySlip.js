@@ -1,62 +1,62 @@
 import { useState, useEffect } from "react";
-import { Button, Card, Table } from "antd";
+import { Affix, Button, Card, Table } from "antd";
 import { DatePicker, Space } from "antd";
 import "../../style/Payslip.css";
 import EmployeeNetSalary from "../../contexts/EmployeeNetSalary";
 import { createPdfFromHtml } from "./downloadLogic";
 import hutechLogo from "../../images/hutechlogo.png";
-import { getUsers } from "../../contexts/CreateContext";
 
-function PaySlip() {
+
+function PaySlip(props) {
+  const showRecord = props.showRecord;
+  console.log('showRecord', showRecord)
+  const [userid, setUserId] = useState(showRecord.id);
   const [month, setMonth] = useState(null);
-  const [paySlip, setPaySlip] = useState(false);
-
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [printContent, setPrintContent] = useState(null);
-  const [paySlipData, setPaySlipData] = useState(false)
-  const [filterEmployees, setFilterEmployees] = useState([]);
-  const [selectedMonth, setSelectedMonth] = useState(new Date());
+  const [paySlipData, setPaySlipData] = useState(false);
+  const [selectedMonth, setSelectedMonth] = useState();
+  const [nofDaysInMonth, setNofDaysInMonth] = useState('-');
 
-  const updateSelectedMonth = (_, dateString) => {
-    const [month, year] = dateString.split("-");
-    const newMonth = new Date(`${year}-${month}-01`);
-    setSelectedMonth(newMonth);
+  const updateSelectedMonth = (date, dateString) => {
+    console.log("selected date string: ", dateString, date);
+    const selectedDate = new Date(date);
+    const month = selectedDate.getMonth();
+    const year = selectedDate.getFullYear();
+    console.log("selected date: ", year);
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const selectedMonthYear = `${monthNames[month]}-${year}`;
+    console.log("selected month-year: ", selectedMonthYear);
+    setSelectedMonth(selectedMonthYear);
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    console.log("daysInMonth: ", daysInMonth)
+    setNofDaysInMonth(daysInMonth);
   };
 
-  const numberOfDaysInMonth = new Date(
-    selectedMonth.getFullYear(),
-    selectedMonth.getMonth() + 1,
-    0
-  ).getDate();
-
   useEffect(() => {
+
     if (month) {
       setPaySlipData(true);
     } else {
       setPaySlipData(false);
     }
-    getSalaryData();
-    getUser()
-  }, [month]);
+    getSalaryData(month);
+
+  }, [month,],);
+
+
+  useEffect(() => {
+    setUserId(props.showRecord.id)
+    console.log('props.showRecord.id', props.showRecord.id)
+  }, [props.showRecord.id]);
 
   async function getSalaryData() {
-    const allSalaryPaySlip = await EmployeeNetSalary.getSalary();
-    console.log('aaa', allSalaryPaySlip,)
-    setPaySlipData(allSalaryPaySlip);
-  }
-
-  async function getUser() {
-    const allUser = await getUsers();
-    let user = allUser.docs.map((doc, i) => {
-      return {
-        ...doc.data(),
-        id: doc.id
-
-      }
-
-    })
-    console.log('aaa', user)
-    setFilterEmployees(user)
+    const allSalaryPaySlip = await EmployeeNetSalary.getSalarySlip();
+    console.log(allSalaryPaySlip);
+    console.log("aaa", allSalaryPaySlip);
+    if (allSalaryPaySlip.length > 0) {
+      setPaySlipData(allSalaryPaySlip[0]);
+    }
   }
 
   return (
@@ -125,9 +125,13 @@ function PaySlip() {
                     setPrintContent(el);
                   }}
                 >
-                  <SlipHtml selectedMonth={selectedMonth.toLocaleString("default", { month: "long" })}
-                    year={selectedMonth.getFullYear()}
-                    numberOfDays={numberOfDaysInMonth} />
+                  <SlipHtml
+                    selectedMonth={selectedMonth}
+                    nofDaysInMonth={nofDaysInMonth}
+                    showRecord={showRecord}
+
+
+                  />
                 </div>
               </div>
             </>
@@ -137,7 +141,10 @@ function PaySlip() {
     </>
   );
 
-  function SlipHtml({ selectedMonth, year, numberOfDays }) {
+  function SlipHtml({ selectedMonth, year, nofDaysInMonth, showRecord, }) {
+    console.log('showRecord', showRecord)
+
+
     return (
       <>
         <div
@@ -191,7 +198,7 @@ function PaySlip() {
                         width: "195px",
                       }}
                     >
-                      {filterEmployees[0].empId}
+                      {showRecord.empId ? showRecord.empId : '-'}
                     </td>
                   </tr>
                   <tr>
@@ -207,7 +214,7 @@ function PaySlip() {
                         width: "195px",
                       }}
                     >
-                      {filterEmployees[0].name}
+                      {showRecord.fname ? showRecord.fname : '-'}
                     </td>
                   </tr>
                   <tr>
@@ -223,7 +230,7 @@ function PaySlip() {
                         width: "180px",
                       }}
                     >
-                      {filterEmployees[0].designation}
+                      {showRecord.designation ? showRecord.designation : '-'}
                     </td>
                     {/* <td
                 style={{
@@ -249,7 +256,7 @@ function PaySlip() {
                         width: "180px",
                       }}
                     >
-                      {filterEmployees[0].doj}
+                      {showRecord.doj ? showRecord.doj : '-'}
                     </td>
                   </tr>
                 </table>
@@ -269,7 +276,7 @@ function PaySlip() {
                         width: "180px",
                       }}
                     >
-                      {numberOfDays}
+                      {nofDaysInMonth}
                     </td>
                   </tr>
                   <tr>
@@ -285,7 +292,7 @@ function PaySlip() {
                         width: "180px",
                       }}
                     >
-                      {numberOfDays}
+                      {nofDaysInMonth}
                     </td>
                   </tr>
                   <tr>
@@ -359,7 +366,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].basic}
+                      {/* {paySlipData[0].basic} */}
                     </td>
                   </tr>
                   <tr>
@@ -376,7 +383,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].hra}
+                      {/* {paySlipData[0].hra} */}
                     </td>
                   </tr>
                   <tr>
@@ -393,7 +400,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].conveyance}
+                      {/* {paySlipData[0].conveyance} */}
                     </td>
                   </tr>
                   <tr>
@@ -427,7 +434,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].proffallowance}
+                      {/* {paySlipData[0].proffallowance} */}
                     </td>
                   </tr>
                   <tr>
@@ -444,7 +451,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].specialallowance}
+                      {/* {paySlipData[0].specialallowance} */}
                     </td>
                   </tr>
                   <tr>
@@ -461,7 +468,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].bonus}
+                      {/* {paySlipData[0].bonus} */}
                     </td>
                   </tr>
                   <tr>
@@ -478,7 +485,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].lta}
+                      {/* {paySlipData[0].lta} */}
                     </td>
                   </tr>
                   <tr>
@@ -495,7 +502,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].otherAllowance}
+                      {/* {paySlipData[0].otherAllowance} */}
                     </td>
                   </tr>
                 </table>
@@ -535,7 +542,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].pfem}
+                      {/* {paySlipData[0].pfem} */}
                     </td>
                   </tr>
                   <tr>
@@ -552,7 +559,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].pfer}
+                      {/* {paySlipData[0].pfer} */}
                     </td>
                   </tr>
                   <tr>
@@ -569,7 +576,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].esi}
+                      {/* {paySlipData[0].esi} */}
                     </td>
                   </tr>
                   <tr>
@@ -586,7 +593,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].profTax}
+                      {/* {paySlipData[0].profTax} */}
                     </td>
                   </tr>
                   <tr>
@@ -603,7 +610,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].tds}
+                      {/* {paySlipData[0].tds} */}
                     </td>
                   </tr>
                   <tr>
@@ -620,7 +627,7 @@ function PaySlip() {
                         textAlign: "center",
                       }}
                     >
-                      {paySlipData[0].otherDeduction}
+                      {/* {paySlipData[0].otherDeduction} */}
                     </td>
                   </tr>
                 </table>
@@ -645,7 +652,7 @@ function PaySlip() {
                         textAlign: "right",
                       }}
                     >
-                      {paySlipData[0].totalEarning}
+                      {/* {paySlipData[0].totalEarning} */}
                     </td>
                   </tr>
                 </table>
@@ -668,7 +675,7 @@ function PaySlip() {
                         textAlign: "right",
                       }}
                     >
-                      {paySlipData[0].totalDeduction}
+                      {/* {paySlipData[0].totalDeduction} */}
                     </td>
                   </tr>
                 </table>
@@ -678,7 +685,10 @@ function PaySlip() {
               <table>
                 <tr>
                   <td>Net Pay For The Month:</td>
-                  <td style={{ width: "178px", textAlign: "end" }}>    {paySlipData[0].netSalaryIncome}</td>
+                  <td style={{ width: "178px", textAlign: "end" }}>
+                    {" "}
+                    {/* {paySlipData[0].netSalaryIncome} */}
+                  </td>
                   <td style={{ width: "160px" }}>(Eight Thousands Only)</td>
                 </tr>
               </table>

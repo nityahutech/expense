@@ -142,6 +142,7 @@ function EmployeeList() {
                     type="link"
                     style={{ padding: "0px" }}
                     onClick={(e) => {
+                      setshowRecord(record)
                       setSelectemp({ id: record.id }); // set selectemp.id to the employee's id
                       setActivetab("3");
                     }}
@@ -555,7 +556,7 @@ function EmployeeList() {
               />
             </Modal>
           </Tabs.TabPane>
-          {console.log(selectemp,showRecord)}
+          {console.log(selectemp, showRecord)}
           <Tabs.TabPane tab="Employee Pofile" disabled={!selectemp.id} key="2">
             <EmployeeListview
               className="Edit"
@@ -570,8 +571,8 @@ function EmployeeList() {
           >
             <PaySlip
               className="Edit"
-            // showRecord={showRecord}
-            // getData={getData}
+              showRecord={showRecord}
+              getData={getData}
             // certificationDetails={certificationDetails}
             />
           </Tabs.TabPane>

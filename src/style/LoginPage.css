@@ -159,6 +159,7 @@
   justify-content: center;
   margin: auto;
   /* margin-top: 2rem; */
+  height: 100vh ;
   width: auto;
   background-color: white;
 }

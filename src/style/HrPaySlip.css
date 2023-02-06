@@ -61,9 +61,10 @@ label {
 .Third {
   box-sizing: border-box;
   background: #fff;
-  margin: 15px 50px;
+  margin: 25px 25px;
   padding: 30px 30px;
   height: auto;
+  border-radius: 10px;
 }
 .ant-select.ant-select-in-form-item.dropDown {
   width: 30%;

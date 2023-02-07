@@ -292,8 +292,6 @@ const NewSidebar = (props) => {
                       <p className="sideFont">Assets</p>
                       <NavLink to="/Assets" />
                     </Menu.Item>
-                  </>
-                ) : null}
                 <Menu.SubMenu
                   className="arrow-div"
                   style={{
@@ -338,6 +336,9 @@ const NewSidebar = (props) => {
                     <NavLink to="/Expense/InvoiceReimbursement" />
                   </Menu.Item>
                 </Menu.SubMenu>
+                  </>
+                ) : null}
+
                 <Menu.Item
                   icon={<img src={userIcon} alt="profile" className="Dash" />}
                   key="21"

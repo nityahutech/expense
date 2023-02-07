@@ -44,7 +44,7 @@ function App() {
                 activeMenu={["30"]}
               />
             }
-          />
+          />{roleView == "super" ? ( 
           <Route
             path="/Organization/Onboarding"
             element={
@@ -54,7 +54,7 @@ function App() {
                 activeMenu={["31"]}
               />
             }
-          />
+          />):null}
           <Route
             path="/CompanyProfile"
             element={

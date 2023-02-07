@@ -29,6 +29,7 @@ import {
   getBase64,
 } from "../../contexts/CreateContext";
 import PrefixSelector from "../PrefixSelector";
+import { useAuth } from "../../contexts/AuthContext";
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -44,7 +45,9 @@ function Personal() {
   const [lccs, setLccs] = useState("");
   const [editAddressInfo, showEditAddressInfo] = useState(false);
   const [data, setData] = useState([]);
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser, compId} = useAuth();
+  console.log(currentUser, compId);
+  // const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [form] = Form.useForm();
 
   const onFinish = (value) => {

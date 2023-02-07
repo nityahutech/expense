@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "../style/LoginPage.css"
 import loginBg from "../images/login-img.png"
 import loginLogo from "../images/Logo77.png"
+import { LoadingOutlined } from "@ant-design/icons";
 
 function LoginPage() {
   const [loginEmail, setLoginEmail] = useState("");
@@ -52,6 +53,8 @@ function LoginPage() {
     }
     setLoading(false);
   }
+
+  const buttonStyle = loading ? { backgroundColor: "lightgray", color: "gray" } : { backgroundColor: "#1963A6", color: "white" }
     return (
     <>
       {/* <div className="main-div"> */}
@@ -145,10 +148,11 @@ function LoginPage() {
                         <Button
                           type="submit"
                           htmlType="submit"
-                          style={{ backgroundColor: "#1963A6", color: "white" }}
+                          style={buttonStyle}
                           onClick={handleSubmit}
                           disabled={loading}
                         >
+                        {loading && (<LoadingOutlined />)}
                           Login
                         </Button>
                       </div>

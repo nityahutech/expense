@@ -15,21 +15,23 @@ import {
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { async } from "@firebase/util";
 
-const compId = sessionStorage.getItem("compId");
+let compId = sessionStorage.getItem("compId");
 
-const companyAssetCollectionRef = collection(
+let companyAssetCollectionRef = collection(
   db,
   `companyprofile/${compId}/assets`
 );
 
-// const companyRepairCollectionRef = collection(
-//   db, `companyprofile/${compId}/assets`, "repairs"
-// );
-
 class AssetContext {
-  // addAsset = async (assetData) => {
-  //   return addDoc(companyAssetCollectionRef, assetData);
-  // };
+
+  getCompId = () => {
+      compId = sessionStorage.getItem("compId");
+      companyAssetCollectionRef = collection(
+        db,
+        `companyprofile/${compId}/assets`
+      );
+      return;
+  };
 
   addAsset = (newLaptop, file) => {
     if (file) {

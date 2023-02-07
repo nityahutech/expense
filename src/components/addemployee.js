@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Col,
   Row,
@@ -208,6 +208,11 @@ function AddEmployee() {
   };
 
   const handleBulkOnboard = () => {
+    // let officialEmail = heads.indexOf("Offical Email Id");
+    // let ids = allEmp.map(x => x[officialEmail])
+    // ids.shift()
+    // console.log(ids)
+    // deleteUsers(ids)
     let temp = [...allEmp];
     let headers = heads;
     let firstName = headers.indexOf("First Name");
@@ -233,7 +238,6 @@ function AddEmployee() {
     let role = headers.indexOf("Role");
     let note = headers.indexOf("Note");
     temp.forEach(((emp, i) => {
-      console.log(emp)
       let temp = {
         empId: emp[id],
         fname: emp[firstName],
@@ -262,7 +266,6 @@ function AddEmployee() {
         workLocation: emp[workLocation],
         remark: emp[note] || "",
       }
-      console.log(temp)
       createUser(temp, compId).then(res => {
         if(i == temp.length-1) {
           showNotification("success", "Success", "Bulk Onboarding Complete!")
@@ -286,7 +289,7 @@ function AddEmployee() {
     let phone = headers.indexOf("Phone Number");
     let gender = headers.indexOf("Gender");
     let empType = headers.indexOf("Employee Type");
-    // let des = headers.indexOf("Designation");
+    let des = headers.indexOf("Designation");
     let workLocation = headers.indexOf("Place of Business");
     let repManager = headers.indexOf("Reporting Manager");
     let secManager = headers.indexOf("Secondary Manager");
@@ -296,7 +299,6 @@ function AddEmployee() {
     let dept = headers.indexOf(order[2]);
     data.forEach(async (emp, i) => {
       if(i == data.length-1) { return; }
-      console.log(emp);
       emp.forEach((field, i) => {emp[i] = field.trim()})
       emp[firstName] = emp[firstName].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
       emp[middleName] = emp[middleName] ? emp[middleName].split(" ").map(x => capitalize(x.toLowerCase())).join(" ") : null;
@@ -331,8 +333,8 @@ function AddEmployee() {
       let validDoj = disabledJoining(moment(emp[doj], "YYYY-MM-DD"))
       let validDob = disabledDate(moment(emp[dob], "YYYY-MM-DD"))
       if (validDob || validDoj) { errors.push([emp[officialEmail], "DOB/DOJ", `Invalid ${validDob ? "DOB " + emp[dob] + (validDoj ? " & DOJ " + emp[doj] : "") : "DOJ " + emp[doj]}`]); };
-      // let desVaild = designations.includes(emp[des])
-      // if (!desVaild) { errors.push([emp[officialEmail], "Designation", "Designation Does Not Exist"]); }
+      let desVaild = designations.includes(emp[des])
+      if (!desVaild) { errors.push([emp[officialEmail], "Designation", "Designation Does Not Exist"]); }
       let locVaild = workLoc.includes(emp[workLocation])
       if (!locVaild) { errors.push([emp[officialEmail], "Work Location", "Work Location Does Not Exist"]); }
       if (repManager != -1) {
@@ -348,7 +350,9 @@ function AddEmployee() {
         if (!leadExists) { errors.push([emp[officialEmail], "Lead", "Lead Does Not Exist"]); }
       }
     })
-    console.log("data");
+    if(data[data.length-1].length == 1) {
+        data.pop()
+    }
     setErrorFile(null)
     const timer = setTimeout(() => {
       if (errors.length > 1) {
@@ -1107,10 +1111,9 @@ function AddEmployee() {
             >
               <CSVReader
                 onUploadAccepted={(results) => {
-                  let temp = [...results.data].splice(0,100);
+                  let temp = [...results.data];
                   let headers = temp.shift();
                   let model = temp.shift();
-                  console.log(temp, headers, model);
                   validateCSV(temp, headers, model);
                 }}
               >

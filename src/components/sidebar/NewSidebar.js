@@ -16,6 +16,7 @@ import LeaveIcon from "../../images/smallLeaveLogo.png";
 import SmallAttd from "../../images/samllattlogo.png";
 import "./newSlidebar.css";
 import SmallerLogo from "../../images/smallerLogo.png";
+import travel from "../../images/map.svg"
 import { NavLink, Link } from "react-router-dom";
 
 const { Sider } = Layout;
@@ -246,7 +247,6 @@ const NewSidebar = (props) => {
                     </Menu.Item>
                   </>
                 ) : null}
-
                 {role != "super" ? (
                   <>
                     <Menu.SubMenu
@@ -338,13 +338,19 @@ const NewSidebar = (props) => {
                     <NavLink to="/Expense/InvoiceReimbursement" />
                   </Menu.Item>
                 </Menu.SubMenu>
-
                 <Menu.Item
                   icon={<img src={userIcon} alt="profile" className="Dash" />}
                   key="21"
                 >
                   <p className="sideFont">My Profile</p>
                   <NavLink to="/Profile" />
+                </Menu.Item>
+                <Menu.Item
+                 icon={<img src={travel} alt="profile" className="Dash"  style={{color:"#fffff"}} />}
+                 key="24"
+                >
+                  <p className="sideFont">Travel Management</p>
+                  <NavLink to="/TravelManagement" />
                 </Menu.Item>
               </Menu>
             </div>

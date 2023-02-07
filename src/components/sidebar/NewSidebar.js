@@ -346,13 +346,13 @@ const NewSidebar = (props) => {
                   <p className="sideFont">My Profile</p>
                   <NavLink to="/Profile" />
                 </Menu.Item>
-                <Menu.Item
+                {role != "super" ? (<Menu.Item
                  icon={<img src={travel} alt="profile" className="Dash"  style={{color:"#fffff"}} />}
                  key="24"
                 >
                   <p className="sideFont">Travel Management</p>
                   <NavLink to="/TravelManagement" />
-                </Menu.Item>
+                </Menu.Item>):null}
               </Menu>
             </div>
           </div>

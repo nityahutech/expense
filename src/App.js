@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import AttendanceLog from "./components/AttendanceLog";
 import InvoiceReimbursement from "./components/assetManagement/InvoiceReimbursement";
 import InvoiceMagHome from "./components/assetManagement/InvoiceMagHome";
+import TravelManagement from "./components/TravelManagement/travelManagement";
 
 function App() {
   const [roleview, setRoleview] = useState('')
@@ -206,6 +207,19 @@ function App() {
                 activeMenu={["22"]}
                 roleView={roleview}
                 switchRole={switchRole}
+              />
+            }
+          />
+          <Route 
+            path="/TravelManagement"
+            element={
+              <FormatPage 
+                main={<TravelManagement roleView={roleView} />}
+                // activeSubMenu={["sub4"]}
+                activeMenu={["24"]}
+                roleView={roleView}
+                switchRole={switchRole}
+               
               />
             }
           />

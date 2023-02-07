@@ -21,6 +21,7 @@ import ExpenseContext from "./ExpenseContext";
 import LeaveContext from "./LeaveContext";
 import PolicyContext from "./PolicyContext";
 import InvoiceContext from "./InvoiceContext";
+import AssetContext from "./AssetContext";
 
 const AuthContext = React.createContext()
 
@@ -67,6 +68,7 @@ export function AuthProvider({ children }) {
       LeaveContext.getCompId();
       PolicyContext.getCompId();
       InvoiceContext.getCompId();
+      AssetContext.getCompId();
       if (rec?.role == "super") { return; }
       CompanyProContext.getCompanyProfile(rec?.compId).then((rec) => {
         sessionStorage.setItem("logo", rec?.logo)

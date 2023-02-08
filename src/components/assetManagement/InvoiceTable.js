@@ -25,24 +25,15 @@ function InvoiceTable(props) {
   }
 
   const setStatus = async (record, status) => {
-    Modal.confirm({
-      title: `Are you sure, you want to ${
-        status == "Approved" ? "approve" : "reject"
-      } this request?`,
-      okText: "Yes",
-      okType: "danger",
-      onOk: async () => {
-        const updateInvoiceReocrd = empInvoiceTable.map((allotInvoice) => {
-          if (allotInvoice.id == record.id) {
-            allotInvoice.status = status;
-            record.status = status;
-          }
-          return allotInvoice;
-        });
-        await InvoiceContext.updateInvoiceData(record.id, record);
-        setEmpInvoiceTable(updateInvoiceReocrd);
-      },
+    const updateInvoiceReocrd = empInvoiceTable.map((allotInvoice) => {
+      if (allotInvoice.id == record.id) {
+        allotInvoice.status = status;
+        record.status = status;
+      }
+      return allotInvoice;
     });
+    await InvoiceContext.updateInvoiceData(record.id, record);
+    setEmpInvoiceTable(updateInvoiceReocrd);
   };
 
   useEffect(() => {

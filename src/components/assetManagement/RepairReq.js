@@ -182,7 +182,6 @@ function LaptopAllot(props) {
                   >
                     <Option value="Upgrade">Upgrade Form</Option>
                     <Option value="Repair">Repair Form</Option>
-                    <Option value="Return">Return Form</Option>
                     {/* <Select.Option value="option3">Option 3</Select.Option> */}
                   </Select>
                 </Form.Item>
@@ -190,8 +189,7 @@ function LaptopAllot(props) {
               {/* ----------------------laptopAllortment */}
 
               {(selectedOption === "Repair" ||
-                selectedOption === "Upgrade" ||
-                selectedOption === "Return") && (
+                selectedOption === "Upgrade") && (
                 <>
                   <Col span={10}>
                     <Form.Item
@@ -199,9 +197,7 @@ function LaptopAllot(props) {
                       label={
                         selectedOption === "Repair"
                           ? "Date Of Repairing Request"
-                          : selectedOption === "Upgrade"
-                          ? "Date of upgrading request"
-                          : "Date of Return"
+                          : "Date of upgrading request"
                       }
                     >
                       <DatePicker
@@ -284,7 +280,6 @@ function LaptopAllot(props) {
                       </FormItem>
                     </Col>
                   ) : null}
-
                   <Col
                     span={24}
                     classsname="gutter-row"

@@ -25,8 +25,8 @@ function AssetMagHome(props) {
   const getRepairData = async () => {
     const typeValues =
       props.roleView == "admin"
-        ? ["Repair", "Upgrade", "Allotment"]
-        : ["Repair", "Upgrade"];
+        ? ["Repair", "Upgrade", "Allotment", "Return"]
+        : ["Repair", "Upgrade", "Return"];
     let repairData = await AssetContext.getRepairData(
       currentUser.uid,
       typeValues

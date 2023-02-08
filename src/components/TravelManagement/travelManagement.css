@@ -1,0 +1,44 @@
+.travelCard {
+    background: #fff;
+    padding: 7px;
+    margin: 6px 6px;
+    border-radius: 5px;
+}
+.travelCard .ant-card-head{
+    border-radius: 5px 5px 0px 0px;
+    background: #1963A6;
+    color: #ffffff;
+  }
+  .travelCard .ant-card-head-title {
+    font-weight: bold;
+    line-height: 19px;
+    text-transform: uppercase;
+    font-size: 17px;
+  }
+.ant-form-item .uploadInput {
+    margin-bottom: 19px;
+}
+
+
+
+.travelTable.ant-table-wrapper {
+    background: #fff;
+    padding: 7px;
+    margin: 6px 6px;
+    border-radius: 5px;
+    
+  }
+  .travelTable table thead tr th,
+  .expenseTable table tbody tr td {
+    padding: 5px 10px;
+  }
+  .travelTable .ant-table-thead > tr > th {
+    background: #1963a6;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+  }
+  .travelTable .ant-table-thead{
+    height: 50px;
+  }

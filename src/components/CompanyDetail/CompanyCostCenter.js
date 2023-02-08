@@ -8,11 +8,9 @@ import {
   Card,
   Table,
   Modal,
-  notification,
   Divider,
 } from "antd";
 import {
-  PlusOutlined,
   EditFilled,
   DeleteOutlined,
   CloseOutlined,
@@ -21,9 +19,9 @@ import {
 import "../../style/CostCenter.css";
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/lib/input/TextArea";
-import { showNotification } from "../../contexts/CreateContext";
-import CompanyCostContext from "../../contexts/CompanyCostContext";
-import AssetContext from "../../contexts/AssetContext";
+import { capitalize, checkAlphabets, checkAlphabetsName, showNotification } from "../../contexts/CreateContext";
+import CompanyProContext from "../../contexts/CompanyProContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 function CostCenter(props) {
   const [isCostModalOpen, setIsCostModalOpen] = useState(false);
@@ -32,29 +30,9 @@ function CostCenter(props) {
   const [editForm] = Form.useForm();
   const [costCenters, setCostCenters] = useState([]);
   const [costEditCenter, setEditCostCenter] = useState({});
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {compId} = useAuth();
 
-  //   const deleteCost = (record) => {
-  //     Modal.confirm({
-  //       title: "Are you sure, You want to delete Cost Center?",
-  //       okText: "Yes",
-  //       okType: "danger",
-
-  //       onOk: () => {
-  //         const newData = costCenters.filter(
-  //           (item) => item.costcentercode !== record.costcentercode
-  //         );
-  //         localStorage.setItem("costCenters", JSON.stringify(newData));
-  //         setCostCenters(newData);
-  //       },
-  //     });
-  //   };
-
-  const showModal = () => {
-    setIsCostModalOpen(true);
-  };
-
-  const onFinishEdit = (values) => {
+  const onFinishEdit = async (values) => {
     console.log(values, "editttttt");
     let newCostCenterTemp = {
       costName: values.costName,
@@ -63,8 +41,7 @@ function CostCenter(props) {
     };
     console.log(newCostCenterTemp);
     try {
-      CompanyCostContext.updateCostCenter(costEditCenter.id, newCostCenterTemp);
-
+      await CompanyProContext.editCompInfo(compId, {costCenters: costEditCenter}, {costCenters: newCostCenterTemp})
       showNotification("success", "Success", "Edit Successful");
       getAllCostCenters();
       setIsCostEditModalOpen(false);
@@ -73,23 +50,7 @@ function CostCenter(props) {
     }
   };
 
-  const checkAlphabets = (event) => {
-    if (!/^[0-9A-Z_-\s]+$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
-  const checkAlphabetsName = (event) => {
-    if (!/^[a-zA-Z\s]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  const onFinishForm = (values) => {
+  const onFinishForm = async (values) => {
     let matchingCostCenter = costCenters.filter(
       (item) => item.costcentercode === values.costcentercode
     );
@@ -104,7 +65,7 @@ function CostCenter(props) {
       costDescription: values.costDescription,
     };
     try {
-      CompanyCostContext.addCostCenter(costCenterDetails, currentUser.uid);
+      await CompanyProContext.addCompInfo(compId, {costCenters: costCenterDetails});
       showNotification("success", "Success", "Cost Center Details Added");
       getAllCostCenters();
       setIsCostModalOpen(false);
@@ -114,29 +75,23 @@ function CostCenter(props) {
   };
 
   const getAllCostCenters = async () => {
-    let costCenterData = await CompanyCostContext.getCostCenter(
-      currentUser.uid
-    );
-    setCostCenters(costCenterData);
+    let data = await CompanyProContext.getCompanyProfile(compId)
+    console.log(compId, data);
+    setCostCenters(data.costCenters || []);
   };
 
   useEffect(() => {
     getAllCostCenters();
   }, []);
 
-  const onDeleteCostCenter = (record) => {
+  const onDeleteCostCenter = async (record) => {
     Modal.confirm({
       title: "Are you sure, you want to delete Cost Center details?",
       okText: "Yes",
       okType: "danger",
       onOk: () => {
-        try {
-          CompanyCostContext.deleteCostCenter(record.id);
-          getAllCostCenters();
-        } catch (error) {
-          {
-          }
-        }
+        CompanyProContext.deleteCompInfo(compId, {costCenters : record})
+        getAllCostCenters();
       },
     });
   };
@@ -251,7 +206,7 @@ function CostCenter(props) {
                     >
                       <Button
                         type="default"
-                        onClick={showModal}
+                        onClick={() => setIsCostModalOpen(true)}
                         style={{
                           margin: "10px 10px 0px 0px",
                           background: "#1963A6",
@@ -292,7 +247,6 @@ function CostCenter(props) {
                   className="costModal"
                   onOk={() => {
                     form.submit();
-                    // setIsCostModalOpen(false);
                   }}
                   okText={
                     <div className="save">
@@ -374,18 +328,12 @@ function CostCenter(props) {
                           <Input
                             maxLength={30}
                             onChange={(e) => {
-                              const inputval = e.target.value;
                               const str = e.target.value;
-                              const newVal =
-                                inputval.substring(0, 1).toUpperCase() +
-                                inputval.substring(1);
                               const caps = str
                                 .split(" ")
                                 .map(capitalize)
                                 .join(" ");
-                              // setPaidBy(newVal);
                               form.setFieldsValue({
-                                costName: newVal,
                                 costName: caps,
                               });
                             }}
@@ -403,18 +351,12 @@ function CostCenter(props) {
                             maxlength={100}
                             autoSize={{ minRows: 2, maxRows: 6 }}
                             onChange={(e) => {
-                              const inputval = e.target.value;
                               const str = e.target.value;
-                              const newVal =
-                                inputval.substring(0).toUpperCase() +
-                                inputval.substring(0);
                               const caps = str
                                 .split(". ")
                                 .map(capitalize)
                                 .join(". ");
-                              // setPaidBy(newVal);
                               form.setFieldsValue({
-                                costDescription: newVal,
                                 costDescription: caps,
                               });
                             }}
@@ -528,18 +470,12 @@ function CostCenter(props) {
                           <Input
                             maxLength={30}
                             onChange={(e) => {
-                              const inputval = e.target.value;
                               const str = e.target.value;
-                              const newVal =
-                                inputval.substring(0, 1).toUpperCase() +
-                                inputval.substring(1);
                               const caps = str
                                 .split(" ")
                                 .map(capitalize)
                                 .join(" ");
-                              // setPaidBy(newVal);
                               form.setFieldsValue({
-                                costName: newVal,
                                 costName: caps,
                               });
                             }}
@@ -558,18 +494,12 @@ function CostCenter(props) {
                             maxlength={100}
                             autoSize={{ minRows: 2, maxRows: 6 }}
                             onChange={(e) => {
-                              const inputval = e.target.value;
                               const str = e.target.value;
-                              const newVal =
-                                inputval.substring(0).toUpperCase() +
-                                inputval.substring(0);
                               const caps = str
                                 .split(". ")
                                 .map(capitalize)
                                 .join(". ");
-                              // setPaidBy(newVal);
                               form.setFieldsValue({
-                                costDescription: newVal,
                                 costDescription: caps,
                               });
                             }}

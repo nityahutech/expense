@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Col,
   Row,
@@ -55,6 +55,7 @@ function AddEmployee() {
   const [options, setOptions] = useState([]);
   const [enableBulk, setEnableBulk] = useState(false);
   const [bulkModal, openBulkModal] = useState(false);
+  const [heads, setHeaders] = useState([]);
 
 
   const showBulkModal = () => {
@@ -96,7 +97,7 @@ function AddEmployee() {
     },
     acceptedFile: {
       border: "1px solid #ccc",
-      height: 45,
+      // height: 45,
       lineHeight: 2.5,
       paddingLeft: 10,
       width: "80%",
@@ -111,6 +112,8 @@ function AddEmployee() {
   };
 
   useEffect(() => {
+    setAllEmp([]);
+    setEnableBulk(false)
     getData();
     getAllUser();
   }, []);
@@ -205,9 +208,13 @@ function AddEmployee() {
   };
 
   const handleBulkOnboard = () => {
+    // let officialEmail = heads.indexOf("Offical Email Id");
+    // let ids = allEmp.map(x => x[officialEmail])
+    // ids.shift()
+    // console.log(ids)
+    // deleteUsers(ids)
     let temp = [...allEmp];
-    let headers = temp.shift();
-    let model = temp.shift();
+    let headers = heads;
     let firstName = headers.indexOf("First Name");
     let middleName = headers.indexOf("Middle Name");
     let lastName = headers.indexOf("Last Name");
@@ -230,7 +237,7 @@ function AddEmployee() {
     let team = headers.indexOf("Team");
     let role = headers.indexOf("Role");
     let note = headers.indexOf("Note");
-    temp.forEach((emp => {
+    temp.forEach(((emp, i) => {
       let temp = {
         empId: emp[id],
         fname: emp[firstName],
@@ -259,9 +266,11 @@ function AddEmployee() {
         workLocation: emp[workLocation],
         remark: emp[note] || "",
       }
-      temp.save()
-      createUser(temp, compId)
-
+      createUser(temp, compId).then(res => {
+        if(i == temp.length-1) {
+          showNotification("success", "Success", "Bulk Onboarding Complete!")
+        }
+      })
     }))
     setEnableBulk(false);
   };
@@ -289,6 +298,7 @@ function AddEmployee() {
     let div = headers.indexOf(order[1]);
     let dept = headers.indexOf(order[2]);
     data.forEach(async (emp, i) => {
+      if(i == data.length-1) { return; }
       emp.forEach((field, i) => {emp[i] = field.trim()})
       emp[firstName] = emp[firstName].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
       emp[middleName] = emp[middleName] ? emp[middleName].split(" ").map(x => capitalize(x.toLowerCase())).join(" ") : null;
@@ -340,14 +350,21 @@ function AddEmployee() {
         if (!leadExists) { errors.push([emp[officialEmail], "Lead", "Lead Does Not Exist"]); }
       }
     })
+    if(data[data.length-1].length == 1) {
+        data.pop()
+    }
     setErrorFile(null)
     const timer = setTimeout(() => {
       if (errors.length > 1) {
         showNotification("error", "Error", "Please correct errors in upload file!")
-        setEnableBulk(false)
         setErrorFile(<Button style={{marginRight: "10px"}} onClick={() => downloadFile(errors)}> Download Error File</Button>)
+        return;
       }
-    }, [2000])
+      showNotification("success", "Success", "All Fields Valid!")
+      setAllEmp(data)
+      setHeaders(headers)
+      setEnableBulk(true)
+    }, [5000])
   }
 
   const downloadFile = (errors) => {
@@ -411,12 +428,12 @@ function AddEmployee() {
             gutter={[16, 16]}
           >
             <Col
-              xs={{ span: 24 }}
-              sm={{ span: 24 }}
-              md={{span:6}}
-              lg={{span:6}}
-              xl={{span:4}}
-              xxl={{span:6}}
+              // xs={{ span: 24 }}
+              // sm={{ span: 24 }}
+              // md={{span:6}}
+              // lg={{span:6}}
+              // xl={{span:4}}
+              // xxl={{span:6}}
 
             >
               <Button
@@ -428,9 +445,9 @@ function AddEmployee() {
               </Button>
             </Col>
             <Col
-                xs={{ span: 24 }}
-                sm={{ span: 24 }}
-                md={{span:6}}
+                // xs={{ span: 24 }}
+                // sm={{ span: 24 }}
+                // md={{span:6}}
             >
             <Button 
               className="bulkEmployee"
@@ -440,79 +457,6 @@ function AddEmployee() {
               <div className="bulkButton">Bulk Employee Onboarding</div>
             </Button>
             </Col>
-            {/* <Col
-            // style={{
-            //   background: "",
-            //   height: "50px",
-            //   display: "flex",
-            //   justifyContent: "flex-start",
-            // }}
-            >
-              <CSVReader
-                onUploadAccepted={(results) => {
-                  setEnableBulk(true)
-                  let temp = [...results.data];
-                  let headers = temp.shift();
-                  let model = temp.shift();
-                  validateCSV(temp, headers, model);
-                  setAllEmp([...results.data])
-                }}
-              >
-                {({
-                  getRootProps,
-                  acceptedFile,
-                  ProgressBar,
-                  getRemoveFileProps,
-                }) => (
-                  <>
-                    <div style={styles.csvReader}>
-                      <button
-                        type="button"
-                        {...getRootProps()}
-                        style={styles.browseFile}
-                      >
-                        Browse file
-                      </button>
-                      <div style={styles.acceptedFile}>
-                        {acceptedFile && acceptedFile.name}
-                        {!acceptedFile && setEnableBulk(false)}
-                        {!acceptedFile && setErrorFile(null)}
-                      </div>
-                      <button {...getRemoveFileProps()} style={styles.remove}>
-                        Remove
-                      </button>
-                    </div>
-                    <ProgressBar style={styles.progressBarBackgroundColor} />
-                  </>
-                )}
-              </CSVReader>
-            </Col> */}
-            {/* <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-center"
-              style={{
-                background: "",
-                height: "50px",
-                display: "flex",
-                justifyContent: "flex-start",
-              }}
-            > 
-              {errorFile}
-              <Button
-                className="listExpense"
-                disabled={!enableBulk}
-                type="primary"
-                onClick={handleBulkOnboard}
-                style={{
-                  cursor: "pointer",
-                  backgroundColor: "#1963A6",
-                  borderRadius: "5px",
-                }}
-              >
-                Bulk Onboard Emloyees
-              </Button>
-            </Col> */}
           </Row>
           <Row gutter={[24, 8]}>
             <Col xs={22} sm={15} md={8}>
@@ -1167,12 +1111,10 @@ function AddEmployee() {
             >
               <CSVReader
                 onUploadAccepted={(results) => {
-                  setEnableBulk(true)
                   let temp = [...results.data];
                   let headers = temp.shift();
                   let model = temp.shift();
                   validateCSV(temp, headers, model);
-                  setAllEmp([...results.data])
                 }}
               >
                 {({
@@ -1223,7 +1165,7 @@ function AddEmployee() {
                 type="primary"
                 onClick={handleBulkOnboard}
                 style={{
-                  cursor: "pointer",
+                  // cursor: "pointer",
                   backgroundColor: "#1963A6",
                   borderRadius: "5px",
                   color:'#ffff'

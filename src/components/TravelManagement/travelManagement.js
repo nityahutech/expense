@@ -11,9 +11,18 @@ import {
   Col,
   Form,
   Input,
+  DatePicker,
 } from "antd";
+import {
+    MinusCircleOutlined,
+    PlusOutlined,
+    CheckOutlined,
+    CloseOutlined,
+    EyeFilled,
+    EditFilled,
+  } from "@ant-design/icons";
 import "./travelManagement.css"
-import { EyeFilled, EditFilled } from "@ant-design/icons";
+// import { EyeFilled, EditFilled } from "@ant-design/icons";
 import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
 
@@ -22,6 +31,7 @@ function TravelManagement(prop) {
       const role =prop.roleView == "emp"
       console.log(prop.roleView);
       const { TextArea } = Input;
+      const { RangePicker } = DatePicker;
       const columns = [
         {
           title: "Employee Code ",
@@ -286,17 +296,17 @@ function TravelManagement(prop) {
                             <Form.Item label="Title"><Input /></Form.Item>
                             </Col>
                             <Col span={24}>
-                            <Form.Item label="Title"><Input /></Form.Item>
+                            <Form.Item label="Date"><RangePicker style={{width:"100%"}}/></Form.Item>
                             </Col>
                             <Col span={24}>
-                            <Form.Item label="Title"><Input /></Form.Item>
+                            <Form.Item label="Total Amount"><Input /></Form.Item>
                             </Col>
                         </Col>
                         <Col span={12}>
                             <Col span={24}>
                             <Form.Item
                                 name="upload"
-                                label="Upload photos if (Physical Damage)"
+                                label="Upload the invoive"
                                 className='uploadInput'
                             >
                                 <div 
@@ -325,25 +335,41 @@ function TravelManagement(prop) {
                             </Form.Item>
                             </Col>                        
                         </Col>
-                        <Col span={24}>
-                        <Space>
-                      <Form.Item>
-                        <Button 
-                        // style={resetButton} onClick={onReset}
-                        >
-                          Reset
-                        </Button>
-                      </Form.Item>
-                      <Form.Item>
-                        <Button
-                        //   style={submitButton}
-                          htmlType="submit"
-                          // onClick={() => form.submit(handleSubmit3)}
-                        >
-                          Submit
-                        </Button>
-                      </Form.Item>
-                    </Space>
+                        <Col span={24} className="buttonCol">
+                            <Space>
+                                <Form.Item>
+                                    <Button 
+                                    // style={resetButton} onClick={onReset}
+                                    style={{
+                                        width:"100px",
+                                        height:"32px",
+                                        fontSize:"15px",
+                                        borderRadius:"5px",
+                                    }}
+                                    >
+                                        <CloseOutlined />
+                                    Cancel
+                                    </Button>
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button
+                                    //   style={submitButton}
+                                    htmlType="submit"
+                                    // onClick={() => form.submit(handleSubmit3)}
+                                    style={{
+                                        width:"100px",
+                                        height:"32px",
+                                        fontSize:"15px",
+                                        color:"#ffffff",
+                                        backgroundColor:"#35527F",
+                                        borderRadius:"5px"
+                                    }}
+                                    >
+                                         <CheckOutlined />
+                                    Submit
+                                    </Button>
+                                </Form.Item>
+                            </Space>
                         </Col>
                     </Row>
                     </Form>

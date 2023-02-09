@@ -18,6 +18,11 @@
 .ant-form-item .uploadInput {
     margin-bottom: 19px;
 }
+.buttonCol {
+    display: flex;
+    justify-content: end;
+    /* margin-left: 0%; */
+}
 
 
 

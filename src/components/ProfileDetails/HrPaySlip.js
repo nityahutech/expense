@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Form, Select, Button, Row, Col, Input, notification } from "antd";
+import { Form, Button, Row, Col, Input, notification } from "antd";
 import "antd/dist/antd.css";
 import "../../style/HrPaySlip.css";
 import EmployeeNetSalary from "../../contexts/EmployeeNetSalary";
-import { getUsers, showNotification } from "../../contexts/CreateContext";
+import { getUsers, } from "../../contexts/CreateContext";
 import { AutoComplete } from "antd";
 
 function HrPaySlip() {
-  const role = sessionStorage.getItem("role");
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [form] = Form.useForm();
   const [showPreview, setShowPreview] = useState(false);
   const [data, setData] = useState({});
-  // const [allData, setAllData] = useState(data || [])
 
   //-------------calculation-----------
   const [hra, setHra] = useState(0);
@@ -21,6 +18,8 @@ function HrPaySlip() {
   const [netSalary, setNetSalary] = useState("");
   const [allEmpName, setAllEmpName] = useState([]);
   const [emp, setEmp] = useState(null);
+  const [options, setOptions] = useState([]);
+  const [ids, setIds] = useState([]);
 
   const handlePrevStep = (values) => {
     console.log("Success:", values);
@@ -95,15 +94,26 @@ function HrPaySlip() {
   }
 
   useEffect(() => {
-    calculateNetSalary();
-    getAllUser();
+    calculateNetSalary()
+
+  }, [total, deduction]);
+
+  useEffect(() => {
     getSalaryData(emp);
     console.log("useEffect envoke", emp);
+  }, [emp]);
 
-  }, [total, deduction, form, emp]);
+  useEffect(() => {
+    getAllUser();
+  }, [])
 
   const onReset = () => {
     form.resetFields();
+    setData({});
+    setEmp(null);
+    setTotal(null);
+    setDeduction(null);
+    setNetSalary(null);
   };
   //updateSalary in firebase using updatedoc
   const onFinish = (values) => {
@@ -134,25 +144,31 @@ function HrPaySlip() {
 
     console.log("netSalaryEmp", netSalaryEmp);
     EmployeeNetSalary.addSalary(
+      ids[`${emp}`],
       netSalaryEmp,
-      currentUser.uid
     )
-      .then(() =>
+      .then(() => {
         notification.success({
           message: "Form submitted successfully",
         })
+        form.resetFields();
+        setEmp(null);
+        setData({});
+        setTotal(null);
+        setDeduction(null);
+        setNetSalary(null);
+      }
       )
       .catch(() =>
         notification.error({
           message: "Form submitted Failed",
         })
       );
-    form.resetFields();
     setShowPreview(false);
   };
 
   //------------------------------search name------------------------------
-  const [options, setOptions] = useState([]);
+
   const onSearch = (searchText) => {
     console.log("onSearch", searchText);
     console.log("onSearch", allEmpName);
@@ -171,31 +187,32 @@ function HrPaySlip() {
   async function getAllUser() {
     const allData = await getUsers();
     console.log("allUsers", allData);
-    let allUsers = allData.docs.map((doc, i) => {
+    let temp = {};
+    let allUsers = allData.docs.map((doc) => {
+      temp = {
+        ...temp,
+        [`${doc.data().fname + " " + doc.data().lname}`]: doc.id
+      }
       return {
         value: doc.data().fname + " " + doc.data().lname,
       };
     });
-    console.log("allUsers", allUsers);
+    console.log("allUsers", allUsers, temp);
     setAllEmpName(allUsers);
+    setIds(temp);
   }
   //-----------------------------get Salary-------------------------
 
-  async function getSalaryData(empName) {
-    const allSalaryData = await EmployeeNetSalary.getSalary(empName);
-    console.log("aaa", allSalaryData);
-    if (allSalaryData.length > 0) {
-      setData(allSalaryData[0]);
-      console.log(allSalaryData[0]);
-    }
-  }
-  //if data is their set data as null
-
-
-  useEffect(() => {
+  async function getSalaryData() {
+    if (emp == null) return;
+    let id = ids[emp];
+    console.log("id", id);
+    let data = await EmployeeNetSalary.getSalary(id);
+    console.log("aaa", data);
+    setData(data || {});
+    console.log(data);
     if (data) {
       form.setFieldsValue({
-        selectStaff: data.selectStaff,
         basic: data.basic,
         hra: data.hra,
         conveyance: data.conveyance,
@@ -217,16 +234,23 @@ function HrPaySlip() {
         totalDeduction: data.totalDeduction,
         netSalaryIncome: data.netSalaryIncome,
       });
+    } else {
+      form.resetFields();
+      setTotal(null);
+      setDeduction(null);
+      setNetSalary(null);
+      form.setFieldsValue({ selectStaff: emp })
     }
+  }
 
-  }, [data]);
-
+  console.log("data", data)
+  console.log("emp", emp)
   return (
     <div>
-      <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div
           className="Third"
-          style={showPreview ? { background: "rgb(227 227 227)" } : {}}
+          style={showPreview ? { display: 'flex', flexDirection: 'column', background: "rgb(227 227 227)", width: '400px' } : {}}
         >
           <h1
             style={
@@ -244,14 +268,14 @@ function HrPaySlip() {
           <Form
             form={form}
             labelCol={{
-              lg: { span: showPreview ? 6 : 24, offset: showPreview ? 6 : 0 },
-              md: { span: showPreview ? 6 : 24, offset: showPreview ? 6 : 0 },
-              sm: { span: showPreview ? 6 : 24, offset: showPreview ? 6 : 0 },
+              lg: { span: showPreview ? 12 : 24, offset: showPreview ? 0 : 0 },
+              md: { span: showPreview ? 12 : 24, offset: showPreview ? 0 : 0 },
+              sm: { span: showPreview ? 12 : 24, offset: showPreview ? 0 : 0 },
             }}
             wrapperCol={{
-              lg: { span: showPreview ? 8 : 24, offset: showPreview ? 4 : 0 },
-              md: { span: showPreview ? 8 : 24, offset: showPreview ? 4 : 0 },
-              sm: { span: showPreview ? 8 : 24, offset: showPreview ? 4 : 0 },
+              lg: { span: showPreview ? 0 : 24, offset: showPreview ? 0 : 0 },
+              md: { span: showPreview ? 0 : 24, offset: showPreview ? 0 : 0 },
+              sm: { span: showPreview ? 0 : 24, offset: showPreview ? 0 : 0 },
             }}
             layout={showPreview ? "horizontal" : "vertical"}
             initialValues={{
@@ -322,7 +346,6 @@ function HrPaySlip() {
                   style={
                     showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                   }
-                  initialValue={data.totalEarning}
                 >
                   {showPreview ? (
                     <span>{total}</span>
@@ -448,7 +471,7 @@ function HrPaySlip() {
                   style={
                     showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                   }
-                  initialValue={data.basic}
+                // initialValue={data.basic}
                 >
                   {showPreview ? (
                     <span>{form.getFieldValue("basic")}</span>
@@ -565,7 +588,7 @@ function HrPaySlip() {
               >
                 <Form.Item
                   name="proffallowance"
-                  label="Professional Development Allowance"
+                  label="Proff. Dev. Allowance"
                   style={
                     showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                   }
@@ -745,7 +768,7 @@ function HrPaySlip() {
                   style={
                     showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                   }
-                // initialValue={data[0].tds}
+
                 >
                   {showPreview ? (
                     <span>{form.getFieldValue("tds")} </span>
@@ -775,7 +798,7 @@ function HrPaySlip() {
                   style={
                     showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                   }
-                // initialValue={data[0].esi}
+
                 >
                   {showPreview ? (
                     <span>{form.getFieldValue("esi")} </span>
@@ -805,7 +828,7 @@ function HrPaySlip() {
                   style={
                     showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                   }
-                // initialValue={data[0].pfer}
+
                 >
                   {showPreview ? (
                     <span>{form.getFieldValue("pfer")} </span>
@@ -836,7 +859,7 @@ function HrPaySlip() {
                   style={
                     showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                   }
-                // initialValue={data[0].pfem}
+
                 >
                   {showPreview ? (
                     <span>{form.getFieldValue("pfem")} </span>
@@ -866,7 +889,7 @@ function HrPaySlip() {
                   style={
                     showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                   }
-                // initialValue={data[0].profTax}
+
                 >
                   {showPreview ? (
                     <span>{form.getFieldValue("profTax")} </span>
@@ -896,7 +919,7 @@ function HrPaySlip() {
                   style={
                     showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                   }
-                // initialValue={data[0].otherDeduction}
+
                 >
                   {showPreview ? (
                     <span>{form.getFieldValue("otherDeduction")} </span>

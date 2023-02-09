@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "antd/dist/antd.css";
 import "../style/profile.css";
 import { Tabs } from "antd";
@@ -13,8 +14,10 @@ import PaySlip from "./ProfileDetails/PaySlip";
 import BankAccount from "./ProfileDetails/BankAccount";
 
 
+
 const Profile = () => {
-const role = sessionStorage.getItem("role");
+  const role = sessionStorage.getItem("role");
+  const [showRecord, setshowRecord] = useState([]);
   return (
     <>
       <div className="myProfile">
@@ -46,9 +49,9 @@ const role = sessionStorage.getItem("role");
               <Tabs.TabPane tab="Work Week" key="7">
                 <WorkWeek />
               </Tabs.TabPane>
-              {/* <Tabs.TabPane tab="Pay Slip" key="8">
-                <PaySlip />
-              </Tabs.TabPane> */}
+              <Tabs.TabPane tab="Pay Slip" key="8">
+                <PaySlip showRecord={showRecord} />
+              </Tabs.TabPane>
               <Tabs.TabPane tab="Bank Account" key="9">
                 <BankAccount />
               </Tabs.TabPane>

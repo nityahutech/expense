@@ -11,20 +11,31 @@ import {
   Modal,
   Switch,
   Typography,
-
+  Skeleton,
 } from "antd";
-import EmpInfoContext from "../../contexts/EmpInfoContext"
+import EmpInfoContext from "../../contexts/EmpInfoContext";
 import ConfigureContext from "../../contexts/ConfigureContext";
-import { DeleteOutlined, EditFilled, CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditFilled,
+  CheckOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import "./companystyle.css";
-import { capitalize, checkNumbervalue, getDesigNo, showNotification } from "../../contexts/CreateContext";
+import {
+  capitalize,
+  checkNumbervalue,
+  getDesigNo,
+  showNotification,
+} from "../../contexts/CreateContext";
 
-const { Text } = Typography
+const { Text } = Typography;
 
 const Designation = () => {
   const page = "addemployeePage";
   const [editContent, showEditContent] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [editGrade, showEditGrade] = useState(false);
   const [data, setData] = useState({});
   const [grade, setGrade] = useState({});
@@ -40,24 +51,26 @@ const Designation = () => {
   const [showNewColumn, setshowNewColumn] = useState(false);
 
   const getData = async () => {
+    setLoading(true);
     let data = await ConfigureContext.getConfigurations(page);
-    setDesignations(data.designations)
-    setshowNewColumn(data.enabled)
-    let designNo = await getDesigNo()
-    let keys = Object.keys(data.designations)
-    let grade = Object.values(data.designations)
-    setNames(designNo.names)
+    setDesignations(data.designations);
+    setshowNewColumn(data.enabled);
+    let designNo = await getDesigNo();
+    let keys = Object.keys(data.designations);
+    let grade = Object.values(data.designations);
+    setNames(designNo.names);
     let temp = keys.map((d, i) => {
       return {
         grade: grade[i],
         designation: d,
         employees: designNo[`${d}`] ? designNo[`${d}`] : 0,
-      }
-    })
+      };
+    });
     temp.sort(function (a, b) {
       return a.designation.localeCompare(b.designation);
     });
-    setDataSource(temp)
+    setDataSource(temp);
+    setLoading(false);
   };
 
   const columns = [
@@ -65,36 +78,36 @@ const Designation = () => {
       title: "Designation",
       dataIndex: "designation",
       key: "designation",
-      align:"left"
+      align: "left",
     },
     {
       title: "Employees",
       dataIndex: "employees",
       key: "employees",
-      align:"left"
+      align: "left",
     },
     {
       title: "Grade",
       dataIndex: "grade",
       key: "grade",
-      align:"left"
+      align: "left",
     },
     {
       title: "Action",
-      align: 'center',
+      align: "center",
       render: (record) => (
         <Row
           style={{
             width: "100%",
             textAlign: "-webkit-right",
-           
           }}
         >
-          <Col span={12} 
-          style={{
-             display:"flex",
-             justifyContent:"center",
-          }}
+          <Col
+            span={12}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
           >
             <Button
               className="editbutton"
@@ -115,11 +128,12 @@ const Designation = () => {
               <EditFilled />
             </Button>
           </Col>
-          <Col span={12}
+          <Col
+            span={12}
             style={{
-              display:"flex",
-              justifyContent:"center",
-           }}
+              display: "flex",
+              justifyContent: "center",
+            }}
           >
             <Button
               className="editbutton"
@@ -140,29 +154,29 @@ const Designation = () => {
     },
   ];
 
-  const [filterdColumns, setColumns] = useState(columns)
+  const [filterdColumns, setColumns] = useState(columns);
 
   useEffect(() => {
     getData();
   }, []);
 
   useEffect(() => {
-    let temp = [...columns]
-    delete temp[2]
-    setColumns(showNewColumn ? columns : temp)
+    let temp = [...columns];
+    delete temp[2];
+    setColumns(showNewColumn ? columns : temp);
   }, [showNewColumn]);
 
   const desExists = async (value) => {
-    let list = Object.keys(names)
-    delete list[list.indexOf(old)]
+    let list = Object.keys(names);
+    delete list[list.indexOf(old)];
     let exists = list.includes(value.split(" ").map(capitalize).join(" "));
     if (exists) {
-      setDes(old)
-      setExists(true)
+      setDes(old);
+      setExists(true);
       return;
     }
-    setDes(value)
-    setExists(false)
+    setDes(value);
+    setExists(false);
   };
 
   const onDelete = (record) => {
@@ -180,8 +194,8 @@ const Designation = () => {
       okType: "danger",
 
       onOk: () => {
-        let temp = { ...designations }
-        delete temp[`${record.designation}`]
+        let temp = { ...designations };
+        delete temp[`${record.designation}`];
         ConfigureContext.editConfiguration(page, { designations: temp })
           .then((response) => {
             showNotification(
@@ -199,15 +213,17 @@ const Designation = () => {
   };
 
   const onEdit = () => {
-    if (exists) { return; }
+    if (exists) {
+      return;
+    }
     let temp = { ...designations };
     delete temp[`${old}`];
     temp[`${des}`] = gra != null ? gra : 1;
     ConfigureContext.editConfiguration(page, { designations: temp })
       .then((response) => {
         names[`${old}`].map((id) => {
-          EmpInfoContext.updateEduDetails(id, { designation: des })
-        })
+          EmpInfoContext.updateEduDetails(id, { designation: des });
+        });
         showNotification(
           "success",
           "Success",
@@ -226,9 +242,9 @@ const Designation = () => {
   const onFinish = (values, extra) => {
     let temp = { ...designations };
     Object.keys(values).forEach((key) => {
-      let i = values[`${key}`]
-      temp[`${i}`] = Number(extra[`${key}`]) || 1
-    })
+      let i = values[`${key}`];
+      temp[`${i}`] = Number(extra[`${key}`]) || 1;
+    });
     ConfigureContext.editConfiguration(page, { designations: temp })
       .then((response) => {
         showNotification(
@@ -248,8 +264,8 @@ const Designation = () => {
   };
 
   function handleAddColumn(e) {
-    ConfigureContext.editConfiguration(page, { enabled: e })
-    setshowNewColumn(e)
+    ConfigureContext.editConfiguration(page, { enabled: e });
+    setshowNewColumn(e);
   }
 
   return (
@@ -272,203 +288,227 @@ const Designation = () => {
           }}
         >
           <Col span={24}>
-            <Card
-              className="overview"
-              title=" DESIGNATIONS"
-              bordered={true}
-              hoverable={true}
-              style={{
-                width: "100%",
-                marginTop: 10,
-                borderRadius: "10px",
-                cursor: 'default'
-              }}
-              extra={
-                <>
-                  <Button
-                    onClick={() => showEditGrade(true)}
-                    className="personal"
-                    type="text"
-                    style={{
-                      color: "#ffff",
-                      display: "none",
-                      paddingTop: "7px",
-                      paddingRight: "7px",
-                      position: "absolute",
-                      right: 10,
-                      top: 10,
+            {loading ? (
+              <Skeleton active />
+            ) : (
+              <Card
+                className="overview"
+                title=" DESIGNATIONS"
+                bordered={true}
+                hoverable={true}
+                style={{
+                  width: "100%",
+                  marginTop: 10,
+                  borderRadius: "10px",
+                  cursor: "default",
+                }}
+                extra={
+                  <>
+                    <Button
+                      onClick={() => showEditGrade(true)}
+                      className="personal"
+                      type="text"
+                      style={{
+                        color: "#ffff",
+                        display: "none",
+                        paddingTop: "7px",
+                        paddingRight: "7px",
+                        position: "absolute",
+                        right: 10,
+                        top: 10,
+                      }}
+                    >
+                      <EditFilled />
+                    </Button>
+                  </>
+                }
+              >
+                <div className="table-responsive">
+                  <Table
+                    columns={filterdColumns}
+                    dataSource={dataSource}
+                    pagination={false}
+                    className="designationTable"
+                    summary={(pageData) => {
+                      let totalEmp = 0;
+                      pageData.forEach(({ employees }) => {
+                        totalEmp += employees;
+                      });
+                      return (
+                        <Table.Summary.Row>
+                          <Table.Summary.Cell index={0}>
+                            Total
+                          </Table.Summary.Cell>
+                          <Table.Summary.Cell index={1}>
+                            <Text type="danger">{totalEmp}</Text>
+                          </Table.Summary.Cell>
+                        </Table.Summary.Row>
+                      );
                     }}
+                  />
+                </div>
+
+                <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
+                  <Form
+                    form={form}
+                    style={{ width: "100%" }}
+                    autoComplete="off"
                   >
-                    <EditFilled />
-                  </Button>
-                </>
-              }
-            >
-              <div className="table-responsive">
-                <Table
-                  columns={filterdColumns}
-                  dataSource={dataSource}
-                  pagination={false}
-                  className="designationTable"
-                  summary={(pageData) => {
-                    let totalEmp = 0;
-                    pageData.forEach(({ employees, }) => {
-                      totalEmp += employees;
-                    });
-                    return (
-                      <Table.Summary.Row>
-                        <Table.Summary.Cell index={0}>Total</Table.Summary.Cell>
-                        <Table.Summary.Cell index={1}>
-                          <Text type="danger">{totalEmp}</Text>
-                        </Table.Summary.Cell>
-                      </Table.Summary.Row>
-                    );
-                  }}
-                />
-              </div>
-
-              <Row gutter={[16, 16]} style={{ marginTop: "5%" }}>
-                <Form form={form} style={{ width: "100%" }} autoComplete="off">
-                  {editContent ? (
-                    <>
-                      <Form.List name="users">
-                        {(fields, { add, remove }) => (
-                          <>
-                            <Row style={{ width: "100%" }}>
-                              {fields.map(({ key, name, ...restField }) => (
-                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                                  <Space key={key} align="baseline">
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "first"]}
-                                      rules={[
-                                        {
-                                          required: true,
-                                          message: "Please Enter Designation",
-                                        },
-                                        {
-                                          validator: (rule, value, callback) => {
-                                            let exists = Object.keys(names).includes(value);
-                                            if (exists) {
-                                              return Promise.reject(new Error("This designations already exists!"));
-                                            }
+                    {editContent ? (
+                      <>
+                        <Form.List name="users">
+                          {(fields, { add, remove }) => (
+                            <>
+                              <Row style={{ width: "100%" }}>
+                                {fields.map(({ key, name, ...restField }) => (
+                                  <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Space key={key} align="baseline">
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "first"]}
+                                        rules={[
+                                          {
+                                            required: true,
+                                            message: "Please Enter Designation",
                                           },
-                                          message: "This designation already exists!",
-                                        }
-                                      ]}
-                                    >
-                                      <Input
-                                        placeholder="Enter Designation"
-                                        onChange={(e) => {
-                                          let temp = {
-                                            ...data,
-                                            [`${key}`]: e.target.value,
-                                          };
-                                          setData(temp);
+                                          {
+                                            validator: (
+                                              rule,
+                                              value,
+                                              callback
+                                            ) => {
+                                              let exists =
+                                                Object.keys(names).includes(
+                                                  value
+                                                );
+                                              if (exists) {
+                                                return Promise.reject(
+                                                  new Error(
+                                                    "This designations already exists!"
+                                                  )
+                                                );
+                                              }
+                                            },
+                                            message:
+                                              "This designation already exists!",
+                                          },
+                                        ]}
+                                      >
+                                        <Input
+                                          placeholder="Enter Designation"
+                                          onChange={(e) => {
+                                            let temp = {
+                                              ...data,
+                                              [`${key}`]: e.target.value,
+                                            };
+                                            setData(temp);
+                                          }}
+                                        />
+                                      </Form.Item>
+                                      {showNewColumn ? (
+                                        <Form.Item
+                                          {...restField}
+                                          name={[name, "second"]}
+                                          onKeyPress={(event) => {
+                                            if (checkNumbervalue(event)) {
+                                              event.preventDefault();
+                                            }
+                                          }}
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message: "Please enter Grade",
+                                            },
+                                          ]}
+                                        >
+                                          <Input
+                                            placeholder="Enter Grade"
+                                            onChange={(e) => {
+                                              let temp = {
+                                                ...grade,
+                                                [`${key}`]: e.target.value,
+                                              };
+                                              setGrade(temp);
+                                            }}
+                                          />
+                                        </Form.Item>
+                                      ) : null}
+                                      <MinusCircleOutlined
+                                        onClick={() => {
+                                          delete data[`${key}`];
+                                          delete grade[`${key}`];
+                                          remove(name);
                                         }}
                                       />
-                                    </Form.Item>
-                                    { showNewColumn ? (
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "second"]}
-                                      onKeyPress={(event) => {
-                                        if (checkNumbervalue(event)) {
-                                          event.preventDefault();
-                                        }
-                                      }}
-                                      rules={[
-                                        {
-                                          required: true,
-                                          message: "Please enter Grade",
-                                        },
-                                      ]}
-                                    >
-                                      <Input
-                                        placeholder="Enter Grade"
-                                        onChange={(e) => {
-                                          let temp = {
-                                            ...grade,
-                                            [`${key}`]: e.target.value,
-                                          };
-                                          setGrade(temp);
-                                        }}
-                                      />
-                                    </Form.Item>
-                                    ) : null}
-                                    <MinusCircleOutlined
-                                      onClick={() => {
-                                        delete data[`${key}`];
-                                        delete grade[`${key}`];
-                                        remove(name);
-                                      }}
-                                    />
-                                  </Space>
-                                </Col>
-                              ))}
-                            </Row>
+                                    </Space>
+                                  </Col>
+                                ))}
+                              </Row>
 
-                            <Form.Item>
-                              <Button
-                                type="dashed"
-                                style={{ width: "150px" }}
-                                onClick={() => add()}
-                                block
-                                icon={<PlusOutlined />}
-                              >
-                                Add field
-                              </Button>
-                            </Form.Item>
-                          </>
-                        )}
-                      </Form.List>
+                              <Form.Item>
+                                <Button
+                                  type="dashed"
+                                  style={{ width: "150px" }}
+                                  onClick={() => add()}
+                                  block
+                                  icon={<PlusOutlined />}
+                                >
+                                  Add field
+                                </Button>
+                              </Form.Item>
+                            </>
+                          )}
+                        </Form.List>
+                        <Form.Item>
+                          <Button
+                            type="text"
+                            style={{ marginRight: "10px" }}
+                            onClick={() => {
+                              setData({});
+                              showEditContent(false);
+                              form.resetFields();
+                            }}
+                          >
+                            <CloseOutlined />
+                            Cancel
+                          </Button>
+                          <Button
+                            style={{
+                              border: "1px solid #1963A6",
+                              background: "#1963A6",
+                              color: "#ffffff",
+                              fontSize: "15",
+                              lineHeight: "17px",
+                              // width: "119px",
+                            }}
+                            type="primary"
+                            onClick={() => {
+                              onFinish(data, grade);
+                            }}
+                          >
+                            <CheckOutlined />
+                            Submit
+                          </Button>
+                        </Form.Item>
+                      </>
+                    ) : (
                       <Form.Item>
                         <Button
-                          type="text"
-                          style={{ marginRight: "10px" }}
-                          onClick={() => {
-                            setData({});
-                            showEditContent(false);
-                            form.resetFields();
-                          }}
-                        >
-                          <CloseOutlined />Cancel
-                        </Button>
-                        <Button
                           style={{
-                            border: "1px solid #1963A6",
-                            background: "#1963A6",
-                            color: "#ffffff",
-                            fontSize: "15",
-                            lineHeight: "17px",
-                            // width: "119px",
+                            background: "#1963a6",
+                            marginLeft: "20px",
                           }}
                           type="primary"
-                          onClick={() => {
-                            onFinish(data, grade);
-                          }}
+                          onClick={() => showEditContent(true)}
                         >
-                          <CheckOutlined />Submit
+                          Add Designations
                         </Button>
                       </Form.Item>
-                    </>
-                  ) : (
-                    <Form.Item>
-                      <Button
-                        style={{
-                          background: "#1963a6",
-                          marginLeft: "20px",
-                        }}
-                        type="primary"
-                        onClick={() => showEditContent(true)}
-                      >
-                        Add Designations
-                      </Button>
-                    </Form.Item>
-                  )}
-                </Form>
-              </Row>
-            </Card>
+                    )}
+                  </Form>
+                </Row>
+              </Card>
+            )}
           </Col>
         </Row>
       </div>
@@ -483,9 +523,9 @@ const Designation = () => {
           setEditInfo(false);
         }}
       >
-        <Form form={form} >
+        <Form form={form}>
           <Form.Item
-            name='editname'
+            name="editname"
             initialValue={des}
             rules={[
               {
@@ -494,15 +534,18 @@ const Designation = () => {
               },
               {
                 validator: (rule, value, callback) => {
-                  let exists = Object.keys(names).includes(value.split(" ").map(capitalize).join(" "));
+                  let exists = Object.keys(names).includes(
+                    value.split(" ").map(capitalize).join(" ")
+                  );
                   if (exists) {
-                    return Promise.reject(new Error("This designations already exists!"));
+                    return Promise.reject(
+                      new Error("This designations already exists!")
+                    );
                   }
                 },
                 message: "This designation already exists!",
-              }
+              },
             ]}
-
           >
             <Input
               type="text"
@@ -529,9 +572,9 @@ const Designation = () => {
         className="editDesignation"
         title="Edit Grade"
         onOk={() => showEditGrade(false)}
-        cancelButtonProps={{ style: { display: 'none' } }}
+        cancelButtonProps={{ style: { display: "none" } }}
         closable={false}
-      // afterClose={() => showEditGrade(false)}
+        // afterClose={() => showEditGrade(false)}
       >
         <Form>
           <Form.Item
@@ -541,7 +584,12 @@ const Designation = () => {
             style={{ marginBottom: "0px" }}
             initialValue={showNewColumn}
           >
-            <Switch defaultChecked={showNewColumn} checkedChildren="Enabled" unCheckedChildren="Disabled" onChange={(e) => handleAddColumn(e)} />
+            <Switch
+              defaultChecked={showNewColumn}
+              checkedChildren="Enabled"
+              unCheckedChildren="Disabled"
+              onChange={(e) => handleAddColumn(e)}
+            />
           </Form.Item>
         </Form>
       </Modal>

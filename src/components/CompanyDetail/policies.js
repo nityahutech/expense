@@ -10,10 +10,15 @@ import {
   Card,
   message,
   Select,
+  Skeleton,
 } from "antd";
 import moment from "moment";
-import { PlusCircleOutlined, DeleteOutlined, EditFilled } from "@ant-design/icons";
-import Iframe from 'react-iframe';
+import {
+  PlusCircleOutlined,
+  DeleteOutlined,
+  EditFilled,
+} from "@ant-design/icons";
+import Iframe from "react-iframe";
 import FormItem from "antd/es/form/FormItem";
 import PolicyContext from "../../contexts/PolicyContext";
 import "../../components/CompanyDetail/companystyle.css";
@@ -24,6 +29,7 @@ const Policies = () => {
   const [version, setVersion] = useState([1]);
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editModal, showEditModal] = useState(false);
@@ -60,15 +66,15 @@ const Policies = () => {
                 width: 55,
               }}
               onChange={(e) => {
-                let temp = [...version]
-                temp[i] = e
-                setVersion(temp)
+                let temp = [...version];
+                temp[i] = e;
+                setVersion(temp);
               }}
               options={record.versions.map((ver) => {
                 return {
                   value: ver.version,
-                  label: ver.version
-                }
+                  label: ver.version,
+                };
               })}
             />
           </>
@@ -81,10 +87,10 @@ const Policies = () => {
       key: "date",
       width: 150,
       align: "left",
-      render: ( _, record, i) => {
-        let res = record.versions.filter((ver) => ver.version == version[i])
-        return res[0].date
-      }
+      render: (_, record, i) => {
+        let res = record.versions.filter((ver) => ver.version == version[i]);
+        return res[0].date;
+      },
     },
     {
       title: "Uploaded File",
@@ -93,31 +99,36 @@ const Policies = () => {
       width: 200,
       align: "left",
       render: (_, record, i) => {
-        let res = record.versions.filter((ver) => ver.version == version[i])
-        return  (
-          <a href={res[0].url} target="policyName" onClick={() => setIsModalVisible(true)}>
+        let res = record.versions.filter((ver) => ver.version == version[i]);
+        return (
+          <a
+            href={res[0].url}
+            target="policyName"
+            onClick={() => setIsModalVisible(true)}
+          >
             {res[0].file}
           </a>
-        )
+        );
       },
     },
     {
       title: "Action",
       key: "action",
-      fixed: 'center',
+      fixed: "center",
       width: 80,
       render: (_, record) => {
         return (
           <>
-            <DeleteOutlined style={{ color: 'red' }}
+            <DeleteOutlined
+              style={{ color: "red" }}
               onClick={() => deleteData(record)}
             />
-            <EditFilled style={{ paddingLeft: '10px', color: '#007acb' }}
+            <EditFilled
+              style={{ paddingLeft: "10px", color: "#007acb" }}
               onClick={() => {
-                setEditOld(record)
+                setEditOld(record);
                 showEditModal(true);
               }}
-
             />
           </>
         );
@@ -126,67 +137,69 @@ const Policies = () => {
   ];
 
   function handleChange(event) {
-    let file = event.target.files[0]
+    let file = event.target.files[0];
     setFile(null);
-    const isPdf = file.type === 'application/pdf';
+    const isPdf = file.type === "application/pdf";
     if (!isPdf) {
-      message.error('You can only upload Pdf file!');
-      return
+      message.error("You can only upload Pdf file!");
+      return;
     }
 
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error('File must smaller than 2MB!');
-      return
+      message.error("File must smaller than 2MB!");
+      return;
     }
     setFile(event.target.files[0]);
   }
 
   function addPolicy(values) {
-    try{
-    let newWorkDoc = {
-      ...values,
-      versions: [{
-        version: 1,
-        date: moment().format("DD MMM, YYYY")
-      }]
-    };
-    delete newWorkDoc.upload;
-    PolicyContext.createPolicy(newWorkDoc, file)
-    // .then(() => {
+    try {
+      let newWorkDoc = {
+        ...values,
+        versions: [
+          {
+            version: 1,
+            date: moment().format("DD MMM, YYYY"),
+          },
+        ],
+      };
+      delete newWorkDoc.upload;
+      PolicyContext.createPolicy(newWorkDoc, file);
+      // .then(() => {
       const timer = setTimeout(() => {
         setIsModalOpen(false);
         showNotification("success", "Success", "Upload Complete");
         getData();
       }, 3500);
       return () => clearTimeout(timer);
-    } catch(err) {
+    } catch (err) {
       setIsModalOpen(false);
       showNotification("error", "Error", `Upload Failed: ${err.message}`);
-    }    
+    }
   }
 
   function editPolicy(values) {
-    try{
-    let newWorkDoc = {
-      ...editOld,
-      description: values.description,
-    };
-    newWorkDoc.versions.push({
-      version: editOld.versions.length + 1,
-      date: moment().format("DD MMM, YYYY")
-    })
-    PolicyContext.updatePolicy(newWorkDoc, file)
+    try {
+      let newWorkDoc = {
+        ...editOld,
+        description: values.description,
+      };
+      newWorkDoc.versions.push({
+        version: editOld.versions.length + 1,
+        date: moment().format("DD MMM, YYYY"),
+      });
+      PolicyContext.updatePolicy(newWorkDoc, file);
       const timer = setTimeout(() => {
         showEditModal(false);
         showNotification("success", "Success", "Upload Complete");
         getData();
       }, 3500);
       return () => clearTimeout(timer);
-    } catch(err) {
+    } catch (err) {
       showEditModal(false);
       showNotification("error", "Error", `Upload Failed: ${err.message}`);
-    }    
+    }
   }
 
   const deleteData = (record) => {
@@ -213,17 +226,18 @@ const Policies = () => {
   }, []);
 
   const getData = async () => {
+    setLoading(true);
     let alldata = await PolicyContext.getPolicy();
     let temp = [...alldata];
-    alldata.forEach((pol,i) => {
+    alldata.forEach((pol, i) => {
       pol.versions.sort((a, b) => {
-        return b.version - a.version
-      })
-      temp[i] = pol.versions[0].version
-    })
-    setVersion(temp)
+        return b.version - a.version;
+      });
+      temp[i] = pol.versions[0].version;
+    });
+    setVersion(temp);
     setPolicy(alldata);
-
+    setLoading(false);
   };
 
   return (
@@ -240,22 +254,26 @@ const Policies = () => {
         <Row
           className="Row-Card"
           style={{
-            width: '75%',
-            margin: '10px',
-            display: 'flex',
-            alignItems: 'center'
-          }}>
+            width: "75%",
+            margin: "10px",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <Col span={24}>
+            {loading ? (
+              <Skeleton active />
+            ) : (
               <Card
                 title="Company Policies"
                 className="policyCard"
                 bordered={true}
                 hoverable={true}
                 style={{
-                  width: '100%',
+                  width: "100%",
                   marginTop: 10,
                   borderRadius: "10px",
-                  cursor: "default"
+                  cursor: "default",
                 }}
               >
                 <Table
@@ -271,7 +289,11 @@ const Policies = () => {
                     setIsModalOpen(true);
                     form.resetFields();
                   }}
-                  style={{ marginLeft: "10px", background: "#1963a6", border: "1px solid #1963A6", }}
+                  style={{
+                    marginLeft: "10px",
+                    background: "#1963a6",
+                    border: "1px solid #1963A6",
+                  }}
                 >
                   <PlusCircleOutlined />
                   Add
@@ -288,7 +310,10 @@ const Policies = () => {
                   layout="vertical"
                 >
                   <Modal
-                    bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+                    bodyStyle={{
+                      overflowY: "auto",
+                      maxHeight: "calc(100vh - 200px)",
+                    }}
                     className="viewAppraisal"
                     title="Add Policy"
                     centered
@@ -368,14 +393,14 @@ const Policies = () => {
                       rules={[
                         {
                           required: true,
-                          message: 'Please upload file',
+                          message: "Please upload file",
                         },
                       ]}
                     >
-                      <div className='idpage'>
+                      <div className="idpage">
                         <Input
                           type="file"
-                          accept='application/pdf'
+                          accept="application/pdf"
                           id="upload"
                           name="upload"
                           onChange={handleChange}
@@ -386,7 +411,10 @@ const Policies = () => {
                 </Form>
                 {/* //---------------iframeModal */}
                 <Modal
-                  bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+                  bodyStyle={{
+                    overflowY: "auto",
+                    maxHeight: "calc(100vh - 200px)",
+                  }}
                   className="viewAppraisal"
                   centered
                   width={800}
@@ -395,11 +423,11 @@ const Policies = () => {
                   height="400px"
                   // closable={false}
                   title="Document Preview"
-
                   closeIcon={
                     <div
                       onClick={() => {
-                        document.getElementById('policyName').src += 'about:blank';
+                        document.getElementById("policyName").src +=
+                          "about:blank";
                         setIsModalVisible(false);
                       }}
                       style={{ color: "#ffffff" }}
@@ -408,18 +436,19 @@ const Policies = () => {
                     </div>
                   }
                 >
-                  <div style={{ position: 'relative', }}>
-                    <Iframe style={{}}
+                  <div style={{ position: "relative" }}>
+                    <Iframe
+                      style={{}}
                       // url="#"
                       width={750}
                       height="400px"
-                      src='about:blank'
+                      src="about:blank"
                       id="policyName"
                       className="myClassname"
                       display="initial"
                       position="relative"
                       overflow="hidden"
-                      name='policyName'
+                      name="policyName"
                     />
                   </div>
                 </Modal>
@@ -436,7 +465,10 @@ const Policies = () => {
                   layout="vertical"
                 >
                   <Modal
-                    bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+                    bodyStyle={{
+                      overflowY: "auto",
+                      maxHeight: "calc(100vh - 200px)",
+                    }}
                     className="viewAppraisal"
                     title="Edit Policy Detail"
                     centered
@@ -465,17 +497,14 @@ const Policies = () => {
                     }
                   >
                     <div className="div-discription">Title</div>
-                    <Form.Item
-                      initialValue={editOld?.title}
-                      name="title"
-                    >
+                    <Form.Item initialValue={editOld?.title} name="title">
                       <Input
                         style={{
                           width: "100%",
                           borderBottom: "1px solid #ccc ",
                           paddingLeft: "0px",
                           marginTop: "10px",
-                          color: "black"
+                          color: "black",
                         }}
                         bordered={false}
                         disabled
@@ -508,20 +537,22 @@ const Policies = () => {
                         placeholder="Enter Description"
                       />
                     </Form.Item>
-                    <div className="div-discription">{`Version ${editOld?.versions?.length + 1}`}</div>
+                    <div className="div-discription">{`Version ${
+                      editOld?.versions?.length + 1
+                    }`}</div>
                     <FormItem
                       name="upload"
                       rules={[
                         {
                           required: true,
-                          message: 'Please upload file',
+                          message: "Please upload file",
                         },
                       ]}
                     >
-                      <div className='idpage'>
+                      <div className="idpage">
                         <Input
                           type="file"
-                          accept='application/pdf'
+                          accept="application/pdf"
                           id="upload"
                           name="upload"
                           onChange={handleChange}
@@ -531,6 +562,7 @@ const Policies = () => {
                   </Modal>
                 </Form>
               </Card>
+            )}
           </Col>
         </Row>
       </div>

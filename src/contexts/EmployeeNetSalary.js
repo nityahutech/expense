@@ -19,41 +19,20 @@ let salaryCollectionRef = collection(db, `companyprofile/${compId}/salary`);
 class EmployeeNetSalary {
 
 
-    // addSalary = (netSalary,) => {
-    //     return addDoc(salaryCollectionRef, netSalary);
-    // };
 
     addSalary = (id, netSalary) => {
-        setDoc(doc(salaryCollectionRef, id), netSalary);
-        return Promise.resolve()
+        return setDoc(doc(salaryCollectionRef, id), netSalary);
+
     };
 
-    getSalary = async (empName) => {
-        const q = query(salaryCollectionRef, where("selectStaff", "==", empName));
-        console.log('success1', q)
-        let allData = await getDocs(q)
-        let data = allData.docs.map((doc) => {
-            return {
-                ...doc.data(),
-                id: doc.id,
-            };
-        });
+    getSalary = async (id) => {
 
-        return data
-    };
-
-    getSalarySlip = async () => {
-        const q = query(salaryCollectionRef,);
-        console.log('success1', q)
-        let allData = await getDocs(q)
-        let data = allData.docs.map((doc) => {
-            return {
-                ...doc.data(),
-                id: doc.id,
-            };
-        });
-
-        return data
+        let allData = await getDoc(doc(salaryCollectionRef, id))
+        console.log('success2', allData)
+        return {
+            ...allData.data(),
+            id: allData.id,
+        };
     };
 
 }

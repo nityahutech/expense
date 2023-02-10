@@ -31,16 +31,9 @@ function App() {
   };
 
   const FirstRole = () => {
-    const {roleView} = useAuth();
-    console.log(roleView);
-    setRoleview(roleView)
+    const { role } = useAuth();
+    setRoleview(role)
   }
-
-  useEffect(() => {
-    console.log(roleview);
-  }, [roleview])
-
-  console.log(roleview);
 
   return (
     <AuthProvider>
@@ -214,10 +207,9 @@ function App() {
             path="/TravelManagement"
             element={
               <FormatPage 
-                main={<TravelManagement roleView={roleView} />}
-                // activeSubMenu={["sub4"]}
+                main={<TravelManagement roleView={roleview} />}
                 activeMenu={["24"]}
-                roleView={roleView}
+                roleView={roleview}
                 switchRole={switchRole}
                
               />

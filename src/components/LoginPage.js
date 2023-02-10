@@ -19,24 +19,25 @@ function LoginPage() {
   }, [])
   const win = window.sessionStorage;
   async function handleSubmit(e) {
+    setLoading(true);
     e.preventDefault();
     win.clear();
     try {
       setError("");
-      setLoading(true);
       let res = await login(loginEmail, loginPassword);
       sessionStorage.setItem("accessToken", res.user.accessToken);
       sessionStorage.setItem("user", JSON.stringify(res.user));
       const timer = setTimeout(() => {
         navigate("DashBoard", { replace: true });
+        setLoading(false);
       }, 3000);
     } catch {
+      setLoading(false);
       setError("Login Failed!");
       setTimeout(() => {
         setError("");
       }, 3000);
     }
-    setLoading(false);
   }
   async function handleReset(e) {
     e.preventDefault();
@@ -45,13 +46,14 @@ function LoginPage() {
       setLoading(true);
       await resetPassword(loginEmail);
       setError("Reset Email Sent");
+      setLoading(false);
     } catch {
       setError("Reset Email Failed To Send!");
       setTimeout(() => {
         setError("");
+        setLoading(false);
       }, 3000);
     }
-    setLoading(false);
   }
 
   const buttonStyle = loading ? { backgroundColor: "lightgray", color: "gray" } : { backgroundColor: "#1963A6", color: "white" }
@@ -68,7 +70,7 @@ function LoginPage() {
             <div className="login-div">
               <div className="form-div">
                   <div className="exepnse-logo">
-                    <img src={loginLogo} alt="" style={{width:"260px"}}/>
+                    <img src={loginLogo} alt="" style={{width:"260px", alignContent: "center"}}/>
                   </div>
                   <Form
                     name="basic"

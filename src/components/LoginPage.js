@@ -6,6 +6,7 @@ import "../style/LoginPage.css"
 import loginBg from "../images/login-img.png"
 import loginLogo from "../images/Logo77.png"
 import { LoadingOutlined } from "@ant-design/icons";
+import CoolLogo from "../images/logooo.svg"
 
 function LoginPage() {
   const [loginEmail, setLoginEmail] = useState("");
@@ -67,10 +68,12 @@ function LoginPage() {
             </div>
           </Col>
           <Col xs={24} xm={24} md={12}>
-            <div className="login-div">
+            {/* <div className="login-div"> */}
               <div className="form-div">
                   <div className="exepnse-logo">
-                    <img src={loginLogo} alt="" style={{width:"260px", alignContent: "center"}}/>
+                    <img src={CoolLogo} alt="logo" 
+                    style={{width:"250px",paddingBottom:"10%"}}
+                    />
                   </div>
                   <Form
                     name="basic"
@@ -144,7 +147,7 @@ function LoginPage() {
                       </div>
                       </Col>
                     </div>
-                    <Form.Item>
+                    <Form.Item className="loginButton">
                       <div className="login-btn">
                         {" "}
                         <Button
@@ -175,7 +178,7 @@ function LoginPage() {
                     </Col>
                   </Form>
               </div>
-            </div>
+            {/* </div> */}
           </Col>
         </Row>
       {/* </div> */}

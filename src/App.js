@@ -12,7 +12,7 @@ import Onboarding from "./components/Onboarding";
 import CompanyProfile from "./components/CompanyProfile";
 import HalfYearGoalHome from "./components/halfYearGoal/halfYearGoalHome";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import "./App.css";
 import FormatPage from "./FormatPage";
 import MainDashBoard from "./components/MainDashBoard";
@@ -24,14 +24,20 @@ import InvoiceMagHome from "./components/assetManagement/InvoiceMagHome";
 import TravelManagement from "./components/TravelManagement/travelManagement";
 
 function App() {
-  const [roleView, setRoleView] = useState(sessionStorage.getItem("roleView"));
+  const [roleview, setRoleview] = useState('')
 
   const switchRole = (role) => {
-    setRoleView(role);
+    setRoleview(role);
   };
+
+  const FirstRole = () => {
+    const { role } = useAuth();
+    setRoleview(role)
+  }
 
   return (
     <AuthProvider>
+    {FirstRole}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
@@ -44,17 +50,19 @@ function App() {
                 activeMenu={["30"]}
               />
             }
-          />{roleView == "super" ? ( 
-          <Route
-            path="/Organization/Onboarding"
-            element={
-              <FormatPage
-                main={<Onboarding />}
-                activeSubMenu={["sub5"]}
-                activeMenu={["31"]}
-              />
-            }
-          />):null}
+          />
+          {roleview == "super" ? ( 
+            <Route
+              path="/Organization/Onboarding"
+              element={
+                <FormatPage
+                  main={<Onboarding />}
+                  activeSubMenu={["sub5"]}
+                  activeMenu={["31"]}
+                />
+              }
+            />
+          ) : null}
           <Route
             path="/CompanyProfile"
             element={
@@ -65,9 +73,9 @@ function App() {
             path="/Attendance"
             element={
               <FormatPage
-                main={<AttendanceLog roleView={roleView} />}
+                main={<AttendanceLog roleView={roleview} />}
                 activeMenu={["6"]}
-                roleView={roleView}
+                roleView={roleview}
                 switchRole={switchRole}
               />
             }
@@ -76,9 +84,9 @@ function App() {
             path="/Leave"
             element={
               <FormatPage
-                main={<Leave roleView={roleView} />}
+                main={<Leave roleView={roleview} />}
                 activeMenu={["7"]}
-                roleView={roleView}
+                roleView={roleview}
                 switchRole={switchRole}
               />
             }
@@ -137,8 +145,8 @@ function App() {
             path="/Expense/InvoiceReimbursement"
             element={
               <FormatPage
-                main={<InvoiceMagHome roleView={roleView} />}
-                roleView={roleView}
+                main={<InvoiceMagHome roleView={roleview} />}
+                roleView={roleview}
                 activeSubMenu={["sub1"]}
                 activeMenu={["23"]}
                 switchRole={switchRole}
@@ -163,10 +171,10 @@ function App() {
             path="/Appraisal/AppraisalPageHr"
             element={
               <FormatPage
-                main={<AppraisalHr roleView={roleView} />}
+                main={<AppraisalHr roleView={roleview} />}
                 activeSubMenu={["sub4"]}
                 activeMenu={["20"]}
-                roleView={roleView}
+                roleView={roleview}
                 switchRole={switchRole}
               />
             }
@@ -175,11 +183,11 @@ function App() {
             path="/Appraisal/HalfYearGoalPage"
             element={
               <FormatPage
-                main={<HalfYearGoalHome roleView={roleView} />}
+                main={<HalfYearGoalHome roleView={roleview} />}
                 activeSubMenu={["sub4"]}
                 activeMenu={["20a"]}
                 switchRole={switchRole}
-                roleView={roleView}
+                roleView={roleview}
               />
             }
           />
@@ -187,10 +195,10 @@ function App() {
             path="/Assets"
             element={
               <FormatPage
-                main={<AssetMag roleView={roleView} />}
+                main={<AssetMag roleView={roleview} />}
                 activeSubMenu={["sub4"]}
                 activeMenu={["22"]}
-                roleView={roleView}
+                roleView={roleview}
                 switchRole={switchRole}
               />
             }
@@ -199,10 +207,9 @@ function App() {
             path="/TravelManagement"
             element={
               <FormatPage 
-                main={<TravelManagement roleView={roleView} />}
-                // activeSubMenu={["sub4"]}
+                main={<TravelManagement roleView={roleview} />}
                 activeMenu={["24"]}
-                roleView={roleView}
+                roleView={roleview}
                 switchRole={switchRole}
                
               />

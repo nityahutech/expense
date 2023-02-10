@@ -277,27 +277,10 @@ function Overview() {
                           <Form.Item
                             initialValue={data ? data.regCompName : null}
                             name="regCompName"
-                            // onKeyPress={(event) => {
-                            //   if (checkAlphabets(event)) {
-                            //     event.preventDefault();
-                            //   }
-                            // }}
-
-                            onChange={(e) => {
-                              const inputval = e.target.value;
-                              const str = e.target.value;
-                              const newVal =
-                                inputval.substring(0, 1).toUpperCase() +
-                                inputval.substring(1);
-                              const caps = str
-                                .split(" ")
-                                .map(capitalize)
-                                .join(" ");
-                              // setPaidBy(newVal);
-                              form.setFieldsValue({
-                                regCompName: newVal,
-                                regCompName: caps,
-                              });
+                            onKeyPress={(event) => {
+                              if (checkAlphabets(event)) {
+                                event.preventDefault();
+                              }
                             }}
                             rules={[
                               {
@@ -311,13 +294,29 @@ function Overview() {
                             ]}
                           >
                             <Input
-                              maxLength={50}
+                              maxLength={30}
                               placeholder="Enter Comapany Name"
                               bordered={false}
                               style={{
                                 borderBottom: "1px solid #ccc ",
                                 paddingLeft: "0px",
                                 width: "220px",
+                              }}
+                              onChange={(e) => {
+                                const inputval = e.target.value;
+                                const str = e.target.value;
+                                const newVal =
+                                  inputval.substring(0, 1).toUpperCase() +
+                                  inputval.substring(1);
+                                const caps = str
+                                  .split(" ")
+                                  .map(capitalize)
+                                  .join(" ");
+                                // setPaidBy(newVal);
+                                form.setFieldsValue({
+                                  regCompName: newVal,
+                                  regCompName: caps,
+                                });
                               }}
                             />
                           </Form.Item>
@@ -353,7 +352,7 @@ function Overview() {
                             ]}
                           >
                             <Input
-                              maxLength={30}
+                              maxLength={20}
                               style={{
                                 paddingLeft: "0px",
                                 borderBottom: "1px solid #ccc ",
@@ -403,7 +402,7 @@ function Overview() {
                               },
                               {
                                 pattern:
-                                  /^(?:(?:(?:[a-zA-z\-]+)\:\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9\-\.]){1,61}(?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?:\:[0-9]{1,5})?$/,
+                                  /^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@%_\+.~#?&//=]*)?$/,
                                 message: "Please enter Valid Website Name",
                               },
                             ]}
@@ -439,7 +438,7 @@ function Overview() {
                               },
                               {
                                 pattern:
-                                  /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/,
+                                  /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/,
 
                                 message: "Please enter Valid Domain Name",
                               },

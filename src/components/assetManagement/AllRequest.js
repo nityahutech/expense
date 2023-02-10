@@ -22,16 +22,25 @@ function AllRequest(props) {
   }, [props.data]);
 
   const setStatus = async (record, status) => {
-    const updatedRepairRecord = repairAllotReq.map((allotRecord) => {
-      if (allotRecord.id === record.id) {
-        allotRecord.status = status;
-        record.status = status;
-      }
+    Modal.confirm({
+      title: `Are you sure, you want to  ${
+        status == "Approved" ? "approve" : "reject"
+      } this request?`,
+      okText: "Yes",
+      okType: "danger",
+      onOk: async () => {
+        const updatedRepairRecord = repairAllotReq.map((allotRecord) => {
+          if (allotRecord.id === record.id) {
+            allotRecord.status = status;
+            record.status = status;
+          }
 
-      return allotRecord;
+          return allotRecord;
+        });
+        await AssetContext.updateRepairData(record.id, record);
+        setRepairAllotReq(updatedRepairRecord);
+      },
     });
-    await AssetContext.updateRepairData(record.id, record);
-    setRepairAllotReq(updatedRepairRecord);
   };
 
   function openModal(data) {

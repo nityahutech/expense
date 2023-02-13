@@ -3,19 +3,22 @@ import { Affix, Button, Card, Table } from "antd";
 import { DatePicker, Space } from "antd";
 import "../../style/Payslip.css";
 import EmployeeNetSalary from "../../contexts/EmployeeNetSalary";
+import { getUsers } from "../../contexts/CreateContext";
 import { createPdfFromHtml } from "./downloadLogic";
 import hutechLogo from "../../images/hutechlogo.png";
 import moment from 'moment';
 
 
 function PaySlip(props) {
-  const showRecord = props.showRecord;
+  const showRecord = props.data;
   console.log('showRecord', showRecord)
   const [userid, setUserId] = useState(showRecord.id);
   const [month, setMonth] = useState(null);
   const [printContent, setPrintContent] = useState(null);
   const [paySlipData, setPaySlipData] = useState(false);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const [data, setData] = useState()
+
 
 
   const currentMonth = moment();//current month
@@ -26,7 +29,6 @@ function PaySlip(props) {
   const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
   const [selectedMonth, setSelectedMonth] = useState(`${previousMonth.format("MMM")}-${previousMonth.format("YYYY")}`);
 
-
   const updateSelectedMonth = (date, dateString) => {
     console.log("selected date string: ", dateString, date);
     const selectedDate = new Date(date);
@@ -35,14 +37,13 @@ function PaySlip(props) {
     const year = selectedDate.getFullYear();
     console.log("selected date: ", year);
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const selectedMonthYear = `${monthNames[month]}-${year}`;
+    const selectedMonthYear = `${monthNames[month]} ${year}`;
     console.log("selected month-year: ", selectedMonthYear);
     setSelectedMonth(selectedMonthYear);
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     console.log("daysInMonth: ", daysInMonth)
     setNofDaysInMonth(daysInMonth);
   };
-
   const disabledDate = (currentDate) => {
     return currentDate && (currentDate.isAfter(currentMonth) || currentDate.isSame(currentMonth, 'month'));
   };
@@ -54,17 +55,20 @@ function PaySlip(props) {
     } else {
       setPaySlipData(false);
     }
-    getSalaryData(props.showRecord.id);
+    getSalaryData(props.data.id);
+
 
   }, [month]);
 
 
   useEffect(() => {
-    setUserId(props.showRecord.id)
-    console.log('props.showRecord.id', props.showRecord.id)
-    getSalaryData(props.showRecord.id)
+    setUserId(props.data.id)
+    console.log('props.data.id', props.data.id)
+    getSalaryData(props.data.id)
+    // getData()
+    getDatas()
 
-  }, [props.showRecord.id]);
+  }, [props.data.id]);
 
   function RupeeSign({ amount }) {
     return (
@@ -83,19 +87,25 @@ function PaySlip(props) {
   function formatNetSalary(amount) {
     return `( ${numberToWords(amount)} Only)`;
   }
-
+  //salary detail
   async function getSalaryData(id) {
     console.log(id)
-    const allSalaryPaySlip = await EmployeeNetSalary.getSalary(id, currentUser.id);
+    const allSalaryPaySlip = await EmployeeNetSalary.getSalary(currentUser.uid);
     console.log("aaa", allSalaryPaySlip);
     setPaySlipData(allSalaryPaySlip);
 
   }
-
+  //current user
+  async function getDatas(id) {
+    console.log(id)
+    const currentUser = await EmployeeNetSalary.getUserCurrent(currentUser.uid);
+    console.log("aaa", currentUser);
+    setData(currentUser);
+  }
 
 
   console.log('paySlipData', paySlipData)
-  console.log(props.showRecord.id, month)
+  // console.log(props.showRecord.id, month)
   return (
     <>
       <div
@@ -129,7 +139,7 @@ function PaySlip(props) {
                 className="picker"
                 placeholder="Select MM & YY"
                 bordered={true}
-                format="YYYY-MM-DD"
+                format="DD-MM-YYYY"
                 style={{
                   width: "100%",
                   background: "#1890ff",
@@ -198,16 +208,16 @@ function PaySlip(props) {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                flexDirection: "row",
+                flexDirection: "row-reverse",
               }}
             >
               <div></div>
-              <div className="heading">
+              <div style={{ marginLeft: '-135px' }} className="heading">
                 <h1 style={{ fontSize: "14px", textAlign: "center" }}>
                   Humantech Solutions India Private Limited
                 </h1>
                 <h2 style={{ fontSize: "14px", textAlign: "center" }}>
-                  Payslip for the month of {selectedMonth} - {year}
+                  Payslip for the month of {selectedMonth}  {year}
                 </h2>
               </div>
               <div>
@@ -236,10 +246,11 @@ function PaySlip(props) {
                       style={{
                         width: "195px",
                         textAlign: 'left',
-                        paddingLeft: '40px'
+                        paddingLeft: '100px'
                       }}
                     >
-                      {showRecord.empId ? showRecord.empId : '-'}
+                      {showRecord.empId ? showRecord.empId : '0'}
+
                     </td>
                   </tr>
                   <tr>
@@ -255,10 +266,10 @@ function PaySlip(props) {
                       style={{
                         width: "195px",
                         textAlign: 'left',
-                        paddingLeft: '40px'
+                        paddingLeft: '100px'
                       }}
                     >
-                      {showRecord.fname ? showRecord.fname : '-'}
+                      {showRecord.fname ? showRecord.fname : '0'}
                     </td>
                   </tr>
                   <tr>
@@ -273,10 +284,10 @@ function PaySlip(props) {
                       style={{
                         width: "180px",
                         textAlign: 'left',
-                        paddingLeft: '40px'
+                        paddingLeft: '100px'
                       }}
                     >
-                      {showRecord.designation ? showRecord.designation : '-'}
+                      {showRecord.designation ? showRecord.designation : '0'}
                     </td>
                     {/* <td
                 style={{
@@ -302,10 +313,10 @@ function PaySlip(props) {
                       style={{
                         width: "180px",
                         textAlign: 'left',
-                        paddingLeft: '40px'
+                        paddingLeft: '100px'
                       }}
                     >
-                      {showRecord.doj ? showRecord.doj : '-'}
+                      {showRecord.doj ? showRecord.doj : '0'}
                     </td>
                   </tr>
                 </table>
@@ -324,7 +335,7 @@ function PaySlip(props) {
                       style={{
                         width: "180px",
                         textAlign: 'left',
-                        paddingLeft: '40px'
+                        paddingLeft: '100px'
                       }}
                     >
                       {nofDaysInMonth}
@@ -342,7 +353,7 @@ function PaySlip(props) {
                       style={{
                         width: "180px",
                         textAlign: 'left',
-                        paddingLeft: '40px'
+                        paddingLeft: '100px'
                       }}
                     >
                       {nofDaysInMonth}
@@ -360,10 +371,10 @@ function PaySlip(props) {
                       style={{
                         width: "180px",
                         textAlign: 'left',
-                        paddingLeft: '40px'
+                        paddingLeft: '100px'
                       }}
                     >
-                      {showRecord.bank[0].bankName ? showRecord.bank[0].bankName : 0}
+                      {/* {showRecord.bank[0].accountNo ? showRecord.bank[0].accountNo : 0} */}
                     </td>
                   </tr>
                   <tr>
@@ -378,10 +389,11 @@ function PaySlip(props) {
                       style={{
                         width: "180px",
                         textAlign: 'left',
-                        paddingLeft: '40px'
+                        paddingLeft: '100px'
                       }}
                     >
-                      {showRecord.bank[0].accountNo ? showRecord.bank[0].accountNo : 0}
+                      {/* {console.log('showRecord.bank[0].accountNo', showRecord.bank[0].accountNo)} */}
+                      {/* {showRecord.bank[0].accountNo ? showRecord.bank[0].accountNo : 0} */}
                     </td>
                   </tr>
                 </table>
@@ -589,6 +601,7 @@ function PaySlip(props) {
                       <th
                         style={{
                           width: "180px",
+                          textAlign: 'left',
                         }}
                       >
                         Amount(INR)
@@ -744,7 +757,7 @@ function PaySlip(props) {
                     </td>
                     <td
                       style={{
-                        width: "105px",
+                        width: "75px",
                         fontWeight: "500",
                         textAlign: "right",
                       }}

@@ -6,7 +6,7 @@ import dashIcon from "../../images/Dashboard.png";
 import empIcon from "../../images/employees.png";
 import userIcon from "../../images/user.png";
 import assetMag from "../../images/newSBLogo/AssetManagement.png";
-import logo from "../../images/Group 1.png";
+import logo from "../../images/logoo.svg";
 import appraisalIcon from "../../images/appraisal.png";
 import Organization from "../../images/Organization.png";
 import CompanyProfile from "../../images/Companyprofile.png";

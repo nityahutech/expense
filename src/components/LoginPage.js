@@ -6,6 +6,7 @@ import "../style/LoginPage.css"
 import loginBg from "../images/login-img.png"
 import loginLogo from "../images/Logo77.png"
 import { LoadingOutlined } from "@ant-design/icons";
+import CoolLogo from "../images/logooo.svg"
 
 function LoginPage() {
   const [loginEmail, setLoginEmail] = useState("");
@@ -19,24 +20,25 @@ function LoginPage() {
   }, [])
   const win = window.sessionStorage;
   async function handleSubmit(e) {
+    setLoading(true);
     e.preventDefault();
     win.clear();
     try {
       setError("");
-      setLoading(true);
       let res = await login(loginEmail, loginPassword);
       sessionStorage.setItem("accessToken", res.user.accessToken);
       sessionStorage.setItem("user", JSON.stringify(res.user));
       const timer = setTimeout(() => {
         navigate("DashBoard", { replace: true });
+        setLoading(false);
       }, 3000);
     } catch {
+      setLoading(false);
       setError("Login Failed!");
       setTimeout(() => {
         setError("");
       }, 3000);
     }
-    setLoading(false);
   }
   async function handleReset(e) {
     e.preventDefault();
@@ -45,13 +47,14 @@ function LoginPage() {
       setLoading(true);
       await resetPassword(loginEmail);
       setError("Reset Email Sent");
+      setLoading(false);
     } catch {
       setError("Reset Email Failed To Send!");
       setTimeout(() => {
         setError("");
+        setLoading(false);
       }, 3000);
     }
-    setLoading(false);
   }
 
   const buttonStyle = loading ? { backgroundColor: "lightgray", color: "gray" } : { backgroundColor: "#1963A6", color: "white" }
@@ -65,10 +68,12 @@ function LoginPage() {
             </div>
           </Col>
           <Col xs={24} xm={24} md={12}>
-            <div className="login-div">
+            {/* <div className="login-div"> */}
               <div className="form-div">
                   <div className="exepnse-logo">
-                    <img src={loginLogo} alt="" style={{width:"260px"}}/>
+                    <img src={CoolLogo} alt="logo" 
+                    style={{width:"250px",paddingBottom:"10%"}}
+                    />
                   </div>
                   <Form
                     name="basic"
@@ -142,7 +147,7 @@ function LoginPage() {
                       </div>
                       </Col>
                     </div>
-                    <Form.Item>
+                    <Form.Item className="loginButton">
                       <div className="login-btn">
                         {" "}
                         <Button
@@ -173,7 +178,7 @@ function LoginPage() {
                     </Col>
                   </Form>
               </div>
-            </div>
+            {/* </div> */}
           </Col>
         </Row>
       {/* </div> */}

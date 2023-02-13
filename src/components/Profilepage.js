@@ -12,13 +12,25 @@ import Document from "./ProfileDetails/Document";
 import WorkWeek from "./ProfileDetails/WorkWeek";
 import PaySlip from "./ProfileDetails/PaySlip";
 import BankAccount from "./ProfileDetails/BankAccount";
+import EmpInfoContext from "../contexts/EmpInfoContext";
 
 
 
 const Profile = () => {
   const role = sessionStorage.getItem("role");
-  const [showRecord, setshowRecord] = useState([]);
-  console.log(showRecord)
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const [record, setRecord] = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, [])
+
+  const getData = async () =>{
+    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+    setRecord(data);
+  }
+
+  console.log(record)
   return (
     <>
       <div className="myProfile">
@@ -51,7 +63,7 @@ const Profile = () => {
                 <WorkWeek />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Pay Slip" key="8">
-                <PaySlip showRecord={showRecord} />
+                <PaySlip data={record} getData={getData} />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Bank Account" key="9">
                 <BankAccount />

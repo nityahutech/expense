@@ -10,7 +10,7 @@ import moment from 'moment';
 
 
 function PaySlip(props) {
-  const showRecord = props.showRecord;
+  const showRecord = props.data;
   console.log('showRecord', showRecord)
   const [userid, setUserId] = useState(showRecord.id);
   const [month, setMonth] = useState(null);
@@ -55,20 +55,20 @@ function PaySlip(props) {
     } else {
       setPaySlipData(false);
     }
-    getSalaryData(props.showRecord.id);
+    getSalaryData(props.data.id);
 
 
   }, [month]);
 
 
   useEffect(() => {
-    setUserId(props.showRecord.id)
-    console.log('props.showRecord.id', props.showRecord.id)
-    getSalaryData(props.showRecord.id)
+    setUserId(props.data.id)
+    console.log('props.data.id', props.data.id)
+    getSalaryData(props.data.id)
     // getData()
     getDatas()
 
-  }, [props.showRecord.id]);
+  }, [props.data.id]);
 
   function RupeeSign({ amount }) {
     return (

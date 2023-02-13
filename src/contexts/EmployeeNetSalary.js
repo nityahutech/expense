@@ -35,6 +35,25 @@ class EmployeeNetSalary {
         };
     };
 
+    // getUserCurrent = async (id,) => {
+    //     let compId = sessionStorage.getItem("compId")
+    //     const q = await getDoc(doc(db, `companyprofile/${compId}/users`), id);
+    //     console.log('getUserCurrent', q)
+    //     return {
+    //         ...q.data(),
+    //         id: q.id,
+    //     };
+    // }
+
+
+
+    getUserCurrent = async (id, compid) => {
+        let tempId = compid ? compid : compId;
+        const q = doc(db, tempId == "undefined" || !tempId ? "admins" : `companyprofile/${tempId}/users`, id);
+        let rec = await getDoc(q);
+        return rec.data();
+    };
+
 }
 
 export default new EmployeeNetSalary();

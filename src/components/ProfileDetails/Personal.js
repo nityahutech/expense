@@ -45,7 +45,7 @@ function Personal() {
   const [lccs, setLccs] = useState("");
   const [editAddressInfo, showEditAddressInfo] = useState(false);
   const [data, setData] = useState([]);
-  const {currentUser, compId} = useAuth();
+  const { currentUser, compId } = useAuth();
   console.log(currentUser, compId);
   // const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [form] = Form.useForm();

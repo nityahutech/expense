@@ -18,6 +18,7 @@ import BankAccount from "./ProfileDetails/BankAccount";
 const Profile = () => {
   const role = sessionStorage.getItem("role");
   const [showRecord, setshowRecord] = useState([]);
+  console.log(showRecord)
   return (
     <>
       <div className="myProfile">

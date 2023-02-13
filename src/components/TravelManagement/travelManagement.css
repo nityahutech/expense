@@ -23,7 +23,18 @@
     justify-content: end;
     /* margin-left: 0%; */
 }
+.addButtonTravel{
+  /* margin-left: 10px; */
+  border-radius: 5px;
+}
 
+.addButtonTravel.ant-btn.ant-btn-block{
+  width: 220px;
+  height: 40px;
+  background: #1963A6;
+    color: #ffffff;
+    font-size: 16px;
+}
 
 
 .travelTable.ant-table-wrapper {

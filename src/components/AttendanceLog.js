@@ -124,27 +124,30 @@ function AttendanceLog(props) {
       dataIndex: "empId",
       className: "code",
       key: "empId",
-      align: "left",
+      align: "center",
       render: (text) => <a>{text}</a>,
     },
     {
       title: "Employee Name",
       dataIndex: "name",
       key: "nFname",
-      align: "left",
+      align: "center",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      align: "left",
+      align: "center",
     },
     {
       title: "Project Name",
       dataIndex: "project",
       key: "project",
       ellipsis: true,
-      align: "left",
+      align: "center",
+      render: (_, data) => {
+        return data.project || "-";
+      },
     },
     {
       title: "Report",
@@ -152,7 +155,10 @@ function AttendanceLog(props) {
       dataIndex: "report",
       ellipsis: true,
       fixed: "right",
-      align: "left",
+      align: "center",
+      render: (_, data) => {
+        return data.report || "-";
+      },
     },
   ];
   useEffect(() => {
@@ -342,42 +348,54 @@ function AttendanceLog(props) {
       dataIndex: "date",
       key: "date",
       width: 80,
-      align: "left",
+      align: "center",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
       width: 80,
-      align: "left",
+      align: "center",
     },
     {
       title: "In Time",
       dataIndex: "clockIn",
       key: "clockIn",
       width: 80,
-      align: "left",
+      align: "center",
+      render: (_, record) => {
+        return record.clockIn || "-";
+      },
     },
     {
       title: "Out Time",
       key: "clockOut",
       dataIndex: "clockOut",
       width: 80,
-      align: "left",
+      align: "center",
+      render: (_, record) => {
+        return record.clockOut || "-";
+      },
     },
     {
       title: "Work Duration",
       key: "duration",
       dataIndex: "duration",
       width: 100,
-      align: "left",
+      align: "center",
+      render: (_, record) => {
+        return record.duration || "-";
+      },
     },
     {
       title: "Break Time",
       key: "break",
       dataIndex: "break",
       width: 80,
-      align: "left",
+      align: "center",
+      render: (_, record) => {
+        return record.break || "-";
+      },
     },
     {
       title: "Project Name",
@@ -385,7 +403,10 @@ function AttendanceLog(props) {
       key: "project",
       ellipsis: true,
       width: 80,
-      align: "left",
+      align: "center",
+      render: (_, record) => {
+        return record.project || "-";
+      },
     },
     {
       title: "Report",
@@ -394,7 +415,10 @@ function AttendanceLog(props) {
       width: 100,
       ellipsis: true,
       fixed: "right",
-      align: "left",
+      align: "center",
+      render: (_, record) => {
+        return record.report || "-";
+      },
     },
   ];
   async function onHrDateFilter(value) {

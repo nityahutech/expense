@@ -197,6 +197,13 @@ function AttendanceLog(props) {
     return () => clearTimeout(timer);
   }, [activetab, isHr]);
 
+  useEffect(() => {
+    console.log("ddddddddddddddddddddddddddd", configurations.inputclock)
+    if (configurations.inputclock) {
+      AttendanceContext.fixNullClock(endTime+":00", isHr ? false : currentUser)
+    }
+  }, [configurations.inputclock])
+
   const getHolidayList = async () => {
     let data = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
     console.log("holidays", data);
@@ -685,6 +692,7 @@ function AttendanceLog(props) {
                   onChange={searchChange}
                   // style={{ width: "95%" }}
                 />
+                <div className="monthColor">
                 <DatePicker
                   defaultValue={selDate}
                   className="Range Daily"
@@ -702,6 +710,7 @@ function AttendanceLog(props) {
                     allEmpDetails("_", e);
                   }}
                 />
+                </div>
                 <Table
                   //   rowSelection={{
                   //     type: selectionType,
@@ -871,7 +880,7 @@ function AttendanceLog(props) {
                         size="small"
                       />
                       <Form.Item
-                        label="Max Break Duration"
+                        label="Max Break Duration (hr)"
                         name="maxBreakDuration"
                         labelCol={{
                           span: 7,
@@ -882,7 +891,6 @@ function AttendanceLog(props) {
                           offset: 1,
                         }}
                         initialValue={configurations.maxBreakDuration}
-                        // noStyle
                       >
                         <InputNumber
                           min={0}

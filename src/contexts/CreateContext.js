@@ -20,6 +20,7 @@ import {
 import { db } from "../firebase-config";
 import { notification } from "antd";
 import CompanyProContext from "./CompanyProContext";
+import axios from "axios";
 
 async function generateEmpId(compId) {
   let data = await CompanyProContext.getCompanyProfile(compId);
@@ -171,4 +172,27 @@ export function checkAlphabetsName(event) {
     return true;
   }
 };
+
+export async function deleteUsers(array) {
+  let q  = query(collection(db, "users"), where("compId", "==", "compId002"));
+  let d = await getDocs(q);
+  let data = d.docs.map(doc => {
+    if (array.includes(doc.data().mailid)) {
+      return doc.id
+    }
+  }).filter(Boolean)
+  console.log(array, data);
+  data.forEach(x => {
+    console.log(x);
+    deleteDoc(doc(db, "users", x));
+    deleteDoc(doc(db, "companyprofile/compId002/users", x));
+  })
+  try {
+    await axios.post("http://localhost:3001/temp-delete/v1", {
+        data
+    })
+  } catch (error) {
+    console.log(error)
+}
+}
 

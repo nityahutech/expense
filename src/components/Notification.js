@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Col,
     Row,
@@ -11,6 +11,7 @@ import moment from "moment";
 import "../style/leave.css";
 import checkedIcon from "../images/checkmark.png"
 import rejectIcon from "../images/rejected.png"
+import { showNotification } from '../contexts/CreateContext';
 const Notification = (props) => {
     const dataSource = props.data.filter(data => data.status == "Pending")
     let value = '';
@@ -30,8 +31,11 @@ const Notification = (props) => {
             onOk: () => {
                 LeaveContext.approveLeave(record.id, record.name)
                     .then(response => {
+                        showNotification("success", "Success", "Request Approved!");
+                        props.getData();
                     })
                     .catch(error => {
+                        showNotification("error", "Error", "Unable to process request!");
                     })
             },
         });
@@ -46,9 +50,11 @@ const Notification = (props) => {
             onOk: () => {
                 LeaveContext.rejectLeave(record.id, record.name, value)
                     .then(response => {
-                        // getData();
+                        showNotification("success", "Success", "Request Rejected!");
+                        props.getData();
                     })
                     .catch(error => {
+                        showNotification("error", "Error", "Unable to process request!");
                     })
             },
         });
@@ -83,16 +89,6 @@ const Notification = (props) => {
             width: 150,
 
         },
-        // {
-        //     title: 'Slot',
-        //     dataIndex: 'slot',
-        //     width: 100,
-        //     align: "left",
-        //     sorter: (a, b) => {
-        //         return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
-        //     },
-        //     sortDirections: ["ascend", "descend"],
-        // },
         {
             title: 'No. Of Days',
             dataIndex: 'len',
@@ -145,8 +141,8 @@ const Notification = (props) => {
                 );
             },
         }
-
     ];
+
     return (
         <Row style={{
             display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
@@ -160,7 +156,6 @@ const Notification = (props) => {
             <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
                 background: 'flex', padding: '10px',
             }} >
-
                 <div>
                     <Table columns={columns}
                         dataSource={dataSource}
@@ -173,7 +168,6 @@ const Notification = (props) => {
                 </div>
             </Col>
         </Row>
-
     )
 }
 

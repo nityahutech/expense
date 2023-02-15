@@ -11,13 +11,10 @@ import {
     orderBy,
     addDoc,
     updateDoc,
-    // update,
     deleteDoc,
     doc,
     where,
     limit, 
-    runTransaction,
-    get
 } from "firebase/firestore";
 
 let compId = sessionStorage.getItem("compId");
@@ -50,9 +47,10 @@ class AttendanceContext {
       }
       let newrec = {
         ...d[0],
-        break: moment().subtract(d[0].clockOut).format("HH:mm:ss"),
+        break: moment().subtract(d[0].clockOut).add(d[0].break).format("HH:mm:ss"),
         clockOut: null,
       }
+      console.log(newrec);
       const attendDoc = doc(db, `companyprofile/${compId}/attendance`, d[0].id);
       updateDoc(attendDoc, newrec)
       return d;
@@ -72,18 +70,22 @@ class AttendanceContext {
         return 
     };
 
-    // fixNullClock = async () => {
-    //     const q = query(attendCollectionRef, where("date","!=",moment().format("DD-MM-YYYY")), where("clockOut","==",null))
-    //     let rec = await getDocs(q);
-    //     let d = rec.docs.map((doc) => {
-    //         return {
-    //             id: doc.id,
-    //             clockOut: "23:59:59"
-    //         };
-    //     });
-    //     const attendDoc = doc(db, "attendance", d[0].id);
-    //     update(attendDoc, record)
-    // }
+    fixNullClock = async (endTime, user) => {
+        console.log(user, !user);
+        const q = query(attendCollectionRef, where("date","!=",moment().format("DD-MM-YYYY")), where("clockOut","==",null))
+        let rec = await getDocs(q);
+        console.log(rec);
+        rec.docs.map((document) => {
+          if (user && document.data().empId != user.uid) { return; }
+          let data = {
+            ...document.data(),
+              clockOut: endTime,
+          };
+          data.duration = moment(endTime, "HH:mm:ss").subtract(data.clockIn).subtract(data.break).format("HH:mm:ss");
+          console.log(data, document.id);
+          updateDoc(doc(db, `companyprofile/${compId}/attendance`, document.id), data);
+        });
+    }
 
     getStartTime = async (id) =>{
         const q = query(attendCollectionRef, where("date","==",moment().format("DD-MM-YYYY")), where("empId", "==", id), limit(1))

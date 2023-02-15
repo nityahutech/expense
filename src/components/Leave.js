@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Col,
   Row,
@@ -8,7 +8,6 @@ import {
   Modal,
   Tag,
   Tabs,
-  notification,
   DatePicker,
   Spin,
 } from "antd";
@@ -29,8 +28,7 @@ import ApprovalConfig from "./ApprovalConfig";
 import LeaveType from "./LeaveType";
 import "../style/leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
-import LeaveCreate from "./LeaveCreate";
-import { showNotification } from "../contexts/CreateContext";
+import { capitalize, showNotification } from "../contexts/CreateContext";
 const dateFormat = "Do MMM, YYYY";
 const Leave = (props) => {
   const page = "leavePage";
@@ -54,11 +52,13 @@ const Leave = (props) => {
   // const isHr = JSON.parse(sessionStorage.getItem("isHr"));
   const isMgr = JSON.parse(sessionStorage.getItem("isMgr"));
   const [leavedays, setLeaveDays] = useState(null); //leave nature & total in obj
-  const [totaldays, setTotalDays] = useState(null); //leave nature & taken in obj
+  const [totaldays, setTotalDays] = useState([]); //leave nature & taken in obj
   const [date, setDate] = useState(moment()); //date for calendar
   const [companyholiday, setCompanyholiday] = useState([]); //holidays in array of objects
+  const [configurations, setConfigurations] = useState([]); //leave type configurations in array of obhects
   const [leaves, setLeaves] = useState([]); //all leaves in array of obects
   const [duration, setDuration] = useState([]); //all days of applied leaves in array
+  const [tempDur, setTempDur] = useState([]); //all days of applied leaves in array (temp for edit)
   const [durStatus, setDurStatus] = useState([]); //corresponding status of duration in array
   const [repManager, setRepManager] = useState(); //name of currentUser's reporting manager
   const [secondModal, setSecondModal] = useState(false); //boolean to open apply leave modal
@@ -70,8 +70,8 @@ const Leave = (props) => {
   const [dateSelected, setDateSelected] = useState([]);
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
-  const [startSlot, setStartSlot] = useState(null);
-  const [endSlot, setEndSlot] = useState(null);
+  const [startSlot, setStartSlot] = useState("Full Day");
+  const [endSlot, setEndSlot] = useState("Full Day");
   const [validleaverequest, setValidleaverequest] = useState("false");
   //--------------------------------------------filter----------------------------
 
@@ -120,6 +120,7 @@ const Leave = (props) => {
     return listData;
   };
   const onFinishEditLeave = (values) => {
+    console.log("values", values);
     if (
       editedLeave.dateCalc === dateSelected &&
       editedLeave.nature === values.leaveNature &&
@@ -130,6 +131,8 @@ const Leave = (props) => {
       setIsEditModalOpen(false);
       return;
     }
+    console.log("newLeave");
+
     if (values.leaveNature === "Optional Leave") {
       let optionalHolidays = companyholiday.filter((item) => {
         return item.optionalHoliday;
@@ -149,10 +152,7 @@ const Leave = (props) => {
         return;
       }
     }
-    let tempdur = duration.filter(
-      (dates) => !editedLeave.dateCalc.includes(dates)
-    );
-    let matchingdates = dateSelected.filter((item) => tempdur.includes(item));
+    let matchingdates = dateSelected.filter((item) => tempDur.includes(item));
     if (matchingdates.length > 0) {
       showNotification(
         "error",
@@ -163,7 +163,7 @@ const Leave = (props) => {
     }
     let newLeave = {
       empId: currentUser.uid,
-      approver: values.approver,
+      approver: values.approver || currentUser.displayName,
       date: dateSelected,
       name: currentUser.displayName,
       nature: values.leaveNature,
@@ -172,6 +172,7 @@ const Leave = (props) => {
       reason: values.reason,
       status: "Pending",
     };
+      console.log(newLeave);
     if (validleaverequest) {
       LeaveContext.updateLeaves(editedLeave.id, newLeave)
         .then((response) => {
@@ -227,7 +228,7 @@ const Leave = (props) => {
     }
     let newLeave = {
       empId: currentUser.uid,
-      approver: values.approver,
+      approver: values.approver || currentUser.displayName,
       date: dateSelected,
       name: currentUser.displayName,
       nature: values.leaveNature,
@@ -236,6 +237,7 @@ const Leave = (props) => {
       reason: values.reason,
       status: "Pending",
     };
+    console.log(newLeave)
     if (validleaverequest) {
       LeaveContext.createLeave(newLeave)
         .then((response) => {
@@ -243,6 +245,7 @@ const Leave = (props) => {
           showNotification("success", "Success", "Leave apply successfully");
         })
         .catch((error) => {
+          console.log(error)
           showNotification(
             "error",
             "Error",
@@ -252,34 +255,51 @@ const Leave = (props) => {
       form.resetFields();
       setDateSelected([]);
       setDateStart(null);
-      setStartSlot(null);
+      setStartSlot("Full Day");
       setDateEnd(null);
-      setEndSlot(null);
+      setEndSlot("Full Day");
       setValidleaverequest(false);
       setSecondModal(false);
     } else {
+      console.log("error")
       showNotification("error", "Error", "Unable to process leave request!");
     }
   };
 
-  const getConfigurations = async () => {
-    let data = await ConfigureContext.getConfigurations(page);
-    if (Object.keys(data).length == 0) {
-      return;
-    }
-    let sorted = Object.keys(data?.leaveNature).sort((k1, k2) =>
-      k1 < k2 ? -1 : k1 > k2 ? 1 : 0
-    );
-    let temp = {};
-    sorted.map((nat) => {
-      temp[`${nat}`] = data.leaveNature[`${nat}`];
+  const getConfigurations = async (load) => {
+    let data = await ConfigureContext.getConfigurations("leaveType");
+    let temp = Object.keys(data).map((type, i) => {
+      return {
+        ...data[`${type}`],
+        name: type
+      }
+    })
+    temp
+    .sort((k1, k2) => {
+      console.log(k1.name,k2.name)
+      return k1.name < k2.name ? -1 : k1.name > k2 ? 1 : 0
     });
-    setTotalDays(temp);
-    getData({ ...temp });
+    let cards = {}
+    let index = temp.indexOf(temp.filter(x => {
+      if (x.name == "Loss Of Pay"){
+        return true
+      }
+      console.log(x.name, data[`${x.name}`].count);
+      cards[`${x.name}`] = data[`${x.name}`].count
+      return false
+    })[0])
+    let lop = temp.splice(index, 1);
+    temp.push(lop[0]);
+    console.log(temp, cards);
+    setConfigurations(temp);
+    setTotalDays(cards);
+    if (load) {getData({ ...cards })}
   };
+
   const getData = async (temp) => {
     setLoading(true);
     let empRecord = await EmpInfoContext.getEduDetails(currentUser.uid);
+    console.log(empRecord)
     setRepManager(empRecord?.repManager);
     let data = await LeaveContext.getAllById(currentUser.uid);
     let d = data.docs.map((doc) => {
@@ -292,6 +312,7 @@ const Leave = (props) => {
     getDateSorted(d);
     setLeaves(d);
     setLoading(false);
+    // let temps = await LeaveContext.carryForward()
     let tempDays = temp ? temp : { ...totaldays };
     let days = await LeaveContext.getLeaveDays(d, tempDays);
     setLeaveDays(days);
@@ -303,6 +324,7 @@ const Leave = (props) => {
         stats.push(rec.status);
       }
     });
+    setTempDur([].concat.apply([], array));
     setDuration([].concat.apply([], array));
     setDurStatus(stats);
   };
@@ -355,7 +377,7 @@ const Leave = (props) => {
   };
   useEffect(() => {
     setLoading(true);
-    getConfigurations();
+    getConfigurations(true);
     getHoliday();
     const timer = setTimeout(() => {
       setLoading(false);
@@ -363,7 +385,7 @@ const Leave = (props) => {
     if (isHr) getAllRequests();
     if (isMgr) getRequestData();
     return () => clearTimeout(timer);
-  }, []);
+  }, [props.roleView]);
 
   useEffect(() => {
     if (isHr) getAllRequests();
@@ -391,6 +413,7 @@ const Leave = (props) => {
     });
   };
   const validateLeaveRequest = (noOfDays, leavetype) => {
+    console.log(noOfDays, leavetype,leavetype != null && dateSelected.length - noOfDays > 0, leavedays[leavetype] < dateSelected.length - noOfDays, leavedays[leavetype])
     if (leavetype != null && dateSelected.length - noOfDays > 0) {
       if (leavedays[leavetype] < dateSelected.length - noOfDays) {
         showNotification(
@@ -404,6 +427,7 @@ const Leave = (props) => {
       }
     }
   };
+    console.log(leavedays, dateSelected, validleaverequest)
   const searchChange = (e) => {
     let search = e.target.value;
     if (search) {
@@ -424,18 +448,20 @@ const Leave = (props) => {
   };
 
   const onLeaveNatureChange = (value) => {
-    if (value == "Optional Leave") {
+    if (value == "Optional Leave" || value == "Sick Leave") {
       if (dateSelected.length == 1) {
-        validateLeaveRequest(1, value);
+        validateLeaveRequest(endSlot == "Full Day" ? 0 : 0.5, value);
       } else {
         setValidleaverequest(false);
         showNotification(
           "error",
           "Error",
-          "Optional Leave can only be for 1 full day!"
+          `${value} can only be for 1 full day!`
         );
       }
+      return;
     }
+    console.log(startSlot, endSlot)
     let noOfDays = 0;
     if (endSlot != "Full Day") {
       noOfDays = 0.5;
@@ -446,6 +472,8 @@ const Leave = (props) => {
     validateLeaveRequest(noOfDays, value);
   };
   const onLeaveDateChange = (e) => {
+    form.setFieldsValue({leaveNature: null});
+    form1.setFieldsValue({leaveNature: null});
     let tempDateEnd = dateEnd;
     if (e != undefined) {
       tempDateEnd = e;
@@ -454,6 +482,7 @@ const Leave = (props) => {
       return !hol.optionalHoliday ? hol.date : null;
     });
     let temp = [];
+    console.log(dateStart,tempDateEnd, tempDur);
     try {
       for (
         let i = dateStart.clone();
@@ -464,7 +493,7 @@ const Leave = (props) => {
         if (!(day == "Saturday" || day == "Sunday")) {
           if (
             !holidayList.includes(i.format("Do MMM, YYYY")) &&
-            !duration.includes(i.format("Do MMM, YYYY"))
+            !tempDur.includes(i.format("Do MMM, YYYY"))
           ) {
             temp.push(i.format("Do MMM, YYYY"));
           }
@@ -529,67 +558,40 @@ const Leave = (props) => {
     const listData = [];
     companyholiday.forEach((hol) => {
       console.log(hol)
-      if (value.format("MMM") == moment(hol.date, "Do MMM, YYYY").format("MMM")) {
-        listData.push(hol.name)
+      if (value.format("MMM, YYYY") == moment(hol.date, "Do MMM, YYYY").format("MMM, YYYY")) {
+        listData.push({
+          name:hol.name,
+          optionalHoliday: hol.optionalHoliday
+        })
       }
     });
+    let color, bgColor, scroll = listData.length > 2 ? {height: "40px", overflowY: "scroll"} : null;
     console.log(value.format("MMM"), listData)
     return (
-      <ul>
-        { listData.map((d) => (
-          <li>{d}</li>
-        ))}
+      <ul style={scroll}>
+        { listData.map((d) => {
+          console.log(d)
+          color = d.optionalHoliday
+              ? "rgba(0, 119, 137, 0.96)"
+              : "rgba(252, 143, 10, 1)"
+          bgColor = d.optionalHoliday
+            ? "rgba(154, 214, 224, 0.96)"
+              : "rgba(252, 143, 10,0.2)"
+              return(
+          <li style={{
+            backgroundColor: bgColor,
+            color: color,
+            fontSize: "12px",
+            paddingLeft: "5px",
+            paddingRight: "5px",
+            margin: "0px",
+            borderRadius: "100px",
+            justifyContent: "center",
+            marginBottom: "3px"
+          }}>{d.name}</li>
+        )})}
       </ul>
     )
-    // let textVal = value.format("dddd");
-    // let bgColor =
-    //   textVal == "Sunday" || textVal == "Saturday"
-    //     ? "rgba(74, 67, 67, 0.2)"
-    //     : "rgba(10, 91, 204, 0.2)";
-    // let color =
-    //   textVal == "Sunday" || textVal == "Saturday"
-    //     ? "rgba(74, 67, 67, 1)"
-    //     : "rgb(10, 91, 204)";
-
-    // if (!(listData.length == 0)) {
-    //   textVal = listData[0].type;
-    //   color =
-    //     listData[0].type == "On Leave"
-    //       ? "rgba(0, 128, 0,  1)"
-    //       : listData[0].type === "Pending"
-    //         ? "rgb(166 168 69)"
-    //         : listData[0].isOptional
-    //           ? "rgba(0, 119, 137, 0.96)"
-    //           : "rgba(252, 143, 10, 1)";
-    //   bgColor =
-    //     listData[0].type == "On Leave"
-    //       ? "rgb(15, 255, 80,0.2)"
-    //       : listData[0].type === "Pending"
-    //         ? "rgb(205 227 36 / 25%)"
-    //         : listData[0].isOptional
-    //           ? "rgba(154, 214, 224, 0.96)"
-    //           : "rgba(252, 143, 10,0.2)";
-    // }
-
-    // return (
-    //   <div>
-    //     <div
-    //       className="events"
-    //       style={{
-    //         backgroundColor: bgColor,
-    //         color: color,
-    //         fontSize: "12px",
-    //         paddingLeft: "5px",
-    //         paddingRight: "5px",
-    //         margin: "0px",
-    //         borderRadius: "100px",
-    //         justifyContent: "center",
-    //       }}
-    //     >
-    //       <div className="present"> {textVal} </div>
-    //     </div>
-    //   </div>
-    // );
   };
 
   const reqColumns = [
@@ -608,6 +610,7 @@ const Leave = (props) => {
     {
       title: "Employee Name",
       dataIndex: "name",
+      align: "left",
       width: 150,
       sorter: (a, b) => {
         return a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0;
@@ -617,19 +620,9 @@ const Leave = (props) => {
     {
       title: "Nature of Leave",
       dataIndex: "nature",
+      align: "left",
       width: 150,
     },
-    // {
-    //     title: 'Slot',
-    //     dataIndex: 'slot',
-    //     width: 100,
-    //     align: "left",
-    //     sorter: (a, b) => {
-    //         return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
-    //     },
-    //     sortDirections: ["ascend", "descend"],
-
-    // },
     {
       title: "No. Of Days",
       dataIndex: "len",
@@ -643,11 +636,13 @@ const Leave = (props) => {
     {
       title: "Reason",
       dataIndex: "reason",
+      align: "left",
       width: 150,
     },
     {
       title: "Approver",
       dataIndex: "approver",
+      align: "left",
       width: 150,
     },
     {
@@ -682,12 +677,14 @@ const Leave = (props) => {
     {
       title: "Comment",
       dataIndex: "comment",
+      align: "left",
       width: 150,
     },
     {
       key: "5",
       title: "Actions",
       fixed: "right",
+      align: "left",
       width: 80,
       render: (record) => {
         return (
@@ -736,17 +733,6 @@ const Leave = (props) => {
       },
       sortDirections: ["ascend", "descend"],
     },
-    // {
-    //     title: 'Slot',
-    //     dataIndex: 'slot',
-    //     width: 100,
-    //     align: "left",
-    //     sorter: (a, b) => {
-    //         return a.slot !== b.slot ? (a.slot < b.slot ? -1 : 1) : 0;
-    //     },
-    //     sortDirections: ["ascend", "descend"],
-
-    // },
     {
       title: "No. Of Days",
       dataIndex: "len",
@@ -761,6 +747,7 @@ const Leave = (props) => {
       title: "Reason",
       dataIndex: "reason",
       width: 150,
+      align: "left",
     },
     {
       title: "Approver",
@@ -801,11 +788,13 @@ const Leave = (props) => {
       title: "Comment",
       dataIndex: "comment",
       width: 150,
+      align: "left",
     },
     {
       key: "5",
       title: "Actions",
       fixed: "right",
+      align: "left",
       width: 80,
       render: (record) => {
         return (
@@ -830,13 +819,16 @@ const Leave = (props) => {
             <EditOutlined
               disabled={record?.status === "Approved"}
               onClick={() => {
-                if (record?.status !== "Approved") {
+                console.log("recorf", record)
+                if (record?.status !== "Approved") {  
+                  form1.resetFields();
                   setEditedLeave(record);
+                  setTempDur(duration.filter(x => !record.dateCalc.includes(x)))
                   setIsEditModalOpen(true);
                   setDateSelected(record.dateCalc);
-                  setDateStart(moment(record.dateCalc, "Do MMM, YYYY"));
+                  setDateStart(moment(record.dateCalc[0], "Do MMM, YYYY"));
                   setStartSlot(record.slotStart);
-                  setDateEnd(moment(record.dateCalc, "Do MMM, YYYY"));
+                  setDateEnd(moment(record.dateCalc[record.len-1], "Do MMM, YYYY"));
                   setEndSlot(record.slotEnd);
                   setValidleaverequest(true);
                 }
@@ -873,13 +865,7 @@ const Leave = (props) => {
     ) {
       return true;
     }
-    let tempdur = [...duration];
-    if (isEditModalOpen) {
-      tempdur = duration.filter(
-        (dates) => !editedLeave.dateCalc.includes(dates)
-      );
-    }
-    if (tempdur.includes(moment(current).format("Do MMM, YYYY"))) {
+    if (tempDur.includes(moment(current).format("Do MMM, YYYY"))) {
       return true;
     }
     let matchOptionalHoliday = companyholiday.filter((item) => {
@@ -923,18 +909,21 @@ const Leave = (props) => {
     );
   }
   const disableEnd = () => {
-    if (dateStart == null || dateStart == 0) {
+    if (dateStart == null) {
       if (isEditModalOpen) {
         form1.setFieldsValue({ dateEnd: null });
+        form1.setFieldsValue({ sloltEnd: "Full Day" });
       } else {
         form.setFieldsValue({ dateEnd: null });
+        form.setFieldsValue({ slotEnd: "Full Day" });
       }
       return true;
     }
     return false;
   };
   const disableNature = () => {
-    if (dateStart == null || dateStart == 0) {
+    console.log(dateStart,dateEnd,isEditModalOpen)
+    if (dateStart == null || dateEnd == null) {
       if (isEditModalOpen) {
         form1.setFieldsValue({ leaveNature: null });
       } else {
@@ -985,20 +974,27 @@ const Leave = (props) => {
     return false;
   };
   const { RangePicker } = DatePicker;
-
-  const onSearch = (value) => console.log(value);
-
-  const { Search } = Input;
   //-----------------------------------------filter-------------------------
   const onChange = (date, dateString) => {
+    console.log(date, allRequests);
     setFilterCriteria({ ...filterCriteria, date });
+    // let temp =[];
+    // for (
+    //   let i = date[0].clone();
+    //   i.isSameOrBefore(date[1]);
+    //   i = i.clone().add(1, "days")
+    // ) {
+    //     temp.push(i.format("Do MMM, YYYY"));
+    // }
     if (date) {
       let result = allRequests.filter((ex) => {
         return (
-          moment(ex.date, dateFormat).isSame(date[0], "day") ||
-          moment(ex.date, dateFormat).isSame(date[1], "day") ||
+          moment(ex.dateCalc[0], dateFormat).isSame(date[0], "day") ||
+          moment(ex.dateCalc[0], dateFormat).isSame(date[1], "day") ||
           (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
-            moment(ex.date, dateFormat).isSameOrBefore(date[1]))
+            moment(ex.date, dateFormat).isSameOrBefore(date[1])) ||
+          moment(ex.dateCalc[ex.len-1], dateFormat).isSame(date[0], "day") ||
+          moment(ex.dateCalc[ex.len-1], dateFormat).isSame(date[1], "day") 
         );
       });
 
@@ -1008,6 +1004,16 @@ const Leave = (props) => {
       setFilterRequest(allRequests);
     }
   };
+  
+  console.log("DateSelected", dateSelected);
+  console.log("dateStart", dateStart);
+  console.log("dateEnd", dateEnd);
+  console.log("startSlot", startSlot);
+  console.log("endSlot", endSlot);
+  console.log("validleaverequest", validleaverequest);
+  console.log("filterre", filterRequest);
+  console.log("dur", duration);
+  console.log("tempdu", tempDur);
 
   return (
     <>
@@ -1023,58 +1029,6 @@ const Leave = (props) => {
             }}
           >
             <Tabs.TabPane tab="Leave Request" key="1">
-              {/* <Row
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-evenly",
-                  alignContent: "flex-start",
-                  backgroundColor: "white",
-                  borderRadius: "10px",
-                  padding: "10px",
-                  marginTop: "10px",
-                }}
-              >
-                <Col
-                  span={24}
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-evenly",
-                    alignContent: "flex-start",
-                    color: "black",
-                    width: "100rem",
-                  }}
-                >
-                  <h3>All Requests</h3>
-                </Col>
-
-                <Col
-                  xl={24}
-                  lg={24}
-                  md={24}
-                  sm={24}
-                  xs={24}
-                  style={{
-                    background: "flex",
-                    padding: "10px",
-                  }}
-                >
-                  <div>
-                    <Table
-                      className="leaveTable"
-                      columns={reqColumns}
-                      dataSource={requests}
-                      pagination={{
-                        position: ["bottomCenter"],
-                      }}
-                      scroll={{ x: 600 }}
-                      size="small"
-                    />
-                  </div>
-                </Col>
-              </Row> */}
-
               <Row
                 style={{
                   display: "flex",
@@ -1114,7 +1068,6 @@ const Leave = (props) => {
                       marginLeft: "5px",
                     }}
                   >
-                    {/* <Col span={6}><RangePicker /></Col> */}
                     <Col xs={24} sm={22} md={7}>
                       <Input
                         className="searchBar"
@@ -1126,7 +1079,6 @@ const Leave = (props) => {
                     </Col>
                     <Col xs={24} sm={22} md={10}>
                       <RangePicker
-                        defaultValue={[]}
                         format={dateFormat}
                         style={{ width: "95%" }}
                         onChange={onChange}
@@ -1138,6 +1090,7 @@ const Leave = (props) => {
                         style={{ marginBottom: "0px" }}
                       >
                         <Select
+                          allowClear
                           onChange={(e) => {
                             if (!e) {
                               setFilterRequest(allRequests)
@@ -1148,16 +1101,14 @@ const Leave = (props) => {
                             setFilterRequest(filteredLeave)
 
                           }}
-                          defaultValue="Loss Of Pay"
-                          options={[
-                            {
-                              value: "Casual Leave",
-                              label: "Casual Leave",
-                            },
-                            {
-                              value: "Earn Leave",
-                              label: "Earn Leave",
-                            },
+                          options={[...Object.keys(totaldays).map(day => {
+                            return {
+                            value: day,
+                            label: day
+                          }}),{
+                            value: "Loss Of Pay",
+                            label: "Loss Of Pay"
+                          }
                           ]}
                         />
                       </Form.Item>
@@ -1340,22 +1291,8 @@ const Leave = (props) => {
                     </div>
                     <div className="holiday-button" style={{ display: "flex" }}>
                       <div>
-                        <HolidayList isHr={isHr} refreshCalendar={getHoliday} />
+                        <HolidayList role={props.roleView} refreshCalendar={getHoliday} />
                       </div>
-                      {/* <div className="resp-leaveButton" style={{
-                        display: 'flex',
-                        alignContent: 'center',
-                        alignItems: 'center'
-                      }}>
-                        <div>
-                          <LeaveCreate isHr={isHr} refresh={getConfigurations} />
-                        </div>
-                        <Button className="button-applyleave"
-                          style={{ borderRadius: '15px', width: '105px', marginRight: "10px", marginTop: '0px' }}
-                          type="default" onClick={() => { setSecondModal(true) }}>
-                          Apply Leave
-                        </Button>
-                      </div> */}
                     </div>
                   </div>
 
@@ -1376,7 +1313,7 @@ const Leave = (props) => {
               </card>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Leave Type" key="3">
-              <LeaveType />
+              <LeaveType data={configurations} getData={getConfigurations} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Approvals" key="4">
               <ApprovalConfig />
@@ -1405,7 +1342,7 @@ const Leave = (props) => {
                     return (
                       <div
                         className="Col-2-center"
-                        style={{ background: colors[id], color: "#fff" }}
+                        style={{ background: "#1963A6", color: "white" }}
                       >
                         <p
                           className="heading"
@@ -1616,9 +1553,6 @@ const Leave = (props) => {
                         alignItems: "center",
                       }}
                     >
-                      <div>
-                        <LeaveCreate isHr={isHr} refresh={getConfigurations} />
-                      </div>
                       <Button
                         className="button-applyleave"
                         style={{
@@ -1663,12 +1597,19 @@ const Leave = (props) => {
               footer={null}
               title="Apply Leave"
               centered
-              visible={secondModal}
+              open={secondModal}
               width={450}
               closeIcon={
                 <div
                   onClick={() => {
                     setSecondModal(false);
+                          form.resetFields();
+                          setDateSelected([]);
+                          setDateStart(null);
+                          setStartSlot(null);
+                          setDateEnd(null);
+                          setEndSlot(null);
+                          setValidleaverequest(false);
                   }}
                   style={{ color: "#ffffff" }}
                 >
@@ -1737,11 +1678,16 @@ const Leave = (props) => {
                           ]}
                         >
                           <DatePicker
-                            style={{ width: "100%" }}
+                            style={{ width: "100%", backgroundColor: "#ffffff" }}
                             format="Do MMM, YYYY"
                             onChange={(e) => {
                               setDateStart(e);
                               onLeaveDateChange();
+                              if (e == null) {
+                                setDateEnd(e);
+                                setEndSlot("Full Day");
+                                setValidleaverequest(false)
+                              }
                             }}
                             disabledDate={disabledDate}
                           />
@@ -1905,11 +1851,9 @@ const Leave = (props) => {
                       <Input.TextArea
                         maxLength={60}
                         onChange={(e) => {
-                          const inputval = e.target.value;
-                          const newVal =
-                            inputval.substring(0, 1).toUpperCase() +
-                            inputval.substring(1);
-                          form.setFieldsValue({ reason: newVal });
+                        const str = e.target.value;
+                        const caps = str.split(". ").map(capitalize).join(". ");
+                          form.setFieldsValue({ reason: caps });
                         }}
                       />
                     </Form.Item>
@@ -1960,7 +1904,7 @@ const Leave = (props) => {
               </Row>
             </Modal>
 
-            {isMgr ? <Notification data={[...requests]} /> : null}
+            {isMgr ? <Notification data={[...requests]} getData={getData} /> : null}
 
             {isMgr && !isHr ? (
               <Row
@@ -2130,13 +2074,14 @@ const Leave = (props) => {
             className="viewAppraisal"
             centered
             width={450}
-            visible={isEditModalOpen}
+            open={isEditModalOpen}
             footer={null}
             destroyOnClose
             title="Edit Applied Leave"
             closeIcon={
               <div
                 onClick={() => {
+                  form1.resetFields();
                   setDateSelected([]);
                   setDateStart(null);
                   setStartSlot(null);
@@ -2195,7 +2140,6 @@ const Leave = (props) => {
                         style={{
                           marginBottom: "20px",
                           color: "white",
-
                           minWidth: "70px",
                         }}
                         label={
@@ -2217,11 +2161,16 @@ const Leave = (props) => {
                         }
                       >
                         <DatePicker
-                          style={{ width: "100%" }}
+                          style={{ width: "100%", backgroundColor: "#ffffff" }}
                           format="Do MMM, YYYY"
                           onChange={(e) => {
-                            setDateStart(e);
-                            onLeaveDateChange();
+                              setDateStart(e);
+                              onLeaveDateChange();
+                              if (e == null) {
+                                setDateEnd(e);
+                                setEndSlot("Full Day");
+                                setValidleaverequest(false)
+                              }
                           }}
                           disabledDate={disabledDate}
                         />
@@ -2280,12 +2229,7 @@ const Leave = (props) => {
                         initialValue={
                           editedLeave.dateCalc == null
                             ? null
-                            : moment(
-                              editedLeave.dateCalc[
-                              editedLeave.dateCalc.length - 1
-                              ],
-                              "Do MMM, YYYY"
-                            )
+                            : moment(editedLeave.dateCalc[editedLeave.len-1], "Do MMM, YYYY")
                         }
                       >
                         <DatePicker
@@ -2328,9 +2272,9 @@ const Leave = (props) => {
                     </Col>
                   </Row>
                   <Form.Item
-                    required={false}
-                    labelAlign="left"
-                    name="leaveNature"
+                      required={false}
+                      labelAlign="left"
+                      name="leaveNature"
                     style={{ marginBottom: "20px" }}
                     label={
                       <label style={{ color: "black", fontWeight: "400" }}>
@@ -2343,8 +2287,10 @@ const Leave = (props) => {
                         message: "Select Nature of Leave",
                       },
                     ]}
+                    // initialValues
                     initialValue={editedLeave.nature}
                   >
+                  {/* {console.log(editedLeave.nature)} */}
                     <Select
                       placeholder="Select an option"
                       allowClear
@@ -2383,13 +2329,10 @@ const Leave = (props) => {
                     <Input.TextArea
                       maxLength={60}
                       onChange={(e) => {
-                        const inputval = e.target.value;
-                        const newVal =
-                          inputval.substring(0, 1).toUpperCase() +
-                          inputval.substring(1);
-                        form1.setFieldsValue({ reason: newVal });
+                        const str = e.target.value;
+                        const caps = str.split(". ").map(capitalize).join(". ");
+                        form1.setFieldsValue({ reason: caps });
                       }}
-                      required
                     />
                   </Form.Item>
 
@@ -2425,11 +2368,11 @@ const Leave = (props) => {
                         form1.resetFields();
                         setDateSelected(editedLeave.dateCalc);
                         setDateStart(
-                          moment(editedLeave.dateCalc, "Do MMM, YYYY")
+                          moment(editedLeave.dateCalc[0], "Do MMM, YYYY")
                         );
                         setStartSlot(editedLeave.slotStart);
                         setDateEnd(
-                          moment(editedLeave.dateCalc, "Do MMM, YYYY")
+                          moment(editedLeave.dateCalc[editedLeave.len-1], "Do MMM, YYYY")
                         );
                         setEndSlot(editedLeave.slotEnd);
                         setValidleaverequest(true);

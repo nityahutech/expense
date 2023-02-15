@@ -1,29 +1,16 @@
 import { useState, useEffect } from "react";
-import { Card, Row, Col, Divider } from "antd";
-import EmpInfoContext from "../../contexts/EmpInfoContext";
+import { Card, Row, Col, Divider, Skeleton } from "antd";
 import "../../style/BankAccount.css";
-// import { color } from "html2canvas/dist/types/css/types/color";
 
-function Work() {
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
-  const [empID, setEmpID] = useState("")
-  const [designation, setDesignation] = useState("");
-  const [doj, setDoj] = useState("");
-  const [department, setDepartment] = useState("");
-  const [workLocation, setWorkLocation] = useState("");
-  const [empType, setEmpType] = useState("");
+function Work(props) {
+  const [data, setData] = useState(props.data)
+  const [loading, setLoading] = useState(false)
+
   useEffect(() => {
-    getData();
-  }, []);
-  const getData = async () => {
-    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    setDesignation(data.designation ? data.designation : null);
-    setDoj(data.doj ? data.doj : null);
-    setWorkLocation(data.workLocation ? data.workLocation : null);
-    setDepartment(data.department ? data.department : null);
-    setEmpType(data.empType ? data.empType : null);
-    setEmpID(data.empId ? data.empId : null);
-  };
+    setLoading(true);
+    setData(props.data);
+    setLoading(false);
+  }, [props.data]);
 
   return (
     <>
@@ -35,6 +22,7 @@ function Work() {
           justifyContent: "center",
         }}
       >
+      {loading ? (<Skeleton active/>) :(
         <Card
           title="WORK DETAILS"
           className="personal"
@@ -74,7 +62,7 @@ function Work() {
                   fontFamily: "Open Sans,sans-serif",
                   marginLeft:"10px"
                 }}
-              >{empID ? empID : "-"}</div>
+              >{data.empId}</div>
             </Col>
             <Divider style={{margin:"0px", backgroundColor:"darkcyan"}}/>
             <Col xs={24} sm={12} md={12}>
@@ -89,7 +77,7 @@ function Work() {
               >
                 Designation
               </div>
-              <div>{designation ? designation : "-"}</div>
+              <div>{data.designation}</div>
             </Col>
             <Col xs={24} sm={12} md={12}>
               <div
@@ -103,7 +91,7 @@ function Work() {
               >
                 Date of Joining
               </div>
-              <div>{doj ? doj : "-"}</div>
+              <div>{data.doj || "-"}</div>
             </Col>
             <Col xs={2} sm={12} md={12}>
               <div
@@ -131,7 +119,7 @@ function Work() {
               >
                 Employee Type
               </div>
-              <div>{empType ? empType : "-"}</div>
+              <div>{data.empType || "-"}</div>
             </Col>
             <Col xs={24} sm={12} md={12}>
               <div
@@ -145,7 +133,7 @@ function Work() {
               >
                 Work Location
               </div>
-              <div>{workLocation ? workLocation : "-"}</div>
+              <div>{data.workLocation || "-"}</div>
             </Col>
             <Col xs={24} sm={12} md={12}>
               <div
@@ -159,10 +147,10 @@ function Work() {
               >
                 Department
               </div>
-              <div>{department ? department : "-"}</div>
+              <div>{data.department || "-"}</div>
             </Col>
           </Row>
-        </Card>
+        </Card>)}
       </div>
     </>
   );

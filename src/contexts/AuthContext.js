@@ -32,16 +32,16 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState()
   const [loading, setLoading] = useState(true)
-  const [role, setRole] = useState();
-  const [roleView, setRoleView] = useState();
-  const [compId, setCompId] = useState();
-  const [isMgr, setIsMgr] = useState();
-  const [isHr, setIsHr] = useState();
-  const [isLead, setIsLead] = useState();
-  const [logo, setLogo] = useState();
+  const [role, setRole] = useState('');
+  const [roleView, setRoleView] = useState('');
+  const [compId, setCompId] = useState('');
+  const [isMgr, setIsMgr] = useState(false);
+  const [isHr, setIsHr] = useState(false);
+  const [isLead, setIsLead] = useState(false);
+  const [logo, setLogo] = useState(null);
 
   function getUserData(user) {
-    console.log("auth called");
+    console.log("auth called", compId, currentUser);
     if (user==null) {
       const timer = setTimeout(() => {
         sessionStorage.clear();
@@ -49,6 +49,7 @@ export function AuthProvider({ children }) {
       }, 2500);
       return () => clearTimeout(timer);
     }
+    console.log("auth called", compId, currentUser);
     getDoc(doc(db, 'users', user.uid)).then((res) => {
       let rec = res.data()
       sessionStorage.setItem("role", rec?.role)

@@ -339,13 +339,6 @@ const NewSidebar = (props) => {
                   </>
                 ) : null}
 
-                <Menu.Item
-                  icon={<img src={userIcon} alt="profile" className="Dash" />}
-                  key="21"
-                >
-                  <p className="sideFont">My Profile</p>
-                  <NavLink to="/Profile" />
-                </Menu.Item>
                 {role != "super" ? (<Menu.Item
                  icon={<img src={travel} alt="profile" className="Dash"  style={{color:"#fffff"}} />}
                  key="24"
@@ -353,6 +346,13 @@ const NewSidebar = (props) => {
                   <p className="sideFont">Travel Management</p>
                   <NavLink to="/TravelManagement" />
                 </Menu.Item>):null}
+                <Menu.Item
+                  icon={<img src={userIcon} alt="profile" className="Dash" />}
+                  key="21"
+                >
+                  <p className="sideFont">My Profile</p>
+                  <NavLink to="/Profile" />
+                </Menu.Item>
               </Menu>
             </div>
           </div>

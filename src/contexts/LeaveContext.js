@@ -49,7 +49,8 @@ class LeaveContext {
             <br />
             <p>Hutech HR</p>`,
             }
-            sendEmail(mailOptions)
+            console.log(id)
+            // sendEmail(mailOptions)
         })
         return addDoc(leaveCollectionRef, newLeave);
     };
@@ -83,7 +84,8 @@ class LeaveContext {
             <br />
             <p>Hutech HR</p>`,
         }
-        sendEmail(mailOptions)
+        console.log(email)
+        // sendEmail(mailOptions)
         return updateDoc(leaveDoc, { status: "Approved" })
     }
     rejectLeave = async (id, name, comment) => {
@@ -99,7 +101,8 @@ class LeaveContext {
             <br />
             <p>Hutech HR</p>`,
         }
-        sendEmail(mailOptions)
+        console.log(email)
+        // sendEmail(mailOptions)
         return updateDoc(leaveDoc, { status: "Rejected", comment: comment })
     }
     getLeaveDays = (records, leavedays) => {

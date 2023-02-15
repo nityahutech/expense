@@ -24,20 +24,14 @@ import InvoiceMagHome from "./components/assetManagement/InvoiceMagHome";
 import TravelManagement from "./components/TravelManagement/travelManagement";
 
 function App() {
-  const [roleview, setRoleview] = useState('')
+  const [roleview, setRoleview] = useState(sessionStorage.getItem("roleView"))
 
   const switchRole = (role) => {
     setRoleview(role);
   };
 
-  const FirstRole = () => {
-    const { role } = useAuth();
-    setRoleview(role)
-  }
-
   return (
     <AuthProvider>
-    {FirstRole}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />

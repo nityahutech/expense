@@ -98,9 +98,9 @@ function PaySlip(props) {
   //current user
   async function getDatas(id) {
     console.log(id)
-    const currentUser = await EmployeeNetSalary.getUserCurrent(currentUser.uid);
-    console.log("aaa", currentUser);
-    setData(currentUser);
+    let data = await EmployeeNetSalary.getUserCurrent(currentUser.uid);
+    console.log("aaa", data);
+    setData(data);
   }
 
 

@@ -71,10 +71,8 @@ class AttendanceContext {
     };
 
     fixNullClock = async (endTime, user) => {
-        console.log(user, !user);
         const q = query(attendCollectionRef, where("date","!=",moment().format("DD-MM-YYYY")), where("clockOut","==",null))
         let rec = await getDocs(q);
-        console.log(rec);
         rec.docs.map((document) => {
           if (user && document.data().empId != user.uid) { return; }
           let data = {
@@ -82,7 +80,6 @@ class AttendanceContext {
               clockOut: endTime,
           };
           data.duration = moment(endTime, "HH:mm:ss").subtract(data.clockIn).subtract(data.break).format("HH:mm:ss");
-          console.log(data, document.id);
           updateDoc(doc(db, `companyprofile/${compId}/attendance`, document.id), data);
         });
     }

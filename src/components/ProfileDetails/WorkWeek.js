@@ -62,15 +62,10 @@ const weekData = [
 ];
 function WorkWeek(props) {
   const [data, setData] = useState(props.data);
-  // const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
   useEffect(() => {
     setData(props.data);
   }, [props.data]);
-
-  // const getData = async () => {
-    
-  // };
 
   const sharedOnCell = (_, index) => {
     if (index === 5) {

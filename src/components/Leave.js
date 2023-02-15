@@ -29,27 +29,17 @@ import LeaveType from "./LeaveType";
 import "../style/leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
 import { capitalize, showNotification } from "../contexts/CreateContext";
-const dateFormat = "Do MMM, YYYY";
-const Leave = (props) => {
-  const page = "leavePage";
-  const colors = [
-    "#0088FE",
-    "#00C49F",
-    "#FFBB28",
-    "#FF8042",
-    "#fc03c2",
-    "#b103fc",
-    "#03d7fc",
-  ];
 
-  const isHr = props.roleView == "admin";
-  console.log(props, isHr);
+const Leave = (props) => {
+  const { RangePicker } = DatePicker;
   const { Option } = Select;
+  const dateFormat = "Do MMM, YYYY";
+  const isAdmin = props.roleView == "admin";
+  const isHr = JSON.parse(sessionStorage.getItem("isHr"));
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  // const isHr = JSON.parse(sessionStorage.getItem("isHr"));
   const isMgr = JSON.parse(sessionStorage.getItem("isMgr"));
   const [leavedays, setLeaveDays] = useState(null); //leave nature & total in obj
   const [totaldays, setTotalDays] = useState([]); //leave nature & taken in obj
@@ -62,6 +52,7 @@ const Leave = (props) => {
   const [durStatus, setDurStatus] = useState([]); //corresponding status of duration in array
   const [repManager, setRepManager] = useState(); //name of currentUser's reporting manager
   const [secondModal, setSecondModal] = useState(false); //boolean to open apply leave modal
+  const [adminLeave, setAdminLeave] = useState(false); //boolean to open apply leave modal for admin
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); //boolean to open edit leave modal
   const [editedLeave, setEditedLeave] = useState({}); //leave record to be edited
   const [requests, setRequests] = useState([]); //leave requests for managers in array of objects
@@ -73,7 +64,6 @@ const Leave = (props) => {
   const [startSlot, setStartSlot] = useState("Full Day");
   const [endSlot, setEndSlot] = useState("Full Day");
   const [validleaverequest, setValidleaverequest] = useState("false");
-  //--------------------------------------------filter----------------------------
 
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
@@ -119,8 +109,8 @@ const Leave = (props) => {
     }
     return listData;
   };
+
   const onFinishEditLeave = (values) => {
-    console.log("values", values);
     if (
       editedLeave.dateCalc === dateSelected &&
       editedLeave.nature === values.leaveNature &&
@@ -131,7 +121,6 @@ const Leave = (props) => {
       setIsEditModalOpen(false);
       return;
     }
-    console.log("newLeave");
 
     if (values.leaveNature === "Optional Leave") {
       let optionalHolidays = companyholiday.filter((item) => {
@@ -172,7 +161,6 @@ const Leave = (props) => {
       reason: values.reason,
       status: "Pending",
     };
-      console.log(newLeave);
     if (validleaverequest) {
       LeaveContext.updateLeaves(editedLeave.id, newLeave)
         .then((response) => {
@@ -237,7 +225,6 @@ const Leave = (props) => {
       reason: values.reason,
       status: "Pending",
     };
-    console.log(newLeave)
     if (validleaverequest) {
       LeaveContext.createLeave(newLeave)
         .then((response) => {
@@ -276,7 +263,6 @@ const Leave = (props) => {
     })
     temp
     .sort((k1, k2) => {
-      console.log(k1.name,k2.name)
       return k1.name < k2.name ? -1 : k1.name > k2 ? 1 : 0
     });
     let cards = {}
@@ -284,13 +270,11 @@ const Leave = (props) => {
       if (x.name == "Loss Of Pay"){
         return true
       }
-      console.log(x.name, data[`${x.name}`].count);
       cards[`${x.name}`] = data[`${x.name}`].count
       return false
     })[0])
     let lop = temp.splice(index, 1);
     temp.push(lop[0]);
-    console.log(temp, cards);
     setConfigurations(temp);
     setTotalDays(cards);
     if (load) {getData({ ...cards })}
@@ -299,7 +283,6 @@ const Leave = (props) => {
   const getData = async (temp) => {
     setLoading(true);
     let empRecord = await EmpInfoContext.getEduDetails(currentUser.uid);
-    console.log(empRecord)
     setRepManager(empRecord?.repManager);
     let data = await LeaveContext.getAllById(currentUser.uid);
     let d = data.docs.map((doc) => {
@@ -413,7 +396,6 @@ const Leave = (props) => {
     });
   };
   const validateLeaveRequest = (noOfDays, leavetype) => {
-    console.log(noOfDays, leavetype,leavetype != null && dateSelected.length - noOfDays > 0, leavedays[leavetype] < dateSelected.length - noOfDays, leavedays[leavetype])
     if (leavetype != null && dateSelected.length - noOfDays > 0) {
       if (leavedays[leavetype] < dateSelected.length - noOfDays) {
         showNotification(
@@ -427,7 +409,7 @@ const Leave = (props) => {
       }
     }
   };
-    console.log(leavedays, dateSelected, validleaverequest)
+  
   const searchChange = (e) => {
     let search = e.target.value;
     if (search) {
@@ -439,9 +421,6 @@ const Leave = (props) => {
       );
       const reqestALL = [...result];
       setFilterRequest(reqestALL);
-      // console.log(reqestALL);
-      console.log(allRequests);
-      console.log(requests);
     } else {
       setFilterRequest(allRequests);
     }
@@ -461,7 +440,6 @@ const Leave = (props) => {
       }
       return;
     }
-    console.log(startSlot, endSlot)
     let noOfDays = 0;
     if (endSlot != "Full Day") {
       noOfDays = 0.5;
@@ -482,7 +460,6 @@ const Leave = (props) => {
       return !hol.optionalHoliday ? hol.date : null;
     });
     let temp = [];
-    console.log(dateStart,tempDateEnd, tempDur);
     try {
       for (
         let i = dateStart.clone();
@@ -557,7 +534,6 @@ const Leave = (props) => {
   const monthCellRender = (value) => {
     const listData = [];
     companyholiday.forEach((hol) => {
-      console.log(hol)
       if (value.format("MMM, YYYY") == moment(hol.date, "Do MMM, YYYY").format("MMM, YYYY")) {
         listData.push({
           name:hol.name,
@@ -566,11 +542,9 @@ const Leave = (props) => {
       }
     });
     let color, bgColor, scroll = listData.length > 2 ? {height: "40px", overflowY: "scroll"} : null;
-    console.log(value.format("MMM"), listData)
     return (
       <ul style={scroll}>
         { listData.map((d) => {
-          console.log(d)
           color = d.optionalHoliday
               ? "rgba(0, 119, 137, 0.96)"
               : "rgba(252, 143, 10, 1)"
@@ -819,7 +793,6 @@ const Leave = (props) => {
             <EditOutlined
               disabled={record?.status === "Approved"}
               onClick={() => {
-                console.log("recorf", record)
                 if (record?.status !== "Approved") {  
                   form1.resetFields();
                   setEditedLeave(record);
@@ -922,7 +895,6 @@ const Leave = (props) => {
     return false;
   };
   const disableNature = () => {
-    console.log(dateStart,dateEnd,isEditModalOpen)
     if (dateStart == null || dateEnd == null) {
       if (isEditModalOpen) {
         form1.setFieldsValue({ leaveNature: null });
@@ -973,19 +945,9 @@ const Leave = (props) => {
     }
     return false;
   };
-  const { RangePicker } = DatePicker;
   //-----------------------------------------filter-------------------------
-  const onChange = (date, dateString) => {
-    console.log(date, allRequests);
+  const onChange = (date) => {
     setFilterCriteria({ ...filterCriteria, date });
-    // let temp =[];
-    // for (
-    //   let i = date[0].clone();
-    //   i.isSameOrBefore(date[1]);
-    //   i = i.clone().add(1, "days")
-    // ) {
-    //     temp.push(i.format("Do MMM, YYYY"));
-    // }
     if (date) {
       let result = allRequests.filter((ex) => {
         return (
@@ -1004,20 +966,10 @@ const Leave = (props) => {
       setFilterRequest(allRequests);
     }
   };
-  
-  console.log("DateSelected", dateSelected);
-  console.log("dateStart", dateStart);
-  console.log("dateEnd", dateEnd);
-  console.log("startSlot", startSlot);
-  console.log("endSlot", endSlot);
-  console.log("validleaverequest", validleaverequest);
-  console.log("filterre", filterRequest);
-  console.log("dur", duration);
-  console.log("tempdu", tempDur);
 
   return (
     <>
-      {props.roleView === "admin" ? (
+      {isAdmin ? (
         <div className="leavePageDiv">
           <Tabs
             defaultActiveKey="1"
@@ -1080,17 +1032,16 @@ const Leave = (props) => {
                     <Col xs={24} sm={22} md={10}>
                       <RangePicker
                         format={dateFormat}
-                        style={{ width: "95%" }}
                         onChange={onChange}
                       />
                     </Col>
                     <Col xs={24} sm={22} md={7}>
                       <Form.Item
-                        label="Nature of Leave::"
                         style={{ marginBottom: "0px" }}
                       >
                         <Select
                           allowClear
+                          placeholder="Nature of Leave"
                           onChange={(e) => {
                             if (!e) {
                               setFilterRequest(allRequests)
@@ -1113,6 +1064,24 @@ const Leave = (props) => {
                         />
                       </Form.Item>
                     </Col>
+                    {/* <Col xs={24} sm={22} md={4}>
+                  <Button
+                    className="button-applyleave"
+                    style={{
+                      borderRadius: "15px",
+                      width: "105px",
+                      marginTop: "0px",
+                      backgroundColor: "#1963a6",
+                      borderColor: "#1963a6"
+                    }}
+                    type="primary"
+                    onClick={() => {
+                      setAdminLeave(true);
+                    }}
+                  >
+                    Apply Leave
+                  </Button>
+                </Col> */}
                   </Row>
                 </Col>
 
@@ -1124,7 +1093,7 @@ const Leave = (props) => {
                   xs={24}
                   style={{
                     background: "flex",
-                    padding: "10px",
+                    paddingTop: "10px",
                   }}
                 >
                   <div className="history-table">
@@ -1142,57 +1111,7 @@ const Leave = (props) => {
                 </Col>
               </Row>
 
-              {/* <Row
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-evenly",
-                  alignContent: "flex-start",
-                  backgroundColor: "white",
-                  borderRadius: "10px",
-                  padding: "10px",
-                  marginTop: "10px",
-                }}
-              >
-                <Col
-                  span={24}
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-evenly",
-                    alignContent: "flex-start",
-                    color: "black",
-                    width: "100rem",
-                  }}
-                >
-                  <h3>Employee Leave History</h3>
-                </Col>
-
-                <Col
-                  xl={24}
-                  lg={24}
-                  md={24}
-                  sm={24}
-                  xs={24}
-                  style={{
-                    background: "flex",
-                    padding: "10px",
-                  }}
-                >
-                  <div className="history-table">
-                    <Table
-                      className="leaveTable "
-                      columns={columns}
-                      dataSource={leaves}
-                      pagination={{
-                        position: ["bottomCenter"],
-                      }}
-                      scroll={{ x: 600 }}
-                      size="small"
-                    />
-                  </div>
-                </Col>
-              </Row> */}
+             
             </Tabs.TabPane>
             <Tabs.TabPane tab="Holidays" key="2">
               <card>
@@ -1603,13 +1522,13 @@ const Leave = (props) => {
                 <div
                   onClick={() => {
                     setSecondModal(false);
-                          form.resetFields();
-                          setDateSelected([]);
-                          setDateStart(null);
-                          setStartSlot(null);
-                          setDateEnd(null);
-                          setEndSlot(null);
-                          setValidleaverequest(false);
+                    form.resetFields();
+                    setDateSelected([]);
+                    setDateStart(null);
+                    setStartSlot(null);
+                    setDateEnd(null);
+                    setEndSlot(null);
+                    setValidleaverequest(false);
                   }}
                   style={{ color: "#ffffff" }}
                 >
@@ -2012,7 +1931,6 @@ const Leave = (props) => {
                 </Col>
               </Row>
             ) : null}
-            {!isHr ? (
               <Row
                 style={{
                   display: "flex",
@@ -2064,7 +1982,6 @@ const Leave = (props) => {
                   </div>
                 </Col>
               </Row>
-            ) : null}
           </Row>
 
           <Modal
@@ -2290,7 +2207,6 @@ const Leave = (props) => {
                     // initialValues
                     initialValue={editedLeave.nature}
                   >
-                  {/* {console.log(editedLeave.nature)} */}
                     <Select
                       placeholder="Select an option"
                       allowClear

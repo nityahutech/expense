@@ -555,7 +555,6 @@ function EmployeeList() {
               />
             </Modal>
           </Tabs.TabPane>
-          {console.log(selectemp, showRecord)}
           <Tabs.TabPane tab="Employee Pofile" disabled={!selectemp.id} key="2">
             <EmployeeListview
               className="Edit"

@@ -12,14 +12,13 @@ import Onboarding from "./components/Onboarding";
 import CompanyProfile from "./components/CompanyProfile";
 import HalfYearGoalHome from "./components/halfYearGoal/halfYearGoalHome";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import "./App.css";
 import FormatPage from "./FormatPage";
 import MainDashBoard from "./components/MainDashBoard";
 import Settingpage from "./components/Settingpage";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AttendanceLog from "./components/AttendanceLog";
-import InvoiceReimbursement from "./components/assetManagement/InvoiceReimbursement";
 import InvoiceMagHome from "./components/assetManagement/InvoiceMagHome";
 import TravelManagement from "./components/TravelManagement/travelManagement";
 

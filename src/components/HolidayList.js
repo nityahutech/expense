@@ -60,7 +60,6 @@ const LeaveList = (props) => {
       
   const validateCSV = async (data, headers, model) => {
     let errors = [["Email Id", "Field", "Error"]];
-    console.log(data);
     let name = headers.indexOf("Name");
     let date = headers.indexOf("Date");
     let type = headers.indexOf("Type");
@@ -77,10 +76,8 @@ const LeaveList = (props) => {
     if(data[data.length-1].length == 1) {
         data.pop()
     }
-    console.log(data, data[data.length-1])
         setErrorFile(null)
         const timer = setTimeout(() => {
-    console.log(errors,moment().format("YYYY"));
         if (errors.length > 1) {
             showNotification("error", "Error", "Please correct errors in upload file!")
             setErrorFile(<Button style={{marginRight: "10px"}} onClick={() => downloadFile(errors)}> Download Error File</Button>)
@@ -168,7 +165,6 @@ const LeaveList = (props) => {
             date: moment(hol[date], "YYYY-MM-DD").format("Do MMM, YYYY"),
             optionalHoliday: hol[type] === 'Official' ? false : true,
         }
-        console.log(newHol);
         CompanyHolidayContext.createHoliday(newHol)
         .then(response => {
             showNotification("success", "Success", "Holiday Created successfuly");
@@ -182,7 +178,6 @@ const LeaveList = (props) => {
     setEnableBulk(false);
   };
     const onFinish = (values) => {
-        console.log('value', values)
         let newHoliday = {
             name: values.holidayname,
             date: values.holidaydate.format("Do MMM, YYYY"),

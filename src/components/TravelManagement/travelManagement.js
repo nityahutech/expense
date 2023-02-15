@@ -326,24 +326,26 @@ function TravelManagement(prop) {
                       <Input />
                     </Form.Item>
                   </Col>
-                  {addTravel ? (
+                  
+                  {addTravel ? (<>
                     <Col span={24}>
                       <Row gutter={[16, 16]}>
                         <Form.List name="users">
                           {(fields, { add, remove }) => {
                             return (
-                              <div style={{ width: "100%" }}>
+                              <div className="Form-div" style={{ width: "100%" }}>
                                 {fields.map((field, i) => (
                                   <>
-                                    <Space
+                                    <div
                                       key={field.key}
                                       style={{
-                                        display: "flex",
-                                        marginBottom: 8,
+                                        // display: "flex",
+                                        // marginBottom: 8,
+                                        width:"100%"
                                       }}
-                                      align="start"
+                                      // align="start"
                                     >
-                                      <Row gutter={[16, 16]}>
+                                      <Row gutter={[16, 16]} style={{width:"100%"}}>
                                         <Divider
                                           orientation="left"
                                           orientationMargin="15px"
@@ -570,12 +572,12 @@ function TravelManagement(prop) {
                                           />
                                         </Col>
                                       </Row>
-                                    </Space>
+                                    </div>
                                   </>
                                 ))}
                                 <Col span={24}>
                                   <Button
-                                    className="addField"
+                                    className="addFieldTravel"
                                     onClick={() => {
                                       add();
                                     }}
@@ -630,6 +632,7 @@ function TravelManagement(prop) {
                         </Space>
                       </Col>
                     </Col>
+                    </>
                   ) : (
                     <Button
                       className="addButtonTravel"
@@ -641,6 +644,7 @@ function TravelManagement(prop) {
                       <PlusOutlined style={{ fontSize: "16px" }} /> Add Travel
                     </Button>
                   )}
+                  
                 </Row>
               </Form>
             </Card>

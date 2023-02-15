@@ -21,11 +21,24 @@
 .buttonCol {
     display: flex;
     justify-content: end;
-    /* margin-left: 0%; */
+    margin-Top: 5%;
 }
 .addButtonTravel{
   /* margin-left: 10px; */
   border-radius: 5px;
+}
+
+.addFieldTravel {
+  margin-top: 5%;
+  border-radius: 5px;
+  width: 100%;
+}
+
+
+.addFieldTravel.ant-btn.ant-btn-block{
+  background: #1963A6;
+  color: #ffffff;
+  font-size: 14px;
 }
 
 .addButtonTravel.ant-btn.ant-btn-block{

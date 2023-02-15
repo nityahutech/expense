@@ -39,7 +39,6 @@ export async function createUser(values, compId) {
     "password"
   );
   try {
-    // console.log(values, compId)
     updateProfile(res.user, { displayName: values.name });
     // updatePhoneNumber(res.user, values.phone)
     const valuesToservice = {
@@ -75,7 +74,6 @@ export async function createUser(values, compId) {
       disabled: false,
       remark: values.remark || "",
     };
-    // console.log(valuesToservice)
     await setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid});
     await setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
   } catch(error) {
@@ -181,9 +179,7 @@ export async function deleteUsers(array) {
       return doc.id
     }
   }).filter(Boolean)
-  console.log(array, data);
   data.forEach(x => {
-    console.log(x);
     deleteDoc(doc(db, "users", x));
     deleteDoc(doc(db, "companyprofile/compId002/users", x));
   })

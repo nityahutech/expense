@@ -8,7 +8,6 @@ import {
     deleteDoc,
     doc,
     query,
-    where
 } from "firebase/firestore";
 
 let compId = sessionStorage.getItem("compId")

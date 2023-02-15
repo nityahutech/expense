@@ -41,27 +41,6 @@ const LeaveType = (props) => {
     setCreditable(data?.creditable)
   }, [props.data])
 
-  const getData = async () => {
-    let data = await ConfigureContext.getConfigurations(page);
-    console.log(data)
-    let temp = Object.keys(data).map((type, i) => {
-      return {
-        ...data[`${type}`],
-        name: type
-      }
-    })
-    temp
-    .sort((k1, k2) => {
-      console.log(k1.name,k2.name)
-      return k1.name < k2.name ? -1 : k1.name > k2 ? 1 : 0
-    });
-    let index = temp.indexOf(temp.find(x => x.name == "Loss Of Pay"))
-    let lop = temp.splice(index, 1);
-    temp.push(lop[0]);
-    setTypes(temp)
-    setActiveType(Object.keys(activeType).length === 0 ? temp[0] : activeType)
-  }
-
   const leaveUpdate = (values) => {
     let record = {
       ...activeType,
@@ -69,8 +48,6 @@ const LeaveType = (props) => {
     };
     delete record.name;
     let name = activeType.name
-    console.log("values", values)
-    console.log({[`${name}`]: record})
     ConfigureContext.editConfiguration(page, {[`${name}`]: record}).then((res) => {
       showNotification("success", "Success", "Updated Successfully!")
       setEditLeaves(false)
@@ -225,7 +202,6 @@ const LeaveType = (props) => {
                       },
                     ]}
                     onKeyPress={(event) => {
-                      console.log(checkNumbervalue(event));
                       if (checkNumbervalue(event)) {
                         event.preventDefault();
                       }

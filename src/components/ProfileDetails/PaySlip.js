@@ -11,7 +11,6 @@ import moment from 'moment';
 
 function PaySlip(props) {
   const showRecord = props.data;
-  console.log('showRecord', showRecord)
   const [userid, setUserId] = useState(showRecord.id);
   const [month, setMonth] = useState(null);
   const [printContent, setPrintContent] = useState(null);

@@ -422,19 +422,21 @@ function MainDashBoard() {
             </Col>
 
             <Col xs={24} sm={24} md={6} className="hi">
-              {appraisalIcon()}
+              {/* {appraisalIcon()} */}
             </Col>
 
             <Col xs={24} sm={24} md={6} className="hi">
-              {expenseIcon()}
-            </Col>
-
-            <Col xs={24} sm={24} md={6} className="hi">
+              {/* {expenseIcon()} */}
               {myProfileIcon()}
             </Col>
 
             <Col xs={24} sm={24} md={6} className="hi">
-            {settingIcon()}
+              {/* {myProfileIcon()} */}
+              {settingIcon()}
+            </Col>
+
+            <Col xs={24} sm={24} md={6} className="hi">
+            {/* {settingIcon()} */}
             </Col>
           </Row>
         </>

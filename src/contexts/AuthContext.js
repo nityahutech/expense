@@ -41,7 +41,6 @@ export function AuthProvider({ children }) {
   const [logo, setLogo] = useState(null);
 
   function getUserData(user) {
-    console.log("auth called", compId, currentUser);
     if (user==null) {
       const timer = setTimeout(() => {
         sessionStorage.clear();
@@ -49,7 +48,6 @@ export function AuthProvider({ children }) {
       }, 2500);
       return () => clearTimeout(timer);
     }
-    console.log("auth called", compId, currentUser);
     getDoc(doc(db, 'users', user.uid)).then((res) => {
       let rec = res.data()
       sessionStorage.setItem("role", rec?.role)

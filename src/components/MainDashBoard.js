@@ -52,7 +52,7 @@ function MainDashBoard() {
 
   const attendanceIcon = () => {
     return (
-      // <Link to="/Attendance">
+      <Link to="/Attendance">
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Card
             bordered={true}
@@ -79,13 +79,13 @@ function MainDashBoard() {
             <span style={{ paddingTop: "10px" }}>Attendance</span>
           </Card>
         </div>
-      // </Link>
+      </Link>
     );
   };
 
   const leaveIcon = () => {
     return (
-      // <Link to="/Leave">
+      <Link to="/Leave">
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Card
             bordered={true}
@@ -112,13 +112,13 @@ function MainDashBoard() {
             <span style={{ paddingTop: "10px" }}>Leave</span>
           </Card>
         </div>
-      // </Link>
+      </Link>
     );
   };
 
   const paySlipIcon = () => {
     return (
-      // <Link to="/PaySlipPage/PaySlip">
+      <Link to="/PaySlipPage/PaySlip">
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Card
           bordered={false}
@@ -145,13 +145,13 @@ function MainDashBoard() {
           <span style={{ paddingTop: "10px" }}>Appraisal</span>
         </Card>
       </div>
-      // </Link>
+      </Link>
     );
   };
 
   const payrollIcon = () => {
     return (
-      // <Link to="/Employee/Payroll">
+      <Link to="/Employee/Payroll">
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Card
           bordered={false}
@@ -178,7 +178,7 @@ function MainDashBoard() {
           <span style={{ paddingTop: "10px" }}>Payroll Generator</span>
         </Card>
       </div>
-      // </Link>
+      </Link>
     );
   };
   const employeeIcon = () => {
@@ -216,7 +216,7 @@ function MainDashBoard() {
 
   const expenseIcon = () => {
     return (
-      // <Link to="/Expense/ExpenseList">
+      <Link to="/Expense/ExpenseList">
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Card
             bordered={false}
@@ -243,7 +243,7 @@ function MainDashBoard() {
             <span style={{ paddingTop: "10px" }}>Expense</span>
           </Card>
         </div>
-      // </Link>
+      </Link>
     );
   };
 
@@ -422,19 +422,21 @@ function MainDashBoard() {
             </Col>
 
             <Col xs={24} sm={24} md={6} className="hi">
-              {appraisalIcon()}
+              {/* {appraisalIcon()} */}
             </Col>
 
             <Col xs={24} sm={24} md={6} className="hi">
-              {expenseIcon()}
-            </Col>
-
-            <Col xs={24} sm={24} md={6} className="hi">
+              {/* {expenseIcon()} */}
               {myProfileIcon()}
             </Col>
 
             <Col xs={24} sm={24} md={6} className="hi">
-            {settingIcon()}
+              {/* {myProfileIcon()} */}
+              {settingIcon()}
+            </Col>
+
+            <Col xs={24} sm={24} md={6} className="hi">
+            {/* {settingIcon()} */}
             </Col>
           </Row>
         </>

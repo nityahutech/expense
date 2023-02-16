@@ -145,14 +145,15 @@ const ApprovalConfig = () => {
         approveNo: values.approversNum,
         approveList: [...listApprovers].slice(0, values.approversNum)
       }
-      let id = filterEmployees.find(x => x.name == emp).id
+      let id = filterEmployees.find(x => x.name == emp.name).id;
       EmpInfoContext.updateEduDetails(id, record).then((res) => {
-        showNotification("success", "Success", `${emp}'s approvers updated successfully!`)
-      })
+        showNotification("success", "Success", `${emp.name}'s approvers updated successfully!`)
+        form.resetFields();
+        setEditEmployeesDetails([])
+        setSelectedRowKeys([]);
+        getData();
+      }).catch((error) => showNotification("error", "Error", "Unable to process request!"))
     })
-    form.resetFields();
-    setEditEmployeesDetails([])
-    getData();
     setIsModalOpen(false);
   }
 

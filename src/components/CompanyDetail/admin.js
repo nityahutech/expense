@@ -43,7 +43,6 @@ const Admin = () => {
     const valuesToservice = {
       [`${type}`]: type == "ceoAdmin" ? ceoAdmin.value : hrAdmin.value,
     };
-    console.log(valuesToservice);
     CompanyProContext.updateCompInfo(compId, valuesToservice).then((res) => {
       showNotification(
         "success",
@@ -72,7 +71,6 @@ const Admin = () => {
   };
 
   const onHRExeFinish = (values) => {
-    console.log("valuesHrEx", values);
 
     let hrExPower = [];
 
@@ -82,7 +80,6 @@ const Admin = () => {
     const value = {
       hrExeAdmin: hrExPower,
     };
-    console.log("valueshr", value);
     CompanyProContext.updateCompInfo(compId, value).then((res) => {
       showNotification("success", "Success", "Hr Executive Added ");
       getData();
@@ -104,7 +101,6 @@ const Admin = () => {
     let finTemp = [],
       hrTemp = [];
     allUsers.forEach((emp) => {
-      console.log(emp);
       if (emp.value == compProfile.ceoAdmin) {
         setCeoAdmin(emp);
       }

@@ -391,9 +391,8 @@ function AddEmployee() {
         style={{
           width: 70,
           background: "#ffffff",
-          border:"1px solid grey"
+          borderRadius: "4px"
         }}
-        // onSelect={(value, event) => handleOnChange(value, event)}
       >
         {codes?.countries?.map((e) => (
           <Option key={e?.code} value={e?.code}>

@@ -41,7 +41,6 @@ function BankAccount() {
   };
 
   function onEditBank(values) {
-    console.log(values);
     let record = {
       title: values.title,
       ifsc: values.ifsc,

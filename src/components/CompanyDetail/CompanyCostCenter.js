@@ -40,13 +40,11 @@ function CostCenter(props) {
   const { compId } = useAuth();
 
   const onFinishEdit = async (values) => {
-    console.log(values, "editttttt");
     let newCostCenterTemp = {
       costName: values.costName,
       costcentercode: values.costcentercode,
       costDescription: values.costDescription,
     };
-    console.log(newCostCenterTemp);
     try {
       await CompanyProContext.editCompInfo(
         compId,
@@ -69,7 +67,6 @@ function CostCenter(props) {
       showNotification("error", "Error", "This Cost Center already exists!");
       return;
     }
-    console.log("costcenter", values);
     let costCenterDetails = {
       costName: values.costName,
       costcentercode: values.costcentercode,
@@ -90,7 +87,6 @@ function CostCenter(props) {
   const getAllCostCenters = async () => {
     setLoading(true);
     let data = await CompanyProContext.getCompanyProfile(compId);
-    console.log(compId, data);
     setCostCenters(data.costCenters || []);
     setLoading(false);
   };

@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Divider, Layout, Menu } from "antd";
 import expenseIcon from "../../images/Expense.png";
 import dot from "../../images/dot.png";
-import dashIcon from "../../images/Dashboard.png";
-import empIcon from "../../images/employees.png";
+import empIcon from "../../images/Employees.png";
 import userIcon from "../../images/user.png";
 import assetMag from "../../images/newSBLogo/AssetManagement.png";
 import logo from "../../images/logoo.svg";
@@ -13,9 +12,8 @@ import CompanyProfile from "../../images/Companyprofile.png";
 import SettingIcon from "../../images/gear.png";
 import homePage from "../../images/homeIcon.png";
 import LeaveIcon from "../../images/smallLeaveLogo.png";
-import SmallAttd from "../../images/samllattlogo.png";
+import SmallAttd from "../../images/attendanceSB.png";
 import "./newSlidebar.css";
-import SmallerLogo from "../../images/smallerLogo.png";
 import travel from "../../images/map.svg"
 import { NavLink, Link } from "react-router-dom";
 
@@ -197,14 +195,14 @@ const NewSidebar = (props) => {
                         <p className="sideFont">View Employees</p>
                         <NavLink to="/Employee/EmployeeList" />
                       </Menu.Item>
-                      <Menu.Item
+                      {/* <Menu.Item
                         className="arrow"
                         icon={<img src={dot} alt="profile" className="dot" />}
                         key="25"
                       >
                         <p className="sideFont">Payroll Manager</p>
                         <NavLink to="/Employee/Payroll" />
-                      </Menu.Item>
+                      </Menu.Item> */}
                     </Menu.SubMenu>
                   </>
                 ) : null}
@@ -339,13 +337,6 @@ const NewSidebar = (props) => {
                   </>
                 ) : null}
 
-                <Menu.Item
-                  icon={<img src={userIcon} alt="profile" className="Dash" />}
-                  key="21"
-                >
-                  <p className="sideFont">My Profile</p>
-                  <NavLink to="/Profile" />
-                </Menu.Item>
                 {role != "super" ? (<Menu.Item
                  icon={<img src={travel} alt="profile" className="Dash"  style={{color:"#fffff"}} />}
                  key="24"
@@ -353,6 +344,13 @@ const NewSidebar = (props) => {
                   <p className="sideFont">Travel Management</p>
                   <NavLink to="/TravelManagement" />
                 </Menu.Item>):null}
+                <Menu.Item
+                  icon={<img src={userIcon} alt="profile" className="Dash" />}
+                  key="21"
+                >
+                  <p className="sideFont">My Profile</p>
+                  <NavLink to="/Profile" />
+                </Menu.Item>
               </Menu>
             </div>
           </div>

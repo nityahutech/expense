@@ -3,7 +3,7 @@ import { Card, Table, Row, Col } from "antd";
 import "../../style/WorkWeek.css";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 
-const data = [
+const weekData = [
   {
     key: "1",
     week: "1",
@@ -60,18 +60,12 @@ const data = [
     sun: "",
   },
 ];
-function WorkWeek() {
-  const [doj, setDoj] = useState();
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+function WorkWeek(props) {
+  const [data, setData] = useState(props.data);
 
   useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = async () => {
-    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    setDoj(data.doj ? data.doj : null);
-  };
+    setData(props.data);
+  }, [props.data]);
 
   const sharedOnCell = (_, index) => {
     if (index === 5) {
@@ -271,7 +265,7 @@ function WorkWeek() {
                         as Saturday and Sunday.
                       </p>
                       <h4>Effective Date</h4>
-                      <p> {doj}</p>
+                      <p> {data?.doj}</p>
                       {/* <hr style={{ marginRight: "21.7rem" }} /> */}
                     </div>
                     <h4 style={{ marginLeft: "10px" }}>Rule Settings1</h4>
@@ -298,7 +292,7 @@ function WorkWeek() {
                       <Table
                         className="Table"
                         columns={columns}
-                        dataSource={data}
+                        dataSource={weekData}
                         pagination={false}
                         size="small"
                         bordered

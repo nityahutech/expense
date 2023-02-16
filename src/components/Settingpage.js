@@ -6,6 +6,7 @@ import { Button } from "antd";
 import { Tabs } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { showNotification } from "../contexts/CreateContext";
+import NotifySettings from "./NotifySettings";
 
 const Settingpage = () => {
   const [form] = Form.useForm();
@@ -44,7 +45,7 @@ const Settingpage = () => {
         <Tabs.TabPane tab="Update Password" key="1">
           <div className="update-card">
             <Card
-              title="UPDATE PASSWORD"
+              // title="UPDATE PASSWORD"
               className="updatepsw"
               hoverable={true}
               bordered={true}
@@ -194,6 +195,9 @@ const Settingpage = () => {
               </div>
             </Card>
           </div>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Notifications" key="2">
+            <NotifySettings data={"hi"} />
         </Tabs.TabPane>
       </Tabs>
     </>

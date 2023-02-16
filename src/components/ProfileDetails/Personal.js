@@ -45,9 +45,7 @@ function Personal() {
   const [lccs, setLccs] = useState("");
   const [editAddressInfo, showEditAddressInfo] = useState(false);
   const [data, setData] = useState([]);
-  const { currentUser, compId } = useAuth();
-  console.log(currentUser, compId);
-  // const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const { currentUser } = useAuth();
   const [form] = Form.useForm();
 
   const onFinish = (value) => {
@@ -69,7 +67,6 @@ function Personal() {
     EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName);
     setTimeout(() => {
       getData();
-      console.log("timer")
     }, 2000);
     showEditContent(false);
   };

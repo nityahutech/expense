@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Col,
     Row,
@@ -8,30 +8,101 @@ import {
     Input,
     Radio,
     DatePicker,
-    Table,
-    notification
 } from 'antd';
 import 'antd/dist/antd.css';
 import { Button, Drawer, Modal, } from 'antd';
 import CompanyHolidayContext from '../contexts/CompanyHolidayContext';
-import { EditOutlined, DeleteOutlined, ContainerOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import moment from 'moment/moment';
+import Papa from 'papaparse';
+import { capitalize, showNotification } from '../contexts/CreateContext';
+import { useCSVReader } from 'react-papaparse';
+
 const { Text, } = Typography;
+
 const LeaveList = (props) => {
+    const { CSVReader } = useCSVReader();
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
+    const [errorFile, setErrorFile] = useState(null);
+    const [enableBulk, setEnableBulk] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isBulkOpen, setIsBulkOpen] = useState(false);
     const [holidaylist, setHolidaylist] = useState([])
+    const [holidays, setHolidays] = useState([])
+    const [head, setHead] = useState([])
     const colors = ['rgba(154, 214, 224, 0.96)', 'rgba(252, 143, 10,0.2)',];
     // const fontColors = ['rgba(204, 204, 10, 1)', 'color: "rgba(252, 143, 10, 1)', ];
-    const columns = [
-        {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
-            render: (text) => <a>{text}</a>,
+    const styles = {
+        csvReader: {
+          display: "flex",
+          flexDirection: "row",
+          marginBottom: 10,
         },
-    ]
+        browseFile: {
+          width: "20%",
+        },
+        acceptedFile: {
+          border: "1px solid #ccc",
+        //   height: 45,
+          lineHeight: 2.5,
+          paddingLeft: 10,
+          width: "80%",
+        },
+        remove: {
+          borderRadius: 0,
+          padding: "0 20px",
+        },
+        progressBarBackgroundColor: {
+          backgroundColor: "red",
+        },
+      };
+      
+  const validateCSV = async (data, headers, model) => {
+    let errors = [["Email Id", "Field", "Error"]];
+    let name = headers.indexOf("Name");
+    let date = headers.indexOf("Date");
+    let type = headers.indexOf("Type");
+    data.forEach(async (hol, i) => {
+        if(i == data.length-1) { return; }
+        hol.forEach((field, i) => {hol[i] = field.trim()})
+        hol[name] = hol[name].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
+        hol[type] = capitalize(hol[type].split(" ")[0].toLowerCase());
+        let typevalid = hol[type] == "Official" || hol[type] == "Optional"
+        if(!typevalid) {errors.push([hol[name], "Type", "Should Be 'Official' or 'Optional'"]);}
+        let valid = moment(hol[date], "YYYY-MM-DD").isSame(moment(), 'year')
+        if(!valid) {errors.push([hol[name], "Date", "Incorrect Year"]);}
+    })
+    if(data[data.length-1].length == 1) {
+        data.pop()
+    }
+        setErrorFile(null)
+        const timer = setTimeout(() => {
+        if (errors.length > 1) {
+            showNotification("error", "Error", "Please correct errors in upload file!")
+            setErrorFile(<Button style={{marginRight: "10px"}} onClick={() => downloadFile(errors)}> Download Error File</Button>)
+            return;
+        }
+        showNotification("success", "Success", "All Fields Valid!")
+        setEnableBulk(true)
+        setHolidays(data);
+        setHead(headers)
+        }, [2000])
+  }
+  
+  const downloadFile = (errors) => {
+    const csv = Papa.unparse(errors);
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'errorFile.csv');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
     const getData = async () => {
         // props.addNewHoliday()
         const allData = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
@@ -67,6 +138,7 @@ const LeaveList = (props) => {
     };
     useEffect(() => {
         getData()
+        setEnableBulk(false)
     }, [])
     const showDrawer = () => {
         getData()
@@ -77,8 +149,35 @@ const LeaveList = (props) => {
         form.resetFields()
 
     }
+    
+  const handleBulkOnboard = () => {
+    let temp=[...holidays];
+    let name = head.indexOf("Name");
+    let date = head.indexOf("Date");
+    let type = head.indexOf("Type");
+    temp.forEach((hol => {
+        let matchingHolidayList = holidaylist.filter((item) => { 
+            return item.name == hol[name] || item.date == moment(hol[date], "YYYY-MM-DD").format("Do MMM, YYYY")
+        })
+        if(matchingHolidayList.length > 0) {return}
+        let newHol = {
+            name: hol[name],
+            date: moment(hol[date], "YYYY-MM-DD").format("Do MMM, YYYY"),
+            optionalHoliday: hol[type] === 'Official' ? false : true,
+        }
+        CompanyHolidayContext.createHoliday(newHol)
+        .then(response => {
+            showNotification("success", "Success", "Holiday Created successfuly");
+            props.refreshCalendar();
+        })
+        .catch(error => {
+            showNotification("error", "Error", "Unable to create holiday!")
+        })
+
+    }))
+    setEnableBulk(false);
+  };
     const onFinish = (values) => {
-        console.log('value', values)
         let newHoliday = {
             name: values.holidayname,
             date: values.holidaydate.format("Do MMM, YYYY"),
@@ -86,7 +185,7 @@ const LeaveList = (props) => {
         }
         let matchingHolidayList = holidaylist.filter((item) => { return item.name == newHoliday.name })
         if (!(matchingHolidayList.length > 0)) {
-            CompanyHolidayContext.createHoliday(newHoliday, "compId001")
+            CompanyHolidayContext.createHoliday(newHoliday)
                 .then(response => {
                     showNotification("success", "Success", "Holiday Created successfuly");
                     props.refreshCalendar();
@@ -108,17 +207,6 @@ const LeaveList = (props) => {
     };
     const onClose = () => {
         setOpen(false);
-    };
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-    const showNotification = (type, msg, desc) => {
-        notification[type]({
-            message: msg,
-            description: desc,
-        });
-    };
-    const handleOk = () => {
     };
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -179,7 +267,7 @@ const LeaveList = (props) => {
                                         }}
                                         >
                                             <Text className='holiday-name' style={holiday.optionalHoliday === true ? { color: "rgba(0, 119, 137, 0.96)", } : { color: "rgba(252, 143, 10, 1)" }}>{holiday.name}</Text>
-                                            {props.isHr ?
+                                            {props.role ?
                                                 <DeleteOutlined
                                                     style={{
                                                         display: 'flex', flexDirection: 'row', marginLeft: '5px', paddingTop: '5px', color: 'red'
@@ -199,16 +287,13 @@ const LeaveList = (props) => {
                             );
 
                         })}
-                        {/* </Table> */}
                     </Drawer>
                 </div>
-                {
-                    props.isHr
-                        ?
-                        <div>
+                {props.role == "admin" ?(<>
+                <div>
                             <Button className='button-div' style={{
                                 marginLeft: '10px', borderRadius: '15px'
-                            }} onClick={showModal}>
+                            }} onClick={() => setIsModalOpen(true)}>
                                 Create Holiday
                             </Button>
                             <Modal className='viewAppraisal'
@@ -216,7 +301,6 @@ const LeaveList = (props) => {
                                 maskClosable={false}
                                 footer={null}
                                 open={isModalOpen}
-                                visible={isModalOpen}
                                 onCancel={handleCancel}
                                 closeIcon={
                                     <div
@@ -294,7 +378,6 @@ const LeaveList = (props) => {
                                     <Form.Item >
                                         <Button
                                             style={cancelStyle}
-                                            onClick={handleOk}
                                             htmlType="submit"
                                             type="primary">Create New Holiday
                                         </Button>
@@ -306,10 +389,83 @@ const LeaveList = (props) => {
                                     </Form.Item>
                                 </Form>
                             </Modal>
-                        </div>
-                        :
-                        null
-                }
+                </div>
+                <div>
+                    <Button className='button-div' style={{
+                        marginLeft: '10px', borderRadius: '15px'
+                    }} onClick={() => setIsBulkOpen(true)}>
+                        Bulk Upload
+                    </Button>
+                            <Modal className='viewAppraisal'
+                                title="Create Holiday"
+                                maskClosable={false}
+                                footer={null}
+                                open={isBulkOpen}
+                                onCancel={() => setIsBulkOpen(false)}
+                                closeIcon={
+                                    <div
+                                        onClick={() => {
+                                            setIsBulkOpen(false);
+                                        }}
+                                        style={{ color: "#ffffff" }}
+                                    >
+                                        X
+                                    </div>
+                                }
+                            >
+              <CSVReader
+                onUploadAccepted={(results) => {
+                  setEnableBulk(false)
+                  let temp = [...results.data];
+                  let headers = temp.shift();
+                  let model = temp.shift();
+                  validateCSV(temp, headers, model);
+                }}
+              >
+                {({
+                  getRootProps,
+                  acceptedFile,
+                  ProgressBar,
+                  getRemoveFileProps,
+                }) => (
+                  <>
+                    <div style={styles.csvReader}>
+                      <button
+                        type="button"
+                        {...getRootProps()}
+                        style={styles.browseFile}
+                      >
+                        Browse file
+                      </button>
+                      <div style={styles.acceptedFile}>
+                        {acceptedFile && acceptedFile.name}
+                        {!acceptedFile && setEnableBulk(false)}
+                        {!acceptedFile && setErrorFile(null)}
+                      </div>
+                      <button {...getRemoveFileProps()} style={styles.remove}>
+                        Remove
+                      </button>
+                    </div>
+                    <ProgressBar style={styles.progressBarBackgroundColor} />
+                  </>
+                )}
+              </CSVReader>
+              {errorFile}
+              <Button
+                className="listExpense"
+                disabled={!enableBulk}
+                type="primary"
+                onClick={handleBulkOnboard}
+                style={{
+                  backgroundColor: "#1963A6",
+                  borderRadius: "5px",
+                }}
+              >
+                Bulk Upload Holidays
+              </Button>
+            </Modal>
+                </div>
+                </>) : null}
             </Col>
         </Row>
     )

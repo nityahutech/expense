@@ -20,6 +20,7 @@ import {
 import { db } from "../firebase-config";
 import { notification } from "antd";
 import CompanyProContext from "./CompanyProContext";
+import axios from "axios";
 
 async function generateEmpId(compId) {
   let data = await CompanyProContext.getCompanyProfile(compId);
@@ -38,7 +39,6 @@ export async function createUser(values, compId) {
     "password"
   );
   try {
-    // console.log(values, compId)
     updateProfile(res.user, { displayName: values.name });
     // updatePhoneNumber(res.user, values.phone)
     const valuesToservice = {
@@ -74,7 +74,6 @@ export async function createUser(values, compId) {
       disabled: false,
       remark: values.remark || "",
     };
-    // console.log(valuesToservice)
     await setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid});
     await setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
   } catch(error) {
@@ -171,4 +170,25 @@ export function checkAlphabetsName(event) {
     return true;
   }
 };
+
+export async function deleteUsers(array) {
+  let q  = query(collection(db, "users"), where("compId", "==", "compId002"));
+  let d = await getDocs(q);
+  let data = d.docs.map(doc => {
+    if (array.includes(doc.data().mailid)) {
+      return doc.id
+    }
+  }).filter(Boolean)
+  data.forEach(x => {
+    deleteDoc(doc(db, "users", x));
+    deleteDoc(doc(db, "companyprofile/compId002/users", x));
+  })
+  try {
+    await axios.post("http://localhost:3001/temp-delete/v1", {
+        data
+    })
+  } catch (error) {
+    console.log(error)
+}
+}
 

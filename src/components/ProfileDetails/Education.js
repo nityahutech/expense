@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import moment from "moment";
 import { useState } from "react";
 import { Card, Col, Row, Input, DatePicker, Button, Form } from "antd";
-import {PlusCircleOutlined, CloseOutlined, CheckOutlined,EditFilled,} from "@ant-design/icons";
+import { CloseOutlined, CheckOutlined,EditFilled } from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
 import "./Education.css"

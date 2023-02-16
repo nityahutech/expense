@@ -30,43 +30,42 @@ const Profile = () => {
     setRecord(data);
   }
 
-  console.log(record)
   return (
     <>
       <div className="myProfile">
         <Tabs defaultActiveKey="1" className="myProfileTabs">
           <Tabs.TabPane tab="Personal" key="1">
-            <Personal />
+            <Personal data={record} getData={getData} />
           </Tabs.TabPane>
           {role != "super" ? (
             <>
               <Tabs.TabPane tab="Work" key="2">
-                <Work />
+                <Work data={record} />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Team" key="3">
-                <Team />
+                <Team data={record} />
               </Tabs.TabPane>
             </>
           ) : null}
           <Tabs.TabPane tab="Education" key="4">
-            <Education />
+            <Education data={record} getData={getData} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Family" key="5">
-            <Family />
+            <Family data={record} getData={getData} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Documents" key="6">
-            <Document />
+            <Document data={record} getData={getData} />
           </Tabs.TabPane>
           {role != "super" ? (
             <>
               <Tabs.TabPane tab="Work Week" key="7">
-                <WorkWeek />
+                <WorkWeek data={record} />
               </Tabs.TabPane>
-              <Tabs.TabPane tab="Pay Slip" key="8">
-                <PaySlip data={record} getData={getData} />
-              </Tabs.TabPane>
+              {/* <Tabs.TabPane tab="Pay Slip" key="8">
+                <PaySlip data={record} />
+              </Tabs.TabPane> */}
               <Tabs.TabPane tab="Bank Account" key="9">
-                <BankAccount />
+                <BankAccount data={record} getData={getData} />
               </Tabs.TabPane>
             </>
           ) : null}

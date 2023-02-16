@@ -126,7 +126,7 @@ function EmployeeList() {
                     {<EditFilled />}
                   </Button>
                 </Tooltip>
-                <Tooltip placement="bottom" title='Delete Profile'>
+                <Tooltip placement="bottom" title='Disable Account'>
                   <Button
                     type="link"
                     className="deleTe"
@@ -137,7 +137,7 @@ function EmployeeList() {
                     <DeleteFilled />
                   </Button>
                 </Tooltip>
-                <Tooltip placement="bottom" title='Salary'>
+                {/* <Tooltip placement="bottom" title='Salary'>
                   <Button
                     type="link"
                     style={{ padding: "0px" }}
@@ -147,10 +147,9 @@ function EmployeeList() {
                       setActivetab("3");
                     }}
                   >
-                    {/* {<img src={PayIcon} />} */}
                     <AlipayCircleOutlined style={{ color: "green" }} />
                   </Button>
-                </Tooltip>
+                </Tooltip> */}
               </div>
             </>
           )
@@ -556,7 +555,6 @@ function EmployeeList() {
               />
             </Modal>
           </Tabs.TabPane>
-          {console.log(selectemp, showRecord)}
           <Tabs.TabPane tab="Employee Pofile" disabled={!selectemp.id} key="2">
             <EmployeeListview
               className="Edit"
@@ -564,7 +562,7 @@ function EmployeeList() {
               getData={getData}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane
+          {/* <Tabs.TabPane
             tab="Employee Pay Slip"
             disabled={!selectemp.id}
             key="3"
@@ -575,7 +573,7 @@ function EmployeeList() {
               getData={getData}
             // certificationDetails={certificationDetails}
             />
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
         </Tabs>
 
         <Modal

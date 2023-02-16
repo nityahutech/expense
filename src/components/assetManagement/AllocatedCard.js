@@ -12,8 +12,6 @@ import {
   Modal,
   Skeleton,
 } from "antd";
-import hutechlogo from "../../images/hutechlogo.png";
-import laptop from "../../images/laptop.jpg";
 import {
   UploadOutlined,
   CloseOutlined,
@@ -26,7 +24,6 @@ import {
   showNotification,
   getBase64,
 } from "../../contexts/CreateContext";
-import UploadImage from "./UploadImage";
 import AssetContext from "../../contexts/AssetContext";
 import moment from "moment";
 import "../assetManagement/AllRequest.css";

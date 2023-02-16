@@ -282,7 +282,7 @@ function TravelManagement(prop) {
             <Card className="travelCard" title="Travel Management">
               <Form
                 // className="addEmp"
-                // form={form}
+                form={form}
                 layout="vertical"
                 labelcol={{
                   span: 4,
@@ -294,7 +294,7 @@ function TravelManagement(prop) {
                   remember: true,
                 }}
                 autoComplete="off"
-                form={form}
+                // form={form}
                 // onFinish={onFinish}
               >
                 <Row gutter={[16, 16]}>

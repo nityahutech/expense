@@ -20,6 +20,7 @@ import Image1 from "../images/Attendance.png";
 import Image2 from "../images/companyvision.png";
 import Image3 from "../images/facebook.png";
 import Image4 from "../images/twitter.png";
+import "../style/Settingpage.css"
 
 function NotifySettings(props) {
   console.log(props.data);
@@ -49,9 +50,10 @@ function NotifySettings(props) {
         }}
       >
         <Form>
+          
           <Form.Item
             labelCol={{
-              span: 18,
+              span: 23,
               // offset: 2,
             }}
             wrapperCol={{
@@ -63,14 +65,18 @@ function NotifySettings(props) {
           >
             <Switch />
           </Form.Item>
-          <Divider orientation="left">Templates</Divider>
+          <Divider orientation="left">Birthday Templates</Divider>
           <Row gutter={[16, 16]}>
-            <Col span={12}>
-              <Card style={{ height: "29.5vh", borderRadius: "10px" }}>
+            <Col span={18}>
+              <Card className="birthdayPreviewDiv" >
                 {previewBirthImg && (
                   <>
-                    <img src={previewBirthImg} />
-                    <Button onClick={() => setPreviewBirthImg("")}>
+                    <img 
+                    className="birthdaytemplateImg"
+                    src={previewBirthImg} />
+                    <Button 
+                    className="templateButton"
+                    onClick={() => setPreviewBirthImg("")}>
                       {" "}
                       Close
                     </Button>
@@ -78,16 +84,10 @@ function NotifySettings(props) {
                 )}
               </Card>
             </Col>
-            <Col span={12}>
-              <Card
-                style={{
-                  borderRadius: "10px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
+            <Col span={6}>
+              <Card className="birthdayTempelateList">
                 <Row gutter={[16, 16]}>
-                  <Col span={12}>
+                  <Col span={24} className="birthdayTemplates">
                     <img
                       src={Image1}
                       width={80}
@@ -96,7 +96,7 @@ function NotifySettings(props) {
                       }}
                     />
                   </Col>
-                  <Col span={12}>
+                  <Col span={24} className="birthdayTemplates">
                     <img
                       src={Image2}
                       width={80}
@@ -105,7 +105,7 @@ function NotifySettings(props) {
                       }}
                     />
                   </Col>
-                  <Col span={12}>
+                  <Col span={24} className="birthdayTemplates">
                     <img
                       src={Image3}
                       width={80}
@@ -114,7 +114,7 @@ function NotifySettings(props) {
                       }}
                     />
                   </Col>
-                  <Col span={12}>
+                  <Col span={24} className="birthdayTemplates">
                     <img
                       src={Image4}
                       width={80}
@@ -128,9 +128,10 @@ function NotifySettings(props) {
             </Col>
           </Row>
           <Divider />
+
           <Form.Item
             labelCol={{
-              span: 18,
+              span: 23,
               // offset: 2,
             }}
             wrapperCol={{
@@ -142,14 +143,18 @@ function NotifySettings(props) {
           >
             <Switch />
           </Form.Item>
-          <Divider orientation="left">Templates</Divider>
+          <Divider orientation="left">Anniversary Templates</Divider>
           <Row gutter={[16, 16]}>
-            <Col span={12}>
-              <Card style={{ height: "29.5vh", borderRadius: "10px" }}>
+            <Col span={18}>
+              <Card className="anniversaryPreviewDiv">
                 {previewAnniversaryImg && (
                   <>
-                    <img src={previewAnniversaryImg} />
-                    <Button onClick={() => setPreviewAnniversaryImg("")}>
+                    <img 
+                    className="anniversarytemplateImg"
+                    src={previewAnniversaryImg} />
+                    <Button 
+                    className="templateButton"
+                    onClick={() => setPreviewAnniversaryImg("")}>
                       {" "}
                       Close
                     </Button>
@@ -157,16 +162,12 @@ function NotifySettings(props) {
                 )}
               </Card>
             </Col>
-            <Col span={12}>
+            <Col span={6}>
               <Card
-                style={{
-                  borderRadius: "10px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
+                className="anniversaryTempelateList"
               >
                 <Row gutter={[16, 16]}>
-                  <Col span={12}>
+                  <Col span={24} className="anniversaryTemplates">
                     <img
                       src={Image1}
                       width={80}
@@ -175,7 +176,7 @@ function NotifySettings(props) {
                       }}
                     />
                   </Col>
-                  <Col span={12}>
+                  <Col span={24} className="anniversaryTemplates">
                     <img
                       src={Image2}
                       width={80}
@@ -184,7 +185,7 @@ function NotifySettings(props) {
                       }}
                     />
                   </Col>
-                  <Col span={12}>
+                  <Col span={24} className="anniversaryTemplates">
                     <img
                       src={Image3}
                       width={80}
@@ -193,7 +194,7 @@ function NotifySettings(props) {
                       }}
                     />
                   </Col>
-                  <Col span={12}>
+                  <Col span={24} className="anniversaryTemplates">
                     <img
                       src={Image4}
                       width={80}
@@ -206,6 +207,7 @@ function NotifySettings(props) {
               </Card>
             </Col>
           </Row>
+
         </Form>
       </Card>
     </div>

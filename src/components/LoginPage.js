@@ -4,15 +4,15 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../style/LoginPage.css"
 import loginBg from "../images/login-img.png"
-import loginLogo from "../images/Logo77.png"
 import { LoadingOutlined } from "@ant-design/icons";
-import CoolLogo from "../images/logooo.svg"
+import logo from "../images/logooo.svg"
 
 function LoginPage() {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState("Login");
+  const [forgot, setForgot] = useState(true);
   const navigate = useNavigate();
   const { login, resetPassword, logout } = useAuth()
   useEffect(() => {
@@ -20,7 +20,7 @@ function LoginPage() {
   }, [])
   const win = window.sessionStorage;
   async function handleSubmit(e) {
-    setLoading(true);
+    setLoading("Logging In");
     e.preventDefault();
     win.clear();
     try {
@@ -30,11 +30,25 @@ function LoginPage() {
       sessionStorage.setItem("user", JSON.stringify(res.user));
       const timer = setTimeout(() => {
         navigate("DashBoard", { replace: true });
-        setLoading(false);
+        setLoading("Login");
       }, 3000);
-    } catch {
-      setLoading(false);
-      setError("Login Failed!");
+    } catch(err) {
+      setLoading("Login");
+      let message = err.message;
+      console.log(err.code);
+      switch (err.code) {
+        case "auth/wrong-password": message = "Incorrect Password!"
+          break;
+        case "auth/user-not-found": message = "User does not exist!"
+          break;
+        case "auth/user-disabled": message = "This account is deactivated. Please contact your HR."
+          break;
+        case "auth/invalid-email": message = "Enter valid email!"
+          break;
+        case "auth/internal-error": message = "Enter a password!"
+          break;
+      }
+      setError(message);
       setTimeout(() => {
         setError("");
       }, 3000);
@@ -44,23 +58,22 @@ function LoginPage() {
     e.preventDefault();
     win.clear();
     try {
-      setLoading(true);
+      setLoading("Sending Email");
       await resetPassword(loginEmail);
       setError("Reset Email Sent");
-      setLoading(false);
+      setLoading("Login");
     } catch {
       setError("Reset Email Failed To Send!");
       setTimeout(() => {
         setError("");
-        setLoading(false);
+        setLoading("Login");
       }, 3000);
     }
   }
 
-  const buttonStyle = loading ? { backgroundColor: "lightgray", color: "gray" } : { backgroundColor: "#1963A6", color: "white" }
+  const buttonStyle = loading != "Login" ? { backgroundColor: "lightgray", color: "gray" } : { backgroundColor: "#1963A6", color: "white" }
     return (
     <>
-      {/* <div className="main-div"> */}
         <Row className="main-div">
           <Col xs={0} xm={0} md={12}>
             <div className="img-div">
@@ -68,10 +81,9 @@ function LoginPage() {
             </div>
           </Col>
           <Col xs={24} xm={24} md={12}>
-            {/* <div className="login-div"> */}
               <div className="form-div">
                   <div className="exepnse-logo">
-                    <img src={CoolLogo} alt="logo" 
+                    <img src={logo} alt="logo" 
                     style={{width:"250px",paddingBottom:"10%"}}
                     />
                   </div>
@@ -88,8 +100,8 @@ function LoginPage() {
                     }}
                     autoComplete="off"
                   >
-                    <div className="wlc-div ">Welcome back!</div>
-                    <div className="msg">Let's Access to our dashboard</div>
+                    <div className="wlc-div ">{forgot ? "Welcome back!" : "Password Reset"}</div>
+                    <div className="msg">{forgot ? "Let's Access to our dashboard" : "We will send a reset link to your registered email"}</div>
 
                     <div className="email-div">
                       Email address<span style={{ color: "red" }}> *</span>
@@ -107,24 +119,28 @@ function LoginPage() {
                         <Input onChange={(e) => setLoginEmail(e.target.value.trim())} />
                       </Form.Item>
                     </div>
-                    <div className="email-div">
-                    Password<span style={{ color: "red" }}> *</span>
-                    </div>
-                    <div className="pwdInput-div">
-                      <Form.Item
-                        name="password"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Enter Password",
-                          },
-                        ]}
-                      >
-                        <Input.Password
-                          onChange={(e) => setLoginPassword(e.target.value)}
-                        />
-                      </Form.Item>
-                    </div>
+                    {forgot ? (
+                      <>
+                        <div className="email-div">
+                        Password<span style={{ color: "red" }}> *</span>
+                        </div>
+                        <div className="pwdInput-div">
+                          <Form.Item
+                            name="password"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Enter Password",
+                              },
+                            ]}
+                          >
+                            <Input.Password
+                              onChange={(e) => setLoginPassword(e.target.value)}
+                            />
+                          </Form.Item>
+                        </div>
+                      </>
+                    ) : null}
                     <div className="checkBox">
                       <Col span={15}>
                       <Form.Item
@@ -141,9 +157,9 @@ function LoginPage() {
                       <Col span={9}>
                       <div 
                         className="forgotpwd" 
-                        onClick={handleReset} 
+                        onClick={()=>setForgot(!forgot)} 
                       >
-                        Forgot Password
+                        {forgot ? "Forgot Password" : "Back"}
                       </div>
                       </Col>
                     </div>
@@ -154,11 +170,11 @@ function LoginPage() {
                           type="submit"
                           htmlType="submit"
                           style={buttonStyle}
-                          onClick={handleSubmit}
-                          disabled={loading}
+                          onClick={forgot ? handleSubmit : handleReset}
+                          disabled={loading != "Login"}
                         >
-                        {loading && (<LoadingOutlined />)}
-                          Login
+                        {loading != "Login" && (<LoadingOutlined />)}
+                          {!forgot && loading == "Login" ? "Send Email" : loading}
                         </Button>
                       </div>
                     </Form.Item>
@@ -178,10 +194,8 @@ function LoginPage() {
                     </Col>
                   </Form>
               </div>
-            {/* </div> */}
           </Col>
         </Row>
-      {/* </div> */}
     </>
   );
 }

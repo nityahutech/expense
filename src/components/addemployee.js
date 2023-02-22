@@ -28,6 +28,8 @@ import CompanyProContext from "../contexts/CompanyProContext";
 import { useCSVReader } from "react-papaparse";
 import Papa from 'papaparse';
 import EmpInfoContext from "../contexts/EmpInfoContext";
+import { DownloadOutlined } from "@ant-design/icons";
+import PrefixSelector from "./PrefixSelector";
 
 const { Option } = Select;
 
@@ -56,7 +58,10 @@ function AddEmployee() {
   const [enableBulk, setEnableBulk] = useState(false);
   const [bulkModal, openBulkModal] = useState(false);
   const [heads, setHeaders] = useState([]);
-
+  const template = [
+    ["Employee ID", "First Name", "Middle Name", "Last Name", "Date Of Birth", "Phone Number", "Gender", "Employee Type", "Official Email Id", "Personal Email Id", "Date Of Joining", "Work Location", "Designation", "Reporting Manager", "Secondary Manager", "Team Lead", "Business Unit", "Division", "Department", "Team", "Note"],
+    ["EMP000001", "Rohit", "Ram", "Sharma", "YYYY-MM-DD", "1234567890", "Male/Female", "Full-Time/Part-Time/Contract-Basis/Intern", "email_handle@domain.com", "email_handle@domain.com", "YYYY-MM-DD", "Work Location", "Designation", "Reporting Manager", "Secondary Manager", "Team Lead", "Business Unit", "Division", "Department", "Team", "Note"] 
+  ]
 
   const showBulkModal = () => {
     openBulkModal(true);
@@ -227,7 +232,7 @@ function AddEmployee() {
     let gender = headers.indexOf("Gender");
     let des = headers.indexOf("Designation");
     let empType = headers.indexOf("Employee Type");
-    let workLocation = headers.indexOf("Place of Business");
+    let workLocation = headers.indexOf("Work Location");
     let repManager = headers.indexOf("Reporting Manager");
     let secManager = headers.indexOf("Secondary Manager");
     let lead = headers.indexOf("Team Lead");
@@ -380,28 +385,28 @@ function AddEmployee() {
     document.body.removeChild(a);
   }
 
-  const prefixSelector = (
-    <Form.Item name="prefix" 
-    noStyle
-    >
-      <Select
-        allowClear={true}
-        showSearch
-        bordered={false}
-        style={{
-          width: 70,
-          background: "#ffffff",
-          borderRadius: "4px"
-        }}
-      >
-        {codes?.countries?.map((e) => (
-          <Option key={e?.code} value={e?.code}>
-            {e?.code}{" "}
-          </Option>
-        ))}
-      </Select>
-    </Form.Item>
-  );
+  // const prefixSelector = (
+  //   <Form.Item name="prefix" 
+  //   noStyle
+  //   >
+  //     <Select
+  //       allowClear={true}
+  //       showSearch
+  //       bordered={false}
+  //       style={{
+  //         width: 70,
+  //         background: "#ffffff",
+  //         borderRadius: "4px"
+  //       }}
+  //     >
+  //       {codes?.countries?.map((e) => (
+  //         <Option key={e?.code} value={e?.code}>
+  //           {e?.code}{" "}
+  //         </Option>
+  //       ))}
+  //     </Select>
+  //   </Form.Item>
+  // );
 
   return (
     <>
@@ -660,7 +665,7 @@ function AddEmployee() {
                 ]}
               >
                 <Input
-                  addonBefore={prefixSelector}
+                  addonBefore={(<PrefixSelector />)}
                   maxLength={10}
                   required
                   placeholder="Enter Phone Number"
@@ -1100,14 +1105,13 @@ function AddEmployee() {
               justifyContent: "space-around",
             }}
           >
-            <Col
-            // style={{
-            //   background: "",
-            //   height: "50px",
-            //   display: "flex",
-            //   justifyContent: "flex-start",
-            // }}
-            >
+            <Col>
+              <Button style={{marginBottom: "10px"}} onClick={() => downloadFile(template)}> 
+                <DownloadOutlined />
+                Download File Template
+              </Button>
+            </Col>
+            <Col>
               <CSVReader
                 onUploadAccepted={(results) => {
                   let temp = [...results.data];

@@ -172,7 +172,7 @@ const OrgDetails = (props) => {
                   message: "Please Enter CIN Number",
                 },
                 {
-                  pattern: /^[0-9a-zA-Z]+$/,
+                  pattern: /^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/,
                   message: "Please Enter Valid Number",
                 },
               ]}

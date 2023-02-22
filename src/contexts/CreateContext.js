@@ -1,10 +1,9 @@
 import { createAuth } from "../firebase-config";
 import {
   createUserWithEmailAndPassword,
-  signOut,
-  updatePhoneNumber,
   updateProfile,
-  deleteUser
+  deleteUser,
+  sendEmailVerification,
 } from "@firebase/auth";
 import {
   collection,
@@ -76,24 +75,14 @@ export async function createUser(values, compId) {
     };
     await setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid});
     await setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
+    sendEmailVerification(res.user)
   } catch(error) {
     deleteDoc(doc(db, `users`, res.user.uid))
     deleteUser(res.user)
     console.log(error.message)
     showNotification("error", "Error", `Incorrect fields for ${values.mailid}`)
     return false;
-    
   }
-    // .then((result) => {
-    //   signOut(createAuth);
-    //   return result;
-    // })
-    // .catch((error) => {
-    // });
-}
-
-export async function deleteErrorUser() {
-
 }
 
 export async function getUsers() {

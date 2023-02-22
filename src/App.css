@@ -73,3 +73,20 @@ tr[data-row-key*="subTotal"] {
     border-radius: 5px;
     color: #171832;
 }
+
+.password-input-len .ant-input {
+  width: 100%;
+}
+
+.color-button {
+  background-color: #1963A6;
+  border: 2px solid #1963A6;
+  border-radius: 4px;
+  width: 150px
+}
+
+.color-button:hover {
+  background-color: #ffffff;
+  color: #1963A6;
+  border: 2px solid #1963A6;
+}

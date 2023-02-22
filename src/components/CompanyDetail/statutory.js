@@ -366,11 +366,11 @@ const Statutory = () => {
                             rules={[
                               {
                                 required: true,
-                                message: "Please enter Brand Name",
+                                message: "Please enter CIN",
                               },
                               {
-                                pattern: /^[0-9A-Z\s]*$/,
-                                message: "Please enter Valid Brand Name",
+                                pattern: /^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/,
+                                message: "Please Enter Valid Number",
                               },
                             ]}
                           >

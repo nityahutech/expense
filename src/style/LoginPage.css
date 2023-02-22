@@ -78,8 +78,13 @@
 }
 
 .forgotpwd{
+  position: relative;
+  right: 10px;
   color: #1963A6;
   margin-top: 1vh;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
  }
 
  .checkBox{

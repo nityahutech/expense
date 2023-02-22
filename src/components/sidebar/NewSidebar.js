@@ -4,8 +4,8 @@ import expenseIcon from "../../images/Expense.png";
 import dot from "../../images/dot.png";
 import empIcon from "../../images/Employees.png";
 import userIcon from "../../images/user.png";
-import assetMag from "../../images/newSBLogo/AssetManagement.png";
-import logo from "../../images/logoo.svg";
+import assetMag from "../../images/AssetManageLogo.svg";
+import logo from "../../images/logo.svg";
 import appraisalIcon from "../../images/appraisal.png";
 import Organization from "../../images/Organization.png";
 import CompanyProfile from "../../images/Companyprofile.png";
@@ -195,14 +195,14 @@ const NewSidebar = (props) => {
                         <p className="sideFont">View Employees</p>
                         <NavLink to="/Employee/EmployeeList" />
                       </Menu.Item>
-                      {/* <Menu.Item
+                      <Menu.Item
                         className="arrow"
                         icon={<img src={dot} alt="profile" className="dot" />}
                         key="25"
                       >
                         <p className="sideFont">Payroll Manager</p>
                         <NavLink to="/Employee/Payroll" />
-                      </Menu.Item> */}
+                      </Menu.Item>
                     </Menu.SubMenu>
                   </>
                 ) : null}
@@ -284,7 +284,7 @@ const NewSidebar = (props) => {
                       </Menu.Item>
                     </Menu.SubMenu>
                     <Menu.Item
-                      icon={<img src={assetMag} alt="asset" class="Dash" />}
+                      icon={<img style={{maxHeight: "15px", margin: "0"}} src={assetMag} alt="asset" class="Dash" />}
                       key="22"
                     >
                       <p className="sideFont">Assets</p>

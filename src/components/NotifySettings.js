@@ -16,7 +16,7 @@ import {
   Row,
   Col,
 } from "antd";
-import Image1 from "../images/Attendance.png";
+import Image1 from "../images/Attendancelog.png";
 import Image2 from "../images/companyvision.png";
 import Image3 from "../images/facebook.png";
 import Image4 from "../images/twitter.png";

@@ -1,5 +1,5 @@
 import { db, storage } from "../firebase-config";
-import { disableAccount } from "./EmailContext";
+import { changeAccount } from "./EmailContext";
 import {
     getDoc,
     updateDoc,
@@ -53,7 +53,7 @@ class EmpInfoContext {
     
     disablePerson = (id) => {
         updateDoc(doc(db, `companyprofile/${compId}/users`, id), { disabled: true });
-        return disableAccount(id, true);
+        return changeAccount(id, {disabled: true});
     };
 
     idExists = async (id) => {

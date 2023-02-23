@@ -1,12 +1,17 @@
 import React, { useContext, useState, useEffect } from "react"
-import { auth, db } from "../firebase-config"
+import { auth, db, createAuth } from "../firebase-config"
 import { signInWithEmailAndPassword,
          signOut,
          sendPasswordResetEmail,
          updateEmail,
          updatePassword,
          updatePhoneNumber,
-         updateProfile
+         updateProfile,
+         applyActionCode,
+         verifyPasswordResetCode,
+         confirmPasswordReset,
+         checkActionCode,
+         sendEmailVerification
 } from "@firebase/auth"
 import moment from "moment";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -22,6 +27,7 @@ import LeaveContext from "./LeaveContext";
 import PolicyContext from "./PolicyContext";
 import InvoiceContext from "./InvoiceContext";
 import AssetContext from "./AssetContext";
+import { adminPassword, isUserVerified } from "./EmailContext";
 
 const AuthContext = React.createContext()
 
@@ -41,7 +47,7 @@ export function AuthProvider({ children }) {
   const [logo, setLogo] = useState(null);
 
   function getUserData(user) {
-    if (user==null) {
+    if (user == null) {
       const timer = setTimeout(() => {
         sessionStorage.clear();
         localStorage.setItem("login", null)
@@ -92,8 +98,12 @@ export function AuthProvider({ children }) {
     return signOut(auth)
   }
 
-  function resetPassword(email) {
-    return sendPasswordResetEmail(auth, email)
+  async function resetPassword(email) {
+    let user = await isUserVerified(email);
+    if (user.emailVerified) { return sendPasswordResetEmail(auth, email) }
+    let record = await signInWithEmailAndPassword(createAuth, user.providerData[0].email, user.providerData[0].providerId);
+    return sendEmailVerification(record.user)
+    
   }
 
   function updateMyProfile(name) {
@@ -111,6 +121,21 @@ export function AuthProvider({ children }) {
 
   function updateMyPassword(password) {
     return updatePassword(currentUser, password)
+  }
+
+  async function handleVerifyEmail(actionCode, password) {
+    let actionCodeInfo = await checkActionCode(auth, actionCode);
+    await applyActionCode(auth, actionCode);
+    await adminPassword(null, {password: password}, actionCodeInfo.data.email);
+    let res = await login(actionCodeInfo.data.email, password);
+    return res;
+  }
+
+  async function handlePasswordReset(actionCode, password) {
+    let email = await verifyPasswordResetCode(auth, actionCode)
+    await confirmPasswordReset(auth, actionCode, password)
+    let res = await login(email, password)
+    return res
   }
 
   useEffect(() => {
@@ -138,7 +163,9 @@ export function AuthProvider({ children }) {
     updateMyEmail,
     updateMyPassword,
     updateMyProfile,
-    updateMyPhNo
+    updateMyPhNo,
+    handleVerifyEmail,
+    handlePasswordReset
   }
 
   return (

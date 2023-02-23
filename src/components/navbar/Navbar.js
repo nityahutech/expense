@@ -8,9 +8,9 @@ import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
-import settingsIcon from "../../images/abstractuserflat4.png";
-import logoutIcon from "../../images/logoutsvgrepocom.png";
-import Logo from "../../images/logo22 ss.png";
+import settingsIcon from "../../images/NavSettingsIcon.png";
+import logoutIcon from "../../images/LogoutIcon.png";
+import Logo from "../../images/HutechHRLogo.svg";
 import dropdown from "../../images/dropdown.png";
 
 const Navbar = (props) => {

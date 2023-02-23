@@ -21,6 +21,7 @@ import { useState } from "react";
 import AttendanceLog from "./components/AttendanceLog";
 import InvoiceMagHome from "./components/assetManagement/InvoiceMagHome";
 import TravelManagement from "./components/TravelManagement/travelManagement";
+import EmailVerification from "./EmailVerification";
 
 function App() {
   const [roleview, setRoleview] = useState(sessionStorage.getItem("roleView"))
@@ -44,18 +45,16 @@ function App() {
               />
             }
           />
-          {roleview == "super" ? ( 
-            <Route
-              path="/Organization/Onboarding"
-              element={
-                <FormatPage
-                  main={<Onboarding />}
-                  activeSubMenu={["sub5"]}
-                  activeMenu={["31"]}
-                />
-              }
-            />
-          ) : null}
+          <Route
+            path="/Organization/Onboarding"
+            element={
+              <FormatPage
+                main={<Onboarding />}
+                activeSubMenu={["sub5"]}
+                activeMenu={["31"]}
+              />
+            }
+          />
           <Route
             path="/CompanyProfile"
             element={
@@ -206,6 +205,12 @@ function App() {
                 switchRole={switchRole}
                
               />
+            }
+          />
+          <Route 
+            path="/VerifyEmail"
+            element={
+              <EmailVerification />
             }
           />
         </Routes>

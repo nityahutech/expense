@@ -349,7 +349,7 @@ function TravelManagement(prop) {
                 onFinish={onFinish}
               >
                 <Row gutter={[16, 16]}>
-                  <Col span={12}>
+                  <Col xs={24} xm={24} md={12} lg={12}>
                     <Form.Item
                       label="Travel Management Title"
                       name="travelName"
@@ -369,12 +369,25 @@ function TravelManagement(prop) {
                         },
                       ]}
                     >
-                      <Input />
+                      <Input maxLength={25}/>
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
-                    <Form.Item label="No. of People" name="people">
-                      <Input />
+                  <Col xs={24} xm={24} md={12} lg={12}>
+                    <Form.Item 
+                      label="No. of People" 
+                      name="people"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Enter the no. of People",
+                        },
+                        {
+                          pattern: /^[0-9\s]*$/,
+                          message: "Please Enter numbers only",
+                        },
+                      ]}
+                    >
+                      <Input maxLength={10}/>
                     </Form.Item>
                   </Col>
 
@@ -448,7 +461,7 @@ function TravelManagement(prop) {
                                           </Col>
                                           {selectedOption[i] === "hotel" ? (
                                             <>
-                                              <Col span={10}>
+                                              <Col xs={24} xm={24} md={11} lg={11}>
                                                 <Form.Item
                                                   label="Duration"
                                                   // {...field}
@@ -471,7 +484,7 @@ function TravelManagement(prop) {
                                                   />
                                                 </Form.Item>
                                               </Col>
-                                              <Col span={12}>
+                                              <Col xs={22} xm={22} md={11} lg={11}>
                                                 <Form.Item
                                                   label="Location"
                                                   // {...field}
@@ -483,12 +496,12 @@ function TravelManagement(prop) {
                                                   rules={[
                                                     {
                                                       required: true,
-                                                      message: "Missing Amount",
+                                                      message: "Please Enter the Hotel Address",
                                                     },
                                                     {
-                                                      pattern: /^[a-zA-Z,\s]*$/,
-                                                      message:
-                                                        "Please Enter Valid Title",
+                                                      pattern: /^[a-zA-Z0-9-,\s]*$/,
+                                                      // message:
+                                                      //   "Please Enter Valid Title",
                                                     },
                                                   ]}
                                                 >
@@ -519,7 +532,7 @@ function TravelManagement(prop) {
                                             </>
                                           ) : selectedOption[i] === "travel" ? (
                                             <>
-                                              <Col span={4}>
+                                              <Col xs={24} xm={24} md={4} lg={4} >
                                                 <Form.Item
                                                   label="Date of Travel"
                                                   {...field}
@@ -528,6 +541,7 @@ function TravelManagement(prop) {
                                                     "travelDate",
                                                   ]}
                                                   // fieldKey={[field.fieldKey, "payment"]}
+                                                  className="travelDatePicker"
                                                   rules={[
                                                     {
                                                       required: true,
@@ -541,19 +555,29 @@ function TravelManagement(prop) {
                                                   />
                                                 </Form.Item>
                                               </Col>
-                                              <Col span={6}>
+                                              <Col xs={24} xm={24} md={6} lg={6} >
                                                 <Form.Item
                                                   label="From"
                                                   {...field}
                                                   name={[field.name, "depart"]}
+                                                  rules={[
+                                                    {
+                                                      required: true,
+                                                      message: "Please Enter Invoice",
+                                                    },
+                                                    {
+                                                      pattern: /^[a-zA-Z\s]*$/,
+                                                      message: "Please Enter Valid Title",
+                                                    },
+                                                  ]}
                                                 >
                                                   <Input
                                                     placeholder="Booking From"
-                                                    maxLength={10}
+                                                    maxLength={25}
                                                   />
                                                 </Form.Item>
                                               </Col>
-                                              <Col span={6}>
+                                              <Col xs={24} xm={24} md={6} lg={6} >
                                                 <Form.Item
                                                   label="To"
                                                   {...field}
@@ -568,11 +592,24 @@ function TravelManagement(prop) {
                                                   //     message: "Missing Description",
                                                   //   },
                                                   // ]}
+                                                  rules={[
+                                                    {
+                                                      required: true,
+                                                      message: "Please Enter Invoice",
+                                                    },
+                                                    {
+                                                      pattern: /^[a-zA-Z\s]*$/,
+                                                      message: "Please Enter Valid Title",
+                                                    },
+                                                  ]}
                                                 >
-                                                  <Input placeholder="Traveling to" />
+                                                  <Input 
+                                                    placeholder="Traveling to"
+                                                    maxLength={25} 
+                                                  />
                                                 </Form.Item>
                                               </Col>
-                                              <Col span={6}>
+                                              <Col xs={22} xm={22} md={6} lg={6} >
                                                 <Form.Item
                                                   initialValue={"flight"}
                                                   label="Transport Type"
@@ -615,7 +652,7 @@ function TravelManagement(prop) {
                                             </>
                                           ) : (
                                             <>
-                                              <Col span={10}>
+                                              <Col xs={24} xm={24} md={10} lg={10}>
                                                 <Form.Item
                                                   label="Date"
                                                   // {...field}
@@ -638,7 +675,7 @@ function TravelManagement(prop) {
                                                   />
                                                 </Form.Item>
                                               </Col>
-                                              <Col span={9}>
+                                              <Col xs={24} xm={24} md={9} lg={9}>
                                                 <Form.Item
                                                   label="Type of Vehicle"
                                                   // {...field}
@@ -687,7 +724,7 @@ function TravelManagement(prop) {
                                                   />
                                                 </Form.Item>
                                               </Col>
-                                              <Col span={3}>
+                                              <Col xs={22} xm={22} md={3} lg={3}>
                                                 <Form.Item
                                                   initialValue={true}
                                                   label="Driver Required"

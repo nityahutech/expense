@@ -71,3 +71,7 @@
   .travelTable .ant-table-thead{
     height: 50px;
   }
+
+  .travelDatePicker .ant-picker{
+    width:100%;
+  }

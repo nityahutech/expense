@@ -137,7 +137,7 @@ function EmployeeList() {
                     <DeleteFilled />
                   </Button>
                 </Tooltip>
-                {/* <Tooltip placement="bottom" title='Salary'>
+                <Tooltip placement="bottom" title='Salary'>
                   <Button
                     type="link"
                     style={{ padding: "0px" }}
@@ -149,7 +149,7 @@ function EmployeeList() {
                   >
                     <AlipayCircleOutlined style={{ color: "green" }} />
                   </Button>
-                </Tooltip> */}
+                </Tooltip>
               </div>
             </>
           )
@@ -562,18 +562,18 @@ function EmployeeList() {
               getData={getData}
             />
           </Tabs.TabPane>
-          {/* <Tabs.TabPane
+          <Tabs.TabPane
             tab="Employee Pay Slip"
             disabled={!selectemp.id}
             key="3"
           >
             <PaySlip
               className="Edit"
-              showRecord={showRecord}
+              data={showRecord}
               getData={getData}
             // certificationDetails={certificationDetails}
             />
-          </Tabs.TabPane> */}
+          </Tabs.TabPane>
         </Tabs>
 
         <Modal

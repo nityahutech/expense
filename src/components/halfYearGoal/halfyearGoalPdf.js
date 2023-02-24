@@ -220,50 +220,50 @@ const HalfyearGoalPdf = (props) => {
     };
 
 
-    for (let i = 0; i < currentAppraisal.projectList.length; i++) {
-        let currentProject = currentAppraisal.projectList[i]
-        docDefinition.content.push(
+    // for (let i = 0; i < currentAppraisal.projectList.length; i++) {
+    //     let currentProject = currentAppraisal.projectList[i]
+    docDefinition.content.push(
 
 
-            { text: 'Projects :', style: 'subheader', margin: [0, 10, 0, 10] },
-            {
-                style: 'tableExample',
+        { text: 'Projects :', style: 'subheader', margin: [0, 10, 0, 10] },
+        {
+            style: 'tableExample',
 
-                table: {
-                    heights: 10,
-                    border: [true, false, false, false],
-                    widths: [150, '*',],
-                    margin: [0, 10, 0, 0],
-                    body: [
-                        ['Project Name :', currentProject.projectName],
-
-
-                    ]
-                }
-            },
+            table: {
+                heights: 10,
+                border: [true, false, false, false],
+                widths: [150, '*',],
+                margin: [0, 10, 0, 0],
+                body: [
+                    // ['Project Name :', currentProject.projectName],
 
 
-        )
-        docDefinition.content.push(
-
-            {
-                style: 'tableExample',
-                table: {
-                    heights: 100,
-                    widths: [150, '*',],
-                    margin: [0, 10, 0, 0],
-                    body: [
-                        ['Project Description :', currentProject.projectDetail],
+                ]
+            }
+        },
 
 
-                    ]
-                }
-            },
+    )
+    docDefinition.content.push(
+
+        {
+            style: 'tableExample',
+            table: {
+                heights: 100,
+                widths: [150, '*',],
+                margin: [0, 10, 0, 0],
+                body: [
+                    // ['Project Description :', currentProject.projectDetail],
 
 
-        )
+                ]
+            }
+        },
 
-    }
+
+    )
+
+    // }
 
     docDefinition.content.push(
 

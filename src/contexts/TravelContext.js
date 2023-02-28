@@ -31,6 +31,17 @@ class travelContext {
     await addDoc(companyTravelCollectionRef, travelData);
     return;
   };
+
+  getAllTravel = async () => {
+    const getTravelData = await getDocs(companyTravelCollectionRef);
+    let rec = getTravelData.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      };
+    });
+    return rec;
+  };
 }
 
 export default new travelContext();

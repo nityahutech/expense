@@ -31,6 +31,8 @@ import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
 import { checkAlphabets, showNotification } from "../../contexts/CreateContext";
 import TravelContext from "../../contexts/TravelContext";
+import InvoiceContext from "../../contexts/InvoiceContext";
+import moment from "moment";
 
 const { RangePicker } = DatePicker;
 
@@ -39,6 +41,7 @@ function TravelManagement(prop) {
   const [selectedOption, setSelectedOption] = useState([]);
   const [form] = Form.useForm();
   const [file, setFile] = useState([]);
+  const [travelDetails, setTravelDetails] = useState([]);
   const role = prop.roleView == "emp";
   console.log(prop.roleView);
   const { TextArea } = Input;
@@ -169,8 +172,8 @@ function TravelManagement(prop) {
   const travelColumns = [
     {
       title: "Travel Title",
-      dataIndex: "travelTitle",
-      key: "travelTitle",
+      dataIndex: "travelName",
+      key: "travelName",
       width: 200,
       align: "left",
     },
@@ -281,34 +284,34 @@ function TravelManagement(prop) {
       people: values.people,
       status: "Pending",
       empId: currentUser.uid,
-
+      durationDate: moment().format("DD-MM-YYYY"),
       travelType: values.users.map((type) => {
         console.log(type);
         switch (type.bookingOption) {
           case "travel":
             return {
               ...type,
-              travelDate: type.travelDate.format("DD-MM-YYYY"),
+              durationDate: type.travelDate.format("DD-MM-YYYY"),
               depart: type.depart,
               arrival: type.arrival,
               transport: type.transport,
             };
           case "hotel":
-            return {};
+            return {
+              ...type,
+              durationDate: type.duration.map((dt) => dt.format("DD-MM-YYYY")),
+              location: type.location,
+            };
+          case "rental":
+            return {
+              ...type,
+              durationDate: type.rentalDate.map((dt) =>
+                dt.format("DD-MM-YYYY")
+              ),
+              vehicleType: type.vehicleType,
+              driver: type.driver,
+            };
         }
-        // return {
-        //   ...type,
-        //   bookingOption: type.bookingOption,
-        //   duration: type.duration.format(["DD-MM-YYYY"]),
-        //   location: type.location,
-        //   travelDate: type.travelDate.format("DD-MM-YYYY"),
-        //   depart: type.depart,
-        //   arrivel: type.arrivel,
-        //   transport: type.transport,
-        //   rentalDate: type.rentalDate.format("DD-MM-YYYY"),
-        //   vehicleType: type.vehicleType,
-        //   driver: type.driver,
-        // };
       }),
     };
     console.log("deatislTravel", allTravelData);
@@ -324,6 +327,16 @@ function TravelManagement(prop) {
       showNotification("error", "Error", "Error In Invoice");
     }
   };
+
+  const getAlltravelData = async () => {
+    let travleData = await TravelContext.getAllTravel(currentUser.uid);
+    setTravelDetails(travleData);
+    console.log("travelDetails", travelDetails);
+  };
+
+  useEffect(() => {
+    getAlltravelData();
+  }, []);
 
   return (
     <>
@@ -369,12 +382,12 @@ function TravelManagement(prop) {
                         },
                       ]}
                     >
-                      <Input maxLength={25}/>
+                      <Input maxLength={25} />
                     </Form.Item>
                   </Col>
                   <Col xs={24} xm={24} md={12} lg={12}>
-                    <Form.Item 
-                      label="No. of People" 
+                    <Form.Item
+                      label="No. of People"
                       name="people"
                       rules={[
                         {
@@ -387,7 +400,7 @@ function TravelManagement(prop) {
                         },
                       ]}
                     >
-                      <Input maxLength={10}/>
+                      <Input maxLength={10} />
                     </Form.Item>
                   </Col>
 
@@ -461,7 +474,12 @@ function TravelManagement(prop) {
                                           </Col>
                                           {selectedOption[i] === "hotel" ? (
                                             <>
-                                              <Col xs={24} xm={24} md={11} lg={11}>
+                                              <Col
+                                                xs={24}
+                                                xm={24}
+                                                md={11}
+                                                lg={11}
+                                              >
                                                 <Form.Item
                                                   label="Duration"
                                                   // {...field}
@@ -484,7 +502,12 @@ function TravelManagement(prop) {
                                                   />
                                                 </Form.Item>
                                               </Col>
-                                              <Col xs={22} xm={22} md={11} lg={11}>
+                                              <Col
+                                                xs={22}
+                                                xm={22}
+                                                md={11}
+                                                lg={11}
+                                              >
                                                 <Form.Item
                                                   label="Location"
                                                   // {...field}
@@ -496,10 +519,12 @@ function TravelManagement(prop) {
                                                   rules={[
                                                     {
                                                       required: true,
-                                                      message: "Please Enter the Hotel Address",
+                                                      message:
+                                                        "Please Enter the Hotel Address",
                                                     },
                                                     {
-                                                      pattern: /^[a-zA-Z0-9-,\s]*$/,
+                                                      pattern:
+                                                        /^[a-zA-Z0-9-,\s]*$/,
                                                       // message:
                                                       //   "Please Enter Valid Title",
                                                     },
@@ -532,7 +557,12 @@ function TravelManagement(prop) {
                                             </>
                                           ) : selectedOption[i] === "travel" ? (
                                             <>
-                                              <Col xs={24} xm={24} md={4} lg={4} >
+                                              <Col
+                                                xs={24}
+                                                xm={24}
+                                                md={4}
+                                                lg={4}
+                                              >
                                                 <Form.Item
                                                   label="Date of Travel"
                                                   {...field}
@@ -555,7 +585,12 @@ function TravelManagement(prop) {
                                                   />
                                                 </Form.Item>
                                               </Col>
-                                              <Col xs={24} xm={24} md={6} lg={6} >
+                                              <Col
+                                                xs={24}
+                                                xm={24}
+                                                md={6}
+                                                lg={6}
+                                              >
                                                 <Form.Item
                                                   label="From"
                                                   {...field}
@@ -563,11 +598,13 @@ function TravelManagement(prop) {
                                                   rules={[
                                                     {
                                                       required: true,
-                                                      message: "Please Enter Invoice",
+                                                      message:
+                                                        "Please Enter Invoice",
                                                     },
                                                     {
                                                       pattern: /^[a-zA-Z\s]*$/,
-                                                      message: "Please Enter Valid Title",
+                                                      message:
+                                                        "Please Enter Valid Title",
                                                     },
                                                   ]}
                                                 >
@@ -577,7 +614,12 @@ function TravelManagement(prop) {
                                                   />
                                                 </Form.Item>
                                               </Col>
-                                              <Col xs={24} xm={24} md={6} lg={6} >
+                                              <Col
+                                                xs={24}
+                                                xm={24}
+                                                md={6}
+                                                lg={6}
+                                              >
                                                 <Form.Item
                                                   label="To"
                                                   {...field}
@@ -595,21 +637,28 @@ function TravelManagement(prop) {
                                                   rules={[
                                                     {
                                                       required: true,
-                                                      message: "Please Enter Invoice",
+                                                      message:
+                                                        "Please Enter Invoice",
                                                     },
                                                     {
                                                       pattern: /^[a-zA-Z\s]*$/,
-                                                      message: "Please Enter Valid Title",
+                                                      message:
+                                                        "Please Enter Valid Title",
                                                     },
                                                   ]}
                                                 >
-                                                  <Input 
+                                                  <Input
                                                     placeholder="Traveling to"
-                                                    maxLength={25} 
+                                                    maxLength={25}
                                                   />
                                                 </Form.Item>
                                               </Col>
-                                              <Col xs={22} xm={22} md={6} lg={6} >
+                                              <Col
+                                                xs={22}
+                                                xm={22}
+                                                md={6}
+                                                lg={6}
+                                              >
                                                 <Form.Item
                                                   initialValue={"flight"}
                                                   label="Transport Type"
@@ -652,7 +701,12 @@ function TravelManagement(prop) {
                                             </>
                                           ) : (
                                             <>
-                                              <Col xs={24} xm={24} md={10} lg={10}>
+                                              <Col
+                                                xs={24}
+                                                xm={24}
+                                                md={10}
+                                                lg={10}
+                                              >
                                                 <Form.Item
                                                   label="Date"
                                                   // {...field}
@@ -675,7 +729,12 @@ function TravelManagement(prop) {
                                                   />
                                                 </Form.Item>
                                               </Col>
-                                              <Col xs={24} xm={24} md={9} lg={9}>
+                                              <Col
+                                                xs={24}
+                                                xm={24}
+                                                md={9}
+                                                lg={9}
+                                              >
                                                 <Form.Item
                                                   label="Type of Vehicle"
                                                   // {...field}
@@ -724,7 +783,12 @@ function TravelManagement(prop) {
                                                   />
                                                 </Form.Item>
                                               </Col>
-                                              <Col xs={22} xm={22} md={3} lg={3}>
+                                              <Col
+                                                xs={22}
+                                                xm={22}
+                                                md={3}
+                                                lg={3}
+                                              >
                                                 <Form.Item
                                                   initialValue={true}
                                                   label="Driver Required"
@@ -837,7 +901,11 @@ function TravelManagement(prop) {
                 </Row>
               </Form>
             </Card>
-            <Table className="travelTable" columns={travelColumns} />
+            <Table
+              className="travelTable"
+              columns={travelColumns}
+              dataSource={travelDetails}
+            />
             <Table className="travelTable" columns={travelColumns} />
           </>
         ) : (

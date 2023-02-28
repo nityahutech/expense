@@ -3,22 +3,23 @@ import { Affix, Button, Card, Table } from "antd";
 import { DatePicker, Space } from "antd";
 import "../../style/Payslip.css";
 import EmployeeNetSalary from "../../contexts/EmployeeNetSalary";
-import { getUsers } from "../../contexts/CreateContext";
+import CompanyProContext from "../../contexts/CompanyProContext";
 import { createPdfFromHtml } from "./downloadLogic";
-import hutechLogo from "../../images/hutechlogo.png";
 import moment from 'moment';
-
 
 function PaySlip(props) {
   const showRecord = props.data;
+  console.log("showRecord", showRecord)
   const [userid, setUserId] = useState(showRecord.id);
   const [month, setMonth] = useState(null);
   const [printContent, setPrintContent] = useState(null);
+  const [dataMonths, setDataMonths] = useState(false);
   const [paySlipData, setPaySlipData] = useState(false);
+  const [allPaySlipData, setAllPaySlipData] = useState(false);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
-  const [data, setData] = useState()
-
-
+  const [companyProfile, setCompanyProfile] = useState([]);
+  const [imageUrl, setImageUrl] = useState("");
+  const compId = sessionStorage.getItem("compId");
 
   const currentMonth = moment();//current month
   const previousMonth = moment().subtract(1, 'month');//previous month
@@ -28,44 +29,46 @@ function PaySlip(props) {
   const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
   const [selectedMonth, setSelectedMonth] = useState(`${previousMonth.format("MMM")}-${previousMonth.format("YYYY")}`);
 
-  const updateSelectedMonth = (date, dateString) => {
-    console.log("selected date string: ", dateString, date);
+  const updateSelectedMonth = (date) => {
+    let field = date.format("MMM_YYYY")
+    console.log("selected date string: ", field);
+    let index = dataMonths.includes(field) ? field : null;
+    if (index == null) {
+      let allMonths = dataMonths.filter((x) => {
+        let value = moment(x, "MMM_YYYY").isBefore(date);
+        console.log(value);
+        return value;
+      });
+      allMonths.sort((a, b) => moment(b, "MMM_YYYY").format('YYYYMMDD') - moment(a, "MMM_YYYY").format('YYYYMMDD'))
+      console.log(allMonths[0]);
+      index = allMonths[0];
+
+    }
     const selectedDate = new Date(date);
     let month = selectedDate.getMonth();
     setMonth(month)
     const year = selectedDate.getFullYear();
-    console.log("selected date: ", year);
+    // console.log("selected date: ", year);
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const selectedMonthYear = `${monthNames[month]} ${year}`;
-    console.log("selected month-year: ", selectedMonthYear);
+    // console.log("selected month-year: ", selectedMonthYear);
     setSelectedMonth(selectedMonthYear);
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    console.log("daysInMonth: ", daysInMonth)
+    // console.log("daysInMonth: ", daysInMonth)
     setNofDaysInMonth(daysInMonth);
+    console.log(allPaySlipData);
+    console.log(allPaySlipData[index]);
+    setPaySlipData(allPaySlipData[index])
   };
   const disabledDate = (currentDate) => {
     return currentDate && (currentDate.isAfter(currentMonth) || currentDate.isSame(currentMonth, 'month'));
   };
 
-  useEffect(() => {
-
-    if (month) {
-      setPaySlipData(true);
-    } else {
-      setPaySlipData(false);
-    }
-    getSalaryData(props.data.id);
-
-
-  }, [month]);
-
 
   useEffect(() => {
     setUserId(props.data.id)
-    console.log('props.data.id', props.data.id)
     getSalaryData(props.data.id)
-    // getData()
-    getDatas()
+    getCompanyProfile()
 
   }, [props.data.id]);
 
@@ -86,27 +89,26 @@ function PaySlip(props) {
   function formatNetSalary(amount) {
     return `( ${numberToWords(amount)} Only)`;
   }
-  //salary detail
+
   async function getSalaryData(id) {
-    console.log(id)
     const allSalaryPaySlip = await EmployeeNetSalary.getSalary(currentUser.uid);
-    console.log("aaa", allSalaryPaySlip);
-    setPaySlipData(allSalaryPaySlip);
-
-  }
-  //current user
-  async function getDatas(id) {
-    console.log(id)
-    let data = await EmployeeNetSalary.getUserCurrent(currentUser.uid);
-    console.log("aaa", data);
-    setData(data);
+    // console.log("aaa", allSalaryPaySlip);
+    setAllPaySlipData(allSalaryPaySlip);
+    setDataMonths(Object.keys(allSalaryPaySlip))
   }
 
+  const getCompanyProfile = async () => {
+    const companyProfile = await CompanyProContext.getCompanyProfile(compId);
+    console.log(companyProfile, "companyProfile")
+    setCompanyProfile(companyProfile);
+    setImageUrl(companyProfile.logo);
+  }
 
-  console.log('paySlipData', paySlipData)
-  // console.log(props.showRecord.id, month)
+  console.log('paySlipData', dataMonths)
+
   return (
     <>
+
       <div
         style={{
           display: "flex",
@@ -138,7 +140,7 @@ function PaySlip(props) {
                 className="picker"
                 placeholder="Select MM & YY"
                 bordered={true}
-                format="DD-MM-YYYY"
+                format="MM-YYYY"
                 style={{
                   width: "100%",
                   background: "#1890ff",
@@ -190,7 +192,7 @@ function PaySlip(props) {
   );
 
   function SlipHtml({ selectedMonth, year, nofDaysInMonth, showRecord, }) {
-    console.log('showRecord', showRecord)
+    // console.log('showRecord', showRecord)
 
 
     return (
@@ -213,18 +215,20 @@ function PaySlip(props) {
               <div></div>
               <div style={{ marginLeft: '-135px' }} className="heading">
                 <h1 style={{ fontSize: "14px", textAlign: "center" }}>
-                  Humantech Solutions India Private Limited
+                  {/* Humantech Solutions India Private Limited */}
+                  {companyProfile.regCompName}
                 </h1>
                 <h2 style={{ fontSize: "14px", textAlign: "center" }}>
                   Payslip for the month of {selectedMonth}  {year}
                 </h2>
               </div>
-              <div>
+              <div style={{
+                margin: '10px'
+              }}>
                 <img
-                  src={hutechLogo}
+                  src={companyProfile.logo}
                   style={{
                     marginRight: "34px",
-                    marginTop: "5px",
                     width: "100px",
                   }}
                 ></img>

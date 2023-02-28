@@ -374,7 +374,7 @@ function TravelManagement(prop) {
                       rules={[
                         {
                           required: true,
-                          message: "Please Enter Invoice",
+                          message: "Please Enter The Title",
                         },
                         {
                           pattern: /^[a-zA-Z\s]*$/,
@@ -599,7 +599,7 @@ function TravelManagement(prop) {
                                                     {
                                                       required: true,
                                                       message:
-                                                        "Please Enter Invoice",
+                                                        "Please Enter the name of place your journey starts from",
                                                     },
                                                     {
                                                       pattern: /^[a-zA-Z\s]*$/,
@@ -638,7 +638,7 @@ function TravelManagement(prop) {
                                                     {
                                                       required: true,
                                                       message:
-                                                        "Please Enter Invoice",
+                                                        "Please Enter the name of the place your Ends to",
                                                     },
                                                     {
                                                       pattern: /^[a-zA-Z\s]*$/,
@@ -668,12 +668,12 @@ function TravelManagement(prop) {
                                                     "transport",
                                                   ]}
                                                   // fieldKey={[field.fieldKey, "upload"]}
-                                                  // rules={[
-                                                  //   {
-                                                  //     required: true,
-                                                  //     message: "Missing Images",
-                                                  //   },
-                                                  // ]}
+                                                  rules={[
+                                                    {
+                                                      required: true,
+                                                      // message: "Please select the mode of Transportation",
+                                                    },
+                                                  ]}
                                                 >
                                                   <Select
                                                     defaultValue="Flight"
@@ -743,17 +743,12 @@ function TravelManagement(prop) {
                                                     "vehicleType",
                                                   ]}
                                                   // fieldKey={[field.fieldKey, "amount"]}
-                                                  // rules={[
-                                                  //   {
-                                                  //     required: true,
-                                                  //     message: "Missing Amount",
-                                                  //   },
-                                                  //   {
-                                                  //     pattern: /^[a-zA-Z,\s]*$/,
-                                                  //     message:
-                                                  //       "Please Enter Valid Title",
-                                                  //   },
-                                                  // ]}
+                                                  rules={[
+                                                    {
+                                                      required: true,
+                                                      message: "Please select the Vehicle Type",
+                                                    },
+                                                  ]}
                                                 >
                                                   <Select
                                                     placeholder="Select Vehicle"

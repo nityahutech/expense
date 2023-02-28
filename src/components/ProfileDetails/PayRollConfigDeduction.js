@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Drawer } from 'antd';
 import { PlusCircleOutlined, MinusCircleOutlined, SaveOutlined } from '@ant-design/icons';
+import ConfigureContext from '../../contexts/ConfigureContext';
+import {
+    showNotification,
+
+} from "../../contexts/CreateContext";
 
 const PayRollConfigDeduction = () => {
     const [open, setOpen] = useState(false);
+    const page = "salary";
     const [fields, setFields] = useState([{ name: 'field', value: '' }]);
     const [form] = Form.useForm();
 
@@ -22,6 +28,19 @@ const PayRollConfigDeduction = () => {
     const onFinish = (values) => {
         console.log('Form values:', values);
         console.log('Fields:', fields);
+        let deductionConfig = [...fields]
+        ConfigureContext.createConfigurationsDeduction(page, {
+            Deduction: deductionConfig,
+        })
+            .then((respnse) => {
+                showNotification("success", "Success, Earning  Added",)
+                form.resetFields();
+                setFields([{ name: 'field', value: '' }]);
+                setOpen(false)
+            })
+            .catch((error) => {
+                showNotification("error", "Error ",);
+            });
     };
 
     const showDrawer = () => {
@@ -36,10 +55,15 @@ const PayRollConfigDeduction = () => {
         const newFields = [...fields];
         newFields[index][key] = value;
         if (key === 'value') {
-            newFields[index].name = value ? `Field ${index + 1}` : '';
+            newFields[index].name = value ? `Field ${index + 100}` : '';
         }
         setFields(newFields);
     };
+
+    const resetForm = () => {
+        form.resetFields();
+        setFields([{ name: 'field', value: '' }]);
+    }
 
     return (
         <>
@@ -49,7 +73,7 @@ const PayRollConfigDeduction = () => {
             <Drawer title="Deduction" placement="right" onClose={onClose} visible={open}>
                 <Form form={form} onFinish={onFinish}>
                     {fields.map((field, index) => (
-                        <Form.Item key={index} name={`field-${index}`} >
+                        <Form.Item key={index} name={`field-${index + 100}`} >
                             <Input
                                 name={`field-${index}`}
                                 placeholder={`Field ${index + 1}`}
@@ -75,6 +99,7 @@ const PayRollConfigDeduction = () => {
                         <Button type="primary" htmlType="submit" icon={<SaveOutlined />} style={{ marginTop: '16px' }}>
                             Save
                         </Button>
+                        <Button type="primary" onClick={resetForm} style={{ marginLeft: '16px' }}>Reset </Button>
                     </Form.Item>
                 </Form>
             </Drawer>

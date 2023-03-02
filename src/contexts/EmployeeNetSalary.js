@@ -17,16 +17,16 @@ let compId = sessionStorage.getItem("compId");
 let salaryCollectionRef = collection(db, `companyprofile/${compId}/salary`);
 
 class EmployeeNetSalary {
-    // addSalary = (id, field, netSalary) => {
-    //     return setDoc(doc(salaryCollectionRef, id), { [`${field}`]: netSalary });
-
-    // };
-
-
     addSalary = (id, field, netSalary) => {
-        return updateDoc(doc(salaryCollectionRef, id), { [`May_2022`]: netSalary });
+        return setDoc(doc(salaryCollectionRef, id), { [`${field}`]: netSalary });
 
     };
+
+
+    // addSalary = (id, field, netSalary) => {
+    //     return updateDoc(doc(salaryCollectionRef, id), { [`May_2022`]: netSalary });
+
+    // };
 
     getSalary = async (id) => {
 

@@ -1,6 +1,5 @@
 import { Col, Divider, Row } from "antd";
 import React, { useState } from "react";
-import hutechlogo from "../images/hutechlogo.png";
 import imageavailable from "../images/imageavailable.png";
 
 function ViewModal(props) {

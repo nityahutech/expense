@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, Table, Row, Col } from "antd";
 import "../../style/WorkWeek.css";
-import EmpInfoContext from "../../contexts/EmpInfoContext";
 
 const weekData = [
   {

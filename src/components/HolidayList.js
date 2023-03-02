@@ -12,10 +12,9 @@ import {
 import 'antd/dist/antd.css';
 import { Button, Drawer, Modal, } from 'antd';
 import CompanyHolidayContext from '../contexts/CompanyHolidayContext';
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, DownloadOutlined } from "@ant-design/icons";
 import moment from 'moment/moment';
-import Papa from 'papaparse';
-import { capitalize, showNotification } from '../contexts/CreateContext';
+import { capitalize, downloadFile, showNotification } from '../contexts/CreateContext';
 import { useCSVReader } from 'react-papaparse';
 
 const { Text, } = Typography;
@@ -31,8 +30,10 @@ const LeaveList = (props) => {
     const [holidaylist, setHolidaylist] = useState([])
     const [holidays, setHolidays] = useState([])
     const [head, setHead] = useState([])
-    const colors = ['rgba(154, 214, 224, 0.96)', 'rgba(252, 143, 10,0.2)',];
-    // const fontColors = ['rgba(204, 204, 10, 1)', 'color: "rgba(252, 143, 10, 1)', ];
+    const template = [
+        ["Name", "Date", "Type"],
+        ["New Year's Day", "YYYY-MM-DD", "Official Holiday/Optional Holiday"]
+    ];
     const styles = {
         csvReader: {
           display: "flex",
@@ -44,7 +45,6 @@ const LeaveList = (props) => {
         },
         acceptedFile: {
           border: "1px solid #ccc",
-        //   height: 45,
           lineHeight: 2.5,
           paddingLeft: 10,
           width: "80%",
@@ -80,7 +80,7 @@ const LeaveList = (props) => {
         const timer = setTimeout(() => {
         if (errors.length > 1) {
             showNotification("error", "Error", "Please correct errors in upload file!")
-            setErrorFile(<Button style={{marginRight: "10px"}} onClick={() => downloadFile(errors)}> Download Error File</Button>)
+            setErrorFile(<Button style={{marginRight: "10px"}} onClick={() => downloadFile(errors, "errorFile")}> Download Error File</Button>)
             return;
         }
         showNotification("success", "Success", "All Fields Valid!")
@@ -89,30 +89,9 @@ const LeaveList = (props) => {
         setHead(headers)
         }, [2000])
   }
-  
-  const downloadFile = (errors) => {
-    const csv = Papa.unparse(errors);
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', 'errorFile.csv');
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
 
     const getData = async () => {
-        // props.addNewHoliday()
-        const allData = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
-        // 33-40 to be written in context
-        let data = allData.docs.map((doc) => {
-            return {
-                ...doc.data(),
-                id: doc.id,
-            };
-        });
+        let data = await CompanyHolidayContext.getAllCompanyHoliday();
         data.sort(function (c, d) {
             let a = moment(c.date, "Do MMM, YYYY")
             let b = moment(d.date, "Do MMM, YYYY")
@@ -396,23 +375,28 @@ const LeaveList = (props) => {
                     }} onClick={() => setIsBulkOpen(true)}>
                         Bulk Upload
                     </Button>
-                            <Modal className='viewAppraisal'
-                                title="Create Holiday"
-                                maskClosable={false}
-                                footer={null}
-                                open={isBulkOpen}
-                                onCancel={() => setIsBulkOpen(false)}
-                                closeIcon={
-                                    <div
-                                        onClick={() => {
-                                            setIsBulkOpen(false);
-                                        }}
-                                        style={{ color: "#ffffff" }}
-                                    >
-                                        X
-                                    </div>
-                                }
+                    <Modal className='viewAppraisal'
+                        title="Create Holiday"
+                        maskClosable={false}
+                        footer={null}
+                        open={isBulkOpen}
+                        onCancel={() => setIsBulkOpen(false)}
+                        closeIcon={
+                            <div
+                                onClick={() => {
+                                    setIsBulkOpen(false);
+                                }}
+                                style={{ color: "#ffffff" }}
                             >
+                                X
+                            </div>
+                        }
+                    >
+                            
+              <Button style={{marginTop: "10px", marginBottom: "20px"}} onClick={() => downloadFile(template, "template")}> 
+                <DownloadOutlined />
+                Download File Template
+              </Button>
               <CSVReader
                 onUploadAccepted={(results) => {
                   setEnableBulk(false)
@@ -450,19 +434,22 @@ const LeaveList = (props) => {
                   </>
                 )}
               </CSVReader>
-              {errorFile}
-              <Button
-                className="listExpense"
-                disabled={!enableBulk}
-                type="primary"
-                onClick={handleBulkOnboard}
-                style={{
-                  backgroundColor: "#1963A6",
-                  borderRadius: "5px",
-                }}
-              >
-                Bulk Upload Holidays
-              </Button>
+              <div 
+              style={{display:"flex", justifyContent:"flex-end", marginTop: "30px", marginBottom: "30px"}}>
+                {errorFile}
+                <Button
+                    className="listExpense"
+                    disabled={!enableBulk}
+                    type="primary"
+                    onClick={handleBulkOnboard}
+                    style={{
+                    backgroundColor: "#1963A6",
+                    borderRadius: "5px",
+                    }}
+                >
+                    Bulk Upload Holidays
+                </Button>
+               </div>
             </Modal>
                 </div>
                 </>) : null}

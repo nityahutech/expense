@@ -333,7 +333,7 @@ function AccessDetails(props) {
                             message: "Please Enter First Name",
                           },
                           {
-                            pattern: /^[a-zA-Z-]*$/,
+                            pattern: /^[a-zA-Z-\s]*$/,
                             message: "Please Enter Valid Name",
                           },
                         ]}
@@ -356,18 +356,12 @@ function AccessDetails(props) {
                             background: "#ffffff",
                           }}
                           onChange={(e) => {
-                            const inputval = e.target.value;
                             const str = e.target.value;
-                            const newVal =
-                              inputval.substring(0, 1).toUpperCase() +
-                              inputval.substring(1);
                             const caps = str
                               .split(" ")
                               .map(capitalize)
                               .join(" ");
-                            // setPaidBy(newVal);
                             form.setFieldsValue({
-                              fName: newVal,
                               fName: caps,
                             });
                           }}
@@ -380,13 +374,13 @@ function AccessDetails(props) {
                         colon={true}
                         label="Middle Name::"
                         onKeyPress={(event) => {
-                          if (checkAlphabets(event)) {
+                          if (checkAlphabetsName(event)) {
                             event.preventDefault();
                           }
                         }}
                         rules={[
                           {
-                            pattern: /^[a-zA-Z\s]*$/,
+                            pattern: /^[a-zA-Z-\s]*$/,
                             message: "Please Enter Valid Name",
                           },
                         ]}
@@ -409,18 +403,12 @@ function AccessDetails(props) {
                             background: "#ffffff",
                           }}
                           onChange={(e) => {
-                            const inputval = e.target.value;
                             const str = e.target.value;
-                            const newVal =
-                              inputval.substring(0, 1).toUpperCase() +
-                              inputval.substring(1);
                             const caps = str
                               .split(" ")
                               .map(capitalize)
                               .join(" ");
-                            // setPaidBy(newVal);
                             form.setFieldsValue({
-                              mName: newVal,
                               mName: caps,
                             });
                           }}
@@ -442,18 +430,10 @@ function AccessDetails(props) {
                             message: "Please Enter Last Name",
                           },
                           {
-                            pattern: /^[a-zA-Z-]*$/,
+                            pattern: /^[a-zA-Z-\s]*$/,
                             message: "Please Enter Valid Name",
                           },
                         ]}
-                        // labelCol={{
-                        //   span: 3,
-                        //   offset: 5,
-                        // }}
-                        // wrapperCol={{
-                        //   span: 9,
-                        //   offset: 1,
-                        // }}
                       >
                         <Input
                           placeholder="Last Name"
@@ -464,17 +444,12 @@ function AccessDetails(props) {
                             background: "#ffffff",
                           }}
                           onChange={(e) => {
-                            const inputval = e.target.value;
                             const str = e.target.value;
-                            const newVal =
-                              inputval.substring(0, 1).toUpperCase() +
-                              inputval.substring(1);
                             const caps = str
                               .split(" ")
                               .map(capitalize)
                               .join(" ");
-                            // setPaidBy(newVal);
-                            form.setFieldsValue({ lName: newVal, lName: caps });
+                            form.setFieldsValue({ lName: caps });
                           }}
                         />
                       </Form.Item>
@@ -1390,7 +1365,7 @@ function AccessDetails(props) {
                         message: "Please Enter First Name",
                       },
                       {
-                        pattern: /^[a-zA-Z-]*$/,
+                        pattern: /^[a-zA-Z-\s]*$/,
                         message: "Please Enter Valid Name",
                       },
                     ]}
@@ -1415,15 +1390,9 @@ function AccessDetails(props) {
                         background: "#ffffff",
                       }}
                       onChange={(e) => {
-                        const inputval = e.target.value;
                         const str = e.target.value;
-                        const newVal =
-                          inputval.substring(0, 1).toUpperCase() +
-                          inputval.substring(1);
                         const caps = str.split(" ").map(capitalize).join(" ");
-                        // setPaidBy(newVal);
                         form.setFieldsValue({
-                          fName: newVal,
                           fName: caps,
                         });
                       }}
@@ -1435,7 +1404,7 @@ function AccessDetails(props) {
                     colon={true}
                     label="Middle Name::"
                     onKeyPress={(event) => {
-                      if (checkAlphabets(event)) {
+                      if (checkAlphabetsName(event)) {
                         event.preventDefault();
                       }
                     }}
@@ -1446,15 +1415,6 @@ function AccessDetails(props) {
                         message: "Please Enter Valid Name",
                       },
                     ]}
-
-                    // labelCol={{
-                    //   span: 3,
-                    //   offset: 5,
-                    // }}
-                    // wrapperCol={{
-                    //   span: 9,
-                    //   offset: 1,
-                    // }}
                   >
                     <Input
                       maxLength={20}
@@ -1466,15 +1426,9 @@ function AccessDetails(props) {
                         background: "#ffffff",
                       }}
                       onChange={(e) => {
-                        const inputval = e.target.value;
                         const str = e.target.value;
-                        const newVal =
-                          inputval.substring(0, 1).toUpperCase() +
-                          inputval.substring(1);
                         const caps = str.split(" ").map(capitalize).join(" ");
-                        // setPaidBy(newVal);
                         form.setFieldsValue({
-                          mName: newVal,
                           mName: caps,
                         });
                       }}
@@ -1496,7 +1450,7 @@ function AccessDetails(props) {
                         message: "Please Enter Last Name",
                       },
                       {
-                        pattern: /^[a-zA-Z-]*$/,
+                        pattern: /^[a-zA-Z-\s]*$/,
                         message: "Please Enter Valid Name",
                       },
                     ]}
@@ -1520,14 +1474,9 @@ function AccessDetails(props) {
                         background: "#ffffff",
                       }}
                       onChange={(e) => {
-                        const inputval = e.target.value;
                         const str = e.target.value;
-                        const newVal =
-                          inputval.substring(0, 1).toUpperCase() +
-                          inputval.substring(1);
                         const caps = str.split(" ").map(capitalize).join(" ");
-                        // setPaidBy(newVal);
-                        form.setFieldsValue({ lName: newVal, lName: caps });
+                        form.setFieldsValue({ lName: caps });
                       }}
                     />
                   </Form.Item>

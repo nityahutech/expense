@@ -42,6 +42,7 @@ function TravelManagement(prop) {
   const [form] = Form.useForm();
   const [file, setFile] = useState([]);
   const [travelDetails, setTravelDetails] = useState([]);
+  const [endDate, setEndDate] = useState(null);
   const role = prop.roleView == "emp";
   console.log(prop.roleView);
   const { TextArea } = Input;
@@ -183,6 +184,24 @@ function TravelManagement(prop) {
       key: "durationDate",
       width: 200,
       align: "left",
+      render: (_, record) => {
+        console.log("record", record);
+
+        let dur = record.travelType.map((dt) => dt.durationDate);
+        let temp = [].concat.apply([], dur);
+
+        console.log("dur", dur);
+        temp.sort((a, b) => {
+          return moment(a, "DD-MM-YYYY") - moment(b, "DD-MM-YYYY");
+        });
+        console.log("temp,", temp);
+        let numberOfDays = moment(temp[temp.length - 1], "DD-MM-YYYY").diff(
+          moment(temp[0], "DD-MM-YYYY"),
+          "days"
+        );
+
+        return <div>{numberOfDays + 1}</div>;
+      },
     },
 
     {
@@ -284,33 +303,41 @@ function TravelManagement(prop) {
       people: values.people,
       status: "Pending",
       empId: currentUser.uid,
-      durationDate: moment().format("DD-MM-YYYY"),
+      empName: currentUser.displayName,
+      date: moment().format("DD-MM-YYYY"),
       travelType: values.users.map((type) => {
         console.log(type);
         switch (type.bookingOption) {
           case "travel":
-            return {
-              ...type,
+            let temp = {
+              bookingOption: "travel",
               durationDate: type.travelDate.format("DD-MM-YYYY"),
               depart: type.depart,
               arrival: type.arrival,
               transport: type.transport,
             };
+            delete temp.travelDate;
+            return temp;
+
           case "hotel":
-            return {
-              ...type,
+            let hotelData = {
+              bookingOption: "hotel",
               durationDate: type.duration.map((dt) => dt.format("DD-MM-YYYY")),
               location: type.location,
             };
+            delete hotelData.duration;
+            return hotelData;
           case "rental":
-            return {
-              ...type,
+            let rentalData = {
+              bookingOption: "rental",
               durationDate: type.rentalDate.map((dt) =>
                 dt.format("DD-MM-YYYY")
               ),
               vehicleType: type.vehicleType,
               driver: type.driver,
             };
+            delete rentalData.rentalDate;
+            return rentalData;
         }
       }),
     };

@@ -20,9 +20,15 @@ class CompanyHolidayContext {
         return;
     }
 
-    getAllCompanyHoliday = () => {
+    getAllCompanyHoliday = async () => {
         const q = query(companyholidayCollectionRef, orderBy("date", "asc"));
-        return getDocs(q);
+        let data = await getDocs(q);
+        return data.docs.map((doc) => {
+            return {
+                ...doc.data(),
+                id: doc.id,
+            };
+        });
     };
     
     createHoliday = (newHoliday) => {

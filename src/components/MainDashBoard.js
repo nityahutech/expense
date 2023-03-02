@@ -13,8 +13,9 @@ import Settings from "../images/Settings.png";
 import Organization from "../images/organizationLogoNew.png";
 import appraisalicon from "../images/list.png"
 import { Link } from "react-router-dom";
-function MainDashBoard() {
+function MainDashBoard(props) {
   const role = sessionStorage.getItem("role");
+  props.switchRole(role);
   const isHr = role == "super" ? false : sessionStorage.getItem("isHr") == "true";
 
   const organizationcon = () => {

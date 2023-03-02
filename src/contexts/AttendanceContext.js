@@ -163,7 +163,7 @@ class AttendanceContext {
         return temp.reverse();
     };
 
-    getAllUsers = async(date) => {
+    getAllUsers = async (date) => {
         const q = query(usersCollectionRef, orderBy("empId", "asc"));
         let userdata = await getDocs(q);
         let res = userdata.docs.map((doc) => {
@@ -190,13 +190,16 @@ class AttendanceContext {
         return res;
     };
 
-    updateLeaves = async (data, isHoiday, isDayoff) => {
+    updateLeaves = async (data, holidays, daysoff) => {
+      console.log(data, holidays, daysoff);
       let list = await this.getLeaveList(data[0].empId);
+      console.log(list);
       data.forEach((emp) => {
+        console.log(emp);
         if(emp.status == "Absent") {
-          if (isDayoff) {
+          if (daysoff.includes(moment(emp.date, "DD-MM-YYYY").format("dddd"))) {
             emp.status = "Weekend";
-          } else if (isHoiday) {
+          } else if (holidays.includes(moment(emp.date, "DD-MM-YYYY").format("Do MMM, YYYY"))) {
             emp.status = "Holiday"
           } else if (list.includes(moment(emp.date, "DD-MM-YYYY").format("Do MMM, YYYY"))) {
             emp.status = "On Leave";
@@ -207,7 +210,9 @@ class AttendanceContext {
     }
 
     updateWithLeave = async (data, isHoiday, isDayoff) => {
+      console.log(data, isHoiday, isDayoff);
       data.forEach((emp) => {
+        console.log(emp);
         if(emp.status == "Absent") {
           if (isHoiday) {
             emp.status = "Holiday"

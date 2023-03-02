@@ -10,12 +10,14 @@ import {
   Space,
   notification,
   Checkbox,
+  AutoComplete,
 } from "antd";
 import moment from "moment";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import "../style/CertificationID.css";
 import ConfigureContext from "../contexts/ConfigureContext";
 import CompanyProContext from "../contexts/CompanyProContext";
+import { getUsers } from "../contexts/CreateContext";
 
 const { Option } = Select;
 const showNotification = (type, msg, desc) => {
@@ -47,6 +49,8 @@ function Editemployee(props) {
   const [configurations, setConfigurations] = useState(null);
   const [teams, setTeams] = useState([]);
   const [workLoc, setWorkLoc] = useState(null);
+  const [options, setOptions] = useState([]);
+  const [allEmpName, setAllEmpName] = useState([]);
   async function submitEdit() {
     let par = team?.split("_")[1]?.split("/")
     try {
@@ -107,9 +111,27 @@ function Editemployee(props) {
     setWorkLoc(add);
     setConfigurations(data);
   };
+  
+  const onSearch = (searchText) => {
+    let matchingName = allEmpName.filter((ex) => { return ex.value.toLowerCase().includes(searchText.toLowerCase()) })
+    setOptions(
+      !searchText ? [] : matchingName,
+    );
+  };
+
+  const getAllUser = async () => {
+    const allData = await getUsers();
+    let allUsers = allData.docs.map((doc, i) => {
+      return {
+        value: doc.data().fname + ' ' + doc.data().lname,
+      };
+    });
+    setAllEmpName(allUsers);
+  }
 
   useEffect(() => {
     getData();
+    getAllUser()
     const fnameVal = props.record ? props.record.fname : "";
     const mnameVal = props.record ? props.record.mname : "";
     const lnameVal = props.record ? props.record.lname : "";
@@ -374,7 +396,7 @@ function Editemployee(props) {
             >
               <DatePicker
                 format={dateFormat}
-                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
+                style={{ border: "1px solid #8692A6", borderRadius: "4px", width:"100%"}}
                 onChange={(e) => {
                   setDoj(e.format(dateFormat));
                 }}
@@ -485,16 +507,17 @@ function Editemployee(props) {
                 },
               ]}
             >
-              <Select
-                bordered={false}
-                onChange={(e) => setRepManager(e)}
-                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
-                placeholder="Select a Manager"
-              >
-                {configurations?.repManager.map((des) => (
-                  <Option value={des}>{des}</Option>
-                ))}
-              </Select>
+                <AutoComplete
+                  bordered={false}
+                  options={options}
+                  onChange={(e) => setRepManager(e)}
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                  onSearch={onSearch}
+                  placeholder="Enter Reporting Manager"
+                />
             </Form.Item>
           </Col>
           <Col xs={22} sm={15} md={8}>
@@ -512,20 +535,54 @@ function Editemployee(props) {
                 },
               ]}
             >
-              <Select
-                bordered={false}
-                onChange={(e) => setSecManager(e)}
-                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
-                placeholder="Select a Manager"
-              >
-                {configurations?.secManager.map((des) => (
-                  <Option value={des}>{des}</Option>
-                ))}
-              </Select>
+                <AutoComplete
+                  bordered={false}
+                  options={options}
+                  onChange={(e) => setSecManager(e)}
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                  onSearch={onSearch}
+                  placeholder="Enter Secondary Manager"
+                />
             </Form.Item>
           </Col>
         </Row>
         <Row gutter={[34, 8]}>
+          <Col xs={22} sm={15} md={8}>
+            <Form.Item
+              name="lead"
+              label="Lead"
+              onKeyPress={(event) => {
+                if (checkAlphabets(event)) {
+                  event.preventDefault();
+                }
+              }}
+              rules={[
+                {
+                  required: false,
+                  message: "Please enter Lead Name",
+                },
+                {
+                  pattern: /^[a-zA-Z\s]*$/,
+                  message: "Please enter Valid Name",
+                },
+              ]}
+            >
+                <AutoComplete
+                  bordered={false}
+                  options={options}
+                  onChange={(e) => setLead(e)}
+                  style={{
+                    border: "1px solid #8692A6",
+                    borderRadius: "4px",
+                  }}
+                  onSearch={onSearch}
+                  placeholder="Enter Team Lead"
+                />
+            </Form.Item>
+          </Col>
           <Col xs={22} sm={15} md={8}>
             <Form.Item
               name="team"
@@ -547,41 +604,6 @@ function Editemployee(props) {
                   <Option value={`${t.name}_${t.parent}`}>{`${t.name} (${t.parent})`}</Option>
                 ))}
               </Select>
-            </Form.Item>
-          </Col>
-          <Col xs={22} sm={15} md={8}>
-            <Form.Item
-              name="lead"
-              label="Lead"
-              onKeyPress={(event) => {
-                if (checkAlphabets(event)) {
-                  event.preventDefault();
-                }
-              }}
-              rules={[
-                {
-                  required: false,
-                  message: "Please enter Lead Name",
-                },
-                {
-                  pattern: /^[a-zA-Z\s]*$/,
-                  message: "Please enter Valid Name",
-                },
-              ]}
-            >
-              <Input
-                style={{ border: "1px solid #8692A6", borderRadius: "4px" }}
-                maxLength={20}
-                onChange={(e) => {
-                  const inputval = e.target.value;
-                  const newVal =
-                    inputval.substring(0, 1).toUpperCase() +
-                    inputval.substring(1);
-                  setLead(newVal);
-                }}
-                // required
-                placeholder="Enter Lead Name"
-              />
             </Form.Item>
           </Col>
           <Col xs={22} sm={15} md={8}>

@@ -27,7 +27,7 @@ import LeaveContext from "./LeaveContext";
 import PolicyContext from "./PolicyContext";
 import InvoiceContext from "./InvoiceContext";
 import AssetContext from "./AssetContext";
-import { adminPassword, isUserVerified } from "./EmailContext";
+import { changeAccount, isUserVerified } from "./EmailContext";
 
 const AuthContext = React.createContext()
 
@@ -101,7 +101,7 @@ export function AuthProvider({ children }) {
   async function resetPassword(email) {
     let user = await isUserVerified(email);
     if (user.emailVerified) { return sendPasswordResetEmail(auth, email) }
-    let record = await signInWithEmailAndPassword(createAuth, user.providerData[0].email, user.providerData[0].providerId);
+    let record = await signInWithEmailAndPassword(createAuth, user.providerData[0].email, "newPassword#1");
     return sendEmailVerification(record.user)
     
   }
@@ -126,7 +126,7 @@ export function AuthProvider({ children }) {
   async function handleVerifyEmail(actionCode, password) {
     let actionCodeInfo = await checkActionCode(auth, actionCode);
     await applyActionCode(auth, actionCode);
-    await adminPassword(null, {password: password}, actionCodeInfo.data.email);
+    await changeAccount(null, {password: password}, actionCodeInfo.data.email);
     let res = await login(actionCodeInfo.data.email, password);
     return res;
   }

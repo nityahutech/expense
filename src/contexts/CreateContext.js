@@ -20,22 +20,20 @@ import { db } from "../firebase-config";
 import { notification } from "antd";
 import CompanyProContext from "./CompanyProContext";
 import axios from "axios";
+import Papa from 'papaparse';
 
 async function generateEmpId(compId) {
   let data = await CompanyProContext.getCompanyProfile(compId);
-  let q = query(collection(db, "users"), where("compId", "==", compId))
-  let len = getDocs(q).then((snapshot) => {
-    let res = snapshot.docs.length + 1;
-    return data.precode + ("00" + res.toString()).slice(-3);
-  });
-  return len;
+  let res = Number(data.lastEmpId.replace(data.precode, '')) + 1
+  let num = -(data.lastEmpId.length - data.precode.length)
+  return data.precode + ("000000000" + res.toString()).slice(num);
 }
 
 export async function createUser(values, compId) {
   let res = await createUserWithEmailAndPassword(
     createAuth,
     values.mailid,
-    "password"
+    "newPassword#1"
   );
   try {
     updateProfile(res.user, { displayName: values.name });
@@ -75,9 +73,13 @@ export async function createUser(values, compId) {
     };
     await setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid});
     await setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
-    sendEmailVerification(res.user)
+    // console.log(res.user);
+    sendEmailVerification(res.user).catch(err => showNotification("error", "Error", `Failed to send verification email to ${values.mailid}`))
+    // console.log(valuesToservice.empId);
+    return valuesToservice.empId
   } catch(error) {
     deleteDoc(doc(db, `users`, res.user.uid))
+    deleteDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid))
     deleteUser(res.user)
     console.log(error.message)
     showNotification("error", "Error", `Incorrect fields for ${values.mailid}`)
@@ -155,10 +157,23 @@ export function checkNoAlphabets(event) {
 };
 
 export function checkAlphabetsName(event) {
-  if (!/^[a-zA-Z- ]*$/.test(event.key) && event.key !== "Backspace") {
+  if (!/^[a-zA-Z.-\s]*$/.test(event.key) && event.key !== "Backspace") {
     return true;
   }
 };
+
+export function downloadFile(data, filename) {
+  const csv = Papa.unparse(data)
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = window.URL.createObjectURL(blob)
+  const a = document.createElement('a');
+  a.setAttribute('hidden', '');
+  a.setAttribute('href', url);
+  a.setAttribute('download', `${filename}.csv`);
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
 
 export async function deleteUsers(array) {
   let q  = query(collection(db, "users"), where("compId", "==", "compId002"));
@@ -178,6 +193,6 @@ export async function deleteUsers(array) {
     })
   } catch (error) {
     console.log(error)
-}
+  }
 }
 

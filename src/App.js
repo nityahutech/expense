@@ -39,7 +39,7 @@ function App() {
             path="/DashBoard"
             element={
               <FormatPage
-                main={<MainDashBoard />}
+                main={<MainDashBoard switchRole={switchRole} />}
                 activeSubMenu={["sub5"]}
                 activeMenu={["30"]}
               />
@@ -146,20 +146,6 @@ function App() {
             }
           />
           <Route
-            path="/Profile"
-            element={
-              <FormatPage
-                main={<Profile />}
-                activeSubMenu={["21"]}
-                activeMenu={["21"]}
-              />
-            }
-          />
-          <Route
-            path="/Settings"
-            element={<FormatPage main={<Settingpage />} activeMenu={["22"]} />}
-          />
-          <Route
             path="/Appraisal/AppraisalPageHr"
             element={
               <FormatPage
@@ -206,6 +192,20 @@ function App() {
                
               />
             }
+          />
+          <Route
+            path="/Profile"
+            element={
+              <FormatPage
+                main={<Profile />}
+                activeSubMenu={["21"]}
+                activeMenu={["21"]}
+              />
+            }
+          />
+          <Route
+            path="/Settings"
+            element={<FormatPage main={<Settingpage />} activeMenu={["22"]} />}
           />
           <Route 
             path="/VerifyEmail"

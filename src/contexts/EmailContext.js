@@ -10,20 +10,10 @@ export const sendEmail = async (mailOptions) => {
     }
 }
 
-export const changeAccount = async (uid, action) => {
-    try {
-        await axios.post("https://auth-api-pink.vercel.app/auth-api/v2", {
-            uid, action
-        })
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-export const adminPassword = async (uid, action, email) => {
+export const changeAccount = async (uid, action, email) => {
     let data = email || null
     try {
-        await axios.post("http://localhost:3001/auth-api/v2", {
+        await axios.post("https://auth-api-pink.vercel.app/auth-api/v2", {
             uid, action, data
         })
     } catch (error) {
@@ -33,10 +23,9 @@ export const adminPassword = async (uid, action, email) => {
 
 export const isUserVerified = async (email) => {
         try {
-        let user = await axios.post("http://localhost:3001/auth-api/v3", {
+        let user = await axios.post("https://auth-api-pink.vercel.app/auth-api/v3", {
             email
         })
-        console.log(user)
         return user.data.userRecord;
     } catch (error) {
         console.log(error)

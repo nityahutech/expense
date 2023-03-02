@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Row, Col, Input, notification } from "antd";
+import { Form, Button, Row, Col, Input, notification, Modal } from "antd";
 import "antd/dist/antd.css";
 import "../../style/HrPaySlip.css";
 import EmployeeNetSalary from "../../contexts/EmployeeNetSalary";
-import { getUsers, } from "../../contexts/CreateContext";
+import { getUsers } from "../../contexts/CreateContext";
 import { AutoComplete } from "antd";
+import { checkAlphabets, checkNumbervalue } from "../../contexts/CreateContext";
+import PayRollUpload from "./PayRollUpload";
+import PayRollConfigEarning from "./PayRollConfigEarning";
+import PayRollConfigDeduction from "./PayRollConfigDeduction";
+import moment from "moment";
+import ConfigureContext from "../../contexts/ConfigureContext";
 
 function HrPaySlip() {
   const [form] = Form.useForm();
@@ -20,6 +26,9 @@ function HrPaySlip() {
   const [emp, setEmp] = useState(null);
   const [options, setOptions] = useState([]);
   const [ids, setIds] = useState([]);
+  const requiredFields = ["basic", "selectStaff"];
+  const [earningConfig, setEarningConfig] = useState()
+
 
   const handlePrevStep = (values) => {
     console.log("Success:", values);
@@ -94,8 +103,7 @@ function HrPaySlip() {
   }
 
   useEffect(() => {
-    calculateNetSalary()
-
+    calculateNetSalary();
   }, [total, deduction]);
 
   useEffect(() => {
@@ -105,7 +113,7 @@ function HrPaySlip() {
 
   useEffect(() => {
     getAllUser();
-  }, [])
+  }, []);
 
   const onReset = () => {
     form.resetFields();
@@ -118,6 +126,7 @@ function HrPaySlip() {
   //updateSalary in firebase using updatedoc
   const onFinish = (values) => {
     console.log("value", values);
+    let field = moment().format("MMM_YYYY")
     let netSalaryEmp = {
       basic: values.basic,
       hra: values.hra,
@@ -145,6 +154,7 @@ function HrPaySlip() {
     console.log("netSalaryEmp", netSalaryEmp);
     EmployeeNetSalary.addSalary(
       ids[`${emp}`],
+      field,
       netSalaryEmp,
     )
       .then(() => {
@@ -159,9 +169,9 @@ function HrPaySlip() {
         setNetSalary(null);
       }
       )
-      .catch(() =>
+      .catch((err) =>
         notification.error({
-          message: "Form submitted Failed",
+          message: "Form submitted Failed" + err.message,
         })
       );
     setShowPreview(false);
@@ -191,8 +201,8 @@ function HrPaySlip() {
     let allUsers = allData.docs.map((doc) => {
       temp = {
         ...temp,
-        [`${doc.data().fname + " " + doc.data().lname}`]: doc.id
-      }
+        [`${doc.data().fname + " " + doc.data().lname}`]: doc.id,
+      };
       return {
         value: doc.data().fname + " " + doc.data().lname,
       };
@@ -209,8 +219,9 @@ function HrPaySlip() {
     console.log("id", id);
     let data = await EmployeeNetSalary.getSalary(id);
     console.log("aaa", data);
+    let field = moment().format("MMM_YYYY")
     setData(data || {});
-    console.log(data);
+    console.log(data[`${field}`]);
     if (data) {
       form.setFieldsValue({
         basic: data.basic,
@@ -239,32 +250,95 @@ function HrPaySlip() {
       setTotal(null);
       setDeduction(null);
       setNetSalary(null);
-      form.setFieldsValue({ selectStaff: emp })
+      form.setFieldsValue({ selectStaff: emp });
     }
   }
 
-  console.log("data", data)
-  console.log("emp", emp)
+  //--------------------------get config------------------------------------------
+  useEffect(() => {
+    getConfigData()
+
+  }, [])
+
+
+  const getConfigData = async () => {
+    let configData = await ConfigureContext.getEarningConfig("salary")
+    console.log('configData', configData)
+    setEarningConfig(configData)
+  }
+
+  //-----------------------------------------disable preview-------------------------------
+  const isAllRequiredFieldsFilled = () => {
+    return requiredFields.every((field) => {
+      const errors = form.getFieldError(field);
+      const value = form.getFieldValue(field);
+      return !errors.length && value;
+    });
+  };
+
+  const earning = ['conveyance', 'medical', 'proffallowance', 'specialallowance', 'bonus', 'lta', 'otherAllowance',]
+  const totalDeduction = ['tds', 'esi', 'pfer', 'pfem', 'profTax', 'otherDeduction',]
+
+  console.log("data", data);
+  console.log("emp", emp);
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <div
           className="Third"
-          style={showPreview ? { display: 'flex', flexDirection: 'column', background: "rgb(227 227 227)", width: '400px' } : {}}
+          style={
+            showPreview
+              ? {
+                display: "flex",
+                flexDirection: "column",
+                background: "rgb(227 227 227)",
+                width: "400px",
+              }
+              : {}
+          }
         >
-          <h1
+          <Col
             style={
               showPreview
                 ? {
                   display: "flex",
+                  flexDirection: "row",
                   alignItems: "center",
                   justifyContent: "center",
                 }
-                : { display: "flex", alignItems: "flex-end" }
+                : {
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }
             }
           >
-            {showPreview ? "Payroll Preview" : "Payroll Setting"}
-          </h1>
+            <h1
+              style={
+                showPreview
+                  ? {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }
+                  : { display: "flex", alignItems: "flex-end" }
+              }
+            >
+              {showPreview ? "Payroll Preview" : "Payroll Setting"}
+            </h1>
+
+            {!showPreview ? (
+              <PayRollUpload allEmpName={allEmpName} ids={ids} emp={emp} />
+
+            ) : null}
+          </Col>
           <Form
             form={form}
             labelCol={{
@@ -312,10 +386,12 @@ function HrPaySlip() {
                     showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                   }
                   rules={[
-                    {
-                      // required: true,
-                      message: "Please Select Staff ",
-                    },
+                    showPreview
+                      ? { required: false }
+                      : {
+                        required: true,
+                        message: "Please Select Staff ",
+                      },
                   ]}
                 >
                   {showPreview ? (
@@ -432,20 +508,24 @@ function HrPaySlip() {
                 </Form.Item>
               </Col>
             </Row>
-            <h2
-              style={
-                showPreview
-                  ? {
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }
-                  : { display: "flex", alignItems: "flex-end" }
-              }
-            >
-              {" "}
-              Earnings
-            </h2>
+            <div style={!showPreview ? { display: 'flex', alignItems: 'center', justifyContent: 'space-between' } : { justifyContent: 'center' }}>
+              <h2
+                style={
+                  showPreview
+                    ? {
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }
+                    : { display: "flex", alignItems: "flex-end" }
+                }
+              >
+                {" "}
+                Earnings
+              </h2>
+              {!showPreview ? (
+                <div><PayRollConfigEarning /></div>) : null}
+            </div>
             <Row
               gutter={[48, 0]}
               style={
@@ -459,6 +539,7 @@ function HrPaySlip() {
                   }
               }
             >
+
               <Col
                 xs={24}
                 sm={showPreview ? 24 : 12}
@@ -466,11 +547,24 @@ function HrPaySlip() {
                 lg={showPreview ? 24 : 8}
               >
                 <Form.Item
+                  onKeyPress={(event) => {
+                    if (checkNumbervalue(event)) {
+                      event.preventDefault();
+                    }
+                  }}
                   name="basic"
                   label="Basic"
                   style={
                     showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                   }
+                  rules={[
+                    showPreview
+                      ? { required: false }
+                      : {
+                        required: true,
+                        message: "Please Select Basic Salary ",
+                      },
+                  ]}
                 // initialValue={data.basic}
                 >
                   {showPreview ? (
@@ -479,7 +573,7 @@ function HrPaySlip() {
                     <Input
                       onChange={onBasicSalaryChange}
                       maxLength={20}
-                      // required
+                      required
                       placeholder="Enter Basic Salary"
                       style={{
                         border: "1px solid #8692A6",
@@ -519,230 +613,64 @@ function HrPaySlip() {
                   )}
                 </Form.Item>
               </Col>
-              <Col
-                xs={24}
-                sm={showPreview ? 24 : 12}
-                md={showPreview ? 24 : 8}
-                lg={showPreview ? 24 : 8}
-              >
-                <Form.Item
-                  name="conveyance"
-                  label="Conveyance"
-                  style={
-                    showPreview ? { margin: "0px" } : { marginBottom: "20px" }
-                  }
-                // initialValue={data[0].conveyance}
+              {earningConfig?.Earning?.map((field, index) => (
+                <Col
+                  xs={24}
+                  sm={showPreview ? 24 : 12}
+                  md={showPreview ? 24 : 8}
+                  lg={showPreview ? 24 : 8}
                 >
-                  {showPreview ? (
-                    <span>{form.getFieldValue("conveyance")}</span>
-                  ) : (
-                    <Input
-                      onChange={onTotalSalaryChange}
-                      maxLength={20}
-                      // required
-                      placeholder="Enter Conveyance"
-                      style={{
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
+                  <Form.Item key={index}
+                    onKeyPress={(event) => {
+                      if (checkNumbervalue(event)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    name={field.name}
+                    label={field.value}
+                    style={
+                      showPreview ? { margin: "0px" } : { marginBottom: "20px" }
+                    }
+                  // initialValue={data.basic}
+                  >
+                    {showPreview ? (
+                      <span>{form.getFieldValue(field)}</span>
+                    ) : (
+                      <Input
+                        onChange={onTotalSalaryChange}
+                        maxLength={20}
+                        // required
+                        placeholder={`Enter ${field.value}`}
+                        style={{
+                          border: "1px solid #8692A6",
+                          borderRadius: "4px",
+                        }}
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+              ))}
 
-              <Col
-                xs={24}
-                sm={showPreview ? 24 : 12}
-                md={showPreview ? 24 : 8}
-                lg={showPreview ? 24 : 8}
-              >
-                <Form.Item
-                  name="medical"
-                  label="Medical Allowance"
-                  style={
-                    showPreview ? { margin: "0px" } : { marginBottom: "20px" }
-                  }
-                // initialValue={data[0].medical}
-                >
-                  {showPreview ? (
-                    <span>{form.getFieldValue("medical")}</span>
-                  ) : (
-                    <Input
-                      maxLength={20}
-                      onChange={onTotalSalaryChange}
-                      // required
-                      placeholder="Enter Medical Allowance"
-                      style={{
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col
-                xs={24}
-                sm={showPreview ? 24 : 12}
-                md={showPreview ? 24 : 8}
-                lg={showPreview ? 24 : 8}
-              >
-                <Form.Item
-                  name="proffallowance"
-                  label="Proff. Dev. Allowance"
-                  style={
-                    showPreview ? { margin: "0px" } : { marginBottom: "20px" }
-                  }
-                // initialValue={data[0].proffallowance}
-                >
-                  {showPreview ? (
-                    <span>{form.getFieldValue("proffallowance")}</span>
-                  ) : (
-                    <Input
-                      maxLength={20}
-                      onChange={onTotalSalaryChange}
-                      // required
-                      placeholder="Enter Professional Allowance"
-                      style={{
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col
-                xs={24}
-                sm={showPreview ? 24 : 12}
-                md={showPreview ? 24 : 8}
-                lg={showPreview ? 24 : 8}
-              >
-                <Form.Item
-                  name="specialallowance"
-                  label="Special Allowance"
-                  style={
-                    showPreview ? { margin: "0px" } : { marginBottom: "20px" }
-                  }
-                // initialValue={data[0].specialallowance}
-                >
-                  {showPreview ? (
-                    <span>{form.getFieldValue("specialallowance")}</span>
-                  ) : (
-                    <Input
-                      maxLength={20}
-                      onChange={onTotalSalaryChange}
-                      // required
-                      placeholder="Enter Special Allowance"
-                      style={{
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-
-              <Col
-                xs={24}
-                sm={showPreview ? 24 : 12}
-                md={showPreview ? 24 : 8}
-                lg={showPreview ? 24 : 8}
-              >
-                <Form.Item
-                  name="bonus"
-                  label="Bonus"
-                  style={
-                    showPreview ? { margin: "0px" } : { marginBottom: "20px" }
-                  }
-                // initialValue={data[0].bonus}
-                >
-                  {showPreview ? (
-                    <span>{form.getFieldValue("bonus")} </span>
-                  ) : (
-                    <Input
-                      onChange={onTotalSalaryChange}
-                      maxLength={20}
-                      placeholder="Bonus"
-                      style={{
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col
-                xs={24}
-                sm={showPreview ? 24 : 12}
-                md={showPreview ? 24 : 8}
-                lg={showPreview ? 24 : 8}
-              >
-                <Form.Item
-                  name="lta"
-                  label="LTA"
-                  style={
-                    showPreview ? { margin: "0px" } : { marginBottom: "20px" }
-                  }
-                // initialValue={data[0].lta}
-                >
-                  {showPreview ? (
-                    <span>{form.getFieldValue("lta")} </span>
-                  ) : (
-                    <Input
-                      onChange={onTotalSalaryChange}
-                      maxLength={20}
-                      placeholder="LTA"
-                      style={{
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col
-                xs={24}
-                sm={showPreview ? 24 : 12}
-                md={showPreview ? 24 : 8}
-                lg={showPreview ? 24 : 8}
-              >
-                <Form.Item
-                  name="otherAllowance"
-                  label="Other Allowance"
-                  style={
-                    showPreview ? { margin: "0px" } : { marginBottom: "20px" }
-                  }
-                // initialValue={data[0].otherAllowance}
-                >
-                  {showPreview ? (
-                    <span>{form.getFieldValue("otherAllowance")} </span>
-                  ) : (
-                    <Input
-                      onChange={onTotalSalaryChange}
-                      maxLength={20}
-                      placeholder="Other Allowance"
-                      style={{
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
+ 
             </Row>
-            <h2
-              style={
-                showPreview
-                  ? {
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }
-                  : { display: "flex", alignItems: "flex-end" }
-              }
-            >
-              {" "}
-              Deductions
-            </h2>
+            <div style={!showPreview ? { display: 'flex', alignItems: 'center', justifyContent: 'space-between' } : { justifyContent: 'center' }}>
+              <h2
+                style={
+                  showPreview
+                    ? {
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }
+                    : { display: "flex", alignItems: "flex-end", }
+                }
+              >
+                {" "}
+                Deductions
+              </h2>
+              {!showPreview ? (
+                <div><PayRollConfigDeduction /></div>) : null}
+            </div>
             <Row
               gutter={[48, 0]}
               style={
@@ -756,187 +684,44 @@ function HrPaySlip() {
                   }
               }
             >
-              <Col
-                xs={24}
-                sm={showPreview ? 24 : 12}
-                md={showPreview ? 24 : 8}
-                lg={showPreview ? 24 : 8}
-              >
-                <Form.Item
-                  name="tds"
-                  label="TDS"
-                  style={
-                    showPreview ? { margin: "0px" } : { marginBottom: "20px" }
-                  }
-
+              {earningConfig?.Deduction.map((field) => (
+                <Col
+                  xs={24}
+                  sm={showPreview ? 24 : 12}
+                  md={showPreview ? 24 : 8}
+                  lg={showPreview ? 24 : 8}
                 >
-                  {showPreview ? (
-                    <span>{form.getFieldValue("tds")} </span>
-                  ) : (
-                    <Input
-                      maxLength={20}
-                      onChange={onTotalDeductionChange}
-                      // required
-                      placeholder="Enter TDS"
-                      style={{
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col
-                xs={24}
-                sm={showPreview ? 24 : 12}
-                md={showPreview ? 24 : 8}
-                lg={showPreview ? 24 : 8}
-              >
-                <Form.Item
-                  name="esi"
-                  label="ESI"
-                  style={
-                    showPreview ? { margin: "0px" } : { marginBottom: "20px" }
-                  }
-
-                >
-                  {showPreview ? (
-                    <span>{form.getFieldValue("esi")} </span>
-                  ) : (
-                    <Input
-                      maxLength={20}
-                      onChange={onTotalDeductionChange}
-                      // required
-                      placeholder="Enter ESI"
-                      style={{
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col
-                xs={24}
-                sm={showPreview ? 24 : 12}
-                md={showPreview ? 24 : 8}
-                lg={showPreview ? 24 : 8}
-              >
-                <Form.Item
-                  name="pfer"
-                  label="PF Employer"
-                  style={
-                    showPreview ? { margin: "0px" } : { marginBottom: "20px" }
-                  }
-
-                >
-                  {showPreview ? (
-                    <span>{form.getFieldValue("pfer")} </span>
-                  ) : (
-                    <Input
-                      maxLength={20}
-                      onChange={onTotalDeductionChange}
-                      // required
-                      placeholder="Enter PF employer"
-                      style={{
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-
-              <Col
-                xs={24}
-                sm={showPreview ? 24 : 12}
-                md={showPreview ? 24 : 8}
-                lg={showPreview ? 24 : 8}
-              >
-                <Form.Item
-                  name="pfem"
-                  label="PF Enployee"
-                  style={
-                    showPreview ? { margin: "0px" } : { marginBottom: "20px" }
-                  }
-
-                >
-                  {showPreview ? (
-                    <span>{form.getFieldValue("pfem")} </span>
-                  ) : (
-                    <Input
-                      maxLength={20}
-                      onChange={onTotalDeductionChange}
-                      // required
-                      placeholder="Enter PF Employee"
-                      style={{
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col
-                xs={24}
-                sm={showPreview ? 24 : 12}
-                md={showPreview ? 24 : 8}
-                lg={showPreview ? 24 : 8}
-              >
-                <Form.Item
-                  name="profTax"
-                  label="Prof. Tax"
-                  style={
-                    showPreview ? { margin: "0px" } : { marginBottom: "20px" }
-                  }
-
-                >
-                  {showPreview ? (
-                    <span>{form.getFieldValue("profTax")} </span>
-                  ) : (
-                    <Input
-                      maxLength={20}
-                      onChange={onTotalDeductionChange}
-                      // required
-                      placeholder="Enter Prof. Tax"
-                      style={{
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col
-                xs={24}
-                sm={showPreview ? 24 : 12}
-                md={showPreview ? 24 : 8}
-                lg={showPreview ? 24 : 8}
-              >
-                <Form.Item
-                  name="otherDeduction"
-                  label="Other Deduction"
-                  style={
-                    showPreview ? { margin: "0px" } : { marginBottom: "20px" }
-                  }
-
-                >
-                  {showPreview ? (
-                    <span>{form.getFieldValue("otherDeduction")} </span>
-                  ) : (
-                    <Input
-                      maxLength={20}
-                      // required
-                      onChange={onTotalDeductionChange}
-                      placeholder="Other Deduction"
-                      style={{
-                        border: "1px solid #8692A6",
-                        borderRadius: "4px",
-                      }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
+                  <Form.Item
+                    onKeyPress={(event) => {
+                      if (checkNumbervalue(event)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    name={field.name}
+                    label={field.value}
+                    style={
+                      showPreview ? { margin: "0px" } : { marginBottom: "20px" }
+                    }
+                  // initialValue={data.basic}
+                  >
+                    {showPreview ? (
+                      <span>{form.getFieldValue(field)}</span>
+                    ) : (
+                      <Input
+                        onChange={onTotalDeductionChange}
+                        maxLength={20}
+                        // required
+                        placeholder={`Enter ${field.value}`}
+                        style={{
+                          border: "1px solid #8692A6",
+                          borderRadius: "4px",
+                        }}
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+              ))}
+            
               {!showPreview ? (
                 <Col span={24}>
                   <div
@@ -967,19 +752,25 @@ function HrPaySlip() {
                     <Button
                       style={{
                         border: "1px solid #1565D8",
-                        background: "#1565D8",
-                        color: "#ffffff",
+                        background: isAllRequiredFieldsFilled()
+                          ? "#1565D8"
+                          : "#dee2e6",
+                        color: isAllRequiredFieldsFilled()
+                          ? "#ffffff"
+                          : "grey",
                         fontWeight: "600",
                         fontSize: "14px",
                         lineHeight: "17px",
                         width: "99px",
                         marginTop: "25px",
-                        cursor: "pointer",
+                        // cursor: "pointer",
                         marginLeft: "17px",
                         marginBottom: "25px",
+
                       }}
                       // htmlType="submit"
                       onClick={handlePrevStep}
+                      disabled={!isAllRequiredFieldsFilled()}
                     >
                       Preview
                     </Button>
@@ -1046,6 +837,7 @@ function HrPaySlip() {
           </Form>
         </div>
       </div>
+
     </div>
   );
 }

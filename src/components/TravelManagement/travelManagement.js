@@ -14,6 +14,7 @@ import {
   Input,
   DatePicker,
   Select,
+  Switch,
 } from "antd";
 import {
   MinusCircleOutlined,
@@ -22,22 +23,32 @@ import {
   CloseOutlined,
   EyeFilled,
   EditFilled,
+  UserAddOutlined,
 } from "@ant-design/icons";
 import "./travelManagement.css";
 // import { EyeFilled, EditFilled } from "@ant-design/icons";
 import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
-import { checkAlphabets } from "../../contexts/CreateContext";
+import { checkAlphabets, showNotification } from "../../contexts/CreateContext";
+import TravelContext from "../../contexts/TravelContext";
+import InvoiceContext from "../../contexts/InvoiceContext";
+import moment from "moment";
+
+const { RangePicker } = DatePicker;
 
 function TravelManagement(prop) {
   const [addTravel, setAddTravel] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState([]);
   const [form] = Form.useForm();
   const [file, setFile] = useState([]);
+  const [travelDetails, setTravelDetails] = useState([]);
   const role = prop.roleView == "emp";
   console.log(prop.roleView);
   const { TextArea } = Input;
   const { RangePicker } = DatePicker;
+
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+
   const columns = [
     {
       title: "Employee Code ",
@@ -161,32 +172,19 @@ function TravelManagement(prop) {
   const travelColumns = [
     {
       title: "Travel Title",
-      dataIndex: "travelTitle",
-      key: "travelTitle",
+      dataIndex: "travelName",
+      key: "travelName",
       width: 200,
       align: "left",
     },
     {
-      title: "Start Date",
-      dataIndex: "startDate",
-      key: "startDate",
+      title: "Duration",
+      dataIndex: "durationDate",
+      key: "durationDate",
       width: 200,
       align: "left",
     },
-    {
-      title: "End Date",
-      dataIndex: "endDate",
-      key: "Date",
-      width: 200,
-      align: "left",
-    },
-    {
-      title: "Total Amount",
-      dataIndex: "totalAmt",
-      key: "totalAmt",
-      width: 200,
-      align: "left",
-    },
+
     {
       title: "Status",
       dataIndex: "status",
@@ -274,6 +272,72 @@ function TravelManagement(prop) {
     },
   ];
 
+  const handleCarChange = (value) => {
+    console.log(`Selected: ${value}`);
+  };
+
+  const onFinish = async (values) => {
+    console.log("travelData", values);
+
+    const allTravelData = {
+      travelName: values.travelName,
+      people: values.people,
+      status: "Pending",
+      empId: currentUser.uid,
+      durationDate: moment().format("DD-MM-YYYY"),
+      travelType: values.users.map((type) => {
+        console.log(type);
+        switch (type.bookingOption) {
+          case "travel":
+            return {
+              ...type,
+              durationDate: type.travelDate.format("DD-MM-YYYY"),
+              depart: type.depart,
+              arrival: type.arrival,
+              transport: type.transport,
+            };
+          case "hotel":
+            return {
+              ...type,
+              durationDate: type.duration.map((dt) => dt.format("DD-MM-YYYY")),
+              location: type.location,
+            };
+          case "rental":
+            return {
+              ...type,
+              durationDate: type.rentalDate.map((dt) =>
+                dt.format("DD-MM-YYYY")
+              ),
+              vehicleType: type.vehicleType,
+              driver: type.driver,
+            };
+        }
+      }),
+    };
+    console.log("deatislTravel", allTravelData);
+    try {
+      await TravelContext.addTravel(allTravelData);
+      showNotification("success", "Success", "Travel Request Added");
+      setTimeout(() => {
+        setAddTravel(false);
+        form.resetFields();
+      }, 5000);
+    } catch (error) {
+      console.log("error", error);
+      showNotification("error", "Error", "Error In Invoice");
+    }
+  };
+
+  const getAlltravelData = async () => {
+    let travleData = await TravelContext.getAllTravel(currentUser.uid);
+    setTravelDetails(travleData);
+    console.log("travelDetails", travelDetails);
+  };
+
+  useEffect(() => {
+    getAlltravelData();
+  }, []);
+
   return (
     <>
       <div className="travelDiv">
@@ -295,10 +359,10 @@ function TravelManagement(prop) {
                 }}
                 autoComplete="off"
                 // form={form}
-                // onFinish={onFinish}
+                onFinish={onFinish}
               >
                 <Row gutter={[16, 16]}>
-                  <Col span={12}>
+                  <Col xs={24} xm={24} md={12} lg={12}>
                     <Form.Item
                       label="Travel Management Title"
                       name="travelName"
@@ -310,7 +374,7 @@ function TravelManagement(prop) {
                       rules={[
                         {
                           required: true,
-                          message: "Please Enter Invoice",
+                          message: "Please Enter The Title",
                         },
                         {
                           pattern: /^[a-zA-Z\s]*$/,
@@ -318,320 +382,505 @@ function TravelManagement(prop) {
                         },
                       ]}
                     >
-                      <Input />
+                      <Input maxLength={25} />
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
-                    <Form.Item label="No. of People">
-                      <Input />
+                  <Col xs={24} xm={24} md={12} lg={12}>
+                    <Form.Item
+                      label="No. of People"
+                      name="people"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Enter the no. of People",
+                        },
+                        {
+                          pattern: /^[0-9\s]*$/,
+                          message: "Please Enter numbers only",
+                        },
+                      ]}
+                    >
+                      <Input maxLength={10} />
                     </Form.Item>
                   </Col>
-                  
-                  {addTravel ? (<>
-                    <Col span={24}>
-                      <Row gutter={[16, 16]}>
-                        <Form.List name="users">
-                          {(fields, { add, remove }) => {
-                            return (
-                              <div className="Form-div" style={{ width: "100%" }}>
-                                {fields.map((field, i) => (
-                                  <>
-                                    <div
-                                      key={field.key}
-                                      style={{
-                                        // display: "flex",
-                                        // marginBottom: 8,
-                                        width:"100%"
-                                      }}
-                                      // align="start"
-                                    >
-                                      <Row gutter={[16, 16]} style={{width:"100%"}}>
-                                        <Divider
-                                          orientation="left"
-                                          orientationMargin="15px"
-                                          style={{ margin: "0px" }}
-                                        >
-                                          Expenditure No.{i + 1}
-                                        </Divider>
-                                        <Col span={24}>
-                                          <Form.Item
-                                            label="Type of Booking"
-                                            name="bookingOption"
-                                          >
-                                            <Select
-                                              defaultValue="Travel Booking"
-                                              style={{
-                                                width: "25%",
-                                              }}
-                                              onChange={(selectedOption) =>
-                                                setSelectedOption(
-                                                  selectedOption
-                                                )
-                                              }
-                                              options={[
-                                                {
-                                                  value: "Travel",
-                                                  label: "Travel Booking",
-                                                },
-                                                {
-                                                  value: "Hotel",
-                                                  label: "Hotel Booking",
-                                                },
-                                                {
-                                                  value: "Rental",
-                                                  label: "Rental Booking",
-                                                },
-                                              ]}
-                                            />
-                                          </Form.Item>
-                                        </Col>
-                                        {selectedOption === "Hotel" ? (
-                                          <>
-                                            <Col span={10}>
-                                              <Form.Item
-                                                label="Date of Payment"
-                                                // {...field}
-                                                // name={[field.name, "paymentDate"]}
-                                                // fieldKey={[field.fieldKey, "payment"]}
-                                                rules={[
-                                                  {
-                                                    required: true,
-                                                    message:
-                                                      "Missing Payment Date",
-                                                  },
-                                                ]}
-                                              >
-                                                <RangePicker
-                                                  style={{ width: "100%" }}
-                                                  format={"DD-MM-YYYY"}
-                                                />
-                                              </Form.Item>
-                                            </Col>
-                                            <Col span={12}>
-                                              <Form.Item
-                                                label="Location"
-                                                // {...field}
-                                                // name={[field.name, "amount"]}
-                                                // fieldKey={[field.fieldKey, "amount"]}
-                                                rules={[
-                                                  {
-                                                    required: true,
-                                                    message: "Missing Amount",
-                                                  },
-                                                  {
-                                                    pattern: /^[a-zA-Z,\s]*$/,
-                                                    message:
-                                                      "Please Enter Valid Title",
-                                                  },
-                                                ]}
-                                              >
-                                                <Input
-                                                  placeholder="Hotel Destination"
-                                                  maxLength={50}
-                                                  onChange={(e) => {
-                                                    // console.log(e.target.value);
-                                                    // const amt = e.target.value;
-                                                    // setAmount(amt);
-                                                    let temp = 0;
-                                                    // fields.map((field) => {
-                                                    //   let data = form.getFieldValue([
-                                                    //     "users",
-                                                    //     field.name,
-                                                    //     "amount",
-                                                    //   ]);
-                                                    //   temp = temp + Number(data);
-                                                    // });
 
-                                                    // form.setFieldsValue({
-                                                    //   totalAmt: temp,
-                                                    // });
-                                                  }}
-                                                />
-                                              </Form.Item>
-                                            </Col>
-                                          </>
-                                        ) : (
-                                          <>
-                                            <Col span={4}>
-                                              <Form.Item
-                                                label="Date of Payment"
-                                                {...field}
-                                                name={[
-                                                  field.name,
-                                                  "paymentDate",
-                                                ]}
-                                                // fieldKey={[field.fieldKey, "payment"]}
-                                                rules={[
+                  {addTravel ? (
+                    <>
+                      <Col span={24}>
+                        <Row gutter={[16, 16]}>
+                          <Form.List name="users">
+                            {(fields, { add, remove }) => {
+                              return (
+                                <div
+                                  className="Form-div"
+                                  style={{ width: "100%" }}
+                                >
+                                  {fields.map((field, i) => (
+                                    <>
+                                      <div
+                                        key={field.key}
+                                        style={{
+                                          // display: "flex",
+                                          // marginBottom: 8,
+                                          width: "100%",
+                                        }}
+                                        // align="start"
+                                      >
+                                        {console.log(fields, field)}
+                                        <Row
+                                          gutter={[16, 16]}
+                                          style={{ width: "100%" }}
+                                        >
+                                          <Divider
+                                            orientation="left"
+                                            orientationMargin="15px"
+                                            style={{ margin: "0px" }}
+                                          >
+                                            Expenditure No.{i + 1}
+                                          </Divider>
+                                          <Col span={24}>
+                                            <Form.Item
+                                              label="Type of Booking"
+                                              name={[i, "bookingOption"]}
+                                              initialValue={selectedOption[i]}
+                                            >
+                                              <Select
+                                                style={{
+                                                  width: "25%",
+                                                }}
+                                                onChange={(e) => {
+                                                  let temp = [
+                                                    ...selectedOption,
+                                                  ];
+                                                  temp[i] = e;
+                                                  setSelectedOption(temp);
+                                                }}
+                                                options={[
                                                   {
-                                                    required: true,
-                                                    message:
-                                                      "Missing Payment Date",
+                                                    value: "travel",
+                                                    label: "Travel Booking",
+                                                  },
+                                                  {
+                                                    value: "hotel",
+                                                    label: "Hotel Booking",
+                                                  },
+                                                  {
+                                                    value: "rental",
+                                                    label: "Rental Booking",
                                                   },
                                                 ]}
+                                              />
+                                            </Form.Item>
+                                          </Col>
+                                          {selectedOption[i] === "hotel" ? (
+                                            <>
+                                              <Col
+                                                xs={24}
+                                                xm={24}
+                                                md={11}
+                                                lg={11}
                                               >
-                                                <DatePicker
-                                                  format={"DD-MM-YYYY"}
-                                                />
-                                              </Form.Item>
-                                            </Col>
-                                            <Col span={6}>
-                                              <Form.Item
-                                                label="From"
-                                                {...field}
-                                                name={[field.name, "depart"]}
-                                                // fieldKey={[field.fieldKey, "amount"]}
-                                                // rules={[
-                                                //   {
-                                                //     required: true,
-                                                //     message: "Missing Amount",
-                                                //   },
-                                                //   {
-                                                //     pattern: /^[0-9\s]*$/,
-                                                //     message:
-                                                //       "Please Enter Valid Title",
-                                                //   },
-                                                // ]}
-                                              >
-                                                <Input
-                                                  placeholder="Booking From"
-                                                  maxLength={10}
-                                                />
-                                              </Form.Item>
-                                            </Col>
-                                            <Col span={6}>
-                                              <Form.Item
-                                                label="To"
-                                                {...field}
-                                                name={[
-                                                  field.name,
-                                                  "destination",
-                                                ]}
-                                                // fieldKey={[
-                                                //   field.fieldKey,
-                                                //   "description",
-                                                // ]}
-                                                // rules={[
-                                                //   {
-                                                //     required: true,
-                                                //     message: "Missing Description",
-                                                //   },
-                                                // ]}
-                                              >
-                                                <Input placeholder="Traveling to" />
-                                              </Form.Item>
-                                            </Col>
-                                            <Col span={6}>
-                                              <Form.Item
-                                                label="Transport Type"
-                                                {...field}
-                                                name={[field.name, "transport"]}
-                                                // fieldKey={[field.fieldKey, "upload"]}
-                                                // rules={[
-                                                //   {
-                                                //     required: true,
-                                                //     message: "Missing Images",
-                                                //   },
-                                                // ]}
-                                              >
-                                                <Select
-                                                  defaultValue="Flight"
-                                                  style={{
-                                                    width: "100%",
-                                                  }}
-                                                  // onChange={handleChange}
-                                                  options={[
+                                                <Form.Item
+                                                  label="Duration"
+                                                  // {...field}
+                                                  name={[
+                                                    field.name,
+                                                    "duration",
+                                                  ]}
+                                                  // fieldKey={[field.fieldKey, "payment"]}
+                                                  rules={[
                                                     {
-                                                      value: "Flight",
-                                                      label: "Flight",
-                                                    },
-                                                    {
-                                                      value: "Train",
-                                                      label: "Train",
-                                                    },
-                                                    {
-                                                      value: "Bus",
-                                                      label: "Bus",
+                                                      required: true,
+                                                      message:
+                                                        "Missing Payment Date",
                                                     },
                                                   ]}
-                                                />
-                                              </Form.Item>
-                                            </Col>
-                                          </>
-                                        )}
+                                                >
+                                                  <RangePicker
+                                                    style={{ width: "100%" }}
+                                                    format={"DD-MM-YYYY"}
+                                                  />
+                                                </Form.Item>
+                                              </Col>
+                                              <Col
+                                                xs={22}
+                                                xm={22}
+                                                md={11}
+                                                lg={11}
+                                              >
+                                                <Form.Item
+                                                  label="Location"
+                                                  // {...field}
+                                                  name={[
+                                                    field.name,
+                                                    "location",
+                                                  ]}
+                                                  // fieldKey={[field.fieldKey, "amount"]}
+                                                  rules={[
+                                                    {
+                                                      required: true,
+                                                      message:
+                                                        "Please Enter the Hotel Address",
+                                                    },
+                                                    {
+                                                      pattern:
+                                                        /^[a-zA-Z0-9-,\s]*$/,
+                                                      // message:
+                                                      //   "Please Enter Valid Title",
+                                                    },
+                                                  ]}
+                                                >
+                                                  <Input
+                                                    placeholder="Hotel Destination"
+                                                    maxLength={50}
+                                                    onChange={(e) => {
+                                                      // console.log(e.target.value);
+                                                      // const amt = e.target.value;
+                                                      // setAmount(amt);
+                                                      let temp = 0;
+                                                      // fields.map((field) => {
+                                                      //   let data = form.getFieldValue([
+                                                      //     "users",
+                                                      //     field.name,
+                                                      //     "amount",
+                                                      //   ]);
+                                                      //   temp = temp + Number(data);
+                                                      // });
 
-                                        <Col span={2} className="actionButton">
-                                          <MinusCircleOutlined
-                                            onClick={() => {
-                                              remove(field.name);
-                                              let temp = [...file];
-                                              // delete temp[i];
-                                              temp.splice(i, 1);
-                                              console.log(temp);
-                                              setFile(temp);
-                                            }}
-                                          />
-                                        </Col>
-                                      </Row>
-                                    </div>
-                                  </>
-                                ))}
-                                <Col span={24}>
-                                  <Button
-                                    className="addFieldTravel"
-                                    onClick={() => {
-                                      add();
-                                    }}
-                                    block
-                                  >
-                                    <PlusOutlined /> Add field
-                                  </Button>
-                                </Col>
-                              </div>
-                            );
-                          }}
-                        </Form.List>
-                      </Row>
+                                                      // form.setFieldsValue({
+                                                      //   totalAmt: temp,
+                                                      // });
+                                                    }}
+                                                  />
+                                                </Form.Item>
+                                              </Col>
+                                            </>
+                                          ) : selectedOption[i] === "travel" ? (
+                                            <>
+                                              <Col
+                                                xs={24}
+                                                xm={24}
+                                                md={4}
+                                                lg={4}
+                                              >
+                                                <Form.Item
+                                                  label="Date of Travel"
+                                                  {...field}
+                                                  name={[
+                                                    field.name,
+                                                    "travelDate",
+                                                  ]}
+                                                  // fieldKey={[field.fieldKey, "payment"]}
+                                                  className="travelDatePicker"
+                                                  rules={[
+                                                    {
+                                                      required: true,
+                                                      message:
+                                                        "Missing Payment Date",
+                                                    },
+                                                  ]}
+                                                >
+                                                  <DatePicker
+                                                    format={"DD-MM-YYYY"}
+                                                  />
+                                                </Form.Item>
+                                              </Col>
+                                              <Col
+                                                xs={24}
+                                                xm={24}
+                                                md={6}
+                                                lg={6}
+                                              >
+                                                <Form.Item
+                                                  label="From"
+                                                  {...field}
+                                                  name={[field.name, "depart"]}
+                                                  rules={[
+                                                    {
+                                                      required: true,
+                                                      message:
+                                                        "Please Enter the name of place your journey starts from",
+                                                    },
+                                                    {
+                                                      pattern: /^[a-zA-Z\s]*$/,
+                                                      message:
+                                                        "Please Enter Valid Title",
+                                                    },
+                                                  ]}
+                                                >
+                                                  <Input
+                                                    placeholder="Booking From"
+                                                    maxLength={25}
+                                                  />
+                                                </Form.Item>
+                                              </Col>
+                                              <Col
+                                                xs={24}
+                                                xm={24}
+                                                md={6}
+                                                lg={6}
+                                              >
+                                                <Form.Item
+                                                  label="To"
+                                                  {...field}
+                                                  name={[field.name, "arrival"]}
+                                                  // fieldKey={[
+                                                  //   field.fieldKey,
+                                                  //   "description",
+                                                  // ]}
+                                                  // rules={[
+                                                  //   {
+                                                  //     required: true,
+                                                  //     message: "Missing Description",
+                                                  //   },
+                                                  // ]}
+                                                  rules={[
+                                                    {
+                                                      required: true,
+                                                      message:
+                                                        "Please Enter the name of the place your Ends to",
+                                                    },
+                                                    {
+                                                      pattern: /^[a-zA-Z\s]*$/,
+                                                      message:
+                                                        "Please Enter Valid Title",
+                                                    },
+                                                  ]}
+                                                >
+                                                  <Input
+                                                    placeholder="Traveling to"
+                                                    maxLength={25}
+                                                  />
+                                                </Form.Item>
+                                              </Col>
+                                              <Col
+                                                xs={22}
+                                                xm={22}
+                                                md={6}
+                                                lg={6}
+                                              >
+                                                <Form.Item
+                                                  initialValue={"flight"}
+                                                  label="Transport Type"
+                                                  {...field}
+                                                  name={[
+                                                    field.name,
+                                                    "transport",
+                                                  ]}
+                                                  // fieldKey={[field.fieldKey, "upload"]}
+                                                  rules={[
+                                                    {
+                                                      required: true,
+                                                      // message: "Please select the mode of Transportation",
+                                                    },
+                                                  ]}
+                                                >
+                                                  <Select
+                                                    defaultValue="Flight"
+                                                    style={{
+                                                      width: "100%",
+                                                    }}
+                                                    // onChange={handleChange}
+                                                    options={[
+                                                      {
+                                                        value: "flight",
+                                                        label: "Flight",
+                                                      },
+                                                      {
+                                                        value: "train",
+                                                        label: "Train",
+                                                      },
+                                                      {
+                                                        value: "bus",
+                                                        label: "Bus",
+                                                      },
+                                                    ]}
+                                                  />
+                                                </Form.Item>
+                                              </Col>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <Col
+                                                xs={24}
+                                                xm={24}
+                                                md={10}
+                                                lg={10}
+                                              >
+                                                <Form.Item
+                                                  label="Date"
+                                                  // {...field}
+                                                  name={[
+                                                    field.name,
+                                                    "rentalDate",
+                                                  ]}
+                                                  // fieldKey={[field.fieldKey, "payment"]}
+                                                  rules={[
+                                                    {
+                                                      required: true,
+                                                      message:
+                                                        "Missing Payment Date",
+                                                    },
+                                                  ]}
+                                                >
+                                                  <RangePicker
+                                                    style={{ width: "100%" }}
+                                                    format={"DD-MM-YYYY"}
+                                                  />
+                                                </Form.Item>
+                                              </Col>
+                                              <Col
+                                                xs={24}
+                                                xm={24}
+                                                md={9}
+                                                lg={9}
+                                              >
+                                                <Form.Item
+                                                  label="Type of Vehicle"
+                                                  // {...field}
+                                                  name={[
+                                                    field.name,
+                                                    "vehicleType",
+                                                  ]}
+                                                  // fieldKey={[field.fieldKey, "amount"]}
+                                                  rules={[
+                                                    {
+                                                      required: true,
+                                                      message: "Please select the Vehicle Type",
+                                                    },
+                                                  ]}
+                                                >
+                                                  <Select
+                                                    placeholder="Select Vehicle"
+                                                    onChange={handleCarChange}
+                                                    options={[
+                                                      {
+                                                        value: "sedan",
+                                                        label: "SEDAN",
+                                                      },
+                                                      {
+                                                        value: "hatchback",
+                                                        label: "HATCH BACK",
+                                                      },
+                                                      {
+                                                        value: "suv",
+                                                        label: "SUV",
+                                                      },
+                                                      {
+                                                        value: "muv",
+                                                        label: "MUV",
+                                                      },
+                                                      {
+                                                        value: "luxury",
+                                                        label: "LUXURY",
+                                                      },
+                                                    ]}
+                                                  />
+                                                </Form.Item>
+                                              </Col>
+                                              <Col
+                                                xs={22}
+                                                xm={22}
+                                                md={3}
+                                                lg={3}
+                                              >
+                                                <Form.Item
+                                                  initialValue={true}
+                                                  label="Driver Required"
+                                                  name={[field.name, "driver"]}
+                                                >
+                                                  <Switch
+                                                    checkedChildren="Yes"
+                                                    unCheckedChildren="No"
+                                                    defaultChecked
+                                                    onChange={(e) =>
+                                                      console.log("test", e)
+                                                    }
+                                                  />
+                                                </Form.Item>
+                                              </Col>
+                                            </>
+                                          )}
 
-                      <Col span={24} className="buttonCol">
-                        <Space>
-                          <Button
-                            // style={resetButton} onClick={onReset}
-                            style={{
-                              width: "100px",
-                              height: "32px",
-                              fontSize: "15px",
-                              borderRadius: "5px",
+                                          <Col
+                                            span={2}
+                                            className="actionButton"
+                                          >
+                                            <MinusCircleOutlined
+                                              onClick={() => {
+                                                remove(field.name);
+                                                let temp = [...file];
+                                                // delete temp[i];
+                                                temp.splice(i, 1);
+                                                console.log(temp);
+                                                setFile(temp);
+                                              }}
+                                            />
+                                          </Col>
+                                        </Row>
+                                      </div>
+                                    </>
+                                  ))}
+                                  <Col span={24}>
+                                    <Button
+                                      className="addFieldTravel"
+                                      onClick={() => {
+                                        add();
+                                        let temp = [...selectedOption];
+                                        temp.push("travel");
+                                        setSelectedOption(temp);
+                                      }}
+                                      block
+                                    >
+                                      <PlusOutlined /> Add field
+                                    </Button>
+                                  </Col>
+                                </div>
+                              );
                             }}
-                            onClick={() => {
-                              setAddTravel(false);
-                              form.resetFields();
-                              setFile([]);
-                            }}
-                          >
-                            <CloseOutlined />
-                            Cancel
-                          </Button>
+                          </Form.List>
+                        </Row>
 
-                          <Button
-                            //   style={submitButton}
-                            htmlType="submit"
-                            // onClick={() => form.submit(handleSubmit3)}
-                            style={{
-                              width: "100px",
-                              height: "32px",
-                              fontSize: "15px",
-                              color: "#ffffff",
-                              backgroundColor: "#35527F",
-                              borderRadius: "5px",
-                            }}
-                            type="primary"
-                          >
-                            <CheckOutlined />
-                            Submit
-                          </Button>
-                        </Space>
+                        <Col span={24} className="buttonCol">
+                          <Space>
+                            <Button
+                              // style={resetButton} onClick={onReset}
+                              style={{
+                                width: "100px",
+                                height: "32px",
+                                fontSize: "15px",
+                                borderRadius: "5px",
+                              }}
+                              onClick={() => {
+                                setAddTravel(false);
+                                form.resetFields();
+                                setFile([]);
+                              }}
+                            >
+                              <CloseOutlined />
+                              Cancel
+                            </Button>
+
+                            <Button
+                              //   style={submitButton}
+                              htmlType="submit"
+                              // onClick={() => form.submit(handleSubmit3)}
+                              style={{
+                                width: "100px",
+                                height: "32px",
+                                fontSize: "15px",
+                                color: "#ffffff",
+                                backgroundColor: "#35527F",
+                                borderRadius: "5px",
+                              }}
+                              type="primary"
+                            >
+                              <CheckOutlined />
+                              Submit
+                            </Button>
+                          </Space>
+                        </Col>
                       </Col>
-                    </Col>
                     </>
                   ) : (
                     <Button
@@ -644,11 +893,14 @@ function TravelManagement(prop) {
                       <PlusOutlined style={{ fontSize: "16px" }} /> Add Travel
                     </Button>
                   )}
-                  
                 </Row>
               </Form>
             </Card>
-            <Table className="travelTable" columns={travelColumns} />
+            <Table
+              className="travelTable"
+              columns={travelColumns}
+              dataSource={travelDetails}
+            />
             <Table className="travelTable" columns={travelColumns} />
           </>
         ) : (

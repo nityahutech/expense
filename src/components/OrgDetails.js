@@ -62,7 +62,6 @@ const OrgDetails = (props) => {
     <div style={{ margin: "13px", background: "#fff" }}>
       <div
         style={{
-          // paddingTop: "13px",
           fontWeight: "600",
           fontSize: "14px",
           lineHeight: "32px",
@@ -125,11 +124,6 @@ const OrgDetails = (props) => {
             <Form.Item
               name="regCompName"
               label="Organization Name"
-              // onKeyPress={(event) => {
-              //   if (checkAlphabets(event)) {
-              //     event.preventDefault();
-              //   }
-              // }}
               rules={[
                 {
                   required: true,
@@ -167,10 +161,6 @@ const OrgDetails = (props) => {
                 }
               }}
               rules={[
-                {
-                  required: true,
-                  message: "Please Enter CIN Number",
-                },
                 {
                   pattern: /^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/,
                   message: "Please Enter Valid Number",
@@ -268,7 +258,7 @@ const OrgDetails = (props) => {
                   message: "Please Enter Valid Number",
                 },
               ]}
-              initialValue={data?.phone ? data.phone : "-"}
+              initialValue={data?.phone}
             >
               <Input
                 addonBefore={(<PrefixSelector name={"prefix"} initial={data.prefix} />)}

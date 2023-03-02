@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "../style/Settingpage.css";
 import "antd/dist/antd.css";
-import { Card, Col, Row, Form, Input, notification, Divider } from "antd";
+import { Card, Col, Row, Form, Input } from "antd";
 import { Button } from "antd";
 import { Tabs } from "antd";
 import { useAuth } from "../contexts/AuthContext";

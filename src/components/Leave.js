@@ -10,6 +10,7 @@ import {
   Tabs,
   DatePicker,
   Spin,
+  AutoComplete,
 } from "antd";
 import { Button } from "antd";
 import { Form, Input } from "antd";
@@ -28,7 +29,7 @@ import ApprovalConfig from "./ApprovalConfig";
 import LeaveType from "./LeaveType";
 import "../style/leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
-import { capitalize, showNotification } from "../contexts/CreateContext";
+import { capitalize, getUsers, showNotification } from "../contexts/CreateContext";
 
 const Leave = (props) => {
   const { RangePicker } = DatePicker;
@@ -64,6 +65,9 @@ const Leave = (props) => {
   const [startSlot, setStartSlot] = useState("Full Day");
   const [endSlot, setEndSlot] = useState("Full Day");
   const [validleaverequest, setValidleaverequest] = useState("false");
+  const [options, setOptions] = useState([]);
+  const [allEmpName, setAllEmpName] = useState([]);
+  const [empApply, setEmpApply] = useState(null);
 
   const [filterCriteria, setFilterCriteria] = useState({
     search: "",
@@ -72,14 +76,8 @@ const Leave = (props) => {
   });
 
   const getHoliday = async () => {
-    const allData = await CompanyHolidayContext.getAllCompanyHoliday();
-    let d = allData.docs.map((doc) => {
-      return {
-        ...doc.data(),
-        id: doc.id,
-      };
-    });
-    setCompanyholiday(d);
+    let data = await CompanyHolidayContext.getAllCompanyHoliday();
+    setCompanyholiday(data);
   };
 
   const getListData = (value) => {
@@ -185,6 +183,7 @@ const Leave = (props) => {
       showNotification("error", "Error", "Unable to process leave request!");
     }
   };
+
   const onFinish = (values) => {
     if (values.leaveNature === "Optional Leave") {
       let optionalHolidays = companyholiday.filter((item) => {
@@ -252,6 +251,35 @@ const Leave = (props) => {
       showNotification("error", "Error", "Unable to process leave request!");
     }
   };
+  
+  useEffect(() => {
+    
+  }, [empApply])
+
+  useEffect(() => {
+    getAllUser()
+  }, [])
+
+  const onSearch = (searchText) => {
+    if (searchText == "") {
+      setEmpApply(null)
+      return;
+    }
+    let matchingName = allEmpName.filter((ex) => { return ex.value.toLowerCase().includes(searchText.toLowerCase()) })
+    setOptions(
+      !searchText ? [] : matchingName,
+    );
+  };
+
+  const getAllUser = async () => {
+    const allData = await getUsers();
+    let allUsers = allData.docs.map((doc, i) => {
+      return {
+        value: doc.data().fname + ' ' + doc.data().lname,
+      };
+    });
+    setAllEmpName(allUsers);
+  }
 
   const getConfigurations = async (load) => {
     let data = await ConfigureContext.getConfigurations("leaveType");
@@ -967,6 +995,9 @@ const Leave = (props) => {
     }
   };
 
+  // console.log(dateSelected);
+  // console.log(empApply);
+
   return (
     <>
       {isAdmin ? (
@@ -1020,7 +1051,7 @@ const Leave = (props) => {
                       marginLeft: "5px",
                     }}
                   >
-                    <Col xs={24} sm={22} md={7}>
+                    <Col xs={24} sm={22} md={6}>
                       <Input
                         className="searchBar"
                         placeholder="Search"
@@ -1029,13 +1060,14 @@ const Leave = (props) => {
                         style={{ width: "100%" }}
                       />
                     </Col>
-                    <Col xs={24} sm={22} md={10}>
+                    <Col xs={24} sm={22} md={7}>
                       <RangePicker
+                        style={{width: "100%"}}
                         format={dateFormat}
                         onChange={onChange}
                       />
                     </Col>
-                    <Col xs={24} sm={22} md={7}>
+                    <Col xs={24} sm={22} md={6}>
                       <Form.Item
                         style={{ marginBottom: "0px" }}
                       >
@@ -1064,24 +1096,25 @@ const Leave = (props) => {
                         />
                       </Form.Item>
                     </Col>
-                    {/* <Col xs={24} sm={22} md={4}>
+                    <Col xs={24} sm={22} md={5} style={{display: "flex", justifyContent:"center"}}>
                   <Button
                     className="button-applyleave"
                     style={{
                       borderRadius: "15px",
-                      width: "105px",
+                      width: "120px",
                       marginTop: "0px",
                       backgroundColor: "#1963a6",
-                      borderColor: "#1963a6"
+                      borderColor: "#1963a6",
                     }}
                     type="primary"
                     onClick={() => {
+                      // console.log(true)
                       setAdminLeave(true);
                     }}
                   >
                     Apply Leave
                   </Button>
-                </Col> */}
+                </Col>
                   </Row>
                 </Col>
 
@@ -1110,7 +1143,372 @@ const Leave = (props) => {
                   </div>
                 </Col>
               </Row>
+              
+              <Modal
+              className="viewAppraisal"
+              bodyStyle={{
+                overflowY: "auto",
+                maxHeight: "calc(100vh - 200px)",
+              }}
+              footer={null}
+              title="Apply Employee Leave"
+              centered
+              open={adminLeave}
+              width={450}
+              closeIcon={
+                <div
+                  onClick={() => {
+                    setAdminLeave(false);
+                    form.resetFields();
+                    setDateSelected([]);
+                    setDateStart(null);
+                    setStartSlot(null);
+                    setDateEnd(null);
+                    setEndSlot(null);
+                    setValidleaverequest(false);
+                  }}
+                  style={{ color: "#ffffff" }}
+                >
+                  X
+                </div>
+              }
+            >
+              <Row
+                className="apply-leave"
+                style={{
+                  marginTop: "10px",
+                }}
+              >
+                <Col
+                  xl={24}
+                  lg={24}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    background: "flex",
+                    padding: "10px",
+                  }}
+                >
+                  <Form
+                    {...Leave}
+                    labelCol={{
+                      span: 8,
+                    }}
+                    wrapperCol={{
+                      span: 16,
+                    }}
+                    form={form}
+                    onFinish={onFinish}
+                  >
+                    <Row
+                      gutter={[16, 0]}
+                      className="row-one-div"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-around",
+                      }}
+                    >
+                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                        <Form.Item
+                          required={false}
+                          labelAlign="left"
+                          style={{
+                            marginBottom: "20px",
+                            color: "white",
+                            minWidth: "70px",
+                          }}
+                          label={
+                            <label
+                              style={{ color: "black", fontWeight: "400" }}
+                            >
+                              Employee Name<span style={{ color: "red" }}> *</span>
+                            </label>
+                          }
+                          name="name"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please Enter Name",
+                            },
+                          ]}
+                        >
+                          <AutoComplete 
+                            // bordered={false}
+                            allowClear
+                            options={options}
+                            onSearch={onSearch}
+                            onSelect={(e) => {
+                              onLeaveDateChange();
+                              setEmpApply(e)
+                            }}
+                          />
+                          {/* <DatePicker
+                            style={{ width: "100%", backgroundColor: "#ffffff" }}
+                            format="Do MMM, YYYY"
+                            onChange={(e) => {
+                              setDateStart(e);
+                              onLeaveDateChange();
+                              if (e == null) {
+                                setDateEnd(e);
+                                setEndSlot("Full Day");
+                                setValidleaverequest(false)
+                              }
+                            }}
+                            disabledDate={disabledDate}
+                          /> */}
+                        </Form.Item>
+                      </Col>
+                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                        <Form.Item
+                          required={false}
+                          labelAlign="left"
+                          style={{
+                            marginBottom: "20px",
+                            color: "white",
+                            minWidth: "70px",
+                          }}
+                          label={
+                            <label
+                              style={{ color: "black", fontWeight: "400" }}
+                            >
+                              Start Date<span style={{ color: "red" }}> *</span>
+                            </label>
+                          }
+                          name="dateStart"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please Select Date",
+                            },
+                          ]}
+                        >
+                          <DatePicker
+                            style={{ width: "100%", backgroundColor: "#ffffff" }}
+                            format="Do MMM, YYYY"
+                            onChange={(e) => {
+                              setDateStart(e);
+                              onLeaveDateChange();
+                              if (e == null) {
+                                setDateEnd(e);
+                                setEndSlot("Full Day");
+                                setValidleaverequest(false)
+                              }
+                            }}
+                            disabledDate={disabledDate}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                        <Form.Item
+                          labelAlign="left"
+                          name="slotStart"
+                          style={{ marginBottom: "25px" }}
+                          className="div-slot"
+                          label={
+                            <label
+                              style={{ color: "black", fontWeight: "400" }}
+                            >
+                              Start Slot<span style={{ color: "red" }}> *</span>
+                            </label>
+                          }
+                          initialValue={"Full Day"}
+                        >
+                          <Select
+                            style={{ width: "100%" }}
+                            onChange={(e) => {
+                              setStartSlot(e);
+                              onLeaveDateChange();
+                            }}
+                          >
+                            <Option value="Full Day">Full Day</Option>
+                            <Option value="Half Day">Half Day</Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
 
+                    <Row
+                      gutter={[16, 0]}
+                      className="row-one-div"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-evenly",
+                      }}
+                    >
+                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                        <Form.Item
+                          required={false}
+                          labelAlign="left"
+                          style={{ marginBottom: "20px", color: "white" }}
+                          label={
+                            <label
+                              style={{ color: "black", fontWeight: "400" }}
+                            >
+                              End Date<span style={{ color: "red" }}> *</span>
+                            </label>
+                          }
+                          name="dateEnd"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please Select Date",
+                            },
+                          ]}
+                        >
+                          <DatePicker
+                            style={{ width: "100%" }}
+                            format="Do MMM, YYYY"
+                            onChange={(e) => {
+                              setDateEnd(e);
+                              onLeaveDateChange(e);
+                            }}
+                            disabledDate={disabledDate}
+                            disabled={disableEnd()}
+                          />
+                        </Form.Item>
+                      </Col>
+
+                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                        <Form.Item
+                          labelAlign="left"
+                          name="slotEnd"
+                          style={{ marginBottom: "25px" }}
+                          className="div-slot"
+                          label={
+                            <label
+                              style={{ color: "black", fontWeight: "400" }}
+                            >
+                              End Slot<span style={{ color: "red" }}> *</span>
+                            </label>
+                          }
+                          initialValue={"Full Day"}
+                        >
+                          <Select
+                            style={{ width: "100%" }}
+                            disabled={disableEndSlot()}
+                            onChange={(e) => {
+                              setEndSlot(e);
+                              onLeaveDateChange();
+                            }}
+                          >
+                            <Option value="Full Day">Full Day</Option>
+                            <Option value="Half Day">Half Day</Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+
+                    <Form.Item
+                      required={false}
+                      labelAlign="left"
+                      name="leaveNature"
+                      style={{ marginBottom: "20px" }}
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          Nature of Leave
+                          <span style={{ color: "red" }}> *</span>
+                        </label>
+                      }
+                      rules={[
+                        {
+                          required: true,
+                          message: "Select Nature of Leave",
+                        },
+                      ]}
+                    >
+                      <Select
+                        placeholder="Select an option"
+                        allowClear
+                        disabled={disableNature()}
+                        onChange={onLeaveNatureChange}
+                      >
+                        {leavedays != null
+                          ? Object.keys(leavedays).map((u) => (
+                            <Option
+                              disabled={disabledLeaveNature(u)}
+                              value={u}
+                            >
+                              {u}
+                            </Option>
+                          ))
+                          : null}
+                        <Option value={"Loss of Pay"}>Loss of Pay</Option>
+                      </Select>
+                    </Form.Item>
+
+                    <Form.Item
+                      required={false}
+                      labelAlign="left"
+                      name="reason"
+                      style={{ marginBottom: "20px" }}
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          Reason<span style={{ color: "red" }}> *</span>{" "}
+                        </label>
+                      }
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Enter a Reason",
+                        },
+                      ]}
+                    >
+                      <Input.TextArea
+                        maxLength={60}
+                        onChange={(e) => {
+                        const str = e.target.value;
+                        const caps = str.split(". ").map(capitalize).join(". ");
+                          form.setFieldsValue({ reason: caps });
+                        }}
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      labelAlign="left"
+                      name="approver"
+                      style={{ marginBottom: "20px" }}
+                      label={
+                        <label style={{ color: "black", fontWeight: "400" }}>
+                          Approver<span style={{ color: "red" }}> *</span>
+                        </label>
+                      }
+                      initialValue={repManager}
+                    >
+                      <Input disabled />
+                    </Form.Item>
+
+                    <Form.Item
+                      style={{ paddingTop: "px" }}
+                      wrapperCol={{
+                        offset: 8,
+                        span: 24,
+                      }}
+                    >
+                      <Button type="primary" htmlType="submit">
+                        Submit
+                      </Button>
+                      <Button
+                        htmlType="button"
+                        type="default"
+                        style={{ marginLeft: "10px" }}
+                        onClick={() => {
+                          form.resetFields();
+                          setDateSelected([]);
+                          setDateStart(null);
+                          setStartSlot(null);
+                          setDateEnd(null);
+                          setEndSlot(null);
+                          setValidleaverequest(false);
+                        }}
+                      >
+                        Reset
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </Col>
+              </Row>
+            </Modal>
              
             </Tabs.TabPane>
             <Tabs.TabPane tab="Holidays" key="2">

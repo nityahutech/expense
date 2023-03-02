@@ -365,10 +365,6 @@ const Statutory = () => {
                             name="cinNumber"
                             rules={[
                               {
-                                required: true,
-                                message: "Please enter CIN",
-                              },
-                              {
                                 pattern: /^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/,
                                 message: "Please Enter Valid Number",
                               },

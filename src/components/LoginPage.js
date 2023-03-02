@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "../style/LoginPage.css"
 import loginBg from "../images/login-img.png"
 import { LoadingOutlined } from "@ant-design/icons";
-import logo from "../images/logooo.svg"
+import logo from "../images/LoginLogo.svg"
 
 function LoginPage() {
   const [loginEmail, setLoginEmail] = useState("");
@@ -35,7 +35,6 @@ function LoginPage() {
     } catch(err) {
       setLoading("Login");
       let message = err.message;
-      console.log(err.code);
       switch (err.code) {
         case "auth/wrong-password": message = "Incorrect Password!"
           break;
@@ -62,7 +61,8 @@ function LoginPage() {
       await resetPassword(loginEmail);
       setError("Reset Email Sent");
       setLoading("Login");
-    } catch {
+    } catch(err) {
+      console.log(err)
       setError("Reset Email Failed To Send!");
       setTimeout(() => {
         setError("");

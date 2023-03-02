@@ -147,53 +147,58 @@ function AttendanceLog(props) {
     },
   ];
   useEffect(() => {
+    console.log("1");
     getAttendanceData();
     getHolidayList();
     getDateOfJoining();
   }, [isAdmin]);
+
+
+
   useEffect(() => {
+    console.log("2");
     form.resetFields();
+    getData();
+  }, [activetab, isAdmin]);
+
+  const getData = async () => {
     let temp = {};
     if (holidays.length == 0) {
-      getHolidayList().then((res) => {
-        temp.holidays = res;
-      });
-      getAttendanceData().then((res) => {
-        temp.selectedDays = res;
-      });
+      let [holTemp, selTemp] = await Promise.all([getHolidayList(), getAttendanceData()]);
+      temp = {
+        holidays: holTemp,
+        selectedDays: selTemp
+      }
     }
-    const timer = setTimeout(() => {
-      if (!isAdmin) {
-        if (activetab == "1") {
+      console.log(temp);
+      if (activetab == "1") {
+        if (!isAdmin) {
           setSelectemp({ id: currentUser.uid });
           getEmpDetails(
             currentUser.uid,
             [moment().subtract(30, "days"), moment()],
             temp
           );
-        }
-      } else {
-        if (activetab == "1") {
+        } else {
           allEmpDetails(temp);
         }
       }
-    }, 800);
-    return () => clearTimeout(timer);
-  }, [activetab, isAdmin]);
+  }
 
   useEffect(() => {
+    console.log("3");
     if (configurations.inputclock) {
       AttendanceContext.fixNullClock(endTime+":00", isAdmin ? false : currentUser)
     }
   }, [configurations.inputclock])
 
   const getHolidayList = async () => {
-    let data = await CompanyHolidayContext.getAllCompanyHoliday("compId001");
-    let req = data.docs.map((doc) => {
-      if (!doc.data().optionalHoliday) {
-        return doc.data().date;
+    let data = await CompanyHolidayContext.getAllCompanyHoliday();
+    let req = [];
+    data.forEach((doc) => {
+      if (!doc.optionalHoliday) {
+        req.push(doc.date);
       }
-      return null;
     });
     setHolidays(req);
     return req;
@@ -263,19 +268,23 @@ function AttendanceLog(props) {
     );
   }
   async function getEmpDetails(id, date, temp) {
+    console.log(id, date, temp);
     setLoading(true);
     let data,
       dayTemp = temp?.selectedDays || selectedDay,
       holTemp = temp?.holidays || holidays;
+      console.log(data, dayTemp, holTemp, selectedDay, holidays);
     AttendanceContext.getAllAttendance(id, date).then((userdata) => {
       let dayoff = Object.keys(dayTemp).filter(
         (day) => dayTemp[`${day}`] == "dayoff"
       );
+      console.log(userdata, dayoff);
       AttendanceContext.updateLeaves(
         userdata,
-        holTemp.includes(moment().format("Do MMM, YYYY")),
-        dayoff.includes(moment().format("dddd"))
+        holTemp,
+        dayoff
       ).then((final) => {
+        console.log(final);
         setHolidayStatus(final);
         data = final;
         setEmpMonthly(final);
@@ -293,8 +302,10 @@ function AttendanceLog(props) {
     let date = selDate || moment();
     let dayTemp = temp?.selectedDays || selectedDay,
       holTemp = temp?.holidays || holidays;
+    console.log(date, temp, dayTemp, holTemp, selectedDay, holidays);
     AttendanceContext.getAllUsers(date.format("DD-MM-YYYY")).then(
       (userdata) => {
+        console.log(userdata);
         let dayoff = Object.keys(dayTemp).filter(
           (day) => dayTemp[`${day}`] == "dayoff"
         );
@@ -303,7 +314,7 @@ function AttendanceLog(props) {
           holTemp.includes(date.format("Do MMM, YYYY")),
           dayoff.includes(date.format("dddd"))
         ).then((final) => {
-          // setHolidayStatus(final)
+          console.log(final);
           setallEmp(final);
           setFilteredEmp(final);
           setEmpMonthly(final);

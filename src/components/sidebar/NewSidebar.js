@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Divider, Layout, Menu } from "antd";
+import { NavLink, Link } from "react-router-dom";
 import expenseIcon from "../../images/Expense.png";
 import dot from "../../images/dot.png";
 import empIcon from "../../images/Employees.png";
 import userIcon from "../../images/user.png";
 import assetMag from "../../images/AssetManageLogo.svg";
-import logo from "../../images/logo.svg";
+import logo from "../../images/SidebarLogo.svg";
 import appraisalIcon from "../../images/appraisal.png";
 import Organization from "../../images/Organization.png";
 import CompanyProfile from "../../images/Companyprofile.png";
@@ -13,9 +14,8 @@ import SettingIcon from "../../images/gear.png";
 import homePage from "../../images/homeIcon.png";
 import LeaveIcon from "../../images/smallLeaveLogo.png";
 import SmallAttd from "../../images/attendanceSB.png";
-import "./newSlidebar.css";
 import travel from "../../images/map.svg"
-import { NavLink, Link } from "react-router-dom";
+import "./newSlidebar.css";
 
 const { Sider } = Layout;
 
@@ -243,10 +243,6 @@ const NewSidebar = (props) => {
                       <p className="sideFont leaveletter">Leave</p>
                       <NavLink to="/Leave" />
                     </Menu.Item>
-                  </>
-                ) : null}
-                {role != "super" ? (
-                  <>
                     <Menu.SubMenu
                       className="arrow-div"
                       style={{
@@ -334,16 +330,15 @@ const NewSidebar = (props) => {
                     <NavLink to="/Expense/InvoiceReimbursement" />
                   </Menu.Item>
                 </Menu.SubMenu>
-                  </>
-                ) : null}
-
-                {role != "super" ? (<Menu.Item
+                <Menu.Item
                  icon={<img src={travel} alt="profile" className="Dash"  style={{color:"#fffff"}} />}
                  key="24"
                 >
                   <p className="sideFont">Travel Management</p>
                   <NavLink to="/TravelManagement" />
-                </Menu.Item>):null}
+                </Menu.Item>
+                  </>
+                  ) :null}
                 <Menu.Item
                   icon={<img src={userIcon} alt="profile" className="Dash" />}
                   key="21"

@@ -22,8 +22,7 @@ function PrefixSelector ({ name, initial }) {
           bordered={false}
           style={{
             width: 80,
-            background: "#ffffff",
-            borderRadius: "4px"
+            borderRadius: "4px",
           }}
         >
           {codes.map((e) => (

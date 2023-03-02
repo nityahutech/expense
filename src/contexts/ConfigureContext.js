@@ -6,6 +6,7 @@ import {
     arrayUnion,
     setDoc,
     arrayRemove,
+    deleteDoc
 } from "firebase/firestore";
 
 let compId = sessionStorage.getItem("compId");
@@ -63,6 +64,8 @@ class ConfigureContext {
         const rec = await getDoc(doc(db, `companyprofile/${compId}/configurations`, page));
         return rec.data();
     };
+
+  
 
 
 }

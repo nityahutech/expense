@@ -47,6 +47,7 @@ function HrPaySlip() {
     const calculatedHra = (basicSalary * 15) / 100;
     setHra(calculatedHra);
     form.setFieldsValue({ hra: calculatedHra });
+    onTotalSalaryChange()
   };
 
 
@@ -64,6 +65,8 @@ function HrPaySlip() {
       totalEarning += parseInt(fieldValue);
     });
 
+    setTotal(totalEarning)
+
     form.setFieldsValue({ totalEarning });
   };
 
@@ -74,6 +77,7 @@ function HrPaySlip() {
       const fieldValue = form.getFieldValue(field) || 0;
       totalDeduction += parseInt(fieldValue);
     });
+    setDeduction(totalDeduction)
     form.setFieldsValue({ totalDeduction });
   };
   // console.log(calculateNetSalary())
@@ -89,7 +93,8 @@ function HrPaySlip() {
 
   useEffect(() => {
     calculateNetSalary();
-  }, [total, deduction]);
+
+  }, [total, deduction, hra]);
 
   useEffect(() => {
     getSalaryData(emp);
@@ -109,31 +114,100 @@ function HrPaySlip() {
     setNetSalary(null);
   };
   //updateSalary in firebase using updatedoc
+  // const onFinish = (values) => {
+  //   console.log("value", values);
+  //   let field = moment().format("MMM_YYYY")
+
+  //   const mappedEarningValues = {};
+  //   earningConfig?.Earning.forEach((field) => {
+  //     mappedEarningValues[field] = values[field];
+  //   });
+
+  //   console.log(mappedEarningValues);
+
+  //   const mappedDeductionValues = {};
+  //   earningConfig?.Deduction.forEach((field) => {
+  //     mappedDeductionValues[field] = values[field];
+  //   });
+
+  //   console.log(mappedDeductionValues);
+
+  //   let netSalaryEmp = {
+  //     basic: values.basic,
+  //     hra: values.hra,
+  //     ...mappedEarningValues,
+  //     ...mappedDeductionValues,
+  //     totalEarning: values.totalEarning,
+  //     totalDeduction: values.totalDeduction,
+  //     netSalaryIncome: values.netSalaryIncome,
+
+  //   };
+  //   console.log("netSalaryEmp", netSalaryEmp);
+  //   EmployeeNetSalary.addSalary(
+  //     ids[`${emp}`],
+  //     field,
+  //     netSalaryEmp,
+  //   )
+  //     .then(() => {
+  //       notification.success({
+  //         message: "Form submitted successfully",
+  //       })
+  //       form.resetFields();
+  //       setEmp(null);
+  //       setData({});
+  //       setTotal(null);
+  //       setDeduction(null);
+  //       setNetSalary(null);
+  //     }
+  //     )
+  //     .catch((err) =>
+  //       notification.error({
+  //         message: "Form submitted Failed" + err.message,
+  //       })
+  //     );
+  //   setShowPreview(false);
+  // };
+
   const onFinish = (values) => {
     console.log("value", values);
     let field = moment().format("MMM_YYYY")
 
     const mappedEarningValues = {};
+    const earningArray = []; // create an array for earning values
     earningConfig?.Earning.forEach((field) => {
       mappedEarningValues[field] = values[field];
+      earningArray.push({
+        field: field,
+        value: values[field]
+      }); // push the field-value pair into the array
     });
 
-    console.log(mappedEarningValues);
+    console.log("netSalaryEmp", mappedEarningValues);
 
     const mappedDeductionValues = {};
+    const deductionArray = []; // create an array for deduction values
     earningConfig?.Deduction.forEach((field) => {
       mappedDeductionValues[field] = values[field];
+      deductionArray.push({
+        field: field,
+        value: values[field]
+      }); // push the field-value pair into the array
     });
 
-    console.log(mappedDeductionValues);
+    console.log("netSalaryEmp", mappedDeductionValues);
 
     let netSalaryEmp = {
       basic: values.basic,
       hra: values.hra,
-      ...mappedEarningValues,
-      ...mappedDeductionValues
-
+      totalEarning: values.totalEarning,
+      totalDeduction: values.totalDeduction,
+      netSalaryIncome: values.netSalaryIncome,
     };
+
+    // add the earning and deduction arrays to netSalaryEmp
+    netSalaryEmp.earningArray = earningArray;
+    netSalaryEmp.deductionArray = deductionArray;
+
     console.log("netSalaryEmp", netSalaryEmp);
     EmployeeNetSalary.addSalary(
       ids[`${emp}`],
@@ -173,6 +247,7 @@ function HrPaySlip() {
   };
 
   const onSelect = (data) => {
+    console.log("onSelect", data);
     if (data) {
       setEmp(data);
     }
@@ -209,6 +284,7 @@ function HrPaySlip() {
       form.setFieldsValue({
         basic: data.basic,
         hra: data.hra,
+        ...data[`${field}`],
 
       });
     } else {
@@ -241,9 +317,6 @@ function HrPaySlip() {
       return !errors.length && value;
     });
   };
-
-  const earning = ['conveyance', 'medical', 'proffallowance', 'specialallowance', 'bonus', 'lta', 'otherAllowance',]
-  const totalDeduction = ['tds', 'esi', 'pfer', 'pfem', 'profTax', 'otherDeduction',]
 
   console.log("data", data);
   console.log("emp", emp);
@@ -390,6 +463,7 @@ function HrPaySlip() {
                   }
                 >
                   {showPreview ? (
+
                     <span>{total}</span>
                   ) : (
                     <Input

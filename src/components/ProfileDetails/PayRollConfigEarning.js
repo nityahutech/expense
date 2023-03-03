@@ -41,10 +41,6 @@ const PayRollConfig = (props) => {
         });
     };
 
-
-
-
-
     const onFinish = (values) => {
         console.log('Form values:', values);
         console.log('Fields:', fields);

@@ -17,16 +17,16 @@ let compId = sessionStorage.getItem("compId");
 let salaryCollectionRef = collection(db, `companyprofile/${compId}/salary`);
 
 class EmployeeNetSalary {
-    addSalary = (id, field, netSalary) => {
-        return setDoc(doc(salaryCollectionRef, id), { [`${field}`]: netSalary });
-
-    };
-
-
     // addSalary = (id, field, netSalary) => {
-    //     return updateDoc(doc(salaryCollectionRef, id), { [`May_2022`]: netSalary });
+    //     return setDoc(doc(salaryCollectionRef, id), { [`${field}`]: netSalary });
 
     // };
+
+
+    addSalary = (id, field, netSalary) => {
+        return updateDoc(doc(salaryCollectionRef, id), { [`May_2022`]: netSalary });
+
+    };
 
     getSalary = async (id) => {
 
@@ -36,17 +36,6 @@ class EmployeeNetSalary {
             ...allData.data(),
         };
     };
-
-    // getUserCurrent = async (id,) => {
-    //     let compId = sessionStorage.getItem("compId")
-    //     const q = await getDoc(doc(db, `companyprofile/${compId}/users`), id);
-    //     console.log('getUserCurrent', q)
-    //     return {
-    //         ...q.data(),
-    //         id: q.id,
-    //     };
-    // }
-
 
 
     getUserCurrent = async (id, compid) => {

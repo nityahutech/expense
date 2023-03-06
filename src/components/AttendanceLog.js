@@ -13,9 +13,13 @@ import {
   Switch,
   TimePicker,
   InputNumber,
+  Tooltip,
+  Modal,
+  Row,
+  Col,
 } from "antd";
 import "../style/AttendanceLog.css";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, EditOutlined } from "@ant-design/icons";
 import moment from "moment";
 import AttendanceContext from "../contexts/AttendanceContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
@@ -48,6 +52,7 @@ function AttendanceLog(props) {
   const [activetab, setActivetab] = useState("1");
   const [loading, setLoading] = useState(false);
   const [empMonthly, setEmpMonthly] = useState([]);
+  const [absentCSS, setAbsentCSS] = useState();
   const [holidays, setHolidays] = useState([]);
   const [dateOfJoining, setDateOfJoining] = useState(null);
   const [month, setMonth] = useState();
@@ -61,6 +66,18 @@ function AttendanceLog(props) {
   const [configurations, setConfigurations] = useState({});
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const showEditModal = (record) => {
+    isEditOpen ? setIsEditOpen(false) : setIsEditOpen(record);
+    // setIsEditOpen(true);
+  };
+  const handleOk = () => {
+    setIsEditOpen(false);
+  };
+  const handleCancel = () => {
+    setIsEditOpen(false);
+  };
 
   const handleFinish = (values) => {
     let temp = Object.keys(values);
@@ -153,8 +170,6 @@ function AttendanceLog(props) {
     getDateOfJoining();
   }, [isAdmin]);
 
-
-
   useEffect(() => {
     console.log("2");
     form.resetFields();
@@ -164,33 +179,39 @@ function AttendanceLog(props) {
   const getData = async () => {
     let temp = {};
     if (holidays.length == 0) {
-      let [holTemp, selTemp] = await Promise.all([getHolidayList(), getAttendanceData()]);
+      let [holTemp, selTemp] = await Promise.all([
+        getHolidayList(),
+        getAttendanceData(),
+      ]);
       temp = {
         holidays: holTemp,
-        selectedDays: selTemp
+        selectedDays: selTemp,
+      };
+    }
+    console.log(temp);
+    if (activetab == "1") {
+      if (!isAdmin) {
+        setSelectemp({ id: currentUser.uid });
+        getEmpDetails(
+          currentUser.uid,
+          [moment().subtract(30, "days"), moment()],
+          temp
+        );
+      } else {
+        allEmpDetails(temp);
       }
     }
-      console.log(temp);
-      if (activetab == "1") {
-        if (!isAdmin) {
-          setSelectemp({ id: currentUser.uid });
-          getEmpDetails(
-            currentUser.uid,
-            [moment().subtract(30, "days"), moment()],
-            temp
-          );
-        } else {
-          allEmpDetails(temp);
-        }
-      }
-  }
+  };
 
   useEffect(() => {
     console.log("3");
     if (configurations.inputclock) {
-      AttendanceContext.fixNullClock(endTime+":00", isAdmin ? false : currentUser)
+      AttendanceContext.fixNullClock(
+        endTime + ":00",
+        isAdmin ? false : currentUser
+      );
     }
-  }, [configurations.inputclock])
+  }, [configurations.inputclock]);
 
   const getHolidayList = async () => {
     let data = await CompanyHolidayContext.getAllCompanyHoliday();
@@ -273,30 +294,30 @@ function AttendanceLog(props) {
     let data,
       dayTemp = temp?.selectedDays || selectedDay,
       holTemp = temp?.holidays || holidays;
-      console.log(data, dayTemp, holTemp, selectedDay, holidays);
+    console.log(data, dayTemp, holTemp, selectedDay, holidays);
     AttendanceContext.getAllAttendance(id, date).then((userdata) => {
       let dayoff = Object.keys(dayTemp).filter(
         (day) => dayTemp[`${day}`] == "dayoff"
       );
       console.log(userdata, dayoff);
-      AttendanceContext.updateLeaves(
-        userdata,
-        holTemp,
-        dayoff
-      ).then((final) => {
-        console.log(final);
-        setHolidayStatus(final);
-        data = final;
-        setEmpMonthly(final);
-        const timer = setTimeout(() => {
-          setLoading(false);
-        }, 750);
-        return () => clearTimeout(timer);
-      });
+      AttendanceContext.updateLeaves(userdata, holTemp, dayoff).then(
+        (final) => {
+          // console.log(final[0].status);
+          setHolidayStatus(final);
+          data = final;
+          setEmpMonthly(final);
+          const timer = setTimeout(() => {
+            setLoading(false);
+          }, 750);
+          return () => clearTimeout(timer);
+        }
+      );
       // getWithLeave(userdata);
     });
     return data;
   }
+
+  console.log("empdetails", empMonthly);
   function allEmpDetails(temp, selDate) {
     setLoading(true);
     let date = selDate || moment();
@@ -344,6 +365,23 @@ function AttendanceLog(props) {
       key: "status",
       width: 80,
       align: "center",
+      render: (_, record) => {
+        return (
+          <>
+            <span style={record.status == "Absent" ? { color: "red" } : {}}>
+              {record.status}
+            </span>
+            {record.status == "Absent" ? (
+              <Tooltip placement="bottom" title="Regularize Attendance">
+                <EditOutlined
+                  style={{ marginLeft: "10px" }}
+                  onClick={() => showEditModal(record)}
+                />
+              </Tooltip>
+            ) : null}
+          </>
+        );
+      },
     },
     {
       title: "In Time",
@@ -528,6 +566,8 @@ function AttendanceLog(props) {
     },
   ];
 
+  console.log("empdatesdsdh", empMonthly[0]?.date);
+
   return (
     <>
       <div className="hrtab">
@@ -569,6 +609,30 @@ function AttendanceLog(props) {
                   dataSource={empMonthly || []}
                   scroll={{ x: 600 }}
                 />
+                <Modal
+                  className="regularize"
+                  title="Regularize Attendance"
+                  open={isEditOpen}
+                  onOk={handleOk}
+                  onCancel={handleCancel}
+                >
+                  <Row gutter={[0, 24]}>
+                    <Col span={24}>
+                      <span className="approvalText">
+                        Get Approval For Attendance on {isEditOpen?.date}
+                      </span>
+                    </Col>
+                    {/* <Col span={24}>
+                      <DatePicker />
+                    </Col> */}
+                    <Col span={24}>
+                      <span>Reason</span>
+                    </Col>
+                    <Col span={24}>
+                      <Input />
+                    </Col>
+                  </Row>
+                </Modal>
               </Tabs.TabPane>
               <Tabs.TabPane
                 tab="Add Report"
@@ -669,23 +733,23 @@ function AttendanceLog(props) {
                   // style={{ width: "95%" }}
                 />
                 <div className="monthColor">
-                <DatePicker
-                  defaultValue={selDate}
-                  className="Range Daily"
-                  bordered={true}
-                  format="DD-MM-YYYY"
-                  style={{
-                    background: "#1963A6",
-                    cursor: "pointer",
-                    marginLeft: "15rem",
-                    width: "10%",
-                  }}
-                  allowClear
-                  onChange={(e) => {
-                    setSelDate(e);
-                    allEmpDetails("_", e);
-                  }}
-                />
+                  <DatePicker
+                    defaultValue={selDate}
+                    className="Range Daily"
+                    bordered={true}
+                    format="DD-MM-YYYY"
+                    style={{
+                      background: "#1963A6",
+                      cursor: "pointer",
+                      marginLeft: "15rem",
+                      width: "10%",
+                    }}
+                    allowClear
+                    onChange={(e) => {
+                      setSelDate(e);
+                      allEmpDetails("_", e);
+                    }}
+                  />
                 </div>
                 <Table
                   //   rowSelection={{

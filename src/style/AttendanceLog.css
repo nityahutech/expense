@@ -134,3 +134,33 @@
   font-weight: 600;
   font-size: 14px;
 }
+
+.Absent{
+  color: red;
+}
+
+.regularize .ant-modal-header{
+  background: #1963a6;
+}
+
+.regularize .ant-modal-close-x{
+  color: #ffffff;
+} 
+
+.regularize .ant-modal-title{
+  color:#ffffff;
+  font-size: 19px;
+}
+
+.regularize .ant-modal-footer .ant-btn + .ant-btn:not(.ant-dropdown-trigger){
+  background: #1963a6;
+  border: 1px solid #1963a6;
+}
+
+.approvalText{
+  color: #000000;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 20px;
+}
+

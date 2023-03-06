@@ -27,7 +27,10 @@ function HrPaySlip() {
   const [options, setOptions] = useState([]);
   const [ids, setIds] = useState([]);
   const requiredFields = ["basic", "selectStaff"];
-  const [earningConfig, setEarningConfig] = useState()
+  const [earningConfig, setEarningConfig] = useState({
+    Earning: [],
+    Deduction: [],
+  })
 
 
   const handlePrevStep = (values) => {
@@ -44,67 +47,54 @@ function HrPaySlip() {
     const calculatedHra = (basicSalary * 15) / 100;
     setHra(calculatedHra);
     form.setFieldsValue({ hra: calculatedHra });
+    onTotalSalaryChange()
   };
 
-  const onTotalSalaryChange = () => {
-    const basic = form.getFieldValue("basic");
-    const hra = form.getFieldValue("hra");
-    const conveyance = form.getFieldValue("conveyance");
-    const medical = form.getFieldValue("medical");
-    const proffallowance = form.getFieldValue("proffallowance");
-    const specialallowance = form.getFieldValue("specialallowance");
-    const bonus = form.getFieldValue("bonus");
-    const lta = form.getFieldValue("lta");
-    const otherAllowance = form.getFieldValue("otherAllowance");
 
-    const newTotal =
-      parseInt(basic || 0) +
-      hra +
-      parseInt(conveyance || 0) +
-      parseInt(medical || 0) +
-      parseInt(proffallowance || 0) +
-      parseInt(specialallowance || 0) +
-      parseInt(otherAllowance || 0) +
-      parseInt(lta || 0) +
-      parseInt(bonus || 0);
-    console.log("dddde", newTotal);
-    setTotal(newTotal);
-    form.setFieldsValue({ totalEarning: newTotal });
+  const onTotalSalaryChange = () => {
+    const earningFields = earningConfig?.Earning;
+    let totalEarning = 0;
+
+    // Add basic and hra fields to totalEarning
+    const basic = form.getFieldValue("basic") || 0;
+    const hra = form.getFieldValue("hra") || 0;
+    totalEarning += parseInt(basic) + parseInt(hra);
+
+    earningFields.forEach((field) => {
+      const fieldValue = form.getFieldValue(field) || 0;
+      totalEarning += parseInt(fieldValue);
+    });
+
+    setTotal(totalEarning)
+
+    form.setFieldsValue({ totalEarning });
   };
 
   const onTotalDeductionChange = () => {
-    const tds = form.getFieldValue("tds");
-    const esi = form.getFieldValue("esi");
-    const pfer = form.getFieldValue("pfer");
-    const pfem = form.getFieldValue("pfem");
-    const profTax = form.getFieldValue("profTax");
-    const otherDeduction = form.getFieldValue("otherDeduction");
-
-    const Deduction =
-      parseInt(tds || 0) +
-      parseInt(esi || 0) +
-      parseInt(pfer || 0) +
-      parseInt(pfem || 0) +
-      parseInt(profTax || 0) +
-      parseInt(otherDeduction || 0);
-    console.log(Deduction);
-    setDeduction(Deduction);
-    form.setFieldsValue({ totalDeduction: Deduction });
+    const deductionFields = earningConfig?.Deduction;
+    let totalDeduction = 0;
+    deductionFields.forEach((field) => {
+      const fieldValue = form.getFieldValue(field) || 0;
+      totalDeduction += parseInt(fieldValue);
+    });
+    setDeduction(totalDeduction)
+    form.setFieldsValue({ totalDeduction });
   };
   // console.log(calculateNetSalary())
   function calculateNetSalary() {
-    const totalEarning = parseInt(form.getFieldValue("totalEarning") || 0);
-    console.log(totalEarning);
-    const totalDeduction = parseInt(form.getFieldValue("totalDeduction") || 0);
-    const netSalary = totalEarning - totalDeduction;
-    console.log(netSalary);
-    setNetSalary(netSalary);
-    form.setFieldsValue({ netSalaryIncome: netSalary });
+    const totalEarnings = parseInt(form.getFieldValue("totalEarning") || 0);
+    console.log(totalEarnings);
+    const totalDeductions = parseInt(form.getFieldValue("totalDeduction") || 0);
+    const netSalarys = totalEarnings - totalDeductions;
+    console.log(netSalarys);
+    setNetSalary(netSalarys);
+    form.setFieldsValue({ netSalaryIncome: netSalarys });
   }
 
   useEffect(() => {
     calculateNetSalary();
-  }, [total, deduction]);
+
+  }, [total, deduction, hra]);
 
   useEffect(() => {
     getSalaryData(emp);
@@ -124,32 +114,99 @@ function HrPaySlip() {
     setNetSalary(null);
   };
   //updateSalary in firebase using updatedoc
+  // const onFinish = (values) => {
+  //   console.log("value", values);
+  //   let field = moment().format("MMM_YYYY")
+
+  //   const mappedEarningValues = {};
+  //   earningConfig?.Earning.forEach((field) => {
+  //     mappedEarningValues[field] = values[field];
+  //   });
+
+  //   console.log(mappedEarningValues);
+
+  //   const mappedDeductionValues = {};
+  //   earningConfig?.Deduction.forEach((field) => {
+  //     mappedDeductionValues[field] = values[field];
+  //   });
+
+  //   console.log(mappedDeductionValues);
+
+  //   let netSalaryEmp = {
+  //     basic: values.basic,
+  //     hra: values.hra,
+  //     ...mappedEarningValues,
+  //     ...mappedDeductionValues,
+  //     totalEarning: values.totalEarning,
+  //     totalDeduction: values.totalDeduction,
+  //     netSalaryIncome: values.netSalaryIncome,
+
+  //   };
+  //   console.log("netSalaryEmp", netSalaryEmp);
+  //   EmployeeNetSalary.addSalary(
+  //     ids[`${emp}`],
+  //     field,
+  //     netSalaryEmp,
+  //   )
+  //     .then(() => {
+  //       notification.success({
+  //         message: "Form submitted successfully",
+  //       })
+  //       form.resetFields();
+  //       setEmp(null);
+  //       setData({});
+  //       setTotal(null);
+  //       setDeduction(null);
+  //       setNetSalary(null);
+  //     }
+  //     )
+  //     .catch((err) =>
+  //       notification.error({
+  //         message: "Form submitted Failed" + err.message,
+  //       })
+  //     );
+  //   setShowPreview(false);
+  // };
+
   const onFinish = (values) => {
     console.log("value", values);
     let field = moment().format("MMM_YYYY")
+
+    const mappedEarningValues = {};
+    const earningArray = []; // create an array for earning values
+    earningConfig?.Earning.forEach((field) => {
+      mappedEarningValues[field] = values[field];
+      earningArray.push({
+        field: field,
+        value: values[field]
+      }); // push the field-value pair into the array
+    });
+
+    console.log("netSalaryEmp", mappedEarningValues);
+
+    const mappedDeductionValues = {};
+    const deductionArray = []; // create an array for deduction values
+    earningConfig?.Deduction.forEach((field) => {
+      mappedDeductionValues[field] = values[field];
+      deductionArray.push({
+        field: field,
+        value: values[field]
+      }); // push the field-value pair into the array
+    });
+
+    console.log("netSalaryEmp", mappedDeductionValues);
+
     let netSalaryEmp = {
       basic: values.basic,
       hra: values.hra,
-      conveyance: values.conveyance,
-      medical: values.medical,
-      proffallowance: values.proffallowance,
-      specialallowance: values.specialallowance,
-      bonus: values.bonus,
-      lta: values.lta,
-      otherAllowance: values.otherAllowance,
-
-      tds: values.tds,
-      esi: values.esi,
-      pfer: values.pfer,
-      pfem: values.pfem,
-      profTax: values.profTax,
-      otherDeduction: values.otherDeduction || null,
-
-      selectStaff: values.selectStaff,
       totalEarning: values.totalEarning,
       totalDeduction: values.totalDeduction,
       netSalaryIncome: values.netSalaryIncome,
     };
+
+    // add the earning and deduction arrays to netSalaryEmp
+    netSalaryEmp.earningArray = earningArray;
+    netSalaryEmp.deductionArray = deductionArray;
 
     console.log("netSalaryEmp", netSalaryEmp);
     EmployeeNetSalary.addSalary(
@@ -190,6 +247,7 @@ function HrPaySlip() {
   };
 
   const onSelect = (data) => {
+    console.log("onSelect", data);
     if (data) {
       setEmp(data);
     }
@@ -226,24 +284,8 @@ function HrPaySlip() {
       form.setFieldsValue({
         basic: data.basic,
         hra: data.hra,
-        conveyance: data.conveyance,
-        medical: data.medical,
-        proffallowance: data.proffallowance,
-        specialallowance: data.specialallowance,
-        bonus: data.bonus,
-        lta: data.lta,
-        otherAllowance: data.otherAllowance,
+        ...data[`${field}`],
 
-        tds: data.tds,
-        esi: data.esi,
-        pfer: data.pfer,
-        pfem: data.pfem,
-        profTax: data.profTax,
-        otherDeduction: data.otherDeduction,
-
-        totalEarning: data.totalEarning,
-        totalDeduction: data.totalDeduction,
-        netSalaryIncome: data.netSalaryIncome,
       });
     } else {
       form.resetFields();
@@ -275,9 +317,6 @@ function HrPaySlip() {
       return !errors.length && value;
     });
   };
-
-  const earning = ['conveyance', 'medical', 'proffallowance', 'specialallowance', 'bonus', 'lta', 'otherAllowance',]
-  const totalDeduction = ['tds', 'esi', 'pfer', 'pfem', 'profTax', 'otherDeduction',]
 
   console.log("data", data);
   console.log("emp", emp);
@@ -424,6 +463,7 @@ function HrPaySlip() {
                   }
                 >
                   {showPreview ? (
+
                     <span>{total}</span>
                   ) : (
                     <Input
@@ -524,7 +564,7 @@ function HrPaySlip() {
                 Earnings
               </h2>
               {!showPreview ? (
-                <div><PayRollConfigEarning /></div>) : null}
+                <div><PayRollConfigEarning data={earningConfig.Earning} /></div>) : null}
             </div>
             <Row
               gutter={[48, 0]}
@@ -620,14 +660,15 @@ function HrPaySlip() {
                   md={showPreview ? 24 : 8}
                   lg={showPreview ? 24 : 8}
                 >
+                  {console.log(field)}
                   <Form.Item key={index}
                     onKeyPress={(event) => {
                       if (checkNumbervalue(event)) {
                         event.preventDefault();
                       }
                     }}
-                    name={field.name}
-                    label={field.value}
+                    name={field}
+                    label={field}
                     style={
                       showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                     }
@@ -640,7 +681,7 @@ function HrPaySlip() {
                         onChange={onTotalSalaryChange}
                         maxLength={20}
                         // required
-                        placeholder={`Enter ${field.value}`}
+                        placeholder={`Enter ${field}`}
                         style={{
                           border: "1px solid #8692A6",
                           borderRadius: "4px",
@@ -651,7 +692,7 @@ function HrPaySlip() {
                 </Col>
               ))}
 
- 
+
             </Row>
             <div style={!showPreview ? { display: 'flex', alignItems: 'center', justifyContent: 'space-between' } : { justifyContent: 'center' }}>
               <h2
@@ -669,7 +710,7 @@ function HrPaySlip() {
                 Deductions
               </h2>
               {!showPreview ? (
-                <div><PayRollConfigDeduction /></div>) : null}
+                <div><PayRollConfigDeduction data={earningConfig.Deduction} /></div>) : null}
             </div>
             <Row
               gutter={[48, 0]}
@@ -684,21 +725,21 @@ function HrPaySlip() {
                   }
               }
             >
-              {earningConfig?.Deduction.map((field) => (
+              {earningConfig?.Deduction.map((field, index) => (
                 <Col
                   xs={24}
                   sm={showPreview ? 24 : 12}
                   md={showPreview ? 24 : 8}
                   lg={showPreview ? 24 : 8}
                 >
-                  <Form.Item
+                  <Form.Item key={index}
                     onKeyPress={(event) => {
                       if (checkNumbervalue(event)) {
                         event.preventDefault();
                       }
                     }}
-                    name={field.name}
-                    label={field.value}
+                    name={field}
+                    label={field}
                     style={
                       showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                     }
@@ -711,7 +752,7 @@ function HrPaySlip() {
                         onChange={onTotalDeductionChange}
                         maxLength={20}
                         // required
-                        placeholder={`Enter ${field.value}`}
+                        placeholder={`Enter ${field}`}
                         style={{
                           border: "1px solid #8692A6",
                           borderRadius: "4px",
@@ -721,7 +762,7 @@ function HrPaySlip() {
                   </Form.Item>
                 </Col>
               ))}
-            
+
               {!showPreview ? (
                 <Col span={24}>
                   <div

@@ -20,6 +20,8 @@ function PaySlip(props) {
   const [companyProfile, setCompanyProfile] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const compId = sessionStorage.getItem("compId");
+  const [earningArray, setEarningArray] = useState([]);
+  const [deductionArray, setDeductionArray] = useState([]);
 
   const currentMonth = moment();//current month
   const previousMonth = moment().subtract(1, 'month');//previous month
@@ -33,6 +35,7 @@ function PaySlip(props) {
     let field = date.format("MMM_YYYY")
     console.log("selected date string: ", field);
     let index = dataMonths.includes(field) ? field : null;
+    console.log("index: ", index)
     if (index == null) {
       let allMonths = dataMonths.filter((x) => {
         let value = moment(x, "MMM_YYYY").isBefore(date);
@@ -57,8 +60,12 @@ function PaySlip(props) {
     // console.log("daysInMonth: ", daysInMonth)
     setNofDaysInMonth(daysInMonth);
     console.log(allPaySlipData);
-    console.log(allPaySlipData[index]);
+    console.log('jjj', allPaySlipData[index].deductionArray);
+    console.log('jjj', allPaySlipData[index].earningArray);
     setPaySlipData(allPaySlipData[index])
+    setDeductionArray(allPaySlipData[index].deductionArray[0])
+    setEarningArray(allPaySlipData[index].earningArray[0])
+    //allPaySlipData[index].deductionArray[0]
   };
   const disabledDate = (currentDate) => {
     return currentDate && (currentDate.isAfter(currentMonth) || currentDate.isSame(currentMonth, 'month'));
@@ -179,6 +186,8 @@ function PaySlip(props) {
                     selectedMonth={selectedMonth}
                     nofDaysInMonth={nofDaysInMonth}
                     showRecord={showRecord}
+                    earning={earningArray}
+                    deduction={deductionArray}
 
 
                   />
@@ -191,7 +200,7 @@ function PaySlip(props) {
     </>
   );
 
-  function SlipHtml({ selectedMonth, year, nofDaysInMonth, showRecord, }) {
+  function SlipHtml({ selectedMonth, year, nofDaysInMonth, showRecord, earning, deduction }) {
     // console.log('showRecord', showRecord)
 
 
@@ -460,7 +469,18 @@ function PaySlip(props) {
                       {paySlipData.hra ? paySlipData.hra : 0}
                     </td>
                   </tr>
-                  <tr>
+
+                  {earning.map((a) => (<div>{a.field}</div>))}
+
+                  {/* {Object.keys(paySlipData).map((field) => (
+                    <tr key={field}>
+                      <td style={{ width: "700px" }}>{field}:</td>
+                      <td style={{ width: "180px", textAlign: 'left', paddingLeft: '40px' }}>
+                        {paySlipData[field] ? paySlipData[field] : 0}
+                      </td>
+                    </tr>
+                  ))} */}
+                  {/* <tr>
                     <td
                       style={{
                         width: "700px",
@@ -585,7 +605,7 @@ function PaySlip(props) {
                     >
                       {paySlipData.otherAllowance ? paySlipData.otherAllowance : 0}
                     </td>
-                  </tr>
+                  </tr> */}
                 </table>
               </div>
               <div className="splitThird">
@@ -611,7 +631,7 @@ function PaySlip(props) {
                       </th>
                     </tr>
                   </thead>
-                  <tr>
+                  {/* <tr>
                     <td
                       style={{
                         width: "700px",
@@ -628,8 +648,8 @@ function PaySlip(props) {
                     >
                       {paySlipData.pfem ? paySlipData.pfem : 0}
                     </td>
-                  </tr>
-                  <tr>
+                  </tr> */}
+                  {/* <tr>
                     <td
                       style={{
                         width: "700px",
@@ -718,7 +738,7 @@ function PaySlip(props) {
                     >
                       {paySlipData.otherDeduction ? paySlipData.otherDeduction : 0}
                     </td>
-                  </tr>
+                  </tr> */}
                 </table>
               </div>
             </div>

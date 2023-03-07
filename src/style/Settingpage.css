@@ -136,7 +136,15 @@
         /* height: 25vh; */
     }
 
-    
+    /* -----------------------------Birthday Template css------------------ */
+
+    .informationLogo {
+        padding-left: 10px;
+    }
+
+    .layoutCard {
+        border-radius: 5px;
+    }
 
     
     

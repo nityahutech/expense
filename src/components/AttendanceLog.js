@@ -959,6 +959,9 @@ function AttendanceLog(props) {
                   </Card>
                 </div>
               </Tabs.TabPane>
+              <Tabs.TabPane tab="Regularise Attendance" key="4">
+
+              </Tabs.TabPane>
             </>
           )}
         </Tabs>

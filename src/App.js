@@ -25,9 +25,14 @@ import EmailVerification from "./EmailVerification";
 
 function App() {
   const [roleview, setRoleview] = useState(sessionStorage.getItem("roleView"))
+  const [refresh, setRefresh] = useState(false)
 
   const switchRole = (role) => {
     setRoleview(role);
+  };
+
+  const switchRefresh = (value) => {
+    setRefresh(value);
   };
 
   return (
@@ -65,10 +70,11 @@ function App() {
             path="/Attendance"
             element={
               <FormatPage
-                main={<AttendanceLog roleView={roleview} />}
+                main={<AttendanceLog roleView={roleview} refresh={refresh} switchRefresh={switchRefresh} />}
                 activeMenu={["6"]}
                 roleView={roleview}
                 switchRole={switchRole}
+                switchRefresh={switchRefresh}
               />
             }
           />

@@ -163,17 +163,25 @@ function AttendanceLog(props) {
       },
     },
   ];
+  
   useEffect(() => {
     // console.log("1");
     getAttendanceData();
     getHolidayList();
     getDateOfJoining();
   }, [isAdmin]);
+  
+  useEffect(() => {
+    // console.log("1");
+    getData();
+    props.switchRefresh(false)
+  }, [props.refresh]);
 
   useEffect(() => {
     // console.log("2");
     form.resetFields();
     getData();
+    props.switchRefresh(false)
   }, [activetab, isAdmin]);
 
   const getData = async () => {
@@ -188,7 +196,7 @@ function AttendanceLog(props) {
         selectedDays: selTemp,
       };
     }
-    console.log(temp);
+    // console.log(temp);
     if (activetab == "1") {
       if (!isAdmin) {
         setSelectemp({ id: currentUser.uid });
@@ -319,7 +327,7 @@ function AttendanceLog(props) {
     return data;
   }
 
-  console.log("empdetails", empMonthly);
+  // console.log("empdetails", empMonthly);
   function allEmpDetails(temp, selDate) {
     setLoading(true);
     let date = selDate || moment();
@@ -568,7 +576,7 @@ function AttendanceLog(props) {
     },
   ];
 
-  console.log("empdatesdsdh", empMonthly[0]?.date);
+  // console.log("empdatesdsdh", empMonthly[0]?.date);
 
   return (
     <>

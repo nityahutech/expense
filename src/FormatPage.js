@@ -14,7 +14,11 @@ const FormatPage = (props) => {
         </div>
         <div className="homeContainer">
           <div className="table">
-            <Navbar roleView={props.roleView} switchRole={props.switchRole}/>
+            <Navbar
+              roleView={props.roleView}
+              switchRefresh={props.switchRefresh}
+              switchRole={props.switchRole}
+            />
           </div>
           <div className="tables">
             {props.main}

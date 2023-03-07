@@ -46,7 +46,7 @@ function AttendanceLog(props) {
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [empMonthly, setEmpMonthly] = useState([]);
   const [holidays, setHolidays] = useState([]);
   const [dateOfJoining, setDateOfJoining] = useState(null);
@@ -147,7 +147,7 @@ function AttendanceLog(props) {
     },
   ];
   useEffect(() => {
-    console.log("1");
+    // console.log("1");
     getAttendanceData();
     getHolidayList();
     getDateOfJoining();
@@ -156,7 +156,7 @@ function AttendanceLog(props) {
 
 
   useEffect(() => {
-    console.log("2");
+    // console.log("2");
     form.resetFields();
     getData();
   }, [activetab, isAdmin]);
@@ -170,7 +170,7 @@ function AttendanceLog(props) {
         selectedDays: selTemp
       }
     }
-      console.log(temp);
+      // console.log(temp);
       if (activetab == "1") {
         if (!isAdmin) {
           setSelectemp({ id: currentUser.uid });
@@ -186,7 +186,7 @@ function AttendanceLog(props) {
   }
 
   useEffect(() => {
-    console.log("3");
+    // console.log("3");
     if (configurations.inputclock) {
       AttendanceContext.fixNullClock(endTime+":00", isAdmin ? false : currentUser)
     }
@@ -268,23 +268,23 @@ function AttendanceLog(props) {
     );
   }
   async function getEmpDetails(id, date, temp) {
-    console.log(id, date, temp);
+    // console.log(id, date, temp);
     setLoading(true);
     let data,
       dayTemp = temp?.selectedDays || selectedDay,
       holTemp = temp?.holidays || holidays;
-      console.log(data, dayTemp, holTemp, selectedDay, holidays);
+      // console.log(data, dayTemp, holTemp, selectedDay, holidays);
     AttendanceContext.getAllAttendance(id, date).then((userdata) => {
       let dayoff = Object.keys(dayTemp).filter(
         (day) => dayTemp[`${day}`] == "dayoff"
       );
-      console.log(userdata, dayoff);
+      // console.log(userdata, dayoff);
       AttendanceContext.updateLeaves(
         userdata,
         holTemp,
         dayoff
       ).then((final) => {
-        console.log(final);
+        // console.log(final);
         setHolidayStatus(final);
         data = final;
         setEmpMonthly(final);
@@ -302,10 +302,10 @@ function AttendanceLog(props) {
     let date = selDate || moment();
     let dayTemp = temp?.selectedDays || selectedDay,
       holTemp = temp?.holidays || holidays;
-    console.log(date, temp, dayTemp, holTemp, selectedDay, holidays);
+    // console.log(date, temp, dayTemp, holTemp, selectedDay, holidays);
     AttendanceContext.getAllUsers(date.format("DD-MM-YYYY")).then(
       (userdata) => {
-        console.log(userdata);
+        // console.log(userdata);
         let dayoff = Object.keys(dayTemp).filter(
           (day) => dayTemp[`${day}`] == "dayoff"
         );
@@ -314,7 +314,7 @@ function AttendanceLog(props) {
           holTemp.includes(date.format("Do MMM, YYYY")),
           dayoff.includes(date.format("dddd"))
         ).then((final) => {
-          console.log(final);
+          // console.log(final);
           setallEmp(final);
           setFilteredEmp(final);
           setEmpMonthly(final);

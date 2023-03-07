@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import { Dropdown, Menu, Space, Switch, Badge, Avatar } from "antd";
-import { BellOutlined } from "@ant-design/icons";
+import { BellOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
 import { Link } from "react-router-dom";
@@ -10,12 +10,14 @@ import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
 import settingsIcon from "../../images/NavSettingsIcon.png";
 import logoutIcon from "../../images/LogoutIcon.png";
-import Logo from "../../images/HutechHRLogo.svg";
+import Logo from "../../images/Logo.svg";
 import dropdown from "../../images/dropdown.png";
 
 const Navbar = (props) => {
   const [startTime, setStartTime] = useState();
+  const [breakTime, setBreakTime] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { logout } = useAuth();
   const [clockinfo, setClockInfo] = useState();
   const [buttonStatus,setButtonStatus]=useState(false);
@@ -26,7 +28,9 @@ const Navbar = (props) => {
   const logo = temp == null ? Logo : temp;
 
   const isClockRunning = async () => {
+    setLoading(true)
     let res = await AttendanceContext.getStartTime(currentUser.uid);
+    setLoading(false)
     if (res == null || res.clockOut != null) {
       setIsRunning(false);
       return false;
@@ -38,6 +42,7 @@ const Navbar = (props) => {
         moment().startOf("day"),
         "seconds"
       );
+      setBreakTime(res.break);
       setStartTime(res.clockIn);
       setClockInfo(offsetTime);
       return true;
@@ -168,6 +173,16 @@ const Navbar = (props) => {
         border: "1px solid white",
       };
 
+  const loadStyle = {
+    padding: "1px",
+    background: "lightgray",
+    color: "white",
+    display: "inline-block",
+    width: "150px",
+    borderRadius: "5px",
+    border: "1px solid white",
+  }
+
   const [buttonText, setButtonText] = useState(
     !isRunning ? "Web Clock In" : ""
   );
@@ -198,6 +213,7 @@ const Navbar = (props) => {
   };
   
   const setClockState = async () => {
+    setLoading(true)
     let clickedDate = {
       empId: currentUser.uid,
       name: currentUser.displayName,
@@ -207,23 +223,34 @@ const Navbar = (props) => {
     };
     await AttendanceContext.addClockData(clickedDate);
     setIsRunning(true);
+    setLoading(false)
+    props.switchRefresh(true)
   };
 
   const stopClockState = async () => {
+    setLoading(true)
+    let offset = moment().subtract(startTime);
+    let offsettime = breakTime != null ? offset.subtract(breakTime) : offset;
+    const offsetTime = moment(offsettime, "HH:mm:ss").diff(
+      moment().startOf("day"),
+      "seconds"
+    );
     let clickedDate = {
       clockOut: moment().format("HH:mm:ss"),
-      duration: moment.utc(clockTime * 1000).format("HH:mm:ss"),
+      duration: moment.utc(offsetTime * 1000).format("HH:mm:ss"),
+      // duration: moment.utc(clockTime * 1000).format("HH:mm:ss"),
     };
+    // console.log(clickedDate)
     await AttendanceContext.updateClockData(currentUser.uid, clickedDate);
     setIsRunning(false);
     setClockInfo(0);
     setStartTime("");
     setButtonText("Web Clock In ");
+    setLoading(false)
+    props.switchRefresh(true)
   };
 
   const handleClock = () => {
-    
-    
     if (isRunning) {
       stopClockState();
     } else {
@@ -251,7 +278,12 @@ const Navbar = (props) => {
             }
           />
         ) : null}
-       {roleView == "emp" ? (
+       {roleView == "emp" ? 
+          loading ? (<button style={loadStyle}>
+            <LoadingOutlined />
+            {"  Loading"}
+          </button>) : 
+          (
           <button
             style={buttonStyle}
             onClick={handleClock}

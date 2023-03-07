@@ -64,6 +64,9 @@ function LoginPage() {
     } catch(err) {
       console.log(err)
       setError("Reset Email Failed To Send!");
+      if (loginEmail == "") {
+        setError("Please enter an email")
+      }
       setTimeout(() => {
         setError("");
         setLoading("Login");

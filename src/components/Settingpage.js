@@ -6,6 +6,7 @@ import { Button } from "antd";
 import { Tabs } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { showNotification } from "../contexts/CreateContext";
+import NotifySettings from "./NotifySettings";
 
 const Settingpage = () => {
   const [form] = Form.useForm();
@@ -195,6 +196,9 @@ const Settingpage = () => {
               </div>
             </Card>
           </div>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Notifications" key="2">
+            <NotifySettings data={"hi"} />
         </Tabs.TabPane>
       </Tabs>
     </>

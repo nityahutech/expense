@@ -334,6 +334,19 @@ class AttendanceContext {
     await addDoc(attendCollectionRef, attendance);
     return;
   };
+
+  getRegularizeAttendance = async () => {
+    const q = query(attendCollectionRef, where("type", "==", "Approval"));
+    const regularizeAtt = await getDocs(q);
+    console.log("getdocss", regularizeAtt);
+    let rec = regularizeAtt.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      };
+    });
+    return rec;
+  };
 }
 
 export default new AttendanceContext();

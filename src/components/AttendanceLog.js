@@ -73,6 +73,7 @@ function AttendanceLog(props) {
   const [empCode, setEmpCode] = useState(null);
   const [empName, setEmpName] = useState(null);
   const [editedAbsent, seteditedAbsent] = useState({});
+  const [regularizeDetails, setRegularizeDetails] = useState([]);
 
   const showEditModal = () => {
     // console.log("record;;", record);
@@ -201,25 +202,16 @@ function AttendanceLog(props) {
       value
         ? {
             title: "Action",
-            dataIndex: "empId",
-            className: "code",
-            key: "empId",
+            dataIndex: "action",
+            key: "action",
             align: "center",
             render: (_, record) => (
               <>
                 <div
                   className="employee-button"
-                  style={{ display: "flex", flexDirection: "row" }}
+                  // style={{ display: "flex", flexDirection: "row" }}
                 >
                   <Button
-                    style={
-                      record.status == "Pending"
-                        ? {
-                            padding: 0,
-                            color: "rgb(39 151 44 / 74%)",
-                          }
-                        : { display: "none" }
-                    }
                     type="link"
                     className="show"
                     //   onClick={() => {
@@ -229,9 +221,6 @@ function AttendanceLog(props) {
                     <img src={Checkmark} />
                   </Button>
                   <Button
-                    style={
-                      record.status == "Pending" ? null : { display: "none" }
-                    }
                     type="link"
                     className="deleTe"
                     //   onClick={() => {
@@ -246,9 +235,8 @@ function AttendanceLog(props) {
           }
         : {
             title: "Status",
-            dataIndex: "empId",
-            className: "code",
-            key: "empId",
+            dataIndex: "appStatus",
+            key: "appStatus",
             align: "center",
           }
     );
@@ -308,7 +296,7 @@ function AttendanceLog(props) {
       empId: empCode,
       empName: empName,
       type: "Approval",
-      status: "pending",
+      appStatus: "Pending",
       reason: values.absentReason,
       date: editedAbsent.date,
     };
@@ -323,6 +311,15 @@ function AttendanceLog(props) {
       showNotification("error", "Error", "Error In Invoice");
     }
   };
+
+  const getAllRegularizeAtt = async () => {
+    let regularizeData = await AttendanceContext.getRegularizeAttendance();
+    setRegularizeDetails(regularizeData);
+  };
+
+  useEffect(() => {
+    getAllRegularizeAtt();
+  }, []);
 
   useEffect(() => {
     // console.log("3");
@@ -1149,6 +1146,7 @@ function AttendanceLog(props) {
                   <Table
                     columns={approveColumns(true)}
                     className="approveTable"
+                    dataSource={regularizeDetails}
                   />
                   <Row gutter={[24, 8]}>
                     <Col span={6}>
@@ -1181,6 +1179,7 @@ function AttendanceLog(props) {
                   <Table
                     columns={approveColumns(false)}
                     className="approveTable"
+                    dataSource={regularizeDetails}
                   />
                 </Card>
               </Tabs.TabPane>

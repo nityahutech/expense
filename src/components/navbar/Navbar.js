@@ -10,7 +10,7 @@ import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
 import settingsIcon from "../../images/NavSettingsIcon.png";
 import logoutIcon from "../../images/LogoutIcon.png";
-import Logo from "../../images/Logo.svg";
+import Logo from "../../images/logo.svg";
 import dropdown from "../../images/dropdown.png";
 
 const Navbar = (props) => {

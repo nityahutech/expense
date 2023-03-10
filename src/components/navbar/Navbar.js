@@ -10,7 +10,7 @@ import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
 import settingsIcon from "../../images/NavSettingsIcon.png";
 import logoutIcon from "../../images/LogoutIcon.png";
-import Logo from "../../images/Logo.svg";
+import Logo from "../../images/logo.svg";
 import dropdown from "../../images/dropdown.png";
 
 const Navbar = (props) => {
@@ -20,17 +20,19 @@ const Navbar = (props) => {
   const [loading, setLoading] = useState(false);
   const { logout } = useAuth();
   const [clockinfo, setClockInfo] = useState();
-  const [buttonStatus,setButtonStatus]=useState(false);
+  const [buttonStatus, setButtonStatus] = useState(false);
   const role = sessionStorage.getItem("role");
-  const [roleView, setRoleView] = useState(props.roleView || sessionStorage.getItem("role"));
+  const [roleView, setRoleView] = useState(
+    props.roleView || sessionStorage.getItem("role")
+  );
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   let temp = sessionStorage.getItem("logo");
   const logo = temp == null ? Logo : temp;
 
   const isClockRunning = async () => {
-    setLoading(true)
+    setLoading(true);
     let res = await AttendanceContext.getStartTime(currentUser.uid);
-    setLoading(false)
+    setLoading(false);
     if (res == null || res.clockOut != null) {
       setIsRunning(false);
       return false;
@@ -64,11 +66,7 @@ const Navbar = (props) => {
             </Link>
           ),
           icon: (
-            <img
-              src={settingsIcon}
-              alt="downArrow"
-              className="avatarimg"
-            />
+            <img src={settingsIcon} alt="downArrow" className="avatarimg" />
           ),
         },
         {
@@ -83,18 +81,12 @@ const Navbar = (props) => {
               Logout
             </Link>
           ),
-          icon: (
-            <img
-              src={logoutIcon}
-              alt="downArrow"
-              className="avatarimg"
-            />
-          ),
+          icon: <img src={logoutIcon} alt="downArrow" className="avatarimg" />,
         },
       ]}
     />
   );
-  
+
   const notificationMenu = (
     <Menu
       className="notificationMenuDp"
@@ -104,8 +96,8 @@ const Navbar = (props) => {
           label: (
             <Link
               // to="/Settings"
-              style={{ 
-                color: "#171832", 
+              style={{
+                color: "#171832",
                 fontWeight: "normal",
               }}
               // rel="noopener noreferrer"
@@ -113,7 +105,7 @@ const Navbar = (props) => {
               Requests
             </Link>
           ),
-          icon: (<></>),
+          icon: <></>,
         },
         {
           key: "2",
@@ -127,7 +119,7 @@ const Navbar = (props) => {
               Leaves
             </Link>
           ),
-          icon: (<></>),
+          icon: <></>,
         },
       ]}
     >
@@ -181,7 +173,7 @@ const Navbar = (props) => {
     width: "150px",
     borderRadius: "5px",
     border: "1px solid white",
-  }
+  };
 
   const [buttonText, setButtonText] = useState(
     !isRunning ? "Web Clock In" : ""
@@ -189,19 +181,17 @@ const Navbar = (props) => {
   let clockTime = isRunning ? clockinfo : "";
 
   const onMouseEnter = (event) => {
-    
     event.target.style.background = "#DB0000";
     setButtonStatus(false);
     if (isRunning) {
       setButtonText(" ");
     }
-    if(buttonStatus){
+    if (buttonStatus) {
       setButtonText("Web clock out");
     }
   };
 
   const onMouseLeave = (event) => {
-    
     if (isRunning) {
       event.target.style.background = "skyblue";
       setButtonText(" ");
@@ -211,9 +201,9 @@ const Navbar = (props) => {
       setButtonText("Web Clock in");
     }
   };
-  
+
   const setClockState = async () => {
-    setLoading(true)
+    setLoading(true);
     let clickedDate = {
       empId: currentUser.uid,
       name: currentUser.displayName,
@@ -223,12 +213,12 @@ const Navbar = (props) => {
     };
     await AttendanceContext.addClockData(clickedDate);
     setIsRunning(true);
-    setLoading(false)
-    props.switchRefresh(true)
+    setLoading(false);
+    props.switchRefresh(true);
   };
 
   const stopClockState = async () => {
-    setLoading(true)
+    setLoading(true);
     let offset = moment().subtract(startTime);
     let offsettime = breakTime != null ? offset.subtract(breakTime) : offset;
     const offsetTime = moment(offsettime, "HH:mm:ss").diff(
@@ -246,8 +236,8 @@ const Navbar = (props) => {
     setClockInfo(0);
     setStartTime("");
     setButtonText("Web Clock In ");
-    setLoading(false)
-    props.switchRefresh(true)
+    setLoading(false);
+    props.switchRefresh(true);
   };
 
   const handleClock = () => {
@@ -260,42 +250,47 @@ const Navbar = (props) => {
 
   return (
     <div className="navbar" style={{ background: "white" }}>
-      <div className="wrapper"> 
+      <div className="wrapper">
         {role == "admin" ? (
-          <Switch 
+          <Switch
             checkedChildren="Admin"
             unCheckedChildren="User"
-            defaultChecked = {roleView == "admin"}
+            defaultChecked={roleView == "admin"}
             style={{
               marginRight: "10px",
               fontWeight: "bold",
-              width:"90px"
+              width: "90px",
             }}
-            onChange={()=>{
-              setRoleView(roleView == "admin" ? "emp" : "admin")
-              props.switchRole(roleView == "admin" ? "emp" : "admin")
-              sessionStorage.setItem("roleView", roleView == "admin" ? "emp" : "admin")}
-            }
+            onChange={() => {
+              setRoleView(roleView == "admin" ? "emp" : "admin");
+              props.switchRole(roleView == "admin" ? "emp" : "admin");
+              sessionStorage.setItem(
+                "roleView",
+                roleView == "admin" ? "emp" : "admin"
+              );
+            }}
           />
         ) : null}
-       {roleView == "emp" ? 
-          loading ? (<button style={loadStyle}>
-            <LoadingOutlined />
-            {"  Loading"}
-          </button>) : 
-          (
-          <button
-            style={buttonStyle}
-            onClick={handleClock}
-            onMouseLeave={onMouseLeave}
-            onMouseEnter={onMouseEnter}
-            className="clockButton"
-          >
-            {buttonText ? buttonText : ""} {!buttonStatus ? <br/> : null}
-            {clockinfo && isRunning
-              ? moment.utc(clockTime * 1000).format("HH:mm:ss")
-              : ""}
-          </button>
+        {roleView == "emp" ? (
+          loading ? (
+            <button style={loadStyle}>
+              <LoadingOutlined />
+              {"  Loading"}
+            </button>
+          ) : (
+            <button
+              style={buttonStyle}
+              onClick={handleClock}
+              onMouseLeave={onMouseLeave}
+              onMouseEnter={onMouseEnter}
+              className="clockButton"
+            >
+              {buttonText ? buttonText : ""} {!buttonStatus ? <br /> : null}
+              {clockinfo && isRunning
+                ? moment.utc(clockTime * 1000).format("HH:mm:ss")
+                : ""}
+            </button>
+          )
         ) : null}
         {/* <Dropdown overlay={notificationMenu} className="notificationBell">
           <Badge count={5} offset={[-10,5]} size="small">
@@ -303,11 +298,7 @@ const Navbar = (props) => {
           </Badge>
         </Dropdown> */}
         <div>
-          <img
-            src={logo}
-            alt={"logo not found"}
-            className="profileLogo"
-          />
+          <img src={logo} alt={"logo not found"} className="profileLogo" />
         </div>
         <Dropdown overlay={menu}>
           <Space>

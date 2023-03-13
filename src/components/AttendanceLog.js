@@ -29,6 +29,7 @@ import ConfigureContext from "../contexts/ConfigureContext";
 import { checkNumbervalue, showNotification } from "../contexts/CreateContext";
 import Checkmark from "../images/checkmark.png";
 import CheckReject from "../images/rejected.png";
+import { webClock } from "../contexts/EmailContext";
 
 const layout = {
   labelCol: {
@@ -112,6 +113,8 @@ function AttendanceLog(props) {
     })
       .then((response) => {
         getAttendanceData();
+        console.log("rule");
+        webClock();
       })
       .catch((error) => {
         showNotification("error", "Error", error.message);
@@ -245,23 +248,15 @@ function AttendanceLog(props) {
 
   useEffect(() => {
     // console.log("1");
-    getAttendanceData();
-    getHolidayList();
     getDateOfJoining();
   }, [isAdmin]);
-
-  useEffect(() => {
-    // console.log("1");
-    getData();
-    props.switchRefresh(false);
-  }, [props.refresh]);
 
   useEffect(() => {
     // console.log("2");
     form.resetFields();
     getData();
     props.switchRefresh(false);
-  }, [activetab, isAdmin]);
+  }, [activetab, isAdmin, props.refresh]);
 
   const getData = async () => {
     let temp = {};
@@ -1025,7 +1020,7 @@ function AttendanceLog(props) {
                         <TimePicker
                           onChange={(e) => {
                             setStartTime(e == null ? "" : e.format("HH:mm"));
-                            handleFinish({ starttime: e });
+                            // handleFinish({ starttime: e });
                           }}
                           disabled={!endTime}
                           disabledTime={() => ({
@@ -1059,7 +1054,7 @@ function AttendanceLog(props) {
                         <TimePicker
                           onChange={(e) => {
                             setEndTime(e == null ? "" : e.format("HH:mm"));
-                            handleFinish({ endtime: e });
+                            // handleFinish({ endtime: e });
                           }}
                           disabled={!startTime}
                           disabledTime={() => ({

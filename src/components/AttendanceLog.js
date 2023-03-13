@@ -52,6 +52,8 @@ function AttendanceLog(props) {
   const [form] = Form.useForm();
   const page = "attendanceConfig";
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const isHr = JSON.parse(sessionStorage.getItem("isHr"));
+  const isManager = JSON.parse(sessionStorage.getItem("isMgr"));
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
   const [loading, setLoading] = useState(true);

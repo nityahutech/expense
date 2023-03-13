@@ -54,7 +54,7 @@ function Editemployee(props) {
   async function submitEdit() {
     let par = team?.split("_")[1]?.split("/")
     try {
-      const editedRecord = {
+      let editedRecord = {
         fname,
         mname,
         lname,
@@ -77,7 +77,9 @@ function Editemployee(props) {
       let record = {
         ...editedRecord,
         name: name,
+        workLocation: editedRecord.location
       };
+      delete editedRecord.location
       if (par) {
         record = {
           ...record,
@@ -93,7 +95,7 @@ function Editemployee(props) {
       return;
     } catch (error) {
       props.setIsModalVisible(false);
-      showNotification("error", "Failed", "Record update failed");
+      showNotification("error", "Failed", "Record update failed"+error.message);
     }
   }
   const getData = async () => {
@@ -144,7 +146,7 @@ function Editemployee(props) {
     const secManagerVal = props.record ? props.record.secManager : "";
     const setTeamVal = props.record ? props.record.team : "";
     const leadVal = props.record ? props.record.lead : "";
-    const locationVal = props.record ? props.record.location : "";
+    const locationVal = props.record ? props.record.workLocation : "";
     const isLeadVal = props.record ? props.record.isLead : "";
     const isMgrVal = props.record ? props.record.isManager : "";
     setFname(fnameVal);
@@ -618,7 +620,6 @@ function Editemployee(props) {
               rules={[
                 {
                   required: true,
-
                   message: "Please enter Location",
                 },
                 {

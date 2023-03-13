@@ -67,6 +67,7 @@ const Leave = (props) => {
   const [validleaverequest, setValidleaverequest] = useState("false");
   const [options, setOptions] = useState([]);
   const [allEmpName, setAllEmpName] = useState([]);
+  const [allEmpMap, setAllEmpMap] = useState({});
   const [empApply, setEmpApply] = useState(null);
 
   const [filterCriteria, setFilterCriteria] = useState({
@@ -253,9 +254,23 @@ const Leave = (props) => {
   };
   
   useEffect(() => {
-    
+    if (empApply != null)
+      getAdminData(empApply)
   }, [empApply])
 
+  const getAdminData = (emp) => {
+    let id = allEmpMap[`${emp}`];
+    let array = []
+    let userReq = allRequests.filter(x => {
+      if (x.empId == id) {
+        array.push(x.dateCalc)
+        return true;
+      }
+    })
+    setTempDur([].concat.apply([], array));
+    console.log(userReq, [].concat.apply([], array))
+  }
+console.log(empApply, tempDur)
   useEffect(() => {
     getAllUser()
   }, [])
@@ -273,11 +288,14 @@ const Leave = (props) => {
 
   const getAllUser = async () => {
     const allData = await getUsers();
+    let userMap = {}
     let allUsers = allData.docs.map((doc, i) => {
+      userMap[`${doc.data().name}`] = doc.id
       return {
-        value: doc.data().fname + ' ' + doc.data().lname,
+        value: doc.data().name,
       };
     });
+    setAllEmpMap(userMap)
     setAllEmpName(allUsers);
   }
 
@@ -661,7 +679,7 @@ const Leave = (props) => {
       render: (_, { status }) =>
         status !== "" && (
           <Tag
-            style={{ width: "70px", color: "black" }}
+            style={{ width: "80px", color: "black", textAlign: "center" }}
             className="statusTag"
             color={
               status === "Approved"
@@ -1295,6 +1313,7 @@ const Leave = (props) => {
                                 setValidleaverequest(false)
                               }
                             }}
+                            disabled={empApply == null}
                             disabledDate={disabledDate}
                           />
                         </Form.Item>
@@ -1316,13 +1335,15 @@ const Leave = (props) => {
                         >
                           <Select
                             style={{ width: "100%" }}
+                            disabled={empApply == null}
                             onChange={(e) => {
                               setStartSlot(e);
                               onLeaveDateChange();
                             }}
                           >
                             <Option value="Full Day">Full Day</Option>
-                            <Option value="Half Day">Half Day</Option>
+                            <Option value="Half Day (First Half)">Half Day (First Half)</Option>
+                            <Option value="Half Day (Second Half)">Half Day (Second Half)</Option>
                           </Select>
                         </Form.Item>
                       </Col>
@@ -1393,7 +1414,8 @@ const Leave = (props) => {
                             }}
                           >
                             <Option value="Full Day">Full Day</Option>
-                            <Option value="Half Day">Half Day</Option>
+                            <Option value="Half Day (First Half)">Half Day (First Half)</Option>
+                            <Option value="Half Day (Second Half)">Half Day (Second Half)</Option>
                           </Select>
                         </Form.Item>
                       </Col>
@@ -2033,7 +2055,8 @@ const Leave = (props) => {
                             }}
                           >
                             <Option value="Full Day">Full Day</Option>
-                            <Option value="Half Day">Half Day</Option>
+                            <Option value="Half Day (First Half)">Half Day (First Half)</Option>
+                            <Option value="Half Day (Second Half)">Half Day (Second Half)</Option>
                           </Select>
                         </Form.Item>
                       </Col>
@@ -2104,7 +2127,8 @@ const Leave = (props) => {
                             }}
                           >
                             <Option value="Full Day">Full Day</Option>
-                            <Option value="Half Day">Half Day</Option>
+                            <Option value="Half Day (First Half)">Half Day (First Half)</Option>
+                            <Option value="Half Day (Second Half)">Half Day (Second Half)</Option>
                           </Select>
                         </Form.Item>
                       </Col>
@@ -2513,7 +2537,8 @@ const Leave = (props) => {
                           }}
                         >
                           <Option value="Full Day">Full Day</Option>
-                          <Option value="Half Day">Half Day</Option>
+                            <Option value="Half Day (First Half)">Half Day (First Half)</Option>
+                            <Option value="Half Day (Second Half)">Half Day (Second Half)</Option>
                         </Select>
                       </Form.Item>
                     </Col>
@@ -2581,7 +2606,8 @@ const Leave = (props) => {
                           }}
                         >
                           <Option value="Full Day">Full Day</Option>
-                          <Option value="Half Day">Half Day</Option>
+                            <Option value="Half Day (First Half)">Half Day (First Half)</Option>
+                            <Option value="Half Day (Second Half)">Half Day (Second Half)</Option>
                         </Select>
                       </Form.Item>
                     </Col>

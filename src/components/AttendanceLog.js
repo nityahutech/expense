@@ -29,6 +29,7 @@ import ConfigureContext from "../contexts/ConfigureContext";
 import { checkNumbervalue, showNotification } from "../contexts/CreateContext";
 import Checkmark from "../images/checkmark.png";
 import CheckReject from "../images/rejected.png";
+import { async } from "@firebase/util";
 
 const layout = {
   labelCol: {
@@ -74,6 +75,7 @@ function AttendanceLog(props) {
   const [empName, setEmpName] = useState(null);
   const [editedAbsent, seteditedAbsent] = useState({});
   const [regularizeDetails, setRegularizeDetails] = useState([]);
+  const [pendingData, setpendingData] = useState([]);
 
   const showEditModal = () => {
     // console.log("record;;", record);
@@ -175,6 +177,40 @@ function AttendanceLog(props) {
     },
   ];
 
+  const setStatus = async (record, status) => {
+    Modal.confirm({
+      title: `Are you sure, you want to ${
+        status == "Approved" ? "approve" : "reject"
+      } this request?`,
+      okText: "yes",
+      okType: "danger",
+      onOk: async () => {
+        const updateAttendance = regularizeDetails.map((attendanceData) => {
+          console.log(attendanceData);
+          if (attendanceData.id == record.id) {
+            attendanceData.appStatus = status;
+            record.appStatus = status;
+            if (status == "Approved") {
+              record.clockIn = configurations.starttime + ":00";
+              record.clockOut = configurations.endtime + ":00";
+              record.break = configurations.maxBreakDuration + ":00:00";
+              record.duration = moment(configurations.endtime, "HH:mm:ss")
+                .subtract(configurations.starttime)
+                .subtract(configurations.maxBreakDuration + ":00:00")
+                .format("HH:mm:ss");
+            }
+          }
+          return attendanceData;
+        });
+        console.log("recorddd", record);
+        await AttendanceContext.updateRegularize(record.id, record);
+        console.log(updateAttendance);
+        getAllRegularizeAtt();
+        // setRegularizeDetails(updateAttendance);
+      },
+    });
+  };
+
   const approveColumns = (value) => {
     let col = [
       {
@@ -214,9 +250,9 @@ function AttendanceLog(props) {
                   <Button
                     type="link"
                     className="show"
-                    //   onClick={() => {
-                    //     setStatus(record, "Approved");
-                    //   }}
+                    onClick={() => {
+                      setStatus(record, "Approved");
+                    }}
                   >
                     <img src={Checkmark} />
                   </Button>
@@ -293,6 +329,7 @@ function AttendanceLog(props) {
   const attendanceReason = async (values) => {
     console.log("valuess", values);
     const addDetails = {
+      id: currentUser.uid,
       empId: empCode,
       empName: empName,
       type: "Approval",
@@ -314,7 +351,16 @@ function AttendanceLog(props) {
 
   const getAllRegularizeAtt = async () => {
     let regularizeData = await AttendanceContext.getRegularizeAttendance();
-    setRegularizeDetails(regularizeData);
+    let temp = [];
+    let pending = regularizeData.filter((x) => {
+      if (x.appStatus == "Pending") {
+        return true;
+      }
+      temp.push(x);
+    });
+    setpendingData(pending);
+
+    setRegularizeDetails(temp);
   };
 
   useEffect(() => {
@@ -1146,41 +1192,43 @@ function AttendanceLog(props) {
                   <Table
                     columns={approveColumns(true)}
                     className="approveTable"
-                    dataSource={regularizeDetails}
+                    dataSource={pendingData}
                   />
-                  <Row gutter={[24, 8]}>
-                    <Col span={6}>
-                      <Input
-                        placeholder="Search"
-                        prefix={<SearchOutlined />}
-                        onChange={searchChange}
-                        // style={{ width: "95%" }}
-                      />
-                    </Col>
-                    <Col span={6}>
-                      <DatePicker
-                        picker="month"
-                        placeholder="Select Month"
-                        bordered={true}
-                        // value={month}
-                        // defaultValue={month ? month : null}
-                        format="MM-YYYY"
-                        // style={{
-                        //   background: "#1963A6",
-                        //   cursor: "pointer",
-                        //   marginLeft: "15rem",
-                        // }}
-                        allowClear
-                        onChange={onHrDateFilter}
-                        disabledDate={disabledDate}
-                      />
-                    </Col>
-                  </Row>
-                  <Table
-                    columns={approveColumns(false)}
-                    className="approveTable"
-                    dataSource={regularizeDetails}
-                  />
+                  <Card title="Attendance Log" className="approveCard">
+                    <Row gutter={[24, 8]} style={{ marginLeft: "0px" }}>
+                      <Col span={6}>
+                        <Input
+                          placeholder="Search"
+                          prefix={<SearchOutlined />}
+                          onChange={searchChange}
+                          // style={{ width: "95%" }}
+                        />
+                      </Col>
+                      <Col span={6}>
+                        <DatePicker
+                          picker="month"
+                          placeholder="Select Month"
+                          bordered={true}
+                          // value={month}
+                          // defaultValue={month ? month : null}
+                          format="MM-YYYY"
+                          // style={{
+                          //   background: "#1963A6",
+                          //   cursor: "pointer",
+                          //   marginLeft: "15rem",
+                          // }}
+                          allowClear
+                          onChange={onHrDateFilter}
+                          disabledDate={disabledDate}
+                        />
+                      </Col>
+                    </Row>
+                    <Table
+                      columns={approveColumns(false)}
+                      className="approveTable"
+                      dataSource={regularizeDetails}
+                    />
+                  </Card>
                 </Card>
               </Tabs.TabPane>
             </>

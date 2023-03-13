@@ -350,6 +350,13 @@ class AttendanceContext {
     });
     return rec;
   };
+
+  updateRegularize = (id, updateAttendance) => {
+    return updateDoc(
+      doc(db, `companyprofile/${compId}/attendance`, id),
+      updateAttendance
+    );
+  };
 }
 
 export default new AttendanceContext();

@@ -175,11 +175,13 @@ function HrPaySlip() {
     const mappedEarningValues = {};
     const earningArray = []; // create an array for earning values
     earningConfig?.Earning.forEach((field) => {
-      mappedEarningValues[field] = values[field];
+      // mappedEarningValues[field] = values[field];
       earningArray.push({
         field: field,
         value: values[field]
       }); // push the field-value pair into the array
+      console.log("earningArray", earningArray);
+      console.log("mappedEarningValues", mappedEarningValues)
     });
 
     console.log("netSalaryEmp", mappedEarningValues);

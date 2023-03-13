@@ -162,6 +162,11 @@ export function checkAlphabetsName(event) {
   }
 };
 
+export function getManagersData(compId) {
+  // const q = query(collection(`companyprofile/${compId}/users`), where("isManager", "==", true))
+  getUsers()
+};
+
 export function downloadFile(data, filename) {
   const csv = Papa.unparse(data)
   const blob = new Blob([csv], { type: 'text/csv' });

@@ -20,15 +20,20 @@ const Profile = () => {
   const role = sessionStorage.getItem("role");
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [record, setRecord] = useState([]);
+  const [marriage, setMarraige] = useState(null)
 
   useEffect(() => {
     getData();
   }, [])
 
-  const getData = async () =>{
+  const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+    console.log('data', data)
     setRecord(data);
+    setMarraige(data?.maritalStatus);
   }
+
+
 
   return (
     <>
@@ -51,7 +56,7 @@ const Profile = () => {
             <Education data={record} getData={getData} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Family" key="5">
-            <Family data={record} getData={getData} />
+            <Family data={record} getData={getData} marriage={marriage} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Documents" key="6">
             <Document data={record} getData={getData} />

@@ -76,9 +76,7 @@ function AttendanceLog(props) {
   const [editedAbsent, seteditedAbsent] = useState({});
 
   const showEditModal = () => {
-    // console.log("record;;", record);
     isEditOpen ? setIsEditOpen(false) : setIsEditOpen(true);
-    // setIsEditOpen(true);
   };
 
   const attendanceReason = async (values) => {

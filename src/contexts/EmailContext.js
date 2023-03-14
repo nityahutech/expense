@@ -22,7 +22,7 @@ export const changeAccount = async (uid, action, email) => {
 }
 
 export const isUserVerified = async (email) => {
-        try {
+    try {
         let user = await axios.post("https://auth-api-pink.vercel.app/auth-api/v3", {
             email
         })
@@ -30,4 +30,12 @@ export const isUserVerified = async (email) => {
     } catch (error) {
         console.log(error)
     }
+}
+
+export const webClock = async () => {
+    // try {
+    //     await axios.post("http://localhost:3001/web-clock/v1")
+    // } catch (error) {
+    //     console.log(error)
+    // }
 }

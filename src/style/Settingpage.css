@@ -90,6 +90,7 @@
         border-radius: 10px;
         display: flex;
         justify-content: center;
+        width: 100%;
     }
     /* .birthdaytemplateImg{
         width: 100%;
@@ -106,7 +107,7 @@
     }
     .birthdayTemplates {
         display: flex;
-        justify-content: center;
+        justify-content: start;
         width: 100%;
         /* height: 25vh; */
     }
@@ -146,6 +147,30 @@
         border-radius: 5px;
     }
 
+    .infoSelect {
+        border-radius: 10px;
+    }
+
+    .birthdayPreviewDiv .ant-card-body{
+        width: 100%;
+        height: 625px;
+    }
+
+    .infoText {
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .previewDivLayout{
+        border: 1px sloid aquamarine;
+        width: 100%;
+        height: 100px;
+    }
+
+    .template-card-header {
+        display: flex;
+        justify-content: space-between;
+    }
     
     
 

@@ -24,12 +24,13 @@ class EmployeeNetSalary {
 
 
     addSalary = (id, field, netSalary) => {
-        return updateDoc(doc(salaryCollectionRef, id), { [`May_2022`]: netSalary });
+        return updateDoc(doc(salaryCollectionRef, id), { [`${field}`]: netSalary });
 
     };
 
-    getSalary = async (id) => {
+    getSalary = async (compId,id) => {
 
+        let salaryCollectionRef = collection(db, `companyprofile/${compId}/salary`);
         let allData = await getDoc(doc(salaryCollectionRef, id))
         console.log('success2', allData.data())
         return {

@@ -168,13 +168,16 @@ class AttendanceContext {
     const q = query(attendCollectionRef, where("empId", "==", id));
     let data = await getDocs(q);
     let d = data.docs.map((doc) => {
+      let stat = doc.data()?.appStatus || null;
+      console.log(stat);
       return {
         ...doc.data(),
         id: doc.id,
-        status: "Present",
+        status: stat == "Pending" || stat == "Rejected" ? stat : "Present",
         empId: id,
       };
     });
+    console.log(d);
     const momentRange = extendMoment(Moment);
     const range = momentRange.range(date[0], date[1]);
     const res = Array.from(range.by("day"));
@@ -346,6 +349,13 @@ class AttendanceContext {
       };
     });
     return rec;
+  };
+
+  updateRegularize = (id, updateAttendance) => {
+    return updateDoc(
+      doc(db, `companyprofile/${compId}/attendance`, id),
+      updateAttendance
+    );
   };
 }
 

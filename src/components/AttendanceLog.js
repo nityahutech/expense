@@ -27,8 +27,8 @@ import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import { checkNumbervalue, showNotification } from "../contexts/CreateContext";
-import Checkmark from "../images/checkmark.png";
-import CheckReject from "../images/rejected.png";
+import { webClock } from "../contexts/EmailContext";
+import RegularizeAttendance from "./RegularizeAttendance";
 
 const layout = {
   labelCol: {
@@ -51,11 +51,12 @@ function AttendanceLog(props) {
   const [form] = Form.useForm();
   const page = "attendanceConfig";
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const isHr = JSON.parse(sessionStorage.getItem("isHr"));
+  const isManager = JSON.parse(sessionStorage.getItem("isMgr"));
   const [selectemp, setSelectemp] = useState({ id: "" });
   const [activetab, setActivetab] = useState("1");
   const [loading, setLoading] = useState(true);
   const [empMonthly, setEmpMonthly] = useState([]);
-  const [absentCSS, setAbsentCSS] = useState();
   const [holidays, setHolidays] = useState([]);
   const [dateOfJoining, setDateOfJoining] = useState(null);
   const [month, setMonth] = useState();
@@ -73,12 +74,32 @@ function AttendanceLog(props) {
   const [empCode, setEmpCode] = useState(null);
   const [empName, setEmpName] = useState(null);
   const [editedAbsent, seteditedAbsent] = useState({});
-  const [regularizeDetails, setRegularizeDetails] = useState([]);
 
   const showEditModal = () => {
-    // console.log("record;;", record);
     isEditOpen ? setIsEditOpen(false) : setIsEditOpen(true);
-    // setIsEditOpen(true);
+  };
+
+  const attendanceReason = async (values) => {
+    console.log("valuess", values);
+    const addDetails = {
+      id: currentUser.uid,
+      empId: empCode,
+      empName: empName,
+      type: "Approval",
+      appStatus: "Pending",
+      reason: values.absentReason,
+      date: editedAbsent.date,
+    };
+
+    try {
+      await AttendanceContext.addRegularize(addDetails);
+      setIsEditOpen(false);
+      showNotification("success", "Success", "Reason has been added");
+      form.resetFields();
+    } catch (error) {
+      console.log("error", error);
+      showNotification("error", "Error", error.message);
+    }
   };
 
   const handleCancel = () => {
@@ -112,6 +133,8 @@ function AttendanceLog(props) {
     })
       .then((response) => {
         getAttendanceData();
+        console.log("rule");
+        webClock();
       })
       .catch((error) => {
         showNotification("error", "Error", error.message);
@@ -175,93 +198,18 @@ function AttendanceLog(props) {
     },
   ];
 
-  const approveColumns = (value) => {
-    let col = [
-      {
-        title: "Employee Code",
-        dataIndex: "empId",
-        key: "empId",
-        align: "center",
-        width: 180,
-      },
-      {
-        title: "Employee Name",
-        dataIndex: "empName",
-        key: "empName",
-        align: "center",
-      },
-      {
-        title: "Date",
-        dataIndex: "date",
-        key: "date",
-        align: "center",
-      },
-      { title: "Reason", dataIndex: "reason", key: "reason", align: "center" },
-    ];
-    col.push(
-      value
-        ? {
-            title: "Action",
-            dataIndex: "action",
-            key: "action",
-            align: "center",
-            render: (_, record) => (
-              <>
-                <div
-                  className="employee-button"
-                  // style={{ display: "flex", flexDirection: "row" }}
-                >
-                  <Button
-                    type="link"
-                    className="show"
-                    //   onClick={() => {
-                    //     setStatus(record, "Approved");
-                    //   }}
-                  >
-                    <img src={Checkmark} />
-                  </Button>
-                  <Button
-                    type="link"
-                    className="deleTe"
-                    //   onClick={() => {
-                    //     setStatus(record, "Reject");
-                    //   }}
-                  >
-                    <img src={CheckReject} width={20} />
-                  </Button>
-                </div>
-              </>
-            ),
-          }
-        : {
-            title: "Status",
-            dataIndex: "appStatus",
-            key: "appStatus",
-            align: "center",
-          }
-    );
-    return col;
-  };
 
   useEffect(() => {
     // console.log("1");
-    getAttendanceData();
-    getHolidayList();
     getDateOfJoining();
   }, [isAdmin]);
-
-  useEffect(() => {
-    // console.log("1");
-    getData();
-    props.switchRefresh(false);
-  }, [props.refresh]);
 
   useEffect(() => {
     // console.log("2");
     form.resetFields();
     getData();
     props.switchRefresh(false);
-  }, [activetab, isAdmin]);
+  }, [activetab, isAdmin, props.refresh]);
 
   const getData = async () => {
     let temp = {};
@@ -289,37 +237,6 @@ function AttendanceLog(props) {
       }
     }
   };
-
-  const attendanceReason = async (values) => {
-    console.log("valuess", values);
-    const addDetails = {
-      empId: empCode,
-      empName: empName,
-      type: "Approval",
-      appStatus: "Pending",
-      reason: values.absentReason,
-      date: editedAbsent.date,
-    };
-
-    try {
-      await AttendanceContext.addRegularize(addDetails);
-      setIsEditOpen(false);
-      showNotification("success", "Success", "Reason has been added");
-      form.resetFields();
-    } catch (error) {
-      console.log("error", error);
-      showNotification("error", "Error", "Error In Invoice");
-    }
-  };
-
-  const getAllRegularizeAtt = async () => {
-    let regularizeData = await AttendanceContext.getRegularizeAttendance();
-    setRegularizeDetails(regularizeData);
-  };
-
-  useEffect(() => {
-    getAllRegularizeAtt();
-  }, []);
 
   useEffect(() => {
     // console.log("3");
@@ -710,7 +627,8 @@ function AttendanceLog(props) {
         >
           {!isAdmin ? (
             <>
-              <Tabs.TabPane tab="Monthly Log" key="1">
+
+              <Tabs.TabPane tab="My Attendance" key="1">
                 <div className="monthColor">
                   <DatePicker
                     picker="month"
@@ -816,9 +734,86 @@ function AttendanceLog(props) {
                   </Form>
                 </Modal>
               </Tabs.TabPane>
+              <Tabs.TabPane tab="Daily Log" key="2" forceRender="true">
+                <Input
+                  className="Daily"
+                  placeholder="Search"
+                  prefix={<SearchOutlined />}
+                  onChange={searchChange}
+                  // style={{ width: "95%" }}
+                />
+                <div className="monthColor">
+                  <DatePicker
+                    defaultValue={selDate}
+                    className="Range Daily"
+                    bordered={true}
+                    format="DD-MM-YYYY"
+                    style={{
+                      background: "#1963A6",
+                      cursor: "pointer",
+                      marginLeft: "15rem",
+                      width: "10%",
+                    }}
+                    allowClear
+                    onChange={(e) => {
+                      setSelDate(e);
+                      allEmpDetails("_", e);
+                    }}
+                  />
+                </div>
+                <Table
+                  //   rowSelection={{
+                  //     type: selectionType,
+                  //     ...rowSelection,
+                  //   }}
+                  className="DailyTable"
+                  onRow={(record, rowIndex) => {
+                    return {
+                      onClick: async (event) => {
+                        setSelectemp({ ...record });
+                        await getEmpDetails(record.id, [
+                          moment().subtract(30, "days"),
+                          moment(),
+                        ]);
+                        setActivetab("2");
+                      },
+                    };
+                  }}
+                  loading={loading} 
+                  columns={columns}
+                  dataSource={filteredEmp}
+                />
+              </Tabs.TabPane>
+              <Tabs.TabPane disabled={!selectemp.id} tab="Monthly Log" key="3">
+                <div className="monthColor">
+                  <DatePicker
+                    picker="month"
+                    placeholder="Select Month"
+                    className="Range"
+                    value={month}
+                    defaultValue={month ? month : null}
+                    format={"MM-YYYY"}
+                    style={{
+                      background: "#1963A6",
+                      cursor: "pointer",
+                      marginLeft: "12rem",
+                    }}
+                    allowClear
+                    onChange={onHrDateFilter}
+                    disabledDate={disabledDate}
+                  />
+                </div>
+                <Table
+                  loading={loading}
+                  className="monthly"
+                  columns={columns1}
+                  dataSource={empMonthly}
+                  pagination={true}
+                />
+              </Tabs.TabPane>
               <Tabs.TabPane
                 tab="Add Report"
-                key="2"
+                key="4"
                 className="reportTabs"
                 // onClick={() => {
                 //   setIsModalOpen(true);
@@ -1025,7 +1020,7 @@ function AttendanceLog(props) {
                         <TimePicker
                           onChange={(e) => {
                             setStartTime(e == null ? "" : e.format("HH:mm"));
-                            handleFinish({ starttime: e });
+                            // handleFinish({ starttime: e });
                           }}
                           disabled={!endTime}
                           disabledTime={() => ({
@@ -1059,7 +1054,7 @@ function AttendanceLog(props) {
                         <TimePicker
                           onChange={(e) => {
                             setEndTime(e == null ? "" : e.format("HH:mm"));
-                            handleFinish({ endtime: e });
+                            // handleFinish({ endtime: e });
                           }}
                           disabled={!startTime}
                           disabledTime={() => ({
@@ -1142,46 +1137,7 @@ function AttendanceLog(props) {
                 </div>
               </Tabs.TabPane>
               <Tabs.TabPane tab="Regularize Attendance" key="4">
-                <Card title="Approve Attendance" className="approveCard">
-                  <Table
-                    columns={approveColumns(true)}
-                    className="approveTable"
-                    dataSource={regularizeDetails}
-                  />
-                  <Row gutter={[24, 8]}>
-                    <Col span={6}>
-                      <Input
-                        placeholder="Search"
-                        prefix={<SearchOutlined />}
-                        onChange={searchChange}
-                        // style={{ width: "95%" }}
-                      />
-                    </Col>
-                    <Col span={6}>
-                      <DatePicker
-                        picker="month"
-                        placeholder="Select Month"
-                        bordered={true}
-                        // value={month}
-                        // defaultValue={month ? month : null}
-                        format="MM-YYYY"
-                        // style={{
-                        //   background: "#1963A6",
-                        //   cursor: "pointer",
-                        //   marginLeft: "15rem",
-                        // }}
-                        allowClear
-                        onChange={onHrDateFilter}
-                        disabledDate={disabledDate}
-                      />
-                    </Col>
-                  </Row>
-                  <Table
-                    columns={approveColumns(false)}
-                    className="approveTable"
-                    dataSource={regularizeDetails}
-                  />
-                </Card>
+                <RegularizeAttendance configurations={configurations} />
               </Tabs.TabPane>
             </>
           )}

@@ -32,8 +32,10 @@ function PaySlip(props) {
   const [selectedMonth, setSelectedMonth] = useState(`${previousMonth.format("MMM")}-${previousMonth.format("YYYY")}`);
 
   const updateSelectedMonth = (date) => {
+    console.log("date: ", date)
     let field = date.format("MMM_YYYY")
-    console.log("selected date string: ", field);
+    console.log("selected date string: ", field,);
+    console.log("selected date string: ", dataMonths);
     let index = dataMonths.includes(field) ? field : null;
     console.log("index: ", index)
     if (index == null) {
@@ -60,11 +62,12 @@ function PaySlip(props) {
     // console.log("daysInMonth: ", daysInMonth)
     setNofDaysInMonth(daysInMonth);
     console.log(allPaySlipData);
-    console.log('jjj', allPaySlipData[index].deductionArray);
-    console.log('jjj', allPaySlipData[index].earningArray);
+    // console.log('jjj', allPaySlipData[index].deductionArray[0].value);
+    // console.log('jjj', allPaySlipData[index].earningArray[0].value);
     setPaySlipData(allPaySlipData[index])
-    setDeductionArray(allPaySlipData[index].deductionArray[0])
-    setEarningArray(allPaySlipData[index].earningArray[0])
+    console.log('jjj', setPaySlipData(allPaySlipData[index]));
+    // setDeductionArray(allPaySlipData[index].deductionArray[0])
+    // setEarningArray(allPaySlipData[index].earningArray[0])
     //allPaySlipData[index].deductionArray[0]
   };
   const disabledDate = (currentDate) => {
@@ -73,9 +76,11 @@ function PaySlip(props) {
 
 
   useEffect(() => {
+    console.log("props.data.id", props.data.id)
     setUserId(props.data.id)
     getSalaryData(props.data.id)
     getCompanyProfile()
+
 
   }, [props.data.id]);
 
@@ -98,8 +103,11 @@ function PaySlip(props) {
   }
 
   async function getSalaryData(id) {
-    const allSalaryPaySlip = await EmployeeNetSalary.getSalary(currentUser.uid);
-    // console.log("aaa", allSalaryPaySlip);
+    console.log("aaa", id);
+    console.log("aaa", compId);
+    const allSalaryPaySlip = await EmployeeNetSalary.getSalary(compId, id);
+    console.log("aaa", currentUser.uid);
+    console.log("aaa", allSalaryPaySlip);
     setAllPaySlipData(allSalaryPaySlip);
     setDataMonths(Object.keys(allSalaryPaySlip))
   }
@@ -386,7 +394,7 @@ function PaySlip(props) {
                         paddingLeft: '100px'
                       }}
                     >
-                      {/* {showRecord.bank[0].accountNo ? showRecord.bank[0].accountNo : 0} */}
+                      {showRecord?.bank && showRecord?.bank[0].bankName ? showRecord?.bank[0].bankName : 0}
                     </td>
                   </tr>
                   <tr>
@@ -395,8 +403,27 @@ function PaySlip(props) {
                         width: "180px",
                       }}
                     >
-                      Bank Account Number:
+                      Bank Acc. No.:
                     </td>
+                    <td
+                      style={{
+                        width: "180px",
+                        textAlign: 'left',
+                        paddingLeft: '100px'
+                      }}
+                    >
+                      {/* {console.log('showRecord.bank[0].accountNo', showRecord.bank[0].accountNo)} */}
+                      {/* {showRecord?.bank[0]?.accountNo ? showRecord?.bank[0]?.accountNo : 0} */}
+                    </td>
+                  </tr>
+                  <tr>
+                    {/* <td
+                      style={{
+                        width: "180px",
+                      }}
+                    >
+                      LWP:
+                    </td> */}
                     <td
                       style={{
                         width: "180px",
@@ -408,6 +435,7 @@ function PaySlip(props) {
                       {/* {showRecord.bank[0].accountNo ? showRecord.bank[0].accountNo : 0} */}
                     </td>
                   </tr>
+
                 </table>
               </div>
             </div>
@@ -470,7 +498,24 @@ function PaySlip(props) {
                     </td>
                   </tr>
 
-                  {earning.map((a) => (<div>{a.field}</div>))}
+                  {paySlipData?.earningArray?.map((a) => (<tr>
+                    <td
+                      style={{
+                        width: "700px",
+                      }}
+                    >
+                      {a.field}
+                    </td>
+                    <td
+                      style={{
+                        width: "180px",
+                        textAlign: 'left',
+                        paddingLeft: '40px'
+                      }}
+                    >
+                      {a.value}
+                    </td>
+                  </tr>))}
 
                   {/* {Object.keys(paySlipData).map((field) => (
                     <tr key={field}>
@@ -480,132 +525,7 @@ function PaySlip(props) {
                       </td>
                     </tr>
                   ))} */}
-                  {/* <tr>
-                    <td
-                      style={{
-                        width: "700px",
-                      }}
-                    >
-                      Conveyance Allowance:
-                    </td>
-                    <td
-                      style={{
-                        width: "180px",
-                        textAlign: 'left',
-                        paddingLeft: '40px'
-                      }}
-                    >
-                      {paySlipData.conveyance ? paySlipData.conveyance : 0}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "700px",
-                      }}
-                    >
-                      Medical Allowance:
-                    </td>
-                    <td
-                      style={{
-                        width: "180px",
-                        textAlign: 'left',
-                        paddingLeft: '40px'
-                      }}
-                    >
-                      {paySlipData.medical ? paySlipData.medical : 0}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "700px",
-                      }}
-                    >
-                      Prof. Development Allowance:
-                    </td>
-                    <td
-                      style={{
-                        width: "180px",
-                        textAlign: 'left',
-                        paddingLeft: '40px'
-                      }}
-                    >
-                      {paySlipData.proffallowance ? paySlipData.proffallowance : 0}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "700px",
-                      }}
-                    >
-                      Special Allowance:
-                    </td>
-                    <td
-                      style={{
-                        width: "180px",
-                        textAlign: 'left',
-                        paddingLeft: '40px'
-                      }}
-                    >
-                      {paySlipData.specialallowance ? paySlipData.specialallowance : 0}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "700px",
-                      }}
-                    >
-                      Bonus:
-                    </td>
-                    <td
-                      style={{
-                        width: "180px",
-                        textAlign: 'left',
-                        paddingLeft: '40px'
-                      }}
-                    >
-                      {paySlipData.bonus ? paySlipData.bonus : 0}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "700px",
-                      }}
-                    >
-                      LTA:
-                    </td>
-                    <td
-                      style={{
-                        width: "180px",
-                        textAlign: 'left',
-                        paddingLeft: '40px'
-                      }}
-                    >
-                      {paySlipData.lta ? paySlipData.lta : 0}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "700px",
-                      }}
-                    >
-                      Other Allowance:
-                    </td>
-                    <td
-                      style={{
-                        width: "180px",
-                        textAlign: 'left',
-                        paddingLeft: '40px'
-                      }}
-                    >
-                      {paySlipData.otherAllowance ? paySlipData.otherAllowance : 0}
-                    </td>
-                  </tr> */}
+
                 </table>
               </div>
               <div className="splitThird">
@@ -631,13 +551,13 @@ function PaySlip(props) {
                       </th>
                     </tr>
                   </thead>
-                  {/* <tr>
+                  {paySlipData?.deductionArray?.map((a) => (<tr>
                     <td
                       style={{
                         width: "700px",
                       }}
                     >
-                      Provident Fund Employee:
+                      {a.field}
                     </td>
                     <td
                       style={{
@@ -646,99 +566,10 @@ function PaySlip(props) {
                         paddingLeft: '40px'
                       }}
                     >
-                      {paySlipData.pfem ? paySlipData.pfem : 0}
+                      {a.value}
                     </td>
-                  </tr> */}
-                  {/* <tr>
-                    <td
-                      style={{
-                        width: "700px",
-                      }}
-                    >
-                      Provident Fund Employee:
-                    </td>
-                    <td
-                      style={{
-                        width: "180px",
-                        textAlign: 'left',
-                        paddingLeft: '40px'
-                      }}
-                    >
-                      {paySlipData.pfer ? paySlipData.pfer : 0}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "700px",
-                      }}
-                    >
-                      ESI:
-                    </td>
-                    <td
-                      style={{
-                        width: "180px",
-                        textAlign: 'left',
-                        paddingLeft: '40px'
-                      }}
-                    >
-                      {paySlipData.esi ? paySlipData.esi : 0}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "700px",
-                      }}
-                    >
-                      Profession Tax:
-                    </td>
-                    <td
-                      style={{
-                        width: "180px",
-                        textAlign: 'left',
-                        paddingLeft: '40px'
-                      }}
-                    >
-                      {paySlipData.profTax ? paySlipData.profTax : 0}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "700px",
-                      }}
-                    >
-                      Income Tax:
-                    </td>
-                    <td
-                      style={{
-                        width: "180px",
-                        textAlign: 'left',
-                        paddingLeft: '40px'
-                      }}
-                    >
-                      {paySlipData.tds ? paySlipData.tds : 0}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "700px",
-                      }}
-                    >
-                      Other Deductions:
-                    </td>
-                    <td
-                      style={{
-                        width: "180px",
-                        textAlign: 'left',
-                        paddingLeft: '40px'
-                      }}
-                    >
-                      {paySlipData.otherDeduction ? paySlipData.otherDeduction : 0}
-                    </td>
-                  </tr> */}
+                  </tr>))}
+
                 </table>
               </div>
             </div>
@@ -756,7 +587,7 @@ function PaySlip(props) {
                     </td>
                     <td
                       style={{
-                        width: "105px",
+                        width: "85px",
                         fontWeight: "500",
                         textAlign: "right",
                       }}
@@ -780,7 +611,7 @@ function PaySlip(props) {
                     </td>
                     <td
                       style={{
-                        width: "75px",
+                        width: "85px",
                         fontWeight: "500",
                         textAlign: "right",
                       }}

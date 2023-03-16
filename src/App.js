@@ -20,12 +20,12 @@ import Settingpage from "./components/Settingpage";
 import { useState } from "react";
 import AttendanceLog from "./components/AttendanceLog";
 import InvoiceMagHome from "./components/assetManagement/InvoiceMagHome";
-import TravelManagement from "./components/TravelManagement/travelManagement";
+import TravelMngHome from "./components/TravelManagement/TravelMngHome";
 import EmailVerification from "./EmailVerification";
 
 function App() {
-  const [roleview, setRoleview] = useState(sessionStorage.getItem("roleView"))
-  const [refresh, setRefresh] = useState(false)
+  const [roleview, setRoleview] = useState(sessionStorage.getItem("roleView"));
+  const [refresh, setRefresh] = useState(false);
 
   const switchRole = (role) => {
     setRoleview(role);
@@ -70,7 +70,13 @@ function App() {
             path="/Attendance"
             element={
               <FormatPage
-                main={<AttendanceLog roleView={roleview} refresh={refresh} switchRefresh={switchRefresh} />}
+                main={
+                  <AttendanceLog
+                    roleView={roleview}
+                    refresh={refresh}
+                    switchRefresh={switchRefresh}
+                  />
+                }
                 activeMenu={["6"]}
                 roleView={roleview}
                 switchRole={switchRole}
@@ -187,15 +193,14 @@ function App() {
               />
             }
           />
-          <Route 
+          <Route
             path="/TravelManagement"
             element={
-              <FormatPage 
-                main={<TravelManagement roleView={roleview} />}
+              <FormatPage
+                main={<TravelMngHome roleView={roleview} />}
                 activeMenu={["24"]}
                 roleView={roleview}
                 switchRole={switchRole}
-               
               />
             }
           />
@@ -213,12 +218,7 @@ function App() {
             path="/Settings"
             element={<FormatPage main={<Settingpage />} activeMenu={["22"]} />}
           />
-          <Route 
-            path="/VerifyEmail"
-            element={
-              <EmailVerification />
-            }
-          />
+          <Route path="/VerifyEmail" element={<EmailVerification />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

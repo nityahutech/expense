@@ -75,3 +75,19 @@
   .travelDatePicker .ant-picker{
     width:100%;
   }
+
+  .viewModal .ant-modal-content {
+    border-radius: 10px;
+  }
+  
+  .viewModal .ant-modal-header {
+    border-radius: 10px 10px 0px 0px;
+    background: #1963a6;
+    color: #ffffff;
+  }
+  .viewModal .ant-modal-title {
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+  }

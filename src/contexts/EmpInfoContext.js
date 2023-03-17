@@ -7,7 +7,10 @@ import {
     collection,
     getDocs,
     query,
-    where
+    where,
+    arrayRemove,
+    arrayUnion,
+    addDoc
 } from "firebase/firestore";
 import {
     deleteObject,
@@ -50,17 +53,54 @@ class EmpInfoContext {
         let rec = await getDoc(eduDoc);
         return rec.data();
     };
-    
+
     disablePerson = (id) => {
         updateDoc(doc(db, `companyprofile/${compId}/users`, id), { disabled: true });
-        return changeAccount(id, {disabled: true});
+        return changeAccount(id, { disabled: true });
     };
 
     idExists = async (id) => {
-        let q = query(collection(db,`companyprofile/${compId}/users`), where("empId", "==", id));
+        let q = query(collection(db, `companyprofile/${compId}/users`), where("empId", "==", id));
         let d = await getDocs(q);
         return d.docs.length > 0;
     };
+
+    //----------------------------------------------------
+
+    deleteCompInfo = (id, deleteContact) => {
+        const companyDoc = doc(db, `companyprofile/${compId}/users`, id);
+        let field = Object.keys(deleteContact)[0];
+        return updateDoc(companyDoc, {
+            [`${field}`]: arrayRemove(deleteContact[`${field}`]),
+        });
+    };
+
+
+    addCompInfo = (id, addContact) => {
+        const companyDoc = doc(db, `companyprofile/${compId}/users`, id);
+        console.log('value', companyDoc)
+        let field = Object.keys(addContact)[0];
+        return updateDoc(companyDoc, {
+            [`${field}`]: arrayUnion(addContact[`${field}`]),
+        });
+    };
+
+
+
+    editCompInfo = async (id, oldCompInfo, newCompInfo) => {
+        const companyDoc = doc(db, `companyprofile/${compId}/users`, id);
+        let field = Object.keys(newCompInfo)[0];
+        // await updateDoc(companyDoc, {
+        //     [`${field}`]: arrayRemove(oldCompInfo[`${field}`]),
+        // });
+        updateDoc(companyDoc, {
+            [`${field}`]: arrayUnion(newCompInfo[`${field}`]),
+        });
+        return;
+    };
+
+
+
 
 }
 

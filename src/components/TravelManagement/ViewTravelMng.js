@@ -1,5 +1,6 @@
 import React from "react";
-import { Row, Form, Col } from "antd";
+import { Row, Form, Col, Divider } from "antd";
+import "./travelManagement.css";
 
 function ViewTravelMng(props) {
   const viewTravelData = props.viewTravelData;
@@ -7,22 +8,30 @@ function ViewTravelMng(props) {
   console.log("viewTravelData", viewTravelData);
   return (
     <>
-      <Form>
-        <Row>
-          <Col span={12}>
-            <Form.Item label="Travel Title::">
-              {viewTravelData.travelName}
-            </Form.Item>
+      <Form >
+        <Row className="titleForModal">
+          <Col span={24} >
+          <span className="titleSpan">{viewTravelData.travelName}</span>
+            {/* <Form.Item label="Travel Title::" className="formCSS">            
+            </Form.Item> */}
           </Col>
-          <Col span={12}>
-            <Form.Item label="People::">{viewTravelData.people}</Form.Item>
+          <Col span={24} >
+            <Form.Item label="No. of Peoples::" className="formCSS">{viewTravelData.people}</Form.Item>
           </Col>
+          </Row>
           {viewTravelData.travelType.map((travel, idx) => (
             <>
-              {travel.bookingOption == "travel" ? (
-                <Row>
+              {travel.bookingOption == "travel" ? (<div className="titleForModal">
+                <Divider
+                orientation="left"
+                orientationMargin="0px"
+                className="dividerCss"
+              >
+                Expenditure No.{idx + 1}
+              </Divider>
+                <Row >
                   <Col span={12}>
-                    <Form.Item label="Travel Type::">
+                    <Form.Item label="Booking Type::">
                       {travel.bookingOption}
                     </Form.Item>
                   </Col>
@@ -43,11 +52,18 @@ function ViewTravelMng(props) {
                     </Form.Item>
                   </Col>
                 </Row>
-              ) : null}
-              {travel.bookingOption == "hotel" ? (
-                <Row>
+              </div>) : null}
+              {travel.bookingOption == "hotel" ? (<div className="titleForModal">
+                <Divider
+                orientation="left"
+                orientationMargin="0px"
+                className="dividerCss"
+              >
+                Expenditure No.{idx + 1}
+              </Divider>
+                <Row >
                   <Col span={12}>
-                    <Form.Item label="Travel Type::">
+                    <Form.Item label="Booking Type::">
                       {travel.bookingOption}
                     </Form.Item>
                   </Col>
@@ -58,11 +74,18 @@ function ViewTravelMng(props) {
                     <Form.Item label="Location::">{travel.location}</Form.Item>
                   </Col>
                 </Row>
-              ) : null}
-              {travel.bookingOption == "rental" ? (
+                </div>) : null}
+              {travel.bookingOption == "rental" ? (<div className="titleForModal">
+                <Divider
+                orientation="left"
+                orientationMargin="0px"
+                className="dividerCss"
+              >
+                Expenditure No.{idx + 1}
+              </Divider>
                 <Row>
                   <Col span={12}>
-                    <Form.Item label="Travel Type::">
+                    <Form.Item label="Booking Type::">
                       {travel.bookingOption}
                     </Form.Item>
                   </Col>
@@ -80,10 +103,10 @@ function ViewTravelMng(props) {
                     </Form.Item>
                   </Col>
                 </Row>
-              ) : null}
+                </div>) : null}
             </>
           ))}
-        </Row>
+        
       </Form>
     </>
   );

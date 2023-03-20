@@ -76,8 +76,15 @@
     width:100%;
   }
 
+  /* .viewModal {
+    overflow-y: scroll;
+    height: 10vh;
+  } */
+
   .viewModal .ant-modal-content {
     border-radius: 10px;
+    /* overflow-y: scroll; */
+    /* height: 50vh; */
   }
   
   .viewModal .ant-modal-header {
@@ -90,4 +97,23 @@
     font-weight: 400;
     font-size: 18px;
     line-height: 25px;
+  }
+  /* --------------------View modal css */
+  .titleForModal {
+    border: 0.5px solid #EAEAEA;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    padding: 10px;
+  }
+
+  .formCSS.ant-form-item {
+     margin-bottom: 0px;
+  }
+
+  .dividerCss {
+    margin-top: 10px;
+  }
+
+  .titleSpan {
+    font-size: 24px;
   }

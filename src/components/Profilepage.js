@@ -20,7 +20,7 @@ const Profile = () => {
   const role = sessionStorage.getItem("role");
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [record, setRecord] = useState([]);
-  const [marriage, setMarraige] = useState(null)
+  const [marriage, setMarraige] = useState(false)
 
   useEffect(() => {
     getData();
@@ -30,7 +30,7 @@ const Profile = () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
     console.log('data', data)
     setRecord(data);
-    setMarraige(data?.maritalStatus);
+    setMarraige(data?.maritalStatus == 'Married');
   }
 
 

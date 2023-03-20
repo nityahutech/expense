@@ -856,6 +856,11 @@ function TravelMngHome(props) {
               dataSource={travelDetails}
             />
             <Modal
+              bodyStyle={{
+                height: 530,
+                overflowY: "scroll",
+                overflowX: "hidden",
+              }}
               destroyOnClose
               centered
               open={openViewModal}

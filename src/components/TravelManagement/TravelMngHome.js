@@ -16,6 +16,7 @@ import {
   Select,
   Switch,
 } from "antd";
+
 import {
   MinusCircleOutlined,
   PlusOutlined,
@@ -26,16 +27,18 @@ import {
   UserAddOutlined,
 } from "@ant-design/icons";
 import "./travelManagement.css";
-// import { EyeFilled, EditFilled } from "@ant-design/icons";
-import Checkmark from "../../images/checkmark.png";
-import CheckReject from "../../images/rejected.png";
-import { checkAlphabets, showNotification } from "../../contexts/CreateContext";
+import {
+  checkAlphabets,
+  showNotification,
+  capitalize,
+} from "../../contexts/CreateContext";
 import TravelContext from "../../contexts/TravelContext";
 import TravelManagement from "./travelManagement";
 import InvoiceContext from "../../contexts/InvoiceContext";
 import moment from "moment";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import ViewTravelMng from "./ViewTravelMng";
+import EditTravelMng from "./EditTravelMng";
 
 const { RangePicker } = DatePicker;
 
@@ -50,6 +53,8 @@ function TravelMngHome(props) {
   const [viewTravelData, setViewTravelData] = useState({});
   const [durationArray, setDurationArray] = useState([]);
   const [openViewModal, setOpenViewModal] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
   const role = props.roleView == "emp";
   console.log(props.roleView);
   const { TextArea } = Input;
@@ -59,6 +64,11 @@ function TravelMngHome(props) {
 
   function viewModal(data) {
     setOpenViewModal(true);
+    setViewTravelData(data);
+  }
+
+  function showModal(data) {
+    setIsEditModalOpen(true);
     setViewTravelData(data);
   }
 
@@ -175,9 +185,9 @@ function TravelMngHome(props) {
                   style={{ padding: 0, color: "rgb(64, 169, 255)" }}
                   type="link"
                   className="show"
-                  //   onClick={() => {
-                  //     showModal(record);
-                  //   }}
+                  onClick={() => {
+                    showModal(record);
+                  }}
                 >
                   {
                     <EditFilled
@@ -218,9 +228,9 @@ function TravelMngHome(props) {
       travelType: values.users.map((type) => {
         console.log(type);
         switch (type.bookingOption) {
-          case "travel":
+          case "Travel":
             let temp = {
-              bookingOption: "travel",
+              bookingOption: "Travel",
               durationDate: type.travelDate.format("DD-MM-YYYY"),
               depart: type.depart,
               arrival: type.arrival,
@@ -229,17 +239,17 @@ function TravelMngHome(props) {
             delete temp.travelDate;
             return temp;
 
-          case "hotel":
+          case "Hotel":
             let hotelData = {
-              bookingOption: "hotel",
+              bookingOption: "Hotel",
               durationDate: type.duration.map((dt) => dt.format("DD-MM-YYYY")),
               location: type.location,
             };
             delete hotelData.duration;
             return hotelData;
-          case "rental":
+          case "Rental":
             let rentalData = {
-              bookingOption: "rental",
+              bookingOption: "Rental",
               durationDate: type.rentalDate.map((dt) =>
                 dt.format("DD-MM-YYYY")
               ),
@@ -291,6 +301,10 @@ function TravelMngHome(props) {
     getAlltravelData();
   }, []);
 
+  const capitalizeFirstLetter = (value) => {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  };
+
   return (
     <>
       <div className="travelDiv">
@@ -335,7 +349,14 @@ function TravelMngHome(props) {
                         },
                       ]}
                     >
-                      <Input maxLength={25} />
+                      <Input
+                        maxLength={25}
+                        onChange={(e) => {
+                          const str = e.target.value;
+                          const caps = str.split(" ").map(capitalize).join(" ");
+                          form.setFieldsValue({ travelName: caps });
+                        }}
+                      />
                     </Form.Item>
                   </Col>
                   <Col xs={24} xm={24} md={12} lg={12}>
@@ -410,22 +431,22 @@ function TravelMngHome(props) {
                                                 }}
                                                 options={[
                                                   {
-                                                    value: "travel",
+                                                    value: "Travel",
                                                     label: "Travel Booking",
                                                   },
                                                   {
-                                                    value: "hotel",
+                                                    value: "Hotel",
                                                     label: "Hotel Booking",
                                                   },
                                                   {
-                                                    value: "rental",
+                                                    value: "Rental",
                                                     label: "Rental Booking",
                                                   },
                                                 ]}
                                               />
                                             </Form.Item>
                                           </Col>
-                                          {selectedOption[i] === "hotel" ? (
+                                          {selectedOption[i] === "Hotel" ? (
                                             <>
                                               <Col
                                                 xs={24}
@@ -468,6 +489,11 @@ function TravelMngHome(props) {
                                                     field.name,
                                                     "location",
                                                   ]}
+                                                  onKeyPress={(event) => {
+                                                    if (checkAlphabets(event)) {
+                                                      event.preventDefault();
+                                                    }
+                                                  }}
                                                   // fieldKey={[field.fieldKey, "amount"]}
                                                   rules={[
                                                     {
@@ -487,28 +513,21 @@ function TravelMngHome(props) {
                                                     placeholder="Hotel Destination"
                                                     maxLength={50}
                                                     onChange={(e) => {
-                                                      // console.log(e.target.value);
-                                                      // const amt = e.target.value;
-                                                      // setAmount(amt);
-                                                      let temp = 0;
-                                                      // fields.map((field) => {
-                                                      //   let data = form.getFieldValue([
-                                                      //     "users",
-                                                      //     field.name,
-                                                      //     "amount",
-                                                      //   ]);
-                                                      //   temp = temp + Number(data);
-                                                      // });
-
-                                                      // form.setFieldsValue({
-                                                      //   totalAmt: temp,
-                                                      // });
+                                                      const str =
+                                                        e.target.value;
+                                                      const caps = str
+                                                        .split(" ")
+                                                        .map(capitalize)
+                                                        .join(" ");
+                                                      form.setFieldsValue({
+                                                        location: caps,
+                                                      });
                                                     }}
                                                   />
                                                 </Form.Item>
                                               </Col>
                                             </>
-                                          ) : selectedOption[i] === "travel" ? (
+                                          ) : selectedOption[i] === "Travel" ? (
                                             <>
                                               <Col
                                                 xs={24}
@@ -548,6 +567,11 @@ function TravelMngHome(props) {
                                                   label="From"
                                                   {...field}
                                                   name={[field.name, "depart"]}
+                                                  onKeyPress={(event) => {
+                                                    if (checkAlphabets(event)) {
+                                                      event.preventDefault();
+                                                    }
+                                                  }}
                                                   rules={[
                                                     {
                                                       required: true,
@@ -564,6 +588,20 @@ function TravelMngHome(props) {
                                                   <Input
                                                     placeholder="Booking From"
                                                     maxLength={25}
+                                                    onChange={(e) => {
+                                                      const str =
+                                                        e.target.value;
+                                                      const caps = str
+                                                        .split(" ")
+                                                        .map(capitalize)
+                                                        .join(" ");
+                                                      let temp =
+                                                        form.getFieldsValue();
+                                                      temp.users[
+                                                        field.key
+                                                      ].depart = caps;
+                                                      form.setFieldsValue(temp);
+                                                    }}
                                                   />
                                                 </Form.Item>
                                               </Col>
@@ -577,6 +615,11 @@ function TravelMngHome(props) {
                                                   label="To"
                                                   {...field}
                                                   name={[field.name, "arrival"]}
+                                                  onKeyPress={(event) => {
+                                                    if (checkAlphabets(event)) {
+                                                      event.preventDefault();
+                                                    }
+                                                  }}
                                                   // fieldKey={[
                                                   //   field.fieldKey,
                                                   //   "description",
@@ -603,6 +646,17 @@ function TravelMngHome(props) {
                                                   <Input
                                                     placeholder="Traveling to"
                                                     maxLength={25}
+                                                    onChange={(e) => {
+                                                      const str =
+                                                        e.target.value;
+                                                      const caps = str
+                                                        .split(" ")
+                                                        .map(capitalize)
+                                                        .join(" ");
+                                                      form.setFieldsValue({
+                                                        arrival: caps,
+                                                      });
+                                                    }}
                                                   />
                                                 </Form.Item>
                                               </Col>
@@ -636,15 +690,15 @@ function TravelMngHome(props) {
                                                     // onChange={handleChange}
                                                     options={[
                                                       {
-                                                        value: "flight",
+                                                        value: "Flight",
                                                         label: "Flight",
                                                       },
                                                       {
-                                                        value: "train",
+                                                        value: "Train",
                                                         label: "Train",
                                                       },
                                                       {
-                                                        value: "bus",
+                                                        value: "Bus",
                                                         label: "Bus",
                                                       },
                                                     ]}
@@ -709,23 +763,23 @@ function TravelMngHome(props) {
                                                     onChange={handleCarChange}
                                                     options={[
                                                       {
-                                                        value: "sedan",
+                                                        value: "Sedan",
                                                         label: "SEDAN",
                                                       },
                                                       {
-                                                        value: "hatchback",
+                                                        value: "Hatchback",
                                                         label: "HATCH BACK",
                                                       },
                                                       {
-                                                        value: "suv",
+                                                        value: "Suv",
                                                         label: "SUV",
                                                       },
                                                       {
-                                                        value: "muv",
+                                                        value: "Muv",
                                                         label: "MUV",
                                                       },
                                                       {
-                                                        value: "luxury",
+                                                        value: "Luxury",
                                                         label: "LUXURY",
                                                       },
                                                     ]}
@@ -781,7 +835,7 @@ function TravelMngHome(props) {
                                       onClick={() => {
                                         add();
                                         let temp = [...selectedOption];
-                                        temp.push("travel");
+                                        temp.push("Travel");
                                         setSelectedOption(temp);
                                       }}
                                       block
@@ -880,6 +934,34 @@ function TravelMngHome(props) {
             >
               <ViewTravelMng
                 setOpenViewModal={setOpenViewModal}
+                viewTravelData={viewTravelData}
+              />
+            </Modal>
+            <Modal
+              bodyStyle={{
+                height: 530,
+                overflowY: "scroll",
+                overflowX: "hidden",
+              }}
+              destroyOnClose
+              centered
+              open={isEditModalOpen}
+              footer={null}
+              title="TRAVEL DETAILS"
+              closeIcon={
+                <div
+                  onClick={() => {
+                    setIsEditModalOpen(false);
+                  }}
+                  style={{ color: "#ffff" }}
+                >
+                  X
+                </div>
+              }
+              className="viewModal"
+            >
+              <EditTravelMng
+                setIsEditModalOpen={setIsEditModalOpen}
                 viewTravelData={viewTravelData}
               />
             </Modal>

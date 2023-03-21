@@ -19,7 +19,7 @@ import MainDashBoard from "./components/MainDashBoard";
 import Settingpage from "./components/Settingpage";
 import AttendanceLog from "./components/AttendanceLog";
 import InvoiceMagHome from "./components/assetManagement/InvoiceMagHome";
-import TravelManagement from "./components/TravelManagement/travelManagement";
+import TravelMngHome from "./components/TravelManagement/TravelMngHome";
 import EmailVerification from "./EmailVerification";
 
 function App() {
@@ -166,7 +166,7 @@ function App() {
               />
             }
           />
-          <Route 
+          <Route
             path="/TravelManagement"
             element={
               <FormatPage 

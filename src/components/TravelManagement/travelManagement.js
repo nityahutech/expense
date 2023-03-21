@@ -29,10 +29,7 @@ import "./travelManagement.css";
 // import { EyeFilled, EditFilled } from "@ant-design/icons";
 import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
-import { checkAlphabets, showNotification } from "../../contexts/CreateContext";
-import TravelContext from "../../contexts/TravelContext";
-import InvoiceContext from "../../contexts/InvoiceContext";
-import moment from "moment";
+import ViewTravelMng from "./ViewTravelMng";
 
 const { RangePicker } = DatePicker;
 
@@ -40,9 +37,17 @@ function TravelManagement(props) {
   console.log("props", props);
   const [travelDetails, setTravelDetails] = useState(props.travelDetails || []);
   const [durationArray, setDurationArray] = useState(props.durationArray || []);
+  const [openViewModal, setOpenViewModal] = useState(false);
+  const [viewTravelData, setViewTravelData] = useState({});
+
   const [user, setUser] = useState({});
 
   console.log(props.roleView);
+
+  function viewModal(data) {
+    setOpenViewModal(true);
+    setViewTravelData(data);
+  }
 
   const columns = [
     {
@@ -135,9 +140,9 @@ function TravelManagement(props) {
               <Button
                 type="link"
                 className="show"
-                // onClick={() => {
-                //   openModal(record);
-                // }}
+                onClick={() => {
+                  viewModal(record);
+                }}
               >
                 {<EyeFilled style={{ color: "#000000" }} />}
               </Button>
@@ -189,6 +194,34 @@ function TravelManagement(props) {
             columns={columns}
             dataSource={travelDetails}
           />
+          <Modal
+            bodyStyle={{
+              height: 530,
+              overflowY: "scroll",
+              overflowX: "hidden",
+            }}
+            destroyOnClose
+            centered
+            open={openViewModal}
+            footer={null}
+            title="TRAVEL DETAILS"
+            closeIcon={
+              <div
+                onClick={() => {
+                  setOpenViewModal(false);
+                }}
+                style={{ color: "#ffff" }}
+              >
+                X
+              </div>
+            }
+            className="viewModal"
+          >
+            <ViewTravelMng
+              setOpenViewModal={setOpenViewModal}
+              viewTravelData={viewTravelData}
+            />
+          </Modal>
           <Table className="travelTable" columns={columns} />
         </>
       </div>

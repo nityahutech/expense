@@ -73,6 +73,7 @@ export async function createUser(values, compId) {
     };
     await setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid});
     await setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
+    await setDoc(doc(db, `companyprofile/${compId}/salary`, res.user.uid), {bank: []})
     // console.log(res.user);
     sendEmailVerification(res.user).catch(err => showNotification("error", "Error", `Failed to send verification email to ${values.mailid}`))
     // console.log(valuesToservice.empId);

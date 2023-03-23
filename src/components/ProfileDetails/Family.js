@@ -33,7 +33,7 @@ import { showNotification } from "../../contexts/CreateContext";
 const { Option } = Select;
 
 const Family = (props) => {
-  console.log("data", props.marriage);
+  // console.log("data", props.marriage);
   const [editfamilymember, showeditfamilymember] = useState(false);
   const [editEmergency, showeditEmergency] = useState(false);
   const [data, setData] = useState(false);
@@ -61,7 +61,7 @@ const Family = (props) => {
       prefix: values?.prefix || null,
     };
 
-    console.log("values", record)
+    // console.log("values", record)
     EmpInfoContext.addCompInfo(currentUser.uid, { [`${active}`]: record });
     addForm.resetFields();
     getData();
@@ -78,7 +78,7 @@ const Family = (props) => {
         prefix: values?.prefix || null,
       };
 
-      console.log("values", record)
+      // console.log("values", record)
       // let old = activeList[editPerson.indexOf(true)];
       EmpInfoContext.editCompInfo(
         currentUser.uid,
@@ -91,14 +91,14 @@ const Family = (props) => {
       return () => clearTimeout(timer);
     } catch (error) {
       // Handle the error here
-      console.log("Error occurred while editing record:", error);
+      // console.log("Error occurred while editing record:", error);
     }
   }
 
   // delete other family members / children
 
   const onDelete = (record) => {
-    console.log("record", record)
+    // console.log("record", record)
     Modal.confirm({
       title: `Are you sure, you want to delete ${active}?`,
       okText: "Yes",
@@ -125,7 +125,6 @@ const Family = (props) => {
   }, []);
 
   useEffect(() => {
-
     setMarraige(props.marriage)
   }, [props.marriage]);
 
@@ -133,21 +132,20 @@ const Family = (props) => {
     let temp = data[`${active}`] || [];
     setActiveList(temp);
     setEditPerson(temp.length == 0 ? [false] : [...temp].fill(false));
-
   }, [active]);
 
 
   const getData = async () => {
     setLoading(true);
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    console.log("data", data);
+    // console.log("data", data);
     setData(data);
     let temp =
-      active == "emergencyContact"
+      (active == "emergencyContact"
         ? data.emergencyContact
         : active == "otherMember"
           ? data.otherMember
-          : data.children;
+          : data.children) || [];
     console.log("data", temp)
     setActiveList(temp);
     setEditPerson(temp.length == 0 ? [false] : [...temp].fill(false));
@@ -163,7 +161,7 @@ const Family = (props) => {
   // add other father mother spouce
 
   const onFinish = (values) => {
-    console.log("data", values);
+    // console.log("data", values);
     values.profilePic = data.profilePic || null;
     EmpInfoContext.updateEduDetails(currentUser.uid, values);
     setData(values);
@@ -416,7 +414,7 @@ const Family = (props) => {
                               Spouse
                             </h1>
 
-                            <div>{data?.Spouse ? data.Spouse : "-"}</div>
+                            <div>{data?.spouse ? data.spouse : "-"}</div>
                           </div>
                         </Col>
                         <Col xs={22} sm={15} md={12}>
@@ -433,8 +431,8 @@ const Family = (props) => {
                               Contact no.
                             </h1>
                             <div>
-                              {data?.SpouseContact
-                                ? `${data.prefixspouce} ${data.SpouseContact}`
+                              {data?.spouseContact
+                                ? `${data.prefixspouce} ${data.spouseContact}`
                                 : "-"}
                             </div>{" "}
                           </div>
@@ -714,7 +712,7 @@ const Family = (props) => {
                               Spouse Name
                             </h1>
                             <Form.Item
-                              name="Spouse"
+                              name="spouse"
                               onKeyPress={(event) => {
                                 if (checkAlphabets(event)) {
                                   event.preventDefault();
@@ -734,7 +732,7 @@ const Family = (props) => {
                               ]}
                               labelCol={{ span: 8 }}
                               wrapperCol={{ span: 32 }}
-                              initialValue={data.Spouse ? data.Spouse : ""}
+                              initialValue={data.spouse ? data.spouse : ""}
                             >
                               <Input
                                 onChange={(e) => {
@@ -743,7 +741,7 @@ const Family = (props) => {
                                     .split(" ")
                                     .map(capitalize)
                                     .join(" ");
-                                  form.setFieldsValue({ Spouse: caps });
+                                  form.setFieldsValue({ spouse: caps });
                                 }}
                                 maxLength={40}
                                 placeholder="Enter Spouse's Name"
@@ -772,7 +770,7 @@ const Family = (props) => {
                               Contact no.
                             </h1>
                             <Form.Item
-                              name="SpouseContact"
+                              name="spouseContact"
                               onKeyPress={(event) => {
                                 if (checkNumbervalue(event)) {
                                   event.preventDefault();
@@ -788,7 +786,7 @@ const Family = (props) => {
                               labelCol={{ span: 8 }}
                               wrapperCol={{ span: 32 }}
                               initialValue={
-                                data.SpouseContact ? data.SpouseContact : ""
+                                data.spouseContact ? data.spouseContact : ""
                               }
                             >
                               <Input

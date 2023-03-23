@@ -423,7 +423,7 @@ function MainDashBoard(props) {
             </Col>
 
             <Col xs={24} sm={24} md={6} className="hi">
-              {/* {appraisalIcon()} */}
+              {payrollIcon()}
             </Col>
 
             <Col xs={24} sm={24} md={6} className="hi">

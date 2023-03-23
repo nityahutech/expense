@@ -28,7 +28,6 @@ const Profile = () => {
 
   const getData = async () => {
     let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    console.log('data', data)
     setRecord(data);
     setMarraige(data?.maritalStatus == 'Married');
   }

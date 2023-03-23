@@ -567,10 +567,12 @@ function EmployeeList() {
             disabled={!selectemp.id}
             key="3"
           >
+            {/* {console.log(showRecord)} */}
             <PaySlip
               className="Edit"
               data={showRecord}
               getData={getData}
+              id={selectemp.id}
             // certificationDetails={certificationDetails}
             />
           </Tabs.TabPane>

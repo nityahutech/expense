@@ -15,7 +15,6 @@ const PayRollConfigDeduction = (props) => {
 
     const handleAddField = () => {
         const newFields = [...fields, ""];
-        console.log(newFields);
         setFields(newFields);
     };
 
@@ -43,10 +42,7 @@ const PayRollConfigDeduction = (props) => {
 
 
     const onFinish = (values) => {
-        console.log('Form values:', values);
-        console.log('Fields:', fields);
         let deductionConfig = [...fields]
-        console.log('earning', deductionConfig);
         ConfigureContext.createConfigurationsDeduction(page, {
             Deduction: deductionConfig,
         })
@@ -71,10 +67,8 @@ const PayRollConfigDeduction = (props) => {
     };
 
     const handleFieldChange = (index, value) => {
-        console.log(index, value)
         let newFields = [...fields];
         newFields[index] = value;
-        console.log(fields, newFields)
         setFields(newFields);
     };
 
@@ -82,8 +76,6 @@ const PayRollConfigDeduction = (props) => {
         form.resetFields();
         setFields([{ name: 'field', value: '' }]);
     }
-
-    console.log('fields', props.data)
 
     return (
         <>
@@ -94,7 +86,6 @@ const PayRollConfigDeduction = (props) => {
                 <Form form={form} onFinish={onFinish} initialValues={[props.data]}>
                     {fields.map((field, index) => (
                         <Form.Item key={index} name={`field-${index + 100}`} >
-                            {console.log(field, index)}
                             <Input
                                 name={`field-${index}`}
                                 placeholder={`Field ${index + 1}`}

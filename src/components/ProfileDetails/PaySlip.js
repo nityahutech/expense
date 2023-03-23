@@ -9,8 +9,7 @@ import moment from 'moment';
 
 function PaySlip(props) {
   const showRecord = props.data;
-  console.log("showRecord", showRecord)
-  const [userid, setUserId] = useState(showRecord.id);
+  const [userid, setUserId] = useState(props.id);
   const [month, setMonth] = useState(null);
   const [printContent, setPrintContent] = useState(null);
   const [dataMonths, setDataMonths] = useState(false);
@@ -32,20 +31,16 @@ function PaySlip(props) {
   const [selectedMonth, setSelectedMonth] = useState(`${previousMonth.format("MMM")}-${previousMonth.format("YYYY")}`);
 
   const updateSelectedMonth = (date) => {
-    console.log("date: ", date)
     let field = date.format("MMM_YYYY")
-    console.log("selected date string: ", field,);
-    console.log("selected date string: ", dataMonths);
     let index = dataMonths.includes(field) ? field : null;
-    console.log("index: ", index)
     if (index == null) {
       let allMonths = dataMonths.filter((x) => {
         let value = moment(x, "MMM_YYYY").isBefore(date);
-        console.log(value);
+        // console.log(value);
         return value;
       });
       allMonths.sort((a, b) => moment(b, "MMM_YYYY").format('YYYYMMDD') - moment(a, "MMM_YYYY").format('YYYYMMDD'))
-      console.log(allMonths[0]);
+      // console.log(allMonths[0]);
       index = allMonths[0];
 
     }
@@ -61,11 +56,11 @@ function PaySlip(props) {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     // console.log("daysInMonth: ", daysInMonth)
     setNofDaysInMonth(daysInMonth);
-    console.log(allPaySlipData);
+    // console.log(allPaySlipData);
     // console.log('jjj', allPaySlipData[index].deductionArray[0].value);
     // console.log('jjj', allPaySlipData[index].earningArray[0].value);
     setPaySlipData(allPaySlipData[index])
-    console.log('jjj', setPaySlipData(allPaySlipData[index]));
+    // console.log('jjj', setPaySlipData(allPaySlipData[index]));
     // setDeductionArray(allPaySlipData[index].deductionArray[0])
     // setEarningArray(allPaySlipData[index].earningArray[0])
     //allPaySlipData[index].deductionArray[0]
@@ -76,13 +71,13 @@ function PaySlip(props) {
 
 
   useEffect(() => {
-    console.log("props.data.id", props.data.id)
-    setUserId(props.data.id)
-    getSalaryData(props.data.id)
+    // console.log("props.data.id", props.id)
+    setUserId(props.id)
+    getSalaryData(props.id)
     getCompanyProfile()
 
 
-  }, [props.data.id]);
+  }, [props.id]);
 
   function RupeeSign({ amount }) {
     return (
@@ -103,23 +98,21 @@ function PaySlip(props) {
   }
 
   async function getSalaryData(id) {
-    console.log("aaa", id);
-    console.log("aaa", compId);
-    const allSalaryPaySlip = await EmployeeNetSalary.getSalary(compId, id);
-    console.log("aaa", currentUser.uid);
-    console.log("aaa", allSalaryPaySlip);
+    // console.log("aaa", id);
+    // console.log("aaa", compId);
+    const allSalaryPaySlip = await EmployeeNetSalary.getSalary(id);
+    // console.log("aaa", currentUser.uid);
+    // console.log("aaa", allSalaryPaySlip);
     setAllPaySlipData(allSalaryPaySlip);
     setDataMonths(Object.keys(allSalaryPaySlip))
   }
 
   const getCompanyProfile = async () => {
     const companyProfile = await CompanyProContext.getCompanyProfile(compId);
-    console.log(companyProfile, "companyProfile")
+    // console.log(companyProfile, "companyProfile")
     setCompanyProfile(companyProfile);
     setImageUrl(companyProfile.logo);
   }
-
-  console.log('paySlipData', dataMonths)
 
   return (
     <>
@@ -209,7 +202,7 @@ function PaySlip(props) {
   );
 
   function SlipHtml({ selectedMonth, year, nofDaysInMonth, showRecord, earning, deduction }) {
-    // console.log('showRecord', showRecord)
+    // console.log('showRecord', selectedMonth, year, nofDaysInMonth, showRecord, earning, deduction)
 
 
     return (

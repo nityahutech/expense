@@ -170,7 +170,7 @@ function App() {
             path="/TravelManagement"
             element={
               <FormatPage 
-                main={TravelManagement}
+                main={TravelMngHome}
                 activeMenu={["24"]}
               />
             }

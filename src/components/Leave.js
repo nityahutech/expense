@@ -259,7 +259,7 @@ const Leave = (props) => {
   }, [empApply])
 
   const getAdminData = (emp) => {
-    let id = allEmpMap[`${emp}`];
+    let id = allEmpMap[`${emp}`][0];
     let array = []
     let userReq = allRequests.filter(x => {
       if (x.empId == id) {
@@ -270,14 +270,19 @@ const Leave = (props) => {
     setTempDur([].concat.apply([], array));
     console.log(userReq, [].concat.apply([], array))
   }
-console.log(empApply, tempDur)
+// console.log(empApply, tempDur)
   useEffect(() => {
     getAllUser()
   }, [])
 
   const onSearch = (searchText) => {
     if (searchText == "") {
-      setEmpApply(null)
+      setEmpApply(null);
+      form.resetFields();
+      setDateStart(null)
+      setEndSlot("Full Day");
+      setValidleaverequest(false)
+      onLeaveDateChange();
       return;
     }
     let matchingName = allEmpName.filter((ex) => { return ex.value.toLowerCase().includes(searchText.toLowerCase()) })
@@ -290,7 +295,7 @@ console.log(empApply, tempDur)
     const allData = await getUsers();
     let userMap = {}
     let allUsers = allData.docs.map((doc, i) => {
-      userMap[`${doc.data().name}`] = doc.id
+      userMap[`${doc.data().name}`] = [doc.id, doc.data()?.repManager || ""]
       return {
         value: doc.data().name,
       };
@@ -1177,6 +1182,7 @@ console.log(empApply, tempDur)
                 <div
                   onClick={() => {
                     setAdminLeave(false);
+                    setEmpApply(null)
                     form.resetFields();
                     setDateSelected([]);
                     setDateStart(null);
@@ -1258,7 +1264,16 @@ console.log(empApply, tempDur)
                             onSearch={onSearch}
                             onSelect={(e) => {
                               onLeaveDateChange();
-                              setEmpApply(e)
+                              // console.log(e)
+                              setEmpApply(e);
+                              if (e == null) {
+                                form.setFieldsValue({ dateStart: null})
+                                setEndSlot("Full Day");
+                                form.setFieldsValue({ approver: ""})
+                                setValidleaverequest(false)
+                              } else {
+                                form.setFieldsValue({ approver: allEmpMap[`${e}`][1]})
+                              }
                             }}
                           />
                           {/* <DatePicker
@@ -1302,7 +1317,7 @@ console.log(empApply, tempDur)
                           ]}
                         >
                           <DatePicker
-                            style={{ width: "100%", backgroundColor: "#ffffff" }}
+                            style={{ width: "100%", }}
                             format="Do MMM, YYYY"
                             onChange={(e) => {
                               setDateStart(e);
@@ -1495,7 +1510,7 @@ console.log(empApply, tempDur)
                           Approver<span style={{ color: "red" }}> *</span>
                         </label>
                       }
-                      initialValue={repManager}
+                      // initialValue={empApply != null ? allEmpMap[`${empApply}`][1] : ""}
                     >
                       <Input disabled />
                     </Form.Item>

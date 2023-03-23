@@ -108,6 +108,14 @@
   height: 24px;
 }
 
+.div.ant-picker.ant-picker-disabled{
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.ant-picker{
+  background-color: #ffffff;
+}
+
 .ant-picker-cell-disabled {
   background-color: rgba(74, 67, 67, 0.2);
   color: rgb(2, 0, 0);

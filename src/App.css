@@ -68,11 +68,6 @@ tr[data-row-key*="subTotal"] {
   .deLete{
     color: #f04747;
   }
-.ant-picker{
-  background: #f8f8f8;
-    border-radius: 5px;
-    color: #171832;
-}
 
 .password-input-len .ant-input {
   width: 100%;

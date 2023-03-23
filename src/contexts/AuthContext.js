@@ -59,7 +59,7 @@ export function AuthProvider({ children }) {
       sessionStorage.setItem("role", rec?.role)
       sessionStorage.setItem("roleView", rec?.role)
       sessionStorage.setItem("compId", rec?.compId)
-      localStorage.setItem("login",  moment().format("hh:mm:ss DD-MM-YYYY"))
+      localStorage.setItem("login",  moment())
       setRoleView(rec?.role)
       setCompId(rec?.compId)
       setRole(rec?.role)

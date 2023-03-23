@@ -21,6 +21,7 @@ const Navbar = (props) => {
   const { logout } = useAuth();
   const [clockinfo, setClockInfo] = useState();
   const [buttonStatus, setButtonStatus] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const role = sessionStorage.getItem("role");
   const [roleView, setRoleView] = useState(
     props.roleView || sessionStorage.getItem("role")
@@ -37,6 +38,8 @@ const Navbar = (props) => {
       setIsRunning(false);
       return false;
     } else {
+      localStorage.setItem("lastRefresh", moment())
+      setButtonText()
       setIsRunning(true);
       let offset = moment().subtract(res.clockIn);
       let offsettime = res.break ? offset.subtract(res.break) : offset;
@@ -131,6 +134,7 @@ const Navbar = (props) => {
 
   useEffect(() => {
     setIsRunning(isClockRunning());
+    window.addEventListener("click", refreshTimer)
   }, []);
 
   useEffect(() => {
@@ -143,7 +147,15 @@ const Navbar = (props) => {
     return () => {
       clearInterval(timer);
     };
-  }, [isRunning]);
+  }, [isRunning, refresh]);
+
+  const refreshTimer = () => {
+    let last = localStorage.getItem("lastRefresh");
+    const diff = moment.duration(moment().diff(moment(last)));
+    if(diff._milliseconds > 1200000) {
+      setRefresh(!refresh)
+    }
+  }
 
   const buttonStyle = !isRunning
     ? {
@@ -178,27 +190,22 @@ const Navbar = (props) => {
   const [buttonText, setButtonText] = useState(
     !isRunning ? "Web Clock In" : ""
   );
-  let clockTime = isRunning ? clockinfo : "";
 
   const onMouseEnter = (event) => {
     event.target.style.background = "#DB0000";
     setButtonStatus(false);
-    if (isRunning) {
-      setButtonText(" ");
-    }
     if (buttonStatus) {
-      setButtonText("Web clock out");
+      setButtonText("Web Clock Out");
     }
   };
 
   const onMouseLeave = (event) => {
     if (isRunning) {
       event.target.style.background = "skyblue";
-      setButtonText(" ");
+      setButtonText();
       setButtonStatus(true);
     } else {
       event.target.style.background = "#FF002A";
-      setButtonText("Web Clock in");
     }
   };
 
@@ -230,7 +237,6 @@ const Navbar = (props) => {
       duration: moment.utc(offsetTime * 1000).format("HH:mm:ss"),
       // duration: moment.utc(clockTime * 1000).format("HH:mm:ss"),
     };
-    // console.log(clickedDate)
     await AttendanceContext.updateClockData(currentUser.uid, clickedDate);
     setIsRunning(false);
     setClockInfo(0);
@@ -249,7 +255,7 @@ const Navbar = (props) => {
   };
 
   return (
-    <div className="navbar" style={{ background: "white" }}>
+    <div className="navbar" style={{ minHeight: "50px", background: "white" }}>
       <div className="wrapper">
         {role == "admin" ? (
           <Switch
@@ -285,9 +291,9 @@ const Navbar = (props) => {
               onMouseEnter={onMouseEnter}
               className="clockButton"
             >
-              {buttonText ? buttonText : ""} {!buttonStatus ? <br /> : null}
+              {buttonText ? buttonText : null} {!clockinfo && !buttonStatus ? <br /> : null}
               {clockinfo && isRunning
-                ? moment.utc(clockTime * 1000).format("HH:mm:ss")
+                ? moment.utc(clockinfo * 1000).format("HH:mm:ss")
                 : ""}
             </button>
           )

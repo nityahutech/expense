@@ -104,6 +104,10 @@ class CompanyProContext {
       secManager: [],
       lead: [],
     });
+    setDoc(doc(db, `companyprofile/${id}/configurations`, "salary"), {
+      Deduction: [],
+      Earning: [],
+    });
     setDoc(doc(db, `companyprofile/${id}/configurations`, "attendanceConfig"), {
       attendanceNature: {
         endtime: "18:00",

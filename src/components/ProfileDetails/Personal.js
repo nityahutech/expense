@@ -33,18 +33,18 @@ import { useAuth } from "../../contexts/AuthContext";
 const { TextArea } = Input;
 const { Option } = Select;
 
-function Personal() {
+function Personal(props) {
   const imgRef = React.useRef(null);
   const [fileName, setFileName] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState(props.data.profilePic);
   const [isBigFile, setIsBigFile] = useState(false);
   const [editContent, showEditContent] = useState(false);
   const [editContactInfo, showEditContactInfo] = useState(false);
-  const [dob, setDob] = useState("");
-  const [scrs, setScrs] = useState("");
-  const [lccs, setLccs] = useState("");
+  const [dob, setDob] = useState(props.data?.dob ? props.data.dob : null);
+  const [scrs, setScrs] = useState(props.data?.scrs ? props.data.scrs : null);
+  const [lccs, setLccs] = useState(props.data?.lccs ? props.data.lccs : null);
   const [editAddressInfo, showEditAddressInfo] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(props.data);
   const { currentUser } = useAuth();
   const [form] = Form.useForm();
 
@@ -64,9 +64,14 @@ function Personal() {
       mname: mname,
       profilePic: imageUrl || null,
     };
+    if (record.maritalStatus == "Single") {
+      record.spouse = "";
+      record.spouseContact = "";
+      console.log(record);
+    }
     EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName);
     setTimeout(() => {
-      getData();
+      props.getData();
     }, 2000);
     showEditContent(false);
   };
@@ -105,7 +110,7 @@ function Personal() {
       prefix2: values.prefix2 ? values.prefix2 : "",
     };
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
-    getData();
+    props.getData();
     showEditContactInfo(false);
   };
 
@@ -120,25 +125,30 @@ function Personal() {
     };
     EmpInfoContext.updateEduDetails(currentUser.uid, record);
     showEditAddressInfo(false);
-    getData();
+    props.getData();
   };
 
   useEffect(() => {
-    getData();
-  }, []);
+    console.log("fffffffff");
+    setData(props.data);
+    setImageUrl(props.data.profilePic);
+    setDob(props.data?.dob ? props.data.dob : null);
+    setLccs(props.data?.lccs ? props.data.lccs : null);
+    setScrs(props.data?.scrs ? props.data.scrs : null);
+  }, [props.data]);
 
   useEffect(() => {
     setIsBigFile(false);
   });
 
-  const getData = async () => {
-    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    setData(data);
-    setImageUrl(data.profilePic);
-    setDob(data?.dob ? data.dob : null);
-    setLccs(data?.lccs ? data.lccs : null);
-    setScrs(data?.scrs ? data.scrs : null);
-  };
+  // const getData = async () => {
+  //   let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+  //   setData(data);
+  //   setImageUrl(data.profilePic);
+  //   setDob(data?.dob ? data.dob : null);
+  //   setLccs(data?.lccs ? data.lccs : null);
+  //   setScrs(data?.scrs ? data.scrs : null);
+  // };
 
   function onReset() {
     setIsBigFile(false);

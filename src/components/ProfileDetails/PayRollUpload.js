@@ -1,20 +1,28 @@
 import React, { useState } from 'react'
-import { Form, Button, Row, Col, Input, notification, Modal } from "antd";
+import { Form, Button, Row, Col, Input, notification, Modal, Select, DatePicker } from "antd";
 import { useCSVReader } from "react-papaparse";
 import Papa from 'papaparse';
 import EmployeeNetSalary from '../../contexts/EmployeeNetSalary';
-import { showNotification } from '../../contexts/CreateContext';
+import { checkNumbervalue, downloadFile, showNotification } from '../../contexts/CreateContext';
+import { DownloadOutlined, LoadingOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 const PayRollUpload = (props) => {
-
-    const [allEmp, setAllEmp] = useState(props.allEmpName);
-    const [ids, setAllIds] = useState(props.ids);
-    const [emp, setEmp] = useState(props.emp);
-    console.log(allEmp,ids,emp)
+    const earning = props.earningConfig.Earning.concat(props.earningConfig.Deduction)
+    // const deductions = 
+    // const allEmp = props.allEmpName;
+    const ids = props.ids;
     const [bulkModal, openBulkModal] = useState(false);
     const [enableBulk, setEnableBulk] = useState(false);
     const [errorFile, setErrorFile] = useState(null);
+    const [month, setMonth] = useState(moment().format("MMM_YYYY"));
+    const startDate = "01-01-2019" //replace later with company start date
     const [heads, setHeaders] = useState([]);
+    const template = [
+      ["Employee ID", "Name", "Basic"].concat(earning),
+      ["EMP000001", "Rohit Ram Sharma", "100000"].concat(Array(earning.length).fill("15000"))
+    ].concat(Object.keys(props.codes).map(x => [props.codes[`${x}`], x]))
+    // console.log(ids, earning, template, month)
 
     //-------------------------upload--------------
     const showBulkModal = () => {
@@ -28,57 +36,45 @@ const PayRollUpload = (props) => {
         openBulkModal(false);
     };
 
-    const handleBulkOnboard = () => {
-        let temp = [...allEmp];
-        let headers = heads;
-        let selectStaff = headers.indexOf("Select Staff");
-        let totalEarning = headers.indexOf("Total Earning");
-        let totalDeduction = headers.indexOf("Total Deduction");
-        let netSalary = headers.indexOf("Net Salary");
-        let basic = headers.indexOf("Basic");
-        let hra = headers.indexOf("HRA(15%)");
-        let conveyance = headers.indexOf("Conveyance");
-        let medicalAllowance = headers.indexOf("Medical Allowance");
-        let profAllowance = headers.indexOf("Proff. Dev. Allowance");
-        let specialAllowance = headers.indexOf("Special Allowance");
-        let bonus = headers.indexOf("Bonus");
-        let lta = headers.indexOf("LTA");
-        let otherAllowance = headers.indexOf("Other Allowance");
-        let tds = headers.indexOf("TDS");
-        let esi = headers.indexOf("ESI");
-        let pfEmployer = headers.indexOf("PF Employer");
-        let PfEmployee = headers.indexOf("PF Enployee");
-        let profTax = headers.indexOf("Prof. Tax");
-        let otherDeduction = headers.indexOf("Other Deduction");
-
-        temp.forEach(((pay, i) => {
+    const handleBulkUpload = (data, headers, err) => {
+        // console.log(props.earningConfig.Earning);
+        data.forEach(((values, i) => {
+            if (err.includes(values[0])) {return}
+            let id = props.ids[`${values[1]}`]
             let temp = {
-
-                selectStaff: pay[selectStaff],
-                totalEarning: pay[totalEarning],
-                totalDeduction: pay[totalDeduction],
-                netSalary: pay[netSalary],
-                basic: pay[basic],
-                hra: pay[hra],
-                conveyance: pay[conveyance] || "",
-                medicalAllowance: pay[medicalAllowance] || "",
-                profAllowance: pay[profAllowance] || "",
-                specialAllowance: pay[specialAllowance] || "",
-                bonus: pay[bonus] || "",
-                lta: pay[lta] || "",
-                otherAllowance: pay[otherAllowance] || "",
-                tds: pay[tds] || "",
-                esi: pay[esi] || "",
-                pfEmployer: pay[pfEmployer] || "",
-                PfEmployee: pay[PfEmployee] || "",
-                profTax: pay[profTax] || "",
-                otherDeduction: pay[otherDeduction] || "",
-
+                totalEarning: 0,
+                totalDeduction: 0,
+                netSalaryIncome: 0,
+                earnings: {},
+                deductions: {}
             }
-            EmployeeNetSalary.addSalary(ids[`${emp}`], temp)
+            // console.log(headers);
+            headers.map((x, i) => {
+                if (i < 2) { return; }
+                if (x == "Basic") {
+                    temp.basic = Number(values[i])
+                    temp.hra = temp.basic * 0.15 
+                    temp.netSalaryIncome = temp.netSalaryIncome + temp.basic + temp.hra
+                    temp.totalEarning = temp.totalEarning + temp.basic + temp.hra
+                    return; 
+                }
+                if (props.earningConfig.Earning.includes(x)) {
+                    temp.earnings[`${x}`] = values[i]
+                    temp.totalEarning = temp.totalEarning + Number(values[i])
+                    temp.netSalaryIncome = temp.netSalaryIncome + Number(values[i])
+                } else {
+                    // console.log(x, i);
+                    temp.deductions[`${x}`] = values[i]
+                    temp.totalDeduction = temp.totalDeduction + Number(values[i])
+                    temp.netSalaryIncome = temp.netSalaryIncome - Number(values[i])
+                }
+            })
+            // console.log(id, month, temp);
+            EmployeeNetSalary.addSalary(id, month, temp)
                 .then(res => {
-                    if (i == temp.length - 1) {
-                        showNotification("success", "Success", "Bulk Onboarding Complete!")
+                    if (i == data.length - 1) {
+                        showNotification("success", "Success", "Bulk Uploading Complete!")
+                        openBulkModal(false)
                     }
                 })
                 .catch(() =>
@@ -116,9 +112,76 @@ const PayRollUpload = (props) => {
         },
     };
 
-    const validateCSV = async (data, headers, model) => {
-
-
+    const validateCSV = async (data, headers) => {
+        let errors = [["Emp Id", "Field", "Error"]];
+        // console.log(data, headers);
+        data.forEach(x => {
+            x.forEach((e, i) => {
+                if (i > 1 && (e == "" || !(/^[0-9]*$/.test(e))))
+                    errors.push([x[0], headers[i], e == "" ? "Missing Value" : "Not a Number"])
+            })
+        })
+        // console.log(errors);
+        if(data[data.length-1].length == 1) {
+            data.pop()
+        }
+        setErrorFile(null)
+        // const timer = setTimeout(() => {
+          // setAllEmp(data)
+          // setHeaders(headers)
+          let temp = []
+          if (errors.length > 1) {
+            // console.log(data, headers, temp)
+            setErrorFile(<Button style={{marginRight: "10px"}} onClick={() => downloadFile(errors, "errorFile")}> Download Error File</Button>)
+            temp = errors.map(x => x[0]);
+            temp.shift()
+            Modal.confirm({
+              title: "This file contains errors. Do you want to contine onboarding all user records without errors?",
+              okText: "Download error file and Continue",
+              okType: "danger",
+        
+              onOk: () => {
+                downloadFile(errors, "errorFile")
+                handleBulkUpload(data, headers, temp)
+                notification.open({
+                  message: "Onboarding",
+                  duration: 7,
+                  icon: <LoadingOutlined />,
+                });
+              },
+              onCancel: () => {}
+            })
+            // setErrorRecs(temp)
+          } else {
+            Modal.confirm({
+              title: "Are you sure you want to upload this data?",
+              okText: "Yes",
+              okType: "danger",
+        
+              onOk: () => {
+                handleBulkUpload(data, headers, temp)
+                notification.open({
+                  message: "Uploading",
+                  duration: 3,
+                  icon: <LoadingOutlined />,
+                });
+                  // .then((res) => {
+                  //   showNotification(
+                  //     "success",
+                  //     "Success",
+                  //     "Users Onboarded Successfully!"
+                  //   );
+                  // })
+                  // .catch((error) => {
+                  //   showNotification("error", "Error", error.message);
+                  // });
+              },
+            })
+          }
+          // showNotification("success", "Success", "All Fields Valid!")
+            
+          // setEnableBulk(true)
+        // }, [5000])
     }
     return (
         <>
@@ -159,13 +222,31 @@ const PayRollUpload = (props) => {
                         justifyContent: "space-around",
                     }}
                 >
+                    <Row style={{justifyContent: "space-between"}}>
+                        <Col>
+                            <Button style={{marginBottom: "10px"}} onClick={() => downloadFile(template, "template")}> 
+                                <DownloadOutlined />
+                                Download File Template
+                            </Button>
+                        </Col>
+                        <Col>
+                            <DatePicker
+                                picker="month"
+                                placeholder="Select Month"
+                                defaultPickerValue={moment()}
+                                format={"MM-YYYY"}
+                                allowClear
+                                onChange={(e) => setMonth(e == null ? month : e.format("MMM_YYYY"))}
+                                disabledDate={(e) => e.isAfter(moment()) || e.isBefore(moment(startDate, "DD-MM-YYYY"))}
+                             />
+                        </Col>
+                    </Row>
                     <Col>
                         <CSVReader
                             onUploadAccepted={(results) => {
                                 let temp = [...results.data];
                                 let headers = temp.shift();
-                                let model = temp.shift();
-                                validateCSV(temp, headers, model);
+                                validateCSV(temp, headers);
                             }}
                         >
                             {({
@@ -197,7 +278,7 @@ const PayRollUpload = (props) => {
                             )}
                         </CSVReader>
                     </Col>
-                    <Col
+                    {/* <Col
                         xs={{ span: 24 }}
                         sm={{ span: 12 }}
                         md={{ span: 24 }}
@@ -209,7 +290,7 @@ const PayRollUpload = (props) => {
                             justifyContent: "flex-end",
                         }}
                     >
-                        {/* {errorFile} */}
+                        {errorFile}
                         <Button
                             className="listExpense"
                             disabled={!enableBulk}
@@ -224,7 +305,7 @@ const PayRollUpload = (props) => {
                         >
                             Bulk Upload Payload
                         </Button>
-                    </Col>
+                    </Col> */}
                 </Row>
             </Modal>
         </>

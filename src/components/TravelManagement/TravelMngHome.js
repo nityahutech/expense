@@ -519,9 +519,12 @@ function TravelMngHome(props) {
                                                         .split(" ")
                                                         .map(capitalize)
                                                         .join(" ");
-                                                      form.setFieldsValue({
-                                                        location: caps,
-                                                      });
+                                                      let temp =
+                                                        form.getFieldsValue();
+                                                      temp.users[
+                                                        field.key
+                                                      ].location = caps;
+                                                      form.setFieldsValue(temp);
                                                     }}
                                                   />
                                                 </Form.Item>
@@ -653,9 +656,12 @@ function TravelMngHome(props) {
                                                         .split(" ")
                                                         .map(capitalize)
                                                         .join(" ");
-                                                      form.setFieldsValue({
-                                                        arrival: caps,
-                                                      });
+                                                      let temp =
+                                                        form.getFieldsValue();
+                                                      temp.users[
+                                                        field.key
+                                                      ].arrival = caps;
+                                                      form.setFieldsValue(temp);
                                                     }}
                                                   />
                                                 </Form.Item>
@@ -943,6 +949,7 @@ function TravelMngHome(props) {
                 overflowY: "scroll",
                 overflowX: "hidden",
               }}
+              width={850}
               destroyOnClose
               centered
               open={isEditModalOpen}
@@ -958,9 +965,10 @@ function TravelMngHome(props) {
                   X
                 </div>
               }
-              className="viewModal"
+              className="editModal"
             >
               <EditTravelMng
+                getData={getAlltravelData}
                 setIsEditModalOpen={setIsEditModalOpen}
                 viewTravelData={viewTravelData}
               />

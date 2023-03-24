@@ -30,6 +30,7 @@ import "./travelManagement.css";
 import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
 import ViewTravelMng from "./ViewTravelMng";
+import TravelContext from "../../contexts/TravelContext";
 
 const { RangePicker } = DatePicker;
 
@@ -48,6 +49,27 @@ function TravelManagement(props) {
     setOpenViewModal(true);
     setViewTravelData(data);
   }
+
+  const setStatus = async (record, status) => {
+    Modal.confirm({
+      title: `Are you sure, you want to ${
+        status == "Approved" ? "approve" : "reject"
+      } this request?`,
+      okText: "Yes",
+      okType: "danger",
+      onOk: async () => {
+        const updateTravelRecord = travelDetails.map((allotTravel) => {
+          if (allotTravel.id == record.id) {
+            allotTravel.status = status;
+            record.status = status;
+          }
+          return allotTravel;
+        });
+        await TravelContext.updateTravelData(record.id, record);
+        setTravelDetails(updateTravelRecord);
+      },
+    });
+  };
 
   const columns = [
     {
@@ -158,9 +180,9 @@ function TravelManagement(props) {
               }
               type="link"
               className="show"
-              //   onClick={() => {
-              //     setStatus(record, "Approved");
-              //   }}
+              onClick={() => {
+                setStatus(record, "Approved");
+              }}
             >
               <img src={Checkmark} />
             </Button>
@@ -168,9 +190,9 @@ function TravelManagement(props) {
               style={record.status == "Pending" ? null : { display: "none" }}
               type="link"
               className="deleTe"
-              //   onClick={() => {
-              //     setStatus(record, "Reject");
-              //   }}
+              onClick={() => {
+                setStatus(record, "Reject");
+              }}
             >
               <img src={CheckReject} width={20} />
             </Button>
@@ -185,6 +207,17 @@ function TravelManagement(props) {
     setDurationArray(props.durationArray);
   }, [props.travelDetails]);
 
+  var filteredPending = [];
+  var filteredApprove = [];
+
+  travelDetails.forEach((record) => {
+    if (record.status == "Pending") {
+      filteredPending.push(record);
+    } else {
+      filteredApprove.push(record);
+    }
+  });
+
   return (
     <>
       <div className="travelDiv">
@@ -192,7 +225,7 @@ function TravelManagement(props) {
           <Table
             className="travelTable"
             columns={columns}
-            dataSource={travelDetails}
+            dataSource={filteredPending}
           />
           <Modal
             bodyStyle={{
@@ -222,7 +255,11 @@ function TravelManagement(props) {
               viewTravelData={viewTravelData}
             />
           </Modal>
-          <Table className="travelTable" columns={columns} />
+          <Table
+            className="travelTable"
+            columns={columns}
+            dataSource={filteredApprove}
+          />
         </>
       </div>
     </>

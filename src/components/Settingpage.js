@@ -197,9 +197,9 @@ const Settingpage = () => {
             </Card>
           </div>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Notifications" key="2">
+        {/* <Tabs.TabPane tab="Notifications" key="2">
             <NotifySettings data={"hi"} />
-        </Tabs.TabPane>
+        </Tabs.TabPane> */}
       </Tabs>
     </>
   );

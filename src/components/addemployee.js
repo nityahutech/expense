@@ -1131,7 +1131,7 @@ function AddEmployee() {
             <Col>
               <CSVReader
                 onUploadAccepted={(results) => {
-                  let temp = [...results.data].splice(0, 100);
+                  let temp = [...results.data];
                   let headers = temp.shift();
                   let model = temp.shift();
                   validateCSV(temp, headers, model);

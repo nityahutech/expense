@@ -26,6 +26,7 @@ function HrPaySlip() {
   const [emp, setEmp] = useState(null);
   const [options, setOptions] = useState([]);
   const [ids, setIds] = useState([]);
+  const [codes, setCodes] = useState([]);
   const requiredFields = ["basic", "selectStaff"];
   const [earningConfig, setEarningConfig] = useState({
     Earning: [],
@@ -34,7 +35,6 @@ function HrPaySlip() {
 
 
   const handlePrevStep = (values) => {
-    console.log("Success:", values);
     setShowPreview(true);
   };
 
@@ -80,13 +80,10 @@ function HrPaySlip() {
     setDeduction(totalDeduction)
     form.setFieldsValue({ totalDeduction });
   };
-  // console.log(calculateNetSalary())
   function calculateNetSalary() {
     const totalEarnings = parseInt(form.getFieldValue("totalEarning") || 0);
-    console.log(totalEarnings);
     const totalDeductions = parseInt(form.getFieldValue("totalDeduction") || 0);
     const netSalarys = totalEarnings - totalDeductions;
-    console.log(netSalarys);
     setNetSalary(netSalarys);
     form.setFieldsValue({ netSalaryIncome: netSalarys });
   }
@@ -98,7 +95,6 @@ function HrPaySlip() {
 
   useEffect(() => {
     getSalaryData(emp);
-    console.log("useEffect envoke", emp);
   }, [emp]);
 
   useEffect(() => {
@@ -169,7 +165,7 @@ function HrPaySlip() {
   // };
 
   const onFinish = (values) => {
-    console.log("value", values);
+    // console.log("value", values);
     let field = moment().format("MMM_YYYY")
 
     const mappedEarningValues = {};
@@ -180,11 +176,10 @@ function HrPaySlip() {
         field: field,
         value: values[field]
       }); // push the field-value pair into the array
-      console.log("earningArray", earningArray);
-      console.log("mappedEarningValues", mappedEarningValues)
+      // console.log("earningArray", earningArray);
+      // console.log("mappedEarningValues", mappedEarningValues)
     });
 
-    console.log("netSalaryEmp", mappedEarningValues);
 
     const mappedDeductionValues = {};
     const deductionArray = []; // create an array for deduction values
@@ -196,7 +191,6 @@ function HrPaySlip() {
       }); // push the field-value pair into the array
     });
 
-    console.log("netSalaryEmp", mappedDeductionValues);
 
     let netSalaryEmp = {
       basic: values.basic,
@@ -210,7 +204,6 @@ function HrPaySlip() {
     netSalaryEmp.earningArray = earningArray;
     netSalaryEmp.deductionArray = deductionArray;
 
-    console.log("netSalaryEmp", netSalaryEmp);
     EmployeeNetSalary.addSalary(
       ids[`${emp}`],
       field,
@@ -239,54 +232,56 @@ function HrPaySlip() {
   //------------------------------search name------------------------------
 
   const onSearch = (searchText) => {
-    console.log("onSearch", searchText);
-    console.log("onSearch", allEmpName);
     let matchingName = allEmpName.filter((ex) => {
       return ex.value.toLowerCase().includes(searchText.toLowerCase());
     });
-    console.log("onSearch", matchingName);
     setOptions(!searchText ? [] : matchingName);
   };
 
   const onSelect = (data) => {
-    console.log("onSelect", data);
     if (data) {
       setEmp(data);
     }
   };
   async function getAllUser() {
     const allData = await getUsers();
-    console.log("allUsers", allData);
+    let codes = {}
     let temp = {};
     let allUsers = allData.docs.map((doc) => {
       temp = {
         ...temp,
-        [`${doc.data().fname + " " + doc.data().lname}`]: doc.id,
+        [`${doc.data().name}`]: doc.id,
+      };
+      codes = {
+        ...codes,
+        [`${doc.data().name}`]: doc.data().empId,
       };
       return {
-        value: doc.data().fname + " " + doc.data().lname,
+        value: doc.data().name,
       };
     });
-    console.log("allUsers", allUsers, temp);
     setAllEmpName(allUsers);
     setIds(temp);
+    setCodes(codes)
   }
   //-----------------------------get Salary-------------------------
 
   async function getSalaryData() {
     if (emp == null) return;
     let id = ids[emp];
-    console.log("id", id);
+    // console.log("id", id);
     let data = await EmployeeNetSalary.getSalary(id);
-    console.log("aaa", data);
+    // console.log("aaa", data);
     let field = moment().format("MMM_YYYY")
-    setData(data || {});
-    console.log(data[`${field}`]);
-    if (data) {
+    let curr = data[`${field}`]
+    setData(curr || {});
+    if (curr) {
       form.setFieldsValue({
-        basic: data.basic,
-        hra: data.hra,
-        ...data[`${field}`],
+        basic: curr.basic,
+        hra: curr.hra,
+        ...curr[`${field}`],
+        ...curr.earnings,
+        ...curr.deductions,
 
       });
     } else {
@@ -307,7 +302,7 @@ function HrPaySlip() {
 
   const getConfigData = async () => {
     let configData = await ConfigureContext.getEarningConfig("salary")
-    console.log('configData', configData)
+    // console.log('configData', configData)
     setEarningConfig(configData)
   }
 
@@ -320,8 +315,6 @@ function HrPaySlip() {
     });
   };
 
-  console.log("data", data);
-  console.log("emp", emp);
   return (
     <div>
       <div
@@ -376,7 +369,7 @@ function HrPaySlip() {
             </h1>
 
             {!showPreview ? (
-              <PayRollUpload allEmpName={allEmpName} ids={ids} emp={emp} />
+              <PayRollUpload ids={ids} codes={codes} earningConfig={earningConfig} />
 
             ) : null}
           </Col>
@@ -662,7 +655,6 @@ function HrPaySlip() {
                   md={showPreview ? 24 : 8}
                   lg={showPreview ? 24 : 8}
                 >
-                  {console.log(field)}
                   <Form.Item key={index}
                     onKeyPress={(event) => {
                       if (checkNumbervalue(event)) {
@@ -674,7 +666,7 @@ function HrPaySlip() {
                     style={
                       showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                     }
-                  // initialValue={data.basic}
+                    // initialValue={data?.earnings?.[`${field}`] || null}
                   >
                     {showPreview ? (
                       <span>{form.getFieldValue(field)}</span>
@@ -745,7 +737,7 @@ function HrPaySlip() {
                     style={
                       showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                     }
-                  // initialValue={data.basic}
+                    // initialValue={data?.deductions?.[`${field}`] || null}
                   >
                     {showPreview ? (
                       <span>{form.getFieldValue(field)}</span>

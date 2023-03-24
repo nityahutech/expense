@@ -72,25 +72,18 @@ function AttendanceLog(props) {
   const [endTime, setEndTime] = useState("");
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [empCode, setEmpCode] = useState(null);
-  const [empName, setEmpName] = useState(null);
-  const [editedAbsent, seteditedAbsent] = useState({});
-
-  const showEditModal = () => {
-    isEditOpen ? setIsEditOpen(false) : setIsEditOpen(true);
-  };
+  const [editedAbsent, setEditedAbsent] = useState({});
 
   const attendanceReason = async (values) => {
-    console.log("valuess", values);
     const addDetails = {
       id: currentUser.uid,
       empId: empCode,
-      empName: empName,
+      empName: currentUser.displayName,
       type: "Approval",
       appStatus: "Pending",
       reason: values.absentReason,
       date: editedAbsent.date,
     };
-
     try {
       await AttendanceContext.addRegularize(addDetails);
       setIsEditOpen(false);
@@ -104,12 +97,8 @@ function AttendanceLog(props) {
 
   const handleCancel = () => {
     setIsEditOpen(false);
-    seteditedAbsent({});
+    setEditedAbsent({});
   };
-
-  {
-    console.log("currentuser;;", currentUser);
-  }
 
   const handleFinish = (values) => {
     let temp = Object.keys(values);
@@ -133,7 +122,6 @@ function AttendanceLog(props) {
     })
       .then((response) => {
         getAttendanceData();
-        console.log("rule");
         webClock();
       })
       .catch((error) => {
@@ -200,7 +188,6 @@ function AttendanceLog(props) {
 
 
   useEffect(() => {
-    // console.log("1");
     getDateOfJoining();
   }, [isAdmin]);
 
@@ -263,12 +250,9 @@ function AttendanceLog(props) {
   const getDateOfJoining = async (id) => {
     let data = await EmpInfoContext.getEduDetails(id || currentUser.uid);
     var doj = moment(data.doj, "DD-MM-YYYY");
-    console.log(data, "dataaa");
     var code = data.empId;
-    var name = data.name;
     setDateOfJoining(doj);
     setEmpCode(code);
-    setEmpName(name);
   };
 
   const setHolidayStatus = (data) => {
@@ -342,7 +326,6 @@ function AttendanceLog(props) {
       // console.log(userdata, dayoff);
       AttendanceContext.updateLeaves(userdata, holTemp, dayoff).then(
         (final) => {
-          console.log(final);
           setHolidayStatus(final);
           data = final;
           setEmpMonthly(final);
@@ -408,20 +391,20 @@ function AttendanceLog(props) {
       render: (_, record) => {
         return (
           <>
-            <span style={record.status == "Absent" ? { color: "red" } : {}}>
+            {/* <span style={record.status == "Absent" ? { color: "red" } : {}}> */}
               {record.status}
-            </span>
+            {/* </span>
             {record.status == "Absent" ? (
               <Tooltip placement="bottom" title="Regularize Attendance">
                 <EditOutlined
                   style={{ marginLeft: "10px" }}
                   onClick={() => {
-                    showEditModal();
-                    seteditedAbsent(record);
+                    setIsEditOpen(true);
+                    setEditedAbsent(record);
                   }}
                 />
               </Tooltip>
-            ) : null}
+            ) : null} */}
           </>
         );
       },
@@ -519,7 +502,6 @@ function AttendanceLog(props) {
     }
   };
 
-  console.log(empMonthly, "empmonthly;;;");
 
   const disabledDate = (current) => {
     return !current.isBetween(dateOfJoining, new Date());
@@ -611,7 +593,6 @@ function AttendanceLog(props) {
     },
   ];
 
-  // console.log("empdatesdsdh", empMonthly[0]?.date);
 
   return (
     <>
@@ -734,7 +715,7 @@ function AttendanceLog(props) {
                   </Form>
                 </Modal>
               </Tabs.TabPane>
-              <Tabs.TabPane tab="Daily Log" key="2" forceRender="true">
+              {/* <Tabs.TabPane tab="Daily Log" key="2" forceRender="true">
                 <Input
                   className="Daily"
                   placeholder="Search"
@@ -810,7 +791,7 @@ function AttendanceLog(props) {
                   dataSource={empMonthly}
                   pagination={true}
                 />
-              </Tabs.TabPane>
+              </Tabs.TabPane> */}
               <Tabs.TabPane
                 tab="Add Report"
                 key="4"
@@ -1136,9 +1117,9 @@ function AttendanceLog(props) {
                   </Card>
                 </div>
               </Tabs.TabPane>
-              <Tabs.TabPane tab="Regularize Attendance" key="4">
+              {/* <Tabs.TabPane tab="Regularize Attendance" key="4">
                 <RegularizeAttendance configurations={configurations} />
-              </Tabs.TabPane>
+              </Tabs.TabPane> */}
             </>
           )}
         </Tabs>

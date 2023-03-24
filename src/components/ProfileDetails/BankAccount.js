@@ -399,10 +399,6 @@ function BankAccount() {
                                   label: "Current Account",
                                 },
                                 {
-                                  value: "Fixed Deposit",
-                                  label: "Fixed Deposit",
-                                },
-                                {
                                   value: "Salary Account",
                                   label: "Salary Account",
                                 },

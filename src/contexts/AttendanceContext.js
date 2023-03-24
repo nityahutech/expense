@@ -57,7 +57,6 @@ class AttendanceContext {
         .format("HH:mm:ss"),
       clockOut: null,
     };
-    console.log(newrec);
     const attendDoc = doc(db, `companyprofile/${compId}/attendance`, d[0].id);
     updateDoc(attendDoc, newrec);
     return d;
@@ -169,7 +168,6 @@ class AttendanceContext {
     let data = await getDocs(q);
     let d = data.docs.map((doc) => {
       let stat = doc.data()?.appStatus || null;
-      console.log(stat);
       return {
         ...doc.data(),
         id: doc.id,
@@ -177,7 +175,6 @@ class AttendanceContext {
         empId: id,
       };
     });
-    console.log(d);
     const momentRange = extendMoment(Moment);
     const range = momentRange.range(date[0], date[1]);
     const res = Array.from(range.by("day"));
@@ -231,11 +228,8 @@ class AttendanceContext {
   };
 
   updateLeaves = async (data, holidays, daysoff) => {
-    console.log(data, holidays, daysoff);
     let list = await this.getLeaveList(data[0].empId);
-    console.log(list);
     data.forEach((emp) => {
-      console.log(emp);
       if (emp.status == "Absent") {
         if (daysoff.includes(moment(emp.date, "DD-MM-YYYY").format("dddd"))) {
           emp.status = "Weekend";
@@ -256,9 +250,7 @@ class AttendanceContext {
   };
 
   updateWithLeave = async (data, isHoiday, isDayoff) => {
-    console.log(data, isHoiday, isDayoff);
     data.forEach((emp) => {
-      console.log(emp);
       if (emp.status == "Absent") {
         if (isHoiday) {
           emp.status = "Holiday";

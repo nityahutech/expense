@@ -3,7 +3,7 @@ import { Divider, Layout, Menu } from "antd";
 import { NavLink, Link } from "react-router-dom";
 import expenseIcon from "../../images/Expense.png";
 import dot from "../../images/dot.png";
-import empIcon from "../../images/employees.png";
+import empIcon from "../../images/Employees.png";
 import userIcon from "../../images/user.png";
 import assetMag from "../../images/AssetManageLogo.svg";
 import logo from "../../images/SidebarLogo.svg";
@@ -14,7 +14,7 @@ import SettingIcon from "../../images/gear.png";
 import homePage from "../../images/homeIcon.png";
 import LeaveIcon from "../../images/smallLeaveLogo.png";
 import SmallAttd from "../../images/attendanceSB.png";
-import travel from "../../images/map.svg"
+import travel from "../../images/map.svg";
 import "./newSlidebar.css";
 
 const { Sider } = Layout;
@@ -280,65 +280,83 @@ const NewSidebar = (props) => {
                       </Menu.Item>
                     </Menu.SubMenu>
                     <Menu.Item
-                      icon={<img style={{maxHeight: "15px", margin: "0"}} src={assetMag} alt="asset" class="Dash" />}
+                      icon={
+                        <img
+                          style={{ maxHeight: "15px", margin: "0" }}
+                          src={assetMag}
+                          alt="asset"
+                          class="Dash"
+                        />
+                      }
                       key="22"
                     >
                       <p className="sideFont">Assets</p>
                       <NavLink to="/Assets" />
                     </Menu.Item>
-                <Menu.SubMenu
-                  className="arrow-div"
-                  style={{
-                    width: "100%",
-                    fontSize: "13px",
-                    fontWeight: "600",
-                    color: "#ffffff",
-                  }}
-                  icon={
-                    <img src={expenseIcon} alt="profile" className="Dash" />
-                  }
-                  key="sub1"
-                  title="Expense"
-                  mode="inline"
-                >
-                  {role == "admin" || isHr ? (
-                    <>
+                    <Menu.SubMenu
+                      className="arrow-div"
+                      style={{
+                        width: "100%",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: "#ffffff",
+                      }}
+                      icon={
+                        <img src={expenseIcon} alt="profile" className="Dash" />
+                      }
+                      key="sub1"
+                      title="Expense"
+                      mode="inline"
+                    >
+                      {role == "admin" || isHr ? (
+                        <>
+                          <Menu.Item
+                            className="arrow"
+                            icon={
+                              <img src={dot} alt="profile" className="dot" />
+                            }
+                            key="2"
+                          >
+                            <p className="sideFont">Add Expense</p>
+                            <NavLink to="/Expense/AddExpense" />
+                          </Menu.Item>
+                          <Menu.Item
+                            className="arrow"
+                            icon={
+                              <img src={dot} alt="profile" className="dot" />
+                            }
+                            key="3"
+                          >
+                            <p className="sideFont">Expense List</p>
+                            <NavLink to="/Expense/ExpenseList" />
+                          </Menu.Item>
+                        </>
+                      ) : null}
                       <Menu.Item
                         className="arrow"
                         icon={<img src={dot} alt="profile" className="dot" />}
-                        key="2"
+                        key="23"
                       >
-                        <p className="sideFont">Add Expense</p>
-                        <NavLink to="/Expense/AddExpense" />
+                        <p className="sideFont">Invoice Reimbursement</p>
+                        <NavLink to="/Expense/InvoiceReimbursement" />
                       </Menu.Item>
-                      <Menu.Item
-                        className="arrow"
-                        icon={<img src={dot} alt="profile" className="dot" />}
-                        key="3"
-                      >
-                        <p className="sideFont">Expense List</p>
-                        <NavLink to="/Expense/ExpenseList" />
-                      </Menu.Item>
-                    </>
-                  ) : null}
-                  <Menu.Item
-                    className="arrow"
-                    icon={<img src={dot} alt="profile" className="dot" />}
-                    key="23"
-                  >
-                    <p className="sideFont">Invoice Reimbursement</p>
-                    <NavLink to="/Expense/InvoiceReimbursement" />
-                  </Menu.Item>
-                </Menu.SubMenu>
-                <Menu.Item
-                 icon={<img src={travel} alt="profile" className="Dash"  style={{color:"#fffff"}} />}
-                 key="24"
-                >
-                  <p className="sideFont">Travel Management</p>
-                  <NavLink to="/TravelManagement" />
-                </Menu.Item>
+                    </Menu.SubMenu>
+                    <Menu.Item
+                      icon={
+                        <img
+                          src={travel}
+                          alt="profile"
+                          className="Dash"
+                          style={{ color: "#fffff" }}
+                        />
+                      }
+                      key="24"
+                    >
+                      <p className="sideFont">Travel Management</p>
+                      <NavLink to="/TravelManagement" />
+                    </Menu.Item>
                   </>
-                  ) :null}
+                ) : null}
                 <Menu.Item
                   icon={<img src={userIcon} alt="profile" className="Dash" />}
                   key="21"

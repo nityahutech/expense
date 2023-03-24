@@ -28,10 +28,13 @@ import {
   showNotification,
   capitalize,
 } from "../../contexts/CreateContext";
+import TravelContext from "../../contexts/TravelContext";
 
 function EditTravelMng(props) {
   console.log("propss", props);
-  const [selectedOption, setSelectedOption] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(
+    props.viewTravelData.travelType.map((x) => x.bookingOption)
+  );
   const [addTravel, setAddTravel] = useState(false);
   const { RangePicker } = DatePicker;
   const [form] = Form.useForm();
@@ -40,19 +43,82 @@ function EditTravelMng(props) {
   const editTravelData = props.viewTravelData;
 
   const editTravelDetails = props.viewTravelData.travelType.map((data) => {
-    console.log(data);
-    return {
-      ...data,
-      duration: moment(data?.durationDate, "DD-MM-YYYY"),
-      travelDate: moment(data?.durationDate, "DD-MM-YYYY"),
-      rentalDate: moment(data?.durationDate, "DD-MM-YYYY"),
-    };
+    let temp = { ...data };
+    switch (temp.bookingOption) {
+      case "Travel":
+        temp.travelDate = moment(temp.durationDate, "DD-MM-YYYY");
+        break;
+      case "Rental":
+        temp.rentalDate = temp.durationDate.map((x) => moment(x, "DD-MM-YYYY"));
+        break;
+      case "Hotel":
+        temp.duration = temp.durationDate.map((x) => moment(x, "DD-MM-YYYY"));
+    }
+    delete temp.durationDate;
+    return temp;
   });
 
   console.log(editTravelDetails);
 
   const handleCarChange = (value) => {
     console.log(`Selected: ${value}`);
+  };
+
+  const onFinish = (values) => {
+    console.log("updateTravel", values);
+
+    const editTravelData = {
+      travelName: values.travelName,
+      people: values.people,
+      travelType: values.users.map((type) => {
+        console.log(type);
+        switch (type.bookingOption) {
+          case "Travel":
+            let temp = {
+              bookingOption: "Travel",
+              durationDate: type.travelDate.format("DD-MM-YYYY"),
+              depart: type.depart,
+              arrival: type.arrival,
+              transport: type.transport,
+            };
+            delete temp.travelDate;
+            return temp;
+
+          case "Hotel":
+            let hotelData = {
+              bookingOption: "Hotel",
+              durationDate: type.duration.map((dt) => dt.format("DD-MM-YYYY")),
+              location: type.location,
+            };
+            delete hotelData.duration;
+            return hotelData;
+          case "Rental":
+            let rentalData = {
+              bookingOption: "Rental",
+              durationDate: type.rentalDate.map((dt) =>
+                dt.format("DD-MM-YYYY")
+              ),
+              vehicleType: type.vehicleType,
+              driver: type.driver,
+            };
+            delete rentalData.rentalDate;
+            return rentalData;
+        }
+      }),
+    };
+
+    console.log("updatetraveldata", editTravelData);
+
+    TravelContext.updateTravelData(props.viewTravelData.id, editTravelData)
+      .then((res) => {
+        showNotification("success", "Success", "Edit Successful");
+        props.getData();
+      })
+      .catch((error) => {
+        console.log(error);
+        showNotification("error", "Error", "Failed to edit");
+      });
+    props.setIsEditModalOpen(false);
   };
 
   return (
@@ -72,7 +138,7 @@ function EditTravelMng(props) {
         }}
         autoComplete="off"
         // form={form}
-        // onFinish={onFinish}
+        onFinish={onFinish}
       >
         <Row gutter={[16, 16]}>
           <Col xs={24} xm={24} md={12} lg={12}>
@@ -508,9 +574,7 @@ function EditTravelMng(props) {
                       borderRadius: "5px",
                     }}
                     onClick={() => {
-                      setAddTravel(false);
-                      form.resetFields();
-                      setFile([]);
+                      props.setIsEditModalOpen(false);
                     }}
                   >
                     <CloseOutlined />

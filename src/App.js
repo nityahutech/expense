@@ -107,6 +107,16 @@ function App() {
             }
           />
           <Route
+            path="/Assets"
+            element={
+              <FormatPage
+                main={AssetMag}
+                activeSubMenu={["sub4"]}
+                activeMenu={["22"]}
+              />
+            }
+          />
+          <Route
             path="/Expense/AddExpense"
             element={
               <FormatPage
@@ -153,16 +163,6 @@ function App() {
                 main={HalfYearGoalHome}
                 activeSubMenu={["sub4"]}
                 activeMenu={["20a"]}
-              />
-            }
-          />
-          <Route
-            path="/Assets"
-            element={
-              <FormatPage
-                main={AssetMag}
-                activeSubMenu={["sub4"]}
-                activeMenu={["22"]}
               />
             }
           />

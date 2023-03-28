@@ -50,156 +50,156 @@ const Settingpage = () => {
               hoverable={true}
               bordered={true}
             >
-              
+
               <div className="updatepsform">
                 <Form
-                    form={form}
-                    onFinish={() => {
-                      form.resetFields();
-                    }}
-                    name="basic"
-                    key={"psw"}
-                    
-                    initialValues={{
-                      remember: true,
-                    }}
-                    autoComplete="off"
-                    colon={true}
-                  >
-                    <Row>
-                      <Col span={24}>
-                        <Form.Item
-                          label="Current Password"
-                          key="currentpassword"
-                          name="current password"
-                          className="currentpsw"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please enter your current password!",
-                              
-                            },
-                            {
-                              pattern: /^(?!.* )(?=.*\d)(?=.*[A-Z]).{8,40}$/,
-                              message: "Please enter min 8 character including special character,number,upper and lower letters. "
-                            }
-                          ]}
-                          
-                          onChange={(e) => setPassword(e.target.value)}
-                          labelCol={{
-                            span: 5,
-                            offset: 6,
-                          }}
-                          wrapperCol={{
-                            span: 7,
-                            
-                          }}
-                        >
-                          <Input.Password
-                            className="new"
-                            type="password"
-                            maxLength={40}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={24}>
-                        <Form.Item
-                          label="New Password"
-                          name="password1"
-                          key="password1"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please enter new password!",
-                              
-                            },
-                            {
-                              pattern: /^(?!.* )(?=.*\d)(?=.*[A-Z]).{8,40}$/,
-                              message: "Please enter min 8 character including special character,number,upper and lower letters. "
-                            }
-                          ]}
-                          
-                          onChange={(e) => setNew(e.target.value)}
-                          labelCol={{
-                            span: 5,
-                            offset: 6,
-                          }}
-                          wrapperCol={{
-                            span: 7,
-                            
-                          }}
-                        >
-                          <Input.Password
-                            className="new"
-                            type="password"
-                            maxLength={40}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={24}>
-                        <Form.Item
+                  form={form}
+                  onFinish={() => {
+                    form.resetFields();
+                  }}
+                  name="basic"
+                  key={"psw"}
+
+                  initialValues={{
+                    remember: true,
+                  }}
+                  autoComplete="off"
+                  colon={true}
+                >
+                  <Row>
+                    <Col span={24}>
+                      <Form.Item
+                        label="Current Password"
+                        key="currentpassword"
+                        name="current password"
+                        className="currentpsw"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter your current password!",
+
+                          },
+                          {
+                            pattern: /^(?!.* )(?=.*\d)(?=.*[A-Z]).{8,40}$/,
+                            message: "Please enter min 8 character including special character,number,upper and lower letters. "
+                          }
+                        ]}
+
+                        onChange={(e) => setPassword(e.target.value)}
                         labelCol={{
                           span: 5,
                           offset: 6,
                         }}
                         wrapperCol={{
                           span: 7,
-                          
-                        }}
-                          label="Confirm Password"
-                          name="password2"
-                          key="password2"
-                          dependencies={["password1"]}
 
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please confirm your password!",
+                        }}
+                      >
+                        <Input.Password
+                          className="new"
+                          type="password"
+                          maxLength={40}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                      <Form.Item
+                        label="New Password"
+                        name="password1"
+                        key="password1"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter new password!",
+
+                          },
+                          {
+                            pattern: /^(?!.* )(?=.*\d)(?=.*[A-Z]).{8,40}$/,
+                            message: "Please enter min 8 character including special character,number,upper and lower letters. "
+                          }
+                        ]}
+
+                        onChange={(e) => setNew(e.target.value)}
+                        labelCol={{
+                          span: 5,
+                          offset: 6,
+                        }}
+                        wrapperCol={{
+                          span: 7,
+
+                        }}
+                      >
+                        <Input.Password
+                          className="new"
+                          type="password"
+                          maxLength={40}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                      <Form.Item
+                        labelCol={{
+                          span: 5,
+                          offset: 6,
+                        }}
+                        wrapperCol={{
+                          span: 7,
+
+                        }}
+                        label="Confirm Password"
+                        name="password2"
+                        key="password2"
+                        dependencies={["password1"]}
+
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please confirm your password!",
+                          },
+                          ({ getFieldValue }) => ({
+                            validator(_, value) {
+                              if (
+                                !value ||
+                                getFieldValue("password1") === value
+                              ) {
+                                return Promise.resolve();
+                              }
+                              return Promise.reject(
+                                new Error(
+                                  "The two passwords that you entered do not match!"
+                                )
+                              );
                             },
-                            ({ getFieldValue }) => ({
-                              validator(_, value) {
-                                if (
-                                  !value ||
-                                  getFieldValue("password1") === value
-                                ) {
-                                  return Promise.resolve();
-                                }
-                                return Promise.reject(
-                                  new Error(
-                                    "The two passwords that you entered do not match!"
-                                  )
-                                );
-                              },
-                            }),
-                          ]}
-                        >
-                          <Input.Password
-                            className="confirm"
-                            type="password"
-                            maxLength={40}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={24} className="save-button-col">
-                        <Button
-                          style={{ background: "#1963A6" }}
-                          className="save-button"
-                          htmlType="submit"
-                          type="primary"
-                          onClick={handlePasswordSubmit}
-                        >
-                          Save Change
-                        </Button>
-                      </Col>
-                    </Row>
+                          }),
+                        ]}
+                      >
+                        <Input.Password
+                          className="confirm"
+                          type="password"
+                          maxLength={40}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={24} className="save-button-col">
+                      <Button
+                        style={{ background: "#1963A6" }}
+                        className="save-button"
+                        htmlType="submit"
+                        type="primary"
+                        onClick={handlePasswordSubmit}
+                      >
+                        Save Change
+                      </Button>
+                    </Col>
+                  </Row>
                 </Form>
               </div>
             </Card>
           </div>
         </Tabs.TabPane>
-        {/* <Tabs.TabPane tab="Notifications" key="2">
-            <NotifySettings data={"hi"} />
-        </Tabs.TabPane> */}
+        <Tabs.TabPane tab="Notifications" key="2">
+          <NotifySettings data={"hi"} />
+        </Tabs.TabPane>
       </Tabs>
     </>
   );

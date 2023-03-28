@@ -38,7 +38,7 @@ const Navbar = (props) => {
       setIsRunning(false);
       return false;
     } else {
-      localStorage.setItem("lastRefresh", moment())
+      localStorage.setItem("lastRefresh", moment().format("x"))
       setButtonText()
       setIsRunning(true);
       let offset = moment().subtract(res.clockIn);
@@ -151,8 +151,8 @@ const Navbar = (props) => {
 
   const refreshTimer = () => {
     let last = localStorage.getItem("lastRefresh");
-    const diff = moment.duration(moment().diff(moment(last)));
-    if (diff._milliseconds > 1200000) {
+    const diff = moment.duration(moment().diff(moment(last, "x")));
+    if(diff._milliseconds > 1200000) {
       setRefresh(!refresh)
     }
   }

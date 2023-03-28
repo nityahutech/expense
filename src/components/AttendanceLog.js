@@ -76,8 +76,8 @@ function AttendanceLog(props) {
 
   const attendanceReason = async (values) => {
     const addDetails = {
-      id: currentUser.uid,
-      empId: empCode,
+      empId: currentUser.uid,
+      empCode: empCode,
       empName: currentUser.displayName,
       type: "Approval",
       appStatus: "Pending",
@@ -391,20 +391,21 @@ function AttendanceLog(props) {
       render: (_, record) => {
         return (
           <>
-            {/* <span style={record.status == "Absent" ? { color: "red" } : {}}> */}
+            <span style={record.status == "Absent" ? { color: "red" } : {}}>
               {record.status}
-            {/* </span>
+            </span>
             {record.status == "Absent" ? (
               <Tooltip placement="bottom" title="Regularize Attendance">
                 <EditOutlined
                   style={{ marginLeft: "10px" }}
                   onClick={() => {
                     setIsEditOpen(true);
+                    console.log(true);
                     setEditedAbsent(record);
                   }}
                 />
               </Tooltip>
-            ) : null} */}
+            ) : null}
           </>
         );
       },
@@ -1117,9 +1118,9 @@ function AttendanceLog(props) {
                   </Card>
                 </div>
               </Tabs.TabPane>
-              {/* <Tabs.TabPane tab="Regularize Attendance" key="4">
+              <Tabs.TabPane tab="Regularize Attendance" key="4">
                 <RegularizeAttendance configurations={configurations} />
-              </Tabs.TabPane> */}
+              </Tabs.TabPane>
             </>
           )}
         </Tabs>

@@ -31,8 +31,8 @@ const RegularizeAttendance = (props) => {
     let col = [
       {
         title: "Employee Code",
-        dataIndex: "empId",
-        key: "empId",
+        dataIndex: "empCode",
+        key: "empCode",
         align: "center",
         width: 180,
       },

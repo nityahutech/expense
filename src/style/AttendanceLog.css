@@ -184,3 +184,14 @@
   line-height: 20px;
 }
 
+.badge .ant-badge-status-warning{
+  width: 8px;
+  height: 8px;
+}
+
+.reject .ant-badge-status-warning{
+  width: 8px;
+  height: 8px;
+  background-color: red;
+}
+

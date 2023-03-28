@@ -18,9 +18,10 @@ import {
   Row,
   Col,
   Space,
+  Badge,
 } from "antd";
 import "../style/AttendanceLog.css";
-import { SearchOutlined, EditOutlined } from "@ant-design/icons";
+import { SearchOutlined, EditOutlined, DeleteFilled } from "@ant-design/icons";
 import moment from "moment";
 import AttendanceContext from "../contexts/AttendanceContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
@@ -74,6 +75,7 @@ function AttendanceLog(props) {
   const [empCode, setEmpCode] = useState(null);
   const [editedAbsent, setEditedAbsent] = useState({});
 
+  console.log(currentUser);
   const attendanceReason = async (values) => {
     const addDetails = {
       empId: currentUser.uid,
@@ -83,6 +85,7 @@ function AttendanceLog(props) {
       appStatus: "Pending",
       reason: values.absentReason,
       date: editedAbsent.date,
+      rejectedReason: "",
     };
     try {
       await AttendanceContext.addRegularize(addDetails);
@@ -185,7 +188,6 @@ function AttendanceLog(props) {
       },
     },
   ];
-
 
   useEffect(() => {
     getDateOfJoining();
@@ -320,6 +322,7 @@ function AttendanceLog(props) {
       holTemp = temp?.holidays || holidays;
     // console.log(data, dayTemp, holTemp, selectedDay, holidays);
     AttendanceContext.getAllAttendance(id, date).then((userdata) => {
+      console.log("userData", userdata);
       let dayoff = Object.keys(dayTemp).filter(
         (day) => dayTemp[`${day}`] == "dayoff"
       );
@@ -389,12 +392,40 @@ function AttendanceLog(props) {
       width: 80,
       align: "center",
       render: (_, record) => {
+        console.log("recorddd", record);
+
         return (
           <>
-            <span style={record.status == "Absent" ? { color: "red" } : {}}>
+            <span
+              style={
+                record.status == "Absent" && record.type == "Approval"
+                  ? { color: "#000000" }
+                  : record.status == "Absent"
+                  ? { color: "red" }
+                  : {}
+              }
+            >
               {record.status}
             </span>
-            {record.status == "Absent" ? (
+            {record.status == "Absent" && record.type == "Approval" ? (
+              <Tooltip
+                placement="bottom"
+                title={
+                  record.appStatus == "Reject"
+                    ? record.rejectedReason
+                    : "Pending"
+                }
+              >
+                <Space style={{ marginLeft: "10px" }}>
+                  <Badge
+                    className={
+                      record.appStatus == "Reject" ? "reject" : "badge"
+                    }
+                    status="warning"
+                  />
+                </Space>
+              </Tooltip>
+            ) : record.status == "Absent" ? (
               <Tooltip placement="bottom" title="Regularize Attendance">
                 <EditOutlined
                   style={{ marginLeft: "10px" }}
@@ -503,7 +534,6 @@ function AttendanceLog(props) {
     }
   };
 
-
   const disabledDate = (current) => {
     return !current.isBetween(dateOfJoining, new Date());
   };
@@ -594,7 +624,6 @@ function AttendanceLog(props) {
     },
   ];
 
-
   return (
     <>
       <div className="hrtab">
@@ -609,7 +638,6 @@ function AttendanceLog(props) {
         >
           {!isAdmin ? (
             <>
-
               <Tabs.TabPane tab="My Attendance" key="1">
                 <div className="monthColor">
                   <DatePicker
@@ -959,6 +987,83 @@ function AttendanceLog(props) {
                   dataSource={empMonthly}
                   pagination={true}
                 />
+                <Modal
+                  className="regularize"
+                  title="Regularize Attendance"
+                  open={isEditOpen}
+                  footer={null}
+                  closeIcon={
+                    <div onClick={handleCancel} style={{ color: "#ffffff" }}>
+                      X
+                    </div>
+                  }
+                >
+                  <Form form={form} onFinish={attendanceReason}>
+                    <Row gutter={[0, 24]}>
+                      <Col span={24}>
+                        <span className="approvalText">
+                          Get Approval For Attendance on {editedAbsent?.date}
+                        </span>
+                      </Col>
+                      {/* <Col span={24}>
+                      <DatePicker />
+                    </Col> */}
+                      <Col span={24}>
+                        <span style={{ fontWeight: "600", fontSize: "16px" }}>
+                          Reason
+                        </span>
+                      </Col>
+                      <Col span={24}>
+                        <Form.Item name="absentReason">
+                          <Input />
+                        </Form.Item>
+                      </Col>
+                      <Col span={24}>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "end",
+                            marginRight: "7px",
+                          }}
+                        >
+                          <Space>
+                            <Form.Item>
+                              <Button
+                                onClick={handleCancel}
+                                style={{
+                                  border: "1px solid #1963a6",
+                                  color: "#1963a6",
+                                  fontWeight: "600",
+                                  fontSize: "14px",
+                                  lineHeight: "17px",
+                                  width: "99px",
+                                }}
+                              >
+                                Cancel
+                              </Button>
+                            </Form.Item>
+                            <Form.Item>
+                              <Button
+                                htmlType="submit"
+                                style={{
+                                  border: "1px solid #1963a6",
+                                  background: "#1963a6",
+                                  color: "#ffffff",
+                                  fontWeight: "600",
+                                  fontSize: "14px",
+                                  lineHeight: "17px",
+                                  width: "99px",
+                                }}
+                              >
+                                Submit
+                              </Button>
+                            </Form.Item>
+                          </Space>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Form>
+                </Modal>
               </Tabs.TabPane>
 
               {/* //---------------------------------------------------------- */}

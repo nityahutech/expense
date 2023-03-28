@@ -8,10 +8,9 @@ import moment from "moment";
 import { SearchOutlined } from "@ant-design/icons";
 
 const RegularizeAttendance = (props) => {
-  const configurations = props.configurations
+  const configurations = props.configurations;
   const [regularizeDetails, setRegularizeDetails] = useState([]);
   const [pendingData, setpendingData] = useState([]);
-
 
   const getAllRegularizeAtt = async () => {
     let regularizeData = await AttendanceContext.getRegularizeAttendance();
@@ -75,9 +74,10 @@ const RegularizeAttendance = (props) => {
                   <Button
                     type="link"
                     className="deleTe"
-                    //   onClick={() => {
-                    //     setStatus(record, "Reject");
-                    //   }}
+                    onClick={() => {
+                      setStatus(record, "Reject");
+                      console.log("record", record);
+                    }}
                   >
                     <img src={CheckReject} width={20} />
                   </Button>
@@ -98,31 +98,45 @@ const RegularizeAttendance = (props) => {
   useEffect(() => {
     getAllRegularizeAtt();
   }, []);
-    
+
   const setStatus = async (record, status) => {
+    console.log("reocrddd", record);
+    let absentReason = "";
     Modal.confirm({
       title: `Are you sure, you want to ${
         status == "Approved" ? "approve" : "reject"
       } this request?`,
+      content:
+        status == "Approved" ? (
+          ""
+        ) : (
+          <Input
+            placeholder="Enter Reason"
+            onChange={(event) => {
+              absentReason = event.target.value;
+            }}
+          />
+        ),
       okText: "yes",
       okType: "danger",
       onOk: async () => {
         // const updateAttendance = regularizeDetails.map((attendanceData) => {
-          // console.log(attendanceData);
-          // if (attendanceData.id == record.id) {
-            // attendanceData.appStatus = status;
-            record.appStatus = status;
-            if (status == "Approved") {
-              record.clockIn = configurations.starttime + ":00";
-              record.clockOut = configurations.endtime + ":00";
-              record.break = configurations.maxBreakDuration + ":00:00";
-              record.duration = moment(configurations.endtime, "HH:mm:ss")
-                .subtract(configurations.starttime)
-                .subtract(configurations.maxBreakDuration + ":00:00")
-                .format("HH:mm:ss");
-            }
-          // }
-          // return attendanceData;
+        // console.log(attendanceData);
+        // if (attendanceData.id == record.id) {
+        // attendanceData.appStatus = status;
+        record.appStatus = status;
+        if (status == "Approved") {
+          record.clockIn = configurations.starttime + ":00";
+          record.clockOut = configurations.endtime + ":00";
+          record.break = configurations.maxBreakDuration + ":00:00";
+          record.duration = moment(configurations.endtime, "HH:mm:ss")
+            .subtract(configurations.starttime)
+            .subtract(configurations.maxBreakDuration + ":00:00")
+            .format("HH:mm:ss");
+        }
+        record.rejectedReason = absentReason;
+        // }
+        // return attendanceData;
         // });
         console.log("recorddd", record);
         await AttendanceContext.updateRegularize(record.id, record);
@@ -135,47 +149,44 @@ const RegularizeAttendance = (props) => {
 
   return (
     <Card title="Approve Attendance" className="approveCard">
-                  <Table
-                    columns={approveColumns(true)}
-                    className="approveTable"
-                    dataSource={pendingData}
-                  />
-                  <Card title="Attendance Log" className="approveCard">
-                    <Row gutter={[24, 8]} style={{ marginLeft: "0px" }}>
-                      <Col span={6}>
-                        <Input
-                          placeholder="Search"
-                          prefix={<SearchOutlined />}
-                        />
-                      </Col>
-                      <Col span={6}>
-                        <DatePicker
-                          picker="month"
-                          placeholder="Select Month"
-                          bordered={true}
-                          // value={month}
-                          // defaultValue={month ? month : null}
-                          format="MM-YYYY"
-                          // style={{
-                          //   background: "#1963A6",
-                          //   cursor: "pointer",
-                          //   marginLeft: "15rem",
-                          // }}
-                          allowClear
-                          disabledDate={(current) => {
-                            return current.isAfter(moment());
-                          }}
-                        />
-                      </Col>
-                    </Row>
-                    <Table
-                      columns={approveColumns(false)}
-                      className="approveTable"
-                      dataSource={regularizeDetails}
-                    />
-                  </Card>
-                </Card>
-  )
-}
+      <Table
+        columns={approveColumns(true)}
+        className="approveTable"
+        dataSource={pendingData}
+      />
+      <Card title="Attendance Log" className="approveCard">
+        <Row gutter={[24, 8]} style={{ marginLeft: "0px" }}>
+          <Col span={6}>
+            <Input placeholder="Search" prefix={<SearchOutlined />} />
+          </Col>
+          <Col span={6}>
+            <DatePicker
+              picker="month"
+              placeholder="Select Month"
+              bordered={true}
+              // value={month}
+              // defaultValue={month ? month : null}
+              format="MM-YYYY"
+              // style={{
+              //   background: "#1963A6",
+              //   cursor: "pointer",
+              //   marginLeft: "15rem",
+              // }}
+              allowClear
+              disabledDate={(current) => {
+                return current.isAfter(moment());
+              }}
+            />
+          </Col>
+        </Row>
+        <Table
+          columns={approveColumns(false)}
+          className="approveTable"
+          dataSource={regularizeDetails}
+        />
+      </Card>
+    </Card>
+  );
+};
 
 export default RegularizeAttendance;

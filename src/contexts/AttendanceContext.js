@@ -171,7 +171,7 @@ class AttendanceContext {
       return {
         ...doc.data(),
         id: doc.id,
-        status: stat == "Pending" || stat == "Rejected" ? stat : "Present",
+        status: stat == "Pending" || stat == "Reject" ? "Absent" : "Present",
         empId: id,
       };
     });

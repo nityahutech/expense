@@ -42,6 +42,13 @@ class travelContext {
     });
     return rec;
   };
+
+  updateTravelData = async (id, updateTravel) => {
+    return await updateDoc(
+      doc(db, `companyprofile/${compId}/travels`, id),
+      updateTravel
+    );
+  };
 }
 
 export default new travelContext();

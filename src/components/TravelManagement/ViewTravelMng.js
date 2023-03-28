@@ -8,28 +8,31 @@ function ViewTravelMng(props) {
   console.log("viewTravelData", viewTravelData);
   return (
     <>
-      <Form >
+      <Form>
         <Row className="titleForModal">
-          <Col span={24} >
-          <span className="titleSpan">{viewTravelData.travelName}</span>
+          <Col span={24}>
+            <span className="titleSpan">{viewTravelData.travelName}</span>
             {/* <Form.Item label="Travel Title::" className="formCSS">            
             </Form.Item> */}
           </Col>
-          <Col span={24} >
-            <Form.Item label="No. of Peoples::" className="formCSS">{viewTravelData.people}</Form.Item>
+          <Col span={24}>
+            <Form.Item label="No. of Peoples::" className="formCSS">
+              {viewTravelData.people}
+            </Form.Item>
           </Col>
-          </Row>
-          {viewTravelData.travelType.map((travel, idx) => (
-            <>
-              {travel.bookingOption == "travel" ? (<div className="titleForModal">
+        </Row>
+        {viewTravelData.travelType.map((travel, idx) => (
+          <>
+            {travel.bookingOption == "Travel" ? (
+              <div className="titleForModal">
                 <Divider
-                orientation="left"
-                orientationMargin="0px"
-                className="dividerCss"
-              >
-                Expenditure No.{idx + 1}
-              </Divider>
-                <Row >
+                  orientation="left"
+                  orientationMargin="0px"
+                  className="dividerCss"
+                >
+                  Expenditure No.{idx + 1}
+                </Divider>
+                <Row>
                   <Col span={12}>
                     <Form.Item label="Booking Type::">
                       {travel.bookingOption}
@@ -52,37 +55,17 @@ function ViewTravelMng(props) {
                     </Form.Item>
                   </Col>
                 </Row>
-              </div>) : null}
-              {travel.bookingOption == "hotel" ? (<div className="titleForModal">
+              </div>
+            ) : null}
+            {travel.bookingOption == "Hotel" ? (
+              <div className="titleForModal">
                 <Divider
-                orientation="left"
-                orientationMargin="0px"
-                className="dividerCss"
-              >
-                Expenditure No.{idx + 1}
-              </Divider>
-                <Row >
-                  <Col span={12}>
-                    <Form.Item label="Booking Type::">
-                      {travel.bookingOption}
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item label="Date::">{travel.durationDate}</Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item label="Location::">{travel.location}</Form.Item>
-                  </Col>
-                </Row>
-                </div>) : null}
-              {travel.bookingOption == "rental" ? (<div className="titleForModal">
-                <Divider
-                orientation="left"
-                orientationMargin="0px"
-                className="dividerCss"
-              >
-                Expenditure No.{idx + 1}
-              </Divider>
+                  orientation="left"
+                  orientationMargin="0px"
+                  className="dividerCss"
+                >
+                  Expenditure No.{idx + 1}
+                </Divider>
                 <Row>
                   <Col span={12}>
                     <Form.Item label="Booking Type::">
@@ -90,7 +73,35 @@ function ViewTravelMng(props) {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Date::">{travel.durationDate}</Form.Item>
+                    <Form.Item label="Date::">
+                      {travel.durationDate.join(" to ")}
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Location::">{travel.location}</Form.Item>
+                  </Col>
+                </Row>
+              </div>
+            ) : null}
+            {travel.bookingOption == "Rental" ? (
+              <div className="titleForModal">
+                <Divider
+                  orientation="left"
+                  orientationMargin="0px"
+                  className="dividerCss"
+                >
+                  Expenditure No.{idx + 1}
+                </Divider>
+                <Row>
+                  <Col span={12}>
+                    <Form.Item label="Booking Type::">
+                      {travel.bookingOption}
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Date::">
+                      {travel.durationDate.join(" to ")}
+                    </Form.Item>
                   </Col>
                   <Col span={12}>
                     <Form.Item label="Vehicle Type::">
@@ -103,10 +114,10 @@ function ViewTravelMng(props) {
                     </Form.Item>
                   </Col>
                 </Row>
-                </div>) : null}
-            </>
-          ))}
-        
+              </div>
+            ) : null}
+          </>
+        ))}
       </Form>
     </>
   );

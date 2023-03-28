@@ -103,7 +103,7 @@ const Navbar = (props) => {
                 color: "#171832",
                 fontWeight: "normal",
               }}
-              // rel="noopener noreferrer"
+            // rel="noopener noreferrer"
             >
               Requests
             </Link>
@@ -117,7 +117,7 @@ const Navbar = (props) => {
               // to="/"
               // onClick={logout}
               style={{ color: "#171832", fontWeight: "normal" }}
-              // rel="noopener noreferrer"
+            // rel="noopener noreferrer"
             >
               Leaves
             </Link>
@@ -159,23 +159,23 @@ const Navbar = (props) => {
 
   const buttonStyle = !isRunning
     ? {
-        padding: "1px",
-        background: "#FF002A",
-        color: "white",
-        display: "inline-block",
-        width: "150px",
-        borderRadius: "5px",
-        border: "1px solid white",
-      }
+      padding: "1px",
+      background: "#FF002A",
+      color: "white",
+      display: "inline-block",
+      width: "150px",
+      borderRadius: "5px",
+      border: "1px solid white",
+    }
     : {
-        padding: "1px",
-        background: "#3ab8eb",
-        color: "white",
-        display: "inline-block",
-        width: "150px",
-        borderRadius: "5px",
-        border: "1px solid white",
-      };
+      padding: "1px",
+      background: "#3ab8eb",
+      color: "white",
+      display: "inline-block",
+      width: "150px",
+      borderRadius: "5px",
+      border: "1px solid white",
+    };
 
   const loadStyle = {
     padding: "1px",
@@ -298,11 +298,11 @@ const Navbar = (props) => {
             </button>
           )
         ) : null}
-        {/* <Dropdown overlay={notificationMenu} className="notificationBell">
-          <Badge count={5} offset={[-10,5]} size="small">
-            <Avatar size={40} icon={<BellOutlined className="notificationBell"/>} className="notificationAvatar" />
+        <Dropdown overlay={notificationMenu} className="notificationBell">
+          <Badge count={5} offset={[-10, 5]} size="small">
+            <Avatar size={40} icon={<BellOutlined className="notificationBell" />} className="notificationAvatar" />
           </Badge>
-        </Dropdown> */}
+        </Dropdown>
         <div>
           <img src={logo} alt={"logo not found"} className="profileLogo" />
         </div>

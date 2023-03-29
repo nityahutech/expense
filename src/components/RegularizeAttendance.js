@@ -11,6 +11,7 @@ const RegularizeAttendance = (props) => {
   const configurations = props.configurations;
   const [regularizeDetails, setRegularizeDetails] = useState([]);
   const [pendingData, setpendingData] = useState([]);
+  const [approveData, setApproveData] = useState([]);
 
   const getAllRegularizeAtt = async () => {
     let regularizeData = await AttendanceContext.getRegularizeAttendance();
@@ -23,6 +24,19 @@ const RegularizeAttendance = (props) => {
     });
     setpendingData(pending);
 
+    setRegularizeDetails(temp);
+  };
+
+  const getAllAdminRegularize = async () => {
+    let regularize = await AttendanceContext.getRegularizeAttendance();
+    let temp = [];
+    let approve = regularize.filter((x) => {
+      if (x.appStatus == "Approved") {
+        return true;
+      }
+      temp.push(x);
+    });
+    setApproveData(approve);
     setRegularizeDetails(temp);
   };
 
@@ -97,6 +111,7 @@ const RegularizeAttendance = (props) => {
 
   useEffect(() => {
     getAllRegularizeAtt();
+    // getAllAdminRegularize();
   }, []);
 
   const setStatus = async (record, status) => {
@@ -179,6 +194,7 @@ const RegularizeAttendance = (props) => {
             />
           </Col>
         </Row>
+
         <Table
           columns={approveColumns(false)}
           className="approveTable"

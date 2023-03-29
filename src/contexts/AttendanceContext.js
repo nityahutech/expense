@@ -166,21 +166,29 @@ class AttendanceContext {
     // let empId = rec.data().empId
     const q = query(attendCollectionRef, where("empId", "==", id));
     let data = await getDocs(q);
-    let d = data.docs.map((doc) => {
+    let d = await data.docs.map((doc) => {
       let stat = doc.data()?.appStatus || null;
       return {
         ...doc.data(),
         id: doc.id,
-        status: stat == "Pending" || stat == "Reject" ? "Absent" : "Present",
+        status:
+          stat == "Pending" || stat == "Reject"
+            ? "Absent"
+            : stat == "Approved"
+            ? "Present"
+            : "Present",
         empId: id,
       };
     });
+
+    console.log("d::: ", d);
     const momentRange = extendMoment(Moment);
     const range = momentRange.range(date[0], date[1]);
     const res = Array.from(range.by("day"));
+    console.log("res::: ", res);
     let x = 0;
     let temp = [];
-    res.map((day) => {
+    res.forEach((day, idx) => {
       for (let i = 0; i < d.length; i++) {
         if (day.isSame(moment(d[i].date, "DD-MM-YYYY"), "day")) {
           temp[x++] = {
@@ -197,6 +205,7 @@ class AttendanceContext {
         empId: id,
       };
     });
+    console.log("temp::: ", temp);
     return temp.reverse();
   };
 

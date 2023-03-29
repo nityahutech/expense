@@ -27,7 +27,12 @@ import AttendanceContext from "../contexts/AttendanceContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import ConfigureContext from "../contexts/ConfigureContext";
-import { checkNumbervalue, showNotification } from "../contexts/CreateContext";
+import {
+  checkNumbervalue,
+  showNotification,
+  checkAlphabets,
+  capitalize,
+} from "../contexts/CreateContext";
 import { webClock } from "../contexts/EmailContext";
 import RegularizeAttendance from "./RegularizeAttendance";
 
@@ -74,6 +79,9 @@ function AttendanceLog(props) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [empCode, setEmpCode] = useState(null);
   const [editedAbsent, setEditedAbsent] = useState({});
+  const [name, setName] = useState(null);
+  const [recordId, setRecordId] = useState(null);
+  const [filteredEmp, setFilteredEmp] = useState([]);
 
   console.log(currentUser);
   const attendanceReason = async (values) => {
@@ -87,6 +95,7 @@ function AttendanceLog(props) {
       date: editedAbsent.date,
       rejectedReason: "",
     };
+
     try {
       await AttendanceContext.addRegularize(addDetails);
       setIsEditOpen(false);
@@ -98,9 +107,45 @@ function AttendanceLog(props) {
     }
   };
 
+  const adminApprovalAtt = async (values) => {
+    const addUserReason = {
+      empId: editedAbsent.empId,
+      empCode: empCode,
+      empName: name,
+      type: "Approval",
+      appStatus: "Approved",
+      reason: values.absentReason,
+      date: editedAbsent.date,
+      rejectedReason: "",
+      clockIn: configurations.starttime + ":00",
+      clockOut: configurations.endtime + ":00",
+      break: configurations.maxBreakDuration + ":00:00",
+      duration: moment(configurations.endtime, "HH:mm:ss")
+        .subtract(configurations.starttime)
+        .subtract(configurations.maxBreakDuration + ":00:00")
+        .format("HH:mm:ss"),
+    };
+
+    try {
+      await AttendanceContext.addRegularize(addUserReason);
+      setIsEditOpen(false);
+      showNotification("success", "Success", "Reason has been added");
+      form.resetFields();
+      await getEmpDetails(editedAbsent.empId, [
+        moment().subtract(30, "days"),
+        moment(),
+      ]);
+    } catch (error) {
+      console.log("error", error);
+      showNotification("error", "Error", error.message);
+    }
+  };
+
   const handleCancel = () => {
     setIsEditOpen(false);
     setEditedAbsent({});
+    setName(null);
+    setRecordId(null);
   };
 
   const handleFinish = (values) => {
@@ -144,7 +189,6 @@ function AttendanceLog(props) {
     return data?.attendanceNature?.selectedDay;
   };
 
-  const [filteredEmp, setFilteredEmp] = useState([]);
   const columns = [
     {
       title: "Employee Code",
@@ -322,13 +366,14 @@ function AttendanceLog(props) {
       holTemp = temp?.holidays || holidays;
     // console.log(data, dayTemp, holTemp, selectedDay, holidays);
     AttendanceContext.getAllAttendance(id, date).then((userdata) => {
-      console.log("userData", userdata);
+      console.log("userLeavee", userdata);
       let dayoff = Object.keys(dayTemp).filter(
         (day) => dayTemp[`${day}`] == "dayoff"
       );
       // console.log(userdata, dayoff);
       AttendanceContext.updateLeaves(userdata, holTemp, dayoff).then(
         (final) => {
+          console.log("final:: ", final);
           setHolidayStatus(final);
           data = final;
           setEmpMonthly(final);
@@ -352,7 +397,7 @@ function AttendanceLog(props) {
     // console.log(date, temp, dayTemp, holTemp, selectedDay, holidays);
     AttendanceContext.getAllUsers(date.format("DD-MM-YYYY")).then(
       (userdata) => {
-        // console.log(userdata);
+        console.log("userDataaa", userdata);
         let dayoff = Object.keys(dayTemp).filter(
           (day) => dayTemp[`${day}`] == "dayoff"
         );
@@ -361,7 +406,7 @@ function AttendanceLog(props) {
           holTemp.includes(date.format("Do MMM, YYYY")),
           dayoff.includes(date.format("dddd"))
         ).then((final) => {
-          // console.log(final);
+          console.log(final);
           setallEmp(final);
           setFilteredEmp(final);
           setEmpMonthly(final);
@@ -430,11 +475,20 @@ function AttendanceLog(props) {
                 <EditOutlined
                   style={{ marginLeft: "10px" }}
                   onClick={() => {
+                    let temp = filteredEmp.find((id) => id.id === record.empId);
+                    setName(temp.name);
+                    console.log("temp", temp);
                     setIsEditOpen(true);
                     console.log(true);
                     setEditedAbsent(record);
                   }}
                 />
+              </Tooltip>
+            ) : record.status == "Present" && record.type == "Approval" ? (
+              <Tooltip placement="bottom" title="Approved">
+                <Space style={{ marginLeft: "10px" }}>
+                  <Badge status="success" className="approve" />
+                </Space>
               </Tooltip>
             ) : null}
           </>
@@ -623,6 +677,7 @@ function AttendanceLog(props) {
       },
     },
   ];
+  console.log("fiteredemp", name);
 
   return (
     <>
@@ -693,8 +748,26 @@ function AttendanceLog(props) {
                         </span>
                       </Col>
                       <Col span={24}>
-                        <Form.Item name="absentReason">
-                          <Input />
+                        <Form.Item
+                          name="absentReason"
+                          onKeyPress={(event) => {
+                            if (checkAlphabets(event)) {
+                              event.preventDefault();
+                            }
+                          }}
+                        >
+                          <Input
+                            onChange={(e) => {
+                              const str = e.target.value;
+                              const caps = str
+                                .split(" ")
+                                .map(capitalize)
+                                .join(" ");
+                              form.setFieldsValue({
+                                absentReason: caps,
+                              });
+                            }}
+                          />
                         </Form.Item>
                       </Col>
                       <Col span={24}>
@@ -744,83 +817,7 @@ function AttendanceLog(props) {
                   </Form>
                 </Modal>
               </Tabs.TabPane>
-              {/* <Tabs.TabPane tab="Daily Log" key="2" forceRender="true">
-                <Input
-                  className="Daily"
-                  placeholder="Search"
-                  prefix={<SearchOutlined />}
-                  onChange={searchChange}
-                  // style={{ width: "95%" }}
-                />
-                <div className="monthColor">
-                  <DatePicker
-                    defaultValue={selDate}
-                    className="Range Daily"
-                    bordered={true}
-                    format="DD-MM-YYYY"
-                    style={{
-                      background: "#1963A6",
-                      cursor: "pointer",
-                      marginLeft: "15rem",
-                      width: "10%",
-                    }}
-                    allowClear
-                    onChange={(e) => {
-                      setSelDate(e);
-                      allEmpDetails("_", e);
-                    }}
-                  />
-                </div>
-                <Table
-                  //   rowSelection={{
-                  //     type: selectionType,
-                  //     ...rowSelection,
-                  //   }}
-                  className="DailyTable"
-                  onRow={(record, rowIndex) => {
-                    return {
-                      onClick: async (event) => {
-                        setSelectemp({ ...record });
-                        await getEmpDetails(record.id, [
-                          moment().subtract(30, "days"),
-                          moment(),
-                        ]);
-                        setActivetab("2");
-                      },
-                    };
-                  }}
-                  loading={loading} 
-                  columns={columns}
-                  dataSource={filteredEmp}
-                />
-              </Tabs.TabPane>
-              <Tabs.TabPane disabled={!selectemp.id} tab="Monthly Log" key="3">
-                <div className="monthColor">
-                  <DatePicker
-                    picker="month"
-                    placeholder="Select Month"
-                    className="Range"
-                    value={month}
-                    defaultValue={month ? month : null}
-                    format={"MM-YYYY"}
-                    style={{
-                      background: "#1963A6",
-                      cursor: "pointer",
-                      marginLeft: "12rem",
-                    }}
-                    allowClear
-                    onChange={onHrDateFilter}
-                    disabledDate={disabledDate}
-                  />
-                </div>
-                <Table
-                  loading={loading}
-                  className="monthly"
-                  columns={columns1}
-                  dataSource={empMonthly}
-                  pagination={true}
-                />
-              </Tabs.TabPane> */}
+
               <Tabs.TabPane
                 tab="Add Report"
                 key="4"
@@ -829,23 +826,6 @@ function AttendanceLog(props) {
                 //   setIsModalOpen(true);
                 // }}
               >
-                {/* <Button type="primary" onClick={showModal}>
-              Open Modal
-            </Button> */}
-                {/* <Modal
-              title="Basic Modal"
-              visible={isModalOpen}
-              footer={null}
-              closeIcon={
-                <div
-                  onClick={() => {
-                    setIsModalOpen(false);
-                  }}
-                >
-                  X
-                </div>
-              }
-            > */}
                 <Form
                   {...layout}
                   form={form}
@@ -998,11 +978,17 @@ function AttendanceLog(props) {
                     </div>
                   }
                 >
-                  <Form form={form} onFinish={attendanceReason}>
+                  <Form form={form} onFinish={adminApprovalAtt}>
                     <Row gutter={[0, 24]}>
                       <Col span={24}>
                         <span className="approvalText">
-                          Get Approval For Attendance on {editedAbsent?.date}
+                          {"Get Approval For" +
+                            " " +
+                            `${name}` +
+                            " " +
+                            "on" +
+                            " " +
+                            `${editedAbsent?.date}`}
                         </span>
                       </Col>
                       {/* <Col span={24}>
@@ -1014,8 +1000,26 @@ function AttendanceLog(props) {
                         </span>
                       </Col>
                       <Col span={24}>
-                        <Form.Item name="absentReason">
-                          <Input />
+                        <Form.Item
+                          name="absentReason"
+                          onKeyPress={(event) => {
+                            if (checkAlphabets(event)) {
+                              event.preventDefault();
+                            }
+                          }}
+                        >
+                          <Input
+                            onChange={(e) => {
+                              const str = e.target.value;
+                              const caps = str
+                                .split(" ")
+                                .map(capitalize)
+                                .join(" ");
+                              form.setFieldsValue({
+                                absentReason: caps,
+                              });
+                            }}
+                          />
                         </Form.Item>
                       </Col>
                       <Col span={24}>

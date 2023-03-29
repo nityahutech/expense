@@ -195,3 +195,8 @@
   background-color: red;
 }
 
+.approve .ant-badge-status-success{
+  width: 8px;
+  height: 8px;
+}
+

@@ -11,7 +11,6 @@ const RegularizeAttendance = (props) => {
   const configurations = props.configurations;
   const [regularizeDetails, setRegularizeDetails] = useState([]);
   const [pendingData, setpendingData] = useState([]);
-  const [approveData, setApproveData] = useState([]);
 
   const getAllRegularizeAtt = async () => {
     let regularizeData = await AttendanceContext.getRegularizeAttendance();
@@ -24,19 +23,6 @@ const RegularizeAttendance = (props) => {
     });
     setpendingData(pending);
 
-    setRegularizeDetails(temp);
-  };
-
-  const getAllAdminRegularize = async () => {
-    let regularize = await AttendanceContext.getRegularizeAttendance();
-    let temp = [];
-    let approve = regularize.filter((x) => {
-      if (x.appStatus == "Approved") {
-        return true;
-      }
-      temp.push(x);
-    });
-    setApproveData(approve);
     setRegularizeDetails(temp);
   };
 
@@ -72,10 +58,7 @@ const RegularizeAttendance = (props) => {
             align: "center",
             render: (_, record) => (
               <>
-                <div
-                  className="employee-button"
-                  // style={{ display: "flex", flexDirection: "row" }}
-                >
+                <div className="employee-button">
                   <Button
                     type="link"
                     className="show"
@@ -111,7 +94,6 @@ const RegularizeAttendance = (props) => {
 
   useEffect(() => {
     getAllRegularizeAtt();
-    // getAllAdminRegularize();
   }, []);
 
   const setStatus = async (record, status) => {
@@ -135,10 +117,6 @@ const RegularizeAttendance = (props) => {
       okText: "yes",
       okType: "danger",
       onOk: async () => {
-        // const updateAttendance = regularizeDetails.map((attendanceData) => {
-        // console.log(attendanceData);
-        // if (attendanceData.id == record.id) {
-        // attendanceData.appStatus = status;
         record.appStatus = status;
         if (status == "Approved") {
           record.clockIn = configurations.starttime + ":00";
@@ -150,14 +128,10 @@ const RegularizeAttendance = (props) => {
             .format("HH:mm:ss");
         }
         record.rejectedReason = absentReason;
-        // }
-        // return attendanceData;
-        // });
+
         console.log("recorddd", record);
         await AttendanceContext.updateRegularize(record.id, record);
-        // console.log(updateAttendance);
         getAllRegularizeAtt();
-        // setRegularizeDetails(updateAttendance);
       },
     });
   };
@@ -179,14 +153,7 @@ const RegularizeAttendance = (props) => {
               picker="month"
               placeholder="Select Month"
               bordered={true}
-              // value={month}
-              // defaultValue={month ? month : null}
               format="MM-YYYY"
-              // style={{
-              //   background: "#1963A6",
-              //   cursor: "pointer",
-              //   marginLeft: "15rem",
-              // }}
               allowClear
               disabledDate={(current) => {
                 return current.isAfter(moment());

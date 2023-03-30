@@ -80,10 +80,12 @@ function AttendanceLog(props) {
   const [empCode, setEmpCode] = useState(null);
   const [editedAbsent, setEditedAbsent] = useState({});
   const [name, setName] = useState(null);
+  const [employeeId, setEmployeeId] = useState(null);
   const [recordId, setRecordId] = useState(null);
   const [filteredEmp, setFilteredEmp] = useState([]);
 
-  console.log(currentUser);
+  console.log(filteredEmp);
+
   const attendanceReason = async (values) => {
     const addDetails = {
       empId: currentUser.uid,
@@ -101,6 +103,10 @@ function AttendanceLog(props) {
       setIsEditOpen(false);
       showNotification("success", "Success", "Reason has been added");
       form.resetFields();
+      await getEmpDetails(editedAbsent.empId, [
+        moment().subtract(30, "days"),
+        moment(),
+      ]);
     } catch (error) {
       console.log("error", error);
       showNotification("error", "Error", error.message);
@@ -110,7 +116,7 @@ function AttendanceLog(props) {
   const adminApprovalAtt = async (values) => {
     const addUserReason = {
       empId: editedAbsent.empId,
-      empCode: empCode,
+      empCode: employeeId,
       empName: name,
       type: "Approval",
       appStatus: "Approved",
@@ -129,7 +135,7 @@ function AttendanceLog(props) {
     try {
       await AttendanceContext.addRegularize(addUserReason);
       setIsEditOpen(false);
-      showNotification("success", "Success", "Reason has been added");
+      showNotification("success", "Success", "Approved");
       form.resetFields();
       await getEmpDetails(editedAbsent.empId, [
         moment().subtract(30, "days"),
@@ -145,6 +151,7 @@ function AttendanceLog(props) {
     setIsEditOpen(false);
     setEditedAbsent({});
     setName(null);
+    setEmployeeId(null);
     setRecordId(null);
   };
 
@@ -238,7 +245,6 @@ function AttendanceLog(props) {
   }, [isAdmin]);
 
   useEffect(() => {
-    // console.log("2");
     form.resetFields();
     getData();
     props.switchRefresh(false);
@@ -256,7 +262,6 @@ function AttendanceLog(props) {
         selectedDays: selTemp,
       };
     }
-    // console.log(temp);
     if (activetab == "1") {
       if (!isAdmin) {
         setSelectemp({ id: currentUser.uid });
@@ -272,7 +277,6 @@ function AttendanceLog(props) {
   };
 
   useEffect(() => {
-    // console.log("3");
     if (configurations.inputclock) {
       AttendanceContext.fixNullClock(
         endTime + ":00",
@@ -359,18 +363,15 @@ function AttendanceLog(props) {
     );
   }
   async function getEmpDetails(id, date, temp) {
-    // console.log(id, date, temp);
     setLoading(true);
     let data,
       dayTemp = temp?.selectedDays || selectedDay,
       holTemp = temp?.holidays || holidays;
-    // console.log(data, dayTemp, holTemp, selectedDay, holidays);
     AttendanceContext.getAllAttendance(id, date).then((userdata) => {
       console.log("userLeavee", userdata);
       let dayoff = Object.keys(dayTemp).filter(
         (day) => dayTemp[`${day}`] == "dayoff"
       );
-      // console.log(userdata, dayoff);
       AttendanceContext.updateLeaves(userdata, holTemp, dayoff).then(
         (final) => {
           console.log("final:: ", final);
@@ -477,6 +478,7 @@ function AttendanceLog(props) {
                   onClick={() => {
                     let temp = filteredEmp.find((id) => id.id === record.empId);
                     setName(temp.name);
+                    setEmployeeId(temp.empId);
                     console.log("temp", temp);
                     setIsEditOpen(true);
                     console.log(true);

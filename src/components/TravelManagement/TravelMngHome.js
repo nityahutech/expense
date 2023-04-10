@@ -24,7 +24,6 @@ import {
   CloseOutlined,
   EyeFilled,
   EditFilled,
-  UserAddOutlined,
 } from "@ant-design/icons";
 import "./travelManagement.css";
 import {
@@ -34,7 +33,6 @@ import {
 } from "../../contexts/CreateContext";
 import TravelContext from "../../contexts/TravelContext";
 import TravelManagement from "./travelManagement";
-import InvoiceContext from "../../contexts/InvoiceContext";
 import moment from "moment";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import ViewTravelMng from "./ViewTravelMng";
@@ -54,7 +52,6 @@ function TravelMngHome(props) {
   const [durationArray, setDurationArray] = useState([]);
   const [openViewModal, setOpenViewModal] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [inputValue, setInputValue] = useState("");
   const role = props.roleView == "emp";
   console.log(props.roleView);
   const { TextArea } = Input;
@@ -268,6 +265,7 @@ function TravelMngHome(props) {
       setTimeout(() => {
         setAddTravel(false);
         form.resetFields();
+        getAlltravelData();
       }, 5000);
     } catch (error) {
       console.log("error", error);

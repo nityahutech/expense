@@ -3,7 +3,7 @@ import { Divider, Layout, Menu } from "antd";
 import { NavLink, Link } from "react-router-dom";
 import expenseIcon from "../../images/Expense.png";
 import dot from "../../images/dot.png";
-import empIcon from "../../images/Employees.png";
+import empIcon from "../../images/employees.png";
 import userIcon from "../../images/user.png";
 import assetMag from "../../images/AssetManageLogo.svg";
 import logo from "../../images/SidebarLogo.svg";
@@ -16,6 +16,7 @@ import LeaveIcon from "../../images/smallLeaveLogo.png";
 import SmallAttd from "../../images/attendanceSB.png";
 import travel from "../../images/map.svg";
 import "./newSlidebar.css";
+import { CalendarFilled, CalendarOutlined, CompassFilled, CompassOutlined, DesktopOutlined, FundProjectionScreenOutlined, GlobalOutlined, HomeFilled, HomeOutlined, IdcardOutlined, PieChartFilled, ProfileFilled, ProfileOutlined, ScheduleFilled, ScheduleOutlined, SettingFilled, SettingOutlined, TeamOutlined, UserOutlined, WalletFilled } from "@ant-design/icons";
 
 const { Sider } = Layout;
 
@@ -108,7 +109,7 @@ const NewSidebar = (props) => {
               >
                 <Menu.Item
                   className="arrow"
-                  icon={<img src={homePage} width="16px" alt="home" />}
+                  icon={<HomeFilled style={{color: "#ffffff", fontSize: "17px"}} />}
                   key="30"
                 >
                   <p className="sideFont">Home</p>
@@ -122,14 +123,7 @@ const NewSidebar = (props) => {
                       fontWeight: "600",
                       color: "#ffffff",
                     }}
-                    icon={
-                      <img
-                        style={{ color: "white" }}
-                        src={Organization}
-                        alt="organization"
-                        className="Dash"
-                      />
-                    }
+                    icon={<GlobalOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
                     key="sub5"
                     title="Organization"
                     mode="inline"
@@ -146,14 +140,7 @@ const NewSidebar = (props) => {
                 {role == "admin" || isHr ? (
                   <>
                     <Menu.Item
-                      icon={
-                        <img
-                          style={{ color: "white" }}
-                          src={CompanyProfile}
-                          alt="profile"
-                          className="Dash"
-                        />
-                      }
+                      icon={<ProfileOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
                       key="32"
                     >
                       <p className="sideFont">Company Profile</p>
@@ -167,14 +154,7 @@ const NewSidebar = (props) => {
                         fontWeight: "600",
                         color: "#ffffff",
                       }}
-                      icon={
-                        <img
-                          style={{ color: "white" }}
-                          src={empIcon}
-                          alt="profile"
-                          className="Dash"
-                        />
-                      }
+                      icon={<TeamOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
                       key="sub2"
                       title="Employees"
                       mode="inline"
@@ -210,34 +190,14 @@ const NewSidebar = (props) => {
                   <>
                     <Menu.Item
                       className="arrow"
-                      icon={
-                        <img
-                          src={SmallAttd}
-                          alt="profile"
-                          style={{
-                            width: "21px",
-                            marginLeft: "-5px",
-                          }}
-                        />
-                      }
+                      icon={<ScheduleFilled style={{color: "#ffffff", fontSize: "17px"}} />}
                       key="6"
                     >
                       <p className="sideFont">Attendance</p>
                       <NavLink className="navLink" to="/Attendance" />
                     </Menu.Item>
                     <Menu.Item
-                      icon={
-                        <img
-                          src={LeaveIcon}
-                          alt="profile"
-                          className="dot"
-                          style={{
-                            width: "32px",
-                            marginLeft: "-9px",
-                            background: "none",
-                          }}
-                        />
-                      }
+                      icon={<CalendarOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
                       key="7"
                     >
                       <p className="sideFont leaveletter">Leave</p>
@@ -251,13 +211,7 @@ const NewSidebar = (props) => {
                         fontWeight: "600",
                         color: "#ffffff",
                       }}
-                      icon={
-                        <img
-                          src={appraisalIcon}
-                          alt="appraisal"
-                          className="Dash"
-                        />
-                      }
+                      icon={<FundProjectionScreenOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
                       key="sub4"
                       title="Appraisal"
                       mode="inline"
@@ -280,14 +234,7 @@ const NewSidebar = (props) => {
                       </Menu.Item>
                     </Menu.SubMenu>
                     <Menu.Item
-                      icon={
-                        <img
-                          style={{ maxHeight: "15px", margin: "0" }}
-                          src={assetMag}
-                          alt="asset"
-                          class="Dash"
-                        />
-                      }
+                      icon={<DesktopOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
                       key="22"
                     >
                       <p className="sideFont">Assets</p>
@@ -301,9 +248,7 @@ const NewSidebar = (props) => {
                         fontWeight: "600",
                         color: "#ffffff",
                       }}
-                      icon={
-                        <img src={expenseIcon} alt="profile" className="Dash" />
-                      }
+                      icon={<PieChartFilled style={{color: "#ffffff", fontSize: "17px"}} />}
                       key="sub1"
                       title="Expense"
                       mode="inline"
@@ -342,14 +287,7 @@ const NewSidebar = (props) => {
                       </Menu.Item>
                     </Menu.SubMenu>
                     <Menu.Item
-                      icon={
-                        <img
-                          src={travel}
-                          alt="profile"
-                          className="Dash"
-                          style={{ color: "#fffff" }}
-                        />
-                      }
+                      icon={<CompassOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
                       key="24"
                     >
                       <p className="sideFont">Travel Management</p>
@@ -358,7 +296,7 @@ const NewSidebar = (props) => {
                   </>
                 ) : null}
                 <Menu.Item
-                  icon={<img src={userIcon} alt="profile" className="Dash" />}
+                  icon={<UserOutlined style={{color: "#ffffff", fontSize: "15px"}} />}
                   key="21"
                 >
                   <p className="sideFont">My Profile</p>
@@ -403,14 +341,7 @@ const NewSidebar = (props) => {
               }}
             >
               <div>
-                <img
-                  style={{
-                    height: "16px",
-                  }}
-                  src={SettingIcon}
-                  alt="Setting"
-                  // className="Dash"
-                />
+                <SettingOutlined style={{color: "#ffffff", fontSize: "15px"}} />
               </div>
 
               <div>

@@ -52,7 +52,7 @@ export async function createUser(values, compId) {
       prefix: values.prefix || "",
       gender: values.gender,
       designation: values.designation,
-      role: values.role? values.role :
+      role: values.role ? values.role :
         (values.designation.includes("Admin")
           ? "admin"
           : "emp"),
@@ -71,14 +71,14 @@ export async function createUser(values, compId) {
       disabled: false,
       remark: values.remark || "",
     };
-    await setDoc(doc(db, `users`, res.user.uid), {compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid});
+    await setDoc(doc(db, `users`, res.user.uid), { compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid });
     await setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
-    await setDoc(doc(db, `companyprofile/${compId}/salary`, res.user.uid), {bank: []})
+    await setDoc(doc(db, `companyprofile/${compId}/salary`, res.user.uid), { bank: [] })
     // console.log(res.user);
     sendEmailVerification(res.user).catch(err => showNotification("error", "Error", `Failed to send verification email to ${values.mailid}`))
     // console.log(valuesToservice.empId);
     return valuesToservice.empId
-  } catch(error) {
+  } catch (error) {
     deleteDoc(doc(db, `users`, res.user.uid))
     deleteDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid))
     deleteUser(res.user)
@@ -140,8 +140,8 @@ export function getBase64(img, callback) {
   reader.readAsDataURL(img);
 };
 
-export async function getCountryCode(){
-  let data =  await getDoc(doc(db, "standardInfo","countryCodes"));
+export async function getCountryCode() {
+  let data = await getDoc(doc(db, "standardInfo", "countryCodes"));
   return data.data();
 }
 
@@ -182,7 +182,7 @@ export function downloadFile(data, filename) {
 }
 
 export async function deleteUsers(array) {
-  let q  = query(collection(db, "users"), where("compId", "==", "compId002"));
+  let q = query(collection(db, "users"), where("compId", "==", "compId002"));
   let d = await getDocs(q);
   let data = d.docs.map(doc => {
     if (array.includes(doc.data().mailid)) {
@@ -195,7 +195,7 @@ export async function deleteUsers(array) {
   })
   try {
     await axios.post("http://localhost:3001/temp-delete/v1", {
-        data
+      data
     })
   } catch (error) {
     console.log(error)

@@ -66,7 +66,8 @@ function TravelManagement(props) {
           return allotTravel;
         });
         await TravelContext.updateTravelData(record.id, record);
-        setTravelDetails(updateTravelRecord);
+        // setTravelDetails(updateTravelRecord);
+        props.getTravelData();
       },
     });
   };

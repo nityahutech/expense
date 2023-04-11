@@ -11,7 +11,7 @@ import {
 let compId = sessionStorage.getItem("compId");
 let companyNotificationTemplateCollectionRef = collection(
     db,
-    `companyprofile/${compId}/template/Birthday`
+    `companyprofile/${compId}/template`
 );
 
 class notificationTemplate {
@@ -25,11 +25,6 @@ class notificationTemplate {
     // };
 
     addBirthdayNotification = async (templateData, fileName) => {
-        console.log(templateData, fileName)
-        await setDoc(companyNotificationTemplateCollectionRef, templateData, fileName);
-        return;
-    };
-    addAnniversaryNotification = async (templateData, fileName) => {
         console.log(templateData, fileName)
         await setDoc(companyNotificationTemplateCollectionRef, templateData, fileName);
         return;

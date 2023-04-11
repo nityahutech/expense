@@ -132,20 +132,19 @@ tr[data-row-key*="subTotal"] {
 .expenseTable table tbody tr td {
   padding: 10px 16px;
 }
-.expenseTable{
+.expenseTable {
   margin-top: 10px;
 }
 .expenseTable .edIt {
   height: 22px;
 }
-.expenseTable .ant-table-thead>tr>th{
-  background:#1963A6;
-    color: #ffffff;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 18px;
+.expenseTable .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
 }
-
 
 .row2.ant-table-cell {
   width: 172px;
@@ -168,7 +167,6 @@ tr[data-row-key*="subTotal"] {
 /* .row5.ant-table-cell{
 width: 90px;
 } */
-
 
 /* @media screen and (max-width: 600px){
  
@@ -198,30 +196,25 @@ width: 90px;
   background: #189ab4;
 }
 
-
-
-.expesneRegister .ant-modal-content{
+.expesneRegister .ant-modal-content {
   border-radius: 10px;
-  
 }
 
-.expesneRegister .ant-modal-header{
+.expesneRegister .ant-modal-header {
   border-radius: 10px 10px 0px 0px;
   background: #043661;
   color: #ffffff;
 }
-.expesneRegister .ant-modal-title{
+.expesneRegister .ant-modal-title {
   color: #ffffff;
   font-weight: 400;
   font-size: 18px;
-line-height: 25px;
+  line-height: 25px;
 }
 
 .expenseListDiv {
   min-height: 100vh;
 }
-
-
 
 @media (max-width: 990px) {
   .addExpense.ant-btn-primary {

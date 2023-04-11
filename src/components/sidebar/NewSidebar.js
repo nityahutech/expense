@@ -3,7 +3,7 @@ import { Divider, Layout, Menu } from "antd";
 import { NavLink, Link } from "react-router-dom";
 import expenseIcon from "../../images/Expense.png";
 import dot from "../../images/dot.png";
-// import empIcon from "../../images/employees.png";
+import empIcon from "../../images/Employees.png";
 import userIcon from "../../images/user.png";
 import assetMag from "../../images/AssetManageLogo.svg";
 import logo from "../../images/SidebarLogo.svg";

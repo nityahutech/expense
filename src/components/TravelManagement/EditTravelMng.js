@@ -69,7 +69,7 @@ function EditTravelMng(props) {
 
     const editTravelData = {
       travelName: values.travelName,
-      people: values.people,
+      reason: values.reason,
       travelType: values.users.map((type) => {
         console.log(type);
         switch (type.bookingOption) {
@@ -167,13 +167,13 @@ function EditTravelMng(props) {
           </Col>
           <Col xs={24} xm={24} md={12} lg={12}>
             <Form.Item
-              initialValue={editTravelData?.people}
-              label="No. of People"
-              name="people"
+              initialValue={editTravelData?.reason}
+              label="Reason"
+              name="reason"
               rules={[
                 {
                   required: true,
-                  message: "Please Enter the no. of People",
+                  message: "Please Enter the reason",
                 },
                 {
                   pattern: /^[0-9\s]*$/,

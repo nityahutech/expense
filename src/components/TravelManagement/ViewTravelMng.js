@@ -16,8 +16,8 @@ function ViewTravelMng(props) {
             </Form.Item> */}
           </Col>
           <Col span={24}>
-            <Form.Item label="No. of Peoples::" className="formCSS">
-              {viewTravelData.people}
+            <Form.Item label="Reason::" className="formCSS">
+              {viewTravelData.reason}
             </Form.Item>
           </Col>
         </Row>

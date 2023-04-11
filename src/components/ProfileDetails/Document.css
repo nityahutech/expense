@@ -33,6 +33,24 @@
   .tabs.ant-tabs {
     width: 100%;
   }
+
+  .background .ant-form-item-label > label{
+    margin-top: 25px;
+    margin-left: 23px;
+  }
+
+  .ant-form-item-control-input .backInput{
+    margin-top: 25px;
+  }
+
+  .errorMessage{
+    color: red;
+    font-weight: 500;
+  }
+
+  .message{
+    font-weight: 500;
+  }
   /* 
   .document-tap-div .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap {
     background-color: #1963a6;

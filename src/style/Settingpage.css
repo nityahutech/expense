@@ -173,7 +173,23 @@ input[type="password"] {
   }
 }
 
-/* .ant-row {
-  display: flex;
-  align-items: center;
-} */
+.input-with-clear {
+  position: relative;
+  display: inline-block;
+}
+
+.clear-btn {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #999;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  color: #666;
+}

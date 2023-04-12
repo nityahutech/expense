@@ -4,7 +4,7 @@ import { CloudDownloadOutlined } from "@ant-design/icons";
 import "./Document.css";
 
 function Background() {
-  const [backStatus, setBackStatus] = useState("Failed");
+  const [backStatus, setBackStatus] = useState("Pending");
 
   return (
     <Form>

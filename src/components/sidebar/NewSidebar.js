@@ -97,7 +97,11 @@ const NewSidebar = (props) => {
               >
                 <Menu.Item
                   className="arrow"
-                  icon={<HomeFilled style={{color: "#ffffff", fontSize: "17px"}} />}
+                  icon={
+                    <HomeFilled
+                      style={{ color: "#ffffff", fontSize: "17px" }}
+                    />
+                  }
                   key="30"
                 >
                   <p className="sideFont">Home</p>
@@ -111,7 +115,11 @@ const NewSidebar = (props) => {
                       fontWeight: "600",
                       color: "#ffffff",
                     }}
-                    icon={<GlobalOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
+                    icon={
+                      <GlobalOutlined
+                        style={{ color: "#ffffff", fontSize: "17px" }}
+                      />
+                    }
                     key="sub5"
                     title="Organization"
                     mode="inline"
@@ -128,7 +136,11 @@ const NewSidebar = (props) => {
                 {role == "admin" || isHr ? (
                   <>
                     <Menu.Item
-                      icon={<ProfileOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
+                      icon={
+                        <ProfileOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
                       key="32"
                     >
                       <p className="sideFont">Company Profile</p>
@@ -142,7 +154,11 @@ const NewSidebar = (props) => {
                         fontWeight: "600",
                         color: "#ffffff",
                       }}
-                      icon={<TeamOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
+                      icon={
+                        <TeamOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
                       key="sub2"
                       title="Employees"
                       mode="inline"
@@ -178,14 +194,22 @@ const NewSidebar = (props) => {
                   <>
                     <Menu.Item
                       className="arrow"
-                      icon={<ScheduleFilled style={{color: "#ffffff", fontSize: "17px"}} />}
+                      icon={
+                        <ScheduleFilled
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
                       key="6"
                     >
                       <p className="sideFont">Attendance</p>
                       <NavLink className="navLink" to="/Attendance" />
                     </Menu.Item>
                     <Menu.Item
-                      icon={<CalendarOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
+                      icon={
+                        <CalendarOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
                       key="7"
                     >
                       <p className="sideFont leaveletter">Leave</p>
@@ -199,7 +223,11 @@ const NewSidebar = (props) => {
                         fontWeight: "600",
                         color: "#ffffff",
                       }}
-                      icon={<FundProjectionScreenOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
+                      icon={
+                        <FundProjectionScreenOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
                       key="sub4"
                       title="Appraisal"
                       mode="inline"
@@ -222,7 +250,11 @@ const NewSidebar = (props) => {
                       </Menu.Item>
                     </Menu.SubMenu>
                     <Menu.Item
-                      icon={<DesktopOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
+                      icon={
+                        <DesktopOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
                       key="22"
                     >
                       <p className="sideFont">Assets</p>
@@ -236,7 +268,11 @@ const NewSidebar = (props) => {
                         fontWeight: "600",
                         color: "#ffffff",
                       }}
-                      icon={<PieChartFilled style={{color: "#ffffff", fontSize: "17px"}} />}
+                      icon={
+                        <PieChartFilled
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
                       key="sub1"
                       title="Expense"
                       mode="inline"
@@ -275,7 +311,11 @@ const NewSidebar = (props) => {
                       </Menu.Item>
                     </Menu.SubMenu>
                     <Menu.Item
-                      icon={<CompassOutlined style={{color: "#ffffff", fontSize: "17px"}} />}
+                      icon={
+                        <CompassOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
                       key="24"
                     >
                       <p className="sideFont">Travel Management</p>
@@ -284,7 +324,11 @@ const NewSidebar = (props) => {
                   </>
                 ) : null}
                 <Menu.Item
-                  icon={<UserOutlined style={{color: "#ffffff", fontSize: "15px"}} />}
+                  icon={
+                    <UserOutlined
+                      style={{ color: "#ffffff", fontSize: "15px" }}
+                    />
+                  }
                   key="21"
                 >
                   <p className="sideFont">My Profile</p>
@@ -329,7 +373,9 @@ const NewSidebar = (props) => {
               }}
             >
               <div>
-                <SettingOutlined style={{color: "#ffffff", fontSize: "15px"}} />
+                <SettingOutlined
+                  style={{ color: "#ffffff", fontSize: "15px" }}
+                />
               </div>
 
               <div>

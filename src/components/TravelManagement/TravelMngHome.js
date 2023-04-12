@@ -216,7 +216,7 @@ function TravelMngHome(props) {
 
     const allTravelData = {
       travelName: values.travelName,
-      people: values.people,
+      reason: values.reason,
       status: "Pending",
       empId: currentUser.uid,
       empName: user.name,
@@ -359,20 +359,16 @@ function TravelMngHome(props) {
                   </Col>
                   <Col xs={24} xm={24} md={12} lg={12}>
                     <Form.Item
-                      label="No. of People"
-                      name="people"
+                      label="Reason"
+                      name="reason"
                       rules={[
                         {
                           required: true,
-                          message: "Please Enter the no. of People",
-                        },
-                        {
-                          pattern: /^[0-9\s]*$/,
-                          message: "Please Enter numbers only",
+                          message: "Please Enter Reason",
                         },
                       ]}
                     >
-                      <Input maxLength={10} />
+                      <TextArea maxLength={10} />
                     </Form.Item>
                   </Col>
 
@@ -767,24 +763,30 @@ function TravelMngHome(props) {
                                                     onChange={handleCarChange}
                                                     options={[
                                                       {
-                                                        value: "Sedan",
-                                                        label: "SEDAN",
+                                                        value:
+                                                          "Sedan(5 Seater)",
+                                                        label:
+                                                          "Sedan(5 Seater)",
                                                       },
                                                       {
-                                                        value: "Hatchback",
-                                                        label: "HATCH BACK",
+                                                        value:
+                                                          "Hatchback(5 Seater)",
+                                                        label:
+                                                          "Hatchback(5 Seater)",
                                                       },
                                                       {
-                                                        value: "Suv",
-                                                        label: "SUV",
+                                                        value: "Suv(7 Seater)",
+                                                        label: "Suv(7 Seater)",
                                                       },
                                                       {
-                                                        value: "Muv",
-                                                        label: "MUV",
+                                                        value: "Muv(7 Seater)",
+                                                        label: "Muv(7 Seater)",
                                                       },
                                                       {
-                                                        value: "Luxury",
-                                                        label: "LUXURY",
+                                                        value:
+                                                          "Luxury(2 Seater)",
+                                                        label:
+                                                          "Luxury(2 Seater)",
                                                       },
                                                     ]}
                                                   />

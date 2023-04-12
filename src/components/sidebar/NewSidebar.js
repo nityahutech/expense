@@ -1,22 +1,10 @@
 import { useState } from "react";
 import { Divider, Layout, Menu } from "antd";
 import { NavLink, Link } from "react-router-dom";
-import expenseIcon from "../../images/Expense.png";
 import dot from "../../images/dot.png";
-import empIcon from "../../images/employees.png";
-import userIcon from "../../images/user.png";
-import assetMag from "../../images/AssetManageLogo.svg";
 import logo from "../../images/SidebarLogo.svg";
-import appraisalIcon from "../../images/appraisal.png";
-import Organization from "../../images/Organization.png";
-import CompanyProfile from "../../images/Companyprofile.png";
-import SettingIcon from "../../images/gear.png";
-import homePage from "../../images/homeIcon.png";
-import LeaveIcon from "../../images/smallLeaveLogo.png";
-import SmallAttd from "../../images/attendanceSB.png";
-import travel from "../../images/map.svg";
 import "./newSlidebar.css";
-import { CalendarFilled, CalendarOutlined, CompassFilled, CompassOutlined, DesktopOutlined, FundProjectionScreenOutlined, GlobalOutlined, HomeFilled, HomeOutlined, IdcardOutlined, PieChartFilled, ProfileFilled, ProfileOutlined, ScheduleFilled, ScheduleOutlined, SettingFilled, SettingOutlined, TeamOutlined, UserOutlined, WalletFilled } from "@ant-design/icons";
+import { CalendarOutlined, CompassOutlined, DesktopOutlined, FundProjectionScreenOutlined, GlobalOutlined, HomeFilled, PieChartFilled, ProfileOutlined, ScheduleFilled, SettingOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
 
 const { Sider } = Layout;
 

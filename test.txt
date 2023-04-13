@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Subscription Suite</title>
+</head>
+
+<body
+    style="display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #ECF2FD; flex-direction: column; flex-wrap: wrap;">
+    <div style="height: 10vh; display: flex; align-items: flex-end;"><img
+            style="width: 20vh; border-radius: 10px 10px 0px 0px;"
+            src="https://ss-suite-images.s3.ap-south-1.amazonaws.com/1681106863507_logo.svg"
+            alt=" PUT ASHUTOSH IMAGE HERE"></div>
+    <div
+        style="background-color: #fff; border-radius: 5px; box-shadow: 0 0px 1px rgba(192, 191, 191, 0.2); border-radius: 10px; width: 80%;">
+        <div
+            style="background: linear-gradient(121.06deg, #5B92E5 20.17%, #3EB5D3 57.33%, #2087C0 95.26%); border-radius: 10px 10px 0px 0px; height: 40vh;">
+            <div
+                style="display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
+                <h2
+                    style="font-family: 'Poppins'; font-style: normal; font-weight: 600; font-size: 20px; display: flex; align-items: center; color: #fff; margin-bottom: 0px;">
+                    Welcome to Subscription Suite</h2>
+                <p
+                    style="font-family: 'Poppins'; font-style: normal; font-weight: 400; font-size: 12px; display: flex; align-items: center; color: #fff; margin-top: 5px; line-height: 16px; text-align: center;">
+                    Tailor-made subscription plans at your fingertips!</p><img style="height: 150px;"
+                    src="https://ss-suite-images.s3.ap-south-1.amazonaws.com/1681106931441_Registers.svg"
+                    alt="PUT ASHUTOSH HERE">
+            </div>
+        </div>
+        <div
+            style="padding: 25px; height: 40vh; display: flex; flex-direction: column; justify-content: space-between;">
+            <h2
+                style="margin-top: 0; font-family: 'Poppins'; font-style: normal; font-weight: 500; font-size: 20px; display: flex; align-items: center;">
+                Hi Username</h2>
+            <p
+                style="margin-bottom: 0; font-family: 'Poppins'; font-style: normal; font-weight: 400; font-size: 16px; display: flex; align-items: center; color: #16191D; text-align: justify;">
+                With Subscription Suite, you have full control over your subscription plans. You can easily adjust the
+                pricing of your plans, create custom plans with unique features and benefits, and set up trial periods
+                to attract new customers. Our platform also allows you to manage your existing subscribers and view
+                detailed analytics to track the performance of your plans.</p><button
+                style="border: none; color: white; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; cursor: pointer; width: 100%; margin-top: 30px; margin-bottom: 20px; height: 50px; background: #5B92E5; border-radius: 10px;">Get
+                Started</button>
+        </div>
+    </div>
+    <div>This is a system generated information.
+        Pleasedo not reply to this mail.</div>
+    <!-- <div style="">
+        <div class="div-twok">
+            <footer class='footer' style='font-size: 12px; margin: 5px;'>This is a system generated information.
+                Pleasedo not reply to this mail.</footer>
+        </div>
+    </div> -->
+</body>
+
+</html>

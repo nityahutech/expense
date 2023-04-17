@@ -4,7 +4,21 @@ import { NavLink, Link } from "react-router-dom";
 import dot from "../../images/dot.png";
 import logo from "../../images/SidebarLogo.svg";
 import "./newSlidebar.css";
-import { CalendarOutlined, CompassOutlined, DesktopOutlined, FundProjectionScreenOutlined, GlobalOutlined, HomeFilled, PieChartFilled, ProfileOutlined, ScheduleFilled, SettingOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  CalendarOutlined,
+  CompassOutlined,
+  DesktopOutlined,
+  FundProjectionScreenOutlined,
+  GlobalOutlined,
+  HomeFilled,
+  PieChartFilled,
+  ProfileOutlined,
+  ScheduleFilled,
+  SettingOutlined,
+  TeamOutlined,
+  UserOutlined,
+  RadarChartOutlined,
+} from "@ant-design/icons";
 
 const { Sider } = Layout;
 
@@ -321,6 +335,17 @@ const NewSidebar = (props) => {
                       <p className="sideFont">Travel Management</p>
                       <NavLink to="/TravelManagement" />
                     </Menu.Item>
+                    <Menu.Item
+                      icon={
+                        <RadarChartOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
+                      key="25"
+                    >
+                      <p className="sideFont">Feedback</p>
+                      <NavLink to="/Feedback" />
+                    </Menu.Item>
                   </>
                 ) : null}
                 <Menu.Item
@@ -337,7 +362,7 @@ const NewSidebar = (props) => {
               </Menu>
             </div>
           </div>
-          <div className="sidelayout-setting" >
+          <div className="sidelayout-setting">
             <div>
               <Divider
                 style={{

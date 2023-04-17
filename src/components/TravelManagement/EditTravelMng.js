@@ -31,6 +31,7 @@ import {
 import TravelContext from "../../contexts/TravelContext";
 
 function EditTravelMng(props) {
+  
   console.log("propss", props);
   const [selectedOption, setSelectedOption] = useState(
     props.viewTravelData.travelType.map((x) => x.bookingOption)

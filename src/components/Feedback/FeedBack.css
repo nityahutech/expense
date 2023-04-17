@@ -1,4 +1,4 @@
-.ant-card-body{
+.feedBackCard .ant-card-body{
     padding: 0px;
 }
 
@@ -117,4 +117,25 @@ line-height: 15px;
   .submitCancel.ant-space-align-center{
     display: flex;
     justify-content: flex-end;
+  }
+
+  .addQue.ant-btn{
+    background: #045477;
+    border-radius: 5px;
+    width: 200px;
+    height: 40px;
+    color: #FFFFFF;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 15px;
+    margin-top: 10px;
+  }
+  .submit.ant-btn{
+    background: #045477;
+    color: #FFFFFF;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 15px;
   }

@@ -37,6 +37,7 @@ import {
   TeamOutlined,
   UserOutlined,
   WalletFilled,
+  RadarChartOutlined,
 } from "@ant-design/icons";
 
 const { Sider } = Layout;
@@ -353,6 +354,17 @@ const NewSidebar = (props) => {
                     >
                       <p className="sideFont">Travel Management</p>
                       <NavLink to="/TravelManagement" />
+                    </Menu.Item>
+                    <Menu.Item
+                      icon={
+                        <RadarChartOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
+                      key="25"
+                    >
+                      <p className="sideFont">Feedback</p>
+                      <NavLink to="/Feedback" />
                     </Menu.Item>
                   </>
                 ) : null}

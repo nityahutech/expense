@@ -20,10 +20,11 @@ import Settingpage from "./components/Settingpage";
 import AttendanceLog from "./components/AttendanceLog";
 import InvoiceMagHome from "./components/assetManagement/InvoiceMagHome";
 import TravelMngHome from "./components/TravelManagement/TravelMngHome";
+import FeedbackTable from "./components/Feedback/FeedbackTable";
 import EmailVerification from "./EmailVerification";
+import ConfigSurvey from "./components/Feedback/ConfigSurvey";
 
 function App() {
-
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -51,30 +52,15 @@ function App() {
           />
           <Route
             path="/CompanyProfile"
-            element={
-              <FormatPage
-                main={CompanyProfile}
-                activeMenu={["32"]}
-              />
-            }
+            element={<FormatPage main={CompanyProfile} activeMenu={["32"]} />}
           />
           <Route
             path="/Attendance"
-            element={
-              <FormatPage
-                main={AttendanceLog}
-                activeMenu={["6"]}
-              />
-            }
+            element={<FormatPage main={AttendanceLog} activeMenu={["6"]} />}
           />
           <Route
             path="/Leave"
-            element={
-              <FormatPage
-                main={Leave}
-                activeMenu={["7"]}
-              />
-            }
+            element={<FormatPage main={Leave} activeMenu={["7"]} />}
           />
           <Route
             path="/Employee/AddEmployee"
@@ -168,12 +154,15 @@ function App() {
           />
           <Route
             path="/TravelManagement"
-            element={
-              <FormatPage 
-                main={TravelMngHome}
-                activeMenu={["24"]}
-              />
-            }
+            element={<FormatPage main={TravelMngHome} activeMenu={["24"]} />}
+          />
+          <Route
+            path="/Feedback"
+            element={<FormatPage main={FeedbackTable} activeMenu={["25"]} />}
+          />
+          <Route
+            path="/ConfigSurvey"
+            element={<FormatPage main={ConfigSurvey} activeMenu={["26"]} />}
           />
           <Route
             path="/Profile"
@@ -187,18 +176,9 @@ function App() {
           />
           <Route
             path="/Settings"
-            element={
-              <FormatPage
-                main={Settingpage}
-                activeMenu={["22"]}
-              />}
+            element={<FormatPage main={Settingpage} activeMenu={["22"]} />}
           />
-          <Route 
-            path="/VerifyEmail"
-            element={
-              <EmailVerification />
-            }
-          />
+          <Route path="/VerifyEmail" element={<EmailVerification />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

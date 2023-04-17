@@ -342,7 +342,19 @@ class AttendanceContext {
   getRegularizeAttendance = async () => {
     const q = query(attendCollectionRef, where("type", "==", "Approval"));
     const regularizeAtt = await getDocs(q);
-    console.log("getdocss", regularizeAtt);
+    // console.log("getdocss", regularizeAtt);
+    let rec = regularizeAtt.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      };
+    });
+    return rec;
+  };
+
+  getPending = async () => {
+    const q = query(attendCollectionRef, where("appStatus", "==", "Pending"));
+    const regularizeAtt = await getDocs(q);
     let rec = regularizeAtt.docs.map((doc) => {
       return {
         ...doc.data(),

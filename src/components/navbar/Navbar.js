@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import { Dropdown, Menu, Space, Switch, Badge, Avatar } from "antd";
-import { BellOutlined, LoadingOutlined } from "@ant-design/icons";
+import { BellOutlined, LoadingOutlined, PoweroffOutlined, SettingOutlined } from "@ant-design/icons";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
 import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
-import settingsIcon from "../../images/NavSettingsIcon.png";
-import logoutIcon from "../../images/LogoutIcon.png";
 import Logo from "../../images/logo.svg";
 import dropdown from "../../images/dropdown.png";
 
@@ -68,9 +66,7 @@ const Navbar = (props) => {
               Settings
             </Link>
           ),
-          icon: (
-            <img src={settingsIcon} alt="downArrow" className="avatarimg" />
-          ),
+          icon: <SettingOutlined style={{color: "#000000", fontSize: "15px"}} />,
         },
         {
           key: "2",
@@ -84,7 +80,7 @@ const Navbar = (props) => {
               Logout
             </Link>
           ),
-          icon: <img src={logoutIcon} alt="downArrow" className="avatarimg" />,
+          icon: <PoweroffOutlined style={{color: "#000000", fontSize: "15px"}} />
         },
       ]}
     />

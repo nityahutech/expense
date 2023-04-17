@@ -145,6 +145,18 @@ class LeaveContext {
         return req[0].mailid;
     }
 
+    getPending = async () => {
+      const q = query(leaveCollectionRef, where("status", "==", "Pending"));
+      const data = await getDocs(q);
+      let rec = data.docs.map((doc) => {
+        return {
+          ...doc.data(),
+          id: doc.id,
+        };
+      });
+      return rec;
+    };
+
     getEmailApproverList = async (manager) => {
         let name = manager.split(" ");
         const q = query(usersCollectionRef, where("lname", "==", name[name.length - 1]), where("fname", "==", name[0]));

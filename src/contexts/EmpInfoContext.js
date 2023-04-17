@@ -28,7 +28,10 @@ class EmpInfoContext {
         return;
     };
 
-    updateEduDetails = (id, updateEdu, file) => {
+    updateEduDetails = (id, updateEdu, file, name) => {
+        // if (record.name != name) {
+        //     this.nameChange(id, record.name, name)
+        // }
         if (file) {
             const storageRef = ref(storage, `/${compId != "undefined" ? compId : "admins"}/${id}/profilePic`);
             uploadBytesResumable(storageRef, file).then((snapshot) => {
@@ -46,6 +49,10 @@ class EmpInfoContext {
             return updateDoc(eduDoc, updateEdu);
         }
     };
+
+    nameChange = async (id, oldName, newName) => {
+        const q = (collection(db, `companyprofile/${compId}/users`), where())
+    }
 
     getEduDetails = async (id, compid) => {
         let tempId = compid ? compid : compId;
@@ -65,7 +72,17 @@ class EmpInfoContext {
         return d.docs.length > 0;
     };
 
-    //----------------------------------------------------
+    getBdayAnniversary = async () => {
+        let recs = await getDocs(collection(db, `companyprofile/${compId}/users`));
+        let data = {};
+        recs.docs.forEach(doc => {
+            let temp = data[doc.data().dob]?.birthday || []
+            data[doc.data().dob] = { birthday: doc.data().name }
+            temp = data[doc.data().dob]?.anniversary || []
+            data[doc.data().doj] = { anniversary: doc.data().name }
+        })
+        return data;
+    }
 
     deleteCompInfo = (id, deleteContact) => {
         const companyDoc = doc(db, `companyprofile/${compId}/users`, id);
@@ -78,7 +95,7 @@ class EmpInfoContext {
 
     addCompInfo = (id, addContact) => {
         const companyDoc = doc(db, `companyprofile/${compId}/users`, id);
-        console.log('value', companyDoc)
+        // console.log('value', companyDoc)
         let field = Object.keys(addContact)[0];
         return updateDoc(companyDoc, {
             [`${field}`]: arrayUnion(addContact[`${field}`]),

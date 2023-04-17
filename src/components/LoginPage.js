@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { Button, Checkbox, Form, Input, Alert, Col, Row } from "antd";
+import { Button, Form, Input, Col, Row, Divider } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../style/LoginPage.css"
 import loginBg from "../images/login-img.png"
-import { LoadingOutlined } from "@ant-design/icons";
+import { GoogleOutlined, LoadingOutlined } from "@ant-design/icons";
 import logo from "../images/LoginLogo.svg"
+import "toastify-js/src/toastify.css"
+import StartToastifyInstance from "toastify-js";
 
 function LoginPage() {
   const [loginEmail, setLoginEmail] = useState("");
@@ -14,7 +16,7 @@ function LoginPage() {
   const [loading, setLoading] = useState("Login");
   const [forgot, setForgot] = useState(true);
   const navigate = useNavigate();
-  const { login, resetPassword, logout } = useAuth()
+  const { login, resetPassword, logout, googleLogin } = useAuth()
   useEffect(() => {
     logout();
   }, [])
@@ -46,6 +48,43 @@ function LoginPage() {
           break;
         case "auth/internal-error": message = "Enter a password!"
           break;
+        case "auth/too-many-requests" : message = "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later."
+          break;
+      }
+      setError(message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    }
+  }
+  async function handleGoogleAuth() {
+    setLoading("Logging In");
+    win.clear();
+    try {
+      setError("");
+      let res = await googleLogin();
+      sessionStorage.setItem("accessToken", res.user.accessToken);
+      sessionStorage.setItem("user", JSON.stringify(res.user));
+      const timer = setTimeout(() => {
+        navigate("DashBoard", { replace: true });
+        setLoading("Login");
+      }, 3000);
+    } catch(err) {
+      setLoading("Login");
+      let message = err.message;
+      switch (err.code) {
+        case "auth/wrong-password": message = "Incorrect Password!"
+          break;
+        case "auth/user-not-found": message = "User does not exist!"
+          break;
+        case "auth/user-disabled": message = "This account is deactivated. Please contact your HR."
+          break;
+        case "auth/cancelled-popup-request": message = "Login Cancelled"
+          break;
+        case "auth/popup-closed-by-user": message = ""
+          break;
+        case "auth/internal-error": message = "Enter a password!"
+          break;
       }
       setError(message);
       setTimeout(() => {
@@ -74,7 +113,22 @@ function LoginPage() {
     }
   }
 
-  const buttonStyle = loading != "Login" ? { backgroundColor: "lightgray", color: "gray" } : { backgroundColor: "#1963A6", color: "white" }
+  useEffect(() => {
+    if (error != "") {
+      StartToastifyInstance({
+        text: error,
+        duration: 3000,
+        gravity: "bottom",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "linear-gradient(to right, #1F80DE, #F17C0F)",
+        },
+      }).showToast();
+    }
+  }, [error])
+
+  const buttonStyle = loading != "Login" ? { backgroundColor: "#f8f8f8", color: "#d3d3d3b3" } : null
     return (
     <>
         <Row className="main-div">
@@ -87,7 +141,7 @@ function LoginPage() {
               <div className="form-div">
                   <div className="exepnse-logo">
                     <img src={logo} alt="logo" 
-                    style={{width:"250px",paddingBottom:"10%"}}
+                    style={{width:"250px",paddingBottom:"1rem"}}
                     />
                   </div>
                   <Form
@@ -107,7 +161,7 @@ function LoginPage() {
                     <div className="msg">{forgot ? "Let's Access to our dashboard" : "We will send a reset link to your registered email"}</div>
 
                     <div className="email-div">
-                      Email address<span style={{ color: "red" }}> *</span>
+                      Email Address<span style={{ color: "red" }}> *</span>
                     </div>
                     <div className="emailInput-div">
                       <Form.Item
@@ -127,7 +181,7 @@ function LoginPage() {
                         <div className="email-div">
                         Password<span style={{ color: "red" }}> *</span>
                         </div>
-                        <div className="pwdInput-div">
+                        <div className="emailInput-div">
                           <Form.Item
                             name="password"
                             rules={[
@@ -144,29 +198,7 @@ function LoginPage() {
                         </div>
                       </>
                     ) : null}
-                    <div className="checkBox">
-                      <Col span={15}>
-                      <Form.Item
-                        name="remember"
-                        valuePropName="checked"
-                        style={{width:"101%"}}
-                      >
-                        <Checkbox 
-                          style={{color:"#1963A6",width:"100%"}} 
-                        >Remember me
-                        </Checkbox>
-                      </Form.Item>
-                      </Col>
-                      <Col span={9}>
-                      <div 
-                        className="forgotpwd" 
-                        onClick={()=>setForgot(!forgot)} 
-                      >
-                        {forgot ? "Forgot Password" : "Back"}
-                      </div>
-                      </Col>
-                    </div>
-                    <Form.Item className="loginButton">
+                    {/* <Form.Item className="loginButton"> */}
                       <div className="login-btn">
                         {" "}
                         <Button
@@ -179,17 +211,25 @@ function LoginPage() {
                         {loading != "Login" && (<LoadingOutlined />)}
                           {!forgot && loading == "Login" ? "Send Email" : loading}
                         </Button>
+                        {/* <div style={{width: "18rem"}}> */}
+                    <div 
+                        className="forgotpwd" 
+                        onClick={()=>setForgot(!forgot)} 
+                      >
+                        <span className="forgotmsg">{forgot ? "Forgot Password" : "Back"}</span>
                       </div>
-                    </Form.Item>
-                    <div className="errormsg">
-                    {error && (
-                      <Alert
-                        type="error"
-                        message={error}
-                        style={{ width: "18rem" }}
-                      />
-                    )}
-                    </div>
+                      </div>
+                      {/* <Divider style={{margin: "5px", fontSize: "smaller", color: "#c2c0c0"}}>OR</Divider>
+                      
+                    <div className="checkBox">
+                      <Button
+                        className="google-btn"
+                        onClick={handleGoogleAuth}
+                      >
+                        Log In with Google
+                        <GoogleOutlined />
+                      </Button>
+                    </div> */}
                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                       <p className="loginFooter">
                         © 2022 Hutech HR. All rights reserved. Terms of Service

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Affix, Button, Card, Table } from "antd";
+import { Button, Card } from "antd";
 import { DatePicker, Space } from "antd";
 import "../../style/Payslip.css";
 import EmployeeNetSalary from "../../contexts/EmployeeNetSalary";
@@ -17,7 +17,6 @@ function PaySlip(props) {
   const [allPaySlipData, setAllPaySlipData] = useState(false);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [companyProfile, setCompanyProfile] = useState([]);
-  const [imageUrl, setImageUrl] = useState("");
   const compId = sessionStorage.getItem("compId");
   const [earningArray, setEarningArray] = useState([]);
   const [deductionArray, setDeductionArray] = useState([]);
@@ -71,7 +70,7 @@ function PaySlip(props) {
 
 
   useEffect(() => {
-    // console.log("props.data.id", props.id)
+    console.log("props.data.id", props)
     setUserId(props.id)
     getSalaryData(props.id)
     getCompanyProfile()
@@ -105,13 +104,13 @@ function PaySlip(props) {
     // console.log("aaa", allSalaryPaySlip);
     setAllPaySlipData(allSalaryPaySlip);
     setDataMonths(Object.keys(allSalaryPaySlip))
+    updateSelectedMonth(moment())
   }
 
   const getCompanyProfile = async () => {
     const companyProfile = await CompanyProContext.getCompanyProfile(compId);
     // console.log(companyProfile, "companyProfile")
     setCompanyProfile(companyProfile);
-    setImageUrl(companyProfile.logo);
   }
 
   return (
@@ -490,14 +489,14 @@ function PaySlip(props) {
                       {paySlipData.hra ? paySlipData.hra : 0}
                     </td>
                   </tr>
-
-                  {paySlipData?.earningArray?.map((a) => (<tr>
+                      
+                  {Object.keys(paySlipData?.earnings)?.map((x) => (<tr>
                     <td
                       style={{
                         width: "700px",
                       }}
                     >
-                      {a.field}
+                      {x}
                     </td>
                     <td
                       style={{
@@ -506,7 +505,7 @@ function PaySlip(props) {
                         paddingLeft: '40px'
                       }}
                     >
-                      {a.value}
+                      {paySlipData?.earnings[x]}
                     </td>
                   </tr>))}
 
@@ -544,13 +543,16 @@ function PaySlip(props) {
                       </th>
                     </tr>
                   </thead>
-                  {paySlipData?.deductionArray?.map((a) => (<tr>
+                  {/* {console.log(paySlipData.deductions)} */}
+                  {Object.keys(paySlipData?.deductions).map((x) => (
+                  <tr>
                     <td
                       style={{
                         width: "700px",
                       }}
                     >
-                      {a.field}
+                      {/* {console.log(x)} */}
+                      {x}
                     </td>
                     <td
                       style={{
@@ -559,7 +561,7 @@ function PaySlip(props) {
                         paddingLeft: '40px'
                       }}
                     >
-                      {a.value}
+                      {paySlipData?.deductions[x]}
                     </td>
                   </tr>))}
 

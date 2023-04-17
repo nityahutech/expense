@@ -33,6 +33,7 @@ class EmployeeNetSalary {
 
 
     addSalary = (id, field, netSalary) => {
+        console.log(salaryCollectionRef);
         return updateDoc(doc(salaryCollectionRef, id), { [`${field}`]: netSalary });
 
     };

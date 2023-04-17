@@ -33,14 +33,14 @@ import { showNotification } from "../../contexts/CreateContext";
 const { Option } = Select;
 
 const Family = (props) => {
-  // console.log("data", props.marriage);
+  // console.log("data", props);
   const [editfamilymember, showeditfamilymember] = useState(false);
   const [editEmergency, showeditEmergency] = useState(false);
   const [data, setData] = useState(false);
   const [form] = Form.useForm();
   const [codes, setCodes] = useState("");
   // const marriage = props.marriage;
-  const [marriage, setMarraige] = useState(props.marriage);
+  const [marriage, setMarraige] = useState(props.data.maritalStatus == "Married");
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const [active, setActive] = useState("emergencyContact");
   const [activeList, setActiveList] = useState([]);
@@ -48,8 +48,7 @@ const Family = (props) => {
   const [addPerson, setAddPerson] = useState(false);
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
-  const [loading, setLoading] = useState(true);
-  const compId = sessionStorage.getItem("compId");
+  const [loading, setLoading] = useState(false);
 
   // add other family members / children
 
@@ -64,7 +63,7 @@ const Family = (props) => {
     // console.log("values", record)
     EmpInfoContext.addCompInfo(currentUser.uid, { [`${active}`]: record });
     addForm.resetFields();
-    getData();
+    props.getData();
   }
 
   // edit other family members / children
@@ -87,7 +86,7 @@ const Family = (props) => {
 
       editForm.resetFields();
       setEditPerson([...editPerson].fill(false));
-      const timer = setTimeout(() => getData(), 400);
+      const timer = setTimeout(() => props.getData(), 400);
       return () => clearTimeout(timer);
     } catch (error) {
       // Handle the error here
@@ -108,7 +107,7 @@ const Family = (props) => {
         EmpInfoContext.deleteCompInfo(currentUser.uid, {
           [`${active}`]: record,
         }).then((response) => {
-          getData();
+          props.getData();
 
         });
       },
@@ -120,13 +119,20 @@ const Family = (props) => {
     getCountryCode().then((res) => {
       setCodes(res);
     });
-    getData();
-
   }, []);
 
   useEffect(() => {
-    setMarraige(props.marriage)
-  }, [props.marriage]);
+    setMarraige(props.data.maritalStatus == "Married")
+    let temp =
+      (active == "emergencyContact"
+        ? props.data.emergencyContact
+        : active == "otherMember"
+          ? props.data.otherMember
+          : props.data.children) || [];
+    // console.log("data", temp)
+    setActiveList(temp);
+    setEditPerson(temp.length == 0 ? [false] : [...temp].fill(false));
+  }, [props.data]);
 
   useEffect(() => {
     let temp = data[`${active}`] || [];
@@ -146,7 +152,7 @@ const Family = (props) => {
         : active == "otherMember"
           ? data.otherMember
           : data.children) || [];
-    console.log("data", temp)
+    // console.log("data", temp)
     setActiveList(temp);
     setEditPerson(temp.length == 0 ? [false] : [...temp].fill(false));
     // if (active === "emergencyContact" && temp.length >= 2) {
@@ -167,7 +173,7 @@ const Family = (props) => {
     setData(values);
     showeditfamilymember(false);
     showeditEmergency(false);
-    getData();
+    props.getData();
   };
 
   const prefixSelector = (
@@ -466,7 +472,7 @@ const Family = (props) => {
                   remember: true,
                   prefixFather: "+91",
                   prefixMother: "+91",
-                  prefixOther: "+91",
+                  spouseContact: "+91"
                 }}
                 autoComplete="off"
                 onFinish={onFinish}
@@ -709,7 +715,7 @@ const Family = (props) => {
                                 fontFamily: "Open Sans,sans-serif",
                               }}
                             >
-                              Spouse Name
+                              Spouse
                             </h1>
                             <Form.Item
                               name="spouse"
@@ -895,9 +901,9 @@ const Family = (props) => {
                 >
                   <Tabs.TabPane tab="Emergency Contacts" key="1" />
                   <Tabs.TabPane tab="Other Family Member" key="2" />
-                  {marriage === "Married" && (
+                  {/* {marriage === "Married" && ( */}
                     <Tabs.TabPane tab="Children" key="3" />
-                  )}
+                  {/* )} */}
                 </Tabs>
                 <Form
                   wrappercol={{

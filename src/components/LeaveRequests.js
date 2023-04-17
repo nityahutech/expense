@@ -12,7 +12,8 @@ import "../style/leave.css";
 import checkedIcon from "../images/checkmark.png"
 import rejectIcon from "../images/rejected.png"
 import { showNotification } from '../contexts/CreateContext';
-const Notification = (props) => {
+
+const LeaveRequests = (props) => {
     const dataSource = props.data.filter(data => data.status == "Pending")
     let value = '';
     const Bbb = () => {
@@ -171,4 +172,4 @@ const Notification = (props) => {
     )
 }
 
-export default Notification
+export default LeaveRequests

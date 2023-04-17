@@ -212,7 +212,7 @@ const NewSidebar = (props) => {
                       }
                       key="7"
                     >
-                      <p className="sideFont leaveletter">Leave</p>
+                      <p className="sideFont">Leave</p>
                       <NavLink to="/Leave" />
                     </Menu.Item>
                     <Menu.SubMenu
@@ -337,26 +337,12 @@ const NewSidebar = (props) => {
               </Menu>
             </div>
           </div>
-          {/* --------------------setting---------------- */}
-          <div
-            className="sidelayout-setting"
-            style={
-              {
-                // padding: '20px',
-                // borderTop: '1px solid #6e6eff',
-                // alignItems: 'center',
-                // width: '80%',
-                // height: '80px',
-                // display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'
-              }
-            }
-          >
+          <div className="sidelayout-setting" >
             <div>
               <Divider
                 style={{
                   margin: "0px",
                   borderWidth: 1,
-                  // borderColor: 'rgb(5 70 179)',
                   borderColor: "#ffffff",
                 }}
               />
@@ -389,7 +375,6 @@ const NewSidebar = (props) => {
                     fontWeight: 600,
                     color: "#ffffff",
                   }}
-                  rel="noopener noreferrer"
                 >
                   Settings
                 </Link>

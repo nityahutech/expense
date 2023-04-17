@@ -1,12 +1,14 @@
 import { db } from "../firebase-config";
 import {
     getDoc,
+    getDocs,
     doc,
     updateDoc,
     arrayUnion,
     setDoc,
     arrayRemove,
-    deleteDoc
+    deleteDoc,
+    collection
 } from "firebase/firestore";
 
 let compId = sessionStorage.getItem("compId");
@@ -17,6 +19,14 @@ class ConfigureContext {
         compId = sessionStorage.getItem("compId");
         return;
     }
+
+    getAllConfigurations = async () => {
+        const rec = await getDocs(collection(db, `companyprofile/${compId}/configurations`));
+        let data = {};
+        rec.docs.forEach(doc => data[doc.id] = {...doc.data()});
+        // console.log(data);
+        return data;
+    };
 
     getConfigurations = async (page) => {
         const rec = await getDoc(doc(db, `companyprofile/${compId}/configurations`, page));
@@ -52,18 +62,18 @@ class ConfigureContext {
 
     //------------------------payRoll--------------------------------------------
 
-    createConfigurationsEarning = (page, config) => {
-        return updateDoc(doc(db, `companyprofile/${compId}/configurations`, page), config);
-    }
+    // createConfigurationsEarning = (page, config) => {
+    //     return updateDoc(doc(db, `companyprofile/${compId}/configurations`, page), config);
+    // }
 
-    createConfigurationsDeduction = (page, config) => {
-        return updateDoc(doc(db, `companyprofile/${compId}/configurations`, page), config);
-    }
+    // createConfigurationsDeduction = (page, config) => {
+    //     return updateDoc(doc(db, `companyprofile/${compId}/configurations`, page), config);
+    // }
 
-    getEarningConfig = async (page) => {
-        const rec = await getDoc(doc(db, `companyprofile/${compId}/configurations`, page));
-        return rec.data();
-    };
+    // getEarningConfig = async (page) => {
+    //     const rec = await getDoc(doc(db, `companyprofile/${compId}/configurations`, page));
+    //     return rec.data();
+    // };
 
   
 

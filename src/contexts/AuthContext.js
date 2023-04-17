@@ -11,7 +11,10 @@ import { signInWithEmailAndPassword,
          verifyPasswordResetCode,
          confirmPasswordReset,
          checkActionCode,
-         sendEmailVerification
+         sendEmailVerification,
+         GoogleAuthProvider,
+         signInWithPopup,
+         deleteUser
 } from "@firebase/auth"
 import moment from "moment";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -28,6 +31,7 @@ import PolicyContext from "./PolicyContext";
 import InvoiceContext from "./InvoiceContext";
 import AssetContext from "./AssetContext";
 import { changeAccount, isUserVerified } from "./EmailContext";
+import { useNavigate } from "react-router";
 
 const AuthContext = React.createContext()
 
@@ -45,6 +49,8 @@ export function AuthProvider({ children }) {
   const [isHr, setIsHr] = useState(false);
   const [isLead, setIsLead] = useState(false);
   const [logo, setLogo] = useState(null);
+  // const navigate = useNavigate()
+  const provider = new GoogleAuthProvider();
 
   function getUserData(user) {
     if (user == null) {
@@ -54,8 +60,10 @@ export function AuthProvider({ children }) {
       }, 2500);
       return () => clearTimeout(timer);
     }
+    // try{
     getDoc(doc(db, 'users', user.uid)).then((res) => {
       let rec = res.data()
+      if (!rec) { throw new Error("User does not Exist")}
       sessionStorage.setItem("role", rec?.role)
       sessionStorage.setItem("roleView", rec?.role)
       sessionStorage.setItem("compId", rec?.compId)
@@ -88,6 +96,23 @@ export function AuthProvider({ children }) {
         setIsLead(rec?.isLead)
       })
     })
+  // } catch (err) {
+  //     // navigate("/");
+  //     console.log("Failed");
+  //   }
+  }
+
+  async function googleLogin() {
+    let res = await signInWithPopup(auth, provider);
+    let user = await getDoc(doc(db, "users", res.user.uid))
+    console.log(res, user.data());
+    if (user.data()) {
+      return res
+    }
+    if (moment(Number(res.user.metadata.createdAt)).calendar().split(" ")[0] == "Today") {
+      await deleteUser(res.user)
+    }
+    throw new Error("User does not exist!")
   }
 
   function login(email, password) {
@@ -159,6 +184,7 @@ export function AuthProvider({ children }) {
     logo,
     login,
     logout,
+    googleLogin,
     resetPassword,
     updateMyEmail,
     updateMyPassword,

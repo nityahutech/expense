@@ -80,7 +80,7 @@ const PayRollConfigDeduction = (props) => {
     return (
         <>
             <Button onClick={showDrawer} className="bulkEmployee" type="primary">
-                <div className="bulkButton">Deduction Configration</div>
+                <div >Deduction Configration</div>
             </Button>
             <Drawer title="Deduction" placement="right" onClose={onClose} open={open}>
                 <Form form={form} onFinish={onFinish} initialValues={[props.data]}>

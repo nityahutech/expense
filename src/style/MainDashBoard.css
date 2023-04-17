@@ -8,8 +8,8 @@
 }
 
 .icon-container{
-    margin: 1rem;
-    width:100%;
+    margin: 40px auto;
+    width: 40%;
 }
 
 .hi .ant-card-body {
@@ -20,6 +20,29 @@
     align-items: center; 
 }
 
+.notification .ant-card-body {
+    padding: 0;
+}
+
 .icon-container {
-    min-height: 100vh;
+    /* min-height: 100vh; */
+    width: 100%;
+    /* margin: 30px;
+    margin-left: 0; */
+}
+
+.bg-sel.ant-calendar-date{
+    background-color: #e6f7ff;
+}
+
+.ant-calendar-date:hover{
+    background-color: #f0f0f0;
+}
+
+.calendar-button {
+    padding: 5px 10px;
+    border-radius: 15px;
+    cursor: default;
+    margin-right: 5px;
+    margin-top: 10px;
 }

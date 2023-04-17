@@ -29,6 +29,14 @@
     cursor: pointer;
     background-color: #1963A6 !important;
     border-radius: 5px;
+    color: #ffffff;
+    border: 1px solid #1963A6;
+}
+
+.bulkEmployee:hover{
+    background-color: rgb(25, 99, 166, 0.8) !important;
+    border-radius: 5px;
+    color: #ffffff;
     border: 1px solid #1963A6;
 }
 .bulkOnboardingModal .ant-modal-content {

@@ -1,42 +1,22 @@
 import { useState } from "react";
 import { Divider, Layout, Menu } from "antd";
 import { NavLink, Link } from "react-router-dom";
-import expenseIcon from "../../images/Expense.png";
 import dot from "../../images/dot.png";
-import empIcon from "../../images/Employees.png";
-import userIcon from "../../images/user.png";
-import assetMag from "../../images/AssetManageLogo.svg";
 import logo from "../../images/SidebarLogo.svg";
-import appraisalIcon from "../../images/appraisal.png";
-import Organization from "../../images/Organization.png";
-import CompanyProfile from "../../images/Companyprofile.png";
-import SettingIcon from "../../images/gear.png";
-import homePage from "../../images/homeIcon.png";
-import LeaveIcon from "../../images/smallLeaveLogo.png";
-import SmallAttd from "../../images/attendanceSB.png";
-import travel from "../../images/map.svg";
 import "./newSlidebar.css";
 import {
-  CalendarFilled,
   CalendarOutlined,
-  CompassFilled,
   CompassOutlined,
   DesktopOutlined,
   FundProjectionScreenOutlined,
   GlobalOutlined,
   HomeFilled,
-  HomeOutlined,
-  IdcardOutlined,
   PieChartFilled,
-  ProfileFilled,
   ProfileOutlined,
   ScheduleFilled,
-  ScheduleOutlined,
-  SettingFilled,
   SettingOutlined,
   TeamOutlined,
   UserOutlined,
-  WalletFilled,
   RadarChartOutlined,
 } from "@ant-design/icons";
 
@@ -246,7 +226,7 @@ const NewSidebar = (props) => {
                       }
                       key="7"
                     >
-                      <p className="sideFont leaveletter">Leave</p>
+                      <p className="sideFont">Leave</p>
                       <NavLink to="/Leave" />
                     </Menu.Item>
                     <Menu.SubMenu
@@ -382,26 +362,12 @@ const NewSidebar = (props) => {
               </Menu>
             </div>
           </div>
-          {/* --------------------setting---------------- */}
-          <div
-            className="sidelayout-setting"
-            style={
-              {
-                // padding: '20px',
-                // borderTop: '1px solid #6e6eff',
-                // alignItems: 'center',
-                // width: '80%',
-                // height: '80px',
-                // display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'
-              }
-            }
-          >
+          <div className="sidelayout-setting">
             <div>
               <Divider
                 style={{
                   margin: "0px",
                   borderWidth: 1,
-                  // borderColor: 'rgb(5 70 179)',
                   borderColor: "#ffffff",
                 }}
               />
@@ -434,7 +400,6 @@ const NewSidebar = (props) => {
                     fontWeight: 600,
                     color: "#ffffff",
                   }}
-                  rel="noopener noreferrer"
                 >
                   Settings
                 </Link>

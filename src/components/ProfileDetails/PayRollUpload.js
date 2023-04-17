@@ -1,43 +1,27 @@
 import React, { useState } from 'react'
-import { Form, Button, Row, Col, Input, notification, Modal, Select, DatePicker } from "antd";
+import { Button, Row, Col, notification, Modal, DatePicker } from "antd";
 import { useCSVReader } from "react-papaparse";
-import Papa from 'papaparse';
 import EmployeeNetSalary from '../../contexts/EmployeeNetSalary';
-import { checkNumbervalue, downloadFile, showNotification } from '../../contexts/CreateContext';
+import { downloadFile, showNotification } from '../../contexts/CreateContext';
 import { DownloadOutlined, LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
 const PayRollUpload = (props) => {
+    const { CSVReader } = useCSVReader();
     const earning = props.earningConfig.Earning.concat(props.earningConfig.Deduction)
-    // const deductions = 
-    // const allEmp = props.allEmpName;
-    const ids = props.ids;
     const [bulkModal, openBulkModal] = useState(false);
-    const [enableBulk, setEnableBulk] = useState(false);
-    const [errorFile, setErrorFile] = useState(null);
     const [month, setMonth] = useState(moment().format("MMM_YYYY"));
     const startDate = "01-01-2019" //replace later with company start date
-    const [heads, setHeaders] = useState([]);
     const template = [
       ["Employee ID", "Name", "Basic"].concat(earning),
       ["EMP000001", "Rohit Ram Sharma", "100000"].concat(Array(earning.length).fill("15000"))
     ].concat(Object.keys(props.codes).map(x => [props.codes[`${x}`], x]))
-    // console.log(ids, earning, template, month)
-
-    //-------------------------upload--------------
+    
     const showBulkModal = () => {
-        openBulkModal(true);
-    };
-
-    const handleBulkModal = () => {
-        openBulkModal(false);
-    };
-    const handleCancel = () => {
-        openBulkModal(false);
+        openBulkModal(!bulkModal);
     };
 
     const handleBulkUpload = (data, headers, err) => {
-        // console.log(props.earningConfig.Earning);
         data.forEach(((values, i) => {
             if (err.includes(values[0])) {return}
             let id = props.ids[`${values[1]}`]
@@ -48,45 +32,42 @@ const PayRollUpload = (props) => {
                 earnings: {},
                 deductions: {}
             }
-            // console.log(headers);
             headers.map((x, i) => {
                 if (i < 2) { return; }
+                let num = values[i] || '0'
                 if (x == "Basic") {
-                    temp.basic = Number(values[i])
+                    temp.basic = Number(num)
                     temp.hra = temp.basic * 0.15 
                     temp.netSalaryIncome = temp.netSalaryIncome + temp.basic + temp.hra
                     temp.totalEarning = temp.totalEarning + temp.basic + temp.hra
                     return; 
                 }
                 if (props.earningConfig.Earning.includes(x)) {
-                    temp.earnings[`${x}`] = values[i]
-                    temp.totalEarning = temp.totalEarning + Number(values[i])
-                    temp.netSalaryIncome = temp.netSalaryIncome + Number(values[i])
+                    temp.earnings[`${x}`] = num
+                    temp.totalEarning = temp.totalEarning + Number(num)
+                    temp.netSalaryIncome = temp.netSalaryIncome + Number(num)
                 } else {
-                    // console.log(x, i);
-                    temp.deductions[`${x}`] = values[i]
-                    temp.totalDeduction = temp.totalDeduction + Number(values[i])
-                    temp.netSalaryIncome = temp.netSalaryIncome - Number(values[i])
+                    temp.deductions[`${x}`] = num
+                    temp.totalDeduction = temp.totalDeduction + Number(num)
+                    temp.netSalaryIncome = temp.netSalaryIncome - Number(num)
                 }
             })
-            // console.log(id, month, temp);
-            EmployeeNetSalary.addSalary(id, month, temp)
+            console.log(id, month, temp);
+            EmployeeNetSalary.addingSalary(id, month, temp)
                 .then(res => {
                     if (i == data.length - 1) {
                         showNotification("success", "Success", "Bulk Uploading Complete!")
                         openBulkModal(false)
                     }
                 })
-                .catch(() =>
+                .catch(err =>
                     notification.error({
-                        message: "Upload Failed",
+                        message: `Upload falied: ${data[1]}`,
                     })
                 );
         }))
-        setEnableBulk(false);
     };
 
-    const { CSVReader } = useCSVReader();
     const styles = {
         csvReader: {
             display: "flex",
@@ -98,7 +79,6 @@ const PayRollUpload = (props) => {
         },
         acceptedFile: {
             border: "1px solid #ccc",
-            // height: 45,
             lineHeight: 2.5,
             paddingLeft: 10,
             width: "80%",
@@ -114,25 +94,24 @@ const PayRollUpload = (props) => {
 
     const validateCSV = async (data, headers) => {
         let errors = [["Emp Id", "Field", "Error"]];
-        // console.log(data, headers);
-        data.forEach(x => {
+        data.forEach((x, emp) => {
+            if (x.length < 2) { data.splice(emp, 1)}
             x.forEach((e, i) => {
-                if (i > 1 && (e == "" || !(/^[0-9]*$/.test(e))))
-                    errors.push([x[0], headers[i], e == "" ? "Missing Value" : "Not a Number"])
+                if (i > 1) {
+                    if (e == "") {
+                        data[emp][i] = "0"
+                    }
+                    if (!(/^[0-9]*$/.test(e))) {
+                        errors.push([x[0], headers[i], "Not a Number"])
+                    }
+                }
             })
         })
-        // console.log(errors);
-        if(data[data.length-1].length == 1) {
-            data.pop()
-        }
-        setErrorFile(null)
-        // const timer = setTimeout(() => {
-          // setAllEmp(data)
-          // setHeaders(headers)
-          let temp = []
-          if (errors.length > 1) {
-            // console.log(data, headers, temp)
-            setErrorFile(<Button style={{marginRight: "10px"}} onClick={() => downloadFile(errors, "errorFile")}> Download Error File</Button>)
+        let temp = [];
+        console.log(data, headers, temp)
+        if (errors.length > 1) {
+            
+            // setErrorFile(<Button style={{marginRight: "10px"}} onClick={() => downloadFile(errors, "errorFile")}> Download Error File</Button>)
             temp = errors.map(x => x[0]);
             temp.shift()
             Modal.confirm({
@@ -195,15 +174,12 @@ const PayRollUpload = (props) => {
             <Modal
                 title="Upload Payload"
                 open={bulkModal}
-                onOk={handleBulkModal}
-                onCancel={handleCancel}
                 footer={false}
+                destroyOnClose
                 className="bulkOnboardingModal"
                 closeIcon={
                     <div
-                        onClick={() => {
-                            openBulkModal(false);
-                        }}
+                        onClick={showBulkModal}
                         style={{ color: "#ffffff" }}
                     >
                         X
@@ -229,17 +205,17 @@ const PayRollUpload = (props) => {
                                 Download File Template
                             </Button>
                         </Col>
-                        <Col>
+                        {/* <Col>
                             <DatePicker
                                 picker="month"
                                 placeholder="Select Month"
-                                defaultPickerValue={moment()}
+                                defaultValue={moment()}
                                 format={"MM-YYYY"}
                                 allowClear
                                 onChange={(e) => setMonth(e == null ? month : e.format("MMM_YYYY"))}
                                 disabledDate={(e) => e.isAfter(moment()) || e.isBefore(moment(startDate, "DD-MM-YYYY"))}
                              />
-                        </Col>
+                        </Col> */}
                     </Row>
                     <Col>
                         <CSVReader
@@ -266,8 +242,6 @@ const PayRollUpload = (props) => {
                                         </button>
                                         <div style={styles.acceptedFile}>
                                             {acceptedFile && acceptedFile.name}
-                                            {!acceptedFile && setEnableBulk(false)}
-                                            {!acceptedFile && setErrorFile(null)}
                                         </div>
                                         <button {...getRemoveFileProps()} style={styles.remove}>
                                             Remove

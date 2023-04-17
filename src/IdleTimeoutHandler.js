@@ -7,11 +7,10 @@ import { useNavigate } from "react-router-dom";
 const IdleTimeOutHandler = (props) =>{
     const navigate = useNavigate();
     let timer = undefined
-    let refresh = undefined
     const events= ['click','load','keydown'];
     
     const eventHandler = (eventType) => {
-        localStorage.setItem('lastInteractionTime', moment())
+        localStorage.setItem('lastInteractionTime', moment().format("x"))
         if (timer) {
             startTimer();
         }
@@ -33,7 +32,7 @@ const IdleTimeOutHandler = (props) =>{
     }
     
     useEffect(() => {
-        localStorage.setItem('lastInteractionTime', moment())
+        localStorage.setItem('lastInteractionTime', moment().format("x"))
         addEvents();
         return (() => {
             removeEvents();
@@ -46,16 +45,15 @@ const IdleTimeOutHandler = (props) =>{
             clearTimeout(timer)
         }
         timer = setTimeout(() => {
-            // console.log("check");
-            let lastInteractionTime = localStorage.getItem('lastInteractionTime')
-            const diff = moment.duration(moment().diff(moment(lastInteractionTime)));
-            // console.log(diff._milliseconds);
+            let lastInteractionTime = JSON.parse(localStorage.getItem('lastInteractionTime'))
+            const diff = moment.duration(moment().diff(moment(lastInteractionTime, "x")));
+            // console.log(lastInteractionTime);
             if (diff._milliseconds < 5*3600000) {
                 startTimer();
             } else {
                 notify()
             }
-        }, 5*3600000)
+        }, 5*3600000+1000)
     }
 
     const addEvents=()=>{

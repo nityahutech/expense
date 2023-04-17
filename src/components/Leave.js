@@ -23,13 +23,13 @@ import {
 import LeaveContext from "../contexts/LeaveContext";
 import CompanyHolidayContext from "../contexts/CompanyHolidayContext";
 import EmpInfoContext from "../contexts/EmpInfoContext";
-import Notification from "./Notification";
 import HolidayList from "./HolidayList";
 import ApprovalConfig from "./ApprovalConfig";
 import LeaveType from "./LeaveType";
 import "../style/leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
 import { capitalize, getUsers, showNotification } from "../contexts/CreateContext";
+import LeaveRequests from "./LeaveRequests";
 
 const Leave = (props) => {
   const { RangePicker } = DatePicker;
@@ -268,7 +268,7 @@ const Leave = (props) => {
       }
     })
     setTempDur([].concat.apply([], array));
-    console.log(userReq, [].concat.apply([], array))
+    // console.log(userReq, [].concat.apply([], array))
   }
 // console.log(empApply, tempDur)
   useEffect(() => {
@@ -1578,22 +1578,6 @@ const Leave = (props) => {
                         justifyContent: "center",
                       }}
                     >
-                      {/* <Button
-                        className="reprentation"
-                        style={{
-                          cursor: 'default',
-                          marginLeft: '10px',
-                          marginRight: "5px", marginTop: '10px',
-                          backgroundColor: "rgba(15, 255, 80, 0.2)",
-                        }}
-                      >
-                        <h5
-                          style={{ color: "rgb(0, 128, 0)" }}
-                          className="rep-text"
-                        >
-                          Leave
-                        </h5>
-                      </Button> */}
                       <Button
                         className="reprentation"
                         style={{
@@ -2260,7 +2244,7 @@ const Leave = (props) => {
               </Row>
             </Modal>
 
-            {isMgr ? <Notification data={[...requests]} getData={getData} /> : null}
+            {isMgr ? <LeaveRequests data={[...requests]} getData={getData} /> : null}
 
             {isMgr && !isHr ? (
               <Row

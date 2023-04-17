@@ -67,9 +67,8 @@ function Personal(props) {
     if (record.maritalStatus == "Single") {
       record.spouse = "";
       record.spouseContact = "";
-      console.log(record);
     }
-    EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName);
+    EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName, currentUser.displayName);
     setTimeout(() => {
       props.getData();
     }, 2000);
@@ -129,7 +128,6 @@ function Personal(props) {
   };
 
   useEffect(() => {
-    console.log("fffffffff");
     setData(props.data);
     setImageUrl(props.data.profilePic);
     setDob(props.data?.dob ? props.data.dob : null);

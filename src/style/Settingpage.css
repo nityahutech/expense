@@ -193,3 +193,10 @@ input[type="password"] {
 .clear-btn:hover {
   color: #666;
 }
+
+@media (max-width: 600px) {
+  .cardTemplate {
+    display: flex;
+    flex-direction: column;
+  }
+}

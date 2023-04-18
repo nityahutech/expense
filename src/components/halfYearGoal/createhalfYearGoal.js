@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Col, DatePicker, notification } from 'antd';
-import {
-    SearchOutlined,
-} from "@ant-design/icons";
-import { Input, Row, Layout, Radio, Table, } from 'antd';
+import React, { useState, useEffect } from "react";
+import { Button, Col, DatePicker, notification } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Input, Row, Layout, Radio, Table } from "antd";
 import { getUsers } from "../../contexts/CreateContext";
-import AppraisalContext from '../../contexts/AppraisalContext';
+import AppraisalContext from "../../contexts/AppraisalContext";
 import moment from "moment";
 
 const CreatehalfYearGoal = (props) => {
-
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [filterEmployees, setFilterEmployees] = useState([]);
     const [allEmployees, setAllEmployees] = useState([]);
-    const [selectionType, setSelectionType] = useState('checkbox');
+    const [selectionType, setSelectionType] = useState("checkbox");
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [selectedQuarter, setSelectedQuarter] = useState();
 
@@ -23,42 +20,41 @@ const CreatehalfYearGoal = (props) => {
             title: "Employee Code",
             dataIndex: "empId",
             key: "empId",
-            // fixed: "left",
+            align: 'left',
             width: 60,
         },
         {
             title: "First Name",
             dataIndex: "fname",
             key: "fname",
-            // fixed: "left",
+            align: 'left',
             width: 60,
-            // fixed: size,
         },
         {
             title: "Last Name",
             dataIndex: "lname",
             key: "lname",
             width: 60,
+            align: 'left',
         },
-
-    ]
+    ];
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
-            setSelectedEmployees(selectedRows)
+            setSelectedEmployees(selectedRows);
             console.log(
                 `selectedRowKeys: ${selectedRowKeys}`,
                 "selectedRows: ",
                 selectedRows
             );
         },
-    }
+    };
     //--------------onFinish------------------------
     const handleCreateAppraisal = () => {
-        console.log('appraisal',);
-        let appraisals = []
+        console.log("appraisal");
+        let appraisals = [];
         for (let i = 0; i < selectedEmployees.length; i++) {
-            let currentEmp = selectedEmployees[i]
+            let currentEmp = selectedEmployees[i];
             let newAppraisal = {
                 empId: currentEmp.empId,
                 fname: currentEmp.fname,
@@ -68,28 +64,26 @@ const CreatehalfYearGoal = (props) => {
                 mailid: currentEmp.mailid,
                 repManager: currentEmp.repManager,
                 lead: currentEmp.lead ? currentEmp.lead : currentEmp.repManager,
-                status: 'empPending'
-
-            }
-            appraisals[i] = newAppraisal
+                status: "empPending",
+            };
+            appraisals[i] = newAppraisal;
         }
 
-        console.log('appraisal', appraisals)
+        console.log("appraisal", appraisals);
 
         AppraisalContext.createMidYearBatchAppraisal(appraisals)
-            .then(response => {
+            .then((response) => {
                 console.log("appraisal Created", response);
 
                 // getAppraisalList()
             })
-            .catch(error => {
-                console.log('appraisal', error.message);
-
-            })
-        console.log('appraisal', 'appraisal created');
+            .catch((error) => {
+                console.log("appraisal", error.message);
+            });
+        console.log("appraisal", "appraisal created");
         showNotification("success", "Success", "Appraisal Created");
-        setSelectedQuarter('')
-        props.closeCreateAppraisalModal()
+        setSelectedQuarter("");
+        props.closeCreateAppraisalModal();
     };
 
     const showNotification = (type, msg, desc) => {
@@ -100,8 +94,8 @@ const CreatehalfYearGoal = (props) => {
     };
 
     const onQuarterChange = (date, dateString) => {
-        setSelectedQuarter(dateString)
-    }
+        setSelectedQuarter(dateString);
+    };
 
     const searchChange = (e) => {
         let search = e.target.value;
@@ -134,7 +128,7 @@ const CreatehalfYearGoal = (props) => {
                 key: doc.data()["empId"],
             };
         });
-        console.log('abcr', { d });
+        console.log("abcr", { d });
         setData(d);
         setFilterEmployees(d);
         setAllEmployees(d);
@@ -148,8 +142,16 @@ const CreatehalfYearGoal = (props) => {
     return (
         <>
             <Layout>
-                <Row className="employeeRow" >
-                    <Col className='check-box' style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                <Row className="employeeRow">
+                    <Col
+                        className="check-box"
+                        style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            width: "100%",
+                            justifyContent: "space-between",
+                        }}
+                    >
                         <div>
                             <Input
                                 placeholder="Search"
@@ -158,26 +160,29 @@ const CreatehalfYearGoal = (props) => {
                             />
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "space-evenly",
+                            }}
+                        >
                             <div>
-                                <DatePicker style={{ width: '100%' }}
-
+                                <DatePicker
+                                    style={{ width: "100%" }}
                                     onChange={onQuarterChange}
                                     picker="month"
-
                                 />
-
-
                             </div>
                             <div>
-                                <Button type="primary"
-
+                                <Button
+                                    type="primary"
                                     onClick={() => {
                                         handleCreateAppraisal();
-
                                     }}
-                                >Create </Button>
-
+                                >
+                                    Create{" "}
+                                </Button>
                             </div>
                         </div>
                     </Col>
@@ -186,12 +191,9 @@ const CreatehalfYearGoal = (props) => {
                 <Radio.Group
                     onChange={({ target: { value } }) => {
                         setSelectionType(value);
-
                     }}
                     value={selectionType}
-                >
-
-                </Radio.Group>
+                ></Radio.Group>
 
                 <Table
                     rowSelection={{
@@ -208,11 +210,11 @@ const CreatehalfYearGoal = (props) => {
                     className="employeeTable"
                     size="small"
                     reloadData={getData}
-                    rowClassName={(record) => record.disabled && "disabled-row"}
+                    // rowClassName={(record) => record.disabled && "disabled-row"}
                 />
             </Layout>
         </>
-    )
-}
+    );
+};
 
-export default CreatehalfYearGoal
+export default CreatehalfYearGoal;

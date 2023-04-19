@@ -23,6 +23,9 @@ import TravelMngHome from "./components/TravelManagement/TravelMngHome";
 import FeedbackTable from "./components/Feedback/FeedbackTable";
 import EmailVerification from "./EmailVerification";
 import ConfigSurvey from "./components/Feedback/ConfigSurvey";
+import Communication from "./components/Feedback/Communication";
+import Technical from "./components/Feedback/Technical";
+import AddSurvey from "./components/Feedback/AddSurvey";
 
 function App() {
   return (
@@ -163,6 +166,18 @@ function App() {
           <Route
             path="/ConfigSurvey"
             element={<FormatPage main={ConfigSurvey} activeMenu={["26"]} />}
+          />
+          <Route
+            path="/Communication"
+            element={<FormatPage main={Communication} activeMenu={["27"]} />}
+          />
+          <Route
+            path="/Technical"
+            element={<FormatPage main={Technical} activeMenu={["28"]} />}
+          />
+          <Route
+            path="addSurvey"
+            element={<FormatPage main={AddSurvey} activeMenu={["29"]} />}
           />
           <Route
             path="/Profile"

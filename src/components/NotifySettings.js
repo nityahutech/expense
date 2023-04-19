@@ -17,6 +17,7 @@ import {
   InfoCircleOutlined,
   PlusCircleOutlined,
   ArrowLeftOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import birthday from "../images/birthday.svg";
 import anniversary from "../images/anniversary.svg";
@@ -66,7 +67,10 @@ function NotifySettings() {
   const [templatePreview, setTempalatePreview] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [showMessageContent, setShowMessageContent] = useState(true)
-  const [inputValue, setInputValue] = useState("");
+  const [isDisablePreview, setIsDisablePreview] = useState(true);
+  const [editorMessage, setEditorMessage] = useState(true)
+  const [dob, setDob] = useState([])
+
 
 
   const awardTypes = [
@@ -86,6 +90,11 @@ function NotifySettings() {
   const handleClick = (e) => {
     console.log(e)
     imgRef.current.click();
+
+  };
+
+  const handleDeleteClick = () => {
+    setImageUrl("");
   };
 
   const handleChangeCustom = (event) => {
@@ -98,10 +107,12 @@ function NotifySettings() {
       setTimeout(() => {
         getBase64(fileUploaded, (url) => {
           setImageUrl(url);
+          setIsDefaultTemplateSelected("2");
         });
         setFileName(fileUploaded);
         setIsBigFile(false);
         setIsLoading(false);
+
       }, 1000);
     } else {
       setFileName(null);
@@ -125,11 +136,12 @@ function NotifySettings() {
         values.UploadEmpImage
       );
       showNotification("success", "Success", "Message Updated Successfully");
-      form.resetFields();
+      setEditorState(EditorState.createEmpty());
+      getData()
+
     } catch (error) {
       console.log(error);
       showNotification("error", "Error", "Update Failed!");
-      form.resetFields();
     }
   };
 
@@ -178,6 +190,8 @@ function NotifySettings() {
 
   const handleEditorChange = (editorState) => {
     setEditorState(editorState);
+    // setEditorMessage(false)
+    setEditorMessage(editorState.getCurrentContent().getPlainText().trim().length === 0);
 
     const contentState = editorState.getCurrentContent();
     const plainText = contentState.getPlainText();
@@ -194,7 +208,7 @@ function NotifySettings() {
       setEditorState(newEditorState);
       message.error("Maximum length exceeded");
     } else {
-      // setError("");
+
     }
   };
 
@@ -233,10 +247,13 @@ function NotifySettings() {
   };
 
   const selectAward = (award) => {
-    console.log(award)
+    setIsLoading(true);
+    console.log(award);
     setAward(true);
     setSelectedAward(award);
-
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
   };
 
   const onSearch = (searchText) => {
@@ -248,9 +265,16 @@ function NotifySettings() {
   };
 
   const onSelect = (data) => {
+    setIsDisablePreview(false);
     console.log("allData", data);
     if (data) {
       setEmp(data);
+    }
+  };
+  const onBlur = (event) => {
+    if (!event.target.value) {
+      setEmp(null);
+      setIsDisablePreview(true);
     }
   };
 
@@ -278,8 +302,52 @@ function NotifySettings() {
     setAllEmpName(allUsers);
   }
 
+  async function getAllData() {
+    const allData = await getUsers();
+
+    console.log(allData)
+
+    let d = allData.docs.map((doc, i) => {
+      // const dob = doc.data().dob;
+      // let age = ''; // Default value for age
+
+      // if (dob) { // Calculate age only if dob is present
+      //   age = calculateAge(dob);
+      // }
+
+      return {
+        // ...doc.data(),
+        name: doc.data().name,
+        dob: doc.data().dob,
+        doj: doc.data().doj,
+        profilePic: doc.data().profilePic,
+        id: doc.id,
+        sn: i + 1,
+        // age: age
+
+      }
+    })
+    console.log(d)
+    setDob(d)
+  }
+  // function calculateAge(dateString) {
+  //   const today = new Date();
+  //   const [dobDay, dobMonth, dobYear] = dateString.split('-');
+  //   const dob = new Date(`${dobYear}-${dobMonth}-${dobDay}`);
+  //   let age = today.getFullYear() - dob.getFullYear();
+  //   const month = today.getMonth() - dob.getMonth();
+  //   if (month < 0 || (month === 0 && today.getDate() < dob.getDate())) {
+  //     age--;
+  //   }
+  //   const diffTime = Math.abs(dob.getTime() - today.getTime());
+  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  //   const remainingDays =(diffDays - age * 365)-365;
+  //   return ` ${remainingDays} days Left`;
+  // }
+
   useEffect(() => {
     getAllUser();
+    getAllData()
   }, []);
 
   const [previewVisible, setPreviewVisible] = useState(false);
@@ -353,42 +421,168 @@ function NotifySettings() {
       }}
     >
       {award === false ? (
-        <Card
-          style={{
-            borderRadius: "5px",
-            marginBottom: "25px",
-            width: "90%",
-          }}
-        >
-          <div>
-            <Col>
-              <p>System Award</p>
-            </Col>
-            <Col
-              style={{
-                display: "flex",
-                justifyContent: "space-evenly",
-                cursor: "pointer",
-              }}
-            >
-              {awardTypes.map((award) => (
-                <div
-                  key={award.type}
-                  onClick={() => selectAward(award.type)}
-                  style={{
-                    animation: "slidein 1s forwards",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <img className="birthdaytemplateImg" src={award.imgSrc} />
-                  <p>{award.type}</p>
+        <>
+          <Card
+            style={{
+              borderRadius: "5px",
+              marginBottom: "25px",
+              width: "90%",
+            }}
+          >
+            <div>
+              <Col>
+                <p>System Award</p>
+              </Col>
+              <Col className='cardTemplate'
+                style={{
+                  display: "flex",
+                  justifyContent: "space-evenly",
+                  cursor: "pointer",
+                }}
+              >
+                {awardTypes.map((award) => (
+                  <div
+                    key={award.type}
+                    onClick={() => selectAward(award.type)}
+                    style={{
+                      animation: "slidein 1s forwards",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img className="birthdaytemplateImg" src={award.imgSrc} />
+                    <p>{award.type}</p>
+                  </div>
+                ))}
+              </Col>
+            </div>
+          </Card>
+          {/* <Row gutter={[12, 0]} style={{ width: '92%' }}>
+            <Col lg={12} md={12} sm={24} xs={24} >
+              <Card
+                style={{
+                  borderRadius: "5px",
+                  marginBottom: "25px",
+                  width: "100%",
+                }}
+              >
+                <div>
+                  <Col>
+                    <p>Today Birthday </p>
+                  </Col>
+                  <Col
+                    style={{
+                      display: "flex",
+                      flexDirection: 'column',
+                      justifyContent: "space-evenly",
+                      cursor: "pointer",
+
+                    }}
+                  >
+                    {dob.map((person) => {
+                      const { id, profilePic, name, dob, age } = person;
+                      return (
+                        <div key={id} className="person" style={{ display: 'flex', flexDirection: 'row', borderRadius: '20px', border: '1px solid #d0d0d3', margin: '10px', alignItems: 'center' }}>
+                          <div>
+                            {profilePic ? (
+                              <img
+                                width={80}
+                                style={{ borderRadius: "50%", width: "80px", height: "80px" }}
+                                src={profilePic}
+                                alt={name}
+                              />
+                            ) : (
+                              <div
+                                style={{
+                                  borderRadius: "50%",
+                                  width: "80px",
+                                  height: "80px",
+                                  backgroundColor: "#f0f0f0",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <span style={{ fontSize: "30px", color: "#fff" }}>{name[0]}</span>
+                              </div>
+                            )}
+                          </div>
+                          <div style={{ marginLeft: '10px' }}>
+                            <h4>{name}</h4>
+                            <p>{dob} </p>
+                            <p>{age} </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </Col>
                 </div>
-              ))}
+              </Card>
             </Col>
-          </div>
-        </Card>
+            <Col lg={12} md={12} sm={24} xs={24} >
+              <Card
+                style={{
+                  borderRadius: "5px",
+                  marginBottom: "25px",
+                  width: "100%",
+                }}
+              >
+                <div>
+                  <Col>
+                    <p>Today Anniversary</p>
+                  </Col>
+                  <Col
+                    style={{
+                      display: "flex",
+                      flexDirection: 'column',
+                      justifyContent: "space-evenly",
+                      cursor: "pointer",
+
+                    }}
+                  >
+                    {dob.map((person) => {
+                      const { id, profilePic, name, doj } = person;
+                      return (
+                        <div key={id} className="person" style={{ display: 'flex', flexDirection: 'row', borderRadius: '20px', border: '1px solid #d0d0d3', margin: '10px', alignItems: 'center' }}>
+                          <div>
+                            {profilePic ? (
+                              <img
+                                width={80}
+                                style={{ borderRadius: "50%", width: "80px", height: "80px" }}
+                                src={profilePic}
+                                alt={name}
+                              />
+                            ) : (
+                              <div
+                                style={{
+                                  borderRadius: "50%",
+                                  width: "80px",
+                                  height: "80px",
+                                  backgroundColor: "#f0f0f0",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <span style={{ fontSize: "30px", color: "#fff" }}>{name[0]}</span>
+                              </div>
+                            )}
+                          </div>
+                          <div style={{ marginLeft: '10px' }}>
+                            <h4>{name}</h4>
+                            <p>{doj} </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </Col>
+                </div>
+              </Card>
+            </Col>
+          </Row> */}
+        </>
+
       ) : (
         <Card
           style={{
@@ -399,33 +593,87 @@ function NotifySettings() {
         >
           <div>
             <Col style={{ display: "flex" }} span={24}>
-              <Col span={12} onClick={BackToTemplate}>
+              <Col span={12} onClick={BackToTemplate} style={{ cursor: 'pointer' }}>
                 <ArrowLeftOutlined />
                 Back
               </Col>
-              {/* <Col span={12}>
-                <Form.Item name="reset">
-                  <Select
-                    style={{ width: "100%" }}
-                    placeholder="Please Select Option"
-                    options={[
-                      {
-                        value: "reset",
-                        label: "Reset to Last Saved",
-                      },
-                      {
-                        value: "reset-whole",
-                        label: "Reset to Original",
-                      },
-                    ]}
-                  ></Select>
-                </Form.Item>
-              </Col> */}
+
             </Col>
             <div>
               <Divider orientation="left" orientationMargin={0}>
                 {selectedAward}
               </Divider>
+              <Form>
+                {/* <Col span={24}>
+                  <Divider orientation="left" orientationMargin={0}>
+                    Background
+                  </Divider>
+                </Col> */}
+                <Col span={24}>
+                  <Form.Item name="select">
+                    <Radio.Group
+                      style={{ width: "100%" }}
+                      options={optionImage}
+                      defaultValue={selectedOptions}
+                      onChange={radioChange}
+                    />
+                  </Form.Item>
+                </Col>
+              </Form>
+              {showMessageContent &&
+                <>
+                  <Col xs={24} sm={24} md={24}>
+                    <Form form={form} onFinish={handleOnFinish}>
+                      <Form.Item label="" name="message">
+                        <Editor
+                          toolbarClassName="toolbarClassName"
+                          wrapperClassName="wrapperClassName"
+                          editorClassName="editorClassName"
+                          editorState={editorState}
+                          // onEditorStateChange={setEditorState}
+                          toolbar={toolbarOptions}
+                          onEditorStateChange={handleEditorChange}
+                          wrapperStyle={{
+                            border: "1px solid #ebebeb",
+                            overflow: "hidden",
+                          }}
+                          editorStyle={{
+                            height: "200px",
+                            overflow: "hidden",
+                            padding: "20px",
+                          }}
+                          placeholder="Please Type Your Message"
+                        />
+                      </Form.Item>
+                      <Col span={24}>
+                        <FormItem>
+                          <Button
+                            htmlType="submit"
+                            type="primary"
+                            style={{ marginRight: "1rem" }}
+                            disabled={editorMessage}
+                          >
+                            {" "}
+                            SAVE
+                          </Button>
+                        </FormItem>
+                      </Col>
+                    </Form>
+                  </Col>
+                  {/* 
+                  <Row gutter={[16, 16]}>
+
+                    <Divider orientation="left" orientationMargin={0}>
+                      Content
+                      <Popover content={content}>
+                        <InfoCircleOutlined className="informationLogo" />
+                      </Popover>
+                    </Divider>
+
+
+                  </Row> */}
+                </>
+              }
               <Row gutter={[16, 16]}>
                 <Col span={12}>
                   <Card className="birthdayPreviewDiv">
@@ -435,6 +683,7 @@ function NotifySettings() {
                         <InfoCircleOutlined className="informationLogo" />
                       </Popover>
                     </Divider>
+
                     <>
                       <div
                         className="previewDiv"
@@ -445,7 +694,7 @@ function NotifySettings() {
                           alignItems: "center",
                           justifyContent: "center",
                           color: "#fff",
-                          height: layout === "2" ? "80%" : "",
+                          height: layout === "2" ? " " : "",
 
                         }}
                       >
@@ -472,7 +721,7 @@ function NotifySettings() {
 
                                 }}
                               >
-                                {templatePreview[0]?.message?.blocks[0]?.text || 'Please Type Message In Editor'}
+                                {templatePreview[0]?.message?.blocks[0]?.text}
                                 {/* {editorState
                                   .getCurrentContent()
                                   .getPlainText("\u0001")} */}
@@ -530,7 +779,7 @@ function NotifySettings() {
                                 textAlign: "center"
                               }}
                             >
-                              {templatePreview[0]?.message?.blocks[0]?.text || 'Please Type Message In Editor'}
+                              {templatePreview[0]?.message?.blocks[0]?.text}
                               {/* {editorState
                                 .getCurrentContent()
                                 .getPlainText("\u0001")} */}
@@ -576,12 +825,13 @@ function NotifySettings() {
                             <div className="capture" style={{ position: "relative" }}>
                               <img src={imageUrl} style={{ width: "100%", height: "100%" }} />
                             </div>
+                            <div style={{ color: 'green' }} > <DeleteOutlined onClick={() => handleDeleteClick(imageUrl)} /></div>
                           </>
                         ) : layout === "2" ? (
                           <div
                             style={{
                               width: "100%",
-                              height: "100%",
+                              height: "100px",
                               backgroundColor: "grey",
                             }}
                           >
@@ -611,21 +861,7 @@ function NotifySettings() {
                 <Col span={12}>
                   <Card className="birthdayPreviewDiv">
                     <Form layout="vertical">
-                      <Col span={24}>
-                        <Divider orientation="left" orientationMargin={0}>
-                          Background
-                        </Divider>
-                      </Col>
-                      <Col span={24}>
-                        <Form.Item name="select">
-                          <Radio.Group
-                            style={{ width: "100%" }}
-                            options={optionImage}
-                            defaultValue={selectedOptions}
-                            onChange={radioChange}
-                          />
-                        </Form.Item>
-                      </Col>
+
                       {isDefaultTemplateSelected === "2" ? (
                         <Col span={24}>
                           <Form.Item
@@ -720,6 +956,47 @@ function NotifySettings() {
                               />
                             </Form.Item>
                           </Col>
+                          <Col span={24} style={{ display: "flex", width: "100%" }}>
+                            <Form.Item
+                              className="auto"
+                              label="Select Employee"
+                              name="SelectedEmp"
+                            >
+                              <AutoComplete
+                                className="autocomplete"
+                                options={optionsEmployee}
+                                style={{
+                                  width: 300,
+                                }}
+                                onSelect={onSelect}
+                                onSearch={onSearch}
+                                onBlur={onBlur}
+                                size="large"
+                                placeholder="Enter Name"
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col span={24}>
+                            <FormItem label="Select Image" name="UploadEmpImage">
+                              <div className="idpage">
+                                <div className="input-with-clear">
+                                  <Input
+                                    type="file"
+                                    accept="application/pdf"
+                                    id="upload"
+                                    name="upload"
+                                    style={{ display: "flex", width: "300px" }}
+                                    onChange={handleChange}
+                                  />
+                                  {file && (
+                                    <button className="clear-btn" onClick={handleClear}>
+                                      X
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            </FormItem>
+                          </Col>
                         </>
                       )}
                     </Form>
@@ -728,106 +1005,31 @@ function NotifySettings() {
               </Row>
               <Col span={24} style={{ margin: "10px" }}>
                 <FormItem>
-                  <Button
+                  {(layout === '3' || layout === '4') ? (
+                    <Button
+                      htmlType="submit"
+                      type="primary"
+                      style={{ marginRight: "1rem" }}
+                      onClick={handlePreviewClick}
+                      disabled={isDisablePreview}
+                    >
+                      {" "}
+                      Preview
+                    </Button>
+                  ) : <Button
                     htmlType="submit"
                     type="primary"
                     style={{ marginRight: "1rem" }}
                     onClick={handlePreviewClick}
+                  // disabled={isDisablePreview}
                   >
                     {" "}
                     Preview
-                  </Button>
+                  </Button>}
+
                 </FormItem>
               </Col>
-              {showMessageContent &&
-                <Row gutter={[16, 16]}>
 
-                  <Divider orientation="left" orientationMargin={0}>
-                    Content
-                    <Popover content={content}>
-                      <InfoCircleOutlined className="informationLogo" />
-                    </Popover>
-                  </Divider>
-                  <Col span={12} style={{ display: "flex" }}>
-                    <Form.Item
-                      className="auto"
-                      label="Select Employee"
-                      name="SelectedEmp"
-                    >
-                      <AutoComplete
-                        className="autocomplete"
-                        options={optionsEmployee}
-                        style={{
-                          width: 200,
-                        }}
-                        onSelect={onSelect}
-                        onSearch={onSearch}
-                        size="large"
-                        placeholder="Enter Name"
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem label="Select Image" name="UploadEmpImage">
-                      <div className="idpage">
-                        <div className="input-with-clear">
-                          <Input
-                            type="file"
-                            accept="application/pdf"
-                            id="upload"
-                            name="upload"
-
-                            onChange={handleChange}
-                          />
-                          {file && (
-                            <button className="clear-btn" onClick={handleClear}>
-                              X
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </FormItem>
-                  </Col>
-                  <Col xs={24} sm={24} md={24}>
-                    <Form form={form} onFinish={handleOnFinish}>
-                      <Form.Item label="" name="message">
-                        <Editor
-                          toolbarClassName="toolbarClassName"
-                          wrapperClassName="wrapperClassName"
-                          editorClassName="editorClassName"
-                          editorState={editorState}
-                          // onEditorStateChange={setEditorState}
-                          toolbar={toolbarOptions}
-                          onEditorStateChange={handleEditorChange}
-                          wrapperStyle={{
-                            border: "1px solid #ebebeb",
-                            overflow: "hidden",
-                          }}
-                          editorStyle={{
-                            height: "200px",
-                            overflow: "hidden",
-                            padding: "20px",
-                          }}
-                          placeholder="Please Type Your Message"
-                        />
-                      </Form.Item>
-                      <Col span={24}>
-                        <FormItem>
-                          <Button
-                            htmlType="submit"
-                            type="primary"
-                            style={{ marginRight: "1rem" }}
-
-                          >
-                            {" "}
-                            SAVE
-                          </Button>
-                        </FormItem>
-                      </Col>
-                    </Form>
-                  </Col>
-                </Row>
-              }
             </div>
           </div>
 
@@ -874,8 +1076,9 @@ function NotifySettings() {
             </Form>
           </Modal>
         </Card>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
 

@@ -15,7 +15,7 @@ import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { createPdfFromHtml } from "./../ProfileDetails/downloadLogicAppraisal";
 
 const HalfYearGoalTable = (props) => {
-    console.log('ppppp', props)
+    console.log('ppddddddddppp', props)
     const [secondModal, setSecondModal] = useState(false);
     const [thirdModal, setThirdModal] = useState(false);
     const [editedAppraisal, setEditedAppraisal] = useState(null);
@@ -27,8 +27,16 @@ const HalfYearGoalTable = (props) => {
     const [printContent, setPrintContent] = useState(null);
     const isMgr = JSON.parse(sessionStorage.getItem("isMgr"));
     const isHr = JSON.parse(sessionStorage.getItem("isHr"));
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const columns = [
+        {
+            title: "Date",
+            dataIndex: "date",
+            fixed: "left",
+            width: 100,
+            align: "left",
+        },
         {
             title: "Employee Id",
             dataIndex: "empId",
@@ -37,17 +45,17 @@ const HalfYearGoalTable = (props) => {
             align: "left",
         },
         {
-            title: "First Name",
+            title: "Name",
             dataIndex: "fname",
             width: 120,
             align: "left",
         },
-        {
-            title: "Last Name",
-            dataIndex: "lname",
-            width: 120,
-            align: "left",
-        },
+        // {
+        //     title: "Last Name",
+        //     dataIndex: "lname",
+        //     width: 120,
+        //     align: "left",
+        // },
         {
             title: "Reporting Manager",
             dataIndex: "repManager",
@@ -116,13 +124,13 @@ const HalfYearGoalTable = (props) => {
             dataIndex: "action",
             key: "action",
             fixed: "right",
-            width: 150,
+            width: 110,
             align: "left",
 
             render: (_, appraisal) => {
                 return (
                     <>
-                        {console.log("render", appraisal)}
+                        {/* {console.log("render", appraisal)} */}
                         {props.roleView === 'emp' ? (
                             <>
                                 <Button
@@ -198,35 +206,7 @@ const HalfYearGoalTable = (props) => {
         },
     ];
 
-    useEffect(() => {
-        getAppraisalList();
-    }, [props]);
 
-    const getAppraisalList = async () => {
-        let allData = [];
-        let empRecord = await EmpInfoContext.getEduDetails(currentUser.uid);
-        setEmployeeRecord(empRecord);
-        if (props.listType === "hr") {
-            allData = await AppraisalContext.getAllMidYearAppraisal();
-        } else if (props.listType === "emp") {
-            allData = await AppraisalContext.getUserMidYearAppraisal(empRecord.empId);
-        } else if (props.listType === "mgr") {
-            allData = await AppraisalContext.getManagerMidYearAppraisal(
-                empRecord.fname + " " + empRecord.lname
-            );
-        }
-
-        allData.docs.map((doc) => {
-            let d = allData.docs.map((doc) => {
-                return {
-                    ...doc.data(),
-                    id: doc.id,
-                };
-            });
-            console.log("appraisalLIST3", d);
-            setAppraisalList(d);
-        });
-    };
     const onDeleteAppraisal = (appraisal) => {
         console.log("deleteappraisal", appraisal);
         Modal.confirm({
@@ -238,7 +218,7 @@ const HalfYearGoalTable = (props) => {
                 AppraisalContext.deleteMidYearAppraisal(appraisal.id)
                     .then((response) => {
                         console.log(response);
-                        getAppraisalList();
+                        props.getData()
                     })
                     .catch((error) => {
                         console.log(error.message);
@@ -252,6 +232,7 @@ const HalfYearGoalTable = (props) => {
             className="app-tab"
             style={{ width: "100%", paddingLeft: "10px", paddingRight: "10px" }}
         >
+
             <Row
                 style={{
                     display: "flex",
@@ -264,6 +245,7 @@ const HalfYearGoalTable = (props) => {
                     marginTop: "10px",
                 }}
             >
+                
                 <Col
                     span={24}
                     style={{
@@ -292,7 +274,7 @@ const HalfYearGoalTable = (props) => {
                     <Table
                         loading={loading}
                         columns={columns}
-                        dataSource={appraisalList}
+                        dataSource={props.appraisalList}
                         bordered={false}
                         pagination={{
                             position: ["bottomCenter"],
@@ -302,7 +284,6 @@ const HalfYearGoalTable = (props) => {
                         style={{ marginLeft: "10px", marginRight: "10px" }}
                         size="small"
                         onClick={() => {
-                            // if (record?.status !== 'Approved')
                             onDeleteAppraisal();
                         }}
                     />
@@ -336,6 +317,7 @@ const HalfYearGoalTable = (props) => {
                     hrMode={props.listType === "hr"}
                 />
             </Modal>
+
         </div>
     );
 };

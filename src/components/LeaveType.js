@@ -24,52 +24,24 @@ import { capitalize, checkAlphabets, checkNumbervalue, showNotification } from "
 
 const { Option } = Select;
 
-const LeaveType = () => {
+const LeaveType = (props) => {
   const page = "leaveType"
   const [form] = Form.useForm();
-  const [nameForm] = Form.useForm();
-  const [countForm] = Form.useForm();
-  const [accuralForm] = Form.useForm();
-  const [appForm] = Form.useForm();
-  const [carryForm] = Form.useForm();
+  const [editForm] = Form.useForm();
   const [types, setTypes] = useState([]);
   const [activeType, setActiveType] = useState({});
-  const [editLeavesCount, setEditLeavesCount] = useState(false);
-  const [editAccrual, setEditAccrual] = useState(false);
-  const [editProbation, setEditProbation] = useState(false);
-  const [editCarry, setEditCarry] = useState(false);
+  const [editLeaves, setEditLeaves] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [creditable, setCreditable] = useState(false);
 
   useEffect(() => {
-    getData()
-  }, [])
-
-  const getData = async () => {
-    let data = await ConfigureContext.getConfigurations(page);
-    console.log(data)
-    let place = [0, 0, 0]
-    let temp = Object.keys(data).map((type, i) => {
-      return {
-        ...data[`${type}`],
-        name: type
-      }
-    })
-    place.forEach((i) => {
-      let hold = temp[i];
-      temp[i] = temp[temp.length - i -1];
-      temp[temp.length - i -1] = hold;
-    })
-    console.log(temp);
-    setTypes(temp)
-    console.log(Object.keys(activeType).length === 0 ? temp[0] : activeType)
-    setActiveType(Object.keys(activeType).length === 0 ? temp[0] : activeType)
-  }
+    setTypes(props.data)
+    let data = Object.keys(activeType).length == 0 ? props.data[0] : props.data.find(x => x.name == activeType.name)
+    setActiveType(data)
+    setCreditable(data?.creditable)
+  }, [props.data])
 
   const leaveUpdate = (values) => {
-    setEditCarry(false);
-    setEditLeavesCount(false);
-    setEditProbation(false);
-    setEditAccrual(false);
     let record = {
       ...activeType,
       ...values
@@ -78,14 +50,12 @@ const LeaveType = () => {
     let name = activeType.name
     ConfigureContext.editConfiguration(page, {[`${name}`]: record}).then((res) => {
       showNotification("success", "Success", "Updated Successfully!")
-      getData();
+      setEditLeaves(false)
+      editForm.resetFields()
+      props.getData();
     }).catch((err) => {
       showNotification("error", "Error", "Update Failed!")
     })
-  };
-
-  const onCheckbox = (e) => {
-    console.log(`checked = ${e.target.checked}`);
   };
 
   const addNewRule = (config) => {
@@ -103,10 +73,10 @@ const LeaveType = () => {
     }
     ConfigureContext.editConfiguration(page, {[`${name}`]: config});
     form.resetFields();
-    getData();
+    props.getData();
     setIsModalOpen(false);
   };
-
+  
   return (
     <div className="wholePage">
       <Row>
@@ -123,7 +93,10 @@ const LeaveType = () => {
                       }
                     : null
                 }
-                onClick={() => setActiveType(type)}
+                onClick={() => {
+                  setActiveType(type);
+                  setCreditable(type.creditable)
+                }}
               >
                 <div
                   style={{
@@ -189,17 +162,9 @@ const LeaveType = () => {
                     <Input
                       maxLength={20}
                       onChange={(e) => {
-                        const inputval = e.target.value;
                         const str = e.target.value;
-                        const newVal =
-                          inputval.substring(0, 1).toUpperCase() +
-                          inputval.substring(1);
                         const caps = str.split(" ").map(capitalize).join(" ");
-                        // setPaidBy(newVal);
-                        form.setFieldsValue({
-                          name: newVal,
-                          name: caps,
-                        });
+                        form.setFieldsValue({ name: caps });
                       }}
                     />
                   </Form.Item>
@@ -214,7 +179,14 @@ const LeaveType = () => {
                       },
                     ]}
                   >
-                    <TextArea rows={2} />
+                    <TextArea 
+                      rows={2}
+                      onChange={(e) => {
+                        const str = e.target.value;
+                        const caps = str.split(". ").map(capitalize).join(". ");
+                        form.setFieldsValue({ description: caps });
+                      }}
+                    />
                   </Form.Item>
                   <Form.Item
                     label="Leave Count"
@@ -230,7 +202,6 @@ const LeaveType = () => {
                       },
                     ]}
                     onKeyPress={(event) => {
-                      console.log(checkNumbervalue(event));
                       if (checkNumbervalue(event)) {
                         event.preventDefault();
                       }
@@ -253,9 +224,18 @@ const LeaveType = () => {
               cursor: "default",
               marginTop: "10px",
             }}
+            extra={ !editLeaves ? (
+              <Button
+                type="text"
+                bordered={false}
+                onClick={() => setEditLeaves(true)}
+              >
+                <EditFilled />
+              </Button>
+            ) : null}
           >
             <Form
-              form={nameForm}
+              form={editForm}
               labelcol={{
                 span: 4,
               }}
@@ -268,12 +248,9 @@ const LeaveType = () => {
               autoComplete="off"
               onFinish={leaveUpdate}
             >
-              <div className="personalCardDiv">
-                <Row>
-                  <Col xs={24} sm={24} md={15}>
-                    <div>
-                      <Row>
-                        <Col xs={24} sm={24} md={23}>
+              <div className="personalCardDiv" style={{flexDirection: "column"}}>
+                <Row style={{width: "100%"}}>
+                  <Col>
                           <div
                             style={{
                               fontSize: "14px",
@@ -286,15 +263,25 @@ const LeaveType = () => {
                           >
                             Name
                           </div>
-                          <div style={{ marginBottom: "13px" }}>
-                            {activeType.name}
-                          </div>
-                        </Col>
-                      </Row>
-                    </div>
+                    { !editLeaves ? (
+                      <div style={{marginBottom: "13px"}}>{activeType.name}</div>
+                    ) : (
+                      <Form.Item initialValue={activeType.name} name="name">
+                        <Input
+                          style={{
+                            marginBottom: "13px",
+                            width: "200px",
+                            borderBottom: "1px solid #ccc ",
+                            paddingLeft: "0px",
+                          }}
+                          bordered={false}
+                        />
+                      </Form.Item>
+                    )}
                   </Col>
-                  <Col xs={24} sm={22} md={18}>
-                    <div>
+                </Row>
+                <Row style={{width: "100%"}}>
+                  <Col style={{width: "90%"}}>
                       <div
                         style={{
                           fontWeight: 600,
@@ -307,27 +294,34 @@ const LeaveType = () => {
                       >
                         Description
                       </div>
-                      <div>{activeType.description}</div>
-                    </div>
+                    { !editLeaves ? (
+                      <div style={{marginBottom: "13px"}}>{activeType.description}</div>
+                    ) : (
+                      <Form.Item initialValue={activeType.description} name="description">
+                        {/* <Input
+                          style={{
+                            marginBottom: "13px",
+                            width: "200px",
+                            borderBottom: "1px solid #ccc ",
+                            paddingLeft: "0px",
+                          }}
+                          bordered={false}
+                        /> */}
+                        
+                    <TextArea 
+                      rows={2}
+                      onChange={(e) => {
+                        const str = e.target.value;
+                        const caps = str.split(". ").map(capitalize).join(". ");
+                        editForm.setFieldsValue({ description: caps });
+                      }}
+                    />
+                      </Form.Item>
+                    )}
                   </Col>
                 </Row>
               </div>
-            </Form>
             <Divider />
-            <Form
-              form={countForm}
-              labelcol={{
-                span: 4,
-              }}
-              wrappercol={{
-                span: 14,
-              }}
-              initialValues={{
-                remember: true,
-              }}
-              autoComplete="off"
-              onFinish={leaveUpdate}
-            >
               <div className="leavesCount">
                 <Row>
                   <Col xs={24} sm={20} md={7}>
@@ -357,7 +351,7 @@ const LeaveType = () => {
                     >
                       Leaves Allowed in a Year
                     </div>
-                    {editLeavesCount === false ? (
+                    {editLeaves === false ? (
                       <div>{activeType.count}</div>
                     ) : (
                       <Form.Item initialValue={activeType.count} name="count">
@@ -387,40 +381,21 @@ const LeaveType = () => {
                     >
                       Weekends Between Leave
                     </div>
-                    {editLeavesCount === false ? (
+                    {editLeaves === false ? (
                       <div>{activeType?.weekendBtwnLeave ? "Yes" : "No"}</div>
                     ) : (
                       <Form.Item
                         initialValue={activeType?.weekendBtwnLeave}
                         name="weekendBtwnLeave"
+                        valuePropName="checked"
                       >
-                        <Checkbox defaultChecked={activeType?.weekendBtwnLeave} onChange={onCheckbox}>
+                        <Checkbox defaultChecked={activeType?.weekendBtwnLeave} >
                           Count as Leave
                         </Checkbox>
                       </Form.Item>
                     )}
                   </Col>
-                  {editLeavesCount === false ? (
-                    <Col xs={24} sm={24} md={1}>
-                      <Button
-                        className="leaves"
-                        type="text"
-                        bordered={false}
-                        style={{
-                          // color: "#ffff",
-                          display: "none",
-                          // paddingTop: "7px",
-                          // paddingRight: "7px",
-                          // position: "absolute",
-                          // left: "17rem",
-                          // top: 10,
-                        }}
-                        onClick={() => setEditLeavesCount(!editLeavesCount)}
-                      >
-                        <EditFilled />
-                      </Button>
-                    </Col>
-                  ) : null}
+                  
                 </Row>
                 <Row>
                   <Col xs={24} sm={22} md={7}></Col>
@@ -444,88 +419,29 @@ const LeaveType = () => {
                     >
                       Holidays Between Leave
                     </div>
-                    {editLeavesCount === false ? (
-                      <div
-                        style={
-                          {
-                            // marginTop: "5px",
-                            // marginRight: "4rem",
-                          }
-                        }
-                      >
+                    {editLeaves === false ? (
+                      <>
                         {activeType?.holidaysBtwnLeave ? "Yes" : "No"}
-                      </div>
+                      </>
                     ) : (
                       <Form.Item
                         initialValue={activeType?.holidaysBtwnLeave}
                         name="holidaysBtwnLeave"
                         style={{ marginRight: "0px" }}
+                        valuePropName="checked"
                       >
-                        <Checkbox defaultChecked={activeType?.holidaysBtwnLeave} onChange={onCheckbox}>
+                        <Checkbox defaultChecked={activeType?.holidaysBtwnLeave} >
                           Count as Leave
                         </Checkbox>
                       </Form.Item>
                     )}
-                    {/* </div> */}
                   </Col>
                   <Col xs={24} sm={22} md={9}></Col>
                 </Row>
-                {editLeavesCount === true ? (
-                  <Row
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "3%",
-                    }}
-                  >
-                    <Button
-                      onClick={() => {
-                        countForm.resetFields();
-                        setEditLeavesCount(false);
-                      }}
-                      type="text"
-                      style={{ fontSize: 15 }}
-                    >
-                      <CloseOutlined /> CANCEL
-                    </Button>
-                    <Col>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        style={{
-                          marginLeft: "10px",
-                          background: "#1963A6",
-                          width: "90px",
-                        }}
-                        onClick={() => {
-                          countForm.submit();
-                        }}
-                      >
-                        <CheckOutlined />
-                        SAVE
-                      </Button>
-                    </Col>
-                  </Row>
-                ) : null}
               </div>
-            </Form>
             {activeType.name != "Loss Of Pay" ? (
               <>
                 <Divider />
-                <Form
-                  form={accuralForm}
-                  labelcol={{
-                    span: 4,
-                  }}
-                  wrappercol={{
-                    span: 14,
-                  }}
-                  initialValues={{
-                    remember: true,
-                  }}
-                  autoComplete="off"
-                  onFinish={leaveUpdate}
-                >
                   <div className="leavesCount">
                     <Row>
                       <Col xs={24} sm={20} md={7}>
@@ -542,8 +458,8 @@ const LeaveType = () => {
                           Accrual
                         </div>
                       </Col>
-                      <Col xs={24} sm={20} md={16}>
-                        {editAccrual === false ? (
+                      <Col xs={24} sm={20} md={8}>
+                        {editLeaves === false ? (
                           <>
                             <div
                               style={{
@@ -567,10 +483,11 @@ const LeaveType = () => {
                               activeType?.creditable ? activeType.creditable : null
                             }
                             name="creditable"
+                            valuePropName="checked"
                           >
                             <Checkbox
+                              onChange={(e) => setCreditable(e.target.checked)}
                               defaultChecked={activeType?.creditable}
-                              onChange={onCheckbox}
                               style={{
                                 fontSize: "14px",
                                 fontWeight: "600",
@@ -584,27 +501,6 @@ const LeaveType = () => {
                           </Form.Item>
                         )}
                       </Col>
-                      {editAccrual === false ? (
-                        <Col xs={24} sm={24} md={1}>
-                          <Button
-                            className="leaves"
-                            type="text"
-                            bordered={false}
-                            style={{
-                              // color: "#ffff",
-                              display: "none",
-                              // paddingTop: "7px",
-                              // paddingRight: "7px",
-                              // position: "absolute",
-                              // left: "17rem",
-                              // top: 10,
-                            }}
-                            onClick={() => setEditAccrual(!editAccrual)}
-                          >
-                            <EditFilled />
-                          </Button>
-                        </Col>
-                      ) : null}
                     </Row>
                     <Row>
                       <Col xs={24} sm={22} md={7}></Col>
@@ -621,7 +517,7 @@ const LeaveType = () => {
                         >
                           Accrual Frequency
                         </div>
-                        {editAccrual === false ? (
+                        {editLeaves === false ? (
                           <div>
                             {activeType?.frequency ? activeType.frequency : "Monthly"}
                           </div>
@@ -633,6 +529,7 @@ const LeaveType = () => {
                             name="frequency"
                           >
                             <Select
+                              disabled={!creditable}
                               style={{
                                 // marginTop: "10px",
                                 width: "200px",
@@ -661,7 +558,7 @@ const LeaveType = () => {
                         >
                           Accrual Period
                         </div>
-                        {editAccrual === false ? (
+                        {editLeaves === false ? (
                           <div>{activeType?.period ? activeType.period : "start"}</div>
                         ) : (
                           <Form.Item
@@ -669,6 +566,7 @@ const LeaveType = () => {
                             name="period"
                           >
                             <Select
+                              disabled={!creditable}
                               style={{
                                 // marginTop: "10px",
                                 width: "200px",
@@ -684,62 +582,10 @@ const LeaveType = () => {
                         )}
                       </Col>
                     </Row>
-                    {editAccrual === true ? (
-                      <Row
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          marginTop: "3%",
-                        }}
-                      >
-                        <Button
-                          onClick={() => {
-                            accuralForm.resetFields();
-                            setEditAccrual(false);
-                          }}
-                          type="text"
-                          style={{ fontSize: 15 }}
-                        >
-                          <CloseOutlined /> CANCEL
-                        </Button>
-                        <Col>
-                          <Button
-                            type="primary"
-                            htmlType="submit"
-                            style={{
-                              marginLeft: "10px",
-                              background: "#1963A6",
-                              width: "90px",
-                            }}
-                            onClick={() => {
-                                accuralForm.submit();
-                            }}
-                          >
-                            <CheckOutlined />
-                            SAVE
-                          </Button>
-                        </Col>
-                      </Row>
-                    ) : null}
                   </div>
-                </Form>
               </>
             ) : null}
             <Divider />
-            <Form
-              form={appForm}
-              labelcol={{
-                span: 4,
-              }}
-              wrappercol={{
-                span: 14,
-              }}
-              initialValues={{
-                remember: true,
-              }}
-              autoComplete="off"
-              onFinish={leaveUpdate}
-            >
               <div className="leavesCount">
                 <Row>
                   <Col xs={24} sm={20} md={7}>
@@ -757,7 +603,7 @@ const LeaveType = () => {
                     </div>
                   </Col>
                   <Col xs={24} sm={20} md={16}>
-                    {editProbation === false ? (
+                    {editLeaves === false ? (
                       <>
                         <div
                           style={{
@@ -779,10 +625,10 @@ const LeaveType = () => {
                       <Form.Item
                         initialValue={activeType?.probation ? activeType.probation : null}
                         name="probation"
+                        valuePropName="checked"
                       >
                         <Checkbox
                           defaultChecked={activeType?.probation}
-                          onChange={onCheckbox}
                           style={{
                             fontSize: "14px",
                             fontWeight: "600",
@@ -796,84 +642,11 @@ const LeaveType = () => {
                       </Form.Item>
                     )}
                   </Col>
-                  {editProbation === false ? (
-                    <Col xs={24} sm={24} md={1}>
-                      <Button
-                        className="leaves"
-                        type="text"
-                        bordered={false}
-                        style={{
-                          // color: "#ffff",
-                          display: "none",
-                          // paddingTop: "7px",
-                          // paddingRight: "7px",
-                          // position: "absolute",
-                          // left: "17rem",
-                          // top: 10,
-                        }}
-                        onClick={() => setEditProbation(!editProbation)}
-                      >
-                        <EditFilled />
-                      </Button>
-                    </Col>
-                  ) : null}
                 </Row>
-                {editProbation === true ? (
-                  <Row
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "3%",
-                    }}
-                  >
-                    <Button
-                      onClick={() => {
-                        appForm.resetFields();
-                        setEditProbation(false);
-                      }}
-                      type="text"
-                      style={{ fontSize: 15 }}
-                    >
-                      <CloseOutlined /> CANCEL
-                    </Button>
-                    <Col>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        style={{
-                          marginLeft: "10px",
-                          background: "#1963A6",
-                          width: "90px",
-                        }}
-                        onClick={() => {
-                          appForm.submit();
-                        }}
-                      >
-                        <CheckOutlined />
-                        SAVE
-                      </Button>
-                    </Col>
-                  </Row>
-                ) : null}
               </div>
-            </Form>
             {activeType.name != "Loss Of Pay" ? (
               <>
                 <Divider />
-                <Form
-                  form={carryForm}
-                  labelcol={{
-                    span: 4,
-                  }}
-                  wrappercol={{
-                    span: 14,
-                  }}
-                  initialValues={{
-                    remember: true,
-                  }}
-                  autoComplete="off"
-                  onFinish={leaveUpdate}
-                >
                   <div className="leavesCount">
                     <Row>
                       <Col xs={24} sm={20} md={7}>
@@ -890,9 +663,9 @@ const LeaveType = () => {
                           Carry Forward
                         </div>
                       </Col>
-                      <Col xs={24} sm={20} md={16}>
-                        {editCarry === false ? (
+                        {editLeaves === false ? (
                           <>
+                      <Col xs={24} sm={20} md={16}>
                             <div
                               style={{
                                 fontSize: "14px",
@@ -908,15 +681,17 @@ const LeaveType = () => {
                             <div style={{ marginBottom: "13px" }}>
                               {activeType?.carryForward ? "Yes" : "No"}
                             </div>
+                      </Col>
                           </>
                         ) : (
+                      <Col xs={24} sm={20} md={16}>
                           <Form.Item
-                            initialValue={activeType?.carryForward ? activeType.carryForward : null}
+                            initialValue={activeType?.carryForward || null}
                             name="carryForward"
+                            valuePropName="checked"
                           >
                             <Checkbox
                               defaultChecked={activeType?.carryForward}
-                              onChange={onCheckbox}
                               style={{
                                 fontSize: "14px",
                                 fontWeight: "600",
@@ -928,31 +703,13 @@ const LeaveType = () => {
                               Carry Forward Enabled
                             </Checkbox>
                           </Form.Item>
-                        )}
-                      </Col>
-                      {editCarry === false ? (
-                        <Col xs={24} sm={24} md={1}>
-                          <Button
-                            className="leaves"
-                            type="text"
-                            bordered={false}
-                            style={{
-                              // color: "#ffff",
-                              display: "none",
-                              // paddingTop: "7px",
-                              // paddingRight: "7px",
-                              // position: "absolute",
-                              // left: "17rem",
-                              // top: 10,
-                            }}
-                            onClick={() => setEditCarry(!editCarry)}
-                          >
-                            <EditFilled />
-                          </Button>
                         </Col>
-                      ) : null}
+                        )}
                     </Row>
-                    {editCarry === true ? (
+                  </div>
+              </>
+            ) : null}
+            {editLeaves === true ? (
                       <Row
                         style={{
                           display: "flex",
@@ -962,8 +719,8 @@ const LeaveType = () => {
                       >
                         <Button
                           onClick={() => {
-                            carryForm.resetFields();
-                            setEditCarry(false);
+                            editForm.resetFields();
+                            setEditLeaves(false);
                           }}
                           type="text"
                           style={{ fontSize: 15 }}
@@ -973,14 +730,13 @@ const LeaveType = () => {
                         <Col>
                           <Button
                             type="primary"
-                            htmlType="submit"
                             style={{
                               marginLeft: "10px",
                               background: "#1963A6",
                               width: "90px",
                             }}
                             onClick={() => {
-                              carryForm.submit();
+                              editForm.submit();
                             }}
                           >
                             <CheckOutlined />
@@ -989,10 +745,7 @@ const LeaveType = () => {
                         </Col>
                       </Row>
                     ) : null}
-                  </div>
-                </Form>
-              </>
-            ) : null}
+            </Form>
           </Card>
         </Col>
       </Row>

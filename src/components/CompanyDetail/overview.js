@@ -8,12 +8,12 @@ import {
   CheckOutlined,
 } from "@ant-design/icons";
 import "./companystyle.css";
-import "./Overview.css"
+import "./Overview.css";
 import linkedin from "../../images/linkedin.png";
 import facebook from "../../images/facebook.png";
 import twitter from "../../images/twitter.png";
 import CompanyProContext from "../../contexts/CompanyProContext";
-import { checkAlphabets, getBase64 } from "../../contexts/CreateContext";
+import { capitalize, checkAlphabets, getBase64 } from "../../contexts/CreateContext";
 
 function Overview() {
   const [form] = Form.useForm();
@@ -38,7 +38,7 @@ function Overview() {
     CompanyProContext.updateCompInfo(compId, valuesToservice, fileName);
     const timer = setTimeout(() => {
       getData();
-    }, [2000])
+    }, [2000]);
     showEditCompanyInfo(false);
   };
 
@@ -54,7 +54,6 @@ function Overview() {
   };
 
   useEffect(() => {
-
     getData();
   }, []);
 
@@ -69,10 +68,6 @@ function Overview() {
     setImageUrl(data.logo);
     setLoading(false);
   };
-
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
 
   //----------------------------------------------photo upload
 
@@ -151,18 +146,16 @@ function Overview() {
       return (
         <div
           className={editContactInfo === true ? "hoverImgCont" : null}
-          style={
-            {
-              display: "flex",
-              justifyContent: "center",
-              marginRight: "15px"
-              // border: "1px solid #d0d0d0",
-              // Width: "auto",
-              // height: "auto",
-              // borderRadius: "6px",
-              // display: "inline-block",
-            }
-          }
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginRight: "15px",
+            // border: "1px solid #d0d0d0",
+            // Width: "auto",
+            // height: "auto",
+            // borderRadius: "6px",
+            // display: "inline-block",
+          }}
         >
           <img
             src={imageUrl}
@@ -188,7 +181,6 @@ function Overview() {
 
   return (
     <>
-
       <div
         className="personalCardDiv"
         style={{
@@ -221,9 +213,10 @@ function Overview() {
               autoComplete="off"
               onFinish={onFinish}
             >
-              {loading ? <Skeleton active /> :
+              {loading ? (
+                <Skeleton active />
+              ) : (
                 <Card
-
                   title=" OVERVIEW"
                   className="overview"
                   hoverable={true}
@@ -269,34 +262,21 @@ function Overview() {
                     </Col>
                     <Col xs={22} sm={15} md={10}>
                       <div>
-                        <div
-                          className="div-discription"
-                        >
+                        <div className="div-discription">
                           Registered Company Name
                         </div>
                         {editContactInfo === false ? (
-                          <div style={{ marginTop: "7px", }}>
+                          <div style={{ marginTop: "7px" }}>
                             {data.regCompName}
                           </div>
                         ) : (
                           <Form.Item
                             initialValue={data ? data.regCompName : null}
                             name="regCompName"
-                            // onKeyPress={(event) => {
-                            //   if (checkAlphabets(event)) {
-                            //     event.preventDefault();
-                            //   }
-                            // }}
-
-                            onChange={(e) => {
-                              const inputval = e.target.value;
-                              const str = e.target.value;
-                              const newVal =
-                                inputval.substring(0, 1).toUpperCase() +
-                                inputval.substring(1);
-                              const caps = str.split(" ").map(capitalize).join(" ");
-                              // setPaidBy(newVal);
-                              form.setFieldsValue({ regCompName: newVal, regCompName: caps });
+                            onKeyPress={(event) => {
+                              if (checkAlphabets(event)) {
+                                event.preventDefault();
+                              }
                             }}
                             rules={[
                               {
@@ -304,19 +284,29 @@ function Overview() {
                                 message: "Please enter Company Name",
                               },
                               {
-                                pattern: /^[a-zA-Z\s]*$/,
+                                pattern: /^[0-9a-zA-Z.,-\s]*$/,
                                 message: "Please enter Valid Company Name",
                               },
                             ]}
                           >
                             <Input
-                              maxLength={50}
+                              maxLength={30}
                               placeholder="Enter Comapany Name"
                               bordered={false}
                               style={{
                                 borderBottom: "1px solid #ccc ",
                                 paddingLeft: "0px",
-                                width: '220px'
+                                width: "220px",
+                              }}
+                              onChange={(e) => {
+                                const str = e.target.value;
+                                const caps = str
+                                  .split(" ")
+                                  .map(capitalize)
+                                  .join(" ");
+                                form.setFieldsValue({
+                                  regCompName: caps,
+                                });
                               }}
                             />
                           </Form.Item>
@@ -327,7 +317,9 @@ function Overview() {
                       <div>
                         <div className="div-discription">Brand Name</div>
                         {editContactInfo === false ? (
-                          <div style={{ marginTop: "7px" }}>{data.brandName}</div>
+                          <div style={{ marginTop: "7px" }}>
+                            {data.brandName}
+                          </div>
                         ) : (
                           <Form.Item
                             initialValue={data ? data.brandName : null}
@@ -344,13 +336,13 @@ function Overview() {
                                 message: "Please enter Brand Name",
                               },
                               {
-                                pattern: /^[a-zA-Z\s]*$/,
+                                pattern: /^[0-9a-zA-Z-\s]*$/,
                                 message: "Please enter Valid Brand Name",
                               },
                             ]}
                           >
                             <Input
-                              maxLength={30}
+                              maxLength={20}
                               style={{
                                 paddingLeft: "0px",
                                 borderBottom: "1px solid #ccc ",
@@ -361,9 +353,15 @@ function Overview() {
                                 const newVal =
                                   inputval.substring(0, 1).toUpperCase() +
                                   inputval.substring(1);
-                                const caps = str.split(" ").map(capitalize).join(" ");
+                                const caps = str
+                                  .split(" ")
+                                  .map(capitalize)
+                                  .join(" ");
                                 // setPaidBy(newVal);
-                                form.setFieldsValue({ brandName: newVal, brandName: caps });
+                                form.setFieldsValue({
+                                  brandName: newVal,
+                                  brandName: caps,
+                                });
                               }}
                               placeholder="Enter Brand Name"
                               bordered={false}
@@ -394,7 +392,7 @@ function Overview() {
                               },
                               {
                                 pattern:
-                                  /^(?:(?:(?:[a-zA-z\-]+)\:\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9\-\.]){1,61}(?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?:\:[0-9]{1,5})?$/,
+                                  /^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@%_\+.~#?&//=]*)?$/,
                                 message: "Please enter Valid Website Name",
                               },
                             ]}
@@ -404,7 +402,7 @@ function Overview() {
                               style={{
                                 paddingLeft: "0px",
                                 borderBottom: "1px solid #ccc ",
-                                width: '220px'
+                                width: "220px",
                               }}
                               placeholder="Enter Website Name"
                               bordered={false}
@@ -430,7 +428,7 @@ function Overview() {
                               },
                               {
                                 pattern:
-                                  /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/,
+                                  /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/,
 
                                 message: "Please enter Valid Domain Name",
                               },
@@ -486,7 +484,7 @@ function Overview() {
                     </Row>
                   ) : null}
                 </Card>
-              }
+              )}
             </Form>
           </Col>
         </Row>
@@ -525,7 +523,9 @@ function Overview() {
               autoComplete="off"
               onFinish={onSocialFinish}
             >
-              {loading ? <Skeleton active /> :
+              {loading ? (
+                <Skeleton active />
+              ) : (
                 <Card
                   title=" SOCIAL PROFILE"
                   className="social"
@@ -626,7 +626,8 @@ function Overview() {
                                 },
                                 {
                                   pattern:
-                                    /^(?:(?:(?:[a-zA-z\-]+)\:\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9\-\.]){1,61}(?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?:\:[0-9]{1,5})?$/,
+                                    // /^(?:(?:(?:[a-zA-z\-]+)\:\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9\-\.]){1,61}(?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?:\:[0-9]{1,5})?$/,
+                                     /^[0-9a-zA-Z-\s]*$/,
                                   message: "Please enter Valid Website Name",
                                 },
                               ]}
@@ -827,7 +828,7 @@ function Overview() {
                     </Row>
                   ) : null}
                 </Card>
-              }
+              )}
             </Form>
           </Col>
         </Row>

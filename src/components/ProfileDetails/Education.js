@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import moment from "moment";
 import { useState } from "react";
 import { Card, Col, Row, Input, DatePicker, Button, Form } from "antd";
-import {PlusCircleOutlined, CloseOutlined, CheckOutlined,EditFilled,} from "@ant-design/icons";
+import { CloseOutlined, CheckOutlined,EditFilled } from "@ant-design/icons";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
 import "./Education.css"
-import { capitalize } from "../../contexts/CreateContext";
+import { capitalize, checkAlphabets, checkNoAlphabets } from "../../contexts/CreateContext";
 
 function Education() {
   const [editContent, showEditContent] = useState(false);
@@ -42,19 +42,6 @@ function Education() {
     setData(data);
     setDateEnd(data.courseEndDate);
     setDateStart(data.courseStartDate);
-  };
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-  const checkNumbervalue = (event) => {
-    if (!/^[0-9]*\.?[0-9]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
-  };
-  const checkAlphabets = (event) => {
-    if (!/^[ A-Za-z.]*$/.test(event.key) && event.key !== "Backspace") {
-      return true;
-    }
   };
 
   const universityCheck = (event) => {
@@ -350,16 +337,28 @@ function Education() {
                           message: "Please select Start Date ",
                         },
                       ]}
+                      onKeyPress={(event) => {
+                        if (checkNoAlphabets(event)) {
+                          event.preventDefault();
+                        }
+                      }}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
-                      initialValues={
+                      initialValue={
                         dateStart ? moment(dateStart, "DD-MM-YYYY") : null
                       }
                     >
                       <DatePicker
-                        // defaultValue={moment(dateStart, "DD-MM-YYYY")}
                         disabledDate={disabledDate}
-                        style={{ width: "100%" }}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              marginTop: "10px",
+                              width: "100%",
+                              border: "none",
+                              borderBottom: "1px solid #ccc",
+                              borderRadius: 0,
+                              padding: "4px",
+                            }}
                         format={"DD-MM-YYYY"}
                         onChange={(e) => {
                           setDateStart(e.format("DD-MM-YYYY"));
@@ -367,7 +366,6 @@ function Education() {
                       />
                     </Form.Item>
                   )}
-                  {/* </div> */}
                 </Col>
                 <Col xs={24} sm={12} md={8}>
                   <h1
@@ -382,7 +380,6 @@ function Education() {
                     Course End Date
                   </h1>
 
-                  {/* <div> */}
                   {editContent === false ? (
                     <div>{data?.courseEndDate ? data.courseEndDate : "-"}</div>
                   ) : (
@@ -394,16 +391,28 @@ function Education() {
                           message: "Please select End Date",
                         },
                       ]}
+                      onKeyPress={(event) => {
+                        if (checkNoAlphabets(event)) {
+                          event.preventDefault();
+                        }
+                      }}
                       labelCol={{ span: 8 }}
                       wrapperCol={{ span: 32 }}
-                      initialValues={
+                      initialValue={
                         dateEnd ? moment(dateEnd, "DD-MM-YYYY") : null
                       }
                     >
                       <DatePicker
-                        // defaultValue={moment(dateEnd, "DD-MM-YYYY")}
                         disabledDate={disabledDate}
-                        style={{ width: "100%" }}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              marginTop: "10px",
+                              width: "100%",
+                              border: "none",
+                              borderBottom: "1px solid #ccc",
+                              borderRadius: 0,
+                              padding: "4px",
+                            }}
                         format={"DD-MM-YYYY"}
                         onChange={(e) => {
                           setDateEnd(e.format("DD-MM-YYYY"));
@@ -411,7 +420,6 @@ function Education() {
                       />
                     </Form.Item>
                   )}
-                  {/* </div> */}
                 </Col>
                 <Col xs={24} sm={24} md={8}>
                   <div>

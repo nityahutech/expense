@@ -1,12 +1,20 @@
 import React, { useContext, useState, useEffect } from "react"
-import { auth, db } from "../firebase-config"
+import { auth, db, createAuth } from "../firebase-config"
 import { signInWithEmailAndPassword,
          signOut,
          sendPasswordResetEmail,
          updateEmail,
          updatePassword,
          updatePhoneNumber,
-         updateProfile
+         updateProfile,
+         applyActionCode,
+         verifyPasswordResetCode,
+         confirmPasswordReset,
+         checkActionCode,
+         sendEmailVerification,
+         GoogleAuthProvider,
+         signInWithPopup,
+         deleteUser
 } from "@firebase/auth"
 import moment from "moment";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -20,6 +28,10 @@ import DocumentContext from "./DocumentContext";
 import ExpenseContext from "./ExpenseContext";
 import LeaveContext from "./LeaveContext";
 import PolicyContext from "./PolicyContext";
+import InvoiceContext from "./InvoiceContext";
+import AssetContext from "./AssetContext";
+import { changeAccount, isUserVerified } from "./EmailContext";
+import { useNavigate } from "react-router";
 
 const AuthContext = React.createContext()
 
@@ -30,26 +42,33 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState()
   const [loading, setLoading] = useState(true)
-  const [role, setRole] = useState();
-  const [compId, setCompId] = useState();
-  const [isMgr, setIsMgr] = useState();
-  const [isHr, setIsHr] = useState();
-  const [isLead, setIsLead] = useState();
+  const [role, setRole] = useState('');
+  const [roleView, setRoleView] = useState('');
+  const [compId, setCompId] = useState('');
+  const [isMgr, setIsMgr] = useState(false);
+  const [isHr, setIsHr] = useState(false);
+  const [isLead, setIsLead] = useState(false);
+  const [logo, setLogo] = useState(null);
+  // const navigate = useNavigate()
+  const provider = new GoogleAuthProvider();
 
   function getUserData(user) {
-    if (user==null) {
+    if (user == null) {
       const timer = setTimeout(() => {
         sessionStorage.clear();
         localStorage.setItem("login", null)
       }, 2500);
       return () => clearTimeout(timer);
     }
+    // try{
     getDoc(doc(db, 'users', user.uid)).then((res) => {
       let rec = res.data()
+      if (!rec) { throw new Error("User does not Exist")}
       sessionStorage.setItem("role", rec?.role)
       sessionStorage.setItem("roleView", rec?.role)
       sessionStorage.setItem("compId", rec?.compId)
-      localStorage.setItem("login",  moment().format("hh:mm:ss DD-MM-YYYY"))
+      localStorage.setItem("login",  moment())
+      setRoleView(rec?.role)
       setCompId(rec?.compId)
       setRole(rec?.role)
       EmpInfoContext.getCompId();
@@ -61,9 +80,12 @@ export function AuthProvider({ children }) {
       ExpenseContext.getCompId();
       LeaveContext.getCompId();
       PolicyContext.getCompId();
+      InvoiceContext.getCompId();
+      AssetContext.getCompId();
       if (rec?.role == "super") { return; }
       CompanyProContext.getCompanyProfile(rec?.compId).then((rec) => {
         sessionStorage.setItem("logo", rec?.logo)
+        setLogo(rec?.logo)
       })
       EmpInfoContext.getEduDetails(user.uid, rec?.compId).then((rec) => {
         sessionStorage.setItem("isMgr", rec?.isManager);
@@ -74,6 +96,23 @@ export function AuthProvider({ children }) {
         setIsLead(rec?.isLead)
       })
     })
+  // } catch (err) {
+  //     // navigate("/");
+  //     console.log("Failed");
+  //   }
+  }
+
+  async function googleLogin() {
+    let res = await signInWithPopup(auth, provider);
+    let user = await getDoc(doc(db, "users", res.user.uid))
+    console.log(res, user.data());
+    if (user.data()) {
+      return res
+    }
+    if (moment(Number(res.user.metadata.createdAt)).calendar().split(" ")[0] == "Today") {
+      await deleteUser(res.user)
+    }
+    throw new Error("User does not exist!")
   }
 
   function login(email, password) {
@@ -84,8 +123,12 @@ export function AuthProvider({ children }) {
     return signOut(auth)
   }
 
-  function resetPassword(email) {
-    return sendPasswordResetEmail(auth, email)
+  async function resetPassword(email) {
+    let user = await isUserVerified(email);
+    if (user.emailVerified) { return sendPasswordResetEmail(auth, email) }
+    let record = await signInWithEmailAndPassword(createAuth, user.providerData[0].email, "newPassword#1");
+    return sendEmailVerification(record.user)
+    
   }
 
   function updateMyProfile(name) {
@@ -105,6 +148,21 @@ export function AuthProvider({ children }) {
     return updatePassword(currentUser, password)
   }
 
+  async function handleVerifyEmail(actionCode, password) {
+    let actionCodeInfo = await checkActionCode(auth, actionCode);
+    await applyActionCode(auth, actionCode);
+    await changeAccount(null, {password: password}, actionCodeInfo.data.email);
+    let res = await login(actionCodeInfo.data.email, password);
+    return res;
+  }
+
+  async function handlePasswordReset(actionCode, password) {
+    let email = await verifyPasswordResetCode(auth, actionCode)
+    await confirmPasswordReset(auth, actionCode, password)
+    let res = await login(email, password)
+    return res
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       getUserData(user)
@@ -119,16 +177,21 @@ export function AuthProvider({ children }) {
     compId,
     currentUser,
     role,
+    roleView,
     isMgr,
     isHr,
     isLead,
+    logo,
     login,
     logout,
+    googleLogin,
     resetPassword,
     updateMyEmail,
     updateMyPassword,
     updateMyProfile,
-    updateMyPhNo
+    updateMyPhNo,
+    handleVerifyEmail,
+    handlePasswordReset
   }
 
   return (

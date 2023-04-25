@@ -7,54 +7,66 @@
   padding: 0px;
   display: flex;
   flex-direction: row;
-  gap: 120px;
+  /* gap: 120px; */
   background-color: white;
 }
 .img-div{
   /* height: 100vh; */
+  /* width: 100%; */
   background-color: #fbfafa;
 }
 .img-div img{
   width: 100%;
   height: 100vh;
   background-color: #fbfafa;
-  margin-left: 50px;
 }
-.login-div{
-  width: 50%;
+/* .login-div{
+ 
+} */
+
+.form-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+   /* width: 50%; */
   overflow: auto;
   min-height: 100%;
   /* height: 100%; */
-  height: auto;
+  height: 100vh;
+  margin: auto;
 }
-.xyz{
-  margin-top: 30px;    
-}
+
+
 .wlc-div{
   font-family: sans-serif;
   font-weight: 600;
 }
 .msg{
+  margin-bottom: 10px;
   color: #c2c0c0;
   font-size: smaller;
   font-family: sans-serif;
 }
-.form-div .ant-form{
-  margin-top: 4rem;
-}
+
 .emailInput-div input[type='text'], input[type='password'], input[type='number'], textarea {
   -webkit-appearance: none;
   width: 18rem;
 }
+
+.emailInput-div .ant-form-item {
+  margin-bottom: 10px;
+}
+
 .email-div{
   /* font-family: sans-serif; */
   font-weight: 600;
   font-size: small;
-  margin-top: 2rem;
+  margin-top: 0;
 
 }
 
-.pwdInput-div .ant-input-affix-wrapper {
+.emailInput-div .ant-input-affix-wrapper {
   position: relative;
   display: inline-block;
   width: 18rem;
@@ -72,20 +84,44 @@
 }
 
 .forgotpwd{
-  color: #0FAEAA;
+  position: relative;
+  color: #1963A6;
+  margin-top: 1vh;
+  display: flex;
+  justify-content: flex-end;
+  cursor: pointer;
+ }
+
+ .forgotmsg:hover {
+  text-decoration: underline;
+ }
+
+ .ant-btn.google-btn {
+  color: #1963A6;
+  background-color: #f8f8f8;
+  width: 100%;
+  margin: 5px 0;
+  border-color: #d3d3d3b3;
+ }
+ 
+ .ant-btn.google-btn:hover {
+  background-color: #ffffff;
+  color: #1963A6;
+  border-color: #1963A6;
  }
 
 .login-btn .ant-btn {
   outline: 0;
   color: #fff;
-  border-color: #189AB4;
-  background: #189AB4;
+  border-color: #1963A6;
+  background: #1963A6;
   width: 18rem;
+  margin-top: 5px;
 }
 .login-btn .ant-btn:hover {
-  background: #189AB4;
-  color: #fff;
-  border-color: #189AB4;
+  background: #ffffff;
+  color: #1963A6;
+  border-color: #1963A6;
 }
 .chkbox-color .ant-checkbox-checked .ant-checkbox-inner {
   background-color: #189AB4;
@@ -100,6 +136,8 @@
   font-size: 12px;
   margin-top: 2rem;
   color: #c2c0c0;
+  position: fixed; 
+  bottom:0%;
 }
 
 /* for signup page */
@@ -108,9 +146,7 @@
   font-weight: 600;
   font-size: small;
 }
-.signupForm-div .ant-form{
-  margin-top: 2rem;
-}
+
 .signupFooter{
   font-family: sans-serif;
   font-size: 12px;
@@ -146,44 +182,15 @@
     min-height: 50px;
 }
 
-/* -----------mobile--------------- */
 
-@media (max-width: 768px){
-  
-
-  .main-div{
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-  .img-div img{
-    display: none;
-  }
-  .xyz{
-    margin-top: 50px;
-  }
-
-  .login-div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-    /* margin-top: 2rem; */
-    width: auto;
-    background-color: white;
-  }
-
-  .forgotpwd{
-    position: static;
-  }
-
+.login-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  /* margin-top: 2rem; */
+  height: 100vh ;
+  width: auto;
+  background-color: white;
 }
 
-@media (min-width: 1300px){
-  .login-div{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-}

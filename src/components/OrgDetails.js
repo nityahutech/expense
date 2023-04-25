@@ -4,7 +4,6 @@ import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "../style/Onboarding.css";
 import { capitalize, checkAlphabets, checkNumbervalue, checkUpperCase, getBase64, getCountryCode } from "../contexts/CreateContext";
 import PrefixSelector from "./PrefixSelector";
-const { Option } = Select;
 
 const OrgDetails = (props) => {
   const imgRef = React.useRef(null);
@@ -63,7 +62,6 @@ const OrgDetails = (props) => {
     <div style={{ margin: "13px", background: "#fff" }}>
       <div
         style={{
-          // paddingTop: "13px",
           fontWeight: "600",
           fontSize: "14px",
           lineHeight: "32px",
@@ -126,18 +124,13 @@ const OrgDetails = (props) => {
             <Form.Item
               name="regCompName"
               label="Organization Name"
-              onKeyPress={(event) => {
-                if (checkAlphabets(event)) {
-                  event.preventDefault();
-                }
-              }}
               rules={[
                 {
                   required: true,
                   message: "Please Enter Organization Name",
                 },
                 {
-                  pattern: /^[a-zA-Z\s]*$/,
+                  pattern: /^[0-9a-zA-Z.,-\s]*$/,
                   message: "Please Enter Valid Name",
                 },
               ]}
@@ -169,11 +162,7 @@ const OrgDetails = (props) => {
               }}
               rules={[
                 {
-                  required: true,
-                  message: "Please Enter CIN Number",
-                },
-                {
-                  pattern: /^[0-9a-zA-Z]+$/,
+                  pattern: /^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/,
                   message: "Please Enter Valid Number",
                 },
               ]}
@@ -269,7 +258,7 @@ const OrgDetails = (props) => {
                   message: "Please Enter Valid Number",
                 },
               ]}
-              initialValue={data?.phone ? data.phone : "-"}
+              initialValue={data?.phone}
             >
               <Input
                 addonBefore={(<PrefixSelector name={"prefix"} initial={data.prefix} />)}

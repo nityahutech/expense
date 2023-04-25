@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Col,
   Row,
@@ -8,24 +8,29 @@ import {
   DatePicker,
   Select,
   Space,
+  Modal,
   AutoComplete,
+  notification,
 } from "antd";
 import "../style/Documents.css";
+import "../style/addEmployee.css"
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import {
   capitalize,
   checkAlphabets,
   createUser,
+  downloadFile,
   getUsers,
   showNotification,
+  deleteUsers
 } from "../contexts/CreateContext";
-import { getCountryCode } from "../contexts/CreateContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import CompanyProContext from "../contexts/CompanyProContext";
 import { useCSVReader } from "react-papaparse";
-import Papa from 'papaparse';
 import EmpInfoContext from "../contexts/EmpInfoContext";
+import { DownloadOutlined, LoadingOutlined } from "@ant-design/icons";
+import PrefixSelector from "./PrefixSelector";
 
 const { Option } = Select;
 
@@ -34,24 +39,36 @@ function AddEmployee() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const compId = sessionStorage.getItem("compId");
-  const [place, setPlace] = useState(null);
   const [designations, setDesignations] = useState([]);
   const [orgHier, setOrgHier] = useState([]);
-  const [codes, setCodes] = useState("");
   const [errorFile, setErrorFile] = useState(null);
-  const [configurations, setConfigurations] = useState([]);
   const [workLoc, setWorkLoc] = useState(null);
-  const [allEmp, setAllEmp] = useState(null);
   const [allEmpName, setAllEmpName] = useState(null);
   const [domain, setDomain] = useState("");
+  const [lastEmpId, setLastEmpId] = useState("");
   const [preCode, setPreCode] = useState("");
   const [bu, setBu] = useState(null);
   const [div, setDiv] = useState(null);
   const [dept, setDept] = useState(null);
-  const [team, setTeam] = useState(null);
+  // const [team, setTeam] = useState(null);
   const order = ["Business Unit", "Division", "Department", "Team"];
   const [options, setOptions] = useState([]);
-  const [enableBulk, setEnableBulk] = useState(false);
+  // const [enableBulk, setEnableBulk] = useState(false);
+  const [bulkModal, openBulkModal] = useState(false);
+  const template = [
+    ["Employee ID", "First Name", "Middle Name", "Last Name", "Date Of Birth", "Phone Number", "Gender", "Employee Type", "Official Email Id", "Personal Email Id", "Date Of Joining", "Work Location", "Designation", "Reporting Manager", "Secondary Manager", "Team Lead", "Business Unit", "Division", "Department", "Team", "Note"],
+    ["EMP000001", "Rohit", "Ram", "Sharma", "YYYY-MM-DD", "1234567890", "Male/Female/Other", "Full-Time/Part-Time/Contract-Basis/Intern", "email_handle@domain.com", "email_handle@domain.com", "YYYY-MM-DD", "Work Location", "Designation", "Rohit Ram Sharma", "Rohit Ram Sharma", "Rohit Ram Sharma", "Business Unit", "Division", "Department", "Team", "Note"] 
+  ]
+
+  const showBulkModal = () => {
+    openBulkModal(true);
+  };
+  const handleBulkModal = () => {
+    openBulkModal(false);
+  };
+  const handleCancel = () => {
+    openBulkModal(false);
+  };
 
   const onSearch = (searchText) => {
     let matchingName = allEmpName.filter((ex) => { return ex.value.toLowerCase().includes(searchText.toLowerCase()) })
@@ -82,7 +99,6 @@ function AddEmployee() {
     },
     acceptedFile: {
       border: "1px solid #ccc",
-      height: 45,
       lineHeight: 2.5,
       paddingLeft: 10,
       width: "80%",
@@ -97,6 +113,8 @@ function AddEmployee() {
   };
 
   useEffect(() => {
+    // setAllEmp([]);
+    // setEnableBulk(false)
     getData();
     getAllUser();
   }, []);
@@ -143,10 +161,7 @@ function AddEmployee() {
 
   const getData = async () => {
     let temp = await CompanyProContext.getCompanyProfile(compId);
-    let data = await ConfigureContext.getConfigurations(page);
-    getCountryCode().then((res) => {
-      setCodes(res);
-    });
+    let data = await ConfigureContext.getConfigurations("addemployeePage");
     let add = ["Registered Office"];
     if (Object.keys(temp.corpOffice) != 0) {
       add.push("Corporate Office");
@@ -156,9 +171,9 @@ function AddEmployee() {
     });
     setOrgHier(temp.departments);
     setDomain(temp.domain);
+    setLastEmpId(temp.lastEmpId)
     setPreCode(temp.precode)
     setWorkLoc(add);
-    setConfigurations(data);
     setDesignations(Object.keys(data.designations));
   };
   const handleListEmployee = () => {
@@ -180,8 +195,9 @@ function AddEmployee() {
       values.fname + (values.mname ? ` ${values.mname} ` : " ") + values.lname;
       values.doj = values.doj.format("DD-MM-YYYY") || null
     createUser(values, compId)
-      .then((response) => {
-        showNotification("success", "Success", "Employee Created");
+      .then((res) => {
+          CompanyProContext.updateCompInfo(compId, {lastEmpId: res})
+          showNotification("success", "Success", "Employee Created");
         navigate("/Employee/EmployeeList");
       })
       .catch((error) =>{
@@ -190,23 +206,28 @@ function AddEmployee() {
       });
   };
 
-  const handleBulkOnboard = () => {
-    let temp = [...allEmp];
-    let headers = temp.shift();
-    let model = temp.shift();
+  const handleBulkOnboard = (data, head, err) => {
+    // let officialEmail = head.indexOf("Offical Email Id");
+    // let ids = data.map(x => x[officialEmail])
+    // // ids.shift()
+    // console.log(ids)
+    // deleteUsers(ids)
+    let last = null
+    let temp = [...data];
+    let headers = head;
+    let id = headers.indexOf("Employee ID");
     let firstName = headers.indexOf("First Name");
     let middleName = headers.indexOf("Middle Name");
     let lastName = headers.indexOf("Last Name");
-    let id = headers.indexOf("Employee ID");
-    let officialEmail = headers.indexOf("Offical Email Id");
-    let contactEmail = headers.indexOf("Personal Email Id");
-    let dob = headers.indexOf("Date of Birth");
-    let doj = headers.indexOf("Date of Joining");
+    let dob = headers.indexOf("Date Of Birth");
     let phone = headers.indexOf("Phone Number");
     let gender = headers.indexOf("Gender");
-    let des = headers.indexOf("Designation");
     let empType = headers.indexOf("Employee Type");
-    let workLocation = headers.indexOf("Place of Business");
+    let officialEmail = headers.indexOf("Official Email Id");
+    let contactEmail = headers.indexOf("Personal Email Id");
+    let doj = headers.indexOf("Date Of Joining");
+    let workLocation = headers.indexOf("Work Location");
+    let des = headers.indexOf("Designation");
     let repManager = headers.indexOf("Reporting Manager");
     let secManager = headers.indexOf("Secondary Manager");
     let lead = headers.indexOf("Team Lead");
@@ -216,15 +237,20 @@ function AddEmployee() {
     let team = headers.indexOf("Team");
     let role = headers.indexOf("Role");
     let note = headers.indexOf("Note");
-    temp.forEach((emp => {
-      let temp = {
+    // console.log(firstName, middleName, lastName, id, officialEmail, contactEmail, dob, doj, phone, gender, empType, des, workLocation, repManager,secManager, lead, bu, div, dept)
+    // console.log(temp,err)
+    temp.forEach(((emp, i) => {
+      if (err.includes(emp[officialEmail])) {
+        return;
+      }
+      let val = {
         empId: emp[id],
         fname: emp[firstName],
         mname: emp[middleName],
         lname: emp[lastName],
         name: emp[firstName] + (emp[middleName] ? ` ${emp[middleName]} ` : " ") + emp[lastName],
-        doj: emp[doj],
-        dob: emp[dob],
+        doj: moment(emp[doj], "YYYY-MM-DD").format("DD-MM-YYYY"),
+        dob: moment(emp[dob], "YYYY-MM-DD").format("DD-MM-YYYY"),
         mailid: emp[officialEmail],
         email: emp[contactEmail],
         phone: emp[phone],
@@ -245,11 +271,18 @@ function AddEmployee() {
         workLocation: emp[workLocation],
         remark: emp[note] || "",
       }
-      temp.save()
-      createUser(temp, compId)
-
+      last = emp[id]
+      // console.log(val, last)
+      createUser(val, compId)
     }))
-    setEnableBulk(false);
+    setTimeout(() => {
+      if (lastEmpId.localeCompare(last) == -1) {
+        CompanyProContext.updateCompInfo(compId, {lastEmpId: last})
+      }
+      showNotification("success", "Success", "Bulk Onboarding Complete!")
+      openBulkModal(false)
+    }, 10000)
+    return;
   };
 
   const validateCSV = async (data, headers, model) => {
@@ -259,15 +292,15 @@ function AddEmployee() {
     let middleName = headers.indexOf("Middle Name");
     let lastName = headers.indexOf("Last Name");
     let id = headers.indexOf("Employee ID");
-    let officialEmail = headers.indexOf("Offical Email Id");
+    let officialEmail = headers.indexOf("Official Email Id");
     let contactEmail = headers.indexOf("Personal Email Id");
-    let dob = headers.indexOf("Date of Birth");
-    let doj = headers.indexOf("Date of Joining");
+    let dob = headers.indexOf("Date Of Birth");
+    let doj = headers.indexOf("Date Of Joining");
     let phone = headers.indexOf("Phone Number");
     let gender = headers.indexOf("Gender");
     let empType = headers.indexOf("Employee Type");
     let des = headers.indexOf("Designation");
-    let workLocation = headers.indexOf("Place of Business");
+    let workLocation = headers.indexOf("Work Location");
     let repManager = headers.indexOf("Reporting Manager");
     let secManager = headers.indexOf("Secondary Manager");
     let lead = headers.indexOf("Team Lead");
@@ -275,12 +308,17 @@ function AddEmployee() {
     let div = headers.indexOf(order[1]);
     let dept = headers.indexOf(order[2]);
     data.forEach(async (emp, i) => {
+      if(i == data.length-1) { return; }
       emp.forEach((field, i) => {emp[i] = field.trim()})
       emp[firstName] = emp[firstName].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
       emp[middleName] = emp[middleName] ? emp[middleName].split(" ").map(x => capitalize(x.toLowerCase())).join(" ") : null;
       emp[lastName] = emp[lastName].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
+      emp[repManager] = emp[repManager].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
+      emp[secManager] = emp[secManager].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
+      emp[lead] = emp[lead].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
       emp[gender] = capitalize(emp[gender].toLowerCase());
       emp[empType] = emp[empType].split("-").map(x => capitalize(x.toLowerCase())).join("-");
+      emps.push(emp[firstName] + (emp[middleName] ? ` ${emp[middleName]} ` : " ") + emp[lastName]);
       // emp[phone] = emp[phone].contains("+");
       // try {
       order.forEach((type, place) => {
@@ -293,8 +331,8 @@ function AddEmployee() {
         let orgValid = orgHier.filter((d) => d.name == value && d.type == type && d.parent == par);
         if (orgValid.length == 0) { errors.push([emp[officialEmail], type, `${value} does not exist!`]); }
       })
-      let idExists = await EmpInfoContext.idExists(emp[id]);
-      if (idExists) { errors.push([emp[officialEmail], "Employee ID", "This employee code already exists!"]); }
+      let idValid = !(emp[id].startsWith(preCode)) || await EmpInfoContext.idExists(emp[id]);
+      if (idValid) { errors.push([emp[officialEmail], "Employee ID", "This employee code already exists!"]); }
       let valid = /^[a-zA-Z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(emp[officialEmail]);
       if (!valid) { errors.push([emp[officialEmail], "Offical Email Id", "Invalid email address!"]); }
       let emailDomain = emp[officialEmail].substring(emp[officialEmail].indexOf("@") + 1);
@@ -310,72 +348,91 @@ function AddEmployee() {
       let validDob = disabledDate(moment(emp[dob], "YYYY-MM-DD"))
       if (validDob || validDoj) { errors.push([emp[officialEmail], "DOB/DOJ", `Invalid ${validDob ? "DOB " + emp[dob] + (validDoj ? " & DOJ " + emp[doj] : "") : "DOJ " + emp[doj]}`]); };
       let desVaild = designations.includes(emp[des])
-      if (!desVaild) { errors.push([emp[officialEmail], "Designation", "Designation Does Not Exist"]); }
+      if (!desVaild) { errors.push([emp[officialEmail], "Designation", `${emp[des]} does not exist!`]); }
       let locVaild = workLoc.includes(emp[workLocation])
-      if (!locVaild) { errors.push([emp[officialEmail], "Work Location", "Work Location Does Not Exist"]); }
+      if (!locVaild) { errors.push([emp[officialEmail], "Work Location", `${emp[workLocation]} does not exist!`]); }
       if (repManager != -1) {
         let repManExists = emp[repManager] == "" || emps.includes(emp[repManager])
-        if (!repManExists) { errors.push([emp[officialEmail], "Reporting Manager", "Reporting Manager Does Not Exist"]); }
+        if (!repManExists) { errors.push([emp[officialEmail], "Reporting Manager", `${emp[repManager]} does not exist!`]); }
       }
       if (secManager != -1) {
         let secManExists = emp[secManager] == "" || emps.includes(emp[secManager])
-        if (!secManExists) { errors.push([emp[officialEmail], "Secondary Manager", "Secondary Manager Does Not Exist"]); }
+        if (!secManExists) { errors.push([emp[officialEmail], "Secondary Manager", `${emp[secManager]} does not exist!`]); }
       }
       if (lead != -1) {
         let leadExists = emp[lead] == "" || emps.includes(emp[lead])
-        if (!leadExists) { errors.push([emp[officialEmail], "Lead", "Lead Does Not Exist"]); }
+        if (!leadExists) { errors.push([emp[officialEmail], "Lead", `${emp[lead]} does not exist!`]); }
       }
     })
+    if(data[data.length-1].length == 1) {
+        data.pop()
+    }
     setErrorFile(null)
     const timer = setTimeout(() => {
+      // setAllEmp(data)
+      // setHeaders(headers)
+      let temp = []
       if (errors.length > 1) {
-        showNotification("error", "Error", "Please correct errors in upload file!")
-        setEnableBulk(false)
-        setErrorFile(<Button style={{marginRight: "10px"}} onClick={() => downloadFile(errors)}> Download Error File</Button>)
+        console.log(data, headers, temp)
+        setErrorFile(<Button style={{marginRight: "10px"}} onClick={() => downloadFile(errors, "errorFile")}> Download Error File</Button>)
+        temp = errors.map(x => x[0]);
+        temp.shift()
+        Modal.confirm({
+          title: "This file contains errors. Do you want to contine onboarding all user records without errors?",
+          // bodyStyle: errorFile,
+          
+          okText: "Download error file and Continue",
+          okType: "danger",
+    
+          onOk: () => {
+            downloadFile(errors, "errorFile")
+            handleBulkOnboard(data, headers, temp)
+            notification.open({
+              message: "Onboarding",
+              duration: 7,
+              icon: <LoadingOutlined />,
+            });
+          },
+          onCancel: () => {}
+        })
+        // setErrorRecs(temp)
+      } else {
+        Modal.confirm({
+          title: "Are you sure you want to onboard these users?",
+          okText: "Yes",
+          okType: "danger",
+    
+          onOk: () => {
+            handleBulkOnboard(data, headers, temp)
+            notification.open({
+              message: "Onboarding",
+              duration: 7,
+              icon: <LoadingOutlined />,
+            });
+              // .then((res) => {
+              //   showNotification(
+              //     "success",
+              //     "Success",
+              //     "Users Onboarded Successfully!"
+              //   );
+              // })
+              // .catch((error) => {
+              //   showNotification("error", "Error", error.message);
+              // });
+          },
+        })
       }
-    }, [2000])
+      // showNotification("success", "Success", "All Fields Valid!")
+        
+      // setEnableBulk(true)
+    }, [5000])
   }
-
-  const downloadFile = (errors) => {
-    const csv = Papa.unparse(errors);
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', 'errorFile.csv');
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select
-        allowClear={true}
-        showSearch
-        bordered={false}
-        style={{
-          width: 70,
-          background: "#ffffff",
-        }}
-        // onSelect={(value, event) => handleOnChange(value, event)}
-      >
-        {codes?.countries?.map((e) => (
-          <Option key={e?.code} value={e?.code}>
-            {e?.code}{" "}
-          </Option>
-        ))}
-      </Select>
-    </Form.Item>
-  );
 
   return (
     <>
-      <div className="expForm" style={{ margin: "15px", background: "#fff" }}>
+      <div className="addEmpFormDiv" >
         <Form
           className="addEmp"
-          style={{ margin: "30px" }}
           form={form}
           layout="vertical"
           labelcol={{
@@ -391,114 +448,38 @@ function AddEmployee() {
           onFinish={onFinish}
         >
           <Row
-            className="rowform"
-            gutter={[0, 8]}
-            style={{
-              marginBottom: "1.5rem",
-              marginTop: "1.5rem",
-              display: "flex",
-              flexDirection: "column",
-              alignitems: "center",
-              justifyContent: "space-around",
-            }}
+            className="buttonRowEmp"
+            gutter={[16, 16]}
           >
             <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-center"
-              style={{
-                background: "",
-                height: "50px",
-                display: "flex",
-                justifyContent: "flex-start",
-              }}
+              // xs={{ span: 24 }}
+              // sm={{ span: 24 }}
+              // md={{span:6}}
+              // lg={{span:6}}
+              // xl={{span:4}}
+              // xxl={{span:6}}
+
             >
               <Button
-                className="listExpense"
-                type="primary"
+                className="listEmployee"
+                type="default"
                 onClick={handleListEmployee}
-                style={{
-                  width: "120px",
-                  cursor: "pointer",
-                  backgroundColor: "#1963A6",
-                  borderRadius: "5px",
-                }}
               >
                 Employee List
               </Button>
             </Col>
             <Col
-            // style={{
-            //   background: "",
-            //   height: "50px",
-            //   display: "flex",
-            //   justifyContent: "flex-start",
-            // }}
+                // xs={{ span: 24 }}
+                // sm={{ span: 24 }}
+                // md={{span:6}}
             >
-              <CSVReader
-                onUploadAccepted={(results) => {
-                  setEnableBulk(true)
-                  let temp = [...results.data];
-                  let headers = temp.shift();
-                  let model = temp.shift();
-                  validateCSV(temp, headers, model);
-                  setAllEmp([...results.data])
-                }}
-              >
-                {({
-                  getRootProps,
-                  acceptedFile,
-                  ProgressBar,
-                  getRemoveFileProps,
-                }) => (
-                  <>
-                    <div style={styles.csvReader}>
-                      <button
-                        type="button"
-                        {...getRootProps()}
-                        style={styles.browseFile}
-                      >
-                        Browse file
-                      </button>
-                      <div style={styles.acceptedFile}>
-                        {acceptedFile && acceptedFile.name}
-                        {!acceptedFile && setEnableBulk(false)}
-                        {!acceptedFile && setErrorFile(null)}
-                      </div>
-                      <button {...getRemoveFileProps()} style={styles.remove}>
-                        Remove
-                      </button>
-                    </div>
-                    <ProgressBar style={styles.progressBarBackgroundColor} />
-                  </>
-                )}
-              </CSVReader>
-            </Col>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              className="Col-1-center"
-              style={{
-                background: "",
-                height: "50px",
-                display: "flex",
-                justifyContent: "flex-start",
-              }}
-            > 
-              {errorFile}
-              <Button
-                className="listExpense"
-                disabled={!enableBulk}
-                type="primary"
-                onClick={handleBulkOnboard}
-                style={{
-                  cursor: "pointer",
-                  backgroundColor: "#1963A6",
-                  borderRadius: "5px",
-                }}
-              >
-                Bulk Onboard Emloyees
-              </Button>
+            <Button 
+              className="bulkEmployee"
+              type="primary" 
+              onClick={showBulkModal}
+            >
+              <div className="bulkButton">Bulk Employee Onboarding</div>
+            </Button>
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
@@ -704,7 +685,7 @@ function AddEmployee() {
                 ]}
               >
                 <Input
-                  addonBefore={prefixSelector}
+                  addonBefore={(<PrefixSelector />)}
                   maxLength={10}
                   required
                   placeholder="Enter Phone Number"
@@ -760,7 +741,6 @@ function AddEmployee() {
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
                   }}
-                  onChange={(e) => setPlace(e)}
                 >
                   {designations?.map((des) => (
                     <Option value={des}>{des}</Option>
@@ -935,7 +915,6 @@ function AddEmployee() {
                 </Select>
               </Form.Item>
             </Col>
-
             <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="businessUnit"
@@ -959,7 +938,7 @@ function AddEmployee() {
                     setBu(e || null);
                     setDiv(null);
                     setDept(null);
-                    setTeam(null)
+                    // setTeam(null)
                   }}
                 >
                   {getOptions("Business Unit")}
@@ -994,14 +973,13 @@ function AddEmployee() {
                   onChange={(e) => {
                     setDiv(e || null);
                     setDept(null);
-                    setTeam(null)
+                    // setTeam(null)
                   }}
                 >
                   {getOptions("Division")}
                 </Select>
               </Form.Item>
             </Col>
-
             <Col xs={22} sm={15} md={8}>
               <Form.Item
                 name="department"
@@ -1027,7 +1005,7 @@ function AddEmployee() {
                   allowClear
                   onChange={(e) => {
                     setDept(e || null);
-                    setTeam(null)
+                    // setTeam(null)
                   }}
                 >
                   {getOptions("Department")}
@@ -1057,7 +1035,7 @@ function AddEmployee() {
                   disabled={disabledTeam()}
                   placeholder="Select Team"
                   allowClear
-                  onChange={(e) => setTeam(e || null)}
+                  // onChange={(e) => setTeam(e || null)}
                 >
                   {getOptions("Team")}
                 </Select>
@@ -1065,21 +1043,19 @@ function AddEmployee() {
             </Col>
           </Row>
           <Row gutter={[24, 16]}>
-            <Col classsname="gutter-row" span={9}></Col>
-            <Col classsname="gutter-row">
+            <Col span={24} classsname="gutter-row">
               <div
                 style={{
                   display: "flex",
-                  justifyContent: "end",
-                  marginRight: "94px",
+                  justifyContent: "center",
                 }}
               >
                 <Space>
                   <Form.Item>
                     <Button
                       style={{
-                        border: "1px solid #1565D8",
-                        color: "#1565D8",
+                        border: "1px solid #1963A6",
+                        color: "#1963A6",
                         fontWeight: "600",
                         fontSize: "14px",
                         lineHeight: "17px",
@@ -1095,8 +1071,8 @@ function AddEmployee() {
                   <Form.Item>
                     <Button
                       style={{
-                        border: "1px solid #1565D8",
-                        background: "#1565D8",
+                        border: "1px solid #1963A6",
+                        background: "#1963A6",
                         color: "#ffffff",
                         fontWeight: "600",
                         fontSize: "14px",
@@ -1118,6 +1094,110 @@ function AddEmployee() {
           </Row>
         </Form>
       </div>
+      <Modal
+       title="Bulk Onboarding" 
+       open={bulkModal} 
+       onOk={handleBulkModal} 
+       onCancel={handleCancel}
+       footer={false}
+       className="bulkOnboardingModal"
+       closeIcon={
+        <div
+            onClick={() => {
+              openBulkModal(false);
+            }}
+            style={{ color: "#ffffff" }}
+        >
+            X
+        </div>
+    }
+      >
+          <Row
+            className="rowform"
+            gutter={[0, 8]}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignitems: "center",
+              justifyContent: "space-around",
+            }}
+          >
+            <Col>
+              <Button style={{marginBottom: "10px"}} onClick={() => downloadFile(template, "template")}> 
+                <DownloadOutlined />
+                Download File Template
+              </Button>
+            </Col>
+            <Col>
+              <CSVReader
+                onUploadAccepted={(results) => {
+                  let temp = [...results.data];
+                  let headers = temp.shift();
+                  let model = temp.shift();
+                  validateCSV(temp, headers, model);
+                  // handleBulkOnboard(temp, headers)
+                }}
+              >
+                {({
+                  getRootProps,
+                  acceptedFile,
+                  ProgressBar,
+                  getRemoveFileProps,
+                }) => (
+                  <>
+                    <div style={styles.csvReader}>
+                      <button
+                        type="button"
+                        {...getRootProps()}
+                        style={styles.browseFile}
+                      >
+                        Browse file
+                      </button>
+                      <div style={styles.acceptedFile}>
+                        {acceptedFile && acceptedFile.name}
+                        {/* {!acceptedFile && setEnableBulk(false)} */}
+                        {!acceptedFile && setErrorFile(null)}
+                      </div>
+                      <button {...getRemoveFileProps()} style={styles.remove}>
+                        Remove
+                      </button>
+                    </div>
+                    <ProgressBar style={styles.progressBarBackgroundColor} />
+                  </>
+                )}
+              </CSVReader>
+            </Col>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 12 }}
+              md={{ span: 24 }}
+              className="Col-1-center"
+              style={{
+                background: "",
+                height: "50px",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            > 
+              {errorFile}
+
+              {/* <Button
+                className="listExpense"
+                disabled={!enableBulk}
+                type="primary"
+                onClick={handleBulkOnboard}
+                style={{
+                  // cursor: "pointer",
+                  backgroundColor: "#1963A6",
+                  borderRadius: "5px",
+                  color:'#ffff'
+                }}
+              >
+                Bulk Onboard Emloyees
+              </Button> */}
+            </Col>
+          </Row>
+      </Modal>
     </>
   );
 }

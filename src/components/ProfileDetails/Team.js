@@ -1,22 +1,15 @@
-import { Card, Row, Col } from "antd";
+import { Card, Row, Col, Skeleton } from "antd";
 import { useState, useEffect } from "react";
-import EmpInfoContext from "../../contexts/EmpInfoContext";
 
-function Team() {
-
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
-  const [repManager, setRepManager] = useState("");
-  const [secManager, setSecManager] = useState("");
+function Team(props) {
+  const [data, setData] = useState(props.data);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = async () => {
-    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
-    setRepManager(data.repManager ? data.repManager : null);
-    setSecManager(data.secManager ? data.secManager : null);
-  };
+    setLoading(true);
+    setData(props.data);
+    setLoading(false);
+  }, [props.data]);
   
   return (
     <>
@@ -28,6 +21,7 @@ function Team() {
           justifyContent: "center",
         }}
       >
+      {loading ? (<Skeleton active/>) :(
         <Card
           title="TEAMS"
           className="personal"
@@ -54,7 +48,7 @@ function Team() {
               >
                 Reporting Manager
               </div>
-              <div>{repManager ? repManager : "-"}</div>
+              <div>{data.repManager || "-"}</div>
             </Col>
             <Col xs={22} sm={20} md={12}>
               <div
@@ -68,10 +62,10 @@ function Team() {
               >
                 Secondary Manager
               </div>
-              <div>{secManager ? secManager : "-"}</div>
+              <div>{data.secManager || "-"}</div>
             </Col>
           </Row>
-        </Card>
+        </Card>)}
       </div>
     </>
   );

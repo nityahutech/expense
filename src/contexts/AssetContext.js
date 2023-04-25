@@ -15,27 +15,30 @@ import {
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { async } from "@firebase/util";
 
-const compId = sessionStorage.getItem("compId");
+let compId = sessionStorage.getItem("compId");
 
-const companyAssetCollectionRef = collection(
+let companyAssetCollectionRef = collection(
   db,
   `companyprofile/${compId}/assets`
 );
 
-// const companyRepairCollectionRef = collection(
-//   db, `companyprofile/${compId}/assets`, "repairs"
-// );
-
 class AssetContext {
-  // addAsset = async (assetData) => {
-  //   return addDoc(companyAssetCollectionRef, assetData);
-  // };
+
+  getCompId = () => {
+      compId = sessionStorage.getItem("compId");
+      companyAssetCollectionRef = collection(
+        db,
+        `companyprofile/${compId}/assets`
+      );
+      return;
+  };
 
   addAsset = (newLaptop, file) => {
     if (file) {
       const storageRef = ref(
         storage,
-        `/${compId != "undefined" ? compId : "admins"}/${newLaptop.empId
+        `/${compId != "undefined" ? compId : "admins"}/${
+          newLaptop.empId
         }/files/${file.name}`
       );
 
@@ -69,17 +72,16 @@ class AssetContext {
 
   //-------------------Repair Request------------------------------------
 
-
-
   addRepairRequest = (repairRequestData, file) => {
     if (file) {
-      console.log('ffff', repairRequestData, file)
+      console.log("ffff", repairRequestData, file);
       const storageRef = ref(
         storage,
-        `/${compId != "undefined" ? compId : "admins"}/${repairRequestData.empId
+        `/${compId != "undefined" ? compId : "admins"}/${
+          repairRequestData.empId
         }/files/${file.name}`
       );
-      console.log('ffff', storageRef)
+      console.log("ffff", storageRef);
       uploadBytesResumable(storageRef, file).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
           repairRequestData.upload = url;
@@ -100,8 +102,7 @@ class AssetContext {
       repairRequestData.upload = null;
       addDoc(companyAssetCollectionRef, repairRequestData);
       return Promise.resolve();
-
-    };
+    }
   };
 
   getRepairData = async (id, typeValues) => {

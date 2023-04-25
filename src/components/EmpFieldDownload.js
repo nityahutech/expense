@@ -17,7 +17,6 @@ const EmpFieldDownload = (props) => {
     };
 // , "Certificate", "Identification Document"
     const handleChange = (checkedList) => {
-        console.log(checkedList);
         setCheckedList(checkedList);
         setIndeterminate(
             !!checkedList.length && checkedList.length < 7

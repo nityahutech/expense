@@ -16,24 +16,8 @@ ul.ant-menu {
   color: aliceblue;
 }
 
-.Logo {
-  width: 100%;
-  height: 50px;
-}
-
-.Dash {
-  width: 10%;
-  height: auto;
-
-  color: white;
-}
-
 .dot {
   transform: scale(0.5);
-  background-color: #045477;
-}
-
-.logos {
   background-color: #045477;
 }
 
@@ -89,13 +73,6 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
   background-color: #045477;
 }
 
-.leaveletter {
-  padding: 0px;
-  margin-bottom: 0px;
-  font-weight: 600;
-  color: #ffffff;
-}
-
 .sideFont {
   margin-bottom: 0px;
   font-size: 13px;
@@ -123,7 +100,7 @@ ul.ant-menu .ant-menu-sub .ant-menu-vertical {
 
 .sidelayout-menu::-webkit-scrollbar-thumb {
   border: 4px solid rgba(0, 0, 0, 0);
-  background-clip: padding-box;
+  /* background-clip: padding-box; */
   border-radius: 9999px;
   background-color: #aaaaaa;
 }

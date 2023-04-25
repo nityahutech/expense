@@ -1,5 +1,5 @@
 import { db, storage } from "../firebase-config";
-import { disableAccount } from "./EmailContext";
+import { changeAccount } from "./EmailContext";
 import {
     getDoc,
     updateDoc,
@@ -7,7 +7,10 @@ import {
     collection,
     getDocs,
     query,
-    where
+    where,
+    arrayRemove,
+    arrayUnion,
+    addDoc
 } from "firebase/firestore";
 import {
     deleteObject,
@@ -25,7 +28,10 @@ class EmpInfoContext {
         return;
     };
 
-    updateEduDetails = (id, updateEdu, file) => {
+    updateEduDetails = (id, updateEdu, file, name) => {
+        // if (record.name != name) {
+        //     this.nameChange(id, record.name, name)
+        // }
         if (file) {
             const storageRef = ref(storage, `/${compId != "undefined" ? compId : "admins"}/${id}/profilePic`);
             uploadBytesResumable(storageRef, file).then((snapshot) => {
@@ -44,24 +50,74 @@ class EmpInfoContext {
         }
     };
 
+    nameChange = async (id, oldName, newName) => {
+        const q = (collection(db, `companyprofile/${compId}/users`), where())
+    }
+
     getEduDetails = async (id, compid) => {
         let tempId = compid ? compid : compId;
         const eduDoc = doc(db, tempId == "undefined" || !tempId ? "admins" : `companyprofile/${tempId}/users`, id);
         let rec = await getDoc(eduDoc);
         return rec.data();
     };
-    
+
     disablePerson = (id) => {
         updateDoc(doc(db, `companyprofile/${compId}/users`, id), { disabled: true });
-        return disableAccount(id, true);
+        return changeAccount(id, { disabled: true });
     };
 
     idExists = async (id) => {
-        let q = query(collection(db,`companyprofile/${compId}/users`), where("empId", "==", id));
+        let q = query(collection(db, `companyprofile/${compId}/users`), where("empId", "==", id));
         let d = await getDocs(q);
-        console.log(d.docs.length)
         return d.docs.length > 0;
     };
+
+    getBdayAnniversary = async () => {
+        let recs = await getDocs(collection(db, `companyprofile/${compId}/users`));
+        let data = {};
+        recs.docs.forEach(doc => {
+            let temp = data[doc.data().dob]?.birthday || []
+            data[doc.data().dob] = { birthday: doc.data().name }
+            temp = data[doc.data().dob]?.anniversary || []
+            data[doc.data().doj] = { anniversary: doc.data().name }
+        })
+        return data;
+    }
+
+    deleteCompInfo = (id, deleteContact) => {
+        const companyDoc = doc(db, `companyprofile/${compId}/users`, id);
+        let field = Object.keys(deleteContact)[0];
+        return updateDoc(companyDoc, {
+            [`${field}`]: arrayRemove(deleteContact[`${field}`]),
+        });
+    };
+
+
+    addCompInfo = (id, addContact) => {
+        const companyDoc = doc(db, `companyprofile/${compId}/users`, id);
+        // console.log('value', companyDoc)
+        let field = Object.keys(addContact)[0];
+        return updateDoc(companyDoc, {
+            [`${field}`]: arrayUnion(addContact[`${field}`]),
+        });
+    };
+
+
+
+    editCompInfo = async (id, oldCompInfo, newCompInfo) => {
+        const companyDoc = doc(db, `companyprofile/${compId}/users`, id);
+        let field = Object.keys(newCompInfo)[0];
+        // await updateDoc(companyDoc, {
+        //     [`${field}`]: arrayRemove(oldCompInfo[`${field}`]),
+        // });
+        updateDoc(companyDoc, {
+            [`${field}`]: arrayUnion(newCompInfo[`${field}`]),
+        });
+        return;
+    };
+
+
+
 
 }
 

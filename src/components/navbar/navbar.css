@@ -7,7 +7,9 @@
   width: 100%;
   right: 0;
   margin-left: 200px;
-  /* height: 15%; */
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 1);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 1);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 1); /* height: 15%; */
 }
 
 .line {
@@ -17,7 +19,7 @@
 
 .wrapper {
   /* width: 100%; */
-  padding: 20px;
+  /* padding: 20px; */
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -43,7 +45,7 @@
 
 .tittle {
   height: auto;
-  padding: 20px;
+  padding: 5px; 
   padding-left: 200px;
   width: 100%;
 }
@@ -104,10 +106,5 @@ img {
 @media (max-width: 1000px) {
   .tittle {
     display: none;
-  }
-}
-
-@media (max-width: 500px) {
-  .tittle {
   }
 }

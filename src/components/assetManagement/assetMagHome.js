@@ -18,15 +18,15 @@ function AssetMagHome(props) {
 
   useEffect(() => {
     getRepairData();
-    // setLaptopAllot(props.refresh);
+    setLaptopAllot(props.refresh);
     // console.log(getRepairData);
   }, [props.roleView]);
 
   const getRepairData = async () => {
     const typeValues =
       props.roleView == "admin"
-        ? ["Repair", "Upgrade", "Allotment"]
-        : ["Repair", "Upgrade"];
+        ? ["Repair", "Upgrade", "Allotment", "Return"]
+        : ["Repair", "Upgrade", "Return"];
     let repairData = await AssetContext.getRepairData(
       currentUser.uid,
       typeValues
@@ -48,10 +48,6 @@ function AssetMagHome(props) {
                 allot={laptopAllot}
               />
             </Tabs.TabPane>
-
-            <Tabs.TabPane tab="Invoice Reimbursement" key="2">
-              <InvoiceReimbursement roleView={props.roleView} />
-            </Tabs.TabPane>
           </>
         ) : (
           <>
@@ -64,9 +60,6 @@ function AssetMagHome(props) {
             </Tabs.TabPane>
             <Tabs.TabPane tab="Request Form" key="2">
               <Requestpage roleView={props.roleView} getData={getRepairData} />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Invoice Reimbursement" key="3">
-              <InvoiceReimbursement roleView={props.roleView} />
             </Tabs.TabPane>
           </>
         )}

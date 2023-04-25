@@ -1,0 +1,62 @@
+.addEmpFormDiv{
+    margin: 15px;
+    background: #fff;
+}
+.addEmp{
+    padding: 5% 10% 2% 10%;
+}
+.buttonRowEmp{
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: flex-start;
+    
+}
+.bulkButton{
+    text-overflow: ellipsis;
+}
+.listEmployee{
+    border: 1px solid #1963A6;
+    border-radius: 5px;
+    color: #1963A6;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    width: 150px;
+    cursor: pointer;
+}
+.bulkEmployee{
+    width: 200px;
+    cursor: pointer;
+    background-color: #1963A6 !important;
+    border-radius: 5px;
+    color: #ffffff;
+    border: 1px solid #1963A6;
+}
+
+.bulkEmployee:hover{
+    background-color: rgb(25, 99, 166, 0.8) !important;
+    border-radius: 5px;
+    color: #ffffff;
+    border: 1px solid #1963A6;
+}
+.bulkOnboardingModal .ant-modal-content {
+    border-radius: 10px;
+  }
+  
+  .bulkOnboardingModal .ant-modal-header {
+    border-radius: 10px 10px 0px 0px;
+    background: #043661;
+    color: #ffffff;
+  }
+  .bulkOnboardingModal .ant-modal-title {
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+  }
+  
+  /* @media only screen and (max-width: 725px) and (min-width: 250px) {
+    .addEmp{
+        padding: 70px 130px 15px 130px;
+    }
+  } */

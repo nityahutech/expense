@@ -1,4 +1,4 @@
-import {React,useState } from "react";
+import { React, useState } from "react";
 import {
   Card,
   Row,
@@ -10,339 +10,348 @@ import {
   DatePicker,
   TextArea,
   Space,
-  Divider,} from "antd";
-import { 
-  MinusCircleOutlined, 
-  PlusOutlined, 
-  CheckOutlined, 
-  CloseOutlined } from "@ant-design/icons";
-import "./invoice.css"
+  Divider,
+  Tooltip,
+  Tag,
+  Modal,
+} from "antd";
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  CheckOutlined,
+  CloseOutlined,
+  EyeFilled,
+  EditFilled,
+} from "@ant-design/icons";
+import "./invoice.css";
 import FormItem from "antd/es/form/FormItem";
+import moment from "moment";
+import InvoiceContext from "../../contexts/InvoiceContext";
+import {
+  showNotification,
+  checkAlphabets,
+  createUser,
+} from "../../contexts/CreateContext";
+import { useEffect } from "react";
 
-
-
-
-function InvoiceReimbursement() {
-  const [editContent, showEditContent] = useState(false);
-  const [invoiceShow, setInvoiceShow] = useState(false)
-  const [invoiceList, setInvoiceList] = useState([]);
+function InvoiceReimbursement(props) {
+  console.log(props);
+  const [AddExpense, setAddExpense] = useState(false);
+  const [file, setFile] = useState([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [invoiceDetails, setInvoiceDetails] = useState(props.invoiceDetails);
+  const [invoiceData, setInvoiceData] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [user, setUser] = useState({});
   const [form] = Form.useForm();
   const { TextArea } = Input;
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const role = sessionStorage.getItem("role");
 
- 
+  const onFinish = async (values) => {
+    console.log(values, "ektaaaaaaaa");
+    const allInvoiceData = {
+      invoiceName: values.invoiceName,
+      totalAmt: values.totalAmt,
+      invoiceDate: moment().format("DD-MM-YYYY"),
+      status: "Pending",
+      empId: currentUser.uid,
+      empCode: user.empId,
+      name: user.name,
+      payments: values.users.map((pay) => {
+        console.log(pay);
+        return {
+          ...pay,
+          paymentDate: pay.paymentDate.format("DD-MM-YYYY"),
+          upload: pay.upload,
+        };
+      }),
+    };
+    console.log(allInvoiceData, file, "pujaaaaaaaa");
+    try {
+      await InvoiceContext.addInvoice(allInvoiceData, file);
+      showNotification("success", "Success", "Invoice Request Added");
+      setTimeout(() => {
+        props.getData();
+        setFile([]);
+        setAddExpense(false);
+        form.resetFields();
+      }, 5000);
+    } catch (error) {
+      showNotification("error", "Error", "Error In Invoice");
+    }
+  };
+
+  useEffect(() => {
+    props.getData();
+  }, [props.roleView]);
+
+  useEffect(() => {
+    setInvoiceDetails(props.invoiceDetails);
+    setUser(props.user);
+  }, [props.invoiceDetails]);
+
+  function handleChange(event, i) {
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    // if (!isLt2M) {
+    //   message.error('File must smaller than 2MB!');
+    //   return
+    // }
+    let temp = [...file];
+    temp[i] = event.target.files[0];
+    setFile(temp);
+    console.log(temp);
+  }
 
   return (
-  <div className="invoiceCardDiv">
-    <Card
-      className="invoiceCard1"
-      bordered="true"
-      title="Invoice Reimbersement"
-    >
-      <Form
-        layout="vertical"
-      >
-        <Row span={24} gutter={[16,16]}>
-          <Col span={12}>
-            <FormItem
-              label="Invoice Reimbersement Title"
-            >
-              <Input />
-            </FormItem>
-          </Col>
-          <Col span={12}>
-            <FormItem
-              label="Total Amount"
-            >
-              <Input />
-            </FormItem>
-          </Col>
-          <Col span={24}>
-            <Row gutter={[16, 16]}  >
-              <Form 
-                form={form} 
-                style={{ width: "100%" }} 
-                autoComplete="off"
-              >
-                    {editContent ? (
-                      <>
-                        <Form.List name="users">
-                          {(editContent, { add }) => (
-                            <>
-                              <Row gutter={[16,16]} style={{ width: "100%" }}>
-                                {editContent.map((field, i) => (<>
-                                  <Divider orientation="left" orientationMargin="0">
-                                    Expenditure No.{i+1}
-                                  </Divider>
+    <div className="invoiceCardDiv">
+      <>
+        <Card
+          className="invoiceCard1"
+          bordered="true"
+          title="Invoice Reimbursement"
+        >
+          <Form
+            layout="vertical"
+            className="invoiceForm"
+            onFinish={onFinish}
+            form={form}
+          >
+            <Row span={24} gutter={[16, 16]}>
+              <Col span={12}>
+                <FormItem
+                  maxLength={25}
+                  label="Invoice Reimbursement Title"
+                  name="invoiceName"
+                  onKeyPress={(event) => {
+                    if (checkAlphabets(event)) {
+                      event.preventDefault();
+                    }
+                  }}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Enter Invoice",
+                    },
+                    {
+                      pattern: /^[a-zA-Z\s]*$/,
+                      message: "Please Enter Valid Title",
+                    },
+                  ]}
+                >
+                  <Input />
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Total Amount" name="totalAmt">
+                  <Input disabled={true} value={totalAmount || 0} />
+                </FormItem>
+              </Col>
+
+              {AddExpense ? (
+                <Col span={24}>
+                  <Row gutter={[16, 16]}>
+                    <Form.List name="users">
+                      {(fields, { add, remove }) => {
+                        return (
+                          <div style={{ width: "100%" }}>
+                            {fields.map((field, i) => (
+                              <>
+                                <Space
+                                  key={field.key}
+                                  style={{ display: "flex", marginBottom: 8 }}
+                                  align="start"
+                                >
+                                  <Row gutter={[16, 16]}>
+                                    <Divider
+                                      orientation="left"
+                                      orientationMargin="15px"
+                                      style={{ margin: "0px" }}
+                                    >
+                                      Expenditure No.{i + 1}
+                                    </Divider>
                                     <Col span={4}>
-                                      <FormItem
-                                      
-                                      {...field}
-                                      name={`payment${i}`}
-                                        label="Payment Date"
+                                      <Form.Item
+                                        label="Date of Payment"
+                                        {...field}
+                                        name={[field.name, "paymentDate"]}
+                                        // fieldKey={[field.fieldKey, "payment"]}
+                                        rules={[
+                                          {
+                                            required: true,
+                                            message: "Missing Payment Date",
+                                          },
+                                        ]}
                                       >
-                                        <DatePicker 
-                                          onChange={(e) => {
-                                            let temp = [...editContent];
-                                            temp[i].date = e.target.value;
-                                            showEditContent(temp)
-                                          }}/>
-                                      </FormItem>
+                                        <DatePicker format={"DD-MM-YYYY"} />
+                                      </Form.Item>
                                     </Col>
                                     <Col span={6}>
-                                      <FormItem
-                                      
-                                       {...field}
-                                      name={`amount${i}`}
+                                      <Form.Item
                                         label="Amount"
+                                        {...field}
+                                        name={[field.name, "amount"]}
+                                        // fieldKey={[field.fieldKey, "amount"]}
+                                        rules={[
+                                          {
+                                            required: true,
+                                            message: "Missing Amount",
+                                          },
+                                          {
+                                            pattern: /^[0-9\s]*$/,
+                                            message: "Please Enter Valid Title",
+                                          },
+                                        ]}
                                       >
-                                        <Input 
+                                        <Input
+                                          placeholder="Enter Amount"
+                                          maxLength={10}
                                           onChange={(e) => {
-                                            let temp = [...editContent];
-                                            temp[i].date = e.target.value;
-                                            showEditContent(temp)
+                                            // console.log(e.target.value);
+                                            // const amt = e.target.value;
+                                            // setAmount(amt);
+                                            let temp = 0;
+                                            fields.map((field) => {
+                                              let data = form.getFieldValue([
+                                                "users",
+                                                field.name,
+                                                "amount",
+                                              ]);
+                                              temp = temp + Number(data);
+                                            });
+
+                                            form.setFieldsValue({
+                                              totalAmt: temp,
+                                            });
                                           }}
                                         />
-                                      </FormItem>
+                                      </Form.Item>
+                                    </Col>
+                                    <Col span={6}>
+                                      <Form.Item
+                                        label="Description"
+                                        {...field}
+                                        name={[field.name, "description"]}
+                                        // fieldKey={[
+                                        //   field.fieldKey,
+                                        //   "description",
+                                        // ]}
+                                        rules={[
+                                          {
+                                            required: true,
+                                            message: "Missing Description",
+                                          },
+                                        ]}
+                                      >
+                                        <Input placeholder="Enter Description" />
+                                      </Form.Item>
                                     </Col>
                                     <Col span={6}>
                                       <FormItem
-                                       {...field}
-                                      name={`description${i}`}
-                                        label="Description"
+                                        label="Upload Image"
+                                        {...field}
+                                        name={[field.name, "upload"]}
+                                        // fieldKey={[field.fieldKey, "upload"]}
+                                        // rules={[
+                                        //   {
+                                        //     required: true,
+                                        //     message: "Missing Images",
+                                        //   },
+                                        // ]}
                                       >
-                                        <TextArea 
-                                        autoSize={{ minRows: 2, maxRows: 6 }}
-                                        rows={2} 
-                                        onChange={(e) => {
-                                          let temp = [...editContent];
-                                          temp[i].date = e.target.value;
-                                          showEditContent(temp)
+                                        <div className="idpage">
+                                          <Input
+                                            type="file"
+                                            accept="application/pdf"
+                                            id="upload"
+                                            name="upload"
+                                            onChange={(e) => handleChange(e, i)}
+                                            style={{ borderRadius: "5px" }}
+                                          />
+                                        </div>
+                                      </FormItem>
+                                    </Col>
+                                    <Col span={2} className="actionButton">
+                                      <MinusCircleOutlined
+                                        onClick={() => {
+                                          remove(field.name);
+                                          let temp = [...file];
+                                          // delete temp[i];
+                                          temp.splice(i, 1);
+                                          console.log(temp);
+                                          setFile(temp);
                                         }}
-                                        />
-                                      </FormItem>
+                                      />
                                     </Col>
-                                    <Col span={6}>
-                                      <FormItem
-                                       {...field}
-                                        name={`upload${i}`}
-                                        label="Upload the bill"
-                                      >
-                                        <div className="idpage">
-                                          <Input
-                                            type="file"
-                                            accept="application/pdf"
-                                            id="upload"
-                                            name="upload"
-                                            // onChange={handleChange}
-                                            style={{ borderRadius: "5px" }}
-                                            onChange={(e) => {
-                                              let temp = [...editContent];
-                                              temp[i].date = e.target.value;
-                                              showEditContent(temp)
-                                            }}
-                                          />
-                                        </div>
-                                      </FormItem>
-                                    </Col>
-                                    <Col span={2} 
-                                    style={{display:'flex',justifyContent:'center',alignItems:"center"}}>
-                                      <FormItem >                                      
-                                        <Row gutter={[8,8]}>                                    
-                                          <Col span={24}>
-                                            <Button type="text" >
-                                              <CloseOutlined />
-                                            </Button>
-                                        </Col>
-                                        </Row>
-                                      </FormItem>
-                                    </Col>                                    
-                                    </>))}
-                              </Row>
-                              
-                              <Form.Item>
-                                <Button
-                                  type="dashed"
-                                  style={{ width: "150px" }}
-                                  onClick={(i) => add(i)}
-                                  block
-                                  icon={<PlusOutlined />}
-                                >
-                                  Add field
-                                </Button>
-                              </Form.Item>
-                            </>
-                          )}
-                        </Form.List>
-
-                        <Form.Item style={{display:"flex",justifyContent:"end"}}>
-                          <Button
-                            type="text"
-                            style={{ marginRight: "10px" }}
-                            onClick={() => {
-                              showEditContent(false);
-                              form.resetFields();
-                            }}
-                          >
-                            <CloseOutlined />Cancel
-                          </Button>
-                          <Button
-                            style={{
-                              border: "1px solid #1963A6",
-                              background: "#1963A6",
-                              color: "#ffffff",
-                              fontSize: "15",
-                              lineHeight: "17px",
-                              // width: "119px",
-                            }}
-                            type="primary"
-                          >
-                            <CheckOutlined />Submit
-                          </Button>
-                        </Form.Item>
-
-                      </>
-                    ) : (
-                      <Form.Item>
-                        <Button
-                          style={{
-                            background: "#1963a6",
-                            marginLeft: "20px",
-                          }}
-                          type="primary"
-                          onClick={() => showEditContent(true)}
-                        >
-                          Add Expenses
-                        </Button>
-                      </Form.Item>
-                    )}
-              </Form>
-
-
-              {/* <Form>
-                {invoiceShow ? (<>
-                  <Row gutter={[16,16]} style={{ width: "100%" }}>
-                    {console.log(invoiceList)}
-                    {invoiceList?.map((invoiceData, i)=>((<>
-                      <Divider orientation="left" orientationMargin="0">
-                        Expenditure No. {i+1}
-                      </Divider>
-                      <Col span={4}>
-                                      <FormItem
-                                      initialValue={invoiceList[i].date || null}
-                                      name={`payment${i}`}
-                                        label="Payment Date"
-                                      >
-                                        <DatePicker 
-                                            onChange={(e) => {
-                                              let temp = [...invoiceList];
-                                              temp[i].date = e.target.value;
-                                              setInvoiceList(temp)
-                                            }}/>
-                                      </FormItem>
-                      </Col>
-                      <Col span={6}>
-                                      <FormItem
-                                      initialValue={invoiceList[i].amount || null}
-                                      name={`amount${i}`}
-                                        label="Amount"
-                                      >
-                                        <Input 
-                                            onChange={(e) => {
-                                              let temp = [...invoiceList];
-                                              temp[i].amount = e.target.value;
-                                              setInvoiceList(temp)
-                                            }}/>
-                                      </FormItem>
-                      </Col>
-                      <Col span={6}>
-                                      <FormItem
-                                      initialValue={invoiceList[i].description || null}
-                                      name={`description${i}`}
-                                        label="Description"
-                                      >
-                                        <TextArea 
-                                            onChange={(e) => {
-                                              let temp = [...invoiceList];
-                                              temp[i].description = e.target.value;
-                                              setInvoiceList(temp)
-                                            }}
-                                        autoSize={{ minRows: 2, maxRows: 6 }}
-                                        rows={2} />
-                                      </FormItem>
-                      </Col>
-                      <Col span={6}>
-                                      <FormItem
-                                        name={`upload${i}`}
-                                        label="Upload the bill"
-                                      >
-                                        <div className="idpage">
-                                          <Input
-                                            type="file"
-                                            accept="application/pdf"
-                                            id="upload"
-                                            name="upload"
-                                            style={{ borderRadius: "5px" }}
-                                          />
-                                        </div>
-                                      </FormItem>
-                      </Col>
-                      <Col span={2}>
-                        <FormItem >                                                                      
-                          <Col span={24}>
-                            <Button 
-                              onClick={() => {
-                                setInvoiceList([])
-                                let temp = [...invoiceList]
-                                temp.splice(i, i)
-                                console.log(i, temp)
-                                setInvoiceList(temp)
-                              }}
-                            >
-                              <CloseOutlined />
-                            </Button>
-                          </Col>
-                        </FormItem>
-                      </Col>  
-                      </>)))}                                  
+                                  </Row>
+                                </Space>
+                              </>
+                            ))}
+                            <Col span={24}>
+                              <Button
+                                className="addField"
+                                onClick={() => {
+                                  add();
+                                }}
+                                block
+                              >
+                                <PlusOutlined /> Add field
+                              </Button>
+                            </Col>
+                          </div>
+                        );
+                      }}
+                    </Form.List>
+                    <Col span={24} className="formButton">
+                      <Button
+                        type="text"
+                        style={{ marginRight: "10px" }}
+                        onClick={() => {
+                          setAddExpense(false);
+                          form.resetFields();
+                          setFile([]);
+                        }}
+                      >
+                        <CloseOutlined />
+                        Cancel
+                      </Button>
+                      <Button
+                        htmlType="submit"
+                        style={{
+                          border: "1px solid #1963A6",
+                          background: "#1963A6",
+                          color: "#ffffff",
+                          fontSize: "15",
+                          lineHeight: "17px",
+                          // width: "119px",
+                        }}
+                        type="primary"
+                      >
+                        <CheckOutlined />
+                        Submit
+                      </Button>
+                    </Col>
+                    {/* </Form> */}
                   </Row>
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      style={{ width: "150px" }}
-                      onClick={() => setInvoiceList([...invoiceList, []])}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                        Add Expenditure
-                    </Button>
-                  </Form.Item>
-                </>):(<>
-                  <Form.Item>
-                        <Button
-                          style={{
-                            background: "#1963a6",
-                            marginLeft: "7%",
-                          }}
-                          type="primary"
-                          onClick={() => setInvoiceShow(true)}
-                        >
-                          Add Expenses
-                        </Button>
-                  </Form.Item>
-                </>)}
-              </Form> */}
-
+                </Col>
+              ) : (
+                <Button
+                  className="addButton"
+                  onClick={() => {
+                    setAddExpense(true);
+                  }}
+                  block
+                >
+                  <PlusOutlined style={{ fontSize: "16px" }} /> Add Expenses
+                </Button>
+              )}
             </Row>
-          </Col>
-        </Row>
-      </Form>
-    </Card>
-    <Card 
-    title="Request Table"
-    className="invoiceCard2">
-      <Table/>
-    </Card>
-  </div>
-)}
+          </Form>
+        </Card>
+      </>
+    </div>
+  );
+}
 
 export default InvoiceReimbursement;

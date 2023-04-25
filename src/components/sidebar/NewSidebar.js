@@ -1,22 +1,25 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Divider, Layout, Menu } from "antd";
-import expenseIcon from "../../images/Expense.png";
-import dot from "../../images/dot.png";
-import dashIcon from "../../images/Dashboard.png";
-import empIcon from "../../images/employees.png";
-import userIcon from "../../images/user.png";
-import assetMag from "../../images/newSBLogo/AssetManagement.png";
-import logo from "../../images/Group 1.png";
-import appraisalIcon from "../../images/appraisal.png";
-import Organization from "../../images/Organization.png";
-import CompanyProfile from "../../images/Companyprofile.png";
-import SettingIcon from "../../images/gear.png";
-import homePage from "../../images/homeIcon.png";
-import LeaveIcon from "../../images/smallLeaveLogo.png";
-import SmallAttd from "../../images/samllattlogo.png";
-import "./newSlidebar.css";
-import SmallerLogo from "../../images/smallerLogo.png";
 import { NavLink, Link } from "react-router-dom";
+import dot from "../../images/dot.png";
+import logo from "../../images/SidebarLogo.svg";
+import "./newSlidebar.css";
+import {
+  CalendarOutlined,
+  CompassOutlined,
+  DesktopOutlined,
+  FundProjectionScreenOutlined,
+  GlobalOutlined,
+  HomeFilled,
+  PieChartFilled,
+  ProfileOutlined,
+  ScheduleFilled,
+  SettingOutlined,
+  TeamOutlined,
+  UserOutlined,
+  RadarChartOutlined,
+  DeploymentUnitOutlined
+} from "@ant-design/icons";
 
 const { Sider } = Layout;
 
@@ -102,14 +105,18 @@ const NewSidebar = (props) => {
                 onClick={() => {
                   setCollapsibleStatus();
                 }}
-                // style={{
-                //   // paddingBottom: "40px",
-                //   height: "100vh",
-                // }}
+              // style={{
+              //   // paddingBottom: "40px",
+              //   height: "100vh",
+              // }}
               >
                 <Menu.Item
                   className="arrow"
-                  icon={<img src={homePage} width="16px" alt="home" />}
+                  icon={
+                    <HomeFilled
+                      style={{ color: "#ffffff", fontSize: "17px" }}
+                    />
+                  }
                   key="30"
                 >
                   <p className="sideFont">Home</p>
@@ -124,11 +131,8 @@ const NewSidebar = (props) => {
                       color: "#ffffff",
                     }}
                     icon={
-                      <img
-                        style={{ color: "white" }}
-                        src={Organization}
-                        alt="organization"
-                        className="Dash"
+                      <GlobalOutlined
+                        style={{ color: "#ffffff", fontSize: "17px" }}
                       />
                     }
                     key="sub5"
@@ -148,11 +152,8 @@ const NewSidebar = (props) => {
                   <>
                     <Menu.Item
                       icon={
-                        <img
-                          style={{ color: "white" }}
-                          src={CompanyProfile}
-                          alt="profile"
-                          className="Dash"
+                        <ProfileOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
                         />
                       }
                       key="32"
@@ -169,11 +170,8 @@ const NewSidebar = (props) => {
                         color: "#ffffff",
                       }}
                       icon={
-                        <img
-                          style={{ color: "white" }}
-                          src={empIcon}
-                          alt="profile"
-                          className="Dash"
+                        <TeamOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
                         />
                       }
                       key="sub2"
@@ -212,13 +210,8 @@ const NewSidebar = (props) => {
                     <Menu.Item
                       className="arrow"
                       icon={
-                        <img
-                          src={SmallAttd}
-                          alt="profile"
-                          style={{
-                            width: "21px",
-                            marginLeft: "-5px",
-                          }}
+                        <ScheduleFilled
+                          style={{ color: "#ffffff", fontSize: "17px" }}
                         />
                       }
                       key="6"
@@ -228,27 +221,15 @@ const NewSidebar = (props) => {
                     </Menu.Item>
                     <Menu.Item
                       icon={
-                        <img
-                          src={LeaveIcon}
-                          alt="profile"
-                          className="dot"
-                          style={{
-                            width: "32px",
-                            marginLeft: "-9px",
-                            background: "none",
-                          }}
+                        <CalendarOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
                         />
                       }
                       key="7"
                     >
-                      <p className="sideFont leaveletter">Leave</p>
+                      <p className="sideFont">Leave</p>
                       <NavLink to="/Leave" />
                     </Menu.Item>
-                  </>
-                ) : null}
-
-                {role != "super" ? (
-                  <>
                     <Menu.SubMenu
                       className="arrow-div"
                       style={{
@@ -258,10 +239,8 @@ const NewSidebar = (props) => {
                         color: "#ffffff",
                       }}
                       icon={
-                        <img
-                          src={appraisalIcon}
-                          alt="appraisal"
-                          className="Dash"
+                        <FundProjectionScreenOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
                         />
                       }
                       key="sub4"
@@ -286,16 +265,16 @@ const NewSidebar = (props) => {
                       </Menu.Item>
                     </Menu.SubMenu>
                     <Menu.Item
-                      icon={<img src={assetMag} alt="asset" class="Dash" />}
+                      icon={
+                        <DesktopOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
                       key="22"
                     >
                       <p className="sideFont">Assets</p>
                       <NavLink to="/Assets" />
                     </Menu.Item>
-                  </>
-                ) : null}
-                {role == "admin" || isHr ? (
-                  <>
                     <Menu.SubMenu
                       className="arrow-div"
                       style={{
@@ -305,62 +284,124 @@ const NewSidebar = (props) => {
                         color: "#ffffff",
                       }}
                       icon={
-                        <img src={expenseIcon} alt="profile" className="Dash" />
+                        <PieChartFilled
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
                       }
                       key="sub1"
                       title="Expense"
                       mode="inline"
                     >
+                      {role == "admin" || isHr ? (
+                        <>
+                          <Menu.Item
+                            className="arrow"
+                            icon={
+                              <img src={dot} alt="profile" className="dot" />
+                            }
+                            key="2"
+                          >
+                            <p className="sideFont">Add Expense</p>
+                            <NavLink to="/Expense/AddExpense" />
+                          </Menu.Item>
+                          <Menu.Item
+                            className="arrow"
+                            icon={
+                              <img src={dot} alt="profile" className="dot" />
+                            }
+                            key="3"
+                          >
+                            <p className="sideFont">Expense List</p>
+                            <NavLink to="/Expense/ExpenseList" />
+                          </Menu.Item>
+                        </>
+                      ) : null}
                       <Menu.Item
                         className="arrow"
                         icon={<img src={dot} alt="profile" className="dot" />}
-                        key="2"
+                        key="23"
                       >
-                        <p className="sideFont">Add Expense</p>
-                        <NavLink to="/Expense/AddExpense" />
-                      </Menu.Item>
-                      <Menu.Item
-                        className="arrow"
-                        icon={<img src={dot} alt="profile" className="dot" />}
-                        key="3"
-                      >
-                        <p className="sideFont">Expense List</p>
-                        <NavLink to="/Expense/ExpenseList" />
+                        <p className="sideFont">Invoice Reimbursement</p>
+                        <NavLink to="/Expense/InvoiceReimbursement" />
                       </Menu.Item>
                     </Menu.SubMenu>
+                    <Menu.Item
+                      icon={
+                        <CompassOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
+                      key="24"
+                    >
+                      <p className="sideFont">Travel Management</p>
+                      <NavLink to="/TravelManagement" />
+                    </Menu.Item>
+                    <Menu.Item
+                      icon={
+                        <RadarChartOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
+                      key="25"
+                    >
+                      <p className="sideFont">Feedback</p>
+                      <NavLink to="/Feedback" />
+                    </Menu.Item>
                   </>
                 ) : null}
-
                 <Menu.Item
-                  icon={<img src={userIcon} alt="profile" className="Dash" />}
+                  icon={
+                    <UserOutlined
+                      style={{ color: "#ffffff", fontSize: "15px" }}
+                    />
+                  }
                   key="21"
                 >
                   <p className="sideFont">My Profile</p>
                   <NavLink to="/Profile" />
                 </Menu.Item>
+                <Menu.SubMenu
+                  style={{
+                    width: "100%",
+                    fontSize: "13px",
+                    fontWeight: "600",
+                    color: "#ffffff",
+                  }}
+                  icon={
+                    <DeploymentUnitOutlined
+                      style={{ color: "#ffffff", fontSize: "17px" }}
+                    />
+                  }
+                  key="sub30"
+                  title="Client"
+                  mode="inline"
+                >
+                  <Menu.Item
+                    className="arrow"
+                    icon={<img src={dot} alt="profile" className="dot" />}
+                    key="30a"
+                  >
+                    <p className="sideFont">Add Client</p>
+                    <NavLink to="/Client/AddClient" />
+                  </Menu.Item>
+                  <Menu.Item
+                    className="arrow"
+                    icon={<img src={dot} alt="profile" className="dot" />}
+                    key="30b"
+                  >
+                    <p className="sideFont">View Client</p>
+                    <NavLink to="/Client/ViewClient" />
+                  </Menu.Item>
+                </Menu.SubMenu>
               </Menu>
             </div>
           </div>
-          {/* --------------------setting---------------- */}
-          <div
-            className="sidelayout-setting"
-            style={
-              {
-                // padding: '20px',
-                // borderTop: '1px solid #6e6eff',
-                // alignItems: 'center',
-                // width: '80%',
-                // height: '80px',
-                // display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'
-              }
-            }
-          >
+          <div className="sidelayout-setting">
             <div>
               <Divider
                 style={{
                   margin: "0px",
                   borderWidth: 1,
-                  // borderColor: 'rgb(5 70 179)',
                   borderColor: "#ffffff",
                 }}
               />
@@ -377,13 +418,8 @@ const NewSidebar = (props) => {
               }}
             >
               <div>
-                <img
-                  style={{
-                    height: "16px",
-                  }}
-                  src={SettingIcon}
-                  alt="Setting"
-                  // className="Dash"
+                <SettingOutlined
+                  style={{ color: "#ffffff", fontSize: "15px" }}
                 />
               </div>
 
@@ -398,7 +434,6 @@ const NewSidebar = (props) => {
                     fontWeight: 600,
                     color: "#ffffff",
                   }}
-                  rel="noopener noreferrer"
                 >
                   Settings
                 </Link>

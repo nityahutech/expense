@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "antd/dist/antd.css";
 import "../style/profile.css";
 import { Tabs } from "antd";
@@ -11,46 +12,66 @@ import Document from "./ProfileDetails/Document";
 import WorkWeek from "./ProfileDetails/WorkWeek";
 import PaySlip from "./ProfileDetails/PaySlip";
 import BankAccount from "./ProfileDetails/BankAccount";
+import EmpInfoContext from "../contexts/EmpInfoContext";
+import { useLocation, useNavigate } from "react-router-dom";
+
 
 
 const Profile = () => {
-const role = sessionStorage.getItem("role");
+  const role = sessionStorage.getItem("role");
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const [record, setRecord] = useState([]);
+  const location = useLocation()
+  const navigate = useNavigate();
+  const active = location.state?.active || "1"
+  
+  useEffect(() => {
+    getData();
+    navigate(location.pathname, {});
+  }, [])
+
+  const getData = async () => {
+    let data = await EmpInfoContext.getEduDetails(currentUser.uid);
+    setRecord(data);
+    // console.log(data);
+  }
+
   return (
     <>
       <div className="myProfile">
-        <Tabs defaultActiveKey="1" className="myProfileTabs">
+        <Tabs defaultActiveKey={active} className="myProfileTabs">
           <Tabs.TabPane tab="Personal" key="1">
-            <Personal />
+            <Personal data={record} getData={getData} />
           </Tabs.TabPane>
           {role != "super" ? (
             <>
               <Tabs.TabPane tab="Work" key="2">
-                <Work />
+                <Work data={record} />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Team" key="3">
-                <Team />
+                <Team data={record} />
               </Tabs.TabPane>
             </>
           ) : null}
           <Tabs.TabPane tab="Education" key="4">
-            <Education />
+            <Education data={record} getData={getData} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Family" key="5">
-            <Family />
+            <Family data={record} getData={getData} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Documents" key="6">
-            <Document />
+            <Document data={record} getData={getData} />
           </Tabs.TabPane>
           {role != "super" ? (
             <>
               <Tabs.TabPane tab="Work Week" key="7">
-                <WorkWeek />
+                <WorkWeek data={record} />
               </Tabs.TabPane>
-              {/* <Tabs.TabPane tab="Pay Slip" key="8">
-                <PaySlip />
-              </Tabs.TabPane> */}
+              <Tabs.TabPane tab="Pay Slip" key="8">
+                <PaySlip data={record} id={currentUser.uid} />
+              </Tabs.TabPane>
               <Tabs.TabPane tab="Bank Account" key="9">
-                <BankAccount />
+                <BankAccount data={record} />
               </Tabs.TabPane>
             </>
           ) : null}

@@ -9,7 +9,6 @@ import {
   Button,
   Space,
   Card,
-  Select,
 } from "antd";
 import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import "../style/Onboarding.css";
@@ -18,12 +17,10 @@ import {
   checkAlphabets,
   checkNumbervalue,
   checkUpperCase,
-  getCountryCode,
+  getBase64,
 } from "../contexts/CreateContext";
 import CompanyProContext from "../contexts/CompanyProContext";
 import PrefixSelector from "./PrefixSelector";
-
-const { Option } = Select;
 
 function EditOnboarding(props) {
   const [fileName, setFileName] = useState(props.modalData.logo);
@@ -33,12 +30,10 @@ function EditOnboarding(props) {
   const imgRef = useRef(null);
   const [form] = Form.useForm();
   const [modalData, setModalData] = useState(props.modalData);
-  const [codes, setCodes] = useState("");
 
   useEffect(() => {
-    getCountryCode().then((res) => {
-      setCodes(res);
-    });
+    setFileName(props.modalData.logo)
+    setImageUrl(props.modalData.logo)
     setModalData(props.modalData);
   }, []);
 
@@ -48,12 +43,6 @@ function EditOnboarding(props) {
 
   const handleClick = () => {
     imgRef.current.click();
-  };
-
-  const getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
-    reader.readAsDataURL(img);
   };
 
   const handleChange = (event) => {
@@ -67,21 +56,15 @@ function EditOnboarding(props) {
     checkFileSize(fileUploaded.size, fileUploaded);
   };
 
-  function checkFileSize(size, fileName) {
-    if (Math.round(size / 1024) <= 200) {
-      setFileName(fileName);
-      setIsBigFile(false);
-    } else {
-      setFileName(null);
-      setIsBigFile(true);
-    }
-  }
-
   function onReset() {
+    setFileEdited(false)
+    setFileName(props.modalData.logo)
+    setImageUrl(props.modalData.logo)
     props.setIsEditOrganization(false);
     form.resetFields();
     setModalData(props.modalData);
   }
+
   const onFinish = (values) => {
     const valuesToservice = {
       regCompName: values.regCompName,
@@ -97,7 +80,7 @@ function EditOnboarding(props) {
       gst: values.gst,
       domain: values.domain,
       phone: values.phone,
-      prefix: values.prefix,
+      prefix: values.prefix || "",
     };
     CompanyProContext.updateCompInfo(
       values.orgCode,
@@ -118,6 +101,7 @@ function EditOnboarding(props) {
     } else {
       setFileName(null);
       setIsBigFile(true);
+      setFileEdited(false);
     }
   }
 
@@ -125,8 +109,6 @@ function EditOnboarding(props) {
     <Card
       style={{
         background: "#fff",
-        // marginRight: "30px",
-        // height: "55rem",
       }}
     >
       <div style={{ background: "#fff" }}>

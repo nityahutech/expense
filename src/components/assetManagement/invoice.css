@@ -9,10 +9,6 @@
     width: 75%;
     border-radius: 10px;
 }
-.invoiceCard2 {
-    width: 75%;
-    border-radius: 10px;
-}
 
 .invoiceCard1 .ant-card-head-title {
     font-weight: bold;
@@ -31,6 +27,34 @@
     width: 75%;
     border-radius: 10px;
     margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.invoiceTable{
+  border-radius: 10px;
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+
+.invoiceTable .ant-card-head-title {
+  font-weight: bold;
+  line-height: 19px;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+
+.invoiceTable .ant-card-head{
+border-radius: 10px 10px 0px 0px;
+background: #1963A6;
+color: #ffffff;
+}
+
+.invoiceDiv{
+  display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
 .invoiceCard2 .ant-card-head-title {
@@ -44,4 +68,69 @@
   border-radius: 10px 10px 0px 0px;
   background: #1963A6;
   color: #ffffff;
+}
+
+.actionButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding-bottom: 15px; */
+}
+
+.invoiceForm {
+  width: 100%;
+}
+
+.addButton{
+  margin-left: 10px;
+  border-radius: 5px;
+  
+}
+
+.addField{
+  /* margin-left: 10px; */
+  border-radius: 5px;
+  width: 100%;
+}
+.addField.ant-btn.ant-btn-block{
+  background: #1963A6;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+
+.addButton.ant-btn.ant-btn-block{
+  width: 220px;
+  height: 40px;
+  background: #1963A6;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.formButton{
+  display: flex;
+  justify-content: end;
+}
+
+/* -----------------table---- */
+.invoiceTable.ant-table-wrapper {
+  background: #fff;
+  padding: 7px;
+  margin: 6px 6px;
+  border-radius: 5px;
+  
+}
+.invoiceTable table thead tr th,
+.expenseTable table tbody tr td {
+  padding: 5px 10px;
+}
+.invoiceTable .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+.invoiceTable .ant-table-thead{
+  height: 50px;
 }

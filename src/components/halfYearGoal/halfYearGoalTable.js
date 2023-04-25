@@ -1,25 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import {
     // PrinterFilled,
     FileImageOutlined,
     DeleteOutlined,
-    DownloadOutlined
+    DownloadOutlined,
 } from "@ant-design/icons";
-import { Button, Col } from 'antd';
-import { Card, Input, Modal, Row, Table, Tag } from 'antd';
+import { Button, Col } from "antd";
+import { Card, Input, Modal, Row, Table, Tag } from "antd";
 import HalfYearGoalForm from "./halfYearGoalForm";
 import HalfyearGoalPdf from "./halfyearGoalPdf";
 import "./halfYearGoal.css";
-import AppraisalContext from '../../contexts/AppraisalContext';
-import EmpInfoContext from '../../contexts/EmpInfoContext';
+import AppraisalContext from "../../contexts/AppraisalContext";
+import EmpInfoContext from "../../contexts/EmpInfoContext";
 import { createPdfFromHtml } from "./../ProfileDetails/downloadLogicAppraisal";
 
-
-
-
 const HalfYearGoalTable = (props) => {
-    const [secondModal, setSecondModal] = useState(false)
-    const [thirdModal, setThirdModal] = useState(false)
+    console.log('ppddddddddppp', props)
+    const [secondModal, setSecondModal] = useState(false);
+    const [thirdModal, setThirdModal] = useState(false);
     const [editedAppraisal, setEditedAppraisal] = useState(null);
     const [downloadAppraisal, setDownloadAppraisal] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -29,52 +27,59 @@ const HalfYearGoalTable = (props) => {
     const [printContent, setPrintContent] = useState(null);
     const isMgr = JSON.parse(sessionStorage.getItem("isMgr"));
     const isHr = JSON.parse(sessionStorage.getItem("isHr"));
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const columns = [
-
+        {
+            title: "Date",
+            dataIndex: "date",
+            fixed: "left",
+            width: 100,
+            align: "left",
+        },
         {
             title: "Employee Id",
             dataIndex: "empId",
             fixed: "left",
             width: 100,
+            align: "left",
         },
         {
-            title: "First Name",
+            title: "Name",
             dataIndex: "fname",
-            // fixed: "left",
             width: 120,
+            align: "left",
         },
-        {
-            title: "Last Name",
-            dataIndex: "lname",
-            // fixed: "left",
-            width: 120,
-        },
+        // {
+        //     title: "Last Name",
+        //     dataIndex: "lname",
+        //     width: 120,
+        //     align: "left",
+        // },
         {
             title: "Reporting Manager",
             dataIndex: "repManager",
-            // fixed: "left",
             width: 150,
+            align: "left",
         },
         {
             title: "Self Assessment",
             dataIndex: "Selfassessment",
-            // fixed: "left",
             width: 150,
+            align: "left",
             sorter: (a, b) => {
                 return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
             },
             sortDirections: ["ascend", "descend"],
             render: (_, { status }) =>
-
                 status !== "" && (
-                    <Tag style={{ width: '100px' }}
+                    <Tag
+                        // style={{ width: "100px" }}
                         className="statusTag"
-                        color={status != "empPending" ? "green" : status === "empPending" ? 'blue' : "volcano"}
+                        color={status != "empPending" ? "#87d068" : "#f50"}
                         key={status}
                     >
-                        {status === 'empPending' ? 'Pending' : 'Completed'}
+                        {status === "empPending" ? "Pending" : "Completed"}
                     </Tag>
                 ),
         },
@@ -82,8 +87,8 @@ const HalfYearGoalTable = (props) => {
         {
             title: "Manager Assessment",
             dataIndex: "Mangassessment",
-            // fixed: "left",
-            width: 140,
+            width: 150,
+            align: "left",
             ellipsis: true,
             sorter: (a, b) => {
                 return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
@@ -91,140 +96,119 @@ const HalfYearGoalTable = (props) => {
             sortDirections: ["ascend", "descend"],
             render: (_, { status }) =>
                 status !== "" && (
-                    <Tag style={{ width: '100px' }}
+                    <Tag
+                        // style={{ width: "100px" }}
                         className="statusTag"
-                        color={status === "completed" ? "green" : status === "mgrPending" ? 'blue' : "volcano"}
+                        color={
+                            status === "completed"
+                                ? "#87d068"
+                                : // : status === "mgrPending"
+                                //     ? "#2db7f5"
+                                "#f50"
+                        }
                         key={status}
                     >
-                        {status === 'completed' ? 'Completed' : 'Pending'}
+                        {status === "completed" ? "Completed" : "Pending"}
                     </Tag>
                 ),
-
         },
         {
-            title: 'Evaluation Quarter',
+            title: "Haly Yearly",
             dataIndex: "quarter",
-            width: 110,
+            width: 150,
+            align: "left",
             ellipsis: true,
-
         },
         {
             title: "Action",
             dataIndex: "action",
             key: "action",
             fixed: "right",
-            width: 150,
+            width: 110,
+            align: "left",
 
             render: (_, appraisal) => {
-
                 return (
                     <>
-                        {console.log('render', appraisal)}
+                        {/* {console.log("render", appraisal)} */}
+                        {props.roleView === 'emp' ? (
+                            <>
+                                <Button
+                                    type="primary"
+                                    style={{
+                                        color: "grey",
+                                        boxShadow: "0 4px 6px rgb(0 0 0 / 12%)",
+                                    }}
+                                    className="edIt"
+                                    onClick={() => {
+                                        setEditedAppraisal(appraisal);
+                                        setSecondModal(true);
+                                    }}
+                                >
+                                    {" "}
+                                    {<FileImageOutlined style={{ color: "white" }} />}
+                                </Button>
+                                <Button
+                                    type="secondary"
+                                    style={{
+                                        color: "grey",
+                                        boxShadow: "0 4px 6px rgb(0 0 0 / 12%)",
+                                        marginLeft: "10px",
+                                    }}
+                                    className="edIt"
+                                    onClick={() => {
+                                        // setDownloadAppraisal(appraisal);
+                                        // setThirdModal(true)
+                                    }}
+                                >
+                                    {<HalfyearGoalPdf appraisal={appraisal} />}
+                                </Button>
+                            </>
 
-                        {isHr &&
-                            <Button type="primary"
-                                style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', }}
+                        ) : (
+                            <>
+                                <Button
+                                    type="danger"
+                                    style={{
+                                        color: "grey",
+                                        boxShadow: "0 4px 6px rgb(0 0 0 / 12%)",
+                                        marginLeft: "10px",
+                                    }}
+                                    className="edIt"
+                                    onClick={() => {
+                                        // if (record?.status !== 'Approved')
+                                        onDeleteAppraisal(appraisal);
+                                    }}
+                                >
+                                    {<DeleteOutlined style={{ color: "white" }} />}
+                                </Button>
 
-                                className="edIt"
-                                onClick={() => {
-
-                                    setEditedAppraisal(appraisal);
-                                    setSecondModal(true)
-
-                                }}
-                            >
-                                {<FileImageOutlined style={{ color: 'white', }} />}
-
-                            </Button>
-                        }
-
-                        {isHr &&
-                            <Button type='danger'
-                                style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', marginLeft: '10px' }}
-                                // type="link"
-                                className="edIt"
-                                onClick={() => {
-                                    // if (record?.status !== 'Approved')
-                                    onDeleteAppraisal(appraisal);
-                                }}
-
-                            >
-                                {<DeleteOutlined style={{ color: 'white', }}
-
-                                />}
-                            </Button>
-
-                        }
-
-                        {isHr &&
-                            <Button type='secondary'
-                                style={{ color: 'grey', boxShadow: '0 4px 6px rgb(0 0 0 / 12%)', marginLeft: '10px' }}
-                                // type="link"
-                                className="edIt"
-                                onClick={() => {
-
-                                    // setDownloadAppraisal(appraisal);
-                                    // setThirdModal(true)
-
-                                }}
-
-
-                            >
-                                {< HalfyearGoalPdf appraisal={appraisal}
-
-                                />}
-                            </Button>
-
-                        }
-
-
-
-
+                                <Button
+                                    type="secondary"
+                                    style={{
+                                        color: "grey",
+                                        boxShadow: "0 4px 6px rgb(0 0 0 / 12%)",
+                                        marginLeft: "10px",
+                                    }}
+                                    className="edIt"
+                                    onClick={() => {
+                                        // setDownloadAppraisal(appraisal);
+                                        // setThirdModal(true)
+                                    }}
+                                >
+                                    {<HalfyearGoalPdf appraisal={appraisal} />}
+                                </Button>
+                            </>
+                        )}
                     </>
                 );
-
             },
         },
     ];
 
-    // useEffect(() => {
-    //     getAppraisalList()
-    // }, [])
 
-    useEffect(() => {
-        getAppraisalList()
-    }, [props])
-
-    const getAppraisalList = async () => {
-
-        let allData = []
-        let empRecord = await EmpInfoContext.getEduDetails(currentUser.uid)
-        setEmployeeRecord(empRecord)
-        if (props.listType === 'hr') {
-            allData = await AppraisalContext.getAllMidYearAppraisal();
-        }
-        else if (props.listType === 'emp') {
-            allData = await AppraisalContext.getUserMidYearAppraisal(empRecord.empId)
-        }
-        else if (props.listType === 'mgr') {
-            allData = await AppraisalContext.getManagerMidYearAppraisal(empRecord.fname + ' ' + empRecord.lname)
-
-        }
-
-        allData.docs.map((doc) => {
-            let d = allData.docs.map((doc) => {
-
-                return {
-                    ...doc.data(),
-                    id: doc.id,
-                };
-            });
-            console.log('appraisalLIST3', d)
-            setAppraisalList(d)
-        });
-    }
     const onDeleteAppraisal = (appraisal) => {
-        console.log('deleteappraisal', appraisal)
+        console.log("deleteappraisal", appraisal);
         Modal.confirm({
             title: "Are you sure, you want to delete Appraisal?",
             okText: "Yes",
@@ -232,62 +216,88 @@ const HalfYearGoalTable = (props) => {
 
             onOk: () => {
                 AppraisalContext.deleteMidYearAppraisal(appraisal.id)
-                    .then(response => {
+                    .then((response) => {
                         console.log(response);
-                        getAppraisalList()
+                        props.getData()
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.log(error.message);
-
-                    })
+                    });
             },
         });
     };
 
     return (
-        <div className="app-tab" style={{ width: '100%', paddingLeft: '10px', paddingRight: '10px', }}>
-            <Row style={{
-                display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', backgroundColor: 'white',
-                borderRadius: '10px', padding: '10px', marginTop: '10px'
-            }}
+        <div
+            className="app-tab"
+            style={{ width: "100%", paddingLeft: "10px", paddingRight: "10px" }}
+        >
+
+            <Row
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignContent: "flex-start",
+                    backgroundColor: "white",
+                    borderRadius: "10px",
+                    padding: "10px",
+                    marginTop: "10px",
+                }}
             >
-                <Col span={24} style={{
-                    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'flex-start', color: 'black', width: '100rem'
-                }}><h3>{props.title}</h3></Col>
+                
+                <Col
+                    span={24}
+                    style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-evenly",
+                        alignContent: "flex-start",
+                        color: "black",
+                        width: "100rem",
+                    }}
+                >
+                    <h3>{props.title}</h3>
+                </Col>
 
-                <Col xl={24} lg={24} md={24} sm={24} xs={24} style={{
-                    background: 'flex', padding: '10px',
-                }} >
-
+                <Col
+                    xl={24}
+                    lg={24}
+                    md={24}
+                    sm={24}
+                    xs={24}
+                    style={{
+                        background: "flex",
+                        padding: "10px",
+                    }}
+                >
                     <Table
                         loading={loading}
                         columns={columns}
-                        dataSource={appraisalList}
+                        dataSource={props.appraisalList}
                         bordered={false}
-
                         pagination={{
                             position: ["bottomCenter"],
                         }}
                         scroll={{ x: 800 }}
                         className="employeeAppraisalTable"
-                        style={{ marginLeft: '10px', marginRight: '10px' }}
+                        style={{ marginLeft: "10px", marginRight: "10px" }}
                         size="small"
                         onClick={() => {
-                            // if (record?.status !== 'Approved')
                             onDeleteAppraisal();
                         }}
                     />
                 </Col>
             </Row>
 
-            <Modal className='viewAppraisalModal'
+            <Modal
+                className="viewAppraisalModal"
                 footer={null}
                 title="Appraisal Form"
                 // centered
                 open={secondModal}
                 visible={secondModal}
                 onOk={() => setSecondModal(false)}
-                // onCancel={() => setSecondModal(false)}
                 width={800}
                 closeIcon={
                     <div
@@ -300,59 +310,16 @@ const HalfYearGoalTable = (props) => {
                     </div>
                 }
             >
-                <HalfYearGoalForm currentEmployee={employeeRecord} appraisal={editedAppraisal} setSecondModal={setSecondModal} hrMode={props.listType === 'hr'} />
-
+                <HalfYearGoalForm
+                    currentEmployee={employeeRecord}
+                    appraisal={editedAppraisal}
+                    setSecondModal={setSecondModal}
+                    hrMode={props.listType === "hr"}
+                />
             </Modal>
 
-            {/* <Modal className='viewAppraisalModal'
-
-                footer={null}
-                // title={<Button
-                //     className="button"
-                //     style={{
-                //         background: "#1890ff",
-                //         color: "white",
-
-                //     }}
-                //     type="button"
-                //     onClick={() => {
-                //         createPdfFromHtml();
-                //     }}
-                // >
-                //     Download
-                // </Button>}
-                // centered
-                open={thirdModal}
-                visible={thirdModal}
-                onOk={() => setThirdModal(false)}
-                // onCancel={() => setThirdModal(false)}
-                width={200}
-
-                closeIcon={
-                    <div
-                        onClick={() => {
-                            setThirdModal(false);
-                        }}
-                        style={{ color: "" }}
-                    >
-                        X
-                    </div>
-                }
-
-            >
-                <div className="mainBorder A4" id="appraisal">
-                    <div
-
-                    >
-                        <HalfyearGoalPdf appraisal={editedAppraisal} />
-                    </div>
-                </div>
-
-
-            </Modal> */}
-
         </div>
-    )
-}
+    );
+};
 
-export default HalfYearGoalTable
+export default HalfYearGoalTable;

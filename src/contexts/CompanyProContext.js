@@ -13,7 +13,6 @@ import {
 } from "firebase/firestore";
 import { createUser } from "./CreateContext";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import moment from "moment";
 
 const companyProfileCollectionRef = collection(db, "companyprofile");
 
@@ -105,6 +104,10 @@ class CompanyProContext {
       secManager: [],
       lead: [],
     });
+    setDoc(doc(db, `companyprofile/${id}/configurations`, "salary"), {
+      Deduction: [],
+      Earning: [],
+    });
     setDoc(doc(db, `companyprofile/${id}/configurations`, "attendanceConfig"), {
       attendanceNature: {
         endtime: "18:00",
@@ -161,22 +164,22 @@ class CompanyProContext {
   };
 
   createCompInfo = async (id, newInfo, file, accessList) => {
-    if (file) {
-      const storageRef = ref(storage, `/${id}/logo`);
-      uploadBytesResumable(storageRef, file).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then((url) => {
-          newInfo.logo = url;
-          let des = {};
-          accessList.map((user) => {
-            des[`${user.designation}`] = 1;
-          });
-          setDoc(doc(db, "companyprofile", id), newInfo);
-          this.createAdmins(accessList, id);
-          this.createConfig(id, des);
-          return Promise.resolve();
-        });
+    const storageRef = ref(storage, `/${id}/logo`);
+    uploadBytesResumable(storageRef, file).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        newInfo.logo = url;
+        let des = {};
+        let codes = accessList.map((user) => {
+          des[`${user.designation}`] = 1;
+          return user.empId
+        }).sort((a, b) => b.localeCompare(a));
+        newInfo.lastEmpId = codes[0];
+        setDoc(doc(db, "companyprofile", id), newInfo);
+        this.createAdmins(accessList, id);
+        this.createConfig(id, des);
+        return Promise.resolve();
       });
-    }
+    });
   };
 
   deleteCompInfo = (id, updateCompInfo) => {
@@ -247,8 +250,5 @@ class CompanyProContext {
   }
 
 }
-
-// let record = { status: "", reason: "" };
-// CompanyProContext.updateCompInfo("compId001", record);
 
 export default new CompanyProContext();

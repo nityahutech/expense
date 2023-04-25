@@ -29,7 +29,6 @@
 .reprentation {
   width: 110px;
   border-radius: 15px;
-  /* opacity: 0.5; */
   border: none;
 }
 
@@ -106,6 +105,14 @@
 .statusTag {
   font-size: 14px;
   height: 24px;
+}
+
+.div.ant-picker.ant-picker-disabled{
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.ant-picker{
+  background-color: #ffffff;
 }
 
 .ant-picker-cell-disabled {

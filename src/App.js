@@ -17,16 +17,16 @@ import "./App.css";
 import FormatPage from "./FormatPage";
 import MainDashBoard from "./components/MainDashBoard";
 import Settingpage from "./components/Settingpage";
-import { useEffect, useState } from "react";
 import AttendanceLog from "./components/AttendanceLog";
+import InvoiceMagHome from "./components/assetManagement/InvoiceMagHome";
+import TravelMngHome from "./components/TravelManagement/TravelMngHome";
+import FeedbackTable from "./components/Feedback/FeedbackTable";
+import EmailVerification from "./EmailVerification";
+import ConfigSurvey from "./components/Feedback/ConfigSurvey";
+import AddClient from "./components/Client/AddClient";
+import ViewClient from "./components/Client/ViewClient";
 
 function App() {
-  const [roleView, setRoleView] = useState(sessionStorage.getItem("roleView"));
-
-  const switchRole = (role) => {
-    setRoleView(role)
-  }
-  
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -36,7 +36,7 @@ function App() {
             path="/DashBoard"
             element={
               <FormatPage
-                main={<MainDashBoard />}
+                main={MainDashBoard}
                 activeSubMenu={["sub5"]}
                 activeMenu={["30"]}
               />
@@ -46,7 +46,7 @@ function App() {
             path="/Organization/Onboarding"
             element={
               <FormatPage
-                main={<Onboarding />}
+                main={Onboarding}
                 activeSubMenu={["sub5"]}
                 activeMenu={["31"]}
               />
@@ -54,33 +54,21 @@ function App() {
           />
           <Route
             path="/CompanyProfile"
-            element={
-              <FormatPage main={<CompanyProfile />} activeMenu={["32"]} />
-            }
+            element={<FormatPage main={CompanyProfile} activeMenu={["32"]} />}
           />
-          <Route path="/Attendance" element={
-            <FormatPage
-              main={<AttendanceLog roleView={roleView} />}
-              activeMenu={["6"]}
-              roleView={roleView}
-              switchRole={switchRole}
-            />
-          }
+          <Route
+            path="/Attendance"
+            element={<FormatPage main={AttendanceLog} activeMenu={["6"]} />}
           />
-          <Route path="/Leave" element={
-            <FormatPage
-              main={<Leave roleView={roleView} />}
-              activeMenu={["7"]}
-              roleView={roleView}
-              switchRole={switchRole}
-            />
-          }
+          <Route
+            path="/Leave"
+            element={<FormatPage main={Leave} activeMenu={["7"]} />}
           />
           <Route
             path="/Employee/AddEmployee"
             element={
               <FormatPage
-                main={<AddEmployee />}
+                main={AddEmployee}
                 activeSubMenu={["sub2"]}
                 activeMenu={["8"]}
               />
@@ -90,7 +78,7 @@ function App() {
             path="/Employee/EmployeeList"
             element={
               <FormatPage
-                main={<EmployeeList />}
+                main={EmployeeList}
                 activeSubMenu={["sub2"]}
                 activeMenu={["9"]}
               />
@@ -100,9 +88,19 @@ function App() {
             path="/Employee/Payroll"
             element={
               <FormatPage
-                main={<Payslip2 />}
+                main={Payslip2}
                 activeSubMenu={["sub2"]}
                 activeMenu={["25"]}
+              />
+            }
+          />
+          <Route
+            path="/Assets"
+            element={
+              <FormatPage
+                main={AssetMag}
+                activeSubMenu={["sub4"]}
+                activeMenu={["22"]}
               />
             }
           />
@@ -110,7 +108,7 @@ function App() {
             path="/Expense/AddExpense"
             element={
               <FormatPage
-                main={<ExpenseFrm />}
+                main={ExpenseFrm}
                 activeSubMenu={["sub1"]}
                 activeMenu={["2"]}
               />
@@ -120,34 +118,29 @@ function App() {
             path="/Expense/ExpenseList"
             element={
               <FormatPage
-                main={<ExpenseList />}
+                main={ExpenseList}
                 activeSubMenu={["sub1"]}
                 activeMenu={["3"]}
               />
             }
           />
           <Route
-            path="/Profile"
+            path="/Expense/InvoiceReimbursement"
             element={
               <FormatPage
-                main={<Profile />}
-                activeSubMenu={["21"]}
-                activeMenu={["21"]}
+                main={InvoiceMagHome}
+                activeSubMenu={["sub1"]}
+                activeMenu={["23"]}
               />
             }
-          />
-          <Route
-            path="/Settings"
-            element={<FormatPage main={<Settingpage />} activeMenu={["22"]} />}
           />
           <Route
             path="/Appraisal/AppraisalPageHr"
             element={
               <FormatPage
-                main={<AppraisalHr />}
+                main={AppraisalHr}
                 activeSubMenu={["sub4"]}
                 activeMenu={["20"]}
-                switchRole={switchRole}
               />
             }
           />
@@ -155,25 +148,59 @@ function App() {
             path="/Appraisal/HalfYearGoalPage"
             element={
               <FormatPage
-                main={<HalfYearGoalHome />}
+                main={HalfYearGoalHome}
                 activeSubMenu={["sub4"]}
                 activeMenu={["20a"]}
-                switchRole={switchRole}
               />
             }
           />
           <Route
-            path="/Assets"
+            path="/TravelManagement"
+            element={<FormatPage main={TravelMngHome} activeMenu={["24"]} />}
+          />
+          <Route
+            path="/Feedback"
+            element={<FormatPage main={FeedbackTable} activeMenu={["25"]} />}
+          />
+          <Route
+            path="/ConfigSurvey"
+            element={<FormatPage main={ConfigSurvey} activeMenu={["26"]} />}
+          />
+          <Route
+            path="/Profile"
             element={
               <FormatPage
-                main={<AssetMag roleView={roleView} />}
-                activeSubMenu={["sub4"]}
-                activeMenu={["22"]}
-                roleView={roleView}
-                switchRole={switchRole}
+                main={Profile}
+                activeSubMenu={["21"]}
+                activeMenu={["21"]}
               />
             }
           />
+          <Route
+            path="/Client/AddClient"
+            element={
+              <FormatPage
+                main={AddClient}
+                activeSubMenu={["sub30"]}
+                activeMenu={["30a"]}
+              />
+            }
+          />
+          <Route
+            path="/Client/ViewClient"
+            element={
+              <FormatPage
+                main={ViewClient}
+                activeSubMenu={["sub30"]}
+                activeMenu={["30b"]}
+              />
+            }
+          />
+          <Route
+            path="/Settings"
+            element={<FormatPage main={Settingpage} activeMenu={["22"]} />}
+          />
+          <Route path="/VerifyEmail" element={<EmailVerification />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

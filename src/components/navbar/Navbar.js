@@ -1,36 +1,43 @@
 import { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import { Dropdown, Menu, Space, Switch, Badge, Avatar } from "antd";
-import { BellOutlined } from "@ant-design/icons";
+import { BellOutlined, LoadingOutlined, PoweroffOutlined, SettingOutlined } from "@ant-design/icons";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
 import { Link } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
-import settingsIcon from "../../images/abstractuserflat4.png";
-import logoutIcon from "../../images/logoutsvgrepocom.png";
-import Logo from "../../images/logo22 ss.png";
+import Logo from "../../images/logo.svg";
 import dropdown from "../../images/dropdown.png";
 
 const Navbar = (props) => {
   const [startTime, setStartTime] = useState();
+  const [breakTime, setBreakTime] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { logout } = useAuth();
   const [clockinfo, setClockInfo] = useState();
-  const [buttonStatus,setButtonStatus]=useState(false);
+  const [buttonStatus, setButtonStatus] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const role = sessionStorage.getItem("role");
-  const [roleView, setRoleView] = useState(props.roleView || sessionStorage.getItem("role"));
+  const [roleView, setRoleView] = useState(
+    props.roleView || sessionStorage.getItem("role")
+  );
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   let temp = sessionStorage.getItem("logo");
   const logo = temp == null ? Logo : temp;
 
   const isClockRunning = async () => {
+    setLoading(true);
     let res = await AttendanceContext.getStartTime(currentUser.uid);
+    setLoading(false);
     if (res == null || res.clockOut != null) {
       setIsRunning(false);
       return false;
     } else {
+      localStorage.setItem("lastRefresh", moment().format("x"))
+      setButtonText()
       setIsRunning(true);
       let offset = moment().subtract(res.clockIn);
       let offsettime = res.break ? offset.subtract(res.break) : offset;
@@ -38,6 +45,7 @@ const Navbar = (props) => {
         moment().startOf("day"),
         "seconds"
       );
+      setBreakTime(res.break);
       setStartTime(res.clockIn);
       setClockInfo(offsetTime);
       return true;
@@ -58,13 +66,7 @@ const Navbar = (props) => {
               Settings
             </Link>
           ),
-          icon: (
-            <img
-              src={settingsIcon}
-              alt="downArrow"
-              className="avatarimg"
-            />
-          ),
+          icon: <SettingOutlined style={{color: "#000000", fontSize: "15px"}} />,
         },
         {
           key: "2",
@@ -78,18 +80,12 @@ const Navbar = (props) => {
               Logout
             </Link>
           ),
-          icon: (
-            <img
-              src={logoutIcon}
-              alt="downArrow"
-              className="avatarimg"
-            />
-          ),
+          icon: <PoweroffOutlined style={{color: "#000000", fontSize: "15px"}} />
         },
       ]}
     />
   );
-  
+
   const notificationMenu = (
     <Menu
       className="notificationMenuDp"
@@ -99,16 +95,16 @@ const Navbar = (props) => {
           label: (
             <Link
               // to="/Settings"
-              style={{ 
-                color: "#171832", 
+              style={{
+                color: "#171832",
                 fontWeight: "normal",
               }}
-              // rel="noopener noreferrer"
+            // rel="noopener noreferrer"
             >
               Requests
             </Link>
           ),
-          icon: (<></>),
+          icon: <></>,
         },
         {
           key: "2",
@@ -117,12 +113,12 @@ const Navbar = (props) => {
               // to="/"
               // onClick={logout}
               style={{ color: "#171832", fontWeight: "normal" }}
-              // rel="noopener noreferrer"
+            // rel="noopener noreferrer"
             >
               Leaves
             </Link>
           ),
-          icon: (<></>),
+          icon: <></>,
         },
       ]}
     >
@@ -134,6 +130,7 @@ const Navbar = (props) => {
 
   useEffect(() => {
     setIsRunning(isClockRunning());
+    window.addEventListener("click", refreshTimer)
   }, []);
 
   useEffect(() => {
@@ -146,58 +143,70 @@ const Navbar = (props) => {
     return () => {
       clearInterval(timer);
     };
-  }, [isRunning]);
+  }, [isRunning, refresh]);
+
+  const refreshTimer = () => {
+    let last = localStorage.getItem("lastRefresh");
+    const diff = moment.duration(moment().diff(moment(last, "x")));
+    if(diff._milliseconds > 1200000) {
+      setRefresh(!refresh)
+    }
+  }
 
   const buttonStyle = !isRunning
     ? {
-        padding: "1px",
-        background: "#FF002A",
-        color: "white",
-        display: "inline-block",
-        width: "150px",
-        borderRadius: "5px",
-        border: "1px solid white",
-      }
+      padding: "1px",
+      background: "#FF002A",
+      color: "white",
+      display: "inline-block",
+      width: "150px",
+      borderRadius: "5px",
+      border: "1px solid white",
+    }
     : {
-        padding: "1px",
-        background: "#3ab8eb",
-        color: "white",
-        display: "inline-block",
-        width: "150px",
-        borderRadius: "5px",
-        border: "1px solid white",
-      };
+      padding: "1px",
+      background: "#3ab8eb",
+      color: "white",
+      display: "inline-block",
+      width: "150px",
+      borderRadius: "5px",
+      border: "1px solid white",
+    };
+
+  const loadStyle = {
+    padding: "1px",
+    background: "lightgray",
+    color: "white",
+    display: "inline-block",
+    width: "150px",
+    borderRadius: "5px",
+    border: "1px solid white",
+  };
 
   const [buttonText, setButtonText] = useState(
     !isRunning ? "Web Clock In" : ""
   );
-  let clockTime = isRunning ? clockinfo : "";
 
   const onMouseEnter = (event) => {
-    
     event.target.style.background = "#DB0000";
     setButtonStatus(false);
-    if (isRunning) {
-      setButtonText(" ");
-    }
-    if(buttonStatus){
-      setButtonText("Web clock out");
+    if (buttonStatus) {
+      setButtonText("Web Clock Out");
     }
   };
 
   const onMouseLeave = (event) => {
-    
     if (isRunning) {
       event.target.style.background = "skyblue";
-      setButtonText(" ");
+      setButtonText();
       setButtonStatus(true);
     } else {
       event.target.style.background = "#FF002A";
-      setButtonText("Web Clock in");
     }
   };
-  
+
   const setClockState = async () => {
+    setLoading(true);
     let clickedDate = {
       empId: currentUser.uid,
       name: currentUser.displayName,
@@ -207,23 +216,33 @@ const Navbar = (props) => {
     };
     await AttendanceContext.addClockData(clickedDate);
     setIsRunning(true);
+    setLoading(false);
+    props.switchRefresh(true);
   };
 
   const stopClockState = async () => {
+    setLoading(true);
+    let offset = moment().subtract(startTime);
+    let offsettime = breakTime != null ? offset.subtract(breakTime) : offset;
+    const offsetTime = moment(offsettime, "HH:mm:ss").diff(
+      moment().startOf("day"),
+      "seconds"
+    );
     let clickedDate = {
       clockOut: moment().format("HH:mm:ss"),
-      duration: moment.utc(clockTime * 1000).format("HH:mm:ss"),
+      duration: moment.utc(offsetTime * 1000).format("HH:mm:ss"),
+      // duration: moment.utc(clockTime * 1000).format("HH:mm:ss"),
     };
     await AttendanceContext.updateClockData(currentUser.uid, clickedDate);
     setIsRunning(false);
     setClockInfo(0);
     setStartTime("");
     setButtonText("Web Clock In ");
+    setLoading(false);
+    props.switchRefresh(true);
   };
 
   const handleClock = () => {
-    
-    
     if (isRunning) {
       stopClockState();
     } else {
@@ -232,50 +251,56 @@ const Navbar = (props) => {
   };
 
   return (
-    <div className="navbar" style={{ background: "white" }}>
-      <div className="wrapper"> 
+    <div className="navbar" style={{ minHeight: "50px", background: "white" }}>
+      <div className="wrapper">
         {role == "admin" ? (
-          <Switch 
+          <Switch
             checkedChildren="Admin"
             unCheckedChildren="User"
-            defaultChecked = {roleView == "admin"}
+            defaultChecked={roleView == "admin"}
             style={{
               marginRight: "10px",
               fontWeight: "bold",
-              width:"90px"
+              width: "90px",
             }}
-            onChange={()=>{
-              setRoleView(roleView == "admin" ? "emp" : "admin")
-              props.switchRole(roleView == "admin" ? "emp" : "admin")
-              sessionStorage.setItem("roleView", roleView == "admin" ? "emp" : "admin")}
-            }
+            onChange={() => {
+              setRoleView(roleView == "admin" ? "emp" : "admin");
+              props.switchRole(roleView == "admin" ? "emp" : "admin");
+              sessionStorage.setItem(
+                "roleView",
+                roleView == "admin" ? "emp" : "admin"
+              );
+            }}
           />
         ) : null}
-       {roleView == "emp" ? (
-          <button
-            style={buttonStyle}
-            onClick={handleClock}
-            onMouseLeave={onMouseLeave}
-            onMouseEnter={onMouseEnter}
-            className="clockButton"
-          >
-            {buttonText ? buttonText : ""} {!buttonStatus ? <br/> : null}
-            {clockinfo && isRunning
-              ? moment.utc(clockTime * 1000).format("HH:mm:ss")
-              : ""}
-          </button>
+        {roleView == "emp" ? (
+          loading ? (
+            <button style={loadStyle}>
+              <LoadingOutlined />
+              {"  Loading"}
+            </button>
+          ) : (
+            <button
+              style={buttonStyle}
+              onClick={handleClock}
+              onMouseLeave={onMouseLeave}
+              onMouseEnter={onMouseEnter}
+              className="clockButton"
+            >
+              {buttonText ? buttonText : null} {!clockinfo && !buttonStatus ? <br /> : null}
+              {clockinfo && isRunning
+                ? moment.utc(clockinfo * 1000).format("HH:mm:ss")
+                : ""}
+            </button>
+          )
         ) : null}
-        {/* <Dropdown overlay={notificationMenu} className="notificationBell">
-          <Badge count={5} offset={[-10,5]} size="small">
-            <Avatar size={40} icon={<BellOutlined className="notificationBell"/>} className="notificationAvatar" />
+        <Dropdown overlay={notificationMenu} className="notificationBell">
+          <Badge count={5} offset={[-10, 5]} size="small">
+            <Avatar size={40} icon={<BellOutlined className="notificationBell" />} className="notificationAvatar" />
           </Badge>
-        </Dropdown> */}
+        </Dropdown>
         <div>
-          <img
-            src={logo}
-            alt={"logo not found"}
-            className="profileLogo"
-          />
+          <img src={logo} alt={"logo not found"} className="profileLogo" />
         </div>
         <Dropdown overlay={menu}>
           <Space>

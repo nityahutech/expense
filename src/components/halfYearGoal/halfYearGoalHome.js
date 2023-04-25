@@ -1,99 +1,111 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Col } from 'antd';
-import { Input, Modal, Row, DatePicker, } from 'antd';
+import React, { useState, useEffect } from "react";
+import { Tabs, Col, Input } from "antd";
 import "./halfYearGoal.css";
 import CreatehalfYearGoal from "./createhalfYearGoal";
-// import EmpInfoContext from '../../contexts/EmpInfoContext';
-import HalfYearGoalTable from './halfYearGoalTable';
+import HalfYearGoalTable from "./halfYearGoalTable";
+import ConfigureContext from "../../contexts/ConfigureContext";
+import AppraisalContext from "../../contexts/AppraisalContext";
+import EmpInfoContext from "../../contexts/EmpInfoContext";
 
-const HalfYearGoalHome = () => {
+const HalfYearGoalHome = (props) => {
+    console.log("pppppppppp", props);
+    const page = "appraisalPage";
+    const isHr = props.roleView == "admin";
+    console.log(props, isHr);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // const [employeeRecord, setEmployeeRecord] = useState();
     const isMgr = JSON.parse(sessionStorage.getItem("isMgr"));
-    const isLead = JSON.parse(sessionStorage.getItem("isLead"));
-    const isHr = JSON.parse(sessionStorage.getItem("isHr"));
+    const [employeeRecord, setEmployeeRecord] = useState();
+    const currentUser = JSON.parse(sessionStorage.getItem("user"));
+    const [appraisalList, setAppraisalList] = useState([]);
 
-    const showModal = () => {
-        console.log('hi')
-        setIsModalOpen(true);
+    useEffect(() => {
+        getConfigurations();
+    }, [props.roleView]);
+
+    const getConfigurations = async () => {
+        let data = await ConfigureContext.getConfigurations(page);
+        console.log(data, "datass");
+    };
+    console.log("props.roleView::: ", props.roleView);
+
+    useEffect(() => {
+        getAppraisalList();
+    }, [props.roleView]);
+
+    const getAppraisalList = async () => {
+        let allData = [];
+        let empRecord = await EmpInfoContext.getEduDetails(currentUser.uid);
+
+        setEmployeeRecord(empRecord);
+        if (props.roleView === "admin") {
+            allData = await AppraisalContext.getAllMidYearAppraisal();
+        } else if (props.roleView === "emp") {
+            allData = await AppraisalContext.getUserMidYearAppraisal(empRecord.empId);
+        } else if (props.roleView === "mgr") {
+            allData = await AppraisalContext.getManagerMidYearAppraisal(
+                empRecord.fname + " " + empRecord.lname
+            );
+        }
+
+        allData.docs.map((doc) => {
+            let d = allData.docs.map((doc) => {
+                return {
+                    ...doc.data(),
+                    id: doc.id,
+                };
+            });
+            console.log("appraisalLIST3", d);
+            setAppraisalList(d);
+        });
     };
 
-    const closeCreateAppraisalModal = () => {
-        console.log('hiii')
-        setIsModalOpen(!isModalOpen);
-    };
-
-    // useEffect(() => {
-    //     getEmployeeRecord()
-
-    // }, [])
-
-    // const getEmployeeRecord = async () => {
-    //     EmpInfoContext.getEduDetails(currentUser.uid)
-    //         .then(response => {
-    //             console.log('empRecorddd', response)
-    //             setEmployeeRecord(response)
-    //         })
-    // }
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            // width: '100%',
-            borderRadius: '10px'
+        <>
+            <Tabs className="appraisal-tab" defaultActiveKey="1">
+                <>
+                    {props.roleView === "admin" ? (
+                        <Tabs.TabPane tab="Create Appraisal" key="1">
+                            <>
 
-        }}>
-
-            { isHr &&
-                <div className="app-tab" style={{ width: '100%', marginleft: '10px' }}>
-                    <Row className="employeeRow" style={{ marginLeft: '10px', marginRight: '10px', flexDirection: 'row', display: 'flex', justifyContent: 'space-between', }}>
-                        <Col>
-                            <Input
-                                placeholder="Search"
+                                <CreatehalfYearGoal
+                                    getData={getAppraisalList}
+                                    appraisalList={appraisalList}
+                                />
+                                <HalfYearGoalTable
+                                    reload={!isModalOpen}
+                                    roleView={props.roleView}
+                                    listType="hr"
+                                    title="Appraisal Created by Hr"
+                                    appraisalList={appraisalList}
+                                    getData={getAppraisalList}
+                                />
+                            </>
+                        </Tabs.TabPane>
+                    ) : (
+                        <Tabs.TabPane tab="My Appraisal" key="2">
+                            <HalfYearGoalTable
+                                roleView={props.roleView}
+                                listType="emp"
+                                title="My Apparisal"
+                                appraisalList={appraisalList}
                             />
+                        </Tabs.TabPane>
+                    )}
+                    {isMgr && props.roleView === "emp" ? (
+                        <Tabs.TabPane tab="Team Approval (Manager)" key="4">
+                            <HalfYearGoalTable
+                                listType="mgr"
+                                roleView={props.roleView}
+                                title="Appraisal Pending For Review (Manager)"
+                                appraisalList={appraisalList}
+                            />
+                        </Tabs.TabPane>
+                    ) : null}
+                </>
+            </Tabs>
+        </>
+    );
+};
 
-                        </Col>
-                        <Button type="primary" onClick={showModal}>Create Appraisal</Button>
-
-                    </Row>
-                </div>
-            }
-
-            {
-                isHr && <HalfYearGoalTable reload={!isModalOpen} listType='hr' title='Appraisal Created by Hr' />
-
-            }
-            <Modal className='viewModal'
-                maskClosable={false}
-                // centered 
-                title="Employee List"
-                footer={null}
-                visible={isModalOpen}
-                open={isModalOpen}
-                onCancel={closeCreateAppraisalModal}
-                width={800}
-                closeIcon={
-                    <div
-                        onClick={() => {
-                            closeCreateAppraisalModal(false);
-                        }}
-                        style={{ color: "#ffffff" }}
-                    >
-                        X
-                    </div>
-                }
-            >
-                <CreatehalfYearGoal closeCreateAppraisalModal={closeCreateAppraisalModal} />
-            </Modal>
-
-            <HalfYearGoalTable listType='emp' title='My Apparisal' />
-            {isLead && <HalfYearGoalTable listType='lead' title='Appraisal Pending For Review (Lead)' />}
-            {isMgr && <HalfYearGoalTable listType='mgr' title='Appraisal Pending For Review (Manager)' />}
-
-        </div >
-    )
-}
-
-export default HalfYearGoalHome
+export default HalfYearGoalHome;

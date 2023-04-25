@@ -68,7 +68,28 @@ class LeaveContext {
         const q = query(leaveCollectionRef, where("approver", "==", name));
         return getDocs(q);
     };
-    updateLeaves = (id, updateLeave) => {
+    updateLeaves = async (id, updateLeave) => {
+        let email = await this.getEmailApproverList(updateLeave.approver)
+        email.forEach((id) => {
+            let mailOptions = {
+                from: 'hutechhr@gmail.com',
+                to: `${id}`,
+                subject: `Leave Request for ${updateLeave.name}`,
+                html: `<p>Hello,</p><br /><p>Leave Request for ${updateLeave.name}</p>
+            <br />
+            <ul>
+            <li>Date(s): ${updateLeave.date.join(", ")}</li>
+            <li>Type: ${updateLeave.nature}</li>
+            <li>Slot: ${updateLeave.slot}</li>
+            <li>Reason: ${updateLeave.reason}</li>
+            </ul>
+            <br />
+            <p>Please approve leave request through HR portal.</p>
+            <br />
+            <p>Hutech HR</p>`,
+            }
+            sendEmail(mailOptions)
+        })
         const leaveDoc = doc(db, `companyprofile/${compId}/leave`, id);
         return updateDoc(leaveDoc, updateLeave);
     };
@@ -124,6 +145,18 @@ class LeaveContext {
         return req[0].mailid;
     }
 
+    getPending = async () => {
+      const q = query(leaveCollectionRef, where("status", "==", "Pending"));
+      const data = await getDocs(q);
+      let rec = data.docs.map((doc) => {
+        return {
+          ...doc.data(),
+          id: doc.id,
+        };
+      });
+      return rec;
+    };
+
     getEmailApproverList = async (manager) => {
         let name = manager.split(" ");
         const q = query(usersCollectionRef, where("lname", "==", name[name.length - 1]), where("fname", "==", name[0]));
@@ -134,7 +167,7 @@ class LeaveContext {
                 id: doc.id
             };
         });
-        const q1 = query(usersCollectionRef, where("role", "==", "hr"));
+        const q1 = query(usersCollectionRef, where("role", "==", "admin"));
         let hrData = await getDocs(q1);
         let hr = hrData.docs.map((doc) => {
             return doc.data().mailid;

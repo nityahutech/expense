@@ -134,3 +134,69 @@
   font-weight: 600;
   font-size: 14px;
 }
+
+.Absent{
+  color: red;
+}
+
+.regularize .ant-modal-header{
+  background: #1963a6;
+}
+
+.approveCard .ant-card-head{
+  background:#1963a6 ;
+}
+
+.approveCard .ant-card-head-title{
+  font-weight: bold;
+    line-height: 19px;
+    text-transform: uppercase;
+    font-size: 17px;
+    color: #ffffff;
+}
+
+.approveTable .ant-table-thead > tr > th{
+  background:#1963a6;
+  color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.regularize .ant-modal-close-x{
+  color: #ffffff;
+} 
+
+.regularize .ant-modal-title{
+  color:#ffffff;
+  font-size: 19px;
+}
+
+.regularize .ant-modal-footer .ant-btn + .ant-btn:not(.ant-dropdown-trigger){
+  background: #1963a6;
+  border: 1px solid #1963a6;
+}
+
+.approvalText{
+  color: #000000;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.badge .ant-badge-status-warning{
+  width: 8px;
+  height: 8px;
+}
+
+.reject .ant-badge-status-warning{
+  width: 8px;
+  height: 8px;
+  background-color: red;
+}
+
+.approve .ant-badge-status-success{
+  width: 8px;
+  height: 8px;
+}
+

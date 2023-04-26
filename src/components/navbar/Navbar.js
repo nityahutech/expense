@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import { Dropdown, Menu, Space, Switch, Badge, Avatar } from "antd";
-import { BellOutlined, LoadingOutlined, PoweroffOutlined, SettingOutlined } from "@ant-design/icons";
+import {
+  BellOutlined,
+  LoadingOutlined,
+  PoweroffOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
 import { Link } from "react-router-dom";
@@ -37,8 +42,8 @@ const Navbar = (props) => {
       setIsRunning(false);
       return false;
     } else {
-      localStorage.setItem("lastRefresh", moment().format("x"))
-      setButtonText()
+      localStorage.setItem("lastRefresh", moment().format("x"));
+      setButtonText();
       setIsRunning(true);
       let offset = moment().subtract(res.clockIn);
       let offsettime = res.break ? offset.subtract(res.break) : offset;
@@ -67,7 +72,9 @@ const Navbar = (props) => {
               Settings
             </Link>
           ),
-          icon: <SettingOutlined style={{color: "#000000", fontSize: "15px"}} />,
+          icon: (
+            <SettingOutlined style={{ color: "#000000", fontSize: "15px" }} />
+          ),
         },
         {
           key: "2",
@@ -81,7 +88,9 @@ const Navbar = (props) => {
               Logout
             </Link>
           ),
-          icon: <PoweroffOutlined style={{color: "#000000", fontSize: "15px"}} />
+          icon: (
+            <PoweroffOutlined style={{ color: "#000000", fontSize: "15px" }} />
+          ),
         },
       ]}
     />
@@ -100,7 +109,7 @@ const Navbar = (props) => {
                 color: "#171832",
                 fontWeight: "normal",
               }}
-            // rel="noopener noreferrer"
+              // rel="noopener noreferrer"
             >
               Requests
             </Link>
@@ -114,7 +123,7 @@ const Navbar = (props) => {
               // to="/"
               // onClick={logout}
               style={{ color: "#171832", fontWeight: "normal" }}
-            // rel="noopener noreferrer"
+              // rel="noopener noreferrer"
             >
               Leaves
             </Link>
@@ -131,7 +140,7 @@ const Navbar = (props) => {
 
   useEffect(() => {
     setIsRunning(isClockRunning());
-    window.addEventListener("click", refreshTimer)
+    window.addEventListener("click", refreshTimer);
   }, []);
 
   useEffect(() => {
@@ -149,30 +158,30 @@ const Navbar = (props) => {
   const refreshTimer = () => {
     let last = localStorage.getItem("lastRefresh");
     const diff = moment.duration(moment().diff(moment(last, "x")));
-    if(diff._milliseconds > 1200000) {
-      setRefresh(!refresh)
+    if (diff._milliseconds > 1200000) {
+      setRefresh(!refresh);
     }
-  }
+  };
 
   const buttonStyle = !isRunning
     ? {
-      padding: "1px",
-      background: "#FF002A",
-      color: "white",
-      display: "inline-block",
-      width: "150px",
-      borderRadius: "5px",
-      border: "1px solid white",
-    }
+        padding: "1px",
+        background: "#FF002A",
+        color: "white",
+        display: "inline-block",
+        width: "150px",
+        borderRadius: "5px",
+        border: "1px solid white",
+      }
     : {
-      padding: "1px",
-      background: "#3ab8eb",
-      color: "white",
-      display: "inline-block",
-      width: "150px",
-      borderRadius: "5px",
-      border: "1px solid white",
-    };
+        padding: "1px",
+        background: "#3ab8eb",
+        color: "white",
+        display: "inline-block",
+        width: "150px",
+        borderRadius: "5px",
+        border: "1px solid white",
+      };
 
   const loadStyle = {
     padding: "1px",
@@ -288,7 +297,8 @@ const Navbar = (props) => {
               onMouseEnter={onMouseEnter}
               className="clockButton"
             >
-              {buttonText ? buttonText : null} {!clockinfo && !buttonStatus ? <br /> : null}
+              {buttonText ? buttonText : null}{" "}
+              {!clockinfo && !buttonStatus ? <br /> : null}
               {clockinfo && isRunning
                 ? moment.utc(clockinfo * 1000).format("HH:mm:ss")
                 : ""}
@@ -309,7 +319,11 @@ const Navbar = (props) => {
               </div>
             } className="notificationBell" arrow={{ pointAtCenter: true }}>
           <Badge count={props.total} offset={[-10, 5]} size="small">
-            <Avatar size={40} icon={<BellOutlined className="notificationBell" />} className="notificationAvatar" />
+            <Avatar
+              size={40}
+              icon={<BellOutlined className="notificationBell" />}
+              className="notificationAvatar"
+            />
           </Badge>
         </Dropdown>
         <div>

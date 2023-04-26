@@ -26,6 +26,10 @@ import ConfigSurvey from "./components/Feedback/ConfigSurvey";
 import Communication from "./components/Feedback/Communication";
 import Technical from "./components/Feedback/Technical";
 import AddSurvey from "./components/Feedback/AddSurvey";
+import FeedbackAdmin from "./components/Feedback/FeedbackAdmin";
+import EmployeeSurvey from "./components/Feedback/EmployeeSurvey";
+import AddClient from "./components/Client/AddClient";
+import ViewClient from "./components/Client/ViewClient";
 import DailyLog from "./components/Attendance/DailyLog";
 import AdminAttendance from "./components/Attendance/AdminAttendance";
 import MonthlyLog from "./components/Attendance/MonthlyLog";
@@ -208,8 +212,12 @@ function App() {
           />
           <Route
             path="/Feedback"
+            element={<FormatPage main={FeedbackAdmin} activeMenu={["30"]} />}
+          ></Route>
+          {/* <Route
+            path="/FeedbackTable"
             element={<FormatPage main={FeedbackTable} activeMenu={["25"]} />}
-          />
+          /> */}
           <Route
             path="/ConfigSurvey"
             element={<FormatPage main={ConfigSurvey} activeMenu={["26"]} />}
@@ -237,10 +245,31 @@ function App() {
             }
           />
           <Route
+            path="/Client/AddClient"
+            element={
+              <FormatPage
+                main={AddClient}
+                activeSubMenu={["sub30"]}
+                activeMenu={["30a"]}
+              />
+            }
+          />
+          <Route
+            path="/Client/ViewClient"
+            element={
+              <FormatPage
+                main={ViewClient}
+                activeSubMenu={["sub30"]}
+                activeMenu={["30b"]}
+              />
+            }
+          />
+          <Route
             path="/Settings"
             element={<FormatPage main={Settingpage} activeMenu={["22"]} />}
           />
           <Route path="/VerifyEmail" element={<EmailVerification />} />
+          <Route path="/EmployeeSurvey" element={<EmployeeSurvey />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

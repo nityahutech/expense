@@ -190,6 +190,26 @@ function App() {
             }
           />
           <Route
+            path="/Client/AddClient"
+            element={
+              <FormatPage
+                main={AddClient}
+                activeSubMenu={["sub30"]}
+                activeMenu={["30a"]}
+              />
+            }
+          />
+          <Route
+            path="/Client/ViewClient"
+            element={
+              <FormatPage
+                main={ViewClient}
+                activeSubMenu={["sub30"]}
+                activeMenu={["30b"]}
+              />
+            }
+          />
+          <Route
             path="/Settings"
             element={<FormatPage main={Settingpage} activeMenu={["22"]} />}
           />

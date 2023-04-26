@@ -45,6 +45,8 @@ function Editclient(props) {
         form.resetFields()
     }
 
+    
+
     useEffect(() => {
         form.setFieldsValue({
             clientName: props?.record?.regCompName,

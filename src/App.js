@@ -26,6 +26,8 @@ import ConfigSurvey from "./components/Feedback/ConfigSurvey";
 import Communication from "./components/Feedback/Communication";
 import Technical from "./components/Feedback/Technical";
 import AddSurvey from "./components/Feedback/AddSurvey";
+import AddClient from "./components/Client/AddClient";
+import ViewClient from "./components/Client/ViewClient";
 
 function App() {
   return (

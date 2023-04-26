@@ -82,66 +82,36 @@ function FeedbackTable(props) {
 
   return (
     <>
-      {role ? (
-        <Card
-          className="feedBackCard"
-          style={{
-            margin: "30px",
-            background: "#FFFFFF",
-            border: "1px solid #C0C0C0",
-            borderRadius: "5px",
-            height: "902px",
-          }}
-        >
-          <h5
-            style={{
-              fontStyle: "normal",
-              fontWeight: "500",
-              fontSize: "32px",
-              lineHeight: "32px",
-              color: "#707070",
-              margin: "30px",
+      <Row>
+        <Col xs={24} xm={24} md={17}>
+          <Input
+            key="empSearch"
+            className="empSearch"
+            style={{ marginLeft: "10px" }}
+            placeholder="Search for Employee"
+            suffix={<SearchOutlined />}
+            //   onChange={searchData}
+          />
+        </Col>
+        <Col xs={24} xm={24} md={3}>
+          <Button className="previewSur">Preview Servey</Button>
+        </Col>
+        <Col xs={24} xm={24} md={3}>
+          <Button
+            className="configSur"
+            onClick={() => {
+              navigate("/ConfigSurvey");
             }}
           >
-            Feedback
-          </h5>
-          <Divider style={{ border: "0.5px inset rgb(240 232 232)" }} />
-          <div style={{ margin: "30px" }}>
-            <Row>
-              <Col xs={24} xm={24} md={17}>
-                <Input
-                  key="empSearch"
-                  className="empSearch"
-                  style={{ marginLeft: "10px" }}
-                  placeholder="Search for Employee"
-                  suffix={<SearchOutlined />}
-                  //   onChange={searchData}
-                />
-              </Col>
-              <Col xs={24} xm={24} md={3}>
-                <Button className="previewSur">Preview Servey</Button>
-              </Col>
-              <Col xs={24} xm={24} md={3}>
-                <Button
-                  className="configSur"
-                  onClick={() => {
-                    navigate("/ConfigSurvey");
-                  }}
-                >
-                  Configuration Survey
-                </Button>
-              </Col>
-            </Row>
-            <Table
-              className="feebBackTable"
-              columns={columns}
-              dataSource={FeedbackTable}
-            />
-          </div>
-        </Card>
-      ) : (
-        <EmpFeedback />
-      )}
+            Configuration Survey
+          </Button>
+        </Col>
+      </Row>
+      <Table
+        className="feebBackTable"
+        columns={columns}
+        dataSource={FeedbackTable}
+      />
     </>
   );
 }

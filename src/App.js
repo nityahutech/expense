@@ -26,6 +26,11 @@ import ConfigSurvey from "./components/Feedback/ConfigSurvey";
 import Communication from "./components/Feedback/Communication";
 import Technical from "./components/Feedback/Technical";
 import AddSurvey from "./components/Feedback/AddSurvey";
+import DailyLog from "./components/Attendance/DailyLog";
+import AdminAttendance from "./components/Attendance/AdminAttendance";
+import MonthlyLog from "./components/Attendance/MonthlyLog";
+import RegularizeAttendance from "./components/Attendance/RegularizeAttendance";
+import ConfigureAttendance from "./components/Attendance/ConfigureAttendance";
 
 function App() {
   return (
@@ -34,7 +39,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route
-            path="/DashBoard"
+            path="/dashboard"
             element={
               <FormatPage
                 main={MainDashBoard}
@@ -54,19 +59,61 @@ function App() {
             }
           />
           <Route
-            path="/CompanyProfile"
+            path="/company-profile"
             element={<FormatPage main={CompanyProfile} activeMenu={["32"]} />}
           />
           <Route
-            path="/Attendance"
+            path="/attendance"
+            element={<FormatPage main={AdminAttendance} activeMenu={["6"]} />}
+          >
+            <Route
+              path="daily-log"
+              element={<DailyLog />}
+            />
+            <Route
+              path="daily-log/:id"
+              element={<MonthlyLog />}
+            />
+            <Route
+              path="configurations"
+              element={<ConfigureAttendance />}
+            />
+            <Route
+              path="regularize"
+              element={<RegularizeAttendance />}
+            />
+          </Route>
+          <Route
+            path="/my-attendance"
             element={<FormatPage main={AttendanceLog} activeMenu={["6"]} />}
           />
           <Route
-            path="/Leave"
+            path="/leave"
             element={<FormatPage main={Leave} activeMenu={["7"]} />}
           />
           <Route
-            path="/Employee/AddEmployee"
+            path="/hr-leave"
+            element={<FormatPage main={Leave} activeMenu={["7"]} />}
+          >
+            <Route
+              path="requests"
+              element={<></>}
+            />
+            <Route
+              path="holidays"
+              element={<></>}
+            />
+            <Route
+              path="type"
+              element={<></>}
+            />
+            <Route
+              path="approval"
+              element={<></>}
+            />
+          </Route>
+          <Route
+            path="/employees/AddEmployee"
             element={
               <FormatPage
                 main={AddEmployee}

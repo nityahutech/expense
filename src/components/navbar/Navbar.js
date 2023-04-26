@@ -10,6 +10,7 @@ import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
 import Logo from "../../images/logo.svg";
 import dropdown from "../../images/dropdown.png";
+import Notifications from "../Notifications";
 
 const Navbar = (props) => {
   const [startTime, setStartTime] = useState();
@@ -294,15 +295,27 @@ const Navbar = (props) => {
             </button>
           )
         ) : null}
-        <Dropdown overlay={notificationMenu} className="notificationBell">
-          <Badge count={5} offset={[-10, 5]} size="small">
+        <Dropdown overlay={
+              <div 
+                style={{
+                  border: "1px solid #d3d3d3b3",
+                  boxShadow: "5px", 
+                  backgroundColor: "#F8F8F8",
+                  padding:"10px",
+                  height:"auto"
+                }}
+              >
+                <Notifications notifications={props.notifications} height={"400px"} />
+              </div>
+            } className="notificationBell" arrow={{ pointAtCenter: true }}>
+          <Badge count={props.total} offset={[-10, 5]} size="small">
             <Avatar size={40} icon={<BellOutlined className="notificationBell" />} className="notificationAvatar" />
           </Badge>
         </Dropdown>
         <div>
           <img src={logo} alt={"logo not found"} className="profileLogo" />
         </div>
-        <Dropdown overlay={menu}>
+        <Dropdown overlay={menu} arrow={{ pointAtCenter: true }}>
           <Space>
             <img
               src={dropdown}

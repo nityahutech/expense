@@ -21,9 +21,11 @@ import {
 } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import "../Feedback/FeedBack.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Communication() {
+  const location = useLocation();
+  console.log(location.pathname);
   const headingSkills = "Communication Skills";
   const [editSkills, setEditSkills] = useState(false);
   const [addQuestions, setAddQuestions] = useState([]);
@@ -364,7 +366,10 @@ function Communication() {
 
         {editSkills ? (
           <Space className="submitCancel">
-            <Button onClick={() => setEditSkills(false)}>
+            <Button
+              onClick={() => setEditSkills(false)}
+              style={{ height: "36px", borderRadius: "5px" }}
+            >
               <CloseOutlined />
               Cancel
             </Button>

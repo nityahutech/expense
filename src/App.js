@@ -26,6 +26,8 @@ import ConfigSurvey from "./components/Feedback/ConfigSurvey";
 import Communication from "./components/Feedback/Communication";
 import Technical from "./components/Feedback/Technical";
 import AddSurvey from "./components/Feedback/AddSurvey";
+import FeedbackAdmin from "./components/Feedback/FeedbackAdmin";
+import EmployeeSurvey from "./components/Feedback/EmployeeSurvey";
 import AddClient from "./components/Client/AddClient";
 import ViewClient from "./components/Client/ViewClient";
 
@@ -163,8 +165,12 @@ function App() {
           />
           <Route
             path="/Feedback"
+            element={<FormatPage main={FeedbackAdmin} activeMenu={["30"]} />}
+          ></Route>
+          {/* <Route
+            path="/FeedbackTable"
             element={<FormatPage main={FeedbackTable} activeMenu={["25"]} />}
-          />
+          /> */}
           <Route
             path="/ConfigSurvey"
             element={<FormatPage main={ConfigSurvey} activeMenu={["26"]} />}
@@ -216,6 +222,7 @@ function App() {
             element={<FormatPage main={Settingpage} activeMenu={["22"]} />}
           />
           <Route path="/VerifyEmail" element={<EmailVerification />} />
+          <Route path="/EmployeeSurvey" element={<EmployeeSurvey />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -31,6 +31,7 @@
   justify-content: flex-end;
   flex: 1 1 auto;
   flex-grow: 1;
+  min-height: 100vh;
 }
 .tables {
   width: 100%;

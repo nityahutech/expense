@@ -62,10 +62,11 @@ function NotifySettings() {
   const [imageData, setImageData] = useState(null);
   const [templatePreview, setTempalatePreview] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [showMessageContent, setShowMessageContent] = useState(true);
+  const [showMessageContent, setShowMessageContent] = useState(false);
   const [isDisablePreview, setIsDisablePreview] = useState(true);
   const [editorMessage, setEditorMessage] = useState(true);
-  const [dob, setDob] = useState([]);
+  
+
   const templates = [
     { id: 1, name: "", image: Landscape },
     { id: 2, name: "", image: Portrait },
@@ -248,6 +249,13 @@ function NotifySettings() {
       return ex.value.toLowerCase().includes(searchText.toLowerCase());
     });
     setOptionsEmployee(!searchText ? [] : matchingName);
+    if (searchText) {
+      setShowMessageContent(true)
+    }
+    else {
+      setShowMessageContent(false)
+    }
+
   };
 
   const onSelect = (data) => {
@@ -288,29 +296,30 @@ function NotifySettings() {
     setAllEmpName(allUsers);
   }
 
-  async function getAllData() {
-    const allData = await getUsers();
+  // async function getAllData() {
+  //   const allData = await getUsers();
 
-    console.log(allData);
+  //   console.log(allData);
 
-    let d = allData.docs.map((doc, i) => {
-      return {
-        name: doc.data().name,
-        dob: doc.data().dob,
-        doj: doc.data().doj,
-        profilePic: doc.data().profilePic,
-        id: doc.id,
-        sn: i + 1,
-        // age: age
-      };
-    });
-    console.log(d);
-    setDob(d);
-  }
+  //   let d = allData.docs.map((doc, i) => {
+  //     return {
+  //       name: doc.data().name,
+  //       dob: doc.data().dob,
+  //       doj: doc.data().doj,
+  //       profilePic: doc.data().profilePic,
+  //       id: doc.id,
+  //       sn: i + 1,
+  //       // age: age
+  //     };
+  //   });
+  //   console.log(d);
+  //   setDob(d);
+  // }
 
   useEffect(() => {
     getAllUser();
-    getAllData();
+
+    // getAllData();
   }, []);
 
   const [previewVisible, setPreviewVisible] = useState(false);
@@ -471,7 +480,7 @@ function NotifySettings() {
               </Form>
 
               <Row gutter={[16, 16]}>
-                <Col span={12}>
+                <Col sm={24} md={10} lg={10}>
                   <Card className="birthdayPreviewDiv">
                     <Divider orientation="left" orientationMargin={0}>
                       Preview
@@ -587,7 +596,7 @@ function NotifySettings() {
                     </>
                   </Card>
                 </Col>
-                <Col span={12}>
+                <Col sm={24} md={14} lg={14}>
                   <Card className="birthdayPreviewDiv">
                     <Form layout="vertical">
                       {isDefaultTemplateSelected === "2" ? (
@@ -702,7 +711,7 @@ function NotifySettings() {
                                   >
                                     <img
                                       style={{
-                                        width: "50%",
+                                        width: "70%",
                                         border: "5px solid grey",
                                       }}
                                       src={template.image}
@@ -789,7 +798,7 @@ function NotifySettings() {
                       type="primary"
                       style={{ marginRight: "1rem" }}
                       onClick={handlePreviewClick}
-                      // disabled={isDisablePreview}
+                    // disabled={isDisablePreview}
                     >
                       {" "}
                       Preview
@@ -807,7 +816,6 @@ function NotifySettings() {
                           wrapperClassName="wrapperClassName"
                           editorClassName="editorClassName"
                           editorState={editorState}
-                          // onEditorStateChange={setEditorState}
                           toolbar={toolbarOptions}
                           onEditorStateChange={handleEditorChange}
                           wrapperStyle={{
@@ -819,7 +827,7 @@ function NotifySettings() {
                             overflow: "hidden",
                             padding: "20px",
                           }}
-                          placeholder="Please Type Your  {Emp} Message"
+                          placeholder="Please Type Your Message"
                         />
                       </Form.Item>
                       <Col span={24}>

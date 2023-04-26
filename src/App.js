@@ -28,6 +28,8 @@ import Technical from "./components/Feedback/Technical";
 import AddSurvey from "./components/Feedback/AddSurvey";
 import FeedbackAdmin from "./components/Feedback/FeedbackAdmin";
 import EmployeeSurvey from "./components/Feedback/EmployeeSurvey";
+import AddClient from "./components/Client/AddClient";
+import ViewClient from "./components/Client/ViewClient";
 
 function App() {
   return (
@@ -192,6 +194,26 @@ function App() {
                 main={Profile}
                 activeSubMenu={["21"]}
                 activeMenu={["21"]}
+              />
+            }
+          />
+          <Route
+            path="/Client/AddClient"
+            element={
+              <FormatPage
+                main={AddClient}
+                activeSubMenu={["sub30"]}
+                activeMenu={["30a"]}
+              />
+            }
+          />
+          <Route
+            path="/Client/ViewClient"
+            element={
+              <FormatPage
+                main={ViewClient}
+                activeSubMenu={["sub30"]}
+                activeMenu={["30b"]}
               />
             }
           />

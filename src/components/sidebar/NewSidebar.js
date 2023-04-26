@@ -18,6 +18,7 @@ import {
   TeamOutlined,
   UserOutlined,
   RadarChartOutlined,
+  DeploymentUnitOutlined
 } from "@ant-design/icons";
 
 const { Sider } = Layout;
@@ -104,10 +105,10 @@ const NewSidebar = (props) => {
                 onClick={() => {
                   setCollapsibleStatus();
                 }}
-                // style={{
-                //   // paddingBottom: "40px",
-                //   height: "100vh",
-                // }}
+              // style={{
+              //   // paddingBottom: "40px",
+              //   height: "100vh",
+              // }}
               >
                 <Menu.Item
                   className="arrow"
@@ -359,6 +360,39 @@ const NewSidebar = (props) => {
                   <p className="sideFont">My Profile</p>
                   <NavLink to="/Profile" />
                 </Menu.Item>
+                <Menu.SubMenu
+                  style={{
+                    width: "100%",
+                    fontSize: "13px",
+                    fontWeight: "600",
+                    color: "#ffffff",
+                  }}
+                  icon={
+                    <DeploymentUnitOutlined
+                      style={{ color: "#ffffff", fontSize: "17px" }}
+                    />
+                  }
+                  key="sub30"
+                  title="Client"
+                  mode="inline"
+                >
+                  <Menu.Item
+                    className="arrow"
+                    icon={<img src={dot} alt="profile" className="dot" />}
+                    key="30a"
+                  >
+                    <p className="sideFont">Add Client</p>
+                    <NavLink to="/Client/AddClient" />
+                  </Menu.Item>
+                  <Menu.Item
+                    className="arrow"
+                    icon={<img src={dot} alt="profile" className="dot" />}
+                    key="30b"
+                  >
+                    <p className="sideFont">View Client</p>
+                    <NavLink to="/Client/ViewClient" />
+                  </Menu.Item>
+                </Menu.SubMenu>
               </Menu>
             </div>
           </div>

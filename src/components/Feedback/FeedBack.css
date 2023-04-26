@@ -1,5 +1,5 @@
 .feedBackCard .ant-card-body{
-    padding: 0px;
+    padding: 25px;
 }
 
 .empSearch.ant-input-affix-wrapper{
@@ -64,26 +64,26 @@ line-height: 15px;
 .heading:after {
     content: "";
     position: absolute;
-    top: 16.5rem;
-    /* bottom: 0; */
-    left: 19rem;
+    top: 6rem;
+    bottom: 0;
+    left: 21rem;
     right: 0;
-    width: 865px;
-    /* height: 0.5em; */
+    width: 840px;
+    height: 0.5em;
     border-top: 0.5px solid #C0C0C0;
-  }
+   }
 
   .otherHeading:after {
     content: "";
     position: absolute;
-    top: 16.5rem;
-    /* bottom: 0; */
-    left: 14rem;
+    top: 6rem; 
+    bottom: 0;
+    left: 16rem;
     right: 0;
-    width: 940px;
-    /* height: 0.5em; */
+    width: 900px;
+    height: 0.5em;
     border-top: 0.5px solid #C0C0C0;
-  }
+  } 
 
   .que1 .ant-form-item-label > label{
     font-style: normal;
@@ -100,23 +100,46 @@ line-height: 15px;
     line-height: 29px;
     padding: 0px;
     color: #000000;
+    margin-top: 10px;
   }
-  .queText{
+
+  .queTitle{
     font-style: normal;
     font-weight: 400;
     font-size: 19px;
     line-height: 29px;
     padding: 0px;
     color: #000000;
+    margin-top: 10px;
   }
+  /* .queText{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 29px;
+    padding: 0px;
+    color: #000000;
+  } */
 
   .que1.ant-form-item{
-    margin-top: 10px;
+    margin-top: 28px;
   }
 
   .submitCancel.ant-space-align-center{
     display: flex;
     justify-content: flex-end;
+  }
+
+  .submitQuestion.ant-space-align-center{
+    display: flex;
+    justify-content: flex-end;
+    
+  }
+  .questionTag{
+    font-style: normal;
+    font-weight: 600;
+    font-size: 21px;
+    
   }
 
   .addQue.ant-btn{
@@ -129,7 +152,7 @@ line-height: 15px;
     font-weight: 400;
     font-size: 15px;
     line-height: 15px;
-    margin-top: 10px;
+    margin-top: 30px;
   }
   .submit.ant-btn{
     background: #045477;
@@ -138,4 +161,18 @@ line-height: 15px;
     font-weight: 400;
     font-size: 15px;
     line-height: 15px;
+    border-radius: 5px;
+    width: 104px;
+    height: 37px;
   }
+
+  .skillName .ant-form-item-label > label{
+    font-size: 18px;
+  }
+
+  .minusRemove.anticon svg{
+    position: relative;
+    right: 10px;
+   
+}
+  

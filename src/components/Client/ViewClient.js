@@ -16,12 +16,13 @@ const ViewClient = () => {
     const [showRecord, setshowRecord] = useState([]);
     const [loading, setLoading] = useState(false);
     const [size, setSize] = useState(window.innerWidth <= 768 ? "" : "left");
-    const [filterEmployees, setFilterEmployees] = useState([]);
+    const [filterClient, setFilterClient] = useState([]);
     const [data, setData] = useState([]);
     const [selectemp, setSelectemp] = useState({ id: "" });
     const [activetab, setActivetab] = useState("1");
-    const [showDownloadModal, setShowDownloadModal] = useState(false);
     const [clientData, setClientdata] = useState();
+
+    console.log('modifiedFilterExpense', filterClient)
 
     const showModal = (record) => {
         setIsModalVisible(true);
@@ -32,7 +33,7 @@ const ViewClient = () => {
     };
 
     const handleDeleteRow = (record) => {
-        console.log('value', record)
+        console.log("value", record);
         Modal.confirm({
             title: "Are you sure, you want to delete Appraisal?",
             okText: "Yes",
@@ -42,14 +43,14 @@ const ViewClient = () => {
                 ClientContext.deleteClient(record.id)
                     .then((response) => {
                         console.log(response);
-                        getClientData()
+                        getClientData();
                     })
                     .catch((error) => {
                         console.log(error.message);
                     });
             },
         });
-    }
+    };
 
     const columns = [
         {
@@ -112,9 +113,8 @@ const ViewClient = () => {
                                     className="show"
                                     style={{ width: "40px" }}
                                     onClick={() => {
-                                        // showViewModal(record);
                                         setshowRecord(record);
-                                        setSelectemp({ id: record.id }); // set selectemp.id to the employee's id
+                                        setSelectemp({ id: record.id });
                                         setActivetab("2");
                                     }}
                                 >
@@ -125,7 +125,7 @@ const ViewClient = () => {
                                 <Button
                                     style={{ padding: 0, color: "rgb(64, 169, 255)" }}
                                     type="link"
-                                    className="edIt"
+                                    className="edIts"
                                     onClick={() => {
                                         handleEditEmployee(record);
                                         showModal(record);
@@ -139,7 +139,6 @@ const ViewClient = () => {
                                     type="link"
                                     className="deleTe"
                                     onClick={() => handleDeleteRow(record)}
-
                                 >
                                     <DeleteFilled />
                                 </Button>
@@ -153,21 +152,25 @@ const ViewClient = () => {
 
     const searchChange = (e) => {
         let search = e.target.value;
-        // setFilterCriteria({ ...filterCriteria, search: search });
+        console.log('search', search)
+        console.log('modifiedFilterExpense', clientData)
         if (search) {
-            let result = data.filter(
+            let result = clientData.filter(
+
                 (ex) =>
-                    ex.fname.toLowerCase().includes(search.toLowerCase()) ||
-                    ex.lname.toLowerCase().includes(search.toLowerCase()) ||
-                    ex?.mname?.toLowerCase()?.includes(search?.toLowerCase()) ||
-                    ex?.designation?.toLowerCase()?.includes(search?.toLowerCase()) ||
-                    ex?.empId?.toLowerCase()?.includes(search?.toLowerCase()) ||
-                    ex.gender?.toLowerCase() == search
+                    ex.regCompName.toLowerCase().includes(search.toLowerCase())
+                //  ||
+                // ex.lname.toLowerCase().includes(search.toLowerCase()) ||
+                // ex?.mname?.toLowerCase()?.includes(search?.toLowerCase()) ||
+                // ex?.designation?.toLowerCase()?.includes(search?.toLowerCase()) ||
+                // ex?.empId?.toLowerCase()?.includes(search?.toLowerCase()) ||
+                // ex.gender?.toLowerCase() == search
             );
-            const modifiedFilterExpense = [...result];
-            setFilterEmployees(modifiedFilterExpense);
+            const modifiedFilterClient = [...result];
+            console.log('modifiedFilterExpense', modifiedFilterClient)
+            setFilterClient(modifiedFilterClient);
         } else {
-            setFilterEmployees(data);
+            setFilterClient(clientData);
         }
     };
 
@@ -175,11 +178,12 @@ const ViewClient = () => {
         let data = await ClientContext.getClient();
         console.log("clientget", data);
         setClientdata(data);
+        setFilterClient(data)
     };
 
     useEffect(() => {
         getClientData();
-    }, []);
+    }, [isModalVisible]);
 
     return (
         <div className="hrtab" style={{ minHeight: "100vh" }}>
@@ -216,24 +220,19 @@ const ViewClient = () => {
                     <Table
                         loading={loading}
                         columns={columns}
-                        dataSource={clientData}
+                        dataSource={filterClient}
                         pagination={{
                             position: ["bottomCenter"],
                         }}
                         scroll={{ x: 800 }}
                         className="empTable"
                         size="small"
-                    // reloadData={getData}
-                    // rowClassName={(record) => record.disabled && "disabled-row"}
+                        activetab={activetab}
+                        reloadData={getClientData}
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Client Pofile" disabled={!selectemp.id} key="2">
-                   
-                    <ClientListview
-                        // className="Edit"
-                        showRecord={showRecord}
-                   
-                    />
+                    <ClientListview showRecord={showRecord} />
                 </Tabs.TabPane>
             </Tabs>
 

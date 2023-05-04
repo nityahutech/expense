@@ -31,8 +31,8 @@ function ClientListview(props) {
                                         style={{
                                             border: "1px solid black",
                                             width: "50%",
-                                            height: "200px",
-                                            borderRadius: "50px",
+                                            height: "190px",
+                                            borderRadius: "50%",
                                             background: "#dddddd",
                                         }}
                                     />
@@ -42,8 +42,8 @@ function ClientListview(props) {
                                         style={{
                                             border: "1px solid black",
                                             width: "50%",
-                                            height: "200px",
-                                            borderRadius: "50px",
+                                            height: "190px",
+                                            borderRadius: "50%",
                                             background: "#dddddd",
                                             display: "flex",
                                             alignItems: "center",
@@ -57,16 +57,18 @@ function ClientListview(props) {
                             </div>
                             <div style={{ padding: "10px" }}>
                                 <h2>Company Details</h2>
-                                <p>
-                                    <b>Company Name:</b>{" "}
-                                    {showRecord.regCompName ? showRecord.regCompName : "-"}
-                                </p>
-                                <p>
-                                    <b>Email:</b> {showRecord.domain ? showRecord.domain : "-"}
-                                </p>
-                                <p>
-                                    <b>Phone:</b> {showRecord.phone ? showRecord.phone : "-"}
-                                </p>
+                                <div style={{ display: 'flex' }} >
+                                    <div style={{ width: '50%' }} >Company Name:</div>{" "}
+                                    <div style={{ width: '50%' }} >{showRecord.regCompName ? showRecord.regCompName : "-"}</div>
+                                </div>
+                                <div style={{ display: 'flex' }}>
+                                    <div style={{ width: '50%' }}>Email:</div>{" "}
+                                    <div style={{ width: '50%' }}>{showRecord.domain ? showRecord.domain : "-"}</div>
+                                </div>
+                                <div style={{ display: 'flex' }}>
+                                    <div style={{ width: '50%' }}>Phone:</div>{" "}
+                                    <div style={{ width: '50%' }}>{showRecord.phone ? showRecord.phone : "-"}</div>
+                                </div>
                             </div>
 
                         </div>
@@ -74,56 +76,42 @@ function ClientListview(props) {
                     <div className="flip-card-back">
                         <div style={{}}>
                             <h2>Contact Details</h2>
-                            <p>
-                                <b>Point of Contact:</b>{" "}
-                                {showRecord.poc && showRecord.poc ? showRecord.poc : "-"}
-                            </p>
-                            <p>
-                                <b>Project:</b>{" "}
-                                {showRecord.project && showRecord.project
-                                    ? showRecord.project
-                                    : "-"}
-                            </p>
-                            <p>
-                                <b>Address Line 1:</b>{" "}
-                                {showRecord.contact && showRecord.contact.addLine1
-                                    ? showRecord.contact.addLine1
-                                    : "-"}
-                            </p>
-                            <p>
-                                <b>Address Line 2:</b>{" "}
-                                {showRecord.contact && showRecord.contact.addLine2
-                                    ? showRecord.contact.addLine2
-                                    : "-"}
-                            </p>
-                            <p>
-                                <b>City:</b>{" "}
-                                {showRecord.contact && showRecord.contact.city
-                                    ? showRecord.contact.city
-                                    : "-"}
-                            </p>
-                            <p>
-                                <b>State:</b>{" "}
-                                {showRecord.contact && showRecord.contact.state
-                                    ? showRecord.contact.state
-                                    : "-"}
-                            </p>
-                            <p>
-                                <b>Country:</b>{" "}
-                                {showRecord.contact && showRecord.contact.country
-                                    ? showRecord.contact.country
-                                    : "-"}
-                            </p>
-                            <p>
-                                <b>Pincode:</b>{" "}
-                                {showRecord.contact && showRecord.contact.pincode
-                                    ? showRecord.contact.pincode
-                                    : "-"}
-                            </p>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>Point of Contact:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.poc && showRecord.poc ? showRecord.poc : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>Project:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.project && showRecord.project ? showRecord.project : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>Address Line 1:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.contact && showRecord.contact.addLine1 ? showRecord.contact.addLine1 : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>Address Line 2:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.contact && showRecord.contact.addLine2 ? showRecord.contact.addLine2 : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>City:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.contact && showRecord.contact.city ? showRecord.contact.city : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>State:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.contact && showRecord.contact.state ? showRecord.contact.state : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>Country:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.contact && showRecord.contact.country ? showRecord.contact.country : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>Pincode:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.contact && showRecord.contact.pincode ? showRecord.contact.pincode : "-"}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 }

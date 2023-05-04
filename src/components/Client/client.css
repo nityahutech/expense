@@ -91,3 +91,23 @@
 .flip-card-back b {
   font-weight: bold;
 }
+
+.editClient .ant-modal-body {
+  margin-left: 0px;
+}
+
+.editClient .ant-modal-content {
+  border-radius: 10px;
+}
+
+.editClient .ant-modal-header {
+  border-radius: 10px 10px 0px 0px;
+  background: #043661;
+  color: #ffffff;
+}
+.editClient .ant-modal-title {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 25px;
+}

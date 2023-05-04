@@ -10,14 +10,13 @@ import ClientContext from "../../contexts/ClientContext";
 import Editclient from "./EditClient";
 import ClientListview from "./ClientListView";
 
-const ViewClient = () => {
+const ViewClient = (props) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editedRecord, setEditedRecord] = useState(null);
     const [showRecord, setshowRecord] = useState([]);
     const [loading, setLoading] = useState(false);
     const [size, setSize] = useState(window.innerWidth <= 768 ? "" : "left");
     const [filterClient, setFilterClient] = useState([]);
-    const [data, setData] = useState([]);
     const [selectemp, setSelectemp] = useState({ id: "" });
     const [activetab, setActivetab] = useState("1");
     const [clientData, setClientdata] = useState();
@@ -121,28 +120,32 @@ const ViewClient = () => {
                                     {<EyeFilled />}
                                 </Button>
                             </Tooltip>
-                            <Tooltip placement="bottom" title="Edit Profile">
-                                <Button
-                                    style={{ padding: 0, color: "rgb(64, 169, 255)" }}
-                                    type="link"
-                                    className="edIts"
-                                    onClick={() => {
-                                        handleEditEmployee(record);
-                                        showModal(record);
-                                    }}
-                                >
-                                    {<EditFilled />}
-                                </Button>
-                            </Tooltip>
-                            <Tooltip placement="bottom" title="Disable Account">
-                                <Button
-                                    type="link"
-                                    className="deleTe"
-                                    onClick={() => handleDeleteRow(record)}
-                                >
-                                    <DeleteFilled />
-                                </Button>
-                            </Tooltip>
+                            {props.roleView === 'admin' &&
+                                <>
+                                    <Tooltip placement="bottom" title="Edit Profile">
+                                        <Button
+                                            style={{ padding: 0, color: "rgb(64, 169, 255)" }}
+                                            type="link"
+                                            className="edIts"
+                                            onClick={() => {
+                                                handleEditEmployee(record);
+                                                showModal(record);
+                                            }}
+                                        >
+                                            {<EditFilled />}
+                                        </Button>
+                                    </Tooltip>
+                                    <Tooltip placement="bottom" title="Disable Account">
+                                        <Button
+                                            type="link"
+                                            className="deleTe"
+                                            onClick={() => handleDeleteRow(record)}
+                                        >
+                                            <DeleteFilled />
+                                        </Button>
+                                    </Tooltip>
+                                </>
+                            }
                         </div>
                     </>
                 );
@@ -183,7 +186,7 @@ const ViewClient = () => {
 
     useEffect(() => {
         getClientData();
-    }, [isModalVisible]);
+    }, [isModalVisible,]);
 
     return (
         <div className="hrtab" style={{ minHeight: "100vh" }}>
@@ -198,6 +201,7 @@ const ViewClient = () => {
                     }
                 }}
             >
+
                 <Tabs.TabPane tab="Client List" key="1">
                     <div
                         style={{
@@ -231,13 +235,14 @@ const ViewClient = () => {
                         reloadData={getClientData}
                     />
                 </Tabs.TabPane>
+
                 <Tabs.TabPane tab="Client Pofile" disabled={!selectemp.id} key="2">
                     <ClientListview showRecord={showRecord} />
                 </Tabs.TabPane>
             </Tabs>
 
             <Modal
-                className="editEmployee"
+                className="editClient"
                 bodyStyle={{
                     overflowX: "hidden",
                 }}

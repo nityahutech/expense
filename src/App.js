@@ -4,13 +4,13 @@ import Leave from "./components/Leave";
 import EmployeeList from "./components/EmployeeList";
 import AddEmployee from "./components/addemployee";
 import ExpenseList from "./components/Expenselist";
-import AppraisalHr from "./components/quarterApp/appraisalHomePage";
+// import AppraisalHr from "./components/quarterApp/appraisalHomePage";
 import Payslip2 from "./components/ProfileDetails/HrPaySlip";
 import AssetMag from "./components/assetManagement/assetMagHome";
 import Profile from "./components/Profilepage";
 import Onboarding from "./components/Onboarding";
 import CompanyProfile from "./components/CompanyProfile";
-import HalfYearGoalHome from "./components/halfYearGoal/halfYearGoalHome";
+// import HalfYearGoalHome from "./components/halfYearGoal/halfYearGoalHome";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import "./App.css";
@@ -139,7 +139,7 @@ function App() {
               />
             }
           />
-          <Route
+          {/* <Route
             path="/Appraisal/AppraisalPageHr"
             element={
               <FormatPage
@@ -148,8 +148,8 @@ function App() {
                 activeMenu={["20"]}
               />
             }
-          />
-          <Route
+          /> */}
+          {/* <Route
             path="/Appraisal/HalfYearGoalPage"
             element={
               <FormatPage
@@ -158,7 +158,7 @@ function App() {
                 activeMenu={["20a"]}
               />
             }
-          />
+          /> */}
           <Route
             path="/TravelManagement"
             element={<FormatPage main={TravelMngHome} activeMenu={["24"]} />}

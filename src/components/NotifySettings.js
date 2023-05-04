@@ -65,7 +65,7 @@ function NotifySettings() {
   const [showMessageContent, setShowMessageContent] = useState(false);
   const [isDisablePreview, setIsDisablePreview] = useState(true);
   const [editorMessage, setEditorMessage] = useState(true);
-  
+
 
   const templates = [
     { id: 1, name: "", image: Landscape },
@@ -511,7 +511,7 @@ function NotifySettings() {
                             <h2
                               style={{
                                 position: "absolute",
-                                top: "70%",
+                                top: "55%",
                                 left: "50%",
                                 transform: "translate(-50%, -50%)",
                                 fontSize: "10px",
@@ -535,6 +535,25 @@ function NotifySettings() {
                             >
                               {emp}
                             </h2>
+                            <div
+                              style={{
+                                position: "absolute",
+                                top: "45%",
+                                left: "50%",
+                                transform: "translate(-50%, -50%)",
+                                fontWeight: "bold",
+                                fontSize: "12px",
+                                color: "black",
+                              }}
+                            >
+                              {file && (
+                                <img
+                                  style={{ width: "20px", height: "20px" }}
+                                  src={file}
+                                  alt="Uploaded Image"
+                                />
+                              )}
+                            </div>
                             <div
                               style={{
                                 position: "absolute",

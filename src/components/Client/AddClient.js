@@ -5,15 +5,12 @@ import {
   capitalize,
   checkAlphabets,
   checkNumbervalue,
-  checkUpperCase,
   getBase64,
-  getCountryCode,
   showNotification,
 } from "../../contexts/CreateContext";
 import axios from "axios";
 import ClientContext from "../../contexts/ClientContext";
-import { Navigate } from "react-router-dom";
-// import { capitalize } from "../../contexts/CreateContext";
+import { useNavigate } from "react-router-dom";
 
 const AddClient = () => {
   const [fileName, setFileName] = useState();
@@ -24,8 +21,7 @@ const AddClient = () => {
   const [form] = Form.useForm();
   const [modalData, setModalData] = useState();
   const [clientData, setClientdata] = useState();
-
-  useEffect(() => {}, []);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsBigFile(false);
@@ -54,7 +50,7 @@ const AddClient = () => {
     setModalData();
   }
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log("clientAdd", values);
     const clientExists = clientData.find(
       (clientPresent) =>
@@ -65,29 +61,32 @@ const AddClient = () => {
       showNotification(
         "error",
         "Error",
-        "Client with the same name already exists!"
+        `Client with the Name ${values.regCompName} or phone number already exists!`
       );
       return;
     }
-    const clientAdd = {
-      contact: {
-        addLine1: values.addLine1,
-        addLine2: values.addLine2,
-        city: values.city,
-        state: values.state,
-        country: values.country,
-        pincode: values.pincode,
-      },
-      regCompName: values.regCompName,
-      domain: values.domain,
-      phone: values.phone,
-      logo: values.logo || null,
-    };
-    console.log("clientAdd", clientAdd);
     try {
-      ClientContext.addClient(clientAdd);
+      let clientAdd = {
+        contact: {
+          addLine1: values.addLine1,
+          addLine2: values.addLine2 || null,
+          city: values.city,
+          state: values.state,
+          country: values.country,
+          pincode: values.pincode,
+        },
+        regCompName: values.regCompName,
+        domain: values.domain,
+        phone: values.phone,
+        logo: values.logo,
+
+      };
+      console.log("clientAdd", clientAdd);
+
+      await ClientContext.addClient(clientAdd, fileName);
       showNotification("success", "Success", "Client Add Successfully");
-      // Navigate('/Client/AddClient')
+      navigate('/Client/ViewClient')
+      
     } catch (error) {
       console.log("error", error);
       showNotification("error", "Error", "Failed to addClient!");
@@ -179,11 +178,10 @@ const AddClient = () => {
                   message: "Please Enter Comapany Name",
                 },
                 {
-                  pattern: /^[0-9a-zA-Z.,-\s]*$/,
+                  pattern: /^[a-zA-Z\s]*$/,
                   message: "Please Enter Valid Name",
                 },
               ]}
-              // initialValue={data?.regCompName}
             >
               <Input
                 maxLength={50}
@@ -195,7 +193,7 @@ const AddClient = () => {
                 onChange={(e) => {
                   const str = e.target.value;
                   const caps = str.split(" ").map(capitalize).join(" ");
-                  // props.form.setFieldsValue({ regCompName: caps });
+                  form.setFieldsValue({ regCompName: caps });
                 }}
               />
             </Form.Item>
@@ -214,7 +212,6 @@ const AddClient = () => {
                   message: "Please enter Valid Email",
                 },
               ]}
-              // initialValue={data?.domain}
             >
               <Input
                 maxLength={30}
@@ -245,10 +242,9 @@ const AddClient = () => {
                   message: "Please Enter Valid Number",
                 },
               ]}
-              // initialValue={data?.phone}
+
             >
               <Input
-                // addonBefore={(<PrefixSelector name={"prefix"} initial={data.prefix} />)}
                 maxLength={10}
                 placeholder="Phone"
                 style={{
@@ -291,7 +287,7 @@ const AddClient = () => {
               label="Address Line 2"
               rules={[
                 {
-                  required: true,
+                  required: false,
                   message: "Please Enter Company Address",
                 },
                 {

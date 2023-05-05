@@ -61,7 +61,7 @@ const AddClient = () => {
       showNotification(
         "error",
         "Error",
-        "Client with the same name already exists!"
+        `Client with the Name ${values.regCompName} or phone number already exists!`
       );
       return;
     }
@@ -86,6 +86,7 @@ const AddClient = () => {
       await ClientContext.addClient(clientAdd, fileName);
       showNotification("success", "Success", "Client Add Successfully");
       navigate('/Client/ViewClient')
+      
     } catch (error) {
       console.log("error", error);
       showNotification("error", "Error", "Failed to addClient!");

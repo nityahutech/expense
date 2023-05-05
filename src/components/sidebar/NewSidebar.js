@@ -230,7 +230,7 @@ const NewSidebar = (props) => {
                       <p className="sideFont">Leave</p>
                       <NavLink to="/leave" />
                     </Menu.Item>
-                    <Menu.SubMenu
+                    {/* <Menu.SubMenu
                       className="arrow-div"
                       style={{
                         width: "100%",
@@ -263,7 +263,7 @@ const NewSidebar = (props) => {
                         <p className="sideFont">Half Year Goal</p>
                         <NavLink to="/Appraisal/HalfYearGoalPage" />
                       </Menu.Item>
-                    </Menu.SubMenu>
+                    </Menu.SubMenu> */}
                     <Menu.Item
                       icon={
                         <DesktopOutlined
@@ -360,6 +360,7 @@ const NewSidebar = (props) => {
                   <p className="sideFont">My Profile</p>
                   <NavLink to="/my-profile" />
                 </Menu.Item>
+
                 <Menu.SubMenu
                   style={{
                     width: "100%",
@@ -376,14 +377,16 @@ const NewSidebar = (props) => {
                   title="Client"
                   mode="inline"
                 >
-                  <Menu.Item
-                    className="arrow"
-                    icon={<img src={dot} alt="profile" className="dot" />}
-                    key="30a"
-                  >
-                    <p className="sideFont">Add Client</p>
-                    <NavLink to="/Client/AddClient" />
-                  </Menu.Item>
+                  {role == "admin" &&
+                    <Menu.Item
+                      className="arrow"
+                      icon={<img src={dot} alt="profile" className="dot" />}
+                      key="30a"
+                    >
+                      <p className="sideFont">Add Client</p>
+                      <NavLink to="/Client/AddClient" />
+                    </Menu.Item>
+                  }
                   <Menu.Item
                     className="arrow"
                     icon={<img src={dot} alt="profile" className="dot" />}
@@ -393,6 +396,7 @@ const NewSidebar = (props) => {
                     <NavLink to="/Client/ViewClient" />
                   </Menu.Item>
                 </Menu.SubMenu>
+
               </Menu>
             </div>
           </div>

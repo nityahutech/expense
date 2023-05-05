@@ -236,8 +236,8 @@ text-align: center;
   --antd-arrow-background-color: linear-gradient(to right bottom, #FFFFFF, #ffffff);}
 
   .questionsScroll{
-    height: 310px;
-    overflow-y: scroll;
+    color: #FFFFFF;
+    margin-top: 30px;
   }
 
   .FeedbackSelect.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder{
@@ -254,17 +254,168 @@ text-align: center;
     list-style-type: disc;
     font-size: 22px;
   }
-  
-  /* .dot-list li:before {
-    content: "•";
-    margin-right: 0.5rem;
-    font-size: 2rem;
-  } */
 
-/* .submitBtn.ant-btn > span {
-  margin-left: 14px;
-} */
+  .surveyCard.ant-card{
+    width: 800px;
+    height: 450px;
+    background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+   margin: auto;
+   margin-top: 7rem;
+  }
+
+  .surveyCard .ant-card-body{
+    margin: 2rem;
+  }
+
+  .surveyCard1.ant-card{
+    width: 800px;
+    height: 450px;
+    background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+   margin: auto;
+  }
+
+  .surveyCardQuestion.ant-card{
+    width: 800px;
+    height: auto;
+    background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+    
+  }
+   
+  .question-button{
+      width: 80px;
+      display: inline-block;
+      text-align: center;
+      height: 46px;
+      font-size: 18px;
+      color: white;
+      background: none;
+      border: 1px solid #bcb2b2,
+  }
+  .question-button :hover {
+    background: white;
+    color: black
+  }
+
+  .skillButton.ant-btn{
+    margin-top: 12rem;
+    margin-left: 31rem;
+    border-radius: 17px;
+    width: 200px;
+    background-image: linear-gradient(to right, rgb(13, 15, 215), rgb(37, 154, 199));
+    color: rgb(255, 255, 255);
+    border: none;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .nextButton.ant-btn{
+  margin-left: 33rem;
+  margin-top: 3rem;
+  border-radius: 17px;
+  width: 200px;
+  background-image: linear-gradient(to right, rgb(13, 15, 215), rgb(37, 154, 199));
+  color: rgb(255, 255, 255);
+  border: none;
+  height: 40px;
+  font-size: 20px;
+  }
+
+  .startButton.ant-btn{
+    margin-top: 4rem;
+    border-radius: 17px;
+    width: 200px;
+    background-image: linear-gradient(to right, rgb(13, 15, 215), rgb(37, 154, 199));
+    color: rgb(255, 255, 255);
+    border: none;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  /* .surveyCarousel{
+    margin: auto;
+    width: 100%;
+  height: 100%} */
   
-/* .previewSur.ant-btn > span{
-  margin-top: 4px;
-} */
+  @media only screen  and (max-width: 768px ) {
+    .surveyCard.ant-card{
+      width: 800px;
+      height: 450px;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+     margin: auto;
+    }
+    .surveyCard1.ant-card{
+      width: 775px;
+      height: 450px;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+     margin: auto;
+    }
+
+
+    .surveyCardQuestion.ant-card{
+      width: 800px;
+      height: auto;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+      
+    }
+  }
+
+  @media only screen  and (max-width: 600px ) {
+    .surveyCard.ant-card{
+      width: 551px;
+      height: 450px;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+     margin: auto;
+    }
+
+    .surveyCard1.ant-card{
+      width: 540px;
+      height: auto;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+     margin: auto;
+    }
+
+
+    .surveyCardQuestion.ant-card{
+      width: 551px;
+      height: auto;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+      
+    }
+  }
+
+  @media only screen and (max-width: 420px ) {
+    .surveyCard.ant-card{
+      width: 400px;
+      height: 450px;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+     margin: auto;
+    }
+
+    .startButton.ant-btn{
+      margin-top: 0;
+    }
+
+    .surveyCard1.ant-card{
+      width: 380px;
+      height: auto;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+     margin: auto;
+    }
+
+    .skillButton.ant-btn{
+      margin-left: 3rem;
+    }
+
+    .nextButton.ant-btn{
+      margin-left: 0;
+    }
+
+
+    .surveyCardQuestion.ant-card{
+      width: 400px;
+      height: auto;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+      
+    }
+  }
+ 

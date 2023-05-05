@@ -35,6 +35,13 @@ import AdminAttendance from "./components/Attendance/AdminAttendance";
 import MonthlyLog from "./components/Attendance/MonthlyLog";
 import RegularizeAttendance from "./components/Attendance/RegularizeAttendance";
 import ConfigureAttendance from "./components/Attendance/ConfigureAttendance";
+import Approvals from "./components/Leave/Approvals";
+import Request from "./components/Leave/Request";
+import Holidays from "./components/Leave/Holidays";
+import Types from "./components/Leave/Types";
+import AdminLeave from "./components/Leave/AdminLeave";
+import UserAttendance from "./components/Attendance/UserAttendance";
+import AddReport from "./components/Attendance/AddReport";
 
 function App() {
   return (
@@ -53,7 +60,7 @@ function App() {
             }
           />
           <Route
-            path="/Organization/Onboarding"
+            path="/organization/onboarding"
             element={
               <FormatPage
                 main={Onboarding}
@@ -64,7 +71,12 @@ function App() {
           />
           <Route
             path="/company-profile"
-            element={<FormatPage main={CompanyProfile} activeMenu={["32"]} />}
+            element={
+              <FormatPage
+                main={CompanyProfile}
+                activeMenu={["32"]}
+              />
+            }
           />
           <Route
             path="/attendance"
@@ -89,35 +101,65 @@ function App() {
           </Route>
           <Route
             path="/my-attendance"
-            element={<FormatPage main={AttendanceLog} activeMenu={["6"]} />}
-          />
+            element={<FormatPage main={UserAttendance} activeMenu={["6"]} />}
+          >
+            <Route
+              path=""
+              element={<MonthlyLog />}
+            />
+            <Route
+              path="daily-log"
+              element={<DailyLog />}
+            />
+            <Route
+              path="daily-log/:id"
+              element={<MonthlyLog />}
+            />
+            <Route
+              path="report"
+              element={<AddReport />}
+            />
+          </Route>
           <Route
             path="/leave"
             element={<FormatPage main={Leave} activeMenu={["7"]} />}
-          />
-          <Route
-            path="/hr-leave"
-            element={<FormatPage main={Leave} activeMenu={["7"]} />}
           >
             <Route
-              path="requests"
-              element={<></>}
-            />
-            <Route
-              path="holidays"
-              element={<></>}
-            />
-            <Route
-              path="type"
+              path=""
               element={<></>}
             />
             <Route
               path="approval"
               element={<></>}
             />
+            <Route
+              path="history"
+              element={<></>}
+            />
           </Route>
           <Route
-            path="/employees/AddEmployee"
+            path="/hr-leave"
+            element={<FormatPage main={AdminLeave} activeMenu={["7"]} />}
+          >
+            <Route
+              path="requests"
+              element={<Request />}
+            />
+            <Route
+              path="holidays"
+              element={<Holidays />}
+            />
+            <Route
+              path="type"
+              element={<Types />}
+            />
+            <Route
+              path="approval"
+              element={<Approvals />}
+            />
+          </Route>
+          <Route
+            path="/employees/onboard"
             element={
               <FormatPage
                 main={AddEmployee}
@@ -127,7 +169,7 @@ function App() {
             }
           />
           <Route
-            path="/Employee/EmployeeList"
+            path="/employees/view"
             element={
               <FormatPage
                 main={EmployeeList}
@@ -137,7 +179,7 @@ function App() {
             }
           />
           <Route
-            path="/Employee/Payroll"
+            path="/employees/payroll"
             element={
               <FormatPage
                 main={Payslip2}
@@ -147,7 +189,7 @@ function App() {
             }
           />
           <Route
-            path="/Assets"
+            path="/assets"
             element={
               <FormatPage
                 main={AssetMag}
@@ -157,7 +199,7 @@ function App() {
             }
           />
           <Route
-            path="/Expense/AddExpense"
+            path="/expenses/create"
             element={
               <FormatPage
                 main={ExpenseFrm}
@@ -167,7 +209,7 @@ function App() {
             }
           />
           <Route
-            path="/Expense/ExpenseList"
+            path="/expenses/view"
             element={
               <FormatPage
                 main={ExpenseList}
@@ -177,7 +219,7 @@ function App() {
             }
           />
           <Route
-            path="/Expense/InvoiceReimbursement"
+            path="/expenses/invoices"
             element={
               <FormatPage
                 main={InvoiceMagHome}
@@ -207,7 +249,7 @@ function App() {
             }
           />
           <Route
-            path="/TravelManagement"
+            path="/travel"
             element={<FormatPage main={TravelMngHome} activeMenu={["24"]} />}
           />
           <Route
@@ -235,7 +277,7 @@ function App() {
             element={<FormatPage main={AddSurvey} activeMenu={["29"]} />}
           />
           <Route
-            path="/Profile"
+            path="/my-profile"
             element={
               <FormatPage
                 main={Profile}
@@ -265,7 +307,7 @@ function App() {
             }
           />
           <Route
-            path="/Settings"
+            path="/settings"
             element={<FormatPage main={Settingpage} activeMenu={["22"]} />}
           />
           <Route path="/VerifyEmail" element={<EmailVerification />} />

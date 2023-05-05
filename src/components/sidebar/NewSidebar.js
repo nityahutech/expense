@@ -120,7 +120,7 @@ const NewSidebar = (props) => {
                   key="30"
                 >
                   <p className="sideFont">Home</p>
-                  <NavLink to="/DashBoard" />
+                  <NavLink to="/dashboard" />
                 </Menu.Item>
                 {role == "super" ? (
                   <Menu.SubMenu
@@ -144,7 +144,7 @@ const NewSidebar = (props) => {
                       key="31"
                     >
                       <p className="sideFont">Onboarding</p>
-                      <NavLink to="/Organization/Onboarding" />
+                      <NavLink to="/organization/onboarding" />
                     </Menu.Item>
                   </Menu.SubMenu>
                 ) : null}
@@ -159,7 +159,7 @@ const NewSidebar = (props) => {
                       key="32"
                     >
                       <p className="sideFont">Company Profile</p>
-                      <NavLink to="/CompanyProfile" />
+                      <NavLink to="/company-profile" />
                     </Menu.Item>
 
                     <Menu.SubMenu
@@ -184,7 +184,7 @@ const NewSidebar = (props) => {
                         key="8"
                       >
                         <p className="sideFont">Add Employee</p>
-                        <NavLink to="/Employee/AddEmployee" />
+                        <NavLink to="/employees/onboard" />
                       </Menu.Item>
                       <Menu.Item
                         className="arrow"
@@ -192,7 +192,7 @@ const NewSidebar = (props) => {
                         key="9"
                       >
                         <p className="sideFont">View Employees</p>
-                        <NavLink to="/Employee/EmployeeList" />
+                        <NavLink to="/employees/view" />
                       </Menu.Item>
                       <Menu.Item
                         className="arrow"
@@ -200,7 +200,7 @@ const NewSidebar = (props) => {
                         key="25"
                       >
                         <p className="sideFont">Payroll Manager</p>
-                        <NavLink to="/Employee/Payroll" />
+                        <NavLink to="/employees/payroll" />
                       </Menu.Item>
                     </Menu.SubMenu>
                   </>
@@ -217,7 +217,7 @@ const NewSidebar = (props) => {
                       key="6"
                     >
                       <p className="sideFont">Attendance</p>
-                      <NavLink className="navLink" to="/Attendance" />
+                      <NavLink className="navLink" to="/my-attendance" />
                     </Menu.Item>
                     <Menu.Item
                       icon={
@@ -228,7 +228,7 @@ const NewSidebar = (props) => {
                       key="7"
                     >
                       <p className="sideFont">Leave</p>
-                      <NavLink to="/Leave" />
+                      <NavLink to="/leave" />
                     </Menu.Item>
                     <Menu.SubMenu
                       className="arrow-div"
@@ -273,7 +273,7 @@ const NewSidebar = (props) => {
                       key="22"
                     >
                       <p className="sideFont">Assets</p>
-                      <NavLink to="/Assets" />
+                      <NavLink to="/assets" />
                     </Menu.Item>
                     <Menu.SubMenu
                       className="arrow-div"
@@ -302,7 +302,7 @@ const NewSidebar = (props) => {
                             key="2"
                           >
                             <p className="sideFont">Add Expense</p>
-                            <NavLink to="/Expense/AddExpense" />
+                            <NavLink to="/expenses/create" />
                           </Menu.Item>
                           <Menu.Item
                             className="arrow"
@@ -312,7 +312,7 @@ const NewSidebar = (props) => {
                             key="3"
                           >
                             <p className="sideFont">Expense List</p>
-                            <NavLink to="/Expense/ExpenseList" />
+                            <NavLink to="/expenses/view" />
                           </Menu.Item>
                         </>
                       ) : null}
@@ -322,7 +322,7 @@ const NewSidebar = (props) => {
                         key="23"
                       >
                         <p className="sideFont">Invoice Reimbursement</p>
-                        <NavLink to="/Expense/InvoiceReimbursement" />
+                        <NavLink to="/expenses/invoices" />
                       </Menu.Item>
                     </Menu.SubMenu>
                     <Menu.Item
@@ -334,7 +334,7 @@ const NewSidebar = (props) => {
                       key="24"
                     >
                       <p className="sideFont">Travel Management</p>
-                      <NavLink to="/TravelManagement" />
+                      <NavLink to="/travel" />
                     </Menu.Item>
                     <Menu.Item
                       icon={
@@ -358,7 +358,7 @@ const NewSidebar = (props) => {
                   key="21"
                 >
                   <p className="sideFont">My Profile</p>
-                  <NavLink to="/Profile" />
+                  <NavLink to="/my-profile" />
                 </Menu.Item>
                 <Menu.SubMenu
                   style={{
@@ -425,7 +425,7 @@ const NewSidebar = (props) => {
 
               <div>
                 <Link
-                  to="/Settings"
+                  to="/settings"
                   className="sideFont"
                   style={{
                     fontWeight: "normal",

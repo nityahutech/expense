@@ -75,92 +75,42 @@ function App() {
           />
           <Route
             path="/company-profile"
-            element={
-              <FormatPage
-                main={CompanyProfile}
-                activeMenu={["32"]}
-              />
-            }
+            element={<FormatPage main={CompanyProfile} activeMenu={["32"]} />}
           />
           <Route
             path="/attendance"
             element={<FormatPage main={AdminAttendance} activeMenu={["6"]} />}
           >
-            <Route
-              path="daily-log"
-              element={<DailyLog />}
-            />
-            <Route
-              path="daily-log/:id"
-              element={<MonthlyLog />}
-            />
-            <Route
-              path="configurations"
-              element={<ConfigureAttendance />}
-            />
-            <Route
-              path="regularize"
-              element={<RegularizeAttendance />}
-            />
+            <Route path="daily-log" element={<DailyLog />} />
+            <Route path="daily-log/:id" element={<MonthlyLog />} />
+            <Route path="configurations" element={<ConfigureAttendance />} />
+            <Route path="regularize" element={<RegularizeAttendance />} />
           </Route>
           <Route
             path="/my-attendance"
             element={<FormatPage main={UserAttendance} activeMenu={["6"]} />}
           >
-            <Route
-              path=""
-              element={<MonthlyLog />}
-            />
-            <Route
-              path="daily-log"
-              element={<DailyLog />}
-            />
-            <Route
-              path="daily-log/:id"
-              element={<MonthlyLog />}
-            />
-            <Route
-              path="report"
-              element={<AddReport />}
-            />
+            <Route path="" element={<MonthlyLog />} />
+            <Route path="daily-log" element={<DailyLog />} />
+            <Route path="daily-log/:id" element={<MonthlyLog />} />
+            <Route path="report" element={<AddReport />} />
           </Route>
           <Route
             path="/leave"
             element={<FormatPage main={Leave} activeMenu={["7"]} />}
           >
-            <Route
-              path=""
-              element={<></>}
-            />
-            <Route
-              path="approval"
-              element={<></>}
-            />
-            <Route
-              path="history"
-              element={<></>}
-            />
+            <Route path="" element={<></>} />
+            <Route path="approval" element={<></>} />
+            <Route path="history" element={<></>} />
           </Route>
           <Route
             path="/hr-leave"
             element={<FormatPage main={AdminLeave} activeMenu={["7"]} />}
           >
-            <Route
-              path="requests"
-              element={<Request />}
-            />
-            <Route
-              path="holidays"
-              element={<Holidays />}
-            />
-            <Route
-              path="type"
-              element={<Types />}
-            />
-            <Route
-              path="approval"
-              element={<Approvals />}
-            />
+            <Route path="requests" element={<Request />} />
+            <Route path="holidays" element={<Holidays />} />
+            <Route path="type" element={<Types />} />
+            <Route path="approval" element={<Approvals />} />
           </Route>
           <Route
             path="/employees/onboard"
@@ -312,28 +262,17 @@ function App() {
           />
           <Route
             path="/requests"
-            element={
-              <FormatPage
-                main={RequestHome}
-                activeMenu={["33"]}
-              />
-            }
+            element={<FormatPage main={RequestHome} activeMenu={["33"]} />}
           >
-            <Route
-              path="view"
-              element={<RequestTable />}
-            />
-            <Route
-              path="forms"
-              element={<Forms />}
-            />
+            <Route path="view" element={<RequestTable />} />
+            <Route path="forms" element={<Forms />} />
           </Route>
           <Route
             path="/settings"
             element={<FormatPage main={Settingpage} activeMenu={["22"]} />}
           />
           <Route path="/VerifyEmail" element={<EmailVerification />} />
-          <Route path="/EmployeeSurvey" element={<EmployeeSurvey />} />
+          <Route path="/survey" element={<Survey />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

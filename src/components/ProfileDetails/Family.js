@@ -888,7 +888,7 @@ const Family = (props) => {
               >
                 <Tabs
                   defaultActiveKey="1"
-                  className="tabs"
+                  className="page-tabs"
                   onChange={(key) =>
                     setActive(
                       key == "2"

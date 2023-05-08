@@ -45,12 +45,10 @@ const AllocatedCard = (props) => {
   const [editContent, showEditContent] = useState(false);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  const compId = sessionStorage.getItem("compId");
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
   const onFinish = (values) => {
-    console.log("ffffffffffff", values);
+    // console.log("ffffffffffff", values);
 
     const allAssetData = {
       lapname: values.lapname,
@@ -71,10 +69,8 @@ const AllocatedCard = (props) => {
       showNotification("success", "Success", "New Laptop Alloctment added");
       const timer = setTimeout(() => {
         getEmpAllAsset();
-      }, 1000);
-      // getEmpAllAsset();
+      }, 3000);
       setEditAsset(false);
-      // props.refresh();
     } catch (error) {
       console.log(error);
       showNotification("error", "Error", "Error In alloctment");
@@ -86,10 +82,8 @@ const AllocatedCard = (props) => {
   }, []);
 
   const getEmpAllAsset = async () => {
-    let assetData = await AssetContext.getRepairData(currentUser.uid, [
-      "Allotment",
-    ]);
-    console.log(assetData);
+    let assetData = await AssetContext.getRepairData(currentUser.uid, true);
+    // console.log(assetData);
     setLoading(true);
     setData(assetData[0]);
     setFileName(assetData[0]?.upload);
@@ -98,11 +92,11 @@ const AllocatedCard = (props) => {
     if (assetData.length > 0) {
       setAddButton(false);
     }
-    console.log("assetData", assetData[0]);
+    // console.log("assetData", assetData[0]);
   };
 
   const imgDiv = () => {
-    console.log(fileName, imageUrl);
+    // console.log(fileName, imageUrl);
     if (fileName == "" || fileName == null) {
       return editContent == true ? (
         <div className="noImage">No Image</div>
@@ -112,7 +106,6 @@ const AllocatedCard = (props) => {
             className="imgInp"
             style={{
               display: "none",
-              // border: "1px solid #05445e",
             }}
             type="file"
             id="logo"
@@ -180,7 +173,6 @@ const AllocatedCard = (props) => {
     }
     const fileUploaded = event.target.files[0];
     getBase64(fileUploaded, (url) => {
-      // setLoading(false);
       setImageUrl(url);
     });
     checkFileSize(fileUploaded.size, fileUploaded);
@@ -193,7 +185,6 @@ const AllocatedCard = (props) => {
   }
 
   return (
-    <>
       <div className="personalCardDiv">
         <Row className="Row-Card">
           <Col span={24}>
@@ -220,7 +211,6 @@ const AllocatedCard = (props) => {
                   className="overview"
                   hoverable={true}
                   bordered={true}
-                  // loading={loading}
                 >
                   {editAsset === true ? (
                     <>
@@ -231,18 +221,12 @@ const AllocatedCard = (props) => {
                             initialValue={data?.lapname}
                             name="lapname"
                             onChange={(e) => {
-                              const inputval = e.target.value;
                               const str = e.target.value;
-                              const newVal =
-                                inputval.substring(0, 1).toUpperCase() +
-                                inputval.substring(1);
                               const caps = str
                                 .split(" ")
                                 .map(capitalize)
                                 .join(" ");
-                              // setPaidBy(newVal);
                               form.setFieldsValue({
-                                lapname: newVal,
                                 lapname: caps,
                               });
                             }}
@@ -290,18 +274,12 @@ const AllocatedCard = (props) => {
                               maxLength={30}
                               className="inputFields"
                               onChange={(e) => {
-                                const inputval = e.target.value;
                                 const str = e.target.value;
-                                const newVal =
-                                  inputval.substring(0, 1).toUpperCase() +
-                                  inputval.substring(1);
                                 const caps = str
                                   .split(" ")
                                   .map(capitalize)
                                   .join(" ");
-                                // setPaidBy(newVal);
                                 form.setFieldsValue({
-                                  modelName: newVal,
                                   modelName: caps,
                                 });
                               }}
@@ -330,18 +308,12 @@ const AllocatedCard = (props) => {
                               className="inputFields"
                               maxLength={60}
                               onChange={(e) => {
-                                const inputval = e.target.value;
                                 const str = e.target.value;
-                                const newVal =
-                                  inputval.substring(0, 1).toUpperCase() +
-                                  inputval.substring(1);
                                 const caps = str
                                   .split(" ")
                                   .map(capitalize)
                                   .join(" ");
-                                // setPaidBy(newVal);
                                 form.setFieldsValue({
-                                  serialNum: newVal,
                                   serialNum: caps,
                                 });
                               }}
@@ -589,7 +561,6 @@ const AllocatedCard = (props) => {
           </Col>
         </Row>
       </div>
-    </>
   );
 };
 

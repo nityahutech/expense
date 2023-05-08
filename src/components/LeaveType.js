@@ -19,7 +19,7 @@ import {
 } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import ConfigureContext from "../contexts/ConfigureContext";
-import "../style/leave.css";
+import "../style/Leave.css";
 import { capitalize, checkAlphabets, checkNumbervalue, showNotification } from "../contexts/CreateContext";
 
 const { Option } = Select;

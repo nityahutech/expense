@@ -145,8 +145,10 @@ class LeaveContext {
         return req[0].mailid;
     }
 
-    getPending = async () => {
-      const q = query(leaveCollectionRef, where("status", "==", "Pending"));
+    getPending = async (name) => {
+        console.log(name);
+        const q = name ? query(leaveCollectionRef, where("status", "==", "Pending"), where("approver", "==", name))
+            :  query(leaveCollectionRef, where("status", "==", "Pending"));
       const data = await getDocs(q);
       let rec = data.docs.map((doc) => {
         return {

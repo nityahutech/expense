@@ -9,12 +9,13 @@ import {
 } from "@ant-design/icons";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
 import Logo from "../../images/logo.svg";
 import dropdown from "../../images/dropdown.png";
+import Notifications from "../Notifications";
 
 const Navbar = (props) => {
   const [startTime, setStartTime] = useState();
@@ -26,12 +27,18 @@ const Navbar = (props) => {
   const [buttonStatus, setButtonStatus] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const role = sessionStorage.getItem("role");
+  const location = useLocation()
+  const navigate = useNavigate()
   const [roleView, setRoleView] = useState(
     props.roleView || sessionStorage.getItem("role")
   );
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   let temp = sessionStorage.getItem("logo");
   const logo = temp == null ? Logo : temp;
+  const paths = {
+    admin: ["attendance", "hr-leave"],
+    emp: ["my-attendance", "leave"]
+  }
 
   const isClockRunning = async () => {
     setLoading(true);
@@ -279,6 +286,10 @@ const Navbar = (props) => {
                 "roleView",
                 roleView == "admin" ? "emp" : "admin"
               );
+              let path = location.pathname.split('/')[1].toLowerCase()
+              let index = paths[roleView].indexOf(path);
+              console.log(path, index, paths[roleView == "emp" ? "admin" : "emp"][index]);
+              navigate(`/${paths[roleView == "emp" ? "admin" : "emp"][index]}`)
             }}
           />
         ) : null}
@@ -304,8 +315,20 @@ const Navbar = (props) => {
             </button>
           )
         ) : null}
-        <Dropdown overlay={notificationMenu} className="notificationBell">
-          <Badge count={5} offset={[-10, 5]} size="small">
+        <Dropdown overlay={
+              <div 
+                style={{
+                  border: "1px solid #d3d3d3b3",
+                  boxShadow: "5px", 
+                  backgroundColor: "#F8F8F8",
+                  padding:"10px",
+                  height:"auto"
+                }}
+              >
+                <Notifications notifications={props.notifications} height={"400px"} />
+              </div>
+            } className="notificationBell" arrow={{ pointAtCenter: true }}>
+          <Badge count={props.total} offset={[-10, 5]} size="small">
             <Avatar
               size={40}
               icon={<BellOutlined className="notificationBell" />}
@@ -316,7 +339,7 @@ const Navbar = (props) => {
         <div>
           <img src={logo} alt={"logo not found"} className="profileLogo" />
         </div>
-        <Dropdown overlay={menu}>
+        <Dropdown overlay={menu} arrow={{ pointAtCenter: true }}>
           <Space>
             <img
               src={dropdown}

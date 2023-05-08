@@ -259,8 +259,8 @@ text-align: center;
     width: 800px;
     height: 450px;
     background-image: linear-gradient(to bottom right, lightblue, lightgreen);
-   margin: auto;
-   margin-top: 7rem;
+    margin: auto;
+   /* margin-top: 7rem; */
   }
 
   .surveyCard .ant-card-body{

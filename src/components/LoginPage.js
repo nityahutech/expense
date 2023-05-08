@@ -117,12 +117,12 @@ function LoginPage() {
     if (error != "") {
       StartToastifyInstance({
         text: error,
-        duration: 3000,
-        gravity: "bottom",
+        duration: 5000,
+        gravity: "top",
         position: "right",
         stopOnFocus: true,
         style: {
-          background: "linear-gradient(to right, #1F80DE, #F17C0F)",
+          background: "#FC6161",
         },
       }).showToast();
     }
@@ -219,17 +219,18 @@ function LoginPage() {
                         <span className="forgotmsg">{forgot ? "Forgot Password" : "Back"}</span>
                       </div>
                       </div>
-                      {/* <Divider style={{margin: "5px", fontSize: "smaller", color: "#c2c0c0"}}>OR</Divider>
+                      <Divider style={{margin: "5px", fontSize: "smaller", color: "#c2c0c0"}}>OR</Divider>
                       
                     <div className="checkBox">
                       <Button
                         className="google-btn"
                         onClick={handleGoogleAuth}
+                        disabled={loading != "Login"}
                       >
                         Log In with Google
                         <GoogleOutlined />
                       </Button>
-                    </div> */}
+                    </div>
                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                       <p className="loginFooter">
                         © 2022 Hutech HR. All rights reserved. Terms of Service

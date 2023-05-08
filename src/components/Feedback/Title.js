@@ -65,7 +65,7 @@ function Title(props) {
         >
           Thank You
         </h1>
-      ) : props.type ? (
+      ) : props.titleType ? (
         <div>
           <h1
             style={{
@@ -74,10 +74,10 @@ function Title(props) {
               color: "#594b4b",
             }}
           >
-            {props.type}
+            {props.titleType}
           </h1>
 
-          <Button className="skillButton" onClick={props.onStart}>
+          <Button className="skillButton" onClick={() => props.onStart()}>
             Continue <ArrowRightOutlined />
           </Button>
         </div>

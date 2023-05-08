@@ -12,11 +12,11 @@ import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
 
 function AllRequest(props) {
-  console.log(props, "ektaaaaaaaaaaa");
+  // console.log(props, "ektaaaaaaaaaaa");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState({});
   const [repairAllotReq, setRepairAllotReq] = useState(props.data || []);
-  console.log(props.data);
+  // console.log(props.data);
   useEffect(() => {
     setRepairAllotReq(props.data);
   }, [props.data]);

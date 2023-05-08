@@ -4,6 +4,42 @@ main{
 #root{
   background: #f8f8f8;
 }
+
+
+.hrtab {
+  min-height: 100vh;
+}
+.hrtab .ant-tabs-nav .ant-tabs-nav-wrap {
+  background: #fff;
+  margin-top: 25px;
+  padding: 5px;
+}
+.page-tabs {
+  margin-right: 13px;
+  border-radius: 5px;
+}
+.ant-tabs-top.page-tabs {
+  margin-left: 13px;
+}
+
+.page-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #000000;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+}
+.page-tabs .ant-tabs-tab:hover {
+  color: #000000;
+}
+.page-tabs .ant-tabs-ink-bar {
+  /* position: absolute; */
+  background: #f9a01f;
+  pointer-events: none;
+}
+.page-tabs .ant-tabs-nav .ant-tabs-nav-list {
+  margin-left: 15px;
+}
+
 .row{
   background: #fff;
     padding: 14px;
@@ -66,6 +102,21 @@ tr[data-row-key*="subTotal"] {
 
 .password-input-len .ant-input {
   width: 100%;
+}
+
+.back-arrow {
+  margin: 0 15px;
+  height: 90%;
+  display: flex;
+  width: 55px;
+  justify-content: space-between;
+  font-size: 15px;
+  align-items: center;
+}
+
+.back-arrow:hover {
+  color: #1890ff;
+  /* border-bottom: 2px solid #f9a01f; */
 }
 
 .color-button {

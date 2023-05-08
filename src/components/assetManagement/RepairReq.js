@@ -9,14 +9,11 @@ import {
   Input,
   Space,
   DatePicker,
-  message,
-  Switch,
   Select,
 } from "antd";
 
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/lib/input/TextArea";
-import RepairRequestTable from "./RepairRequestTable";
 import AllocatedCard from "./AllocatedCard";
 import AssetContext from "../../contexts/AssetContext";
 import { capitalize, showNotification } from "../../contexts/CreateContext";
@@ -29,7 +26,6 @@ function LaptopAllot(props) {
   const [selectedOption, setSelectedOption] = useState("");
   const [user, setUser] = useState({});
   const [allotmentData, setAllotmentData] = useState([]);
-  const compId = sessionStorage.getItem("compId");
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const { Option } = Select;
 
@@ -39,7 +35,7 @@ function LaptopAllot(props) {
   };
 
   const onFinish = (values) => {
-    console.log("ffffff", values);
+    // console.log("ffffff", values);
     form.resetFields();
     const allUpgradeData = {
       lapname: values.lapname,
@@ -52,10 +48,8 @@ function LaptopAllot(props) {
       name: user.name,
       type: values.option,
       status: "Pending",
-      // ...values
     };
 
-    console.log("ffffff", allUpgradeData);
     try {
       AssetContext.addRepairRequest(allUpgradeData, file);
 
@@ -74,13 +68,11 @@ function LaptopAllot(props) {
   }, []);
 
   const getAllotmentData = async () => {
-    let allData = await AssetContext.getRepairData(currentUser.uid, [
-      "Allotment",
-    ]);
+    let allData = await AssetContext.getRepairData(currentUser.uid, true);
     let userData = await EmpInfoContext.getEduDetails(currentUser.uid);
     setUser(userData);
     setAllotmentData(allData);
-    console.log(setAllotmentData, "ektadewangan");
+    // console.log(setAllotmentData, "ektadewangan");
   };
 
   const divStyle = {

@@ -475,7 +475,7 @@ function AddEmployee() {
             >
             <Button 
               className="bulkEmployee"
-              type="primary" 
+              // type="primary" 
               onClick={showBulkModal}
             >
               <div className="bulkButton">Bulk Employee Onboarding</div>

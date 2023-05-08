@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Badge, Calendar, Card, Col, Row, Tooltip } from "antd";
 import "../style/MainDashBoard.css";
 import Attendancelog from "../images/Attendancelog.png";
@@ -15,14 +15,16 @@ import appraisalicon from "../images/list.png";
 import { Link, useNavigate } from "react-router-dom";
 // import { Button } from "antd/lib/radio";
 import moment from "moment";
+import { AlertTwoTone } from "@ant-design/icons";
+import Notifications from "./Notifications";
+import { getManagersData } from "../contexts/CreateContext";
 // import { AlertTwoTone, CalendarTwoTone, ScheduleTwoTone } from "@ant-design/icons";
 
 function MainDashBoard(props) {
-  // console.log(props);
   const role = sessionStorage.getItem("role");
+  const compId = sessionStorage.getItem("compId");
   const navigate = useNavigate()
   const [selected, setSelected] = useState([moment().format("Do MMM, YYYY"), moment().format("MMM, YYYY")])
-  const [notifications, setNotifications] = useState([])
   props.switchRole(role);
   const cardStyle = {
     fontWeight: "600",
@@ -66,7 +68,7 @@ function MainDashBoard(props) {
 
   const attendanceIcon = () => {
     return (
-      <Link to="/Attendance">
+      <Link to="/attendance/daily-log">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
         <Card
           bordered
@@ -344,6 +346,9 @@ function MainDashBoard(props) {
       // </div>
     );
   };
+  useEffect(() => {
+    getManagersData(compId, "Swetha Et Vijay")
+  }, [])
 
   // const getListData = (value) => {
   //   let listData = [];
@@ -672,35 +677,8 @@ function MainDashBoard(props) {
                 hoverable
                 headStyle={{ height: "45px"}}
               >
-                <div style={{overflowY: "scroll", height: "200px"}}>
-                  {notifications.map(x => {
-                    // console.log(x);
-                    return (
-                    <Card
-                      className="notification"
-                      bordered
-                      hoverable
-                      style={{height: "70px", padding: "10px"}}
-                      onClick={() => {if (x.ref) {navigate(x.ref[0], x.ref[1] || {})}}}
-                    >
-                      {/* <Card.Meta
-                        avatar={<AlertTwoTone twoToneColor="#fa8128" style={{fontSize: "20px"}} />}
-                        title={<h5>Leave Notification</h5>}
-                        // description=""
-                        extra={<Badge count={3} />}
-                      /> */}
-                      {/* This is the description */}
-                      <Row style={{ padding: "0"}}>
-                        <Col span={2}>{x.icon}</Col>
-                        <Col span={20}>
-                          <h4>{x.name}</h4>
-                          <p style={{color:"lightgray"}}>{x.description}</p>
-                        </Col>
-                        <Col span={2}><Badge count={x.badge} /></Col>
-                      </Row>
-                    </Card>
-                  )})}
-                </div>
+                <Notifications notifications={props.notifications} height={"200px"} />
+                {Notifications}
               </Card>
             </Col>
             <Col>
@@ -709,7 +687,7 @@ function MainDashBoard(props) {
                   <>
                     <Row
                       gutter={[0, 10]}
-                      style={{ justifyContent: "space-between" }}
+                      // style={{ justifyContent: "space-between" }}
                     >
                       <Col xs={12} sm={12} md={8} lg={8} xl={6} className="hi">
                         {attendanceIcon()}
@@ -736,7 +714,10 @@ function MainDashBoard(props) {
 
                 {role == "admin" || isHr ? (
                   <>
-                    <Row gutter={[10, 10]}>
+                  <Row
+                    gutter={[0, 10]}                    
+                    // style={{ justifyContent: "space-between" }}
+                  >
                       <Col xs={12} sm={12} md={8} lg={8} xl={6} className="hi">
                         {companyProfileIcon()}
                       </Col>
@@ -774,7 +755,10 @@ function MainDashBoard(props) {
 
                 {role == "super" ? (
                   <>
-                    <Row gutter={[0, 10]}>
+                    <Row
+                      gutter={[0, 10]}                    
+                      // style={{ justifyContent: "space-between" }}
+                    >
                       <Col xs={12} sm={12} md={8} className="hi">
                         {myProfileIcon()}
                       </Col>

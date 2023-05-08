@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
@@ -27,12 +27,18 @@ const Navbar = (props) => {
   const [buttonStatus, setButtonStatus] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const role = sessionStorage.getItem("role");
+  const location = useLocation()
+  const navigate = useNavigate()
   const [roleView, setRoleView] = useState(
     props.roleView || sessionStorage.getItem("role")
   );
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   let temp = sessionStorage.getItem("logo");
   const logo = temp == null ? Logo : temp;
+  const paths = {
+    admin: ["attendance", "hr-leave"],
+    emp: ["my-attendance", "leave"]
+  }
 
   const isClockRunning = async () => {
     setLoading(true);
@@ -280,6 +286,10 @@ const Navbar = (props) => {
                 "roleView",
                 roleView == "admin" ? "emp" : "admin"
               );
+              let path = location.pathname.split('/')[1].toLowerCase()
+              let index = paths[roleView].indexOf(path);
+              console.log(path, index, paths[roleView == "emp" ? "admin" : "emp"][index]);
+              navigate(`/${paths[roleView == "emp" ? "admin" : "emp"][index]}`)
             }}
           />
         ) : null}

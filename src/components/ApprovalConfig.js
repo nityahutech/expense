@@ -11,7 +11,7 @@ import {
   Col,
 } from "antd";
 import { EditOutlined, SearchOutlined } from "@ant-design/icons";
-import "../style/leave.css";
+import "../style/Leave.css";
 import { getUsers, showNotification } from "../contexts/CreateContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import EmpInfoContext from "../contexts/EmpInfoContext";

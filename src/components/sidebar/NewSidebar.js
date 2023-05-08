@@ -18,7 +18,8 @@ import {
   TeamOutlined,
   UserOutlined,
   RadarChartOutlined,
-  DeploymentUnitOutlined
+  DeploymentUnitOutlined,
+  AlertFilled
 } from "@ant-design/icons";
 
 const { Sider } = Layout;
@@ -396,6 +397,18 @@ const NewSidebar = (props) => {
                     <NavLink to="/Client/ViewClient" />
                   </Menu.Item>
                 </Menu.SubMenu>
+                    <Menu.Item
+                      className="arrow"
+                      icon={
+                        <AlertFilled
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
+                      key="33"
+                    >
+                      <p className="sideFont">Requests</p>
+                      <NavLink className="navLink" to="/requests" />
+                    </Menu.Item>
 
               </Menu>
             </div>

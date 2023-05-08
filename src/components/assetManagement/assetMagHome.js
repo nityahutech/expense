@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Tabs } from "antd";
 import AllRequest from "./AllRequest";
 import Requestpage from "./RepairReq";
-import InvoiceReimbursement from "./InvoiceReimbursement";
 import "./AssetManag.css";
 import AssetContext from "../../contexts/AssetContext";
 import RepairRequestTable from "./RepairRequestTable";
+import AddAsset from "./AddAsset";
+import AssetList from "./AssetList";
 
 function AssetMagHome(props) {
   const [repairLaptopData, setRepairLaptopData] = useState([]);
   const [laptopAllot, setLaptopAllot] = useState(props.refresh);
-  console.log(props.refresh);
+  // console.log(props.refresh);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const role = sessionStorage.getItem("role");
   const isHr =
@@ -19,24 +20,18 @@ function AssetMagHome(props) {
   useEffect(() => {
     getRepairData();
     setLaptopAllot(props.refresh);
-    // console.log(getRepairData);
   }, [props.roleView]);
 
   const getRepairData = async () => {
-    const typeValues =
-      props.roleView == "admin"
-        ? ["Repair", "Upgrade", "Allotment", "Return"]
-        : ["Repair", "Upgrade", "Return"];
     let repairData = await AssetContext.getRepairData(
       currentUser.uid,
-      typeValues
     );
-    console.log("values", repairData);
+    // console.log("values", repairData);
     setRepairLaptopData(repairData);
   };
-  console.log("props.roleView::: ", props.roleView);
+  
   return (
-    <div className="primarydiva">
+    <div>
       <Tabs defaultActiveKey="1" className="assetTabs">
         {props.roleView == "admin" ? (
           <>
@@ -47,6 +42,12 @@ function AssetMagHome(props) {
                 data={repairLaptopData}
                 allot={laptopAllot}
               />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Asset List" key="2">
+              <AssetList />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Add Asset" key="3">
+              <AddAsset />
             </Tabs.TabPane>
           </>
         ) : (

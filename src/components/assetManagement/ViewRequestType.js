@@ -3,10 +3,8 @@ import { Col, Form, Row, Input, Divider } from "antd";
 const { TextArea } = Input;
 
 function ViewRequestType(props) {
-  console.log("ssss", props.type);
 
   const laptopData = props.modalData;
-  console.log("ttsssssss", laptopData.type);
 
   return (
     <>

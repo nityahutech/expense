@@ -71,7 +71,7 @@ const modalContent2 = {
 };
 
 const RepairRequestTable = (props) => {
-  console.log("RepairRequestTable props::,", props);
+  // console.log("RepairRequestTable props::,", props);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [repairLaptopData, setRepairLaptopData] = useState(props.data);
   // console.log(repairLaptopData);
@@ -120,8 +120,8 @@ const RepairRequestTable = (props) => {
   };
 
   const onFinish = (values) => {
-    console.log(values, "values");
-    console.log(modalData);
+    // console.log(values, "values");
+    // console.log(modalData);
     // form1.resetFields();
     const updateData = {
       repairDes: values.repairDes,
@@ -149,7 +149,7 @@ const RepairRequestTable = (props) => {
 
   function handleChange(event) {
     let file = event.target.files[0];
-    console.log("handleupload", file);
+    // console.log("handleupload", file);
     setFile(null);
     const isPdf = file.type === "application/pdf";
     if (!isPdf) {
@@ -186,6 +186,7 @@ const RepairRequestTable = (props) => {
       key: "repairDes",
       width: 200,
       align: "left",
+      render: (_, { repairDes }) => repairDes || "-"
     },
     {
       title: "Status",
@@ -339,7 +340,7 @@ const RepairRequestTable = (props) => {
     <>
       <div className="laptopDiv">
         <Card
-          title=" Repair Request / Upgrade Request"
+          title="Requests"
           className="laptopcard"
           bordered={true}
           hoverable={true}

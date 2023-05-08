@@ -63,7 +63,7 @@ export function AuthProvider({ children }) {
     // try{
     getDoc(doc(db, 'users', user.uid)).then((res) => {
       let rec = res.data()
-      if (!rec) { throw new Error("User does not Exist")}
+      if (!rec) { return new Error("User does not exist!")}
       sessionStorage.setItem("role", rec?.role)
       sessionStorage.setItem("roleView", rec?.role)
       sessionStorage.setItem("compId", rec?.compId)
@@ -112,7 +112,7 @@ export function AuthProvider({ children }) {
     if (moment(Number(res.user.metadata.createdAt)).calendar().split(" ")[0] == "Today") {
       await deleteUser(res.user)
     }
-    throw new Error("User does not exist!")
+    throw new Error("User has not been onboarded! Please contact your HR.")
   }
 
   function login(email, password) {

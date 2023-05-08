@@ -42,6 +42,10 @@ import Types from "./components/Leave/Types";
 import AdminLeave from "./components/Leave/AdminLeave";
 import UserAttendance from "./components/Attendance/UserAttendance";
 import AddReport from "./components/Attendance/AddReport";
+import Survey from "./components/Feedback/Survey";
+import RequestHome from "./components/Requests/RequestHome";
+import Forms from "./components/Requests/Forms";
+import RequestTable from "./components/Requests/RequestTable";
 
 function App() {
   return (
@@ -306,6 +310,24 @@ function App() {
               />
             }
           />
+          <Route
+            path="/requests"
+            element={
+              <FormatPage
+                main={RequestHome}
+                activeMenu={["33"]}
+              />
+            }
+          >
+            <Route
+              path="view"
+              element={<RequestTable />}
+            />
+            <Route
+              path="forms"
+              element={<Forms />}
+            />
+          </Route>
           <Route
             path="/settings"
             element={<FormatPage main={Settingpage} activeMenu={["22"]} />}

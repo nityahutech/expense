@@ -260,7 +260,23 @@ text-align: center;
     height: 450px;
     background-image: linear-gradient(to bottom right, lightblue, lightgreen);
     margin: auto;
-   /* margin-top: 7rem; */
+   margin-top: 7rem;
+  }
+
+  .sectionCard.ant-card{
+    width: 800px;
+    height: 450px;
+    background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+    margin: auto;
+   margin-top: 1rem;
+  }
+
+  .commentCard.ant-card{
+    width: 800px;
+    height: 450px;
+    background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+    margin: auto;
+   /* margin-top: 2rem; */
   }
 
   .surveyCard .ant-card-body{
@@ -297,8 +313,32 @@ text-align: center;
   }
 
   .skillButton.ant-btn{
-    margin-top: 12rem;
-    margin-left: 31rem;
+    margin-top: 14rem;
+    margin-left: 32rem;
+    border-radius: 17px;
+    width: 200px;
+    background-image: linear-gradient(to right, rgb(13, 15, 215), rgb(37, 154, 199));
+    color: rgb(255, 255, 255);
+    border: none;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .commentButton.ant-btn{
+    margin-top: 9rem;
+    margin-left: 33rem;
+    border-radius: 17px;
+    width: 200px;
+    background-image: linear-gradient(to right, rgb(13, 15, 215), rgb(37, 154, 199));
+    color: rgb(255, 255, 255);
+    border: none;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .submitButton.ant-btn{
+    margin-top: 5rem;
+    margin-left: 32rem;
     border-radius: 17px;
     width: 200px;
     background-image: linear-gradient(to right, rgb(13, 15, 215), rgb(37, 154, 199));

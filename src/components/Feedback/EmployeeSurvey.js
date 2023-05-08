@@ -5,6 +5,7 @@ import backgroundImage from "../../images/backgroundImage.jpg";
 import "../Feedback/FeedBack.css";
 import Questions from "./Questions";
 import Title from "./Title";
+import Survey from "./Survey";
 // import { color } from "html2canvas/dist/types/css/types/color";
 
 function EmployeeSurvey() {
@@ -130,14 +131,17 @@ function EmployeeSurvey() {
             <Title onStart={onStart} titleType={titleType} />
           </Card>
         </div>
-        {sections.map((section, i) => (
+        <div>
+          <Survey />
+        </div>
+        {/* {sections.map((section, i) => (
           <div key={`simple-${i}`}>
             <div className="surveyCarousel">
               <Card className="surveyCard">
                 <Title type={section} onStart={onStart} />
               </Card>
             </div>
-            {questions.map((que, idx) => (
+            {/* {questions.map((que, idx) => (
               <div className="surveyCarousel">
                 <Card className="surveyCard">
                   <Questions
@@ -149,9 +153,9 @@ function EmployeeSurvey() {
                   />
                 </Card>
               </div>
-            ))}
+            ))} */}
 
-            {/* {questions.map((que, idx) => {
+        {/* {questions.map((que, idx) => {
               console.log(que, idx);
               return (
                 <div className="surveyCarousel">
@@ -169,8 +173,8 @@ function EmployeeSurvey() {
                 </div>
               );
             })} */}
-          </div>
-        ))}
+        {/* </div> */}
+        {/* ))} */}
 
         {/* <div className="surveyCarousel">
           <Card className="surveyCard">

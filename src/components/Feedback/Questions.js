@@ -4,8 +4,9 @@ import "../Feedback/FeedBack.css";
 
 function Questions(props) {
   console.log("props", props);
-  const [questions, setQuestions] = useState(props.questions || []);
-  const [currentQuestion, setCurrentQuestion] = useState(props.currentQuestion);
+  const [questionNumber, setQuestionNumber] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(props.questionList[0]);
+  const [rankNumber, setrankNumber] = useState(props.ranks);
   //   const [questionDetails, setQuestionDetails] = useState([
   //     {
   //       id: 1,
@@ -33,20 +34,49 @@ function Questions(props) {
   //     },
   //   ]);
 
-  useEffect(() => {
-    setQuestions(props.questions);
-    setCurrentQuestion(props.currentQuestion);
-  }, [props.questions]);
+  // useEffect(() => {
+  //   setQuestions(props.questions);
+  //   setCurrentQuestion(props.currentQuestion);
+  // }, [props.questions]);
 
   const handleRankingClick = () => {
     props.handleRankingClick();
     // props.handleRankingTechnical();
   };
+  console.log(props.questionList[props.questionList.length - 1]);
 
   return (
     <>
       <div className="questionsScroll">
+        <h1 style={{ color: "#594b4b" }}>{props.section}</h1>
+        <h3>Question {questionNumber + 1}</h3>
+        <p style={{ marginTop: "20px" }}>{currentQuestion}</p>
+        {rankNumber.map((rank) => (
+          <Tooltip title={rank.toolTipText} overlayClassName="toolTipQue">
+            <Button
+              style={{ marginTop: "20px" }}
+              className="question-button"
+              key={rank.value}
+              onClick={() => {
+                if (questionNumber + 1 == props.questionList.length) {
+                  // props.nextPage();
+                } else {
+                  setCurrentQuestion(props.questionList[questionNumber]);
+                  setQuestionNumber(questionNumber + 1);
+                }
+              }}
+            >
+              {rank.label}
+            </Button>
+          </Tooltip>
+        ))}
+        {questionNumber === props.questionList.length - 1 ? (
+          <Button onClick={() => props.next()} className="submitButton">
+            Submit
+          </Button>
+        ) : null}
         {/* <p>Question{props.number}</p> */}
+
         {/* <h2 style={{ color: "#847e79" }}>
           {questions[currentQuestion].number}
         </h2> */}

@@ -38,13 +38,14 @@ function Survey() {
       "Lorem tech ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa ?",
     ],
   };
-  const [ranks, setRanks] = useState([
-    { label: "1", value: 1, toolTipText: "Poor" },
-    { label: "2", value: 2, toolTipText: "Ok" },
-    { label: "3", value: 3, toolTipText: "Good" },
-    { label: "4", value: 4, toolTipText: "Great" },
-    { label: "5", value: 5, toolTipText: "Excellent" },
-  ]);
+  const [ranks, setRanks] = useState(["1", "2", "3", "4", "5"]);
+  // [
+  //   { label: "1", value: 1, toolTipText: "Poor" },
+  //   { label: "2", value: 2, toolTipText: "Ok" },
+  //   { label: "3", value: 3, toolTipText: "Good" },
+  //   { label: "4", value: 4, toolTipText: "Great" },
+  //   { label: "5", value: 5, toolTipText: "Excellent" },
+  // ]
   const [scores, setScores] = useState({});
   const [slides, setSlides] = useState([]);
 
@@ -86,6 +87,14 @@ function Survey() {
             ranks={ranks}
           />
         ))}
+        <div>
+        <div className="surveyCarousel">
+          <Card className="surveyCard">
+            <Title nextPage={nextOuter} titleType={"Preview"} />
+          </Card>
+        </div>
+        </div>
+
         <div>
         <div className="surveyCarousel">
           <Card className="surveyCard">

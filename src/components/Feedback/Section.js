@@ -5,6 +5,7 @@ import backgroundImage from "../../images/backgroundImage.jpg";
 import "../Feedback/FeedBack.css";
 import Questions from "./Questions";
 import Title from "./Title";
+import Question from "./Question";
 // import { color } from "html2canvas/dist/types/css/types/color";
 
 function Section(props) {
@@ -59,7 +60,16 @@ function Section(props) {
         </Card>
       </div>
       </div>
-      <div>
+      {props.questions.map((question, i) => (
+          <Question
+            index={i}
+            section={props.section}
+            question={question}
+            nextInner={nextInner}
+            ranks={props.ranks}
+          />
+        ))}
+      {/* <div>
       <div className="surveyCarousel">
         <Card className="surveyCard">
           <Questions
@@ -71,8 +81,7 @@ function Section(props) {
           />
         </Card>
       </div>
-
-      </div>
+      </div> */}
       <div>
       <div className="surveyCarousel">
         <Card className="commentCard">

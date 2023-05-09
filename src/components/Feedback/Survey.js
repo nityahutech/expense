@@ -64,17 +64,19 @@ function Survey() {
         dots={false}
         style={{
           // margin: "auto",
-          display: "flex",
-          alignItems: "center",
+          // display: "flex",
+          // alignItems: "center",
           width: "100%",
           height: "100vh",
           backgroundColor: "#f8f8f8",
         }}
       >
+        <div>
         <div className="surveyCarousel">
           <Card className="surveyCard">
             <Title nextPage={nextOuter} titleType={"startPage"} />
           </Card>
+        </div>
         </div>
         {sections.map((section) => (
           <Section
@@ -84,10 +86,12 @@ function Survey() {
             ranks={ranks}
           />
         ))}
+        <div>
         <div className="surveyCarousel">
           <Card className="surveyCard">
             <Title nextPage={nextOuter} titleType={"thankyou"} />
           </Card>
+        </div>
         </div>
       </Carousel>
     </div>

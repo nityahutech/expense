@@ -260,16 +260,16 @@ text-align: center;
     height: 450px;
     background-image: linear-gradient(to bottom right, lightblue, lightgreen);
     margin: auto;
-   margin-top: 7rem;
+   /* margin-top: 7rem; */
   }
 
-  .sectionCard.ant-card{
+  /* .sectionCard.ant-card{
     width: 800px;
     height: 450px;
     background-image: linear-gradient(to bottom right, lightblue, lightgreen);
     margin: auto;
    margin-top: 1rem;
-  }
+  } */
 
   .commentCard.ant-card{
     width: 800px;
@@ -371,10 +371,11 @@ text-align: center;
     font-size: 20px;
   }
 
-  /* .surveyCarousel{
-    margin: auto;
+  .surveyCarousel{
     width: 100%;
-  height: 100%} */
+    height: 100vh;
+    display: flex;
+}
   
   @media only screen  and (max-width: 768px ) {
     .surveyCard.ant-card{

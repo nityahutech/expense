@@ -52,13 +52,16 @@ function Section(props) {
         backgroundColor: "#f8f8f8",
       }}
     >
+      <div>
       <div className="surveyCarousel">
-        <Card className="sectionCard">
+        <Card className="surveyCard">
           <Title nextPage={nextInner} titleType={props.section} />
         </Card>
       </div>
+      </div>
+      <div>
       <div className="surveyCarousel">
-        <Card className="sectionCard">
+        <Card className="surveyCard">
           <Questions
             nextPage={props.nextOuter}
             questionList={props.questions}
@@ -68,6 +71,9 @@ function Section(props) {
           />
         </Card>
       </div>
+
+      </div>
+      <div>
       <div className="surveyCarousel">
         <Card className="commentCard">
           <Title
@@ -77,6 +83,7 @@ function Section(props) {
             length={props.section.length}
           />
         </Card>
+      </div>
       </div>
     </Carousel>
     //         )

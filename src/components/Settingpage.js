@@ -198,11 +198,11 @@ const Settingpage = (props) => {
             </Card>
           </div>
         </Tabs.TabPane>
-        {props.roleView === 'admin' &&
+        {/* {props.roleView === 'admin' &&
           <Tabs.TabPane tab="Notifications" key="2">
             <NotifySettings data={"hi"} />
           </Tabs.TabPane>
-        }
+        } */}
       </Tabs>
     </>
   );

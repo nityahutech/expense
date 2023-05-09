@@ -9,6 +9,7 @@ import {
   CompassOutlined,
   DesktopOutlined,
   FundProjectionScreenOutlined,
+
   GlobalOutlined,
   HomeFilled,
   PieChartFilled,
@@ -397,20 +398,32 @@ const NewSidebar = (props) => {
                     <NavLink to="/Client/ViewClient" />
                   </Menu.Item>
                 </Menu.SubMenu>
-                    <Menu.Item
-                      className="arrow"
-                      icon={
-                        <AlertFilled
-                          style={{ color: "#ffffff", fontSize: "17px" }}
-                        />
-                      }
-                      key="33"
-                    >
-                      <p className="sideFont">Requests</p>
-                      <NavLink className="navLink" to="/requests" />
-                    </Menu.Item>
+                <Menu.Item
+                  className="arrow"
+                  icon={
+                    <AlertFilled
+                      style={{ color: "#ffffff", fontSize: "17px" }}
+                    />
+                  }
+                  key="33"
+                >
+                  <p className="sideFont">Requests</p>
+                  <NavLink className="navLink" to="/requests" />
+                </Menu.Item>
+                <Menu.Item
+                  icon={
+                    <ProfileOutlined
+                      style={{ color: "#ffffff", fontSize: "17px" }}
+                    />
+                  }
+                  key="32a"
+                >
+                  <p className="sideFont">Template</p>
+                  <NavLink to="/NotifySettings" />
+                </Menu.Item>
 
               </Menu>
+
             </div>
           </div>
           <div className="sidelayout-setting">

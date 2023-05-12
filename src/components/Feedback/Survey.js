@@ -58,9 +58,22 @@ function Survey() {
     outerCarouselRef.current.next();
   };
 
+  const redirectToLogin = () => {
+    console.log("testttt");
+    outerCarouselRef.current.next();
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 5000);
+  };
+
+  const backIn = () => {
+    outerCarouselRef.current.prev();
+  };
+
   return (
     <div>
       <Carousel
+        // afterChange={redirectToLogin}
         ref={outerCarouselRef}
         dots={false}
         style={{
@@ -73,11 +86,15 @@ function Survey() {
         }}
       >
         <div>
-        <div className="surveyCarousel">
-          <Card className="surveyCard">
-            <Title nextPage={nextOuter} titleType={"startPage"} />
-          </Card>
-        </div>
+          <div className="surveyCarousel">
+            <Card className="surveyCard">
+              <Title
+                nextPage={nextOuter}
+                titleType={"startPage"}
+                backIn={backIn}
+              />
+            </Card>
+          </div>
         </div>
         {sections.map((section) => (
           <Section
@@ -85,22 +102,32 @@ function Survey() {
             nextOuter={nextOuter}
             questions={questions[section]}
             ranks={ranks}
+            backIn={backIn}
           />
         ))}
         <div>
-        <div className="surveyCarousel">
-          <Card className="surveyCard">
-            <Title nextPage={nextOuter} titleType={"Preview"} />
-          </Card>
-        </div>
+          <div className="surveyCarousel">
+            <Card className="surveyCard">
+              <Title
+                nextPage={nextOuter}
+                titleType={"Preview"}
+                redirectToLogin={redirectToLogin}
+                backIn={backIn}
+              />
+            </Card>
+          </div>
         </div>
 
         <div>
-        <div className="surveyCarousel">
-          <Card className="surveyCard">
-            <Title nextPage={nextOuter} titleType={"thankyou"} />
-          </Card>
-        </div>
+          <div className="surveyCarousel">
+            <Card className="surveyCard">
+              <Title
+                nextPage={nextOuter}
+                titleType={"thankyou"}
+                backIn={backIn}
+              />
+            </Card>
+          </div>
         </div>
       </Carousel>
     </div>

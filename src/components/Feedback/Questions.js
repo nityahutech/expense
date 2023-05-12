@@ -48,7 +48,7 @@ function Questions(props) {
   return (
     <>
       <div className="questionsScroll">
-        <h1 style={{ color: "#594b4b" }}>{props.section}</h1>
+        <h1 style={{ color: "#ffffff" }}>{props.section}</h1>
         <h3>Question {questionNumber + 1}</h3>
         <p style={{ marginTop: "20px" }}>{currentQuestion}</p>
         {rankNumber.map((rank) => (

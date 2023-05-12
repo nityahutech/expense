@@ -281,7 +281,9 @@ text-align: center;
 
   .surveyCard .ant-card-body{
     margin: 2rem;
+    padding: 0;
   }
+  
 
   .surveyCard1.ant-card{
     width: 800px;
@@ -313,7 +315,7 @@ text-align: center;
   }
 
   .skillButton.ant-btn{
-    margin-top: 14rem;
+    margin-top: 12rem;
     margin-left: 32rem;
     border-radius: 17px;
     width: 200px;
@@ -325,7 +327,7 @@ text-align: center;
   }
 
   .commentButton.ant-btn{
-    margin-top: 9rem;
+    margin-top: 7rem;
     margin-left: 33rem;
     border-radius: 17px;
     width: 200px;
@@ -388,6 +390,7 @@ text-align: center;
 
   .shaded-style {
     background: white;
+/* color: #000000; */
   }
 
   .rank-list {
@@ -423,6 +426,10 @@ text-align: center;
       background-image: linear-gradient(to bottom right, lightblue, lightgreen);
       
     }
+
+    .commentButton.ant-btn{
+      margin-left: 5rem;
+    }
   }
 
   @media only screen  and (max-width: 600px ) {
@@ -438,6 +445,10 @@ text-align: center;
       height: auto;
       background-image: linear-gradient(to bottom right, lightblue, lightgreen);
      margin: auto;
+    }
+
+    .commentButton.ant-btn{
+      margin-left: 5rem;
     }
 
 
@@ -459,6 +470,10 @@ text-align: center;
 
     .startButton.ant-btn{
       margin-top: 0;
+    }
+
+    .commentButton.ant-btn{
+      margin-left: 5rem;
     }
 
     .surveyCard1.ant-card{

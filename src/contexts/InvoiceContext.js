@@ -13,7 +13,7 @@ let compId = sessionStorage.getItem("compId");
 
 let companyInvoiceCollectionRef = collection(
   db,
-  `companyprofile/${compId}/invoices`
+  `companyprofile/${compId}/request`
 );
 
 class InvoiceContext {
@@ -21,7 +21,7 @@ class InvoiceContext {
     compId = sessionStorage.getItem("compId");
     companyInvoiceCollectionRef = collection(
       db,
-      `companyprofile/${compId}/invoices`
+      `companyprofile/${compId}/request`
     );
     return;
   };
@@ -71,7 +71,7 @@ class InvoiceContext {
 
   updateInvoiceData = (id, updateInvoice) => {
     return updateDoc(
-      doc(db, `companyprofile/${compId}/invoices`, id),
+      doc(db, `companyprofile/${compId}/request`, id),
       updateInvoice
     );
   };

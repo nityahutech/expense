@@ -118,8 +118,8 @@ function TravelMngHome(props) {
               status === "Approved"
                 ? "rgb(8 231 68 / 75%)"
                 : status === "Pending"
-                ? "rgb(244 209 105)"
-                : "#f44336"
+                  ? "rgb(244 209 105)"
+                  : "#f44336"
             }
             key={status}
           >
@@ -158,9 +158,9 @@ function TravelMngHome(props) {
                 style={{ padding: 0, color: "rgb(64, 169, 255)" }}
                 type="link"
                 className="show"
-                // onClick={() => {
-                //   showModal(record);
-                // }}
+              // onClick={() => {
+              //   showModal(record);
+              // }}
               >
                 {
                   <EditFilled
@@ -392,7 +392,7 @@ function TravelMngHome(props) {
                                           // marginBottom: 8,
                                           width: "100%",
                                         }}
-                                        // align="start"
+                                      // align="start"
                                       >
                                         {console.log(fields, field)}
                                         <Row

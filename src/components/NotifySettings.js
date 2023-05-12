@@ -401,6 +401,7 @@ function NotifySettings() {
         justifyContent: "center",
         flexDirection: "column",
         alignItems: "center",
+        marginTop: '40px'
       }}
     >
       {award === false ? (

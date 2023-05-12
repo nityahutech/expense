@@ -3,15 +3,6 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDn5e6U6H_cipP0N2_Wk2CfeBqeezaA6HY",
-//   authDomain: "hutech-hr.firebaseapp.com",
-//   projectId: "hutech-hr",
-//   storageBucket: "hutech-hr.appspot.com",
-//   messagingSenderId: "950376087363",
-//   appId: "1:950376087363:web:4f0755f9b55b3c01deb9f6",
-//   measurementId: "G-LSK2TMX7WC"
-// };
 const firebaseConfig = {
   apiKey: "AIzaSyBlxO52TTZqs4KjmDQtJbG2i0uf1GEAi-U",
   authDomain: "fir-db-for-spring-boot-aea1a.firebaseapp.com",

@@ -22,6 +22,26 @@ main{
   margin-left: 13px;
 }
 
+.view-modal .ant-modal-content {
+  border-radius: 10px;
+}
+
+/* .view-modal .ant-modal-body {
+  padding: 0;
+} */
+
+.view-modal .ant-modal-header {
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+.view-modal .ant-modal-title {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 25px;
+}
+
 .page-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   color: #000000;
   font-weight: 600;

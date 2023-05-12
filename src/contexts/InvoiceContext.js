@@ -84,7 +84,7 @@ class InvoiceContext {
         id: doc.id,
       };
     });
-    console.log(compId, companyInvoiceCollectionRef, rec);
+    console.log('ssssssssssss',compId, companyInvoiceCollectionRef, rec);
     return rec;
   };
 }

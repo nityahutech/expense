@@ -17,17 +17,14 @@ import "./App.css";
 import FormatPage from "./FormatPage";
 import MainDashBoard from "./components/MainDashBoard";
 import Settingpage from "./components/Settingpage";
-import AttendanceLog from "./components/AttendanceLog";
 import InvoiceMagHome from "./components/assetManagement/InvoiceMagHome";
 import TravelMngHome from "./components/TravelManagement/TravelMngHome";
-import FeedbackTable from "./components/Feedback/FeedbackTable";
 import EmailVerification from "./EmailVerification";
 import ConfigSurvey from "./components/Feedback/ConfigSurvey";
 import Communication from "./components/Feedback/Communication";
 import Technical from "./components/Feedback/Technical";
 import AddSurvey from "./components/Feedback/AddSurvey";
 import FeedbackAdmin from "./components/Feedback/FeedbackAdmin";
-import EmployeeSurvey from "./components/Feedback/EmployeeSurvey";
 import AddClient from "./components/Client/AddClient";
 import ViewClient from "./components/Client/ViewClient";
 import DailyLog from "./components/Attendance/DailyLog";
@@ -44,8 +41,8 @@ import UserAttendance from "./components/Attendance/UserAttendance";
 import AddReport from "./components/Attendance/AddReport";
 import Survey from "./components/Feedback/Survey";
 import RequestHome from "./components/Requests/RequestHome";
-import Forms from "./components/Requests/Forms";
-import RequestTable from "./components/Requests/RequestTable";
+import Forms from "./components/Requests/Form/Forms";
+import RequestTable from "./components/Requests/Table/RequestTable";
 
 function App() {
   return (

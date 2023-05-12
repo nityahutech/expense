@@ -54,21 +54,26 @@ function Section(props) {
       }}
     >
       <div>
-      <div className="surveyCarousel">
-        <Card className="surveyCard">
-          <Title nextPage={nextInner} titleType={props.section} />
-        </Card>
-      </div>
+        <div className="surveyCarousel">
+          <Card className="surveyCard">
+            <Title
+              nextPage={nextInner}
+              titleType={props.section}
+              backIn={props.backIn}
+            />
+          </Card>
+        </div>
       </div>
       {props.questions.map((question, i) => (
-          <Question
-            index={i}
-            section={props.section}
-            question={question}
-            nextInner={nextInner}
-            ranks={props.ranks}
-          />
-        ))}
+        <Question
+          index={i}
+          section={props.section}
+          question={question}
+          nextInner={nextInner}
+          ranks={props.ranks}
+          backInner={backInner}
+        />
+      ))}
       {/* <div>
       <div className="surveyCarousel">
         <Card className="surveyCard">
@@ -83,16 +88,17 @@ function Section(props) {
       </div>
       </div> */}
       <div>
-      <div className="surveyCarousel">
-        <Card className="commentCard">
-          <Title
-            nextPage={props.nextOuter}
-            titleType={props.section + " " + "Comments"}
-            text={"If any further comments, please enter below:"}
-            length={props.section.length}
-          />
-        </Card>
-      </div>
+        <div className="surveyCarousel">
+          <Card className="commentCard">
+            <Title
+              backInner={backInner}
+              nextPage={props.nextOuter}
+              titleType={props.section}
+              text={"If any further comments, please enter below:"}
+              length={props.section.length}
+            />
+          </Card>
+        </div>
       </div>
     </Carousel>
     //         )

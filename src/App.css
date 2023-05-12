@@ -125,13 +125,15 @@ tr[data-row-key*="subTotal"] {
 }
 
 .back-arrow {
-  margin: 0 15px;
+  cursor: pointer;
+  /* margin: 0 15px; */
   height: 90%;
   display: flex;
   width: 55px;
-  justify-content: space-between;
+  justify-content: space-evenly;
   font-size: 15px;
   align-items: center;
+  color: #ffffff;
 }
 
 .back-arrow:hover {

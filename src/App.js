@@ -43,13 +43,24 @@ import Survey from "./components/Feedback/Survey";
 import RequestHome from "./components/Requests/RequestHome";
 import Forms from "./components/Requests/Form/Forms";
 import RequestTable from "./components/Requests/Table/RequestTable";
+import RegistrationPage from "./components/Registration/RegistrationPage";
+import RegisterAccount from "./components/Registration/RegisterAccount";
+import RegisterCompany from "./components/Registration/RegisterCompany";
+import RegisterEmployee from "./components/Registration/RegisterEmployee";
+import HomePage from "./components/Home/HomePage";
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegistrationPage />}>
+            <Route path="" element={<RegisterAccount />} />
+            <Route path="company" element={<RegisterCompany />} />
+            <Route path="employee" element={<RegisterEmployee />} />
+          </Route>
           <Route
             path="/dashboard"
             element={

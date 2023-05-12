@@ -289,6 +289,7 @@ const Navbar = (props) => {
               let path = location.pathname.split('/')[1].toLowerCase()
               let index = paths[roleView].indexOf(path);
               console.log(path, index, paths[roleView == "emp" ? "admin" : "emp"][index]);
+              if (index == -1) { return; }
               navigate(`/${paths[roleView == "emp" ? "admin" : "emp"][index]}`)
             }}
           />

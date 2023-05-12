@@ -193,3 +193,26 @@
   background-color: white;
 }
 
+.homeNavbar.ant-layout-header{
+  background: #1963A6;
+}
+
+.homeNavbar ul.ant-menu{
+  background: #1963A6;
+  display: flex;
+  justify-content: flex-end;
+
+}
+.menuBar.ant-menu.ant-menu-dark .ant-menu-item-selected {
+background-color: #1963A6;   
+}
+
+.site-layout.ant-layout-content{
+  width: 100%;
+  height: 90vh;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

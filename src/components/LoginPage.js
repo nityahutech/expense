@@ -31,7 +31,7 @@ function LoginPage() {
       sessionStorage.setItem("accessToken", res.user.accessToken);
       sessionStorage.setItem("user", JSON.stringify(res.user));
       const timer = setTimeout(() => {
-        navigate("DashBoard", { replace: true });
+        navigate("/dashboard", { replace: true });
         setLoading("Login");
       }, 3000);
     } catch(err) {
@@ -139,13 +139,12 @@ function LoginPage() {
           </Col>
           <Col xs={24} xm={24} md={12}>
               <div className="form-div">
-                  <div className="exepnse-logo">
+                  <div>
                     <img src={logo} alt="logo" 
-                    style={{width:"250px",paddingBottom:"1rem"}}
+                    style={{width:"250px", paddingBottom:"1rem"}}
                     />
                   </div>
                   <Form
-                    name="basic"
                     labelCol={{
                       span: 8,
                     }}
@@ -219,7 +218,7 @@ function LoginPage() {
                         <span className="forgotmsg">{forgot ? "Forgot Password" : "Back"}</span>
                       </div>
                       </div>
-                      <Divider style={{margin: "5px", fontSize: "smaller", color: "#c2c0c0"}}>OR</Divider>
+                      <Divider style={{margin: "5px", fontSize: "smaller", color: "#c2c0c0", cursor: "default"}}>OR</Divider>
                       
                     <div className="checkBox">
                       <Button

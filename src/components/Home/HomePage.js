@@ -33,6 +33,8 @@ function HomePage() {
           <Menu.Item key="home">
             <Button
               style={{ borderRadius: "5px", width: "170px", fontWeight: "500" }}
+              onClick={() => navigate("/login")}
+              className="loginButton"
             >
               Login
             </Button>

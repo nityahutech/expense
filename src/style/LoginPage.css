@@ -214,3 +214,14 @@ background-color: #1963A6;
   align-items: center;
 }
 
+.menuBar.ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover{
+  background-color:#1963A6 ;
+}
+
+.registerHeader .ant-card-body{
+  padding: 13px;
+}
+
+
+
+  

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Card, Divider, Steps, Button, Form, Modal } from "antd";
+import { Card, Divider, Steps, Button, Form, Modal, Affix } from "antd";
 import { Outlet } from "react-router-dom";
 import RegisterCompany from "./RegisterCompany";
 import RegisterEmployee from "./RegisterEmployee";
 import { useNavigate } from "react-router-dom";
+import logo from "../../images/SidebarLogo.svg";
 
 const { Step } = Steps;
 
@@ -14,11 +15,11 @@ const RegistrationPage = (props) => {
   const navigate = useNavigate();
 
   const progressBar = (value) => {
-    // if (progress == 0) {
-    //   form.submit();
-    //   setNext(value);
-    //   return;
-    // }
+    if (progress == 0) {
+      form.submit();
+      setNext(value);
+      return;
+    }
     setProgress(value);
   };
 
@@ -40,10 +41,25 @@ const RegistrationPage = (props) => {
 
   return (
     <>
+      <Affix offsetTop={0}>
+        <Card
+          className="registerHeader"
+          style={{
+            height: "70px",
+            display: "flex",
+            justifyContent: "flex-end",
+            background: "#1963A6",
+            boxShadow: "2px 2px 13px rgba(0, 0, 0, 0.12)",
+          }}
+        >
+          <img src={logo} width={120} />
+        </Card>
+      </Affix>
+
       <Card
-      // title="Registration page"
+        // title="Registration page"
+        style={{ marginTop: "20px" }}
       >
-        <Divider />
         <Steps progress current={progress} onChange={progressBar}>
           <Step title="Register Company" />
           <Step title="Employee Details" />
@@ -51,8 +67,8 @@ const RegistrationPage = (props) => {
         {/* <Outlet /> */}
       </Card>
       <Card style={{ marginTop: "20px" }}>
-        {progress == 0 ? <RegisterCompany /> : <RegisterEmployee />}
-        <Divider />
+        {progress == 0 ? <RegisterCompany form={form} /> : <RegisterEmployee />}
+
         <div
           style={{
             display: "flex",
@@ -67,6 +83,7 @@ const RegistrationPage = (props) => {
               fontSize: "14px",
               lineHeight: "17px",
               width: "99px",
+              marginLeft: "30px",
             }}
             onClick={onReset}
           >
@@ -86,17 +103,20 @@ const RegistrationPage = (props) => {
               style={{
                 marginLeft: "10px",
                 backgroundColor: "rgb(25, 99, 166)",
+                marginRight: "23px",
               }}
-              //   htmlType="submit"
+              // htmlType="submit"
               onClick={async () => {
                 if (progress != 1) {
                   if (progress == 0) {
+                    // console.log("testttt");
                     setNext(1);
                     form.submit();
                     return;
                   }
-                  //   setIsStepOneInvalid(false);
                   setProgress(progress + 1);
+
+                  //   setIsStepOneInvalid(false);
                 } else {
                   //   createCompany();
                 }

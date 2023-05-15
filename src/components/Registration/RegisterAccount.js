@@ -99,6 +99,9 @@ function RegisterAccount() {
         case "auth/internal-error":
           message = "Enter a password!";
           break;
+        case "auth/email-already-exists":
+          message = "Enter a password!";
+          break;
       }
       setError(message);
       setTimeout(() => {
@@ -140,14 +143,14 @@ function RegisterAccount() {
             <p> We are delighted to have you with us. Please
             click the below link to register your company.</p>
           
-          <a href="http://localhost:3001/register/company">localhost:3001/register/company</a>
+          <a href="http://localhost:3000/register/company">localhost:3000/register/company</a>
 
           <p>ThankYou,</p>
           <p> Hutech HR</p>
         `,
     };
     sendEmail(mailOptions);
-    setError("testing");
+    setError("Your account has been created, Please follow the link attached");
   };
 
   useEffect(() => {
@@ -159,7 +162,7 @@ function RegisterAccount() {
         position: "right",
         stopOnFocus: true,
         style: {
-          background: "#FC6161",
+          background: "#lightgreen",
         },
       }).showToast();
     }

@@ -2,14 +2,18 @@ import { Card, Divider, Select } from "antd"
 import { useState } from "react"
 import InvoiceForm from "./InvoiceForm"
 import TravelForm from "./TravelForm"
+import LaptopUpgradeForm from "./LaptopUpgradeForm"
+import LaptopRepairForm from "./LaptopRepairForm"
+import LaptopReturnForm from "./LaptopReturnForm"
+
 
 const Forms = () => {
     const [type, setType] = useState(null)
     const formTypes = {
         "Invoice Reimbursement": <InvoiceForm />,
-        "Laptop Upgrade": null,
-        "Laptop Repair": null,
-        "Laptop Return": null,
+        "Laptop Upgrade": <LaptopUpgradeForm/>,
+        "Laptop Repair": <LaptopRepairForm/>,
+        "Laptop Return": <LaptopReturnForm/>,
         "Travel Booking": <TravelForm />
     }
 
@@ -17,7 +21,7 @@ const Forms = () => {
         <div className="personalCardDiv">
             <Card
                 className="personal"
-                style={{width: "90%"}}
+                style={{ width: "90%" }}
                 title="Forms"
                 bordered={true}
                 hoverable={true}
@@ -26,7 +30,7 @@ const Forms = () => {
                     placeholder="Select Form Type"
                     allowClear
                     onChange={(e) => setType(e || null)}
-                    style={{minWidth: "200px", width: "40%"}}
+                    style={{ minWidth: "200px", width: "40%" }}
                     options={Object.keys(formTypes).map(x => {
                         return {
                             value: x,
@@ -36,8 +40,8 @@ const Forms = () => {
                 />
                 {type && (
                     <>
-                    <Divider />
-                    {formTypes[type]}
+                        <Divider />
+                        {formTypes[type]}
                     </>
                 )}
             </Card>
@@ -47,14 +51,3 @@ const Forms = () => {
 
 export default Forms
 
-// import AllForms from "./AllForms"
-
-// const Forms = () => {
-//     return (
-//         <div>
-//             <AllForms />
-//         </div>
-//     )
-// }
-
-// export default Forms

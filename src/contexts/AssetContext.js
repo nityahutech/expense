@@ -66,9 +66,6 @@ class AssetContext {
     }
   };
 
-  // addRepairRequest = async (repairRequestData) => {
-  //   return addDoc(companyAssetCollectionRef, repairRequestData);
-  // };
 
   //-------------------Repair Request------------------------------------
 

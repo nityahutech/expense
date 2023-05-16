@@ -92,7 +92,7 @@ const RegisterCompany = (props) => {
           remember: true,
         }}
         autoComplete="off"
-        onFinish={(values) => props.changeSave(values, fileName, imageUrl)}
+        // onFinish={(values) => props.changeSave(values, fileName, imageUrl)}
         onFinishFailed={onFinishFailed}
       >
         <Row gutter={[24, 8]}>

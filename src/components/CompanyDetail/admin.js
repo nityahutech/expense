@@ -13,6 +13,8 @@ import {
   Space,
   notification,
   Skeleton,
+  Table,
+  Input,
 } from "antd";
 import {
   PlusCircleOutlined,
@@ -71,7 +73,6 @@ const Admin = () => {
   };
 
   const onHRExeFinish = (values) => {
-
     let hrExPower = [];
 
     for (let i = 0; i < values.hrExeUser.length && i < 3; i++) {
@@ -114,10 +115,11 @@ const Admin = () => {
         hrTemp.push(emp);
       }
     });
-    setFinanceAdmins(finTemp);
+    // setFinanceAdmins(finTemp);
     setHrExAdmins(hrTemp);
     setLoading(false);
   };
+  console.log("testt");
 
   const onSearch = (searchText) => {
     let matchingName = allEmpName.filter((ex) => {
@@ -168,6 +170,153 @@ const Admin = () => {
     flexDirection: "row",
     marginRight: "10px",
   };
+  console.log("financeadmin", financeAdmins);
+  const handleIconClick = (recordKey, index) => {
+    setAccessdetails((prevData) =>
+      prevData.map((item) =>
+        item.key === recordKey ? { ...item, showInput: index } : item
+      )
+    );
+  };
+  const columns = [
+    {
+      title: "Access",
+      dataIndex: "access",
+      key: "access",
+      width: 200,
+      align: "center",
+      render: (access) => (
+        <div>
+          {access.map((data) => (
+            <div key={data} style={{ marginBottom: "1.5rem" }}>
+              {data}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      title: "Employees Name",
+      dataIndex: "empName",
+      key: "empName",
+      // width: 200,
+      align: "center",
+      render: (_, record) => (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+          }}
+        >
+          {record.access.map((data, index) => (
+            <div key={data}>
+              {record.showInput !== index && (
+                <Button
+                  style={{ marginTop: "20px" }}
+                  type="primary"
+                  onClick={() => handleIconClick(record.key, index)}
+                >
+                  <PlusCircleOutlined />
+                  Add
+                </Button>
+              )}
+              {record.showInput === index && (
+                <>
+                  <Form.List
+                    name="users"
+                    initialValue={[...financeAdmins]}
+                    key={index}
+                  >
+                    {(fields, { add, remove }) => (
+                      <>
+                        {fields
+                          .slice(0, 5)
+                          .map(({ key, name, ...restField }) => (
+                            <Space
+                              key={key}
+                              style={{
+                                display: "flex",
+                                // marginBottom: 8,
+                              }}
+                              align="baseline"
+                            >
+                              <Form.Item
+                                // style={{ marginTop: "10px" }}
+                                initialValue={
+                                  data.financerAdmin != null
+                                    ? data.financerAdmin[key]
+                                    : ""
+                                }
+                                {...restField}
+                                name={[name, "financerAdmin"]}
+                              >
+                                <AutoComplete
+                                  // options={options}
+                                  style={{
+                                    width: 100,
+                                    padding: "5px",
+                                  }}
+                                  onSearch={onSearch}
+                                  size="large"
+                                  placeholder="Enter Finance Admin Name"
+                                />
+                              </Form.Item>
+
+                              <MinusCircleOutlined
+                                onClick={() => remove(name)}
+                              />
+                            </Space>
+                          ))}
+                        {console.log(fields.length)}
+                        {fields.length > 5 ? (
+                          <Space>
+                            <Button>Save</Button>
+                            <Button>Cancel</Button>
+                          </Space>
+                        ) : (
+                          <Form.Item>
+                            <Button
+                              type="dashed"
+                              onClick={() => add()}
+                              block
+                              icon={<PlusOutlined />}
+                            >
+                              Add field
+                            </Button>
+                          </Form.Item>
+                        )}
+                      </>
+                    )}
+                  </Form.List>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+  ];
+  const rowStyle = { border: "1px solid #ddd" };
+
+  const [accessdetails, setAccessdetails] = useState([
+    {
+      key: 1,
+      access: [
+        "Leave",
+        "Attendance",
+        "Assets",
+        "Invoices",
+        "Travels",
+        "Templates",
+        "Payroll",
+        "Employee Onboard",
+        "Employee List",
+        "Expenses",
+      ],
+      showInput: -1,
+    },
+  ]);
 
   return (
     <>
@@ -209,16 +358,8 @@ const Admin = () => {
                 >
                   <Row>
                     <Col span={24}>
-                      <p>
-                        CEO is the head of the organization.
-                        <br />
-                        For Organisation Chart, addition of CEO is required.
-                      </p>
-                      <p>
-                        CEO is also the HR Admin.
-                        <br />
-                        CEO's permissions apply to all employees.
-                      </p>
+                      <p>CEO is the head of the organization.</p>
+                      <p>CEO's permissions apply to all employees.</p>
                       <p>CEO can:</p>
                       <div className="div-text" style={{ paddingLeft: "20px" }}>
                         <Text>
@@ -552,6 +693,20 @@ const Admin = () => {
             <div className="site-card-border-less-wrapper">
               <Card
                 className="financeCard"
+                title="Access Details"
+                bordered={true}
+                hoverable={true}
+                style={{
+                  width: "auto",
+                  marginTop: 10,
+                  borderRadius: "10px",
+                  cursor: "default",
+                }}
+              >
+                <Table columns={columns} dataSource={accessdetails} bordered />
+              </Card>
+              {/* <Card
+                className="financeCard"
                 title="FINANCE ADMIN"
                 bordered={true}
                 hoverable={true}
@@ -737,13 +892,13 @@ const Admin = () => {
                     ) : null}
                   </Col>
                 </Row>
-              </Card>
+              </Card> */}
             </div>
           )}
         </Form>
       </div>
 
-      <div
+      {/* <div
         className="personalCardDiv"
         style={{
           display: "flex",
@@ -968,7 +1123,7 @@ const Admin = () => {
             </div>
           )}
         </Form>
-      </div>
+      </div> */}
     </>
   );
 };

@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { DeleteOutlined, EyeFilled, SearchOutlined } from "@ant-design/icons";
-import { Card, Col, Input, Modal, Row, Table, Tag } from "antd"
+import { DeleteOutlined, EyeFilled, SearchOutlined, EditFilled, DeleteFilled, } from "@ant-design/icons";
+import { Card, Col, Input, Modal, Row, Table, Tag, Spin } from "antd"
 import ViewInvoice from "./ViewInvoice";
 import ViewLaptopUpgrade from "./ViewLaptopUpgrade";
 import ViewLaptopRepair from "./ViewLaptopRepair";
 import ViewLaptopReturn from "./ViewLaptopReturn";
 import ViewTravelBoking from "./ViewTravelBoking";
-
+import EditLaptopRepair from "./EditLaptopRepair";
+import EditLaptopReturn from "./EditLaptopReturn";
+import EditLaptopUpgrade from "./EditLaptopUpgrade";
+import EditInvoice from "./EditInvoice";
+import EditTravelBoking from "./EditTravelBoking";
 import RequestContext from "../../../contexts/RequestContext";
+
 
 const RequestTable = () => {
     const [viewData, setViewData] = useState(null)
+    const [editData, setEditData] = useState(null)
+    const [formData, setFormData] = useState([]);
+    const [filterRequest, setFilterRequest] = useState([]);
+    const [loading, setLoading] = useState([])
     const currentUser = JSON.parse(sessionStorage.getItem("user"));
     const viewTypes = {
         "Invoice Reimbursement": <ViewInvoice data={viewData} />,
@@ -19,19 +28,64 @@ const RequestTable = () => {
         "Laptop Return": <ViewLaptopReturn data={viewData} />,
         "Travel Booking": <ViewTravelBoking data={viewData} />,
     }
+    const EditTypes = {
+        "Invoice Reimbursement": <EditInvoice data={editData} setEditData={setEditData} />,
+        "Laptop Upgrade": <EditLaptopUpgrade data={editData} setEditData={setEditData} />,
+        "Laptop Repair": <EditLaptopRepair data={editData} setEditData={setEditData} />,
+        "Laptop Return": <EditLaptopReturn data={editData} setEditData={setEditData} />,
+        "Travel Booking": <EditTravelBoking data={editData} setEditData={setEditData} />,
+    }
 
-    const [formData, setFormData] = useState([]);
-    const getRepairData = async () => {
+    const getData = async () => {
+        setLoading(true)
         let repairData = await RequestContext.getAllAsset(
             currentUser.uid,
         );
         setFormData(repairData);
+        setFilterRequest(repairData)
+        setLoading(false)
     };
 
     useEffect(() => {
-        getRepairData();
+        getData();
 
-    }, []);
+    }, [editData,]);
+
+    const onDeleteRecord = (record) => {
+        console.log('record', record.type)
+        Modal.confirm({
+            title: `Are you sure, you want to delete ${record.type} dated ${record.date}`,
+            okText: "Yes",
+            okType: "danger",
+            onOk: () => {
+                RequestContext.deleteRepairData(record.id)
+                    .then((response) => {
+                        getData();
+                    })
+                    .catch((error) => { });
+            },
+        });
+    };
+
+    console.log('formData', formData)
+    const searchChange = (e) => {
+        let search = e.target.value
+        console.log('formData', search)
+        if (search) {
+            let result = formData.filter((ex) =>
+                ex?.date?.toLowerCase().includes(search?.toLowerCase()) ||
+                ex?.type?.toLowerCase().includes(search?.toLowerCase())
+
+            )
+            console.log('formData', result)
+            const modifiedFilterRequest = [...result];
+            setFilterRequest(modifiedFilterRequest)
+        }
+        else {
+            setFilterRequest(formData)
+        }
+    }
+
 
     const columns = [
         {
@@ -41,6 +95,7 @@ const RequestTable = () => {
             fixed: "left",
             align: "center",
             align: "left",
+            width: '200px'
         },
         {
             title: "Request Type",
@@ -78,28 +133,47 @@ const RequestTable = () => {
             title: "Actions",
             fixed: "right",
             align: "left",
+            width: '200px',
             render: (record) => {
                 return (
                     <>
                         {
                             <>
                                 <EyeFilled
+                                    style={{ color: '#6e7475' }}
                                     onClick={() => {
                                         setViewData(record)
                                     }}
                                 />
-                                <DeleteOutlined
+                                <DeleteFilled
                                     onClick={() => {
-                                        // onDeleteLeave(record);
+                                        onDeleteRecord(record);
                                     }}
                                     style={
                                         record?.status === "Approved"
                                             ? { color: "green", marginLeft: 10 }
                                             : record?.status === "Pending"
-                                                ? { color: "blue", marginLeft: 10 }
+                                                ? { color: "red", marginLeft: 10 }
                                                 : { color: "red", marginLeft: 10 }
                                     }
                                 />
+                                {
+                                    <EditFilled
+                                        onClick={() => {
+                                            setEditData(record)
+                                        }}
+                                        style={
+                                            record.status == "Approved"
+                                                ? {
+                                                    color: "rgb(64, 169, 255)", marginLeft: 10
+                                                }
+                                                : {
+                                                    color: "rgb(64, 169, 255)", marginLeft: 10
+                                                }
+                                        }
+                                        disabled={record.status == "Approved"}
+                                    />
+                                }
                             </>
                         }
                     </>
@@ -107,6 +181,10 @@ const RequestTable = () => {
             },
         },
     ];
+
+    const tableProps = {
+        loading,
+    };
 
 
     return (
@@ -117,17 +195,24 @@ const RequestTable = () => {
                         className="daily"
                         placeholder="Search"
                         prefix={<SearchOutlined />}
+                        onChange={searchChange}
+
                     />
                 </Col>
             </Row>
 
             <Table
+                {...tableProps}
                 className="daily daily-table"
                 columns={columns}
-                dataSource={formData}
+                dataSource={filterRequest}
                 pagination={true}
                 onChange={(pagination) => console.log(pagination)}
+                scroll={{
+                    x: 800,
+                }}
             />
+
             {console.log("yellow")}
             <Modal
                 className="view-modal"
@@ -136,7 +221,7 @@ const RequestTable = () => {
                 closeIcon={
                     <div
                         onClick={() => setViewData(null)}
-                        style={{ color: "#ffffff" }}
+                        style={{ color: "white" }}
                     >
                         X
                     </div>
@@ -145,6 +230,24 @@ const RequestTable = () => {
                 destroyOnClose
             >
                 {viewTypes[viewData?.type]}
+            </Modal>
+            <Modal
+                className="view-modal scrollable-modal"
+                open={editData}
+                footer={null}
+                closeIcon={
+                    <div
+                        onClick={() => setEditData(null)}
+                        style={{ color: "white" }}
+                    >
+                        X
+                    </div>
+                }
+                title={editData?.type}
+                destroyOnClose
+            >
+                {EditTypes[editData?.type]}
+
             </Modal>
         </Card>
     )

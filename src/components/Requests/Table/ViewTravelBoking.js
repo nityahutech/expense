@@ -34,23 +34,23 @@ function ViewTravelBoking(props) {
                                 </Divider>
                                 <Row>
                                     <Col span={12}>
-                                        <Form.Item label="Booking Type::">
+                                        <Form.Item style={{marginBottom:'0px'}} label="Booking Type::">
                                             {travel.bookingOption}
                                         </Form.Item>
                                     </Col>
                                     <Col span={12}>
-                                        <Form.Item label="Travel Date::">
+                                        <Form.Item style={{marginBottom:'0px'}} label="Travel Date::">
                                             {travel.durationDate}
                                         </Form.Item>
                                     </Col>
                                     <Col span={12}>
-                                        <Form.Item label="Departure::">{travel.depart}</Form.Item>
+                                        <Form.Item style={{marginBottom:'0px'}} label="Departure::">{travel.depart}</Form.Item>
                                     </Col>
                                     <Col span={12}>
-                                        <Form.Item label="Arrival::">{travel.arrival}</Form.Item>
+                                        <Form.Item style={{marginBottom:'0px'}} label="Arrival::">{travel.arrival}</Form.Item>
                                     </Col>
                                     <Col span={12}>
-                                        <Form.Item label="Transportation Type::">
+                                        <Form.Item style={{marginBottom:'0px'}} label="Transportation Type::">
                                             {travel.transport}
                                         </Form.Item>
                                     </Col>
@@ -68,17 +68,17 @@ function ViewTravelBoking(props) {
                                 </Divider>
                                 <Row>
                                     <Col span={12}>
-                                        <Form.Item label="Booking Type::">
+                                        <Form.Item style={{marginBottom:'0px'}} label="Booking Type::">
                                             {travel.bookingOption}
                                         </Form.Item>
                                     </Col>
                                     <Col span={12}>
-                                        <Form.Item label="Date::">
+                                        <Form.Item style={{marginBottom:'0px'}} label="Date::">
                                             {travel.durationDate.join(" to ")}
                                         </Form.Item>
                                     </Col>
                                     <Col span={12}>
-                                        <Form.Item label="Location::">{travel.location}</Form.Item>
+                                        <Form.Item style={{marginBottom:'0px'}} label="Location::">{travel.location}</Form.Item>
                                     </Col>
                                 </Row>
                             </div>
@@ -94,22 +94,22 @@ function ViewTravelBoking(props) {
                                 </Divider>
                                 <Row>
                                     <Col span={12}>
-                                        <Form.Item label="Booking Type::">
+                                        <Form.Item style={{marginBottom:'0px'}} label="Booking Type::">
                                             {travel.bookingOption}
                                         </Form.Item>
                                     </Col>
                                     <Col span={12}>
-                                        <Form.Item label="Date::">
+                                        <Form.Item style={{marginBottom:'0px'}} label="Date::">
                                             {travel.durationDate.join(" to ")}
                                         </Form.Item>
                                     </Col>
                                     <Col span={12}>
-                                        <Form.Item label="Vehicle Type::">
+                                        <Form.Item style={{marginBottom:'0px'}} label="Vehicle Type::">
                                             {travel.vehicleType}
                                         </Form.Item>
                                     </Col>
                                     <Col span={12}>
-                                        <Form.Item label="Driver::">
+                                        <Form.Item style={{marginBottom:'0px'}} label="Driver::">
                                             {JSON.stringify(travel.driver)}
                                         </Form.Item>
                                     </Col>

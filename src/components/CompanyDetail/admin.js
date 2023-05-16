@@ -119,6 +119,7 @@ const Admin = () => {
     setHrExAdmins(hrTemp);
     setLoading(false);
   };
+  console.log("testt");
 
   const onSearch = (searchText) => {
     let matchingName = allEmpName.filter((ex) => {

@@ -19,7 +19,9 @@ import { capitalize, showNotification } from "../../../contexts/CreateContext";
 import moment from "moment";
 import EmpInfoContext from "../../../contexts/EmpInfoContext";
 
-function LaptopUpgradeForm() {
+function LaptopUpgradeForm(props) {
+    console.log('props', props?.assetData[0]?.lapname)
+    const upgradeFormData = props?.assetData[0];
     const [form] = Form.useForm();
     const [file, setFile] = useState("");
     const [selectedOption, setSelectedOption] = useState("");
@@ -37,9 +39,9 @@ function LaptopUpgradeForm() {
         console.log("ffffff", values);
         form.resetFields();
         const allUpgradeData = {
-            lapname: values.lapname || null,
-            modelName: values.modelName || null,
-            serialNum: values.serialNum || null,
+            lapname: values.lapname || upgradeFormData.lapname,
+            modelName: values.modelName || upgradeFormData.modelName,
+            serialNum: values.serialNum || upgradeFormData.serialNum,
             date: moment().format("DD-MM-YYYY"),
             empId: currentUser.uid,
             empCode: user.empId,

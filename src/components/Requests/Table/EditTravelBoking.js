@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import {
   Card,
@@ -30,21 +31,25 @@ import {
 } from "../../../contexts/CreateContext";
 import TravelContext from "../../../contexts/TravelContext";
 
-function EditTravelMng(props) {
-  
+
+function EditTravelBoking(props) {
+
   console.log("propss", props);
   const [selectedOption, setSelectedOption] = useState(
-    props.viewTravelData.travelType.map((x) => x.bookingOption)
+    props.data.travelType.map((x) => x.bookingOption)
   );
-  const [addTravel, setAddTravel] = useState(false);
+  console.log("propss", selectedOption);
+
   const { RangePicker } = DatePicker;
   const [form] = Form.useForm();
   const [file, setFile] = useState([]);
+  const editTravelData = props?.data;
 
-  const editTravelData = props.viewTravelData;
 
-  const editTravelDetails = props.viewTravelData.travelType.map((data) => {
+
+  const editTravelDetails = editTravelData?.travelType.map((data) => {
     let temp = { ...data };
+    console.log("propss", temp);
     switch (temp.bookingOption) {
       case "Travel":
         temp.travelDate = moment(temp.durationDate, "DD-MM-YYYY");
@@ -59,14 +64,14 @@ function EditTravelMng(props) {
     return temp;
   });
 
-  console.log(editTravelDetails);
+  console.log("propss", editTravelDetails);
 
   const handleCarChange = (value) => {
     console.log(`Selected: ${value}`);
   };
 
   const onFinish = (values) => {
-    console.log("updateTravel", values);
+    console.log("updatetraveldata", values);
 
     const editTravelData = {
       travelName: values.travelName,
@@ -108,18 +113,18 @@ function EditTravelMng(props) {
       }),
     };
 
-    console.log("updatetraveldata", editTravelData);
+    console.log("updatetraveldata", editTravelData, props.data.id);
 
-    TravelContext.updateTravelData(props.viewTravelData.id, editTravelData)
+    TravelContext.updateTravelData(props.data.id, editTravelData)
       .then((res) => {
         showNotification("success", "Success", "Edit Successful");
-        props.getData();
+        // props.getData();
       })
       .catch((error) => {
         console.log(error);
         showNotification("error", "Error", "Failed to edit");
       });
-    props.setIsEditModalOpen(false);
+    props.setEditData(false);
   };
 
   return (
@@ -138,7 +143,7 @@ function EditTravelMng(props) {
           remember: true,
         }}
         autoComplete="off"
-        // form={form}
+        form={form}
         onFinish={onFinish}
       >
         <Row gutter={[16, 16]}>
@@ -177,8 +182,8 @@ function EditTravelMng(props) {
                   message: "Please Enter the reason",
                 },
                 {
-                  pattern: /^[0-9\s]*$/,
-                  message: "Please Enter numbers only",
+                  pattern: /^[a-zA-Z\s]*$/,
+                  message: "Please Enter Text only",
                 },
               ]}
             >
@@ -203,7 +208,7 @@ function EditTravelMng(props) {
                                 // marginBottom: 8,
                                 width: "100%",
                               }}
-                              // align="start"
+                            // align="start"
                             >
                               {console.log(fields, field)}
                               <Row gutter={[16, 16]} style={{ width: "100%" }}>
@@ -249,7 +254,7 @@ function EditTravelMng(props) {
                                 </Col>
                                 {selectedOption[i] === "Hotel" ? (
                                   <>
-                                    <Col xs={24} xm={24} md={11} lg={11}>
+                                    <Col xs={11} xm={11} md={11} lg={11}>
                                       <Form.Item
                                         {...edit}
                                         label="Duration"
@@ -269,7 +274,7 @@ function EditTravelMng(props) {
                                         />
                                       </Form.Item>
                                     </Col>
-                                    <Col xs={22} xm={22} md={11} lg={11}>
+                                    <Col  xs={11} xm={11} md={11} lg={11}>
                                       <Form.Item
                                         initialValue={
                                           editTravelDetails?.location
@@ -315,7 +320,7 @@ function EditTravelMng(props) {
                                   </>
                                 ) : selectedOption[i] === "Travel" ? (
                                   <>
-                                    <Col xs={24} xm={24} md={4} lg={4}>
+                                    <Col xs={11} xm={11} md={11} lg={11}>
                                       <Form.Item
                                         label="Date of Travel"
                                         {...field}
@@ -332,7 +337,7 @@ function EditTravelMng(props) {
                                         <DatePicker format={"DD-MM-YYYY"} />
                                       </Form.Item>
                                     </Col>
-                                    <Col xs={24} xm={24} md={6} lg={6}>
+                                    <Col xs={11} xm={11} md={11} lg={11}>
                                       <Form.Item
                                         label="From"
                                         {...field}
@@ -360,7 +365,7 @@ function EditTravelMng(props) {
                                         />
                                       </Form.Item>
                                     </Col>
-                                    <Col xs={24} xm={24} md={6} lg={6}>
+                                    <Col xs={11} xm={11} md={11} lg={11}>
                                       <Form.Item
                                         label="To"
                                         {...field}
@@ -408,7 +413,7 @@ function EditTravelMng(props) {
                                         />
                                       </Form.Item>
                                     </Col>
-                                    <Col xs={22} xm={22} md={6} lg={6}>
+                                    <Col xs={11} xm={11} md={11} lg={11}>
                                       <Form.Item
                                         initialValue={"flight"}
                                         label="Transport Type"
@@ -448,7 +453,7 @@ function EditTravelMng(props) {
                                   </>
                                 ) : (
                                   <>
-                                    <Col xs={24} xm={24} md={10} lg={10}>
+                                    <Col  xs={11} xm={11} md={11} lg={11}>
                                       <Form.Item
                                         label="Date"
                                         // {...field}
@@ -467,7 +472,7 @@ function EditTravelMng(props) {
                                         />
                                       </Form.Item>
                                     </Col>
-                                    <Col xs={24} xm={24} md={9} lg={9}>
+                                    <Col  xs={11} xm={11} md={11} lg={11}>
                                       <Form.Item
                                         label="Type of Vehicle"
                                         // {...field}
@@ -509,7 +514,7 @@ function EditTravelMng(props) {
                                         />
                                       </Form.Item>
                                     </Col>
-                                    <Col xs={22} xm={22} md={3} lg={3}>
+                                    <Col  xs={11} xm={11} md={11} lg={11}>
                                       <Form.Item
                                         initialValue={true}
                                         label="Driver Required"
@@ -575,7 +580,7 @@ function EditTravelMng(props) {
                       borderRadius: "5px",
                     }}
                     onClick={() => {
-                      props.setIsEditModalOpen(false);
+                      props.setEditData(false);
                     }}
                   >
                     <CloseOutlined />
@@ -620,4 +625,4 @@ function EditTravelMng(props) {
   );
 }
 
-export default EditTravelMng;
+export default EditTravelBoking;

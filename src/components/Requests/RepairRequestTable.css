@@ -20,10 +20,26 @@
   border-radius: 4px;
 }
 
-.reqTable .ant-table-thead > tr > th{
+.reqTable .ant-table-thead > tr > th {
   background: #1963a6;
-    color: #ffffff;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 18px;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
 }
+
+.scrollable-modal .ant-modal-body {
+  max-height: 500px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.scrollable-modal .ant-modal-body::-webkit-scrollbar-thumb {
+  background-color: #1963a6;
+}
+
+.scrollable-modal .ant-modal-body::-webkit-scrollbar-track {
+  display: none;
+}
+

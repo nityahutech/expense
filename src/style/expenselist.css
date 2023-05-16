@@ -194,6 +194,7 @@ width: 90px;
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #189ab4;
+  
 }
 
 .expesneRegister .ant-modal-content {

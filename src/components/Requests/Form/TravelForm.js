@@ -33,7 +33,9 @@ import moment from "moment";
 
 const { RangePicker } = DatePicker;
 
-function TravelForm() {
+function TravelForm(props) {
+  console.log('props', props?.assetData[0])
+  const upgradeFormData = props?.assetData[0];
   const [addTravel, setAddTravel] = useState(false);
   const [selectedOption, setSelectedOption] = useState([]);
   const [form] = Form.useForm();
@@ -57,8 +59,8 @@ function TravelForm() {
       reason: values.reason,
       status: "Pending",
       empId: currentUser.uid,
-      empName: user.name || null,
-      empCode: user.empId || null,
+      empName: user.name || upgradeFormData.name,
+      empCode: user.empId || upgradeFormData.empCode,
       type: 'Travel Booking',
       date: moment().format("DD-MM-YYYY"),
       travelType: values.users.map((type) => {

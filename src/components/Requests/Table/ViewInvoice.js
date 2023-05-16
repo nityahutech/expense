@@ -3,10 +3,12 @@ import React from "react";
 import { Col, Form, Row, Input, Divider } from "antd";
 
 const ViewInvoice = (props) => {
+
     const viewInvoiceData = props?.data;
-    console.log(viewInvoiceData);
+    console.log('viewInvoiceData', viewInvoiceData);
     return (
         <>
+
             <Form>
                 <Row gutter={[16, 16]}>
                     {viewInvoiceData.payments.map((invoice) => (

@@ -40,7 +40,7 @@ class InvoiceContext {
           // invoiceData.payments[i].upload = url;
           // invoiceData.payments[i].fileName = file.name;
 
-          updateDoc(doc(db, `companyprofile/${compId}/invoices`, data.id), {
+          updateDoc(doc(db, `companyprofile/${compId}/request`, data.id), {
             payments: arrayUnion({
               ...payments[i],
               upload: url,

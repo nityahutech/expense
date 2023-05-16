@@ -4,6 +4,7 @@ const { TextArea } = Input;
 
 function ViewLaptopReturn(props) {
   const laptopData = props?.data;
+  console.log('laptopData', laptopData)
 
   return (
     <>
@@ -46,44 +47,11 @@ function ViewLaptopReturn(props) {
                     labelCol={{ span: 12 }}
                     label="Date of Request:"
                   >
-                    {laptopData?.dateOfRepair}
+                    {laptopData?.date}
                   </Form.Item>
                 </Col>
               </div>
 
-              <div
-                style={{
-                  width: "100%",
-                  border: "1px solid black",
-                  borderRadius: "10px",
-                }}
-              >
-                <div>
-                  <span
-                    style={{
-                      fontWeight: 700,
-                      fontSize: "13px",
-                      marginLeft: "10px",
-                    }}
-                  >
-                    Upload Image:-
-                  </span>
-                </div>
-                <Col span={24}>
-                  <Form.Item>
-                    <img
-                      src={laptopData?.upload}
-                      style={{
-                        width: "100%",
-                        height: "170px",
-                        border: "1px solid #05445e",
-                        borderRadius: "5px",
-                        marginTop: "10px",
-                      }}
-                    />
-                  </Form.Item>
-                </Col>
-              </div>
             </div>
 
             <div
@@ -94,7 +62,7 @@ function ViewLaptopReturn(props) {
               }}
             >
               <Col span={24}>
-                <Form.Item label="Reason::">{laptopData?.repairDes}</Form.Item>
+                <Form.Item label="Reason::">{laptopData?.data?.repairDes}</Form.Item>
               </Col>
             </div>
           </Row>

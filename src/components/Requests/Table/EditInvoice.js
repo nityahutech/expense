@@ -1,19 +1,13 @@
 import { React, useState, useRef } from "react";
 import {
-  Card,
   Row,
   Col,
   Button,
   Input,
   Form,
-  Table,
   DatePicker,
-  TextArea,
-  Space,
   Divider,
-  Tooltip,
-  Tag,
-  Modal,
+
 } from "antd";
 import {
   MinusCircleOutlined,
@@ -24,27 +18,33 @@ import {
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import {
-  showNotification,
   checkAlphabets,
-  createUser,
   getBase64,
+  showNotification
 } from "../../../contexts/CreateContext";
 import moment from "moment";
 import InvoiceContext from "../../../contexts/InvoiceContext";
 import EmpInfoContext from "../../../contexts/EmpInfoContext";
 
-function EditInvoiceDetails(props) {
+
+function EditInvoice(props) {
+  console.log('editInvoiceName', props);
+  const editInvoiceName = props?.data;
+  console.log('editInvoiceName', editInvoiceName);
+
   const imgRef = useRef(null);
   const [fileName, setFileName] = useState(
-    props.invoiceData.payments.map((img) => img.upload)
+    editInvoiceName?.payments?.map((img) => img.upload)
   );
+
   const { TextArea } = Input;
-  const editInvoiceName = props.invoiceData;
+
   const [imageUrl, setImageUrl] = useState(
-    props.invoiceData.payments.map((img) => img.upload) || ""
+    editInvoiceName?.payments?.map((img) => img.upload) || ""
   );
+
   const [editInvoiceData, setEditInvoicsData] = useState(
-    props.invoiceData.payments.map((data) => {
+    editInvoiceName?.payments?.map((data) => {
       console.log(data);
       return {
         ...data,
@@ -52,9 +52,8 @@ function EditInvoiceDetails(props) {
       };
     })
   );
-  console.log(editInvoiceData);
-  console.log(editInvoiceName);
-  console.log(props);
+  console.log('editInvoiceName', fileName, imageUrl, editInvoiceData)
+
 
   const handleChange = (event) => {
     if (!event) {
@@ -89,22 +88,22 @@ function EditInvoiceDetails(props) {
     editInvoice.totalAmt = temp;
     console.log(props.invoiceData);
     console.log(editInvoice, "ektaaaaaaaaa");
-    InvoiceContext.updateInvoiceData(props.invoiceData.id, editInvoice)
+    InvoiceContext.updateInvoiceData(props.data.id, editInvoice)
       .then((res) => {
         showNotification("success", "Success", "Edit Successful");
-        props.getData();
+        // props.getData();
       })
       .catch((err) => {
         console.log(err);
         showNotification("error", "Error", "Failed to edit");
       });
-    props.setIsEditModalOpen(false);
+    props.setEditData(false);
   };
 
   return (
     <>
       <Form layout="vertical" className="invoiceForm" onFinish={onFinish}>
-        <Row gutter={[44, 8]}>
+        <Row gutter={[8, 8]}>
           <Col span={24}>
             <Form.Item
               initialValue={editInvoiceName.invoiceName}
@@ -329,7 +328,7 @@ function EditInvoiceDetails(props) {
               type="text"
               style={{ marginRight: "10px" }}
               onClick={() => {
-                props.setIsEditModalOpen(false);
+                props.setEditData(false);
               }}
             >
               <CloseOutlined />
@@ -357,4 +356,6 @@ function EditInvoiceDetails(props) {
   );
 }
 
-export default EditInvoiceDetails;
+export default EditInvoice;
+
+

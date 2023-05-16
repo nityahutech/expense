@@ -6,6 +6,7 @@ const { TextArea } = Input;
 
 function ViewLaptopRepair(props) {
   const laptopData = props.data;
+  console.log('laptopData', laptopData)
   return (
     <>
 
@@ -48,7 +49,7 @@ function ViewLaptopRepair(props) {
                     labelCol={{ span: 12 }}
                     label="Date of Request:"
                   >
-                    {laptopData?.dateOfRepair}
+                    {laptopData?.date}
                   </Form.Item>
                 </Col>
               </div>
@@ -98,7 +99,7 @@ function ViewLaptopRepair(props) {
             >
               <Col span={24}>
                 <Form.Item label="Reason::">
-                  {laptopData?.repairDes}
+                  {laptopData?.data?.repairDes}
                 </Form.Item>
               </Col>
             </div>

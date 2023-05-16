@@ -19,7 +19,9 @@ import { capitalize, showNotification } from "../../../contexts/CreateContext";
 import moment from "moment";
 import EmpInfoContext from "../../../contexts/EmpInfoContext";
 
-function LaptopRepairForm() {
+function LaptopRepairForm(props) {
+  console.log('props', props?.assetData[0]?.lapname)
+  const upgradeFormData = props?.assetData[0];
   const [form] = Form.useForm();
   const [file, setFile] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
@@ -34,12 +36,13 @@ function LaptopRepairForm() {
   };
 
   const onFinish = (values) => {
+
     console.log("ffffff", values);
     form.resetFields();
     const allUpgradeData = {
-      lapname: values.lapname || null,
-      modelName: values.modelName || null,
-      serialNum: values.serialNum || null,
+      lapname: values.lapname || upgradeFormData.lapname,
+      modelName: values.modelName || upgradeFormData.modelName,
+      serialNum: values.serialNum || upgradeFormData.serialNum,
       date: moment().format("DD-MM-YYYY"),
       empId: currentUser.uid,
       empCode: user.empId,
@@ -127,6 +130,7 @@ function LaptopRepairForm() {
           }}
           autoComplete="off"
           onFinish={onFinish}
+          style={{ width: '100%' }}
         >
           <Row gutter={[0, 0]}>
             <>

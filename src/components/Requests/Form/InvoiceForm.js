@@ -11,6 +11,8 @@ import { showNotification } from "../../../contexts/CreateContext";
 import InvoiceContext from "../../../contexts/InvoiceContext";
 
 const InvoiceForm = (props) => {
+  console.log('props', props?.assetData[0])
+  const upgradeFormData = props?.assetData[0];
   const [form] = Form.useForm();
   const [file, setFile] = useState([]);
   const [addExpense, setAddExpense] = useState(false);
@@ -18,6 +20,7 @@ const InvoiceForm = (props) => {
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
   const handleSubmit = async (values) => {
+
     console.log(values, "ektaaaaaaaa");
     const allInvoiceData = {
       invoiceName: values.invoiceName,
@@ -25,8 +28,8 @@ const InvoiceForm = (props) => {
       date: moment().format("DD-MM-YYYY"),
       status: "Pending",
       empId: currentUser.uid,
-      empCode: user.empId || null,
-      name: user.name || null,
+      empCode: user.empId || upgradeFormData.empCode,
+      name: user.name || upgradeFormData.name,
       type: 'Invoice Reimbursement',
       payments: values.users.map((pay) => {
         console.log(pay);

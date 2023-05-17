@@ -15,6 +15,7 @@ import {
   DatePicker,
   Select,
   Switch,
+  Tabs
 } from "antd";
 
 import {
@@ -59,219 +60,219 @@ function TravelMngHome(props) {
 
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
-  function viewModal(data) {
-    setOpenViewModal(true);
-    setViewTravelData(data);
-  }
+  // function viewModal(data) {
+  //   setOpenViewModal(true);
+  //   setViewTravelData(data);
+  // }
 
-  function showModal(data) {
-    setIsEditModalOpen(true);
-    setViewTravelData(data);
-  }
+  // function showModal(data) {
+  //   setIsEditModalOpen(true);
+  //   setViewTravelData(data);
+  // }
 
-  const travelColumns = [
-    {
-      title: "Travel Title",
-      dataIndex: "travelName",
-      key: "travelName",
-      width: 200,
-      align: "left",
-    },
-    {
-      title: "Duration",
-      dataIndex: "durationDate",
-      key: "durationDate",
-      width: 200,
-      align: "left",
-      render: (_, record, index) => {
-        console.log("record", record);
-        let temp = durationArray[index];
-        // console.log("temp,", temp);
-        let numberOfDays = moment(temp[temp.length - 1], "DD-MM-YYYY").diff(
-          moment(temp[0], "DD-MM-YYYY"),
-          "days"
-        );
+  // const travelColumns = [
+  //   {
+  //     title: "Travel Title",
+  //     dataIndex: "travelName",
+  //     key: "travelName",
+  //     width: 200,
+  //     align: "left",
+  //   },
+  //   {
+  //     title: "Duration",
+  //     dataIndex: "durationDate",
+  //     key: "durationDate",
+  //     width: 200,
+  //     align: "left",
+  //     render: (_, record, index) => {
+  //       console.log("record", record);
+  //       let temp = durationArray[index];
+  //       // console.log("temp,", temp);
+  //       let numberOfDays = moment(temp[temp.length - 1], "DD-MM-YYYY").diff(
+  //         moment(temp[0], "DD-MM-YYYY"),
+  //         "days"
+  //       );
 
-        return <div>{numberOfDays + 1}</div>;
-      },
-    },
+  //       return <div>{numberOfDays + 1}</div>;
+  //     },
+  //   },
 
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      width: 200,
-      align: "left",
-      render: (_, { status }) =>
-        status !== "" && (
-          <Tag
-            style={{
-              width: "84px",
-              color: "#000000",
-              borderRadius: "10px",
-              display: "flex",
-              justifyContent: "center",
-              padding: "2px",
-            }}
-            className="statusTag"
-            color={
-              status === "Approved"
-                ? "rgb(8 231 68 / 75%)"
-                : status === "Pending"
-                  ? "rgb(244 209 105)"
-                  : "#f44336"
-            }
-            key={status}
-          >
-            {status}
-          </Tag>
-        ),
-    },
-    {
-      title: "Action",
-      dataIndex: "operation",
-      key: "operation",
-      width: 200,
-      align: "left",
-      render: (_, record) => (
-        <>
-          <div
-            className="employee-button"
-            style={{ display: "flex", flexDirection: "row" }}
-          >
-            <Tooltip placement="bottom" title="View" color="#1963A6">
-              <Button
-                type="link"
-                className="show"
-                onClick={() => {
-                  viewModal(record);
-                }}
-              >
-                {<EyeFilled style={{ color: "#000000" }} />}
-              </Button>
-            </Tooltip>
-            {record.status == "Approved" || record.status == "Reject" ? (
-              <Button
-                disabled={
-                  record.status == "Approved" || record.status == "Reject"
-                }
-                style={{ padding: 0, color: "rgb(64, 169, 255)" }}
-                type="link"
-                className="show"
-              // onClick={() => {
-              //   showModal(record);
-              // }}
-              >
-                {
-                  <EditFilled
-                    style={
-                      record.status == "Approved" || record.status == "Reject"
-                        ? { color: "lightgray" }
-                        : null
-                    }
-                    disabled={
-                      record.status == "Approved" || record.status == "Reject"
-                    }
-                  />
-                }
-              </Button>
-            ) : (
-              <Tooltip placement="bottom" title="Edit" color="#1963A6">
-                <Button
-                  disabled={record.status == "Approved"}
-                  style={{ padding: 0, color: "rgb(64, 169, 255)" }}
-                  type="link"
-                  className="show"
-                  onClick={() => {
-                    showModal(record);
-                  }}
-                >
-                  {
-                    <EditFilled
-                      style={
-                        record.status == "Approved"
-                          ? { color: "lightgray" }
-                          : null
-                      }
-                      disabled={record.status == "Approved"}
-                    />
-                  }
-                </Button>
-              </Tooltip>
-            )}
-          </div>
-        </>
-      ),
-    },
-  ];
+  //   {
+  //     title: "Status",
+  //     dataIndex: "status",
+  //     key: "status",
+  //     width: 200,
+  //     align: "left",
+  //     render: (_, { status }) =>
+  //       status !== "" && (
+  //         <Tag
+  //           style={{
+  //             width: "84px",
+  //             color: "#000000",
+  //             borderRadius: "10px",
+  //             display: "flex",
+  //             justifyContent: "center",
+  //             padding: "2px",
+  //           }}
+  //           className="statusTag"
+  //           color={
+  //             status === "Approved"
+  //               ? "rgb(8 231 68 / 75%)"
+  //               : status === "Pending"
+  //                 ? "rgb(244 209 105)"
+  //                 : "#f44336"
+  //           }
+  //           key={status}
+  //         >
+  //           {status}
+  //         </Tag>
+  //       ),
+  //   },
+  //   {
+  //     title: "Action",
+  //     dataIndex: "operation",
+  //     key: "operation",
+  //     width: 200,
+  //     align: "left",
+  //     render: (_, record) => (
+  //       <>
+  //         <div
+  //           className="employee-button"
+  //           style={{ display: "flex", flexDirection: "row" }}
+  //         >
+  //           <Tooltip placement="bottom" title="View" color="#1963A6">
+  //             <Button
+  //               type="link"
+  //               className="show"
+  //               onClick={() => {
+  //                 viewModal(record);
+  //               }}
+  //             >
+  //               {<EyeFilled style={{ color: "#000000" }} />}
+  //             </Button>
+  //           </Tooltip>
+  //           {record.status == "Approved" || record.status == "Reject" ? (
+  //             <Button
+  //               disabled={
+  //                 record.status == "Approved" || record.status == "Reject"
+  //               }
+  //               style={{ padding: 0, color: "rgb(64, 169, 255)" }}
+  //               type="link"
+  //               className="show"
+  //             // onClick={() => {
+  //             //   showModal(record);
+  //             // }}
+  //             >
+  //               {
+  //                 <EditFilled
+  //                   style={
+  //                     record.status == "Approved" || record.status == "Reject"
+  //                       ? { color: "lightgray" }
+  //                       : null
+  //                   }
+  //                   disabled={
+  //                     record.status == "Approved" || record.status == "Reject"
+  //                   }
+  //                 />
+  //               }
+  //             </Button>
+  //           ) : (
+  //             <Tooltip placement="bottom" title="Edit" color="#1963A6">
+  //               <Button
+  //                 disabled={record.status == "Approved"}
+  //                 style={{ padding: 0, color: "rgb(64, 169, 255)" }}
+  //                 type="link"
+  //                 className="show"
+  //                 onClick={() => {
+  //                   showModal(record);
+  //                 }}
+  //               >
+  //                 {
+  //                   <EditFilled
+  //                     style={
+  //                       record.status == "Approved"
+  //                         ? { color: "lightgray" }
+  //                         : null
+  //                     }
+  //                     disabled={record.status == "Approved"}
+  //                   />
+  //                 }
+  //               </Button>
+  //             </Tooltip>
+  //           )}
+  //         </div>
+  //       </>
+  //     ),
+  //   },
+  // ];
 
-  console.log("user;;", user);
 
-  const handleCarChange = (value) => {
-    console.log(`Selected: ${value}`);
-  };
-  console.log("currentuser", currentUser);
-  const onFinish = async (values) => {
-    console.log("travelData", values);
 
-    const allTravelData = {
-      travelName: values.travelName,
-      reason: values.reason,
-      status: "Pending",
-      empId: currentUser.uid,
-      empName: user.name,
-      empCode: user.empId,
-      date: moment().format("DD-MM-YYYY"),
-      travelType: values.users.map((type) => {
-        console.log(type);
-        switch (type.bookingOption) {
-          case "Travel":
-            let temp = {
-              bookingOption: "Travel",
-              durationDate: type.travelDate.format("DD-MM-YYYY"),
-              depart: type.depart,
-              arrival: type.arrival,
-              transport: type.transport,
-            };
-            delete temp.travelDate;
-            return temp;
+  // const handleCarChange = (value) => {
+  //   console.log(`Selected: ${value}`);
+  // };
 
-          case "Hotel":
-            let hotelData = {
-              bookingOption: "Hotel",
-              durationDate: type.duration.map((dt) => dt.format("DD-MM-YYYY")),
-              location: type.location,
-            };
-            delete hotelData.duration;
-            return hotelData;
-          case "Rental":
-            let rentalData = {
-              bookingOption: "Rental",
-              durationDate: type.rentalDate.map((dt) =>
-                dt.format("DD-MM-YYYY")
-              ),
-              vehicleType: type.vehicleType,
-              driver: type.driver,
-            };
-            delete rentalData.rentalDate;
-            return rentalData;
-        }
-      }),
-    };
-    console.log("deatislTravel", allTravelData);
-    try {
-      await TravelContext.addTravel(allTravelData);
-      showNotification("success", "Success", "Travel Request Added");
-      setTimeout(() => {
-        setAddTravel(false);
-        form.resetFields();
-        getAlltravelData();
-      }, 5000);
-    } catch (error) {
-      console.log("error", error);
-      showNotification("error", "Error", "Error In Invoice");
-    }
-  };
+  // const onFinish = async (values) => {
+  //   console.log("travelData", values);
+
+  //   const allTravelData = {
+  //     travelName: values.travelName,
+  //     reason: values.reason,
+  //     status: "Pending",
+  //     empId: currentUser.uid,
+  //     empName: user.name,
+  //     empCode: user.empId,
+  //     date: moment().format("DD-MM-YYYY"),
+  //     travelType: values.users.map((type) => {
+  //       console.log(type);
+  //       switch (type.bookingOption) {
+  //         case "Travel":
+  //           let temp = {
+  //             bookingOption: "Travel",
+  //             durationDate: type.travelDate.format("DD-MM-YYYY"),
+  //             depart: type.depart,
+  //             arrival: type.arrival,
+  //             transport: type.transport,
+  //           };
+  //           delete temp.travelDate;
+  //           return temp;
+
+  //         case "Hotel":
+  //           let hotelData = {
+  //             bookingOption: "Hotel",
+  //             durationDate: type.duration.map((dt) => dt.format("DD-MM-YYYY")),
+  //             location: type.location,
+  //           };
+  //           delete hotelData.duration;
+  //           return hotelData;
+  //         case "Rental":
+  //           let rentalData = {
+  //             bookingOption: "Rental",
+  //             durationDate: type.rentalDate.map((dt) =>
+  //               dt.format("DD-MM-YYYY")
+  //             ),
+  //             vehicleType: type.vehicleType,
+  //             driver: type.driver,
+  //           };
+  //           delete rentalData.rentalDate;
+  //           return rentalData;
+  //       }
+  //     }),
+  //   };
+  //   console.log("deatislTravel", allTravelData);
+  //   try {
+  //     await TravelContext.addTravel(allTravelData);
+  //     showNotification("success", "Success", "Travel Request Added");
+  //     setTimeout(() => {
+  //       setAddTravel(false);
+  //       form.resetFields();
+  //       getAlltravelData();
+  //     }, 5000);
+  //   } catch (error) {
+  //     console.log("error", error);
+  //     showNotification("error", "Error", "Error In Invoice");
+  //   }
+  // };
 
   const getAlltravelData = async () => {
     let userData = await EmpInfoContext.getEduDetails(currentUser.uid);
@@ -299,14 +300,14 @@ function TravelMngHome(props) {
     getAlltravelData();
   }, []);
 
-  const capitalizeFirstLetter = (value) => {
-    return value.charAt(0).toUpperCase() + value.slice(1);
-  };
+  // const capitalizeFirstLetter = (value) => {
+  //   return value.charAt(0).toUpperCase() + value.slice(1);
+  // };
 
   return (
     <>
       <div className="travelDiv">
-        {role ? (
+        {/* {role ? (
           <>
             <Card className="travelCard" title="Travel Management">
               <Form
@@ -982,7 +983,22 @@ function TravelMngHome(props) {
             durationArray={durationArray}
             user={user}
           />
-        )}
+        )} */}
+        <Tabs className="assetTabs" defaultActiveKey="1">
+          <Tabs.TabPane tab='Travel Reimbursement ' key='1'>
+            <TravelManagement
+              roleView={role}
+              getTravelData={getAlltravelData}
+              travelDetails={travelDetails}
+              durationArray={durationArray}
+              user={user}
+            />
+          </Tabs.TabPane>
+        </Tabs>
+
+
+
+
       </div>
     </>
   );

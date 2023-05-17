@@ -141,15 +141,29 @@ tr[data-row-key*="subTotal"] {
   /* border-bottom: 2px solid #f9a01f; */
 }
 
-.color-button {
+.button-color {
   background-color: #1963A6;
-  border: 2px solid #1963A6;
+  border: 1px solid #1963A6;
   border-radius: 4px;
   width: 150px
 }
 
-.color-button:hover {
+.button-color:hover {
   background-color: #ffffff;
   color: #1963A6;
-  border: 2px solid #1963A6;
+  border: 1px solid #1963A6;
+}
+
+.button-white {
+  color: #1963A6;
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  width: 150px
+}
+
+.button-white:hover {
+  background-color: #ffffff;
+  color: #1963A6;
+  border: 1px solid #1963A6;
 }

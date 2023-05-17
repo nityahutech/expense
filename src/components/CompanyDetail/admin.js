@@ -7,6 +7,7 @@ import "./companystyle.css";
 import {
   Button,
   Col,
+  Modal,
   Form,
   Row,
   Card,
@@ -150,9 +151,9 @@ const Admin = () => {
     border: "1px solid #ccc",
     borderRadius: "25px",
     backgroundColor: "aqua",
-    width: "50px",
-    height: "50px",
-    margin: "2px",
+    width: "30px",
+    height: "30px",
+    margin: "3px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -163,9 +164,10 @@ const Admin = () => {
     borderRadius: "50px",
     marginTop: "10px",
     marginBottom: "10px",
-    fontSize: "25px",
+    fontSize: "14px",
     fontWeight: "lighter",
-    display: "flex",
+    display: "inline-flex",
+    width: "auto",
     alignItems: "center",
     flexDirection: "row",
     marginRight: "10px",
@@ -183,117 +185,138 @@ const Admin = () => {
       title: "Access",
       dataIndex: "access",
       key: "access",
-      width: 200,
+      width: 90,
       align: "center",
-      render: (access) => (
-        <div>
-          {access.map((data) => (
-            <div key={data} style={{ marginBottom: "1.5rem" }}>
-              {data}
-            </div>
-          ))}
-        </div>
-      ),
+      // render: (access) => (
+      //   <div>
+      //     {access.map((data) => (
+      //       <div key={data} style={{ marginBottom: "1.5rem" }}>
+      //         {data}
+      //       </div>
+      //     ))}
+      //   </div>
+      // ),
     },
     {
       title: "Employees Name",
-      dataIndex: "empName",
-      key: "empName",
-      // width: 200,
+      dataIndex: "employees",
+      key: "employees",
+      // width: 500,
       align: "center",
-      render: (_, record) => (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-end",
-          }}
-        >
-          {record.access.map((data, index) => (
-            <div key={data}>
-              {record.showInput !== index && (
-                <Button
-                  style={{ marginTop: "20px" }}
-                  type="primary"
-                  onClick={() => handleIconClick(record.key, index)}
-                >
-                  <PlusCircleOutlined />
-                  Add
-                </Button>
-              )}
-              {record.showInput === index && (
-                <>
-                  <Form.List
-                    name="users"
-                    initialValue={[...financeAdmins]}
-                    key={index}
-                  >
-                    {(fields, { add, remove }) => (
-                      <>
-                        {fields
-                          .slice(0, 5)
-                          .map(({ key, name, ...restField }) => (
-                            <Space
-                              key={key}
-                              style={{
-                                display: "flex",
-                                // marginBottom: 8,
-                              }}
-                              align="baseline"
-                            >
-                              <Form.Item
-                                // style={{ marginTop: "10px" }}
-                                initialValue={
-                                  data.financerAdmin != null
-                                    ? data.financerAdmin[key]
-                                    : ""
-                                }
-                                {...restField}
-                                name={[name, "financerAdmin"]}
-                              >
-                                <AutoComplete
-                                  // options={options}
-                                  style={{
-                                    width: 100,
-                                    padding: "5px",
-                                  }}
-                                  onSearch={onSearch}
-                                  size="large"
-                                  placeholder="Enter Finance Admin Name"
-                                />
-                              </Form.Item>
-
-                              <MinusCircleOutlined
-                                onClick={() => remove(name)}
-                              />
-                            </Space>
-                          ))}
-                        {console.log(fields.length)}
-                        {fields.length > 5 ? (
-                          <Space>
-                            <Button>Save</Button>
-                            <Button>Cancel</Button>
-                          </Space>
-                        ) : (
-                          <Form.Item>
-                            <Button
-                              type="dashed"
-                              onClick={() => add()}
-                              block
-                              icon={<PlusOutlined />}
-                            >
-                              Add field
-                            </Button>
-                          </Form.Item>
-                        )}
-                      </>
-                    )}
-                  </Form.List>
-                </>
-              )}
+      render: (_, { employees }) => (
+        <div style={{textAlign: "left"}}>
+        {employees.map(x => (
+          <div style={divStyle}>
+          {" "}
+          {x.profilePic ? (
+            <img
+              style={imageStyle}
+              src={x.profilePic}
+            />
+          ) : (
+            <div style={imageStyle}>
+              {getInitials(x.name)}
             </div>
-          ))}
+          )}
+          <span style={{ marginRight: "10px" }}>
+            {x.name}
+          </span>
         </div>
+        ))}
+        </div>
+
+        // <div
+        //   style={{
+        //     display: "flex",
+        //     flexDirection: "column",
+        //     alignItems: "flex-end",
+        //   }}
+        // >
+        //   {employees.map((data, index) => (
+        //     <div key={data}>
+        //       {record.showInput !== index && (
+        //         <Button
+        //           style={{ marginTop: "20px" }}
+        //           type="primary"
+        //           onClick={() => handleIconClick(record.key, index)}
+        //         >
+        //           <PlusCircleOutlined />
+        //           Add
+        //         </Button>
+        //       )}
+        //       {record.showInput === index && (
+        //         <>
+        //           <Form.List
+        //             name="users"
+        //             initialValue={[...financeAdmins]}
+        //             key={index}
+        //           >
+        //             {(fields, { add, remove }) => (
+        //               <>
+        //                 {fields
+        //                   .slice(0, 5)
+        //                   .map(({ key, name, ...restField }) => (
+        //                     <Space
+        //                       key={key}
+        //                       style={{
+        //                         display: "flex",
+        //                         // marginBottom: 8,
+        //                       }}
+        //                       align="baseline"
+        //                     >
+        //                       <Form.Item
+        //                         // style={{ marginTop: "10px" }}
+        //                         initialValue={
+        //                           data.financerAdmin != null
+        //                             ? data.financerAdmin[key]
+        //                             : ""
+        //                         }
+        //                         {...restField}
+        //                         name={[name, "financerAdmin"]}
+        //                       >
+        //                         <AutoComplete
+        //                           // options={options}
+        //                           style={{
+        //                             width: 100,
+        //                             padding: "5px",
+        //                           }}
+        //                           onSearch={onSearch}
+        //                           size="large"
+        //                           placeholder="Enter Finance Admin Name"
+        //                         />
+        //                       </Form.Item>
+
+        //                       <MinusCircleOutlined
+        //                         onClick={() => remove(name)}
+        //                       />
+        //                     </Space>
+        //                   ))}
+        //                 {console.log(fields.length)}
+        //                 {fields.length > 5 ? (
+        //                   <Space>
+        //                     <Button>Save</Button>
+        //                     <Button>Cancel</Button>
+        //                   </Space>
+        //                 ) : (
+        //                   <Form.Item>
+        //                     <Button
+        //                       type="dashed"
+        //                       onClick={() => add()}
+        //                       block
+        //                       icon={<PlusOutlined />}
+        //                     >
+        //                       Add field
+        //                     </Button>
+        //                   </Form.Item>
+        //                 )}
+        //               </>
+        //             )}
+        //           </Form.List>
+        //         </>
+        //       )}
+        //     </div>
+        //   ))}
+        // </div>
       ),
     },
   ];
@@ -317,6 +340,28 @@ const Admin = () => {
       showInput: -1,
     },
   ]);
+
+  let temp = {
+    Leave: [{name: "Swetha Vijay", profilePic: null}, {name: "Ekta Dewangan", profilePic: null}, {name: "Swetha Vijay", profilePic: null}, {name: "Ekta Dewangan", profilePic: null},{name: "Ekta Dewangan", profilePic: null}],
+    Attendance:[],
+    Assets:[],
+    Invoices:[{name: "Ekta Dewangan", profilePic: null}],
+    Travels:[{name: "Swetha Vijay", profilePic: null}, {name: "Ekta Dewangan", profilePic: null}],
+    Templates:[],
+    Payroll:[{name: "Swetha Vijay", profilePic: null}],
+    "Employee Onboard":[],
+    "Employee List":[],
+    Expenses:[]
+  }
+
+  let tempData = Object.keys(temp).map(x => {
+    return{
+      access: x,
+      employees: temp[x]
+    }
+  })
+
+  console.log(tempData);
 
   return (
     <>
@@ -702,8 +747,14 @@ const Admin = () => {
                   borderRadius: "10px",
                   cursor: "default",
                 }}
+                // extra={() => (
+
+                // )}
               >
-                <Table columns={columns} dataSource={accessdetails} bordered />
+                <Table className="daily daily-table" columns={columns} dataSource={tempData} bordered pagination={false} />
+                <Modal>
+
+                </Modal>
               </Card>
               {/* <Card
                 className="financeCard"

@@ -90,7 +90,7 @@ function App() {
             element={<FormatPage main={AdminAttendance} activeMenu={["6"]} />}
           >
             <Route path="daily-log" element={<DailyLog />} />
-            <Route path="daily-log/:id" element={<MonthlyLog />} />
+            <Route path="daily-log/employee" element={<MonthlyLog />} />
             <Route path="configurations" element={<ConfigureAttendance />} />
             <Route path="regularize" element={<RegularizeAttendance />} />
           </Route>
@@ -100,7 +100,7 @@ function App() {
           >
             <Route path="" element={<MonthlyLog />} />
             <Route path="daily-log" element={<DailyLog />} />
-            <Route path="daily-log/:id" element={<MonthlyLog />} />
+            <Route path="daily-log/employee" element={<MonthlyLog />} />
             <Route path="report" element={<AddReport />} />
           </Route>
           <Route

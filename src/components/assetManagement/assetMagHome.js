@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Tabs } from "antd";
 import AllRequest from "./AllRequest";
 import Requestpage from "./RepairReq";
-import "./AssetManag.css";
 import AssetContext from "../../contexts/AssetContext";
 import RepairRequestTable from "./RepairRequestTable";
 import AddAsset from "./AddAsset";

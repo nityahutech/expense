@@ -1,32 +1,17 @@
 import React, { useState, useEffect } from "react";
 import {
-  Card,
   Button,
   Table,
   Tooltip,
   Tag,
   Modal,
-  Space,
-  Row,
-  Divider,
-  Col,
-  Form,
-  Input,
   DatePicker,
-  Select,
-  Switch,
+
 } from "antd";
 import {
-  MinusCircleOutlined,
-  PlusOutlined,
-  CheckOutlined,
-  CloseOutlined,
   EyeFilled,
-  EditFilled,
-  UserAddOutlined,
 } from "@ant-design/icons";
 import "./travelManagement.css";
-// import { EyeFilled, EditFilled } from "@ant-design/icons";
 import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
 import ViewTravelMng from "./ViewTravelMng";
@@ -256,7 +241,7 @@ function TravelManagement(props) {
               viewTravelData={viewTravelData}
             />
           </Modal>
-          ddddd
+
           <Table
             className="travelTable"
             columns={columns}

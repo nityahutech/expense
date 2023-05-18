@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./AllRequest.css";
+import "./RepairRequestTable.css";
 import { Table, Button, Tag, Card, Modal } from "antd";
 import {
   EyeFilled,

@@ -1,5 +1,5 @@
 import { Button, Card, Col, Form, Input, Modal, Row, Select, message } from "antd";
-import "./AllRequest.css";
+import "./RepairRequestTable.css";
 import { CheckOutlined, CloseOutlined, DeleteOutlined, UploadOutlined } from "@ant-design/icons";
 import { capitalize, getBase64 } from "../../contexts/CreateContext";
 import React, { useState } from "react";

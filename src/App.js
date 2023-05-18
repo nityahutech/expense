@@ -17,7 +17,7 @@ import "./App.css";
 import FormatPage from "./FormatPage";
 import MainDashBoard from "./components/MainDashBoard";
 import Settingpage from "./components/Settingpage";
-import InvoiceMagHome from "./components/assetManagement/InvoiceMagHome";
+import InvoiceMagHome from "./components/InvoiceManagment/InvoiceMagHome";
 import TravelMngHome from "./components/TravelManagement/TravelMngHome";
 import EmailVerification from "./EmailVerification";
 import ConfigSurvey from "./components/Feedback/ConfigSurvey";
@@ -48,6 +48,7 @@ import RegisterAccount from "./components/Registration/RegisterAccount";
 import RegisterCompany from "./components/Registration/RegisterCompany";
 import RegisterEmployee from "./components/Registration/RegisterEmployee";
 import HomePage from "./components/Home/HomePage";
+
 
 function App() {
   return (
@@ -180,7 +181,7 @@ function App() {
               />
             }
           />
-          <Route
+          {/* <Route
             path="/expenses/invoices"
             element={
               <FormatPage
@@ -189,7 +190,7 @@ function App() {
                 activeMenu={["23"]}
               />
             }
-          />
+          /> */}
           {/* <Route
             path="/Appraisal/AppraisalPageHr"
             element={
@@ -213,6 +214,10 @@ function App() {
           <Route
             path="/travel"
             element={<FormatPage main={TravelMngHome} activeMenu={["24"]} />}
+          />
+          <Route
+            path="/invoices"
+            element={<FormatPage main={InvoiceMagHome} activeMenu={["24a"]} />}
           />
           <Route
             path="/Feedback"

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Tabs } from "antd";
-import InvoiceReimbursement from "./InvoiceReimbursement";
 import InvoiceTable from "./InvoiceTable";
 import "./AssetManag.css";
 import InvoiceContext from "../../contexts/InvoiceContext";
@@ -15,10 +14,16 @@ function InvoiceMagHome(props) {
   const getAllInvoiceData = async () => {
     console.log('getAllInvoiceData', getAllInvoiceData)
     let invoiceData = await InvoiceContext.getInvoice(createUser.uid);
+    let filterType = invoiceData.filter((type) => { return type.type === 'Invoice Reimbursement' })
     let userData = await EmpInfoContext.getEduDetails(currentUser.uid);
+    setInvoiceDetails(filterType)
     setUser(userData);
-    setInvoiceDetails(invoiceData);
+    // setInvoiceDetails(invoiceData);
+
   };
+  console.log("travelDetails", invoiceDetails);
+
+
 
   useEffect(() => {
     getAllInvoiceData();
@@ -35,16 +40,7 @@ function InvoiceMagHome(props) {
             user={user}
           />
         </Tabs.TabPane>
-        {props.roleView == "emp" ? (
-          <Tabs.TabPane tab="Invoice Reimbursement Request" key="2">
-            <InvoiceReimbursement
-              roleView={props.roleView}
-              getData={getAllInvoiceData}
-              invoiceDetails={invoiceDetails}
-              user={user}
-            />
-          </Tabs.TabPane>
-        ) : null}
+
       </Tabs>
     </div>
   );

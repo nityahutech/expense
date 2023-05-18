@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Tabs } from "antd";
 import AllRequest from "./AllRequest";
-import Requestpage from "./RepairReq";
-import "./AssetManag.css";
 import AssetContext from "../../contexts/AssetContext";
-import RepairRequestTable from "./RepairRequestTable";
 import AddAsset from "./AddAsset";
 import AssetList from "./AssetList";
+import RequestContext from "../../contexts/RequestContext";
 
 function AssetMagHome(props) {
   const [repairLaptopData, setRepairLaptopData] = useState([]);
   const [laptopAllot, setLaptopAllot] = useState(props.refresh);
-  // console.log(props.refresh);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const role = sessionStorage.getItem("role");
   const isHr =
@@ -22,48 +19,43 @@ function AssetMagHome(props) {
     setLaptopAllot(props.refresh);
   }, [props.roleView]);
 
+
+  // const getRepairData = async () => {
+  //   let repairData = await RequestContext.getAllAsset(
+  //     currentUser.uid,
+  //   );
+
+  //   setRepairLaptopData(repairData);
+  // };
+
   const getRepairData = async () => {
-    let repairData = await AssetContext.getRepairData(
+    let repairData = await RequestContext.getAllAsset(
       currentUser.uid,
     );
-    // console.log("values", repairData);
-    setRepairLaptopData(repairData);
+    let filterType = repairData.filter((type) => { return type?.type === 'Laptop Upgrade' || type?.type === 'Laptop Repair' || type?.type === 'Laptop Return' })
+    setRepairLaptopData(filterType);
   };
-  
+
+
   return (
     <div>
       <Tabs defaultActiveKey="1" className="assetTabs">
-        {props.roleView == "admin" ? (
-          <>
-            <Tabs.TabPane tab="Laptop Request" key="1">
-              <AllRequest
-                roleView={props.roleView}
-                getData={getRepairData}
-                data={repairLaptopData}
-                allot={laptopAllot}
-              />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Asset List" key="2">
-              <AssetList />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Add Asset" key="3">
-              <AddAsset />
-            </Tabs.TabPane>
-          </>
-        ) : (
-          <>
-            <Tabs.TabPane tab="All Request" key="1">
-              <RepairRequestTable
-                data={repairLaptopData}
-                getData={getRepairData}
-                roleView={props.roleView}
-              />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Request Form" key="2">
-              <Requestpage roleView={props.roleView} getData={getRepairData} />
-            </Tabs.TabPane>
-          </>
-        )}
+        <>
+          <Tabs.TabPane tab="Laptop Request" key="1">
+            <AllRequest
+              roleView={props.roleView}
+              getData={getRepairData}
+              data={repairLaptopData}
+              allot={laptopAllot}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Asset List" key="2">
+            <AssetList />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Add Asset" key="3">
+            <AddAsset />
+          </Tabs.TabPane>
+        </>
       </Tabs>
     </div>
   );

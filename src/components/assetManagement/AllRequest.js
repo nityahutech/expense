@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./AllRequest.css";
+import "./RepairRequestTable.css";
 import { Table, Button, Tag, Card, Modal } from "antd";
 import {
   EyeFilled,
@@ -10,6 +10,7 @@ import ViewRequestType from "./ViewRequestType";
 import AssetContext from "../../contexts/AssetContext";
 import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
+import RequestContext from "../../contexts/RequestContext";
 
 function AllRequest(props) {
   // console.log(props, "ektaaaaaaaaaaa");
@@ -23,9 +24,8 @@ function AllRequest(props) {
 
   const setStatus = async (record, status) => {
     Modal.confirm({
-      title: `Are you sure, you want to  ${
-        status == "Approved" ? "approve" : "reject"
-      } this request?`,
+      title: `Are you sure, you want to  ${status == "Approved" ? "approve" : "reject"
+        } this request?`,
       okText: "Yes",
       okType: "danger",
       onOk: async () => {
@@ -37,7 +37,7 @@ function AllRequest(props) {
 
           return allotRecord;
         });
-        await AssetContext.updateRepairData(record.id, record);
+        await RequestContext.updateRepairData(record.id, record);
         setRepairAllotReq(updatedRepairRecord);
       },
     });
@@ -82,7 +82,7 @@ function AllRequest(props) {
     },
     {
       title: "Date",
-      dataIndex: "dateOfRepair",
+      dataIndex: "date",
       key: "dateOfRepair",
       width: 150,
       align: "left",
@@ -115,8 +115,8 @@ function AllRequest(props) {
               status === "Approved"
                 ? "rgb(8 231 68 / 75%)"
                 : status === "Reject"
-                ? "#f44336"
-                : "rgb(244 209 105)"
+                  ? "#f44336"
+                  : "rgb(244 209 105)"
             }
             key={status}
           >
@@ -157,9 +157,9 @@ function AllRequest(props) {
               style={
                 record.status == "Pending"
                   ? {
-                      padding: 0,
-                      color: "rgb(39 151 44 / 74%)",
-                    }
+                    padding: 0,
+                    color: "rgb(39 151 44 / 74%)",
+                  }
                   : { display: "none" }
               }
               type="link"

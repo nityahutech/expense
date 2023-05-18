@@ -21,14 +21,13 @@ const { RangePicker } = DatePicker;
 
 function TravelManagement(props) {
   console.log("props", props);
-  const [travelDetails, setTravelDetails] = useState(props.travelDetails || []);
-  const [durationArray, setDurationArray] = useState(props.durationArray || []);
+  const [travelDetails, setTravelDetails] = useState(props?.travelDetails || []);
+  const [durationArray, setDurationArray] = useState(props?.durationArray || []);
   const [openViewModal, setOpenViewModal] = useState(false);
   const [viewTravelData, setViewTravelData] = useState({});
 
-  const [user, setUser] = useState({});
-
   console.log(props.roleView);
+  console.log('eeeeeeee', durationArray, travelDetails)
 
   function viewModal(data) {
     setOpenViewModal(true);
@@ -50,7 +49,7 @@ function TravelManagement(props) {
           return allotTravel;
         });
         await TravelContext.updateTravelData(record.id, record);
-        // setTravelDetails(updateTravelRecord);
+        setTravelDetails(updateTravelRecord);
         props.getTravelData();
       },
     });
@@ -84,10 +83,11 @@ function TravelManagement(props) {
       key: "startDate",
       width: 200,
       align: "left",
-      // render: (_, record, index) => {
-      //   let temp = durationArray[index];
-      //   return temp[0];
-      // },
+      render: (_, record, index) => {
+        let temp = durationArray[index];
+        // return temp[0];
+        return Array.isArray(temp) && temp.length > 0 ? temp[0] : null;
+      },
     },
     {
       title: "End Date",
@@ -95,10 +95,11 @@ function TravelManagement(props) {
       key: "endDate",
       width: 200,
       align: "left",
-      // render: (_, record, index) => {
-      //   let temp = durationArray[index];
-      //   return temp[temp.length - 1];
-      // },
+      render: (_, record, index) => {
+        let temp = durationArray[index];
+        // return temp[temp.length - 1];
+        return Array.isArray(temp) ? temp[temp.length - 1] : null;
+      },
     },
     {
       title: "Status",
@@ -137,6 +138,7 @@ function TravelManagement(props) {
       key: "operation",
       width: 200,
       align: "center",
+      fixed: 'right',
       render: (_, record) => (
         <>
           <div

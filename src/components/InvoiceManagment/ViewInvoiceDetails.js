@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Form, Row, Input, Divider } from "antd";
+import { Col, Form, Row, } from "antd";
 
 function ViewInvoiceDetails(props) {
   const viewInvoiceData = props.invoiceData;

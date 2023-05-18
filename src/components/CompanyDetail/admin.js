@@ -16,6 +16,7 @@ import {
   Skeleton,
   Table,
   Input,
+  Select,
 } from "antd";
 import {
   PlusCircleOutlined,
@@ -39,8 +40,33 @@ const Admin = () => {
   const [ceoAdmin, setCeoAdmin] = useState();
   const [hrAdmin, setHrAdmin] = useState();
   const [financeAdmins, setFinanceAdmins] = useState([]);
+  const [accessType, setAccessType] = useState(null);
+  const [accessUsers, setAccessUsers] = useState();
+  const [updateEmpNames, setUpdateEmpNames] = useState("");
   const [hrExAdmins, setHrExAdmins] = useState([]);
   const [options, setOptions] = useState([]);
+  const [editAccessModal, setEditAccessModal] = useState(false);
+  const [form] = Form.useForm();
+
+  const showModal = () => {
+    setEditAccessModal(true);
+  };
+  const handleOk = () => {
+    setEditAccessModal(false);
+  };
+  const handleCancel = () => {
+    setAccessUsers("");
+    setEditAccessModal(false);
+    form.resetFields();
+  };
+
+  const handleEmpInputChange = (e) => {
+    setAccessUsers(e.target.value);
+  };
+
+  const updateExcessDetails = () => {
+    setUpdateEmpNames(accessUsers);
+  };
 
   const onFinish = (type) => {
     const valuesToservice = {
@@ -147,10 +173,21 @@ const Admin = () => {
     return initials;
   }
 
+  const getColor = (index) => {
+    const backgroundColor = [
+      "aqua",
+      "#2196F3",
+      "#009688",
+      "#8BC34A",
+      "#FFEB3B",
+    ];
+    return backgroundColor[index % backgroundColor.length];
+  };
+
   const imageStyle = {
     border: "1px solid #ccc",
     borderRadius: "25px",
-    backgroundColor: "aqua",
+    // backgroundColor: getColor(),
     width: "30px",
     height: "30px",
     margin: "3px",
@@ -173,13 +210,7 @@ const Admin = () => {
     marginRight: "10px",
   };
   console.log("financeadmin", financeAdmins);
-  const handleIconClick = (recordKey, index) => {
-    setAccessdetails((prevData) =>
-      prevData.map((item) =>
-        item.key === recordKey ? { ...item, showInput: index } : item
-      )
-    );
-  };
+
   const columns = [
     {
       title: "Access",
@@ -204,25 +235,34 @@ const Admin = () => {
       // width: 500,
       align: "center",
       render: (_, { employees }) => (
-        <div style={{textAlign: "left"}}>
-        {employees.map(x => (
-          <div style={divStyle}>
-          {" "}
-          {x.profilePic ? (
-            <img
-              style={imageStyle}
-              src={x.profilePic}
-            />
-          ) : (
-            <div style={imageStyle}>
-              {getInitials(x.name)}
+        <div style={{ textAlign: "left" }}>
+          {employees.map((x, i) => (
+            <div style={divStyle} key={i}>
+              {" "}
+              {x.profilePic ? (
+                <img style={imageStyle} src={x.profilePic} />
+              ) : (
+                <div
+                  style={{
+                    border: "1px solid #ccc",
+                    borderRadius: "25px",
+                    // backgroundColor: getColor(),
+                    width: "30px",
+                    height: "30px",
+                    margin: "3px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: getColor(i),
+                  }}
+                  // className="empImg"
+                >
+                  {getInitials(x.name)}
+                </div>
+              )}
+              <span style={{ marginRight: "10px" }}>{x.name}</span>
             </div>
-          )}
-          <span style={{ marginRight: "10px" }}>
-            {x.name}
-          </span>
-        </div>
-        ))}
+          ))}
         </div>
 
         // <div
@@ -322,46 +362,45 @@ const Admin = () => {
   ];
   const rowStyle = { border: "1px solid #ddd" };
 
-  const [accessdetails, setAccessdetails] = useState([
-    {
-      key: 1,
-      access: [
-        "Leave",
-        "Attendance",
-        "Assets",
-        "Invoices",
-        "Travels",
-        "Templates",
-        "Payroll",
-        "Employee Onboard",
-        "Employee List",
-        "Expenses",
-      ],
-      showInput: -1,
-    },
-  ]);
-
   let temp = {
-    Leave: [{name: "Swetha Vijay", profilePic: null}, {name: "Ekta Dewangan", profilePic: null}, {name: "Swetha Vijay", profilePic: null}, {name: "Ekta Dewangan", profilePic: null},{name: "Ekta Dewangan", profilePic: null}],
-    Attendance:[],
-    Assets:[],
-    Invoices:[{name: "Ekta Dewangan", profilePic: null}],
-    Travels:[{name: "Swetha Vijay", profilePic: null}, {name: "Ekta Dewangan", profilePic: null}],
-    Templates:[],
-    Payroll:[{name: "Swetha Vijay", profilePic: null}],
-    "Employee Onboard":[],
-    "Employee List":[],
-    Expenses:[]
-  }
+    Leave: [
+      { name: "Swetha Vijay", profilePic: null },
+      { name: "Ekta Dewangan", profilePic: null },
+      { name: "Swetha Vijay", profilePic: null },
+      { name: "Ekta Dewangan", profilePic: null },
+      { name: "Ekta Dewangan", profilePic: null },
+    ],
+    Attendance: [],
+    Assets: [],
+    Invoices: [{ name: "Ekta Dewangan", profilePic: null }],
+    Travels: [
+      { name: "Swetha Vijay", profilePic: null },
+      { name: "Ekta Dewangan", profilePic: null },
+    ],
+    Templates: [],
+    Payroll: [{ name: "Swetha Vijay", profilePic: null }],
+    "Employee Onboard": [],
+    "Employee List": [],
+    Expenses: [],
+  };
 
-  let tempData = Object.keys(temp).map(x => {
-    return{
+  console.log(temp.Leave);
+
+  let tempData = Object.keys(temp).map((x) => {
+    return {
       access: x,
-      employees: temp[x]
-    }
-  })
+      employees: temp[x],
+    };
+  });
 
   console.log(tempData);
+
+  const initialValue = tempData
+    .flatMap((item) => item.employees)
+    .map((employee) => employee.name)
+    .join(", ");
+
+  console.log(initialValue);
 
   return (
     <>
@@ -719,18 +758,14 @@ const Admin = () => {
           style={{
             width: "75%",
           }}
-          labelcol={{
-            span: 4,
-          }}
-          wrappercol={{
-            span: 14,
-          }}
           initialValues={{
             remember: true,
           }}
           fields={[]}
           autoComplete="off"
-          onFinish={onFinanceFinish}
+          onFinish={updateExcessDetails}
+          form={form}
+          layout="Horizontal"
         >
           {loading ? (
             <Skeleton active />
@@ -747,15 +782,97 @@ const Admin = () => {
                   borderRadius: "10px",
                   cursor: "default",
                 }}
-                // extra={() => (
-
-                // )}
+                extra={
+                  <>
+                    <Button
+                      className="edit"
+                      type="text"
+                      style={{
+                        color: "#ffff",
+                        display: "none",
+                        paddingTop: "2px",
+                        paddingRight: "10px",
+                        position: "absolute",
+                        right: 10,
+                        top: 10,
+                      }}
+                    >
+                      <EditFilled onClick={showModal} />
+                    </Button>
+                  </>
+                }
               >
-                <Table className="daily daily-table" columns={columns} dataSource={tempData} bordered pagination={false} />
-                <Modal>
-
+                <Table
+                  className="daily daily-table"
+                  columns={columns}
+                  dataSource={tempData}
+                  bordered
+                  pagination={false}
+                />
+                <Modal
+                  className="accessModal"
+                  title="Update Access Details"
+                  open={editAccessModal}
+                  footer={false}
+                  style={{ height: "400px" }}
+                  // onOk={handleOk}
+                  onCancel={handleCancel}
+                  closeIcon={
+                    <div
+                      onClick={() => {
+                        handleCancel();
+                      }}
+                      style={{ color: "#ffffff" }}
+                    >
+                      X
+                    </div>
+                  }
+                >
+                  <Form.Item name="accessList" label="Access List">
+                    <Select
+                      onChange={(selected) => {
+                        const selectedEmployees = tempData
+                          ?.filter((t) => t?.access === selected)?.[0]
+                          ?.employees?.map((e) => e.name)
+                          ?.toString();
+                        console.log({ selectedEmployees });
+                        setAccessUsers(selectedEmployees);
+                      }}
+                      placeholder="Please Select Access Details"
+                      options={tempData.map((x) => {
+                        return {
+                          value: x.access,
+                          label: x.access,
+                        };
+                      })}
+                    />
+                  </Form.Item>
+                  {console.log("tempp", accessType)}
+                  {accessUsers && (
+                    <Form.Item label="Employees">
+                      <Input
+                        onChange={handleEmpInputChange}
+                        // defaultValue={accessUsers}
+                        value={accessUsers || updateEmpNames}
+                      />
+                    </Form.Item>
+                  )}
+                  <Space
+                    style={{ display: "flex", justifyContent: "flex-end" }}
+                  >
+                    <Button
+                      onClick={handleCancel}
+                      className="accessModalCancel"
+                    >
+                      Cancel
+                    </Button>
+                    <Button onClick={handleOk} className="accessModalSubmit">
+                      Submit
+                    </Button>
+                  </Space>
                 </Modal>
               </Card>
+
               {/* <Card
                 className="financeCard"
                 title="FINANCE ADMIN"

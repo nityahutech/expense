@@ -327,3 +327,39 @@ line-height: 25px;
 .hoverIcon:hover {
   color: rgb(255, 255, 255);
 }
+
+.accessModalCancel.ant-btn{
+  border: 1px solid rgb(25, 99, 166);
+  color: rgb(25, 99, 166);
+  width: 99px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  cursor: pointer;
+}
+
+.accessModalSubmit.ant-btn{
+  border: 1px solid rgb(21, 101, 216);
+  background: rgb(25, 99, 166);
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  width: 99px;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+.accessModal .ant-modal-header{
+  border-radius: 5px 5px 0px 0px;
+    background: #043661;
+    color: #ffffff;
+}
+
+.accessModal .ant-modal-title{
+color: #ffffff;
+}
+
+/*  */
+
+    /*  */

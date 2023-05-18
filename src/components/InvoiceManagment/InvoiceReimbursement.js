@@ -6,22 +6,17 @@ import {
   Button,
   Input,
   Form,
-  Table,
   DatePicker,
-  TextArea,
   Space,
   Divider,
-  Tooltip,
-  Tag,
-  Modal,
+
 } from "antd";
 import {
   MinusCircleOutlined,
   PlusOutlined,
   CheckOutlined,
   CloseOutlined,
-  EyeFilled,
-  EditFilled,
+
 } from "@ant-design/icons";
 import "./invoice.css";
 import FormItem from "antd/es/form/FormItem";
@@ -30,7 +25,6 @@ import InvoiceContext from "../../contexts/InvoiceContext";
 import {
   showNotification,
   checkAlphabets,
-  createUser,
 } from "../../contexts/CreateContext";
 import { useEffect } from "react";
 
@@ -38,14 +32,10 @@ function InvoiceReimbursement(props) {
   console.log(props);
   const [AddExpense, setAddExpense] = useState(false);
   const [file, setFile] = useState([]);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [invoiceDetails, setInvoiceDetails] = useState(props.invoiceDetails);
-  const [invoiceData, setInvoiceData] = useState({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState({});
   const [form] = Form.useForm();
-  const { TextArea } = Input;
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const role = sessionStorage.getItem("role");
 

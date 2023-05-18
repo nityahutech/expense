@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Tabs } from "antd";
-import InvoiceReimbursement from "./InvoiceReimbursement";
 import InvoiceTable from "./InvoiceTable";
 import "./AssetManag.css";
 import InvoiceContext from "../../contexts/InvoiceContext";
@@ -35,16 +34,7 @@ function InvoiceMagHome(props) {
             user={user}
           />
         </Tabs.TabPane>
-        {props.roleView == "emp" ? (
-          <Tabs.TabPane tab="Invoice Reimbursement Request" key="2">
-            <InvoiceReimbursement
-              roleView={props.roleView}
-              getData={getAllInvoiceData}
-              invoiceDetails={invoiceDetails}
-              user={user}
-            />
-          </Tabs.TabPane>
-        ) : null}
+
       </Tabs>
     </div>
   );

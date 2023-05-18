@@ -8,8 +8,7 @@ import {
   CalendarOutlined,
   CompassOutlined,
   DesktopOutlined,
-  FundProjectionScreenOutlined,
-
+  BookOutlined,
   GlobalOutlined,
   HomeFilled,
   PieChartFilled,
@@ -318,14 +317,14 @@ const NewSidebar = (props) => {
                           </Menu.Item>
                         </>
                       ) : null}
-                      <Menu.Item
+                      {/* <Menu.Item
                         className="arrow"
                         icon={<img src={dot} alt="profile" className="dot" />}
                         key="23"
                       >
                         <p className="sideFont">Invoice Reimbursement</p>
                         <NavLink to="/expenses/invoices" />
-                      </Menu.Item>
+                      </Menu.Item> */}
                     </Menu.SubMenu>
                     <Menu.Item
                       icon={
@@ -337,6 +336,18 @@ const NewSidebar = (props) => {
                     >
                       <p className="sideFont">Travel Management</p>
                       <NavLink to="/travel" />
+                    </Menu.Item>
+                    <Menu.Item
+                      icon={
+
+                        <BookOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
+                      key="24a"
+                    >
+                      <p className="sideFont">Invoice Reimbursement</p>
+                      <NavLink to="/invoices" />
                     </Menu.Item>
                     <Menu.Item
                       icon={

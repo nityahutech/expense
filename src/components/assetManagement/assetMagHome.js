@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Tabs } from "antd";
 import AllRequest from "./AllRequest";
-import Requestpage from "./RepairReq";
-import "./AssetManag.css";
 import AssetContext from "../../contexts/AssetContext";
-import RepairRequestTable from "./RepairRequestTable";
 import AddAsset from "./AddAsset";
 import AssetList from "./AssetList";
 
 function AssetMagHome(props) {
   const [repairLaptopData, setRepairLaptopData] = useState([]);
   const [laptopAllot, setLaptopAllot] = useState(props.refresh);
-  // console.log(props.refresh);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const role = sessionStorage.getItem("role");
   const isHr =
@@ -26,14 +22,12 @@ function AssetMagHome(props) {
     let repairData = await AssetContext.getRepairData(
       currentUser.uid,
     );
-    // console.log("values", repairData);
     setRepairLaptopData(repairData);
   };
   
   return (
     <div>
-      <Tabs defaultActiveKey="1" className="assetTabs">
-        {props.roleView == "admin" ? (
+      <Tabs defaultActiveKey="1" className="assetTabs"> 
           <>
             <Tabs.TabPane tab="Laptop Request" key="1">
               <AllRequest
@@ -50,20 +44,6 @@ function AssetMagHome(props) {
               <AddAsset />
             </Tabs.TabPane>
           </>
-        ) : (
-          <>
-            <Tabs.TabPane tab="All Request" key="1">
-              <RepairRequestTable
-                data={repairLaptopData}
-                getData={getRepairData}
-                roleView={props.roleView}
-              />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Request Form" key="2">
-              <Requestpage roleView={props.roleView} getData={getRepairData} />
-            </Tabs.TabPane>
-          </>
-        )}
       </Tabs>
     </div>
   );

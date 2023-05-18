@@ -20,7 +20,6 @@ import {
   CheckOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import "../../components/assetManagement/RepairRequest.css";
 import "./RepairRequestTable.css";
 import AssetContext from "../../contexts/AssetContext";
 import ViewRequestType from "./ViewRequestType";
@@ -114,7 +113,7 @@ const RepairRequestTable = (props) => {
           .then((response) => {
             props.getData();
           })
-          .catch((error) => {});
+          .catch((error) => { });
       },
     });
   };
@@ -209,8 +208,8 @@ const RepairRequestTable = (props) => {
               status === "Approved"
                 ? "rgb(8 231 68 / 75%)"
                 : status === "Pending"
-                ? "rgb(244 209 105)"
-                : "#f44336"
+                  ? "rgb(244 209 105)"
+                  : "#f44336"
             }
             key={status}
           >

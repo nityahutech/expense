@@ -1,32 +1,17 @@
 import React, { useState, useEffect } from "react";
 import {
-  Card,
   Button,
   Table,
   Tooltip,
   Tag,
   Modal,
-  Space,
-  Row,
-  Divider,
-  Col,
-  Form,
-  Input,
   DatePicker,
-  Select,
-  Switch,
+
 } from "antd";
 import {
-  MinusCircleOutlined,
-  PlusOutlined,
-  CheckOutlined,
-  CloseOutlined,
   EyeFilled,
-  EditFilled,
-  UserAddOutlined,
 } from "@ant-design/icons";
 import "./travelManagement.css";
-// import { EyeFilled, EditFilled } from "@ant-design/icons";
 import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
 import ViewTravelMng from "./ViewTravelMng";
@@ -52,9 +37,8 @@ function TravelManagement(props) {
 
   const setStatus = async (record, status) => {
     Modal.confirm({
-      title: `Are you sure, you want to ${
-        status == "Approved" ? "approve" : "reject"
-      } this request?`,
+      title: `Are you sure, you want to ${status == "Approved" ? "approve" : "reject"
+        } this request?`,
       okText: "Yes",
       okType: "danger",
       onOk: async () => {
@@ -100,10 +84,10 @@ function TravelManagement(props) {
       key: "startDate",
       width: 200,
       align: "left",
-      render: (_, record, index) => {
-        let temp = durationArray[index];
-        return temp[0];
-      },
+      // render: (_, record, index) => {
+      //   let temp = durationArray[index];
+      //   return temp[0];
+      // },
     },
     {
       title: "End Date",
@@ -111,10 +95,10 @@ function TravelManagement(props) {
       key: "endDate",
       width: 200,
       align: "left",
-      render: (_, record, index) => {
-        let temp = durationArray[index];
-        return temp[temp.length - 1];
-      },
+      // render: (_, record, index) => {
+      //   let temp = durationArray[index];
+      //   return temp[temp.length - 1];
+      // },
     },
     {
       title: "Status",
@@ -138,8 +122,8 @@ function TravelManagement(props) {
               status === "Approved"
                 ? "rgb(8 231 68 / 75%)"
                 : status === "Pending"
-                ? "rgb(244 209 105)"
-                : "#f44336"
+                  ? "rgb(244 209 105)"
+                  : "#f44336"
             }
             key={status}
           >
@@ -174,9 +158,9 @@ function TravelManagement(props) {
               style={
                 record.status == "Pending"
                   ? {
-                      padding: 0,
-                      color: "rgb(39 151 44 / 74%)",
-                    }
+                    padding: 0,
+                    color: "rgb(39 151 44 / 74%)",
+                  }
                   : { display: "none" }
               }
               type="link"
@@ -223,6 +207,7 @@ function TravelManagement(props) {
     <>
       <div className="travelDiv">
         <>
+
           <Table
             className="travelTable"
             columns={columns}
@@ -256,6 +241,7 @@ function TravelManagement(props) {
               viewTravelData={viewTravelData}
             />
           </Modal>
+
           <Table
             className="travelTable"
             columns={columns}

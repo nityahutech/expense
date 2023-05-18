@@ -3,7 +3,6 @@ import { Card, Button, Table, Tooltip, Tag, Modal } from "antd";
 import { EyeFilled, EditFilled } from "@ant-design/icons";
 import "./invoice.css";
 import ViewInvoiceDetails from "./ViewInvoiceDetails";
-import EditInvoiceDetails from "./EditInvoiceDetails";
 import InvoiceContext from "../../contexts/InvoiceContext";
 import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
@@ -17,8 +16,6 @@ function InvoiceTable(props) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [user, setUser] = useState({});
 
-  const [file, setFile] = useState([]);
-
   function openModal(data) {
     setIsModalOpen(true);
     setInvoiceData(data);
@@ -26,9 +23,8 @@ function InvoiceTable(props) {
 
   const setStatus = async (record, status) => {
     Modal.confirm({
-      title: `Are you sure, you want to ${
-        status == "Approved" ? "approve" : "reject"
-      } this request?`,
+      title: `Are you sure, you want to ${status == "Approved" ? "approve" : "reject"
+        } this request?`,
       okText: "Yes",
       okType: "danger",
       onOk: async () => {
@@ -54,7 +50,6 @@ function InvoiceTable(props) {
     setIsEditModalOpen(true);
     setInvoiceData(data);
 
-    // setRepairLaptopData(repairLaptopData);
   };
 
   const invoiceColumns = [
@@ -116,8 +111,8 @@ function InvoiceTable(props) {
               status === "Approved"
                 ? "rgb(8 231 68 / 75%)"
                 : status === "Pending"
-                ? "rgb(244 209 105)"
-                : "#f44336"
+                  ? "rgb(244 209 105)"
+                  : "#f44336"
             }
             key={status}
           >
@@ -152,9 +147,9 @@ function InvoiceTable(props) {
               style={
                 record.status == "Pending"
                   ? {
-                      padding: 0,
-                      color: "rgb(39 151 44 / 74%)",
-                    }
+                    padding: 0,
+                    color: "rgb(39 151 44 / 74%)",
+                  }
                   : { display: "none" }
               }
               type="link"
@@ -225,8 +220,8 @@ function InvoiceTable(props) {
               status === "Approved"
                 ? "rgb(8 231 68 / 75%)"
                 : status === "Pending"
-                ? "rgb(244 209 105)"
-                : "#f44336"
+                  ? "rgb(244 209 105)"
+                  : "#f44336"
             }
             key={status}
           >
@@ -265,9 +260,9 @@ function InvoiceTable(props) {
                 style={{ padding: 0, color: "rgb(64, 169, 255)" }}
                 type="link"
                 className="show"
-                // onClick={() => {
-                //   showModal(record);
-                // }}
+              // onClick={() => {
+              //   showModal(record);
+              // }}
               >
                 {
                   <EditFilled
@@ -325,103 +320,42 @@ function InvoiceTable(props) {
 
   return (
     <div className="invoiceDiv">
-      {props.roleView == "emp" ? (
-        <>
-          <Card title="Request Table" className="invoiceTable">
-            <Table
-              className="invoiceTable"
-              columns={columns}
-              dataSource={empInvoiceTable}
-            />
-          </Card>
-          {console.log(empInvoiceTable)}
-          <Modal
-            destroyOnClose
-            centered
-            open={isModalOpen}
-            footer={null}
-            title="INVOICE DETAILS"
-            closeIcon={
-              <div
-                onClick={() => {
-                  setIsModalOpen(false);
-                }}
-                style={{ color: "#ffff" }}
-              >
-                X
-              </div>
-            }
-            className="updateModal"
-          >
-            <ViewInvoiceDetails
-              setIsModalOpen={setIsModalOpen}
-              invoiceData={invoiceData}
-            />
-          </Modal>
-          <Modal
-            destroyOnClose
-            centered
-            open={isEditModalOpen}
-            footer={null}
-            title="INVOICE DETAILS"
-            width={750}
-            closeIcon={
-              <div
-                onClick={() => {
-                  setIsEditModalOpen(false);
-                }}
-                style={{ color: "#ffff" }}
-              >
-                X
-              </div>
-            }
-            className="updateModal"
-          >
-            {console.log(invoiceData)}
-            <EditInvoiceDetails
-              getData={props.getData}
-              invoiceData={invoiceData}
-              setIsEditModalOpen={setIsEditModalOpen}
-            />
-          </Modal>
-        </>
-      ) : (
-        <>
-          <Table
-            className="invoiceTable"
-            columns={invoiceColumns}
-            dataSource={filteredPending}
+      <>
+        <Table
+          className="invoiceTable"
+          columns={invoiceColumns}
+          dataSource={filteredPending}
+        />
+        <Table
+          className="invoiceTable"
+          columns={invoiceColumns}
+          dataSource={filteredApprove}
+        />
+        <Modal
+          destroyOnClose
+          centered
+          open={isModalOpen}
+          footer={null}
+          title="INVOICE DETAILS"
+          closeIcon={
+            <div
+              onClick={() => {
+                setIsModalOpen(false);
+              }}
+              style={{ color: "#ffff" }}
+            >
+              X
+            </div>
+          }
+          className="updateModal"
+        >
+          <ViewInvoiceDetails
+            setIsModalOpen={setIsModalOpen}
+            invoiceData={invoiceData}
           />
-          <Table
-            className="invoiceTable"
-            columns={invoiceColumns}
-            dataSource={filteredApprove}
-          />
-          <Modal
-            destroyOnClose
-            centered
-            open={isModalOpen}
-            footer={null}
-            title="INVOICE DETAILS"
-            closeIcon={
-              <div
-                onClick={() => {
-                  setIsModalOpen(false);
-                }}
-                style={{ color: "#ffff" }}
-              >
-                X
-              </div>
-            }
-            className="updateModal"
-          >
-            <ViewInvoiceDetails
-              setIsModalOpen={setIsModalOpen}
-              invoiceData={invoiceData}
-            />
-          </Modal>
-        </>
-      )}
+        </Modal>
+      </>
+  
     </div>
   );
 }

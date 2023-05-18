@@ -10,7 +10,7 @@ import {
 
 } from "antd";
 
-import "../RepairRequest.css";
+import "../Form.css";
 import "../RepairRequestTable.css";
 import RequestContext from "../../../contexts/RequestContext";
 import { showNotification } from "../../../contexts/CreateContext";

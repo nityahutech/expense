@@ -30,24 +30,29 @@ function TravelMngHome(props) {
   const getAlltravelData = async () => {
     let userData = await EmpInfoContext.getEduDetails(currentUser.uid);
     let travleData = await TravelContext.getAllTravel(currentUser.uid);
+    let filterType = travleData.filter((type) => { return type?.type === 'Travel Booking' })
+    console.log(filterType);
     console.log(travleData);
-    setTravelDetails(travleData);
+    setTravelDetails(filterType)
+    // setTravelDetails(travleData);
     setUser(userData);
-    let data = travleData.map((record) => {
+    let data = filterType.map((record) => {
       let dur = record.travelType.map((dt) => dt.durationDate);
       let temp = [].concat.apply([], dur);
 
-      console.log("dur", dur);
+      console.log("travelDetails", dur);
+      console.log("travelDetails", temp);
       temp.sort((a, b) => {
         return moment(a, "DD-MM-YYYY") - moment(b, "DD-MM-YYYY");
       });
       return temp;
     });
-    console.log("data", data);
+    console.log("travelDetails", data);
     setDurationArray(data);
   };
 
-  console.log("travelDetails", travelDetails);
+  console.log("travelDetails", travelDetails, durationArray);
+
 
   useEffect(() => {
     getAlltravelData();

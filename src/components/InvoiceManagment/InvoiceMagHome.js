@@ -14,10 +14,16 @@ function InvoiceMagHome(props) {
   const getAllInvoiceData = async () => {
     console.log('getAllInvoiceData', getAllInvoiceData)
     let invoiceData = await InvoiceContext.getInvoice(createUser.uid);
+    let filterType = invoiceData.filter((type) => { return type.type === 'Invoice Reimbursement' })
     let userData = await EmpInfoContext.getEduDetails(currentUser.uid);
+    setInvoiceDetails(filterType)
     setUser(userData);
-    setInvoiceDetails(invoiceData);
+    // setInvoiceDetails(invoiceData);
+
   };
+  console.log("travelDetails", invoiceDetails);
+
+
 
   useEffect(() => {
     getAllInvoiceData();

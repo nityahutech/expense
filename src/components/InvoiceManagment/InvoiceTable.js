@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Table, Tooltip, Tag, Modal } from "antd";
-import { EyeFilled, EditFilled } from "@ant-design/icons";
+import {  Button, Table, Tooltip, Tag, Modal } from "antd";
+import { EyeFilled,} from "@ant-design/icons";
 import "./invoice.css";
 import ViewInvoiceDetails from "./ViewInvoiceDetails";
 import InvoiceContext from "../../contexts/InvoiceContext";
@@ -70,7 +70,7 @@ function InvoiceTable(props) {
 
     {
       title: "Invoice Date ",
-      dataIndex: "invoiceDate",
+      dataIndex: "date",
       key: "invoiceDate",
       width: 200,
       align: "left",
@@ -126,6 +126,7 @@ function InvoiceTable(props) {
       key: "operation",
       width: 200,
       align: "left",
+      fixed: 'right',
       render: (_, record) => (
         <>
           <div
@@ -170,137 +171,6 @@ function InvoiceTable(props) {
             >
               <img src={CheckReject} width={20} />
             </Button>
-          </div>
-        </>
-      ),
-    },
-  ];
-
-  const columns = [
-    {
-      title: "Invoice Date ",
-      dataIndex: "invoiceDate",
-      key: "invoiceDate",
-      width: 200,
-      align: "left",
-    },
-    {
-      title: "Invoice Name",
-      dataIndex: "invoiceName",
-      key: "invoiceName",
-      width: 200,
-      align: "left",
-    },
-    {
-      title: "Total Amount",
-      dataIndex: "totalAmt",
-      key: "totalAmt",
-      width: 200,
-      align: "left",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      width: 200,
-      align: "left",
-      render: (_, { status }) =>
-        status !== "" && (
-          <Tag
-            style={{
-              width: "84px",
-              color: "#000000",
-              borderRadius: "10px",
-              display: "flex",
-              justifyContent: "center",
-              padding: "2px",
-            }}
-            className="statusTag"
-            color={
-              status === "Approved"
-                ? "rgb(8 231 68 / 75%)"
-                : status === "Pending"
-                  ? "rgb(244 209 105)"
-                  : "#f44336"
-            }
-            key={status}
-          >
-            {status}
-          </Tag>
-        ),
-    },
-    {
-      title: "Action",
-      dataIndex: "operation",
-      key: "operation",
-      width: 100,
-      align: "center",
-      render: (_, record) => (
-        <>
-          <div
-            className="employee-button"
-            style={{ display: "flex", flexDirection: "row" }}
-          >
-            <Tooltip placement="bottom" title="View" color="#1963A6">
-              <Button
-                type="link"
-                className="show"
-                onClick={() => {
-                  openModal(record);
-                }}
-              >
-                {<EyeFilled style={{ color: "#000000" }} />}
-              </Button>
-            </Tooltip>
-            {record.status == "Approved" || record.status == "Reject" ? (
-              <Button
-                disabled={
-                  record.status == "Approved" || record.status == "Reject"
-                }
-                style={{ padding: 0, color: "rgb(64, 169, 255)" }}
-                type="link"
-                className="show"
-              // onClick={() => {
-              //   showModal(record);
-              // }}
-              >
-                {
-                  <EditFilled
-                    style={
-                      record.status == "Approved" || record.status == "Reject"
-                        ? { color: "lightgray" }
-                        : null
-                    }
-                    disabled={
-                      record.status == "Approved" || record.status == "Reject"
-                    }
-                  />
-                }
-              </Button>
-            ) : (
-              <Tooltip placement="bottom" title="Edit" color="#1963A6">
-                <Button
-                  disabled={record.status == "Approved"}
-                  style={{ padding: 0, color: "rgb(64, 169, 255)" }}
-                  type="link"
-                  className="show"
-                  onClick={() => {
-                    showModal(record);
-                  }}
-                >
-                  {
-                    <EditFilled
-                      style={
-                        record.status == "Approved"
-                          ? { color: "lightgray" }
-                          : null
-                      }
-                      disabled={record.status == "Approved"}
-                    />
-                  }
-                </Button>
-              </Tooltip>
-            )}
           </div>
         </>
       ),
@@ -355,7 +225,7 @@ function InvoiceTable(props) {
           />
         </Modal>
       </>
-  
+
     </div>
   );
 }

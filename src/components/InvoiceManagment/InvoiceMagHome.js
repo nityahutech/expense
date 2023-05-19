@@ -13,7 +13,9 @@ function InvoiceMagHome(props) {
 
   const getAllInvoiceData = async () => {
     console.log('getAllInvoiceData', getAllInvoiceData)
-    let invoiceData = await InvoiceContext.getInvoice(createUser.uid);
+    // let invoiceData = await InvoiceContext.getInvoice(createUser.uid);
+    let invoiceData = await InvoiceContext.getInvoice();
+    console.log('invoiceData', invoiceData)
     let filterType = invoiceData.filter((type) => { return type.type === 'Invoice Reimbursement' })
     let userData = await EmpInfoContext.getEduDetails(currentUser.uid);
     setInvoiceDetails(filterType)

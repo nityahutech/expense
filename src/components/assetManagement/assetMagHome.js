@@ -20,21 +20,16 @@ function AssetMagHome(props) {
   }, [props.roleView]);
 
 
-  // const getRepairData = async () => {
-  //   let repairData = await RequestContext.getAllAsset(
-  //     currentUser.uid,
-  //   );
-
-  //   setRepairLaptopData(repairData);
-  // };
-
   const getRepairData = async () => {
     let repairData = await RequestContext.getAllAsset(
-      currentUser.uid,
+      // currentUser.uid,
     );
+    console.log('repairData', repairData)
     let filterType = repairData.filter((type) => { return type?.type === 'Laptop Upgrade' || type?.type === 'Laptop Repair' || type?.type === 'Laptop Return' })
+    console.log('repairData', filterType)
     setRepairLaptopData(filterType);
   };
+
 
 
   return (

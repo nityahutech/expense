@@ -2,22 +2,17 @@ import { db, storage } from "../firebase-config";
 import {
     addDoc,
     collection,
-    getDoc,
     getDocs,
     query,
     where,
-    setDoc,
-    orderBy,
     doc,
     updateDoc,
     deleteDoc,
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 
-import { async } from "@firebase/util";
 
 let compId = sessionStorage.getItem("compId");
-
 let companyAssetCollectionRef = collection(
     db,
     `companyprofile/${compId}/request`
@@ -141,11 +136,6 @@ class RequestContext {
         }
     };
 
-    // updateRepairData = (id, updateRepair) => {
-    //     updateDoc(doc(companyAssetCollectionRef, id), updateRepair);
-    //     return Promise.resolve();
-    // };
-
     deleteRepairData = (id) => {
         const deleteData = doc(companyAssetCollectionRef, id);
         return deleteDoc(deleteData);
@@ -153,17 +143,24 @@ class RequestContext {
 
     //---------------------------------------------------------------
 
-    getAllAsset = async () => {
-        const q = await getDocs(companyAssetCollectionRef);
-        console.log('ddddd', q)
+    getAllAsset = async (empId) => {
+        console.log('repairData', empId)
+        const q = await getDocs(companyAssetCollectionRef, where("empId", "==", empId));
+        console.log('repairData', q)
         let rec = q.docs.map((doc) => {
             return {
                 ...doc.data(),
                 id: doc.id,
             };
         });
+        console.log('repairData', rec)
         return rec;
     };
+
+
 }
 
 export default new RequestContext();
+
+
+

@@ -1,17 +1,13 @@
 import { db, storage } from "../firebase-config";
 import {
   addDoc,
-  arrayUnion,
   collection,
   doc,
   getDocs,
   updateDoc,
 } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { async } from "@firebase/util";
 
 let compId = sessionStorage.getItem("compId");
-
 let companyTravelCollectionRef = collection(
   db,
   `companyprofile/${compId}/request`

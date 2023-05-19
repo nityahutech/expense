@@ -39,13 +39,13 @@ function LaptopUpgradeForm(props) {
         console.log("ffffff", values);
         form.resetFields();
         const allUpgradeData = {
-            lapname: values.lapname || upgradeFormData.lapname,
-            modelName: values.modelName || upgradeFormData.modelName,
-            serialNum: values.serialNum || upgradeFormData.serialNum,
+            lapname: upgradeFormData.lapname || null,
+            modelName: upgradeFormData.modelName || null,
+            serialNum: upgradeFormData.serialNum || null,
             date: moment().format("DD-MM-YYYY"),
-            empId: currentUser.uid,
-            empCode: user.empId,
-            name: user.name,
+            empId: currentUser.uid || null,
+            empCode: user.empId || null,
+            name: user.name || null,
             type: 'Laptop Upgrade',
             status: "Pending",
             data: {

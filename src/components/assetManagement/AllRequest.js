@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import "./RepairRequestTable.css";
-import { Table, Button, Tag, Card, Modal } from "antd";
+import { Table, Button, Tag, Card, Modal, Row, Col, Input } from "antd";
 import {
   EyeFilled,
-  CheckCircleFilled,
-  CloseCircleFilled,
+  SearchOutlined
 } from "@ant-design/icons";
 import ViewRequestType from "./ViewRequestType";
-import AssetContext from "../../contexts/AssetContext";
 import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
 import RequestContext from "../../contexts/RequestContext";
 
 function AllRequest(props) {
-  // console.log(props, "ektaaaaaaaaaaa");
+  console.log(props.data, "ektaaaaaaaaaaa");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState({});
   const [repairAllotReq, setRepairAllotReq] = useState(props.data || []);
-  // console.log(props.data);
+  const [filterRequest, setFilterRequest] = useState([])
+
   useEffect(() => {
     setRepairAllotReq(props.data);
   }, [props.data]);
@@ -48,10 +47,6 @@ function AllRequest(props) {
     setModalData(data);
   }
 
-  function closeModal() {
-    setIsModalOpen(false);
-  }
-
   var filteredPending = [];
   var filteredApprove = [];
 
@@ -63,12 +58,31 @@ function AllRequest(props) {
     }
   });
 
-  const columns2 = [
-    // showed in the admin flow
 
+  console.log('repairAllotReq', repairAllotReq)
+
+  // const searchChange = (e) => {
+  //   let search = e.target.value
+  //   console.log('formData', search)
+  //   if (search) {
+  //     let result = filteredApprove.filter((ex) =>
+  //       ex?.date?.toLowerCase().includes(search?.toLowerCase()) ||
+  //       ex?.type?.toLowerCase().includes(search?.toLowerCase())
+
+  //     )
+  //     console.log('formData', result)
+  //     const modifiedFilterRequest = [...result];
+  //     setFilterRequest(modifiedFilterRequest)
+  //   }
+  //   else {
+  //     setFilterRequest(filteredApprove)
+  //   }
+  // }
+
+
+  const columns2 = [
     {
       title: "Employee Code",
-      dataIndex: "empCode",
       key: "empCode",
       width: 150,
       align: "left",
@@ -194,6 +208,17 @@ function AllRequest(props) {
         dataSource={filteredPending}
         className="assetTable"
       />
+      {/* <Row gutter={10} style={{ justifyContent: "space-between" }}>
+        <Col sm={24} md={8}>
+          <Input
+            className="daily"
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            onChange={searchChange}
+
+          />
+        </Col>
+      </Row> */}
       <Table
         size="small"
         columns={columns2}

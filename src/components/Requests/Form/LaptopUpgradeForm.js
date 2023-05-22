@@ -39,13 +39,13 @@ function LaptopUpgradeForm(props) {
         console.log("ffffff", values);
         form.resetFields();
         const allUpgradeData = {
-            lapname: values.lapname || upgradeFormData.lapname,
-            modelName: values.modelName || upgradeFormData.modelName,
-            serialNum: values.serialNum || upgradeFormData.serialNum,
+            lapname: upgradeFormData.lapname || null,
+            modelName: upgradeFormData.modelName || null,
+            serialNum: upgradeFormData.serialNum || null,
             date: moment().format("DD-MM-YYYY"),
-            empId: currentUser.uid,
-            empCode: user.empId,
-            name: user.name,
+            empId: currentUser.uid || null,
+            empCode: user.empId || null,
+            name: user.name || null,
             type: 'Laptop Upgrade',
             status: "Pending",
             data: {
@@ -83,28 +83,7 @@ function LaptopUpgradeForm(props) {
         width: "100%",
     };
 
-    const resetButton = {
-        border: "1px solid #1963a6",
-        color: "#1963a6",
-        fontWeight: "600",
-        fontSize: "14px",
-        lineHeight: "17px",
-        width: "99px",
-        marginTop: "10px",
-        cursor: "pointer",
-    };
-    const submitButton = {
-        border: "1px solid #1963a6",
-        background: "#1963a6",
-        color: "#ffffff",
-        fontWeight: "600",
-        fontSize: "14px",
-        lineHeight: "17px",
-        width: "99px",
-        marginTop: "10px",
-        cursor: "pointer",
-        marginLeft: "17px",
-    };
+
 
     function handleChange(event) {
         const isLt2M = file.size / 1024 / 1024 < 2;
@@ -237,12 +216,12 @@ function LaptopUpgradeForm(props) {
                             >
                                 <Space>
                                     <Form.Item>
-                                        <Button style={resetButton} onClick={onReset}>
+                                        <Button className="button-white" onClick={onReset}>
                                             Reset
                                         </Button>
                                     </Form.Item>
                                     <Form.Item>
-                                        <Button style={submitButton} htmlType="submit">
+                                        <Button className='button-color' htmlType="submit">
                                             Submit
                                         </Button>
                                     </Form.Item>

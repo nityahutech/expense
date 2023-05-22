@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal, Row, Col, Input, Tabs, Tooltip } from "antd";
+import { Table, Button, Modal, Row, Col, Input, Tabs, Tooltip, Card } from "antd";
 import {
     EditFilled,
     SearchOutlined,
@@ -15,7 +15,6 @@ const ViewClient = (props) => {
     const [editedRecord, setEditedRecord] = useState(null);
     const [showRecord, setshowRecord] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [size, setSize] = useState(window.innerWidth <= 768 ? "" : "left");
     const [filterClient, setFilterClient] = useState([]);
     const [selectemp, setSelectemp] = useState({ id: "" });
     const [activetab, setActivetab] = useState("1");
@@ -57,7 +56,7 @@ const ViewClient = (props) => {
             dataIndex: "id",
             key: "id",
             fixed: "left",
-            width: 100,
+            width: 150,
             align: "left",
         },
         {
@@ -178,22 +177,28 @@ const ViewClient = (props) => {
     };
 
     const getClientData = async () => {
+        setLoading(true)
         let data = await ClientContext.getClient();
         console.log("clientget", data);
         setClientdata(data);
         setFilterClient(data)
+        setLoading(false)
     };
 
     useEffect(() => {
         getClientData();
     }, [isModalVisible,]);
 
+    const tableProps = {
+        loading,
+    };
+
     return (
         <div className="hrtab" style={{ minHeight: "100vh" }}>
             <Tabs
                 defaultActiveKey={activetab}
                 activeKey={activetab}
-                className="Tabs"
+                className="page-tabs"
                 onChange={(tabKey) => {
                     setActivetab(tabKey);
                     if (tabKey == 1) {
@@ -203,37 +208,35 @@ const ViewClient = (props) => {
             >
 
                 <Tabs.TabPane tab="Client List" key="1">
-                    <div
-                        style={{
-                            width: "100%",
-                            padding: "10px",
-                            backgroundColor: "white",
-                            marginBottom: "15px",
-                        }}
+                    <Card className="daily"
+
                     >
-                        <Row gutter={[16, 16]}>
-                            <Col xs={24} xm={24} md={8} lg={4}>
+                        <Row gutter={10} style={{ justifyContent: "space-between" }}>
+                            <Col sm={24} md={8}>
                                 <Input
+                                    className="daily"
                                     placeholder="Search"
                                     prefix={<SearchOutlined />}
                                     onChange={searchChange}
                                 />
                             </Col>
                         </Row>
-                    </div>
-                    <Table
-                        loading={loading}
-                        columns={columns}
-                        dataSource={filterClient}
-                        pagination={{
-                            position: ["bottomCenter"],
-                        }}
-                        scroll={{ x: 800 }}
-                        className="empTable"
-                        size="small"
-                        activetab={activetab}
-                        reloadData={getClientData}
-                    />
+
+                        <Table
+                            {...tableProps}
+                            // loading={loading}
+                            columns={columns}
+                            dataSource={filterClient}
+                            pagination={{
+                                position: ["bottomCenter"],
+                            }}
+                            scroll={{ x: 800 }}
+                            className="invoiceTable"
+                            size="small"
+                            activetab={activetab}
+                            reloadData={getClientData}
+                        />
+                    </Card>
                 </Tabs.TabPane>
 
                 <Tabs.TabPane tab="Client Pofile" disabled={!selectemp.id} key="2">

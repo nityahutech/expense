@@ -266,17 +266,21 @@ const NewSidebar = (props) => {
                         <NavLink to="/Appraisal/HalfYearGoalPage" />
                       </Menu.Item>
                     </Menu.SubMenu> */}
-                    <Menu.Item
-                      icon={
-                        <DesktopOutlined
-                          style={{ color: "#ffffff", fontSize: "17px" }}
-                        />
-                      }
-                      key="22"
-                    >
-                      <p className="sideFont">Assets</p>
-                      <NavLink to="/assets" />
-                    </Menu.Item>
+                    {role == "admin" || isHr ? (
+                      <>
+                        <Menu.Item
+                          icon={
+                            <DesktopOutlined
+                              style={{ color: "#ffffff", fontSize: "17px" }}
+                            />
+                          }
+                          key="22"
+                        >
+                          <p className="sideFont">Assets</p>
+                          <NavLink to="/assets" />
+                        </Menu.Item>
+                      </>
+                    ) : null}
                     <Menu.SubMenu
                       className="arrow-div"
                       style={{
@@ -327,28 +331,32 @@ const NewSidebar = (props) => {
                         <NavLink to="/expenses/invoices" />
                       </Menu.Item> */}
                     </Menu.SubMenu>
-                    <Menu.Item
-                      icon={
-                        <CompassOutlined
-                          style={{ color: "#ffffff", fontSize: "17px" }}
-                        />
-                      }
-                      key="24"
-                    >
-                      <p className="sideFont">Travel Management</p>
-                      <NavLink to="/travel" />
-                    </Menu.Item>
-                    <Menu.Item
-                      icon={
-                        <BookOutlined
-                          style={{ color: "#ffffff", fontSize: "17px" }}
-                        />
-                      }
-                      key="24a"
-                    >
-                      <p className="sideFont">Invoice Reimbursement</p>
-                      <NavLink to="/invoices" />
-                    </Menu.Item>
+                    {role == "admin" || isHr ? (
+                      <>
+                        <Menu.Item
+                          icon={
+                            <CompassOutlined
+                              style={{ color: "#ffffff", fontSize: "17px" }}
+                            />
+                          }
+                          key="24"
+                        >
+                          <p className="sideFont">Travel Management</p>
+                          <NavLink to="/travel" />
+                        </Menu.Item>
+                        <Menu.Item
+                          icon={
+                            <BookOutlined
+                              style={{ color: "#ffffff", fontSize: "17px" }}
+                            />
+                          }
+                          key="24a"
+                        >
+                          <p className="sideFont">Invoice Reimbursement</p>
+                          <NavLink to="/invoices" />
+                        </Menu.Item>
+                      </>
+                    ) : null}
                     <Menu.Item
                       icon={
                         <RadarChartOutlined

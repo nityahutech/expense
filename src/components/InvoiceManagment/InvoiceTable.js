@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Table, Tooltip, Tag, Modal } from "antd";
-import { EyeFilled, EditFilled } from "@ant-design/icons";
+import {
+  Button,
+  Table,
+  Tooltip,
+  Tag,
+  Modal,
+  Card,
+  Input,
+  Row,
+  Col,
+} from "antd";
+import { EyeFilled, SearchOutlined } from "@ant-design/icons";
 import "./invoice.css";
 import ViewInvoiceDetails from "./ViewInvoiceDetails";
 import InvoiceContext from "../../contexts/InvoiceContext";
@@ -11,10 +21,12 @@ function InvoiceTable(props) {
   const [empInvoiceTable, setEmpInvoiceTable] = useState(
     props.invoiceDetails || []
   );
+  const loading = props.loading
   const [invoiceData, setInvoiceData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [user, setUser] = useState({});
+
 
   function openModal(data) {
     setIsModalOpen(true);
@@ -44,12 +56,12 @@ function InvoiceTable(props) {
   useEffect(() => {
     setEmpInvoiceTable(props.invoiceDetails);
     setUser(props.user);
+
   }, [props.invoiceDetails]);
 
   const showModal = (data) => {
     setIsEditModalOpen(true);
     setInvoiceData(data);
-
   };
 
   const invoiceColumns = [
@@ -57,22 +69,22 @@ function InvoiceTable(props) {
       title: "Employee Code",
       dataIndex: "empCode",
       key: "empCode",
-      width: 200,
+      width: 120,
       align: "left",
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: 200,
+      width: 150,
       align: "left",
     },
 
     {
       title: "Invoice Date ",
-      dataIndex: "invoiceDate",
+      dataIndex: "date",
       key: "invoiceDate",
-      width: 200,
+      width: 100,
       align: "left",
     },
     {
@@ -86,14 +98,14 @@ function InvoiceTable(props) {
       title: "Total Amount",
       dataIndex: "totalAmt",
       key: "totalAmt",
-      width: 150,
+      width: 100,
       align: "left",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      width: 200,
+      width: 100,
       align: "left",
       render: (_, { status }) =>
         status !== "" && (
@@ -124,8 +136,9 @@ function InvoiceTable(props) {
       title: "Action",
       dataIndex: "operation",
       key: "operation",
-      width: 200,
+      width: 150,
       align: "left",
+      fixed: "right",
       render: (_, record) => (
         <>
           <div
@@ -176,137 +189,6 @@ function InvoiceTable(props) {
     },
   ];
 
-  const columns = [
-    {
-      title: "Invoice Date ",
-      dataIndex: "invoiceDate",
-      key: "invoiceDate",
-      width: 200,
-      align: "left",
-    },
-    {
-      title: "Invoice Name",
-      dataIndex: "invoiceName",
-      key: "invoiceName",
-      width: 200,
-      align: "left",
-    },
-    {
-      title: "Total Amount",
-      dataIndex: "totalAmt",
-      key: "totalAmt",
-      width: 200,
-      align: "left",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      width: 200,
-      align: "left",
-      render: (_, { status }) =>
-        status !== "" && (
-          <Tag
-            style={{
-              width: "84px",
-              color: "#000000",
-              borderRadius: "10px",
-              display: "flex",
-              justifyContent: "center",
-              padding: "2px",
-            }}
-            className="statusTag"
-            color={
-              status === "Approved"
-                ? "rgb(8 231 68 / 75%)"
-                : status === "Pending"
-                  ? "rgb(244 209 105)"
-                  : "#f44336"
-            }
-            key={status}
-          >
-            {status}
-          </Tag>
-        ),
-    },
-    {
-      title: "Action",
-      dataIndex: "operation",
-      key: "operation",
-      width: 100,
-      align: "center",
-      render: (_, record) => (
-        <>
-          <div
-            className="employee-button"
-            style={{ display: "flex", flexDirection: "row" }}
-          >
-            <Tooltip placement="bottom" title="View" color="#1963A6">
-              <Button
-                type="link"
-                className="show"
-                onClick={() => {
-                  openModal(record);
-                }}
-              >
-                {<EyeFilled style={{ color: "#000000" }} />}
-              </Button>
-            </Tooltip>
-            {record.status == "Approved" || record.status == "Reject" ? (
-              <Button
-                disabled={
-                  record.status == "Approved" || record.status == "Reject"
-                }
-                style={{ padding: 0, color: "rgb(64, 169, 255)" }}
-                type="link"
-                className="show"
-              // onClick={() => {
-              //   showModal(record);
-              // }}
-              >
-                {
-                  <EditFilled
-                    style={
-                      record.status == "Approved" || record.status == "Reject"
-                        ? { color: "lightgray" }
-                        : null
-                    }
-                    disabled={
-                      record.status == "Approved" || record.status == "Reject"
-                    }
-                  />
-                }
-              </Button>
-            ) : (
-              <Tooltip placement="bottom" title="Edit" color="#1963A6">
-                <Button
-                  disabled={record.status == "Approved"}
-                  style={{ padding: 0, color: "rgb(64, 169, 255)" }}
-                  type="link"
-                  className="show"
-                  onClick={() => {
-                    showModal(record);
-                  }}
-                >
-                  {
-                    <EditFilled
-                      style={
-                        record.status == "Approved"
-                          ? { color: "lightgray" }
-                          : null
-                      }
-                      disabled={record.status == "Approved"}
-                    />
-                  }
-                </Button>
-              </Tooltip>
-            )}
-          </div>
-        </>
-      ),
-    },
-  ];
-
   var filteredPending = [];
   var filteredApprove = [];
 
@@ -317,46 +199,60 @@ function InvoiceTable(props) {
       filteredApprove.push(record);
     }
   });
+  const tableProps = {
+    loading,
+  };
 
   return (
-    <div className="invoiceDiv">
-      <>
-        <Table
-          className="invoiceTable"
-          columns={invoiceColumns}
-          dataSource={filteredPending}
-        />
-        <Table
-          className="invoiceTable"
-          columns={invoiceColumns}
-          dataSource={filteredApprove}
-        />
-        <Modal
-          destroyOnClose
-          centered
-          open={isModalOpen}
-          footer={null}
-          title="INVOICE DETAILS"
-          closeIcon={
-            <div
-              onClick={() => {
-                setIsModalOpen(false);
-              }}
-              style={{ color: "#ffff" }}
-            >
-              X
-            </div>
-          }
-          className="updateModal"
-        >
-          <ViewInvoiceDetails
-            setIsModalOpen={setIsModalOpen}
-            invoiceData={invoiceData}
+    <Card className="daily">
+      <Table
+        {...tableProps}
+        className="invoiceTable"
+        columns={invoiceColumns}
+        dataSource={filteredPending}
+        scroll={{ x: 600 }}
+      />
+      <Row gutter={10} style={{ justifyContent: "space-between" }}>
+        <Col sm={24} md={8}>
+          <Input
+            className="daily"
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+          // onChange={searchChange}
           />
-        </Modal>
-      </>
-  
-    </div>
+        </Col>
+      </Row>
+      <Table
+        {...tableProps}
+        className="invoiceTable"
+        columns={invoiceColumns}
+        dataSource={filteredApprove}
+        scroll={{ x: 600 }}
+      />
+      <Modal
+        destroyOnClose
+        centered
+        open={isModalOpen}
+        footer={null}
+        title="INVOICE DETAILS"
+        closeIcon={
+          <div
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+            style={{ color: "#ffff" }}
+          >
+            X
+          </div>
+        }
+        className="updateModal"
+      >
+        <ViewInvoiceDetails
+          setIsModalOpen={setIsModalOpen}
+          invoiceData={invoiceData}
+        />
+      </Modal>
+    </Card>
   );
 }
 

@@ -31,6 +31,7 @@ import FormItem from "antd/es/form/FormItem";
 const { Option } = Select;
 
 const AllocatedCard = (props) => {
+  console.log("ffffffffffff", props.data.empId);
   const imgRef = React.useRef(null);
   const [form] = Form.useForm();
   const [imageUrl, setImageUrl] = useState("");
@@ -38,13 +39,13 @@ const AllocatedCard = (props) => {
   const [data, setData] = useState([]);
   const [dob, setDob] = useState("");
   const [addButton, setAddButton] = useState(true);
-  const [fileList, setFileList] = useState([]);
   const [isBigFile, setIsBigFile] = useState(false);
   const [fileName, setFileName] = useState(null);
   const [editContent, showEditContent] = useState(false);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  console.log("ffffffffffff", currentUser.uid,);
 
   const onFinish = (values) => {
     // console.log("ffffffffffff", values);
@@ -57,8 +58,8 @@ const AllocatedCard = (props) => {
       dateOfRepair: values.dateOfRepair.format("DD-MM-YYYY"),
       lapBag: values.lapBag,
       empId: currentUser.uid,
-      empCode: props.user.empId,
-      name: props.user.name,
+      empCode: props.data.empId,
+      name: props.data.name,
       status: "Pending",
       type: "Allotment",
       // photo: imageUrl || null,

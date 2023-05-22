@@ -227,7 +227,7 @@ const InvoiceForm = (props) => {
                       ))}
                       <Col span={24}>
                         <Button
-                          className="addField"
+                          className="addFieldTravel"
                           onClick={() => {
                             add();
                           }}
@@ -240,37 +240,32 @@ const InvoiceForm = (props) => {
                   );
                 }}
               </Form.List>
-              <Col span={24} className="formButton">
-                <Button
-                  type="text"
-                  style={{ marginRight: "10px" }}
-                  onClick={() => {
+            </Row>
+            <Col
+              span={24}
+              classsname="gutter-row"
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Space>
+                <Form.Item>
+                  <Button className="button-white" onClick={() => {
                     setAddExpense(false);
                     form.resetFields();
                     setFile([]);
-                  }}
-                >
-                  <CloseOutlined />
-                  Cancel
-                </Button>
-                <Button
-                  htmlType="submit"
-                  style={{
-                    border: "1px solid #1963A6",
-                    background: "#1963A6",
-                    color: "#ffffff",
-                    fontSize: "15",
-                    lineHeight: "17px",
-                    // width: "119px",
-                  }}
-                  type="primary"
-                >
-                  <CheckOutlined />
-                  Submit
-                </Button>
-              </Col>
-              {/* </Form> */}
-            </Row>
+                  }}>
+                    Cancel
+                  </Button>
+                </Form.Item>
+                <Form.Item>
+                  <Button className='button-color' htmlType="submit">
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Space>
+            </Col>
           </Col>
         ) : (
           <Button

@@ -1,31 +1,31 @@
 import React, { useState, useEffect } from "react";
 import "./RepairRequestTable.css";
-import { Table, Button, Tag, Card, Modal } from "antd";
+import { Table, Button, Tag, Card, Modal, Row, Col, Input } from "antd";
 import {
   EyeFilled,
-  CheckCircleFilled,
-  CloseCircleFilled,
+  SearchOutlined
 } from "@ant-design/icons";
 import ViewRequestType from "./ViewRequestType";
-import AssetContext from "../../contexts/AssetContext";
 import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
+import RequestContext from "../../contexts/RequestContext";
 
 function AllRequest(props) {
-  // console.log(props, "ektaaaaaaaaaaa");
+  console.log(props.data, "ektaaaaaaaaaaa");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState({});
   const [repairAllotReq, setRepairAllotReq] = useState(props.data || []);
-  // console.log(props.data);
+  const [filterRequest, setFilterRequest] = useState([])
+  const loading = props.loading
+
   useEffect(() => {
     setRepairAllotReq(props.data);
   }, [props.data]);
 
   const setStatus = async (record, status) => {
     Modal.confirm({
-      title: `Are you sure, you want to  ${
-        status == "Approved" ? "approve" : "reject"
-      } this request?`,
+      title: `Are you sure, you want to  ${status == "Approved" ? "approve" : "reject"
+        } this request?`,
       okText: "Yes",
       okType: "danger",
       onOk: async () => {
@@ -37,7 +37,7 @@ function AllRequest(props) {
 
           return allotRecord;
         });
-        await AssetContext.updateRepairData(record.id, record);
+        await RequestContext.updateRepairData(record.id, record);
         setRepairAllotReq(updatedRepairRecord);
       },
     });
@@ -46,10 +46,6 @@ function AllRequest(props) {
   function openModal(data) {
     setIsModalOpen(true);
     setModalData(data);
-  }
-
-  function closeModal() {
-    setIsModalOpen(false);
   }
 
   var filteredPending = [];
@@ -63,12 +59,31 @@ function AllRequest(props) {
     }
   });
 
-  const columns2 = [
-    // showed in the admin flow
 
+  console.log('repairAllotReq', repairAllotReq)
+
+  // const searchChange = (e) => {
+  //   let search = e.target.value
+  //   console.log('formData', search)
+  //   if (search) {
+  //     let result = filteredApprove.filter((ex) =>
+  //       ex?.date?.toLowerCase().includes(search?.toLowerCase()) ||
+  //       ex?.type?.toLowerCase().includes(search?.toLowerCase())
+
+  //     )
+  //     console.log('formData', result)
+  //     const modifiedFilterRequest = [...result];
+  //     setFilterRequest(modifiedFilterRequest)
+  //   }
+  //   else {
+  //     setFilterRequest(filteredApprove)
+  //   }
+  // }
+
+
+  const columns2 = [
     {
       title: "Employee Code",
-      dataIndex: "empCode",
       key: "empCode",
       width: 150,
       align: "left",
@@ -82,7 +97,7 @@ function AllRequest(props) {
     },
     {
       title: "Date",
-      dataIndex: "dateOfRepair",
+      dataIndex: "date",
       key: "dateOfRepair",
       width: 150,
       align: "left",
@@ -115,8 +130,8 @@ function AllRequest(props) {
               status === "Approved"
                 ? "rgb(8 231 68 / 75%)"
                 : status === "Reject"
-                ? "#f44336"
-                : "rgb(244 209 105)"
+                  ? "#f44336"
+                  : "rgb(244 209 105)"
             }
             key={status}
           >
@@ -130,6 +145,7 @@ function AllRequest(props) {
       key: "operation",
       width: 170,
       align: "center",
+      fixed: 'right',
       render: (_, record) => (
         <>
           <div
@@ -157,9 +173,9 @@ function AllRequest(props) {
               style={
                 record.status == "Pending"
                   ? {
-                      padding: 0,
-                      color: "rgb(39 151 44 / 74%)",
-                    }
+                    padding: 0,
+                    color: "rgb(39 151 44 / 74%)",
+                  }
                   : { display: "none" }
               }
               type="link"
@@ -186,19 +202,39 @@ function AllRequest(props) {
     },
   ];
 
+  const tableProps = {
+    loading,
+  };
+
+
   return (
-    <div>
+    <Card className="daily">
       <Table
+         {...tableProps}
         size="small"
         columns={columns2}
         dataSource={filteredPending}
         className="assetTable"
+        scroll={{ x: 600 }}
       />
+      <Row gutter={10} style={{ justifyContent: "space-between" }}>
+        <Col sm={24} md={8}>
+          <Input
+            className="daily"
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+          // onChange={searchChange}
+
+          />
+        </Col>
+      </Row>
       <Table
+         {...tableProps}
         size="small"
         columns={columns2}
         dataSource={filteredApprove}
         className="assetTable"
+        scroll={{ x: 600 }}
       />
       <Modal
         destroyOnClose
@@ -223,7 +259,7 @@ function AllRequest(props) {
           modalData={modalData}
         />
       </Modal>
-    </div>
+    </Card>
   );
 }
 

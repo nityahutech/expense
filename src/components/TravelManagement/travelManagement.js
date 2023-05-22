@@ -6,10 +6,14 @@ import {
   Tag,
   Modal,
   DatePicker,
-
+  Card,
+  Input,
+  Row,
+  Col
 } from "antd";
 import {
   EyeFilled,
+  SearchOutlined
 } from "@ant-design/icons";
 import "./travelManagement.css";
 import Checkmark from "../../images/checkmark.png";
@@ -21,14 +25,14 @@ const { RangePicker } = DatePicker;
 
 function TravelManagement(props) {
   console.log("props", props);
-  const [travelDetails, setTravelDetails] = useState(props.travelDetails || []);
-  const [durationArray, setDurationArray] = useState(props.durationArray || []);
+  const loading = props.loading
+  const [travelDetails, setTravelDetails] = useState(props?.travelDetails || []);
+  const [durationArray, setDurationArray] = useState(props?.durationArray || []);
   const [openViewModal, setOpenViewModal] = useState(false);
   const [viewTravelData, setViewTravelData] = useState({});
 
-  const [user, setUser] = useState({});
-
   console.log(props.roleView);
+  console.log('eeeeeeee', durationArray, travelDetails)
 
   function viewModal(data) {
     setOpenViewModal(true);
@@ -50,7 +54,7 @@ function TravelManagement(props) {
           return allotTravel;
         });
         await TravelContext.updateTravelData(record.id, record);
-        // setTravelDetails(updateTravelRecord);
+        setTravelDetails(updateTravelRecord);
         props.getTravelData();
       },
     });
@@ -61,50 +65,52 @@ function TravelManagement(props) {
       title: "Employee Code ",
       dataIndex: "empCode",
       key: "empCode",
-      width: 200,
+      width: 120,
       align: "left",
     },
     {
       title: "Employee Name",
       dataIndex: "empName",
       key: "empName",
-      width: 200,
+      width: 150,
       align: "left",
     },
     {
       title: "Travel Title",
       dataIndex: "travelName",
       key: "travelName",
-      width: 200,
+      width: 100,
       align: "left",
     },
     {
       title: "Start Date",
       dataIndex: "startDate",
       key: "startDate",
-      width: 200,
+      width: 150,
       align: "left",
-      // render: (_, record, index) => {
-      //   let temp = durationArray[index];
-      //   return temp[0];
-      // },
+      render: (_, record, index) => {
+        let temp = durationArray[index];
+        // return temp[0];
+        return Array.isArray(temp) && temp.length > 0 ? temp[0] : null;
+      },
     },
     {
       title: "End Date",
       dataIndex: "endDate",
       key: "endDate",
-      width: 200,
+      width: 150,
       align: "left",
-      // render: (_, record, index) => {
-      //   let temp = durationArray[index];
-      //   return temp[temp.length - 1];
-      // },
+      render: (_, record, index) => {
+        let temp = durationArray[index];
+        // return temp[temp.length - 1];
+        return Array.isArray(temp) ? temp[temp.length - 1] : null;
+      },
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      width: 200,
+      width: 100,
       align: "left",
       render: (_, { status }) =>
         status !== "" && (
@@ -135,8 +141,9 @@ function TravelManagement(props) {
       title: "Action",
       dataIndex: "operation",
       key: "operation",
-      width: 200,
+      width: 150,
       align: "center",
+      fixed: 'right',
       render: (_, record) => (
         <>
           <div
@@ -202,54 +209,68 @@ function TravelManagement(props) {
       filteredApprove.push(record);
     }
   });
+  const tableProps = {
+    loading,
+  };
+
 
   return (
-    <>
-      <div className="travelDiv">
-        <>
 
-          <Table
-            className="travelTable"
-            columns={columns}
-            dataSource={filteredPending}
+    <Card className="daily">
+      <Table
+        {...tableProps}
+        className="travelTable"
+        columns={columns}
+        dataSource={filteredPending}
+        scroll={{ x: 600 }}
+      />
+      <Row gutter={10} style={{ justifyContent: "space-between" }}>
+        <Col sm={24} md={8}>
+          <Input
+            className="daily"
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+          // onChange={searchChange}
           />
-          <Modal
-            bodyStyle={{
-              height: 530,
-              overflowY: "scroll",
-              overflowX: "hidden",
+        </Col>
+      </Row>
+      <Table
+        {...tableProps}
+        className="travelTable"
+        columns={columns}
+        dataSource={filteredApprove}
+        scroll={{ x: 600 }}
+      />
+      <Modal
+        bodyStyle={{
+          height: 530,
+          overflowY: "scroll",
+          overflowX: "hidden",
+        }}
+        destroyOnClose
+        centered
+        open={openViewModal}
+        footer={null}
+        title="TRAVEL DETAILS"
+        closeIcon={
+          <div
+            onClick={() => {
+              setOpenViewModal(false);
             }}
-            destroyOnClose
-            centered
-            open={openViewModal}
-            footer={null}
-            title="TRAVEL DETAILS"
-            closeIcon={
-              <div
-                onClick={() => {
-                  setOpenViewModal(false);
-                }}
-                style={{ color: "#ffff" }}
-              >
-                X
-              </div>
-            }
-            className="viewModal"
+            style={{ color: "#ffff" }}
           >
-            <ViewTravelMng
-              setOpenViewModal={setOpenViewModal}
-              viewTravelData={viewTravelData}
-            />
-          </Modal>
+            X
+          </div>
+        }
+        className="viewModal"
+      >
+        <ViewTravelMng
+          setOpenViewModal={setOpenViewModal}
+          viewTravelData={viewTravelData}
+        />
+      </Modal>
+    </Card>
 
-          <Table
-            className="travelTable"
-            columns={columns}
-            dataSource={filteredApprove}
-          />
-        </>
-      </div>
-    </>
   );
 }
 

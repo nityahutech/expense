@@ -35,20 +35,21 @@ const RequestTable = () => {
         "Laptop Return": <EditLaptopReturn data={editData} setEditData={setEditData} />,
         "Travel Booking": <EditTravelBoking data={editData} setEditData={setEditData} />,
     }
-
+    console.log('currentUser', currentUser.uid)
     const getData = async () => {
         setLoading(true)
         let repairData = await RequestContext.getAllAsset(
             currentUser.uid,
         );
-        setFormData(repairData);
-        setFilterRequest(repairData)
+        const filteredData = repairData.filter((item) => item.empId === currentUser.uid);
+        console.log('repairData', filteredData)
+        setFormData(filteredData);
+        setFilterRequest(filteredData)
         setLoading(false)
     };
 
     useEffect(() => {
         getData();
-
     }, [editData,]);
 
     const onDeleteRecord = (record) => {
@@ -151,7 +152,8 @@ const RequestTable = () => {
                                     }}
                                     style={
                                         record?.status === "Approved"
-                                            ? { color: "green", marginLeft: 10 }
+                                            ? { display: 'none' }
+                                            // ? { color: "green", marginLeft: 10 }
                                             : record?.status === "Pending"
                                                 ? { color: "red", marginLeft: 10 }
                                                 : { color: "red", marginLeft: 10 }
@@ -165,7 +167,7 @@ const RequestTable = () => {
                                         style={
                                             record.status == "Approved"
                                                 ? {
-                                                    color: "rgb(64, 169, 255)", marginLeft: 10
+                                                    display: 'none'
                                                 }
                                                 : {
                                                     color: "rgb(64, 169, 255)", marginLeft: 10

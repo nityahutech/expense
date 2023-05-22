@@ -122,6 +122,7 @@ function TravelForm(props) {
 
         <>
           <Form
+
             form={form}
             layout="vertical"
             labelcol={{
@@ -664,43 +665,29 @@ function TravelForm(props) {
                         }}
                       </Form.List>
                     </Row>
-
-                    <Col span={24} className="buttonCol">
+                    <Col
+                      span={24}
+                      classsname="gutter-row"
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                      }}
+                    >
                       <Space>
-                        <Button
-
-                          style={{
-                            width: "100px",
-                            height: "32px",
-                            fontSize: "15px",
-                            borderRadius: "5px",
-                          }}
-                          onClick={() => {
+                        <Form.Item>
+                          <Button className="button-white" onClick={() => {
                             setAddTravel(false);
                             form.resetFields();
                             setFile([]);
-                          }}
-                        >
-                          <CloseOutlined />
-                          Cancel
-                        </Button>
-
-                        <Button
-
-                          htmlType="submit"
-                          style={{
-                            width: "100px",
-                            height: "32px",
-                            fontSize: "15px",
-                            color: "#ffffff",
-                            backgroundColor: "#35527F",
-                            borderRadius: "5px",
-                          }}
-                          type="primary"
-                        >
-                          <CheckOutlined />
-                          Submit
-                        </Button>
+                          }}>
+                            Cancel
+                          </Button>
+                        </Form.Item>
+                        <Form.Item>
+                          <Button className='button-color' htmlType="submit">
+                            Submit
+                          </Button>
+                        </Form.Item>
                       </Space>
                     </Col>
                   </Col>

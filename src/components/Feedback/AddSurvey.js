@@ -75,98 +75,8 @@ function AddSurvey() {
                     <Form.Item name={[index, "questions"]}>
                       <TextArea placeholder="Enter Question Here" />
                     </Form.Item>
-                    <Form.Item name={[index, "feedbackRange"]}>
-                      <div>
-                        <span
-                          style={{
-                            width: "68px",
-                            border: "0.5px solid black",
-                            display: "inline-block",
-                            textAlign: "center",
-                            borderRight: "none",
-                            height: "30px",
-                            fontSize: "18px",
-                          }}
-                        >
-                          1
-                        </span>
-                        <span
-                          style={{
-                            width: "68px",
-                            border: "0.5px solid black",
-                            display: "inline-block",
-                            textAlign: "center",
-                            borderRight: "none",
-                            height: "30px",
-                            fontSize: "18px",
-                          }}
-                        >
-                          2
-                        </span>
-                        <span
-                          style={{
-                            width: "68px",
-                            border: "0.5px solid black",
-                            display: "inline-block",
-                            textAlign: "center",
-                            borderRight: "none",
-                            height: "30px",
-                            fontSize: "18px",
-                          }}
-                        >
-                          3
-                        </span>
-                        <span
-                          style={{
-                            width: "68px",
-                            border: "0.5px solid black",
-                            display: "inline-block",
-                            textAlign: "center",
-                            borderRight: "none",
-                            height: "30px",
-                            fontSize: "18px",
-                          }}
-                        >
-                          4
-                        </span>
-                        <span
-                          style={{
-                            width: "68px",
-                            border: "0.5px solid black",
-                            display: "inline-block",
-                            textAlign: "center",
-                            height: "30px",
-                            fontSize: "18px",
-                          }}
-                        >
-                          5
-                        </span>
-                      </div>
-                    </Form.Item>
-
-                    {/* <Form.Item
-                        
-                        name={[index, "type"]}
-                        rules={[{ required: true }]}
-                      >
-                        <Select>
-                          <Select.Option value="string">String</Select.Option>
-                          <Select.Option value="dropdown">
-                            Dropdown
-                          </Select.Option>
-                          <Select.Option value="number">Number</Select.Option>
-                        </Select>
-                      </Form.Item> */}
                   </div>
                 ))}
-                {fields.length >= 1 ? (
-                  <Space>
-                    <Button className="submit" style={{ marginTop: "20px" }}>
-                      <CheckOutlined />
-                      Save
-                    </Button>
-                  </Space>
-                ) : null}
 
                 <Divider />
                 <Form.Item>
@@ -179,6 +89,14 @@ function AddSurvey() {
                     Add Questions
                   </Button>
                 </Form.Item>
+                {fields.length >= 1 ? (
+                  <Space>
+                    <Button className="submit" style={{ marginTop: "20px" }}>
+                      <CheckOutlined />
+                      Save
+                    </Button>
+                  </Space>
+                ) : null}
               </div>
             );
           }}

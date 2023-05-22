@@ -10,6 +10,7 @@ import {
   Input,
   InputNumber,
   Radio,
+  Space,
 } from "antd";
 import { ArrowLeftOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import Communication from "./Communication";
@@ -22,12 +23,19 @@ import "../Feedback/FeedBack.css";
 function ConfigSurvey(props) {
   // const [rankValue, setRankValue] = useState(0);
   const [addInputField, setaddInputField] = useState(0);
+  const [selectRankingType, setSelectRankingType] = useState("number");
+
   console.log("propss", props);
   const navigate = useNavigate();
   const role = props.roleView == "admin";
 
   const onRankValueChange = (value) => {
     setaddInputField(value);
+  };
+
+  const radioOnChange = (e) => {
+    console.log("radio checked", e.target.value);
+    setSelectRankingType(e.target.value);
   };
 
   const renderInputField = () => {
@@ -143,30 +151,49 @@ function ConfigSurvey(props) {
             <div>
               <Form layout="horizontal">
                 <h2>Rankings</h2>
-                <ul class="dot-list">
-                  <li>Number</li>
-                  <div style={{ display: "flex", marginTop: "13px" }}>
-                    <Form.Item label="Start::">
-                      <Input style={{ width: "200px" }} />
-                    </Form.Item>
-                    <Form.Item label="End::" style={{ marginLeft: "25px" }}>
-                      <Input style={{ width: "200px" }} />
-                    </Form.Item>
-                  </div>
-                  <li>Custom</li>
-                  <Form.Item
-                    label="Number of Ranks"
-                    style={{ marginTop: "20px" }}
-                  >
-                    <InputNumber
-                      min={1}
-                      max={5}
-                      // value={rankValue}
-                      onChange={onRankValueChange}
-                    />
-                  </Form.Item>
-                  {addInputField > 0 && renderInputField()}
-                </ul>
+                <Radio.Group onChange={radioOnChange} value={selectRankingType}>
+                  <Space direction="vertical">
+                    <Radio value="number">
+                      <h3>Number</h3>
+                      <div style={{ display: "flex", marginTop: "13px" }}>
+                        <Form.Item label="Start::">
+                          <Input
+                            style={{ width: "200px" }}
+                            disabled={
+                              selectRankingType === "custom" ? true : false
+                            }
+                          />
+                        </Form.Item>
+                        <Form.Item label="End::" style={{ marginLeft: "25px" }}>
+                          <Input
+                            style={{ width: "200px" }}
+                            disabled={
+                              selectRankingType === "custom" ? true : false
+                            }
+                          />
+                        </Form.Item>
+                      </div>
+                    </Radio>
+                    <Radio value="custom">
+                      <h3> Custom</h3>
+                      <Form.Item
+                        label="Number of Ranks"
+                        style={{ marginTop: "20px" }}
+                      >
+                        <InputNumber
+                          min={1}
+                          max={5}
+                          // value={rankValue}
+                          onChange={onRankValueChange}
+                          disabled={
+                            selectRankingType === "number" ? true : false
+                          }
+                        />
+                      </Form.Item>
+                    </Radio>
+                  </Space>
+                </Radio.Group>
+                {addInputField > 0 && renderInputField()}
               </Form>
             </div>
           </Tabs.TabPane>

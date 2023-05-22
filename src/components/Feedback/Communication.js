@@ -132,7 +132,7 @@ function Communication() {
             <Form.Item
               label={
                 editSkills ? (
-                  <div style={{ display: "flex" }}>
+                  <div>
                     <Input
                       defaultValue={title?.label}
                       bordered={false}
@@ -141,16 +141,17 @@ function Communication() {
                         fontWeight: "600",
                         fontSize: "21px",
                         lineHeight: "25px",
+                        width: "130px",
                       }}
                     />
                     <Button
-                      style={{ border: "none" }}
+                      style={{ border: "none", padding: "0px" }}
                       onClick={() => handleRemove(title.id)}
                     >
                       <MinusCircleOutlined
                         style={{
-                          position: "relative",
-                          right: "11rem",
+                          // position: "relative",
+                          // right: "11rem",
                           fontSize: "16px",
                           marginTop: "3px",
                         }}
@@ -169,7 +170,7 @@ function Communication() {
                 <p className="queTitle">{title?.questionText}</p>
               )}
 
-              <div style={{ marginTop: "20px" }}>
+              {/* <div style={{ marginTop: "20px" }}>
                 <span
                   style={{
                     width: "68px",
@@ -234,7 +235,7 @@ function Communication() {
                 >
                   5
                 </span>
-              </div>
+              </div> */}
             </Form.Item>
           </div>
         ))}
@@ -264,74 +265,7 @@ function Communication() {
                       <Form.Item name={[index, "questions"]}>
                         <TextArea placeholder="Enter Question Here" />
                       </Form.Item>
-                      <Form.Item name={[index, "feedbackRange"]}>
-                        <div>
-                          <span
-                            style={{
-                              width: "68px",
-                              border: "0.5px solid black",
-                              display: "inline-block",
-                              textAlign: "center",
-                              borderRight: "none",
-                              height: "30px",
-                              fontSize: "18px",
-                            }}
-                          >
-                            1
-                          </span>
-                          <span
-                            style={{
-                              width: "68px",
-                              border: "0.5px solid black",
-                              display: "inline-block",
-                              textAlign: "center",
-                              borderRight: "none",
-                              height: "30px",
-                              fontSize: "18px",
-                            }}
-                          >
-                            2
-                          </span>
-                          <span
-                            style={{
-                              width: "68px",
-                              border: "0.5px solid black",
-                              display: "inline-block",
-                              textAlign: "center",
-                              borderRight: "none",
-                              height: "30px",
-                              fontSize: "18px",
-                            }}
-                          >
-                            3
-                          </span>
-                          <span
-                            style={{
-                              width: "68px",
-                              border: "0.5px solid black",
-                              display: "inline-block",
-                              textAlign: "center",
-                              borderRight: "none",
-                              height: "30px",
-                              fontSize: "18px",
-                            }}
-                          >
-                            4
-                          </span>
-                          <span
-                            style={{
-                              width: "68px",
-                              border: "0.5px solid black",
-                              display: "inline-block",
-                              textAlign: "center",
-                              height: "30px",
-                              fontSize: "18px",
-                            }}
-                          >
-                            5
-                          </span>
-                        </div>
-                      </Form.Item>
+
                       {/* <Form.Item
                         
                         name={[index, "type"]}

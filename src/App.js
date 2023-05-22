@@ -48,7 +48,8 @@ import RegisterAccount from "./components/Registration/RegisterAccount";
 import RegisterCompany from "./components/Registration/RegisterCompany";
 import RegisterEmployee from "./components/Registration/RegisterEmployee";
 import HomePage from "./components/Home/HomePage";
-
+import Policies from "./components/Policies";
+import NotifySettings from "./components/NotifySettings";
 
 function App() {
   return (
@@ -222,7 +223,11 @@ function App() {
           <Route
             path="/Feedback"
             element={<FormatPage main={FeedbackAdmin} activeMenu={["30"]} />}
-          ></Route>
+          />
+          <Route
+            path="/Policies"
+            element={<FormatPage main={Policies} activeMenu={["31"]} />}
+          />
           {/* <Route
             path="/FeedbackTable"
             element={<FormatPage main={FeedbackTable} activeMenu={["25"]} />}
@@ -258,6 +263,16 @@ function App() {
             element={
               <FormatPage
                 main={AddClient}
+                activeSubMenu={["sub30"]}
+                activeMenu={["30a"]}
+              />
+            }
+          />
+          <Route
+            path="/templates"
+            element={
+              <FormatPage
+                main={NotifySettings}
                 activeSubMenu={["sub30"]}
                 activeMenu={["30a"]}
               />

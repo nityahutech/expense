@@ -22,7 +22,7 @@ const DailyLog = (props) => {
       let result = allEmp.filter((ex) =>
         ex.name.toLowerCase().includes(search.toLowerCase()) ||
         ex.empId.toLowerCase().includes(search.toLowerCase()) ||
-        ex.status.toLowerCase().includes(search.toLowerCase())||
+        ex.status.toLowerCase().includes(search.toLowerCase()) ||
         ex.project.toLowerCase().includes(search.toLowerCase())
       );
       setFilteredEmp(result);
@@ -55,7 +55,7 @@ const DailyLog = (props) => {
           console.log(final);
           setallEmp(final);
           setFilteredEmp(final);
-        //   setEmpMonthly(final);
+          //   setEmpMonthly(final);
           const timer = setTimeout(() => {
             setLoading(false);
           }, 750);
@@ -65,7 +65,7 @@ const DailyLog = (props) => {
       }
     );
   }
-  
+
   const getHolidayList = async () => {
     let data = await CompanyHolidayContext.getAllCompanyHoliday();
     let req = [];
@@ -142,31 +142,31 @@ const DailyLog = (props) => {
 
   return (
     <Card className="daily">
-        <Row gutter={10} style={{justifyContent:"space-between"}}>
+      <Row gutter={10} style={{ justifyContent: "space-between" }}>
         <Col sm={24} md={8}>
-        <Input
-        className="daily"
-        placeholder="Search"
-        prefix={<SearchOutlined />}
-        onChange={searchChange}
-      />
+          <Input
+            className="daily"
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            onChange={searchChange}
+          />
         </Col>
-        <Col sm={24} md={8} style={{textAlign: "right"}}>
-        <DatePicker
+        <Col sm={24} md={8} style={{ textAlign: "right" }}>
+          <DatePicker
             defaultValue={selDate}
             className="daily range"
             bordered={true}
             format="DD-MM-YYYY"
             allowClear={false}
             onChange={(e) => {
-                setSelDate(e);
-                allEmpDetails("_", e);
+              setSelDate(e);
+              allEmpDetails("_", e);
             }}
             disabledDate={(current) => !current.isBetween(moment('2023', 'YYYY'), new Date())}
-        />
-      </Col>
+          />
+        </Col>
 
-    </Row>
+      </Row>
 
       <Table
         className="daily daily-table"

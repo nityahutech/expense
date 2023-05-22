@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
-import {  Button, Table, Tooltip, Tag, Modal } from "antd";
-import { EyeFilled,} from "@ant-design/icons";
+import {
+  Button,
+  Table,
+  Tooltip,
+  Tag,
+  Modal,
+  Card,
+  Input,
+  Row,
+  Col,
+} from "antd";
+import { EyeFilled, SearchOutlined } from "@ant-design/icons";
 import "./invoice.css";
 import ViewInvoiceDetails from "./ViewInvoiceDetails";
 import InvoiceContext from "../../contexts/InvoiceContext";
@@ -11,10 +21,12 @@ function InvoiceTable(props) {
   const [empInvoiceTable, setEmpInvoiceTable] = useState(
     props.invoiceDetails || []
   );
+  const loading = props.loading
   const [invoiceData, setInvoiceData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [user, setUser] = useState({});
+
 
   function openModal(data) {
     setIsModalOpen(true);
@@ -44,12 +56,12 @@ function InvoiceTable(props) {
   useEffect(() => {
     setEmpInvoiceTable(props.invoiceDetails);
     setUser(props.user);
+
   }, [props.invoiceDetails]);
 
   const showModal = (data) => {
     setIsEditModalOpen(true);
     setInvoiceData(data);
-
   };
 
   const invoiceColumns = [
@@ -57,14 +69,14 @@ function InvoiceTable(props) {
       title: "Employee Code",
       dataIndex: "empCode",
       key: "empCode",
-      width: 200,
+      width: 120,
       align: "left",
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: 200,
+      width: 150,
       align: "left",
     },
 
@@ -72,7 +84,7 @@ function InvoiceTable(props) {
       title: "Invoice Date ",
       dataIndex: "date",
       key: "invoiceDate",
-      width: 200,
+      width: 100,
       align: "left",
     },
     {
@@ -86,14 +98,14 @@ function InvoiceTable(props) {
       title: "Total Amount",
       dataIndex: "totalAmt",
       key: "totalAmt",
-      width: 150,
+      width: 100,
       align: "left",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      width: 200,
+      width: 100,
       align: "left",
       render: (_, { status }) =>
         status !== "" && (
@@ -124,9 +136,9 @@ function InvoiceTable(props) {
       title: "Action",
       dataIndex: "operation",
       key: "operation",
-      width: 200,
+      width: 150,
       align: "left",
-      fixed: 'right',
+      fixed: "right",
       render: (_, record) => (
         <>
           <div
@@ -187,46 +199,60 @@ function InvoiceTable(props) {
       filteredApprove.push(record);
     }
   });
+  const tableProps = {
+    loading,
+  };
 
   return (
-    <div className="invoiceDiv">
-      <>
-        <Table
-          className="invoiceTable"
-          columns={invoiceColumns}
-          dataSource={filteredPending}
-        />
-        <Table
-          className="invoiceTable"
-          columns={invoiceColumns}
-          dataSource={filteredApprove}
-        />
-        <Modal
-          destroyOnClose
-          centered
-          open={isModalOpen}
-          footer={null}
-          title="INVOICE DETAILS"
-          closeIcon={
-            <div
-              onClick={() => {
-                setIsModalOpen(false);
-              }}
-              style={{ color: "#ffff" }}
-            >
-              X
-            </div>
-          }
-          className="updateModal"
-        >
-          <ViewInvoiceDetails
-            setIsModalOpen={setIsModalOpen}
-            invoiceData={invoiceData}
+    <Card className="daily">
+      <Table
+        {...tableProps}
+        className="invoiceTable"
+        columns={invoiceColumns}
+        dataSource={filteredPending}
+        scroll={{ x: 600 }}
+      />
+      <Row gutter={10} style={{ justifyContent: "space-between" }}>
+        <Col sm={24} md={8}>
+          <Input
+            className="daily"
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+          // onChange={searchChange}
           />
-        </Modal>
-      </>
-
-    </div>
+        </Col>
+      </Row>
+      <Table
+        {...tableProps}
+        className="invoiceTable"
+        columns={invoiceColumns}
+        dataSource={filteredApprove}
+        scroll={{ x: 600 }}
+      />
+      <Modal
+        destroyOnClose
+        centered
+        open={isModalOpen}
+        footer={null}
+        title="INVOICE DETAILS"
+        closeIcon={
+          <div
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+            style={{ color: "#ffff" }}
+          >
+            X
+          </div>
+        }
+        className="updateModal"
+      >
+        <ViewInvoiceDetails
+          setIsModalOpen={setIsModalOpen}
+          invoiceData={invoiceData}
+        />
+      </Modal>
+    </Card>
   );
 }
 

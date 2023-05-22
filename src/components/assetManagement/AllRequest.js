@@ -16,6 +16,7 @@ function AllRequest(props) {
   const [modalData, setModalData] = useState({});
   const [repairAllotReq, setRepairAllotReq] = useState(props.data || []);
   const [filterRequest, setFilterRequest] = useState([])
+  const loading = props.loading
 
   useEffect(() => {
     setRepairAllotReq(props.data);
@@ -144,6 +145,7 @@ function AllRequest(props) {
       key: "operation",
       width: 170,
       align: "center",
+      fixed: 'right',
       render: (_, record) => (
         <>
           <div
@@ -200,30 +202,39 @@ function AllRequest(props) {
     },
   ];
 
+  const tableProps = {
+    loading,
+  };
+
+
   return (
-    <div>
+    <Card className="daily">
       <Table
+         {...tableProps}
         size="small"
         columns={columns2}
         dataSource={filteredPending}
         className="assetTable"
+        scroll={{ x: 600 }}
       />
-      {/* <Row gutter={10} style={{ justifyContent: "space-between" }}>
+      <Row gutter={10} style={{ justifyContent: "space-between" }}>
         <Col sm={24} md={8}>
           <Input
             className="daily"
             placeholder="Search"
             prefix={<SearchOutlined />}
-            onChange={searchChange}
+          // onChange={searchChange}
 
           />
         </Col>
-      </Row> */}
+      </Row>
       <Table
+         {...tableProps}
         size="small"
         columns={columns2}
         dataSource={filteredApprove}
         className="assetTable"
+        scroll={{ x: 600 }}
       />
       <Modal
         destroyOnClose
@@ -248,7 +259,7 @@ function AllRequest(props) {
           modalData={modalData}
         />
       </Modal>
-    </div>
+    </Card>
   );
 }
 

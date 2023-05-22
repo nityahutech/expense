@@ -133,49 +133,54 @@ const RequestTable = () => {
             key: "5",
             title: "Actions",
             fixed: "right",
-            align: "left",
-            width: '200px',
+            align: "center",
+            width: '150px',
             render: (record) => {
                 return (
                     <>
                         {
                             <>
-                                <EyeFilled
-                                    style={{ color: '#6e7475' }}
-                                    onClick={() => {
-                                        setViewData(record)
-                                    }}
-                                />
-                                <DeleteFilled
-                                    onClick={() => {
-                                        onDeleteRecord(record);
-                                    }}
-                                    style={
-                                        record?.status === "Approved"
-                                            ? { display: 'none' }
-                                            // ? { color: "green", marginLeft: 10 }
-                                            : record?.status === "Pending"
-                                                ? { color: "red", marginLeft: 10 }
-                                                : { color: "red", marginLeft: 10 }
-                                    }
-                                />
-                                {
-                                    <EditFilled
+                                <div
+                                    className="employee-button"
+                                    style={{ display: "flex", flexDirection: "row", justifyContent: "center", }}
+                                >
+                                    <EyeFilled
+                                        style={{ color: '#6e7475' }}
                                         onClick={() => {
-                                            setEditData(record)
+                                            setViewData(record)
+                                        }}
+                                    />
+                                    <DeleteFilled
+                                        onClick={() => {
+                                            onDeleteRecord(record);
                                         }}
                                         style={
-                                            record.status == "Approved"
-                                                ? {
-                                                    display: 'none'
-                                                }
-                                                : {
-                                                    color: "rgb(64, 169, 255)", marginLeft: 10
-                                                }
+                                            record?.status === "Approved"
+                                                ? { display: 'none' }
+                                                // ? { color: "green", marginLeft: 10 }
+                                                : record?.status === "Pending"
+                                                    ? { color: "red", marginLeft: 10 }
+                                                    : { color: "red", marginLeft: 10 }
                                         }
-                                        disabled={record.status == "Approved"}
                                     />
-                                }
+                                    {
+                                        <EditFilled
+                                            onClick={() => {
+                                                setEditData(record)
+                                            }}
+                                            style={
+                                                record.status == "Approved"
+                                                    ? {
+                                                        display: 'none'
+                                                    }
+                                                    : {
+                                                        color: "rgb(64, 169, 255)", marginLeft: 10
+                                                    }
+                                            }
+                                            disabled={record.status == "Approved"}
+                                        />
+                                    }
+                                </div>
                             </>
                         }
                     </>

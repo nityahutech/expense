@@ -24,10 +24,12 @@ function InvoiceTable(props) {
   const loading = props.loading
   const [invoiceData, setInvoiceData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [user, setUser] = useState({});
+  const [filteredPending, setFilteredPending] = useState([])
+  const [filteredApprove, setFilteredApprove] = useState([])
+  const [filterRequest, setFilterRequest] = useState(filteredApprove || [])
 
-
+  console.log('eeeeeeee', empInvoiceTable)
   function openModal(data) {
     setIsModalOpen(true);
     setInvoiceData(data);
@@ -56,13 +58,10 @@ function InvoiceTable(props) {
   useEffect(() => {
     setEmpInvoiceTable(props.invoiceDetails);
     setUser(props.user);
+    setFilterRequest(filteredApprove)
 
-  }, [props.invoiceDetails]);
+  }, [props.invoiceDetails, filteredApprove]);
 
-  const showModal = (data) => {
-    setIsEditModalOpen(true);
-    setInvoiceData(data);
-  };
 
   const invoiceColumns = [
     {
@@ -143,7 +142,7 @@ function InvoiceTable(props) {
         <>
           <div
             className="employee-button"
-            style={{ display: "flex", flexDirection: "row" }}
+            style={{ display: "flex", flexDirection: "row", justifyContent: "center", }}
           >
             <Tooltip placement="bottom" title="View" color="#1963A6">
               <Button
@@ -189,19 +188,47 @@ function InvoiceTable(props) {
     },
   ];
 
-  var filteredPending = [];
-  var filteredApprove = [];
+  useEffect(() => {
+    const tempFilteredPending = [];
+    const tempFilteredApprove = [];
 
-  empInvoiceTable.forEach((record) => {
-    if (record.status == "Pending") {
-      filteredPending.push(record);
-    } else {
-      filteredApprove.push(record);
-    }
-  });
+    empInvoiceTable.forEach((record) => {
+      if (record.status === 'Pending') {
+        tempFilteredPending.push(record);
+      } else {
+        tempFilteredApprove.push(record);
+      }
+    });
+
+    setFilteredPending(tempFilteredPending);
+    setFilteredApprove(tempFilteredApprove);
+
+
+  }, [empInvoiceTable])
+
+
   const tableProps = {
     loading,
   };
+
+  console.log('eeeeee', filteredApprove)
+  const searchChange = (e) => {
+    let search = e.target.value
+    if (search) {
+      let result = filteredApprove.filter((ex) =>
+        ex?.date?.toLowerCase().includes(search?.toLowerCase()) ||
+        ex?.name?.toLowerCase().includes(search?.toLowerCase()) ||
+        ex?.invoiceName?.toLowerCase().includes(search?.toLowerCase())
+
+      )
+      const modifiedFilterRequest = [...result]
+      setFilterRequest(modifiedFilterRequest)
+    }
+    else {
+      setFilterRequest(filteredApprove)
+    }
+
+  }
 
   return (
     <Card className="daily">
@@ -218,7 +245,7 @@ function InvoiceTable(props) {
             className="daily"
             placeholder="Search"
             prefix={<SearchOutlined />}
-          // onChange={searchChange}
+            onChange={searchChange}
           />
         </Col>
       </Row>
@@ -226,7 +253,7 @@ function InvoiceTable(props) {
         {...tableProps}
         className="invoiceTable"
         columns={invoiceColumns}
-        dataSource={filteredApprove}
+        dataSource={filterRequest}
         scroll={{ x: 600 }}
       />
       <Modal

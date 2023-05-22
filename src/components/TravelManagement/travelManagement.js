@@ -30,6 +30,9 @@ function TravelManagement(props) {
   const [durationArray, setDurationArray] = useState(props?.durationArray || []);
   const [openViewModal, setOpenViewModal] = useState(false);
   const [viewTravelData, setViewTravelData] = useState({});
+  const [filteredPending, setFilteredPending] = useState([]);
+  const [filteredApprove, setFilteredApprove] = useState([]);
+  const [filterRequest, setFilterRequest] = useState(filteredApprove || [])
 
   console.log(props.roleView);
   console.log('eeeeeeee', durationArray, travelDetails)
@@ -37,6 +40,7 @@ function TravelManagement(props) {
   function viewModal(data) {
     setOpenViewModal(true);
     setViewTravelData(data);
+
   }
 
   const setStatus = async (record, status) => {
@@ -122,6 +126,7 @@ function TravelManagement(props) {
               display: "flex",
               justifyContent: "center",
               padding: "2px",
+
             }}
             className="statusTag"
             color={
@@ -148,7 +153,7 @@ function TravelManagement(props) {
         <>
           <div
             className="employee-button"
-            style={{ display: "flex", flexDirection: "row" }}
+            style={{ display: "flex", flexDirection: "row", justifyContent: "center", }}
           >
             <Tooltip placement="bottom" title="View" color="#1963A6">
               <Button
@@ -197,21 +202,46 @@ function TravelManagement(props) {
   useEffect(() => {
     setTravelDetails(props.travelDetails);
     setDurationArray(props.durationArray);
-  }, [props.travelDetails]);
+    setFilterRequest(filteredApprove);
+  }, [props.travelDetails,filteredApprove]);
 
-  var filteredPending = [];
-  var filteredApprove = [];
+  useEffect(() => {
+    const tempFilteredPending = [];
+    const tempFilteredApprove = [];
 
-  travelDetails.forEach((record) => {
-    if (record.status == "Pending") {
-      filteredPending.push(record);
-    } else {
-      filteredApprove.push(record);
-    }
-  });
+    travelDetails.forEach((record) => {
+      if (record.status === 'Pending') {
+        tempFilteredPending.push(record);
+      } else {
+        tempFilteredApprove.push(record);
+      }
+    });
+
+    setFilteredPending(tempFilteredPending);
+    setFilteredApprove(tempFilteredApprove);
+  }, [travelDetails]);
+
   const tableProps = {
     loading,
   };
+
+  const searchChange = (e) => {
+    let search = e.target.value
+    console.log('formData', search)
+    if (search) {
+      let result = filteredApprove.filter((ex) =>
+        ex?.date?.toLowerCase().includes(search?.toLowerCase()) ||
+        ex?.travelName?.toLowerCase().includes(search?.toLowerCase()) ||
+        ex?.empName?.toLowerCase().includes(search?.toLowerCase())
+      )
+      console.log('formData', result)
+      const modifiedFilterRequest = [...result];
+      setFilterRequest(modifiedFilterRequest)
+    }
+    else {
+      setFilterRequest(filteredApprove)
+    }
+  }
 
 
   return (
@@ -230,7 +260,7 @@ function TravelManagement(props) {
             className="daily"
             placeholder="Search"
             prefix={<SearchOutlined />}
-          // onChange={searchChange}
+            onChange={searchChange}
           />
         </Col>
       </Row>
@@ -238,7 +268,7 @@ function TravelManagement(props) {
         {...tableProps}
         className="travelTable"
         columns={columns}
-        dataSource={filteredApprove}
+        dataSource={filterRequest}
         scroll={{ x: 600 }}
       />
       <Modal

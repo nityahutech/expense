@@ -15,11 +15,12 @@ function AllRequest(props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState({});
   const [repairAllotReq, setRepairAllotReq] = useState(props.data || []);
-  const [filterRequest, setFilterRequest] = useState([])
+  const [filterRequest, setFilterRequest] = useState(props.data || [])
   const loading = props.loading
 
   useEffect(() => {
     setRepairAllotReq(props.data);
+    setFilterRequest(props.data);
   }, [props.data]);
 
   const setStatus = async (record, status) => {
@@ -62,28 +63,29 @@ function AllRequest(props) {
 
   console.log('repairAllotReq', repairAllotReq)
 
-  // const searchChange = (e) => {
-  //   let search = e.target.value
-  //   console.log('formData', search)
-  //   if (search) {
-  //     let result = filteredApprove.filter((ex) =>
-  //       ex?.date?.toLowerCase().includes(search?.toLowerCase()) ||
-  //       ex?.type?.toLowerCase().includes(search?.toLowerCase())
-
-  //     )
-  //     console.log('formData', result)
-  //     const modifiedFilterRequest = [...result];
-  //     setFilterRequest(modifiedFilterRequest)
-  //   }
-  //   else {
-  //     setFilterRequest(filteredApprove)
-  //   }
-  // }
+  const searchChange = (e) => {
+    let search = e.target.value
+    console.log('formData', search)
+    if (search) {
+      let result = filteredApprove.filter((ex) =>
+        ex?.date?.toLowerCase().includes(search?.toLowerCase()) ||
+        ex?.type?.toLowerCase().includes(search?.toLowerCase()) ||
+        ex?.name?.toLowerCase().includes(search?.toLowerCase()) 
+      )
+      console.log('formData', result)
+      const modifiedFilterRequest = [...result];
+      setFilterRequest(modifiedFilterRequest)
+    }
+    else {
+      setFilterRequest(filteredApprove)
+    }
+  }
 
 
   const columns2 = [
     {
       title: "Employee Code",
+      dataIndex: "empCode",
       key: "empCode",
       width: 150,
       align: "left",
@@ -162,7 +164,7 @@ function AllRequest(props) {
               className="show"
               style={
                 record.status == "Approved" || "Reject"
-                  ? { marginLeft: "2rem", color: "#000000" }
+                  ? { marginLeft: "0rem", color: "#000000" }
                   : { marginLeft: "1rem", color: "#000000" }
               }
             >
@@ -210,7 +212,7 @@ function AllRequest(props) {
   return (
     <Card className="daily">
       <Table
-         {...tableProps}
+        {...tableProps}
         size="small"
         columns={columns2}
         dataSource={filteredPending}
@@ -223,16 +225,16 @@ function AllRequest(props) {
             className="daily"
             placeholder="Search"
             prefix={<SearchOutlined />}
-          // onChange={searchChange}
+            onChange={searchChange}
 
           />
         </Col>
       </Row>
       <Table
-         {...tableProps}
+        {...tableProps}
         size="small"
         columns={columns2}
-        dataSource={filteredApprove}
+        dataSource={filterRequest}
         className="assetTable"
         scroll={{ x: 600 }}
       />

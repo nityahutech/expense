@@ -11,6 +11,7 @@ function AssetMagHome(props) {
   const [laptopAllot, setLaptopAllot] = useState(props.refresh);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const role = sessionStorage.getItem("role");
+  const [loading, setLoading] = useState(false);
   const isHr =
     role == "super" ? false : sessionStorage.getItem("isHr") == "true";
 
@@ -21,6 +22,7 @@ function AssetMagHome(props) {
 
 
   const getRepairData = async () => {
+    setLoading(true)
     let repairData = await RequestContext.getAllAsset(
       // currentUser.uid,
     );
@@ -28,13 +30,14 @@ function AssetMagHome(props) {
     let filterType = repairData.filter((type) => { return type?.type === 'Laptop Upgrade' || type?.type === 'Laptop Repair' || type?.type === 'Laptop Return' })
     console.log('repairData', filterType)
     setRepairLaptopData(filterType);
+    setLoading(false)
   };
 
 
 
   return (
-    <div>
-      <Tabs defaultActiveKey="1" className="assetTabs">
+    <div className="hrtab">
+      <Tabs defaultActiveKey="1" className="page-tabs">
         <>
           <Tabs.TabPane tab="Laptop Request" key="1">
             <AllRequest
@@ -42,6 +45,7 @@ function AssetMagHome(props) {
               getData={getRepairData}
               data={repairLaptopData}
               allot={laptopAllot}
+              loading={loading}
             />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Asset List" key="2">

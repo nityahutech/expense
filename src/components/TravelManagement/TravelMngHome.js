@@ -19,7 +19,7 @@ function TravelMngHome(props) {
   const [travelDetails, setTravelDetails] = useState([]);
   const [user, setUser] = useState({});
   const [durationArray, setDurationArray] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const role = props.roleView == "emp";
   console.log(props.roleView);
   const { TextArea } = Input;
@@ -28,6 +28,7 @@ function TravelMngHome(props) {
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
   const getAlltravelData = async () => {
+    setLoading(true)
     let userData = await EmpInfoContext.getEduDetails(currentUser.uid);
     let travleData = await TravelContext.getAllTravel(currentUser.uid);
     let filterType = travleData.filter((type) => { return type?.type === 'Travel Booking' })
@@ -49,6 +50,7 @@ function TravelMngHome(props) {
     });
     console.log("travelDetails", data);
     setDurationArray(data);
+    setLoading(false)
   };
 
   console.log("travelDetails", travelDetails, durationArray);
@@ -61,8 +63,8 @@ function TravelMngHome(props) {
 
   return (
     <>
-      <div className="travelDiv">
-        <Tabs className="assetTabs"  >
+      <div className="hrtab">
+        <Tabs className="page-tabs"  >
           <Tabs.TabPane tab='Travel Reimbursement ' key='1'>
             <TravelManagement
               roleView={role}
@@ -70,6 +72,7 @@ function TravelMngHome(props) {
               travelDetails={travelDetails}
               durationArray={durationArray}
               user={user}
+              loading={loading}
             />
           </Tabs.TabPane>
         </Tabs>

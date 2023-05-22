@@ -3,9 +3,9 @@ import { Button, Form, Input, Col, Row, Divider } from "antd";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../../style/LoginPage.css";
-// import loginBg from "../images/login-img.png";
+import register3 from "../../images/register3.jpg";
 import { GoogleOutlined, LoadingOutlined } from "@ant-design/icons";
-import loginBg from "../../images/login-img.png";
+import logo from "../../images/LoginLogo.svg";
 import "toastify-js/src/toastify.css";
 import StartToastifyInstance from "toastify-js";
 import { sendEmail } from "../../contexts/EmailContext";
@@ -177,13 +177,13 @@ function RegisterAccount() {
       <Row className="main-div">
         <Col xs={24} xm={24} md={12}>
           <div className="form-div">
-            {/* <div className="exepnse-logo">
+            <div className="exepnse-logo">
               <img
-                // src={logo}
+                src={logo}
                 alt="logo"
                 style={{ width: "250px", paddingBottom: "1rem" }}
               />
-            </div> */}
+            </div>
             <Form
               name="basic"
               labelCol={{
@@ -286,7 +286,9 @@ function RegisterAccount() {
           </div>
         </Col>
         <Col xs={0} xm={0} md={12}>
-          <div className="img-div">{/* <img src={loginBg} alt="" /> */}</div>
+          <div className="img-div">
+            <img src={register3} alt="" />
+          </div>
         </Col>
       </Row>
     </>

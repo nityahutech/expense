@@ -106,7 +106,7 @@ class AssetContext {
     const q = query(
       companyAssetCollectionRef,
       where("empId", "==", id),
-      where("type", "in", typeValues ? ["Allotment"] : ["Repair", "Upgrade", "Allotment", "Return"])
+      where("type", "in", typeValues ? ["Allotment"] : ["Laptop Upgrade", "Laptop Return", "Allotment", "Laptop Repair"])
     );
 
     const empRepair = await getDocs(q);

@@ -1,10 +1,9 @@
-main{
+main {
   padding: 41px;
 }
-#root{
+#root {
   background: #f8f8f8;
 }
-
 
 .hrtab {
   min-height: 100vh;
@@ -32,7 +31,7 @@ main{
 
 .view-modal .ant-modal-header {
   border-radius: 10px 10px 0px 0px;
-  background: #1963A6;
+  background: #1963a6;
   color: #ffffff;
 }
 .view-modal .ant-modal-title {
@@ -60,34 +59,34 @@ main{
   margin-left: 15px;
 }
 
-.row{
+.row {
   background: #fff;
-    padding: 14px;
-    border-radius: 5px
-}
-.ant-table-wrapper{
-  background: #fff;
-    padding: 11px;
-}
-.ant-tag-green{
-  color: white;
-    background: #41BF36;
-    
-    border-radius: 5px;
-    font-family: 'Open Sans';
-  
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 22px;
-    width: 68px;
-    height: 25px;
-    text-align: center;
-}
-.ant-tag-volcano{
-  background: #FC6161;
+  padding: 14px;
   border-radius: 5px;
-    font-family: 'Open Sans';
+}
+.ant-table-wrapper {
+  background: #fff;
+  padding: 11px;
+}
+.ant-tag-green {
+  color: white;
+  background: #41bf36;
+
+  border-radius: 5px;
+  font-family: "Open Sans";
+
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 22px;
+  width: 68px;
+  height: 25px;
+  text-align: center;
+}
+.ant-tag-volcano {
+  background: #fc6161;
+  border-radius: 5px;
+  font-family: "Open Sans";
   color: white;
     font-style: normal;
     font-weight: 600;
@@ -111,24 +110,25 @@ main{
 a{
   color: #171832;
 }
-.ant-table-cell{
+.ant-table-cell {
   text-align: center;
 }
 
 tr[data-row-key*="subTotal"] {
   font-weight: bold;
 }
-.ant-table-column-has-sorters{
+.ant-table-column-has-sorters {
   text-align: center;
 }
 .ant-table-thead th.ant-table-column-has-sorters {
-  text-align: center;}
-  .ant-btn-link{
-    color: #6e7475;
-  }
-  .deLete{
-    color: #f04747;
-  }
+  text-align: center;
+}
+.ant-btn-link {
+  color: #6e7475;
+}
+.deLete {
+  color: #f04747;
+}
 
 .password-input-len .ant-input {
   width: 100%;
@@ -152,31 +152,33 @@ tr[data-row-key*="subTotal"] {
 }
 
 .button-color {
-  background-color: #1963A6;
-  border: 1px solid #1963A6;
+  background-color: #1963a6;
+  border: 1px solid #1963a6;
   border-radius: 4px;
+  width: 150px;
+  color: white;
   width: 150px;
   color: white;
 }
 
 .button-color:hover {
   background-color: #ffffff;
-  color: #1963A6;
-  border: 1px solid #1963A6;
+  color: #1963a6;
+  border: 1px solid #1963a6;
 }
 
 .button-white {
-  color: #1963A6;
+  color: #1963a6;
   background-color: #ffffff;
   border: 1px solid #dbdbdb;
   border-radius: 4px;
-  width: 150px
+  width: 150px;
 }
 
 .button-white:hover {
   background-color: #ffffff;
-  color: #1963A6;
-  border: 1px solid #1963A6;
+  color: #1963a6;
+  border: 1px solid #1963a6;
 }
 
 

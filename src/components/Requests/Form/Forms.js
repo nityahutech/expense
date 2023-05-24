@@ -29,11 +29,7 @@ const Forms = () => {
         console.log('assetData', assetData)
         setAssetData(assetData)
 
-
-
     };
-
-
 
     return (
         <div className="personalCardDiv">

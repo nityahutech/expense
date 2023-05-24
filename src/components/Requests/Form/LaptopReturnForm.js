@@ -39,14 +39,14 @@ function LaptopReturnForm(props) {
         console.log("ffffff", values);
         form.resetFields();
         const allUpgradeData = {
-            lapname: values.lapname || upgradeFormData.lapname,
-            modelName: values.modelName || upgradeFormData.modelName,
-            serialNum: values.serialNum || upgradeFormData.serialNum,
+            lapname: upgradeFormData.lapname || null,
+            modelName: upgradeFormData.modelName || null,
+            serialNum: upgradeFormData.serialNum || null,
             date: moment().format("DD-MM-YYYY"),
             repairDes: values.repairDes,
-            empId: currentUser.uid,
-            empCode: user.empId,
-            name: user.name,
+            empId: currentUser.uid || null,
+            empCode: user.empId || null,
+            name: user.name || null,
             type: 'Laptop Return',
             status: "Pending",
             data: {
@@ -81,29 +81,6 @@ function LaptopReturnForm(props) {
         border: "1px solid #8692A6",
         borderRadius: "4px",
         width: "100%",
-    };
-
-    const resetButton = {
-        border: "1px solid #1963a6",
-        color: "#1963a6",
-        fontWeight: "600",
-        fontSize: "14px",
-        lineHeight: "17px",
-        width: "99px",
-        marginTop: "10px",
-        cursor: "pointer",
-    };
-    const submitButton = {
-        border: "1px solid #1963a6",
-        background: "#1963a6",
-        color: "#ffffff",
-        fontWeight: "600",
-        fontSize: "14px",
-        lineHeight: "17px",
-        width: "99px",
-        marginTop: "10px",
-        cursor: "pointer",
-        marginLeft: "17px",
     };
 
     function handleChange(event) {
@@ -215,13 +192,13 @@ function LaptopReturnForm(props) {
                             >
                                 <Space>
                                     <Form.Item>
-                                        <Button style={resetButton} onClick={onReset}>
+                                        <Button className="button-white" onClick={onReset}>
                                             Reset
                                         </Button>
                                     </Form.Item>
                                     <Form.Item>
                                         <Button
-                                            style={submitButton}
+                                            className='button-color'
                                             htmlType="submit"
                                         // onClick={() => form.submit(handleSubmit3)}
                                         >

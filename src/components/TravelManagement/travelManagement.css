@@ -1,29 +1,29 @@
 .travelCard {
-    background: #fff;
-    padding: 7px;
-    margin: 6px 6px;
-    border-radius: 5px;
+  background: #fff;
+  padding: 7px;
+  margin: 6px 6px;
+  border-radius: 5px;
 }
-.travelCard .ant-card-head{
-    border-radius: 5px 5px 0px 0px;
-    background: #1963A6;
-    color: #ffffff;
-  }
-  .travelCard .ant-card-head-title {
-    font-weight: bold;
-    line-height: 19px;
-    text-transform: uppercase;
-    font-size: 17px;
-  }
+.travelCard .ant-card-head {
+  border-radius: 5px 5px 0px 0px;
+  background: #1963a6;
+  color: #ffffff;
+}
+.travelCard .ant-card-head-title {
+  font-weight: bold;
+  line-height: 19px;
+  text-transform: uppercase;
+  font-size: 17px;
+}
 .ant-form-item .uploadInput {
-    margin-bottom: 19px;
+  margin-bottom: 19px;
 }
 .buttonCol {
-    display: flex;
-    justify-content: end;
-    margin-Top: 5%;
+  display: flex;
+  justify-content: end;
+  margin-top: 5%;
 }
-.addButtonTravel{
+.addButtonTravel {
   /* margin-left: 10px; */
   border-radius: 5px;
 }
@@ -32,90 +32,86 @@
   margin-top: 5%;
   border-radius: 5px;
   width: 100%;
+  margin-bottom: 20px;
 }
 
-
-.addFieldTravel.ant-btn.ant-btn-block{
-  background: #1963A6;
+.addFieldTravel.ant-btn.ant-btn-block {
+  background: #1963a6;
   color: #ffffff;
   font-size: 14px;
 }
 
-.addButtonTravel.ant-btn.ant-btn-block{
+.addButtonTravel.ant-btn.ant-btn-block {
   width: 220px;
   height: 40px;
-  background: #1963A6;
-    color: #ffffff;
-    font-size: 16px;
+  background: #1963a6;
+  color: #ffffff;
+  font-size: 16px;
 }
 
-
 .travelTable.ant-table-wrapper {
-    background: #fff;
-    padding: 7px;
-    margin: 6px 6px;
-    border-radius: 5px;
-    
-  }
-  .travelTable table thead tr th,
-  .expenseTable table tbody tr td {
-    padding: 5px 10px;
-  }
-  .travelTable .ant-table-thead > tr > th {
-    background: #1963a6;
-    color: #ffffff;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 18px;
-  }
-  .travelTable .ant-table-thead{
-    height: 50px;
-  }
+  background: #fff;
+  padding: 7px;
+  margin: 6px 6px;
+  border-radius: 5px;
+}
+.travelTable table thead tr th,
+.expenseTable table tbody tr td {
+  padding: 5px 10px;
+}
+.travelTable .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+.travelTable .ant-table-thead {
+  height: 50px;
+}
 
-  .travelDatePicker .ant-picker{
-    width:100%;
-  }
+.travelDatePicker .ant-picker {
+  width: 100%;
+}
 
-  
-
-  /* .viewModal {
+/* .viewModal {
     overflow-y: scroll;
     height: 10vh;
   } */
 
-  .viewModal .ant-modal-content {
-    border-radius: 10px;
-    /* overflow-y: scroll; */
-    /* height: 50vh; */
-  }
-  
-  .viewModal .ant-modal-header {
-    border-radius: 10px 10px 0px 0px;
-    background: #1963a6;
-    color: #ffffff;
-  }
-  .viewModal .ant-modal-title {
-    color: #ffffff;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 25px;
-  }
-  /* --------------------View modal css */
-  .titleForModal {
-    border: 0.5px solid #EAEAEA;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    padding: 10px;
-  }
+.viewModal .ant-modal-content {
+  border-radius: 10px;
+  /* overflow-y: scroll; */
+  /* height: 50vh; */
+}
 
-  .formCSS.ant-form-item {
-     margin-bottom: 0px;
-  }
+.viewModal .ant-modal-header {
+  border-radius: 10px 10px 0px 0px;
+  background: #1963a6;
+  color: #ffffff;
+}
+.viewModal .ant-modal-title {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 25px;
+}
+/* --------------------View modal css */
+.titleForModal {
+  border: 0.5px solid #eaeaea;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  padding: 10px;
+}
 
-  .dividerCss {
-    margin-top: 10px;
-  }
+.formCSS.ant-form-item {
+  margin-bottom: 0px;
+}
 
-  .titleSpan {
-    font-size: 24px;
-  }
+.dividerCss {
+  margin-top: 10px;
+}
+
+.titleSpan {
+  font-size: 24px;
+}

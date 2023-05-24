@@ -9,6 +9,7 @@ import {
   Space,
   Tabs,
   Table,
+  Modal,
 } from "antd";
 import { EyeFilled, SearchOutlined } from "@ant-design/icons";
 import { getManagersData, getUsers } from "../../contexts/CreateContext";
@@ -17,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import "antd/dist/antd.css";
 import "../../style/Onboarding.css";
 import "../Feedback/FeedBack.css";
+import { Content } from "antd/lib/layout/layout";
 
 const dataSource = [
   {
@@ -109,6 +111,37 @@ function EmpFeedback() {
     },
   ];
 
+  const submitFeedbackForm = (value) => {
+    console.log("valueee", value);
+    const feedbackFormData = (
+      <Form
+        layout="horizontal"
+        labelCol={{
+          span: 0,
+        }}
+        wrapperCol={{
+          span: 0,
+        }}
+      >
+        <Form.Item label="Sections::" className="feedbackSection">
+          {value.sections.map((sec) => sec)?.toString()}
+        </Form.Item>
+        <Form.Item label="Employees::" className="feedbackSection">
+          {value.employees.map((emp) => emp)?.toString()}
+        </Form.Item>
+      </Form>
+    );
+    Modal.confirm({
+      title: `Are you sure you want to create a feedback for ${value.name} ?`,
+      content: feedbackFormData,
+      okText: "Yes",
+      okType: "danger",
+      onOk: () => {
+        // navigate("/survey");
+      },
+    });
+  };
+
   // const onSearch = (searchText) => {
   //   let matchingName = showEmpName.filter((ex) => {
   //     return ex.value.toLowerCase().includes(searchText.toLowerCase());
@@ -132,8 +165,13 @@ function EmpFeedback() {
             }}
             title="Feedback"
           >
-            <Form layout="vertical">
-              <Form.Item label="Name" className="FeedbackTitle">
+            <Form layout="vertical" onFinish={submitFeedbackForm}>
+              <Form.Item
+                label="Name"
+                name="name"
+                className="FeedbackTitle"
+                rules={[{ required: true, message: "Please select the name" }]}
+              >
                 <Select
                   placeholder="Please Select Name"
                   options={[
@@ -143,20 +181,46 @@ function EmpFeedback() {
                   className="FeedbackSelect"
                 />
               </Form.Item>
-              <Form.Item label="Select Section" className="FeedbackTitle">
+              <Form.Item
+                label="Select Section"
+                name="sections"
+                className="FeedbackTitle"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select the atleast one skill",
+                  },
+                ]}
+              >
                 <Select
                   mode="multiple"
                   allowClear
                   placeholder="Please Select"
                   options={[
-                    { value: "communication", label: "Communication Skills" },
-                    { value: "technical", label: "Technical Skills" },
-                    { value: "programming", label: "Programming Skills" },
+                    {
+                      value: "Communication Skills",
+                      label: "Communication Skills",
+                    },
+                    { value: "Technical Skills", label: "Technical Skills" },
+                    {
+                      value: "Programming Skills",
+                      label: "Programming Skills",
+                    },
                   ]}
                   className="FeedbackSelect"
                 />
               </Form.Item>
-              <Form.Item label="Select Employee" className="FeedbackTitle">
+              <Form.Item
+                label="Select Employee"
+                name="employees"
+                className="FeedbackTitle"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select the atleast one employee",
+                  },
+                ]}
+              >
                 <Select
                   options={[...allEmpName]}
                   mode="multiple"
@@ -176,7 +240,8 @@ function EmpFeedback() {
                     height: "37px",
                   }}
                   className="submitBtn"
-                  onClick={() => navigate("/EmployeeSurvey")}
+                  htmlType="submit"
+                  // onClick={submitFeedbackForm}
                 >
                   Submit
                 </Button>

@@ -86,7 +86,7 @@ const AddClient = () => {
       await ClientContext.addClient(clientAdd, fileName);
       showNotification("success", "Success", "Client Add Successfully");
       navigate('/Client/ViewClient')
-      
+
     } catch (error) {
       console.log("error", error);
       showNotification("error", "Error", "Failed to addClient!");
@@ -139,20 +139,25 @@ const AddClient = () => {
     });
   };
   return (
-    <div style={{ margin: "13px", background: "#fff" }}>
+    <div style={{ margin: "15px", background: "#fff" }}>
       <div
         style={{
           fontWeight: "600",
-          fontSize: "14px",
+          fontSize: "16px",
           lineHeight: "32px",
+          background: '#1963a6',
+          color: 'white',
+          padding: '10px'
+
         }}
+
       >
         Add Client
       </div>
-      <Divider />
+
       <Form
         className="details"
-        style={{ padding: "11px" }}
+        style={{ padding: "20px" }}
         form={form}
         layout="vertical"
         labelcol={{
@@ -518,7 +523,7 @@ const AddClient = () => {
             </Form.Item>
           </Col>
         </Row>
-        <Divider />
+
         <div
           style={{
             display: "flex",
@@ -529,14 +534,7 @@ const AddClient = () => {
           <Space>
             <Form.Item>
               <Button
-                style={{
-                  border: "1px solid #1963a6",
-                  color: "#1963a6",
-                  fontWeight: "600",
-                  fontSize: "14px",
-                  lineHeight: "17px",
-                  width: "99px",
-                }}
+                className="button-white"
                 onClick={onReset}
               >
                 CANCEL
@@ -544,15 +542,7 @@ const AddClient = () => {
             </Form.Item>
             <Form.Item>
               <Button
-                style={{
-                  border: "1px solid #1963a6",
-                  background: "#1963a6",
-                  color: "#ffffff",
-                  fontWeight: "600",
-                  fontSize: "14px",
-                  lineHeight: "17px",
-                  width: "99px",
-                }}
+                className="button-color"
                 htmlType="submit"
               >
                 SAVE

@@ -3,16 +3,20 @@ import { Button, Form, Input, Col, Row, Divider } from "antd";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../../style/LoginPage.css";
-// import loginBg from "../images/login-img.png";
+import register3 from "../../images/register3.jpg";
 import { GoogleOutlined, LoadingOutlined } from "@ant-design/icons";
-import loginBg from "../../images/login-img.png";
+import logo from "../../images/LoginLogo.svg";
 import "toastify-js/src/toastify.css";
 import StartToastifyInstance from "toastify-js";
 import { sendEmail } from "../../contexts/EmailContext";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createAuth } from "../../firebase-config";
+import Password from "antd/lib/input/Password";
 
 function RegisterAccount() {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState("Login");
   const [forgot, setForgot] = useState(true);
@@ -130,27 +134,64 @@ function RegisterAccount() {
   //     }
   //   }
 
-  const handleSubmit = () => {
-    console.log("tsesttt ");
-    let mailOptions = {
-      from: "hutechhr@gmail.com",
-      to: `${loginEmail}`,
-      subject: `Welcome to HutechHr`,
-      html: `
-          <p>Hello !</p>
-          <p>
-            Welcome to HutechHR:</p>
-            <p> We are delighted to have you with us. Please
-            click the below link to register your company.</p>
-          
-          <a href="http://localhost:3001/register/company">localhost:3000/register/company</a>
+  const handleSubmit = async (value) => {
+    console.log("testttt", value);
 
-          <p>ThankYou,</p>
-          <p> Hutech HR</p>
-        `,
-    };
-    sendEmail(mailOptions);
-    setError("Your account has been created, Please follow the link attached");
+    try {
+      if (loginPassword === confirmPassword) {
+        let res = await createUserWithEmailAndPassword(
+          createAuth,
+          loginEmail,
+          loginPassword
+          // confirmPassword
+        );
+        // sessionStorage.setItem("accessToken", res.user.accessToken);
+        // sessionStorage.setItem("user", JSON.stringify(res.user));
+        console.log("tsesttt ");
+        let mailOptions = {
+          from: "hutechhr@gmail.com",
+          to: `${loginEmail}`,
+          subject: `Welcome to HutechHr`,
+          html: `
+              <p>Hello !</p>
+              <p>
+                Welcome to HutechHR:</p>
+                <p> We are delighted to have you with us. Please
+                click the below link to register your company.</p>
+    
+              <a href="http://localhost:3000/register/company>localhost:3000/register/company</a>
+    
+              <p>ThankYou,</p>
+              <p> Hutech HR</p>
+            `,
+        };
+        sendEmail(mailOptions);
+        setError(
+          "Your account has been created, Please follow the link attached"
+        );
+      } else {
+        setError("Password Mismatch!");
+      }
+    } catch (error) {
+      // setLoading("Login");
+      let message = error.message;
+      switch (error.code) {
+        case "auth/cancelled-popup-request":
+          message = "Login Cancelled";
+          break;
+
+        case "auth/internal-error":
+          message = "Enter a password!";
+          break;
+        case "auth/email-already-in-use":
+          message = "Email Id already exists!";
+          break;
+      }
+      setError(message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    }
   };
 
   useEffect(() => {
@@ -177,13 +218,13 @@ function RegisterAccount() {
       <Row className="main-div">
         <Col xs={24} xm={24} md={12}>
           <div className="form-div">
-            {/* <div className="exepnse-logo">
+            <div className="exepnse-logo">
               <img
-                // src={logo}
+                src={logo}
                 alt="logo"
                 style={{ width: "250px", paddingBottom: "1rem" }}
               />
-            </div> */}
+            </div>
             <Form
               name="basic"
               labelCol={{
@@ -196,6 +237,7 @@ function RegisterAccount() {
                 remember: true,
               }}
               autoComplete="off"
+              onFinish={handleSubmit}
             >
               <div className="wlc-div ">Hello There !</div>
               <div className="msg">Let's register your account</div>
@@ -218,35 +260,51 @@ function RegisterAccount() {
                   />
                 </Form.Item>
               </div>
-              {forgot ? (
-                <>
-                  <div className="email-div">
-                    Password<span style={{ color: "red" }}> *</span>
-                  </div>
-                  <div className="emailInput-div">
-                    <Form.Item
-                      name="password"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Enter Password",
-                        },
-                      ]}
-                    >
-                      <Input.Password
-                      // onChange={(e) => setLoginPassword(e.target.value)}
-                      />
-                    </Form.Item>
-                  </div>
-                </>
-              ) : null}
+
+              <div className="email-div">
+                Password<span style={{ color: "red" }}> *</span>
+              </div>
+              <div className="emailInput-div">
+                <Form.Item
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Enter Password",
+                    },
+                  ]}
+                >
+                  <Input.Password
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                  />
+                </Form.Item>
+              </div>
+              <div className="email-div">
+                Confirm Password<span style={{ color: "red" }}> *</span>
+              </div>
+              <div className="emailInput-div">
+                <Form.Item
+                  name="confrmPassword"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Enter Confirm Password",
+                    },
+                  ]}
+                >
+                  <Input.Password
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </Form.Item>
+              </div>
+
               {/* <Form.Item className="loginButton"> */}
               <div className="login-btn">
                 <Button
                   type="submit"
                   htmlType="submit"
                   style={buttonStyle}
-                  onClick={handleSubmit}
+                  // onClick={handleSubmit}
                   //   onClick={forgot ? handleSubmit : handleReset}
                   //   disabled={loading != "Login"}
                 >
@@ -286,7 +344,9 @@ function RegisterAccount() {
           </div>
         </Col>
         <Col xs={0} xm={0} md={12}>
-          <div className="img-div">{/* <img src={loginBg} alt="" /> */}</div>
+          <div className="img-div">
+            <img src={register3} alt="" />
+          </div>
         </Col>
       </Row>
     </>

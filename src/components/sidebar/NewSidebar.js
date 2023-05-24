@@ -19,7 +19,8 @@ import {
   UserOutlined,
   RadarChartOutlined,
   DeploymentUnitOutlined,
-  AlertFilled
+  AlertFilled,
+  ContainerOutlined,
 } from "@ant-design/icons";
 
 const { Sider } = Layout;
@@ -106,10 +107,10 @@ const NewSidebar = (props) => {
                 onClick={() => {
                   setCollapsibleStatus();
                 }}
-              // style={{
-              //   // paddingBottom: "40px",
-              //   height: "100vh",
-              // }}
+                // style={{
+                //   // paddingBottom: "40px",
+                //   height: "100vh",
+                // }}
               >
                 <Menu.Item
                   className="arrow"
@@ -265,17 +266,21 @@ const NewSidebar = (props) => {
                         <NavLink to="/Appraisal/HalfYearGoalPage" />
                       </Menu.Item>
                     </Menu.SubMenu> */}
-                    <Menu.Item
-                      icon={
-                        <DesktopOutlined
-                          style={{ color: "#ffffff", fontSize: "17px" }}
-                        />
-                      }
-                      key="22"
-                    >
-                      <p className="sideFont">Assets</p>
-                      <NavLink to="/assets" />
-                    </Menu.Item>
+                    {role == "admin" || isHr ? (
+                      <>
+                        <Menu.Item
+                          icon={
+                            <DesktopOutlined
+                              style={{ color: "#ffffff", fontSize: "17px" }}
+                            />
+                          }
+                          key="22"
+                        >
+                          <p className="sideFont">Assets</p>
+                          <NavLink to="/assets" />
+                        </Menu.Item>
+                      </>
+                    ) : null}
                     <Menu.SubMenu
                       className="arrow-div"
                       style={{
@@ -326,29 +331,32 @@ const NewSidebar = (props) => {
                         <NavLink to="/expenses/invoices" />
                       </Menu.Item> */}
                     </Menu.SubMenu>
-                    <Menu.Item
-                      icon={
-                        <CompassOutlined
-                          style={{ color: "#ffffff", fontSize: "17px" }}
-                        />
-                      }
-                      key="24"
-                    >
-                      <p className="sideFont">Travel Management</p>
-                      <NavLink to="/travel" />
-                    </Menu.Item>
-                    <Menu.Item
-                      icon={
-
-                        <BookOutlined
-                          style={{ color: "#ffffff", fontSize: "17px" }}
-                        />
-                      }
-                      key="24a"
-                    >
-                      <p className="sideFont">Invoice Reimbursement</p>
-                      <NavLink to="/invoices" />
-                    </Menu.Item>
+                    {role == "admin" || isHr ? (
+                      <>
+                        <Menu.Item
+                          icon={
+                            <CompassOutlined
+                              style={{ color: "#ffffff", fontSize: "17px" }}
+                            />
+                          }
+                          key="24"
+                        >
+                          <p className="sideFont">Travel Management</p>
+                          <NavLink to="/travel" />
+                        </Menu.Item>
+                        <Menu.Item
+                          icon={
+                            <BookOutlined
+                              style={{ color: "#ffffff", fontSize: "17px" }}
+                            />
+                          }
+                          key="24a"
+                        >
+                          <p className="sideFont">Invoice Reimbursement</p>
+                          <NavLink to="/invoices" />
+                        </Menu.Item>
+                      </>
+                    ) : null}
                     <Menu.Item
                       icon={
                         <RadarChartOutlined
@@ -359,6 +367,17 @@ const NewSidebar = (props) => {
                     >
                       <p className="sideFont">Feedback</p>
                       <NavLink to="/Feedback" />
+                    </Menu.Item>
+                    <Menu.Item
+                      icon={
+                        <ContainerOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
+                      key="26"
+                    >
+                      <p className="sideFont">Policy</p>
+                      <NavLink to="/Policies" />
                     </Menu.Item>
                   </>
                 ) : null}
@@ -390,7 +409,7 @@ const NewSidebar = (props) => {
                   title="Client"
                   mode="inline"
                 >
-                  {role == "admin" &&
+                  {role == "admin" && (
                     <Menu.Item
                       className="arrow"
                       icon={<img src={dot} alt="profile" className="dot" />}
@@ -399,7 +418,7 @@ const NewSidebar = (props) => {
                       <p className="sideFont">Add Client</p>
                       <NavLink to="/Client/AddClient" />
                     </Menu.Item>
-                  }
+                  )}
                   <Menu.Item
                     className="arrow"
                     icon={<img src={dot} alt="profile" className="dot" />}
@@ -430,11 +449,9 @@ const NewSidebar = (props) => {
                   key="32a"
                 >
                   <p className="sideFont">Template</p>
-                  <NavLink to="/NotifySettings" />
+                  <NavLink to="/templates" />
                 </Menu.Item>
-
               </Menu>
-
             </div>
           </div>
           <div className="sidelayout-setting">

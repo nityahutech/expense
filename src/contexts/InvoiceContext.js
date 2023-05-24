@@ -10,7 +10,6 @@ import {
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 let compId = sessionStorage.getItem("compId");
-
 let companyInvoiceCollectionRef = collection(
   db,
   `companyprofile/${compId}/request`
@@ -37,9 +36,7 @@ class InvoiceContext {
       uploadBytesResumable(storageRef, file).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
           console.log(i, url);
-          // invoiceData.payments[i].upload = url;
-          // invoiceData.payments[i].fileName = file.name;
-
+    
           updateDoc(doc(db, `companyprofile/${compId}/request`, data.id), {
             payments: arrayUnion({
               ...payments[i],
@@ -52,21 +49,9 @@ class InvoiceContext {
             upload: url,
             fileName: file.name,
           });
-
-          // return Promise.resolve();
         });
       });
-      //   } else {
-      //     invoiceData.payments[i].upload = null;
-      //     // addDoc(companyInvoiceCollectionRef, invoiceData);
-      //     // return Promise.resolve();
-      //   }
     });
-
-    // setTimeout(() => {
-    //   console.log(invoiceData);
-    //   addDoc(companyInvoiceCollectionRef, invoiceData);
-    // }, 4000);
   };
 
   updateInvoiceData = (id, updateInvoice) => {

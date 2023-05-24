@@ -18,6 +18,7 @@ const RegisterCompany = (props) => {
   const [imageUrl, setImageUrl] = useState(props.imageUrl || "");
   const [isBigFile, setIsBigFile] = useState(false);
   const [data, setData] = useState(props.data || {});
+  const [form] = Form.useForm();
 
   useEffect(() => {
     setFileName(props.fileName || null);
@@ -61,9 +62,9 @@ const RegisterCompany = (props) => {
     setImageUrl("");
   }
 
-  const onFinishFailed = (errorInfo) => {
-    props.setIsStepOneInvalid(true);
-  };
+  // const onFinishFailed = (errorInfo) => {
+  //   props.setIsStepOneInvalid(true);
+  // };
 
   return (
     <div style={{ margin: "13px", background: "#fff" }}>
@@ -92,8 +93,9 @@ const RegisterCompany = (props) => {
           remember: true,
         }}
         autoComplete="off"
+        // onFinish={props.registerCompany}
         // onFinish={(values) => props.changeSave(values, fileName, imageUrl)}
-        onFinishFailed={onFinishFailed}
+        // onFinishFailed={onFinishFailed}
       >
         <Row gutter={[24, 8]}>
           {/* <Col xs={22} sm={15} md={8}>
@@ -153,7 +155,7 @@ const RegisterCompany = (props) => {
                 onChange={(e) => {
                   const str = e.target.value;
                   const caps = str.split(" ").map(capitalize).join(" ");
-                  props.form.setFieldsValue({ regCompName: caps });
+                  // props.form.setFieldsValue({ regCompName: caps });
                 }}
               />
             </Form.Item>

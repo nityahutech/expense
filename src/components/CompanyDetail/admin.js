@@ -187,7 +187,7 @@ const Admin = () => {
   const imageStyle = {
     border: "1px solid #ccc",
     borderRadius: "25px",
-    // backgroundColor: getColor(),
+    backgroundColor: "aqua",
     width: "30px",
     height: "30px",
     margin: "3px",
@@ -853,7 +853,7 @@ const Admin = () => {
                       <Input
                         onChange={handleEmpInputChange}
                         // defaultValue={accessUsers}
-                        value={accessUsers || updateEmpNames}
+                        value={accessUsers}
                       />
                     </Form.Item>
                   )}

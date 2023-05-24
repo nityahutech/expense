@@ -22,6 +22,7 @@ import {
 } from "@ant-design/icons";
 import birthday from "../images/birthday.svg";
 import anniversary from "../images/anniversary.svg";
+import addTemplate from "../images/addTemplate.avif";
 import Landscape from "../images/Landscape.svg";
 import Portrait from "../images/portrait.svg";
 import FormItem from "antd/es/form/FormItem";
@@ -66,7 +67,6 @@ function NotifySettings() {
   const [isDisablePreview, setIsDisablePreview] = useState(true);
   const [editorMessage, setEditorMessage] = useState(true);
 
-
   const templates = [
     { id: 1, name: "", image: Landscape },
     { id: 2, name: "", image: Portrait },
@@ -82,6 +82,7 @@ function NotifySettings() {
   const awardTypes = [
     { type: "Birthday", imgSrc: birthday },
     { type: "Anniversary", imgSrc: anniversary },
+    { type: "Add Template", imgSrc: addTemplate },
   ];
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -250,12 +251,10 @@ function NotifySettings() {
     });
     setOptionsEmployee(!searchText ? [] : matchingName);
     if (searchText) {
-      setShowMessageContent(true)
+      setShowMessageContent(true);
+    } else {
+      setShowMessageContent(false);
     }
-    else {
-      setShowMessageContent(false)
-    }
-
   };
 
   const onSelect = (data) => {
@@ -401,7 +400,7 @@ function NotifySettings() {
         justifyContent: "center",
         flexDirection: "column",
         alignItems: "center",
-        marginTop: '40px'
+        marginTop: "40px",
       }}
     >
       {award === false ? (
@@ -436,7 +435,19 @@ function NotifySettings() {
                       alignItems: "center",
                     }}
                   >
-                    <img className="birthdaytemplateImg" src={award.imgSrc} />
+                    <img
+                      className="birthdaytemplateImg"
+                      src={award.imgSrc}
+                      style={
+                        award.type === "Add Template"
+                          ? {
+                              width: "226px",
+                              height: "92px",
+                              borderRadius: "4px",
+                            }
+                          : {}
+                      }
+                    />
                     <p>{award.type}</p>
                   </div>
                 ))}
@@ -818,7 +829,7 @@ function NotifySettings() {
                       type="primary"
                       style={{ marginRight: "1rem" }}
                       onClick={handlePreviewClick}
-                    // disabled={isDisablePreview}
+                      // disabled={isDisablePreview}
                     >
                       {" "}
                       Preview

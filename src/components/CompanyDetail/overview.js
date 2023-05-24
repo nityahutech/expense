@@ -13,7 +13,11 @@ import linkedin from "../../images/linkedin.png";
 import facebook from "../../images/facebook.png";
 import twitter from "../../images/twitter.png";
 import CompanyProContext from "../../contexts/CompanyProContext";
-import { capitalize, checkAlphabets, getBase64 } from "../../contexts/CreateContext";
+import {
+  capitalize,
+  checkAlphabets,
+  getBase64,
+} from "../../contexts/CreateContext";
 
 function Overview() {
   const [form] = Form.useForm();
@@ -290,7 +294,7 @@ function Overview() {
                             ]}
                           >
                             <Input
-                              maxLength={30}
+                              maxLength={50}
                               placeholder="Enter Comapany Name"
                               bordered={false}
                               style={{
@@ -583,19 +587,19 @@ function Overview() {
                           className="icon-position"
                           style={{
                             display: "flex",
-                            flexDirection: "row",
-                            // paddingRight: "10px",
-                            justifyContent: "start",
+                            //   flexDirection: "row",
+                            //   // paddingRight: "10px",
+                            //   justifyContent: "start",
                             alignItems: "center",
-                            // paddingLeft:"10px"
+                            //   // paddingLeft:"10px"
                           }}
                         >
                           <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
+                          // style={{
+                          //   display: "flex",
+                          //   justifyContent: "center",
+                          //   alignItems: "center",
+                          // }}
                           >
                             <img
                               src={linkedin}
@@ -627,7 +631,7 @@ function Overview() {
                                 {
                                   pattern:
                                     // /^(?:(?:(?:[a-zA-z\-]+)\:\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9\-\.]){1,61}(?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?:\:[0-9]{1,5})?$/,
-                                     /^[0-9a-zA-Z-\s]*$/,
+                                    /^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@%_\+.~#?&//=]*)?$/,
                                   message: "Please enter Valid Website Name",
                                 },
                               ]}
@@ -651,18 +655,18 @@ function Overview() {
                           className="icon-position"
                           style={{
                             display: "flex",
-                            flexDirection: "row",
-                            // paddingRight: "10px",
-                            justifyContent: "start",
+                            //   flexDirection: "row",
+                            //   // paddingRight: "10px",
+                            //   justifyContent: "start",
                             alignItems: "center",
                           }}
                         >
                           <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
+                          // style={{
+                          //   display: "flex",
+                          //   justifyContent: "center",
+                          //   alignItems: "center",
+                          // }}
                           >
                             <img
                               src={facebook}
@@ -693,7 +697,7 @@ function Overview() {
                                 },
                                 {
                                   pattern:
-                                    /^(?:(?:(?:[a-zA-z\-]+)\:\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9\-\.]){1,61}(?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?:\:[0-9]{1,5})?$/,
+                                    /^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@%_\+.~#?&//=]*)?$/,
                                   message: "Please enter Valid Website Name",
                                 },
                               ]}
@@ -717,10 +721,10 @@ function Overview() {
                           className="icon-position"
                           style={{
                             display: "flex",
-                            justifyContent: "start",
+                            //   justifyContent: "start",
                             alignItems: "center",
-                            flexDirection: "row",
-                            // paddingRight: "10px",
+                            //   flexDirection: "row",
+                            //   // paddingRight: "10px",
                           }}
                         >
                           <div>
@@ -753,7 +757,7 @@ function Overview() {
                                 },
                                 {
                                   pattern:
-                                    /^(?:(?:(?:[a-zA-z\-]+)\:\/{1,3})?(?:[a-zA-Z0-9])(?:[a-zA-Z0-9\-\.]){1,61}(?:\.[a-zA-Z]{2,})+|\[(?:(?:(?:[a-fA-F0-9]){1,4})(?::(?:[a-fA-F0-9]){1,4}){7}|::1|::)\]|(?:(?:[0-9]{1,3})(?:\.[0-9]{1,3}){3}))(?:\:[0-9]{1,5})?$/,
+                                    /^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@%_\+.~#?&//=]*)?$/,
                                   message: "Please enter Valid Website Name",
                                 },
                               ]}

@@ -86,7 +86,7 @@ function RegisterEmployee(props) {
     let temp = localStorage.getItem("OrgAccess");
     if (!temp) {
       localStorage.setItem("OrgAccess", "[]");
-      props.setIsStepFourInvalid(true);
+      // props.setIsStepFourInvalid(true);
       return;
     }
     let t = JSON.parse(temp);

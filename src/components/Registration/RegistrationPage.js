@@ -1,16 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { Card, Divider, Steps, Button, Form, Modal, Affix } from "antd";
+import {
+  Card,
+  Divider,
+  Steps,
+  Button,
+  Form,
+  Modal,
+  Affix,
+  notification,
+} from "antd";
 import { Outlet } from "react-router-dom";
+import {
+  LoadingOutlined,
+  CheckCircleFilled,
+  StopFilled,
+  EyeFilled,
+  EditFilled,
+} from "@ant-design/icons";
 import RegisterCompany from "./RegisterCompany";
 import RegisterEmployee from "./RegisterEmployee";
 import { useNavigate } from "react-router-dom";
 import logo from "../../images/SidebarLogo.svg";
+import CompanyProContext from "../../contexts/CompanyProContext";
+import { showNotification } from "../../contexts/CreateContext";
 
 const { Step } = Steps;
 
 const RegistrationPage = (props) => {
   const [progress, setProgress] = useState(0);
+  const [fileName, setFileName] = useState(null);
   const [next, setNext] = useState(1);
+  const [activetab, setActivetab] = useState("1");
+  const [isStepOneInvalid, setIsStepOneInvalid] = useState(false);
+  const [isStepSecondInvalid, setIsStepFourInvalid] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
@@ -23,6 +45,94 @@ const RegistrationPage = (props) => {
     setProgress(value);
   };
 
+  const registerCompany = async (data) => {
+    console.log("datttaa", data);
+    let orgcode = await CompanyProContext.getOrgId();
+    let temp1 = localStorage.getItem("OrgAccess");
+    let accessList = JSON.parse(temp1);
+    let temp = localStorage.getItem("costCenters");
+    let costCenters = temp == "[]" ? [] : JSON.parse(temp);
+    let temp2 = localStorage.getItem("OrgHier");
+    let orgHier = temp2 == "[]" ? null : JSON.parse(temp2);
+    // if (orgHier != null) {
+
+    // }
+    const value = {
+      regCompName: data.regCompName,
+      regOffice: {
+        addLine1: data.addLine1,
+        addLine2: data.addLine2,
+        city: data.city,
+        state: data.state,
+        country: data.country,
+        pincode: data.pincode,
+      },
+      precode: data.preCode,
+      corpOffice: {},
+      cinNumber: data.cinNumber,
+      gst: data.gst || null,
+      domain: data.domain,
+      prefix: data.prefix || "",
+      phone: data.phone,
+      accessList: [],
+      address: [],
+      secretary: [],
+      director: [],
+      auditor: [],
+      bank: [],
+      costCenters: costCenters == null ? [] : costCenters,
+      departments:
+        orgHier == null
+          ? [
+              {
+                name: "Default",
+                description: "Default",
+                type: "Business Unit",
+                parent: null,
+              },
+              {
+                name: "Default",
+                description: "Default",
+                type: "Division",
+                parent: "Default",
+              },
+              {
+                name: "Default",
+                description: "Default",
+                type: "Department",
+                parent: "Default/Default",
+              },
+              {
+                name: "Default",
+                description: "Default",
+                type: "Team",
+                parent: "Default/Default/Default",
+              },
+            ]
+          : orgHier,
+      status: "Deactivated",
+      reason: "First Activation Incomplete",
+    };
+    CompanyProContext.createCompInfo(orgcode, value, fileName, accessList)
+      .then((response) => {
+        notification.open({
+          message: "Creating Company",
+          duration: 3,
+          icon: <LoadingOutlined />,
+        });
+        const timer = setTimeout(() => {
+          showNotification("success", "Success", "Onboarding Completed");
+          // getData();
+          // reset();
+          setActivetab("1");
+        }, 5000);
+        return () => clearTimeout(timer);
+      })
+      .catch((error) => {
+        showNotification("error", "Error", error.message);
+      });
+  };
+
   const onReset = () => {
     Modal.confirm({
       title: "Are you sure you want to reset all pages?",
@@ -30,6 +140,8 @@ const RegistrationPage = (props) => {
       okType: "danger",
       onOk: () => {
         form.resetFields();
+        setIsStepOneInvalid(false);
+        setIsStepFourInvalid(false);
         navigate("/register/company", { replace: false });
       },
     });
@@ -61,13 +173,29 @@ const RegistrationPage = (props) => {
         style={{ marginTop: "20px" }}
       >
         <Steps progress current={progress} onChange={progressBar}>
-          <Step title="Register Company" />
-          <Step title="Employee Details" />
+          <Step
+            title="Register Company"
+            className={isStepOneInvalid ? "stepOneError" : ""}
+          />
+          <Step
+            title="Employee Details"
+            className={isStepSecondInvalid ? "stepOneError" : ""}
+          />
         </Steps>
         {/* <Outlet /> */}
       </Card>
       <Card style={{ marginTop: "20px" }}>
-        {progress == 0 ? <RegisterCompany form={form} /> : <RegisterEmployee />}
+        {progress == 0 ? (
+          <RegisterCompany
+            // registerCompany={registerCompany}
+            fileName={fileName}
+            form={form}
+
+            // setIsStepOneInvalid={setIsStepOneInvalid}
+          />
+        ) : (
+          <RegisterEmployee />
+        )}
 
         <div
           style={{
@@ -107,6 +235,7 @@ const RegistrationPage = (props) => {
               }}
               // htmlType="submit"
               onClick={async () => {
+                console.log("testtt");
                 if (progress != 1) {
                   if (progress == 0) {
                     // console.log("testttt");
@@ -116,9 +245,10 @@ const RegistrationPage = (props) => {
                   }
                   setProgress(progress + 1);
 
-                  //   setIsStepOneInvalid(false);
+                  // setIsStepOneInvalid(false);
                 } else {
-                  //   createCompany();
+                  console.log("test222");
+                  registerCompany();
                 }
               }}
             >

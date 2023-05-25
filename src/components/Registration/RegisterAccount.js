@@ -159,7 +159,7 @@ function RegisterAccount() {
                 <p> We are delighted to have you with us. Please
                 click the below link to register your company.</p>
     
-              <a href="http://localhost:3000/register/company>localhost:3000/register/company</a>
+              <a href="http://localhost:3000/register/company?uid=${res.user.uid}&accessToken=${res.user.accessToken}&email=${loginEmail}">Follow this link</a>
     
               <p>ThankYou,</p>
               <p> Hutech HR</p>

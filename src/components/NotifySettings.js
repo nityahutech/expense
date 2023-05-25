@@ -398,533 +398,1021 @@ function NotifySettings() {
       style={{
         display: "flex",
         justifyContent: "center",
-        flexDirection: "column",
-        alignItems: "center",
+        // flexDirection: "column",
+        // alignItems: "center",
         marginTop: "40px",
       }}
     >
-      {award === false ? (
-        <>
+      {
+        award === false ? (
+          <Card title="System Award">
+            {awardTypes.map((award) => (
+              <Button
+                onClick={() => selectAward(award.type)}
+                className="addTemplate"
+                style={{ marginLeft: "20px" }}
+              >
+                {award.type}
+              </Button>
+            ))}
+          </Card>
+        ) : (
           <Card
-            style={{
-              borderRadius: "5px",
-              marginBottom: "25px",
-              width: "90%",
-            }}
+          // style={{
+          //   borderRadius: "5px",
+          //   marginBottom: "25px",
+          //   width: "90%",
+          // }}
           >
             <div>
-              <Col>
-                <p>System Award</p>
-              </Col>
-              <Col
-                className="cardTemplate"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-evenly",
-                  cursor: "pointer",
-                }}
-              >
-                {awardTypes.map((award) => (
-                  <div
-                    key={award.type}
-                    onClick={() => selectAward(award.type)}
-                    style={{
-                      animation: "slidein 1s forwards",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      className="birthdaytemplateImg"
-                      src={award.imgSrc}
-                      style={
-                        award.type === "Add Template"
-                          ? {
-                              width: "226px",
-                              height: "92px",
-                              borderRadius: "4px",
-                            }
-                          : {}
-                      }
-                    />
-                    <p>{award.type}</p>
-                  </div>
-                ))}
-              </Col>
-            </div>
-          </Card>
-        </>
-      ) : (
-        <Card
-          style={{
-            borderRadius: "5px",
-            marginBottom: "25px",
-            width: "90%",
-          }}
-        >
-          <div>
-            <Col style={{ display: "flex" }} span={24}>
-              <Col
-                span={12}
-                onClick={BackToTemplate}
-                style={{ cursor: "pointer" }}
-              >
-                <ArrowLeftOutlined />
-                Back
-              </Col>
-            </Col>
-            <div>
-              <Divider orientation="left" orientationMargin={0}>
-                {selectedAward}
-              </Divider>
-              <Form>
-                <Col span={24}>
-                  <Form.Item name="select">
-                    <Radio.Group
-                      style={{ width: "100%" }}
-                      options={optionImage}
-                      defaultValue={selectedOptions}
-                      onChange={radioChange}
-                    />
-                  </Form.Item>
+              <Col style={{ display: "flex" }} span={24}>
+                <Col
+                  span={12}
+                  onClick={BackToTemplate}
+                  style={{ cursor: "pointer" }}
+                >
+                  <ArrowLeftOutlined />
+                  Back
                 </Col>
-              </Form>
+              </Col>
+              <div>
+                <Divider orientation="left" orientationMargin={0}>
+                  {selectedAward}
+                </Divider>
+                <Form>
+                  <Col span={24}>
+                    <Form.Item name="select">
+                      <Radio.Group
+                        style={{ width: "100%" }}
+                        options={optionImage}
+                        defaultValue={selectedOptions}
+                        onChange={radioChange}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Form>
 
-              <Row gutter={[16, 16]}>
-                <Col sm={24} md={10} lg={10}>
-                  <Card className="birthdayPreviewDiv">
-                    <Divider orientation="left" orientationMargin={0}>
-                      Preview
-                      <Popover content={contentPreview}>
-                        <InfoCircleOutlined className="informationLogo" />
-                      </Popover>
-                    </Divider>
+                <Row gutter={[16, 16]}>
+                  <Col sm={24} md={10} lg={10}>
+                    <Card className="birthdayPreviewDiv">
+                      <Divider orientation="left" orientationMargin={0}>
+                        Preview
+                        <Popover content={contentPreview}>
+                          <InfoCircleOutlined className="informationLogo" />
+                        </Popover>
+                      </Divider>
 
-                    <>
-                      <div
-                        className="previewDiv"
-                        style={{
-                          // border: "1px solid black",
-                          backgroundColor: layout ? "" : "#c9c6c6",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          color: "#fff",
-                          height: layout === "2" ? " " : "",
-                        }}
-                      >
-                        {layout === "1" ? (
-                          <div style={{ display: "flex" }}>
-                            <img
-                              src={selectedTemplate?.image}
-                              style={{ width: "100%", height: "100%" }}
-                            />
-                            <h2
-                              style={{
-                                position: "absolute",
-                                top: "55%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
-                                fontSize: "10px",
-                                wordWrap: "break-word",
-                                maxWidth: "45%",
-                                textAlign: "center",
-                              }}
-                            >
-                              {templatePreview?.[0]?.message?.blocks?.[0]?.text}
-                            </h2>
-                            <h2
-                              style={{
-                                position: "absolute",
-                                top: "40%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
-                                fontWeight: "bold",
-                                fontSize: "10px",
-                                color: "black",
-                              }}
-                            >
-                              {emp}
-                            </h2>
-                            <div
-                              style={{
-                                position: "absolute",
-                                top: "45%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
-                                fontWeight: "bold",
-                                fontSize: "12px",
-                                color: "black",
-                              }}
-                            >
-                              {file && (
-                                <img
-                                  style={{ width: "20px", height: "20px" }}
-                                  src={file}
-                                  alt="Uploaded Image"
-                                />
-                              )}
-                            </div>
-                            <div
-                              style={{
-                                position: "absolute",
-                                top: "32%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
-                                fontWeight: "bold",
-                                fontSize: "12px",
-                                color: "black",
-                              }}
-                            ></div>
-                          </div>
-                        ) : layout === "2" && imageUrl ? (
-                          <>
-                            <div
-                              className="capture"
-                              style={{ position: "relative" }}
-                            >
+                      <>
+                        <div
+                          className="previewDiv"
+                          style={{
+                            // border: "1px solid black",
+                            backgroundColor: layout ? "" : "#c9c6c6",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "#fff",
+                            height: layout === "2" ? " " : "",
+                          }}
+                        >
+                          {layout === "1" ? (
+                            <div style={{ display: "flex" }}>
                               <img
-                                src={imageUrl}
+                                src={selectedTemplate?.image}
                                 style={{ width: "100%", height: "100%" }}
                               />
-                            </div>
-                            <div style={{ color: "green" }}>
-                              {" "}
-                              <DeleteOutlined
-                                onClick={() => handleDeleteClick(imageUrl)}
-                              />
-                            </div>
-                          </>
-                        ) : (
-                          <div
-                            style={{
-                              width: "100%",
-                              height: "100px",
-                              backgroundColor: "grey",
-                            }}
-                          >
-                            <div
-                              style={{
-                                position: "relative",
-                                top: "50%",
-                                transform: "translateY(-50%)",
-                              }}
-                            >
-                              <span
+                              <h2
                                 style={{
-                                  color: "white",
+                                  position: "absolute",
+                                  top: "55%",
+                                  left: "50%",
+                                  transform: "translate(-50%, -50%)",
+                                  fontSize: "10px",
+                                  wordWrap: "break-word",
+                                  maxWidth: "45%",
                                   textAlign: "center",
-                                  display: "block",
                                 }}
                               >
-                                No image Uploaded
-                              </span>
+                                {
+                                  templatePreview?.[0]?.message?.blocks?.[0]
+                                    ?.text
+                                }
+                              </h2>
+                              <h2
+                                style={{
+                                  position: "absolute",
+                                  top: "40%",
+                                  left: "50%",
+                                  transform: "translate(-50%, -50%)",
+                                  fontWeight: "bold",
+                                  fontSize: "10px",
+                                  color: "black",
+                                }}
+                              >
+                                {emp}
+                              </h2>
+                              <div
+                                style={{
+                                  position: "absolute",
+                                  top: "45%",
+                                  left: "50%",
+                                  transform: "translate(-50%, -50%)",
+                                  fontWeight: "bold",
+                                  fontSize: "12px",
+                                  color: "black",
+                                }}
+                              >
+                                {file && (
+                                  <img
+                                    style={{ width: "20px", height: "20px" }}
+                                    src={file}
+                                    alt="Uploaded Image"
+                                  />
+                                )}
+                              </div>
+                              <div
+                                style={{
+                                  position: "absolute",
+                                  top: "32%",
+                                  left: "50%",
+                                  transform: "translate(-50%, -50%)",
+                                  fontWeight: "bold",
+                                  fontSize: "12px",
+                                  color: "black",
+                                }}
+                              ></div>
                             </div>
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  </Card>
-                </Col>
-                <Col sm={24} md={14} lg={14}>
-                  <Card className="birthdayPreviewDiv">
-                    <Form layout="vertical">
-                      {isDefaultTemplateSelected === "2" ? (
-                        <Col span={24}>
-                          <Form.Item
-                            name="logo"
-                            className="uploadLogo"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please Upload the Template",
-                              },
-                            ]}
-                          >
+                          ) : layout === "2" && imageUrl ? (
+                            <>
+                              <div
+                                className="capture"
+                                style={{ position: "relative" }}
+                              >
+                                <img
+                                  src={imageUrl}
+                                  style={{ width: "100%", height: "100%" }}
+                                />
+                              </div>
+                              <div style={{ color: "green" }}>
+                                {" "}
+                                <DeleteOutlined
+                                  onClick={() => handleDeleteClick(imageUrl)}
+                                />
+                              </div>
+                            </>
+                          ) : (
                             <div
                               style={{
-                                border: "dashed #B9B9B9",
-                                borderWidth: "thin",
-                                borderRadius: "4px",
-                                display: "flex",
-                                justifyContent: "center",
-                                width: "300px",
+                                width: "100%",
+                                height: "100px",
+                                backgroundColor: "grey",
                               }}
                             >
-                              <input
+                              <div
                                 style={{
-                                  display: "none",
+                                  position: "relative",
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
                                 }}
-                                type="file"
-                                id="logo"
-                                name="logo"
-                                ref={imgRef}
-                                onChange={(e) => handleChangeCustom(e)}
-                              />
-                              <>
-                                <Button
-                                  onClick={(e) => handleClick(e)}
-                                  style={{
-                                    width: "60px",
-                                    height: "50px",
-                                    margin: "15px",
-                                  }}
-                                >
-                                  <PlusCircleOutlined
-                                    style={{
-                                      display: "flex",
-                                      flexDirection: "column-reverse",
-                                      alignItems: "center",
-                                    }}
-                                  />
-                                  <span
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "center",
-                                      marginRight: "8px",
-                                    }}
-                                  >
-                                    Upload
-                                  </span>
-                                </Button>
-                                <p
-                                  style={{
-                                    fontWeight: "400",
-                                    fontSize: "13px",
-                                    lineHeight: "19px",
-                                    marginLeft: "5px",
-                                    marginTop: "10px",
-                                  }}
-                                >
-                                  Upload logo. Use the 800 kb size image. PNG or
-                                  JPEG file format accepted
-                                </p>
-                              </>
-                            </div>
-                            {isBigFile &&
-                              message.error(
-                                "File size must be less than 800Kb."
-                              )}
-                          </Form.Item>
-                        </Col>
-                      ) : (
-                        <>
-                          <Col span={24}>
-                            <Divider orientation="left" orientationMargin={0}>
-                              Layout
-                            </Divider>
-                          </Col>
-                          <Col span={24}>
-                            <Form.Item name="selectLayout">
-                              <Button type="" onClick={showDrawer}>
-                                Choose Template
-                              </Button>
-                              <Drawer
-                                style={{ padding: "0px" }}
-                                width={220}
-                                title="Select Template"
-                                placement="right"
-                                onClose={onClose}
-                                open={open}
                               >
-                                {templates.map((template) => (
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      alignItems: "center",
-                                    }}
-                                    key={template.id}
-                                    onClick={() =>
-                                      handleTemplateClick(template)
-                                    }
-                                  >
-                                    <img
-                                      style={{
-                                        width: "70%",
-                                        border: "5px solid grey",
-                                      }}
-                                      src={template.image}
-                                      alt={template.name}
-                                    />
-                                    <h3>{template.name}</h3>
-                                  </div>
-                                ))}
-                              </Drawer>
-                            </Form.Item>
-                          </Col>
-                          <Col
-                            span={24}
-                            style={{ display: "flex", width: "100%" }}
-                          >
-                            <Form.Item
-                              className="auto"
-                              label="Select Employee"
-                              name="SelectedEmp"
-                            >
-                              <AutoComplete
-                                className="autocomplete"
-                                options={optionsEmployee}
-                                style={{
-                                  width: 300,
-                                }}
-                                onSelect={onSelect}
-                                onSearch={onSearch}
-                                onBlur={onBlur}
-                                size="large"
-                                placeholder="Enter Name"
-                              />
-                            </Form.Item>
-                          </Col>
-                          <Col span={24}>
-                            <FormItem
-                              label="Select Image"
-                              name="UploadEmpImage"
-                            >
-                              <div className="idpage">
-                                <div className="input-with-clear">
-                                  <Input
-                                    type="file"
-                                    accept="application/pdf"
-                                    id="upload"
-                                    name="upload"
-                                    style={{ display: "flex", width: "300px" }}
-                                    onChange={handleChange}
-                                  />
-                                  {file && (
-                                    <button
-                                      className="clear-btn"
-                                      onClick={handleClear}
-                                    >
-                                      X
-                                    </button>
-                                  )}
-                                </div>
+                                <span
+                                  style={{
+                                    color: "white",
+                                    textAlign: "center",
+                                    display: "block",
+                                  }}
+                                >
+                                  No image Uploaded
+                                </span>
                               </div>
-                            </FormItem>
-                          </Col>
-                        </>
-                      )}
-                    </Form>
-                  </Card>
-                </Col>
-              </Row>
-              <Col span={24} style={{ margin: "10px" }}>
-                <FormItem>
-                  {layout === "3" || layout === "4" ? (
-                    <Button
-                      htmlType="submit"
-                      type="primary"
-                      style={{ marginRight: "1rem" }}
-                      onClick={handlePreviewClick}
-                      disabled={isDisablePreview}
-                    >
-                      {" "}
-                      Preview
-                    </Button>
-                  ) : (
-                    <Button
-                      htmlType="submit"
-                      type="primary"
-                      style={{ marginRight: "1rem" }}
-                      onClick={handlePreviewClick}
-                      // disabled={isDisablePreview}
-                    >
-                      {" "}
-                      Preview
-                    </Button>
-                  )}
-                </FormItem>
-              </Col>
-              {showMessageContent && (
-                <>
-                  <Col xs={24} sm={24} md={24}>
-                    <Form form={form} onFinish={handleOnFinish}>
-                      <Form.Item label="" name="message">
-                        <Editor
-                          toolbarClassName="toolbarClassName"
-                          wrapperClassName="wrapperClassName"
-                          editorClassName="editorClassName"
-                          editorState={editorState}
-                          toolbar={toolbarOptions}
-                          onEditorStateChange={handleEditorChange}
-                          wrapperStyle={{
-                            border: "1px solid #ebebeb",
-                            overflow: "hidden",
-                          }}
-                          editorStyle={{
-                            height: "200px",
-                            overflow: "hidden",
-                            padding: "20px",
-                          }}
-                          placeholder="Please Type Your Message"
-                        />
-                      </Form.Item>
-                      <Col span={24}>
-                        <FormItem>
-                          <Button
-                            htmlType="submit"
-                            type="primary"
-                            style={{ marginRight: "1rem" }}
-                            disabled={editorMessage}
-                          >
-                            {" "}
-                            SAVE
-                          </Button>
-                        </FormItem>
-                      </Col>
-                    </Form>
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    </Card>
                   </Col>
-                </>
-              )}
-            </div>
-          </div>
-
-          <Modal
-            visible={previewVisible}
-            onCancel={handleCancel}
-            footer={null}
-            style={{
-              maxWidth: "90vw",
-              maxHeight: "90vh",
-              width: imageData ? `${imageData.width}px` : "auto",
-              height: imageData ? `${imageData.height}px` : "auto",
-              padding: "10px",
-            }}
-          >
-            <Form
-              form={formPreview}
-              onFinish={() => handleSendTemplate(imageData)}
-            >
-              <Form.Item
-                name="sendTemplate"
-                style={{ display: "flex", flexDirection: "column" }}
-              >
-                {imageData && (
-                  <img
-                    src={imageData}
-                    alt="preview"
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "100%",
-                      width: "auto",
-                      height: "auto",
-                    }}
-                  />
+                  <Col sm={24} md={14} lg={14}>
+                    <Card className="birthdayPreviewDiv">
+                      <Form layout="vertical">
+                        {isDefaultTemplateSelected === "2" ? (
+                          <Col span={24}>
+                            <Form.Item
+                              name="logo"
+                              className="uploadLogo"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Please Upload the Template",
+                                },
+                              ]}
+                            >
+                              <div
+                                style={{
+                                  border: "dashed #B9B9B9",
+                                  borderWidth: "thin",
+                                  borderRadius: "4px",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  width: "300px",
+                                }}
+                              >
+                                <input
+                                  style={{
+                                    display: "none",
+                                  }}
+                                  type="file"
+                                  id="logo"
+                                  name="logo"
+                                  ref={imgRef}
+                                  onChange={(e) => handleChangeCustom(e)}
+                                />
+                                <>
+                                  <Button
+                                    onClick={(e) => handleClick(e)}
+                                    style={{
+                                      width: "60px",
+                                      height: "50px",
+                                      margin: "15px",
+                                    }}
+                                  >
+                                    <PlusCircleOutlined
+                                      style={{
+                                        display: "flex",
+                                        flexDirection: "column-reverse",
+                                        alignItems: "center",
+                                      }}
+                                    />
+                                    <span
+                                      style={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        marginRight: "8px",
+                                      }}
+                                    >
+                                      Upload
+                                    </span>
+                                  </Button>
+                                  <p
+                                    style={{
+                                      fontWeight: "400",
+                                      fontSize: "13px",
+                                      lineHeight: "19px",
+                                      marginLeft: "5px",
+                                      marginTop: "10px",
+                                    }}
+                                  >
+                                    Upload logo. Use the 800 kb size image. PNG
+                                    or JPEG file format accepted
+                                  </p>
+                                </>
+                              </div>
+                              {isBigFile &&
+                                message.error(
+                                  "File size must be less than 800Kb."
+                                )}
+                            </Form.Item>
+                          </Col>
+                        ) : (
+                          <>
+                            <Col span={24}>
+                              <Divider orientation="left" orientationMargin={0}>
+                                Layout
+                              </Divider>
+                            </Col>
+                            <Col span={24}>
+                              <Form.Item name="selectLayout">
+                                <Button type="" onClick={showDrawer}>
+                                  Choose Template
+                                </Button>
+                                <Drawer
+                                  style={{ padding: "0px" }}
+                                  width={220}
+                                  title="Select Template"
+                                  placement="right"
+                                  onClose={onClose}
+                                  open={open}
+                                >
+                                  {templates.map((template) => (
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                      }}
+                                      key={template.id}
+                                      onClick={() =>
+                                        handleTemplateClick(template)
+                                      }
+                                    >
+                                      <img
+                                        style={{
+                                          width: "70%",
+                                          border: "5px solid grey",
+                                        }}
+                                        src={template.image}
+                                        alt={template.name}
+                                      />
+                                      <h3>{template.name}</h3>
+                                    </div>
+                                  ))}
+                                </Drawer>
+                              </Form.Item>
+                            </Col>
+                            <Col
+                              span={24}
+                              style={{ display: "flex", width: "100%" }}
+                            >
+                              <Form.Item
+                                className="auto"
+                                label="Select Employee"
+                                name="SelectedEmp"
+                              >
+                                <AutoComplete
+                                  className="autocomplete"
+                                  options={optionsEmployee}
+                                  style={{
+                                    width: 300,
+                                  }}
+                                  onSelect={onSelect}
+                                  onSearch={onSearch}
+                                  onBlur={onBlur}
+                                  size="large"
+                                  placeholder="Enter Name"
+                                />
+                              </Form.Item>
+                            </Col>
+                            <Col span={24}>
+                              <FormItem
+                                label="Select Image"
+                                name="UploadEmpImage"
+                              >
+                                <div className="idpage">
+                                  <div className="input-with-clear">
+                                    <Input
+                                      type="file"
+                                      accept="application/pdf"
+                                      id="upload"
+                                      name="upload"
+                                      style={{
+                                        display: "flex",
+                                        width: "300px",
+                                      }}
+                                      onChange={handleChange}
+                                    />
+                                    {file && (
+                                      <button
+                                        className="clear-btn"
+                                        onClick={handleClear}
+                                      >
+                                        X
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              </FormItem>
+                            </Col>
+                          </>
+                        )}
+                      </Form>
+                    </Card>
+                  </Col>
+                </Row>
+                <Col span={24} style={{ margin: "10px" }}>
+                  <FormItem>
+                    {layout === "3" || layout === "4" ? (
+                      <Button
+                        htmlType="submit"
+                        type="primary"
+                        style={{ marginRight: "1rem" }}
+                        onClick={handlePreviewClick}
+                        disabled={isDisablePreview}
+                      >
+                        {" "}
+                        Preview
+                      </Button>
+                    ) : (
+                      <Button
+                        htmlType="submit"
+                        type="primary"
+                        style={{ marginRight: "1rem" }}
+                        onClick={handlePreviewClick}
+                        // disabled={isDisablePreview}
+                      >
+                        {" "}
+                        Preview
+                      </Button>
+                    )}
+                  </FormItem>
+                </Col>
+                {showMessageContent && (
+                  <>
+                    <Col xs={24} sm={24} md={24}>
+                      <Form form={form} onFinish={handleOnFinish}>
+                        <Form.Item label="" name="message">
+                          <Editor
+                            toolbarClassName="toolbarClassName"
+                            wrapperClassName="wrapperClassName"
+                            editorClassName="editorClassName"
+                            editorState={editorState}
+                            toolbar={toolbarOptions}
+                            onEditorStateChange={handleEditorChange}
+                            wrapperStyle={{
+                              border: "1px solid #ebebeb",
+                              overflow: "hidden",
+                            }}
+                            editorStyle={{
+                              height: "200px",
+                              overflow: "hidden",
+                              padding: "20px",
+                            }}
+                            placeholder="Please Type Your Message"
+                          />
+                        </Form.Item>
+                        <Col span={24}>
+                          <FormItem>
+                            <Button
+                              htmlType="submit"
+                              type="primary"
+                              style={{ marginRight: "1rem" }}
+                              disabled={editorMessage}
+                            >
+                              {" "}
+                              SAVE
+                            </Button>
+                          </FormItem>
+                        </Col>
+                      </Form>
+                    </Col>
+                  </>
                 )}
-              </Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ width: "auto", marginTop: "10px" }}
+              </div>
+            </div>
+
+            <Modal
+              visible={previewVisible}
+              onCancel={handleCancel}
+              footer={null}
+              style={{
+                maxWidth: "90vw",
+                maxHeight: "90vh",
+                width: imageData ? `${imageData.width}px` : "auto",
+                height: imageData ? `${imageData.height}px` : "auto",
+                padding: "10px",
+              }}
+            >
+              <Form
+                form={formPreview}
+                onFinish={() => handleSendTemplate(imageData)}
               >
-                SEND TEMPLATE
-              </Button>
-            </Form>
-          </Modal>
-        </Card>
-      )}
+                <Form.Item
+                  name="sendTemplate"
+                  style={{ display: "flex", flexDirection: "column" }}
+                >
+                  {imageData && (
+                    <img
+                      src={imageData}
+                      alt="preview"
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                        width: "auto",
+                        height: "auto",
+                      }}
+                    />
+                  )}
+                </Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{ width: "auto", marginTop: "10px" }}
+                >
+                  SEND TEMPLATE
+                </Button>
+              </Form>
+            </Modal>
+          </Card>
+        )
+        //   <>
+        //     <Card
+        //     // style={{
+        //     //   borderRadius: "5px",
+        //     //   marginBottom: "25px",
+        //     //   width: "90%",
+        //     // }}
+        //     >
+        //       <div>
+        //         <Col>
+        //           <p>System Award</p>
+        //         </Col>
+        //         <Col
+        //           className="cardTemplate"
+        //           style={{
+        //             display: "flex",
+        //             justifyContent: "space-evenly",
+        //             cursor: "pointer",
+        //           }}
+        //         >
+        //           {awardTypes.map((award) => (
+        //             <div
+        //               key={award.type}
+        //               onClick={() => selectAward(award.type)}
+        //               style={{
+        //                 animation: "slidein 1s forwards",
+        //                 display: "flex",
+        //                 flexDirection: "column",
+        //                 alignItems: "center",
+        //               }}
+        //             >
+        //               <img
+        //                 className="birthdaytemplateImg"
+        //                 src={award.imgSrc}
+        //                 style={
+        //                   award.type === "Add Template"
+        //                     ? {
+        //                         width: "226px",
+        //                         height: "92px",
+        //                         borderRadius: "4px",
+        //                       }
+        //                     : {}
+        //                 }
+        //               />
+        //               <p>{award.type}</p>
+        //             </div>
+        //           ))}
+        //         </Col>
+        //       </div>
+        //     </Card>
+        //   </>
+        // ) : (
+        //   <Card
+        //   // style={{
+        //   //   borderRadius: "5px",
+        //   //   marginBottom: "25px",
+        //   //   width: "90%",
+        //   // }}
+        //   >
+        //     <div>
+        //       <Col style={{ display: "flex" }} span={24}>
+        //         <Col
+        //           span={12}
+        //           onClick={BackToTemplate}
+        //           style={{ cursor: "pointer" }}
+        //         >
+        //           <ArrowLeftOutlined />
+        //           Back
+        //         </Col>
+        //       </Col>
+        //       <div>
+        //         <Divider orientation="left" orientationMargin={0}>
+        //           {selectedAward}
+        //         </Divider>
+        //         <Form>
+        //           <Col span={24}>
+        //             <Form.Item name="select">
+        //               <Radio.Group
+        //                 style={{ width: "100%" }}
+        //                 options={optionImage}
+        //                 defaultValue={selectedOptions}
+        //                 onChange={radioChange}
+        //               />
+        //             </Form.Item>
+        //           </Col>
+        //         </Form>
+
+        //         <Row gutter={[16, 16]}>
+        //           <Col sm={24} md={10} lg={10}>
+        //             <Card className="birthdayPreviewDiv">
+        //               <Divider orientation="left" orientationMargin={0}>
+        //                 Preview
+        //                 <Popover content={contentPreview}>
+        //                   <InfoCircleOutlined className="informationLogo" />
+        //                 </Popover>
+        //               </Divider>
+
+        //               <>
+        //                 <div
+        //                   className="previewDiv"
+        //                   style={{
+        //                     // border: "1px solid black",
+        //                     backgroundColor: layout ? "" : "#c9c6c6",
+        //                     display: "flex",
+        //                     alignItems: "center",
+        //                     justifyContent: "center",
+        //                     color: "#fff",
+        //                     height: layout === "2" ? " " : "",
+        //                   }}
+        //                 >
+        //                   {layout === "1" ? (
+        //                     <div style={{ display: "flex" }}>
+        //                       <img
+        //                         src={selectedTemplate?.image}
+        //                         style={{ width: "100%", height: "100%" }}
+        //                       />
+        //                       <h2
+        //                         style={{
+        //                           position: "absolute",
+        //                           top: "55%",
+        //                           left: "50%",
+        //                           transform: "translate(-50%, -50%)",
+        //                           fontSize: "10px",
+        //                           wordWrap: "break-word",
+        //                           maxWidth: "45%",
+        //                           textAlign: "center",
+        //                         }}
+        //                       >
+        //                         {templatePreview?.[0]?.message?.blocks?.[0]?.text}
+        //                       </h2>
+        //                       <h2
+        //                         style={{
+        //                           position: "absolute",
+        //                           top: "40%",
+        //                           left: "50%",
+        //                           transform: "translate(-50%, -50%)",
+        //                           fontWeight: "bold",
+        //                           fontSize: "10px",
+        //                           color: "black",
+        //                         }}
+        //                       >
+        //                         {emp}
+        //                       </h2>
+        //                       <div
+        //                         style={{
+        //                           position: "absolute",
+        //                           top: "45%",
+        //                           left: "50%",
+        //                           transform: "translate(-50%, -50%)",
+        //                           fontWeight: "bold",
+        //                           fontSize: "12px",
+        //                           color: "black",
+        //                         }}
+        //                       >
+        //                         {file && (
+        //                           <img
+        //                             style={{ width: "20px", height: "20px" }}
+        //                             src={file}
+        //                             alt="Uploaded Image"
+        //                           />
+        //                         )}
+        //                       </div>
+        //                       <div
+        //                         style={{
+        //                           position: "absolute",
+        //                           top: "32%",
+        //                           left: "50%",
+        //                           transform: "translate(-50%, -50%)",
+        //                           fontWeight: "bold",
+        //                           fontSize: "12px",
+        //                           color: "black",
+        //                         }}
+        //                       ></div>
+        //                     </div>
+        //                   ) : layout === "2" && imageUrl ? (
+        //                     <>
+        //                       <div
+        //                         className="capture"
+        //                         style={{ position: "relative" }}
+        //                       >
+        //                         <img
+        //                           src={imageUrl}
+        //                           style={{ width: "100%", height: "100%" }}
+        //                         />
+        //                       </div>
+        //                       <div style={{ color: "green" }}>
+        //                         {" "}
+        //                         <DeleteOutlined
+        //                           onClick={() => handleDeleteClick(imageUrl)}
+        //                         />
+        //                       </div>
+        //                     </>
+        //                   ) : (
+        //                     <div
+        //                       style={{
+        //                         width: "100%",
+        //                         height: "100px",
+        //                         backgroundColor: "grey",
+        //                       }}
+        //                     >
+        //                       <div
+        //                         style={{
+        //                           position: "relative",
+        //                           top: "50%",
+        //                           transform: "translateY(-50%)",
+        //                         }}
+        //                       >
+        //                         <span
+        //                           style={{
+        //                             color: "white",
+        //                             textAlign: "center",
+        //                             display: "block",
+        //                           }}
+        //                         >
+        //                           No image Uploaded
+        //                         </span>
+        //                       </div>
+        //                     </div>
+        //                   )}
+        //                 </div>
+        //               </>
+        //             </Card>
+        //           </Col>
+        //           <Col sm={24} md={14} lg={14}>
+        //             <Card className="birthdayPreviewDiv">
+        //               <Form layout="vertical">
+        //                 {isDefaultTemplateSelected === "2" ? (
+        //                   <Col span={24}>
+        //                     <Form.Item
+        //                       name="logo"
+        //                       className="uploadLogo"
+        //                       rules={[
+        //                         {
+        //                           required: true,
+        //                           message: "Please Upload the Template",
+        //                         },
+        //                       ]}
+        //                     >
+        //                       <div
+        //                         style={{
+        //                           border: "dashed #B9B9B9",
+        //                           borderWidth: "thin",
+        //                           borderRadius: "4px",
+        //                           display: "flex",
+        //                           justifyContent: "center",
+        //                           width: "300px",
+        //                         }}
+        //                       >
+        //                         <input
+        //                           style={{
+        //                             display: "none",
+        //                           }}
+        //                           type="file"
+        //                           id="logo"
+        //                           name="logo"
+        //                           ref={imgRef}
+        //                           onChange={(e) => handleChangeCustom(e)}
+        //                         />
+        //                         <>
+        //                           <Button
+        //                             onClick={(e) => handleClick(e)}
+        //                             style={{
+        //                               width: "60px",
+        //                               height: "50px",
+        //                               margin: "15px",
+        //                             }}
+        //                           >
+        //                             <PlusCircleOutlined
+        //                               style={{
+        //                                 display: "flex",
+        //                                 flexDirection: "column-reverse",
+        //                                 alignItems: "center",
+        //                               }}
+        //                             />
+        //                             <span
+        //                               style={{
+        //                                 display: "flex",
+        //                                 justifyContent: "center",
+        //                                 marginRight: "8px",
+        //                               }}
+        //                             >
+        //                               Upload
+        //                             </span>
+        //                           </Button>
+        //                           <p
+        //                             style={{
+        //                               fontWeight: "400",
+        //                               fontSize: "13px",
+        //                               lineHeight: "19px",
+        //                               marginLeft: "5px",
+        //                               marginTop: "10px",
+        //                             }}
+        //                           >
+        //                             Upload logo. Use the 800 kb size image. PNG or
+        //                             JPEG file format accepted
+        //                           </p>
+        //                         </>
+        //                       </div>
+        //                       {isBigFile &&
+        //                         message.error(
+        //                           "File size must be less than 800Kb."
+        //                         )}
+        //                     </Form.Item>
+        //                   </Col>
+        //                 ) : (
+        //                   <>
+        //                     <Col span={24}>
+        //                       <Divider orientation="left" orientationMargin={0}>
+        //                         Layout
+        //                       </Divider>
+        //                     </Col>
+        //                     <Col span={24}>
+        //                       <Form.Item name="selectLayout">
+        //                         <Button type="" onClick={showDrawer}>
+        //                           Choose Template
+        //                         </Button>
+        //                         <Drawer
+        //                           style={{ padding: "0px" }}
+        //                           width={220}
+        //                           title="Select Template"
+        //                           placement="right"
+        //                           onClose={onClose}
+        //                           open={open}
+        //                         >
+        //                           {templates.map((template) => (
+        //                             <div
+        //                               style={{
+        //                                 display: "flex",
+        //                                 flexDirection: "column",
+        //                                 alignItems: "center",
+        //                               }}
+        //                               key={template.id}
+        //                               onClick={() =>
+        //                                 handleTemplateClick(template)
+        //                               }
+        //                             >
+        //                               <img
+        //                                 style={{
+        //                                   width: "70%",
+        //                                   border: "5px solid grey",
+        //                                 }}
+        //                                 src={template.image}
+        //                                 alt={template.name}
+        //                               />
+        //                               <h3>{template.name}</h3>
+        //                             </div>
+        //                           ))}
+        //                         </Drawer>
+        //                       </Form.Item>
+        //                     </Col>
+        //                     <Col
+        //                       span={24}
+        //                       style={{ display: "flex", width: "100%" }}
+        //                     >
+        //                       <Form.Item
+        //                         className="auto"
+        //                         label="Select Employee"
+        //                         name="SelectedEmp"
+        //                       >
+        //                         <AutoComplete
+        //                           className="autocomplete"
+        //                           options={optionsEmployee}
+        //                           style={{
+        //                             width: 300,
+        //                           }}
+        //                           onSelect={onSelect}
+        //                           onSearch={onSearch}
+        //                           onBlur={onBlur}
+        //                           size="large"
+        //                           placeholder="Enter Name"
+        //                         />
+        //                       </Form.Item>
+        //                     </Col>
+        //                     <Col span={24}>
+        //                       <FormItem
+        //                         label="Select Image"
+        //                         name="UploadEmpImage"
+        //                       >
+        //                         <div className="idpage">
+        //                           <div className="input-with-clear">
+        //                             <Input
+        //                               type="file"
+        //                               accept="application/pdf"
+        //                               id="upload"
+        //                               name="upload"
+        //                               style={{ display: "flex", width: "300px" }}
+        //                               onChange={handleChange}
+        //                             />
+        //                             {file && (
+        //                               <button
+        //                                 className="clear-btn"
+        //                                 onClick={handleClear}
+        //                               >
+        //                                 X
+        //                               </button>
+        //                             )}
+        //                           </div>
+        //                         </div>
+        //                       </FormItem>
+        //                     </Col>
+        //                   </>
+        //                 )}
+        //               </Form>
+        //             </Card>
+        //           </Col>
+        //         </Row>
+        //         <Col span={24} style={{ margin: "10px" }}>
+        //           <FormItem>
+        //             {layout === "3" || layout === "4" ? (
+        //               <Button
+        //                 htmlType="submit"
+        //                 type="primary"
+        //                 style={{ marginRight: "1rem" }}
+        //                 onClick={handlePreviewClick}
+        //                 disabled={isDisablePreview}
+        //               >
+        //                 {" "}
+        //                 Preview
+        //               </Button>
+        //             ) : (
+        //               <Button
+        //                 htmlType="submit"
+        //                 type="primary"
+        //                 style={{ marginRight: "1rem" }}
+        //                 onClick={handlePreviewClick}
+        //                 // disabled={isDisablePreview}
+        //               >
+        //                 {" "}
+        //                 Preview
+        //               </Button>
+        //             )}
+        //           </FormItem>
+        //         </Col>
+        //         {showMessageContent && (
+        //           <>
+        //             <Col xs={24} sm={24} md={24}>
+        //               <Form form={form} onFinish={handleOnFinish}>
+        //                 <Form.Item label="" name="message">
+        //                   <Editor
+        //                     toolbarClassName="toolbarClassName"
+        //                     wrapperClassName="wrapperClassName"
+        //                     editorClassName="editorClassName"
+        //                     editorState={editorState}
+        //                     toolbar={toolbarOptions}
+        //                     onEditorStateChange={handleEditorChange}
+        //                     wrapperStyle={{
+        //                       border: "1px solid #ebebeb",
+        //                       overflow: "hidden",
+        //                     }}
+        //                     editorStyle={{
+        //                       height: "200px",
+        //                       overflow: "hidden",
+        //                       padding: "20px",
+        //                     }}
+        //                     placeholder="Please Type Your Message"
+        //                   />
+        //                 </Form.Item>
+        //                 <Col span={24}>
+        //                   <FormItem>
+        //                     <Button
+        //                       htmlType="submit"
+        //                       type="primary"
+        //                       style={{ marginRight: "1rem" }}
+        //                       disabled={editorMessage}
+        //                     >
+        //                       {" "}
+        //                       SAVE
+        //                     </Button>
+        //                   </FormItem>
+        //                 </Col>
+        //               </Form>
+        //             </Col>
+        //           </>
+        //         )}
+        //       </div>
+        //     </div>
+
+        //     <Modal
+        //       visible={previewVisible}
+        //       onCancel={handleCancel}
+        //       footer={null}
+        //       style={{
+        //         maxWidth: "90vw",
+        //         maxHeight: "90vh",
+        //         width: imageData ? `${imageData.width}px` : "auto",
+        //         height: imageData ? `${imageData.height}px` : "auto",
+        //         padding: "10px",
+        //       }}
+        //     >
+        //       <Form
+        //         form={formPreview}
+        //         onFinish={() => handleSendTemplate(imageData)}
+        //       >
+        //         <Form.Item
+        //           name="sendTemplate"
+        //           style={{ display: "flex", flexDirection: "column" }}
+        //         >
+        //           {imageData && (
+        //             <img
+        //               src={imageData}
+        //               alt="preview"
+        //               style={{
+        //                 maxWidth: "100%",
+        //                 maxHeight: "100%",
+        //                 width: "auto",
+        //                 height: "auto",
+        //               }}
+        //             />
+        //           )}
+        //         </Form.Item>
+        //         <Button
+        //           type="primary"
+        //           htmlType="submit"
+        //           style={{ width: "auto", marginTop: "10px" }}
+        //         >
+        //           SEND TEMPLATE
+        //         </Button>
+        //       </Form>
+        //     </Modal>
+        //   </Card>
+      }
     </div>
   );
 }

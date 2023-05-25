@@ -30,6 +30,19 @@
   min-height: 100vh;
 }
 
+.addTemplate.ant-btn{
+  background: #045477;
+  border-radius: 5px;
+  width: 250px;
+  height: 40px;
+  color: #FFFFFF;
+  font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 15px;
+
+}
+
 /* -------------------update-card--------------------- */
 /* .updatepsw .ant-card-head{
         background: #1963A6;

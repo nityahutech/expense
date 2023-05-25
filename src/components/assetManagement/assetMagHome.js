@@ -5,6 +5,7 @@ import AssetContext from "../../contexts/AssetContext";
 import AddAsset from "./AddAsset";
 import AssetList from "./AssetList";
 import RequestContext from "../../contexts/RequestContext";
+import AssetConfig from "./AssetConfig";
 
 function AssetMagHome(props) {
   const [repairLaptopData, setRepairLaptopData] = useState([]);
@@ -20,20 +21,24 @@ function AssetMagHome(props) {
     setLaptopAllot(props.refresh);
   }, [props.roleView]);
 
-
   const getRepairData = async () => {
-    setLoading(true)
-    let repairData = await RequestContext.getAllAsset(
+    setLoading(true);
+    let repairData = await RequestContext
+      .getAllAsset
       // currentUser.uid,
-    );
-    console.log('repairData', repairData)
-    let filterType = repairData.filter((type) => { return type?.type === 'Laptop Upgrade' || type?.type === 'Laptop Repair' || type?.type === 'Laptop Return' })
-    console.log('repairData', filterType)
+      ();
+    console.log("repairData", repairData);
+    let filterType = repairData.filter((type) => {
+      return (
+        type?.type === "Laptop Upgrade" ||
+        type?.type === "Laptop Repair" ||
+        type?.type === "Laptop Return"
+      );
+    });
+    console.log("repairData", filterType);
     setRepairLaptopData(filterType);
-    setLoading(false)
+    setLoading(false);
   };
-
-
 
   return (
     <div className="hrtab">
@@ -53,6 +58,9 @@ function AssetMagHome(props) {
           </Tabs.TabPane>
           <Tabs.TabPane tab="Add Asset" key="3">
             <AddAsset />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Configuration" key="4">
+            <AssetConfig />
           </Tabs.TabPane>
         </>
       </Tabs>

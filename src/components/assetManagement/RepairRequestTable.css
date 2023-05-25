@@ -231,6 +231,23 @@
   display: block !important;
 }
 
+.configCard .ant-card-head-title {
+  font-weight: bold;
+  line-height: 19px;
+  text-transform: uppercase;
+  font-size: 17px;}
+
+  .configCard .ant-card-head {
+    border-radius: 10px 10px 0px 0px;
+    background: #1963A6;
+    color: #ffffff;}
+
+.configCard.ant-card{
+  width: 70%;
+  height: auto;
+  border-radius: 5px
+}
+
 .edit{
   color: #ffffff;
   display: none; 
@@ -240,3 +257,16 @@
   right: 10px;
   top: 10px;
 }
+
+.addConfig.ant-btn{
+  background-color: rgb(25, 99, 166);
+    border-color: rgb(25, 99, 166);
+    width: 119px;
+    color: #fff;
+    margin-top: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 4px;
+}
+
+

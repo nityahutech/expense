@@ -9,7 +9,7 @@ import {
   Affix,
   notification,
 } from "antd";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 import {
   LoadingOutlined,
   CheckCircleFilled,
@@ -29,91 +29,51 @@ const { Step } = Steps;
 const RegistrationPage = (props) => {
   const [progress, setProgress] = useState(0);
   const [fileName, setFileName] = useState(null);
-  const [next, setNext] = useState(1);
+  const [domain, setDomain] = useState(null);
+  const [parameters, setParameters] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+  const [compData, setCompData] = useState({});
   const [activetab, setActivetab] = useState("1");
   const [isStepOneInvalid, setIsStepOneInvalid] = useState(false);
   const [isStepSecondInvalid, setIsStepFourInvalid] = useState(false);
-  const [form] = Form.useForm();
+  const [companyForm] = Form.useForm();
+  const [employeeForm] = Form.useForm();
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const params = useParams();
   const progressBar = (value) => {
+    console.log("valuessprogress", value);
     if (progress == 0) {
-      form.submit();
-      setNext(value);
+      companyForm.submit();
+      // setProgress(value);
       return;
     }
     setProgress(value);
   };
 
-  const registerCompany = async (data) => {
-    console.log("datttaa", data);
-    let orgcode = await CompanyProContext.getOrgId();
-    let temp1 = localStorage.getItem("OrgAccess");
-    let accessList = JSON.parse(temp1);
-    let temp = localStorage.getItem("costCenters");
-    let costCenters = temp == "[]" ? [] : JSON.parse(temp);
-    let temp2 = localStorage.getItem("OrgHier");
-    let orgHier = temp2 == "[]" ? null : JSON.parse(temp2);
-    // if (orgHier != null) {
+  useEffect(() => {
+    console.log(window.location.href, "windowwwww");
+    let params = {};
+    window.location.href
+      .split("?")[1]
+      .split("&")
+      .map((x) => {
+        let temp = x.split("=");
+        params = {
+          ...params,
+          [`${temp[0]}`]: temp[1],
+        };
+      });
+    console.log({ params });
+    setParameters(params);
+  }, []);
 
-    // }
-    const value = {
-      regCompName: data.regCompName,
-      regOffice: {
-        addLine1: data.addLine1,
-        addLine2: data.addLine2,
-        city: data.city,
-        state: data.state,
-        country: data.country,
-        pincode: data.pincode,
-      },
-      precode: data.preCode,
-      corpOffice: {},
-      cinNumber: data.cinNumber,
-      gst: data.gst || null,
-      domain: data.domain,
-      prefix: data.prefix || "",
-      phone: data.phone,
-      accessList: [],
-      address: [],
-      secretary: [],
-      director: [],
-      auditor: [],
-      bank: [],
-      costCenters: costCenters == null ? [] : costCenters,
-      departments:
-        orgHier == null
-          ? [
-              {
-                name: "Default",
-                description: "Default",
-                type: "Business Unit",
-                parent: null,
-              },
-              {
-                name: "Default",
-                description: "Default",
-                type: "Division",
-                parent: "Default",
-              },
-              {
-                name: "Default",
-                description: "Default",
-                type: "Department",
-                parent: "Default/Default",
-              },
-              {
-                name: "Default",
-                description: "Default",
-                type: "Team",
-                parent: "Default/Default/Default",
-              },
-            ]
-          : orgHier,
-      status: "Deactivated",
-      reason: "First Activation Incomplete",
-    };
-    CompanyProContext.createCompInfo(orgcode, value, fileName, accessList)
+  console.log(parameters.email, domain);
+
+  const registerCompany = async (empData) => {
+    console.log("datttgaa", compData, empData, params);
+
+    CompanyProContext.createCompInfo(compData, empData, fileName)
       .then((response) => {
         notification.open({
           message: "Creating Company",
@@ -139,7 +99,8 @@ const RegistrationPage = (props) => {
       okText: "Yes",
       okType: "danger",
       onOk: () => {
-        form.resetFields();
+        companyForm.resetFields();
+        employeeForm.resetFields();
         setIsStepOneInvalid(false);
         setIsStepFourInvalid(false);
         navigate("/register/company", { replace: false });
@@ -147,9 +108,9 @@ const RegistrationPage = (props) => {
     });
   };
 
-  const saveOrgDetails = (values, filename, imageurl) => {
-    setProgress(next);
-  };
+  // const saveOrgDetails = (values, filename, imageurl) => {
+  //   setProgress(next);
+  // };
 
   return (
     <>
@@ -188,13 +149,23 @@ const RegistrationPage = (props) => {
         {progress == 0 ? (
           <RegisterCompany
             // registerCompany={registerCompany}
+            setProgress={setProgress}
             fileName={fileName}
-            form={form}
-
-            // setIsStepOneInvalid={setIsStepOneInvalid}
+            setFileName={setFileName}
+            imageUrl={imageUrl}
+            setImageUrl={setImageUrl}
+            form={companyForm}
+            setCompData={setCompData}
+            setIsStepOneInvalid={setIsStepOneInvalid}
+            officialEmail={parameters.email}
           />
         ) : (
-          <RegisterEmployee />
+          <RegisterEmployee
+            compData={compData}
+            form={employeeForm}
+            registerCompany={registerCompany}
+            officialEmail={parameters.email}
+          />
         )}
 
         <div
@@ -233,22 +204,23 @@ const RegistrationPage = (props) => {
                 backgroundColor: "rgb(25, 99, 166)",
                 marginRight: "23px",
               }}
-              // htmlType="submit"
-              onClick={async () => {
+              htmlType="submit"
+              onClick={() => {
                 console.log("testtt");
-                if (progress != 1) {
-                  if (progress == 0) {
-                    // console.log("testttt");
-                    setNext(1);
-                    form.submit();
-                    return;
-                  }
-                  setProgress(progress + 1);
+                if (progress == 1) {
+                  console.log("test222");
+                  employeeForm.submit();
 
                   // setIsStepOneInvalid(false);
                 } else {
-                  console.log("test222");
-                  registerCompany();
+                  if (progress == 0) {
+                    console.log("testttt");
+                    // setNext(1);
+                    companyForm.submit();
+                    return;
+                  }
+                  setIsStepOneInvalid(false);
+                  setProgress(1);
                 }
               }}
             >

@@ -14,15 +14,17 @@ import PrefixSelector from "./../PrefixSelector";
 
 const RegisterCompany = (props) => {
   const imgRef = React.useRef(null);
-  const [fileName, setFileName] = useState(props.fileName || null);
-  const [imageUrl, setImageUrl] = useState(props.imageUrl || "");
+  // const [fileName, setFileName] = useState(props.fileName || null);
+  // const [imageUrl, setImageUrl] = useState(props.imageUrl || "");
+  const [domain, setDomain] = useState("");
   const [isBigFile, setIsBigFile] = useState(false);
   const [data, setData] = useState(props.data || {});
   const [form] = Form.useForm();
+  console.log("jdhfjdfdhj", props);
 
   useEffect(() => {
-    setFileName(props.fileName || null);
-    setImageUrl(props.imageUrl || "");
+    props.setFileName(props.fileName);
+    props.setImageUrl(props.imageUrl);
     setIsBigFile(false);
     setData(props.data || {});
   }, [props.data]);
@@ -30,6 +32,15 @@ const RegisterCompany = (props) => {
   useEffect(() => {
     setIsBigFile(false);
   });
+
+  useEffect(() => {
+    console.log("pppppp", { props: JSON.stringify(props) });
+    let temp = props?.officialEmail?.split("@")[1];
+    setDomain(temp);
+    props.form.setFieldsValue({ domain: temp });
+  }, [props]);
+
+  console.log(domain);
 
   const handleClick = () => {
     imgRef.current.click();
@@ -41,27 +52,31 @@ const RegisterCompany = (props) => {
     }
     const fileUploaded = event.target.files[0];
     getBase64(fileUploaded, (url) => {
-      setImageUrl(url);
+      props.setImageUrl(url);
     });
     checkFileSize(fileUploaded.size, fileUploaded);
   };
 
   function checkFileSize(size, fileName) {
     if (Math.round(size / 1024) <= 200) {
-      setFileName(fileName);
+      props.setFileName(fileName);
       setIsBigFile(false);
     } else {
-      setFileName(null);
+      props.setFileName(null);
       setIsBigFile(true);
     }
   }
 
   function onReset() {
     setIsBigFile(false);
-    setFileName(null);
-    setImageUrl("");
+    props.setFileName(null);
+    props.setImageUrl("");
   }
 
+  // var domainName = props.officialEmail.split("@")[1];
+  // setDomain(domainName);
+
+  // console.log("dataaaa", domain);
   // const onFinishFailed = (errorInfo) => {
   //   props.setIsStepOneInvalid(true);
   // };
@@ -93,10 +108,18 @@ const RegisterCompany = (props) => {
           remember: true,
         }}
         autoComplete="off"
+        onFinish={(e) => {
+          props.setCompData(e);
+          props.setProgress(1);
+          props.setIsStepOneInvalid(false);
+        }}
         // onFinish={props.registerCompany}
         // onFinish={(values) => props.changeSave(values, fileName, imageUrl)}
-        // onFinishFailed={onFinishFailed}
+        onFinishFailed={(errorInfo) => {
+          props.setIsStepOneInvalid(true);
+        }}
       >
+        {console.log("comddddd", props.compData)}
         <Row gutter={[24, 8]}>
           {/* <Col xs={22} sm={15} md={8}>
             <Form.Item
@@ -225,21 +248,26 @@ const RegisterCompany = (props) => {
             <Form.Item
               name="domain"
               label="Domain Name"
-              rules={[
-                {
-                  required: true,
-                  message: "Please Enter Domain Name",
-                },
-                {
-                  pattern:
-                    /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/,
-                  message: "Please Enter Valid Name",
-                },
-              ]}
-              initialValue={data?.domain}
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: "Please Enter Domain Name",
+              //   },
+              //   {
+              //     pattern:
+              //       /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/,
+              //     message: "Please Enter Valid Name",
+              //   },
+              // ]}
+              // initialValue={domain}
             >
+              {/* {JSON.stringify(domain)} */}
               <Input
+                readOnly
+                // value={props.domain.toString() || "KJKIHJU"}
+                // value={props?.officialEmail?.split("@")[1]}
                 maxLength={30}
+                type="text"
                 placeholder="Domain Name"
                 style={{
                   border: "1px solid #8692A6",
@@ -492,10 +520,10 @@ const RegisterCompany = (props) => {
                   ref={imgRef}
                   onChange={(e) => handleChange(e)}
                 />
-                {fileName ? (
+                {props.fileName ? (
                   <div className="hoverImgCont">
                     <img
-                      src={imageUrl}
+                      src={props.imageUrl}
                       style={{
                         maxWidth: "170px",
                         height: "100px",

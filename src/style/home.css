@@ -57,7 +57,7 @@
 }
 @media (max-width: 800px) {
   .homeContainer {
-    position: absolute;
+    /* position: absolute; */
     width: 100%;
   }
   .sidecontainer {

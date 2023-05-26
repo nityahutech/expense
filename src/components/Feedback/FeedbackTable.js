@@ -145,7 +145,7 @@ function FeedbackTable(props) {
   return (
     <>
       <Row gutter={[0, 16]}>
-        <Col xs={24} xm={24} md={8}>
+        <Col xs={24} xm={24} md={9}>
           <Input
             key="empSearch"
             className="empSearch"
@@ -156,7 +156,7 @@ function FeedbackTable(props) {
           />
         </Col>
         <Col xs={24} xm={24} md={11}></Col>
-        <Col xs={24} xm={24} md={5}>
+        <Col xs={24} xm={24} md={4}>
           <Button
             className="configSur"
             onClick={() => {

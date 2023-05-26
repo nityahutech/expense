@@ -120,12 +120,12 @@ function TravelManagement(props) {
         status !== "" && (
           <Tag
             style={{
-              width: "84px",
+              width: "100%",
               color: "#000000",
               borderRadius: "10px",
               display: "flex",
               justifyContent: "center",
-              padding: "2px",
+              // padding: "2px",
 
             }}
             className="statusTag"

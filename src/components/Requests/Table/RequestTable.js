@@ -115,7 +115,7 @@ const RequestTable = () => {
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <Tag
                             style={{
-                                width: "20%",
+                                width: "84px",
                                 color: "#000000",
                                 borderRadius: "10px",
                                 display: "flex",

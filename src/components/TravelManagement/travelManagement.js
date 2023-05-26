@@ -115,31 +115,33 @@ function TravelManagement(props) {
       dataIndex: "status",
       key: "status",
       width: 100,
-      align: "left",
+      align: "center",
       render: (_, { status }) =>
         status !== "" && (
-          <Tag
-            style={{
-              width: "100%",
-              color: "#000000",
-              borderRadius: "10px",
-              display: "flex",
-              justifyContent: "center",
-              // padding: "2px",
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Tag
+              style={{
+                width: "84px",
+                color: "#000000",
+                borderRadius: "10px",
+                display: "flex",
+                justifyContent: "center",
+                // padding: "2px",
 
-            }}
-            className="statusTag"
-            color={
-              status === "Approved"
-                ? "rgb(8 231 68 / 75%)"
-                : status === "Pending"
-                  ? "rgb(244 209 105)"
-                  : "#f44336"
-            }
-            key={status}
-          >
-            {status}
-          </Tag>
+              }}
+              className="statusTag"
+              color={
+                status === "Approved"
+                  ? "rgb(8 231 68 / 75%)"
+                  : status === "Pending"
+                    ? "rgb(244 209 105)"
+                    : "#f44336"
+              }
+              key={status}
+            >
+              {status}
+            </Tag>
+          </div>
         ),
     },
     {
@@ -203,7 +205,7 @@ function TravelManagement(props) {
     setTravelDetails(props.travelDetails);
     setDurationArray(props.durationArray);
     setFilterRequest(filteredApprove);
-  }, [props.travelDetails,filteredApprove]);
+  }, [props.travelDetails, filteredApprove]);
 
   useEffect(() => {
     const tempFilteredPending = [];

@@ -105,17 +105,17 @@ function InvoiceTable(props) {
       dataIndex: "status",
       key: "status",
       width: 100,
-      align: "left",
+      align: "center",
       render: (_, { status }) =>
         status !== "" && (
           <Tag
             style={{
-              width: "84px",
+              width: "100%",
               color: "#000000",
               borderRadius: "10px",
               display: "flex",
               justifyContent: "center",
-              padding: "2px",
+              // padding: "2px",
             }}
             className="statusTag"
             color={
@@ -136,7 +136,7 @@ function InvoiceTable(props) {
       dataIndex: "operation",
       key: "operation",
       width: 150,
-      align: "left",
+      align: "center",
       fixed: "right",
       render: (_, record) => (
         <>

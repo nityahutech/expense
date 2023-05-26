@@ -90,11 +90,12 @@ function FeedbackAdmin(props) {
         <Card
           className="feedBackCard"
           style={{
+            // display: "flex",
+            // justifyContent: "center",
             margin: "30px",
             background: "#FFFFFF",
             border: "1px solid #C0C0C0",
             borderRadius: "5px",
-            height: "902px",
           }}
         >
           <h5

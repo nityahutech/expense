@@ -1,9 +1,9 @@
-.feedBackCard .ant-card-body{
+/* .feedBackCard .ant-card-body{
     padding: 25px;
-}
+} */
 
 .empSearch.ant-input-affix-wrapper{
-    width: 300px; 
+    /* width: 300px;  */
     background: #FFFFFF;
     border: 1px solid #C5C5C5;
     border-radius: 5px;
@@ -20,7 +20,7 @@
 font-weight: 400;
 font-size: 13px;
 line-height: 15px;
-/* margin-left: 28px; */
+margin-left: 28px;
 }
 
 .feebBackTable.ant-table-wrapper{
@@ -38,17 +38,18 @@ line-height: 15px;
   .comunication.ant-btn{
     background: #045477;
     border-radius: 5px;
-    width: 250px;
+    min-width: 250px;
     height: 40px;
     color: #FFFFFF;
     font-style: normal;
 font-weight: 400;
 font-size: 20px;
 line-height: 15px;
+/* margin-left: 10px; */
 
 }
 
-.heading:after {
+/* .heading:after {
     content: "";
     position: absolute;
     top: 6rem;
@@ -58,9 +59,9 @@ line-height: 15px;
     width: 840px;
     height: 0.5em;
     border-top: 0.5px solid #C0C0C0;
-   }
+   } */
 
-  .otherHeading:after {
+  /* .otherHeading:after {
     content: "";
     position: absolute;
     top: 6rem; 
@@ -70,7 +71,7 @@ line-height: 15px;
     width: 900px;
     height: 0.5em;
     border-top: 0.5px solid #C0C0C0;
-  } 
+  }  */
 
   .que1 .ant-form-item-label > label{
     font-style: normal;
@@ -482,4 +483,6 @@ text-align: center;
       
     }
   }
+
+  
  

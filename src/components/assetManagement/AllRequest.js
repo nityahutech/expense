@@ -70,7 +70,7 @@ function AllRequest(props) {
       let result = filteredApprove.filter((ex) =>
         ex?.date?.toLowerCase().includes(search?.toLowerCase()) ||
         ex?.type?.toLowerCase().includes(search?.toLowerCase()) ||
-        ex?.name?.toLowerCase().includes(search?.toLowerCase()) 
+        ex?.name?.toLowerCase().includes(search?.toLowerCase())
       )
       console.log('formData', result)
       const modifiedFilterRequest = [...result];
@@ -115,30 +115,32 @@ function AllRequest(props) {
       title: "Status",
       key: "Status",
       width: 120,
-      align: "left",
+      align: "center",
       render: (_, { status }) =>
         status !== "" && (
-          <Tag
-            style={{
-              width: "84px",
-              color: "#000000",
-              borderRadius: "10px",
-              display: "flex",
-              justifyContent: "center",
-              padding: "2px",
-            }}
-            className="statusTag"
-            color={
-              status === "Approved"
-                ? "rgb(8 231 68 / 75%)"
-                : status === "Reject"
-                  ? "#f44336"
-                  : "rgb(244 209 105)"
-            }
-            key={status}
-          >
-            {status}
-          </Tag>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Tag
+              style={{
+                width: "84px",
+                color: "#000000",
+                borderRadius: "10px",
+                display: "flex",
+                justifyContent: "center",
+                padding: "2px",
+              }}
+              className="statusTag"
+              color={
+                status === "Approved"
+                  ? "rgb(8 231 68 / 75%)"
+                  : status === "Reject"
+                    ? "#f44336"
+                    : "rgb(244 209 105)"
+              }
+              key={status}
+            >
+              {status}
+            </Tag>
+          </div>
         ),
     },
     {

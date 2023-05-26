@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Card,
@@ -54,8 +54,8 @@ function ConfigSurvey(props) {
               i === 1
                 ? { width: "200px" }
                 : i === addInputField
-                ? { width: "200px" }
-                : { width: "200px", marginLeft: "55px" }
+                  ? { width: "200px" }
+                  : { width: "200px", marginLeft: "55px" }
             }
           />
         </Form.Item>
@@ -64,7 +64,18 @@ function ConfigSurvey(props) {
 
     return inputField;
   };
-  //get data confiurations
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  const isMobile = screenWidth < 600;
+  const tabPosition = isMobile ? 'top' : 'left';
   return (
     <>
       {/* {role ? ( */}
@@ -110,11 +121,11 @@ function ConfigSurvey(props) {
         </h5>
         <Divider style={{ border: "0.5px inset rgb(240 232 232)" }} />
         <div className="responsive-tabs">
-          <Tabs tabPosition="left" className="feedbackTabs">
+          <Tabs tabPosition={tabPosition} className="feedbackTabs">
             <Tabs.TabPane tab="Survey Questions" key="1">
-              <div style={{}}>
-                <Row style={{ marginTop: "30px" }} gutter={[40, 16]}>
-                  <Col xs={24} sm={24} md={8}>
+              <div >
+                <Row gutter={[40, 16]}>
+                  <Col xs={24} sm={24} md={12} lg={12} xl={8}>
                     <Button
                       className="comunication"
                       onClick={() => {
@@ -124,7 +135,7 @@ function ConfigSurvey(props) {
                       Communication Skills
                     </Button>
                   </Col>
-                  <Col xs={24} sm={24} md={8}>
+                  <Col xs={24} sm={24} md={12} lg={12} xl={8}>
                     <Button
                       className="comunication"
                       onClick={() => {
@@ -134,7 +145,7 @@ function ConfigSurvey(props) {
                       Technical Skills
                     </Button>
                   </Col>
-                  <Col xs={24} sm={24} md={8}>
+                  <Col xs={24} sm={24} md={12} lg={12} xl={8}>
                     <Button
                       className="comunication"
                       onClick={() => {

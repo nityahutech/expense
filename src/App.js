@@ -234,7 +234,7 @@ function App() {
           /> */}
           <Route
             path="/ConfigSurvey"
-            element={<FormatPage main={ConfigSurvey} activeMenu={["26"]} />}
+            element={<FormatPage main={ConfigSurvey} activeMenu={["25"]} />}
           />
           <Route
             path="/Communication"

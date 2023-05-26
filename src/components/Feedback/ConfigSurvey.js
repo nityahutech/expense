@@ -109,95 +109,103 @@ function ConfigSurvey(props) {
           Feedback
         </h5>
         <Divider style={{ border: "0.5px inset rgb(240 232 232)" }} />
-        <Tabs tabPosition="left" className="feedbackTabs">
-          <Tabs.TabPane tab="Survey Questions" key="1">
-            <div style={{ margin: "30px" }}>
-              <Row style={{ marginTop: "30px" }}>
-                <Col span={8}>
-                  <Button
-                    className="comunication"
-                    onClick={() => {
-                      navigate("/Communication");
-                    }}
+        <div className="responsive-tabs">
+          <Tabs tabPosition="left" className="feedbackTabs">
+            <Tabs.TabPane tab="Survey Questions" key="1">
+              <div style={{}}>
+                <Row style={{ marginTop: "30px" }} gutter={[40, 16]}>
+                  <Col xs={24} sm={24} md={8}>
+                    <Button
+                      className="comunication"
+                      onClick={() => {
+                        navigate("/Communication");
+                      }}
+                    >
+                      Communication Skills
+                    </Button>
+                  </Col>
+                  <Col xs={24} sm={24} md={8}>
+                    <Button
+                      className="comunication"
+                      onClick={() => {
+                        navigate("/Technical");
+                      }}
+                    >
+                      Technical Skills
+                    </Button>
+                  </Col>
+                  <Col xs={24} sm={24} md={8}>
+                    <Button
+                      className="comunication"
+                      onClick={() => {
+                        navigate("/addSurvey");
+                      }}
+                    >
+                      <PlusCircleOutlined />
+                      Add Survey
+                    </Button>
+                  </Col>
+                </Row>
+              </div>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Survey Settings" key="2">
+              <div style={{ marginLeft: "20px" }}>
+                <Form layout="horizontal">
+                  <h2>Rankings</h2>
+                  <Radio.Group
+                    onChange={radioOnChange}
+                    value={selectRankingType}
                   >
-                    Communication Skills
-                  </Button>
-                </Col>
-                <Col span={8}>
-                  <Button
-                    className="comunication"
-                    onClick={() => {
-                      navigate("/Technical");
-                    }}
-                  >
-                    Technical Skills
-                  </Button>
-                </Col>
-                <Col span={8}>
-                  <Button
-                    className="comunication"
-                    onClick={() => {
-                      navigate("/addSurvey");
-                    }}
-                  >
-                    <PlusCircleOutlined />
-                    Add Survey
-                  </Button>
-                </Col>
-              </Row>
-            </div>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Survey Settings" key="2">
-            <div>
-              <Form layout="horizontal">
-                <h2>Rankings</h2>
-                <Radio.Group onChange={radioOnChange} value={selectRankingType}>
-                  <Space direction="vertical">
-                    <Radio value="number">
-                      <h3>Number</h3>
-                      <div style={{ display: "flex", marginTop: "13px" }}>
-                        <Form.Item label="Start::">
-                          <Input
-                            style={{ width: "200px" }}
+                    <Space direction="vertical">
+                      <Radio value="number">
+                        <h3>Number</h3>
+                        <div style={{ display: "flex", marginTop: "13px" }}>
+                          <Form.Item label="Start::">
+                            <Input
+                              style={{ width: "200px" }}
+                              disabled={
+                                selectRankingType === "custom" ? true : false
+                              }
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="End::"
+                            style={{ marginLeft: "25px" }}
+                          >
+                            <Input
+                              style={{ width: "200px" }}
+                              disabled={
+                                selectRankingType === "custom" ? true : false
+                              }
+                            />
+                          </Form.Item>
+                        </div>
+                      </Radio>
+                      <Radio value="custom">
+                        <h3> Custom</h3>
+                        <Form.Item
+                          label="Number of Ranks"
+                          style={{ marginTop: "20px" }}
+                        >
+                          <InputNumber
+                            min={1}
+                            max={5}
+                            // value={rankValue}
+                            onChange={onRankValueChange}
                             disabled={
-                              selectRankingType === "custom" ? true : false
+                              selectRankingType === "number" ? true : false
                             }
                           />
                         </Form.Item>
-                        <Form.Item label="End::" style={{ marginLeft: "25px" }}>
-                          <Input
-                            style={{ width: "200px" }}
-                            disabled={
-                              selectRankingType === "custom" ? true : false
-                            }
-                          />
-                        </Form.Item>
-                      </div>
-                    </Radio>
-                    <Radio value="custom">
-                      <h3> Custom</h3>
-                      <Form.Item
-                        label="Number of Ranks"
-                        style={{ marginTop: "20px" }}
-                      >
-                        <InputNumber
-                          min={1}
-                          max={5}
-                          // value={rankValue}
-                          onChange={onRankValueChange}
-                          disabled={
-                            selectRankingType === "number" ? true : false
-                          }
-                        />
-                      </Form.Item>
-                    </Radio>
-                  </Space>
-                </Radio.Group>
-                {addInputField > 0 && renderInputField()}
-              </Form>
-            </div>
-          </Tabs.TabPane>
-        </Tabs>
+                      </Radio>
+                    </Space>
+                  </Radio.Group>
+                  {addInputField > 0 && renderInputField()}
+                </Form>
+              </div>
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
       </Card>
 
       {/* ) : (

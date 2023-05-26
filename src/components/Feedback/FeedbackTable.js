@@ -97,6 +97,7 @@ function FeedbackTable(props) {
       dataIndex: "action",
       key: "action",
       align: "left",
+      fixed: "right",
       render: (_, record) => {
         return (
           <div>
@@ -143,8 +144,8 @@ function FeedbackTable(props) {
 
   return (
     <>
-      <Row>
-        <Col xs={24} xm={24} md={20}>
+      <Row gutter={[0, 16]}>
+        <Col xs={24} xm={24} md={8}>
           <Input
             key="empSearch"
             className="empSearch"
@@ -154,8 +155,8 @@ function FeedbackTable(props) {
             //   onChange={searchData}
           />
         </Col>
-
-        <Col xs={24} xm={24} md={3}>
+        <Col xs={24} xm={24} md={11}></Col>
+        <Col xs={24} xm={24} md={5}>
           <Button
             className="configSur"
             onClick={() => {
@@ -165,12 +166,15 @@ function FeedbackTable(props) {
             Survey Configuration
           </Button>
         </Col>
+        <Col xs={24} sm={24} md={24}>
+          <Table
+            className="feebBackTable"
+            columns={columns}
+            dataSource={FeedbackTable}
+            scroll={{ x: 600 }}
+          />
+        </Col>
       </Row>
-      <Table
-        className="feebBackTable"
-        columns={columns}
-        dataSource={FeedbackTable}
-      />
     </>
   );
 }

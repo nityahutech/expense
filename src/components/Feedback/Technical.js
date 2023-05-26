@@ -95,9 +95,10 @@ function Technical() {
               onClick={() => setEditSkills(true)}
               style={{
                 fontSize: "20px",
-                position: "relative",
-                left: "58rem",
-                bottom: "5px",
+                marginLeft: "20px",
+                // position: "relative",
+                // left: "58rem",
+                // bottom: "5px",
               }}
             />
           </h1>

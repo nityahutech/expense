@@ -50,6 +50,10 @@ import RegisterEmployee from "./components/Registration/RegisterEmployee";
 import HomePage from "./components/Home/HomePage";
 import Policies from "./components/Policies";
 import NotifySettings from "./components/NotifySettings";
+import UserLeave from "./components/Leave/UserLeave";
+import ManagerApproval from "./components/Leave/ManagerApproval";
+import ApprovalConfig from "./components/ApprovalConfig";
+import LeaveType from "./components/LeaveType";
 
 function App() {
   return (
@@ -107,11 +111,11 @@ function App() {
           </Route>
           <Route
             path="/leave"
-            element={<FormatPage main={Leave} activeMenu={["7"]} />}
+            element={<FormatPage main={UserLeave} activeMenu={["7"]} />}
           >
-            <Route path="" element={<></>} />
-            <Route path="approval" element={<></>} />
-            <Route path="history" element={<></>} />
+            <Route path="" element={<Holidays />} />
+            <Route path="approval" element={<ManagerApproval />} />
+            <Route path="history" element={<Request />} />
           </Route>
           <Route
             path="/hr-leave"
@@ -119,8 +123,8 @@ function App() {
           >
             <Route path="requests" element={<Request />} />
             <Route path="holidays" element={<Holidays />} />
-            <Route path="type" element={<Types />} />
-            <Route path="approval" element={<Approvals />} />
+            <Route path="type" element={<LeaveType />} />
+            <Route path="approval" element={<ApprovalConfig />} />
           </Route>
           <Route
             path="/employees/onboard"

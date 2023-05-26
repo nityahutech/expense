@@ -96,7 +96,7 @@ function FeedbackTable(props) {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      align: "left",
+      align: "center",
       fixed: "right",
       render: (_, record) => {
         return (

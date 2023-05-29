@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, Layout, Typography, Breadcrumb, Button } from "antd";
 import "../../style/LoginPage.css";
@@ -8,6 +8,9 @@ const { Header, Content, Footer } = Layout;
 
 function HomePage() {
   const navigate = useNavigate();
+  useEffect(() => {    
+     navigate("/login")
+  },[])
   return (
     <Layout>
       <Header

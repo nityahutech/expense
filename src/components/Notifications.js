@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Notifications = (props) => {
   const navigate = useNavigate();
-
+  console.log(props)
   return (
     <div style={{ overflowY: "auto", height: props.height }}>
       {props.notifications.map((x) => {

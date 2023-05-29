@@ -55,7 +55,11 @@ import ManagerApproval from "./components/Leave/ManagerApproval";
 import ApprovalConfig from "./components/ApprovalConfig";
 import LeaveType from "./components/LeaveType";
 
+
 function App() {
+  // if (window.location.href == "/") {
+  //   window.location.href = "/login"
+  // }
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -224,10 +228,10 @@ function App() {
             path="/invoices"
             element={<FormatPage main={InvoiceMagHome} activeMenu={["24a"]} />}
           />
-          <Route
+          {/* <Route
             path="/Feedback"
             element={<FormatPage main={FeedbackAdmin} activeMenu={["30"]} />}
-          />
+          /> */}
           <Route
             path="/Policies"
             element={<FormatPage main={Policies} activeMenu={["31"]} />}

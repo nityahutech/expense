@@ -1,12 +1,12 @@
 import React, { useRef } from "react";
-import { Button, Card, Carousel, Tooltip } from "antd";
+import { Button, Card, Carousel, Progress, Row, Tooltip } from "antd";
 import {
   ArrowRightOutlined,
   RightOutlined,
   ArrowLeftOutlined,
 } from "@ant-design/icons";
 import TextArea from "antd/lib/input/TextArea";
-import "../../App.css";
+// import "../../App.css";
 
 function Title(props) {
   console.log("propsss", props);
@@ -97,7 +97,7 @@ function Title(props) {
         </>
       ) : props.titleType ? (
         <div>
-          <div className="back-arrow">
+          <div className="back-arrow" style={{color: "white"}}>
             <ArrowLeftOutlined
               onClick={props.text ? props.backInner : props.backIn}
             />
@@ -119,6 +119,13 @@ function Title(props) {
           {props.text ? (
             <TextArea style={{ width: "50%", marginTop: "12px" }} />
           ) : null}
+        {/* <Row>
+        <Progress 
+          width={60}
+          type="circle"
+          percent={85}
+          strokeColor={{ '0%': '#87d068', '100%': '#108ee9' }}
+        /> */}
 
           <Button
             className={props.text ? "commentButton" : "skillButton"}
@@ -130,6 +137,7 @@ function Title(props) {
           >
             Continue <ArrowRightOutlined />
           </Button>
+          {/* </Row> */}
         </div>
       ) : null}
     </>

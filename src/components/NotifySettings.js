@@ -164,9 +164,9 @@ function NotifySettings() {
     const file = event.target.files[0];
     console.log(file);
     setFile(null);
-    const isPNG = file.type === "image/png";
-    if (!isPNG) {
-      message.error("You can only upload Pdf file!");
+    const isPNG = file.type === "image/pdf";
+    if (isPNG) {
+      message.error("You can only upload png/jpg file!");
       form.resetFields();
       return;
     }
@@ -501,7 +501,7 @@ function NotifySettings() {
                               <h2
                                 style={{
                                   position: "absolute",
-                                  top: "40%",
+                                  top: "35%",
                                   left: "50%",
                                   transform: "translate(-50%, -50%)",
                                   fontWeight: "bold",
@@ -524,7 +524,7 @@ function NotifySettings() {
                               >
                                 {file && (
                                   <img
-                                    style={{ width: "20px", height: "20px" }}
+                                    style={{ maxWidth: "60px", maxHeight: "120px" }}
                                     src={file}
                                     alt="Uploaded Image"
                                   />
@@ -750,7 +750,7 @@ function NotifySettings() {
                                   <div className="input-with-clear">
                                     <Input
                                       type="file"
-                                      accept="application/pdf"
+                                      accept="image/png, image/jpg"
                                       id="upload"
                                       name="upload"
                                       style={{

@@ -1,37 +1,45 @@
 import { ArrowLeftOutlined, EditOutlined, SearchOutlined } from "@ant-design/icons";
-import { Badge, Card, Col, DatePicker, Input, Modal, Row, Space, Table, Tooltip } from "antd";
+import { Badge, Card, Col, DatePicker, Divider, Form, Input, Modal, Row, Space, Table, Tooltip } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import CompanyHolidayContext from "../../contexts/CompanyHolidayContext";
 import ConfigureContext from "../../contexts/ConfigureContext";
 import AttendanceContext from "../../contexts/AttendanceContext";
+import RegularizeModal from "./RegularizeModal";
+import { useAuth } from "../../contexts/AuthContext";
+import { getEmpInfo, showNotification } from "../../contexts/CreateContext";
 
 const MonthlyLog = (props) => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [selDate, setSelDate] = useState(moment());
     const [selectedDay, setSelectedDay] = useState({})
     const [empMonthly, setEmpMonthly] = useState([]);
     const [holidays, setHolidays] = useState([]);
-    const params = useParams()
-    const currentUser = JSON.parse(sessionStorage.getItem("user"));
-    const id = params.id || currentUser.uid
-    console.log(props, params, id);
+    const [empInfo, setEmpInfo] = useState({});
+    const [regularizeOpen, setRegularizeOpen] = useState(false);
+    const [date, setDate] = useState(null);
+    const location = useLocation()
+    console.log(location);
+    const {currentUser} = useAuth()
+    const id = location.state == null ? currentUser.uid : location.state.id
+    console.log(empInfo, location, id);
     
   const columns = [
     {
       title: "Date",
       dataIndex: "date",
       key: "date",
+      fixed: "left",
       width: 80,
       align: "center",
     },
     {
       title: "Status",
       dataIndex: "status",
+      fixed: "left",
       key: "status",
-      width: 80,
+      width: 90,
       align: "center",
       render: (_, record) => (
           <>
@@ -44,13 +52,14 @@ const MonthlyLog = (props) => {
                   : {}
               }
             >
+              {console.log(record)}
               {record.status}
             </span>
             {record.status == "Absent" && record.type == "Approval" ? (
               <Tooltip
                 placement="bottom"
                 title={
-                  record.appStatus == "Reject"
+                  record.appStatus == "Rejected"
                     ? record.rejectedReason
                     : "Pending"
                 }
@@ -58,7 +67,7 @@ const MonthlyLog = (props) => {
                 <Space style={{ marginLeft: "10px" }}>
                   <Badge
                     className={
-                      record.appStatus == "Reject" ? "reject" : "badge"
+                      record.appStatus == "Rejected" ? "reject" : "badge"
                     }
                     status="warning"
                   />
@@ -76,6 +85,8 @@ const MonthlyLog = (props) => {
                     // setIsEditOpen(true);
                     // console.log(true);
                     // setEditedAbsent(record);
+                    setRegularizeOpen(true);
+                    setDate(record.date)
                   }}
                 />
               </Tooltip>
@@ -93,7 +104,7 @@ const MonthlyLog = (props) => {
       title: "In Time",
       dataIndex: "clockIn",
       key: "clockIn",
-      width: 80,
+      width: 85,
       align: "center",
       render: (_, record) => {
         return record.clockIn || "-";
@@ -103,7 +114,7 @@ const MonthlyLog = (props) => {
       title: "Out Time",
       key: "clockOut",
       dataIndex: "clockOut",
-      width: 80,
+      width: 85,
       align: "center",
       render: (_, record) => {
         return record.clockOut || "-";
@@ -113,7 +124,7 @@ const MonthlyLog = (props) => {
       title: "Work Duration",
       key: "duration",
       dataIndex: "duration",
-      width: 100,
+      width: 90,
       align: "center",
       render: (_, record) => {
         return record.duration || "-";
@@ -123,7 +134,7 @@ const MonthlyLog = (props) => {
       title: "Break Time",
       key: "break",
       dataIndex: "break",
-      width: 80,
+      width: 85,
       align: "center",
       render: (_, record) => {
         return record.break || "-";
@@ -133,8 +144,7 @@ const MonthlyLog = (props) => {
       title: "Project Name",
       dataIndex: "project",
       key: "project",
-      ellipsis: true,
-      width: 80,
+      width: 95,
       align: "center",
       render: (_, record) => {
         return record.project || "-";
@@ -144,9 +154,8 @@ const MonthlyLog = (props) => {
       title: "Report",
       key: "report",
       dataIndex: "report",
-      width: 100,
+      width: 150,
       ellipsis: true,
-      fixed: "right",
       align: "center",
       render: (_, record) => {
         return record.report || "-";
@@ -156,7 +165,14 @@ const MonthlyLog = (props) => {
 
   useEffect(() => {
     getData()
+    getEmployeeInfo()
   }, []);
+
+  const getEmployeeInfo = async () => {
+    let data = await getEmpInfo(id);
+    setEmpInfo(data)
+    console.log(data);
+  }
 
 //   function allEmpDetails(temp, selDate) {
 //     setLoading(true);
@@ -202,6 +218,34 @@ const MonthlyLog = (props) => {
     return req;
   };
 
+  
+  const handleFinish = async (values) => {
+    const addDetails = {
+      empId: id,
+      empCode: empInfo.empCode,
+      empName: empInfo.name,
+      type: "Approval",
+      appStatus: location.state == null ? "Approved" : "Pending",
+      reason: values.reason,
+      date: date,
+      rejectedReason: "",
+    };
+    console.log(addDetails);
+    try {
+      await AttendanceContext.addRegularize(addDetails);
+      setRegularizeOpen(false);
+      showNotification("success", "Success", "Reason has been added");
+      // form.resetFields();
+      await getEmpDetails(empInfo.empId, [
+        moment().subtract(30, "days"),
+        moment(),
+      ]);
+    } catch (error) {
+      console.log("error", error);
+      showNotification("error", "Error", error.message);
+    }
+  };
+
   const getData = async () => {
     setLoading(true)
     let temp = {};
@@ -218,10 +262,15 @@ const MonthlyLog = (props) => {
     }
     // allEmpDetails(temp)
     getEmpDetails(
-        currentUser.uid,
+        id,
         [moment().subtract(30, "days"), moment()],
         temp
       );
+  }
+
+  const handleCancel = () => {
+    setDate(null);
+    setRegularizeOpen(false)
   }
 
    const getEmpDetails = async (id, date, temp) => {
@@ -254,43 +303,51 @@ const MonthlyLog = (props) => {
   }
 
     return (
-        <Card className="daily">
-        <Row gutter={10} style={{justifyContent:"space-between"}}>
-        <Col span={8}>
-            <div className="back-arrow" onClick={() => navigate("/attendance/daily-log")} >
-                <ArrowLeftOutlined />
-                Back
-            </div>
-        </Col>
-        <Col span={8} style={{textAlign: "right"}}>
-            <DatePicker
-                picker="month"
-                // defaultValue={selDate}
-                className="daily range"
-                bordered={true}
-                format="MM-YYYY"
-                allowClear
-                onChange={(e) => {
-                    console.log(e);
-                    setSelDate(e);
-                    if (e == null) {
-                        getEmpDetails(id, [
-                            moment().subtract(30, "days"),
-                            moment(),
-                        ]);
-                        // setEmpMonthly(modifiedFilterExpense);
-                      } else {
-                        const begin = e.clone().startOf("month");
-                        const end = e.clone().endOf("month");
-                        getEmpDetails(id, [begin, end]);
-                        // setEmpMonthly(modifiedFilterExpense);
-                      }
-                    // getEmpDetails("_", e);
-                }}
-                disabledDate={(current) => !current.isBetween(moment('2023', 'YYYY'), new Date())}
-            />
-        </Col>
+        <Card id="top" className="daily">
+          <Row gutter={10} style={{justifyContent:"space-between"}}>
+          <Col span={8}>
+              {location.state != null && (
+                <div
+                  className="back-arrow"
+                  style={{
+                    margin: "0 15px",
+                    position: "relative",
+                    bottom: "5px"
+                  }}
+                  onClick={() => navigate(`/${window.location.href.includes('my-') ? "my-attendance": "attendance"}/daily-log`)}
+                >
+                    <ArrowLeftOutlined />
+                    Back
+                </div>
+              )}
+          </Col>
+          <Col span={16} style={{textAlign: "right"}}>
+              <DatePicker
+                  picker="month"
+                  // defaultValue={selDate}
+                  className="daily range"
+                  bordered={true}
+                  format="MM-YYYY"
+                  allowClear
+                  onChange={(e) => {
+                      console.log(e);
+                      if (e == null) {
+                          getEmpDetails(id, [
+                              moment().subtract(30, "days"),
+                              moment(),
+                          ]);
+                        } else {
+                          const begin = e.clone().startOf("month");
+                          const end = e.clone().endOf("month");
+                          getEmpDetails(id, [begin, end]);
+                        }
+                  }}
+                  disabledDate={(current) => !current.isBetween(moment('05-2023', 'MM-YYYY'), new Date())}
+              />
+          </Col>
         </Row>
+      
+      {location.state != null && (<Divider>{empInfo.name}</Divider>)}
 
       <Table
         className="daily daily-table"
@@ -298,7 +355,10 @@ const MonthlyLog = (props) => {
         columns={columns}
         dataSource={empMonthly}
         pagination={true}
+        scroll={{ x: 500 }}
+        onChange={() => document.getElementById("att-tabs").scrollIntoView(true)}
       />
+      <RegularizeModal regularizeOpen={regularizeOpen} name={empInfo.name} date={date} handleCancel={handleCancel} handleFinish={handleFinish} />
     </Card>
     )
 }

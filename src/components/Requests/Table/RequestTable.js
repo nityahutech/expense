@@ -12,6 +12,7 @@ import EditLaptopUpgrade from "./EditLaptopUpgrade";
 import EditInvoice from "./EditInvoice";
 import EditTravelBoking from "./EditTravelBoking";
 import RequestContext from "../../../contexts/RequestContext";
+import { useAuth } from "../../../contexts/AuthContext";
 
 
 const RequestTable = () => {
@@ -20,7 +21,7 @@ const RequestTable = () => {
     const [formData, setFormData] = useState([]);
     const [filterRequest, setFilterRequest] = useState([]);
     const [loading, setLoading] = useState([])
-    const currentUser = JSON.parse(sessionStorage.getItem("user"));
+    const {currentUser} = useAuth()
     const viewTypes = {
         "Invoice Reimbursement": <ViewInvoice data={viewData} />,
         "Laptop Upgrade": <ViewLaptopUpgrade data={viewData} />,
@@ -112,29 +113,18 @@ const RequestTable = () => {
             align: "center",
             render: (_, { status }) =>
                 status !== "" && (
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Tag
-                            style={{
-                                width: "20%",
-                                color: "#000000",
-                                borderRadius: "10px",
-                                display: "flex",
-                                justifyContent: "center",
-                                // padding: "2px",
-                            }}
-                            className="statusTag"
-                            color={
-                                status === "Approved"
-                                    ? "rgb(8 231 68 / 75%)"
-                                    : status === "Pending"
-                                        ? "rgb(244 209 105)"
-                                        : "#f44336"
-                            }
-                            key={status}
-                        >
-                            {status}
-                        </Tag>
-                    </div>
+                    <Tag
+                      className="status-tag"
+                      color={
+                        status === "Approved"
+                          ? "rgba(15, 255, 80, 0.2)"
+                          : status === "Pending"
+                          ? "rgba(205, 227, 36, 0.25)"
+                          : "rgb(252, 97, 97, 0.5)"
+                      }
+                    >
+                      {status}
+                    </Tag>
                 ),
         },
         {

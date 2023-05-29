@@ -2,16 +2,8 @@
 .ant-tabs-nav-wrap.Tabs {
   margin-left: 13px;
 }
-.ant-input.name {
-  width: 50%;
-}
-.ant-form.formItem {
+.ant-form.form-layout {
   background: #fff;
-  padding: 3rem;
-  margin: 2rem 0rem 10rem 0rem;
-  width: 70%;
-  position: relative;
-  left: 7rem;
   border-radius: 5px;
 }
 .ant-btn.reset {
@@ -19,13 +11,14 @@
   left: 96px;
   width: 91px;
 }
-.formItem .ant-form-item-label {
+.form-layout .ant-form-item-label {
   font-size: 16px;
 }
 .range {
   background: #1963A6;
   border-color: #1963A6;
   color: "#fffff";
+  width: 150px;
   /* position: relative; */
   /* bottom: 3.7rem; */
   /* left: 44rem;
@@ -86,10 +79,6 @@
 .weekDays .ant-table-thead > tr > th {
   font-weight: 600;
   font-size: 13px;
-}
-.time .ant-form-item-label > label {
-  font-weight: 600;
-  font-size: 14px;
 }
 
 .Absent{

@@ -125,7 +125,7 @@ function AddEmployee() {
     const allData = await getUsers();
     let allUsers = allData.docs.map((doc, i) => {
       return {
-        value: doc.data().fname + " " + doc.data().lname,
+        value: doc.data().name,
       };
     });
     setAllEmpName(allUsers);

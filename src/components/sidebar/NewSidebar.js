@@ -281,6 +281,7 @@ const NewSidebar = (props) => {
                         </Menu.Item>
                       </>
                     ) : null}
+                    {role =="admin" ?
                     <Menu.SubMenu
                       className="arrow-div"
                       style={{
@@ -330,7 +331,7 @@ const NewSidebar = (props) => {
                         <p className="sideFont">Invoice Reimbursement</p>
                         <NavLink to="/expenses/invoices" />
                       </Menu.Item> */}
-                    </Menu.SubMenu>
+                    </Menu.SubMenu>  : null}
                     {role == "admin" || isHr ? (
                       <>
                         <Menu.Item
@@ -355,8 +356,6 @@ const NewSidebar = (props) => {
                           <p className="sideFont">Invoice Reimbursement</p>
                           <NavLink to="/invoices" />
                         </Menu.Item>
-                      </>
-                    ) : null}
                     <Menu.Item
                       icon={
                         <RadarChartOutlined
@@ -368,6 +367,9 @@ const NewSidebar = (props) => {
                       <p className="sideFont">Feedback</p>
                       <NavLink to="/Feedback" />
                     </Menu.Item>
+                    
+                      </>
+                    ) : null}
                     <Menu.Item
                       icon={
                         <ContainerOutlined
@@ -393,6 +395,7 @@ const NewSidebar = (props) => {
                   <NavLink to="/my-profile" />
                 </Menu.Item>
 
+                  {role == "admin" && (
                 <Menu.SubMenu
                   style={{
                     width: "100%",
@@ -409,7 +412,6 @@ const NewSidebar = (props) => {
                   title="Client"
                   mode="inline"
                 >
-                  {role == "admin" && (
                     <Menu.Item
                       className="arrow"
                       icon={<img src={dot} alt="profile" className="dot" />}
@@ -418,7 +420,6 @@ const NewSidebar = (props) => {
                       <p className="sideFont">Add Client</p>
                       <NavLink to="/Client/AddClient" />
                     </Menu.Item>
-                  )}
                   <Menu.Item
                     className="arrow"
                     icon={<img src={dot} alt="profile" className="dot" />}
@@ -428,6 +429,8 @@ const NewSidebar = (props) => {
                     <NavLink to="/Client/ViewClient" />
                   </Menu.Item>
                 </Menu.SubMenu>
+                
+                )}
                 <Menu.Item
                   className="arrow"
                   icon={
@@ -440,7 +443,7 @@ const NewSidebar = (props) => {
                   <p className="sideFont">Requests</p>
                   <NavLink className="navLink" to="/requests" />
                 </Menu.Item>
-                <Menu.Item
+                {role == "admin" ? <Menu.Item
                   icon={
                     <ProfileOutlined
                       style={{ color: "#ffffff", fontSize: "17px" }}
@@ -450,7 +453,7 @@ const NewSidebar = (props) => {
                 >
                   <p className="sideFont">Template</p>
                   <NavLink to="/templates" />
-                </Menu.Item>
+                </Menu.Item> : null}
               </Menu>
             </div>
           </div>

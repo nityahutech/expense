@@ -24,6 +24,7 @@ import "./RepairRequestTable.css";
 import AssetContext from "../../contexts/AssetContext";
 import ViewRequestType from "./ViewRequestType";
 import { showNotification } from "../../contexts/CreateContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 const { TextArea } = Input;
 
@@ -80,7 +81,7 @@ const RepairRequestTable = (props) => {
   const [form1] = Form.useForm();
   const iframeRef = useRef(null);
   const [file, setFile] = useState("");
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth()
 
   const showModal = (data) => {
     setIsEditModalOpen(true);

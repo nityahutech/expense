@@ -68,7 +68,7 @@ function MainDashBoard(props) {
 
   const attendanceIcon = () => {
     return (
-      <Link to="/attendance/daily-log">
+      <Link to="/my-attendance">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
         <Card
           bordered
@@ -96,7 +96,7 @@ function MainDashBoard(props) {
 
   const leaveIcon = () => {
     return (
-      <Link to="/Leave">
+      <Link to="/leave">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
         <Card
           bordered
@@ -122,7 +122,7 @@ function MainDashBoard(props) {
 
   const paySlipIcon = () => {
     return (
-      <Link to="/Profile" state={{ active: "8" }}>
+      <Link to="/my-profile" state={{ active: "8" }}>
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
         <Card
           bordered
@@ -150,7 +150,7 @@ function MainDashBoard(props) {
 
   const payrollIcon = () => {
     return (
-      <Link to="/Employee/Payroll">
+      <Link to="/employees/payroll">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
         <Card
           bordered
@@ -183,7 +183,7 @@ function MainDashBoard(props) {
   };
   const employeeIcon = () => {
     return (
-      <Link to="/Employee/EmployeeList">
+      <Link to="/employees/view">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
         <Card
           bordered
@@ -239,7 +239,7 @@ function MainDashBoard(props) {
 
   const myProfileIcon = () => {
     return (
-      <Link to="/Profile">
+      <Link to="/my-profile">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
         <Card
           bordered
@@ -267,7 +267,7 @@ function MainDashBoard(props) {
 
   const companyProfileIcon = () => {
     return (
-      <Link to="/CompanyProfile">
+      <Link to="/company-profile">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
         <Card
           bordered
@@ -295,7 +295,7 @@ function MainDashBoard(props) {
 
   const settingIcon = () => {
     return (
-      <Link to="/Settings">
+      <Link to="/settings">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
         <Card
           bordered
@@ -678,7 +678,7 @@ function MainDashBoard(props) {
                 headStyle={{ height: "45px"}}
               >
                 <Notifications notifications={props.notifications} height={"200px"} />
-                {Notifications}
+                {/* {Notifications} */}
               </Card>
             </Col>
             <Col>

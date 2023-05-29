@@ -27,6 +27,7 @@ import {
   checkAlphabets,
 } from "../../contexts/CreateContext";
 import { useEffect } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 function InvoiceReimbursement(props) {
   console.log(props);
@@ -36,7 +37,7 @@ function InvoiceReimbursement(props) {
   const [invoiceDetails, setInvoiceDetails] = useState(props.invoiceDetails);
   const [user, setUser] = useState({});
   const [form] = Form.useForm();
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth()
   const role = sessionStorage.getItem("role");
 
   const onFinish = async (values) => {

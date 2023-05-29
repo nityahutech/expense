@@ -384,8 +384,6 @@ const Admin = () => {
     Expenses: [],
   };
 
-  console.log(temp.Leave);
-
   let tempData = Object.keys(temp).map((x) => {
     return {
       access: x,

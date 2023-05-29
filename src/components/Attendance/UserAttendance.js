@@ -1,95 +1,81 @@
 import { Tabs } from "antd"
-import { useState } from "react";
-import MonthlyLog from "./MonthlyLog";
+import { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import AttendanceContext from "../../contexts/AttendanceContext";
+import { useAuth } from "../../contexts/AuthContext";
+import { getEmpInfo } from "../../contexts/CreateContext";
 
 const UserAttendance = (props) => {
-  const [activetab, setActivetab] = useState("1");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [path, setPath] = useState(location.pathname.split("/").at(-1));
+  const {currentUser} = useAuth()
+
+  const [attTabs, setAttTabs] = useState([
+      {
+        key: "",
+        label: "My Attendance",
+      },
+      {
+        key: "report",
+        label: "Add Report",
+      }
+    ]);
+    
+    useEffect(() => {
+      let temp = path
+      console.log(temp);
+      if (location.pathname.split("/").at(-1) == "") {
+          setPath(location.pathname.split("/").at(-2));
+          temp = location.pathname.split("/").at(-2)
+      }
+      if (temp.toLowerCase() == "my-attendance") {
+          navigate("", { replace: true });
+          setPath("");
+      }
+      if (location.pathname.toLowerCase().split("/").includes("daily-log")) {
+          setPath("daily-log");
+      }
+      console.log(temp);
+      getManageeList()
+    }, [])
+    
+    const getManageeList = async () => {
+      let data = await getEmpInfo(currentUser.uid);
+      let list = data?.managees || []
+      if (list.length != 0) {
+        setAttTabs([
+          {
+            key: "",
+            label: "My Attendance",
+          },
+          {
+            key: "daily-log",
+            label: "Daily Log",
+          },
+          {
+            key: "report",
+            label: "Add Report",
+          }
+        ])
+      }
+    }
+
   return (
-        <div className="hrtab">
-        <Tabs
-            className="page-tabs"
-            defaultActiveKey={activetab}
-            activeKey={activetab}
-            onChange={(tabKey) => {
-              setActivetab(tabKey);
-            }}
-        >
-        <Tabs.TabPane tab="My Attendance" key="1">
-          <MonthlyLog />
-        </Tabs.TabPane>
-        <Tabs.TabPane
-          tab="Add Report"
-          key="4"
-          className="reportTabs"
-          // onClick={() => {
-          //   setIsModalOpen(true);
-          // }}
-        >
-          {/* <Form
-            {...layout}
-            form={form}
-            name="control-hooks"
-            onFinish={onFinish}
-            className="formItem"
-          >
-            <Form.Item
-              name="date"
-              label="Date"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-              className="pname"
-            >
-              <DatePicker
-                disabledDate={(current) => current.isAfter(moment())}
-                format={"DD-MM-YYYY"}
-                style={{ width: "50%" }}
-              />
-            </Form.Item>
-            <Form.Item
-              name="project_name"
-              label="Project Name"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-              className="pname"
-            >
-              <Input className="name" />
-            </Form.Item>
-            <Form.Item
-              name="project_details"
-              label="Project Details"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-              className="pname"
-            >
-              <Input className="name" />
-            </Form.Item>
-            <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit" className="submit">
-                Submit
-              </Button>
-              <Button
-                htmlType="button"
-                onClick={onReset}
-                className="reset"
-              >
-                Reset
-              </Button>
-            </Form.Item>
-          </Form> */}
-          {/* </Modal> */}
-        </Tabs.TabPane>
-        </Tabs>
-       </div>
-    )
+    <div className="hrtab">
+      <Tabs
+          id="att-tabs"
+          className="page-tabs"
+          activeKey={path}
+          items={attTabs}
+          onChange={(e) => {
+              setPath(e)
+              navigate(e)
+          }}
+      />
+      <Outlet />
+     </div>
+  )
 }
 
 export default UserAttendance

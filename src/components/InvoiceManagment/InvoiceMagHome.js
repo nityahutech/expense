@@ -4,10 +4,11 @@ import InvoiceTable from "./InvoiceTable";
 import "./AssetManag.css";
 import InvoiceContext from "../../contexts/InvoiceContext";
 import EmpInfoContext from "../../contexts/EmpInfoContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 function InvoiceMagHome(props) {
   const [invoiceDetails, setInvoiceDetails] = useState([]);
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth()
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
 

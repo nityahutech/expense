@@ -19,7 +19,7 @@ import {
 } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import ConfigureContext from "../contexts/ConfigureContext";
-import "../style/leave.css";
+import "../style/Leave.css";
 import {
   capitalize,
   checkAlphabets,
@@ -40,14 +40,48 @@ const LeaveType = (props) => {
   const [creditable, setCreditable] = useState(false);
 
   useEffect(() => {
-    setTypes(props.data);
+    // setTypes(props.data);
+    getConfigurations()
+  }, []);
+
+  
+
+  const getConfigurations = async () => {
+    let recs = await ConfigureContext.getConfigurations("leaveType");
+    let temp = Object.keys(recs).map((type, i) => {
+      return {
+        ...recs[`${type}`],
+        name: type,
+      };
+    });
+    temp.sort((k1, k2) => {
+      return k1.name < k2.name ? -1 : k1.name > k2 ? 1 : 0;
+    });
+    // let cards = {};
+    let index = temp.indexOf(
+      temp.filter((x) => {
+        if (x.name == "Loss Of Pay") {
+          return true;
+        }
+        // cards[`${x.name}`] = data[`${x.name}`].count;
+        return false;
+      })[0]
+    );
+    let lop = temp.splice(index, 1);
+    temp.push(lop[0]);
+    setTypes(temp);
+    console.log(temp, activeType)
     let data =
       Object.keys(activeType).length == 0
-        ? props.data[0]
-        : props.data.find((x) => x.name == activeType.name);
+        ? temp[0]
+        : temp.find((x) => x.name == activeType.name);
     setActiveType(data);
     setCreditable(data?.creditable);
-  }, [props.data]);
+    // setTotalDays(cards);
+    // if (load) {
+    //   getConfigurations({ ...cards });
+    // }
+  };
 
   const leaveUpdate = (values) => {
     let record = {
@@ -61,7 +95,7 @@ const LeaveType = (props) => {
         showNotification("success", "Success", "Updated Successfully!");
         setEditLeaves(false);
         editForm.resetFields();
-        props.getData();
+        getConfigurations();
       })
       .catch((err) => {
         showNotification("error", "Error", "Update Failed!");
@@ -83,7 +117,7 @@ const LeaveType = (props) => {
     };
     ConfigureContext.editConfiguration(page, { [`${name}`]: config });
     form.resetFields();
-    props.getData();
+    getConfigurations();
     setIsModalOpen(false);
   };
 
@@ -91,9 +125,9 @@ const LeaveType = (props) => {
     <div className="wholePage">
       <Row>
         <Col xs={24} sm={22} md={6}>
-          <ul className="sidecard" style={{ cursor: "pointer" }}>
+          <div className="sidecard" style={{display: "flex", flexDirection: "column", cursor: "pointer", marginLeft: "20px" }}>
             {types.map((type) => (
-              <li
+              <div
                 className="sideCard"
                 style={
                   activeType.name == type.name
@@ -118,9 +152,9 @@ const LeaveType = (props) => {
                 >
                   {type.name}
                 </div>
-              </li>
+              </div>
             ))}
-            <li className="sideCreate">
+            <div className="sideCreate">
               <Button
                 onClick={() => {
                   setIsModalOpen(true);
@@ -228,8 +262,8 @@ const LeaveType = (props) => {
                   </Form.Item>
                 </Form>
               </Modal>
-            </li>
-          </ul>
+            </div>
+          </div>
         </Col>
         <Col xs={24} sm={22} md={18}>
           <Card

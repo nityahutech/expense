@@ -26,7 +26,7 @@ import EmpInfoContext from "../contexts/EmpInfoContext";
 import HolidayList from "./HolidayList";
 import ApprovalConfig from "./ApprovalConfig";
 import LeaveType from "./LeaveType";
-import "../style/leave.css";
+import "../style/Leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
 import {
   capitalize,
@@ -34,14 +34,15 @@ import {
   showNotification,
 } from "../contexts/CreateContext";
 import LeaveRequests from "./LeaveRequests";
+import { useAuth } from "../contexts/AuthContext";
 
 const Leave = (props) => {
   const { RangePicker } = DatePicker;
   const { Option } = Select;
   const dateFormat = "Do MMM, YYYY";
-  const isAdmin = props.roleView == "admin";
+  const isAdmin = false;
   const isHr = JSON.parse(sessionStorage.getItem("isHr"));
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth()
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -701,7 +702,7 @@ const Leave = (props) => {
       render: (_, { status }) =>
         status !== "" && (
           <Tag
-            style={{ width: "80px", color: "black", textAlign: "center" }}
+            style={{ width: "80px", color: "black", textAlign: "center", borderRadius:"5px" }}
             className="statusTag"
             color={
               status === "Approved"
@@ -1728,7 +1729,7 @@ const Leave = (props) => {
                           style={{ background: "#1963A6", color: "white" }}
                         >
                           <p
-                            className="heading"
+                            // className="heading"
                             style={{
                               fontWeight: "500",
                               fontSize: "20px",

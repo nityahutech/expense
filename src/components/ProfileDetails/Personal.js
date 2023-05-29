@@ -45,7 +45,7 @@ function Personal(props) {
   const [lccs, setLccs] = useState(props.data?.lccs ? props.data.lccs : null);
   const [editAddressInfo, showEditAddressInfo] = useState(false);
   const [data, setData] = useState(props.data);
-  const { currentUser } = useAuth();
+  const { currentUser, updateMyProfile } = useAuth();
   const [form] = Form.useForm();
 
   const onFinish = (value) => {
@@ -68,6 +68,7 @@ function Personal(props) {
       record.spouse = "";
       record.spouseContact = "";
     }
+    updateMyProfile(record.name)
     EmpInfoContext.updateEduDetails(currentUser.uid, record, fileName, currentUser.displayName);
     setTimeout(() => {
       props.getData();

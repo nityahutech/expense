@@ -1,15 +1,21 @@
 import { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import { Dropdown, Menu, Space, Switch, Badge, Avatar } from "antd";
-import { BellOutlined, LoadingOutlined, PoweroffOutlined, SettingOutlined } from "@ant-design/icons";
+import {
+  BellOutlined,
+  LoadingOutlined,
+  PoweroffOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ExpenseBreadCrumb from "../ExpenseBreadCrumb";
 import AttendanceContext from "../../contexts/AttendanceContext";
 import moment from "moment";
 import Logo from "../../images/logo.svg";
 import dropdown from "../../images/dropdown.png";
+import Notifications from "../Notifications";
 
 const Navbar = (props) => {
   const [startTime, setStartTime] = useState();
@@ -21,12 +27,18 @@ const Navbar = (props) => {
   const [buttonStatus, setButtonStatus] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const role = sessionStorage.getItem("role");
+  const location = useLocation()
+  const navigate = useNavigate()
   const [roleView, setRoleView] = useState(
     props.roleView || sessionStorage.getItem("role")
   );
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   let temp = sessionStorage.getItem("logo");
   const logo = temp == null ? Logo : temp;
+  const paths = {
+    admin: ["attendance", "hr-leave"],
+    emp: ["my-attendance", "leave"]
+  }
 
   const isClockRunning = async () => {
     setLoading(true);
@@ -36,8 +48,8 @@ const Navbar = (props) => {
       setIsRunning(false);
       return false;
     } else {
-      localStorage.setItem("lastRefresh", moment().format("x"))
-      setButtonText()
+      localStorage.setItem("lastRefresh", moment().format("x"));
+      setButtonText();
       setIsRunning(true);
       let offset = moment().subtract(res.clockIn);
       let offsettime = res.break ? offset.subtract(res.break) : offset;
@@ -66,7 +78,9 @@ const Navbar = (props) => {
               Settings
             </Link>
           ),
-          icon: <SettingOutlined style={{color: "#000000", fontSize: "15px"}} />,
+          icon: (
+            <SettingOutlined style={{ color: "#000000", fontSize: "15px" }} />
+          ),
         },
         {
           key: "2",
@@ -80,7 +94,9 @@ const Navbar = (props) => {
               Logout
             </Link>
           ),
-          icon: <PoweroffOutlined style={{color: "#000000", fontSize: "15px"}} />
+          icon: (
+            <PoweroffOutlined style={{ color: "#000000", fontSize: "15px" }} />
+          ),
         },
       ]}
     />
@@ -99,7 +115,7 @@ const Navbar = (props) => {
                 color: "#171832",
                 fontWeight: "normal",
               }}
-            // rel="noopener noreferrer"
+              // rel="noopener noreferrer"
             >
               Requests
             </Link>
@@ -113,7 +129,7 @@ const Navbar = (props) => {
               // to="/"
               // onClick={logout}
               style={{ color: "#171832", fontWeight: "normal" }}
-            // rel="noopener noreferrer"
+              // rel="noopener noreferrer"
             >
               Leaves
             </Link>
@@ -130,7 +146,7 @@ const Navbar = (props) => {
 
   useEffect(() => {
     setIsRunning(isClockRunning());
-    window.addEventListener("click", refreshTimer)
+    window.addEventListener("click", refreshTimer);
   }, []);
 
   useEffect(() => {
@@ -148,30 +164,30 @@ const Navbar = (props) => {
   const refreshTimer = () => {
     let last = localStorage.getItem("lastRefresh");
     const diff = moment.duration(moment().diff(moment(last, "x")));
-    if(diff._milliseconds > 1200000) {
-      setRefresh(!refresh)
+    if (diff._milliseconds > 1200000) {
+      setRefresh(!refresh);
     }
-  }
+  };
 
   const buttonStyle = !isRunning
     ? {
-      padding: "1px",
-      background: "#FF002A",
-      color: "white",
-      display: "inline-block",
-      width: "150px",
-      borderRadius: "5px",
-      border: "1px solid white",
-    }
+        padding: "1px",
+        background: "#FF002A",
+        color: "white",
+        display: "inline-block",
+        width: "150px",
+        borderRadius: "5px",
+        border: "1px solid white",
+      }
     : {
-      padding: "1px",
-      background: "#3ab8eb",
-      color: "white",
-      display: "inline-block",
-      width: "150px",
-      borderRadius: "5px",
-      border: "1px solid white",
-    };
+        padding: "1px",
+        background: "#3ab8eb",
+        color: "white",
+        display: "inline-block",
+        width: "150px",
+        borderRadius: "5px",
+        border: "1px solid white",
+      };
 
   const loadStyle = {
     padding: "1px",
@@ -270,6 +286,11 @@ const Navbar = (props) => {
                 "roleView",
                 roleView == "admin" ? "emp" : "admin"
               );
+              let path = location.pathname.split('/')[1].toLowerCase()
+              let index = paths[roleView].indexOf(path);
+              console.log(path, index, paths[roleView == "emp" ? "admin" : "emp"][index]);
+              if (index == -1) { return; }
+              navigate(`/${paths[roleView == "emp" ? "admin" : "emp"][index]}`)
             }}
           />
         ) : null}
@@ -287,22 +308,39 @@ const Navbar = (props) => {
               onMouseEnter={onMouseEnter}
               className="clockButton"
             >
-              {buttonText ? buttonText : null} {!clockinfo && !buttonStatus ? <br /> : null}
+              {buttonText ? buttonText : null}{" "}
+              {!clockinfo && !buttonStatus ? <br /> : null}
               {clockinfo && isRunning
                 ? moment.utc(clockinfo * 1000).format("HH:mm:ss")
                 : ""}
             </button>
           )
         ) : null}
-        <Dropdown overlay={notificationMenu} className="notificationBell">
-          <Badge count={5} offset={[-10, 5]} size="small">
-            <Avatar size={40} icon={<BellOutlined className="notificationBell" />} className="notificationAvatar" />
+        <Dropdown overlay={
+              <div 
+                style={{
+                  border: "1px solid #d3d3d3b3",
+                  boxShadow: "5px", 
+                  backgroundColor: "#F8F8F8",
+                  padding:"10px",
+                  height:"auto"
+                }}
+              >
+                <Notifications notifications={props.notifications} height={"400px"} />
+              </div>
+            } className="notificationBell" arrow={{ pointAtCenter: true }}>
+          <Badge count={props.total} offset={[-10, 5]} size="small">
+            <Avatar
+              size={40}
+              icon={<BellOutlined className="notificationBell" />}
+              className="notificationAvatar"
+            />
           </Badge>
         </Dropdown>
         <div>
           <img src={logo} alt={"logo not found"} className="profileLogo" />
         </div>
-        <Dropdown overlay={menu}>
+        <Dropdown overlay={menu} arrow={{ pointAtCenter: true }}>
           <Space>
             <img
               src={dropdown}

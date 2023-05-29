@@ -30,8 +30,8 @@ const ApprovalConfig = () => {
   const [listApprovers, setListApprovers] = useState([null, null, null]);
 
   useEffect(() => {
-    getData()
-  }, [])
+    getData();
+  }, []);
 
   const getData = async () => {
     let d = await getUsers();
@@ -45,19 +45,19 @@ const ApprovalConfig = () => {
         designation: doc.data().designation,
         approveNo: doc.data()?.approveNo || 1,
         approveList: doc.data()?.approveList || ["HR"],
-      }
-    })
-    let des = Object.keys(temp.designations)
-    setEmpData(data)
-    setFilterEmployees(data)
-    setDesignations(des)
-  }
+      };
+    });
+    let des = Object.keys(temp.designations);
+    setEmpData(data);
+    setFilterEmployees(data);
+    setDesignations(des);
+  };
 
   const onSelectChange = (newSelectedRowKeys, data) => {
     setSelectedRowKeys(newSelectedRowKeys);
     setEditEmployeesDetails(data);
-    let names = data.map((detail) => detail.name)
-    form.setFieldValue("selectemp", names)
+    let names = data.map((detail) => detail.name);
+    form.setFieldValue("selectemp", names);
   };
 
   const rowSelection = {
@@ -94,18 +94,18 @@ const ApprovalConfig = () => {
         return (
           <>
             {data.map((d) => {
-              return (<div>{d}</div>)
+              return <div>{d}</div>;
             })}
           </>
-        )
-      }
+        );
+      },
     },
   ];
 
   const handleCancel = () => {
     setIsModalOpen(false);
     setSelectedRowKeys([]);
-    setEditEmployeesDetails([])
+    setEditEmployeesDetails([]);
     form.resetFields();
   };
 
@@ -116,7 +116,7 @@ const ApprovalConfig = () => {
   const handleDesignation = (i, value) => {
     let temp = [...listApprovers];
     temp[i] = value;
-    setListApprovers(temp)
+    setListApprovers(temp);
   };
 
   const approveOptions = [
@@ -137,25 +137,33 @@ const ApprovalConfig = () => {
       value: "Reporting Manager",
       label: "Reporting Manager",
     },
-  ]
+  ];
 
   const changeApprovers = (values) => {
     editEmployeeDetails.forEach((emp, i) => {
       let record = {
         approveNo: values.approversNum,
-        approveList: [...listApprovers].slice(0, values.approversNum)
-      }
-      let id = filterEmployees.find(x => x.name == emp.name).id;
-      EmpInfoContext.updateEduDetails(id, record).then((res) => {
-        showNotification("success", "Success", `${emp.name}'s approvers updated successfully!`)
-        form.resetFields();
-        setEditEmployeesDetails([])
-        setSelectedRowKeys([]);
-        getData();
-      }).catch((error) => showNotification("error", "Error", "Unable to process request!"))
-    })
+        approveList: [...listApprovers].slice(0, values.approversNum),
+      };
+      let id = filterEmployees.find((x) => x.name == emp.name).id;
+      EmpInfoContext.updateEduDetails(id, record)
+        .then((res) => {
+          showNotification(
+            "success",
+            "Success",
+            `${emp.name}'s approvers updated successfully!`
+          );
+          form.resetFields();
+          setEditEmployeesDetails([]);
+          setSelectedRowKeys([]);
+          getData();
+        })
+        .catch((error) =>
+          showNotification("error", "Error", "Unable to process request!")
+        );
+    });
     setIsModalOpen(false);
-  }
+  };
 
   return (
     <>
@@ -165,14 +173,14 @@ const ApprovalConfig = () => {
             <Col xs={24} sm={24} md={5} lg={5} xl={5} xxl={5}>
               <Input
                 className="searchBar"
-                style={{marginLeft:"10px"}}
+                style={{ marginLeft: "10px" }}
                 placeholder="Search"
                 prefix={<SearchOutlined />}
                 onChange={(e) => {
                   const search = e.target.value;
                   if (!search) {
                     setFilterEmployees(empData);
-                    return
+                    return;
                   }
                   const filteredData = empData.filter((emp) =>
                     emp.name.toLowerCase().includes(search.toLowerCase())
@@ -190,7 +198,7 @@ const ApprovalConfig = () => {
                 onChange={(e) => {
                   if (!e) {
                     setFilterEmployees(empData);
-                    return
+                    return;
                   }
                   const selectedData = empData.filter((emp) =>
                     emp.designation.includes(e)
@@ -200,11 +208,8 @@ const ApprovalConfig = () => {
                 showSearch
               >
                 {designations?.map((des) => {
-                    return (
-                      <Option value={des}>{des}</Option>
-                    )
-                  })
-                }
+                  return <Option value={des}>{des}</Option>;
+                })}
               </Select>
             </Col>
           </Row>
@@ -240,7 +245,12 @@ const ApprovalConfig = () => {
         </div>
       </Card>
 
-      <Modal open={isModalOpen} destroyOnClose onOk={() => form.submit()} onCancel={handleCancel}>
+      <Modal
+        open={isModalOpen}
+        destroyOnClose
+        onOk={() => form.submit()}
+        onCancel={handleCancel}
+      >
         <Form
           form={form}
           name="basic"
@@ -254,10 +264,7 @@ const ApprovalConfig = () => {
           layout="vertical"
           onFinish={changeApprovers}
         >
-          <Form.Item
-            label="Selected Employees"
-            name="selectemp"
-          >
+          <Form.Item label="Selected Employees" name="selectemp">
             <Select
               mode="multiple"
               placeholder="Please select"
@@ -292,10 +299,7 @@ const ApprovalConfig = () => {
               ]}
             />
           </Form.Item>
-          <Form.Item
-            label="Approvers"
-            name="approvers"
-          >
+          <Form.Item label="Approvers" name="approvers">
             <Row gutter={[24, 8]}>
               <Col xs={24} sm={22} md={8}>
                 <Select

@@ -163,9 +163,18 @@ export function checkAlphabetsName(event) {
   }
 };
 
-export function getManagersData(compId) {
-  // const q = query(collection(`companyprofile/${compId}/users`), where("isManager", "==", true))
-  getUsers()
+export async function getManagersData(compId, name) {
+  console.log(compId, name)
+  const q = query(collection(db, `companyprofile/${compId}/users`), where("repManager", "==", name))
+  console.log(q)
+  let data = await getDocs(q);
+  let ppl = {}
+  data.docs.map(doc => ppl[doc.id] = {
+      name: doc.data().name,
+      email: doc.data().mailid,
+  })
+  console.log(ppl);
+  return ppl
 };
 
 export function downloadFile(data, filename) {

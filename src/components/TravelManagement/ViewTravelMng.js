@@ -12,8 +12,6 @@ function ViewTravelMng(props) {
         <Row className="titleForModal">
           <Col span={24}>
             <span className="titleSpan">{viewTravelData.travelName}</span>
-            {/* <Form.Item label="Travel Title::" className="formCSS">            
-            </Form.Item> */}
           </Col>
           <Col span={24}>
             <Form.Item label="Reason::" className="formCSS">

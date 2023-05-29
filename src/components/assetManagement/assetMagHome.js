@@ -1,68 +1,68 @@
 import React, { useState, useEffect } from "react";
 import { Tabs } from "antd";
 import AllRequest from "./AllRequest";
-import Requestpage from "./RepairReq";
-import InvoiceReimbursement from "./InvoiceReimbursement";
-import "./AssetManag.css";
 import AssetContext from "../../contexts/AssetContext";
-import RepairRequestTable from "./RepairRequestTable";
+import AddAsset from "./AddAsset";
+import AssetList from "./AssetList";
+import RequestContext from "../../contexts/RequestContext";
+import AssetConfig from "./AssetConfig";
 
 function AssetMagHome(props) {
   const [repairLaptopData, setRepairLaptopData] = useState([]);
   const [laptopAllot, setLaptopAllot] = useState(props.refresh);
-  console.log(props.refresh);
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
   const role = sessionStorage.getItem("role");
+  const [loading, setLoading] = useState(false);
   const isHr =
     role == "super" ? false : sessionStorage.getItem("isHr") == "true";
 
   useEffect(() => {
     getRepairData();
     setLaptopAllot(props.refresh);
-    // console.log(getRepairData);
   }, [props.roleView]);
 
   const getRepairData = async () => {
-    const typeValues =
-      props.roleView == "admin"
-        ? ["Repair", "Upgrade", "Allotment", "Return"]
-        : ["Repair", "Upgrade", "Return"];
-    let repairData = await AssetContext.getRepairData(
-      currentUser.uid,
-      typeValues
-    );
-    console.log("values", repairData);
-    setRepairLaptopData(repairData);
+    setLoading(true);
+    let repairData = await RequestContext
+      .getAllAsset
+      // currentUser.uid,
+      ();
+    console.log("repairData", repairData);
+    let filterType = repairData.filter((type) => {
+      return (
+        type?.type === "Laptop Upgrade" ||
+        type?.type === "Laptop Repair" ||
+        type?.type === "Laptop Return"
+      );
+    });
+    console.log("repairData", filterType);
+    setRepairLaptopData(filterType);
+    setLoading(false);
   };
-  console.log("props.roleView::: ", props.roleView);
+
   return (
-    <div className="primarydiva">
-      <Tabs defaultActiveKey="1" className="assetTabs">
-        {props.roleView == "admin" ? (
-          <>
-            <Tabs.TabPane tab="Laptop Request" key="1">
-              <AllRequest
-                roleView={props.roleView}
-                getData={getRepairData}
-                data={repairLaptopData}
-                allot={laptopAllot}
-              />
-            </Tabs.TabPane>
-          </>
-        ) : (
-          <>
-            <Tabs.TabPane tab="All Request" key="1">
-              <RepairRequestTable
-                data={repairLaptopData}
-                getData={getRepairData}
-                roleView={props.roleView}
-              />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Request Form" key="2">
-              <Requestpage roleView={props.roleView} getData={getRepairData} />
-            </Tabs.TabPane>
-          </>
-        )}
+    <div className="hrtab">
+      <Tabs defaultActiveKey="1" className="page-tabs">
+        <>
+          <Tabs.TabPane tab="Laptop Request" key="1">
+            <AllRequest
+              roleView={props.roleView}
+              getData={getRepairData}
+              data={repairLaptopData}
+              allot={laptopAllot}
+              loading={loading}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Asset List" key="2">
+            <AssetList />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Add Asset" key="3">
+            <AddAsset />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Configuration" key="4">
+            <AssetConfig />
+          </Tabs.TabPane>
+        </>
       </Tabs>
     </div>
   );

@@ -8,7 +8,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { showNotification } from "../contexts/CreateContext";
 import NotifySettings from "./NotifySettings";
 
-const Settingpage = () => {
+const Settingpage = (props) => {
+  console.log('propsroleView', props.roleView);
   const [form] = Form.useForm();
   const [password, setPassword] = useState("");
   const [newPassword, setNew] = useState("");
@@ -197,9 +198,11 @@ const Settingpage = () => {
             </Card>
           </div>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Notifications" key="2">
-          <NotifySettings data={"hi"} />
-        </Tabs.TabPane>
+        {/* {props.roleView === 'admin' &&
+          <Tabs.TabPane tab="Notifications" key="2">
+            <NotifySettings data={"hi"} />
+          </Tabs.TabPane>
+        } */}
       </Tabs>
     </>
   );

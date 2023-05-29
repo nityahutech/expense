@@ -229,7 +229,7 @@ function AddressCust() {
                                     bordered={false}
                                     required
                                     maxLength={60}
-                                    placeholder="Enter Title"
+                                    placeholder="Enter Address Title"
                                   />
                                 </Form.Item>
                               </Col>
@@ -277,7 +277,7 @@ function AddressCust() {
                                     }}
                                     bordered={false}
                                     required
-                                    placeholder=""
+                                    placeholder="Enter Address Line 2"
                                   />
                                 </Form.Item>
                               </Col>

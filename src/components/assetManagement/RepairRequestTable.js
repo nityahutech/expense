@@ -20,7 +20,6 @@ import {
   CheckOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import "../../components/assetManagement/RepairRequest.css";
 import "./RepairRequestTable.css";
 import AssetContext from "../../contexts/AssetContext";
 import ViewRequestType from "./ViewRequestType";
@@ -71,7 +70,7 @@ const modalContent2 = {
 };
 
 const RepairRequestTable = (props) => {
-  console.log("RepairRequestTable props::,", props);
+  // console.log("RepairRequestTable props::,", props);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [repairLaptopData, setRepairLaptopData] = useState(props.data);
   // console.log(repairLaptopData);
@@ -114,14 +113,14 @@ const RepairRequestTable = (props) => {
           .then((response) => {
             props.getData();
           })
-          .catch((error) => {});
+          .catch((error) => { });
       },
     });
   };
 
   const onFinish = (values) => {
-    console.log(values, "values");
-    console.log(modalData);
+    // console.log(values, "values");
+    // console.log(modalData);
     // form1.resetFields();
     const updateData = {
       repairDes: values.repairDes,
@@ -149,7 +148,7 @@ const RepairRequestTable = (props) => {
 
   function handleChange(event) {
     let file = event.target.files[0];
-    console.log("handleupload", file);
+    // console.log("handleupload", file);
     setFile(null);
     const isPdf = file.type === "application/pdf";
     if (!isPdf) {
@@ -186,35 +185,38 @@ const RepairRequestTable = (props) => {
       key: "repairDes",
       width: 200,
       align: "left",
+      render: (_, { repairDes }) => repairDes || "-"
     },
     {
       title: "Status",
       key: "Status",
       width: 200,
-      align: "left",
+      align: "center",
       render: (_, { status }) =>
         status !== "" && (
-          <Tag
-            style={{
-              width: "84px",
-              color: "#000000",
-              borderRadius: "10px",
-              display: "flex",
-              justifyContent: "center",
-              padding: "2px",
-            }}
-            className="statusTag"
-            color={
-              status === "Approved"
-                ? "rgb(8 231 68 / 75%)"
-                : status === "Pending"
-                ? "rgb(244 209 105)"
-                : "#f44336"
-            }
-            key={status}
-          >
-            {status}
-          </Tag>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Tag
+              style={{
+                width: "84px",
+                color: "#000000",
+                borderRadius: "10px",
+                display: "flex",
+                justifyContent: "center",
+                padding: "2px",
+              }}
+              className="statusTag"
+              color={
+                status === "Approved"
+                  ? "rgb(8 231 68 / 75%)"
+                  : status === "Pending"
+                    ? "rgb(244 209 105)"
+                    : "#f44336"
+              }
+              key={status}
+            >
+              {status}
+            </Tag>
+          </div>
         ),
     },
     {
@@ -339,7 +341,7 @@ const RepairRequestTable = (props) => {
     <>
       <div className="laptopDiv">
         <Card
-          title=" Repair Request / Upgrade Request"
+          title="Requests"
           className="laptopcard"
           bordered={true}
           hoverable={true}

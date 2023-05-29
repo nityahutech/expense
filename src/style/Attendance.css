@@ -1,0 +1,159 @@
+
+.ant-tabs-nav-wrap.Tabs {
+  margin-left: 13px;
+}
+.ant-input.name {
+  width: 50%;
+}
+.ant-form.formItem {
+  background: #fff;
+  padding: 3rem;
+  margin: 2rem 0rem 10rem 0rem;
+  width: 70%;
+  position: relative;
+  left: 7rem;
+  border-radius: 5px;
+}
+.ant-btn.reset {
+  position: absolute;
+  left: 96px;
+  width: 91px;
+}
+.formItem .ant-form-item-label {
+  font-size: 16px;
+}
+.range {
+  background: #1963A6;
+  border-color: #1963A6;
+  color: "#fffff";
+  /* position: relative; */
+  /* bottom: 3.7rem; */
+  /* left: 44rem;
+   */
+  /* float: right; */
+}
+.range.ant-picker-input ::placeholder {
+  color: #ffffff;
+}
+/* .back-arrow {
+  display: flex;
+  width: 30px;
+  justify-content: space-between;
+} */
+.daily {
+  margin: 0 15px 15px;
+}
+.daily-table {
+  padding: 0;
+}
+.range .ant-picker-input span.ant-picker-suffix{
+  color: white;
+  cursor: pointer;
+}
+.range .ant-picker-input ::placeholder {
+  color: white;
+}
+.monthly .ant-table table {
+  cursor: default;
+}
+.daily-table .ant-table table {
+  cursor: pointer;
+}
+.range .ant-picker-input > input {
+  color: white;
+}
+
+.monthly .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.daily-table .ant-table-thead > tr > th {
+  background: #1963a6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.radio .ant-radio-inner {
+  border: 2px solid #d9d9d9;
+}
+
+.weekDays .ant-table-thead > tr > th {
+  font-weight: 600;
+  font-size: 13px;
+}
+.time .ant-form-item-label > label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.Absent{
+  color: red;
+}
+
+.regularize .ant-modal-header{
+  background: #1963a6;
+}
+
+.approveCard .ant-card-head{
+  background:#1963a6 ;
+}
+
+.approveCard .ant-card-head-title{
+  font-weight: bold;
+    line-height: 19px;
+    text-transform: uppercase;
+    font-size: 17px;
+    color: #ffffff;
+}
+
+.approveTable .ant-table-thead > tr > th{
+  background:#1963a6;
+  color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.regularize .ant-modal-close-x{
+  color: #ffffff;
+} 
+
+.regularize .ant-modal-title{
+  color:#ffffff;
+  font-size: 19px;
+}
+
+.regularize .ant-modal-footer .ant-btn + .ant-btn:not(.ant-dropdown-trigger){
+  background: #1963a6;
+  border: 1px solid #1963a6;
+}
+
+.approvalText{
+  color: #000000;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.badge .ant-badge-status-warning{
+  width: 8px;
+  height: 8px;
+}
+
+.reject .ant-badge-status-warning{
+  width: 8px;
+  height: 8px;
+  background-color: red;
+}
+
+.approve .ant-badge-status-success{
+  width: 8px;
+  height: 8px;
+}
+

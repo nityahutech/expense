@@ -1,172 +1,117 @@
-import React, { useEffect, useState } from "react";
-import {
-    Col,
-    Divider,
-    Row,
-    Form,
-    Card,
-    Avatar,
-    Typography,
-    Timeline,
-    Modal,
-} from "antd";
-
-const styleFont = {
-    marginBottom: "0px",
-    fontSize: "15px",
-    fontFamily: "Open Sans",
-};
-
-const styleFont1 = {
-    marginBottom: "0px",
-    fontSize: "25px",
-    fontFamily: "Open Sans",
-};
+import React, { useState } from "react";
+import "./client.css";
 
 function ClientListview(props) {
+    console.log("props", props);
     const showRecord = props.showRecord;
+    const [isFlipped, setIsFlipped] = useState(false);
 
+    const flipCard = () => {
+        setIsFlipped(!isFlipped);
+    };
     return (
         <>
-            <div>
-                <Card
-                    className="card-profile-head"
-                    bodyStyle={{ display: "none" }}
-                    style={{ borderRadius: "10px" }}
-                    title={
-                        <Row align="middle" gutter={[24, 0]}>
-                            <Col
-                                span={24}
-                                md={12}
-                                style={{ display: "flex", justifyContent: "space-between" }}
-                                className="col-info"
+            <div className="container">
+                <div
+                    className={`flip-card ${isFlipped ? "flipped" : ""}`}
+                    onClick={flipCard}
+                >
+                    <div className="flip-card-front">
+                        <div style={{ padding: "10px" }}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
                             >
-                                <Avatar.Group
-                                    className="card-profile-photo"
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-evenly",
-                                        width: "100%",
-                                    }}
-                                >
-                                    <Avatar
-                                        size={75}
-                                        src={showRecord.profilePic}
+                                {showRecord.upload ? (
+                                    <img
+                                        src={showRecord.upload}
                                         style={{
-                                            // borderRadius: '50%',
                                             border: "1px solid black",
-                                            objectFit: "contain",
-                                            textAlign: "center",
+                                            width: "50%",
+                                            height: "190px",
+                                            borderRadius: "50%",
+                                            background: "#dddddd",
                                         }}
-
                                     />
-
-                                    <div className="avatar-info">
-                                        <h4 style={styleFont1}>
-                                            {showRecord.fname ? showRecord.fname : "-"}
-                                        </h4>
-                                        <h5 style={styleFont}>
-                                            {showRecord.designation ? showRecord.designation : "-"}
-                                        </h5>
-                                        <h4 style={styleFont1}>
-                                            Employee ID : {showRecord.empId ? showRecord.empId : "-"}
-                                        </h4>
-                                        <h5 style={styleFont}>
-                                            Date of Joining : {showRecord.doj ? showRecord.doj : "-"}
-                                        </h5>
+                                ) : (
+                                    <div
+                                        // src={showRecord.profilePic}
+                                        style={{
+                                            border: "1px solid black",
+                                            width: "50%",
+                                            height: "190px",
+                                            borderRadius: "50%",
+                                            background: "#dddddd",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            color: "black",
+                                        }}
+                                    >
+                                        No image !!{" "}
                                     </div>
-                                </Avatar.Group>
+                                )}
+                            </div>
+                            <div style={{ padding: "10px" }}>
+                                <h2>Company Details</h2>
+                                <div style={{ display: 'flex' }} >
+                                    <div style={{ width: '50%' }} >Company Name:</div>{" "}
+                                    <div style={{ width: '50%' }} >{showRecord.regCompName ? showRecord.regCompName : "-"}</div>
+                                </div>
+                                <div style={{ display: 'flex' }}>
+                                    <div style={{ width: '50%' }}>Email:</div>{" "}
+                                    <div style={{ width: '50%' }}>{showRecord.domain ? showRecord.domain : "-"}</div>
+                                </div>
+                                <div style={{ display: 'flex' }}>
+                                    <div style={{ width: '50%' }}>Phone:</div>{" "}
+                                    <div style={{ width: '50%' }}>{showRecord.phone ? showRecord.phone : "-"}</div>
+                                </div>
+                            </div>
 
-
-                            </Col>
-
-                            <Col span={12}>
-                                <Form
-                                    layout="horizontal"
-                                    name="wrap"
-                                    labelCol={{
-                                        flex: "150px",
-                                    }}
-                                    labelAlign="left"
-                                    labelWrap
-                                    wrapperCol={{
-                                        flex: 1,
-                                    }}
-                                    colon={false}
-                                >
-                                    <Col xs={24} sm={24} md={24}>
-                                        <Form.Item
-                                            className="profilestyle"
-                                            style={styleFont}
-                                            label="Full Name"
-                                        >
-                                            <span>
-                                                {showRecord.fname +
-                                                    " " +
-                                                    showRecord.mname +
-                                                    " " +
-                                                    showRecord.lname}
-                                            </span>
-                                        </Form.Item>
-                                    </Col>
-
-                                    <Col xs={24} sm={24} md={24}>
-                                        <Form.Item
-                                            className="profilestyle"
-                                            style={styleFont}
-                                            label="Gender"
-                                        >
-                                            <span>{showRecord.gender ? showRecord.gender : "-"}</span>
-                                        </Form.Item>
-                                    </Col>
-                                    <Col xs={24} sm={24} md={24}>
-                                        <Form.Item
-                                            className="profilestyle"
-                                            style={styleFont}
-                                            label="Phone"
-                                        >
-                                            <span>
-                                                {showRecord.phonenumber ? showRecord.phonenumber : "-"}
-                                            </span>
-                                        </Form.Item>
-                                    </Col>
-                                    <Col xs={24} sm={24} md={24}>
-                                        <Form.Item
-                                            className="profilestyle"
-                                            style={styleFont}
-                                            label="Email Id"
-                                        >
-                                            <span>{showRecord.mailid ? showRecord.mailid : "-"}</span>
-                                        </Form.Item>
-                                    </Col>
-                                    <Col xs={24} sm={24} md={24}>
-                                        <Form.Item
-                                            className="profilestyle"
-                                            style={styleFont}
-                                            label="Work Location"
-                                        >
-                                            <span>
-                                                {showRecord.location ? showRecord.location : "-"}
-                                            </span>
-                                        </Form.Item>
-                                    </Col>
-                                    <Col xs={24} sm={24} md={24}>
-                                        <Form.Item
-                                            className="profilestyle"
-                                            style={styleFont}
-                                            label="Reports to"
-                                        >
-                                            <span>
-                                                {showRecord.repManager ? showRecord.repManager : "-"}
-                                            </span>
-                                        </Form.Item>
-                                    </Col>
-                                </Form>
-                            </Col>
-                        </Row>
-                    }
-                ></Card>
-            </div>
+                        </div>
+                    </div>
+                    <div className="flip-card-back">
+                        <div style={{}}>
+                            <h2>Contact Details</h2>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>Point of Contact:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.poc && showRecord.poc ? showRecord.poc : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>Project:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.project && showRecord.project ? showRecord.project : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>Address Line 1:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.contact && showRecord.contact.addLine1 ? showRecord.contact.addLine1 : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>Address Line 2:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.contact && showRecord.contact.addLine2 ? showRecord.contact.addLine2 : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>City:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.contact && showRecord.contact.city ? showRecord.contact.city : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>State:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.contact && showRecord.contact.state ? showRecord.contact.state : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>Country:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.contact && showRecord.contact.country ? showRecord.contact.country : "-"}</div>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ width: '50%' }}>Pincode:</div>{" "}
+                                <div style={{ width: '50%' }}>{showRecord.contact && showRecord.contact.pincode ? showRecord.contact.pincode : "-"}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div >
         </>
     );
 }

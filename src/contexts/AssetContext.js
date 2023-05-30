@@ -66,9 +66,6 @@ class AssetContext {
     }
   };
 
-  // addRepairRequest = async (repairRequestData) => {
-  //   return addDoc(companyAssetCollectionRef, repairRequestData);
-  // };
 
   //-------------------Repair Request------------------------------------
 
@@ -109,7 +106,7 @@ class AssetContext {
     const q = query(
       companyAssetCollectionRef,
       where("empId", "==", id),
-      where("type", "in", typeValues)
+      where("type", "in", typeValues ? ["Allotment"] : ["Laptop Upgrade", "Laptop Return", "Allotment", "Laptop Repair"])
     );
 
     const empRepair = await getDocs(q);

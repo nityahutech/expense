@@ -10,10 +10,9 @@ import {
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 let compId = sessionStorage.getItem("compId");
-
 let companyInvoiceCollectionRef = collection(
   db,
-  `companyprofile/${compId}/invoices`
+  `companyprofile/${compId}/request`
 );
 
 class InvoiceContext {
@@ -21,7 +20,7 @@ class InvoiceContext {
     compId = sessionStorage.getItem("compId");
     companyInvoiceCollectionRef = collection(
       db,
-      `companyprofile/${compId}/invoices`
+      `companyprofile/${compId}/request`
     );
     return;
   };
@@ -37,10 +36,8 @@ class InvoiceContext {
       uploadBytesResumable(storageRef, file).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
           console.log(i, url);
-          // invoiceData.payments[i].upload = url;
-          // invoiceData.payments[i].fileName = file.name;
-
-          updateDoc(doc(db, `companyprofile/${compId}/invoices`, data.id), {
+    
+          updateDoc(doc(db, `companyprofile/${compId}/request`, data.id), {
             payments: arrayUnion({
               ...payments[i],
               upload: url,
@@ -52,26 +49,14 @@ class InvoiceContext {
             upload: url,
             fileName: file.name,
           });
-
-          // return Promise.resolve();
         });
       });
-      //   } else {
-      //     invoiceData.payments[i].upload = null;
-      //     // addDoc(companyInvoiceCollectionRef, invoiceData);
-      //     // return Promise.resolve();
-      //   }
     });
-
-    // setTimeout(() => {
-    //   console.log(invoiceData);
-    //   addDoc(companyInvoiceCollectionRef, invoiceData);
-    // }, 4000);
   };
 
   updateInvoiceData = (id, updateInvoice) => {
     return updateDoc(
-      doc(db, `companyprofile/${compId}/invoices`, id),
+      doc(db, `companyprofile/${compId}/request`, id),
       updateInvoice
     );
   };
@@ -84,7 +69,7 @@ class InvoiceContext {
         id: doc.id,
       };
     });
-    console.log(compId, companyInvoiceCollectionRef, rec);
+    console.log('ssssssssssss',compId, companyInvoiceCollectionRef, rec);
     return rec;
   };
 }

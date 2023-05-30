@@ -333,7 +333,7 @@ const Statutory = () => {
                               },
                               {
                                 pattern: /^[a-zA-Z\s]*$/,
-                                message: "Please enter Valid Company Name",
+                                message: "Please enter valid company Name",
                               },
                             ]}
                           >
@@ -365,7 +365,8 @@ const Statutory = () => {
                             name="cinNumber"
                             rules={[
                               {
-                                pattern: /^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/,
+                                pattern:
+                                  /^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/,
                                 message: "Please Enter Valid Number",
                               },
                             ]}
@@ -452,12 +453,12 @@ const Statutory = () => {
                             rules={[
                               {
                                 required: true,
-                                message: "Please enter Company PAN",
+                                message: "Please Enter Company PAN",
                                 type: "domain",
                               },
                               {
                                 pattern: /^[0-9A-Z\s]*$/,
-                                message: "Please enter Valid Company PAN",
+                                message: "Please Enter Valid Company PAN",
                               },
                             ]}
                           >
@@ -465,7 +466,7 @@ const Statutory = () => {
                               maxlength={10}
                               type="DomainName"
                               required
-                              placeholder="Enter Domain Name"
+                              placeholder="Enter PAN"
                               bordered={false}
                               style={{
                                 width: "100%",
@@ -491,12 +492,12 @@ const Statutory = () => {
                             rules={[
                               {
                                 required: true,
-                                message: "Please enter Domain Name",
+                                message: "Please enter company TAN",
                                 type: "domain",
                               },
                               {
                                 pattern: /^[0-9A-Z\s]*$/,
-                                message: "Please enter Valid Domain Name",
+                                message: "Please enter Valid Company TAN",
                               },
                             ]}
                           >
@@ -504,7 +505,7 @@ const Statutory = () => {
                               maxLength={10}
                               type="DomainName"
                               required
-                              placeholder="Enter Domain Name"
+                              placeholder="Enter TAN"
                               bordered={false}
                               style={{
                                 width: "100%",
@@ -530,12 +531,12 @@ const Statutory = () => {
                             rules={[
                               {
                                 required: true,
-                                message: "Please enter Domain Name",
+                                message: "Please enter company GST",
                                 type: "domain",
                               },
                               {
                                 pattern: /^[0-9A-Z\s]*$/,
-                                message: "Please enter Valid Domain Name",
+                                message: "Please enter valid company GST",
                               },
                             ]}
                           >
@@ -543,7 +544,7 @@ const Statutory = () => {
                               maxLength={10}
                               type="DomainName"
                               required
-                              placeholder="Enter Domain Name"
+                              placeholder="Enter GST"
                               bordered={false}
                               style={{
                                 width: "100%",
@@ -629,7 +630,7 @@ const Statutory = () => {
               >
                 <Tabs
                   defaultActiveKey="1"
-                  className="tabs"
+                  className="page-tabs"
                   onChange={(key) =>
                     setActive(
                       key == "2"
@@ -683,6 +684,7 @@ const Statutory = () => {
                                   paddingLeft: "0px",
                                   marginTop: "10px",
                                 }}
+                                placeholder="Enter Name"
                               />
                             </FormItem>
                           )}
@@ -699,6 +701,7 @@ const Statutory = () => {
                                 {
                                   required: true,
                                   message: "Please Enter Email ID",
+                                  type: "email",
                                 },
                               ]}
                             >
@@ -711,6 +714,7 @@ const Statutory = () => {
                                   paddingLeft: "0px",
                                   marginTop: "10px",
                                 }}
+                                placeholder="Enter Email ID"
                               />
                             </FormItem>
                           )}
@@ -753,6 +757,7 @@ const Statutory = () => {
                                       paddingLeft: "0px",
                                       marginTop: "10px",
                                     }}
+                                    placeholder="Enter Name"
                                   />
                                 ) : (
                                   <Select
@@ -774,6 +779,7 @@ const Statutory = () => {
                                         label: "Statutory",
                                       },
                                     ]}
+                                    placeholder="Please Select"
                                   />
                                 )}
                               </FormItem>
@@ -783,7 +789,7 @@ const Statutory = () => {
                         <Col xs={24} sm={15} md={6} lg={6} xl={6} xxl={6}>
                           <div className="div-Phone">Phone Number</div>
                           {editPerson[i] === false ? (
-                            <div style={{ marginLeft: "4rem" }}>
+                            <div style={{}}>
                               {rec?.phone
                                 ? `${rec.prefix ? rec.prefix : ""} ${rec.phone}`
                                 : "-"}
@@ -796,7 +802,7 @@ const Statutory = () => {
                                 {
                                   pattern: /^[0-9\s]*$/,
                                   required: true,
-                                  message: "Please Enter Phone No",
+                                  message: "Please Enter Phone Number",
                                 },
                               ]}
                             >
@@ -810,6 +816,7 @@ const Statutory = () => {
                                   paddingLeft: "0px",
                                   marginTop: "10px",
                                 }}
+                                placeholder="Enter phone number"
                               />
                             </FormItem>
                           )}
@@ -942,7 +949,7 @@ const Statutory = () => {
                               ]}
                             >
                               <Input
-                                placeholder="Name"
+                                placeholder="Enter Name"
                                 style={{
                                   width: "100%",
                                   borderBottom: "1px solid #ccc ",
@@ -972,6 +979,7 @@ const Statutory = () => {
                                   marginTop: "10px",
                                 }}
                                 bordered={false}
+                                placeholder="Enter Email ID"
                               />
                             </FormItem>
                           </Col>
@@ -1001,6 +1009,7 @@ const Statutory = () => {
                                       paddingLeft: "0px",
                                       marginTop: "10px",
                                     }}
+                                    placeholder="Enter Name"
                                   />
                                 ) : (
                                   <Select
@@ -1021,6 +1030,7 @@ const Statutory = () => {
                                         label: "Statutory",
                                       },
                                     ]}
+                                    placeholder="Please Select"
                                   />
                                 )}
                               </FormItem>
@@ -1034,7 +1044,7 @@ const Statutory = () => {
                               rules={[
                                 {
                                   required: true,
-                                  message: "Please Enter Phone No",
+                                  message: "Please Enter Phone Number",
                                 },
                                 {
                                   pattern: /^[0-9]\d{9}$/,
@@ -1052,6 +1062,7 @@ const Statutory = () => {
                                   marginTop: "10px",
                                 }}
                                 bordered={false}
+                                placeholder="Enter phone number"
                               />
                             </FormItem>
                           </Col>

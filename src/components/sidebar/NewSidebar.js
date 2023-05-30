@@ -8,7 +8,7 @@ import {
   CalendarOutlined,
   CompassOutlined,
   DesktopOutlined,
-  FundProjectionScreenOutlined,
+  BookOutlined,
   GlobalOutlined,
   HomeFilled,
   PieChartFilled,
@@ -18,7 +18,9 @@ import {
   TeamOutlined,
   UserOutlined,
   RadarChartOutlined,
-  DeploymentUnitOutlined
+  DeploymentUnitOutlined,
+  AlertFilled,
+  ContainerOutlined,
 } from "@ant-design/icons";
 
 const { Sider } = Layout;
@@ -105,10 +107,10 @@ const NewSidebar = (props) => {
                 onClick={() => {
                   setCollapsibleStatus();
                 }}
-              // style={{
-              //   // paddingBottom: "40px",
-              //   height: "100vh",
-              // }}
+                // style={{
+                //   // paddingBottom: "40px",
+                //   height: "100vh",
+                // }}
               >
                 <Menu.Item
                   className="arrow"
@@ -120,7 +122,7 @@ const NewSidebar = (props) => {
                   key="30"
                 >
                   <p className="sideFont">Home</p>
-                  <NavLink to="/DashBoard" />
+                  <NavLink to="/dashboard" />
                 </Menu.Item>
                 {role == "super" ? (
                   <Menu.SubMenu
@@ -144,7 +146,7 @@ const NewSidebar = (props) => {
                       key="31"
                     >
                       <p className="sideFont">Onboarding</p>
-                      <NavLink to="/Organization/Onboarding" />
+                      <NavLink to="/organization/onboarding" />
                     </Menu.Item>
                   </Menu.SubMenu>
                 ) : null}
@@ -159,7 +161,7 @@ const NewSidebar = (props) => {
                       key="32"
                     >
                       <p className="sideFont">Company Profile</p>
-                      <NavLink to="/CompanyProfile" />
+                      <NavLink to="/company-profile" />
                     </Menu.Item>
 
                     <Menu.SubMenu
@@ -184,7 +186,7 @@ const NewSidebar = (props) => {
                         key="8"
                       >
                         <p className="sideFont">Add Employee</p>
-                        <NavLink to="/Employee/AddEmployee" />
+                        <NavLink to="/employees/onboard" />
                       </Menu.Item>
                       <Menu.Item
                         className="arrow"
@@ -192,7 +194,7 @@ const NewSidebar = (props) => {
                         key="9"
                       >
                         <p className="sideFont">View Employees</p>
-                        <NavLink to="/Employee/EmployeeList" />
+                        <NavLink to="/employees/view" />
                       </Menu.Item>
                       <Menu.Item
                         className="arrow"
@@ -200,7 +202,7 @@ const NewSidebar = (props) => {
                         key="25"
                       >
                         <p className="sideFont">Payroll Manager</p>
-                        <NavLink to="/Employee/Payroll" />
+                        <NavLink to="/employees/payroll" />
                       </Menu.Item>
                     </Menu.SubMenu>
                   </>
@@ -217,7 +219,7 @@ const NewSidebar = (props) => {
                       key="6"
                     >
                       <p className="sideFont">Attendance</p>
-                      <NavLink className="navLink" to="/Attendance" />
+                      <NavLink className="navLink" to="/my-attendance" />
                     </Menu.Item>
                     <Menu.Item
                       icon={
@@ -228,9 +230,9 @@ const NewSidebar = (props) => {
                       key="7"
                     >
                       <p className="sideFont">Leave</p>
-                      <NavLink to="/Leave" />
+                      <NavLink to="/leave" />
                     </Menu.Item>
-                    <Menu.SubMenu
+                    {/* <Menu.SubMenu
                       className="arrow-div"
                       style={{
                         width: "100%",
@@ -263,18 +265,23 @@ const NewSidebar = (props) => {
                         <p className="sideFont">Half Year Goal</p>
                         <NavLink to="/Appraisal/HalfYearGoalPage" />
                       </Menu.Item>
-                    </Menu.SubMenu>
-                    <Menu.Item
-                      icon={
-                        <DesktopOutlined
-                          style={{ color: "#ffffff", fontSize: "17px" }}
-                        />
-                      }
-                      key="22"
-                    >
-                      <p className="sideFont">Assets</p>
-                      <NavLink to="/Assets" />
-                    </Menu.Item>
+                    </Menu.SubMenu> */}
+                    {role == "admin" || isHr ? (
+                      <>
+                        <Menu.Item
+                          icon={
+                            <DesktopOutlined
+                              style={{ color: "#ffffff", fontSize: "17px" }}
+                            />
+                          }
+                          key="22"
+                        >
+                          <p className="sideFont">Assets</p>
+                          <NavLink to="/assets" />
+                        </Menu.Item>
+                      </>
+                    ) : null}
+                    {role =="admin" ?
                     <Menu.SubMenu
                       className="arrow-div"
                       style={{
@@ -302,7 +309,7 @@ const NewSidebar = (props) => {
                             key="2"
                           >
                             <p className="sideFont">Add Expense</p>
-                            <NavLink to="/Expense/AddExpense" />
+                            <NavLink to="/expenses/create" />
                           </Menu.Item>
                           <Menu.Item
                             className="arrow"
@@ -312,30 +319,43 @@ const NewSidebar = (props) => {
                             key="3"
                           >
                             <p className="sideFont">Expense List</p>
-                            <NavLink to="/Expense/ExpenseList" />
+                            <NavLink to="/expenses/view" />
                           </Menu.Item>
                         </>
                       ) : null}
-                      <Menu.Item
+                      {/* <Menu.Item
                         className="arrow"
                         icon={<img src={dot} alt="profile" className="dot" />}
                         key="23"
                       >
                         <p className="sideFont">Invoice Reimbursement</p>
-                        <NavLink to="/Expense/InvoiceReimbursement" />
-                      </Menu.Item>
-                    </Menu.SubMenu>
-                    <Menu.Item
-                      icon={
-                        <CompassOutlined
-                          style={{ color: "#ffffff", fontSize: "17px" }}
-                        />
-                      }
-                      key="24"
-                    >
-                      <p className="sideFont">Travel Management</p>
-                      <NavLink to="/TravelManagement" />
-                    </Menu.Item>
+                        <NavLink to="/expenses/invoices" />
+                      </Menu.Item> */}
+                    </Menu.SubMenu>  : null}
+                    {role == "admin" || isHr ? (
+                      <>
+                        <Menu.Item
+                          icon={
+                            <CompassOutlined
+                              style={{ color: "#ffffff", fontSize: "17px" }}
+                            />
+                          }
+                          key="24"
+                        >
+                          <p className="sideFont">Travel Management</p>
+                          <NavLink to="/travel" />
+                        </Menu.Item>
+                        <Menu.Item
+                          icon={
+                            <BookOutlined
+                              style={{ color: "#ffffff", fontSize: "17px" }}
+                            />
+                          }
+                          key="24a"
+                        >
+                          <p className="sideFont">Invoice Reimbursement</p>
+                          <NavLink to="/invoices" />
+                        </Menu.Item>
                     <Menu.Item
                       icon={
                         <RadarChartOutlined
@@ -346,6 +366,20 @@ const NewSidebar = (props) => {
                     >
                       <p className="sideFont">Feedback</p>
                       <NavLink to="/Feedback" />
+                    </Menu.Item>
+                    
+                      </>
+                    ) : null}
+                    <Menu.Item
+                      icon={
+                        <ContainerOutlined
+                          style={{ color: "#ffffff", fontSize: "17px" }}
+                        />
+                      }
+                      key="26"
+                    >
+                      <p className="sideFont">Policy</p>
+                      <NavLink to="/Policies" />
                     </Menu.Item>
                   </>
                 ) : null}
@@ -358,8 +392,10 @@ const NewSidebar = (props) => {
                   key="21"
                 >
                   <p className="sideFont">My Profile</p>
-                  <NavLink to="/Profile" />
+                  <NavLink to="/my-profile" />
                 </Menu.Item>
+
+                  {role == "admin" && (
                 <Menu.SubMenu
                   style={{
                     width: "100%",
@@ -376,14 +412,14 @@ const NewSidebar = (props) => {
                   title="Client"
                   mode="inline"
                 >
-                  <Menu.Item
-                    className="arrow"
-                    icon={<img src={dot} alt="profile" className="dot" />}
-                    key="30a"
-                  >
-                    <p className="sideFont">Add Client</p>
-                    <NavLink to="/Client/AddClient" />
-                  </Menu.Item>
+                    <Menu.Item
+                      className="arrow"
+                      icon={<img src={dot} alt="profile" className="dot" />}
+                      key="30a"
+                    >
+                      <p className="sideFont">Add Client</p>
+                      <NavLink to="/Client/AddClient" />
+                    </Menu.Item>
                   <Menu.Item
                     className="arrow"
                     icon={<img src={dot} alt="profile" className="dot" />}
@@ -393,6 +429,31 @@ const NewSidebar = (props) => {
                     <NavLink to="/Client/ViewClient" />
                   </Menu.Item>
                 </Menu.SubMenu>
+                
+                )}
+                <Menu.Item
+                  className="arrow"
+                  icon={
+                    <AlertFilled
+                      style={{ color: "#ffffff", fontSize: "17px" }}
+                    />
+                  }
+                  key="33"
+                >
+                  <p className="sideFont">Requests</p>
+                  <NavLink className="navLink" to="/requests" />
+                </Menu.Item>
+                {role == "admin" ? <Menu.Item
+                  icon={
+                    <ProfileOutlined
+                      style={{ color: "#ffffff", fontSize: "17px" }}
+                    />
+                  }
+                  key="32a"
+                >
+                  <p className="sideFont">Template</p>
+                  <NavLink to="/templates" />
+                </Menu.Item> : null}
               </Menu>
             </div>
           </div>
@@ -425,7 +486,7 @@ const NewSidebar = (props) => {
 
               <div>
                 <Link
-                  to="/Settings"
+                  to="/settings"
                   className="sideFont"
                   style={{
                     fontWeight: "normal",

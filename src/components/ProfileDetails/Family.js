@@ -30,6 +30,7 @@ import {
 import "../../style/BankAccount.css";
 import FormItem from "antd/es/form/FormItem";
 import { showNotification } from "../../contexts/CreateContext";
+import { useAuth } from "../../contexts/AuthContext";
 const { Option } = Select;
 
 const Family = (props) => {
@@ -41,7 +42,7 @@ const Family = (props) => {
   const [codes, setCodes] = useState("");
   // const marriage = props.marriage;
   const [marriage, setMarraige] = useState(props.data.maritalStatus == "Married");
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth()
   const [active, setActive] = useState("emergencyContact");
   const [activeList, setActiveList] = useState([]);
   const [editPerson, setEditPerson] = useState([false]);
@@ -49,7 +50,7 @@ const Family = (props) => {
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
   const [loading, setLoading] = useState(false);
-
+console.log(props)
   // add other family members / children
 
   function onAdd(values) {
@@ -66,6 +67,9 @@ const Family = (props) => {
     props.getData();
   }
 
+  useEffect(() => {
+    setData(props.data)
+  }, [props.data])
   // edit other family members / children
 
   function onEdit(values) {
@@ -888,7 +892,7 @@ const Family = (props) => {
               >
                 <Tabs
                   defaultActiveKey="1"
-                  className="tabs"
+                  className="page-tabs"
                   onChange={(key) =>
                     setActive(
                       key == "2"

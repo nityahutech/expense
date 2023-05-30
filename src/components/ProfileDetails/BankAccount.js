@@ -20,6 +20,7 @@ import {
 } from "@ant-design/icons";
 import "../../style/BankAccount.css";
 import { capitalize, checkNumbervalue, showNotification } from "../../contexts/CreateContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 function BankAccount() {
   const [editBankForm] = Form.useForm();
@@ -27,7 +28,7 @@ function BankAccount() {
   const [editBank, setEditBank] = useState([false]);
   const [bankList, setBankList] = useState([]);
   const [addBank, setAddBank] = useState(false);
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth();
 
   useEffect(() => {
     getData();

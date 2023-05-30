@@ -60,11 +60,13 @@ function HrPaySlip() {
   const rowStyle = showPreview
     ? {}
     : {
-        border: "1px solid #edecec",
-        paddingTop: "10px",
-        margin: "10px",
-        borderRadius: "10px",
-      };
+      border: "1px solid #edecec",
+      paddingTop: "10px",
+      margin: "10px",
+      borderRadius: "10px",
+      minHeight: '100px'
+
+    };
 
   const handlePreview = () => {
     setShowPreview(!showPreview);
@@ -458,7 +460,7 @@ function HrPaySlip() {
                   message: "Please Select Basic Salary ",
                 },
               ]}
-              // initialValue={data.basic}
+            // initialValue={data.basic}
             >
               {showPreview ? (
                 <span>{form.getFieldValue("basic")}</span>
@@ -481,7 +483,7 @@ function HrPaySlip() {
               name="hra"
               label="HRA(15%)"
               style={showPreview ? { margin: "0px" } : { marginBottom: "20px" }}
-              // initialValue={data[0].hra}
+            // initialValue={data[0].hra}
             >
               {showPreview ? (
                 <span>{hra}</span>
@@ -513,7 +515,7 @@ function HrPaySlip() {
                 style={
                   showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                 }
-                // initialValue={data?.earnings?.[`${field}`] || null}
+              // initialValue={data?.earnings?.[`${field}`] || null}
               >
                 {showPreview ? (
                   <span>{form.getFieldValue(field)}</span>
@@ -558,7 +560,7 @@ function HrPaySlip() {
         </div>
         <Row gutter={[48, 0]} style={rowStyle}>
           {earningConfig?.Deduction.map((field, index) => (
-            <Col {...bodyLayout()}>
+            <Col  {...bodyLayout()}>
               <Form.Item
                 key={index}
                 onKeyPress={(event) => {
@@ -571,7 +573,7 @@ function HrPaySlip() {
                 style={
                   showPreview ? { margin: "0px" } : { marginBottom: "20px" }
                 }
-                // initialValue={data?.deductions?.[`${field}`] || null}
+              // initialValue={data?.deductions?.[`${field}`] || null}
               >
                 {showPreview ? (
                   <span>{form.getFieldValue(field)}</span>

@@ -31,6 +31,8 @@
   justify-content: flex-end;
   flex: 1 1 auto;
   flex-grow: 1;
+  min-height: 100vh;
+  background-color: #f8f8f8;
 }
 .tables {
   width: 100%;
@@ -55,7 +57,7 @@
 }
 @media (max-width: 800px) {
   .homeContainer {
-    position: absolute;
+    /* position: absolute; */
     width: 100%;
   }
   .sidecontainer {

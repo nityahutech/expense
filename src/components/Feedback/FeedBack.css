@@ -1,26 +1,13 @@
-.feedBackCard .ant-card-body{
-    padding: 0px;
-}
+/* .feedBackCard .ant-card-body{
+    padding: 25px;
+} */
 
 .empSearch.ant-input-affix-wrapper{
-    width: 300px; 
+    /* width: 300px;  */
     background: #FFFFFF;
     border: 1px solid #C5C5C5;
     border-radius: 5px;
     height: 35px
-}
-
-.previewSur.ant-btn{
-    background: #045477;
-    border-radius: 5px;
-    width: 127px;
-    height: 35px;
-    color: #FFFFFF;
-    font-style: normal;
-font-weight: 400;
-font-size: 13px;
-line-height: 15px;
-margin-left: 2.5rem;
 }
 
 .configSur.ant-btn{
@@ -51,39 +38,40 @@ margin-left: 28px;
   .comunication.ant-btn{
     background: #045477;
     border-radius: 5px;
-    width: 300px;
+    min-width: 250px;
     height: 40px;
     color: #FFFFFF;
     font-style: normal;
 font-weight: 400;
 font-size: 20px;
 line-height: 15px;
+/* margin-left: 10px; */
 
 }
 
-.heading:after {
+/* .heading:after {
     content: "";
     position: absolute;
-    top: 16.5rem;
-    /* bottom: 0; */
-    left: 19rem;
+    top: 6rem;
+    bottom: 0;
+    left: 21rem;
     right: 0;
-    width: 865px;
-    /* height: 0.5em; */
+    width: 840px;
+    height: 0.5em;
     border-top: 0.5px solid #C0C0C0;
-  }
+   } */
 
-  .otherHeading:after {
+  /* .otherHeading:after {
     content: "";
     position: absolute;
-    top: 16.5rem;
-    /* bottom: 0; */
-    left: 14rem;
+    top: 6rem; 
+    bottom: 0;
+    left: 16rem;
     right: 0;
-    width: 940px;
-    /* height: 0.5em; */
+    width: 900px;
+    height: 0.5em;
     border-top: 0.5px solid #C0C0C0;
-  }
+  }  */
 
   .que1 .ant-form-item-label > label{
     font-style: normal;
@@ -100,23 +88,40 @@ line-height: 15px;
     line-height: 29px;
     padding: 0px;
     color: #000000;
+    margin-top: 10px;
   }
-  .queText{
+
+  .queTitle{
     font-style: normal;
     font-weight: 400;
     font-size: 19px;
     line-height: 29px;
     padding: 0px;
     color: #000000;
+    margin-top: 10px;
   }
+  /* .queText{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 29px;
+    padding: 0px;
+    color: #000000;
+  } */
 
   .que1.ant-form-item{
-    margin-top: 10px;
+    margin-top: 28px;
   }
 
   .submitCancel.ant-space-align-center{
     display: flex;
     justify-content: flex-end;
+  }
+
+  .submitQuestion.ant-space-align-center{
+    display: flex;
+    justify-content: flex-end;
+    
   }
 
   .addQue.ant-btn{
@@ -129,7 +134,7 @@ line-height: 15px;
     font-weight: 400;
     font-size: 15px;
     line-height: 15px;
-    margin-top: 10px;
+    margin-top: 30px;
   }
   .submit.ant-btn{
     background: #045477;
@@ -138,4 +143,346 @@ line-height: 15px;
     font-weight: 400;
     font-size: 15px;
     line-height: 15px;
+    border-radius: 5px;
+    width: 104px;
+    height: 37px;
   }
+
+  .skillName .ant-form-item-label > label{
+    font-size: 18px;
+  }
+
+  .minusRemove.anticon svg{
+    position: relative;
+    right: 10px;
+   
+}
+
+.empFeedbackCard .ant-card-head{
+  border-radius: 10px 10px 0 0;
+    background: #045477;
+    color: #FFFFFF;
+    font-style: normal;
+font-weight: 500;
+font-size: 24px;
+line-height: 30px;
+}
+
+.FeedbackTitle .ant-form-item-label > label{
+  font-style: normal;
+font-weight: 400;
+font-size: 15px;
+line-height: 15px;
+color: #000000;
+}
+
+.FeedbackTitle.ant-form-item{
+  margin-left: 15px;
+}
+
+
+
+.FeedbackSelect.ant-select:not(.ant-select-customize-input) .ant-select-selector{
+  background: #FFFFFF;
+    border: 1px solid #C5C5C5;
+    border-radius: 5px;
+    width: 500px;
+    height: 43px;
+}
+
+.FeedbackSelect .ant-select-arrow {
+  font-size: 23px;
+  right: 28px;
+}
+
+.FeedbackSelect .ant-select-clear{
+  right: 23px;
+}
+
+.toolTipQue .ant-tooltip-inner{
+background-color: #FFFFFF;
+color: #000000;
+width: 73px;
+text-align: center;
+}
+
+.toolTipQue .ant-tooltip-arrow-content{
+  --antd-arrow-background-color: linear-gradient(to right bottom, #FFFFFF, #ffffff);}
+
+  .questionsScroll{
+    color: #FFFFFF;
+    margin-top: 30px;
+  }
+
+  .FeedbackSelect.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder{
+    margin-top: 5px;
+  }
+
+  .feedbackTabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #000000;
+    font-weight: 600;
+
+  }
+
+  .dot-list {
+    list-style-type: disc;
+    font-size: 22px;
+  }
+
+  .surveyCard.ant-card{
+    width: 800px;
+    height: 450px;
+    background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+    margin: auto;
+   /* margin-top: 7rem; */
+  }
+
+  .feedbackSection .ant-form-item-label > label{
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  .feedbackSection.ant-form-item{
+    font-weight: 400;
+    margin-bottom: 0px;
+  }
+
+  /* .sectionCard.ant-card{
+    width: 800px;
+    height: 450px;
+    background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+    margin: auto;
+   margin-top: 1rem;
+  } */
+
+  .commentCard.ant-card{
+    width: 800px;
+    height: 450px;
+    background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+    margin: auto;
+   /* margin-top: 2rem; */
+  }
+
+  .surveyCard .ant-card-body{
+    margin: 2rem;
+    padding: 0;
+  }
+  
+
+  .surveyCard1.ant-card{
+    width: 800px;
+    height: 450px;
+    background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+   margin: auto;
+  }
+
+  .surveyCardQuestion.ant-card{
+    width: 800px;
+    height: auto;
+    background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+    
+  }
+   
+  .question-button{
+      width: 80px;
+      display: inline-block;
+      text-align: center;
+      height: 46px;
+      font-size: 18px;
+      color: white;
+      background: none;
+      border: 1px solid #bcb2b2,
+  }
+  .question-button :hover {
+    background: white;
+    color: black
+  }
+
+  .skillButton.ant-btn{
+    margin-top: 12rem;
+    margin-left: 32rem;
+    border-radius: 17px;
+    width: 200px;
+    background-image: linear-gradient(to right, rgb(13, 15, 215), rgb(37, 154, 199));
+    color: rgb(255, 255, 255);
+    border: none;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .commentButton.ant-btn{
+    margin-top: 7rem;
+    margin-left: 33rem;
+    border-radius: 17px;
+    width: 200px;
+    background-image: linear-gradient(to right, rgb(13, 15, 215), rgb(37, 154, 199));
+    color: rgb(255, 255, 255);
+    border: none;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .submitButton.ant-btn{
+    margin-top: 5rem;
+    margin-left: 32rem;
+    border-radius: 17px;
+    width: 200px;
+    background-image: linear-gradient(to right, rgb(13, 15, 215), rgb(37, 154, 199));
+    color: rgb(255, 255, 255);
+    border: none;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .nextButton.ant-btn{
+  margin-left: 33rem;
+  margin-top: 3rem;
+  border-radius: 17px;
+  width: 200px;
+  background-image: linear-gradient(to right, rgb(13, 15, 215), rgb(37, 154, 199));
+  color: rgb(255, 255, 255);
+  border: none;
+  height: 40px;
+  font-size: 20px;
+  }
+
+  .startButton.ant-btn{
+    margin-top: 4rem;
+    border-radius: 17px;
+    width: 200px;
+    background-image: linear-gradient(to right, rgb(13, 15, 215), rgb(37, 154, 199));
+    color: rgb(255, 255, 255);
+    border: none;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .rank-button {
+    width: 60px;
+    height: 40px;
+    background: transparent;
+    color: white;
+    border-radius: 0;
+    border-color: white;
+  }
+
+  .rank-button:hover {
+    background: transparent;
+    color: black;
+    border-color: #d5d5d5;
+  }
+
+  .shaded-style {
+    background: white;
+/* color: #000000; */
+  }
+
+  .rank-list {
+    display: inline-block;
+    border: 1px solid white;
+    border-radius: 5px;
+  }
+
+  .surveyCarousel{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+}
+  
+  @media only screen  and (max-width: 768px ) {
+    .surveyCard.ant-card{
+      width: 800px;
+      height: 450px;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+     margin: auto;
+    }
+    .surveyCard1.ant-card{
+      width: 775px;
+      height: 450px;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+     margin: auto;
+    }
+
+
+    .surveyCardQuestion.ant-card{
+      width: 800px;
+      height: auto;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+      
+    }
+
+    .commentButton.ant-btn{
+      margin-left: 5rem;
+    }
+  }
+
+  @media only screen  and (max-width: 600px ) {
+    .surveyCard.ant-card{
+      width: 551px;
+      height: 450px;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+     margin: auto;
+    }
+
+    .surveyCard1.ant-card{
+      width: 540px;
+      height: auto;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+     margin: auto;
+    }
+
+    .commentButton.ant-btn{
+      margin-left: 5rem;
+    }
+
+
+    .surveyCardQuestion.ant-card{
+      width: 551px;
+      height: auto;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+      
+    }
+  }
+
+  @media only screen and (max-width: 420px ) {
+    .surveyCard.ant-card{
+      width: 400px;
+      height: 450px;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+     margin: auto;
+    }
+
+    .startButton.ant-btn{
+      margin-top: 0;
+    }
+
+    .commentButton.ant-btn{
+      margin-left: 5rem;
+    }
+
+    .surveyCard1.ant-card{
+      width: 380px;
+      height: auto;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+     margin: auto;
+    }
+
+    .skillButton.ant-btn{
+      margin-left: 3rem;
+    }
+
+    .nextButton.ant-btn{
+      margin-left: 0;
+    }
+
+
+    .surveyCardQuestion.ant-card{
+      width: 400px;
+      height: auto;
+      background-image: linear-gradient(to bottom right, lightblue, lightgreen);
+      
+    }
+  }
+
+  
+ 

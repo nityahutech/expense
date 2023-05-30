@@ -1,37 +1,92 @@
-main{
+main {
   padding: 41px;
 }
-#root{
+#root {
   background: #f8f8f8;
 }
-.row{
+
+.hrtab {
+  min-height: 100vh;
+}
+.hrtab .ant-tabs-nav .ant-tabs-nav-wrap {
   background: #fff;
-    padding: 14px;
-    border-radius: 5px
+  margin-top: 25px;
+  padding: 5px;
 }
-.ant-table-wrapper{
-  background: #fff;
-    padding: 11px;
-}
-.ant-tag-green{
-  color: white;
-    background: #41BF36;
-    
-    border-radius: 5px;
-    font-family: 'Open Sans';
-  
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 22px;
-    width: 68px;
-    height: 25px;
-    text-align: center;
-}
-.ant-tag-volcano{
-  background: #FC6161;
+.page-tabs {
+  margin-right: 13px;
   border-radius: 5px;
-    font-family: 'Open Sans';
+}
+.ant-tabs-top.page-tabs {
+  margin-left: 13px;
+}
+
+.view-modal .ant-modal-content {
+  border-radius: 10px;
+}
+
+/* .view-modal .ant-modal-body {
+  padding: 0;
+} */
+
+.view-modal .ant-modal-header {
+  border-radius: 10px 10px 0px 0px;
+  background: #1963a6;
+  color: #ffffff;
+}
+.view-modal .ant-modal-title {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 25px;
+}
+
+.page-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #000000;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+}
+.page-tabs .ant-tabs-tab:hover {
+  color: #000000;
+}
+.page-tabs .ant-tabs-ink-bar {
+  /* position: absolute; */
+  background: #f9a01f;
+  pointer-events: none;
+}
+.page-tabs .ant-tabs-nav .ant-tabs-nav-list {
+  margin-left: 15px;
+}
+
+.row {
+  background: #fff;
+  padding: 14px;
+  border-radius: 5px;
+}
+.ant-table-wrapper {
+  background: #fff;
+  padding: 11px;
+}
+.ant-tag-green {
+  color: white;
+  background: #41bf36;
+
+  border-radius: 5px;
+  font-family: "Open Sans";
+
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 22px;
+  width: 68px;
+  height: 25px;
+  text-align: center;
+}
+.ant-tag-volcano {
+  background: #fc6161;
+  border-radius: 5px;
+  font-family: "Open Sans";
   color: white;
     font-style: normal;
     font-weight: 600;
@@ -39,44 +94,113 @@ main{
     line-height: 22px;
     width: 68px;
     height: 25px;
-    text-align: center;
+    text-align: center;      
 
 }
+
+.status-tag{
+  width: 80px; 
+  color: black;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 14px;
+  height: 24px;
+}
+
 a{
   color: #171832;
 }
-.ant-table-cell{
+.ant-table-cell {
   text-align: center;
 }
 
 tr[data-row-key*="subTotal"] {
   font-weight: bold;
 }
-.ant-table-column-has-sorters{
+.ant-table-column-has-sorters {
   text-align: center;
 }
 .ant-table-thead th.ant-table-column-has-sorters {
-  text-align: center;}
-  .ant-btn-link{
-    color: #6e7475;
-  }
-  .deLete{
-    color: #f04747;
-  }
+  text-align: center;
+}
+.ant-btn-link {
+  color: #6e7475;
+}
+.deLete {
+  color: #f04747;
+}
 
 .password-input-len .ant-input {
   width: 100%;
 }
 
-.color-button {
-  background-color: #1963A6;
-  border: 2px solid #1963A6;
-  border-radius: 4px;
-  width: 150px
+.back-arrow {
+  cursor: pointer;
+  /* margin: 0 15px; */
+  height: 90%;
+  display: flex;
+  width: 55px;
+  justify-content: space-evenly;
+  font-size: 15px;
+  align-items: center;
+  color: black;
 }
 
-.color-button:hover {
+.back-arrow:hover {
+  color: #1890ff;
+  /* border-bottom: 2px solid #f9a01f; */
+}
+
+.button-color {
+  background-color: #1963a6;
+  border: 1px solid #1963a6;
+  border-radius: 4px;
+  width: 150px;
+  color: white;
+  width: 150px;
+  color: white;
+}
+
+.button-color:hover {
   background-color: #ffffff;
-  color: #1963A6;
-  border: 2px solid #1963A6;
+  color: #1963a6;
+  border: 1px solid #1963a6;
+}
+
+.button-white {
+  color: #1963a6;
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  width: 150px;
+}
+
+.button-white:hover {
+  background-color: #ffffff;
+  color: #1963a6;
+  border: 1px solid #1963a6;
+}
+
+
+
+.viewAppraisal .ant-modal-body {
+  margin-left: 10px;
+  padding: 10px;
+}
+
+.modal-window .ant-modal-content {
+  border-radius: 10px;
+  /* width: 820px; */
+}
+
+.modal-window .ant-modal-header {
+  border-radius: 10px 10px 0px 0px;
+  background: #1963A6;
+  color: #ffffff;
+}
+.modal-window .ant-modal-title {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 25px;
 }

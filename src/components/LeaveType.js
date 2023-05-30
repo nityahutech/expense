@@ -19,13 +19,18 @@ import {
 } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import ConfigureContext from "../contexts/ConfigureContext";
-import "../style/leave.css";
-import { capitalize, checkAlphabets, checkNumbervalue, showNotification } from "../contexts/CreateContext";
+import "../style/Leave.css";
+import {
+  capitalize,
+  checkAlphabets,
+  checkNumbervalue,
+  showNotification,
+} from "../contexts/CreateContext";
 
 const { Option } = Select;
 
 const LeaveType = (props) => {
-  const page = "leaveType"
+  const page = "leaveType";
   const [form] = Form.useForm();
   const [editForm] = Form.useForm();
   const [types, setTypes] = useState([]);
@@ -35,55 +40,94 @@ const LeaveType = (props) => {
   const [creditable, setCreditable] = useState(false);
 
   useEffect(() => {
-    setTypes(props.data)
-    let data = Object.keys(activeType).length == 0 ? props.data[0] : props.data.find(x => x.name == activeType.name)
-    setActiveType(data)
-    setCreditable(data?.creditable)
-  }, [props.data])
+    // setTypes(props.data);
+    getConfigurations()
+  }, []);
+
+  
+
+  const getConfigurations = async () => {
+    let recs = await ConfigureContext.getConfigurations("leaveType");
+    let temp = Object.keys(recs).map((type, i) => {
+      return {
+        ...recs[`${type}`],
+        name: type,
+      };
+    });
+    temp.sort((k1, k2) => {
+      return k1.name < k2.name ? -1 : k1.name > k2 ? 1 : 0;
+    });
+    // let cards = {};
+    let index = temp.indexOf(
+      temp.filter((x) => {
+        if (x.name == "Loss Of Pay") {
+          return true;
+        }
+        // cards[`${x.name}`] = data[`${x.name}`].count;
+        return false;
+      })[0]
+    );
+    let lop = temp.splice(index, 1);
+    temp.push(lop[0]);
+    setTypes(temp);
+    console.log(temp, activeType)
+    let data =
+      Object.keys(activeType).length == 0
+        ? temp[0]
+        : temp.find((x) => x.name == activeType.name);
+    setActiveType(data);
+    setCreditable(data?.creditable);
+    // setTotalDays(cards);
+    // if (load) {
+    //   getConfigurations({ ...cards });
+    // }
+  };
 
   const leaveUpdate = (values) => {
     let record = {
       ...activeType,
-      ...values
+      ...values,
     };
     delete record.name;
-    let name = activeType.name
-    ConfigureContext.editConfiguration(page, {[`${name}`]: record}).then((res) => {
-      showNotification("success", "Success", "Updated Successfully!")
-      setEditLeaves(false)
-      editForm.resetFields()
-      props.getData();
-    }).catch((err) => {
-      showNotification("error", "Error", "Update Failed!")
-    })
+    let name = activeType.name;
+    ConfigureContext.editConfiguration(page, { [`${name}`]: record })
+      .then((res) => {
+        showNotification("success", "Success", "Updated Successfully!");
+        setEditLeaves(false);
+        editForm.resetFields();
+        getConfigurations();
+      })
+      .catch((err) => {
+        showNotification("error", "Error", "Update Failed!");
+      });
   };
 
   const addNewRule = (config) => {
     let name = config.name;
     delete config.name;
-    config ={
-        ...config,
-        weekendBtwnLeave: false,
-        holidaysBtwnLeave: false,
-        creditable: true,
-        frequency: "Monthly",
-        period: "Start",
-        probation: true,
-        carryForward: false,
-    }
-    ConfigureContext.editConfiguration(page, {[`${name}`]: config});
+    config = {
+      ...config,
+      weekendBtwnLeave: false,
+      holidaysBtwnLeave: false,
+      creditable: true,
+      frequency: "Monthly",
+      period: "Start",
+      probation: true,
+      carryForward: false,
+    };
+    ConfigureContext.editConfiguration(page, { [`${name}`]: config });
     form.resetFields();
-    props.getData();
+    getConfigurations();
     setIsModalOpen(false);
   };
-  
+
   return (
     <div className="wholePage">
       <Row>
         <Col xs={24} sm={22} md={6}>
-          <ul className="sidecard" style={{ cursor: "pointer" }}>
+          <div className="sidecard" style={{display: "flex", flexDirection: "column", cursor: "pointer", marginLeft: "20px" }}>
             {types.map((type) => (
-              <li
+              <div
                 className="sideCard"
                 style={
                   activeType.name == type.name
@@ -95,7 +139,7 @@ const LeaveType = (props) => {
                 }
                 onClick={() => {
                   setActiveType(type);
-                  setCreditable(type.creditable)
+                  setCreditable(type.creditable);
                 }}
               >
                 <div
@@ -108,19 +152,26 @@ const LeaveType = (props) => {
                 >
                   {type.name}
                 </div>
-              </li>
+              </div>
             ))}
-            <li className="sideCreate">
-                <Button onClick={() => { setIsModalOpen(true) }} style={{ width:"100%", border: "none" }}>
-                  <PlusCircleOutlined />
-                  Create New Rule
-                </Button>
+            <div className="sideCreate">
+              <Button
+                onClick={() => {
+                  setIsModalOpen(true);
+                }}
+                style={{ width: "100%", border: "none" }}
+              >
+                <PlusCircleOutlined />
+                Create New Rule
+              </Button>
               <Modal
                 destroyOnClose
                 title="Create New Rule"
                 open={isModalOpen}
                 onOk={() => form.submit()}
-                onCancel={() => { setIsModalOpen(false) }}
+                onCancel={() => {
+                  setIsModalOpen(false);
+                }}
               >
                 <Form
                   form={form}
@@ -179,7 +230,7 @@ const LeaveType = (props) => {
                       },
                     ]}
                   >
-                    <TextArea 
+                    <TextArea
                       rows={2}
                       onChange={(e) => {
                         const str = e.target.value;
@@ -211,8 +262,8 @@ const LeaveType = (props) => {
                   </Form.Item>
                 </Form>
               </Modal>
-            </li>
-          </ul>
+            </div>
+          </div>
         </Col>
         <Col xs={24} sm={22} md={18}>
           <Card
@@ -224,15 +275,17 @@ const LeaveType = (props) => {
               cursor: "default",
               marginTop: "10px",
             }}
-            extra={ !editLeaves ? (
-              <Button
-                type="text"
-                bordered={false}
-                onClick={() => setEditLeaves(true)}
-              >
-                <EditFilled />
-              </Button>
-            ) : null}
+            extra={
+              !editLeaves ? (
+                <Button
+                  type="text"
+                  bordered={false}
+                  onClick={() => setEditLeaves(true)}
+                >
+                  <EditFilled />
+                </Button>
+              ) : null
+            }
           >
             <Form
               form={editForm}
@@ -248,23 +301,28 @@ const LeaveType = (props) => {
               autoComplete="off"
               onFinish={leaveUpdate}
             >
-              <div className="personalCardDiv" style={{flexDirection: "column"}}>
-                <Row style={{width: "100%"}}>
+              <div
+                className="personalCardDiv"
+                style={{ flexDirection: "column" }}
+              >
+                <Row style={{ width: "100%" }}>
                   <Col>
-                          <div
-                            style={{
-                              fontSize: "14px",
-                              fontWeight: "600",
-                              lineHeight: "18px",
-                              color: "#07182B",
-                              fontFamily: "Open Sans,sans-serif",
-                              marginBottom: "7px",
-                            }}
-                          >
-                            Name
-                          </div>
-                    { !editLeaves ? (
-                      <div style={{marginBottom: "13px"}}>{activeType.name}</div>
+                    <div
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        lineHeight: "18px",
+                        color: "#07182B",
+                        fontFamily: "Open Sans,sans-serif",
+                        marginBottom: "7px",
+                      }}
+                    >
+                      Name
+                    </div>
+                    {!editLeaves ? (
+                      <div style={{ marginBottom: "13px" }}>
+                        {activeType.name}
+                      </div>
                     ) : (
                       <Form.Item initialValue={activeType.name} name="name">
                         <Input
@@ -280,24 +338,29 @@ const LeaveType = (props) => {
                     )}
                   </Col>
                 </Row>
-                <Row style={{width: "100%"}}>
-                  <Col style={{width: "90%"}}>
-                      <div
-                        style={{
-                          fontWeight: 600,
-                          lineHeight: "18px",
-                          color: "#07182b",
-                          fontSize: "15px",
-                          fontFamily: "Open Sans,sans-serif",
-                          marginBottom: "6px",
-                        }}
-                      >
-                        Description
+                <Row style={{ width: "100%" }}>
+                  <Col style={{ width: "90%" }}>
+                    <div
+                      style={{
+                        fontWeight: 600,
+                        lineHeight: "18px",
+                        color: "#07182b",
+                        fontSize: "15px",
+                        fontFamily: "Open Sans,sans-serif",
+                        marginBottom: "6px",
+                      }}
+                    >
+                      Description
+                    </div>
+                    {!editLeaves ? (
+                      <div style={{ marginBottom: "13px" }}>
+                        {activeType.description}
                       </div>
-                    { !editLeaves ? (
-                      <div style={{marginBottom: "13px"}}>{activeType.description}</div>
                     ) : (
-                      <Form.Item initialValue={activeType.description} name="description">
+                      <Form.Item
+                        initialValue={activeType.description}
+                        name="description"
+                      >
                         {/* <Input
                           style={{
                             marginBottom: "13px",
@@ -307,21 +370,24 @@ const LeaveType = (props) => {
                           }}
                           bordered={false}
                         /> */}
-                        
-                    <TextArea 
-                      rows={2}
-                      onChange={(e) => {
-                        const str = e.target.value;
-                        const caps = str.split(". ").map(capitalize).join(". ");
-                        editForm.setFieldsValue({ description: caps });
-                      }}
-                    />
+
+                        <TextArea
+                          rows={2}
+                          onChange={(e) => {
+                            const str = e.target.value;
+                            const caps = str
+                              .split(". ")
+                              .map(capitalize)
+                              .join(". ");
+                            editForm.setFieldsValue({ description: caps });
+                          }}
+                        />
                       </Form.Item>
                     )}
                   </Col>
                 </Row>
               </div>
-            <Divider />
+              <Divider />
               <div className="leavesCount">
                 <Row>
                   <Col xs={24} sm={20} md={7}>
@@ -389,13 +455,12 @@ const LeaveType = (props) => {
                         name="weekendBtwnLeave"
                         valuePropName="checked"
                       >
-                        <Checkbox defaultChecked={activeType?.weekendBtwnLeave} >
+                        <Checkbox defaultChecked={activeType?.weekendBtwnLeave}>
                           Count as Leave
                         </Checkbox>
                       </Form.Item>
                     )}
                   </Col>
-                  
                 </Row>
                 <Row>
                   <Col xs={24} sm={22} md={7}></Col>
@@ -420,9 +485,7 @@ const LeaveType = (props) => {
                       Holidays Between Leave
                     </div>
                     {editLeaves === false ? (
-                      <>
-                        {activeType?.holidaysBtwnLeave ? "Yes" : "No"}
-                      </>
+                      <>{activeType?.holidaysBtwnLeave ? "Yes" : "No"}</>
                     ) : (
                       <Form.Item
                         initialValue={activeType?.holidaysBtwnLeave}
@@ -430,7 +493,9 @@ const LeaveType = (props) => {
                         style={{ marginRight: "0px" }}
                         valuePropName="checked"
                       >
-                        <Checkbox defaultChecked={activeType?.holidaysBtwnLeave} >
+                        <Checkbox
+                          defaultChecked={activeType?.holidaysBtwnLeave}
+                        >
                           Count as Leave
                         </Checkbox>
                       </Form.Item>
@@ -439,9 +504,9 @@ const LeaveType = (props) => {
                   <Col xs={24} sm={22} md={9}></Col>
                 </Row>
               </div>
-            {activeType.name != "Loss Of Pay" ? (
-              <>
-                <Divider />
+              {activeType.name != "Loss Of Pay" ? (
+                <>
+                  <Divider />
                   <div className="leavesCount">
                     <Row>
                       <Col xs={24} sm={20} md={7}>
@@ -480,7 +545,9 @@ const LeaveType = (props) => {
                         ) : (
                           <Form.Item
                             initialValue={
-                              activeType?.creditable ? activeType.creditable : null
+                              activeType?.creditable
+                                ? activeType.creditable
+                                : null
                             }
                             name="creditable"
                             valuePropName="checked"
@@ -519,12 +586,16 @@ const LeaveType = (props) => {
                         </div>
                         {editLeaves === false ? (
                           <div>
-                            {activeType?.frequency ? activeType.frequency : "Monthly"}
+                            {activeType?.frequency
+                              ? activeType.frequency
+                              : "Monthly"}
                           </div>
                         ) : (
                           <Form.Item
                             initialValue={
-                              activeType?.frequency ? activeType.frequency : null
+                              activeType?.frequency
+                                ? activeType.frequency
+                                : null
                             }
                             name="frequency"
                           >
@@ -559,10 +630,14 @@ const LeaveType = (props) => {
                           Accrual Period
                         </div>
                         {editLeaves === false ? (
-                          <div>{activeType?.period ? activeType.period : "start"}</div>
+                          <div>
+                            {activeType?.period ? activeType.period : "start"}
+                          </div>
                         ) : (
                           <Form.Item
-                            initialValue={activeType?.period ? activeType.period : null}
+                            initialValue={
+                              activeType?.period ? activeType.period : null
+                            }
                             name="period"
                           >
                             <Select
@@ -583,9 +658,9 @@ const LeaveType = (props) => {
                       </Col>
                     </Row>
                   </div>
-              </>
-            ) : null}
-            <Divider />
+                </>
+              ) : null}
+              <Divider />
               <div className="leavesCount">
                 <Row>
                   <Col xs={24} sm={20} md={7}>
@@ -623,7 +698,9 @@ const LeaveType = (props) => {
                       </>
                     ) : (
                       <Form.Item
-                        initialValue={activeType?.probation ? activeType.probation : null}
+                        initialValue={
+                          activeType?.probation ? activeType.probation : null
+                        }
                         name="probation"
                         valuePropName="checked"
                       >
@@ -644,9 +721,9 @@ const LeaveType = (props) => {
                   </Col>
                 </Row>
               </div>
-            {activeType.name != "Loss Of Pay" ? (
-              <>
-                <Divider />
+              {activeType.name != "Loss Of Pay" ? (
+                <>
+                  <Divider />
                   <div className="leavesCount">
                     <Row>
                       <Col xs={24} sm={20} md={7}>
@@ -663,9 +740,9 @@ const LeaveType = (props) => {
                           Carry Forward
                         </div>
                       </Col>
-                        {editLeaves === false ? (
-                          <>
-                      <Col xs={24} sm={20} md={16}>
+                      {editLeaves === false ? (
+                        <>
+                          <Col xs={24} sm={20} md={16}>
                             <div
                               style={{
                                 fontSize: "14px",
@@ -681,10 +758,10 @@ const LeaveType = (props) => {
                             <div style={{ marginBottom: "13px" }}>
                               {activeType?.carryForward ? "Yes" : "No"}
                             </div>
-                      </Col>
-                          </>
-                        ) : (
-                      <Col xs={24} sm={20} md={16}>
+                          </Col>
+                        </>
+                      ) : (
+                        <Col xs={24} sm={20} md={16}>
                           <Form.Item
                             initialValue={activeType?.carryForward || null}
                             name="carryForward"
@@ -704,47 +781,47 @@ const LeaveType = (props) => {
                             </Checkbox>
                           </Form.Item>
                         </Col>
-                        )}
+                      )}
                     </Row>
                   </div>
-              </>
-            ) : null}
-            {editLeaves === true ? (
-                      <Row
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          marginTop: "3%",
-                        }}
-                      >
-                        <Button
-                          onClick={() => {
-                            editForm.resetFields();
-                            setEditLeaves(false);
-                          }}
-                          type="text"
-                          style={{ fontSize: 15 }}
-                        >
-                          <CloseOutlined /> CANCEL
-                        </Button>
-                        <Col>
-                          <Button
-                            type="primary"
-                            style={{
-                              marginLeft: "10px",
-                              background: "#1963A6",
-                              width: "90px",
-                            }}
-                            onClick={() => {
-                              editForm.submit();
-                            }}
-                          >
-                            <CheckOutlined />
-                            SAVE
-                          </Button>
-                        </Col>
-                      </Row>
-                    ) : null}
+                </>
+              ) : null}
+              {editLeaves === true ? (
+                <Row
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "3%",
+                  }}
+                >
+                  <Button
+                    onClick={() => {
+                      editForm.resetFields();
+                      setEditLeaves(false);
+                    }}
+                    type="text"
+                    style={{ fontSize: 15 }}
+                  >
+                    <CloseOutlined /> CANCEL
+                  </Button>
+                  <Col>
+                    <Button
+                      type="primary"
+                      style={{
+                        marginLeft: "10px",
+                        background: "#1963A6",
+                        width: "90px",
+                      }}
+                      onClick={() => {
+                        editForm.submit();
+                      }}
+                    >
+                      <CheckOutlined />
+                      SAVE
+                    </Button>
+                  </Col>
+                </Row>
+              ) : null}
             </Form>
           </Card>
         </Col>

@@ -1,32 +1,21 @@
 import React, { useState, useEffect } from "react";
 import {
-  Card,
   Button,
   Table,
   Tooltip,
   Tag,
   Modal,
-  Space,
-  Row,
-  Divider,
-  Col,
-  Form,
-  Input,
   DatePicker,
-  Select,
-  Switch,
+  Card,
+  Input,
+  Row,
+  Col
 } from "antd";
 import {
-  MinusCircleOutlined,
-  PlusOutlined,
-  CheckOutlined,
-  CloseOutlined,
   EyeFilled,
-  EditFilled,
-  UserAddOutlined,
+  SearchOutlined
 } from "@ant-design/icons";
 import "./travelManagement.css";
-// import { EyeFilled, EditFilled } from "@ant-design/icons";
 import Checkmark from "../../images/checkmark.png";
 import CheckReject from "../../images/rejected.png";
 import ViewTravelMng from "./ViewTravelMng";
@@ -36,25 +25,28 @@ const { RangePicker } = DatePicker;
 
 function TravelManagement(props) {
   console.log("props", props);
-  const [travelDetails, setTravelDetails] = useState(props.travelDetails || []);
-  const [durationArray, setDurationArray] = useState(props.durationArray || []);
+  const loading = props.loading
+  const [travelDetails, setTravelDetails] = useState(props?.travelDetails || []);
+  const [durationArray, setDurationArray] = useState(props?.durationArray || []);
   const [openViewModal, setOpenViewModal] = useState(false);
   const [viewTravelData, setViewTravelData] = useState({});
-
-  const [user, setUser] = useState({});
+  const [filteredPending, setFilteredPending] = useState([]);
+  const [filteredApprove, setFilteredApprove] = useState([]);
+  const [filterRequest, setFilterRequest] = useState(filteredApprove || [])
 
   console.log(props.roleView);
+  console.log('eeeeeeee', durationArray, travelDetails)
 
   function viewModal(data) {
     setOpenViewModal(true);
     setViewTravelData(data);
+
   }
 
   const setStatus = async (record, status) => {
     Modal.confirm({
-      title: `Are you sure, you want to ${
-        status == "Approved" ? "approve" : "reject"
-      } this request?`,
+      title: `Are you sure, you want to ${status == "Approved" ? "approve" : "reject"
+        } this request?`,
       okText: "Yes",
       okType: "danger",
       onOk: async () => {
@@ -66,7 +58,7 @@ function TravelManagement(props) {
           return allotTravel;
         });
         await TravelContext.updateTravelData(record.id, record);
-        // setTravelDetails(updateTravelRecord);
+        setTravelDetails(updateTravelRecord);
         props.getTravelData();
       },
     });
@@ -77,87 +69,93 @@ function TravelManagement(props) {
       title: "Employee Code ",
       dataIndex: "empCode",
       key: "empCode",
-      width: 200,
+      width: 120,
       align: "left",
     },
     {
       title: "Employee Name",
       dataIndex: "empName",
       key: "empName",
-      width: 200,
+      width: 150,
       align: "left",
     },
     {
       title: "Travel Title",
       dataIndex: "travelName",
       key: "travelName",
-      width: 200,
+      width: 100,
       align: "left",
     },
     {
       title: "Start Date",
       dataIndex: "startDate",
       key: "startDate",
-      width: 200,
+      width: 150,
       align: "left",
       render: (_, record, index) => {
         let temp = durationArray[index];
-        return temp[0];
+        // return temp[0];
+        return Array.isArray(temp) && temp.length > 0 ? temp[0] : null;
       },
     },
     {
       title: "End Date",
       dataIndex: "endDate",
       key: "endDate",
-      width: 200,
+      width: 150,
       align: "left",
       render: (_, record, index) => {
         let temp = durationArray[index];
-        return temp[temp.length - 1];
+        // return temp[temp.length - 1];
+        return Array.isArray(temp) ? temp[temp.length - 1] : null;
       },
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      width: 200,
-      align: "left",
+      width: 100,
+      align: "center",
       render: (_, { status }) =>
         status !== "" && (
-          <Tag
-            style={{
-              width: "84px",
-              color: "#000000",
-              borderRadius: "10px",
-              display: "flex",
-              justifyContent: "center",
-              padding: "2px",
-            }}
-            className="statusTag"
-            color={
-              status === "Approved"
-                ? "rgb(8 231 68 / 75%)"
-                : status === "Pending"
-                ? "rgb(244 209 105)"
-                : "#f44336"
-            }
-            key={status}
-          >
-            {status}
-          </Tag>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Tag
+              style={{
+                width: "84px",
+                color: "#000000",
+                borderRadius: "10px",
+                display: "flex",
+                justifyContent: "center",
+                // padding: "2px",
+
+              }}
+              className="statusTag"
+              color={
+                status === "Approved"
+                  ? "rgb(8 231 68 / 75%)"
+                  : status === "Pending"
+                    ? "rgb(244 209 105)"
+                    : "#f44336"
+              }
+              key={status}
+            >
+              {status}
+            </Tag>
+          </div>
         ),
     },
     {
       title: "Action",
       dataIndex: "operation",
       key: "operation",
-      width: 200,
+      width: 150,
       align: "center",
+      fixed: 'right',
       render: (_, record) => (
         <>
           <div
             className="employee-button"
-            style={{ display: "flex", flexDirection: "row" }}
+            style={{ display: "flex", flexDirection: "row", justifyContent: "center", }}
           >
             <Tooltip placement="bottom" title="View" color="#1963A6">
               <Button
@@ -174,9 +172,9 @@ function TravelManagement(props) {
               style={
                 record.status == "Pending"
                   ? {
-                      padding: 0,
-                      color: "rgb(39 151 44 / 74%)",
-                    }
+                    padding: 0,
+                    color: "rgb(39 151 44 / 74%)",
+                  }
                   : { display: "none" }
               }
               type="link"
@@ -206,64 +204,105 @@ function TravelManagement(props) {
   useEffect(() => {
     setTravelDetails(props.travelDetails);
     setDurationArray(props.durationArray);
-  }, [props.travelDetails]);
+    setFilterRequest(filteredApprove);
+  }, [props.travelDetails, filteredApprove]);
 
-  var filteredPending = [];
-  var filteredApprove = [];
+  useEffect(() => {
+    const tempFilteredPending = [];
+    const tempFilteredApprove = [];
 
-  travelDetails.forEach((record) => {
-    if (record.status == "Pending") {
-      filteredPending.push(record);
-    } else {
-      filteredApprove.push(record);
+    travelDetails.forEach((record) => {
+      if (record.status === 'Pending') {
+        tempFilteredPending.push(record);
+      } else {
+        tempFilteredApprove.push(record);
+      }
+    });
+
+    setFilteredPending(tempFilteredPending);
+    setFilteredApprove(tempFilteredApprove);
+  }, [travelDetails]);
+
+  const tableProps = {
+    loading,
+  };
+
+  const searchChange = (e) => {
+    let search = e.target.value
+    console.log('formData', search)
+    if (search) {
+      let result = filteredApprove.filter((ex) =>
+        ex?.date?.toLowerCase().includes(search?.toLowerCase()) ||
+        ex?.travelName?.toLowerCase().includes(search?.toLowerCase()) ||
+        ex?.empName?.toLowerCase().includes(search?.toLowerCase())
+      )
+      console.log('formData', result)
+      const modifiedFilterRequest = [...result];
+      setFilterRequest(modifiedFilterRequest)
     }
-  });
+    else {
+      setFilterRequest(filteredApprove)
+    }
+  }
+
 
   return (
-    <>
-      <div className="travelDiv">
-        <>
-          <Table
-            className="travelTable"
-            columns={columns}
-            dataSource={filteredPending}
+
+    <Card className="daily">
+      <Table
+        {...tableProps}
+        className="travelTable"
+        columns={columns}
+        dataSource={filteredPending}
+        scroll={{ x: 600 }}
+      />
+      <Row gutter={10} style={{ justifyContent: "space-between" }}>
+        <Col sm={24} md={8}>
+          <Input
+            className="daily"
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            onChange={searchChange}
           />
-          <Modal
-            bodyStyle={{
-              height: 530,
-              overflowY: "scroll",
-              overflowX: "hidden",
+        </Col>
+      </Row>
+      <Table
+        {...tableProps}
+        className="travelTable"
+        columns={columns}
+        dataSource={filterRequest}
+        scroll={{ x: 600 }}
+      />
+      <Modal
+        bodyStyle={{
+          height: 530,
+          overflowY: "scroll",
+          overflowX: "hidden",
+        }}
+        destroyOnClose
+        centered
+        open={openViewModal}
+        footer={null}
+        title="TRAVEL DETAILS"
+        closeIcon={
+          <div
+            onClick={() => {
+              setOpenViewModal(false);
             }}
-            destroyOnClose
-            centered
-            open={openViewModal}
-            footer={null}
-            title="TRAVEL DETAILS"
-            closeIcon={
-              <div
-                onClick={() => {
-                  setOpenViewModal(false);
-                }}
-                style={{ color: "#ffff" }}
-              >
-                X
-              </div>
-            }
-            className="viewModal"
+            style={{ color: "#ffff" }}
           >
-            <ViewTravelMng
-              setOpenViewModal={setOpenViewModal}
-              viewTravelData={viewTravelData}
-            />
-          </Modal>
-          <Table
-            className="travelTable"
-            columns={columns}
-            dataSource={filteredApprove}
-          />
-        </>
-      </div>
-    </>
+            X
+          </div>
+        }
+        className="viewModal"
+      >
+        <ViewTravelMng
+          setOpenViewModal={setOpenViewModal}
+          viewTravelData={viewTravelData}
+        />
+      </Modal>
+    </Card>
+
   );
 }
 

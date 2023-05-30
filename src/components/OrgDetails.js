@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Form, Input, Col, Row, Divider, message, Button, Select } from "antd";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "../style/Onboarding.css";
-import { capitalize, checkAlphabets, checkNumbervalue, checkUpperCase, getBase64, getCountryCode } from "../contexts/CreateContext";
+import {
+  capitalize,
+  checkAlphabets,
+  checkNumbervalue,
+  checkUpperCase,
+  getBase64,
+  getCountryCode,
+} from "../contexts/CreateContext";
 import PrefixSelector from "./PrefixSelector";
 
 const OrgDetails = (props) => {
@@ -261,7 +268,9 @@ const OrgDetails = (props) => {
               initialValue={data?.phone}
             >
               <Input
-                addonBefore={(<PrefixSelector name={"prefix"} initial={data.prefix} />)}
+                addonBefore={
+                  <PrefixSelector name={"prefix"} initial={data.prefix} />
+                }
                 maxLength={10}
                 placeholder="Phone"
                 style={{

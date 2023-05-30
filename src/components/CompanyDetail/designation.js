@@ -56,9 +56,11 @@ const Designation = () => {
     setDesignations(data.designations);
     setshowNewColumn(data.enabled);
     let designNo = await getDesigNo();
+    console.log(designNo, data.designations);
     let keys = Object.keys(data.designations);
     let grade = Object.values(data.designations);
     setNames(designNo.names);
+    ConfigureContext.editConfiguration(page, {designations : designNo})
     let temp = keys.map((d, i) => {
       return {
         grade: grade[i],
@@ -196,7 +198,8 @@ const Designation = () => {
       onOk: () => {
         let temp = { ...designations };
         delete temp[`${record.designation}`];
-        ConfigureContext.editConfiguration(page, { designations: temp })
+        console.log(temp);
+        ConfigureContext.updateConfigurations(page, {designations: temp})
           .then((response) => {
             showNotification(
               "success",
@@ -219,7 +222,8 @@ const Designation = () => {
     let temp = { ...designations };
     delete temp[`${old}`];
     temp[`${des}`] = gra != null ? gra : 1;
-    ConfigureContext.editConfiguration(page, { designations: temp })
+    console.log(temp);
+    ConfigureContext.updateConfigurations(page, { designations: temp })
       .then((response) => {
         names[`${old}`].map((id) => {
           EmpInfoContext.updateEduDetails(id, { designation: des });
@@ -383,9 +387,7 @@ const Designation = () => {
                                                 );
                                               if (exists) {
                                                 return Promise.reject(
-                                                  new Error(
-                                                    "This designations already exists!"
-                                                  )
+                                                  new Error()
                                                 );
                                               }
                                             },

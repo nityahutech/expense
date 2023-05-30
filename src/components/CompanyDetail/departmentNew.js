@@ -399,7 +399,7 @@ const DepartmentNew = () => {
               <Skeleton active />
             ) : (
               <Card
-                title="Organisation"
+                title="Organization"
                 className="organisationCard"
                 bordered={true}
                 hoverable={true}

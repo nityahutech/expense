@@ -33,7 +33,7 @@ export async function createUser(values, compId) {
   let res = await createUserWithEmailAndPassword(
     createAuth,
     values.mailid,
-    "newPassword#1"
+    randomStringGenerator()
   );
   try {
     updateProfile(res.user, { displayName: values.name });
@@ -71,12 +71,19 @@ export async function createUser(values, compId) {
       disabled: false,
       remark: values.remark || "",
     };
-    await setDoc(doc(db, `users`, res.user.uid), { compId: compId, role: valuesToservice.role, mailid: valuesToservice.mailid });
+    await setDoc(doc(db, `users`, res.user.uid), { 
+      compId: compId,
+      role: valuesToservice.role,
+      mailid: valuesToservice.mailid,
+      name: values.name,
+      managees: [],
+      empId: valuesToservice.empId
+    });
     await setDoc(doc(db, `companyprofile/${compId}/users`, res.user.uid), valuesToservice)
     await setDoc(doc(db, `companyprofile/${compId}/salary`, res.user.uid), { bank: [] })
-    // console.log(res.user);
+    console.log(res.user);
     sendEmailVerification(res.user).catch(err => showNotification("error", "Error", `Failed to send verification email to ${values.mailid}`))
-    // console.log(valuesToservice.empId);
+    console.log(valuesToservice);
     return valuesToservice.empId
   } catch (error) {
     deleteDoc(doc(db, `users`, res.user.uid))
@@ -86,6 +93,11 @@ export async function createUser(values, compId) {
     showNotification("error", "Error", `Incorrect fields for ${values.mailid}`)
     return false;
   }
+}
+
+export async function getEmpInfo(id) {
+  let rec = await getDoc(doc(db, 'users', id));
+  return rec.data()
 }
 
 export async function getUsers() {
@@ -163,9 +175,18 @@ export function checkAlphabetsName(event) {
   }
 };
 
-export function getManagersData(compId) {
-  // const q = query(collection(`companyprofile/${compId}/users`), where("isManager", "==", true))
-  getUsers()
+export async function getManagersData(compId, name) {
+  console.log(compId, name)
+  const q = query(collection(db, `companyprofile/${compId}/users`), where("repManager", "==", name))
+  console.log(q)
+  let data = await getDocs(q);
+  let ppl = {}
+  data.docs.map(doc => ppl[doc.id] = {
+      name: doc.data().name,
+      email: doc.data().mailid,
+  })
+  console.log(ppl);
+  return ppl
 };
 
 export function downloadFile(data, filename) {
@@ -202,3 +223,6 @@ export async function deleteUsers(array) {
   }
 }
 
+export function randomStringGenerator() {
+  return Math.floor(Math.random() * Math.pow(10, 16)).toString(36);
+}

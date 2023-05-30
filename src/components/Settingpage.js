@@ -6,13 +6,12 @@ import { Button } from "antd";
 import { Tabs } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { showNotification } from "../contexts/CreateContext";
-import NotifySettings from "./NotifySettings";
 
-const Settingpage = () => {
+const Settingpage = (props) => {
   const [form] = Form.useForm();
   const [password, setPassword] = useState("");
   const [newPassword, setNew] = useState("");
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth();
   const { updateMyPassword, login } = useAuth();
 
   const checkPassword = async () => {
@@ -196,9 +195,6 @@ const Settingpage = () => {
               </div>
             </Card>
           </div>
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Notifications" key="2">
-          <NotifySettings data={"hi"} />
         </Tabs.TabPane>
       </Tabs>
     </>

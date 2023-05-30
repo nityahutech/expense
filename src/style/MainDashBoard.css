@@ -34,6 +34,9 @@
 .bg-sel.ant-calendar-date{
     background-color: #e6f7ff;
 }
+.bg-sel.ant-calendar-date:hover{
+    background-color: #e6f7ff;
+}
 
 .ant-calendar-date:hover{
     background-color: #f0f0f0;

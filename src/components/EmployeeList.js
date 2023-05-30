@@ -450,7 +450,7 @@ function EmployeeList() {
         <Tabs
           defaultActiveKey={activetab}
           activeKey={activetab}
-          className="Tabs"
+          className="page-tabs"
           onChange={(tabKey) => {
             setActivetab(tabKey);
             if (tabKey == 1) {

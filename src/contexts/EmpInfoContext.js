@@ -74,12 +74,16 @@ class EmpInfoContext {
 
     getBdayAnniversary = async () => {
         let recs = await getDocs(collection(db, `companyprofile/${compId}/users`));
-        let data = {};
+        let data = {}, date, temp;
         recs.docs.forEach(doc => {
-            let temp = data[doc.data().dob]?.birthday || []
-            data[doc.data().dob] = { birthday: doc.data().name }
-            temp = data[doc.data().dob]?.anniversary || []
-            data[doc.data().doj] = { anniversary: doc.data().name }
+            date = doc.data().dob?.substring(0, 5) || null;
+            temp = data[date]?.birthday || [];
+            temp.push(doc.data().name);
+            data[date] = { ...data[date], birthday: temp };
+            date = doc.data().doj?.substring(0, 5) || null;
+            temp = data[date]?.anniversary || [];
+            temp.push(doc.data().name);
+            data[date] = { ...data[date], anniversary: temp }
         })
         return data;
     }

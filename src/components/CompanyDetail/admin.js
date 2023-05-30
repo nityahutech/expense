@@ -7,12 +7,16 @@ import "./companystyle.css";
 import {
   Button,
   Col,
+  Modal,
   Form,
   Row,
   Card,
   Space,
   notification,
   Skeleton,
+  Table,
+  Input,
+  Select,
 } from "antd";
 import {
   PlusCircleOutlined,
@@ -36,8 +40,33 @@ const Admin = () => {
   const [ceoAdmin, setCeoAdmin] = useState();
   const [hrAdmin, setHrAdmin] = useState();
   const [financeAdmins, setFinanceAdmins] = useState([]);
+  const [accessType, setAccessType] = useState(null);
+  const [accessUsers, setAccessUsers] = useState();
+  const [updateEmpNames, setUpdateEmpNames] = useState("");
   const [hrExAdmins, setHrExAdmins] = useState([]);
   const [options, setOptions] = useState([]);
+  const [editAccessModal, setEditAccessModal] = useState(false);
+  const [form] = Form.useForm();
+
+  const showModal = () => {
+    setEditAccessModal(true);
+  };
+  const handleOk = () => {
+    setEditAccessModal(false);
+  };
+  const handleCancel = () => {
+    setAccessUsers("");
+    setEditAccessModal(false);
+    form.resetFields();
+  };
+
+  const handleEmpInputChange = (e) => {
+    setAccessUsers(e.target.value);
+  };
+
+  const updateExcessDetails = () => {
+    setUpdateEmpNames(accessUsers);
+  };
 
   const onFinish = (type) => {
     const valuesToservice = {
@@ -71,7 +100,6 @@ const Admin = () => {
   };
 
   const onHRExeFinish = (values) => {
-
     let hrExPower = [];
 
     for (let i = 0; i < values.hrExeUser.length && i < 3; i++) {
@@ -114,10 +142,11 @@ const Admin = () => {
         hrTemp.push(emp);
       }
     });
-    setFinanceAdmins(finTemp);
+    // setFinanceAdmins(finTemp);
     setHrExAdmins(hrTemp);
     setLoading(false);
   };
+  console.log("testt");
 
   const onSearch = (searchText) => {
     let matchingName = allEmpName.filter((ex) => {
@@ -144,13 +173,24 @@ const Admin = () => {
     return initials;
   }
 
+  const getColor = (index) => {
+    const backgroundColor = [
+      "aqua",
+      "#2196F3",
+      "#009688",
+      "#8BC34A",
+      "#FFEB3B",
+    ];
+    return backgroundColor[index % backgroundColor.length];
+  };
+
   const imageStyle = {
     border: "1px solid #ccc",
     borderRadius: "25px",
     backgroundColor: "aqua",
-    width: "50px",
-    height: "50px",
-    margin: "2px",
+    width: "30px",
+    height: "30px",
+    margin: "3px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -161,13 +201,204 @@ const Admin = () => {
     borderRadius: "50px",
     marginTop: "10px",
     marginBottom: "10px",
-    fontSize: "25px",
+    fontSize: "14px",
     fontWeight: "lighter",
-    display: "flex",
+    display: "inline-flex",
+    width: "auto",
     alignItems: "center",
     flexDirection: "row",
     marginRight: "10px",
   };
+  console.log("financeadmin", financeAdmins);
+
+  const columns = [
+    {
+      title: "Access",
+      dataIndex: "access",
+      key: "access",
+      width: 90,
+      align: "center",
+      // render: (access) => (
+      //   <div>
+      //     {access.map((data) => (
+      //       <div key={data} style={{ marginBottom: "1.5rem" }}>
+      //         {data}
+      //       </div>
+      //     ))}
+      //   </div>
+      // ),
+    },
+    {
+      title: "Employees Name",
+      dataIndex: "employees",
+      key: "employees",
+      // width: 500,
+      align: "center",
+      render: (_, { employees }) => (
+        <div style={{ textAlign: "left" }}>
+          {employees.map((x, i) => (
+            <div style={divStyle} key={i}>
+              {" "}
+              {x.profilePic ? (
+                <img style={imageStyle} src={x.profilePic} />
+              ) : (
+                <div
+                  style={{
+                    border: "1px solid #ccc",
+                    borderRadius: "25px",
+                    // backgroundColor: getColor(),
+                    width: "30px",
+                    height: "30px",
+                    margin: "3px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: getColor(i),
+                  }}
+                  // className="empImg"
+                >
+                  {getInitials(x.name)}
+                </div>
+              )}
+              <span style={{ marginRight: "10px" }}>{x.name}</span>
+            </div>
+          ))}
+        </div>
+
+        // <div
+        //   style={{
+        //     display: "flex",
+        //     flexDirection: "column",
+        //     alignItems: "flex-end",
+        //   }}
+        // >
+        //   {employees.map((data, index) => (
+        //     <div key={data}>
+        //       {record.showInput !== index && (
+        //         <Button
+        //           style={{ marginTop: "20px" }}
+        //           type="primary"
+        //           onClick={() => handleIconClick(record.key, index)}
+        //         >
+        //           <PlusCircleOutlined />
+        //           Add
+        //         </Button>
+        //       )}
+        //       {record.showInput === index && (
+        //         <>
+        //           <Form.List
+        //             name="users"
+        //             initialValue={[...financeAdmins]}
+        //             key={index}
+        //           >
+        //             {(fields, { add, remove }) => (
+        //               <>
+        //                 {fields
+        //                   .slice(0, 5)
+        //                   .map(({ key, name, ...restField }) => (
+        //                     <Space
+        //                       key={key}
+        //                       style={{
+        //                         display: "flex",
+        //                         // marginBottom: 8,
+        //                       }}
+        //                       align="baseline"
+        //                     >
+        //                       <Form.Item
+        //                         // style={{ marginTop: "10px" }}
+        //                         initialValue={
+        //                           data.financerAdmin != null
+        //                             ? data.financerAdmin[key]
+        //                             : ""
+        //                         }
+        //                         {...restField}
+        //                         name={[name, "financerAdmin"]}
+        //                       >
+        //                         <AutoComplete
+        //                           // options={options}
+        //                           style={{
+        //                             width: 100,
+        //                             padding: "5px",
+        //                           }}
+        //                           onSearch={onSearch}
+        //                           size="large"
+        //                           placeholder="Enter Finance Admin Name"
+        //                         />
+        //                       </Form.Item>
+
+        //                       <MinusCircleOutlined
+        //                         onClick={() => remove(name)}
+        //                       />
+        //                     </Space>
+        //                   ))}
+        //                 {console.log(fields.length)}
+        //                 {fields.length > 5 ? (
+        //                   <Space>
+        //                     <Button>Save</Button>
+        //                     <Button>Cancel</Button>
+        //                   </Space>
+        //                 ) : (
+        //                   <Form.Item>
+        //                     <Button
+        //                       type="dashed"
+        //                       onClick={() => add()}
+        //                       block
+        //                       icon={<PlusOutlined />}
+        //                     >
+        //                       Add field
+        //                     </Button>
+        //                   </Form.Item>
+        //                 )}
+        //               </>
+        //             )}
+        //           </Form.List>
+        //         </>
+        //       )}
+        //     </div>
+        //   ))}
+        // </div>
+      ),
+    },
+  ];
+  const rowStyle = { border: "1px solid #ddd" };
+
+  let temp = {
+    Leave: [
+      { name: "Swetha Vijay", profilePic: null },
+      { name: "Ekta Dewangan", profilePic: null },
+      { name: "Swetha Vijay", profilePic: null },
+      { name: "Ekta Dewangan", profilePic: null },
+      { name: "Ekta Dewangan", profilePic: null },
+    ],
+    Attendance: [],
+    Assets: [],
+    Invoices: [{ name: "Ekta Dewangan", profilePic: null }],
+    Travels: [
+      { name: "Swetha Vijay", profilePic: null },
+      { name: "Ekta Dewangan", profilePic: null },
+    ],
+    Templates: [],
+    Payroll: [{ name: "Swetha Vijay", profilePic: null }],
+    "Employee Onboard": [],
+    "Employee List": [],
+    Expenses: [],
+  };
+
+  let tempData = Object.keys(temp).map((x) => {
+    return {
+      access: x,
+      employees: temp[x],
+    };
+  });
+
+  console.log(tempData);
+
+  const initialValue = tempData
+    .flatMap((item) => item.employees)
+    .map((employee) => employee.name)
+    .join(", ");
+
+  console.log(initialValue);
 
   return (
     <>
@@ -209,16 +440,8 @@ const Admin = () => {
                 >
                   <Row>
                     <Col span={24}>
-                      <p>
-                        CEO is the head of the organization.
-                        <br />
-                        For Organisation Chart, addition of CEO is required.
-                      </p>
-                      <p>
-                        CEO is also the HR Admin.
-                        <br />
-                        CEO's permissions apply to all employees.
-                      </p>
+                      <p>CEO is the head of the organization.</p>
+                      <p>CEO's permissions apply to all employees.</p>
                       <p>CEO can:</p>
                       <div className="div-text" style={{ paddingLeft: "20px" }}>
                         <Text>
@@ -533,24 +756,122 @@ const Admin = () => {
           style={{
             width: "75%",
           }}
-          labelcol={{
-            span: 4,
-          }}
-          wrappercol={{
-            span: 14,
-          }}
           initialValues={{
             remember: true,
           }}
           fields={[]}
           autoComplete="off"
-          onFinish={onFinanceFinish}
+          onFinish={updateExcessDetails}
+          form={form}
+          layout="Horizontal"
         >
           {loading ? (
             <Skeleton active />
           ) : (
             <div className="site-card-border-less-wrapper">
               <Card
+                className="financeCard"
+                title="Access Details"
+                bordered={true}
+                hoverable={true}
+                style={{
+                  width: "auto",
+                  marginTop: 10,
+                  borderRadius: "10px",
+                  cursor: "default",
+                }}
+                extra={
+                  <>
+                    <Button
+                      className="edit"
+                      type="text"
+                      style={{
+                        color: "#ffff",
+                        display: "none",
+                        paddingTop: "2px",
+                        paddingRight: "10px",
+                        position: "absolute",
+                        right: 10,
+                        top: 10,
+                      }}
+                    >
+                      <EditFilled onClick={showModal} />
+                    </Button>
+                  </>
+                }
+              >
+                <Table
+                  className="daily daily-table"
+                  columns={columns}
+                  dataSource={tempData}
+                  bordered
+                  pagination={false}
+                />
+                <Modal
+                  className="accessModal"
+                  title="Update Access Details"
+                  open={editAccessModal}
+                  footer={false}
+                  style={{ height: "400px" }}
+                  // onOk={handleOk}
+                  onCancel={handleCancel}
+                  closeIcon={
+                    <div
+                      onClick={() => {
+                        handleCancel();
+                      }}
+                      style={{ color: "#ffffff" }}
+                    >
+                      X
+                    </div>
+                  }
+                >
+                  <Form.Item name="accessList" label="Access List">
+                    <Select
+                      onChange={(selected) => {
+                        const selectedEmployees = tempData
+                          ?.filter((t) => t?.access === selected)?.[0]
+                          ?.employees?.map((e) => e.name)
+                          ?.toString();
+                        console.log({ selectedEmployees });
+                        setAccessUsers(selectedEmployees);
+                      }}
+                      placeholder="Please Select Access Details"
+                      options={tempData.map((x) => {
+                        return {
+                          value: x.access,
+                          label: x.access,
+                        };
+                      })}
+                    />
+                  </Form.Item>
+                  {console.log("tempp", accessType)}
+                  {accessUsers && (
+                    <Form.Item label="Employees">
+                      <Input
+                        onChange={handleEmpInputChange}
+                        // defaultValue={accessUsers}
+                        value={accessUsers}
+                      />
+                    </Form.Item>
+                  )}
+                  <Space
+                    style={{ display: "flex", justifyContent: "flex-end" }}
+                  >
+                    <Button
+                      onClick={handleCancel}
+                      className="accessModalCancel"
+                    >
+                      Cancel
+                    </Button>
+                    <Button onClick={handleOk} className="accessModalSubmit">
+                      Submit
+                    </Button>
+                  </Space>
+                </Modal>
+              </Card>
+
+              {/* <Card
                 className="financeCard"
                 title="FINANCE ADMIN"
                 bordered={true}
@@ -737,13 +1058,13 @@ const Admin = () => {
                     ) : null}
                   </Col>
                 </Row>
-              </Card>
+              </Card> */}
             </div>
           )}
         </Form>
       </div>
 
-      <div
+      {/* <div
         className="personalCardDiv"
         style={{
           display: "flex",
@@ -968,7 +1289,7 @@ const Admin = () => {
             </div>
           )}
         </Form>
-      </div>
+      </div> */}
     </>
   );
 };

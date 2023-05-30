@@ -13,7 +13,7 @@ import {
   notification,
 } from "antd";
 import "../style/Documents.css";
-import "../style/addEmployee.css"
+import "../style/addEmployee.css";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import {
@@ -23,7 +23,7 @@ import {
   downloadFile,
   getUsers,
   showNotification,
-  deleteUsers
+  deleteUsers,
 } from "../contexts/CreateContext";
 import ConfigureContext from "../contexts/ConfigureContext";
 import CompanyProContext from "../contexts/CompanyProContext";
@@ -56,9 +56,53 @@ function AddEmployee() {
   // const [enableBulk, setEnableBulk] = useState(false);
   const [bulkModal, openBulkModal] = useState(false);
   const template = [
-    ["Employee ID", "First Name", "Middle Name", "Last Name", "Date Of Birth", "Phone Number", "Gender", "Employee Type", "Official Email Id", "Personal Email Id", "Date Of Joining", "Work Location", "Designation", "Reporting Manager", "Secondary Manager", "Team Lead", "Business Unit", "Division", "Department", "Team", "Note"],
-    ["EMP000001", "Rohit", "Ram", "Sharma", "YYYY-MM-DD", "1234567890", "Male/Female/Other", "Full-Time/Part-Time/Contract-Basis/Intern", "email_handle@domain.com", "email_handle@domain.com", "YYYY-MM-DD", "Work Location", "Designation", "Rohit Ram Sharma", "Rohit Ram Sharma", "Rohit Ram Sharma", "Business Unit", "Division", "Department", "Team", "Note"] 
-  ]
+    [
+      "Employee ID",
+      "First Name",
+      "Middle Name",
+      "Last Name",
+      "Date Of Birth",
+      "Phone Number",
+      "Gender",
+      "Employee Type",
+      "Official Email Id",
+      "Personal Email Id",
+      "Date Of Joining",
+      "Work Location",
+      "Designation",
+      "Reporting Manager",
+      "Secondary Manager",
+      "Team Lead",
+      "Business Unit",
+      "Division",
+      "Department",
+      "Team",
+      "Note",
+    ],
+    [
+      "EMP000001",
+      "Rohit",
+      "Ram",
+      "Sharma",
+      "YYYY-MM-DD",
+      "1234567890",
+      "Male/Female/Other",
+      "Full-Time/Part-Time/Contract-Basis/Intern",
+      "email_handle@domain.com",
+      "email_handle@domain.com",
+      "YYYY-MM-DD",
+      "Work Location",
+      "Designation",
+      "Rohit Ram Sharma",
+      "Rohit Ram Sharma",
+      "Rohit Ram Sharma",
+      "Business Unit",
+      "Division",
+      "Department",
+      "Team",
+      "Note",
+    ],
+  ];
 
   const showBulkModal = () => {
     openBulkModal(true);
@@ -71,21 +115,21 @@ function AddEmployee() {
   };
 
   const onSearch = (searchText) => {
-    let matchingName = allEmpName.filter((ex) => { return ex.value.toLowerCase().includes(searchText.toLowerCase()) })
-    setOptions(
-      !searchText ? [] : matchingName,
-    );
+    let matchingName = allEmpName.filter((ex) => {
+      return ex.value.toLowerCase().includes(searchText.toLowerCase());
+    });
+    setOptions(!searchText ? [] : matchingName);
   };
 
   const getAllUser = async () => {
     const allData = await getUsers();
     let allUsers = allData.docs.map((doc, i) => {
       return {
-        value: doc.data().fname + ' ' + doc.data().lname,
+        value: doc.data().name,
       };
     });
     setAllEmpName(allUsers);
-  }
+  };
 
   const { CSVReader } = useCSVReader();
   const styles = {
@@ -118,7 +162,7 @@ function AddEmployee() {
     getData();
     getAllUser();
   }, []);
-  
+
   const disabledDiv = () => {
     if (bu == null) {
       form.setFieldsValue({ division: null });
@@ -148,15 +192,16 @@ function AddEmployee() {
     let place = order.indexOf(type);
     let par =
       place == 0
-        ? null : bu + (place == 1
-          ? "" : "/" + div + (place == 2 
-            ? "" : "/" + dept));
+        ? null
+        : bu + (place == 1 ? "" : "/" + div + (place == 2 ? "" : "/" + dept));
     orgHier.map((d) => {
       if (d.type == type && d.parent == par) {
         temp.push(<Option value={d.name}>{d.name}</Option>);
       }
     });
-    return temp.length == 0 ? [(<Option value={"Default"}>Default</Option>)] : temp;
+    return temp.length == 0
+      ? [<Option value={"Default"}>Default</Option>]
+      : temp;
   };
 
   const getData = async () => {
@@ -171,8 +216,8 @@ function AddEmployee() {
     });
     setOrgHier(temp.departments);
     setDomain(temp.domain);
-    setLastEmpId(temp.lastEmpId)
-    setPreCode(temp.precode)
+    setLastEmpId(temp.lastEmpId);
+    setPreCode(temp.precode);
     setWorkLoc(add);
     setDesignations(Object.keys(data.designations));
   };
@@ -193,16 +238,16 @@ function AddEmployee() {
   const onFinish = (values) => {
     values.name =
       values.fname + (values.mname ? ` ${values.mname} ` : " ") + values.lname;
-      values.doj = values.doj.format("DD-MM-YYYY") || null
+    values.doj = values.doj.format("DD-MM-YYYY") || null;
     createUser(values, compId)
       .then((res) => {
-          CompanyProContext.updateCompInfo(compId, {lastEmpId: res})
-          showNotification("success", "Success", "Employee Created");
-        navigate("/Employee/EmployeeList");
+        CompanyProContext.updateCompInfo(compId, { lastEmpId: res });
+        showNotification("success", "Success", "Employee Created");
+        navigate("/employees/view");
       })
-      .catch((error) =>{
-        console.log(error.message)
-        showNotification("error", "Error", "This user already exists!")
+      .catch((error) => {
+        console.log(error.message);
+        showNotification("error", "Error", "This user already exists!");
       });
   };
 
@@ -212,7 +257,7 @@ function AddEmployee() {
     // // ids.shift()
     // console.log(ids)
     // deleteUsers(ids)
-    let last = null
+    let last = null;
     let temp = [...data];
     let headers = head;
     let id = headers.indexOf("Employee ID");
@@ -239,7 +284,7 @@ function AddEmployee() {
     let note = headers.indexOf("Note");
     // console.log(firstName, middleName, lastName, id, officialEmail, contactEmail, dob, doj, phone, gender, empType, des, workLocation, repManager,secManager, lead, bu, div, dept)
     // console.log(temp,err)
-    temp.forEach(((emp, i) => {
+    temp.forEach((emp, i) => {
       if (err.includes(emp[officialEmail])) {
         return;
       }
@@ -248,7 +293,10 @@ function AddEmployee() {
         fname: emp[firstName],
         mname: emp[middleName],
         lname: emp[lastName],
-        name: emp[firstName] + (emp[middleName] ? ` ${emp[middleName]} ` : " ") + emp[lastName],
+        name:
+          emp[firstName] +
+          (emp[middleName] ? ` ${emp[middleName]} ` : " ") +
+          emp[lastName],
         doj: moment(emp[doj], "YYYY-MM-DD").format("DD-MM-YYYY"),
         dob: moment(emp[dob], "YYYY-MM-DD").format("DD-MM-YYYY"),
         mailid: emp[officialEmail],
@@ -270,24 +318,26 @@ function AddEmployee() {
         team: emp[team],
         workLocation: emp[workLocation],
         remark: emp[note] || "",
-      }
-      last = emp[id]
+      };
+      last = emp[id];
       // console.log(val, last)
-      createUser(val, compId)
-    }))
+      createUser(val, compId);
+    });
     setTimeout(() => {
       if (lastEmpId.localeCompare(last) == -1) {
-        CompanyProContext.updateCompInfo(compId, {lastEmpId: last})
+        CompanyProContext.updateCompInfo(compId, { lastEmpId: last });
       }
-      showNotification("success", "Success", "Bulk Onboarding Complete!")
-      openBulkModal(false)
-    }, 10000)
+      showNotification("success", "Success", "Bulk Onboarding Complete!");
+      openBulkModal(false);
+    }, 10000);
     return;
   };
 
   const validateCSV = async (data, headers, model) => {
     let errors = [["Email Id", "Field", "Error"]];
-    let emps = allEmpName.map((ex) => { return ex.value })
+    let emps = allEmpName.map((ex) => {
+      return ex.value;
+    });
     let firstName = headers.indexOf("First Name");
     let middleName = headers.indexOf("Middle Name");
     let lastName = headers.indexOf("Last Name");
@@ -308,129 +358,261 @@ function AddEmployee() {
     let div = headers.indexOf(order[1]);
     let dept = headers.indexOf(order[2]);
     data.forEach(async (emp, i) => {
-      if(i == data.length-1) { return; }
-      emp.forEach((field, i) => {emp[i] = field.trim()})
-      emp[firstName] = emp[firstName].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
-      emp[middleName] = emp[middleName] ? emp[middleName].split(" ").map(x => capitalize(x.toLowerCase())).join(" ") : null;
-      emp[lastName] = emp[lastName].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
-      emp[repManager] = emp[repManager].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
-      emp[secManager] = emp[secManager].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
-      emp[lead] = emp[lead].split(" ").map(x => capitalize(x.toLowerCase())).join(" ");
+      if (i == data.length - 1) {
+        return;
+      }
+      emp.forEach((field, i) => {
+        emp[i] = field.trim();
+      });
+      emp[firstName] = emp[firstName]
+        .split(" ")
+        .map((x) => capitalize(x.toLowerCase()))
+        .join(" ");
+      emp[middleName] = emp[middleName]
+        ? emp[middleName]
+            .split(" ")
+            .map((x) => capitalize(x.toLowerCase()))
+            .join(" ")
+        : null;
+      emp[lastName] = emp[lastName]
+        .split(" ")
+        .map((x) => capitalize(x.toLowerCase()))
+        .join(" ");
+      emp[repManager] = emp[repManager]
+        .split(" ")
+        .map((x) => capitalize(x.toLowerCase()))
+        .join(" ");
+      emp[secManager] = emp[secManager]
+        .split(" ")
+        .map((x) => capitalize(x.toLowerCase()))
+        .join(" ");
+      emp[lead] = emp[lead]
+        .split(" ")
+        .map((x) => capitalize(x.toLowerCase()))
+        .join(" ");
       emp[gender] = capitalize(emp[gender].toLowerCase());
-      emp[empType] = emp[empType].split("-").map(x => capitalize(x.toLowerCase())).join("-");
-      emps.push(emp[firstName] + (emp[middleName] ? ` ${emp[middleName]} ` : " ") + emp[lastName]);
+      emp[empType] = emp[empType]
+        .split("-")
+        .map((x) => capitalize(x.toLowerCase()))
+        .join("-");
+      emps.push(
+        emp[firstName] +
+          (emp[middleName] ? ` ${emp[middleName]} ` : " ") +
+          emp[lastName]
+      );
       // emp[phone] = emp[phone].contains("+");
       // try {
       order.forEach((type, place) => {
         let value = emp[headers.indexOf(type)];
         let par =
           place == 0
-            ? null : emp[bu] + (place == 1
-              ? "" : "/" + emp[div] + (place == 2 
-                ? "" : "/" + emp[dept]));
-        let orgValid = orgHier.filter((d) => d.name == value && d.type == type && d.parent == par);
-        if (orgValid.length == 0) { errors.push([emp[officialEmail], type, `${value} does not exist!`]); }
-      })
-      let idValid = !(emp[id].startsWith(preCode)) || await EmpInfoContext.idExists(emp[id]);
-      if (idValid) { errors.push([emp[officialEmail], "Employee ID", "This employee code already exists!"]); }
-      let valid = /^[a-zA-Z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(emp[officialEmail]);
-      if (!valid) { errors.push([emp[officialEmail], "Offical Email Id", "Invalid email address!"]); }
-      let emailDomain = emp[officialEmail].substring(emp[officialEmail].indexOf("@") + 1);
+            ? null
+            : emp[bu] +
+              (place == 1
+                ? ""
+                : "/" + emp[div] + (place == 2 ? "" : "/" + emp[dept]));
+        let orgValid = orgHier.filter(
+          (d) => d.name == value && d.type == type && d.parent == par
+        );
+        if (orgValid.length == 0) {
+          errors.push([emp[officialEmail], type, `${value} does not exist!`]);
+        }
+      });
+      let idValid =
+        !emp[id].startsWith(preCode) ||
+        (await EmpInfoContext.idExists(emp[id]));
+      if (idValid) {
+        errors.push([
+          emp[officialEmail],
+          "Employee ID",
+          "This employee code already exists!",
+        ]);
+      }
+      let valid = /^[a-zA-Z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(
+        emp[officialEmail]
+      );
+      if (!valid) {
+        errors.push([
+          emp[officialEmail],
+          "Offical Email Id",
+          "Invalid email address!",
+        ]);
+      }
+      let emailDomain = emp[officialEmail].substring(
+        emp[officialEmail].indexOf("@") + 1
+      );
       valid = domain == emailDomain;
-      if (!valid) { errors.push([emp[officialEmail], "Offical Email Id", "Official email required!"]); }
+      if (!valid) {
+        errors.push([
+          emp[officialEmail],
+          "Offical Email Id",
+          "Official email required!",
+        ]);
+      }
       let exists = await CompanyProContext.checkUserExists(emp[officialEmail]);
-      if (exists) { errors.push([emp[officialEmail], "Offical Email Id", "This email already exists!"]); }
-      let contactValid = /^[a-zA-Z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(emp[contactEmail]);
-      if (!contactValid) { errors.push([emp[officialEmail], "Personal Email Id", "Invalid contact email address!"]); }
-      let validPhone = emp[phone].length == 10
-      if (!validPhone) {errors.push([emp[officialEmail], "Phone Number", "Invalid phone number!"]); }
-      let validDoj = disabledJoining(moment(emp[doj], "YYYY-MM-DD"))
-      let validDob = disabledDate(moment(emp[dob], "YYYY-MM-DD"))
-      if (validDob || validDoj) { errors.push([emp[officialEmail], "DOB/DOJ", `Invalid ${validDob ? "DOB " + emp[dob] + (validDoj ? " & DOJ " + emp[doj] : "") : "DOJ " + emp[doj]}`]); };
-      let desVaild = designations.includes(emp[des])
-      if (!desVaild) { errors.push([emp[officialEmail], "Designation", `${emp[des]} does not exist!`]); }
-      let locVaild = workLoc.includes(emp[workLocation])
-      if (!locVaild) { errors.push([emp[officialEmail], "Work Location", `${emp[workLocation]} does not exist!`]); }
+      if (exists) {
+        errors.push([
+          emp[officialEmail],
+          "Offical Email Id",
+          "This email already exists!",
+        ]);
+      }
+      let contactValid = /^[a-zA-Z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(
+        emp[contactEmail]
+      );
+      if (!contactValid) {
+        errors.push([
+          emp[officialEmail],
+          "Personal Email Id",
+          "Invalid contact email address!",
+        ]);
+      }
+      let validPhone = emp[phone].length == 10;
+      if (!validPhone) {
+        errors.push([
+          emp[officialEmail],
+          "Phone Number",
+          "Invalid phone number!",
+        ]);
+      }
+      let validDoj = disabledJoining(moment(emp[doj], "YYYY-MM-DD"));
+      let validDob = disabledDate(moment(emp[dob], "YYYY-MM-DD"));
+      if (validDob || validDoj) {
+        errors.push([
+          emp[officialEmail],
+          "DOB/DOJ",
+          `Invalid ${
+            validDob
+              ? "DOB " + emp[dob] + (validDoj ? " & DOJ " + emp[doj] : "")
+              : "DOJ " + emp[doj]
+          }`,
+        ]);
+      }
+      let desVaild = designations.includes(emp[des]);
+      if (!desVaild) {
+        errors.push([
+          emp[officialEmail],
+          "Designation",
+          `${emp[des]} does not exist!`,
+        ]);
+      }
+      let locVaild = workLoc.includes(emp[workLocation]);
+      if (!locVaild) {
+        errors.push([
+          emp[officialEmail],
+          "Work Location",
+          `${emp[workLocation]} does not exist!`,
+        ]);
+      }
       if (repManager != -1) {
-        let repManExists = emp[repManager] == "" || emps.includes(emp[repManager])
-        if (!repManExists) { errors.push([emp[officialEmail], "Reporting Manager", `${emp[repManager]} does not exist!`]); }
+        let repManExists =
+          emp[repManager] == "" || emps.includes(emp[repManager]);
+        if (!repManExists) {
+          errors.push([
+            emp[officialEmail],
+            "Reporting Manager",
+            `${emp[repManager]} does not exist!`,
+          ]);
+        }
       }
       if (secManager != -1) {
-        let secManExists = emp[secManager] == "" || emps.includes(emp[secManager])
-        if (!secManExists) { errors.push([emp[officialEmail], "Secondary Manager", `${emp[secManager]} does not exist!`]); }
+        let secManExists =
+          emp[secManager] == "" || emps.includes(emp[secManager]);
+        if (!secManExists) {
+          errors.push([
+            emp[officialEmail],
+            "Secondary Manager",
+            `${emp[secManager]} does not exist!`,
+          ]);
+        }
       }
       if (lead != -1) {
-        let leadExists = emp[lead] == "" || emps.includes(emp[lead])
-        if (!leadExists) { errors.push([emp[officialEmail], "Lead", `${emp[lead]} does not exist!`]); }
+        let leadExists = emp[lead] == "" || emps.includes(emp[lead]);
+        if (!leadExists) {
+          errors.push([
+            emp[officialEmail],
+            "Lead",
+            `${emp[lead]} does not exist!`,
+          ]);
+        }
       }
-    })
-    if(data[data.length-1].length == 1) {
-        data.pop()
+    });
+    if (data[data.length - 1].length == 1) {
+      data.pop();
     }
-    setErrorFile(null)
+    setErrorFile(null);
     const timer = setTimeout(() => {
       // setAllEmp(data)
       // setHeaders(headers)
-      let temp = []
+      let temp = [];
       if (errors.length > 1) {
-        console.log(data, headers, temp)
-        setErrorFile(<Button style={{marginRight: "10px"}} onClick={() => downloadFile(errors, "errorFile")}> Download Error File</Button>)
-        temp = errors.map(x => x[0]);
-        temp.shift()
+        console.log(data, headers, temp);
+        setErrorFile(
+          <Button
+            style={{ marginRight: "10px" }}
+            onClick={() => downloadFile(errors, "errorFile")}
+          >
+            {" "}
+            Download Error File
+          </Button>
+        );
+        temp = errors.map((x) => x[0]);
+        temp.shift();
         Modal.confirm({
-          title: "This file contains errors. Do you want to contine onboarding all user records without errors?",
+          title:
+            "This file contains errors. Do you want to contine onboarding all user records without errors?",
           // bodyStyle: errorFile,
-          
+
           okText: "Download error file and Continue",
           okType: "danger",
-    
+
           onOk: () => {
-            downloadFile(errors, "errorFile")
-            handleBulkOnboard(data, headers, temp)
+            downloadFile(errors, "errorFile");
+            handleBulkOnboard(data, headers, temp);
             notification.open({
               message: "Onboarding",
               duration: 7,
               icon: <LoadingOutlined />,
             });
           },
-          onCancel: () => {}
-        })
+          onCancel: () => {},
+        });
         // setErrorRecs(temp)
       } else {
         Modal.confirm({
           title: "Are you sure you want to onboard these users?",
           okText: "Yes",
           okType: "danger",
-    
+
           onOk: () => {
-            handleBulkOnboard(data, headers, temp)
+            handleBulkOnboard(data, headers, temp);
             notification.open({
               message: "Onboarding",
               duration: 7,
               icon: <LoadingOutlined />,
             });
-              // .then((res) => {
-              //   showNotification(
-              //     "success",
-              //     "Success",
-              //     "Users Onboarded Successfully!"
-              //   );
-              // })
-              // .catch((error) => {
-              //   showNotification("error", "Error", error.message);
-              // });
+            // .then((res) => {
+            //   showNotification(
+            //     "success",
+            //     "Success",
+            //     "Users Onboarded Successfully!"
+            //   );
+            // })
+            // .catch((error) => {
+            //   showNotification("error", "Error", error.message);
+            // });
           },
-        })
+        });
       }
       // showNotification("success", "Success", "All Fields Valid!")
-        
+
       // setEnableBulk(true)
-    }, [5000])
-  }
+    }, [5000]);
+  };
 
   return (
     <>
-      <div className="addEmpFormDiv" >
+      <div className="addEmpFormDiv">
         <Form
           className="addEmp"
           form={form}
@@ -447,18 +629,14 @@ function AddEmployee() {
           autoComplete="off"
           onFinish={onFinish}
         >
-          <Row
-            className="buttonRowEmp"
-            gutter={[16, 16]}
-          >
+          <Row className="buttonRowEmp" gutter={[16, 16]}>
             <Col
-              // xs={{ span: 24 }}
-              // sm={{ span: 24 }}
-              // md={{span:6}}
-              // lg={{span:6}}
-              // xl={{span:4}}
-              // xxl={{span:6}}
-
+            // xs={{ span: 24 }}
+            // sm={{ span: 24 }}
+            // md={{span:6}}
+            // lg={{span:6}}
+            // xl={{span:4}}
+            // xxl={{span:6}}
             >
               <Button
                 className="listEmployee"
@@ -469,17 +647,17 @@ function AddEmployee() {
               </Button>
             </Col>
             <Col
-                // xs={{ span: 24 }}
-                // sm={{ span: 24 }}
-                // md={{span:6}}
+            // xs={{ span: 24 }}
+            // sm={{ span: 24 }}
+            // md={{span:6}}
             >
-            <Button 
-              className="bulkEmployee"
-              type="primary" 
-              onClick={showBulkModal}
-            >
-              <div className="bulkButton">Bulk Employee Onboarding</div>
-            </Button>
+              <Button
+                className="bulkEmployee"
+                // type="primary"
+                onClick={showBulkModal}
+              >
+                <div className="bulkButton">Bulk Employee Onboarding</div>
+              </Button>
             </Col>
           </Row>
           <Row gutter={[24, 8]}>
@@ -685,7 +863,7 @@ function AddEmployee() {
                 ]}
               >
                 <Input
-                  addonBefore={(<PrefixSelector />)}
+                  addonBefore={<PrefixSelector />}
                   maxLength={10}
                   required
                   placeholder="Enter Phone Number"
@@ -879,13 +1057,13 @@ function AddEmployee() {
               >
                 <DatePicker
                   format={"DD-MM-YYYY"}
-                   disabledDate={disabledJoining}
+                  disabledDate={disabledJoining}
                   placeholder="Choose Date"
                   style={{
                     width: "100%",
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
-                    background: "#ffffff"
+                    background: "#ffffff",
                   }}
                 />
               </Form.Item>
@@ -962,9 +1140,7 @@ function AddEmployee() {
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
-                    background: disabledDiv()
-                      ? "rgba(0,0,0,0.1)"
-                      : "#ffffff",
+                    background: disabledDiv() ? "rgba(0,0,0,0.1)" : "#ffffff",
                   }}
                   disabled={disabledDiv()}
                   bordered={false}
@@ -995,9 +1171,7 @@ function AddEmployee() {
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
-                    background: disabledDept()
-                      ? "rgba(0,0,0,0.1)"
-                      : "#ffffff",
+                    background: disabledDept() ? "rgba(0,0,0,0.1)" : "#ffffff",
                   }}
                   disabled={disabledDept()}
                   bordered={false}
@@ -1028,9 +1202,7 @@ function AddEmployee() {
                   style={{
                     border: "1px solid #8692A6",
                     borderRadius: "4px",
-                    background: disabledTeam()
-                      ? "rgba(0,0,0,0.1)"
-                      : "#ffffff",
+                    background: disabledTeam() ? "rgba(0,0,0,0.1)" : "#ffffff",
                   }}
                   disabled={disabledTeam()}
                   placeholder="Select Team"
@@ -1095,93 +1267,96 @@ function AddEmployee() {
         </Form>
       </div>
       <Modal
-       title="Bulk Onboarding" 
-       open={bulkModal} 
-       onOk={handleBulkModal} 
-       onCancel={handleCancel}
-       footer={false}
-       className="bulkOnboardingModal"
-       closeIcon={
-        <div
+        title="Bulk Onboarding"
+        open={bulkModal}
+        onOk={handleBulkModal}
+        onCancel={handleCancel}
+        footer={false}
+        className="bulkOnboardingModal"
+        closeIcon={
+          <div
             onClick={() => {
               openBulkModal(false);
             }}
             style={{ color: "#ffffff" }}
-        >
+          >
             X
-        </div>
-    }
+          </div>
+        }
       >
-          <Row
-            className="rowform"
-            gutter={[0, 8]}
+        <Row
+          className="rowform"
+          gutter={[0, 8]}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignitems: "center",
+            justifyContent: "space-around",
+          }}
+        >
+          <Col>
+            <Button
+              style={{ marginBottom: "10px" }}
+              onClick={() => downloadFile(template, "template")}
+            >
+              <DownloadOutlined />
+              Download File Template
+            </Button>
+          </Col>
+          <Col>
+            <CSVReader
+              onUploadAccepted={(results) => {
+                let temp = [...results.data];
+                let headers = temp.shift();
+                let model = temp.shift();
+                validateCSV(temp, headers, model);
+                // handleBulkOnboard(temp, headers)
+              }}
+            >
+              {({
+                getRootProps,
+                acceptedFile,
+                ProgressBar,
+                getRemoveFileProps,
+              }) => (
+                <>
+                  <div style={styles.csvReader}>
+                    <button
+                      type="button"
+                      {...getRootProps()}
+                      style={styles.browseFile}
+                    >
+                      Browse file
+                    </button>
+                    <div style={styles.acceptedFile}>
+                      {acceptedFile && acceptedFile.name}
+                      {/* {!acceptedFile && setEnableBulk(false)} */}
+                      {!acceptedFile && setErrorFile(null)}
+                    </div>
+                    <button {...getRemoveFileProps()} style={styles.remove}>
+                      Remove
+                    </button>
+                  </div>
+                  <ProgressBar style={styles.progressBarBackgroundColor} />
+                </>
+              )}
+            </CSVReader>
+          </Col>
+          <Col
+            xs={{ span: 24 }}
+            sm={{ span: 12 }}
+            md={{ span: 24 }}
+            className="Col-1-center"
             style={{
+              background: "",
+              height: "50px",
               display: "flex",
-              flexDirection: "column",
-              alignitems: "center",
-              justifyContent: "space-around",
+              justifyContent: "flex-end",
             }}
           >
-            <Col>
-              <Button style={{marginBottom: "10px"}} onClick={() => downloadFile(template, "template")}> 
-                <DownloadOutlined />
-                Download File Template
-              </Button>
-            </Col>
-            <Col>
-              <CSVReader
-                onUploadAccepted={(results) => {
-                  let temp = [...results.data];
-                  let headers = temp.shift();
-                  let model = temp.shift();
-                  validateCSV(temp, headers, model);
-                  // handleBulkOnboard(temp, headers)
-                }}
-              >
-                {({
-                  getRootProps,
-                  acceptedFile,
-                  ProgressBar,
-                  getRemoveFileProps,
-                }) => (
-                  <>
-                    <div style={styles.csvReader}>
-                      <button
-                        type="button"
-                        {...getRootProps()}
-                        style={styles.browseFile}
-                      >
-                        Browse file
-                      </button>
-                      <div style={styles.acceptedFile}>
-                        {acceptedFile && acceptedFile.name}
-                        {/* {!acceptedFile && setEnableBulk(false)} */}
-                        {!acceptedFile && setErrorFile(null)}
-                      </div>
-                      <button {...getRemoveFileProps()} style={styles.remove}>
-                        Remove
-                      </button>
-                    </div>
-                    <ProgressBar style={styles.progressBarBackgroundColor} />
-                  </>
-                )}
-              </CSVReader>
-            </Col>
-            <Col
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              md={{ span: 24 }}
-              className="Col-1-center"
-              style={{
-                background: "",
-                height: "50px",
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-            > 
-              {errorFile}
+            {errorFile}
 
-              {/* <Button
+            {/* <Button
                 className="listExpense"
                 disabled={!enableBulk}
                 type="primary"
@@ -1195,8 +1370,8 @@ function AddEmployee() {
               >
                 Bulk Onboard Emloyees
               </Button> */}
-            </Col>
-          </Row>
+          </Col>
+        </Row>
       </Modal>
     </>
   );

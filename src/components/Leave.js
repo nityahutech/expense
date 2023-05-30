@@ -26,18 +26,23 @@ import EmpInfoContext from "../contexts/EmpInfoContext";
 import HolidayList from "./HolidayList";
 import ApprovalConfig from "./ApprovalConfig";
 import LeaveType from "./LeaveType";
-import "../style/leave.css";
+import "../style/Leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
-import { capitalize, getUsers, showNotification } from "../contexts/CreateContext";
+import {
+  capitalize,
+  getUsers,
+  showNotification,
+} from "../contexts/CreateContext";
 import LeaveRequests from "./LeaveRequests";
+import { useAuth } from "../contexts/AuthContext";
 
 const Leave = (props) => {
   const { RangePicker } = DatePicker;
   const { Option } = Select;
   const dateFormat = "Do MMM, YYYY";
-  const isAdmin = props.roleView == "admin";
+  const isAdmin = false;
   const isHr = JSON.parse(sessionStorage.getItem("isHr"));
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth()
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -232,7 +237,7 @@ const Leave = (props) => {
           showNotification("success", "Success", "Leave apply successfully");
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           showNotification(
             "error",
             "Error",
@@ -248,87 +253,89 @@ const Leave = (props) => {
       setValidleaverequest(false);
       setSecondModal(false);
     } else {
-      console.log("error")
+      console.log("error");
       showNotification("error", "Error", "Unable to process leave request!");
     }
   };
-  
+
   useEffect(() => {
-    if (empApply != null)
-      getAdminData(empApply)
-  }, [empApply])
+    if (empApply != null) getAdminData(empApply);
+  }, [empApply]);
 
   const getAdminData = (emp) => {
     let id = allEmpMap[`${emp}`][0];
-    let array = []
-    let userReq = allRequests.filter(x => {
+    let array = [];
+    let userReq = allRequests.filter((x) => {
       if (x.empId == id) {
-        array.push(x.dateCalc)
+        array.push(x.dateCalc);
         return true;
       }
-    })
+    });
     setTempDur([].concat.apply([], array));
     // console.log(userReq, [].concat.apply([], array))
-  }
-// console.log(empApply, tempDur)
+  };
+  // console.log(empApply, tempDur)
   useEffect(() => {
-    getAllUser()
-  }, [])
+    getAllUser();
+  }, []);
 
   const onSearch = (searchText) => {
     if (searchText == "") {
       setEmpApply(null);
       form.resetFields();
-      setDateStart(null)
+      setDateStart(null);
       setEndSlot("Full Day");
-      setValidleaverequest(false)
+      setValidleaverequest(false);
       onLeaveDateChange();
       return;
     }
-    let matchingName = allEmpName.filter((ex) => { return ex.value.toLowerCase().includes(searchText.toLowerCase()) })
-    setOptions(
-      !searchText ? [] : matchingName,
-    );
+    let matchingName = allEmpName.filter((ex) => {
+      return ex.value.toLowerCase().includes(searchText.toLowerCase());
+    });
+    setOptions(!searchText ? [] : matchingName);
   };
 
   const getAllUser = async () => {
     const allData = await getUsers();
-    let userMap = {}
+    let userMap = {};
     let allUsers = allData.docs.map((doc, i) => {
-      userMap[`${doc.data().name}`] = [doc.id, doc.data()?.repManager || ""]
+      userMap[`${doc.data().name}`] = [doc.id, doc.data()?.repManager || ""];
       return {
         value: doc.data().name,
       };
     });
-    setAllEmpMap(userMap)
+    setAllEmpMap(userMap);
     setAllEmpName(allUsers);
-  }
+  };
 
   const getConfigurations = async (load) => {
     let data = await ConfigureContext.getConfigurations("leaveType");
     let temp = Object.keys(data).map((type, i) => {
       return {
         ...data[`${type}`],
-        name: type
-      }
-    })
-    temp
-    .sort((k1, k2) => {
-      return k1.name < k2.name ? -1 : k1.name > k2 ? 1 : 0
+        name: type,
+      };
     });
-    let cards = {}
-    let index = temp.indexOf(temp.filter(x => {
-      if (x.name == "Loss Of Pay"){
-        return true
-      }
-      cards[`${x.name}`] = data[`${x.name}`].count
-      return false
-    })[0])
+    temp.sort((k1, k2) => {
+      return k1.name < k2.name ? -1 : k1.name > k2 ? 1 : 0;
+    });
+    let cards = {};
+    let index = temp.indexOf(
+      temp.filter((x) => {
+        if (x.name == "Loss Of Pay") {
+          return true;
+        }
+        cards[`${x.name}`] = data[`${x.name}`].count;
+        return false;
+      })[0]
+    );
     let lop = temp.splice(index, 1);
     temp.push(lop[0]);
     setConfigurations(temp);
     setTotalDays(cards);
-    if (load) {getData({ ...cards })}
+    if (load) {
+      getData({ ...cards });
+    }
   };
 
   const getData = async (temp) => {
@@ -385,7 +392,7 @@ const Leave = (props) => {
     getDateFormatted(req);
     getDateSorted(req);
     setAllRequests(req);
-    setFilterRequest(req)
+    setFilterRequest(req);
   };
   const onDeleteLeave = (record) => {
     Modal.confirm({
@@ -460,7 +467,7 @@ const Leave = (props) => {
       }
     }
   };
-  
+
   const searchChange = (e) => {
     let search = e.target.value;
     if (search) {
@@ -501,8 +508,8 @@ const Leave = (props) => {
     validateLeaveRequest(noOfDays, value);
   };
   const onLeaveDateChange = (e) => {
-    form.setFieldsValue({leaveNature: null});
-    form1.setFieldsValue({leaveNature: null});
+    form.setFieldsValue({ leaveNature: null });
+    form1.setFieldsValue({ leaveNature: null });
     let tempDateEnd = dateEnd;
     if (e != undefined) {
       tempDateEnd = e;
@@ -527,7 +534,7 @@ const Leave = (props) => {
           }
         }
       }
-    } catch (error) { }
+    } catch (error) {}
     setDateSelected(temp);
   };
   const dateCellRender = (value) => {
@@ -548,18 +555,18 @@ const Leave = (props) => {
         listData[0].type == "On Leave"
           ? "rgba(0, 128, 0,  1)"
           : listData[0].type === "Pending"
-            ? "rgb(166 168 69)"
-            : listData[0].isOptional
-              ? "rgba(0, 119, 137, 0.96)"
-              : "rgba(252, 143, 10, 1)";
+          ? "rgb(166 168 69)"
+          : listData[0].isOptional
+          ? "rgba(0, 119, 137, 0.96)"
+          : "rgba(252, 143, 10, 1)";
       bgColor =
         listData[0].type == "On Leave"
           ? "rgb(15, 255, 80,0.2)"
           : listData[0].type === "Pending"
-            ? "rgb(205 227 36 / 25%)"
-            : listData[0].isOptional
-              ? "rgba(154, 214, 224, 0.96)"
-              : "rgba(252, 143, 10,0.2)";
+          ? "rgb(205 227 36 / 25%)"
+          : listData[0].isOptional
+          ? "rgba(154, 214, 224, 0.96)"
+          : "rgba(252, 143, 10,0.2)";
     }
 
     return (
@@ -585,38 +592,49 @@ const Leave = (props) => {
   const monthCellRender = (value) => {
     const listData = [];
     companyholiday.forEach((hol) => {
-      if (value.format("MMM, YYYY") == moment(hol.date, "Do MMM, YYYY").format("MMM, YYYY")) {
+      if (
+        value.format("MMM, YYYY") ==
+        moment(hol.date, "Do MMM, YYYY").format("MMM, YYYY")
+      ) {
         listData.push({
-          name:hol.name,
-          optionalHoliday: hol.optionalHoliday
-        })
+          name: hol.name,
+          optionalHoliday: hol.optionalHoliday,
+        });
       }
     });
-    let color, bgColor, scroll = listData.length > 2 ? {height: "40px", overflowY: "scroll"} : null;
+    let color,
+      bgColor,
+      scroll =
+        listData.length > 2 ? { height: "40px", overflowY: "scroll" } : null;
     return (
       <ul style={scroll}>
-        { listData.map((d) => {
+        {listData.map((d) => {
           color = d.optionalHoliday
-              ? "rgba(0, 119, 137, 0.96)"
-              : "rgba(252, 143, 10, 1)"
+            ? "rgba(0, 119, 137, 0.96)"
+            : "rgba(252, 143, 10, 1)";
           bgColor = d.optionalHoliday
             ? "rgba(154, 214, 224, 0.96)"
-              : "rgba(252, 143, 10,0.2)"
-              return(
-          <li style={{
-            backgroundColor: bgColor,
-            color: color,
-            fontSize: "12px",
-            paddingLeft: "5px",
-            paddingRight: "5px",
-            margin: "0px",
-            borderRadius: "100px",
-            justifyContent: "center",
-            marginBottom: "3px"
-          }}>{d.name}</li>
-        )})}
+            : "rgba(252, 143, 10,0.2)";
+          return (
+            <li
+              style={{
+                backgroundColor: bgColor,
+                color: color,
+                fontSize: "12px",
+                paddingLeft: "5px",
+                paddingRight: "5px",
+                margin: "0px",
+                borderRadius: "100px",
+                justifyContent: "center",
+                marginBottom: "3px",
+              }}
+            >
+              {d.name}
+            </li>
+          );
+        })}
       </ul>
-    )
+    );
   };
 
   const reqColumns = [
@@ -684,14 +702,14 @@ const Leave = (props) => {
       render: (_, { status }) =>
         status !== "" && (
           <Tag
-            style={{ width: "80px", color: "black", textAlign: "center" }}
+            style={{ width: "80px", color: "black", textAlign: "center", borderRadius:"5px" }}
             className="statusTag"
             color={
               status === "Approved"
                 ? "rgba(15, 255, 80, 0.2)"
                 : status === "Pending"
-                  ? "rgba(205, 227, 36, 0.25)"
-                  : "volcano"
+                ? "rgba(205, 227, 36, 0.25)"
+                : "volcano"
             }
             key={status}
           >
@@ -724,8 +742,8 @@ const Leave = (props) => {
                     record?.status === "Approved"
                       ? { color: "green", marginLeft: 10 }
                       : record?.status === "Pending"
-                        ? { color: "blue", marginLeft: 10 }
-                        : { color: "red", marginLeft: 10 }
+                      ? { color: "blue", marginLeft: 10 }
+                      : { color: "red", marginLeft: 10 }
                   }
                 />
               </>
@@ -800,8 +818,8 @@ const Leave = (props) => {
               status === "Approved"
                 ? "rgba(15, 255, 80, 0.2)"
                 : status === "Pending"
-                  ? "rgba(205, 227, 36, 0.25)"
-                  : "volcano"
+                ? "rgba(205, 227, 36, 0.25)"
+                : "volcano"
             }
             key={status}
           >
@@ -832,27 +850,31 @@ const Leave = (props) => {
               style={
                 record?.status === "Approved"
                   ? {
-                    color: "green",
-                    cursor: "not-allowed",
-                    marginLeft: 10,
-                  }
+                      color: "green",
+                      cursor: "not-allowed",
+                      marginLeft: 10,
+                    }
                   : record?.status === "Pending"
-                    ? { color: "blue", marginLeft: 10 }
-                    : { color: "red", marginLeft: 10 }
+                  ? { color: "blue", marginLeft: 10 }
+                  : { color: "red", marginLeft: 10 }
               }
             />
             <EditOutlined
               disabled={record?.status === "Approved"}
               onClick={() => {
-                if (record?.status !== "Approved") {  
+                if (record?.status !== "Approved") {
                   form1.resetFields();
                   setEditedLeave(record);
-                  setTempDur(duration.filter(x => !record.dateCalc.includes(x)))
+                  setTempDur(
+                    duration.filter((x) => !record.dateCalc.includes(x))
+                  );
                   setIsEditModalOpen(true);
                   setDateSelected(record.dateCalc);
                   setDateStart(moment(record.dateCalc[0], "Do MMM, YYYY"));
                   setStartSlot(record.slotStart);
-                  setDateEnd(moment(record.dateCalc[record.len-1], "Do MMM, YYYY"));
+                  setDateEnd(
+                    moment(record.dateCalc[record.len - 1], "Do MMM, YYYY")
+                  );
                   setEndSlot(record.slotEnd);
                   setValidleaverequest(true);
                 }
@@ -860,13 +882,13 @@ const Leave = (props) => {
               style={
                 record?.status === "Approved"
                   ? {
-                    color: "green",
-                    cursor: "not-allowed",
-                    marginLeft: 10,
-                  }
+                      color: "green",
+                      cursor: "not-allowed",
+                      marginLeft: 10,
+                    }
                   : record?.status === "Pending"
-                    ? { color: "blue", marginLeft: 10 }
-                    : { color: "red", marginLeft: 10 }
+                  ? { color: "blue", marginLeft: 10 }
+                  : { color: "red", marginLeft: 10 }
               }
             />
           </>
@@ -988,10 +1010,10 @@ const Leave = (props) => {
     if (u == "Sick Leave" && dateSelected.length == 1) {
       return dateStart != null || dateStart != undefined
         ? !(
-          dateStart.format("DD-MM-yyyy") == moment().format("DD-MM-yyyy") ||
-          dateStart.format("DD-MM-yyyy") ==
-          moment().add(1, "days").format("DD-MM-yyyy")
-        )
+            dateStart.format("DD-MM-yyyy") == moment().format("DD-MM-yyyy") ||
+            dateStart.format("DD-MM-yyyy") ==
+              moment().add(1, "days").format("DD-MM-yyyy")
+          )
         : false;
     }
     return false;
@@ -1006,8 +1028,8 @@ const Leave = (props) => {
           moment(ex.dateCalc[0], dateFormat).isSame(date[1], "day") ||
           (moment(ex.date, dateFormat).isSameOrAfter(date[0]) &&
             moment(ex.date, dateFormat).isSameOrBefore(date[1])) ||
-          moment(ex.dateCalc[ex.len-1], dateFormat).isSame(date[0], "day") ||
-          moment(ex.dateCalc[ex.len-1], dateFormat).isSame(date[1], "day") 
+          moment(ex.dateCalc[ex.len - 1], dateFormat).isSame(date[0], "day") ||
+          moment(ex.dateCalc[ex.len - 1], dateFormat).isSame(date[1], "day")
         );
       });
 
@@ -1085,59 +1107,65 @@ const Leave = (props) => {
                     </Col>
                     <Col xs={24} sm={22} md={7}>
                       <RangePicker
-                        style={{width: "100%"}}
+                        style={{ width: "100%" }}
                         format={dateFormat}
                         onChange={onChange}
                       />
                     </Col>
                     <Col xs={24} sm={22} md={6}>
-                      <Form.Item
-                        style={{ marginBottom: "0px" }}
-                      >
+                      <Form.Item style={{ marginBottom: "0px" }}>
                         <Select
                           allowClear
                           placeholder="Nature of Leave"
                           onChange={(e) => {
                             if (!e) {
-                              setFilterRequest(allRequests)
-                              return
+                              setFilterRequest(allRequests);
+                              return;
                             }
-                            const filteredLeave = allRequests.filter((leaveNat) =>
-                              leaveNat.nature.includes(e))
-                            setFilterRequest(filteredLeave)
-
+                            const filteredLeave = allRequests.filter(
+                              (leaveNat) => leaveNat.nature.includes(e)
+                            );
+                            setFilterRequest(filteredLeave);
                           }}
-                          options={[...Object.keys(totaldays).map(day => {
-                            return {
-                            value: day,
-                            label: day
-                          }}),{
-                            value: "Loss Of Pay",
-                            label: "Loss Of Pay"
-                          }
+                          options={[
+                            ...Object.keys(totaldays).map((day) => {
+                              return {
+                                value: day,
+                                label: day,
+                              };
+                            }),
+                            {
+                              value: "Loss Of Pay",
+                              label: "Loss Of Pay",
+                            },
                           ]}
                         />
                       </Form.Item>
                     </Col>
-                    <Col xs={24} sm={22} md={5} style={{display: "flex", justifyContent:"center"}}>
-                  <Button
-                    className="button-applyleave"
-                    style={{
-                      borderRadius: "15px",
-                      width: "120px",
-                      marginTop: "0px",
-                      backgroundColor: "#1963a6",
-                      borderColor: "#1963a6",
-                    }}
-                    type="primary"
-                    onClick={() => {
-                      // console.log(true)
-                      setAdminLeave(true);
-                    }}
-                  >
-                    Apply Leave
-                  </Button>
-                </Col>
+                    <Col
+                      xs={24}
+                      sm={22}
+                      md={5}
+                      style={{ display: "flex", justifyContent: "center" }}
+                    >
+                      <Button
+                        className="button-applyleave"
+                        style={{
+                          borderRadius: "15px",
+                          width: "120px",
+                          marginTop: "0px",
+                          backgroundColor: "#1963a6",
+                          borderColor: "#1963a6",
+                        }}
+                        type="primary"
+                        onClick={() => {
+                          // console.log(true)
+                          setAdminLeave(true);
+                        }}
+                      >
+                        Apply Leave
+                      </Button>
+                    </Col>
                   </Row>
                 </Col>
 
@@ -1166,117 +1194,120 @@ const Leave = (props) => {
                   </div>
                 </Col>
               </Row>
-              
+
               <Modal
-              className="viewAppraisal"
-              bodyStyle={{
-                overflowY: "auto",
-                maxHeight: "calc(100vh - 200px)",
-              }}
-              footer={null}
-              title="Apply Employee Leave"
-              centered
-              open={adminLeave}
-              width={450}
-              closeIcon={
-                <div
-                  onClick={() => {
-                    setAdminLeave(false);
-                    setEmpApply(null)
-                    form.resetFields();
-                    setDateSelected([]);
-                    setDateStart(null);
-                    setStartSlot(null);
-                    setDateEnd(null);
-                    setEndSlot(null);
-                    setValidleaverequest(false);
-                  }}
-                  style={{ color: "#ffffff" }}
-                >
-                  X
-                </div>
-              }
-            >
-              <Row
-                className="apply-leave"
-                style={{
-                  marginTop: "10px",
+                className="viewAppraisal"
+                bodyStyle={{
+                  overflowY: "auto",
+                  maxHeight: "calc(100vh - 200px)",
                 }}
+                footer={null}
+                title="Apply Employee Leave"
+                centered
+                open={adminLeave}
+                width={450}
+                closeIcon={
+                  <div
+                    onClick={() => {
+                      setAdminLeave(false);
+                      setEmpApply(null);
+                      form.resetFields();
+                      setDateSelected([]);
+                      setDateStart(null);
+                      setStartSlot(null);
+                      setDateEnd(null);
+                      setEndSlot(null);
+                      setValidleaverequest(false);
+                    }}
+                    style={{ color: "#ffffff" }}
+                  >
+                    X
+                  </div>
+                }
               >
-                <Col
-                  xl={24}
-                  lg={24}
-                  md={24}
-                  sm={24}
-                  xs={24}
+                <Row
+                  className="apply-leave"
                   style={{
-                    background: "flex",
-                    padding: "10px",
+                    marginTop: "10px",
                   }}
                 >
-                  <Form
-                    {...Leave}
-                    labelCol={{
-                      span: 8,
+                  <Col
+                    xl={24}
+                    lg={24}
+                    md={24}
+                    sm={24}
+                    xs={24}
+                    style={{
+                      background: "flex",
+                      padding: "10px",
                     }}
-                    wrapperCol={{
-                      span: 16,
-                    }}
-                    form={form}
-                    onFinish={onFinish}
                   >
-                    <Row
-                      gutter={[16, 0]}
-                      className="row-one-div"
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-around",
+                    <Form
+                      {...Leave}
+                      labelCol={{
+                        span: 8,
                       }}
+                      wrapperCol={{
+                        span: 16,
+                      }}
+                      form={form}
+                      onFinish={onFinish}
                     >
-                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                        <Form.Item
-                          required={false}
-                          labelAlign="left"
-                          style={{
-                            marginBottom: "20px",
-                            color: "white",
-                            minWidth: "70px",
-                          }}
-                          label={
-                            <label
-                              style={{ color: "black", fontWeight: "400" }}
-                            >
-                              Employee Name<span style={{ color: "red" }}> *</span>
-                            </label>
-                          }
-                          name="name"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please Enter Name",
-                            },
-                          ]}
-                        >
-                          <AutoComplete 
-                            // bordered={false}
-                            allowClear
-                            options={options}
-                            onSearch={onSearch}
-                            onSelect={(e) => {
-                              onLeaveDateChange();
-                              // console.log(e)
-                              setEmpApply(e);
-                              if (e == null) {
-                                form.setFieldsValue({ dateStart: null})
-                                setEndSlot("Full Day");
-                                form.setFieldsValue({ approver: ""})
-                                setValidleaverequest(false)
-                              } else {
-                                form.setFieldsValue({ approver: allEmpMap[`${e}`][1]})
-                              }
+                      <Row
+                        gutter={[16, 0]}
+                        className="row-one-div"
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-around",
+                        }}
+                      >
+                        <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                          <Form.Item
+                            required={false}
+                            labelAlign="left"
+                            style={{
+                              marginBottom: "20px",
+                              color: "white",
+                              minWidth: "70px",
                             }}
-                          />
-                          {/* <DatePicker
+                            label={
+                              <label
+                                style={{ color: "black", fontWeight: "400" }}
+                              >
+                                Employee Name
+                                <span style={{ color: "red" }}> *</span>
+                              </label>
+                            }
+                            name="name"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please Enter Name",
+                              },
+                            ]}
+                          >
+                            <AutoComplete
+                              // bordered={false}
+                              allowClear
+                              options={options}
+                              onSearch={onSearch}
+                              onSelect={(e) => {
+                                onLeaveDateChange();
+                                // console.log(e)
+                                setEmpApply(e);
+                                if (e == null) {
+                                  form.setFieldsValue({ dateStart: null });
+                                  setEndSlot("Full Day");
+                                  form.setFieldsValue({ approver: "" });
+                                  setValidleaverequest(false);
+                                } else {
+                                  form.setFieldsValue({
+                                    approver: allEmpMap[`${e}`][1],
+                                  });
+                                }
+                              }}
+                            />
+                            {/* <DatePicker
                             style={{ width: "100%", backgroundColor: "#ffffff" }}
                             format="Do MMM, YYYY"
                             onChange={(e) => {
@@ -1290,263 +1321,275 @@ const Leave = (props) => {
                             }}
                             disabledDate={disabledDate}
                           /> */}
-                        </Form.Item>
-                      </Col>
-                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                        <Form.Item
-                          required={false}
-                          labelAlign="left"
-                          style={{
-                            marginBottom: "20px",
-                            color: "white",
-                            minWidth: "70px",
-                          }}
-                          label={
-                            <label
-                              style={{ color: "black", fontWeight: "400" }}
+                          </Form.Item>
+                        </Col>
+                        <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                          <Form.Item
+                            required={false}
+                            labelAlign="left"
+                            style={{
+                              marginBottom: "20px",
+                              color: "white",
+                              minWidth: "70px",
+                            }}
+                            label={
+                              <label
+                                style={{ color: "black", fontWeight: "400" }}
+                              >
+                                Start Date
+                                <span style={{ color: "red" }}> *</span>
+                              </label>
+                            }
+                            name="dateStart"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please Select Date",
+                              },
+                            ]}
+                          >
+                            <DatePicker
+                              style={{ width: "100%" }}
+                              format="Do MMM, YYYY"
+                              onChange={(e) => {
+                                setDateStart(e);
+                                onLeaveDateChange();
+                                if (e == null) {
+                                  setDateEnd(e);
+                                  setEndSlot("Full Day");
+                                  setValidleaverequest(false);
+                                }
+                              }}
+                              disabled={empApply == null}
+                              disabledDate={disabledDate}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                          <Form.Item
+                            labelAlign="left"
+                            name="slotStart"
+                            style={{ marginBottom: "25px" }}
+                            className="div-slot"
+                            label={
+                              <label
+                                style={{ color: "black", fontWeight: "400" }}
+                              >
+                                Start Slot
+                                <span style={{ color: "red" }}> *</span>
+                              </label>
+                            }
+                            initialValue={"Full Day"}
+                          >
+                            <Select
+                              style={{ width: "100%" }}
+                              disabled={empApply == null}
+                              onChange={(e) => {
+                                setStartSlot(e);
+                                onLeaveDateChange();
+                              }}
                             >
-                              Start Date<span style={{ color: "red" }}> *</span>
-                            </label>
-                          }
-                          name="dateStart"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please Select Date",
-                            },
-                          ]}
-                        >
-                          <DatePicker
-                            style={{ width: "100%", }}
-                            format="Do MMM, YYYY"
-                            onChange={(e) => {
-                              setDateStart(e);
-                              onLeaveDateChange();
-                              if (e == null) {
+                              <Option value="Full Day">Full Day</Option>
+                              <Option value="Half Day (First Half)">
+                                Half Day (First Half)
+                              </Option>
+                              <Option value="Half Day (Second Half)">
+                                Half Day (Second Half)
+                              </Option>
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                      </Row>
+
+                      <Row
+                        gutter={[16, 0]}
+                        className="row-one-div"
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                        }}
+                      >
+                        <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                          <Form.Item
+                            required={false}
+                            labelAlign="left"
+                            style={{ marginBottom: "20px", color: "white" }}
+                            label={
+                              <label
+                                style={{ color: "black", fontWeight: "400" }}
+                              >
+                                End Date<span style={{ color: "red" }}> *</span>
+                              </label>
+                            }
+                            name="dateEnd"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please Select Date",
+                              },
+                            ]}
+                          >
+                            <DatePicker
+                              style={{ width: "100%" }}
+                              format="Do MMM, YYYY"
+                              onChange={(e) => {
                                 setDateEnd(e);
-                                setEndSlot("Full Day");
-                                setValidleaverequest(false)
-                              }
-                            }}
-                            disabled={empApply == null}
-                            disabledDate={disabledDate}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                        <Form.Item
-                          labelAlign="left"
-                          name="slotStart"
-                          style={{ marginBottom: "25px" }}
-                          className="div-slot"
-                          label={
-                            <label
-                              style={{ color: "black", fontWeight: "400" }}
-                            >
-                              Start Slot<span style={{ color: "red" }}> *</span>
-                            </label>
-                          }
-                          initialValue={"Full Day"}
-                        >
-                          <Select
-                            style={{ width: "100%" }}
-                            disabled={empApply == null}
-                            onChange={(e) => {
-                              setStartSlot(e);
-                              onLeaveDateChange();
-                            }}
+                                onLeaveDateChange(e);
+                              }}
+                              disabledDate={disabledDate}
+                              disabled={disableEnd()}
+                            />
+                          </Form.Item>
+                        </Col>
+
+                        <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                          <Form.Item
+                            labelAlign="left"
+                            name="slotEnd"
+                            style={{ marginBottom: "25px" }}
+                            className="div-slot"
+                            label={
+                              <label
+                                style={{ color: "black", fontWeight: "400" }}
+                              >
+                                End Slot<span style={{ color: "red" }}> *</span>
+                              </label>
+                            }
+                            initialValue={"Full Day"}
                           >
-                            <Option value="Full Day">Full Day</Option>
-                            <Option value="Half Day (First Half)">Half Day (First Half)</Option>
-                            <Option value="Half Day (Second Half)">Half Day (Second Half)</Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-
-                    <Row
-                      gutter={[16, 0]}
-                      className="row-one-div"
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-evenly",
-                      }}
-                    >
-                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                        <Form.Item
-                          required={false}
-                          labelAlign="left"
-                          style={{ marginBottom: "20px", color: "white" }}
-                          label={
-                            <label
-                              style={{ color: "black", fontWeight: "400" }}
+                            <Select
+                              style={{ width: "100%" }}
+                              disabled={disableEndSlot()}
+                              onChange={(e) => {
+                                setEndSlot(e);
+                                onLeaveDateChange();
+                              }}
                             >
-                              End Date<span style={{ color: "red" }}> *</span>
-                            </label>
-                          }
-                          name="dateEnd"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please Select Date",
-                            },
-                          ]}
-                        >
-                          <DatePicker
-                            style={{ width: "100%" }}
-                            format="Do MMM, YYYY"
-                            onChange={(e) => {
-                              setDateEnd(e);
-                              onLeaveDateChange(e);
-                            }}
-                            disabledDate={disabledDate}
-                            disabled={disableEnd()}
-                          />
-                        </Form.Item>
-                      </Col>
+                              <Option value="Full Day">Full Day</Option>
+                              <Option value="Half Day (First Half)">
+                                Half Day (First Half)
+                              </Option>
+                              <Option value="Half Day (Second Half)">
+                                Half Day (Second Half)
+                              </Option>
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                      </Row>
 
-                      <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                        <Form.Item
-                          labelAlign="left"
-                          name="slotEnd"
-                          style={{ marginBottom: "25px" }}
-                          className="div-slot"
-                          label={
-                            <label
-                              style={{ color: "black", fontWeight: "400" }}
-                            >
-                              End Slot<span style={{ color: "red" }}> *</span>
-                            </label>
-                          }
-                          initialValue={"Full Day"}
-                        >
-                          <Select
-                            style={{ width: "100%" }}
-                            disabled={disableEndSlot()}
-                            onChange={(e) => {
-                              setEndSlot(e);
-                              onLeaveDateChange();
-                            }}
-                          >
-                            <Option value="Full Day">Full Day</Option>
-                            <Option value="Half Day (First Half)">Half Day (First Half)</Option>
-                            <Option value="Half Day (Second Half)">Half Day (Second Half)</Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-
-                    <Form.Item
-                      required={false}
-                      labelAlign="left"
-                      name="leaveNature"
-                      style={{ marginBottom: "20px" }}
-                      label={
-                        <label style={{ color: "black", fontWeight: "400" }}>
-                          Nature of Leave
-                          <span style={{ color: "red" }}> *</span>
-                        </label>
-                      }
-                      rules={[
-                        {
-                          required: true,
-                          message: "Select Nature of Leave",
-                        },
-                      ]}
-                    >
-                      <Select
-                        placeholder="Select an option"
-                        allowClear
-                        disabled={disableNature()}
-                        onChange={onLeaveNatureChange}
+                      <Form.Item
+                        required={false}
+                        labelAlign="left"
+                        name="leaveNature"
+                        style={{ marginBottom: "20px" }}
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            Nature of Leave
+                            <span style={{ color: "red" }}> *</span>
+                          </label>
+                        }
+                        rules={[
+                          {
+                            required: true,
+                            message: "Select Nature of Leave",
+                          },
+                        ]}
                       >
-                        {leavedays != null
-                          ? Object.keys(leavedays).map((u) => (
-                            <Option
-                              disabled={disabledLeaveNature(u)}
-                              value={u}
-                            >
-                              {u}
-                            </Option>
-                          ))
-                          : null}
-                        <Option value={"Loss of Pay"}>Loss of Pay</Option>
-                      </Select>
-                    </Form.Item>
+                        <Select
+                          placeholder="Select an option"
+                          allowClear
+                          disabled={disableNature()}
+                          onChange={onLeaveNatureChange}
+                        >
+                          {leavedays != null
+                            ? Object.keys(leavedays).map((u) => (
+                                <Option
+                                  disabled={disabledLeaveNature(u)}
+                                  value={u}
+                                >
+                                  {u}
+                                </Option>
+                              ))
+                            : null}
+                          <Option value={"Loss of Pay"}>Loss of Pay</Option>
+                        </Select>
+                      </Form.Item>
 
-                    <Form.Item
-                      required={false}
-                      labelAlign="left"
-                      name="reason"
-                      style={{ marginBottom: "20px" }}
-                      label={
-                        <label style={{ color: "black", fontWeight: "400" }}>
-                          Reason<span style={{ color: "red" }}> *</span>{" "}
-                        </label>
-                      }
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please Enter a Reason",
-                        },
-                      ]}
-                    >
-                      <Input.TextArea
-                        maxLength={60}
-                        onChange={(e) => {
-                        const str = e.target.value;
-                        const caps = str.split(". ").map(capitalize).join(". ");
-                          form.setFieldsValue({ reason: caps });
-                        }}
-                      />
-                    </Form.Item>
+                      <Form.Item
+                        required={false}
+                        labelAlign="left"
+                        name="reason"
+                        style={{ marginBottom: "20px" }}
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            Reason<span style={{ color: "red" }}> *</span>{" "}
+                          </label>
+                        }
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Enter a Reason",
+                          },
+                        ]}
+                      >
+                        <Input.TextArea
+                          maxLength={60}
+                          onChange={(e) => {
+                            const str = e.target.value;
+                            const caps = str
+                              .split(". ")
+                              .map(capitalize)
+                              .join(". ");
+                            form.setFieldsValue({ reason: caps });
+                          }}
+                        />
+                      </Form.Item>
 
-                    <Form.Item
-                      labelAlign="left"
-                      name="approver"
-                      style={{ marginBottom: "20px" }}
-                      label={
-                        <label style={{ color: "black", fontWeight: "400" }}>
-                          Approver<span style={{ color: "red" }}> *</span>
-                        </label>
-                      }
-                      // initialValue={empApply != null ? allEmpMap[`${empApply}`][1] : ""}
-                    >
-                      <Input disabled />
-                    </Form.Item>
+                      <Form.Item
+                        labelAlign="left"
+                        name="approver"
+                        style={{ marginBottom: "20px" }}
+                        label={
+                          <label style={{ color: "black", fontWeight: "400" }}>
+                            Approver<span style={{ color: "red" }}> *</span>
+                          </label>
+                        }
+                        // initialValue={empApply != null ? allEmpMap[`${empApply}`][1] : ""}
+                      >
+                        <Input disabled />
+                      </Form.Item>
 
-                    <Form.Item
-                      style={{ paddingTop: "px" }}
-                      wrapperCol={{
-                        offset: 8,
-                        span: 24,
-                      }}
-                    >
-                      <Button type="primary" htmlType="submit">
-                        Submit
-                      </Button>
-                      <Button
-                        htmlType="button"
-                        type="default"
-                        style={{ marginLeft: "10px" }}
-                        onClick={() => {
-                          form.resetFields();
-                          setDateSelected([]);
-                          setDateStart(null);
-                          setStartSlot(null);
-                          setDateEnd(null);
-                          setEndSlot(null);
-                          setValidleaverequest(false);
+                      <Form.Item
+                        style={{ paddingTop: "px" }}
+                        wrapperCol={{
+                          offset: 8,
+                          span: 24,
                         }}
                       >
-                        Reset
-                      </Button>
-                    </Form.Item>
-                  </Form>
-                </Col>
-              </Row>
-            </Modal>
-             
+                        <Button type="primary" htmlType="submit">
+                          Submit
+                        </Button>
+                        <Button
+                          htmlType="button"
+                          type="default"
+                          style={{ marginLeft: "10px" }}
+                          onClick={() => {
+                            form.resetFields();
+                            setDateSelected([]);
+                            setDateStart(null);
+                            setStartSlot(null);
+                            setDateEnd(null);
+                            setEndSlot(null);
+                            setValidleaverequest(false);
+                          }}
+                        >
+                          Reset
+                        </Button>
+                      </Form.Item>
+                    </Form>
+                  </Col>
+                </Row>
+              </Modal>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Holidays" key="2">
               <card>
@@ -1629,7 +1672,10 @@ const Leave = (props) => {
                     </div>
                     <div className="holiday-button" style={{ display: "flex" }}>
                       <div>
-                        <HolidayList role={props.roleView} refreshCalendar={getHoliday} />
+                        <HolidayList
+                          role={props.roleView}
+                          refreshCalendar={getHoliday}
+                        />
                       </div>
                     </div>
                   </div>
@@ -1677,99 +1723,99 @@ const Leave = (props) => {
               <div className="leavediv">
                 {leavedays != null
                   ? Object.keys(leavedays).map((user, id) => {
-                    return (
-                      <div
-                        className="Col-2-center"
-                        style={{ background: "#1963A6", color: "white" }}
-                      >
-                        <p
-                          className="heading"
-                          style={{
-                            fontWeight: "500",
-                            fontSize: "20px",
-                          }}
-                        >
-                          {user}
-                        </p>
-
+                      return (
                         <div
-                          className="total-leave"
-                          style={{
-                            width: "90%",
-                          }}
+                          className="Col-2-center"
+                          style={{ background: "#1963A6", color: "white" }}
                         >
-                          <div className="leave-status">
-                            <p
-                              className="leave"
-                              Total
-                              style={{
-                                fontWeight: "500",
-                                fontSize: "15px",
-                                margin: "0px",
-                              }}
-                            >
-                              Total
-                            </p>
-                            <p
-                              style={{
-                                fontWeight: "500",
-                                fontSize: "15px",
-                                margin: "0px",
-                              }}
-                            >
-                              {totaldays[user]}
-                            </p>
-                          </div>
+                          <p
+                            // className="heading"
+                            style={{
+                              fontWeight: "500",
+                              fontSize: "20px",
+                            }}
+                          >
+                            {user}
+                          </p>
 
-                          <div className="leave-status">
-                            <p
-                              className="leave"
-                              Total
-                              style={{
-                                fontWeight: "500",
-                                fontSize: "15px",
-                                margin: "0px",
-                              }}
-                            >
-                              Availed
-                            </p>
-                            <p
-                              style={{
-                                fontWeight: "500",
-                                fontSize: "15px",
-                                margin: "0px",
-                              }}
-                            >
-                              {totaldays[user] - leavedays[user]}
-                            </p>
-                          </div>
+                          <div
+                            className="total-leave"
+                            style={{
+                              width: "90%",
+                            }}
+                          >
+                            <div className="leave-status">
+                              <p
+                                className="leave"
+                                Total
+                                style={{
+                                  fontWeight: "500",
+                                  fontSize: "15px",
+                                  margin: "0px",
+                                }}
+                              >
+                                Total
+                              </p>
+                              <p
+                                style={{
+                                  fontWeight: "500",
+                                  fontSize: "15px",
+                                  margin: "0px",
+                                }}
+                              >
+                                {totaldays[user]}
+                              </p>
+                            </div>
 
-                          <div className="leave-status">
-                            <p
-                              className="leave"
-                              Total
-                              style={{
-                                fontWeight: "500",
-                                fontSize: "15px",
-                                margin: "0px",
-                              }}
-                            >
-                              Remaining
-                            </p>
-                            <p
-                              style={{
-                                fontWeight: "500",
-                                fontSize: "15px",
-                                margin: "0px",
-                              }}
-                            >
-                              {leavedays[user]}
-                            </p>
+                            <div className="leave-status">
+                              <p
+                                className="leave"
+                                Total
+                                style={{
+                                  fontWeight: "500",
+                                  fontSize: "15px",
+                                  margin: "0px",
+                                }}
+                              >
+                                Availed
+                              </p>
+                              <p
+                                style={{
+                                  fontWeight: "500",
+                                  fontSize: "15px",
+                                  margin: "0px",
+                                }}
+                              >
+                                {totaldays[user] - leavedays[user]}
+                              </p>
+                            </div>
+
+                            <div className="leave-status">
+                              <p
+                                className="leave"
+                                Total
+                                style={{
+                                  fontWeight: "500",
+                                  fontSize: "15px",
+                                  margin: "0px",
+                                }}
+                              >
+                                Remaining
+                              </p>
+                              <p
+                                style={{
+                                  fontWeight: "500",
+                                  fontSize: "15px",
+                                  margin: "0px",
+                                }}
+                              >
+                                {leavedays[user]}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })
+                      );
+                    })
                   : null}
               </div>
             </Col>
@@ -2016,7 +2062,10 @@ const Leave = (props) => {
                           ]}
                         >
                           <DatePicker
-                            style={{ width: "100%", backgroundColor: "#ffffff" }}
+                            style={{
+                              width: "100%",
+                              backgroundColor: "#ffffff",
+                            }}
                             format="Do MMM, YYYY"
                             onChange={(e) => {
                               setDateStart(e);
@@ -2024,7 +2073,7 @@ const Leave = (props) => {
                               if (e == null) {
                                 setDateEnd(e);
                                 setEndSlot("Full Day");
-                                setValidleaverequest(false)
+                                setValidleaverequest(false);
                               }
                             }}
                             disabledDate={disabledDate}
@@ -2054,8 +2103,12 @@ const Leave = (props) => {
                             }}
                           >
                             <Option value="Full Day">Full Day</Option>
-                            <Option value="Half Day (First Half)">Half Day (First Half)</Option>
-                            <Option value="Half Day (Second Half)">Half Day (Second Half)</Option>
+                            <Option value="Half Day (First Half)">
+                              Half Day (First Half)
+                            </Option>
+                            <Option value="Half Day (Second Half)">
+                              Half Day (Second Half)
+                            </Option>
                           </Select>
                         </Form.Item>
                       </Col>
@@ -2126,8 +2179,12 @@ const Leave = (props) => {
                             }}
                           >
                             <Option value="Full Day">Full Day</Option>
-                            <Option value="Half Day (First Half)">Half Day (First Half)</Option>
-                            <Option value="Half Day (Second Half)">Half Day (Second Half)</Option>
+                            <Option value="Half Day (First Half)">
+                              Half Day (First Half)
+                            </Option>
+                            <Option value="Half Day (Second Half)">
+                              Half Day (Second Half)
+                            </Option>
                           </Select>
                         </Form.Item>
                       </Col>
@@ -2159,13 +2216,13 @@ const Leave = (props) => {
                       >
                         {leavedays != null
                           ? Object.keys(leavedays).map((u) => (
-                            <Option
-                              disabled={disabledLeaveNature(u)}
-                              value={u}
-                            >
-                              {u}
-                            </Option>
-                          ))
+                              <Option
+                                disabled={disabledLeaveNature(u)}
+                                value={u}
+                              >
+                                {u}
+                              </Option>
+                            ))
                           : null}
                         <Option value={"Loss of Pay"}>Loss of Pay</Option>
                       </Select>
@@ -2191,8 +2248,11 @@ const Leave = (props) => {
                       <Input.TextArea
                         maxLength={60}
                         onChange={(e) => {
-                        const str = e.target.value;
-                        const caps = str.split(". ").map(capitalize).join(". ");
+                          const str = e.target.value;
+                          const caps = str
+                            .split(". ")
+                            .map(capitalize)
+                            .join(". ");
                           form.setFieldsValue({ reason: caps });
                         }}
                       />
@@ -2244,7 +2304,9 @@ const Leave = (props) => {
               </Row>
             </Modal>
 
-            {isMgr ? <LeaveRequests data={[...requests]} getData={getData} /> : null}
+            {isMgr ? (
+              <LeaveRequests data={[...requests]} getData={getData} />
+            ) : null}
 
             {isMgr && !isHr ? (
               <Row
@@ -2352,57 +2414,57 @@ const Leave = (props) => {
                 </Col>
               </Row>
             ) : null}
-              <Row
+            <Row
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                alignContent: "flex-start",
+                backgroundColor: "white",
+                borderRadius: "10px",
+                padding: "10px",
+                marginTop: "10px",
+              }}
+            >
+              <Col
+                span={24}
                 style={{
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-evenly",
                   alignContent: "flex-start",
-                  backgroundColor: "white",
-                  borderRadius: "10px",
-                  padding: "10px",
-                  marginTop: "10px",
+                  color: "black",
+                  width: "100rem",
                 }}
               >
-                <Col
-                  span={24}
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-evenly",
-                    alignContent: "flex-start",
-                    color: "black",
-                    width: "100rem",
-                  }}
-                >
-                  <h3>Employee Leave History</h3>
-                </Col>
+                <h3>Employee Leave History</h3>
+              </Col>
 
-                <Col
-                  xl={24}
-                  lg={24}
-                  md={24}
-                  sm={24}
-                  xs={24}
-                  style={{
-                    background: "flex",
-                    padding: "10px",
-                  }}
-                >
-                  <div className="history-table">
-                    <Table
-                      className="leaveTable "
-                      columns={columns}
-                      dataSource={leaves}
-                      pagination={{
-                        position: ["bottomCenter"],
-                      }}
-                      scroll={{ x: 600 }}
-                      size="small"
-                    />
-                  </div>
-                </Col>
-              </Row>
+              <Col
+                xl={24}
+                lg={24}
+                md={24}
+                sm={24}
+                xs={24}
+                style={{
+                  background: "flex",
+                  padding: "10px",
+                }}
+              >
+                <div className="history-table">
+                  <Table
+                    className="leaveTable "
+                    columns={columns}
+                    dataSource={leaves}
+                    pagination={{
+                      position: ["bottomCenter"],
+                    }}
+                    scroll={{ x: 600 }}
+                    size="small"
+                  />
+                </div>
+              </Col>
+            </Row>
           </Row>
 
           <Modal
@@ -2502,13 +2564,13 @@ const Leave = (props) => {
                           style={{ width: "100%", backgroundColor: "#ffffff" }}
                           format="Do MMM, YYYY"
                           onChange={(e) => {
-                              setDateStart(e);
-                              onLeaveDateChange();
-                              if (e == null) {
-                                setDateEnd(e);
-                                setEndSlot("Full Day");
-                                setValidleaverequest(false)
-                              }
+                            setDateStart(e);
+                            onLeaveDateChange();
+                            if (e == null) {
+                              setDateEnd(e);
+                              setEndSlot("Full Day");
+                              setValidleaverequest(false);
+                            }
                           }}
                           disabledDate={disabledDate}
                         />
@@ -2536,8 +2598,12 @@ const Leave = (props) => {
                           }}
                         >
                           <Option value="Full Day">Full Day</Option>
-                            <Option value="Half Day (First Half)">Half Day (First Half)</Option>
-                            <Option value="Half Day (Second Half)">Half Day (Second Half)</Option>
+                          <Option value="Half Day (First Half)">
+                            Half Day (First Half)
+                          </Option>
+                          <Option value="Half Day (Second Half)">
+                            Half Day (Second Half)
+                          </Option>
                         </Select>
                       </Form.Item>
                     </Col>
@@ -2568,7 +2634,10 @@ const Leave = (props) => {
                         initialValue={
                           editedLeave.dateCalc == null
                             ? null
-                            : moment(editedLeave.dateCalc[editedLeave.len-1], "Do MMM, YYYY")
+                            : moment(
+                                editedLeave.dateCalc[editedLeave.len - 1],
+                                "Do MMM, YYYY"
+                              )
                         }
                       >
                         <DatePicker
@@ -2605,16 +2674,20 @@ const Leave = (props) => {
                           }}
                         >
                           <Option value="Full Day">Full Day</Option>
-                            <Option value="Half Day (First Half)">Half Day (First Half)</Option>
-                            <Option value="Half Day (Second Half)">Half Day (Second Half)</Option>
+                          <Option value="Half Day (First Half)">
+                            Half Day (First Half)
+                          </Option>
+                          <Option value="Half Day (Second Half)">
+                            Half Day (Second Half)
+                          </Option>
                         </Select>
                       </Form.Item>
                     </Col>
                   </Row>
                   <Form.Item
-                      required={false}
-                      labelAlign="left"
-                      name="leaveNature"
+                    required={false}
+                    labelAlign="left"
+                    name="leaveNature"
                     style={{ marginBottom: "20px" }}
                     label={
                       <label style={{ color: "black", fontWeight: "400" }}>
@@ -2638,10 +2711,10 @@ const Leave = (props) => {
                     >
                       {leavedays != null
                         ? Object.keys(leavedays).map((u) => (
-                          <Option disabled={disabledLeaveNature(u)} value={u}>
-                            {u}
-                          </Option>
-                        ))
+                            <Option disabled={disabledLeaveNature(u)} value={u}>
+                              {u}
+                            </Option>
+                          ))
                         : null}
                       <Option value={"Loss of Pay"}>Loss of Pay</Option>
                     </Select>
@@ -2711,7 +2784,10 @@ const Leave = (props) => {
                         );
                         setStartSlot(editedLeave.slotStart);
                         setDateEnd(
-                          moment(editedLeave.dateCalc[editedLeave.len-1], "Do MMM, YYYY")
+                          moment(
+                            editedLeave.dateCalc[editedLeave.len - 1],
+                            "Do MMM, YYYY"
+                          )
                         );
                         setEndSlot(editedLeave.slotEnd);
                         setValidleaverequest(true);

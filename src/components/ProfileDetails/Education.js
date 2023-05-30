@@ -7,13 +7,14 @@ import EmpInfoContext from "../../contexts/EmpInfoContext";
 import "../../style/BankAccount.css";
 import "./Education.css"
 import { capitalize, checkAlphabets, checkNoAlphabets } from "../../contexts/CreateContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 function Education() {
   const [editContent, showEditContent] = useState(false);
   const [dateStart, setDateStart] = useState();
   const [dateEnd, setDateEnd] = useState();
   const [data, setData] = useState([]);
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth()
   const onFinish = (value) => {
     let record = {
       qualificationType: value.qualificationType
@@ -55,7 +56,7 @@ function Education() {
     }
   };
   const disabledDate = (current) => {
-    return ! current.isBetween(moment().subtract(14, 'years'),moment());
+    return ! current.isBetween(moment().subtract(50, 'years'),moment());
   }
   const [form] = Form.useForm();
 

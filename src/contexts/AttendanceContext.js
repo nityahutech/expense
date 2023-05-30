@@ -172,11 +172,10 @@ class AttendanceContext {
         ...doc.data(),
         id: doc.id,
         status:
-          stat == "Pending" || stat == "Reject"
-            ? "Absent"
-            : stat == "Approved"
+          stat == null 
+            ? "Present" : stat == "Approved"
             ? "Present"
-            : "Present",
+            : "Absent",
         empId: id,
       };
     });
@@ -209,14 +208,17 @@ class AttendanceContext {
     return temp.reverse();
   };
 
-  getAllUsers = async (date) => {
-    const q = query(usersCollectionRef, orderBy("empId", "asc"));
+  getAllUsers = async (date, name) => {
+    const q = name 
+      ? query(usersCollectionRef, where("repManager", "==", name)) 
+        : query(usersCollectionRef, orderBy("empId", "asc"));
+    console.log(name,q);
     let userdata = await getDocs(q);
     let res = userdata.docs.map((doc) => {
       return {
         id: doc.id,
         empId: doc.data().empId,
-        name: doc.data().fname + " " + doc.data().lname,
+        name: doc.data().mname.split(" ").length > 1 ? doc.data().fname + " " + doc.data().lname : doc.data().name,
         status: "Absent",
         project: "",
         report: "",
@@ -233,6 +235,7 @@ class AttendanceContext {
         }
       }
     });
+    console.log(res);
     return res;
   };
 
@@ -291,8 +294,8 @@ class AttendanceContext {
       return {
         id: doc.data().empId,
         name: doc.data().name,
-        project: doc.data().project,
-        report: doc.data().report,
+        project: doc.data().project || "",
+        report: doc.data().report || "",
       };
     });
     return res;

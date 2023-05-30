@@ -8,7 +8,6 @@ import {
   DatePicker,
   Spin,
   Card,
-  Divider,
   Radio,
   Switch,
   TimePicker,
@@ -20,7 +19,7 @@ import {
   Space,
   Badge,
 } from "antd";
-import "../style/AttendanceLog.css";
+import "../style/Attendance.css";
 import { SearchOutlined, EditOutlined, DeleteFilled } from "@ant-design/icons";
 import moment from "moment";
 import AttendanceContext from "../contexts/AttendanceContext";
@@ -34,7 +33,7 @@ import {
   capitalize,
 } from "../contexts/CreateContext";
 import { webClock } from "../contexts/EmailContext";
-import RegularizeAttendance from "./RegularizeAttendance";
+import RegularizeAttendance from "./Attendance/RegularizeAttendance";
 
 const layout = {
   labelCol: {
@@ -372,6 +371,7 @@ function AttendanceLog(props) {
       let dayoff = Object.keys(dayTemp).filter(
         (day) => dayTemp[`${day}`] == "dayoff"
       );
+      console.log("breh", userdata, holTemp, dayoff);
       AttendanceContext.updateLeaves(userdata, holTemp, dayoff).then(
         (final) => {
           console.log("final:: ", final);
@@ -437,10 +437,7 @@ function AttendanceLog(props) {
       key: "status",
       width: 80,
       align: "center",
-      render: (_, record) => {
-        console.log("recorddd", record);
-
-        return (
+      render: (_, record) => (
           <>
             <span
               style={
@@ -494,8 +491,7 @@ function AttendanceLog(props) {
               </Tooltip>
             ) : null}
           </>
-        );
-      },
+        )
     },
     {
       title: "In Time",
@@ -562,6 +558,7 @@ function AttendanceLog(props) {
     },
   ];
   async function onHrDateFilter(value) {
+    console.log(value);
     setMonth(value);
     if (value == null) {
       const modifiedFilterExpense = await getEmpDetails(selectemp.id, [
@@ -624,12 +621,13 @@ function AttendanceLog(props) {
       title: "Days",
       dataIndex: "days",
       key: "days",
+      align: "left",
     },
     {
       title: "Full Day",
       dataIndex: "fullday",
       key: "fullday",
-      align: "center",
+      align: "left",
       render: (_, data) => {
         return (
           <Radio.Group
@@ -646,7 +644,7 @@ function AttendanceLog(props) {
       title: "Half Day",
       dataIndex: "halfday",
       key: "halfday",
-      align: "center",
+      align: "left",
       render: (_, data) => {
         return (
           <Radio.Group
@@ -666,7 +664,7 @@ function AttendanceLog(props) {
       title: "Dayoff",
       dataIndex: "dayoff",
       key: "dayoff",
-      align: "center",
+      align: "left",
       render: (_, data) => {
         return (
           <Radio.Group
@@ -687,7 +685,7 @@ function AttendanceLog(props) {
         <Tabs
           defaultActiveKey={activetab}
           activeKey={activetab}
-          className="Tabs"
+          className="page-tabs"
           onChange={(tabKey) => {
             setActivetab(tabKey);
             setSelectemp({ id: "" });
@@ -819,7 +817,6 @@ function AttendanceLog(props) {
                   </Form>
                 </Modal>
               </Tabs.TabPane>
-
               <Tabs.TabPane
                 tab="Add Report"
                 key="4"
@@ -1071,9 +1068,6 @@ function AttendanceLog(props) {
                   </Form>
                 </Modal>
               </Tabs.TabPane>
-
-              {/* //---------------------------------------------------------- */}
-
               <Tabs.TabPane tab="Configure" key="3">
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <Card
@@ -1160,7 +1154,7 @@ function AttendanceLog(props) {
                           defaultOpenValue={moment("00:00", "HH:mm")}
                         />
                       </Form.Item>
-                      <div
+                      {/* <div
                         style={{
                           fontWeight: "600",
                           fontSize: "14px",
@@ -1168,21 +1162,35 @@ function AttendanceLog(props) {
                         }}
                       >
                         Work Days
-                      </div>
-                      <Divider
+                      </div> */}
+                      {/* <Divider
                         style={{
                           borderTop: "2px solid #EAEAEA",
                           margin: "10px",
                         }}
-                      />
+                      /> */}
+                      
+                      <Form.Item
+                        // initialValue={moment(endTime, "HH:mm")}
+                        name="days"
+                        // className="time"
+                        label="Work Days"
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     message: "Please Enter End Date",
+                        //   },
+                        // ]}
+                      >
                       <Table
                         className="weekDays"
                         columns={tableHeaders}
                         dataSource={workingdays || []}
-                        bordered={false}
+                        bordered
                         pagination={false}
                         size="small"
                       />
+                      </Form.Item>
                       <Form.Item
                         label="Max Break Duration (hr)"
                         name="maxBreakDuration"

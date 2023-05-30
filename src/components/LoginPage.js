@@ -31,7 +31,7 @@ function LoginPage() {
       sessionStorage.setItem("accessToken", res.user.accessToken);
       sessionStorage.setItem("user", JSON.stringify(res.user));
       const timer = setTimeout(() => {
-        navigate("DashBoard", { replace: true });
+        navigate("/dashboard", { replace: true });
         setLoading("Login");
       }, 3000);
     } catch(err) {
@@ -117,12 +117,12 @@ function LoginPage() {
     if (error != "") {
       StartToastifyInstance({
         text: error,
-        duration: 3000,
-        gravity: "bottom",
+        duration: 5000,
+        gravity: "top",
         position: "right",
         stopOnFocus: true,
         style: {
-          background: "linear-gradient(to right, #1F80DE, #F17C0F)",
+          background: "#FC6161",
         },
       }).showToast();
     }
@@ -139,13 +139,12 @@ function LoginPage() {
           </Col>
           <Col xs={24} xm={24} md={12}>
               <div className="form-div">
-                  <div className="exepnse-logo">
+                  <div>
                     <img src={logo} alt="logo" 
-                    style={{width:"250px",paddingBottom:"1rem"}}
+                    style={{width:"250px", paddingBottom:"1rem"}}
                     />
                   </div>
                   <Form
-                    name="basic"
                     labelCol={{
                       span: 8,
                     }}
@@ -158,7 +157,7 @@ function LoginPage() {
                     autoComplete="off"
                   >
                     <div className="wlc-div ">{forgot ? "Welcome back!" : "Password Reset"}</div>
-                    <div className="msg">{forgot ? "Let's Access to our dashboard" : "We will send a reset link to your registered email"}</div>
+                    <div className="msg">{forgot ? "Let's access our dashboard" : "We will send a reset link to your registered email"}</div>
 
                     <div className="email-div">
                       Email Address<span style={{ color: "red" }}> *</span>
@@ -213,23 +212,23 @@ function LoginPage() {
                         </Button>
                         {/* <div style={{width: "18rem"}}> */}
                     <div 
-                        className="forgotpwd" 
-                        onClick={()=>setForgot(!forgot)} 
+                        className="forgotpwd"                          
                       >
-                        <span className="forgotmsg">{forgot ? "Forgot Password" : "Back"}</span>
+                        <span onClick={()=>setForgot(!forgot)} className="forgotmsg">{forgot ? "Forgot Password" : "Back"}</span>
                       </div>
                       </div>
-                      {/* <Divider style={{margin: "5px", fontSize: "smaller", color: "#c2c0c0"}}>OR</Divider>
+                      {forgot ? (<><Divider style={{margin: "5px", fontSize: "smaller", color: "#c2c0c0", cursor: "default"}}>OR</Divider>
                       
                     <div className="checkBox">
                       <Button
                         className="google-btn"
                         onClick={handleGoogleAuth}
+                        disabled={loading != "Login"}
                       >
                         Log In with Google
                         <GoogleOutlined />
                       </Button>
-                    </div> */}
+                    </div></>) : null}
                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                       <p className="loginFooter">
                         © 2022 Hutech HR. All rights reserved. Terms of Service

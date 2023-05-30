@@ -19,6 +19,7 @@ const MonthlyLog = (props) => {
     const [empInfo, setEmpInfo] = useState({});
     const [regularizeOpen, setRegularizeOpen] = useState(false);
     const [date, setDate] = useState(null);
+    const [configurations, setConfigurations] = useState(null);
     const location = useLocation()
     console.log(location);
     const {currentUser} = useAuth()
@@ -73,7 +74,9 @@ const MonthlyLog = (props) => {
                   />
                 </Space>
               </Tooltip>
-            ) : record.status == "Absent" ? (
+            ) : record.status == "Absent" ? 
+            window.location.href.includes('my-attendance/daily-log') ? null :
+            (
               <Tooltip placement="bottom" title="Regularize Attendance">
                 <EditOutlined
                   style={{ marginLeft: "10px" }}
@@ -90,7 +93,8 @@ const MonthlyLog = (props) => {
                   }}
                 />
               </Tooltip>
-            ) : record.status == "Present" && record.type == "Approval" ? (
+            )
+            : record.status == "Present" && record.type == "Approval" ? (
               <Tooltip placement="bottom" title="Approved">
                 <Space style={{ marginLeft: "10px" }}>
                   <Badge status="success" className="approve" />
@@ -220,16 +224,27 @@ const MonthlyLog = (props) => {
 
   
   const handleFinish = async (values) => {
-    const addDetails = {
+    console.log(empInfo);
+    let addDetails = {
       empId: id,
-      empCode: empInfo.empCode,
+      empCode: empInfo.empId,
       empName: empInfo.name,
       type: "Approval",
-      appStatus: location.state == null ? "Approved" : "Pending",
+      appStatus: "Pending",
       reason: values.reason,
       date: date,
       rejectedReason: "",
     };
+    if (!window.location.href.includes("my-attendance")){
+      addDetails.appStatus = "Approved"
+      addDetails.clockIn = configurations.starttime + ":00";
+      addDetails.clockOut = configurations.endtime + ":00";
+      addDetails.break = configurations.maxBreakDuration + ":00:00";
+      addDetails.duration = moment(configurations.endtime, "HH:mm:ss")
+            .subtract(configurations.starttime)
+            .subtract(configurations.maxBreakDuration + ":00:00")
+            .format("HH:mm:ss");
+    }
     console.log(addDetails);
     try {
       await AttendanceContext.addRegularize(addDetails);
@@ -258,6 +273,7 @@ const MonthlyLog = (props) => {
         holidays: holTemp,
         selectedDays: selTemp.attendanceNature.selectedDay,
       };
+      setConfigurations(selTemp.attendanceNature)
       setSelectedDay(selTemp.attendanceNature.selectedDay)
     }
     // allEmpDetails(temp)
@@ -342,7 +358,7 @@ const MonthlyLog = (props) => {
                           getEmpDetails(id, [begin, end]);
                         }
                   }}
-                  disabledDate={(current) => !current.isBetween(moment('05-2023', 'MM-YYYY'), new Date())}
+                  disabledDate={(current) => !current.isBetween(moment('03-2023', 'MM-YYYY'), new Date())}
               />
           </Col>
         </Row>

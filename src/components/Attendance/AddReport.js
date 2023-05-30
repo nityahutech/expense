@@ -73,7 +73,7 @@ const AddReport = (props) => {
           </Form.Item>
           <Form.Item
             name="report"
-            label="Project Details"
+            label="Report"
             rules={[
               {
                 required: true,

@@ -459,13 +459,17 @@ const ApplyLeave = (props) => {
                     style={{ width: "100%" }}
                     format="Do MMM, YYYY"
                     onChange={(e) => {
+                      form.resetFields();
+                      form.setFieldsValue({approver: repManager})
+                      form.setFieldsValue({dateStart: e})
+                      setDateSelected([]);
+                      setStartSlot(null);
+                      setDateEnd(null);
+                      setEndSlot("Full Day");
+                      setValidleaverequest(false);
+                      
                       setDateStart(e);
                       onLeaveDateChange();
-                      // if (e == null) {
-                        setDateEnd(e);
-                        setEndSlot("Full Day");
-                        setValidleaverequest(false);
-                      // }
                     }}
                     disabled={empApply == null}
                     disabledDate={disabledDate}

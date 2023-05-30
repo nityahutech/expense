@@ -58,8 +58,9 @@ const FormatPage = (props) => {
             +`${currentUser.displayName}!`,
             icon: <StarTwoTone twoToneColor="#fa8128" style={{fontSize: "20px"}} />
           })
-      } else if (days[moment().format("DD-MM")]?.birthday?.length != 0){
+      } else if (days[moment().format("DD-MM")]?.birthday?.length > 0){
         count += 1
+        console.log(days[moment().format("DD-MM")]?.birthday?.length);
         let namesStr=days[moment().format("DD-MM")]?.birthday[0];
         if (days[moment().format("DD-MM")]?.birthday?.length > 1){
         let temp = [...days[moment().format("DD-MM")]?.birthday]
@@ -68,7 +69,7 @@ const FormatPage = (props) => {
             name: ("Happy Birthday to " + namesStr + "!"),
             icon: <StarTwoTone twoToneColor="#fa8128" style={{fontSize: "20px"}} />
           })
-      } else if (days[moment().format("DD-MM")]?.anniversary?.length != 0){
+      } else if (days[moment().format("DD-MM")]?.anniversary?.length > 0){
         count += 1
         let namesStr=days[moment().format("DD-MM")]?.anniversary[0];
         if (days[moment().format("DD-MM")]?.anniversary?.length > 1){
@@ -159,7 +160,7 @@ const FormatPage = (props) => {
               roleView={roleView}
               switchRefresh={switchRefresh}
               switchRole={switchRole}
-              notifications={[]}
+              notifications={notifications}
               total={total}
             />
           </div>

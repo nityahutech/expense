@@ -140,8 +140,8 @@ function TravelForm(props) {
             <Row gutter={[16, 16]}>
               <Col xs={24} xm={24} md={12} lg={12}>
                 <Form.Item
-                  label="Travel Management Title"
-                  name="travelName"
+                  label="Travel Management Title  "
+                  name="travelName (Max 25)"
                   onKeyPress={(event) => {
                     if (checkAlphabets(event)) {
                       event.preventDefault();
@@ -159,6 +159,7 @@ function TravelForm(props) {
                   ]}
                 >
                   <Input
+                    placeholder="Enter Travel Management Title"
                     maxLength={25}
                     onChange={(e) => {
                       const str = e.target.value;
@@ -179,7 +180,7 @@ function TravelForm(props) {
                     },
                   ]}
                 >
-                  <TextArea maxLength={10} />
+                  <TextArea showCount maxLength={10} placeholder="Max 10 Words" />
                 </Form.Item>
               </Col>
 
@@ -215,7 +216,7 @@ function TravelForm(props) {
                                         orientationMargin="15px"
                                         style={{ margin: "0px" }}
                                       >
-                                        Expenditure No.{i + 1}
+                                        Travel Booking No.{i + 1}
                                       </Divider>
                                       <Col span={24}>
                                         <Form.Item
@@ -478,22 +479,23 @@ function TravelForm(props) {
                                             lg={6}
                                           >
                                             <Form.Item
-                                              initialValue={"flight"}
+                                              initialValue={"Flight"}
                                               label="Transport Type"
                                               {...field}
                                               name={[
                                                 field.name,
                                                 "transport",
                                               ]}
-                                              // fieldKey={[field.fieldKey, "upload"]}
+
                                               rules={[
                                                 {
                                                   required: true,
-                                                  // message: "Please select the mode of Transportation",
+
                                                 },
                                               ]}
                                             >
                                               <Select
+                                                placeholder='Please Select'
                                                 defaultValue="Flight"
                                                 style={{
                                                   width: "100%",

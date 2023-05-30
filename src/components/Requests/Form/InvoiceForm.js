@@ -1,14 +1,13 @@
-import { Button, Col, DatePicker, Divider, Form, Input, Row, Space } from "antd";
+import { Button, Col, DatePicker, Divider, Form, Input, Row, Space, message } from "antd";
 import { useState } from "react";
 import {
   MinusCircleOutlined,
   PlusOutlined,
-  CheckOutlined,
-  CloseOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import { showNotification } from "../../../contexts/CreateContext";
 import InvoiceContext from "../../../contexts/InvoiceContext";
+import { capitalize, checkAlphabets } from "../../../contexts/CreateContext";
 
 const InvoiceForm = (props) => {
   console.log('props', props?.assetData[0])
@@ -55,11 +54,17 @@ const InvoiceForm = (props) => {
   }
 
   function handleChange(event, i) {
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    let temp = [...file];
+    const temp = [...file];
     temp[i] = event.target.files[0];
+    const isLt2M = temp[i].size / 1024 / 1024 < 2;
     setFile(temp);
-    console.log(temp);
+    const allowedFileTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+    console.log(temp[i], temp[i].type)
+    if (temp[i] && allowedFileTypes.includes(temp[i].type)) {
+      message.success('File uploaded: ' + temp[i].name);
+    } else {
+      message.error('Invalid file type');
+    }
   }
 
   return (
@@ -67,17 +72,37 @@ const InvoiceForm = (props) => {
       <Row span={24} gutter={[16, 16]}>
         <Col span={12}>
           <Form.Item
-            maxLength={25}
+
             label="Invoice Title"
             name="invoiceName"
+            onKeyPress={(event) => {
+              if (checkAlphabets(event)) {
+                event.preventDefault();
+              }
+            }}
             rules={[
               {
                 required: true,
                 message: "Please enter a title",
               },
+              {
+                pattern: /^[a-zA-Z]+$/,
+                message: "Please enter Valid Title",
+              },
             ]}
           >
-            <Input />
+            <Input maxLength={25}
+              placeholder="Enter Invoice Title (Max 25)"
+              onChange={(e) => {
+                const str = e.target.value;
+                const caps = str
+                  .split(" ")
+                  .map(capitalize)
+                  .join(" ");
+                form.setFieldsValue({
+                  invoiceName: caps,
+                });
+              }} />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -106,7 +131,7 @@ const InvoiceForm = (props) => {
                               orientationMargin="15px"
                               style={{ margin: "0px" }}
                             >
-                              Expenditure No.{i + 1}
+                              Invoice No.{i + 1}
                             </Divider>
                             <Col md={10} sm={24}>
                               <Form.Item
@@ -181,7 +206,7 @@ const InvoiceForm = (props) => {
                                   },
                                 ]}
                               >
-                                <Input placeholder="Enter Description" />
+                                <Input maxLength={50} placeholder="Enter Description" />
                               </Form.Item>
                             </Col>
                             <Col md={10} sm={24}>
@@ -189,18 +214,18 @@ const InvoiceForm = (props) => {
                                 label="Upload Image"
                                 {...field}
                                 name={[field.name, "upload"]}
-                              // fieldKey={[field.fieldKey, "upload"]}
-                              // rules={[
-                              //   {
-                              //     required: true,
-                              //     message: "Missing Images",
-                              //   },
-                              // ]}
+                                // fieldKey={[field.fieldKey, "upload"]}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please Upload File",
+                                  },
+                                ]}
                               >
                                 <div className="idpage">
                                   <Input
                                     type="file"
-                                    accept="application/pdf, image/png, image/jpeg"
+                                    accept=".pdf,.jpeg,.jpg,.png"
                                     id="upload"
                                     name="upload"
                                     onChange={(e) => handleChange(e, i)}

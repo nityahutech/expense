@@ -10,6 +10,7 @@ import {
   Space,
   DatePicker,
   Select,
+  message,
 } from "antd";
 
 import FormItem from "antd/es/form/FormItem";
@@ -84,10 +85,18 @@ function LaptopRepairForm(props) {
     width: "100%",
   };
 
- 
+
   function handleChange(event) {
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    setFile(event.target.files[0]);
+    const selectedFile = event.target.files[0];
+    const isLt2M = selectedFile.size / 1024 / 1024 < 2;
+    setFile(selectedFile);
+    const allowedFileTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+
+    if (selectedFile && allowedFileTypes.includes(selectedFile.type)) {
+      message.success('File uploaded: ' + selectedFile.name);
+    } else {
+      message.error('Invalid file type');
+    }
   }
 
   return (
@@ -175,6 +184,7 @@ function LaptopRepairForm(props) {
                   ]}
                 >
                   <TextArea
+                    showCount
                     Rows={4}
                     maxLength={100}
                     autoSize={{ minRows: 4, maxRows: 4 }}
@@ -188,11 +198,17 @@ function LaptopRepairForm(props) {
                 <FormItem
                   name="upload"
                   label="Upload photos if (Physical Damage)"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Upload File",
+                    },
+                  ]}
                 >
                   <div className="idpage">
                     <Input
                       type="file"
-                      accept="application/pdf"
+                      accept=".pdf, .jpeg, .jpg, .png"
                       id="upload"
                       name="upload"
                       onChange={handleChange}

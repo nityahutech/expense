@@ -4,11 +4,6 @@ import { capitalize } from "../../contexts/CreateContext";
 const RegularizeModal = (props) => {
   const [form] = Form.useForm();
 
-  const handleFinish = (value) => {
-    if (props.role == 'admin') {let status = "Approved"};
-    console.log(value);
-  }
-
   return (
         <Modal
             className="regularize"

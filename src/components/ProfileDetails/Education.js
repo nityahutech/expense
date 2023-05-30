@@ -56,7 +56,7 @@ function Education() {
     }
   };
   const disabledDate = (current) => {
-    return ! current.isBetween(moment().subtract(14, 'years'),moment());
+    return ! current.isBetween(moment().subtract(50, 'years'),moment());
   }
   const [form] = Form.useForm();
 

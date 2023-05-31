@@ -1,5 +1,5 @@
 import { Button, Col, DatePicker, Divider, Form, Input, Row, Space, message } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   MinusCircleOutlined,
   PlusOutlined,
@@ -8,10 +8,10 @@ import moment from "moment";
 import { showNotification } from "../../../contexts/CreateContext";
 import InvoiceContext from "../../../contexts/InvoiceContext";
 import { capitalize, checkAlphabets } from "../../../contexts/CreateContext";
+import AssetContext from "../../../contexts/AssetContext";
 
 const InvoiceForm = (props) => {
   console.log('props', props?.assetData[0])
-  const upgradeFormData = props?.assetData[0];
   const [form] = Form.useForm();
   const [file, setFile] = useState([]);
   const [addExpense, setAddExpense] = useState(false);
@@ -26,9 +26,9 @@ const InvoiceForm = (props) => {
       totalAmt: values.totalAmt,
       date: moment().format("DD-MM-YYYY"),
       status: "Pending",
-      empId: currentUser.uid,
-      empCode: user.empId || upgradeFormData.empCode,
-      name: user.name || upgradeFormData.name,
+      empId: currentUser.uid || null,
+      empCode: user.empId || null,
+      name: user.name || null,
       type: 'Invoice Reimbursement',
       payments: values.users.map((pay) => {
         console.log(pay);
@@ -39,7 +39,7 @@ const InvoiceForm = (props) => {
         };
       }),
     };
-    console.log(allInvoiceData, file, "pujaaaaaaaa");
+    console.log(allInvoiceData, file, "ektaaaaaaaa");
     try {
       await InvoiceContext.addInvoice(allInvoiceData, file);
       showNotification("success", "Success", "Invoice Request Added");
@@ -52,6 +52,16 @@ const InvoiceForm = (props) => {
       showNotification("error", "Error", error.message);
     }
   }
+
+  useEffect(() => {
+    getEmpAllAsset();
+  }, []);
+
+  const getEmpAllAsset = async () => {
+    let assetData = await AssetContext.getRepairData(currentUser.uid, true);
+    console.log('ektaaaaaaaa', assetData)
+    setUser(assetData[0])
+  };
 
   function handleChange(event, i) {
     const temp = [...file];

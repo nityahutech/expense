@@ -12,6 +12,7 @@ const Forms = () => {
     const [type, setType] = useState(null)
     const currentUser = JSON.parse(sessionStorage.getItem("user"));
     const [assetData, setAssetData] = useState([])
+    const [user, setUser] = useState({});
     const formTypes = {
         "Invoice Reimbursement": <InvoiceForm assetData={assetData} />,
         "Laptop Upgrade": <LaptopUpgradeForm assetData={assetData} />,
@@ -28,7 +29,7 @@ const Forms = () => {
         let assetData = await AssetContext.getRepairData(currentUser.uid, true);
         console.log('assetData', assetData)
         setAssetData(assetData)
-
+        setUser(assetData)
     };
 
     return (

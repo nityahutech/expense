@@ -45,9 +45,9 @@ function LaptopRepairForm(props) {
       modelName: values.modelName || upgradeFormData.modelName,
       serialNum: values.serialNum || upgradeFormData.serialNum,
       date: moment().format("DD-MM-YYYY"),
-      empId: currentUser.uid,
-      empCode: user.empId,
-      name: user.name,
+      empId: currentUser.uid || null,
+      empCode: user.empId || null,
+      name: user.name || null,
       type: 'Laptop Repair',
       status: "Pending",
       data: {

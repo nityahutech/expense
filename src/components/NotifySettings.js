@@ -36,6 +36,9 @@ import html2canvas from "html2canvas";
 import NotificationTemplateContext from "../contexts/NotificationTemplateContext";
 import { showNotification } from "../contexts/CreateContext";
 import notificationTemplate from "../contexts/NotificationTemplateContext";
+import { sendEmail } from "../contexts/EmailContext";
+import { getDoc, where, query, collection, getDocs, doc, documentId } from "firebase/firestore";
+import { db } from "../firebase-config";
 
 const optionImage = [
   { label: "Default Template", value: "1" },
@@ -317,7 +320,6 @@ function NotifySettings() {
 
   useEffect(() => {
     getAllUser();
-
     // getAllData();
   }, []);
 
@@ -336,20 +338,44 @@ function NotifySettings() {
     });
   };
 
-  const handleSendTemplate = (values) => {
-    console.log(imageData, values);
-    const newTemplate = { sendTemplate: values.sendTemplate };
-    console.log(newTemplate);
-
+  const handleSendTemplate = async (values) => {
     try {
-      NotificationTemplateContext.addTemplate(selectedAward, newTemplate);
+      const record = await getDoc(doc(db, 'companyprofile', sessionStorage.getItem("compId")));
+      const UIDS = record.data().adminAccess.Templates;
+      const q = query(
+        collection(db, "users"),
+        where(documentId(), "in", 
+          UIDS
+        ),
+      );
+
+      let data = await getDocs(q);
+      const mails = data.docs.map(doc => doc.data().mailid);
+
+      for(const mail of mails) {
+        let mailOptions = {
+          from: "hutechhr@gmail.com",
+          to: mail,
+          subject: "Image attachment",
+          text: "Please find the attached image.",
+          attachments: [
+            {
+              filename: "image.png",
+              path: imageData,
+              encoding: "base64",
+            },
+          ],
+        };
+        await sendEmail(mailOptions);
+      }
+
       showNotification(
         "success",
         "Success",
         "Birthday Template successfully Send!"
       );
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log("error", err);
       showNotification("error", "Error", "Update Failed!");
     }
   };

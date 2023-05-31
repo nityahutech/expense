@@ -8,6 +8,13 @@ export const sendEmail = async (mailOptions) => {
     } catch (error) {
         console.log(error)
     }
+    // try {
+    //     await axios.post("http://localhost:3001/mail-api/v2", {
+    //         mailOptions
+    //     })
+    // } catch (error) {
+    //     console.log("error at sendEmail:",error)
+    // }
 }
 
 export const changeAccount = async (uid, action, email) => {

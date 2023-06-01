@@ -37,7 +37,15 @@ import NotificationTemplateContext from "../contexts/NotificationTemplateContext
 import { showNotification } from "../contexts/CreateContext";
 import notificationTemplate from "../contexts/NotificationTemplateContext";
 import { sendEmail } from "../contexts/EmailContext";
-import { getDoc, where, query, collection, getDocs, doc, documentId } from "firebase/firestore";
+import {
+  getDoc,
+  where,
+  query,
+  collection,
+  getDocs,
+  doc,
+  documentId,
+} from "firebase/firestore";
 import { db } from "../firebase-config";
 
 const optionImage = [
@@ -69,6 +77,7 @@ function NotifySettings() {
   const [showMessageContent, setShowMessageContent] = useState(false);
   const [isDisablePreview, setIsDisablePreview] = useState(true);
   const [editorMessage, setEditorMessage] = useState(true);
+  const [greeting, setGreeting] = useState(`Happy ${selectedAward}!`);
 
   const templates = [
     { id: 1, name: "", image: Landscape },
@@ -81,7 +90,6 @@ function NotifySettings() {
     name: "Template 1",
     image: Landscape,
   });
-  console.log("selectedTemplate", selectedTemplate);
   const awardTypes = [
     { type: "Birthday", imgSrc: birthday },
     { type: "Anniversary", imgSrc: anniversary },
@@ -152,11 +160,15 @@ function NotifySettings() {
   };
 
   const getData = async () => {
-    let data = await notificationTemplate.getNotification();
-    console.log("datasss", data, selectedAward);
-    const filteredArray = data.filter((obj) => obj.id === selectedAward);
-    console.log("datasss", filteredArray);
-    setTempalatePreview(filteredArray);
+    try {
+      let data = await notificationTemplate.getNotification();
+      console.log("datasss", data, selectedAward);
+      const filteredArray = data.filter((obj) => obj.id === selectedAward);
+      console.log("datasss", filteredArray);
+      setTempalatePreview(filteredArray);
+    } catch (err) {
+      console.log("error at getting data in notifySettings",err);
+    }
   };
 
   useEffect(() => {
@@ -169,7 +181,7 @@ function NotifySettings() {
     setFile(null);
     const isPNG = file.type === "image/png";
     if (!isPNG) {
-      message.error("You can only upload Pdf file!");
+      message.error("You can only upload image in png format!");
       form.resetFields();
       return;
     }
@@ -242,6 +254,7 @@ function NotifySettings() {
     console.log(award);
     setAward(true);
     setSelectedAward(award);
+    setGreeting(award === "Add Template" ? "" :`Happy ${award}!`);
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -284,39 +297,17 @@ function NotifySettings() {
         ...temp,
         [`${doc.data().name}`]: doc.id,
       };
-      console.log("allData", temp);
       codes = {
         ...codes,
         [`${doc.data().name}`]: doc.data().empId,
       };
-      console.log("allData", codes);
       return {
         value: doc.data().name,
       };
     });
-    console.log("allData", allUsers);
     setAllEmpName(allUsers);
   }
 
-  // async function getAllData() {
-  //   const allData = await getUsers();
-
-  //   console.log(allData);
-
-  //   let d = allData.docs.map((doc, i) => {
-  //     return {
-  //       name: doc.data().name,
-  //       dob: doc.data().dob,
-  //       doj: doc.data().doj,
-  //       profilePic: doc.data().profilePic,
-  //       id: doc.id,
-  //       sn: i + 1,
-  //       // age: age
-  //     };
-  //   });
-  //   console.log(d);
-  //   setDob(d);
-  // }
 
   useEffect(() => {
     getAllUser();
@@ -340,19 +331,16 @@ function NotifySettings() {
 
   const handleSendTemplate = async (values) => {
     try {
-      const record = await getDoc(doc(db, 'companyprofile', sessionStorage.getItem("compId")));
-      const UIDS = record.data().adminAccess.Templates;
-      const q = query(
-        collection(db, "users"),
-        where(documentId(), "in", 
-          UIDS
-        ),
+      const record = await getDoc(
+        doc(db, "companyprofile", sessionStorage.getItem("compId"))
       );
+      const UIDS = record.data().adminAccess.Templates;
+      const q = query(collection(db, "users"), where(documentId(), "in", UIDS));
 
       let data = await getDocs(q);
-      const mails = data.docs.map(doc => doc.data().mailid);
+      const mails = data.docs.map((doc) => doc.data().mailid);
 
-      for(const mail of mails) {
+      for (const mail of mails) {
         let mailOptions = {
           from: "hutechhr@gmail.com",
           to: mail,
@@ -504,34 +492,37 @@ function NotifySettings() {
                           {layout === "1" ? (
                             <div style={{ display: "flex" }}>
                               <img
+                                alt=""
                                 src={selectedTemplate?.image}
                                 style={{ width: "100%", height: "100%" }}
                               />
                               <h2
                                 style={{
                                   position: "absolute",
-                                  top: "55%",
+                                  top: "38%",
                                   left: "50%",
                                   transform: "translate(-50%, -50%)",
-                                  fontSize: "10px",
+                                  fontSize: "15px",
                                   wordWrap: "break-word",
                                   maxWidth: "45%",
                                   textAlign: "center",
                                 }}
                               >
-                                {
-                                  templatePreview?.[0]?.message?.blocks?.[0]
-                                    ?.text
-                                }
+                                {greeting}
                               </h2>
                               <h2
                                 style={{
                                   position: "absolute",
-                                  top: "40%",
+                                  top: "65%",
                                   left: "50%",
                                   transform: "translate(-50%, -50%)",
                                   fontWeight: "bold",
                                   fontSize: "10px",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  width: "60%",
+                                  height: "30px",
                                   color: "black",
                                 }}
                               >
@@ -540,7 +531,7 @@ function NotifySettings() {
                               <div
                                 style={{
                                   position: "absolute",
-                                  top: "45%",
+                                  top: "52%",
                                   left: "50%",
                                   transform: "translate(-50%, -50%)",
                                   fontWeight: "bold",
@@ -550,7 +541,7 @@ function NotifySettings() {
                               >
                                 {file && (
                                   <img
-                                    style={{ width: "20px", height: "20px" }}
+                                    style={{ width: "60px", height: "60px", borderRadius: "10px" }}
                                     src={file}
                                     alt="Uploaded Image"
                                   />
@@ -575,6 +566,7 @@ function NotifySettings() {
                                 style={{ position: "relative" }}
                               >
                                 <img
+                                  alt=""
                                   src={imageUrl}
                                   style={{ width: "100%", height: "100%" }}
                                 />
@@ -760,10 +752,12 @@ function NotifySettings() {
                                     width: 300,
                                   }}
                                   onSelect={onSelect}
+                                  onClear={() => setEmp("")}
                                   onSearch={onSearch}
                                   onBlur={onBlur}
                                   size="large"
                                   placeholder="Enter Name"
+                                  allowClear={true}
                                 />
                               </Form.Item>
                             </Col>
@@ -776,7 +770,7 @@ function NotifySettings() {
                                   <div className="input-with-clear">
                                     <Input
                                       type="file"
-                                      accept="application/pdf"
+                                      accept="image/png"
                                       id="upload"
                                       name="upload"
                                       style={{
@@ -875,7 +869,8 @@ function NotifySettings() {
             </div>
 
             <Modal
-              visible={previewVisible}
+              open={previewVisible}
+              // visible={previewVisible}
               onCancel={handleCancel}
               footer={null}
               style={{

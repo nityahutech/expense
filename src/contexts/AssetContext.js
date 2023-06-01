@@ -22,15 +22,21 @@ let companyAssetCollectionRef = collection(
   `companyprofile/${compId}/assets`
 );
 
-class AssetContext {
+let companyEmpAssetCollectionRef = collection(
+  db,
+  `companyprofile/${compId}/empAssets`
+);
 
+console.log("compidddd", compId);
+
+class AssetContext {
   getCompId = () => {
-      compId = sessionStorage.getItem("compId");
-      companyAssetCollectionRef = collection(
-        db,
-        `companyprofile/${compId}/assets`
-      );
-      return;
+    compId = sessionStorage.getItem("compId");
+    companyAssetCollectionRef = collection(
+      db,
+      `companyprofile/${compId}/assets`
+    );
+    return;
   };
 
   addAsset = (newLaptop, file) => {
@@ -66,6 +72,33 @@ class AssetContext {
     }
   };
 
+  addEmpAsset = (newAsset, file) => {
+    if (file) {
+      console.log("uploadimaggg", newAsset, file);
+      const storageRef = ref(storage, `/${compId}/empAssets/${file.name}`);
+      console.log("imagesss", storageRef);
+      uploadBytesResumable(storageRef, file).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => {
+          newAsset.upload = url;
+          newAsset.file = file.name;
+          addDoc(
+            collection(
+              db,
+              compId != "undefined"
+                ? `companyprofile/${compId}/empAssets`
+                : `companyprofile/${compId}/empAssets`
+            ),
+            newAsset
+          );
+          return Promise.resolve();
+        });
+      });
+    } else {
+      newAsset.upload = null;
+      addDoc(companyEmpAssetCollectionRef, newAsset);
+      return Promise.resolve();
+    }
+  };
 
   //-------------------Repair Request------------------------------------
 
@@ -106,7 +139,13 @@ class AssetContext {
     const q = query(
       companyAssetCollectionRef,
       where("empId", "==", id),
-      where("type", "in", typeValues ? ["Allotment"] : ["Laptop Upgrade", "Laptop Return", "Allotment", "Laptop Repair"])
+      where(
+        "type",
+        "in",
+        typeValues
+          ? ["Allotment"]
+          : ["Laptop Upgrade", "Laptop Return", "Allotment", "Laptop Repair"]
+      )
     );
 
     const empRepair = await getDocs(q);

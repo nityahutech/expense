@@ -6,14 +6,12 @@ import { Button } from "antd";
 import { Tabs } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { showNotification } from "../contexts/CreateContext";
-import NotifySettings from "./NotifySettings";
 
 const Settingpage = (props) => {
-  console.log('propsroleView', props.roleView);
   const [form] = Form.useForm();
   const [password, setPassword] = useState("");
   const [newPassword, setNew] = useState("");
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth();
   const { updateMyPassword, login } = useAuth();
 
   const checkPassword = async () => {
@@ -198,11 +196,6 @@ const Settingpage = (props) => {
             </Card>
           </div>
         </Tabs.TabPane>
-        {/* {props.roleView === 'admin' &&
-          <Tabs.TabPane tab="Notifications" key="2">
-            <NotifySettings data={"hi"} />
-          </Tabs.TabPane>
-        } */}
       </Tabs>
     </>
   );

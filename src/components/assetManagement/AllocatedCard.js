@@ -28,6 +28,7 @@ import AssetContext from "../../contexts/AssetContext";
 import moment from "moment";
 import "../assetManagement/RepairRequestTable.css";
 import FormItem from "antd/es/form/FormItem";
+import { useAuth } from "../../contexts/AuthContext";
 const { Option } = Select;
 
 const AllocatedCard = (props) => {
@@ -44,7 +45,7 @@ const AllocatedCard = (props) => {
   const [editContent, showEditContent] = useState(false);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth()
   console.log("ffffffffffff", currentUser.uid,);
 
   const onFinish = (values) => {

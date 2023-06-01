@@ -28,7 +28,7 @@ function Question(props) {
   return (
     <div className="surveyCarousel">
       <Card className="surveyCard">
-        <div className="back-arrow" onClick={props.backInner}>
+        <div className="back-arrow"  style={{color: "white"}} onClick={props.backInner}>
           <ArrowLeftOutlined />
           Back
         </div>

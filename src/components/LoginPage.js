@@ -157,7 +157,7 @@ function LoginPage() {
                     autoComplete="off"
                   >
                     <div className="wlc-div ">{forgot ? "Welcome back!" : "Password Reset"}</div>
-                    <div className="msg">{forgot ? "Let's Access to our dashboard" : "We will send a reset link to your registered email"}</div>
+                    <div className="msg">{forgot ? "Let's access our dashboard" : "We will send a reset link to your registered email"}</div>
 
                     <div className="email-div">
                       Email Address<span style={{ color: "red" }}> *</span>
@@ -212,13 +212,12 @@ function LoginPage() {
                         </Button>
                         {/* <div style={{width: "18rem"}}> */}
                     <div 
-                        className="forgotpwd" 
-                        onClick={()=>setForgot(!forgot)} 
+                        className="forgotpwd"                          
                       >
-                        <span className="forgotmsg">{forgot ? "Forgot Password" : "Back"}</span>
+                        <span onClick={()=>setForgot(!forgot)} className="forgotmsg">{forgot ? "Forgot Password" : "Back"}</span>
                       </div>
                       </div>
-                      <Divider style={{margin: "5px", fontSize: "smaller", color: "#c2c0c0", cursor: "default"}}>OR</Divider>
+                      {forgot ? (<><Divider style={{margin: "5px", fontSize: "smaller", color: "#c2c0c0", cursor: "default"}}>OR</Divider>
                       
                     <div className="checkBox">
                       <Button
@@ -229,7 +228,7 @@ function LoginPage() {
                         Log In with Google
                         <GoogleOutlined />
                       </Button>
-                    </div>
+                    </div></>) : null}
                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                       <p className="loginFooter">
                         © 2022 Hutech HR. All rights reserved. Terms of Service

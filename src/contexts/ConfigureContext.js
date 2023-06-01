@@ -60,20 +60,20 @@ class ConfigureContext {
         return updateDoc(doc(db, `companyprofile/${compId}/configurations/`, page), config);
     };
 
-    //------------------------payRoll--------------------------------------------
+    // ------------------------payRoll--------------------------------------------
 
-    // createConfigurationsEarning = (page, config) => {
-    //     return updateDoc(doc(db, `companyprofile/${compId}/configurations`, page), config);
-    // }
+    createConfigurationsEarning = (page, config) => {
+        return updateDoc(doc(db, `companyprofile/${compId}/configurations`, page), config);
+    }
 
-    // createConfigurationsDeduction = (page, config) => {
-    //     return updateDoc(doc(db, `companyprofile/${compId}/configurations`, page), config);
-    // }
+    createConfigurationsDeduction = (page, config) => {
+        return updateDoc(doc(db, `companyprofile/${compId}/configurations`, page), config);
+    }
 
-    // getEarningConfig = async (page) => {
-    //     const rec = await getDoc(doc(db, `companyprofile/${compId}/configurations`, page));
-    //     return rec.data();
-    // };
+    getEarningConfig = async (page) => {
+        const rec = await getDoc(doc(db, `companyprofile/${compId}/configurations`, page));
+        return rec.data();
+    };
 
   
 

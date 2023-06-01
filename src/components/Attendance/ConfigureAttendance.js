@@ -96,13 +96,15 @@ const ConfigureAttendance = () => {
       title: "Days",
       dataIndex: "days",
       key: "days",
+      width: 100,
       align: "left",
     },
     {
       title: "Full Day",
       dataIndex: "fullday",
       key: "fullday",
-      align: "left",
+      align: "center",
+      width: 75,
       render: (_, data) => {
         return (
           <Radio.Group
@@ -119,7 +121,8 @@ const ConfigureAttendance = () => {
       title: "Half Day",
       dataIndex: "halfday",
       key: "halfday",
-      align: "left",
+      align: "center",
+      width: 75,
       render: (_, data) => {
         return (
           <Radio.Group
@@ -139,7 +142,8 @@ const ConfigureAttendance = () => {
       title: "Dayoff",
       dataIndex: "dayoff",
       key: "dayoff",
-      align: "left",
+      align: "center",
+      width: 75,
       render: (_, data) => {
         return (
           <Radio.Group
@@ -168,14 +172,14 @@ const ConfigureAttendance = () => {
           <Skeleton active />
         ) : (
           <Form
-            labelCol={{
-              span: 4,
-              offset: 2,
-            }}
-            wrapperCol={{
-              span: 14,
-              offset: 1,
-            }}
+          labelCol={{
+            span: 6,
+            offset: 2,
+          }}
+          wrapperCol={{
+            span: 18,
+            offset: 1,
+          }}
             layout="horizontal"
             initialValues={{
               remember: true,
@@ -185,14 +189,13 @@ const ConfigureAttendance = () => {
             <Form.Item
               initialValue={startTime}
               name="starttime"
-              className="time"
               label="Start Time"
-              rules={[
-                {
-                  required: true,
-                  message: "Please Enter Start Date",
-                },
-              ]}
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: "Please Enter Start Date",
+              //   },
+              // ]}
             >
               <TimePicker
                 onChange={(e) => setStartTime(e)}
@@ -215,14 +218,13 @@ const ConfigureAttendance = () => {
             <Form.Item
               initialValues={endTime}
               name="endtime"
-              className="time"
               label="End Time"
-              rules={[
-                {
-                  required: true,
-                  message: "Please Enter End Date",
-                },
-              ]}
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: "Please Enter End Date",
+              //   },
+              // ]}
             >
               <TimePicker
                 defaultValue={endTime}
@@ -273,23 +275,28 @@ const ConfigureAttendance = () => {
                 bordered
                 pagination={false}
                 size="small"
+                style={{
+                  width: "100%",
+                  padding: 0
+                }}
               />
             </Form.Item>
             <Form.Item
               label="Max Break Duration (hr)"
               name="maxBreakDuration"
-              labelCol={{
-                span: 7,
-                offset: 2,
-              }}
-              wrapperCol={{
-                span: 10,
-                offset: 1,
-              }}
+              // labelCol={{
+              //   span: 7,
+              //   offset: 2,
+              // }}
+              // wrapperCol={{
+              //   span: 10,
+              //   offset: 1,
+              // }}
               initialValue={configurations.maxBreakDuration}
             >
               <InputNumber
                 min={0}
+                style={{width: "100px"}}
                 max={5}
                 onKeyPress={(event) => {
                   if (checkNumbervalue(event)) {
@@ -302,19 +309,20 @@ const ConfigureAttendance = () => {
               initialValue={configurations.inputclock}
               name="inputclock"
               label="Auto Clock Out"
-              labelCol={{
-                span: 6,
-                offset: 2,
-              }}
-              wrapperCol={{
-                span: 10,
-                offset: 2,
-              }}
+              // labelCol={{
+              //   span: 6,
+              //   offset: 2,
+              // }}
+              // wrapperCol={{
+              //   span: 10,
+              //   offset: 2,
+              // }}
             >
               <Switch
                 checkedChildren="Enabled"
                 unCheckedChildren="Disabled"
                 defaultChecked={configurations.inputclock}
+                style={{width: "100px"}}
               />
             </Form.Item>
           </Form>

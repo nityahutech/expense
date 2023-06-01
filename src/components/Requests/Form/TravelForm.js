@@ -29,6 +29,7 @@ import {
 } from "../../../contexts/CreateContext";
 import TravelContext from "../../../contexts/TravelContext";
 import moment from "moment";
+import AssetContext from "../../../contexts/AssetContext";
 
 
 const { RangePicker } = DatePicker;
@@ -45,6 +46,15 @@ function TravelForm(props) {
   const { RangePicker } = DatePicker;
 
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  useEffect(() => {
+    getEmpAllAsset();
+  }, [selectedOption]);
+
+  const getEmpAllAsset = async () => {
+    let assetData = await AssetContext.getRepairData(currentUser.uid, true);
+    console.log('travelData', assetData)
+    setUser(assetData[0])
+  };
 
 
   const handleCarChange = (value) => {
@@ -59,8 +69,8 @@ function TravelForm(props) {
       reason: values.reason,
       status: "Pending",
       empId: currentUser.uid,
-      empName: user.name || upgradeFormData.name,
-      empCode: user.empId || upgradeFormData.empCode,
+      empName: user.name,
+      empCode: user.empId,
       type: 'Travel Booking',
       date: moment().format("DD-MM-YYYY"),
       travelType: values.users.map((type) => {
@@ -99,7 +109,7 @@ function TravelForm(props) {
         }
       }),
     };
-    console.log("deatislTravel", allTravelData);
+    console.log("travelData", allTravelData);
     try {
       await TravelContext.addTravel(allTravelData);
       showNotification("success", "Success", "Travel Request Added");
@@ -113,6 +123,7 @@ function TravelForm(props) {
       showNotification("error", "Error", "Error In Invoice");
     }
   };
+
 
 
 
@@ -140,7 +151,7 @@ function TravelForm(props) {
             <Row gutter={[16, 16]}>
               <Col xs={24} xm={24} md={12} lg={12}>
                 <Form.Item
-                  label="Travel Management Title"
+                  label="Travel Management Title  "
                   name="travelName"
                   onKeyPress={(event) => {
                     if (checkAlphabets(event)) {
@@ -159,6 +170,7 @@ function TravelForm(props) {
                   ]}
                 >
                   <Input
+                    placeholder="Enter Travel Management Title"
                     maxLength={25}
                     onChange={(e) => {
                       const str = e.target.value;
@@ -179,7 +191,7 @@ function TravelForm(props) {
                     },
                   ]}
                 >
-                  <TextArea maxLength={10} />
+                  <TextArea showCount maxLength={10} placeholder="Max 10 Words" />
                 </Form.Item>
               </Col>
 
@@ -215,7 +227,7 @@ function TravelForm(props) {
                                         orientationMargin="15px"
                                         style={{ margin: "0px" }}
                                       >
-                                        Expenditure No.{i + 1}
+                                        Travel Booking No.{i + 1}
                                       </Divider>
                                       <Col span={24}>
                                         <Form.Item
@@ -478,22 +490,23 @@ function TravelForm(props) {
                                             lg={6}
                                           >
                                             <Form.Item
-                                              initialValue={"flight"}
+                                              initialValue={"Flight"}
                                               label="Transport Type"
                                               {...field}
                                               name={[
                                                 field.name,
                                                 "transport",
                                               ]}
-                                              // fieldKey={[field.fieldKey, "upload"]}
+
                                               rules={[
                                                 {
                                                   required: true,
-                                                  // message: "Please select the mode of Transportation",
+
                                                 },
                                               ]}
                                             >
                                               <Select
+                                                placeholder='Please Select'
                                                 defaultValue="Flight"
                                                 style={{
                                                   width: "100%",

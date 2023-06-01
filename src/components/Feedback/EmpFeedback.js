@@ -42,7 +42,7 @@ function EmpFeedback() {
   const [autoOptions, setAutoOptions] = useState([]);
   const compId = sessionStorage.getItem("compId");
   const [allEmpName, setAllEmpName] = useState([]);
-  const { currentUser } = useAuth();
+  const {currentUser} = useAuth()
   const navigate = useNavigate();
 
   async function getData() {

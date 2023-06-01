@@ -41,6 +41,7 @@ const AdminAttendance = (props) => {
     return (
       <div className="hrtab">
         <Tabs
+            id="att-tabs"
             className="page-tabs"
             activeKey={path}
             items={attTabs}

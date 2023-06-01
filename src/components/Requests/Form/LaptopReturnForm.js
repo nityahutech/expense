@@ -173,6 +173,7 @@ function LaptopReturnForm(props) {
                                     ]}
                                 >
                                     <TextArea
+                                        showCount
                                         Rows={4}
                                         maxLength={100}
                                         autoSize={{ minRows: 4, maxRows: 4 }}

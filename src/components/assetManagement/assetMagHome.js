@@ -6,11 +6,12 @@ import AddAsset from "./AddAsset";
 import AssetList from "./AssetList";
 import RequestContext from "../../contexts/RequestContext";
 import AssetConfig from "./AssetConfig";
+import { useAuth } from "../../contexts/AuthContext";
 
 function AssetMagHome(props) {
   const [repairLaptopData, setRepairLaptopData] = useState([]);
   const [laptopAllot, setLaptopAllot] = useState(props.refresh);
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth()
   const role = sessionStorage.getItem("role");
   const [loading, setLoading] = useState(false);
   const isHr =

@@ -20,12 +20,13 @@ import {
 import "../CompanyDetail/companystyle.css";
 import FormItem from "antd/es/form/FormItem";
 import DocumentContext from "../../contexts/DocumentContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 function CertificateID() {
   const [certificatioDetails, setCertificationDetails] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth()
   const [file, setFile] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);

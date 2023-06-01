@@ -126,7 +126,7 @@ const EmailVerification = () => {
                     />
                 </Form.Item>
                 <div style={{display: "flex", justifyContent: "flex-end"}}>
-                    <Button className="color-button" type="primary" style={loading ? { backgroundColor: "lightgray", color: "gray" } : null} onClick={changePassword}>
+                    <Button className="button-color" type="primary" style={loading ? { backgroundColor: "lightgray", color: "gray" } : null} onClick={changePassword}>
                         {loading && (<LoadingOutlined />)}
                         {loading? "Saving": "Set Password"}
                     </Button>

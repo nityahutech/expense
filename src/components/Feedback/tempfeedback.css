@@ -1,13 +1,34 @@
-/* .feedBackCard .ant-card-body{
+.feedBackCard .ant-card-body{
     padding: 25px;
-} */
+}
+
+.questionTag .ant-card-body{
+  padding: 0px;
+}
 
 .empSearch.ant-input-affix-wrapper{
-    /* width: 300px;  */
+    width: 300px; 
     background: #FFFFFF;
     border: 1px solid #C5C5C5;
     border-radius: 5px;
     height: 35px
+}
+
+/* .ant-btn:focus{
+  background-color: #FFFFFF;
+} */
+ 
+.previewSur.ant-btn{
+    background: #045477;
+    border-radius: 5px;
+    width: 127px;
+    height: 35px;
+    color: #FFFFFF;
+    font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 15px;
+/* margin-left: 2.5rem; */
 }
 
 .configSur.ant-btn{
@@ -20,7 +41,7 @@
 font-weight: 400;
 font-size: 13px;
 line-height: 15px;
-margin-left: 28px;
+/* margin-left: 28px; */
 }
 
 .feebBackTable.ant-table-wrapper{
@@ -38,18 +59,17 @@ margin-left: 28px;
   .comunication.ant-btn{
     background: #045477;
     border-radius: 5px;
-    min-width: 250px;
+    width: 250px;
     height: 40px;
     color: #FFFFFF;
     font-style: normal;
 font-weight: 400;
 font-size: 20px;
 line-height: 15px;
-/* margin-left: 10px; */
 
 }
 
-/* .heading:after {
+.heading:after {
     content: "";
     position: absolute;
     top: 6rem;
@@ -59,9 +79,9 @@ line-height: 15px;
     width: 840px;
     height: 0.5em;
     border-top: 0.5px solid #C0C0C0;
-   } */
+   }
 
-  /* .otherHeading:after {
+  .otherHeading:after {
     content: "";
     position: absolute;
     top: 6rem; 
@@ -71,7 +91,7 @@ line-height: 15px;
     width: 900px;
     height: 0.5em;
     border-top: 0.5px solid #C0C0C0;
-  }  */
+  } 
 
   .que1 .ant-form-item-label > label{
     font-style: normal;
@@ -121,6 +141,12 @@ line-height: 15px;
   .submitQuestion.ant-space-align-center{
     display: flex;
     justify-content: flex-end;
+    
+  }
+  .questionTag{
+    font-style: normal;
+    font-weight: 600;
+    font-size: 21px;
     
   }
 
@@ -220,7 +246,7 @@ text-align: center;
 
   .feedbackTabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
     color: #000000;
-    font-weight: 600;
+    font-weight: 700;
 
   }
 
@@ -235,16 +261,6 @@ text-align: center;
     background-image: linear-gradient(to bottom right, lightblue, lightgreen);
     margin: auto;
    /* margin-top: 7rem; */
-  }
-
-  .feedbackSection .ant-form-item-label > label{
-    font-weight: 600;
-    font-size: 16px;
-  }
-
-  .feedbackSection.ant-form-item{
-    font-weight: 400;
-    margin-bottom: 0px;
   }
 
   /* .sectionCard.ant-card{
@@ -483,6 +499,4 @@ text-align: center;
       
     }
   }
-
-  
  

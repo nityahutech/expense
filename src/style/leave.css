@@ -178,6 +178,10 @@ background-color: #ffffff;
 margin: 10px 0;
 }
 
+.sidecard.li::marker {
+  display: none;
+}
+
 .sideCreate{
   padding: 5px;
 background-color: #ffffff;
@@ -292,21 +296,21 @@ border-left: 4px solid #0093FF;
 }
 
 @media only screen and (max-width: 450px) {
-  .rep-div {
+  /* .rep-div {
     display: none !important;
-  }
-  .holiday-button {
+  } */
+  /* .holiday-button {
     flex-direction: column !important;
     align-items: center !important;
-  }
-  .button-applyleave {
+  } */
+  /* .button-applyleave {
     margin-right: 0px !important;
     margin-top: 0px !important;
   }
   .button-applyleave {
     margin-right: 0px !important;
     margin-top: 0px !important;
-  }
+  } */
 }
 
 @media only screen and (max-width: 767px){

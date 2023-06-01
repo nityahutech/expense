@@ -1,5 +1,5 @@
 import { Tabs } from "antd";
-import "../../style/leave.css";
+import "../../style/Leave.css";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -11,7 +11,7 @@ const AdminLeave = (props) => {
   const leaveTabs = [
     {
       key: "requests",
-      label: "Leave Request",
+      label: "Leave Requests",
     },
     {
       key: "holidays",

@@ -45,8 +45,10 @@ const FormatPage = (props) => {
       })
       let notes = []
       let count = req?.length || 0 + att?.length || 0
-      let bdayTrue = days[moment().format("DD-MM")]?.birthday.includes(currentUser.displayName)
-      let anniTrue = days[moment().format("DD-MM")]?.anniversary.includes(currentUser.displayName)
+      console.log(currentUser, days)
+      let bdayTrue = days[moment().format("DD-MM")]?.birthday?.includes(currentUser.displayName)
+      let anniTrue = days[moment().format("DD-MM")]?.anniversary?.includes(currentUser.displayName)
+      console.log();
       if (bdayTrue || anniTrue) {
         count += 1
         notes.push({
@@ -56,9 +58,30 @@ const FormatPage = (props) => {
             +`${currentUser.displayName}!`,
             icon: <StarTwoTone twoToneColor="#fa8128" style={{fontSize: "20px"}} />
           })
+      } else if (days[moment().format("DD-MM")]?.birthday?.length > 0){
+        count += 1
+        console.log(days[moment().format("DD-MM")]?.birthday?.length);
+        let namesStr=days[moment().format("DD-MM")]?.birthday[0];
+        if (days[moment().format("DD-MM")]?.birthday?.length > 1){
+        let temp = [...days[moment().format("DD-MM")]?.birthday]
+        temp.forEach(x => namesStr = namesStr+", "+x )}
+        notes.push({
+            name: ("Happy Birthday to " + namesStr + "!"),
+            icon: <StarTwoTone twoToneColor="#fa8128" style={{fontSize: "20px"}} />
+          })
+      } else if (days[moment().format("DD-MM")]?.anniversary?.length > 0){
+        count += 1
+        let namesStr=days[moment().format("DD-MM")]?.anniversary[0];
+        if (days[moment().format("DD-MM")]?.anniversary?.length > 1){
+        let temp = [...days[moment().format("DD-MM")]?.anniversary]
+        temp.forEach(x => namesStr = namesStr+", "+x )}
+        notes.push({
+            name: ("Happy Work Anniversary to " + namesStr + "!"),
+            icon: <StarTwoTone twoToneColor="#fa8128" style={{fontSize: "20px"}} />
+          })
       }
       let holDates = hols.find(x => x.date == moment().format("Do MMM, YYYY"))
-      console.log(holDates);
+      console.log(holDates, notes);
       if (holDates) {
         count += 1
         notes.push({
@@ -137,7 +160,7 @@ const FormatPage = (props) => {
               roleView={roleView}
               switchRefresh={switchRefresh}
               switchRole={switchRole}
-              notifications={[]}
+              notifications={notifications}
               total={total}
             />
           </div>

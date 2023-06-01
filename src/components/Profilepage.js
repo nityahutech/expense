@@ -15,12 +15,13 @@ import BankAccount from "./ProfileDetails/BankAccount";
 import EmpInfoContext from "../contexts/EmpInfoContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import AllocatedCard from "./assetManagement/AllocatedCard";
+import { useAuth } from "../contexts/AuthContext";
 
 
 
 const Profile = () => {
   const role = sessionStorage.getItem("role");
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const {currentUser} = useAuth();
   const [record, setRecord] = useState([]);
   const location = useLocation()
   const navigate = useNavigate();

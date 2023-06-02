@@ -26,7 +26,7 @@ import EmpInfoContext from "../contexts/EmpInfoContext";
 import HolidayList from "./HolidayList";
 import ApprovalConfig from "./ApprovalConfig";
 import LeaveType from "./LeaveType";
-import "../style/Leave.css";
+import "../style/leave.css";
 import ConfigureContext from "../contexts/ConfigureContext";
 import {
   capitalize,

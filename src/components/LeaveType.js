@@ -19,7 +19,7 @@ import {
 } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import ConfigureContext from "../contexts/ConfigureContext";
-import "../style/Leave.css";
+import "../style/leave.css";
 import {
   capitalize,
   checkAlphabets,

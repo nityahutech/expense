@@ -110,7 +110,7 @@ export async function getDesigNo() {
   let data = await getUsers();
   let res = {};
   let names = {};
-  data.docs.map((doc) => {
+  data.docs.forEach((doc) => {
     let des = doc.data().designation
     res[`${des}`] = res[`${des}`] ? res[`${des}`] + 1 : 1;
     if (names[`${des}`]) {
@@ -205,11 +205,16 @@ export function downloadFile(data, filename) {
 export async function deleteUsers(array) {
   let q = query(collection(db, "users"), where("compId", "==", "compId002"));
   let d = await getDocs(q);
-  let data = d.docs.map(doc => {
-    if (array.includes(doc.data().mailid)) {
-      return doc.id
-    }
-  }).filter(Boolean)
+  // let data = d.docs.map(doc => {
+  //   if (array.includes(doc.data().mailid)) {
+  //     return doc.id
+  //   }
+  // }).filter(Boolean)
+
+  let data = d.docs.filter(doc => {
+    return array.includes(doc.data().mailid)
+  }).map(doc => doc.id);
+  
   data.forEach(x => {
     deleteDoc(doc(db, "users", x));
     deleteDoc(doc(db, "companyprofile/compId002/users", x));

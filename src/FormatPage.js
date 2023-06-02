@@ -160,6 +160,7 @@ const FormatPage = (props) => {
               roleView={roleView}
               switchRefresh={switchRefresh}
               switchRole={switchRole}
+              showSwitch={props?.showSwitch}
               notifications={notifications}
               total={total}
             />

@@ -29,6 +29,7 @@ import {
 } from "../../../contexts/CreateContext";
 import TravelContext from "../../../contexts/TravelContext";
 import moment from "moment";
+import AssetContext from "../../../contexts/AssetContext";
 
 
 const { RangePicker } = DatePicker;
@@ -45,6 +46,15 @@ function TravelForm(props) {
   const { RangePicker } = DatePicker;
 
   const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  useEffect(() => {
+    getEmpAllAsset();
+  }, [selectedOption]);
+
+  const getEmpAllAsset = async () => {
+    let assetData = await AssetContext.getRepairData(currentUser.uid, true);
+    console.log('travelData', assetData)
+    setUser(assetData[0])
+  };
 
 
   const handleCarChange = (value) => {
@@ -59,8 +69,8 @@ function TravelForm(props) {
       reason: values.reason,
       status: "Pending",
       empId: currentUser.uid,
-      empName: user.name || upgradeFormData.name,
-      empCode: user.empId || upgradeFormData.empCode,
+      empName: user.name,
+      empCode: user.empId,
       type: 'Travel Booking',
       date: moment().format("DD-MM-YYYY"),
       travelType: values.users.map((type) => {
@@ -99,7 +109,7 @@ function TravelForm(props) {
         }
       }),
     };
-    console.log("deatislTravel", allTravelData);
+    console.log("travelData", allTravelData);
     try {
       await TravelContext.addTravel(allTravelData);
       showNotification("success", "Success", "Travel Request Added");
@@ -113,6 +123,7 @@ function TravelForm(props) {
       showNotification("error", "Error", "Error In Invoice");
     }
   };
+
 
 
 
@@ -141,7 +152,7 @@ function TravelForm(props) {
               <Col xs={24} xm={24} md={12} lg={12}>
                 <Form.Item
                   label="Travel Management Title  "
-                  name="travelName (Max 25)"
+                  name="travelName"
                   onKeyPress={(event) => {
                     if (checkAlphabets(event)) {
                       event.preventDefault();

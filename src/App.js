@@ -76,6 +76,7 @@ function App() {
             element={
               <FormatPage
                 main={MainDashBoard}
+                showSwitch={true}
                 activeSubMenu={["sub5"]}
                 activeMenu={["30"]}
               />

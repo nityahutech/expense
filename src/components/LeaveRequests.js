@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Row, Table, Modal, Input } from "antd";
 import LeaveContext from "../contexts/LeaveContext";
 import moment from "moment";
-import "../style/Leave.css";
+import "../style/leave.css";
 import checkedIcon from "../images/checkmark.png";
 import rejectIcon from "../images/rejected.png";
 import { showNotification } from "../contexts/CreateContext";

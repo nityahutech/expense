@@ -37,7 +37,15 @@ import NotificationTemplateContext from "../contexts/NotificationTemplateContext
 import { showNotification } from "../contexts/CreateContext";
 import notificationTemplate from "../contexts/NotificationTemplateContext";
 import { sendEmail } from "../contexts/EmailContext";
-import { getDoc, where, query, collection, getDocs, doc, documentId } from "firebase/firestore";
+import {
+  getDoc,
+  where,
+  query,
+  collection,
+  getDocs,
+  doc,
+  documentId,
+} from "firebase/firestore";
 import { db } from "../firebase-config";
 
 const optionImage = [
@@ -69,6 +77,7 @@ function NotifySettings() {
   const [showMessageContent, setShowMessageContent] = useState(false);
   const [isDisablePreview, setIsDisablePreview] = useState(true);
   const [editorMessage, setEditorMessage] = useState(true);
+  const [title, setTitle] = useState("");
 
   const templates = [
     { id: 1, name: "", image: Landscape },
@@ -81,7 +90,6 @@ function NotifySettings() {
     name: "Template 1",
     image: Landscape,
   });
-  console.log("selectedTemplate", selectedTemplate);
   const awardTypes = [
     { type: "Birthday", imgSrc: birthday },
     { type: "Anniversary", imgSrc: anniversary },
@@ -153,9 +161,7 @@ function NotifySettings() {
 
   const getData = async () => {
     let data = await notificationTemplate.getNotification();
-    console.log("datasss", data, selectedAward);
     const filteredArray = data.filter((obj) => obj.id === selectedAward);
-    console.log("datasss", filteredArray);
     setTempalatePreview(filteredArray);
   };
 
@@ -242,6 +248,9 @@ function NotifySettings() {
     console.log(award);
     setAward(true);
     setSelectedAward(award);
+    setEmp("");
+    setFile("");
+    setTitle("");
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -276,7 +285,6 @@ function NotifySettings() {
 
   async function getAllUser() {
     const allData = await getUsers();
-    console.log("allData", allData);
     let codes = {};
     let temp = {};
     let allUsers = allData.docs.map((doc) => {
@@ -284,17 +292,14 @@ function NotifySettings() {
         ...temp,
         [`${doc.data().name}`]: doc.id,
       };
-      console.log("allData", temp);
       codes = {
         ...codes,
         [`${doc.data().name}`]: doc.data().empId,
       };
-      console.log("allData", codes);
       return {
         value: doc.data().name,
       };
     });
-    console.log("allData", allUsers);
     setAllEmpName(allUsers);
   }
 
@@ -340,22 +345,20 @@ function NotifySettings() {
 
   const handleSendTemplate = async (values) => {
     try {
-      const record = await getDoc(doc(db, 'companyprofile', sessionStorage.getItem("compId")));
-      const UIDS = record.data().adminAccess.Templates;
-      const q = query(
-        collection(db, "users"),
-        where(documentId(), "in", 
-          UIDS
-        ),
+      const record = await getDoc(
+        doc(db, "companyprofile", sessionStorage.getItem("compId"))
       );
+      const UIDS = record.data().adminAccess.Templates;
+      const q = query(collection(db, "users"), where(documentId(), "in", UIDS));
 
       let data = await getDocs(q);
-      const mails = data.docs.map(doc => doc.data().mailid);
+      const mails = data.docs.map((doc) => doc.data().mailid);
 
-      for(const mail of mails) {
+      for (const mail of mails) {
         let mailOptions = {
           from: "hutechhr@gmail.com",
           to: mail,
+          // to: "kesava@hutechsolutions.com",
           subject: "Image attachment",
           text: "Please find the attached image.",
           attachments: [
@@ -443,13 +446,7 @@ function NotifySettings() {
             ))}
           </Card>
         ) : (
-          <Card
-          // style={{
-          //   borderRadius: "5px",
-          //   marginBottom: "25px",
-          //   width: "90%",
-          // }}
-          >
+          <Card>
             <div>
               <Col style={{ display: "flex" }} span={24}>
                 <Col
@@ -503,6 +500,20 @@ function NotifySettings() {
                         >
                           {layout === "1" ? (
                             <div style={{ display: "flex" }}>
+                              <h2
+                                style={{
+                                  position: "absolute",
+                                  top: "8rem",
+                                  left: "50%",
+                                  transform: "translate(-50%, -50%)",
+                                  fontSize: "16px",
+                                  wordWrap: "break-word",
+                                  maxWidth: "45%",
+                                  textAlign: "center",
+                                }}
+                              >
+                                {title}
+                              </h2>
                               <img
                                 src={selectedTemplate?.image}
                                 style={{ width: "100%", height: "100%" }}
@@ -510,29 +521,17 @@ function NotifySettings() {
                               <h2
                                 style={{
                                   position: "absolute",
-                                  top: "55%",
-                                  left: "50%",
-                                  transform: "translate(-50%, -50%)",
-                                  fontSize: "10px",
-                                  wordWrap: "break-word",
-                                  maxWidth: "45%",
-                                  textAlign: "center",
-                                }}
-                              >
-                                {
-                                  templatePreview?.[0]?.message?.blocks?.[0]
-                                    ?.text
-                                }
-                              </h2>
-                              <h2
-                                style={{
-                                  position: "absolute",
-                                  top: "35%",
+                                  top: "15.5rem",
                                   left: "50%",
                                   transform: "translate(-50%, -50%)",
                                   fontWeight: "bold",
                                   fontSize: "10px",
                                   color: "black",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  width: "14rem",
+                                  height: "2.5rem"
                                 }}
                               >
                                 {emp}
@@ -540,7 +539,7 @@ function NotifySettings() {
                               <div
                                 style={{
                                   position: "absolute",
-                                  top: "45%",
+                                  top: "11.5rem",
                                   left: "50%",
                                   transform: "translate(-50%, -50%)",
                                   fontWeight: "bold",
@@ -550,7 +549,10 @@ function NotifySettings() {
                               >
                                 {file && (
                                   <img
-                                    style={{ maxWidth: "60px", maxHeight: "120px" }}
+                                    style={{
+                                      maxWidth: "60px",
+                                      maxHeight: "120px",
+                                    }}
                                     src={file}
                                     alt="Uploaded Image"
                                   />
@@ -708,12 +710,12 @@ function NotifySettings() {
                             <Col span={24}>
                               <Form.Item name="selectLayout">
                                 <Button type="" onClick={showDrawer}>
-                                  Choose Template
+                                  Choose Layout
                                 </Button>
                                 <Drawer
                                   style={{ padding: "0px" }}
                                   width={220}
-                                  title="Select Template"
+                                  title="Select Layout"
                                   placement="right"
                                   onClose={onClose}
                                   open={open}
@@ -750,21 +752,17 @@ function NotifySettings() {
                             >
                               <Form.Item
                                 className="auto"
-                                label="Select Employee"
-                                name="SelectedEmp"
+                                label="Title"
+                                name="title"
                               >
-                                <AutoComplete
-                                  className="autocomplete"
-                                  options={optionsEmployee}
+                                <Input
+                                  placeholder="Enter Title"
                                   style={{
                                     width: 300,
                                   }}
-                                  onSelect={onSelect}
-                                  onSearch={onSearch}
-                                  onBlur={onBlur}
                                   size="large"
-                                  placeholder="Enter Name"
-                                />
+                                  onChange={(e) => setTitle(e.target.value)}
+                                ></Input>
                               </Form.Item>
                             </Col>
                             <Col span={24}>
@@ -796,6 +794,31 @@ function NotifySettings() {
                                   </div>
                                 </div>
                               </FormItem>
+                            </Col>
+                            <Col
+                              span={24}
+                              style={{ display: "flex", width: "100%" }}
+                            >
+                              <Form.Item
+                                className="auto"
+                                label="Select Employee"
+                                name="SelectedEmp"
+                              >
+                                <AutoComplete
+                                  className="autocomplete"
+                                  options={optionsEmployee}
+                                  style={{
+                                    width: 300,
+                                  }}
+                                  onSelect={onSelect}
+                                  onSearch={onSearch}
+                                  onClear={() => setEmp("")}
+                                  onBlur={onBlur}
+                                  size="large"
+                                  placeholder="Enter Name"
+                                  allowClear={true}
+                                />
+                              </Form.Item>
                             </Col>
                           </>
                         )}
@@ -830,7 +853,7 @@ function NotifySettings() {
                     )}
                   </FormItem>
                 </Col>
-                {showMessageContent && (
+                {/* {showMessageContent && (
                   <>
                     <Col xs={24} sm={24} md={24}>
                       <Form form={form} onFinish={handleOnFinish}>
@@ -870,7 +893,7 @@ function NotifySettings() {
                       </Form>
                     </Col>
                   </>
-                )}
+                )} */}
               </div>
             </div>
 

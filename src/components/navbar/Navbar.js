@@ -392,7 +392,7 @@ const Navbar = (props) => {
         )}
         </div>
         {/* ) : null} */}
-        {/* <Dropdown overlay={
+        <Dropdown overlay={
               <div 
                 style={{
                   border: "1px solid #d3d3d3b3",
@@ -412,7 +412,7 @@ const Navbar = (props) => {
               className="notificationAvatar"
             />
           </Badge>
-        </Dropdown> */}
+        </Dropdown>
         <div>
           <img src={logo} alt={"logo not found"} className="profileLogo" />
         </div>

@@ -1,5 +1,5 @@
 import { Tabs } from "antd";
-import "../../style/Leave.css";
+import "../../style/leave.css";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";

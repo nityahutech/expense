@@ -5,7 +5,7 @@ const Notifications = (props) => {
   const navigate = useNavigate();
   console.log(props)
   return (
-    <div style={{ overflowY: "auto", height: props.height }}>
+    <div style={{ overflowY: "auto", width: "300px", height: props.height }}>
       {props.notifications.map((x) => {
         console.log(x);
         if (x == null) {
@@ -31,8 +31,8 @@ const Notifications = (props) => {
                       /> */}
             {/* This is the description */}
             <Row style={{ height: "auto", padding: "0" }}>
-              <Col span={2}>{x.icon}</Col>
-              <Col span={20}>
+              <Col span={3} style={{padding:"5px"}}>{x.icon}</Col>
+              <Col span={19}>
                 <h4 style={{ margin: 0 }}>{x.name}</h4>
                 {x.description ? (
                   <p

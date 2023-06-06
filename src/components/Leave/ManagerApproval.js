@@ -356,7 +356,7 @@ const ManagerApproval = (props) => {
             style={{ margin: "0 15px 15px" }}
             bordered={true}
             format="DD-MM-YYYY"
-            allowClear={false}
+            allowClear={true}
             onChange={(e) => {
               setSelDate(e);
             }}

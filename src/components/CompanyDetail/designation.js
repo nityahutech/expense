@@ -60,7 +60,10 @@ const Designation = () => {
     let keys = Object.keys(data.designations);
     let grade = Object.values(data.designations);
     setNames(designNo.names);
-    ConfigureContext.editConfiguration(page, {designations : designNo})
+    // let addBack = {...designNo};
+    // delete addBack.names
+    // console.log(addBack);
+    // ConfigureContext.editConfiguration(page, {designations : addBack})
     let temp = keys.map((d, i) => {
       return {
         grade: grade[i],
@@ -198,8 +201,8 @@ const Designation = () => {
       onOk: () => {
         let temp = { ...designations };
         delete temp[`${record.designation}`];
-        console.log(temp);
-        ConfigureContext.updateConfigurations(page, {designations: temp})
+        console.log(record, temp);
+        ConfigureContext.editConfiguration(page, {designations: temp})
           .then((response) => {
             showNotification(
               "success",

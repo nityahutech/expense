@@ -31,27 +31,27 @@ class LeaveContext {
 
     createLeave = async (newLeave) => {
         let email = await this.getEmailApproverList(newLeave.approver)
-        email.forEach((id) => {
-            let mailOptions = {
-                from: 'hutechhr@gmail.com',
-                to: `${id}`,
-                subject: `Leave Request for ${newLeave.name}`,
-                html: `<p>Hello,</p><br /><p>Leave Request for ${newLeave.name}</p>
-            <br />
-            <ul>
-            <li>Date(s): ${newLeave.date.join(", ")}</li>
-            <li>Type: ${newLeave.nature}</li>
-            <li>Slot: ${newLeave.slot}</li>
-            <li>Reason: ${newLeave.reason}</li>
-            </ul>
-            <br />
-            <p>Please approve leave request through HR portal.</p>
-            <br />
-            <p>Hutech HR</p>`,
-            }
-            sendEmail(mailOptions)
-        })
-        return addDoc(leaveCollectionRef, newLeave);
+        await addDoc(leaveCollectionRef, newLeave)
+            email.forEach((id) => {
+                let mailOptions = {
+                    from: 'hutechhr@gmail.com',
+                    to: `${id}`,
+                    subject: `Leave Request for ${newLeave.name}`,
+                    html: `<p>Hello,</p><br /><p>Leave Request for ${newLeave.name}</p>
+                <br />
+                <ul>
+                <li>Date(s): ${newLeave.date.join(", ")}</li>
+                <li>Type: ${newLeave.nature}</li>
+                <li>Reason: ${newLeave.reason}</li>
+                </ul>
+                <br />
+                <p>Please approve leave request through HR portal.</p>
+                <br />
+                <p>Hutech HR</p>`,
+                }
+                sendEmail(mailOptions)
+            })
+        return;
     };
     deleteLeave = (id) => {
         const leaveDoc = doc(db, `companyprofile/${compId}/leave`, id);

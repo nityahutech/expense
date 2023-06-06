@@ -3,7 +3,6 @@ import { Button, Card, Col, DatePicker, Divider, Input, Modal, Row, Table, Tag }
 import moment from "moment";
 import { useEffect, useState } from "react";
 import LeaveContext from "../../contexts/LeaveContext";
-import ApplyLeave from "./ApplyLeave";
 import { useAuth } from "../../contexts/AuthContext";
 import { showNotification } from "../../contexts/CreateContext";
 const { RangePicker } = DatePicker;
@@ -19,7 +18,7 @@ const ManagerApproval = (props) => {
 
     
   const columns = (value) => {
-    return [
+    let temp = [
         {
           title: "Duration",
           dataIndex: "date",
@@ -71,93 +70,73 @@ const ManagerApproval = (props) => {
           align: "left",
           width: 150,
         },
-        {
-            title: "Status",
-            dataIndex: "status",
-            key: "status",
-            align: "left",
-            width: 90,
-            // sorter: (a, b) => {
-            //     return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
-            // },
-            render: (_, { status }) => (
-              <Tag
-                className="status-tag"
-                color={
-                  status === "Approved"
-                    ? "rgba(15, 255, 80, 0.2)"
-                    : status === "Pending"
-                    ? "rgba(205, 227, 36, 0.25)"
-                    : "rgb(252, 97, 97, 0.5)"
-                }
-              >
-                {status}
-              </Tag>
-            )
-        },
-        {
-          title: "Comment",
-          dataIndex: "comment",
-          align: "left",
-          width: 150,
-        }, value ? 
-        {
-            title: "Action",
-            dataIndex: "action",
-            key: "action",
-            align: "center",
-            width: 80,
-            render: (_, record) => (
-              <>
-                {/* <Button
-                    type="link"
-                    className="show"
-                  > */}
-                    <CheckCircleTwoTone
-                    onClick={() => {
-                      onApproveLeave(record);
-                    }}twoToneColor="#41BF36" style={{ fontSize: '1rem',marginRight: "10px" }}/>
-                  {/* </Button> 
-                  <Button
-                    type="link"
-                    className="deleTe"
-                  >*/}
-                    <CloseCircleTwoTone
-                    onClick={() => {
-                      onRejectedLeave(record, value);
-                      console.log("record", record);
-                    }} twoToneColor="#FC6161" style={{ fontSize: '1rem' }} />
-                  {/* </Button> */}
-              </>
-            ),
-          } : 
-          {
-            key: "5",
-            title: "Actions",
-            fixed: "right",
-            align: "left",
-            width: 80,
-            render: (_, record) => (
-            <>
-            <DeleteTwoTone
-            twoToneColor="#f04747"
-                    onClick={() => {
-                      // setStatus(record, "Rejected");
-                      console.log("record", record);
-                    }} style={{ fontSize: '1rem',marginRight: "10px"  }} 
-              />
-              
-              <EditTwoTone
-              twoToneColor="#40a9ff"
-                    onClick={() => {
-                      // setStatus(record, "Rejected");
-                      console.log("record", record);
-                    }} style={{ fontSize: '1rem' }} 
-              />
-            </>
-            ),
-          },
-      ]
+        ]
+        if (value) {
+            temp.push(
+                {
+                    title: "Action",
+                    dataIndex: "action",
+                    key: "action",
+                    align: "center",
+                    width: 80,
+                    render: (_, record) => (
+                      <>
+                        {/* <Button
+                            type="link"
+                            className="show"
+                          > */}
+                            <CheckCircleTwoTone
+                            onClick={() => {
+                              onApproveLeave(record);
+                            }}twoToneColor="#41BF36" style={{ fontSize: '1rem',marginRight: "10px" }}/>
+                          {/* </Button> 
+                          <Button
+                            type="link"
+                            className="deleTe"
+                          >*/}
+                            <CloseCircleTwoTone
+                            onClick={() => {
+                              onRejectedLeave(record, value);
+                              console.log("record", record);
+                            }} twoToneColor="#FC6161" style={{ fontSize: '1rem' }} />
+                          {/* </Button> */}
+                      </>
+                    ),
+                  })
+        } else {
+            temp.push(
+                {
+                    title: "Status",
+                    dataIndex: "status",
+                    key: "status",
+                    align: "left",
+                    width: 90,
+                    // sorter: (a, b) => {
+                    //     return a.status !== b.status ? (a.status < b.status ? -1 : 1) : 0;
+                    // },
+                    render: (_, { status }) => (
+                      <Tag
+                        className="status-tag"
+                        color={
+                          status === "Approved"
+                            ? "rgba(15, 255, 80, 0.2)"
+                            : status === "Pending"
+                            ? "rgba(205, 227, 36, 0.25)"
+                            : "rgb(252, 97, 97, 0.5)"
+                        }
+                      >
+                        {status}
+                      </Tag>
+                    )
+                },
+                {
+                  title: "Comment",
+                  dataIndex: "comment",
+                  align: "left",
+                  width: 150,
+                })
+        }
+        return temp
   };
 
   useEffect(() => {
@@ -194,12 +173,14 @@ const ManagerApproval = (props) => {
         id: doc.id,
       };
     });
+    console.log(currentUser, req);
     let pending = []
     let history = []
     getDateFormatted(req);
     getDateSorted(req);
-    let temp = req.forEach(x => {
+    req.forEach(x => {
         if (x.approver != currentUser.displayName) { return; }
+        console.log(x);
         if (x.status == "Pending") {
             pending.push(x)
         }
@@ -222,7 +203,7 @@ const ManagerApproval = (props) => {
         LeaveContext.approveLeave(record.id, record.name)
           .then((response) => {
             showNotification("success", "Success", "Request Approved!");
-            props.getData();
+            getAllRequests();
           })
           .catch((error) => {
             showNotification("error", "Error", "Unable to process request!");
@@ -251,7 +232,7 @@ let value = "";
         LeaveContext.rejectLeave(record.id, record.name, value)
           .then((response) => {
             showNotification("success", "Success", "Request Rejected!");
-            props.getData();
+            getAllRequests();
           })
           .catch((error) => {
             showNotification("error", "Error", "Unable to process request!");

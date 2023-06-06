@@ -37,8 +37,10 @@ const Admin = () => {
   const [loading, setLoading] = useState(true);
   const compId = sessionStorage.getItem("compId");
   const [allEmpName, setAllEmpName] = useState([]);
-  const [ceoAdmin, setCeoAdmin] = useState();
-  const [hrAdmin, setHrAdmin] = useState();
+  const [filterData, setFilterData] = useState([]);
+  const [ceoAdmins, setCeoAdmins] = useState([]);
+  const [hrAdmins, setHrAdmins] = useState([]);
+  const [adminAccess, setAdminAccess] = useState({});
   const [financeAdmins, setFinanceAdmins] = useState([]);
   const [accessType, setAccessType] = useState(null);
   const [accessUsers, setAccessUsers] = useState();
@@ -69,16 +71,16 @@ const Admin = () => {
   };
 
   const onFinish = (type) => {
-    const valuesToservice = {
-      [`${type}`]: type == "ceoAdmin" ? ceoAdmin.value : hrAdmin.value,
-    };
-    CompanyProContext.updateCompInfo(compId, valuesToservice).then((res) => {
-      showNotification(
-        "success",
-        "Success",
-        `${type == "ceoAdmin" ? "CEO" : "HR Admin"} Changed`
-      );
-    });
+    // const valuesToservice = {
+    //   [`${type}`]: type == "ceoAdmin" ? ceoAdmin.value : hrAdmin.value,
+    // };
+    // CompanyProContext.updateCompInfo(compId, valuesToservice).then((res) => {
+    //   showNotification(
+    //     "success",
+    //     "Success",
+    //     `${type == "ceoAdmin" ? "CEO" : "HR Admin"} Changed`
+    //   );
+    // });
     showEditContactInfo(false);
     showEditHrContactInfo(false);
   };
@@ -123,27 +125,42 @@ const Admin = () => {
 
   const getData = async (allUserData) => {
     setLoading(true);
-    let allUsers = allUserData || allEmpName;
+    let allUsers = allUserData || filterData;
     let compProfile = await CompanyProContext.getCompanyProfile(compId);
     setData(compProfile);
-    let finTemp = [],
-      hrTemp = [];
-    allUsers.forEach((emp) => {
-      if (emp.value == compProfile.ceoAdmin) {
-        setCeoAdmin(emp);
-      }
-      if (emp.value == compProfile.hrAdmin) {
-        setHrAdmin(emp);
-      }
-      if (compProfile.financerAdmin?.includes(emp.value)) {
-        finTemp.push(emp);
-      }
-      if (compProfile.hrExeAdmin?.includes(emp.value)) {
-        hrTemp.push(emp);
-      }
-    });
-    // setFinanceAdmins(finTemp);
-    setHrExAdmins(hrTemp);
+    let ceoAdminsArray = [],
+    hrAdminsArray = [],
+    adminAccessArray = {};
+    compProfile.ceoAdmins.forEach(x => ceoAdminsArray.push(allUsers[x]))
+    compProfile.hrAdmins.forEach(x => hrAdminsArray.push(allUsers[x]))
+    Object.keys(compProfile.adminAccess).forEach(x => {
+      adminAccessArray[x] = []
+      compProfile.adminAccess[x].forEach(user => adminAccessArray[x].push(allUsers[user]))
+    })
+    console.log(ceoAdminsArray,
+      hrAdminsArray,
+      adminAccessArray);
+      setAdminAccess(adminAccessArray)
+      setCeoAdmins(ceoAdminsArray)
+      setHrAdmins(hrAdminsArray)
+    // let finTemp = [],
+    //   hrTemp = [];
+    // allUsers.forEach((emp) => {
+    //   if (emp.value == compProfile.ceoAdmin) {
+    //     setCeoAdmin(emp);
+    //   }
+    //   if (emp.value == compProfile.hrAdmin) {
+    //     setHrAdmin(emp);
+    //   }
+    //   if (compProfile.financerAdmin?.includes(emp.value)) {
+    //     finTemp.push(emp);
+    //   }
+    //   if (compProfile.hrExeAdmin?.includes(emp.value)) {
+    //     hrTemp.push(emp);
+    //   }
+    // });
+    // // setFinanceAdmins(finTemp);
+    // setHrExAdmins(hrTemp);
     setLoading(false);
   };
   console.log("testt");
@@ -155,16 +172,22 @@ const Admin = () => {
     setOptions(!searchText ? [] : matchingName);
   };
 
-  async function getAllUser() {
+  const getAllUser = async () => {
     const allData = await getUsers();
+    let filterData = {}
     let allUsers = allData.docs.map((doc, i) => {
-      return {
-        value: doc.data().fname + " " + doc.data().lname,
+      filterData[doc.id] = {
+        name: doc.data().name,
         profilePic: doc.data().profilePic,
+      }
+      return {
+        value: doc.data().name,
+        id: doc.id
       };
     });
     setAllEmpName(allUsers);
-    getData(allUsers);
+    setFilterData(filterData)
+    getData(filterData)
   }
 
   function getInitials(text) {
@@ -384,10 +407,10 @@ const Admin = () => {
     Expenses: [],
   };
 
-  let tempData = Object.keys(temp).map((x) => {
+  let tempData = Object.keys(adminAccess).map((x) => {
     return {
       access: x,
-      employees: temp[x],
+      employees: adminAccess[x],
     };
   });
 
@@ -461,7 +484,7 @@ const Admin = () => {
                     <Col style={{ display: "inline-block" }}>
                       <div>
                         {editContactInfo === false ? (
-                          !ceoAdmin ? (
+                          ceoAdmins.length == 0 ? (
                             <Button
                               style={{
                                 marginTop: "10px",
@@ -477,22 +500,23 @@ const Admin = () => {
                             </Button>
                           ) : (
                             <>
+                            {ceoAdmins.map(ceo => (
                               <div style={divStyle}>
                                 {" "}
-                                {ceoAdmin.profilePic ? (
+                                {ceo.profilePic ? (
                                   <img
                                     style={imageStyle}
-                                    src={ceoAdmin.profilePic}
+                                    src={ceo.profilePic}
                                   />
                                 ) : (
                                   <div style={imageStyle}>
-                                    {getInitials(ceoAdmin.value)}
+                                    {getInitials(ceo.name)}
                                   </div>
                                 )}
                                 <span style={{ marginRight: "10px" }}>
-                                  {ceoAdmin ? ceoAdmin.value : "-"}
+                                  {ceo.name}
                                 </span>
-                              </div>
+                              </div>))}
                               <Button
                                 style={{
                                   marginTop: "10px",
@@ -518,7 +542,7 @@ const Admin = () => {
                               let temp = allEmpName.filter(
                                 (emp) => emp.value == data
                               );
-                              setCeoAdmin(temp[0]);
+                              setCeoAdmins([]);
                             }}
                             onSearch={onSearch}
                             size="large"
@@ -628,7 +652,7 @@ const Admin = () => {
                     <Col style={{ display: "inline-block" }}>
                       <div>
                         {editHrContactInfo === false ? (
-                          !hrAdmin ? (
+                          hrAdmins.length == 0 ? (
                             <>
                               <Button
                                 style={{
@@ -646,26 +670,27 @@ const Admin = () => {
                             </>
                           ) : (
                             <>
+                            {hrAdmins.map(hr => (
                               <div style={{ display: "flex" }}>
                                 <Row style={{ display: "flex" }}>
                                   <Col style={divStyle}>
-                                    {hrAdmin.profilePic ? (
+                                    {hr.profilePic ? (
                                       <img
                                         style={imageStyle}
-                                        src={hrAdmin.profilePic}
+                                        src={hr.profilePic}
                                       />
                                     ) : (
                                       <div style={imageStyle}>
-                                        {getInitials(hrAdmin.value)}
+                                        {getInitials(hr.name)}
                                       </div>
                                     )}
 
                                     <span style={{ marginRight: "10px" }}>
-                                      {hrAdmin ? hrAdmin.value : "-"}
+                                      {hr.name}
                                     </span>
                                   </Col>
                                 </Row>
-                              </div>
+                              </div>))}
                               <Button
                                 style={{
                                   marginTop: "10px",
@@ -688,10 +713,10 @@ const Admin = () => {
                               marginTop: "10px",
                             }}
                             onSelect={(data) => {
-                              let temp = allEmpName.filter(
+                              let temp = allEmpName.find(
                                 (emp) => emp.value == data
                               );
-                              setHrAdmin(temp[0]);
+                              setHrAdmins([]);
                             }}
                             onSearch={onSearch}
                             size="large"
@@ -1063,233 +1088,6 @@ const Admin = () => {
           )}
         </Form>
       </div>
-
-      {/* <div
-        className="personalCardDiv"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: "10px",
-        }}
-      >
-        <Form
-          style={{
-            width: "75%",
-          }}
-          labelcol={{
-            span: 4,
-          }}
-          wrappercol={{
-            span: 14,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          autoComplete="off"
-          onFinish={onHRExeFinish}
-        >
-          {loading ? (
-            <Skeleton active />
-          ) : (
-            <div className="site-card-border-less-wrapper">
-              <Card
-                className="hreCard"
-                title="HR EXECUTIVE"
-                bordered={true}
-                hoverable={true}
-                style={{
-                  width: "100%",
-                  marginTop: 10,
-                  borderRadius: "10px",
-                  cursor: "default",
-                }}
-              >
-                <Row>
-                  <Col span={24}>
-                    <p>HR Executive's permissions apply to all employees.</p>
-                    <p>This admin can:</p>
-                    <div className="div-text" style={{ paddingLeft: "20px" }}>
-                      <Text>
-                        View all employee profile information (Non-payroll),
-                        <br />
-                        View all employee profile information (Non-payroll),
-                        <br />
-                        Add and edit employee profiles,
-                        <br />
-                        Edit, Upload and Approve Attendance and Leaves,
-                        <br />
-                        This Admin will not have any payroll access.
-                        <br />
-                      </Text>
-                    </div>
-                  </Col>
-
-                  <Col style={{ display: "inline-block" }}>
-                    <div>
-                      {editExecutiveContactInfo === false ? (
-                        !data.hrExeAdmin ? (
-                          <Button
-                            style={{
-                              marginTop: "10px",
-                              background: "#1963a6",
-                              border: "1px solid #1963A6",
-                            }}
-                            type="primary"
-                            onClick={() =>
-                              showEditExecutiveContactInfo(
-                                !editExecutiveContactInfo
-                              )
-                            }
-                          >
-                            <PlusCircleOutlined />
-                            Add
-                          </Button>
-                        ) : (
-                          <>
-                            <div style={{ display: "flex" }}>
-                              <Row style={{ display: "flex" }}>
-                                {hrExAdmins?.map((personHrExe) => (
-                                  <div style={divStyle}>
-                                    {" "}
-                                    {personHrExe.profilePic ? (
-                                      <img
-                                        style={imageStyle}
-                                        src={personHrExe.profilePic}
-                                      />
-                                    ) : (
-                                      <div style={imageStyle}>
-                                        {getInitials(personHrExe.value)}
-                                      </div>
-                                    )}
-                                    <span style={{ marginRight: "10px" }}>
-                                      {personHrExe.value
-                                        ? personHrExe.value
-                                        : "-"}
-                                    </span>
-                                  </div>
-                                ))}
-                              </Row>
-                            </div>
-                            <Button
-                              type="text"
-                              style={{
-                                marginTop: "10px",
-                                background: "#1963a6",
-                                border: "1px solid #1963A6",
-                                color: "#ffff",
-                              }}
-                              onClick={() =>
-                                showEditExecutiveContactInfo(
-                                  !editExecutiveContactInfo
-                                )
-                              }
-                            >
-                              <EditFilled /> Change
-                            </Button>
-                          </>
-                        )
-                      ) : (
-                        <>
-                          <Form.List
-                            name="hrExeUser"
-                            initialValue={[...hrExAdmins]}
-                          >
-                            {(fields, { add, remove }) => (
-                              <>
-                                {fields.slice(0, 3).map(({ key, name }) => (
-                                  <Space
-                                    key={key}
-                                    style={{
-                                      display: "flex",
-                                      marginBottom: 8,
-                                    }}
-                                    align="baseline"
-                                  >
-                                    <Form.Item
-                                      style={{ marginTop: "10px" }}
-                                      initialValue={
-                                        data.hrExeAdmin != null
-                                          ? data.hrExeAdmin[key]
-                                          : ""
-                                      }
-                                      name={[name, "hrExeAdmin"]}
-                                    >
-                                      <AutoComplete
-                                        options={options}
-                                        style={{
-                                          width: 200,
-                                          padding: "5px",
-                                        }}
-                                        // onSelect={onSelect}
-                                        onSearch={onSearch}
-                                        size="large"
-                                        placeholder="Enter HR Admin Name"
-                                      />
-                                    </Form.Item>
-
-                                    <MinusCircleOutlined
-                                      onClick={() => remove(name)}
-                                    />
-                                  </Space>
-                                ))}
-                                <Form.Item>
-                                  <Button
-                                    type="dashed"
-                                    onClick={() => add()}
-                                    block
-                                    icon={<PlusOutlined />}
-                                  >
-                                    Add field
-                                  </Button>
-                                </Form.Item>
-                              </>
-                            )}
-                          </Form.List>
-                        </>
-                      )}
-                    </div>
-                  </Col>
-                  <Col span={24}>
-                    {editExecutiveContactInfo === true ? (
-                      <Row
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          marginTop: "3%",
-                        }}
-                      >
-                        <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
-                          <Button
-                            type="text"
-                            style={{ fontSize: 15 }}
-                            onClick={() => showEditExecutiveContactInfo(false)}
-                          >
-                            <CloseOutlined /> CANCEL
-                          </Button>
-                        </Col>
-                        <Col xs={24} sm={8} md={7} lg={6} xl={4} xxl={2}>
-                          <Button
-                            type="primary"
-                            htmlType="submit"
-                            style={{
-                              background: "#1963a6",
-                              border: "1px solid #1963A6",
-                              width: "119px",
-                            }}
-                          >
-                            <CheckOutlined /> SAVE
-                          </Button>
-                        </Col>
-                      </Row>
-                    ) : null}
-                  </Col>
-                </Row>
-              </Card>
-            </div>
-          )}
-        </Form>
-      </div> */}
     </>
   );
 };

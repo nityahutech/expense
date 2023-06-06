@@ -1,21 +1,22 @@
 import {  DeleteTwoTone, EditTwoTone, SearchOutlined } from "@ant-design/icons";
-import { Button, Card, Col, DatePicker, Input, Row, Table, Tag } from "antd";
+import { Button, Card, Col, DatePicker, Input, Modal, Row, Table, Tag } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import LeaveContext from "../../contexts/LeaveContext";
 import ApplyLeave from "./ApplyLeave";
 import { useAuth } from "../../contexts/AuthContext";
-import { getUsers } from "../../contexts/CreateContext";
+import { getUsers, showNotification } from "../../contexts/CreateContext";
 const { RangePicker } = DatePicker;
 
 const Request = (props) => {
-    const [allEmpName, setAllEmpName] = useState([]);
-    const [allEmpMap, setAllEmpMap] = useState({});
     const [selDate, setSelDate] = useState(moment());
     const [loading, setLoading] = useState(true);
     const [applyModal, setApplyModal] = useState(false);
     const [allRequests, setAllRequests] = useState([]);
     const [filterRequest, setFilterRequest] = useState([]);
+    const [allEmpMap, setAllEmpMap] = useState([]);
+    const [allEmpName, setAllEmpName] = useState([]);
+    const [duration, setDuration] = useState([]);
     let role = window.location.href.includes("hr-leave")
     const { currentUser } = useAuth()
     
@@ -112,8 +113,31 @@ const Request = (props) => {
       <DeleteTwoTone
       twoToneColor="#f04747"
               onClick={() => {
-                // setStatus(record, "Rejected");
                 console.log("record", record);
+                if (record.status == "Approved" && !role){
+                  showNotification("error", "Error", "Leave has already been approved! Please contact your HR to delete record.")
+                  return;
+                }
+                Modal.confirm({
+                  title: "Are you sure, you want to delete Leave record?",
+                  okText: "Yes",
+                  okType: "danger",
+            
+                  onOk: () => {
+                    LeaveContext.deleteLeave(record.id)
+                      .then((response) => {
+                        showNotification(
+                          "success",
+                          "Success",
+                          "Leave deleted successfully!"
+                        );
+                        getAllRequests();
+                      })
+                      .catch((error) => {
+                        showNotification("error", "Error", error.message);
+                      });
+                  },
+                })
               }} style={{ fontSize: '1rem',marginRight: "10px"  }} 
         />
         
@@ -130,8 +154,8 @@ const Request = (props) => {
   ];
 
   useEffect(() => {
-    getAllUser()
     getAllRequests()
+    getAllUser()
   }, [])
 
   const getDateFormatted = (data) => {
@@ -258,8 +282,10 @@ const Request = (props) => {
         leavedays={{
             "Casual Leave": 2
         }}
+        allRequests={allRequests}
         holidays={props.data?.holidays}
         allEmpMap={allEmpMap}
+        duration={duration|| []}
         allEmpName={allEmpName}
     />
     </Card>

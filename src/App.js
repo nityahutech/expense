@@ -66,7 +66,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/register-acoount" element={<RegisterAccount />} />
+          <Route path="/register-account" element={<RegisterAccount />} />
           <Route path="/register" element={<RegistrationPage />}>
             <Route path="company" element={<RegisterCompany />} />
             <Route path="employee" element={<RegisterEmployee />} />
@@ -228,10 +228,10 @@ function App() {
             path="/invoices"
             element={<FormatPage main={InvoiceMagHome} activeMenu={["24a"]} />}
           />
-          {/* <Route
+          <Route
             path="/Feedback"
             element={<FormatPage main={FeedbackAdmin} activeMenu={["30"]} />}
-          /> */}
+          />
           <Route
             path="/Policies"
             element={<FormatPage main={Policies} activeMenu={["31"]} />}

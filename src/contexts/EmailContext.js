@@ -34,7 +34,7 @@ export const isUserVerified = async (email) => {
 
 export const sendVerificationEmail = async (email) => {
     try {
-        let user = await axios.post("http://localhost:3001/auth-api/v4", {
+        await axios.post("http://localhost:3001/auth-api/v4", {
             email
         })
     } catch (error) {

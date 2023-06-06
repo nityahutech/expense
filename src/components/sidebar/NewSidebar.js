@@ -444,7 +444,7 @@ const NewSidebar = (props) => {
                   <p className="sideFont">Requests</p>
                   <NavLink className="navLink" to="/requests" />
                 </Menu.Item>
-                {role == "admin" && authctx.ischecked ?  (
+                {/* {role == "admin" && authctx.ischecked ?  (
                   <Menu.Item
                     icon={
                       <ProfileOutlined
@@ -456,7 +456,7 @@ const NewSidebar = (props) => {
                     <p className="sideFont">Template</p>
                     <NavLink to="/templates" />
                   </Menu.Item>
-                ) : null}
+                ) : null} */}
               </Menu>
             </div>
           </div>

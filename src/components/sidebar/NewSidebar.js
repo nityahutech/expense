@@ -22,6 +22,7 @@ import {
   AlertFilled,
   ContainerOutlined,
 } from "@ant-design/icons";
+import { useAuth } from "../../contexts/AuthContext";
 
 const { Sider } = Layout;
 
@@ -29,6 +30,7 @@ const NewSidebar = (props) => {
   const [collapsed, setCollapsed] = useState(false);
   const [collapsePoint, setCollapsePoint] = useState(false);
   const role = sessionStorage.getItem("role");
+  const authctx = useAuth();
   const isHr =
     role == "super" ? false : sessionStorage.getItem("isHr") == "true";
 
@@ -150,7 +152,7 @@ const NewSidebar = (props) => {
                     </Menu.Item>
                   </Menu.SubMenu>
                 ) : null}
-                {role == "admin" || isHr ? (
+                {(role == "admin" || isHr) && authctx.ischecked ? (
                   <>
                     <Menu.Item
                       icon={
@@ -219,7 +221,7 @@ const NewSidebar = (props) => {
                       key="6"
                     >
                       <p className="sideFont">Attendance</p>
-                      <NavLink className="navLink" to="/my-attendance" />
+                      <NavLink className="navLink" to={authctx.ischecked ? "/attendance/daily-log" : "/my-attendance"} />
                     </Menu.Item>
                     <Menu.Item
                       icon={
@@ -230,7 +232,7 @@ const NewSidebar = (props) => {
                       key="7"
                     >
                       <p className="sideFont">Leave</p>
-                      <NavLink to="/leave" />
+                      <NavLink to={authctx.ischecked ? "/hr-leave/requests" : "/leave"} />
                     </Menu.Item>
                     {/* <Menu.SubMenu
                       className="arrow-div"
@@ -266,7 +268,7 @@ const NewSidebar = (props) => {
                         <NavLink to="/Appraisal/HalfYearGoalPage" />
                       </Menu.Item>
                     </Menu.SubMenu> */}
-                    {role == "admin" || isHr ? (
+                    {(role == "admin" || isHr) && authctx.ischecked ? (
                       <>
                         <Menu.Item
                           icon={
@@ -281,49 +283,49 @@ const NewSidebar = (props) => {
                         </Menu.Item>
                       </>
                     ) : null}
-                    {role =="admin" ?
-                    <Menu.SubMenu
-                      className="arrow-div"
-                      style={{
-                        width: "100%",
-                        fontSize: "13px",
-                        fontWeight: "600",
-                        color: "#ffffff",
-                      }}
-                      icon={
-                        <PieChartFilled
-                          style={{ color: "#ffffff", fontSize: "17px" }}
-                        />
-                      }
-                      key="sub1"
-                      title="Expense"
-                      mode="inline"
-                    >
-                      {role == "admin" || isHr ? (
-                        <>
-                          <Menu.Item
-                            className="arrow"
-                            icon={
-                              <img src={dot} alt="profile" className="dot" />
-                            }
-                            key="2"
-                          >
-                            <p className="sideFont">Add Expense</p>
-                            <NavLink to="/expenses/create" />
-                          </Menu.Item>
-                          <Menu.Item
-                            className="arrow"
-                            icon={
-                              <img src={dot} alt="profile" className="dot" />
-                            }
-                            key="3"
-                          >
-                            <p className="sideFont">Expense List</p>
-                            <NavLink to="/expenses/view" />
-                          </Menu.Item>
-                        </>
-                      ) : null}
-                      {/* <Menu.Item
+                    {role == "admin" && authctx.ischecked ? (
+                      <Menu.SubMenu
+                        className="arrow-div"
+                        style={{
+                          width: "100%",
+                          fontSize: "13px",
+                          fontWeight: "600",
+                          color: "#ffffff",
+                        }}
+                        icon={
+                          <PieChartFilled
+                            style={{ color: "#ffffff", fontSize: "17px" }}
+                          />
+                        }
+                        key="sub1"
+                        title="Expense"
+                        mode="inline"
+                      >
+                        {role == "admin" || isHr ? (
+                          <>
+                            <Menu.Item
+                              className="arrow"
+                              icon={
+                                <img src={dot} alt="profile" className="dot" />
+                              }
+                              key="2"
+                            >
+                              <p className="sideFont">Add Expense</p>
+                              <NavLink to="/expenses/create" />
+                            </Menu.Item>
+                            <Menu.Item
+                              className="arrow"
+                              icon={
+                                <img src={dot} alt="profile" className="dot" />
+                              }
+                              key="3"
+                            >
+                              <p className="sideFont">Expense List</p>
+                              <NavLink to="/expenses/view" />
+                            </Menu.Item>
+                          </>
+                        ) : null}
+                        {/* <Menu.Item
                         className="arrow"
                         icon={<img src={dot} alt="profile" className="dot" />}
                         key="23"
@@ -331,8 +333,9 @@ const NewSidebar = (props) => {
                         <p className="sideFont">Invoice Reimbursement</p>
                         <NavLink to="/expenses/invoices" />
                       </Menu.Item> */}
-                    </Menu.SubMenu>  : null}
-                    {role == "admin" || isHr ? (
+                      </Menu.SubMenu>
+                    ) : null}
+                    {(role == "admin" || isHr) && authctx.ischecked ? (
                       <>
                         <Menu.Item
                           icon={
@@ -356,18 +359,17 @@ const NewSidebar = (props) => {
                           <p className="sideFont">Invoice Reimbursement</p>
                           <NavLink to="/invoices" />
                         </Menu.Item>
-                    <Menu.Item
-                      icon={
-                        <RadarChartOutlined
-                          style={{ color: "#ffffff", fontSize: "17px" }}
-                        />
-                      }
-                      key="25"
-                    >
-                      <p className="sideFont">Feedback</p>
-                      <NavLink to="/Feedback" />
-                    </Menu.Item>
-                    
+                        <Menu.Item
+                          icon={
+                            <RadarChartOutlined
+                              style={{ color: "#ffffff", fontSize: "17px" }}
+                            />
+                          }
+                          key="25"
+                        >
+                          <p className="sideFont">Feedback</p>
+                          <NavLink to="/Feedback" />
+                        </Menu.Item>
                       </>
                     ) : null}
                     <Menu.Item
@@ -395,23 +397,23 @@ const NewSidebar = (props) => {
                   <NavLink to="/my-profile" />
                 </Menu.Item>
 
-                  {role == "admin" && (
-                <Menu.SubMenu
-                  style={{
-                    width: "100%",
-                    fontSize: "13px",
-                    fontWeight: "600",
-                    color: "#ffffff",
-                  }}
-                  icon={
-                    <DeploymentUnitOutlined
-                      style={{ color: "#ffffff", fontSize: "17px" }}
-                    />
-                  }
-                  key="sub30"
-                  title="Client"
-                  mode="inline"
-                >
+                {role == "admin" && authctx.ischecked && (
+                  <Menu.SubMenu
+                    style={{
+                      width: "100%",
+                      fontSize: "13px",
+                      fontWeight: "600",
+                      color: "#ffffff",
+                    }}
+                    icon={
+                      <DeploymentUnitOutlined
+                        style={{ color: "#ffffff", fontSize: "17px" }}
+                      />
+                    }
+                    key="sub30"
+                    title="Client"
+                    mode="inline"
+                  >
                     <Menu.Item
                       className="arrow"
                       icon={<img src={dot} alt="profile" className="dot" />}
@@ -420,16 +422,15 @@ const NewSidebar = (props) => {
                       <p className="sideFont">Add Client</p>
                       <NavLink to="/Client/AddClient" />
                     </Menu.Item>
-                  <Menu.Item
-                    className="arrow"
-                    icon={<img src={dot} alt="profile" className="dot" />}
-                    key="30b"
-                  >
-                    <p className="sideFont">View Client</p>
-                    <NavLink to="/Client/ViewClient" />
-                  </Menu.Item>
-                </Menu.SubMenu>
-                
+                    <Menu.Item
+                      className="arrow"
+                      icon={<img src={dot} alt="profile" className="dot" />}
+                      key="30b"
+                    >
+                      <p className="sideFont">View Client</p>
+                      <NavLink to="/Client/ViewClient" />
+                    </Menu.Item>
+                  </Menu.SubMenu>
                 )}
                 <Menu.Item
                   className="arrow"
@@ -443,17 +444,19 @@ const NewSidebar = (props) => {
                   <p className="sideFont">Requests</p>
                   <NavLink className="navLink" to="/requests" />
                 </Menu.Item>
-                {role == "admin" ? <Menu.Item
-                  icon={
-                    <ProfileOutlined
-                      style={{ color: "#ffffff", fontSize: "17px" }}
-                    />
-                  }
-                  key="32a"
-                >
-                  <p className="sideFont">Template</p>
-                  <NavLink to="/templates" />
-                </Menu.Item> : null}
+                {/* {role == "admin" && authctx.ischecked ?  (
+                  <Menu.Item
+                    icon={
+                      <ProfileOutlined
+                        style={{ color: "#ffffff", fontSize: "17px" }}
+                      />
+                    }
+                    key="32a"
+                  >
+                    <p className="sideFont">Template</p>
+                    <NavLink to="/templates" />
+                  </Menu.Item>
+                ) : null} */}
               </Menu>
             </div>
           </div>

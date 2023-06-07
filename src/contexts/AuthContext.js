@@ -33,7 +33,10 @@ import AssetContext from "./AssetContext";
 import { changeAccount, isUserVerified } from "./EmailContext";
 import { useNavigate } from "react-router";
 
-const AuthContext = React.createContext()
+const AuthContext = React.createContext({
+  ischecked : false,
+  updataisChecked : (bool) => {}
+})
 
 export function useAuth() {
   return useContext(AuthContext)
@@ -49,6 +52,7 @@ export function AuthProvider({ children }) {
   const [isHr, setIsHr] = useState(false);
   const [isLead, setIsLead] = useState(false);
   const [logo, setLogo] = useState(null);
+  const [ischecked, updateIsChecked] = useState(false);
   // const navigate = useNavigate()
   const provider = new GoogleAuthProvider();
 
@@ -174,6 +178,7 @@ export function AuthProvider({ children }) {
   }, [])
 
   const value = {
+    ischecked,
     compId,
     currentUser,
     role,
@@ -191,7 +196,8 @@ export function AuthProvider({ children }) {
     updateMyProfile,
     updateMyPhNo,
     handleVerifyEmail,
-    handlePasswordReset
+    handlePasswordReset,
+    updataisChecked : (bool) => updateIsChecked(bool)
   }
 
   return (

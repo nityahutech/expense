@@ -17,9 +17,12 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import {
+  checkAlphabets,
+  checkUpperCase,
   capitalize,
   getBase64,
   showNotification,
+  checkNumbervalue,
 } from "../../contexts/CreateContext";
 import React, { useState } from "react";
 import AssetContext from "../../contexts/AssetContext";
@@ -203,11 +206,11 @@ const AddAsset = (props) => {
                 <Form.Item
                   label="Modal Name"
                   name="modalName"
-                  // onKeyPress={(event) => {
-                  //   if (checkAlphabets(event)) {
-                  //     event.preventDefault();
-                  //   }
-                  // }}
+                  onKeyPress={(event) => {
+                    if (checkNumbervalue(event) && checkAlphabets(event)) {
+                      event.preventDefault();
+                    }
+                  }}
                   rules={[
                     {
                       required: true,
@@ -222,14 +225,14 @@ const AddAsset = (props) => {
                   <Input
                     maxLength={30}
                     className="inputFields"
-                    onChange={(e) => {
-                      const str = e.target.value;
-                      const caps = str.split(" ").map(capitalize).join(" ");
-                      form.setFieldsValue({
-                        model: caps,
-                      });
-                    }}
-                    placeholder="Enter Model Name"
+                    // onChange={(e) => {
+                    //   const str = e.target.value;
+                    //   const caps = str.split(" ").map(capitalize).join(" ");
+                    //   form.setFieldsValue({
+                    //     model: caps,
+                    //   });
+                    // }}
+                    placeholder="Enter Modal Name"
                   />
                 </Form.Item>
               </Col>
@@ -237,13 +240,18 @@ const AddAsset = (props) => {
                 <Form.Item
                   label="Serial Number"
                   name="serialNumber"
+                  onKeyPress={(event) => {
+                    if (checkNumbervalue(event) && checkUpperCase(event)) {
+                      event.preventDefault();
+                    }
+                  }}
                   rules={[
                     {
                       required: true,
                       message: "Please Enter Serial Number",
                     },
                     {
-                      pattern: /[0-9a-zA-Z]/,
+                      pattern: /[0-9A-Z]/,
                       message: "Please Enter Valid Serial Number",
                     },
                   ]}
@@ -252,13 +260,6 @@ const AddAsset = (props) => {
                     type="text"
                     className="inputFields"
                     maxLength={60}
-                    onChange={(e) => {
-                      const str = e.target.value;
-                      const caps = str.split(" ").map(capitalize).join(" ");
-                      form.setFieldsValue({
-                        sn: caps,
-                      });
-                    }}
                     placeholder="Enter Serial Number"
                   />
                 </Form.Item>
@@ -280,36 +281,7 @@ const AddAsset = (props) => {
                   </Select>
                 </Form.Item>
               </Col>
-              {/* <Col xs={24} sm={12} md={8}>
-                          <Form.Item
-                            label="Date of Issue"
-                            initialValue={
-                              data?.dateOfRepair
-                                ? moment(data?.dateOfRepair, "DD-MM-YYYY")
-                                : null
-                            }
-                            name="dateOfRepair"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please Choose a Date",
-                              },
-                            ]}
-                          >
-                            <DatePicker
-                              format="DD-MM-YYYY"
-                              className="dateFields"
-                              // format={dateFormatList}
-                              // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
-                              onChange={(e) => {
-                                setDob(e.format("DD-MM-YYYY"));
-                              }}
-                              // disabledDate={(e) => disabledDate(e)}
-                              value={dob}
-                              placeholder="Choose Date"
-                            />
-                          </Form.Item>
-                        </Col> */}
+
               {type == "Monitor" ? null : (
                 <Col xs={24} sm={12} md={8}>
                   <Form.Item
@@ -358,6 +330,7 @@ const AddAsset = (props) => {
                 <Button
                   type="text"
                   style={{ fontSize: 15 }}
+                  onClick={() => form.resetFields()}
                   //   onClick={() => {
                   //     setEditAsset(false);
                   //     setAddButton(true);

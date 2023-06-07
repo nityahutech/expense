@@ -12,7 +12,12 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 import { async } from "@firebase/util";
 
 let compId = sessionStorage.getItem("compId");
@@ -100,6 +105,36 @@ class AssetContext {
     }
   };
 
+  updateEmpAsset = (id, updateAsset, file) => {
+    // return new Promise((resolve, reject) => {
+    if (file) {
+      const storageRef = ref(storage, `/${compId}/empAssets/${file.name}`);
+      console.log("storage", storageRef);
+      uploadBytesResumable(storageRef, file).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => {
+          updateAsset.upload = url;
+          updateAsset.file = file.name;
+          const documentDoc = doc(db, `companyprofile/${compId}/empAssets`, id);
+          updateDoc(documentDoc, updateAsset);
+          return Promise.resolve();
+        });
+      });
+    } else {
+      if (updateAsset?.upload && updateAsset.upload === null) {
+        deleteObject(ref(storage, `/${compId}/empAssets/${file.name}`));
+      }
+      const documentDoc = doc(db, `companyprofile/${compId}/empAssets`, id);
+      updateDoc(documentDoc, updateAsset);
+      return Promise.resolve();
+    }
+    // });
+  };
+
+  deleteEmpAsset = (id) => {
+    const deleteData = doc(companyEmpAssetCollectionRef, id);
+    return deleteDoc(deleteData);
+  };
+
   //-------------------Repair Request------------------------------------
 
   addRepairRequest = (repairRequestData, file) => {
@@ -180,6 +215,18 @@ class AssetContext {
         id: doc.id,
       };
     });
+  };
+
+  getEmpAsset = async () => {
+    const list = await getDocs(companyEmpAssetCollectionRef);
+    console.log("listtass", list);
+    let rec = list.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      };
+    });
+    return rec;
   };
 }
 

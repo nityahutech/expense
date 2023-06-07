@@ -80,6 +80,28 @@
   display: block !important;
 }
 
+.viewAssetModal .ant-modal-header{
+  background: #1963a6;
+}
+
+.viewAssetModal .ant-modal-title{
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.viewAssetModal.ant-modal-content{
+  border-radius: 5px;
+}
+
+.viewAssetModal .ant-form-item-control-input-content{
+  font-size: 16px;
+  color: #000000;
+}
+
+.labelText .ant-form-item-label > label{
+  font-size: 15px;
+}
+
 .edit {
   color: #ffffff;
   display: none;

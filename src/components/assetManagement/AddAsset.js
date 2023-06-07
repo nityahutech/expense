@@ -1,18 +1,42 @@
-import { Button, Card, Col, Form, Input, Modal, Row, Select, message } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Input,
+  Modal,
+  Row,
+  Select,
+  message,
+} from "antd";
 import "./RepairRequestTable.css";
-import { CheckOutlined, CloseOutlined, DeleteOutlined, UploadOutlined } from "@ant-design/icons";
-import { capitalize, getBase64 } from "../../contexts/CreateContext";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
+import {
+  checkAlphabets,
+  checkUpperCase,
+  capitalize,
+  getBase64,
+  showNotification,
+  checkNumbervalue,
+} from "../../contexts/CreateContext";
 import React, { useState } from "react";
+import AssetContext from "../../contexts/AssetContext";
 const { Option } = Select;
 
 const AddAsset = (props) => {
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
   const imgRef = React.useRef(null);
-  const [type, setType] = useState("Laptop")
+  const [type, setType] = useState("Laptop");
   const [fileName, setFileName] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [isBigFile, setIsBigFile] = useState(false);
   const [visible, setVisible] = useState(true);
+  const [file, setFile] = useState("");
 
   const handleClick = () => {
     imgRef.current.click();
@@ -29,14 +53,12 @@ const AddAsset = (props) => {
   }
 
   const handleChange = (event) => {
-    if (!event) {
-      return;
-    }
-    const fileUploaded = event.target.files[0];
-    getBase64(fileUploaded, (url) => {
-      setImageUrl(url);
-    });
-    checkFileSize(fileUploaded.size, fileUploaded);
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    // if (!isLt2M) {
+    //   message.error('File must smaller than 2MB!');
+    //   return
+    // }
+    setFile(event.target.files[0]);
   };
 
   function onReset() {
@@ -45,24 +67,25 @@ const AddAsset = (props) => {
     setImageUrl("");
   }
 
-
   const imgDiv = () => {
     // console.log(fileName, imageUrl);
     if (fileName == "" || fileName == null) {
-      <Button className="imgDel" onClick={(e) => handleClick(e)}>
-        <input
-          className="imgInp"
-          style={{
-            display: "none",
-          }}
-          type="file"
-          id="logo"
-          name="logo"
-          ref={imgRef}
-          onChange={(e) => handleChange(e)}
-        />
-        <UploadOutlined /> Upload Photo
-      </Button>
+      return (
+        <Button className="imgDel" onClick={(e) => handleClick(e)}>
+          <input
+            className="imgInp"
+            style={{
+              display: "none",
+            }}
+            type="file"
+            id="logo"
+            name="logo"
+            ref={imgRef}
+            onChange={(e) => handleChange(e)}
+          />
+          <UploadOutlined /> Upload Photo
+        </Button>
+      );
     } else {
       return (
         <div
@@ -100,11 +123,26 @@ const AddAsset = (props) => {
     }
   };
 
-  const onFinish = (values) => {
-    console.log(values)
+  const onFinish = async (values) => {
+    console.log(values);
 
-  }
+    const newAssetList = {
+      ...values,
+    };
 
+    console.log("assetdetailsss", newAssetList);
+    try {
+      await AssetContext.addEmpAsset(newAssetList, file);
+      showNotification("success", "Success", "Asset Details Added");
+      setTimeout(() => {
+        // setAddTravel(false);
+        form.resetFields();
+      }, 5000);
+    } catch (error) {
+      console.log("error", error);
+      showNotification("error", "Error", "Error In Asset");
+    }
+  };
 
   return (
     <div className="personalCardDiv">
@@ -135,7 +173,7 @@ const AddAsset = (props) => {
               <Col xs={24} sm={12} md={8}>
                 <Form.Item
                   label="Type"
-                  name="type"
+                  name="assetType"
                   initialValue="Laptop"
                   rules={[
                     {
@@ -150,15 +188,15 @@ const AddAsset = (props) => {
                     options={[
                       {
                         label: "Laptop",
-                        value: "Laptop"
+                        value: "Laptop",
                       },
                       {
                         label: "Monitor",
-                        value: "Monitor"
+                        value: "Monitor",
                       },
                       {
                         label: "Mobile",
-                        value: "Mobile"
+                        value: "Mobile",
                       },
                     ]}
                   />
@@ -166,52 +204,54 @@ const AddAsset = (props) => {
               </Col>
               <Col xs={24} sm={12} md={8}>
                 <Form.Item
-                  label="Model Name"
-                  name="model"
-                  // onKeyPress={(event) => {
-                  //   if (checkAlphabets(event)) {
-                  //     event.preventDefault();
-                  //   }
-                  // }}
+                  label="Modal Name"
+                  name="modalName"
+                  onKeyPress={(event) => {
+                    if (checkNumbervalue(event) && checkAlphabets(event)) {
+                      event.preventDefault();
+                    }
+                  }}
                   rules={[
                     {
                       required: true,
-                      message: "Please Enter Model Name",
+                      message: "Please Enter Modal Name",
                     },
                     {
                       pattern: /^[a-zA-Z0-9\s]*$/,
-                      message: "Please Enter Valid Model Name",
+                      message: "Please Enter Valid Modal Name",
                     },
                   ]}
                 >
                   <Input
                     maxLength={30}
                     className="inputFields"
-                    onChange={(e) => {
-                      const str = e.target.value;
-                      const caps = str
-                        .split(" ")
-                        .map(capitalize)
-                        .join(" ");
-                      form.setFieldsValue({
-                        model: caps,
-                      });
-                    }}
-                    placeholder="Enter Model Name"
+                    // onChange={(e) => {
+                    //   const str = e.target.value;
+                    //   const caps = str.split(" ").map(capitalize).join(" ");
+                    //   form.setFieldsValue({
+                    //     model: caps,
+                    //   });
+                    // }}
+                    placeholder="Enter Modal Name"
                   />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={12} md={8}>
                 <Form.Item
                   label="Serial Number"
-                  name="sn"
+                  name="serialNumber"
+                  onKeyPress={(event) => {
+                    if (checkNumbervalue(event) && checkUpperCase(event)) {
+                      event.preventDefault();
+                    }
+                  }}
                   rules={[
                     {
                       required: true,
                       message: "Please Enter Serial Number",
                     },
                     {
-                      pattern: /[0-9a-zA-Z]/,
+                      pattern: /[0-9A-Z]/,
                       message: "Please Enter Valid Serial Number",
                     },
                   ]}
@@ -220,16 +260,6 @@ const AddAsset = (props) => {
                     type="text"
                     className="inputFields"
                     maxLength={60}
-                    onChange={(e) => {
-                      const str = e.target.value;
-                      const caps = str
-                        .split(" ")
-                        .map(capitalize)
-                        .join(" ");
-                      form.setFieldsValue({
-                        sn: caps,
-                      });
-                    }}
                     placeholder="Enter Serial Number"
                   />
                 </Form.Item>
@@ -245,45 +275,13 @@ const AddAsset = (props) => {
                     },
                   ]}
                 >
-                  <Select
-                    placeholder="Select"
-                    className="selectFields"
-                  >
+                  <Select placeholder="Select" className="selectFields">
                     <Option value="Yes">Yes</Option>
                     <Option value="No">No</Option>
                   </Select>
                 </Form.Item>
               </Col>
-              {/* <Col xs={24} sm={12} md={8}>
-                          <Form.Item
-                            label="Date of Issue"
-                            initialValue={
-                              data?.dateOfRepair
-                                ? moment(data?.dateOfRepair, "DD-MM-YYYY")
-                                : null
-                            }
-                            name="dateOfRepair"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please Choose a Date",
-                              },
-                            ]}
-                          >
-                            <DatePicker
-                              format="DD-MM-YYYY"
-                              className="dateFields"
-                              // format={dateFormatList}
-                              // defaultValue= {dob?moment(dob, "DD-MM-YYYY"):null}
-                              onChange={(e) => {
-                                setDob(e.format("DD-MM-YYYY"));
-                              }}
-                              // disabledDate={(e) => disabledDate(e)}
-                              value={dob}
-                              placeholder="Choose Date"
-                            />
-                          </Form.Item>
-                        </Col> */}
+
               {type == "Monitor" ? null : (
                 <Col xs={24} sm={12} md={8}>
                   <Form.Item
@@ -296,40 +294,34 @@ const AddAsset = (props) => {
                       },
                     ]}
                   >
-                    <Select
-                      placeholder="Select"
-                      className="selectFields"
-                    >
+                    <Select placeholder="Select" className="selectFields">
                       <Option value="Yes">Yes</Option>
                       <Option value="No">No</Option>
                     </Select>
                   </Form.Item>
-                </Col>)}
-              <Col
-                span={24}
-                xs={24}
-                sm={24}
-                md={7}
-                lg={6}
-                xl={6}
-                xxl={6}
-              >
+                </Col>
+              )}
+              <Col span={24} xs={24} sm={24} md={7} lg={6} xl={6} xxl={6}>
                 <Form.Item
                   label="Upload Image"
                   name="upload"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please upload file",
-                //   },
-                // ]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please upload file",
+                    },
+                  ]}
                 >
-                  {isBigFile
-                    ? message.error(
-                      "File size must be less than 200Kb."
-                    )
-                    : ""}
-                  {imgDiv()}
+                  <div className="idpage">
+                    <Input
+                      type="file"
+                      accept="application/pdf"
+                      id="upload"
+                      name="upload"
+                      onChange={handleChange}
+                      style={{ borderRadius: "5px" }}
+                    />
+                  </div>
                 </Form.Item>
               </Col>
             </Row>
@@ -338,10 +330,11 @@ const AddAsset = (props) => {
                 <Button
                   type="text"
                   style={{ fontSize: 15 }}
-                //   onClick={() => {
-                //     setEditAsset(false);
-                //     setAddButton(true);
-                //   }}
+                  onClick={() => form.resetFields()}
+                  //   onClick={() => {
+                  //     setEditAsset(false);
+                  //     setAddButton(true);
+                  //   }}
                 >
                   <CloseOutlined /> CANCEL
                 </Button>
@@ -356,10 +349,10 @@ const AddAsset = (props) => {
                     borderColor: "#1963A6",
                     width: "119px",
                   }}
-                // onClick={() => {
-                //   // setAddButton(true);
-                //   setEditAsset(false);
-                // }}
+                  // onClick={() => {
+                  //   // setAddButton(true);
+                  //   setEditAsset(false);
+                  // }}
                 >
                   <CheckOutlined /> SAVE
                 </Button>
@@ -370,7 +363,7 @@ const AddAsset = (props) => {
         {/* </Col> */}
       </Row>
     </div>
-  )
-}
+  );
+};
 
-export default AddAsset
+export default AddAsset;

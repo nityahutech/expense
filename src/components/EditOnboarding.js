@@ -23,6 +23,7 @@ import CompanyProContext from "../contexts/CompanyProContext";
 import PrefixSelector from "./PrefixSelector";
 
 function EditOnboarding(props) {
+  console.log("propsss", props);
   const [fileName, setFileName] = useState(props.modalData.logo);
   const [fileEdited, setFileEdited] = useState(false);
   const [imageUrl, setImageUrl] = useState(props.modalData.logo || "");
@@ -32,8 +33,8 @@ function EditOnboarding(props) {
   const [modalData, setModalData] = useState(props.modalData);
 
   useEffect(() => {
-    setFileName(props.modalData.logo)
-    setImageUrl(props.modalData.logo)
+    setFileName(props.modalData.logo);
+    setImageUrl(props.modalData.logo);
     setModalData(props.modalData);
   }, []);
 
@@ -57,9 +58,9 @@ function EditOnboarding(props) {
   };
 
   function onReset() {
-    setFileEdited(false)
-    setFileName(props.modalData.logo)
-    setImageUrl(props.modalData.logo)
+    setFileEdited(false);
+    setFileName(props.modalData.logo);
+    setImageUrl(props.modalData.logo);
     props.setIsEditOrganization(false);
     form.resetFields();
     setModalData(props.modalData);
@@ -299,7 +300,12 @@ function EditOnboarding(props) {
                 initialValue={props?.modalData?.phone}
               >
                 <Input
-                  addonBefore={(<PrefixSelector name={"prefix"} initial={modalData.prefix} />)}
+                  addonBefore={
+                    <PrefixSelector
+                      name={"prefix"}
+                      initial={modalData.prefix}
+                    />
+                  }
                   maxLength={10}
                   placeholder="Phone"
                   style={{

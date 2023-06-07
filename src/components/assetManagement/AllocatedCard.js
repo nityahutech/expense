@@ -266,7 +266,7 @@ const AllocatedCard = (props) => {
                               message: "Please enter Model Name",
                             },
                             {
-                              pattern: /^[a-zA-Z\s]*$/,
+                              pattern: /^[a-zA-Z0-9]+$/,
                               message: "Please enter Valid Model Name",
                             },
                           ]}

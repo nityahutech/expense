@@ -179,7 +179,6 @@ console.log(props)
     showeditEmergency(false);
     props.getData();
   };
-
   const prefixSelector = (
     <Form.Item name="prefixFather" noStyle>
       <Select
@@ -476,7 +475,7 @@ console.log(props)
                   remember: true,
                   prefixFather: "+91",
                   prefixMother: "+91",
-                  spouseContact: "+91"
+                  prefixspouce: "+91"
                 }}
                 autoComplete="off"
                 onFinish={onFinish}

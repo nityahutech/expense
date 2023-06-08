@@ -3,34 +3,42 @@ import { showNotification } from "../../contexts/CreateContext";
 import AttendanceContext from "../../contexts/AttendanceContext";
 import { useAuth } from "../../contexts/AuthContext";
 import moment from "moment";
+import { useEffect, useState } from "react";
 
 const AddReport = (props) => {
-    const [form] = Form.useForm();
-    const {currentUser} = useAuth()
+  console.log("propsss", props);
+  const [form] = Form.useForm();
+  const { currentUser } = useAuth();
 
-    const onFinish = (values) => {
-      const newData = {
-        report: values?.report || "-",
-        project: values?.projectName || "-",
-      };
-      AttendanceContext.updateAttendance(currentUser.uid, values.date, newData)
-        .then((response) => {
-          showNotification("success", "Success", "Record updated successfully!");
-        })
-        .catch((error) => {
-          showNotification("error", "Error", "No records exist for this day! You were absent.");
-        });
+  const onFinish = (values) => {
+    const newData = {
+      report: values?.report || "-",
+      project: values?.projectName || "-",
     };
+    AttendanceContext.updateAttendance(currentUser.uid, values.date, newData)
+      .then((response) => {
+        showNotification("success", "Success", "Record updated successfully!");
+        form.resetFields();
+      })
+      .catch((error) => {
+        showNotification(
+          "error",
+          "Error",
+          "No records exist for this day! You were absent."
+        );
+      });
+  };
 
-    return (
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Card
-            style={{
-              width: "80%",
-              borderRadius: "5px",
-              marginBottom: "25px",
-            }}>
-                <Form
+  return (
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <Card
+        style={{
+          width: "80%",
+          borderRadius: "5px",
+          marginBottom: "25px",
+        }}
+      >
+        <Form
           form={form}
           labelCol={{
             span: 6,
@@ -49,7 +57,7 @@ const AddReport = (props) => {
             rules={[
               {
                 required: true,
-                message: "Please select a date"
+                message: "Please select a date",
               },
             ]}
           >
@@ -82,7 +90,13 @@ const AddReport = (props) => {
           >
             <Input />
           </Form.Item>
-          <div style={{display: "flex", justifyContent:"center"}}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginLeft: "4rem",
+            }}
+          >
             <Button
               htmlType="button"
               onClick={() => form.resetFields()}
@@ -91,19 +105,18 @@ const AddReport = (props) => {
               Reset
             </Button>
             <Button
-                type="primary"
-                htmlType="submit"
-                className="button-color"
-                style={{marginLeft: "10px"}}
+              type="primary"
+              htmlType="submit"
+              className="button-color"
+              style={{ marginLeft: "10px" }}
             >
               Submit
             </Button>
           </div>
         </Form>
-            </Card>
-            </div>
-        
-    )
-}
+      </Card>
+    </div>
+  );
+};
 
 export default AddReport;

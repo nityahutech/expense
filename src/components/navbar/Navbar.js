@@ -29,21 +29,34 @@ const Navbar = (props) => {
   const [refresh, setRefresh] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const role = sessionStorage.getItem("role");
-  const location = useLocation()
-  const navigate = useNavigate()
+  const location = useLocation();
+  const navigate = useNavigate();
   const paths = {
-    admin: ["attendance", "hr-leave", "hr-feedback", "company-profile", "assets", "templates", "employees", "expenses", "travel", "invoices", "client"],
-    emp: ["my-attendance", "leave", "feedback"]
-  }
-  console.log(location.pathname.split('/')[1]);
+    admin: [
+      "attendance",
+      "hr-leave",
+      "hr-feedback",
+      "company-profile",
+      "assets",
+      "templates",
+      "employees",
+      "expenses",
+      "travel",
+      "invoices",
+      "client",
+    ],
+    emp: ["my-attendance", "leave", "feedback"],
+  };
+  // console.log(location.pathname.split('/')[1]);
   // const path = location.pathname.split('/')[1].toLowerCase();
   // const adminPages = ["leave", "attendance", "company-profile"]
-  const [roleView, setRoleView] = useState(paths.admin.includes(location.pathname.split('/')[1].toLowerCase()));
-  const {currentUser} = useAuth()
+  const [roleView, setRoleView] = useState(
+    paths.admin.includes(location.pathname.split("/")[1].toLowerCase())
+  );
+  const { currentUser } = useAuth();
   let temp = sessionStorage.getItem("logo");
   const logo = temp == null ? Logo : temp;
   let timer = undefined;
-
 
   const isClockRunning = async () => {
     setLoading(true);
@@ -148,39 +161,49 @@ const Navbar = (props) => {
       </Menu.Item> */}
     </Menu>
   );
-    
+
   const eventHandler = (eventType) => {
-      localStorage.setItem('lastRefresh', moment().format("x"))
-      if (timer) {
-          refreshTimer();
-      }
+    localStorage.setItem("lastRefresh", moment().format("x"));
+    if (timer) {
+      refreshTimer();
+    }
   };
 
   useEffect(() => {
     setIsRunning(isClockRunning());
-    localStorage.setItem('lastRefresh', moment().format("x"))
+    localStorage.setItem("lastRefresh", moment().format("x"));
     window.addEventListener("click", eventHandler);
     refreshTimer();
     console.log(location);
-    return (() => {
-        window.removeEventListener("click", eventHandler)
-        clearTimeout(timer);
-    })
+    return () => {
+      window.removeEventListener("click", eventHandler);
+      clearTimeout(timer);
+    };
   }, []);
 
   useEffect(() => {
-    console.log("location", window.location.href, location, paths.admin.includes(location.pathname.split('/')[1].toLowerCase()));
-    let temp = paths.admin.includes(location.pathname.split('/')[1].toLowerCase())
-    setRoleView(temp)
-    let path = location.pathname.split('/')[1].toLowerCase()
+    console.log(
+      "location",
+      window.location.href,
+      location,
+      paths.admin.includes(location.pathname.split("/")[1].toLowerCase())
+    );
+    let temp = paths.admin.includes(
+      location.pathname.split("/")[1].toLowerCase()
+    );
+    setRoleView(temp);
+    let path = location.pathname.split("/")[1].toLowerCase();
     let index = paths[temp ? "admin" : "emp"].indexOf(path);
     console.log(temp, path, index);
-    if (index == -1 || index > paths.emp.length-1) { setDisabled(true) }
-    else { setDisabled(false) }
+    if (index == -1 || index > paths.emp.length - 1) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
   }, [window.location.href]);
 
   useEffect(() => {
-    console.log("check")
+    console.log("check");
     isClockRunning();
     const timer = setInterval(() => {
       if (isRunning) {
@@ -194,18 +217,18 @@ const Navbar = (props) => {
 
   const refreshTimer = () => {
     if (timer) {
-        clearTimeout(timer)
+      clearTimeout(timer);
     }
     timer = setTimeout(() => {
-        let last = localStorage.getItem("lastRefresh");
-        const diff = moment.duration(moment().diff(moment(last, "x")));
-        console.log(diff);
-        if (diff._milliseconds < 5*3600000) {
-            refreshTimer();
-        } else {
-          setRefresh(!refresh);
-        }
-    }, 1200000+1000)
+      let last = localStorage.getItem("lastRefresh");
+      const diff = moment.duration(moment().diff(moment(last, "x")));
+      console.log(diff);
+      if (diff._milliseconds < 5 * 3600000) {
+        refreshTimer();
+      } else {
+        setRefresh(!refresh);
+      }
+    }, 1200000 + 1000);
   };
 
   const buttonStyle = !isRunning
@@ -301,7 +324,7 @@ const Navbar = (props) => {
     setButtonTimeout(true);
     setTimeout(() => {
       setButtonTimeout(false);
-    }, 3000)
+    }, 3000);
     if (isRunning) {
       stopClockState();
     } else {
@@ -326,50 +349,59 @@ const Navbar = (props) => {
             onChange={() => {
               console.log(roleView);
               setRoleView(roleView ? "emp" : "admin");
-              let path = location.pathname.split('/')[1].toLowerCase()
+              let path = location.pathname.split("/")[1].toLowerCase();
               let index = paths[roleView ? "admin" : "emp"].indexOf(path);
               console.log(path, index);
-              if (index == -1 || index > paths.emp.length-1) { return; }
-              navigate(`/${paths[!roleView ? "admin" : "emp"][index]}`)
+              if (index == -1 || index > paths.emp.length - 1) {
+                return;
+              }
+              navigate(`/${paths[!roleView ? "admin" : "emp"][index]}`);
             }}
           />
         ) : null}
         {/* {roleView == "emp" ? ( */}
-          {loading ? (
-            <button style={loadStyle}>
-              <LoadingOutlined />
-              {"  Loading"}
-            </button>
-          ) : (
-            <button
-              style={buttonStyle}
-              onClick={handleClock}
-              onMouseLeave={onMouseLeave}
-              onMouseEnter={onMouseEnter}
-              className="clockButton"
-              disabled={buttonTimeout}
-            >
-              {buttonText ? buttonText : null}{" "}
-              {!clockinfo && !buttonStatus ? <br /> : null}
-              {clockinfo && isRunning
-                ? moment.utc(clockinfo * 1000).format("HH:mm:ss")
-                : ""}
-            </button>
-          )}
+        {loading ? (
+          <button style={loadStyle}>
+            <LoadingOutlined />
+            {"  Loading"}
+          </button>
+        ) : (
+          <button
+            style={buttonStyle}
+            onClick={handleClock}
+            onMouseLeave={onMouseLeave}
+            onMouseEnter={onMouseEnter}
+            className="clockButton"
+            disabled={buttonTimeout}
+          >
+            {buttonText ? buttonText : null}{" "}
+            {!clockinfo && !buttonStatus ? <br /> : null}
+            {clockinfo && isRunning
+              ? moment.utc(clockinfo * 1000).format("HH:mm:ss")
+              : ""}
+          </button>
+        )}
         {/* ) : null} */}
-        <Dropdown overlay={
-              <div 
-                style={{
-                  border: "1px solid #d3d3d3b3",
-                  boxShadow: "5px", 
-                  backgroundColor: "#F8F8F8",
-                  padding:"10px",
-                  height:"auto"
-                }}
-              >
-                <Notifications notifications={props.notifications} height={"400px"} />
-              </div>
-            } className="notificationBell" arrow={{ pointAtCenter: true }}>
+        <Dropdown
+          overlay={
+            <div
+              style={{
+                border: "1px solid #d3d3d3b3",
+                boxShadow: "5px",
+                backgroundColor: "#F8F8F8",
+                padding: "10px",
+                height: "auto",
+              }}
+            >
+              <Notifications
+                notifications={props.notifications}
+                height={"400px"}
+              />
+            </div>
+          }
+          className="notificationBell"
+          arrow={{ pointAtCenter: true }}
+        >
           <Badge count={props.total} offset={[-10, 5]} size="small">
             <Avatar
               size={40}

@@ -21,17 +21,21 @@ import {
   getBase64,
   showNotification,
 } from "../../contexts/CreateContext";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AssetContext from "../../contexts/AssetContext";
 const { Option } = Select;
 
 function EditAsset(props) {
-  const editAssetData = props.editAssetData;
   const [form] = Form.useForm();
   const [file, setFile] = useState(null);
-  const [fileName, setFileName] = useState(editAssetData?.file);
+  //   const [fileName, setFileName] = useState(editAssetData?.file);
+  const [editAssetData, setEditAssetData] = useState(
+    props?.editAssetData || []
+  );
 
-  console.log("propssss", editAssetData?.file);
+  useEffect(() => {
+    setEditAssetData(props.editAssetData);
+  }, [props]);
 
   const onFinish = async (values) => {
     const updateAssetData = {
@@ -59,11 +63,11 @@ function EditAsset(props) {
     //   .catch(() => {
     //     showNotification("error", "Error", "Failed to edit");
     //   });
-    props.setEditAssetData(false);
+    props.setEditAssetData(null);
   };
 
   function onReset() {
-    props.setEditAssetData(false);
+    props.setEditAssetData(null);
     form.resetFields();
     // setModalData();
   }
@@ -87,10 +91,10 @@ function EditAsset(props) {
     setFile(event.target.files[0]);
   };
 
-  const handleClearFile = () => {
-    setFile(null);
-    setFileName("");
-  };
+  //   const handleClearFile = () => {
+  //     setFile(null);
+  //     setFileName("");
+  //   };
 
   return (
     <div className="personalCardDiv">
@@ -124,7 +128,7 @@ function EditAsset(props) {
             >
               <Select
                 className="selectFields"
-                value={editAssetData?.assetType}
+                // value={editAssetData?.assetType}
                 // onChange={(e) => setType(e)}
                 options={[
                   {

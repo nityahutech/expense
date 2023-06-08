@@ -18,6 +18,7 @@ const Notifications = (props) => {
             hoverable
             style={{ height: "auto", padding: "10px" }}
             onClick={() => {
+              console.log(x.ref);
               if (x.ref) {
                 navigate(x.ref[0], x.ref[1] || {});
               }

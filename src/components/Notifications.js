@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Notifications = (props) => {
   const navigate = useNavigate();
-  console.log(props)
+  console.log(props, "notificationnnnns");
   return (
     <div style={{ overflowY: "auto", width: "300px", height: props.height }}>
       {props.notifications.map((x) => {
@@ -31,7 +31,9 @@ const Notifications = (props) => {
                       /> */}
             {/* This is the description */}
             <Row style={{ height: "auto", padding: "0" }}>
-              <Col span={3} style={{padding:"5px"}}>{x.icon}</Col>
+              <Col span={3} style={{ padding: "5px" }}>
+                {x.icon}
+              </Col>
               <Col span={19}>
                 <h4 style={{ margin: 0 }}>{x.name}</h4>
                 {x.description ? (

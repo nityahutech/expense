@@ -21,10 +21,14 @@ import { getManagersData } from "../contexts/CreateContext";
 // import { AlertTwoTone, CalendarTwoTone, ScheduleTwoTone } from "@ant-design/icons";
 
 function MainDashBoard(props) {
+  console.log("propsss", props);
   const role = sessionStorage.getItem("role");
   const compId = sessionStorage.getItem("compId");
-  const navigate = useNavigate()
-  const [selected, setSelected] = useState([moment().format("Do MMM, YYYY"), moment().format("MMM, YYYY")])
+  const navigate = useNavigate();
+  const [selected, setSelected] = useState([
+    moment().format("Do MMM, YYYY"),
+    moment().format("MMM, YYYY"),
+  ]);
   props.switchRole(role);
   const cardStyle = {
     fontWeight: "600",
@@ -33,8 +37,8 @@ function MainDashBoard(props) {
     borderRadius: "15px",
     width: "125px",
     padding: "5px",
-    margin: "auto"
-  }
+    margin: "auto",
+  };
   const isHr =
     role == "super" ? false : sessionStorage.getItem("isHr") == "true";
 
@@ -42,11 +46,7 @@ function MainDashBoard(props) {
     return (
       <Link to="/Organization/Onboarding">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
-        <Card
-          bordered
-          hoverable
-          style={cardStyle}
-        >
+        <Card bordered hoverable style={cardStyle}>
           <img
             style={{
               width: "80%",
@@ -70,11 +70,7 @@ function MainDashBoard(props) {
     return (
       <Link to="/my-attendance">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
-        <Card
-          bordered
-          hoverable
-          style={cardStyle}
-        >
+        <Card bordered hoverable style={cardStyle}>
           <img
             style={{
               width: "80%",
@@ -98,11 +94,7 @@ function MainDashBoard(props) {
     return (
       <Link to="/leave">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
-        <Card
-          bordered
-          hoverable
-          style={cardStyle}
-        >
+        <Card bordered hoverable style={cardStyle}>
           <img
             style={{
               width: "80%",
@@ -124,11 +116,7 @@ function MainDashBoard(props) {
     return (
       <Link to="/my-profile" state={{ active: "8" }}>
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
-        <Card
-          bordered
-          hoverable
-          style={cardStyle}
-        >
+        <Card bordered hoverable style={cardStyle}>
           <img
             style={{
               width: "80%",
@@ -152,11 +140,7 @@ function MainDashBoard(props) {
     return (
       <Link to="/employees/payroll">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
-        <Card
-          bordered
-          hoverable
-          style={cardStyle}
-        >
+        <Card bordered hoverable style={cardStyle}>
           <img
             style={{
               width: "80%",
@@ -185,11 +169,7 @@ function MainDashBoard(props) {
     return (
       <Link to="/employees/view">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
-        <Card
-          bordered
-          hoverable
-          style={cardStyle}
-        >
+        <Card bordered hoverable style={cardStyle}>
           <img
             style={{
               width: "80%",
@@ -213,11 +193,7 @@ function MainDashBoard(props) {
     return (
       <Link to="/Expense/ExpenseList">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
-        <Card
-          bordered
-          hoverable
-          style={cardStyle}
-        >
+        <Card bordered hoverable style={cardStyle}>
           <img
             style={{
               width: "80%",
@@ -241,11 +217,7 @@ function MainDashBoard(props) {
     return (
       <Link to="/my-profile">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
-        <Card
-          bordered
-          hoverable
-          style={cardStyle}
-        >
+        <Card bordered hoverable style={cardStyle}>
           <img
             style={{
               width: "80%",
@@ -269,11 +241,7 @@ function MainDashBoard(props) {
     return (
       <Link to="/company-profile">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
-        <Card
-          bordered
-          hoverable
-          style={cardStyle}
-        >
+        <Card bordered hoverable style={cardStyle}>
           <img
             style={{
               width: "80%",
@@ -297,11 +265,7 @@ function MainDashBoard(props) {
     return (
       <Link to="/settings">
         {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
-        <Card
-          bordered
-          hoverable
-          style={cardStyle}
-        >
+        <Card bordered hoverable style={cardStyle}>
           <img
             style={{
               width: "80%",
@@ -324,11 +288,7 @@ function MainDashBoard(props) {
   const appraisalIcon = () => {
     return (
       // <div style={{ display: "flex", justifyContent: "center" }}>
-      <Card
-        bordered
-        hoverable
-        style={cardStyle}
-      >
+      <Card bordered hoverable style={cardStyle}>
         <img
           style={{
             width: "80%",
@@ -347,8 +307,8 @@ function MainDashBoard(props) {
     );
   };
   useEffect(() => {
-    getManagersData(compId, "Swetha Et Vijay")
-  }, [])
+    getManagersData(compId, "Swetha Et Vijay");
+  }, []);
 
   // const getListData = (value) => {
   //   let listData = [];
@@ -384,19 +344,20 @@ function MainDashBoard(props) {
 
   const monthCellRender = (value) => {
     const listData = [];
-    let currdate = value.format("MMM, YYYY")
+    let currdate = value.format("MMM, YYYY");
     props.data?.holidays?.forEach((hol) => {
       if (currdate == moment(hol.date, "Do MMM, YYYY").format("MMM, YYYY")) {
         listData.push({
-          name:hol.name,
-          optionalHoliday: hol.optionalHoliday
-        })
+          name: hol.name,
+          optionalHoliday: hol.optionalHoliday,
+        });
       }
     });
     let textVal = "";
     let bgColor = "#ffffff";
     let color = "#ffffff";
-    let borderColor = currdate == moment().format("MMM, YYYY") ? "#1890ff" : "#e6e8eb";
+    let borderColor =
+      currdate == moment().format("MMM, YYYY") ? "#1890ff" : "#e6e8eb";
     let bgSel = selected[1] == currdate ? " bg-sel" : "";
     return (
       // <div className="ant-calendar-date" title="">
@@ -425,7 +386,7 @@ function MainDashBoard(props) {
       //   )})}
       // </div>
       <div
-        className={"ant-calendar-date"+bgSel}
+        className={"ant-calendar-date" + bgSel}
         title=""
         style={{
           width: "90%",
@@ -442,45 +403,50 @@ function MainDashBoard(props) {
         }}
       >
         {value.format("MMM")}
-        <div style={{height: "30px", width: "85%", display: "flex",  alignItems: "center", justifyContent:"space-evenly"}}>
-              { listData.map((d) => {
-          color = d.optionalHoliday
+        <div
+          style={{
+            height: "30px",
+            width: "85%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+          }}
+        >
+          {listData.map((d) => {
+            color = d.optionalHoliday
               ? "rgba(0, 119, 137, 0.96)"
-              : "rgba(252, 143, 10, 1)"
-          bgColor = d.optionalHoliday
-            ? "rgba(154, 214, 224, 0.96)"
-              : "rgba(252, 143, 10,0.2)"
-              return(
-          // <li style={{
-          //   backgroundColor: bgColor,
-          //   color: color,
-          //   fontSize: "12px",
-          //   paddingLeft: "5px",
-          //   paddingRight: "5px",
-          //   margin: "0px",
-          //   borderRadius: "100px",
-          //   justifyContent: "center",
-          //   marginBottom: "3px"
-          // }}>{d.name}</li>
-          <Tooltip title={d.name} color={color}>
-            {/* <Badge color={color} /> */}
-        <Avatar size={10} style={{ backgroundColor: color }}></Avatar>
-
-          </Tooltip>
-        )})}
-         
+              : "rgba(252, 143, 10, 1)";
+            bgColor = d.optionalHoliday
+              ? "rgba(154, 214, 224, 0.96)"
+              : "rgba(252, 143, 10,0.2)";
+            return (
+              // <li style={{
+              //   backgroundColor: bgColor,
+              //   color: color,
+              //   fontSize: "12px",
+              //   paddingLeft: "5px",
+              //   paddingRight: "5px",
+              //   margin: "0px",
+              //   borderRadius: "100px",
+              //   justifyContent: "center",
+              //   marginBottom: "3px"
+              // }}>{d.name}</li>
+              <Tooltip title={d.name} color={color}>
+                {/* <Badge color={color} /> */}
+                <Avatar size={10} style={{ backgroundColor: color }}></Avatar>
+              </Tooltip>
+            );
+          })}
         </div>
-        
       </div>
-    )
+    );
   };
 
   const dateCellRender = (value) => {
     let listData = [];
     let currdate = value.format("Do MMM, YYYY");
-    let companyHolidayRecord = props.data?.holidays?.filter(
-      (record) => record.date == currdate
-    ) || [];
+    let companyHolidayRecord =
+      props.data?.holidays?.filter((record) => record.date == currdate) || [];
     if (companyHolidayRecord.length > 0) {
       listData = [
         {
@@ -492,7 +458,8 @@ function MainDashBoard(props) {
     let textVal = "";
     let bgColor = "#ffffff";
     let color = "#ffffff";
-    let borderColor = currdate == moment().format("Do MMM, YYYY") ? "#1890ff" : "#e6e8eb";
+    let borderColor =
+      currdate == moment().format("Do MMM, YYYY") ? "#1890ff" : "#e6e8eb";
     let bgSel = selected[0] == currdate ? " bg-sel" : "";
     // rgba(74, 67, 67, 0.2)
     if (!(listData.length == 0)) {
@@ -501,23 +468,23 @@ function MainDashBoard(props) {
         listData[0].type == "On Leave"
           ? "rgba(0, 128, 0,  1)"
           : listData[0].type === "Pending"
-            ? "rgb(166 168 69)"
-            : listData[0].isOptional
-              ? "rgba(0, 119, 137, 0.96)"
-              : "rgba(252, 143, 10, 1)";
+          ? "rgb(166 168 69)"
+          : listData[0].isOptional
+          ? "rgba(0, 119, 137, 0.96)"
+          : "rgba(252, 143, 10, 1)";
       bgColor =
         listData[0].type == "On Leave"
           ? "rgb(15, 255, 80,0.2)"
           : listData[0].type === "Pending"
-            ? "rgb(205 227 36 / 25%)"
-            : listData[0].isOptional
-              ? "rgba(154, 214, 224, 0.96)"
-              : "rgba(252, 143, 10,0.2)";
+          ? "rgb(205 227 36 / 25%)"
+          : listData[0].isOptional
+          ? "rgba(154, 214, 224, 0.96)"
+          : "rgba(252, 143, 10,0.2)";
     }
 
     return (
       <div
-        className={"ant-calendar-date"+bgSel}
+        className={"ant-calendar-date" + bgSel}
         title=""
         style={{
           width: "90%",
@@ -536,9 +503,17 @@ function MainDashBoard(props) {
         {value.format("DD")}
         {/* <div style={{flexDirection: "column"}}> */}
         {textVal == "" ? null : (
-          <div style={{height: "30px", width: "85%", display: "flex",  alignItems: "center", justifyContent:"space-evenly"}}>
-          <Tooltip title={textVal} color={color}>
-          {/* <div
+          <div
+            style={{
+              height: "30px",
+              width: "85%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <Tooltip title={textVal} color={color}>
+              {/* <div
                   // className="calendar-button"
                   // style={{
                   //       backgroundColor: bgColor,
@@ -548,10 +523,10 @@ function MainDashBoard(props) {
                 >
                   
                 </div> */}
-                <Avatar size={10} style={{ backgroundColor: color }}></Avatar>
-                {/* <Badge color={color} /> */}
-        </Tooltip>
-        </div>
+              <Avatar size={10} style={{ backgroundColor: color }}></Avatar>
+              {/* <Badge color={color} /> */}
+            </Tooltip>
+          </div>
           // <div
           //   className="events"
           //   style={{
@@ -570,8 +545,6 @@ function MainDashBoard(props) {
           // </div> */}
           //   <div className="present"> {textVal} </div>
           // </div>
-
-          
         )}
         {/* </div> */}
       </div>
@@ -585,7 +558,12 @@ function MainDashBoard(props) {
           <Card
             bordered
             hoverable
-            style={{ width: "100%", marginBottom: "15px",padding: "10px", borderRadius: "15px" }}
+            style={{
+              width: "100%",
+              marginBottom: "15px",
+              padding: "10px",
+              borderRadius: "15px",
+            }}
           >
             <div
               style={{
@@ -658,7 +636,9 @@ function MainDashBoard(props) {
                 style={{ margin: "auto", marginTop: "30px" }}
                 // value={date}
                 // onChange={setDate}
-                onSelect={(e) => setSelected([e.format("Do MMM, YYYY"), e.format("MMM, YYYY")])}
+                onSelect={(e) =>
+                  setSelected([e.format("Do MMM, YYYY"), e.format("MMM, YYYY")])
+                }
                 dateFullCellRender={dateCellRender}
                 disabledDate={disabledCalendarDate}
                 monthFullCellRender={monthCellRender}
@@ -675,9 +655,12 @@ function MainDashBoard(props) {
                 // scroll={{ x: "max-content" }}
                 bordered
                 hoverable
-                headStyle={{ height: "45px"}}
+                headStyle={{ height: "45px" }}
               >
-                <Notifications notifications={props.notifications} height={"200px"} />
+                <Notifications
+                  notifications={props.notifications}
+                  height={"200px"}
+                />
                 {/* {Notifications} */}
               </Card>
             </Col>
@@ -714,10 +697,10 @@ function MainDashBoard(props) {
 
                 {role == "admin" || isHr ? (
                   <>
-                  <Row
-                    gutter={[0, 10]}                    
-                    // style={{ justifyContent: "space-between" }}
-                  >
+                    <Row
+                      gutter={[0, 10]}
+                      // style={{ justifyContent: "space-between" }}
+                    >
                       <Col xs={12} sm={12} md={8} lg={8} xl={6} className="hi">
                         {companyProfileIcon()}
                       </Col>
@@ -756,7 +739,7 @@ function MainDashBoard(props) {
                 {role == "super" ? (
                   <>
                     <Row
-                      gutter={[0, 10]}                    
+                      gutter={[0, 10]}
                       // style={{ justifyContent: "space-between" }}
                     >
                       <Col xs={12} sm={12} md={8} className="hi">

@@ -8,6 +8,7 @@ import rejectIcon from "../images/rejected.png";
 import { showNotification } from "../contexts/CreateContext";
 
 const LeaveRequests = (props) => {
+  console.log("propsss", props.data);
   const dataSource = props.data.filter((data) => data.status == "Pending");
   let value = "";
   const Bbb = () => {

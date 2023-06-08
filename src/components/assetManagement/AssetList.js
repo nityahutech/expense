@@ -102,6 +102,7 @@ const AssetList = (props) => {
                   <Col xs={24} sm={20} md={8}>
                     <EditFilled
                       onClick={() => {
+                        console.log(record?.id);
                         setEditAssetData(record);
                       }}
                       style={{
